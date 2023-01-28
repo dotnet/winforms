@@ -6,12 +6,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class SplitterTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -729,7 +728,7 @@ namespace System.Windows.Forms.Tests
         public void Splitter_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
         {
             using var control = new Splitter();
-            Assert.Throws<ArgumentException>(null, () => control.Dock = value);
+            Assert.Throws<ArgumentException>(() => control.Dock = value);
         }
 
         [WinFormsTheory]

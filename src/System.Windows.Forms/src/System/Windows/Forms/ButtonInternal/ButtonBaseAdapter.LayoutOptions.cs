@@ -177,7 +177,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             private Composition GetHorizontalComposition()
             {
-                BitVector32 action = new BitVector32();
+                BitVector32 action = default(BitVector32);
 
                 // Checks reserve space horizontally if possible, so only AnyLeft/AnyRight prevents combination.
                 action[s_combineCheck] =
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             private Composition GetVerticalComposition()
             {
-                BitVector32 action = new BitVector32();
+                BitVector32 action = default(BitVector32);
 
                 // Checks reserve space horizontally if possible, so only Top/Bottom prevents combination.
                 action[s_combineCheck] = CheckAlign == ContentAlignment.MiddleCenter || !LayoutUtils.IsVerticalAlignment(CheckAlign);

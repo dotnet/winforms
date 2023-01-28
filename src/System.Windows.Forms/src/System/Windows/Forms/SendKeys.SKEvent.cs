@@ -16,9 +16,9 @@ namespace System.Windows.Forms
             public readonly User32.WM WM;
             public readonly uint ParamL;
             public readonly uint ParamH;
-            public readonly IntPtr HWND;
+            public readonly HWND HWND;
 
-            public SKEvent(User32.WM wm, uint paramL, bool paramH, IntPtr hwnd)
+            public SKEvent(User32.WM wm, uint paramL, bool paramH, HWND hwnd)
             {
                 WM = wm;
                 ParamL = paramL;
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
                 HWND = hwnd;
             }
 
-            public SKEvent(User32.WM wm, uint paramL, uint paramH, IntPtr hwnd)
+            public SKEvent(User32.WM wm, uint paramL, uint paramH, HWND hwnd)
             {
                 WM = wm;
                 ParamL = paramL;

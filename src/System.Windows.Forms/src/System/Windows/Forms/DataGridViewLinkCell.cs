@@ -870,10 +870,7 @@ namespace System.Windows.Forms
                     DataGridView.InvalidateCell(ColumnIndex, e.RowIndex);
                 }
 
-                if (s_dataGridViewCursor is null)
-                {
-                    s_dataGridViewCursor = DataGridView.UserSetCursor;
-                }
+                s_dataGridViewCursor ??= DataGridView.UserSetCursor;
 
                 if (DataGridView.Cursor != Cursors.Hand)
                 {

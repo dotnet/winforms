@@ -5,38 +5,111 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
-using static Interop;
-using static Interop.Ole32;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal class Com2ComponentEditor : WindowsFormsComponentEditor
 {
-    internal class Com2ComponentEditor : WindowsFormsComponentEditor
+    public static unsafe bool NeedsComponentEditor(object comObject)
     {
-        public unsafe static bool NeedsComponentEditor(object obj)
+        if (comObject is IPerPropertyBrowsing.Interface perPropertyBrowsing)
         {
-            if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
+            // Check for a property page.
+            Guid guid = Guid.Empty;
+            HRESULT hr = perPropertyBrowsing.MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
+            if (hr.Succeeded && !guid.Equals(Guid.Empty))
             {
-                // check for a property page
-                Guid guid = Guid.Empty;
-                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
-                if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
+                return true;
+            }
+        }
+
+        if (comObject is ISpecifyPropertyPages.Interface ispp)
+        {
+            CAUUID uuids = default;
+            try
+            {
+                HRESULT hr = ispp.GetPages(&uuids);
+                return hr.Succeeded && uuids.cElems > 0;
+            }
+            finally
+            {
+                if (uuids.pElems is not null)
                 {
-                    return true;
+                    Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
                 }
             }
+        }
 
-            if (obj is ISpecifyPropertyPages ispp)
+        return false;
+    }
+
+    public override unsafe bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
+    {
+        HWND handle = parent is null ? HWND.Null : (HWND)parent.Handle;
+
+        // Try to get the page guid
+        if (obj is IPerPropertyBrowsing.Interface perPropertyBrowsing)
+        {
+            // Check for a property page.
+            Guid guid = Guid.Empty;
+            HRESULT hr = perPropertyBrowsing.MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
+            if (hr.Succeeded & !guid.Equals(Guid.Empty))
             {
-                var uuids = new CAUUID();
+                using var unknown = ComHelpers.GetComScope<IUnknown>(obj);
+
+                fixed (char* c = "PropertyPages")
+                {
+                    PInvoke.OleCreatePropertyFrame(
+                        handle,
+                        0,
+                        0,
+                        (PCWSTR)c,
+                        1,
+                        unknown,
+                        1,
+                        &guid,
+                        PInvoke.GetThreadLocale(),
+                        0,
+                        null);
+                }
+
+                return true;
+            }
+        }
+
+        if (obj is ISpecifyPropertyPages.Interface ispp)
+        {
+            try
+            {
+                var uuids = default(CAUUID);
+                HRESULT hr = ispp.GetPages(&uuids);
+                if (!hr.Succeeded || uuids.cElems == 0)
+                {
+                    return false;
+                }
+
+                using var unknown = ComHelpers.GetComScope<IUnknown>(obj);
                 try
                 {
-                    HRESULT hr = ispp.GetPages(&uuids);
-                    if (!hr.Succeeded())
+                    fixed (char* c = "PropertyPages")
                     {
-                        return false;
-                    }
+                        PInvoke.OleCreatePropertyFrame(
+                            handle,
+                            0,
+                            0,
+                            (PCWSTR)c,
+                            1,
+                            unknown,
+                            uuids.cElems,
+                            uuids.pElems,
+                            PInvoke.GetThreadLocale(),
+                            0,
+                            null);
 
-                    return uuids.cElems > 0;
+                        return true;
+                    }
                 }
                 finally
                 {
@@ -46,107 +119,34 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-
-            return false;
-        }
-
-        public unsafe override bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
-        {
-            IntPtr handle = (parent is null ? IntPtr.Zero : parent.Handle);
-
-            // try to get the page guid
-            if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
+            catch (Exception ex)
             {
-                // check for a property page
-                Guid guid = Guid.Empty;
-                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
-                if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
+                string errString = SR.ErrorPropertyPageFailed;
+
+                IUIService? uiSvc = (IUIService?)context?.GetService(typeof(IUIService));
+
+                if (uiSvc is null)
                 {
-                    IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
-                    try
-                    {
-                        Oleaut32.OleCreatePropertyFrame(
-                            new HandleRef(parent, handle),
-                            0,
-                            0,
-                            "PropertyPages",
-                            1,
-                            &pUnk,
-                            1,
-                            &guid,
-                            Kernel32.GetThreadLocale(),
-                            0,
-                            IntPtr.Zero);
-                        return true;
-                    }
-                    finally
-                    {
-                        Marshal.Release(pUnk);
-                    }
+                    RTLAwareMessageBox.Show(
+                        null,
+                        errString,
+                        SR.PropertyGridTitle,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error,
+                        MessageBoxDefaultButton.Button1,
+                        0);
+                }
+                else if (ex is not null)
+                {
+                    uiSvc.ShowError(ex, errString);
+                }
+                else
+                {
+                    uiSvc.ShowError(errString);
                 }
             }
-
-            if (obj is ISpecifyPropertyPages ispp)
-            {
-                try
-                {
-                    var uuids = new CAUUID();
-                    HRESULT hr = ispp.GetPages(&uuids);
-                    if (!hr.Succeeded() || uuids.cElems == 0)
-                    {
-                        return false;
-                    }
-
-                    IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
-                    try
-                    {
-                        Oleaut32.OleCreatePropertyFrame(
-                            new HandleRef(parent, handle),
-                            0,
-                            0,
-                            "PropertyPages",
-                            1,
-                            &pUnk,
-                            uuids.cElems,
-                            uuids.pElems,
-                            Kernel32.GetThreadLocale(),
-                            0,
-                            IntPtr.Zero);
-                        return true;
-                    }
-                    finally
-                    {
-                        Marshal.Release(pUnk);
-                        if (uuids.pElems is not null)
-                        {
-                            Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string errString = SR.ErrorPropertyPageFailed;
-
-                    IUIService? uiSvc = (IUIService?)context?.GetService(typeof(IUIService));
-
-                    if (uiSvc is null)
-                    {
-                        RTLAwareMessageBox.Show(null, errString, SR.PropertyGridTitle,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error,
-                                MessageBoxDefaultButton.Button1, 0);
-                    }
-                    else if (ex is not null)
-                    {
-                        uiSvc.ShowError(ex, errString);
-                    }
-                    else
-                    {
-                        uiSvc.ShowError(errString);
-                    }
-                }
-            }
-
-            return false;
         }
+
+        return false;
     }
 }

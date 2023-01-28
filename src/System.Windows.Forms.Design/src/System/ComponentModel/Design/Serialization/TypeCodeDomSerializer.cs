@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -27,10 +29,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default is null)
-                {
-                    s_default = new TypeCodeDomSerializer();
-                }
+                s_default ??= new TypeCodeDomSerializer();
 
                 return s_default;
             }
@@ -149,14 +148,13 @@ namespace System.ComponentModel.Design.Serialization
 
                     // Interesting problem.  The CodeDom parser may auto generate statements that are associated with other methods. VB does this, for example, to  create statements automatically for Handles clauses.  The problem with this technique is that we will end up with statements that are related to variables that live solely in user code and not in InitializeComponent. We will attempt to construct instances of these objects with limited success. To guard against this, we check to see if the manager even supports this feature, and if it does, we must look out for these statements while filling the statement collections.
                     PropertyDescriptor supportGenerate = manager.Properties["SupportsStatementGeneration"];
-                    if (supportGenerate is not null && supportGenerate.PropertyType == typeof(bool) && ((bool)supportGenerate.GetValue(manager)) == true)
+                    if (supportGenerate is not null && supportGenerate.PropertyType == typeof(bool) && ((bool)supportGenerate.GetValue(manager)))
                     {
                         // Ok, we must do the more expensive work of validating the statements we get.
                         foreach (string name in _nameTable.Keys)
                         {
-                            if (!name.Equals(declaration.Name) && _statementTable.ContainsKey(name))
+                            if (!name.Equals(declaration.Name) && _statementTable.TryGetValue(name, out OrderedCodeStatementCollection statements))
                             {
-                                CodeStatementCollection statements = _statementTable[name];
                                 bool acceptStatement = false;
                                 foreach (CodeStatement statement in statements)
                                 {
@@ -292,9 +290,9 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        if (statements is null && _statementTable.ContainsKey(name))
+                        if (statements is null && _statementTable.TryGetValue(name, out OrderedCodeStatementCollection statementOut))
                         {
-                            statements = _statementTable[name];
+                            statements = statementOut;
                         }
 
                         if (statements is not null && statements.Count > 0)
@@ -443,10 +441,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
 #if DEBUG
                             string memberName = manager.GetName(member);
-                            if (memberName is null)
-                            {
-                                memberName = member.ToString();
-                            }
+                            memberName ??= member.ToString();
 
                             Trace("--------------------------------------------------------------------");
                             Trace("     Beginning serialization of {0}", memberName);
@@ -461,10 +456,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Now do the root object last.
 #if DEBUG
                 string rootName = manager.GetName(root);
-                if (rootName is null)
-                {
-                    rootName = root.ToString();
-                }
+                rootName ??= root.ToString();
 
                 Trace("--------------------------------------------------------------------");
                 Trace("     Beginning serialization of root object {0}", rootName);

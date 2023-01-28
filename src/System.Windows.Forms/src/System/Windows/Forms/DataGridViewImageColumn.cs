@@ -119,10 +119,7 @@ namespace System.Windows.Forms
             set
             {
                 _icon = value;
-                if (DataGridView is not null)
-                {
-                    DataGridView.OnColumnCommonChange(Index);
-                }
+                DataGridView?.OnColumnCommonChange(Index);
             }
         }
 
@@ -138,10 +135,7 @@ namespace System.Windows.Forms
             set
             {
                 _image = value;
-                if (DataGridView is not null)
-                {
-                    DataGridView.OnColumnCommonChange(Index);
-                }
+                DataGridView?.OnColumnCommonChange(Index);
             }
         }
 

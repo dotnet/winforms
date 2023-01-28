@@ -9,6 +9,6 @@ internal static partial class Interop
     internal static partial class GdiPlus
     {
         [DllImport(Libraries.Gdiplus, ExactSpelling = true)]
-        internal unsafe static extern GpStatus GdipCreateSolidFill(int color, IntPtr* brush);
+        internal static extern unsafe GpStatus GdipCreateSolidFill(int color, IntPtr* brush);
     }
 }

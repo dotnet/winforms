@@ -4,10 +4,8 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Drawing.Design
 {
@@ -21,9 +19,9 @@ namespace System.Drawing.Design
     {
         private static readonly List<string> s_iconExtensions = new List<string>() { "ico" };
         private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
-        private FileDialog _fileDialog;
+        private FileDialog? _fileDialog;
 
-        protected static string CreateExtensionsString(string[] extensions, string sep)
+        protected static string? CreateExtensionsString(string?[]? extensions, string sep)
         {
             const string StarDot = "*.";
 
@@ -35,6 +33,11 @@ namespace System.Drawing.Design
             string text = string.Empty;
             for (int i = 0; i < extensions.Length; i++)
             {
+                if (string.IsNullOrWhiteSpace(extensions[i]))
+                {
+                    continue;
+                }
+
                 text = text + StarDot + extensions[i];
                 if (i < extensions.Length - 1)
                 {
@@ -48,12 +51,12 @@ namespace System.Drawing.Design
         protected static string CreateFilterEntry(IconEditor editor)
         {
             string description = editor.GetFileDialogDescription();
-            string extensions = CreateExtensionsString(editor.GetExtensions(), ",");
-            string extensionsWithSemicolons = CreateExtensionsString(editor.GetExtensions(), ";");
+            string? extensions = CreateExtensionsString(editor.GetExtensions(), ",");
+            string? extensionsWithSemicolons = CreateExtensionsString(editor.GetExtensions(), ";");
             return $"{description}({extensions})|{extensionsWithSemicolons}";
         }
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             // Even though we don't use the editor service this is historically what we did.
             if (!provider.TryGetService(out IWindowsFormsEditorService _))
@@ -71,7 +74,7 @@ namespace System.Drawing.Design
                 _fileDialog.Filter = filter;
             }
 
-            IntPtr hwndFocus = User32.GetFocus();
+            HWND hwndFocus = PInvoke.GetFocus();
             try
             {
                 if (_fileDialog.ShowDialog() == DialogResult.OK)
@@ -82,9 +85,9 @@ namespace System.Drawing.Design
             }
             finally
             {
-                if (hwndFocus != IntPtr.Zero)
+                if (!hwndFocus.IsNull)
                 {
-                    User32.SetFocus(new HandleRef(null, hwndFocus));
+                    PInvoke.SetFocus(hwndFocus);
                 }
             }
 
@@ -95,7 +98,7 @@ namespace System.Drawing.Design
         /// Retrieves the editing style of the Edit method.  If the method
         /// is not supported, this will return None.
         /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
             => UITypeEditorEditStyle.Modal;
 
         protected virtual string GetFileDialogDescription() => SR.iconFileDescription;
@@ -103,7 +106,7 @@ namespace System.Drawing.Design
         protected virtual string[] GetExtensions() => s_iconExtensions.ToArray();
 
         /// <inheritdoc />
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
         protected virtual Icon LoadFromStream(Stream stream) => new(stream);
 

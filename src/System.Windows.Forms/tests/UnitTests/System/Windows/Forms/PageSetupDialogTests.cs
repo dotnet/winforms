@@ -443,7 +443,7 @@ namespace System.Windows.Forms.Tests
         public void PageSetupDialog_ShowDialog_InvokeWithoutDocument_ThrowsArgumentException()
         {
             using var dialog = new PageSetupDialog();
-            Assert.Throws<ArgumentException>(null, () => dialog.ShowDialog());
+            Assert.Throws<ArgumentException>(() => dialog.ShowDialog());
         }
     }
 }

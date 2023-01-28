@@ -12,8 +12,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Friend NotInheritable Class NativeTypes
 
+#Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
         <StructLayout(LayoutKind.Sequential)>
         Friend NotInheritable Class SECURITY_ATTRIBUTES
+#Enable Warning CA1812
             Implements IDisposable
 
             Friend Sub New()

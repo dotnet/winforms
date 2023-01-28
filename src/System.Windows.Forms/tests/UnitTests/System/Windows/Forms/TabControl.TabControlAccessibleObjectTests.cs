@@ -673,7 +673,7 @@ namespace System.Windows.Forms.Tests
 
             TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-            Assert.Equal(tabControl.InternalHandle, (IntPtr)accessibleObject.GetPropertyValue(UIA.NativeWindowHandlePropertyId));
+            Assert.Equal(tabControl.InternalHandle, (HWND)accessibleObject.GetPropertyValue(UIA.NativeWindowHandlePropertyId));
             Assert.Equal(createControl, tabControl.IsHandleCreated);
         }
 

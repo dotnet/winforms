@@ -6,6 +6,7 @@ Option Strict On
 Option Explicit On
 
 Imports Microsoft.VisualBasic.MyServices
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -82,12 +83,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' This property returns the primary display screen.
         ''' </summary>
         ''' <value>A System.Windows.Forms.Screen object as the primary screen.</value>
-        Public ReadOnly Property Screen() As System.Windows.Forms.Screen
+        Public ReadOnly Property Screen() As Screen
             Get
                 'Don't cache this.  The Screen class responds to display resolution changes by nulling out AllScreens, which
                 'PrimaryScreen relies on to find the primary.  So we always need to access the latest PrimaryScreen so we
                 'will get the current resolution reported.
-                Return Windows.Forms.Screen.PrimaryScreen
+                Return Screen.PrimaryScreen
             End Get
         End Property
 

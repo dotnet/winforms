@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMLVFINDITEMW
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public int iStart;
             public LVFINDINFOW lvfi;
         }

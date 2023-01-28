@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms
 {

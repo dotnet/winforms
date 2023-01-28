@@ -61,18 +61,13 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return GetIsOffscreenPropertyValue(_toolStripControlHost?.Placement, Bounds);
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_toolStripControlHost?.Placement, Bounds),
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {

@@ -7,12 +7,11 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ScrollableControlTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -1586,7 +1585,7 @@ namespace System.Windows.Forms.Tests
                         {
                             foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
                             {
-                                int expected = backgroundImage != null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (hScroll || vScroll) ? 0 : 1;
+                                int expected = backgroundImage is not null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (hScroll || vScroll) ? 0 : 1;
                                 yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
                                 yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
                                 yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
@@ -1637,8 +1636,7 @@ namespace System.Windows.Forms.Tests
 
                                 int expected = parentFactory == CreateTabPage
                                     ? 0
-                                    : backgroundImage != null
-                                        && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center)
+                                    : backgroundImage is not null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center)
                                         && (hScroll || vScroll)
                                             ? 0
                                             : 1;
@@ -1787,7 +1785,7 @@ namespace System.Windows.Forms.Tests
                     {
                         foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
                         {
-                            int expected = backgroundImage != null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (!hScroll && vScroll) ? 0 : 1;
+                            int expected = backgroundImage is not null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (!hScroll && vScroll) ? 0 : 1;
                             yield return new object[] { hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
                             yield return new object[] { hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
                             yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };

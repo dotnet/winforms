@@ -177,6 +177,11 @@
         <target state="translated">Üst Satırlar</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">Erişim reddedildi</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">Denetim</target>
@@ -242,6 +247,31 @@
         <target state="translated">&amp;Uygula</target>
         <note />
       </trans-unit>
+      <trans-unit id="Arg_ArrayPlusOffTooSmall">
+        <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
+        <target state="translated">Hedef dizi, koleksiyondaki tüm öğeleri kopyalamak için yeterince uzun değil. Dizi dizinini ve uzunluğunu denetleyin.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_NonZeroLowerBound">
+        <source>The lower bound of target array must be zero.</source>
+        <target state="translated">Hedef dizinin alt sınırı sıfır olmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_RankMultiDimNotSupported">
+        <source>Only single dimensional arrays are supported for the requested action.</source>
+        <target state="translated">Yalnızca tek boyutlu diziler, istenen eylem için destekleniyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
+        <source>Non-negative number required.</source>
+        <target state="translated">Negatif olmayan sayı gerekiyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_IncompatibleArrayType">
+        <source>Target array type is not compatible with the type of items in the collection.</source>
+        <target state="translated">Hedef dizi türü, koleksiyondaki öğelerin türüyle uyumlu değil.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">autoComplete, verilen özel kaynakla başlatılamıyor.</target>
@@ -260,6 +290,16 @@
       <trans-unit id="BadDataSourceForComplexBinding">
         <source>Complex DataBinding accepts as a data source either an IList or an IListSource.</source>
         <target state="translated">Karmaşık DataBinding, veri kaynağı olarak ya IList ya da IListSource kabul eder.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="translated">Bağlama bağlamı değiştiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="translated">Bu bağlanabilir Bileşen için BindingContext'i alır veya ayarlar.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1147,9 +1187,34 @@
         <target state="translated">Aç</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="translated">Command özelliğine atanan komutun ICommand.CanExecute(object?) durumu değiştiğinde oluşur.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="translated">Command özelliğinin atanan ICommand nesnesi değiştiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="translated">Bu bileşenin Click olayı her çağrıldığında Execute temsilcisinin yürütüldüğü ICommand nesnesini alır veya ayarlar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="translated">Yürütme sırasında veya yürütme bağlamı isteğinde Command özelliğinin nesnesine geçirilen parametreyi alır veya ayarlar.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Yeni komut kimliği ayrılamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="translated">CommandParameter özelliğinin değeri değiştiğinde gerçekleşir.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1520,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">İşaretçi denetimin üzerine geldiğinde görünen imleç.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="translated">DataContext özelliğinin değeri değiştiğinde gerçekleşir.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4861,6 +4931,11 @@ Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye
         <target state="translated">{0} örneği oluşturulmaya çalışılırken özel durum oluştu. Özel durum: "{1}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="translated">Genişletilmiş</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">Dış özel durum</target>
@@ -5472,11 +5547,6 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Null değeri '{1}' türüne dönüştürülemez.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">GridItem atıldı, artık kullanılamaz.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">GridItem genişletilemez.</target>
@@ -5759,6 +5829,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument='{1}' değeri '{0}' için geçerli değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="translated">Bağımsız değişken '{0}', '{1}' türünde olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
@@ -6564,11 +6639,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0} görünümündeki ListView içindir</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0}, {1} veya {2} görünümündeki ListView içindir</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
@@ -7384,11 +7454,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">Tamam</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Bırakılan '{0}' artık kullanılamaz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">
@@ -9911,6 +9976,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Denetimde metin ve grafikleri görüntülemek için kullanılan arka plan rengi.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="translated">Bu araç şeridi öğesi için BindingContext'i alır veya ayarlar.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">Açılan öğeler koleksiyonuna sahip öğesi ekleyemez.</target>
@@ -10004,6 +10074,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ToolStripItemOnBackColorChangedDescr">
         <source>Occurs when the value of the BackColor property is changed on the item.</source>
         <target state="translated">Öğenin BackColor özelliğinin değeri değiştiğinde gerçekleştirilir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="translated">Bağlanabilir komut her değiştiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="translated">Bağlama bağlamı her değiştiğinde gerçekleşir.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

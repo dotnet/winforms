@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    static internal class ClientUtils
+    internal static class ClientUtils
     {
         public static bool IsCriticalException(Exception ex)
             => ex is NullReferenceException

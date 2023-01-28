@@ -64,10 +64,8 @@ namespace System.Windows.Forms
 
             private static void RaiseMouseClick(int x, int y)
             {
-                Point previousPosition = new();
-                BOOL setOldCursorPos = User32.GetPhysicalCursorPos(ref previousPosition);
-
-                bool mouseSwapped = User32.GetSystemMetrics(User32.SystemMetric.SM_SWAPBUTTON) != 0;
+                BOOL setOldCursorPos = PInvoke.GetPhysicalCursorPos(out Point previousPosition);
+                bool mouseSwapped = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_SWAPBUTTON) != 0;
 
                 SendMouseInput(x, y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
                 SendMouseInput(0, 0, mouseSwapped ? User32.MOUSEEVENTF.RIGHTDOWN : User32.MOUSEEVENTF.LEFTDOWN);
@@ -76,7 +74,7 @@ namespace System.Windows.Forms
                 Threading.Thread.Sleep(50);
 
                 // Set back the mouse position where it was.
-                if (setOldCursorPos.IsTrue())
+                if (setOldCursorPos)
                 {
                     SendMouseInput(previousPosition.X, previousPosition.Y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
                 }
@@ -88,10 +86,10 @@ namespace System.Windows.Forms
             {
                 if ((flags & User32.MOUSEEVENTF.ABSOLUTE) != 0)
                 {
-                    int vscreenWidth = User32.GetSystemMetrics(User32.SystemMetric.SM_CXVIRTUALSCREEN);
-                    int vscreenHeight = User32.GetSystemMetrics(User32.SystemMetric.SM_CYVIRTUALSCREEN);
-                    int vscreenLeft = User32.GetSystemMetrics(User32.SystemMetric.SM_XVIRTUALSCREEN);
-                    int vscreenTop = User32.GetSystemMetrics(User32.SystemMetric.SM_YVIRTUALSCREEN);
+                    int vscreenWidth = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXVIRTUALSCREEN);
+                    int vscreenHeight = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYVIRTUALSCREEN);
+                    int vscreenLeft = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_XVIRTUALSCREEN);
+                    int vscreenTop = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_YVIRTUALSCREEN);
 
                     const int DesktopNormalizedMax = 65536;
 
@@ -121,7 +119,7 @@ namespace System.Windows.Forms
                     flags |= User32.MOUSEEVENTF.VIRTUALDESK;
                 }
 
-                User32.INPUT mouseInput = new();
+                User32.INPUT mouseInput = default(User32.INPUT);
                 mouseInput.type = User32.INPUTENUM.MOUSE;
                 mouseInput.inputUnion.mi.dx = x;
                 mouseInput.inputUnion.mi.dy = y;

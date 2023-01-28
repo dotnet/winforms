@@ -55,7 +55,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         [MemberData(nameof(Ctor_InvalidElement_TestData))]
         public void VisualStyleRenderer_Ctor_InvalidClassNamePartOrState_ThrowsArgumentException(VisualStyleElement element)
         {
-            Assert.Throws<ArgumentException>(null, () => new VisualStyleRenderer(element.ClassName, element.Part, element.State));
+            Assert.Throws<ArgumentException>(() => new VisualStyleRenderer(element.ClassName, element.Part, element.State));
         }
 
         [Theory]
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         [MemberData(nameof(Ctor_InvalidElement_TestData))]
         public void VisualStyleRenderer_Ctor_InvalidElement_ThrowsArgumentException(VisualStyleElement element)
         {
-            Assert.Throws<ArgumentException>(null, () => new VisualStyleRenderer(element));
+            Assert.Throws<ArgumentException>(() => new VisualStyleRenderer(element));
         }
 
         [Fact]
@@ -529,7 +529,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         public void VisualStyleRenderer_SetParameters_InvalidClassNamePartState_ThrowsArgumentException(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
-            Assert.Throws<ArgumentException>(null, () => renderer.SetParameters(element.ClassName, element.Part, element.State));
+            Assert.Throws<ArgumentException>(() => renderer.SetParameters(element.ClassName, element.Part, element.State));
         }
 
         [Theory]
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         public void VisualStyleRenderer_SetParameters_InvalidElement_ThrowsArgumentException(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
-            Assert.Throws<ArgumentException>(null, () => renderer.SetParameters(element));
+            Assert.Throws<ArgumentException>(() => renderer.SetParameters(element));
         }
 
         [Fact]

@@ -4,13 +4,14 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.Versioning;
+using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public partial class ToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -566,6 +567,56 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, item.AutoToolTip);
         }
 
+        [WinFormsFact]
+        [RequiresPreviewFeatures]
+        public void ToolStripButton_BasicCommandBinding()
+        {
+            const string CommandParameter = nameof(CommandParameter);
+
+            using SubToolStripButton button = new();
+
+            // TestCommandExecutionAbility is controlling the execution context.
+            CommandViewModel viewModel = new() { TestCommandExecutionAbility = true };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(button, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            button.CommandChanged += handler;
+            button.Command = viewModel.TestCommand;
+            Assert.Equal(1, callCount);
+
+            button.CommandParameterChanged += handler;
+            button.CommandParameter = CommandParameter;
+            Assert.Equal(2, callCount);
+
+            Assert.Same(viewModel.TestCommand, button.Command);
+            Assert.True(button.Enabled);
+
+            // OnClick is invoking the command in the ViewModel.
+            // The CommandParameter should make its way into the viewmodel's CommandExecuteResult property.
+            button.OnClick(EventArgs.Empty);
+            Assert.Same(CommandParameter, viewModel.CommandExecuteResult);
+
+            // We're changing the execution context.
+            // The ViewModel calls RaiseCanExecuteChanged, which the Button should handle.
+            viewModel.TestCommandExecutionAbility = false;
+            Assert.False(button.Enabled);
+
+            // Remove handler.
+            button.CommandChanged -= handler;
+            button.Command = null;
+            Assert.Equal(2, callCount);
+
+            button.CommandParameterChanged -= handler;
+            button.CommandParameter = null;
+            Assert.Equal(2, callCount);
+        }
+
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripButton_CheckOnClick_Set_GetReturnsExpected(bool value)
@@ -1007,9 +1058,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, CheckState.Checked, AccessibleStates.Focusable | AccessibleStates.Checked)]
         [InlineData(true, CheckState.Indeterminate, AccessibleStates.Focusable | AccessibleStates.Checked)]
         [InlineData(true, CheckState.Unchecked, AccessibleStates.Focusable)]
-        [InlineData(false, CheckState.Checked, AccessibleStates.Unavailable)]
-        [InlineData(false, CheckState.Indeterminate, AccessibleStates.Unavailable)]
-        [InlineData(false, CheckState.Unchecked, AccessibleStates.Unavailable)]
+        [InlineData(false, CheckState.Checked, AccessibleStates.None)]
+        [InlineData(false, CheckState.Indeterminate, AccessibleStates.None)]
+        [InlineData(false, CheckState.Unchecked, AccessibleStates.None)]
         public void ToolStripButton_CreateAccessibilityInstance_InvokeChecked_ReturnsExpected(bool enabled, CheckState checkState, AccessibleStates expectedState)
         {
             using var item = new SubToolStripButton
@@ -1026,7 +1077,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData(true, AccessibleStates.Focused | AccessibleStates.HotTracked | AccessibleStates.Focusable)]
-        [InlineData(false, AccessibleStates.Unavailable | AccessibleStates.Focused)]
+        [InlineData(false, AccessibleStates.None)]
         public void ToolStripButton_CreateAccessibilityInstance_InvokeSelected_ReturnsExpected(bool enabled, AccessibleStates expectedState)
         {
             using var item = new SubToolStripButton
@@ -1034,7 +1085,7 @@ namespace System.Windows.Forms.Tests
                 Enabled = enabled
             };
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
 
             ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
             Assert.Equal(AccessibleRole.PushButton, accessibleObject.Role);

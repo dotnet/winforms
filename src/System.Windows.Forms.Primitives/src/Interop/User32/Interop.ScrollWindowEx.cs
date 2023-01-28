@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public unsafe static partial int ScrollWindowEx(
+        [DllImport(Libraries.User32)]
+        public static extern unsafe int ScrollWindowEx(
             IntPtr hWnd,
             int dx,
             int dy,
@@ -19,7 +19,7 @@ internal static partial class Interop
             RECT* prcUpdate,
             ScrollSW flags);
 
-        public unsafe static int ScrollWindowEx(
+        public static unsafe int ScrollWindowEx(
             IHandle hWnd,
             int dx,
             int dy,

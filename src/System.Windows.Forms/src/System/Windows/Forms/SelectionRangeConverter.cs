@@ -60,10 +60,7 @@ namespace System.Windows.Forms
                 }
 
                 // Separate the string into the two dates, and parse each one
-                if (culture is null)
-                {
-                    culture = CultureInfo.CurrentCulture;
-                }
+                culture ??= CultureInfo.CurrentCulture;
 
                 char separator = culture.TextInfo.ListSeparator[0];
                 string[] tokens = text.Split(new char[] { separator });
@@ -105,10 +102,7 @@ namespace System.Windows.Forms
             {
                 if (destinationType == typeof(string))
                 {
-                    if (culture is null)
-                    {
-                        culture = CultureInfo.CurrentCulture;
-                    }
+                    culture ??= CultureInfo.CurrentCulture;
 
                     string sep = culture.TextInfo.ListSeparator + " ";
                     PropertyDescriptorCollection props = GetProperties(value)!;

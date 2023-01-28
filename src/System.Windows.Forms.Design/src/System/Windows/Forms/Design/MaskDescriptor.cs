@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Globalization;
 
@@ -92,13 +94,13 @@ namespace System.Windows.Forms.Design
 
             if (maskedTextBox.Tag is null) // Sample was added successfully (MaskInputRejected event handler did not change the maskedTextBox tag).
             {
-                if (maskDescriptor.ValidatingType != null)
+                if (maskDescriptor.ValidatingType is not null)
                 {
                     maskedTextBox.ValidateText();
                 }
             }
 
-            if (maskedTextBox.Tag != null) // Validation failed.
+            if (maskedTextBox.Tag is not null) // Validation failed.
             {
                 validationErrorDescription = maskedTextBox.Tag.ToString();
             }
@@ -147,7 +149,7 @@ namespace System.Windows.Forms.Design
         {
             string hash = Mask;
 
-            if (ValidatingType != null)
+            if (ValidatingType is not null)
             {
                 hash += ValidatingType.ToString();
             }
@@ -159,9 +161,9 @@ namespace System.Windows.Forms.Design
         {
             return string.Format(CultureInfo.CurrentCulture, "{0}<Name={1}, Mask={2}, ValidatingType={3}",
                 GetType(),
-                Name != null ? Name : "null",
-                Mask != null ? Mask : "null",
-                ValidatingType != null ? ValidatingType.ToString() : "null");
+                Name ?? "null",
+                Mask ?? "null",
+                ValidatingType is not null ? ValidatingType.ToString() : "null");
         }
     }
 }

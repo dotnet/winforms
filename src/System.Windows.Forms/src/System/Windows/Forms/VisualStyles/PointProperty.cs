@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.UxTheme;
-
 namespace System.Windows.Forms.VisualStyles
 {
     public enum PointProperty
     {
-        Offset = TMT.OFFSET,
-        TextShadowOffset = TMT.TEXTSHADOWOFFSET,
-        MinSize = TMT.MINSIZE,
-        MinSize1 = TMT.MINSIZE1,
-        MinSize2 = TMT.MINSIZE2,
-        MinSize3 = TMT.MINSIZE3,
-        MinSize4 = TMT.MINSIZE4,
-        MinSize5 = TMT.MINSIZE5
+        Offset = (int)THEME_PROPERTY_SYMBOL_ID.TMT_OFFSET,
+        TextShadowOffset = (int)THEME_PROPERTY_SYMBOL_ID.TMT_TEXTSHADOWOFFSET,
+        MinSize = (int)THEME_PROPERTY_SYMBOL_ID.TMT_MINSIZE,
+        MinSize1 = (int)THEME_PROPERTY_SYMBOL_ID.TMT_MINSIZE1,
+        MinSize2 = (int)THEME_PROPERTY_SYMBOL_ID.TMT_MINSIZE2,
+        MinSize3 = (int)THEME_PROPERTY_SYMBOL_ID.TMT_MINSIZE3,
+        MinSize4 = (int)THEME_PROPERTY_SYMBOL_ID.TMT_MINSIZE4,
+        MinSize5 = (int)THEME_PROPERTY_SYMBOL_ID.TMT_MINSIZE5
     }
 }

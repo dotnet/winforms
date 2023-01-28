@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
 
                 // Returns info about the selected text range.
                 // If there is no selection, start and end parameters are the position of the caret.
-                SendMessageW(_owningTextBoxBase, (WM)EM.GETSEL, ref start, ref end);
+                PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETSEL, ref start, ref end);
 
                 return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
             }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
 
                 // Convert screen to client coordinates.
                 // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-                if (MapWindowPoint(IntPtr.Zero, _owningTextBoxBase, ref clientLocation) == 0)
+                if (PInvoke.MapWindowPoints((HWND)default, _owningTextBoxBase, ref clientLocation) == 0)
                 {
                     return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0);
                 }
@@ -96,13 +96,15 @@ namespace System.Windows.Forms
                 return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, start);
             }
 
+            public override Rectangle RectangleToScreen(Rectangle rect) => _owningTextBoxBase.RectangleToScreen(rect);
+
             public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, TextLength);
 
             public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 
             public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
             {
-                isActive = BOOL.FALSE;
+                isActive = false;
 
                 if (!_owningTextBoxBase.IsHandleCreated)
                 {
@@ -112,7 +114,7 @@ namespace System.Windows.Forms
                 var hasKeyboardFocus = _owningTextBoxBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
                 if (hasKeyboardFocus is bool && (bool)hasKeyboardFocus)
                 {
-                    isActive = BOOL.TRUE;
+                    isActive = true;
                 }
 
                 return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, _owningTextBoxBase.SelectionStart, _owningTextBoxBase.SelectionStart);
@@ -142,13 +144,13 @@ namespace System.Windows.Forms
 
             public override int FirstVisibleLine
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
+                    ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
                     : -1;
 
             public override bool IsMultiline => _owningTextBoxBase.Multiline;
 
             public override bool IsReadingRTL
-                => _owningTextBoxBase.IsHandleCreated && WindowExStyle.HasFlag(WS_EX.RTLREADING);
+                => _owningTextBoxBase.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
             public override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
 
@@ -161,14 +163,14 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)GetWindowLong(_owningTextBoxBase, GWL.STYLE);
+                    ES extendedStyle = (ES)PInvoke.GetWindowLong(_owningTextBoxBase, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL) || extendedStyle.HasFlag(ES.AUTOVSCROLL);
                 }
             }
 
             public override int LinesCount
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
+                    ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
                     : -1;
 
             public override int LinesPerPage
@@ -206,20 +208,17 @@ namespace System.Windows.Forms
                     ? _owningTextBoxBase.Text
                     : string.Empty;
 
-            public override int TextLength
-                => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
-                    : -1;
+            public override int TextLength => Text.Length;
 
-            public override WS_EX WindowExStyle
+            public override WINDOW_EX_STYLE WindowExStyle
                 => _owningTextBoxBase.IsHandleCreated
                     ? GetWindowExStyle(_owningTextBoxBase)
-                    : WS_EX.LEFT;
+                    : WINDOW_EX_STYLE.WS_EX_LEFT;
 
-            public override WS WindowStyle
+            public override WINDOW_STYLE WindowStyle
                 => _owningTextBoxBase.IsHandleCreated
                     ? GetWindowStyle(_owningTextBoxBase)
-                    : WS.OVERLAPPED;
+                    : WINDOW_STYLE.WS_OVERLAPPED;
 
             public override ES EditStyle
                 => _owningTextBoxBase.IsHandleCreated
@@ -233,7 +232,7 @@ namespace System.Windows.Forms
 
             public override int GetLineIndex(int line)
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.LINEINDEX, line)
+                    ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.LINEINDEX, (WPARAM)line)
                     : -1;
 
             public override Point GetPositionFromChar(int charIndex)
@@ -306,19 +305,39 @@ namespace System.Windows.Forms
                 Point ptStart = new Point(rectangle.X + 1, rectangle.Y + 1);
                 Point ptEnd = new Point(rectangle.Right - 1, rectangle.Bottom - 1);
 
-                visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
-                visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1; // Add 1 to get a caret position after received character
+                if (IsMultiline)
+                {
+                    visibleStart = GetLineIndex(FirstVisibleLine);
+
+                    int lastVisibleLine = FirstVisibleLine + LinesPerPage - 1;
+                    // Index of the next line is the end caret position of the previous line.
+                    visibleEnd = GetLineIndex(lastVisibleLine + 1);
+                    if (visibleEnd == -1)
+                    {
+                        visibleEnd = Text.Length;
+                    }
+                }
+                else
+                {
+                    visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
+                    // Add 1 to get a caret position after received character.
+                    visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1;
+                }
 
                 return;
 
-                bool IsDegenerate(Rectangle rect)
+                static bool IsDegenerate(Rectangle rect)
                     => rect.IsEmpty || rect.Width <= 0 || rect.Height <= 0;
             }
 
             public override bool LineScroll(int charactersHorizontal, int linesVertical)
                 // Sends an EM_LINESCROLL message to scroll it horizontally and/or vertically.
                 => _owningTextBoxBase.IsHandleCreated
-                    && SendMessageW(_owningTextBoxBase, (WM)EM.LINESCROLL, charactersHorizontal, linesVertical) != 0;
+                    && PInvoke.SendMessage(
+                        _owningTextBoxBase,
+                        (WM)EM.LINESCROLL,
+                        (WPARAM)charactersHorizontal,
+                        (LPARAM)linesVertical) != 0;
 
             public override void SetSelection(int start, int end)
             {
@@ -339,7 +358,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningTextBoxBase, (WM)EM.SETSEL, start, end);
+                PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.SETSEL, (WPARAM)start, (LPARAM)end);
             }
 
             private RECT GetFormattingRectangle()
@@ -347,25 +366,28 @@ namespace System.Windows.Forms
                 Debug.Assert(_owningTextBoxBase.IsHandleCreated);
 
                 // Send an EM_GETRECT message to find out the bounding rectangle.
-                RECT rectangle = new RECT();
-                SendMessageW(_owningTextBoxBase, (WM)EM.GETRECT, 0, ref rectangle);
+                RECT rectangle = default(RECT);
+                PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETRECT, (WPARAM)0, ref rectangle);
                 return rectangle;
             }
 
-            private bool GetTextExtentPoint32(char item, out Size size)
+            private unsafe bool GetTextExtentPoint32(char item, out Size size)
             {
                 Debug.Assert(_owningTextBoxBase.IsHandleCreated);
 
-                size = new Size();
+                size = default;
 
-                using var hdc = new GetDcScope(_owningTextBoxBase.Handle);
+                using GetDcScope hdc = new(_owningTextBoxBase.Handle);
                 if (hdc.IsNull)
                 {
                     return false;
                 }
 
-                // Add the width of the character at that position.
-                return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size).IsTrue();
+                fixed (void* pSize = &size)
+                {
+                    // Add the width of the character at that position.
+                    return PInvoke.GetTextExtentPoint32W(hdc, &item, 1, (SIZE*)pSize);
+                }
             }
         }
     }

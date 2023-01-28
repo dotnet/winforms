@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -85,11 +87,7 @@ namespace System.ComponentModel.Design.Serialization
                     return _host;
                 }
 
-                if (_hostInitialized)
-                {
-                    throw new ObjectDisposedException(GetType().Name);
-                }
-
+                ObjectDisposedException.ThrowIf(_hostInitialized, this);
                 throw new InvalidOperationException(SR.BasicDesignerLoaderNotInitialized);
             }
         }
@@ -854,10 +852,7 @@ namespace System.ComponentModel.Design.Serialization
 
             Exception ex = lastError as Exception;
 
-            if (ex is null)
-            {
-                ex = new InvalidOperationException(lastError.ToString());
-            }
+            ex ??= new InvalidOperationException(lastError.ToString());
 
             throw ex;
         }

@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -22,7 +21,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Image))]
     [DefaultBindingProperty(nameof(Image))]
     [Docking(DockingBehavior.Ask)]
-    [Designer("System.Windows.Forms.Design.PictureBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.PictureBoxDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionPictureBox))]
     public partial class PictureBox : Control, ISupportInitialize
     {
@@ -127,7 +126,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(BorderStyle.None)]
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.PictureBoxBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
@@ -198,10 +197,10 @@ namespace System.Windows.Forms
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)User32.WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
@@ -233,10 +232,7 @@ namespace System.Windows.Forms
                     if (_defaultErrorImage is null)
                     {
                         // Can't share images across threads.
-                        if (t_defaultErrorImageForThread is null)
-                        {
-                            t_defaultErrorImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
-                        }
+                        t_defaultErrorImageForThread ??= DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
 
                         _defaultErrorImage = t_defaultErrorImageForThread;
                     }
@@ -394,10 +390,7 @@ namespace System.Windows.Forms
                     if (_defaultInitialImage is null)
                     {
                         // Can't share images across threads.
-                        if (t_defaultInitialImageForThread is null)
-                        {
-                            t_defaultInitialImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
-                        }
+                        t_defaultInitialImageForThread ??= DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
 
                         _defaultInitialImage = t_defaultInitialImageForThread;
                     }
@@ -627,10 +620,7 @@ namespace System.Windows.Forms
         {
             AsyncOperation temp = _currentAsyncLoadOperation;
             _currentAsyncLoadOperation = null;
-            if (temp is not null)
-            {
-                temp.PostOperationCompleted(_loadCompletedDelegate, new AsyncCompletedEventArgs(error, cancelled, null));
-            }
+            temp?.PostOperationCompleted(_loadCompletedDelegate, new AsyncCompletedEventArgs(error, cancelled, null));
         }
 
         private void LoadCompletedDelegate(object arg)
@@ -732,21 +722,15 @@ namespace System.Windows.Forms
                     if (_contentLength != -1)
                     {
                         int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
-                        if (_currentAsyncLoadOperation is not null)
-                        {
-                            _currentAsyncLoadOperation.Post(_loadProgressDelegate,
+                        _currentAsyncLoadOperation?.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(progress, null));
-                        }
                     }
                 }
                 else
                 {
                     _tempDownloadStream.Seek(0, SeekOrigin.Begin);
-                    if (_currentAsyncLoadOperation is not null)
-                    {
-                        _currentAsyncLoadOperation.Post(_loadProgressDelegate,
+                    _currentAsyncLoadOperation?.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(100, null));
-                    }
 
                     PostCompleted(null, false);
 

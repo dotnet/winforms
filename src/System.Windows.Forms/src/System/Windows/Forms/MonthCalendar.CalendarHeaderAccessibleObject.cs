@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -36,7 +35,7 @@ namespace System.Windows.Forms
                 // otherwise the calendar accessibility tree will be rebuilt.
                 // So save these values one time to avoid sending messages to Windows every time
                 // or recreating new structures and making extra calculations.
-                _initName = _monthCalendarAccessibleObject.GetCalendarPartText(MCGIP.CALENDARHEADER, _calendarIndex);
+                _initName = _monthCalendarAccessibleObject.GetCalendarPartText(MCGRIDINFO_PART.MCGIP_CALENDARHEADER, _calendarIndex);
                 _initRuntimeId = new int[]
                 {
                     _calendarAccessibleObject.RuntimeId[0],
@@ -47,7 +46,7 @@ namespace System.Windows.Forms
             }
 
             public override Rectangle Bounds
-                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGIP.CALENDARHEADER, _calendarIndex);
+                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_CALENDARHEADER, _calendarIndex);
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 => direction switch

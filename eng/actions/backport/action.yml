@@ -16,5 +16,5 @@ inputs:
       /cc %cc_users%
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'index.js'

@@ -6,17 +6,16 @@
 
 using System.Drawing;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     internal class PenValidator : IStateValidator
     {
         private readonly int _penWidth;
-        private readonly Gdi32.PS _penStyle;
+        private readonly PEN_STYLE _penStyle;
         private readonly Color _penColor;
 
-        public PenValidator(int penWidth, Color penColor, Gdi32.PS penStyle)
+        public PenValidator(int penWidth, Color penColor, PEN_STYLE penStyle)
         {
             _penWidth = penWidth;
             _penColor = penColor;

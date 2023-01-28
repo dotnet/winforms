@@ -187,6 +187,13 @@ namespace System.Windows.Forms
         /// </summary>
         public object? GetObject(int key) => GetObject(key, out _);
 
+        public bool TryGetObject<T>(int key, [NotNullWhen(true)] out T? value)
+        {
+            object? entry = GetObject(key, out bool found);
+            value = !found ? default : (T?)entry;
+            return found;
+        }
+
         /// <summary>
         ///  Retrieves an object value from our property list.
         ///  This will set value to null and return false if the

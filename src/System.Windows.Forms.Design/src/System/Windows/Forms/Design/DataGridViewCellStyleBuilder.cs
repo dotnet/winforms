@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -45,7 +47,7 @@ namespace System.Windows.Forms.Design
             _serviceProvider = serviceProvider;
             _comp = comp;
 
-            if (_serviceProvider != null)
+            if (_serviceProvider is not null)
             {
                 _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
             }
@@ -334,10 +336,7 @@ namespace System.Windows.Forms.Design
             DialogDataGridViewCellAccessibleObject _accObj;
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                if (_accObj is null)
-                {
-                    _accObj = new DialogDataGridViewCellAccessibleObject(this);
-                }
+                _accObj ??= new DialogDataGridViewCellAccessibleObject(this);
 
                 return _accObj;
             }

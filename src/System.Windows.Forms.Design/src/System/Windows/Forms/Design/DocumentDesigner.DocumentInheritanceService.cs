@@ -1,6 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -40,12 +42,12 @@ namespace System.Windows.Forms.Design
                 //
                 bool privateMember;
                 Type memberType;
-                if (field != null)
+                if (field is not null)
                 {
                     privateMember = field.IsPrivate || field.IsAssembly;
                     memberType = field.FieldType;
                 }
-                else if (method != null)
+                else if (method is not null)
                 {
                     privateMember = method.IsPrivate || method.IsAssembly;
                     memberType = method.ReturnType;
@@ -63,25 +65,25 @@ namespace System.Windows.Forms.Design
                         // See if this member is a child of our document...
                         //
                         Control child = null;
-                        if (field != null)
+                        if (field is not null)
                         {
                             child = (Control)field.GetValue(component);
                         }
-                        else if (method != null)
+                        else if (method is not null)
                         {
                             child = (Control)method.Invoke(component, null);
                         }
 
                         Control parent = designer.Control;
 
-                        while (child != null && child != parent)
+                        while (child is not null && child != parent)
                         {
                             child = child.Parent;
                         }
 
                         // If it is a child of our designer, we don't want to ignore this member.
                         //
-                        if (child != null)
+                        if (child is not null)
                         {
                             return false;
                         }

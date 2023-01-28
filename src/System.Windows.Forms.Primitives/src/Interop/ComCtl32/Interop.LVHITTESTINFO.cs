@@ -11,7 +11,7 @@ internal static partial class Interop
         public struct LVHITTESTINFO
         {
             public Point pt;
-            public LVHT flags;
+            public LVHITTESTINFO_FLAGS flags;
             public int iItem;
             public int iSubItem;
             public int iGroup;

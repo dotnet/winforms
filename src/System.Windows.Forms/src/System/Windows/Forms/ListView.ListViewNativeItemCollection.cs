@@ -30,32 +30,13 @@ namespace System.Windows.Forms
                 get
                 {
                     _owner.ApplyUpdateCachedItems();
-                    if (_owner.VirtualMode)
-                    {
-                        return _owner.VirtualListSize;
-                    }
-                    else
-                    {
-                        return _owner._itemCount;
-                    }
+                    return _owner.VirtualMode ? _owner.VirtualListSize : _owner._itemCount;
                 }
             }
 
-            public bool OwnerIsVirtualListView
-            {
-                get
-                {
-                    return _owner.VirtualMode;
-                }
-            }
+            public bool OwnerIsVirtualListView => _owner.VirtualMode;
 
-            public bool OwnerIsDesignMode
-            {
-                get
-                {
-                    return _owner.DesignMode;
-                }
-            }
+            public bool OwnerIsDesignMode => _owner.DesignMode;
 
             public ListViewItem this[int displayIndex]
             {
@@ -80,7 +61,8 @@ namespace System.Windows.Forms
 
                         if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
                         {
-                            return (ListViewItem)_owner._listItemsTable[DisplayIndexToID(displayIndex)];
+                            _owner._listItemsTable.TryGetValue(DisplayIndexToID(displayIndex), out ListViewItem item);
+                            return item;
                         }
                         else
                         {
@@ -213,11 +195,11 @@ namespace System.Windows.Forms
                     // Obtain internal index of the item
                     var lvItem = new LVITEMW
                     {
-                        mask = LVIF.PARAM,
+                        mask = LIST_VIEW_ITEM_FLAGS.LVIF_PARAM,
                         iItem = displayIndex
                     };
 
-                    User32.SendMessageW(_owner, (User32.WM)LVM.GETITEMW, 0, ref lvItem);
+                    PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETITEMW, (WPARAM)0, ref lvItem);
                     return PARAM.ToInt(lvItem.lParam);
                 }
                 else
@@ -241,7 +223,12 @@ namespace System.Windows.Forms
                     // We use the LVM_GETNEXTITEM message to see what the next selected item is
                     // so we can avoid checking selection for each one.
                     int count = _owner.Items.Count;
-                    int nextSelected = (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETNEXTITEM, -1, (nint)LVNI.SELECTED);
+                    int nextSelected = (int)PInvoke.SendMessage(
+                        _owner,
+                        (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                        (WPARAM)(-1),
+                        (LPARAM)(uint)PInvoke.LVNI_SELECTED);
+
                     for (int i = 0; i < count; i++)
                     {
                         ListViewItem item = _owner.Items[i];
@@ -252,7 +239,10 @@ namespace System.Windows.Forms
                             if (i == nextSelected)
                             {
                                 item.StateSelected = true;
-                                nextSelected = (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETNEXTITEM, nextSelected, (nint)LVNI.SELECTED);
+                                nextSelected = (int)PInvoke.SendMessage(
+                                    _owner,
+                                    (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                                    (WPARAM)nextSelected, (LPARAM)(uint)PInvoke.LVNI_SELECTED);
                             }
                             else
                             {
@@ -266,7 +256,7 @@ namespace System.Windows.Forms
 
                     Debug.Assert(_owner._listViewItems is null, "listItemsArray not null, even though handle created");
 
-                    User32.SendMessageW(_owner, (User32.WM)LVM.DELETEALLITEMS);
+                    PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETEALLITEMS);
 
                     // There's a problem in the list view that if it's in small icon, it won't pick up the small icon
                     // sizes until it changes from large icon, so we flip it twice here...
@@ -291,10 +281,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < count; i++)
                     {
                         ListViewItem item = _owner.Items[i];
-                        if (item is not null)
-                        {
-                            item.UnHost(i, true);
-                        }
+                        item?.UnHost(i, true);
                     }
 
                     Debug.Assert(_owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
@@ -320,7 +307,8 @@ namespace System.Windows.Forms
                 _owner.ApplyUpdateCachedItems();
                 if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
                 {
-                    return _owner._listItemsTable[item.ID] == item;
+                    return _owner._listItemsTable.TryGetValue(item.ID, out ListViewItem itemOut)
+                        && itemOut == item;
                 }
                 else
                 {
@@ -432,7 +420,7 @@ namespace System.Windows.Forms
                 if (_owner.IsHandleCreated)
                 {
                     Debug.Assert(_owner._listViewItems is null, "listItemsArray not null, even though handle created");
-                    if (User32.SendMessageW(_owner, (User32.WM)LVM.DELETEITEM, index) == 0)
+                    if (PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETEITEM, (WPARAM)index) == 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }

@@ -215,7 +215,7 @@ namespace System.Windows.Forms
             ///  Given an IEnumVariant interface, this method jumps to a specific
             ///  item in the collection and extracts the result for that one item.
             /// </summary>
-            private unsafe static bool GotoItem(Oleaut32.IEnumVariant iev, int index, IntPtr variantPtr)
+            private static unsafe bool GotoItem(Oleaut32.IEnumVariant iev, int index, IntPtr variantPtr)
             {
                 uint celtFetched = 0;
 

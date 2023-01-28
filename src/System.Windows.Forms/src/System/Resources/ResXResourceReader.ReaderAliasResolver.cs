@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.Reflection;
 
 namespace System.Resources
@@ -13,27 +10,22 @@ namespace System.Resources
     {
         private sealed class ReaderAliasResolver : IAliasResolver
         {
-            private readonly Hashtable _cachedAliases;
+            private readonly Dictionary<string, AssemblyName> _cachedAliases;
 
             internal ReaderAliasResolver()
             {
-                _cachedAliases = new Hashtable();
+                _cachedAliases = new Dictionary<string, AssemblyName>();
             }
 
-            public AssemblyName ResolveAlias(string alias)
+            public AssemblyName? ResolveAlias(string alias)
             {
-                AssemblyName result = null;
-                if (_cachedAliases is not null)
-                {
-                    result = (AssemblyName)_cachedAliases[alias];
-                }
-
+                _cachedAliases.TryGetValue(alias, out AssemblyName? result);
                 return result;
             }
 
-            public void PushAlias(string alias, AssemblyName name)
+            public void PushAlias(string? alias, AssemblyName name)
             {
-                if (_cachedAliases is not null && !string.IsNullOrEmpty(alias))
+                if (!string.IsNullOrEmpty(alias))
                 {
                     _cachedAliases[alias] = name;
                 }

@@ -27,7 +27,7 @@ namespace System.Windows.Forms.UITests
 
                 MCHITTESTINFO info = new()
                 {
-                    uHit = MCHT.CALENDARDAY,
+                    uHit = MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY,
                     iRow = 0
                 };
                 MonthCalendarChildAccessibleObject cell = calendarAccessibleObject.GetChildFromPoint(info);

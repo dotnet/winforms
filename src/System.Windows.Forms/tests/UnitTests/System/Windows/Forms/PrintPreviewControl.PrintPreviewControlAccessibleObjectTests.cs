@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using Xunit;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
@@ -47,7 +45,7 @@ namespace System.Windows.Forms.Tests
 
             var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
             control.CreateControl();
-            User32.SetFocus(new HandleRef(control, control.Handle));
+            PInvoke.SetFocus(control);
             bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
 
             Assert.True(value);

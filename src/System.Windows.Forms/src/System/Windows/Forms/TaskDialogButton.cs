@@ -382,12 +382,12 @@ namespace System.Windows.Forms
         /// <returns>A string that contains the control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
-        internal ComCtl32.TDF Bind(TaskDialogPage page, int customButtonID)
+        internal TASKDIALOG_FLAGS Bind(TaskDialogPage page, int customButtonID)
         {
             if (_standardButtonResult is not null)
                 throw new InvalidOperationException();
 
-            ComCtl32.TDF result = Bind(page);
+            TASKDIALOG_FLAGS result = Bind(page);
             _customButtonID = customButtonID;
 
             return result;

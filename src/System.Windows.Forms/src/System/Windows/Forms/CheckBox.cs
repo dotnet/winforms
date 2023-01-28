@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_checkState);
+                        PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(int)_checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                cp.ClassName = PInvoke.WC_BUTTON;
                 if (OwnerDraw)
                 {
                     cp.Style |= (int)User32.BS.OWNERDRAW;
@@ -530,7 +530,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_checkState);
+                PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(int)_checkState);
             }
         }
 
@@ -539,26 +539,22 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent.Button == MouseButtons.Left && MouseIsPressed)
+            // It's best not to have the mouse captured while running Click events
+            if (mevent.Button == MouseButtons.Left
+                && MouseIsPressed
+                && MouseIsDown
+                && PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND)
             {
-                // It's best not to have the mouse captured while running Click events
-                if (base.MouseIsDown)
+                // Paint in raised state.
+                ResetFlagsandPaint();
+                if (!ValidationCancelled)
                 {
-                    Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (User32.WindowFromPoint(pt) == Handle)
+                    if (Capture)
                     {
-                        //Paint in raised state...
-                        ResetFlagsandPaint();
-                        if (!ValidationCancelled)
-                        {
-                            if (Capture)
-                            {
-                                OnClick(mevent);
-                            }
-
-                            OnMouseClick(mevent);
-                        }
+                        OnClick(mevent);
                     }
+
+                    OnMouseClick(mevent);
                 }
             }
 

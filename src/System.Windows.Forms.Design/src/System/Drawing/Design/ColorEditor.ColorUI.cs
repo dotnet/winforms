@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -14,11 +14,11 @@ namespace System.Drawing.Design
         /// <summary>
         ///  Editor UI for the color editor.
         /// </summary>
-        private class ColorUI : Control
+        private sealed partial class ColorUI : Control
         {
             private readonly ColorEditor editor;
-            private IWindowsFormsEditorService edSvc;
-            private object value;
+            private IWindowsFormsEditorService? edSvc;
+            private object? value;
             private ColorEditorTabControl tabControl;
             private TabPage systemTabPage;
             private TabPage commonTabPage;
@@ -26,9 +26,9 @@ namespace System.Drawing.Design
             private ListBox lbSystem;
             private ListBox lbCommon;
             private ColorPalette pal;
-            private object[] systemColorConstants;
-            private object[] colorConstants;
-            private Color[] customColors;
+            private Color[]? systemColorConstants;
+            private Color[]? colorConstants;
+            private Color[]? customColors;
             private bool commonHeightSet;
             private bool systemHeightSet;
 
@@ -42,7 +42,7 @@ namespace System.Drawing.Design
             /// <summary>
             ///  Array of standard colors.
             /// </summary>
-            private object[] ColorValues => colorConstants ?? (colorConstants = GetConstants(typeof(Color)));
+            private Color[] ColorValues => colorConstants ??= GetConstants(typeof(Color));
 
             /// <summary>
             ///  Retrieves the array of custom colors for our use.
@@ -62,25 +62,19 @@ namespace System.Drawing.Design
 
                     return customColors;
                 }
-
-                set
-                {
-                    customColors = value;
-                    pal = null;
-                }
             }
 
             /// <summary>
             ///  Allows someone else to close our dropdown.
             /// </summary>
-            public IWindowsFormsEditorService EditorService => edSvc;
+            public IWindowsFormsEditorService? EditorService => edSvc;
 
             /// <summary>
             ///  Array of system colors.
             /// </summary>
-            private object[] SystemColorValues => systemColorConstants ?? (systemColorConstants = GetConstants(typeof(SystemColors)));
+            private Color[] SystemColorValues => systemColorConstants ??= GetConstants(typeof(SystemColors));
 
-            public object Value => value;
+            public object? Value => value;
 
             public void End()
             {
@@ -91,7 +85,6 @@ namespace System.Drawing.Design
             private void AdjustColorUIHeight()
             {
                 // Compute the default size for the color UI
-                //
                 Size size = pal.Size;
                 Rectangle rectItemSize = tabControl.GetTabRect(0);
                 int CMARGIN = 0;
@@ -110,13 +103,13 @@ namespace System.Drawing.Design
             /// </summary>
             private Color GetBestColor(Color color)
             {
-                object[] colors = ColorValues;
+                Color[] colors = ColorValues;
                 int rgb = color.ToArgb();
                 for (int i = 0; i < colors.Length; i++)
                 {
-                    if (((Color)colors[i]).ToArgb() == rgb)
+                    if (colors[i].ToArgb() == rgb)
                     {
-                        return (Color)colors[i];
+                        return colors[i];
                     }
                 }
 
@@ -126,30 +119,46 @@ namespace System.Drawing.Design
             /// <summary>
             ///  Retrieves an array of color constants for the given object.
             /// </summary>
-            private static object[] GetConstants(Type enumType)
+            private static Color[] GetConstants(Type enumType)
             {
                 MethodAttributes attrs = MethodAttributes.Public | MethodAttributes.Static;
                 PropertyInfo[] props = enumType.GetProperties();
 
-                ArrayList colorList = new ArrayList();
+                List<Color> colorList = new();
 
                 for (int i = 0; i < props.Length; i++)
                 {
                     PropertyInfo prop = props[i];
-                    if (prop.PropertyType == typeof(Color))
+                    if (prop.PropertyType != typeof(Color))
                     {
-                        MethodInfo method = prop.GetGetMethod();
-                        if (method != null && (method.Attributes & attrs) == attrs)
-                        {
-                            object[] tempIndex = null;
-                            colorList.Add(prop.GetValue(null, tempIndex));
-                        }
+                        continue;
                     }
+
+                    MethodInfo? method = prop.GetGetMethod();
+                    if (method is null || (method.Attributes & attrs) != attrs)
+                    {
+                        continue;
+                    }
+
+                    if (prop.GetValue(obj: null, index: null) is not Color outColor)
+                    {
+                        continue;
+                    }
+
+                    colorList.Add(outColor);
                 }
 
                 return colorList.ToArray();
             }
 
+            [MemberNotNull(
+                nameof(tabControl),
+                nameof(pal),
+                nameof(paletteTabPage),
+                nameof(commonTabPage),
+                nameof(systemTabPage),
+                nameof(lbSystem),
+                nameof(lbCommon))]
             private void InitializeComponent()
             {
                 paletteTabPage = new TabPage(SR.ColorEditorPaletteTab);
@@ -194,16 +203,16 @@ namespace System.Drawing.Design
                 lbCommon.Dock = DockStyle.Fill;
 
                 Array.Sort(ColorValues, new StandardColorComparer());
-                Array.Sort(SystemColorValues, new SystemColorComparer());
+                Array.Sort(SystemColorValues, comparer: new SystemColorComparer());
 
                 lbCommon.Items.Clear();
-                foreach (object color in ColorValues)
+                foreach (Color color in ColorValues)
                 {
                     lbCommon.Items.Add(color);
                 }
 
                 lbSystem.Items.Clear();
-                foreach (object color in SystemColorValues)
+                foreach (Color color in SystemColorValues)
                 {
                     lbSystem.Items.Add(color);
                 }
@@ -224,26 +233,29 @@ namespace System.Drawing.Design
                 OnTabControlSelChange(this, EventArgs.Empty);
             }
 
-            private void OnFontChanged(object sender, EventArgs e)
+            private void OnFontChanged(object? sender, EventArgs e)
             {
                 commonHeightSet = systemHeightSet = false;
             }
 
-            private void OnListClick(object sender, EventArgs e)
+            private void OnListClick(object? sender, EventArgs e)
             {
-                ListBox lb = (ListBox)sender;
-                if (lb.SelectedItem != null)
+                if (sender is ListBox lb && lb.SelectedItem is Color selectedColor)
                 {
-                    value = (Color)lb.SelectedItem;
+                    value = selectedColor;
                 }
 
-                edSvc.CloseDropDown();
+                edSvc?.CloseDropDown();
             }
 
-            private void OnListDrawItem(object sender, DrawItemEventArgs die)
+            private void OnListDrawItem(object? sender, DrawItemEventArgs die)
             {
-                ListBox lb = (ListBox)sender;
-                object value = lb.Items[die.Index];
+                if (sender is not ListBox lb)
+                {
+                    return;
+                }
+
+                Color value = (Color)lb.Items[die.Index];
                 Font font = Font;
 
                 if (lb == lbCommon && !commonHeightSet)
@@ -263,11 +275,11 @@ namespace System.Drawing.Design
                 editor.PaintValue(value, graphics, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22, die.Bounds.Height - 4));
                 graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22 - 1, die.Bounds.Height - 4 - 1));
                 Brush foreBrush = new SolidBrush(die.ForeColor);
-                graphics.DrawString(((Color)value).Name, font, foreBrush, die.Bounds.X + 26, die.Bounds.Y);
+                graphics.DrawString(value.Name, font, foreBrush, die.Bounds.X + 26, die.Bounds.Y);
                 foreBrush.Dispose();
             }
 
-            private void OnListKeyDown(object sender, KeyEventArgs ke)
+            private void OnListKeyDown(object? sender, KeyEventArgs ke)
             {
                 if (ke.KeyCode == Keys.Return)
                 {
@@ -275,11 +287,14 @@ namespace System.Drawing.Design
                 }
             }
 
-            private void OnPalettePick(object sender, EventArgs e)
+            private void OnPalettePick(object? sender, EventArgs e)
             {
-                ColorPalette p = (ColorPalette)sender;
-                value = GetBestColor(p.SelectedColor);
-                edSvc.CloseDropDown();
+                if (sender is ColorPalette palette)
+                {
+                    value = GetBestColor(palette.SelectedColor);
+                }
+
+                edSvc?.CloseDropDown();
             }
 
             protected override void OnFontChanged(EventArgs e)
@@ -289,7 +304,7 @@ namespace System.Drawing.Design
                 AdjustColorUIHeight();
             }
 
-            private void OnTabControlResize(object sender, EventArgs e)
+            private void OnTabControlResize(object? sender, EventArgs e)
             {
                 Rectangle rectTabControl = tabControl.TabPages[0].ClientRectangle;
                 Rectangle rectItemSize = tabControl.GetTabRect(1);
@@ -303,11 +318,11 @@ namespace System.Drawing.Design
                 pal.Location = new Point(0, rectTabControl.Y);
             }
 
-            private void OnTabControlSelChange(object sender, EventArgs e)
+            private void OnTabControlSelChange(object? sender, EventArgs e)
             {
                 TabPage selectedPage = tabControl.SelectedTab;
 
-                if (selectedPage != null && selectedPage.Controls.Count > 0)
+                if (selectedPage is not null && selectedPage.Controls.Count > 0)
                 {
                     selectedPage.Controls[0].Focus();
                 }
@@ -328,17 +343,8 @@ namespace System.Drawing.Design
                     if (sel != -1)
                     {
                         int count = tabControl.TabPages.Count;
-                        if (forward)
-                        {
-                            sel = (sel + 1) % count;
-                        }
-                        else
-                        {
-                            sel = (sel + count - 1) % count;
-                        }
-
+                        sel = forward ? (sel + 1) % count : (sel + count - 1) % count;
                         tabControl.SelectedTab = tabControl.TabPages[sel];
-
                         return true;
                     }
                 }
@@ -346,7 +352,7 @@ namespace System.Drawing.Design
                 return base.ProcessDialogKey(keyData);
             }
 
-            public void Start(IWindowsFormsEditorService edSvc, object value)
+            public void Start(IWindowsFormsEditorService edSvc, object? value)
             {
                 this.edSvc = edSvc;
                 this.value = value;
@@ -354,10 +360,9 @@ namespace System.Drawing.Design
                 AdjustColorUIHeight();
 
                 // Now look for the current color so we can select the proper tab.
-                //
-                if (value != null)
+                if (value is not null)
                 {
-                    object[] values = ColorValues;
+                    Color[] values = ColorValues;
                     TabPage selectedTab = paletteTabPage;
 
                     for (int i = 0; i < values.Length; i++)
@@ -385,36 +390,6 @@ namespace System.Drawing.Design
                     }
 
                     tabControl.SelectedTab = selectedTab;
-                }
-            }
-
-            private class ColorEditorListBox : ListBox
-            {
-                protected override bool IsInputKey(Keys keyData)
-                {
-                    switch (keyData)
-                    {
-                        case Keys.Return:
-                            return true;
-                    }
-
-                    return base.IsInputKey(keyData);
-                }
-            }
-
-            private class ColorEditorTabControl : TabControl
-            {
-                public ColorEditorTabControl() : base()
-                {
-                }
-
-                protected override void OnGotFocus(EventArgs e)
-                {
-                    TabPage selectedTab = SelectedTab;
-                    if (selectedTab != null && selectedTab.Controls.Count > 0)
-                    {
-                        selectedTab.Controls[0].Focus();
-                    }
                 }
             }
         }

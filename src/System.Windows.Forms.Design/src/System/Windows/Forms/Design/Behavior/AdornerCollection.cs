@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -96,7 +98,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <seealso cref="Add"/>
         public void AddRange(Adorner[] value)
         {
-            for (int i = 0; (i < value.Length); i = (i + 1))
+            for (int i = 0; (i < value.Length); i++)
             {
                 Add(value[i]);
             }
@@ -117,7 +119,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <seealso cref="Add"/>
         public void AddRange(BehaviorServiceAdornerCollection value)
         {
-            for (int i = 0; (i < value.Count); i = (i + 1))
+            for (int i = 0; (i < value.Count); i++)
             {
                 Add(value[i]);
             }

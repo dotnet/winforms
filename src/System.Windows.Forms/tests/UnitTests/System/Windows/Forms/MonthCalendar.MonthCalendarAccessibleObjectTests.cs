@@ -225,5 +225,57 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected.End, actual.End);
             Assert.True(monthCalendar.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_FragmentNavigate_Parent_Returns_Expected()
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_FragmentNavigate_Sibling_Returns_Expected()
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_FragmentNavigate_FirstChild_Returns_Expected()
+        {
+            using MonthCalendar monthCalendar = new();
+            var accessibleObject = new MonthCalendarAccessibleObject(monthCalendar);
+
+            AccessibleObject previousButton = accessibleObject.PreviousButtonAccessibleObject;
+
+            Assert.Equal(previousButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_FragmentNavigate_LastChild_Returns_Expected()
+        {
+            using MonthCalendar monthCalendar = new();
+            var accessibleObject = new MonthCalendarAccessibleObject(monthCalendar);
+
+            AccessibleObject todayLink = accessibleObject.TodayLinkAccessibleObject;
+
+            Assert.Equal(todayLink, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_FragmentNavigate_LastChild_Returns_Expected_IfTodayLinkHidden()
+        {
+            using MonthCalendar monthCalendar = new() { ShowToday = false };
+            var accessibleObject = new MonthCalendarAccessibleObject(monthCalendar);
+
+            AccessibleObject lastCalendar = accessibleObject.CalendarsAccessibleObjects?.Last?.Value;
+
+            Assert.Equal(lastCalendar, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        }
     }
 }

@@ -3,25 +3,24 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class CachedItemHdcInfo : IDisposable, IHandle
+    internal class CachedItemHdcInfo : IDisposable, IHandle<HDC>
     {
         internal CachedItemHdcInfo()
         {
         }
 
-        private Gdi32.HDC _cachedItemHDC;
+        private HDC _cachedItemHDC;
         private Size _cachedHDCSize = Size.Empty;
-        private Gdi32.HBITMAP _cachedItemBitmap;
+        private HBITMAP _cachedItemBitmap;
 
-        public IntPtr Handle => (IntPtr)_cachedItemHDC;
+        public HDC Handle => _cachedItemHDC;
 
         // this DC is cached and should only be deleted on Dispose or when the size changes.
 
-        public Gdi32.HDC GetCachedItemDC(Gdi32.HDC toolStripHDC, Size bitmapSize)
+        public HDC GetCachedItemDC(HDC toolStripHDC, Size bitmapSize)
         {
             if (_cachedHDCSize.Width < bitmapSize.Width
                  || _cachedHDCSize.Height < bitmapSize.Height)
@@ -29,17 +28,17 @@ namespace System.Windows.Forms
                 if (_cachedItemHDC.IsNull)
                 {
                     // Create a new DC - we don't have one yet.
-                    _cachedItemHDC = Gdi32.CreateCompatibleDC(toolStripHDC);
+                    _cachedItemHDC = PInvoke.CreateCompatibleDC(toolStripHDC);
                 }
 
                 // Create compatible bitmap with the correct size.
-                _cachedItemBitmap = Gdi32.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
-                Gdi32.HGDIOBJ oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
+                _cachedItemBitmap = PInvoke.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
+                HGDIOBJ oldBitmap = PInvoke.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // Delete the old bitmap
                 if (!oldBitmap.IsNull)
                 {
-                    Gdi32.DeleteObject(oldBitmap);
+                    PInvoke.DeleteObject(oldBitmap);
                 }
 
                 // remember what size we created.
@@ -55,11 +54,10 @@ namespace System.Windows.Forms
             {
                 if (!_cachedItemBitmap.IsNull)
                 {
-                    Gdi32.DeleteObject(_cachedItemBitmap);
+                    PInvoke.DeleteObject(_cachedItemBitmap);
                 }
 
-                // delete the DC itself.
-                Gdi32.DeleteDC(_cachedItemHDC);
+                PInvoke.DeleteDC(_cachedItemHDC);
             }
 
             _cachedItemHDC = default;

@@ -11,6 +11,12 @@ namespace System
             public PropertyGridTestAccessor(Windows.Forms.PropertyGrid instance) : base(instance) { }
 
             internal Windows.Forms.PropertyGridInternal.PropertyGridView GridView => Dynamic._gridView;
+
+            internal void SaveSelectedTabIndex() { Dynamic.SaveSelectedTabIndex(); }
+
+            internal bool TryGetSavedTabIndex(out int selectedTabIndex) { return Dynamic.TryGetSavedTabIndex(out selectedTabIndex); }
+
+            internal Dictionary<int, int> _designerSelections => Dynamic._designerSelections;
         }
 
         public static PropertyGridTestAccessor TestAccessor(this Windows.Forms.PropertyGrid propertyGrid)

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,12 +9,11 @@ using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static System.Windows.Forms.ComboBox;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ComboBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -2282,15 +2281,9 @@ namespace System.Windows.Forms.Tests
             comboBox.SelectedIndex = selectedIndex;
             comboBox.ResetEventsCount();
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam.
-            nint keyCode = (nint)key;
-            nint lParam = 0x00000001 | keyCode << 16;
             for (int i = 0; i < expectedKeyPressesCount; i++)
             {
-                User32.SendMessageW(comboBox, User32.WM.KEYDOWN, keyCode, lParam);
-                User32.SendMessageW(comboBox, User32.WM.KEYUP, keyCode, lParam);
+                KeyboardSimulator.KeyPress(comboBox, key);
             }
 
             Assert.Equal(expectedKeyPressesCount, comboBox.EventsCount);

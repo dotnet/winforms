@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -49,20 +48,18 @@ namespace System.Windows.Forms
                 item = Interlocked.Exchange(ref _itemsCache[i], IntPtr.Zero);
                 if (item != IntPtr.Zero)
                 {
-                    return new ScreenDcScope(this, (Gdi32.HDC)item);
+                    return new ScreenDcScope(this, (HDC)item);
                 }
             }
 
             // Didn't find anything in the cache, create a new HDC
-            return CreateNew();
+            return new ScreenDcScope(this, PInvoke.CreateCompatibleDC((HDC)default));
         }
-
-        private ScreenDcScope CreateNew() => new ScreenDcScope(this, Gdi32.CreateCompatibleDC(default));
 
         /// <summary>
         ///  Release an item back to the cache, disposing if no room is available.
         /// </summary>
-        private void Release(Gdi32.HDC hdc)
+        private void Release(HDC hdc)
         {
             ArgumentValidation.ThrowIfNull(hdc);
             ValidateHdc(hdc);
@@ -80,7 +77,7 @@ namespace System.Windows.Forms
             }
 
             // Too many to store, delete the last item we swapped.
-            Gdi32.DeleteDC((Gdi32.HDC)temp);
+            PInvoke.DeleteDC((HDC)temp);
         }
 
         ~ScreenDcCache() => Dispose();
@@ -92,28 +89,29 @@ namespace System.Windows.Forms
                 IntPtr hdc = _itemsCache[i];
                 if (hdc != IntPtr.Zero)
                 {
-                    Gdi32.DeleteDC((Gdi32.HDC)hdc);
+                    PInvoke.DeleteDC((HDC)hdc);
                 }
             }
         }
 
         [Conditional("DEBUG")]
-        private static void ValidateHdc(Gdi32.HDC hdc)
+        private static unsafe void ValidateHdc(HDC hdc)
         {
             // A few sanity checks against the HDC to see if it was left in a dirty state
 
-            Gdi32.HRGN hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
-            Debug.Assert(Gdi32.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
-            Gdi32.DeleteObject(hrgn);
+            HRGN hrgn = PInvoke.CreateRectRgn(0, 0, 0, 0);
+            Debug.Assert(PInvoke.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
+            PInvoke.DeleteObject(hrgn);
 
-            Gdi32.GetViewportOrgEx(hdc, out Point point);
+            Point point;
+            PInvoke.GetViewportOrgEx(hdc, &point);
             Debug.Assert(point.IsEmpty, "Viewport origin shouldn't be shifted");
-            Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
-            Debug.Assert(Gdi32.GetROP2(hdc) == Gdi32.R2.COPYPEN);
-            Debug.Assert(Gdi32.GetBkMode(hdc) == Gdi32.BKMODE.OPAQUE);
+            Debug.Assert(PInvoke.GetMapMode(hdc) == HDC_MAP_MODE.MM_TEXT);
+            Debug.Assert(PInvoke.GetROP2(hdc) == R2_MODE.R2_COPYPEN);
+            Debug.Assert(PInvoke.GetBkMode(hdc) == BACKGROUND_MODE.OPAQUE);
 
             Matrix3x2 matrix = default;
-            Debug.Assert(Gdi32.GetWorldTransform(hdc, ref matrix).IsTrue());
+            Debug.Assert(PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&matrix));
             Debug.Assert(matrix.IsIdentity);
         }
     }

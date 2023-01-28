@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -164,17 +163,20 @@ namespace System.Windows.Forms
         {
             if (_values is null)
             {
-                ArrayList list = new ArrayList();
+                List<object> list = new();
                 PropertyInfo[] props = GetProperties();
                 for (int i = 0; i < props.Length; i++)
                 {
                     PropertyInfo prop = props[i];
                     object[]? tempIndex = null;
-                    Debug.Assert(prop.GetValue(null, tempIndex) is not null, "Property " + prop.Name + " returned NULL");
-                    list.Add(prop.GetValue(null, tempIndex));
+                    Debug.Assert(prop.GetValue(null, tempIndex) is not null, $"Property {prop.Name} returned NULL");
+                    if (prop.GetValue(null, tempIndex) is object item)
+                    {
+                        list.Add(item);
+                    }
                 }
 
-                _values = new StandardValuesCollection(list.ToArray());
+                _values = new StandardValuesCollection(list);
             }
 
             return _values;

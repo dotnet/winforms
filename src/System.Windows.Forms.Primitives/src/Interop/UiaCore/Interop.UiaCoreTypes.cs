@@ -15,7 +15,7 @@ internal static partial class Interop
 
         public static object UiaGetReservedNotSupportedValue()
         {
-            if (s_notSupportedValue == null)
+            if (s_notSupportedValue is null)
             {
                 UiaGetReservedNotSupportedValue(out s_notSupportedValue);
             }

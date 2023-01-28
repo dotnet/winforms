@@ -4,8 +4,6 @@
 
 #nullable enable
 
-using static Interop;
-
 namespace System.Windows.Forms.Metafiles
 {
     /// <summary>
@@ -15,7 +13,7 @@ namespace System.Windows.Forms.Metafiles
     {
         private readonly IStateValidator[] _stateValidators;
         public StateValidator(IStateValidator[] stateValidators) => _stateValidators = stateValidators;
-        public abstract bool ShouldValidate(Gdi32.EMR recordType);
+        public abstract bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType);
 
         public virtual void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {

@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             _dataMember = dataMember;
 
             // Set inner list to something, so that the currency manager doesn't have an issue.
-            _innerList = new ArrayList();
+            _innerList = new List<object>();
 
             // Set up the currency manager
             _currencyManager = new CurrencyManager(this);
@@ -179,10 +179,7 @@ namespace System.Windows.Forms
         private BindingSource GetRelatedBindingSource(string dataMember)
         {
             // Auto-create the binding source cache on first use
-            if (_relatedBindingSources is null)
-            {
-                _relatedBindingSources = new Dictionary<string, BindingSource>();
-            }
+            _relatedBindingSources ??= new Dictionary<string, BindingSource>();
 
             // Look for an existing binding source that uses this data member, and return that
             foreach (string key in _relatedBindingSources.Keys)
@@ -212,10 +209,7 @@ namespace System.Windows.Forms
             get => _dataMember;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!_dataMember.Equals(value))
                 {
@@ -704,10 +698,7 @@ namespace System.Windows.Forms
 
             foreach (object item in enumerable)
             {
-                if (list is null)
-                {
-                    list = CreateBindingList(item.GetType());
-                }
+                list ??= CreateBindingList(item.GetType());
 
                 list.Add(item);
             }
@@ -989,7 +980,7 @@ namespace System.Windows.Forms
                 return new ListSortDescriptionCollection();
             }
 
-            ArrayList sorts = new ArrayList();
+            List<ListSortDescription> sorts = new();
             PropertyDescriptorCollection props = _currencyManager.GetItemProperties();
 
             string[] split = sortString.Split(new char[] { ',' });
@@ -1013,14 +1004,9 @@ namespace System.Windows.Forms
                 // Handle brackets
                 if (current.StartsWith("["))
                 {
-                    if (current.EndsWith("]"))
-                    {
-                        current = current.Substring(1, current.Length - 2);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(SR.BindingSourceBadSortString);
-                    }
+                    current = current.EndsWith("]")
+                        ? current.Substring(1, current.Length - 2)
+                        : throw new ArgumentException(SR.BindingSourceBadSortString);
                 }
 
                 // Find the property
@@ -1034,9 +1020,7 @@ namespace System.Windows.Forms
                 sorts.Add(new ListSortDescription(prop, ascending ? ListSortDirection.Ascending : ListSortDirection.Descending));
             }
 
-            ListSortDescription[] result = new ListSortDescription[sorts.Count];
-            sorts.CopyTo(result);
-            return new ListSortDescriptionCollection(result);
+            return new ListSortDescriptionCollection(sorts.ToArray());
         }
 
         public void RemoveCurrent()
@@ -1155,10 +1139,7 @@ namespace System.Windows.Forms
                         // same item type. If the item type cannot be determined, we end up with an item type of 'Object'.
                         Type type = ListBindingHelper.GetListItemType(_dataSource, _dataMember);
                         bindingList = GetListFromType(type);
-                        if (bindingList is null)
-                        {
-                            bindingList = CreateBindingList(type);
-                        }
+                        bindingList ??= CreateBindingList(type);
                     }
                 }
             }
@@ -1684,7 +1665,7 @@ namespace System.Windows.Forms
                 // Don't let user set value to true if inner list can never support adding of items
                 // do NOT check for a default constructor because someone will set AllowNew=True
                 // when they have overridden OnAddingNew (which we cannot detect).
-                if (value == true && !_isBindingList && !IsListWriteable(checkConstructor: false))
+                if (value && !_isBindingList && !IsListWriteable(checkConstructor: false))
                 {
                     throw new InvalidOperationException(SR.NoAllowNewOnReadOnlyList);
                 }

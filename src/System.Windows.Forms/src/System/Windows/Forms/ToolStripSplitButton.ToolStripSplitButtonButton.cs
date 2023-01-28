@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
 
             public ToolStripSplitButtonButton(ToolStripSplitButton owner)
             {
-                this._owner = owner;
+                _owner = owner;
             }
 
             public override bool Enabled
@@ -71,7 +69,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override Image Image
+            public override Image? Image
             {
                 get
                 {
@@ -103,7 +101,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Text
+            public override string? Text
             {
                 get
                 {

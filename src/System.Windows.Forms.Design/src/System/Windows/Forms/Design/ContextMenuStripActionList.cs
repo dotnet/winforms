@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -22,8 +24,8 @@ namespace System.Windows.Forms.Design
         private object GetProperty(string propertyName)
         {
             PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_toolStripDropDown)[propertyName];
-            Debug.Assert(getProperty != null, "Could not find given property in control.");
-            if (getProperty != null)
+            Debug.Assert(getProperty is not null, "Could not find given property in control.");
+            if (getProperty is not null)
             {
                 return getProperty.GetValue(_toolStripDropDown);
             }
@@ -35,11 +37,8 @@ namespace System.Windows.Forms.Design
         private void ChangeProperty(string propertyName, object value)
         {
             PropertyDescriptor changingProperty = TypeDescriptor.GetProperties(_toolStripDropDown)[propertyName];
-            Debug.Assert(changingProperty != null, "Could not find given property in control.");
-            if (changingProperty != null)
-            {
-                changingProperty.SetValue(_toolStripDropDown, value);
-            }
+            Debug.Assert(changingProperty is not null, "Could not find given property in control.");
+            changingProperty?.SetValue(_toolStripDropDown, value);
         }
 
         /// <summary>

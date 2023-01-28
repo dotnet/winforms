@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
@@ -68,7 +70,7 @@ namespace System.Windows.Forms.Design
 
         public static int GetHashCode(MaskDescriptor maskDescriptor)
         {
-            if (maskDescriptor != null)
+            if (maskDescriptor is not null)
             {
                 return maskDescriptor.GetHashCode();
             }

@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Properties_TestData()
         {
-            Func<T> I<T>(Func<T> t) => t;
+            static Func<T> I<T>(Func<T> t) => t;
 
             yield return new object[] { I(() => ProfessionalColors.ButtonCheckedGradientBegin) };
             yield return new object[] { I(() => ProfessionalColors.ButtonCheckedGradientEnd) };

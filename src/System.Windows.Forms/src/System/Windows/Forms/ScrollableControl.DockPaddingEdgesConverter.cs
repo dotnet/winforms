@@ -206,10 +206,7 @@ namespace System.Windows.Forms
 
             internal void Scale(float dx, float dy)
             {
-                if (_owner is not null)
-                {
-                    _owner.Padding.Scale(dx, dy);
-                }
+                _owner?.Padding.Scale(dx, dy);
             }
 
             public override string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";

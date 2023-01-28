@@ -102,7 +102,7 @@ namespace System.Windows.Forms
             }
         }
 
-        static private object GetCurrentOrNull(BindingManagerBase parentManager)
+        private static object GetCurrentOrNull(BindingManagerBase parentManager)
         {
             bool anyCurrent = (parentManager.Position >= 0 && parentManager.Position < parentManager.Count);
             return anyCurrent ? parentManager.Current : null;

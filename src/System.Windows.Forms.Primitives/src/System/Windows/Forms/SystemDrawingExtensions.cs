@@ -13,8 +13,8 @@ namespace System.Windows.Forms
 {
     internal static class SystemDrawingExtensions
     {
-        internal static Gdi32.HBITMAP GetHBITMAP(this Bitmap bitmap) => (Gdi32.HBITMAP)bitmap.GetHbitmap();
-        internal static Gdi32.HFONT ToHFONT(this Font font) => (Gdi32.HFONT)font.ToHfont();
+        internal static HBITMAP GetHBITMAP(this Bitmap bitmap) => (HBITMAP)bitmap.GetHbitmap();
+        internal static HFONT ToHFONT(this Font font) => (HFONT)font.ToHfont();
 
         /// <summary>
         ///  Similar to <see cref="Graphics.GetNearestColor(Color)"/>, but this retains the original color if the color

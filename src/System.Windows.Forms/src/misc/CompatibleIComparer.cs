@@ -8,7 +8,7 @@ namespace System.Collections.Specialized
 {
     internal class BackCompatibleStringComparer : IEqualityComparer<string>
     {
-        static internal IEqualityComparer<string> Default = new BackCompatibleStringComparer();
+        internal static IEqualityComparer<string> Default = new BackCompatibleStringComparer();
 
         internal BackCompatibleStringComparer()
         {

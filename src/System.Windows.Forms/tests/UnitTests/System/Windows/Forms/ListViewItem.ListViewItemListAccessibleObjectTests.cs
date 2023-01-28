@@ -83,5 +83,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(control.IsHandleCreated);
         }
+
+        // More tests for this class has been created already in ListViewItem_ListViewItemAccessibleObjectTests
     }
 }

@@ -2,24 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Drawing;
 using Microsoft.Win32;
-using static Interop;
-using static Interop.UxTheme;
 
 namespace System.Windows.Forms.VisualStyles
 {
     /// <summary>
     ///  This class provides full feature parity with UxTheme API.
     /// </summary>
-    public sealed class VisualStyleRenderer : IHandle
+    public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         private HRESULT _lastHResult;
         private const int NumberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
 
         [ThreadStatic]
-        private static Hashtable? t_themeHandles; // per-thread cache of ThemeHandle objects.
+        private static Dictionary<string, ThemeHandle>? t_themeHandles; // per-thread cache of ThemeHandle objects.
 
         [ThreadStatic]
         private static long t_threadCacheVersion;
@@ -94,30 +91,23 @@ namespace System.Windows.Forms.VisualStyles
                     : SR.VisualStyleNotActive);
             }
 
-            IntPtr hTheme = GetHandle(className, false);
+            HTHEME hTheme = GetHandle(className, false);
 
-            if (hTheme != IntPtr.Zero)
+            if (!hTheme.IsNull)
             {
                 // IsThemePartDefined doesn't work for part = 0, although there are valid parts numbered 0. We
                 // allow these explicitly here.
-                if (part == 0)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = IsThemePartDefined(hTheme, part, 0).IsTrue();
-                }
+                result = part == 0 || (bool)PInvoke.IsThemePartDefined(hTheme, part, 0);
             }
 
             // If the combo isn't defined, check the validity of our theme handle cache.
             if (!result)
             {
-                using ThemeHandle? handle = ThemeHandle.Create(className, false);
+                using var handle = new PInvoke.OpenThemeDataScope(HWND.Null, className);
 
-                if (handle is not null)
+                if (!handle.IsNull)
                 {
-                    result = IsThemePartDefined(handle, part, 0).IsTrue();
+                    result = PInvoke.IsThemePartDefined(handle, part, 0);
                 }
 
                 // If we did, in fact get a new correct theme handle, our cache is out of date -- update it now.
@@ -170,25 +160,25 @@ namespace System.Windows.Forms.VisualStyles
 
         /// <summary>
         ///  Returns the underlying HTheme handle.
-        ///  NOTE: The handle gets invalidated when the theme changes or the user disables theming. When that
-        ///   happens, the user should requery this property to get the correct handle. To know when the
-        ///   theme changed, hook on to SystemEvents.UserPreferenceChanged and look for ThemeChanged
-        ///   category.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   NOTE: The handle gets invalidated when the theme changes or the user disables theming. When that
+        ///   happens, the user should requery this property to get the correct handle. To know when the
+        ///   theme changed, hook on to SystemEvents.UserPreferenceChanged and look for ThemeChanged.
+        ///   category.
+        /// </para>
+        /// </remarks>
         public IntPtr Handle
-        {
-            get
-            {
-                if (!IsSupported)
-                {
-                    throw new InvalidOperationException(VisualStyleInformation.IsEnabledByUser
-                        ? SR.VisualStylesDisabledInClientArea
-                        : SR.VisualStyleNotActive);
-                }
+            => !IsSupported
+                ? throw new InvalidOperationException(VisualStyleInformation.IsEnabledByUser
+                    ? SR.VisualStylesDisabledInClientArea
+                    : SR.VisualStyleNotActive)
+                : (nint)GetHandle(Class);
 
-                return GetHandle(Class);
-            }
-        }
+        HTHEME IHandle<HTHEME>.Handle => (HTHEME)Handle;
+
+        internal HTHEME HTHEME => (HTHEME)Handle;
 
         /// <summary>
         ///  Used to set a new VisualStyleElement on this VisualStyleRenderer instance.
@@ -223,29 +213,24 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
-            DrawBackground(hdc, bounds, IntPtr.Zero);
+            DrawBackground(hdc, bounds, HWND.Null);
         }
 
-        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, IntPtr hwnd = default)
+        internal unsafe void DrawBackground(HDC dc, Rectangle bounds, HWND hwnd = default)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
-                return;
-
-            if (hwnd != IntPtr.Zero)
             {
-                using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
-                if (htheme.IsNull)
-                {
-                    throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
-                }
+                return;
+            }
 
-                RECT rect = bounds;
-                _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, null);
+            if (!hwnd.IsNull)
+            {
+                using var htheme = OpenThemeData(hwnd, Class);
+                _lastHResult = PInvoke.DrawThemeBackground(htheme, dc, Part, State, bounds, null);
             }
             else
             {
-                RECT rect = bounds;
-                _lastHResult = DrawThemeBackground(this, dc, Part, State, ref rect, null);
+                _lastHResult = PInvoke.DrawThemeBackground(HTHEME, dc, Part, State, bounds, null);
             }
         }
 
@@ -257,31 +242,22 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
-            DrawBackground(hdc, bounds, clipRectangle, IntPtr.Zero);
+            DrawBackground(hdc, bounds, clipRectangle, HWND.Null);
         }
 
-        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hwnd)
+        internal unsafe void DrawBackground(HDC dc, Rectangle bounds, Rectangle clipRectangle, HWND hwnd)
         {
             if (bounds.Width < 0 || bounds.Height < 0 || clipRectangle.Width < 0 || clipRectangle.Height < 0)
                 return;
 
-            if (IntPtr.Zero != hwnd)
+            if (!hwnd.IsNull)
             {
-                using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
-                if (htheme.IsNull)
-                {
-                    throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
-                }
-
-                RECT rect = bounds;
-                RECT clipRect = clipRectangle;
-                _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, &clipRect);
+                using var htheme = OpenThemeData(hwnd, Class);
+                _lastHResult = PInvoke.DrawThemeBackground(htheme, dc, Part, State, bounds, clipRectangle);
             }
             else
             {
-                RECT rect = bounds;
-                RECT clipRect = clipRectangle;
-                _lastHResult = DrawThemeBackground(this, dc, Part, State, ref rect, &clipRect);
+                _lastHResult = PInvoke.DrawThemeBackground(HTHEME, dc, Part, State, bounds, clipRectangle);
             }
         }
 
@@ -296,23 +272,22 @@ namespace System.Windows.Forms.VisualStyles
             return DrawEdge(hdc, bounds, edges, style, effects);
         }
 
-        internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
+        internal unsafe Rectangle DrawEdge(HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
             SourceGenerated.EnumValidator.Validate(edges, nameof(edges));
             SourceGenerated.EnumValidator.Validate(style, nameof(style));
             SourceGenerated.EnumValidator.Validate(effects, nameof(effects));
 
-            RECT destRect = bounds;
-            var contentRect = new RECT();
-            _lastHResult = DrawThemeEdge(
-                this,
+            RECT contentRect;
+            _lastHResult = PInvoke.DrawThemeEdge(
+                HTHEME,
                 dc,
                 Part,
                 State,
-                ref destRect,
-                (User32.EDGE)style,
-                (User32.BF)edges | (User32.BF)effects | User32.BF.ADJUST,
-                ref contentRect);
+                bounds,
+                (DRAWEDGE_FLAGS)style,
+                (DRAW_EDGE_FLAGS)edges | (DRAW_EDGE_FLAGS)effects | DRAW_EDGE_FLAGS.BF_ADJUST,
+                &contentRect);
 
             return contentRect;
         }
@@ -363,13 +338,14 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(childControl);
 
             if (bounds.Width < 0 || bounds.Height < 0)
+            {
                 return;
+            }
 
             if (childControl.IsHandleCreated)
             {
                 using var hdc = new DeviceContextHdcScope(dc);
-                RECT rc = bounds;
-                _lastHResult = DrawThemeParentBackground(childControl, hdc, ref rc);
+                _lastHResult = PInvoke.DrawThemeParentBackground(childControl.HWND, hdc, bounds);
             }
         }
 
@@ -400,16 +376,26 @@ namespace System.Windows.Forms.VisualStyles
             DrawText(hdc, bounds, textToDraw, drawDisabled, flags);
         }
 
-        internal void DrawText(Gdi32.HDC dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
+        internal void DrawText(HDC dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
+            {
                 return;
+            }
 
             if (!string.IsNullOrEmpty(textToDraw))
             {
                 uint disableFlag = drawDisabled ? 0x1u : 0u;
-                RECT rect = bounds;
-                _lastHResult = DrawThemeText(this, dc, Part, State, textToDraw, textToDraw.Length, (User32.DT)flags, disableFlag, ref rect);
+                _lastHResult = PInvoke.DrawThemeText(
+                    HTHEME,
+                    dc,
+                    Part,
+                    State,
+                    textToDraw,
+                    textToDraw.Length,
+                    (DRAW_TEXT_FORMAT)flags,
+                    disableFlag,
+                    bounds);
             }
         }
 
@@ -424,13 +410,14 @@ namespace System.Windows.Forms.VisualStyles
             return GetBackgroundContentRectangle(hdc, bounds);
         }
 
-        internal Rectangle GetBackgroundContentRectangle(Gdi32.HDC dc, Rectangle bounds)
+        internal Rectangle GetBackgroundContentRectangle(HDC dc, Rectangle bounds)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
+            {
                 return Rectangle.Empty;
+            }
 
-            RECT boundsRect = bounds;
-            _lastHResult = GetThemeBackgroundContentRect(this, dc, Part, State, ref boundsRect, out RECT rect);
+            _lastHResult = PInvoke.GetThemeBackgroundContentRect(HTHEME, dc, Part, State, bounds, out RECT rect);
             return rect;
         }
 
@@ -442,12 +429,13 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(dc);
 
             if (contentBounds.Width < 0 || contentBounds.Height < 0)
+            {
                 return Rectangle.Empty;
+            }
 
             using var hdc = new DeviceContextHdcScope(dc);
-            RECT contentBoundsRect = contentBounds;
-            _lastHResult = GetThemeBackgroundExtent(this, hdc, Part, State, ref contentBoundsRect, out RECT extentRect);
-            return extentRect;
+            _lastHResult = PInvoke.GetThemeBackgroundExtent(HTHEME, hdc, Part, State, contentBounds, out RECT extents);
+            return extents;
         }
 
         /// <summary>
@@ -455,29 +443,31 @@ namespace System.Windows.Forms.VisualStyles
         ///  rectangle. Return null if the region cannot be created.
         ///  [See win32 equivalent.]
         /// </summary>
-        public Region? GetBackgroundRegion(IDeviceContext dc, Rectangle bounds)
+        public unsafe Region? GetBackgroundRegion(IDeviceContext dc, Rectangle bounds)
         {
             ArgumentNullException.ThrowIfNull(dc);
 
             if (bounds.Width < 0 || bounds.Height < 0)
+            {
                 return null;
+            }
 
-            using var hdc = new DeviceContextHdcScope(dc);
-            RECT boundsRect = bounds;
-            _lastHResult = GetThemeBackgroundRegion(this, hdc, Part, State, ref boundsRect, out Gdi32.HRGN hRegion);
+            using DeviceContextHdcScope hdc = new(dc);
+            HRGN hrgn;
+            _lastHResult = PInvoke.GetThemeBackgroundRegion(HTHEME, hdc, Part, State, bounds, &hrgn);
 
             // GetThemeBackgroundRegion returns a null hRegion if it fails to create one, it could be because the bounding
             // box is too big. For more info see code in %xpsrc%\shell\themes\uxtheme\imagefile.cpp if you have an enlistment to it.
 
-            if (hRegion.IsNull)
+            if (hrgn.IsNull)
             {
                 return null;
             }
 
             // From the GDI+ sources it doesn't appear as if they take ownership of the hRegion, so this is safe to do.
             // We need to DeleteObject in order to not leak.
-            Region region = Region.FromHrgn(hRegion.Handle);
-            Gdi32.DeleteObject(hRegion);
+            Region region = Region.FromHrgn(hrgn);
+            PInvoke.DeleteObject(hrgn);
             return region;
         }
 
@@ -488,9 +478,8 @@ namespace System.Windows.Forms.VisualStyles
         {
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            BOOL val = BOOL.FALSE;
-            _lastHResult = GetThemeBool(this, Part, State, (int)prop, ref val);
-            return val.IsTrue();
+            _lastHResult = PInvoke.GetThemeBool(HTHEME, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, out BOOL value);
+            return value;
         }
 
         /// <summary>
@@ -501,9 +490,8 @@ namespace System.Windows.Forms.VisualStyles
             // Valid values are 0xed9 to 0xeef
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            int color = 0;
-            _lastHResult = GetThemeColor(this, Part, State, (int)prop, ref color);
-            return ColorTranslator.FromWin32(color);
+            _lastHResult = PInvoke.GetThemeColor(HTHEME, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, out COLORREF color);
+            return color;
         }
 
         /// <summary>
@@ -514,9 +502,8 @@ namespace System.Windows.Forms.VisualStyles
             // Valid values are 0xfa1 to 0xfaf
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            int val = 0;
-            _lastHResult = GetThemeEnumValue(this, Part, State, (int)prop, ref val);
-            return val;
+            _lastHResult = PInvoke.GetThemeEnumValue(HTHEME, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, out int value);
+            return value;
         }
 
         /// <summary>
@@ -530,7 +517,7 @@ namespace System.Windows.Forms.VisualStyles
             Span<char> filename = stackalloc char[512];
             fixed (char* pFilename = filename)
             {
-                _lastHResult = GetThemeFilename(this, Part, State, (int)prop, pFilename, filename.Length);
+                _lastHResult = PInvoke.GetThemeFilename(HTHEME, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, pFilename, filename.Length);
             }
 
             return filename.SliceAtFirstNull().ToString();
@@ -546,11 +533,11 @@ namespace System.Windows.Forms.VisualStyles
 
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            using var hdc = new DeviceContextHdcScope(dc);
-            _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
+            using DeviceContextHdcScope hdc = new(dc);
+            _lastHResult = PInvoke.GetThemeFont(this, hdc, Part, State, (int)prop, out LOGFONTW logfont);
 
             // Check for a failed HR.
-            if (!_lastHResult.Succeeded())
+            if (!_lastHResult.Succeeded)
             {
                 return null;
             }
@@ -559,13 +546,8 @@ namespace System.Windows.Forms.VisualStyles
             {
                 return Font.FromLogFont(logfont);
             }
-            catch (Exception e)
+            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
             {
-                if (ClientUtils.IsCriticalException(e))
-                {
-                    throw;
-                }
-
                 // Looks like the font was not true type
                 return null;
             }
@@ -579,9 +561,8 @@ namespace System.Windows.Forms.VisualStyles
             // Valid values are 0x961 to 0x978
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            int val = 0;
-            _lastHResult = GetThemeInt(this, Part, State, (int)prop, ref val);
-            return val;
+            _lastHResult = PInvoke.GetThemeInt(HTHEME, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, out int value);
+            return value;
         }
 
         /// <summary>
@@ -592,27 +573,22 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
-            return GetPartSize(hdc, type, IntPtr.Zero);
+            return GetPartSize(hdc, type, HWND.Null);
         }
 
-        internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hwnd = default)
+        internal unsafe Size GetPartSize(HDC dc, ThemeSizeType type, HWND hwnd = default)
         {
             // Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
-            if (DpiHelper.IsPerMonitorV2Awareness && hwnd != IntPtr.Zero)
+            if (!hwnd.IsNull && DpiHelper.IsPerMonitorV2Awareness)
             {
-                using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
-                if (htheme.IsNull)
-                {
-                    throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
-                }
-
-                _lastHResult = GetThemePartSize(htheme, dc, Part, State, null, type, out Size dpiSize);
+                using var htheme = OpenThemeData(hwnd, Class);
+                _lastHResult = PInvoke.GetThemePartSize(htheme, dc, Part, State, null, (THEMESIZE)type, out SIZE dpiSize);
                 return dpiSize;
             }
 
-            _lastHResult = GetThemePartSize(this, dc, Part, State, null, type, out Size size);
+            _lastHResult = PInvoke.GetThemePartSize(HTHEME, dc, Part, State, null, (THEMESIZE)type, out SIZE size);
             return size;
         }
 
@@ -627,8 +603,7 @@ namespace System.Windows.Forms.VisualStyles
             SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
             using var hdc = new DeviceContextHdcScope(dc);
-            RECT boundsRect = bounds;
-            _lastHResult = GetThemePartSize(this, hdc, Part, State, &boundsRect, type, out Size size);
+            _lastHResult = PInvoke.GetThemePartSize(HTHEME, hdc, Part, State, bounds, (THEMESIZE)type, out SIZE size);
             return size;
         }
 
@@ -640,7 +615,7 @@ namespace System.Windows.Forms.VisualStyles
             //valid values are 0xd49 to 0xd50
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            _lastHResult = GetThemePosition(this, Part, State, (int)prop, out Point point);
+            _lastHResult = PInvoke.GetThemePosition(HTHEME, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, out Point point);
             return point;
         }
 
@@ -655,7 +630,7 @@ namespace System.Windows.Forms.VisualStyles
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
-            _lastHResult = GetThemeMargins(this, hdc, Part, State, (int)prop, null, out MARGINS margins);
+            _lastHResult = PInvoke.GetThemeMargins(HTHEME, hdc, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, null, out MARGINS margins);
 
             return new Padding(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
         }
@@ -671,7 +646,7 @@ namespace System.Windows.Forms.VisualStyles
             Span<char> aString = stackalloc char[512];
             fixed (char* pString = aString)
             {
-                _lastHResult = GetThemeString(this, Part, State, (int)prop, pString, aString.Length);
+                _lastHResult = PInvoke.GetThemeString(HTHEME, Part, State, (int)prop, pString, aString.Length);
             }
 
             return aString.SliceAtFirstNull().ToString();
@@ -686,7 +661,17 @@ namespace System.Windows.Forms.VisualStyles
             textToDraw.ThrowIfNullOrEmpty();
 
             using var hdc = new DeviceContextHdcScope(dc);
-            _lastHResult = GetThemeTextExtent(this, hdc, Part, State, textToDraw, textToDraw.Length, (uint)flags, null, out RECT rect);
+            _lastHResult = PInvoke.GetThemeTextExtent(
+                HTHEME,
+                hdc,
+                Part,
+                State,
+                textToDraw,
+                textToDraw.Length,
+                (DRAW_TEXT_FORMAT)flags,
+                null,
+                out RECT rect);
+
             return rect;
         }
 
@@ -699,8 +684,17 @@ namespace System.Windows.Forms.VisualStyles
             textToDraw.ThrowIfNullOrEmpty();
 
             using var hdc = new DeviceContextHdcScope(dc);
-            RECT boundsRect = bounds;
-            _lastHResult = GetThemeTextExtent(this, hdc, Part, State, textToDraw, textToDraw.Length, (uint)flags, &boundsRect, out RECT rect);
+            _lastHResult = PInvoke.GetThemeTextExtent(
+                HTHEME,
+                hdc,
+                Part,
+                State,
+                textToDraw,
+                textToDraw.Length,
+                (DRAW_TEXT_FORMAT)flags,
+                bounds,
+                out RECT rect);
+
             return rect;
         }
 
@@ -712,8 +706,8 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
-            _lastHResult = GetThemeTextMetrics(this, hdc, Part, State, out TextMetrics tm);
-            return tm;
+            _lastHResult = PInvoke.GetThemeTextMetrics(HTHEME, hdc, Part, State, out TEXTMETRICW tm);
+            return TextMetrics.FromTEXTMETRICW(tm);
         }
 
         /// <summary>
@@ -724,9 +718,18 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
-            RECT backgroundRect = backgroundRectangle;
-            _lastHResult = HitTestThemeBackground(this, hdc, Part, State, (uint)options, ref backgroundRect, IntPtr.Zero, pt, out ushort htCode);
-            return (HitTestCode)htCode;
+            _lastHResult = PInvoke.HitTestThemeBackground(
+                HTHEME,
+                hdc,
+                Part,
+                State,
+                (HIT_TEST_BACKGROUND_OPTIONS)options,
+                backgroundRectangle,
+                HRGN.Null,
+                pt,
+                out ushort code);
+
+            return (HitTestCode)code;
         }
 
         /// <summary>
@@ -749,9 +752,18 @@ namespace System.Windows.Forms.VisualStyles
             ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
-            RECT backgroundRect = backgroundRectangle;
-            _lastHResult = HitTestThemeBackground(this, hdc, Part, State, (uint)options, ref backgroundRect, hRgn, pt, out ushort htCode);
-            return (HitTestCode)htCode;
+            _lastHResult = PInvoke.HitTestThemeBackground(
+                HTHEME,
+                hdc,
+                Part,
+                State,
+                (HIT_TEST_BACKGROUND_OPTIONS)options,
+                backgroundRectangle,
+                (HRGN)hRgn,
+                pt,
+                out ushort code);
+
+            return (HitTestCode)code;
         }
 
         /// <summary>
@@ -759,7 +771,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool IsBackgroundPartiallyTransparent()
         {
-            return IsThemeBackgroundPartiallyTransparent(this, Part, State).IsTrue();
+            return PInvoke.IsThemeBackgroundPartiallyTransparent(HTHEME, Part, State);
         }
 
         /// <summary>
@@ -767,14 +779,6 @@ namespace System.Windows.Forms.VisualStyles
         ///  into theme apis.  We eat the errors and let the user handle any errors that occurred.
         /// </summary>
         public int LastHResult => (int)_lastHResult;
-
-        /// <summary>
-        ///  Instantiates the ThemeHandle cache hashtable.
-        /// </summary>
-        private static void CreateThemeHandleHashtable()
-        {
-            t_themeHandles = new Hashtable(NumberOfPossibleClasses);
-        }
 
         /// <summary>
         ///  Handles the ThemeChanged event. Basically, we need to ensure all per-thread theme handle
@@ -799,112 +803,102 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         private static void RefreshCache()
         {
-            ThemeHandle? tHandle = null;
-
-            if (t_themeHandles is not null)
+            if (t_themeHandles is null)
             {
-                string[] classNames = new string[t_themeHandles.Keys.Count];
-                t_themeHandles.Keys.CopyTo(classNames, 0);
+                return;
+            }
 
-                foreach (string className in classNames)
+            string[] classNames = new string[t_themeHandles.Keys.Count];
+            t_themeHandles.Keys.CopyTo(classNames, 0);
+
+            foreach (string className in classNames)
+            {
+                ThemeHandle? themeHandle = t_themeHandles[className];
+                themeHandle?.Dispose();
+
+                // We don't call IsSupported here, since that could cause RefreshCache to be called again,
+                // leading to stack overflow.
+                if (AreClientAreaVisualStylesSupported)
                 {
-                    tHandle = (ThemeHandle?)t_themeHandles[className];
-                    if (tHandle is not null)
+                    themeHandle = ThemeHandle.Create(className, false);
+                    if (themeHandle is not null)
                     {
-                        tHandle.Dispose();
-                    }
-
-                    // We don't call IsSupported here, since that could cause RefreshCache to be called again,
-                    // leading to stack overflow.
-                    if (AreClientAreaVisualStylesSupported)
-                    {
-                        tHandle = ThemeHandle.Create(className, false);
-                        if (tHandle is not null)
-                        {
-                            t_themeHandles[className] = tHandle;
-                        }
+                        t_themeHandles[className] = themeHandle;
                     }
                 }
             }
         }
 
-        private static IntPtr GetHandle(string className)
+        private static HTHEME GetHandle(string className)
         {
             return GetHandle(className, true);
         }
 
         /// <summary>
-        ///  Retrieves a IntPtr theme handle for the given class from the themeHandle cache. If its not
-        ///  present in the cache, it creates a new ThemeHandle object and stores it there.
+        ///  Retrieves a theme handle for the given class from the handle cache. If its not
+        ///  present in the cache, it creates a new object and stores it there.
         /// </summary>
-        private static IntPtr GetHandle(string className, bool throwExceptionOnFail)
+        private static HTHEME GetHandle(string className, bool throwExceptionOnFail)
         {
-            if (t_themeHandles is null)
-            {
-                CreateThemeHandleHashtable();
-            }
-
+            t_themeHandles ??= new(NumberOfPossibleClasses);
             if (t_threadCacheVersion != s_globalCacheVersion)
             {
                 RefreshCache();
                 t_threadCacheVersion = s_globalCacheVersion;
             }
 
-            if (!t_themeHandles!.Contains(className))
+            if (!t_themeHandles.TryGetValue(className, out ThemeHandle? themeHandle))
             {
                 // See if it is already in cache
-                ThemeHandle? tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
-                if (tHandle is null)
+                themeHandle = ThemeHandle.Create(className, throwExceptionOnFail);
+                if (themeHandle is null)
                 {
-                    return IntPtr.Zero;
+                    return HTHEME.Null;
                 }
 
-                t_themeHandles.Add(className, tHandle);
-                return tHandle.Handle;
+                t_themeHandles[className] = themeHandle;
             }
 
-            return ((ThemeHandle)t_themeHandles[className]!).Handle;
+            return themeHandle.Handle;
+        }
+
+        private static PInvoke.OpenThemeDataScope OpenThemeData(HWND hwnd, string classList)
+        {
+            var htheme = new PInvoke.OpenThemeDataScope(hwnd, classList);
+            return htheme.IsNull ? throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed) : htheme;
         }
 
         // This wrapper class is needed for safely cleaning up TLS cache of handles.
-        private class ThemeHandle : IDisposable, IHandle
+        private class ThemeHandle : IDisposable, IHandle<HTHEME>
         {
-            private ThemeHandle(IntPtr hTheme)
+            private ThemeHandle(HTHEME hTheme)
             {
                 Handle = hTheme;
             }
 
-            public IntPtr Handle { get; private set; }
+            public HTHEME Handle { get; private set; }
 
             public static ThemeHandle? Create(string className, bool throwExceptionOnFail)
             {
-                return Create(className, throwExceptionOnFail, IntPtr.Zero);
+                return Create(className, throwExceptionOnFail, HWND.Null);
             }
 
-            internal static ThemeHandle? Create(string className, bool throwExceptionOnFail, IntPtr hWndRef)
+            internal static ThemeHandle? Create(string className, bool throwExceptionOnFail, HWND hWndRef)
             {
                 // HThemes require an HWND when display scaling is different between monitors.
-                IntPtr hTheme = OpenThemeData(hWndRef, className);
+                HTHEME hTheme = PInvoke.OpenThemeData(hWndRef, className);
 
-                if (hTheme == IntPtr.Zero)
-                {
-                    if (throwExceptionOnFail)
-                    {
-                        throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
-                    }
-
-                    return null;
-                }
-
-                return new ThemeHandle(hTheme);
+                return hTheme.IsNull
+                    ? throwExceptionOnFail ? throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed) : null
+                    : new ThemeHandle(hTheme);
             }
 
             public void Dispose()
             {
-                if (Handle != IntPtr.Zero)
+                if (!Handle.IsNull)
                 {
-                    CloseThemeData(Handle);
-                    Handle = IntPtr.Zero;
+                    PInvoke.CloseThemeData(Handle);
+                    Handle = HTHEME.Null;
                 }
 
                 GC.SuppressFinalize(this);

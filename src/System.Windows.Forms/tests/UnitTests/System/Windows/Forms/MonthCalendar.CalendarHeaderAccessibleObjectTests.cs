@@ -72,6 +72,42 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void CalendarHeaderAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
+            CalendarHeaderAccessibleObject header = new(calendar, controlAccessibleObject, 0);
+
+            Assert.Equal(calendar, header.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarHeaderAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
+            CalendarHeaderAccessibleObject header = new(calendar, controlAccessibleObject, 0);
+
+            Assert.Equal(calendar.CalendarBodyAccessibleObject, header.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(header.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarHeaderAccessibleObject_FragmentNavigate_Child_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            CalendarHeaderAccessibleObject header = CreateCalendarHeaderAccessibleObject(control, 0);
+
+            Assert.Null(header.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(header.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(control.IsHandleCreated);
+        }
+
         private CalendarHeaderAccessibleObject CreateCalendarHeaderAccessibleObject(MonthCalendar control, int calendarIndex = 0)
         {
             MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;

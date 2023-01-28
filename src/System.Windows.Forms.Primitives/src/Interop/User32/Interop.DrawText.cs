@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, StringMarshalling = StringMarshalling.Utf16)]
-        public static partial int DrawTextW(Gdi32.HDC hdc, string lpchText, int nCount, ref RECT lprc, DT format);
+        [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
+        public static extern int DrawTextW(HDC hdc, string lpchText, int nCount, ref RECT lprc, DT format);
     }
 }

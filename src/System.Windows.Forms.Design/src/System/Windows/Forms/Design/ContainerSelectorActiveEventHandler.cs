@@ -9,4 +9,3 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal delegate void ContainerSelectorActiveEventHandler(object sender, ContainerSelectorActiveEventArgs e);
 }
-

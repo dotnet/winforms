@@ -20,10 +20,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (browsableAttribute is null)
-                {
-                    browsableAttribute = new Attribute[] { new BrowsableAttribute(true) };
-                }
+                browsableAttribute ??= new Attribute[] { new BrowsableAttribute(true) };
 
                 return browsableAttribute;
             }

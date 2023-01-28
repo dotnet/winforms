@@ -52,10 +52,7 @@ namespace System.Windows.Forms
                         {
                             string? ns = _owner.GetType().Namespace;
 
-                            if (ns is null)
-                            {
-                                ns = string.Empty;
-                            }
+                            ns ??= string.Empty;
 
                             int firstDot = ns.IndexOf('/');
                             if (firstDot != -1)
@@ -102,10 +99,7 @@ namespace System.Windows.Forms
                         {
                             string? ns = _owner.GetType().Namespace;
 
-                            if (ns is null)
-                            {
-                                ns = string.Empty;
-                            }
+                            ns ??= string.Empty;
 
                             int firstDot = ns.IndexOf('.');
                             if (firstDot != -1)

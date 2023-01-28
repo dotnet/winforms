@@ -39,4 +39,3 @@ internal static class WMExtensions
         WM secondMessage)
         => (uint)message.message >= (uint)firstMessage && (uint)message.message <= (uint)secondMessage;
 }
-

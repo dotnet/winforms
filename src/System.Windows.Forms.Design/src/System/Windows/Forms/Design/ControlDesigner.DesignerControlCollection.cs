@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -68,8 +70,8 @@ namespace System.Windows.Forms.Design
             {
                 for (int i = _realCollection.Count - 1; i >= 0; i--)
                 {
-                    if (_realCollection[i] != null &&
-                        _realCollection[i].Site != null &&
+                    if (_realCollection[i] is not null &&
+                        _realCollection[i].Site is not null &&
                         TypeDescriptor.GetAttributes(_realCollection[i]).Contains(InheritanceAttribute.NotInherited))
                     {
                         _realCollection.RemoveAt(i);

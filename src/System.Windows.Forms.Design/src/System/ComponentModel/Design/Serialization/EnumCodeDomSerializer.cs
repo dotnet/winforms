@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Diagnostics;
 
@@ -17,14 +19,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static EnumCodeDomSerializer Default
+        internal static new EnumCodeDomSerializer Default
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new EnumCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new EnumCodeDomSerializer();
 
                 return s_defaultSerializer;
             }

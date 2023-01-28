@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
@@ -25,10 +27,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new DataGridViewRowCollectionCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new DataGridViewRowCollectionCodeDomSerializer();
 
                 return s_defaultSerializer;
             }

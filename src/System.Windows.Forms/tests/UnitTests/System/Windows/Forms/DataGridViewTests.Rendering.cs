@@ -7,7 +7,6 @@ using System.Numerics;
 using System.Windows.Forms.Metafiles;
 using Xunit;
 using static System.Windows.Forms.Metafiles.DataHelpers;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -46,8 +45,8 @@ namespace System.Windows.Forms.Tests
             Matrix3x2 times16 = Matrix3x2.CreateScale(16.0f);
 
             // This is the default pen style GDI+ renders with
-            Gdi32.PS penStyle = Gdi32.PS.SOLID | Gdi32.PS.JOIN_ROUND | Gdi32.PS.COSMETIC | Gdi32.PS.ENDCAP_FLAT
-                | Gdi32.PS.JOIN_MITER | Gdi32.PS.GEOMETRIC;
+            PEN_STYLE penStyle = PEN_STYLE.PS_SOLID | PEN_STYLE.PS_JOIN_ROUND | PEN_STYLE.PS_COSMETIC |
+                PEN_STYLE.PS_ENDCAP_FLAT | PEN_STYLE.PS_JOIN_MITER | PEN_STYLE.PS_GEOMETRIC;
 
             // Don't really care about the bounds, just the actual shapes/lines
             emf.Validate(
@@ -56,8 +55,8 @@ namespace System.Windows.Forms.Tests
                 Validate.Polygon16(
                     bounds: null,
                     PointArray(times16, 1, 1, 1, 149, 239, 149, 239, 1, 1, 1),
-                    State.Pen(1, Color.Empty, Gdi32.PS.NULL),
-                    State.Brush(SystemColors.ButtonShadow, Gdi32.BS.SOLID),
+                    State.Pen(1, Color.Empty, PEN_STYLE.PS_NULL),
+                    State.Brush(SystemColors.ButtonShadow, BRUSH_STYLE.BS_SOLID),
                     State.Transform(oneSixteenth)),
                 // Left cell border
                 Validate.Polyline16(
@@ -87,15 +86,15 @@ namespace System.Windows.Forms.Tests
                 Validate.Polygon16(
                     bounds: null,
                     PointArray(times16, 2, 2, 2, 26, 101, 26, 101, 2, 2, 2),
-                    State.Pen(1, Color.Empty, Gdi32.PS.NULL),
-                    State.Brush(SystemColors.ButtonHighlight, Gdi32.BS.SOLID),
+                    State.Pen(1, Color.Empty, PEN_STYLE.PS_NULL),
+                    State.Brush(SystemColors.ButtonHighlight, BRUSH_STYLE.BS_SOLID),
                     State.Transform(oneSixteenth)),
                 // Datagrid border
                 Validate.Polygon16(
                     bounds: null,
                     PointArray(times16, 0, 0, 239, 0, 239, 149, 0, 149),
                     State.Pen(16, SystemColors.Desktop, penStyle),
-                    State.Brush(Color.Empty, Gdi32.BS.NULL),
+                    State.Brush(Color.Empty, BRUSH_STYLE.BS_NULL),
                     State.Transform(oneSixteenth)));
         }
 

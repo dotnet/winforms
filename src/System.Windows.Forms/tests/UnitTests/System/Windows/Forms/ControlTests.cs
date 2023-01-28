@@ -6,12 +6,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public partial class ControlTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -719,6 +718,64 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createParams.Y);
             Assert.Same(createParams, control.CreateParams);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_DataContext_AmbientBehaviorTest()
+        {
+            using SubControl control = new();
+            using SubControl childControl = new();
+
+            control.Controls.Add(childControl);
+            string dataContext = "dataContext";
+
+            int callCount = 0;
+            EventHandler controlHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            EventHandler childControlHandler = (sender, e) =>
+            {
+                Assert.Same(childControl, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+
+            control.DataContextChanged += controlHandler;
+            childControl.DataContextChanged += childControlHandler;
+
+            control.DataContext = dataContext;
+            Assert.Equal(dataContext, control.DataContext);
+            Assert.Equal(dataContext, childControl.DataContext);
+
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.DataContextChanged -= controlHandler;
+            control.DataContext = null;
+
+            // ChildControl's DataContextChanged should still be called.
+            Assert.Equal(3, callCount);
+            Assert.Null(childControl.DataContext);
+
+            // Testing ambient behavior:
+            // Given: Parent's DataContext = null; ChildControl's DataContext = "dataContext".
+            // We're changing Parent's to "dataContext". ChildControl's DataContextChanged should not be called.
+            childControl.DataContext = dataContext;
+            Assert.Equal(4, callCount);
+            control.DataContext = dataContext;
+            Assert.Equal(4, callCount);
+
+            Assert.Equal(dataContext, control.DataContext);
+            Assert.Equal(dataContext, childControl.DataContext);
+
+            // Remove handler.
+            childControl.DataContextChanged -= childControlHandler;
+            childControl.DataContext = null;
+            Assert.Equal(4, callCount);
         }
 
         [WinFormsTheory]

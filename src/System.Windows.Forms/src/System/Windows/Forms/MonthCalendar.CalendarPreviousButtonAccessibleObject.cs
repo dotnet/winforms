@@ -27,7 +27,7 @@ namespace System.Windows.Forms
             }
 
             public override Rectangle Bounds
-                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(ComCtl32.MCGIP.PREV);
+                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_PREV);
 
             public override string Description => SR.CalendarPreviousButtonAccessibleObjectDescription;
 

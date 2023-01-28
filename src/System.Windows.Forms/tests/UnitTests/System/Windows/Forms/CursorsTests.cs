@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Cursors_TestData()
         {
             // Identity function to avoid constant casting
-            Func<Cursor> I(Func<Cursor> factory) => factory;
+            static Func<Cursor> I(Func<Cursor> factory) => factory;
 
             yield return new object[] { I(() => Cursors.AppStarting) };
             yield return new object[] { I(() => Cursors.Arrow) };

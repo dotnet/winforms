@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Collections;
 
@@ -28,7 +30,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public ObjectStatementCollection StatementCollection
         {
-            get => _statements ?? (_statements = new ObjectStatementCollection());
+            get => _statements ??= new ObjectStatementCollection();
         }
     }
 

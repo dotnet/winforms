@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -76,10 +78,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Rectangle rectangle)
         {
-            if (_behaviorService != null)
-            {
-                _behaviorService.Invalidate(rectangle);
-            }
+            _behaviorService?.Invalidate(rectangle);
         }
 
         /// <summary>
@@ -87,10 +86,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Region region)
         {
-            if (_behaviorService != null)
-            {
-                _behaviorService.Invalidate(region);
-            }
+            _behaviorService?.Invalidate(region);
         }
     }
 }

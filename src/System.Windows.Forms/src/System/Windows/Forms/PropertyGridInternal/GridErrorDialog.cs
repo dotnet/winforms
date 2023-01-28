@@ -272,6 +272,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             AcceptButton = _okButton;
             AutoSize = true;
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             CancelButton = _cancelButton;

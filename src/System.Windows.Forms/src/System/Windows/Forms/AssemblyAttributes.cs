@@ -11,8 +11,8 @@ using System.Runtime.CompilerServices;
 [assembly: Dependency("System.Core", LoadHint.Sometimes)]
 // This is now trun on by default, use source file NO_RUNTIMECOMPATIBILITY_ATTRIBUTE flag to control this
 // [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)]
-[assembly: StringFreezing()]
+[assembly: StringFreezing]
 [assembly: System.Runtime.InteropServices.TypeLibVersion(2, 4)]
 
 // Opts into the VS loading icons from the Icon Satellite assembly: System.Windows.Forms.VisualStudio.<version>.0.dll
-[assembly: System.Drawing.BitmapSuffixInSatelliteAssembly()]
+[assembly: System.Drawing.BitmapSuffixInSatelliteAssembly]

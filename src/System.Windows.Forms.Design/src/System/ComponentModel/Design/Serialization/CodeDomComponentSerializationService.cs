@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Collections;
 using System.Diagnostics;
@@ -196,7 +198,7 @@ namespace System.ComponentModel.Design.Serialization
             private readonly IServiceProvider _provider;
 
             // These fields persist across the store
-            private readonly ArrayList _objectNames;
+            private readonly List<string> _objectNames;
             private Hashtable _objectState;
             private LocalResourceManager _resources;
             private AssemblyName[] _assemblies;
@@ -212,7 +214,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 _provider = provider;
                 _objects = new Hashtable();
-                _objectNames = new ArrayList();
+                _objectNames = new List<string>();
                 _shimObjectNames = new List<string>();
             }
 
@@ -231,10 +233,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_errors is null)
-                    {
-                        _errors = Array.Empty<object>();
-                    }
+                    _errors ??= Array.Empty<object>();
 
                     object[] errors = new object[_errors.Count];
                     _errors.CopyTo(errors, 0);
@@ -249,10 +248,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_resources is null)
-                    {
-                        _resources = new LocalResourceManager();
-                    }
+                    _resources ??= new LocalResourceManager();
 
                     return _resources;
                 }
@@ -619,7 +615,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 internal static ComponentListCodeDomSerializer s_instance = new ComponentListCodeDomSerializer();
                 private Hashtable _statementsTable;
-                Dictionary<string, ArrayList> _expressions;
+                Dictionary<string, List<CodeExpression>> _expressions;
                 private Hashtable _objectState; // only used during deserialization
                 private bool _applyDefaults = true;
                 private readonly Hashtable _nameResolveGuard = new Hashtable();
@@ -642,15 +638,9 @@ namespace System.ComponentModel.Design.Serialization
                     else if (data is CodeExpression expression)
                     {
                         // we handle expressions a little differently since they don't have a LHS or RHS they won't show up correctly in the statement table. We will deserialize them explicitly.
-                        ArrayList exps = null;
-                        if (_expressions.ContainsKey(name))
+                        if (!_expressions.TryGetValue(name, out List<CodeExpression> exps))
                         {
-                            exps = _expressions[name];
-                        }
-
-                        if (exps is null)
-                        {
-                            exps = new ArrayList();
+                            exps = new();
                             _expressions[name] = exps;
                         }
 
@@ -668,7 +658,7 @@ namespace System.ComponentModel.Design.Serialization
                 internal void Deserialize(IDesignerSerializationManager manager, IDictionary objectState, IList objectNames, bool applyDefaults)
                 {
                     CodeStatementCollection completeStatements = new CodeStatementCollection();
-                    _expressions = new Dictionary<string, ArrayList>();
+                    _expressions = new();
                     _applyDefaults = applyDefaults;
                     foreach (string name in objectNames)
                     {
@@ -793,10 +783,7 @@ namespace System.ComponentModel.Design.Serialization
                             foreach (DictionaryEntry de in (IDictionary)state)
                             {
                                 PropertyDescriptor prop = props[(string)de.Key];
-                                if (prop is not null)
-                                {
-                                    prop.SetValue(comp, de.Value);
-                                }
+                                prop?.SetValue(comp, de.Value);
                             }
                         }
                     }
@@ -966,9 +953,8 @@ namespace System.ComponentModel.Design.Serialization
                             DeserializeModifier(manager, name, state[StateModifier]);
                         }
 
-                        if (_expressions.ContainsKey(name))
+                        if (_expressions.TryGetValue(name, out List<CodeExpression> exps))
                         {
-                            ArrayList exps = _expressions[name];
                             foreach (CodeExpression exp in exps)
                             {
                                 object exValue = DeserializeExpression(manager, name, exp);
@@ -984,9 +970,8 @@ namespace System.ComponentModel.Design.Serialization
                         if (!resolved)
                         {
                             // this is condition 2 of the comment at the start of this method.
-                            if (_expressions.ContainsKey(name))
+                            if (_expressions.TryGetValue(name, out List<CodeExpression> exps))
                             {
-                                ArrayList exps = _expressions[name];
                                 foreach (CodeExpression exp in exps)
                                 {
                                     object exValue = DeserializeExpression(manager, name, exp);
@@ -1053,10 +1038,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     PropertyDescriptor prop = eventProps[eventName];
 
-                                    if (prop is not null)
-                                    {
-                                        prop.SetValue(comp, null);
-                                    }
+                                    prop?.SetValue(comp, null);
                                 }
                             }
                         }
@@ -1071,10 +1053,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         MemberAttributes modifierValue = (MemberAttributes)state;
                         PropertyDescriptor modifierProp = TypeDescriptor.GetProperties(comp)["Modifiers"];
-                        if (modifierProp is not null)
-                        {
-                            modifierProp.SetValue(comp, modifierValue);
-                        }
+                        modifierProp?.SetValue(comp, modifierValue);
                     }
                 }
 
@@ -1245,10 +1224,7 @@ namespace System.ComponentModel.Design.Serialization
                                     {
                                         if (prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) || !prop.IsReadOnly)
                                         {
-                                            if (defaultPropList is null)
-                                            {
-                                                defaultPropList = new ArrayList(data.Members.Count);
-                                            }
+                                            defaultPropList ??= new ArrayList(data.Members.Count);
 
                                             Trace("Adding default for {0}.{1}", data._name, prop.Name);
                                             defaultPropList.Add(prop.Name);
@@ -1268,10 +1244,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                         if (eventProp.GetValue(data._value) is null)
                                         {
-                                            if (defaultEventList is null)
-                                            {
-                                                defaultEventList = new List<string>();
-                                            }
+                                            defaultEventList ??= new List<string>();
 
                                             defaultEventList.Add(eventProp.Name);
                                         }
@@ -1287,19 +1260,13 @@ namespace System.ComponentModel.Design.Serialization
                                         if (ebs is not null && ebs.GetEvent(prop) is not null)
                                         {
                                             Debug.Assert(prop.GetValue(data._value) is null, "ShouldSerializeValue and GetValue are differing");
-                                            if (defaultEventList is null)
-                                            {
-                                                defaultEventList = new List<string>();
-                                            }
+                                            defaultEventList ??= new List<string>();
 
                                             defaultEventList.Add(prop.Name);
                                         }
                                         else
                                         {
-                                            if (defaultPropList is null)
-                                            {
-                                                defaultPropList = new ArrayList(data.Members.Count);
-                                            }
+                                            defaultPropList ??= new ArrayList(data.Members.Count);
 
                                             Trace("Adding default for {0}.{1}", data._name, prop.Name);
                                             defaultPropList.Add(prop.Name);
@@ -1414,10 +1381,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     get
                     {
-                        if (_members is null)
-                        {
-                            _members = new ArrayList();
-                        }
+                        _members ??= new ArrayList();
 
                         return _members;
                     }
@@ -1438,10 +1402,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     get
                     {
-                        if (_hashtable is null)
-                        {
-                            _hashtable = new Hashtable();
-                        }
+                        _hashtable ??= new Hashtable();
 
                         return _hashtable;
                     }

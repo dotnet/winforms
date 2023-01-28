@@ -96,7 +96,7 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 LayoutOptions? options = default;
                 using (var screen = GdiCache.GetScreenHdc())
-                using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
+                using (PaintEventArgs pe = new PaintEventArgs(screen, default(Rectangle)))
                 {
                     options = Layout(pe);
                 }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.ButtonInternal
                         GetState(),
                         true,
                         Control.MouseIsOver),
-                    Control.HandleInternal).Width;
+                    Control.HWNDInternal).Width;
             }
             else
             {

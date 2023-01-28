@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -20,7 +22,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (dataBitmap == null)
+                if (dataBitmap is null)
                 {
                     dataBitmap = new Bitmap(typeof(DesignBindingValueUIHandler), "BoundProperty.bmp");
                     dataBitmap.MakeTransparent();
@@ -32,9 +34,8 @@ namespace System.Windows.Forms.Design
 
         internal void OnGetUIValueItem(ITypeDescriptorContext context, PropertyDescriptor propDesc, ArrayList valueUIItemList)
         {
-            if (context.Instance is Control)
+            if (context.Instance is Control control)
             {
-                Control control = (Control)context.Instance;
                 foreach (Binding binding in control.DataBindings)
                 {
                     // Only add the binding if it is one of the data source types we recognize.  Otherwise, our drop-down list won't show it as
@@ -68,10 +69,7 @@ namespace System.Windows.Forms.Design
 
         public void Dispose()
         {
-            if (dataBitmap != null)
-            {
-                dataBitmap.Dispose();
-            }
+            dataBitmap?.Dispose();
         }
     }
 }

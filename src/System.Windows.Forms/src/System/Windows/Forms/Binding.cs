@@ -262,10 +262,7 @@ namespace System.Windows.Forms
             get => _formatString;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!value.Equals(_formatString))
                 {

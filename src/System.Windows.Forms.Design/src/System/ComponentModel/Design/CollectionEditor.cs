@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Drawing.Design;
 using System.Reflection;
@@ -218,7 +220,7 @@ namespace System.ComponentModel.Design
             _currentContext = context;
 
             // Child modal dialog - launching in SystemAware mode.
-            CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
+            CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(CreateCollectionForm);
             ITypeDescriptorContext lastContext = _currentContext;
             localCollectionForm.EditValue = value;
             _ignoreChangingEvents = false;

@@ -94,7 +94,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         hdc,
                         dropDownButtonRect,
                         state,
-                        DpiHelper.IsScalingRequirementMet ? HandleInternal : IntPtr.Zero);
+                        DpiHelper.IsScalingRequirementMet ? HWNDInternal : HWND.Null);
                 }
 
                 // Redraw focus cues.

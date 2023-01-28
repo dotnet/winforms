@@ -2,9 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using static Interop;
 using static Interop.User32;
 
 namespace System.Drawing.Design
@@ -211,7 +212,7 @@ namespace System.Drawing.Design
                     {
                         if (SelectedColor.Equals(GetColorFromCell(x, y)))
                         {
-                            Rectangle r = new Rectangle();
+                            Rectangle r = default(Rectangle);
                             FillRectWithCellBounds(x, y, ref r);
                             Invalidate(Rectangle.Inflate(r, 5, 5));
                             break;
@@ -222,7 +223,7 @@ namespace System.Drawing.Design
 
             private void InvalidateFocus()
             {
-                Rectangle r = new Rectangle();
+                Rectangle r = default(Rectangle);
                 FillRectWithCellBounds(_focus.X, _focus.Y, ref r);
                 Invalidate(Rectangle.Inflate(r, 5, 5));
                 NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(_focus.X, _focus.Y));
@@ -242,7 +243,7 @@ namespace System.Drawing.Design
                 _colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
                 CustomColorDialog dialog = new CustomColorDialog();
 
-                IntPtr hwndFocus = GetFocus();
+                HWND hwndFocus = PInvoke.GetFocus();
                 try
                 {
                     DialogResult result = dialog.ShowDialog();
@@ -258,9 +259,9 @@ namespace System.Drawing.Design
                 }
                 finally
                 {
-                    if (hwndFocus != IntPtr.Zero)
+                    if (!hwndFocus.IsNull)
                     {
-                        User32.SetFocus(hwndFocus);
+                        PInvoke.SetFocus(hwndFocus);
                     }
                 }
             }

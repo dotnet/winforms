@@ -221,12 +221,9 @@ namespace System.Windows.Forms
                 }
 
                 string? name = User32.GetClipboardFormatNameW(clampedId);
-                if (name is null)
-                {
-                    // This can happen if windows adds a standard format that we don't know about,
-                    // so we should play it safe.
-                    name = "Format" + clampedId;
-                }
+                // This can happen if windows adds a standard format that we don't know about,
+                // so we should play it safe.
+                name ??= "Format" + clampedId;
 
                 EnsureFormatSpace(1);
                 s_formatList[s_formatCount] = new Format(name, clampedId);
@@ -286,10 +283,7 @@ namespace System.Windows.Forms
 
                 s_formatCount = s_formatList.Length;
             }
-            else if (s_formatList is null)
-            {
-                s_formatList = Array.Empty<Format>();
-            }
+            else s_formatList ??= Array.Empty<Format>();
         }
     }
 }

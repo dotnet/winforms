@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         /// <summary>
         ///  There is one ControlItem for each control that the ErrorProvider is tracking state for.
@@ -21,7 +20,7 @@ namespace System.Windows.Forms
 
             private string _error;
             private readonly Control _control;
-            private ErrorWindow _window;
+            private ErrorWindow? _window;
             private readonly ErrorProvider _provider;
             private int _iconPadding;
             private ErrorIconAlignment _iconAlignment;
@@ -54,7 +53,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
+                    AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
 
                     if (accessibleObject is null)
                     {
@@ -72,7 +71,7 @@ namespace System.Windows.Forms
             /// </summary>
             private AccessibleObject CreateAccessibilityInstance()
             {
-                return new ControlItemAccessibleObject(this, _window, _control.ParentInternal, _provider);
+                return new ControlItemAccessibleObject(this, _window, _control, _provider);
             }
 
             public void Dispose()
@@ -126,15 +125,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns or sets the error description string for the control.
             /// </summary>
+            [AllowNull]
             public string Error
             {
                 get => _error;
                 set
                 {
-                    if (value is null)
-                    {
-                        value = string.Empty;
-                    }
+                    value ??= string.Empty;
 
                     // If the error is the same and the blinkStyle is not AlwaysBlink, then
                     // we should not add the error and not start blinking.
@@ -321,9 +318,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  This is called when a property on the control is changed.
             /// </summary>
-            private void OnBoundsChanged(object sender, EventArgs e) => UpdateWindow();
+            private void OnBoundsChanged(object? sender, EventArgs e) => UpdateWindow();
 
-            void OnParentVisibleChanged(object sender, EventArgs e)
+            void OnParentVisibleChanged(object? sender, EventArgs e)
             {
                 BlinkPhase = 0;
                 RemoveFromWindow();
@@ -340,12 +337,12 @@ namespace System.Windows.Forms
             /// <summary>
             ///  This is called when the control's handle is created.
             /// </summary>
-            private void OnCreateHandle(object sender, EventArgs e) => AddToWindow();
+            private void OnCreateHandle(object? sender, EventArgs e) => AddToWindow();
 
             /// <summary>
             ///  This is called when the control's handle is destroyed.
             /// </summary>
-            private void OnDestroyHandle(object sender, EventArgs e) => RemoveFromWindow();
+            private void OnDestroyHandle(object? sender, EventArgs e) => RemoveFromWindow();
         }
     }
 }

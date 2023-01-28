@@ -274,9 +274,9 @@ namespace System.Windows.Forms
                 => propertyId switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HeaderControlTypeId,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => false,
                     UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => false,
                     _ => base.GetPropertyValue(propertyId),
                 };
 

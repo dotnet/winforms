@@ -341,6 +341,19 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.GetTopLevel());
         }
 
+        [WinFormsFact]
+        public void ToolStripPanel_AddTwoToolStrips_DoesNotThrowInvalidCastException()
+        {
+            using ToolStripContainer toolStripContainer = new();
+            using ToolStrip toolStrip1 = new();
+            using ToolStrip toolStrip2 = new();
+
+            toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip1);
+            var exception = Record.Exception(() => toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip2));
+
+            Assert.Null(exception);
+        }
+
         private class SubToolStripPanel : ToolStripPanel
         {
             public new SizeF AutoScaleFactor => base.AutoScaleFactor;

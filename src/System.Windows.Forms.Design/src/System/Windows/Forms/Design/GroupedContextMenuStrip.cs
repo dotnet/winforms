@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -26,10 +28,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_groups is null)
-                {
-                    _groups = new ContextMenuStripGroupCollection();
-                }
+                _groups ??= new ContextMenuStripGroupCollection();
 
                 return _groups;
             }
@@ -39,10 +38,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_groupOrdering is null)
-                {
-                    _groupOrdering = new StringCollection();
-                }
+                _groupOrdering ??= new StringCollection();
 
                 return _groupOrdering;
             }

@@ -63,5 +63,25 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
             Assert.False(toolStrip.Control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void ToolStripControlHostAccessibleObject_ReleaseUiaProvider_ToolStripControlHostControl()
+        {
+            using var toolStrip = new ToolStrip();
+            using Control control = new();
+            using ToolStripControlHost toolStripControlHost = new(control);
+            toolStrip.Items.Add(toolStripControlHost);
+            toolStripControlHost.Parent = toolStrip;
+            toolStrip.CreateControl();
+
+            _ = toolStripControlHost.AccessibilityObject;
+            _ = toolStripControlHost.Control.AccessibilityObject;
+
+            Assert.True(toolStripControlHost.Control.IsAccessibilityObjectCreated);
+
+            toolStripControlHost.ReleaseUiaProvider();
+
+            Assert.False(toolStripControlHost.Control.IsAccessibilityObjectCreated);
+        }
     }
 }

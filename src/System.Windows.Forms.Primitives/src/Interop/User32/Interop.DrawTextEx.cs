@@ -8,9 +8,9 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        private static unsafe partial int DrawTextExW(
-            Gdi32.HDC hdc,
+        [DllImport(Libraries.User32)]
+        private static extern unsafe int DrawTextExW(
+            HDC hdc,
             char* lpchText,
             int cchText,
             ref RECT lprc,
@@ -18,7 +18,7 @@ internal static partial class Interop
             ref DRAWTEXTPARAMS lpdtp);
 
         public static unsafe int DrawTextExW(
-            Gdi32.HDC hdc,
+            HDC hdc,
             ReadOnlySpan<char> lpchText,
             ref RECT lprc,
             DT format,

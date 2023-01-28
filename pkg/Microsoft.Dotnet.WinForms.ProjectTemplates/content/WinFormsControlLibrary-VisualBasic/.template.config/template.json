@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project template for creating a control library that targets .NET Windows Forms (WinForms).",
   "groupIdentity": "Microsoft.Common.WinForms.ControlLibrary",
-  "precedence": "7000",
-  "identity": "Microsoft.Common.WinForms.ControlLibrary.VisualBasic.7.0",
+  "precedence": "8000",
+  "identity": "Microsoft.Common.WinForms.ControlLibrary.VisualBasic.8.0",
   "shortName": "winformscontrollib",
   "tags": {
     "language": "VB",
@@ -48,11 +48,16 @@
           "choice": "net7.0",
           "description": "Target net7.0",
           "displayName": ".NET 7.0"
+        },
+        {
+          "choice": "net8.0",
+          "description": "Target net8.0",
+          "displayName": ".NET 8.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net7.0",
-      "displayName": ".NET 7.0"
+      "defaultValue": "net8.0",
+      "displayName": ".NET 8.0"
     },
     "UseWindowsDesktopSdk": {
       "type": "computed",

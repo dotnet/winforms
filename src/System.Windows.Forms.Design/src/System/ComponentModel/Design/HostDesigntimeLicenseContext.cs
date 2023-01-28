@@ -17,6 +17,6 @@ namespace System.ComponentModel.Design
             _provider = provider;
         }
 
-        public override object GetService(Type serviceClass) => _provider.GetService(serviceClass);
+        public override object? GetService(Type serviceClass) => _provider.GetService(serviceClass);
     }
 }

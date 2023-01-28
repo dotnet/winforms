@@ -74,34 +74,25 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
-            {
-                switch (propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
+                propertyId switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
+                    UiaCore.UIA.AccessKeyPropertyId => _panel.AccessibilityObject.KeyboardShortcut,
+                    UiaCore.UIA.ControlTypePropertyId =>
                         // If we don't set a default role for the accessible object
                         // it will be retrieved from Windows.
                         // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                        return Owner.AccessibleRole == AccessibleRole.Default
-                               ? UiaCore.UIA.PaneControlTypeId
-                               : base.GetPropertyValue(propertyId);
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return true;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _ownerDataGridView.CurrentCell is not null;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _ownerDataGridView.Enabled;
-                    case UiaCore.UIA.IsControlElementPropertyId:
-                    case UiaCore.UIA.IsContentElementPropertyId:
-                        return true;
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return _panel.AccessibilityObject.KeyboardShortcut;
-                    case UiaCore.UIA.ProviderDescriptionPropertyId:
-                        return SR.DataGridViewEditingPanelUiaProviderDescription;
-                }
-
-                return base.GetPropertyValue(propertyId);
-            }
+                        Owner.AccessibleRole == AccessibleRole.Default
+                            ? UiaCore.UIA.PaneControlTypeId
+                            : base.GetPropertyValue(propertyId),
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _ownerDataGridView.CurrentCell is not null,
+                    UiaCore.UIA.IsContentElementPropertyId => true,
+                    UiaCore.UIA.IsControlElementPropertyId => true,
+                    UiaCore.UIA.IsEnabledPropertyId => _ownerDataGridView.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
+                    UiaCore.UIA.ProviderDescriptionPropertyId => SR.DataGridViewEditingPanelUiaProviderDescription,
+                    _ => base.GetPropertyValue(propertyId)
+                };
 
             #endregion
         }

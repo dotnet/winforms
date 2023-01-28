@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms.Tests
@@ -608,7 +607,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.Encoding = value);
+            Assert.Throws<ArgumentException>(() => document.Encoding = value);
         }
 
         [WinFormsFact]
@@ -1431,7 +1430,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.CreateElement(null));
+            Assert.Throws<ArgumentException>(() => document.CreateElement(null));
         }
 
         [WinFormsTheory]
@@ -1602,7 +1601,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.GetElementById(null));
+            Assert.Throws<ArgumentException>(() => document.GetElementById(null));
         }
 
         [WinFormsFact]
@@ -1658,7 +1657,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.GetElementsByTagName(null));
+            Assert.Throws<ArgumentException>(() => document.GetElementsByTagName(null));
         }
 
         [WinFormsFact]
@@ -1796,7 +1795,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("about:blank", newDocument.Url.OriginalString);
         }
 
-#pragma warning disable CS1718 // Disable "Comparison made to same variable" warning.
+#pragma warning disable CS1718, CSIsNull001, CSIsNull002 // Disable "Comparison made to same variable" warning.
         [WinFormsFact]
         public async Task HtmlDocument_OperatorEquals_Invoke_ReturnsExpected()
         {
@@ -1812,7 +1811,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(document == document);
             Assert.False(document == newDocument);
-            Assert.False((HtmlDocument)null == document);
+            Assert.False(document == (HtmlDocument)null);
             Assert.False(document == (HtmlDocument)null);
             Assert.True((HtmlDocument)null == (HtmlDocument)null);
         }
@@ -1832,11 +1831,11 @@ namespace System.Windows.Forms.Tests
 
             Assert.False(document != document);
             Assert.True(document != newDocument);
-            Assert.True((HtmlDocument)null != document);
+            Assert.True(document != (HtmlDocument)null);
             Assert.True(document != (HtmlDocument)null);
             Assert.False((HtmlDocument)null != (HtmlDocument)null);
         }
-#pragma warning restore CS1718
+#pragma warning restore CS1718, CSIsNull001, CSIsNull002
 
         [WinFormsFact]
         public async Task HtmlDocument_Click_InvokeEvent_Success()
@@ -2148,7 +2147,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        private async static Task<HtmlDocument> GetDocument(WebBrowser control, string html)
+        private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
         {
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);

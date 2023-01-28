@@ -520,7 +520,7 @@ namespace System.Windows.Forms
                 {
                     if (element is Control c)
                     {
-                        ControlInformation controlInfo = new ControlInformation();
+                        ControlInformation controlInfo = default(ControlInformation);
 
                         // We need to go through the PropertyDescriptor for the Name property
                         // since it is shadowed.

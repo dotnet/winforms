@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Tests
             group.Items.Add(item);
             otherListView.Items.Add(item);
 
-            Assert.Throws<ArgumentException>(null, () => collection[0] = group);
+            Assert.Throws<ArgumentException>(() => collection[0] = group);
             Assert.Same(oldGroup, Assert.Single(collection.Cast<ListViewGroup>()));
             Assert.Null(group.ListView);
         }
@@ -494,7 +494,7 @@ namespace System.Windows.Forms.Tests
             group.Items.Add(item);
             otherListView.Items.Add(item);
 
-            Assert.Throws<ArgumentException>(null, () => collection.Add(group));
+            Assert.Throws<ArgumentException>(() => collection.Add(group));
             Assert.Empty(collection);
         }
 
@@ -850,7 +850,7 @@ namespace System.Windows.Forms.Tests
             group.Items.Add(item);
             otherListView.Items.Add(item);
 
-            Assert.Throws<ArgumentException>(null, () => collection.Insert(0, group));
+            Assert.Throws<ArgumentException>(() => collection.Insert(0, group));
             Assert.Empty(collection);
         }
 

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -32,7 +34,7 @@ namespace System.Windows.Forms.Design.Behavior
     {
         private readonly IServiceProvider _serviceProvider;             // standard service provider
         private readonly AdornerWindow _adornerWindow;                  // the transparent window all glyphs are drawn to
-        private readonly ArrayList _behaviorStack;                      // the stack behavior objects can be pushed to and popped from
+        private readonly List<Behavior> _behaviorStack;                 // the stack behavior objects can be pushed to and popped from
         private Behavior _captureBehavior;                              // the behavior that currently has capture; may be null
         private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
         private IToolboxService _toolboxSvc;                            // allows us to have the toolbox choose a cursor
@@ -47,7 +49,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly MenuCommandHandler _menuCommandHandler;        // private object that handles all menu commands
         private bool _useSnapLines;                                     // indicates if this designer session is using snaplines or snapping to a grid
         private bool _queriedSnapLines;                                 // only query for this once since we require the user restart design sessions when this changes
-        private readonly Hashtable _dragEnterReplies;                   // we keep track of whether glyph has already responded to a DragEnter this D&D.
+        private readonly HashSet<Glyph> _dragEnterReplies;              // we keep track of whether glyph has already responded to a DragEnter this D&D.
         private static readonly TraceSwitch s_dragDropSwitch
             = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
 
@@ -63,16 +65,16 @@ namespace System.Windows.Forms.Design.Behavior
 
             // Use the adornerWindow as an overlay
             IOverlayService os = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
-            if (os != null)
+            if (os is not null)
             {
                 AdornerWindowIndex = os.PushOverlay(_adornerWindow);
             }
 
-            _dragEnterReplies = new Hashtable();
+            _dragEnterReplies = new();
 
             // Start with an empty adorner collection & no behavior on the stack
             Adorners = new BehaviorServiceAdornerCollection(this);
-            _behaviorStack = new ArrayList();
+            _behaviorStack = new();
 
             _hitTestedGlyph = null;
             _validDragArgs = null;
@@ -113,7 +115,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal int AdornerWindowIndex { get; } = -1;
 
-        internal bool HasCapture => _captureBehavior != null;
+        internal bool HasCapture => _captureBehavior is not null;
 
         /// <summary>
         ///  Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
@@ -151,14 +153,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorStack != null && _behaviorStack.Count > 0)
-                {
-                    return (_behaviorStack[0] as Behavior);
-                }
-                else
-                {
-                    return null;
-                }
+                return _behaviorStack is not null && _behaviorStack.Count > 0 ? _behaviorStack[0] : null;
             }
         }
 
@@ -184,10 +179,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             // Remove adorner window from overlay service
             IOverlayService os = (IOverlayService)_serviceProvider.GetService(typeof(IOverlayService));
-            if (os != null)
-            {
-                os.RemoveOverlay(_adornerWindow);
-            }
+            os?.RemoveOverlay(_adornerWindow);
 
             MenuCommandHandler menuCommandHandler = null;
             if (_serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService)
@@ -195,7 +187,7 @@ namespace System.Windows.Forms.Design.Behavior
                 menuCommandHandler = menuCommandService as MenuCommandHandler;
             }
 
-            if (menuCommandHandler != null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+            if (menuCommandHandler is not null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 IMenuCommandService oldMenuCommandService = menuCommandHandler.MenuService;
                 host.RemoveService(typeof(IMenuCommandService));
@@ -263,10 +255,7 @@ namespace System.Windows.Forms.Design.Behavior
                 // It's possible we did not receive an EndDrag, and therefore we weren't able to cleanup the drag.
                 // We will do that here. Scenarios where this happens: dragging from designer to recycle-bin,
                 // or over the taskbar.
-                if (dropSourceBehavior != null)
-                {
-                    dropSourceBehavior.CleanupDrag();
-                }
+                dropSourceBehavior?.CleanupDrag();
             }
 
             return res;
@@ -299,7 +288,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             var pt = new Point(c.Left, c.Top);
-            User32.MapWindowPoint(c.Parent, _adornerWindow, ref pt);
+            PInvoke.MapWindowPoints(c.Parent, _adornerWindow, ref pt);
             if (c.Parent.IsMirrored)
             {
                 pt.X -= c.Width;
@@ -313,7 +302,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            User32.MapWindowPoint(handle, _adornerWindow, ref pt);
+            PInvoke.MapWindowPoints((HWND)handle, _adornerWindow, ref pt);
             return pt;
         }
 
@@ -365,12 +354,12 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Behavior GetNextBehavior(Behavior behavior)
         {
-            if (_behaviorStack != null && _behaviorStack.Count > 0)
+            if (_behaviorStack is not null && _behaviorStack.Count > 0)
             {
                 int index = _behaviorStack.IndexOf(behavior);
                 if ((index != -1) && (index < _behaviorStack.Count - 1))
                 {
-                    return _behaviorStack[index + 1] as Behavior;
+                    return _behaviorStack[index + 1];
                 }
             }
 
@@ -433,7 +422,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _adornerWindow.Capture = false;
 
                 // Defensive:  adornerWindow should get a WM_CAPTURECHANGED, but do this by hand if it didn't.
-                if (_captureBehavior != null)
+                if (_captureBehavior is not null)
                 {
                     OnLoseCapture();
                     Debug.Assert(_captureBehavior is null, "OnLostCapture should have cleared captureBehavior");
@@ -461,7 +450,7 @@ namespace System.Windows.Forms.Design.Behavior
             _behaviorStack.Insert(0, behavior);
 
             // If there is a capture behavior, and it isn't this behavior, notify it that it no longer has capture.
-            if (_captureBehavior != null && _captureBehavior != behavior)
+            if (_captureBehavior is not null && _captureBehavior != behavior)
             {
                 OnLoseCapture();
             }
@@ -482,12 +471,12 @@ namespace System.Windows.Forms.Design.Behavior
             // which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window,
             // let's activate it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
-            if (uiService != null)
+            if (uiService is not null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
+                if (hwnd is not null && hwnd.Handle != 0 && hwnd.Handle != PInvoke.GetActiveWindow())
                 {
-                    User32.SetActiveWindow(hwnd.Handle);
+                    PInvoke.SetActiveWindow(new HandleRef<HWND>(hwnd, (HWND)hwnd.Handle));
                 }
             }
         }
@@ -499,7 +488,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal void OnLoseCapture()
         {
-            if (_captureBehavior != null)
+            if (_captureBehavior is not null)
             {
                 Behavior b = _captureBehavior;
                 _captureBehavior = null;
@@ -525,7 +514,7 @@ namespace System.Windows.Forms.Design.Behavior
                 for (int j = 0; j < Adorners[i].Glyphs.Count; j++)
                 {
                     Cursor hitTestCursor = Adorners[i].Glyphs[j].GetHitTest(pt);
-                    if (hitTestCursor != null)
+                    if (hitTestCursor is not null)
                     {
                         // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
                         Glyph newGlyph = Adorners[i].Glyphs[j];
@@ -549,7 +538,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (_validDragArgs is null)
             {
                 Cursor cursor = Cursors.Default;
-                if ((_behaviorStack != null) && (_behaviorStack.Count > 0))
+                if ((_behaviorStack is not null) && (_behaviorStack.Count > 0))
                 {
                     if (_behaviorStack[0] is Behavior behavior)
                     {
@@ -573,13 +562,13 @@ namespace System.Windows.Forms.Design.Behavior
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
 
-            if (behavior != null)
+            if (behavior is not null)
             {
                 if (behavior.DisableAllCommands)
                 {
                     MenuCommand menuCommand = menuService.FindCommand(commandID);
 
-                    if (menuCommand != null)
+                    if (menuCommand is not null)
                     {
                         menuCommand.Enabled = false;
                     }
@@ -590,7 +579,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     // Check to see if the behavior wants to interrupt this command
                     MenuCommand menuCommand = behavior.FindCommand(commandID);
-                    if (menuCommand != null)
+                    if (menuCommand is not null)
                     {
                         // The behavior chose to interrupt - so return the new command
                         return menuCommand;
@@ -603,17 +592,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Behavior GetAppropriateBehavior(Glyph g)
         {
-            if (_behaviorStack != null && _behaviorStack.Count > 0)
-            {
-                return _behaviorStack[0] as Behavior;
-            }
-
-            if (g != null && g.Behavior != null)
-            {
-                return g.Behavior;
-            }
-
-            return null;
+            return _behaviorStack is not null && _behaviorStack.Count > 0 ? _behaviorStack[0] : g?.Behavior;
         }
 
         private void ShowError(Exception ex)
@@ -626,17 +605,14 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void SetAppropriateCursor(Cursor cursor)
         {
-            //default cursors will let the toolbox svc set a cursor if needed
+            // Default cursors will let the toolbox svc set a cursor if needed
             if (cursor == Cursors.Default)
             {
-                if (_toolboxSvc is null)
-                {
-                    _toolboxSvc = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
-                }
+                _toolboxSvc ??= (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
 
-                if (_toolboxSvc != null && _toolboxSvc.SetCursor())
+                if (_toolboxSvc is not null && _toolboxSvc.SetCursor())
                 {
-                    cursor = new Cursor(User32.GetCursor());
+                    cursor = new Cursor(PInvoke.GetCursor());
                 }
             }
 
@@ -645,15 +621,15 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void InvokeMouseEnterLeave(Glyph leaveGlyph, Glyph enterGlyph)
         {
-            if (leaveGlyph != null)
+            if (leaveGlyph is not null)
             {
-                if (enterGlyph != null && leaveGlyph.Equals(enterGlyph))
+                if (enterGlyph is not null && leaveGlyph.Equals(enterGlyph))
                 {
                     // Same glyph - no change
                     return;
                 }
 
-                if (_validDragArgs != null)
+                if (_validDragArgs is not null)
                 {
                     OnDragLeave(leaveGlyph, EventArgs.Empty);
                 }
@@ -663,9 +639,9 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            if (enterGlyph != null)
+            if (enterGlyph is not null)
             {
-                if (_validDragArgs != null)
+                if (_validDragArgs is not null)
                 {
                     OnDragEnter(enterGlyph, _validDragArgs);
                 }
@@ -694,9 +670,9 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragEnter(g, e);
 
-            if (g != null && g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
+            if (g is not null && g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
             {
-                _dragEnterReplies[g] = this; // dummy value, we just need to set something.
+                _dragEnterReplies.Add(g);
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tCalled DragEnter on this glyph. Caching");
             }
         }
@@ -813,7 +789,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void TestHook_GetRecentSnapLines(ref Message m)
         {
             string snapLineInfo = string.Empty;
-            if (_testHook_RecentSnapLines != null)
+            if (_testHook_RecentSnapLines is not null)
             {
                 foreach (string line in _testHook_RecentSnapLines)
                 {
@@ -828,13 +804,13 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (m.LParamInternal == 0)
             {
-                m.ResultInternal = (text.Length + 1) * sizeof(char);
+                m.ResultInternal = (LRESULT)((text.Length + 1) * sizeof(char));
                 return;
             }
 
-            if (m.WParamInternal < text.Length + 1)
+            if ((int)m.WParamInternal < text.Length + 1)
             {
-                m.ResultInternal = -1;
+                m.ResultInternal = (LRESULT)(-1);
                 return;
             }
 
@@ -847,21 +823,21 @@ namespace System.Windows.Forms.Design.Behavior
             nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
 
             Marshal.Copy(bytes, 0, m.LParamInternal, bytes.Length);
-            Marshal.Copy(nullBytes, 0, m.LParamInternal + bytes.Length, nullBytes.Length);
-            m.ResultInternal = (bytes.Length + nullBytes.Length) / sizeof(char);
+            Marshal.Copy(nullBytes, 0, m.LParamInternal + (nint)bytes.Length, nullBytes.Length);
+            m.ResultInternal = (LRESULT)((bytes.Length + nullBytes.Length) / sizeof(char));
         }
 
         private void TestHook_GetAllSnapLines(ref Message m)
         {
             string snapLineInfo = string.Empty;
-            if (!(_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host))
+            if (_serviceProvider.GetService(typeof(IDesignerHost)) is not IDesignerHost host)
             {
                 return;
             }
 
             foreach (Component comp in host.Container.Components)
             {
-                if (!(comp is Control))
+                if (comp is not Control)
                 {
                     continue;
                 }
@@ -893,7 +869,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             if (_hitTestedGlyph is null ||
-               (_hitTestedGlyph != null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
+               (_hitTestedGlyph is not null && !_dragEnterReplies.Contains(_hitTestedGlyph)))
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFound glyph, forwarding to behavior");
                 behavior.OnDragOver(_hitTestedGlyph, e);

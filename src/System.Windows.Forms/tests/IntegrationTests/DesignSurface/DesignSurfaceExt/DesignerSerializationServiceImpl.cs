@@ -16,7 +16,7 @@ namespace DesignSurfaceExt
         public System.Collections.ICollection Deserialize(object serializationData)
         {
             SerializationStore serializationStore = serializationData as SerializationStore;
-            if (serializationStore != null)
+            if (serializationStore is not null)
             {
                 ComponentSerializationService componentSerializationService = _serviceProvider.GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
                 ICollection collection = componentSerializationService.Deserialize(serializationStore);

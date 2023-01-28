@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Reflection;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -18,12 +17,12 @@ namespace System.Windows.Forms.Design
     {
         // Metafile types are not supported in the ImageListImageEditor and should not be displayed as an option.
         internal static Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor) };
-        private OpenFileDialog _fileDialog;
+        private OpenFileDialog? _fileDialog;
 
         // Derived classes can implement a different list of supported image types.
         protected override Type[] GetImageExtenders() => s_imageExtenders;
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             if (provider is null)
             {
@@ -31,7 +30,7 @@ namespace System.Windows.Forms.Design
             }
 
             var images = new ArrayList();
-            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+            if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
             {
                 return images;
             }
@@ -46,17 +45,18 @@ namespace System.Windows.Forms.Design
                 string filter = CreateFilterEntry(this);
                 foreach (Type extender in GetImageExtenders())
                 {
-                    var myClass = GetType();
-                    var editor = (ImageEditor)Activator.CreateInstance(
+                    Type myClass = GetType();
+                    var editor = (ImageEditor?)Activator.CreateInstance(
                         extender,
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
                         binder: null,
                         args: null,
                         culture: null);
 
-                    var editorClass = editor.GetType();
-
-                    if (!myClass.Equals(editorClass) && editor is not null && myClass.IsInstanceOfType(editor))
+                    if (editor is not null
+                        && editor.GetType() is Type editorClass
+                        && !myClass.Equals(editorClass)
+                        && myClass.IsInstanceOfType(editor))
                     {
                         filter += $"|{CreateFilterEntry(editor)}";
                     }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Design
                 _fileDialog.Filter = filter;
             }
 
-            IntPtr hwndFocus = User32.GetFocus();
+            HWND hwndFocus = PInvoke.GetFocus();
             try
             {
                 if (_fileDialog.ShowDialog() == DialogResult.OK)
@@ -81,9 +81,9 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (hwndFocus != IntPtr.Zero)
+                if (!hwndFocus.IsNull)
                 {
-                    User32.SetFocus(hwndFocus);
+                    PInvoke.SetFocus(hwndFocus);
                 }
             }
 
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Determines if this editor supports the painting of a representation of an object's value.
         /// </summary>
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
         private static ImageListImage LoadImageFromStream(Stream stream, bool imageIsIcon)
         {
@@ -123,4 +123,3 @@ namespace System.Windows.Forms.Design
         }
     }
 }
-

@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
@@ -78,7 +80,7 @@ namespace System.Windows.Forms.Design
 
         private static IComponent GetDragOwnerComponent(IDataObject data)
         {
-            if (currentDrags == null || !currentDrags.Contains(data))
+            if (currentDrags is null || !currentDrags.Contains(data))
             {
                 return null;
             }
@@ -88,10 +90,7 @@ namespace System.Windows.Forms.Design
 
         private static void AddCurrentDrag(IDataObject data, IComponent component)
         {
-            if (currentDrags == null)
-            {
-                currentDrags = new Hashtable();
-            }
+            currentDrags ??= new Hashtable();
 
             currentDrags[data] = component;
         }
@@ -111,12 +110,12 @@ namespace System.Windows.Forms.Design
 
         protected virtual bool CanDropDataObject(IDataObject dataObj)
         {
-            if (dataObj != null)
+            if (dataObj is not null)
             {
                 if (dataObj is ComponentDataObjectWrapper)
                 {
                     object[] dragObjs = GetDraggingObjects(dataObj, true);
-                    if (dragObjs == null)
+                    if (dragObjs is null)
                     {
                         return false;
                     }
@@ -134,13 +133,13 @@ namespace System.Windows.Forms.Design
                 {
                     object serializationData = dataObj.GetData(DataFormat, false);
 
-                    if (serializationData == null)
+                    if (serializationData is null)
                     {
                         return false;
                     }
 
                     IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
-                    if (ds == null)
+                    if (ds is null)
                     {
                         return false;
                     }
@@ -220,7 +219,7 @@ namespace System.Windows.Forms.Design
             {
                 try
                 {
-                    if (host != null)
+                    if (host is not null)
                         trans = host.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool.ToString()));
                 }
                 catch (CheckoutException cxe)
@@ -238,13 +237,10 @@ namespace System.Windows.Forms.Design
                         // First check if we are currently in localization mode (i.e., language is non-default).
                         // If so, we should not permit addition of new components. This is an intentional
                         // change from Everett - see VSWhidbey #292249.
-                        if (host != null && CurrentlyLocalizing(host.RootComponent))
+                        if (host is not null && CurrentlyLocalizing(host.RootComponent))
                         {
                             IUIService uiService = (IUIService)GetService(typeof(IUIService));
-                            if (uiService != null)
-                            {
-                                uiService.ShowMessage(SR.LocalizingCannotAdd);
-                            }
+                            uiService?.ShowMessage(SR.LocalizingCannotAdd);
 
                             comps = Array.Empty<IComponent>();
                             return comps;
@@ -253,12 +249,12 @@ namespace System.Windows.Forms.Design
                         // Create a dictionary of default values that the designer can
                         // use to initialize a control with.
                         Hashtable defaultValues = new Hashtable();
-                        if (parent != null)
+                        if (parent is not null)
                             defaultValues["Parent"] = parent;
 
                         // adjust the location if we are in a mirrored parent. That is because the origin
                         // will then be in the upper right rather than upper left.
-                        if (parent != null && parent.IsMirrored)
+                        if (parent is not null && parent.IsMirrored)
                         {
                             x += width;
                         }
@@ -268,7 +264,7 @@ namespace System.Windows.Forms.Design
                         if (hasSize)
                             defaultValues["Size"] = new Size(width, height);
                         //store off extra behavior drag/drop information
-                        if (e != null)
+                        if (e is not null)
                             defaultValues["ToolboxSnapDragDropEventArgs"] = e;
 
                         comps = tool.CreateComponents(host, defaultValues);
@@ -287,17 +283,14 @@ namespace System.Windows.Forms.Design
                     catch (ArgumentException argumentEx)
                     {
                         IUIService uiService = (IUIService)GetService(typeof(IUIService));
-                        if (uiService != null)
-                        {
-                            uiService.ShowError(argumentEx);
-                        }
+                        uiService?.ShowError(argumentEx);
                     }
                     catch (Exception ex)
                     {
                         IUIService uiService = (IUIService)GetService(typeof(IUIService));
 
                         string exceptionMessage = string.Empty;
-                        if (ex.InnerException != null)
+                        if (ex.InnerException is not null)
                         {
                             exceptionMessage = ex.InnerException.ToString();
                         }
@@ -312,7 +305,7 @@ namespace System.Windows.Forms.Design
                             exceptionMessage = ex.Message;
                         }
 
-                        if (uiService != null)
+                        if (uiService is not null)
                         {
                             uiService.ShowError(ex, string.Format(SR.FailedToCreateComponent, tool.DisplayName, exceptionMessage));
                         }
@@ -322,14 +315,11 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    if (comps == null)
-                    {
-                        comps = Array.Empty<IComponent>();
-                    }
+                    comps ??= Array.Empty<IComponent>();
                 }
                 finally
                 {
-                    if (toolboxSvc != null && tool.Equals(toolboxSvc.GetSelectedToolboxItem(host)))
+                    if (toolboxSvc is not null && tool.Equals(toolboxSvc.GetSelectedToolboxItem(host)))
                     {
                         toolboxSvc.SelectedToolboxItemUsed();
                     }
@@ -337,22 +327,16 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 Cursor.Current = oldCursor;
             }
 
             // Finally, select the newly created components.
             //
-            if (selSvc != null && comps.Length > 0)
+            if (selSvc is not null && comps.Length > 0)
             {
-                if (host != null)
-                {
-                    host.Activate();
-                }
+                host?.Activate();
 
                 ArrayList selectComps = new ArrayList(comps);
 
@@ -376,11 +360,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private static bool CurrentlyLocalizing(IComponent rootComponent)
         {
-            if (rootComponent != null)
+            if (rootComponent is not null)
             {
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(rootComponent)["Language"];
 
-                if (prop != null && prop.PropertyType == typeof(Globalization.CultureInfo))
+                if (prop is not null && prop.PropertyType == typeof(Globalization.CultureInfo))
                 {
                     Globalization.CultureInfo ci = (Globalization.CultureInfo)prop.GetValue(rootComponent);
                     if (!ci.Equals(Globalization.CultureInfo.InvariantCulture))
@@ -397,7 +381,7 @@ namespace System.Windows.Forms.Design
         {
             foreach (Control c in controls)
             {
-                if (c != null)
+                if (c is not null)
                 {
                     if (c.AllowDrop)
                     {
@@ -421,13 +405,13 @@ namespace System.Windows.Forms.Design
             Control comp;
             Control parentControl = client.GetDesignerControl();
 
-            if (selectionHandler == null)
+            if (selectionHandler is null)
             {
                 Debug.Fail("selectionHandler should not be null");
                 return Point.Empty;
             }
 
-            if (comps == null)
+            if (comps is null)
             {
                 return Point.Empty;
             }
@@ -455,7 +439,7 @@ namespace System.Windows.Forms.Design
                 bool readOnlyLocation = true;
 
                 PropertyDescriptor loc = TypeDescriptor.GetProperties(comps[i])["Location"];
-                if (loc != null)
+                if (loc is not null)
                 {
                     readOnlyLocation = loc.IsReadOnly;
                 }
@@ -522,33 +506,34 @@ namespace System.Windows.Forms.Design
             // ControlPaint.DrawReversibleFrame(handle, rectangle, backColor, FrameStyle.Thick);
 
             // ------ Duplicate code----------------------------------------------------------
-            Gdi32.R2 rop2;
+            R2_MODE rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = Gdi32.R2.NOTXORPEN;
+                rop2 = R2_MODE.R2_NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = Gdi32.R2.XORPEN;
+                rop2 = R2_MODE.R2_XORPEN;
                 graphicsColor = Color.Black;
             }
 
-            using var dc = new User32.GetDcScope(handle);
-            using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)));
+            using User32.GetDcScope dc = new(handle);
+            using PInvoke.ObjectScope pen =
+                new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
 
-            using var rop2Scope = new Gdi32.SetRop2Scope(dc, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
-            using var penSelection = new Gdi32.SelectObjectScope(dc, pen);
+            using PInvoke.SetRop2Scope rop2Scope = new(dc, rop2);
+            using PInvoke.SelectObjectScope brushSelection = new(dc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope penSelection = new(dc, pen);
 
-            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
-            Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
+            PInvoke.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
             // ------ Duplicate code----------------------------------------------------------
         }
 
-        public bool DoBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
+        public unsafe bool DoBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
             // if we're in a sizing operation, or the mouse isn't down, don't do this!
             if ((rules & SelectionRules.AllSizeable) != SelectionRules.None || Control.MouseButtons == MouseButtons.None)
@@ -589,12 +574,11 @@ namespace System.Windows.Forms.Design
             // We make sure we're painted before we start the drag.  Then, we disable window painting to
             // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
             // but that causes a horrible flashing because GDI+ uses direct draw.
-            //
-            User32.MSG msg = default;
-            while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE).IsTrue())
+            MSG msg = default;
+            while (PInvoke.PeekMessage(&msg, HWND.Null, (uint)User32.WM.PAINT, (uint)User32.WM.PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
             {
-                User32.TranslateMessage(ref msg);
-                User32.DispatchMessageW(ref msg);
+                PInvoke.TranslateMessage(msg);
+                PInvoke.DispatchMessage(&msg);
             }
 
             // don't do any new painting...
@@ -615,7 +599,7 @@ namespace System.Windows.Forms.Design
             foreach (object comp in components)
             {
                 Control ctl = comp as Control;
-                if (ctl != null && ctl.HasChildren)
+                if (ctl is not null && ctl.HasChildren)
                 {
                     DisableDragDropChildren(ctl.Controls, allowDropChanged);
                 }
@@ -624,7 +608,7 @@ namespace System.Windows.Forms.Design
             DragDropEffects effect = DragDropEffects.None;
             IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
             DesignerTransaction trans = null;
-            if (host != null)
+            if (host is not null)
             {
                 trans = host.CreateTransaction(string.Format(SR.DragDropDragComponents, components.Length));
             }
@@ -632,10 +616,7 @@ namespace System.Windows.Forms.Design
             try
             {
                 effect = c.DoDragDrop(data, allowedEffects);
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
             }
             finally
             {
@@ -650,7 +631,7 @@ namespace System.Windows.Forms.Design
 
                 freezePainting = oldFreezePainting;
 
-                if (trans != null)
+                if (trans is not null)
                 {
                     ((IDisposable)trans).Dispose();
                 }
@@ -662,9 +643,9 @@ namespace System.Windows.Forms.Design
             bool isLocalMove = isMove && localDragInside;
 
             ISelectionUIService selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
-            Debug.Assert(selectionUISvc != null, "Unable to get selection ui service when adding child control");
+            Debug.Assert(selectionUISvc is not null, "Unable to get selection ui service when adding child control");
 
-            if (selectionUISvc != null)
+            if (selectionUISvc is not null)
             {
                 // We must check to ensure that UI service is still in drag mode.  It is
                 // possible that the user hit escape, which will cancel drag mode.
@@ -739,7 +720,7 @@ namespace System.Windows.Forms.Design
             //
             freezePainting = false;
 
-            if (selectionHandler == null)
+            if (selectionHandler is null)
             {
                 Debug.Fail("selectionHandler should not be null");
                 de.Effect = DragDropEffects.None;
@@ -820,7 +801,7 @@ namespace System.Windows.Forms.Design
                         // to make sure we pick up design time props, etc.
                         //
                         IComponent dragOwner = GetDragOwnerComponent(de.Data);
-                        bool newContainer = dragOwner == null || client.Component == null || dragOwner.Site.Container != client.Component.Site.Container;
+                        bool newContainer = dragOwner is null || client.Component is null || dragOwner.Site.Container != client.Component.Site.Container;
                         bool collapseChildren = false;
                         if (de.Effect == DragDropEffects.Copy || newContainer)
                         {
@@ -845,7 +826,7 @@ namespace System.Windows.Forms.Design
                     {
                         object serializationData = dataObj.GetData(DataFormat, true);
 
-                        if (serializationData == null)
+                        if (serializationData is null)
                         {
                             Debug.Fail("data object didn't return any data, so how did we allow the drop?");
                             components = Array.Empty<IComponent>();
@@ -861,9 +842,9 @@ namespace System.Windows.Forms.Design
                     // now we need to offset the components locations from the drop mouse
                     // point to the parent, since their current locations are relative
                     // the mouse pointer
-                    if (components != null && components.Length > 0)
+                    if (components is not null && components.Length > 0)
                     {
-                        Debug.Assert(container != null, "Didn't get a container from the site!");
+                        Debug.Assert(container is not null, "Didn't get a container from the site!");
                         string name;
                         IComponent comp = null;
 
@@ -883,7 +864,7 @@ namespace System.Windows.Forms.Design
                             {
                                 comp = components[i] as IComponent;
 
-                                if (comp == null)
+                                if (comp is null)
                                 {
                                     comp = null;
                                     continue;
@@ -897,22 +878,19 @@ namespace System.Windows.Forms.Design
                                     if (updateLocation)
                                     {
                                         oldDesignerControl = client.GetDesignerControl();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                                        PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                                     }
 
                                     Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
 
                                     // First check if the component we are dropping have a TrayLocation, and if so, use it
                                     PropertyDescriptor loc = TypeDescriptor.GetProperties(comp)["TrayLocation"];
-                                    if (loc == null)
-                                    {
-                                        // it didn't, so let's check for the regular Location
-                                        loc = TypeDescriptor.GetProperties(comp)["Location"];
-                                    }
+                                    // it didn't, so let's check for the regular Location
+                                    loc ??= TypeDescriptor.GetProperties(comp)["Location"];
 
-                                    if (loc != null && !loc.IsReadOnly)
+                                    if (loc is not null && !loc.IsReadOnly)
                                     {
-                                        Rectangle bounds = new Rectangle();
+                                        Rectangle bounds = default(Rectangle);
                                         Point pt = (Point)loc.GetValue(comp);
                                         bounds.X = dropPt.X + pt.X;
                                         bounds.Y = dropPt.Y + pt.Y;
@@ -929,7 +907,7 @@ namespace System.Windows.Forms.Design
                                     else
                                     {
                                         // make sure the component was added to this client
-                                        if (client.GetControlForComponent(comp) == null)
+                                        if (client.GetControlForComponent(comp) is null)
                                         {
                                             updateLocation = false;
                                         }
@@ -938,7 +916,7 @@ namespace System.Windows.Forms.Design
                                     if (updateLocation)
                                     {
                                         ParentControlDesigner parentDesigner = client as ParentControlDesigner;
-                                        if (parentDesigner != null)
+                                        if (parentDesigner is not null)
                                         {
                                             Control c = client.GetControlForComponent(comp);
                                             dropPt = parentDesigner.GetSnappedPoint(c.Location);
@@ -949,7 +927,7 @@ namespace System.Windows.Forms.Design
                                     if (oldDesignerControl is not null)
                                     {
                                         //((ComponentDataObject)dataObj).ShowControls();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                                        PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                                         oldDesignerControl.Invalidate(true);
                                     }
 
@@ -969,10 +947,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            if (host != null)
-                            {
-                                host.Activate();
-                            }
+                            host?.Activate();
 
                             // select the newly added components
                             ISelectionService selService = (ISelectionService)GetService(typeof(ISelectionService));
@@ -982,8 +957,7 @@ namespace System.Windows.Forms.Design
                         }
                         finally
                         {
-                            if (trans != null)
-                                trans.Commit();
+                            trans?.Commit();
                         }
                     }
                 }
@@ -991,9 +965,9 @@ namespace System.Windows.Forms.Design
                 if (localDragInside)
                 {
                     ISelectionUIService selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
-                    Debug.Assert(selectionUISvc != null, "Unable to get selection ui service when adding child control");
+                    Debug.Assert(selectionUISvc is not null, "Unable to get selection ui service when adding child control");
 
-                    if (selectionUISvc != null)
+                    if (selectionUISvc is not null)
                     {
                         // We must check to ensure that UI service is still in drag mode.  It is
                         // possible that the user hit escape, which will cancel drag mode.
@@ -1170,13 +1144,13 @@ namespace System.Windows.Forms.Design
 
         public void DoOleGiveFeedback(GiveFeedbackEventArgs e)
         {
-            if (selectionHandler == null)
+            if (selectionHandler is null)
             {
                 Debug.Fail("selectionHandler should not be null");
             }
 
             e.UseDefaultCursors = ((!localDragInside && !forceDrawFrames) || ((e.Effect & (DragDropEffects.Copy)) != 0)) || e.Effect == DragDropEffects.None;
-            if (!e.UseDefaultCursors && selectionHandler != null)
+            if (!e.UseDefaultCursors && selectionHandler is not null)
             {
                 selectionHandler.SetCursor();
             }
@@ -1194,7 +1168,7 @@ namespace System.Windows.Forms.Design
                 components = cdo.Components;
             }
 
-            if (!topLevelOnly || components == null)
+            if (!topLevelOnly || components is null)
             {
                 return components;
             }
@@ -1226,13 +1200,13 @@ namespace System.Windows.Forms.Design
             foreach (object comp in compList)
             {
                 Control c = comp as Control;
-                if (c == null && comp != null)
+                if (c is null && comp is not null)
                 {
                     topLevel.Add(comp);
                 }
-                else if (c != null)
+                else if (c is not null)
                 {
-                    if (c.Parent == null || !compList.Contains(c.Parent))
+                    if (c.Parent is null || !compList.Contains(c.Parent))
                     {
                         topLevel.Add(comp);
                     }

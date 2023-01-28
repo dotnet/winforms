@@ -101,14 +101,10 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId
-                        => UiaCore.UIA.TreeItemControlTypeId,
-                    UiaCore.UIA.IsEnabledPropertyId
-                        => _owningTreeView.Enabled,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId
-                        => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId
-                        => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                    UiaCore.UIA.IsEnabledPropertyId => _owningTreeView.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

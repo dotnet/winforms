@@ -2,19 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+
 namespace System.Windows.Forms
 {
     public partial class DomainUpDown
     {
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete(
+            Obsoletions.DomainItemAccessibleObjectMessage,
+            error: false,
+            DiagnosticId = Obsoletions.DomainItemAccessibleObjectDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
         public class DomainItemAccessibleObject : AccessibleObject
         {
             private string? _name;
-            private readonly DomainItemListAccessibleObject _parent;
 
             public DomainItemAccessibleObject(string? name, AccessibleObject parent)
             {
                 _name = name;
-                _parent = (DomainItemListAccessibleObject)parent.OrThrowIfNull();
             }
 
             public override string? Name
@@ -29,13 +35,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return _parent;
-                }
-            }
+            public override AccessibleObject? Parent => null;
 
             public override AccessibleRole Role
             {
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
         }
     }
 }

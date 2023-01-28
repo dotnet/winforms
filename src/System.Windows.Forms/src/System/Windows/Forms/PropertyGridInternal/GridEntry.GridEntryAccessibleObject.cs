@@ -279,7 +279,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void Collapse()
             {
-                if (_owningGridEntry.Expandable && _owningGridEntry.Expanded == true)
+                if (_owningGridEntry.Expandable && _owningGridEntry.Expanded)
                 {
                     _owningGridEntry.Expanded = false;
                 }
@@ -337,9 +337,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningGridEntry.HasFocus,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => true,
-                    _ => base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    _ => base.GetPropertyValue(propertyID)
                 };
             }
 

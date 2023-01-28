@@ -46,6 +46,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
                     if (!_owningPropertyGridView.IsEditTextBoxCreated
+                        // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
+                        // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
+                        || !_owningPropertyGridView.OwnerGrid.Created
                         || _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
                     {
                         return null;
@@ -68,17 +71,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
+                    UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
                     UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
-                    UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
-                    _ => base.GetPropertyValue(propertyID),
-                };
-
-                internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
-                {
-                    UiaCore.UIA.ValuePatternId => true,
-                    _ => base.IsPatternSupported(patternId)
+                    _ => base.GetPropertyValue(propertyID)
                 };
 
                 internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
@@ -102,18 +99,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return name;
                         }
-                        else
-                        {
-                            GridEntry selectedGridEntry = _owningPropertyGridView.SelectedGridEntry;
-                            if (selectedGridEntry is not null)
-                            {
-                                return selectedGridEntry.AccessibilityObject.Name;
-                            }
-                        }
 
-                        return base.Name;
+                        return _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject.Name ?? base.Name;
                     }
-                    set => base.Name = value;
                 }
 
                 internal override int[] RuntimeId
@@ -127,12 +115,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 internal override bool IsReadOnly
                     => _owningPropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
                         || propertyDescriptorGridEntry.IsPropertyReadOnly;
-
-                internal override void SetFocus()
-                {
-                    RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-                    base.SetFocus();
-                }
             }
         }
     }

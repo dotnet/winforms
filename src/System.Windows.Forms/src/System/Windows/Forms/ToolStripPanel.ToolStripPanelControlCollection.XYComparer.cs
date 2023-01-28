@@ -4,7 +4,7 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
@@ -13,10 +13,10 @@ namespace System.Windows.Forms
         internal partial class ToolStripPanelControlCollection : TypedControlCollection
         {
             // sort by X, then Y
-            public class XYComparer : IComparer
+            public class XYComparer : IComparer<IArrangedElement>
             {
                 public XYComparer() { }
-                public int Compare(object first, object second)
+                public int Compare(IArrangedElement first, IArrangedElement second)
                 {
                     Control one = first as Control;
                     Control two = second as Control;
@@ -28,12 +28,7 @@ namespace System.Windows.Forms
 
                     if (one.Bounds.X == two.Bounds.X)
                     {
-                        if (one.Bounds.Y < two.Bounds.Y)
-                        {
-                            return -1;
-                        }
-
-                        return 1;
+                        return one.Bounds.Y < two.Bounds.Y ? -1 : 1;
                     }
 
                     return 1;

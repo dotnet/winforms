@@ -15,9 +15,9 @@ namespace System.ComponentModel.Design
     /// </summary>
     public abstract partial class DesignerActionItem
     {
-        private IDictionary _properties;
+        private IDictionary? _properties;
 
-        public DesignerActionItem(string displayName, string category, string description)
+        public DesignerActionItem(string? displayName, string? category, string? description)
         {
             DisplayName = displayName is null ? null : SanitizeNameRegex().Replace(displayName, "");
             Category = category;
@@ -29,13 +29,13 @@ namespace System.ComponentModel.Design
 
         public bool AllowAssociate { get; set; }
 
-        public virtual string Category { get; }
+        public virtual string? Category { get; }
 
-        public virtual string Description { get; }
+        public virtual string? Description { get; }
 
-        public virtual string DisplayName { get; }
+        public virtual string? DisplayName { get; }
 
-        public IDictionary Properties => _properties ?? (_properties = new HybridDictionary());
+        public IDictionary Properties => _properties ??= new HybridDictionary();
 
         public bool ShowInSourceView { get; set; } = true;
     }

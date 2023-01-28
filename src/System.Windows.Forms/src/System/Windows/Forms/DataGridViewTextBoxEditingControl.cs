@@ -24,9 +24,7 @@ namespace System.Windows.Forms
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DataGridViewTextBoxEditingControlAccessibleObject(this);
-        }
+            => new DataGridViewTextBoxEditingControlAccessibleObject(this);
 
         public virtual DataGridView? EditingControlDataGridView
         {
@@ -91,8 +89,6 @@ namespace System.Windows.Forms
                 return _repositionOnValueChange;
             }
         }
-
-        internal override bool SupportsUiaProviders => true;
 
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
@@ -237,15 +233,6 @@ namespace System.Windows.Forms
             _dataGridView?.NotifyCurrentCellDirty(true);
         }
 
-        protected override void OnGotFocus(EventArgs e)
-        {
-            base.OnGotFocus(e);
-            if (IsAccessibilityObjectCreated)
-            {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
-        }
-
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             // Forwarding to grid control. Can't prevent the TextBox from handling the mouse wheel as expected.
@@ -262,7 +249,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            switch ((Keys)m.WParamInternal)
+            switch ((Keys)(nint)m.WParamInternal)
             {
                 case Keys.Enter:
                     if (m.MsgInternal == User32.WM.CHAR
@@ -298,6 +285,16 @@ namespace System.Windows.Forms
             return base.ProcessKeyEventArgs(ref m);
         }
 
+        internal override void ReleaseUiaProvider(HWND handle)
+        {
+            if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
+            {
+                ((DataGridViewTextBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
+            }
+
+            base.ReleaseUiaProvider(handle);
+        }
+
         private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align)
         {
             if ((align & AnyRight) != 0)
@@ -317,10 +314,11 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            if (IsHandleCreated)
+
+            // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+            if (IsHandleCreated && _dataGridView?.IsAccessibilityObjectCreated == true)
             {
-                // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
-                _dataGridView?.SetAccessibleObjectParent(AccessibilityObject);
+                _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
             }
         }
     }

@@ -103,32 +103,26 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
                     // "ControlType" value depends on owner's AccessibleRole value.
                     // See: docs/accessibility/accessible-role-controltype.md
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return AccessibleRoleControlTypeMap.GetControlType(Role);
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _ownerItem.Enabled;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds);
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return _ownerItem.CanSelect;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _ownerItem.Selected;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.ControlTypePropertyId => AccessibleRoleControlTypeMap.GetControlType(Role),
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _ownerItem.Selected,
+                    UiaCore.UIA.IsEnabledPropertyId => _ownerItem.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => _ownerItem.CanSelect,
+                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds),
+                    UiaCore.UIA.IsControlElementPropertyId => true,
+                    UiaCore.UIA.IsContentElementPropertyId => true,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             public override string? Name
             {
                 get
                 {
-                    string name = _ownerItem.AccessibleName;
+                    string? name = _ownerItem.AccessibleName;
                     if (name is not null)
                     {
                         return name;
@@ -204,10 +198,7 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (Owner is not null)
-                {
-                    Owner.PerformClick();
-                }
+                Owner?.PerformClick();
             }
 
             public override int GetHelpTopic(out string? fileName)
@@ -237,7 +228,7 @@ namespace System.Windows.Forms
 
                 if (Owner is not null)
                 {
-                    ToolStrip parent = Owner.ParentInternal;
+                    ToolStrip? parent = Owner.ParentInternal;
                     if (parent is null)
                     {
                         return null;
@@ -323,7 +314,7 @@ namespace System.Windows.Forms
                     if (Owner.IsOnDropDown)
                     {
                         // Return the owner item as the accessible parent.
-                        ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown();
+                        ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
                         return dropDown.AccessibilityObject;
                     }
 
@@ -457,7 +448,7 @@ namespace System.Windows.Forms
 
             internal void RaiseFocusChanged()
             {
-                ToolStrip root = _ownerItem.RootToolStrip;
+                ToolStrip? root = _ownerItem.RootToolStrip;
                 if (root is not null && root.IsHandleCreated && root.SupportsUiaProviders)
                 {
                     RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

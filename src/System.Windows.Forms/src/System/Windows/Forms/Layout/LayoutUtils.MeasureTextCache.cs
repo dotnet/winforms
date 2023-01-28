@@ -51,10 +51,7 @@ namespace System.Windows.Forms.Layout
                     // than 200 px.
 
                     // Create our ring buffer if we don't have one
-                    if (_sizeCacheList is null)
-                    {
-                        _sizeCacheList = new PreferredSizeCache[MaxCacheSize];
-                    }
+                    _sizeCacheList ??= new PreferredSizeCache[MaxCacheSize];
 
                     // check the existing constraints from previous calls
                     foreach (PreferredSizeCache sizeCache in _sizeCacheList)

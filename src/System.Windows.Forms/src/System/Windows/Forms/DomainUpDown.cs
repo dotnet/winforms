@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionDomainUpDown))]
     public partial class DomainUpDown : UpDownBase
     {
-        private readonly static string s_defaultValue = string.Empty;
+        private static readonly string s_defaultValue = string.Empty;
 
         /// <summary>
         ///  Allowable strings for the domain updown.
@@ -61,10 +61,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_domainItems is null)
-                {
-                    _domainItems = new DomainUpDownItemCollection(this);
-                }
+                _domainItems ??= new DomainUpDownItemCollection(this);
 
                 return _domainItems;
             }
@@ -208,15 +205,6 @@ namespace System.Windows.Forms
         {
             add => _onSelectedItemChanged += value;
             remove => _onSelectedItemChanged -= value;
-        }
-
-        /// <summary>
-        ///  Constructs the new instance of the accessibility object for this control. Subclasses
-        ///  should not call base.CreateAccessibilityObject.
-        /// </summary>
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DomainUpDownAccessibleObject(this);
         }
 
         /// <summary>
@@ -428,7 +416,7 @@ namespace System.Windows.Forms
                 UserEdit = true;
             }
 
-            Debug.Assert(_domainIndex >= 0 || UserEdit == true, "UserEdit should be true when domainIndex < 0 " + UserEdit);
+            Debug.Assert(_domainIndex >= 0 || UserEdit, "UserEdit should be true when domainIndex < 0 " + UserEdit);
         }
 
         /// <summary>
@@ -547,7 +535,7 @@ namespace System.Windows.Forms
             int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
 
             // AdjustWindowRect with our border, since textbox is borderless.
-            width = SizeFromClientSize(width, height).Width + _upDownButtons.Width;
+            width = SizeFromClientSizeInternal(new(width, height)).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
     }

@@ -302,25 +302,29 @@ namespace System.Windows.Forms
             return text;
         }
 
-        private static string Parenthesize(string? input) => input is null ? string.Empty : $" ({input})";
-
         public static string ToString(Message message)
         {
-            return ToString(message.HWnd, message.MsgInternal, message.WParamInternal, message.LParamInternal, message.ResultInternal);
+            return ToString(
+                message.HWnd,
+                message.MsgInternal,
+                message.WParamInternal,
+                message.LParamInternal,
+                message.ResultInternal);
         }
 
-        private static string ToString(IntPtr hWnd, User32.WM msg, nint wparam, nint lparam, nint result)
+        private static string ToString(IntPtr hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam, LRESULT result)
         {
+            static string Parenthesize(string? input) => input is null ? string.Empty : $" ({input})";
+
             string id = Parenthesize(MsgToString(msg));
 
             string lDescription = string.Empty;
             if (msg == User32.WM.PARENTNOTIFY)
             {
-                lDescription = Parenthesize(MsgToString((User32.WM)PARAM.LOWORD(wparam)));
+                lDescription = Parenthesize(MsgToString((User32.WM)wparam.LOWORD));
             }
 
-            return $@"msg=0x{(uint)msg:x}{id} hwnd=0x{(long)hWnd:x} wparam=0x{wparam:x} lparam=0x{lparam:x}{lDescription} result=0x{result:x}";
+            return $@"msg=0x{(uint)msg:x}{id} hwnd=0x{(long)hWnd:x} wparam=0x{(nint)wparam:x} lparam=0x{(nint)lparam:x}{lDescription} result=0x{(nint)result:x}";
         }
     }
 }
-

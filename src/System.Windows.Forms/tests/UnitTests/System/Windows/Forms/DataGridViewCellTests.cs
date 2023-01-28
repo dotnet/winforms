@@ -9,11 +9,10 @@ using System.Windows.Forms.Automation;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class DataGridViewCellTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -4749,7 +4748,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewCell_GetInheritedState_InvalidRowIndexNoDataGridView_ThrowsArgumentException(int rowIndex)
         {
             using var cell = new SubDataGridViewCell();
-            Assert.Throws<ArgumentException>(null, () => cell.GetInheritedState(rowIndex));
+            Assert.Throws<ArgumentException>(() => cell.GetInheritedState(rowIndex));
         }
 
         [WinFormsTheory]
@@ -4760,7 +4759,7 @@ namespace System.Windows.Forms.Tests
             using var row = new DataGridViewRow();
             using var cell = new SubDataGridViewCell();
             row.Cells.Add(cell);
-            Assert.Throws<ArgumentException>(null, () => cell.GetInheritedState(rowIndex));
+            Assert.Throws<ArgumentException>(() => cell.GetInheritedState(rowIndex));
         }
 
         [WinFormsTheory]

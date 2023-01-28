@@ -6,11 +6,10 @@ using System.ComponentModel;
 using System.Drawing;
 using Moq;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class WebBrowserBaseTests
     {
@@ -724,7 +723,7 @@ namespace System.Windows.Forms.Tests
                 Height = 20
             };
             using var bitmap = new Bitmap(10, 10);
-            Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(x, y, width, height)));
+            Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(x, y, width, height)));
         }
 
         [WinFormsTheory]
@@ -738,7 +737,7 @@ namespace System.Windows.Forms.Tests
                 Height = 20
             };
             using var bitmap = new Bitmap(10, 10);
-            Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
+            Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
         }
 
         [WinFormsTheory]
@@ -752,7 +751,7 @@ namespace System.Windows.Forms.Tests
                 Height = height
             };
             using var bitmap = new Bitmap(10, 10);
-            Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
+            Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
         }
 
         [WinFormsFact]

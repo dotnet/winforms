@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         private TaskDialogFootnote? _footnote;
         private TaskDialogProgressBar? _progressBar;
 
-        private ComCtl32.TDF _flags;
+        private TASKDIALOG_FLAGS _flags;
         private TaskDialogIcon? _icon;
         private string? _caption;
         private string? _heading;
@@ -326,7 +326,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        BoundDialog.UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, value);
+                        BoundDialog.UpdateTextElement(TASKDIALOG_ELEMENTS.TDE_MAIN_INSTRUCTION, value);
                     }
                 }
 
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        BoundDialog.UpdateTextElement(ComCtl32.TDE.CONTENT, value);
+                        BoundDialog.UpdateTextElement(TASKDIALOG_ELEMENTS.TDE_CONTENT, value);
                     }
                 }
 
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
                     }
 
                     BoundDialog.UpdateIconElement(
-                        ComCtl32.TDIE.ICON_MAIN,
+                         TASKDIALOG_ICON_ELEMENTS.TDIE_ICON_MAIN,
                         _boundIconIsFromHandle ? icon.hIcon : (IntPtr)icon.pszIcon);
                 }
 
@@ -444,8 +444,8 @@ namespace System.Windows.Forms
         /// </exception>
         public bool AllowCancel
         {
-            get => GetFlag(ComCtl32.TDF.ALLOW_DIALOG_CANCELLATION);
-            set => SetFlag(ComCtl32.TDF.ALLOW_DIALOG_CANCELLATION, value);
+            get => GetFlag(TASKDIALOG_FLAGS.TDF_ALLOW_DIALOG_CANCELLATION);
+            set => SetFlag(TASKDIALOG_FLAGS.TDF_ALLOW_DIALOG_CANCELLATION, value);
         }
 
         /// <summary>
@@ -469,8 +469,8 @@ namespace System.Windows.Forms
         /// </exception>
         public bool RightToLeftLayout
         {
-            get => GetFlag(ComCtl32.TDF.RTL_LAYOUT);
-            set => SetFlag(ComCtl32.TDF.RTL_LAYOUT, value);
+            get => GetFlag(TASKDIALOG_FLAGS.TDF_RTL_LAYOUT);
+            set => SetFlag(TASKDIALOG_FLAGS.TDF_RTL_LAYOUT, value);
         }
 
         /// <summary>
@@ -492,8 +492,8 @@ namespace System.Windows.Forms
         /// </exception>
         public bool AllowMinimize
         {
-            get => GetFlag(ComCtl32.TDF.CAN_BE_MINIMIZED);
-            set => SetFlag(ComCtl32.TDF.CAN_BE_MINIMIZED, value);
+            get => GetFlag(TASKDIALOG_FLAGS.TDF_CAN_BE_MINIMIZED);
+            set => SetFlag(TASKDIALOG_FLAGS.TDF_CAN_BE_MINIMIZED, value);
         }
 
         /// <summary>
@@ -509,8 +509,8 @@ namespace System.Windows.Forms
         /// </exception>
         public bool SizeToContent
         {
-            get => GetFlag(ComCtl32.TDF.SIZE_TO_CONTENT);
-            set => SetFlag(ComCtl32.TDF.SIZE_TO_CONTENT, value);
+            get => GetFlag(TASKDIALOG_FLAGS.TDF_SIZE_TO_CONTENT);
+            set => SetFlag(TASKDIALOG_FLAGS.TDF_SIZE_TO_CONTENT, value);
         }
 
         /// <summary>
@@ -764,7 +764,7 @@ namespace System.Windows.Forms
 
         internal void Bind(
             TaskDialog owner,
-            out ComCtl32.TDF flags,
+            out TASKDIALOG_FLAGS flags,
             out ComCtl32.TDCBF buttonFlags,
             out IEnumerable<(int buttonID, string text)> customButtonElements,
             out IEnumerable<(int buttonID, string text)> radioButtonElements,
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
 
             if (_boundIconIsFromHandle)
             {
-                flags |= ComCtl32.TDF.USE_HICON_MAIN;
+                flags |= TASKDIALOG_FLAGS.TDF_USE_HICON_MAIN;
             }
 
             TaskDialogButtonCollection buttons = _buttons;
@@ -851,7 +851,7 @@ namespace System.Windows.Forms
 
             if (defaultRadioButtonID == 0)
             {
-                flags |= ComCtl32.TDF.NO_DEFAULT_RADIO_BUTTON;
+                flags |= TASKDIALOG_FLAGS.TDF_NO_DEFAULT_RADIO_BUTTON;
             }
 
             customButtonElements = _boundCustomButtons.Where(e => e.IsCreated).Select(e => (e.ButtonID, e.GetResultingText()!));
@@ -860,7 +860,7 @@ namespace System.Windows.Forms
             // If we have command links, specify the TDF_USE_COMMAND_LINKS flag.
             // Note: The USE_COMMAND_LINKS_NO_ICON is currently not used.
             if (_boundCustomButtons.Any(e => e.IsCreated && e is TaskDialogCommandLinkButton))
-                flags |= ComCtl32.TDF.USE_COMMAND_LINKS;
+                flags |= TASKDIALOG_FLAGS.TDF_USE_COMMAND_LINKS;
 
             if (_checkBox is not null)
             {
@@ -968,23 +968,23 @@ namespace System.Windows.Forms
         ///   Raises the <see cref="Created"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnCreated(EventArgs e) => Created?.Invoke(this, e);
+        protected internal void OnCreated(EventArgs e) => Created?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Destroyed"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnDestroyed(EventArgs e) => Destroyed?.Invoke(this, e);
+        protected internal void OnDestroyed(EventArgs e) => Destroyed?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="HelpRequest"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
+        protected internal void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
 
-        private bool GetFlag(ComCtl32.TDF flag) => (_flags & flag) == flag;
+        private bool GetFlag(TASKDIALOG_FLAGS flag) => (_flags & flag) == flag;
 
-        private void SetFlag(ComCtl32.TDF flag, bool value)
+        private void SetFlag(TASKDIALOG_FLAGS flag, bool value)
         {
             DenyIfBound();
 

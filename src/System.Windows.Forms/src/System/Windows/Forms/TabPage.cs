@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -441,10 +442,7 @@ namespace System.Windows.Forms
             get => _toolTipText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (value == _toolTipText)
                 {
@@ -620,6 +618,18 @@ namespace System.Windows.Forms
             {
                 base.OnPaintBackground(e);
             }
+        }
+
+        internal override void ReleaseUiaProvider(HWND handle)
+        {
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
+            }
+
+            _tabAccessibilityObject = null;
+
+            base.ReleaseUiaProvider(handle);
         }
 
         internal override void RemoveToolTip(ToolTip toolTip)

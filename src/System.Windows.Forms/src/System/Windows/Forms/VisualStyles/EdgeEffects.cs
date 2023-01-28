@@ -2,17 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms.VisualStyles
 {
     [Flags]
     public enum EdgeEffects
     {
         None = 0,
-        FillInterior = (int)User32.BF.MIDDLE,
-        Flat = (int)User32.BF.FLAT,
-        Soft = (int)User32.BF.SOFT,
-        Mono = (int)User32.BF.MONO,
+        FillInterior = (int)DRAW_EDGE_FLAGS.BF_MIDDLE,
+        Flat = (int)DRAW_EDGE_FLAGS.BF_FLAT,
+        Soft = (int)DRAW_EDGE_FLAGS.BF_SOFT,
+        Mono = (int)DRAW_EDGE_FLAGS.BF_MONO,
     }
 }

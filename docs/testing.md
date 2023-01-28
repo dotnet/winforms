@@ -27,6 +27,7 @@ This document describes our approach to testing.
     * [Adding new functional tests](#adding-new-functional-tests)
         - [Test placement](#therefore-you-just-need-to-put-your-tests-in-the-right-place-in-order-for-them-to-run-1)
  * [Testing for Accessibility](#testing-for-accessibility)
+ * [Running and debugging crashed tests](#running-and-debugging-crashed-tests)
     
 
 # Building tests
@@ -324,3 +325,20 @@ Functional tests are built and executed by file name convention
 # Testing for Accessibility
 
 Our goal is to make writing accessible WinForms applications easy. Specifically, all default property values should yield accessible experience. To test that controls are accessible, find or add the changed control to [AccessibilityTests application](https://github.com/dotnet/winforms/tree/main/src/System.Windows.Forms/tests/AccessibilityTests) and run [Accessibility Insights for Windows](https://accessibilityinsights.io/docs/en/windows/overview) on it. 
+
+
+# Running and debugging crashed tests
+
+At times tests may fail in way that makes it difficult to debug (e.g., the [test runner process crashes](https://github.com/dotnet/runtime/issues/76219)). In this case, it's good to replicate the issue locally and collect a memory dump to have a better understanding whether the issue is caused by the change in Windows Forms SDK, or, for example, by the .NET runtime.
+
+* Configure your workstation to automatically collect memory dumps following [Collecting User-Mode Dumps guide](https://learn.microsoft.com/windows/win32/wer/collecting-user-mode-dumps) guide.
+* Run `.\start-code.cmd`
+* In the VS Code terminal run the following commands to run the tests:
+    ```
+    .\restore.cmd
+    pushd .\src\System.Windows.Forms\tests\UnitTests
+    dotnet test 
+    ```
+* Upon the test process crash, navigate to the collected memory dump and inspect it in [WinDbg](https://learn.microsoft.com/windows-hardware/drivers/debugger/debugger-download-tools) (or [MSFT internal](https://www.osgwiki.com/wiki/WinDbg)) (or another tool of your choice).
+
+❕If you need to debug an x86-related issue, run tests with `-a x86` argument, e.g., `dotnet test -a x86`, and then use the 32-bit version of WinDbg to open the dump.

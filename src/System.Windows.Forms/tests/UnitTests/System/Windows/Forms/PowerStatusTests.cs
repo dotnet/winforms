@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
             // try an invalid (as of time of writing) combination
             Assert.False(EnumIsDefined((BatteryChargeStatus)67));
 
-            bool EnumIsDefined(BatteryChargeStatus value)
+            static bool EnumIsDefined(BatteryChargeStatus value)
             {
                 // BatteryChargeStatus.Unknown == 1111_1111, OR'ing anything with it won't change the result
                 // and thus won't catch invalid combinations, so we need to exclude if from further consideration

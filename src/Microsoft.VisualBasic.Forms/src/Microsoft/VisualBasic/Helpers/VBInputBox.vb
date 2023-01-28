@@ -10,14 +10,14 @@ Imports System.Windows.Forms
 Namespace Microsoft.VisualBasic.CompilerServices
 
     Friend NotInheritable Class VBInputBox
-        Inherits Windows.Forms.Form
+        Inherits Form
 
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<VBInputBox.resx depends on these names>
         Private ReadOnly components As Container
-        Private TextBox As Windows.Forms.TextBox
-        Private Label As Windows.Forms.Label
-        Private OKButton As Windows.Forms.Button
-        Private MyCancelButton As Windows.Forms.Button
+        Private TextBox As TextBox
+        Private Label As Label
+        Private OKButton As Button
+        Private MyCancelButton As Button
 #Enable Warning IDE1006 ' Naming Styles
         Public Output As String = ""
 
@@ -35,19 +35,17 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         Protected Overloads Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
-                If Not (components Is Nothing) Then
-                    components.Dispose()
-                End If
+                components?.Dispose()
             End If
             MyBase.Dispose(disposing)
         End Sub
 
         Private Sub InitializeComponent()
             Dim resources As ComponentResourceManager = New ComponentResourceManager(GetType(VBInputBox))
-            OKButton = New Windows.Forms.Button
-            MyCancelButton = New Windows.Forms.Button
-            TextBox = New Windows.Forms.TextBox
-            Label = New Windows.Forms.Label
+            OKButton = New Button
+            MyCancelButton = New Button
+            TextBox = New TextBox
+            Label = New Label
             SuspendLayout()
             '
             'OKButton

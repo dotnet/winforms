@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -14,7 +16,8 @@ using static Interop;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  The FormDocumentDesigner class builds on the DocumentDesigner.  It adds shadowing for form properties that need to be shadowed and it also adds logic to properly paint the form's title bar to match the active document window.
+    ///  The FormDocumentDesigner class builds on the DocumentDesigner.  It adds shadowing for form properties that need
+    ///  to be shadowed and it also adds logic to properly paint the form's title bar to match the active document window.
     /// </summary>
     internal class FormDocumentDesigner : DocumentDesigner
     {
@@ -24,7 +27,8 @@ namespace System.Windows.Forms.Design
         private ToolStripAdornerWindowService _toolStripAdornerWindowService;
 
         /// <summary>
-        ///  Shadow the AcceptButton property at design-time so that we can preserve it when the form is rebuilt.  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
+        ///  Shadow the AcceptButton property at design-time so that we can preserve it when the form is rebuilt.
+        ///  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
         /// </summary>
         private IButtonControl AcceptButton
         {
@@ -37,7 +41,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Shadow the CancelButton property at design-time so that we can preserve it when the form is rebuilt.  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
+        ///  Shadow the CancelButton property at design-time so that we can preserve it when the form is rebuilt.
+        ///  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.
         /// </summary>
         private IButtonControl CancelButton
         {
@@ -50,13 +55,16 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Shadowed version of the AutoScaleBaseSize property.  We shadow this so that it always persists.  Normally only properties that differ from the default values at instantiation are persisted, but this should always be written.  So, we shadow it and add our own ShouldSerialize method.
+        ///  Shadowed version of the AutoScaleBaseSize property.  We shadow this so that it always persists.  Normally
+        ///  only properties that differ from the default values at instantiation are persisted, but this should always
+        ///  be written.  So, we shadow it and add our own ShouldSerialize method.
         /// </summary>
         private Size AutoScaleBaseSize
         {
             get
             {
-                // we don't want to get inherited value from a base form that might have been designed in a different DPI so we recalculate the thing instead of getting  AutoScaleBaseSize (QFE 2280)
+                // we don't want to get inherited value from a base form that might have been designed in a different
+                // DPI so we recalculate the thing instead of getting  AutoScaleBaseSize (QFE 2280)
                 SizeF real = Form.GetAutoScaleSize(((Form)Component).Font);
                 return new Size((int)Math.Round(real.Width), (int)Math.Round(real.Height));
             }
@@ -69,7 +77,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  We shadow the AutoSize property at design-time so that the form doesn't grow and shrink as users fiddle with  autosize related properties.
+        ///  We shadow the AutoSize property at design-time so that the form doesn't grow and shrink as users fiddle
+        ///  with autosize related properties.
         /// </summary>
         private bool AutoSize
         {
@@ -85,7 +94,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Shadow property for the ClientSize property -- this allows us to intercept client size changes and apply the new menu height if necessary
+        ///  Shadow property for the ClientSize property -- this allows us to intercept client size changes and apply
+        ///  the new menu height if necessary
         /// </summary>
         private Size ClientSize
         {
@@ -101,7 +111,10 @@ namespace System.Windows.Forms.Design
                     if (Component is Form form)
                     {
                         size = form.ClientSize;
-                        // don't report the size decremented by the scroll bars, otherwise, we'll just lose that size when we run because the form doesn't take that into consideration (it's too early, it hasn't layed out and doesn't know it needs scrollbars) when sizing.
+
+                        // Don't report the size decremented by the scroll bars, otherwise, we'll just lose that size
+                        // when we run because the form doesn't take that into consideration (it's too early, it hasn't
+                        // layed out and doesn't know it needs scrollbars) when sizing.
                         if (form.HorizontalScroll.Visible)
                         {
                             size.Height += SystemInformation.HorizontalScrollBarHeight;
@@ -163,7 +176,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Overrides the default implementation of ParentControlDesigner SnapLines.  Note that if the Padding property is not set on our Form - we'll special case this and add default Padding values to our SnapLines. This was a usability request specific to the Form itself. Note that a Form only has Padding SnapLines.
+        ///  Overrides the default implementation of ParentControlDesigner SnapLines.  Note that if the Padding property
+        ///  is not set on our Form - we'll special case this and add default Padding values to our SnapLines. This was
+        ///  a usability request specific to the Form itself. Note that a Form only has Padding SnapLines.
         /// </summary>
         public override IList SnapLines
         {
@@ -178,13 +193,13 @@ namespace System.Windows.Forms.Design
                 }
 
                 // if the padding has not been set - then we'll auto-add padding to form - this is a Usability request
-                if (Control.Padding == Padding.Empty && snapLines != null)
+                if (Control.Padding == Padding.Empty && snapLines is not null)
                 {
                     int paddingsFound = 0; // used to short-circuit once we find 4 paddings
                     for (int i = 0; i < snapLines.Count; i++)
                     {
                         // remove previous padding snaplines
-                        if (snapLines[i] is SnapLine snapLine && snapLine.Filter != null && snapLine.Filter.StartsWith(SnapLine.Padding))
+                        if (snapLines[i] is SnapLine snapLine && snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding))
                         {
                             if (snapLine.Filter.Equals(SnapLine.PaddingLeft) || snapLine.Filter.Equals(SnapLine.PaddingTop))
                             {
@@ -244,7 +259,8 @@ namespace System.Windows.Forms.Design
 
         private static void ApplyAutoScaling(SizeF baseVar, Form form)
         {
-            // We also don't do this if the property is empty.  Otherwise we will perform two GetAutoScaleBaseSize calls only to find that they returned the same value.
+            // We also don't do this if the property is empty.  Otherwise we will perform two GetAutoScaleBaseSize calls
+            // only to find that they returned the same value.
             if (!baseVar.IsEmpty)
             {
                 SizeF newVarF = Form.GetAutoScaleSize(form.Font);
@@ -269,9 +285,9 @@ namespace System.Windows.Forms.Design
             if (disposing)
             {
                 IDesignerHost host = GetService<IDesignerHost>();
-                Debug.Assert(host != null, "Must have a designer host on dispose");
+                Debug.Assert(host is not null, "Must have a designer host on dispose");
 
-                if (host != null)
+                if (host is not null)
                 {
                     host.LoadComplete -= new EventHandler(OnLoadComplete);
                     host.Activated -= new EventHandler(OnDesignerActivate);
@@ -279,7 +295,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
                     cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
@@ -295,13 +311,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Initializes the designer with the given component.  The designer can get the component's site and request services from it in this call.
+        ///  Initializes the designer with the given component.  The designer can get the component's site and request
+        ///  services from it in this call.
         /// </summary>
         public override void Initialize(IComponent component)
         {
             // We have to shadow the WindowState before we call base.Initialize
             PropertyDescriptor windowStateProp = TypeDescriptor.GetProperties(component.GetType())["WindowState"];
-            if (windowStateProp != null && windowStateProp.PropertyType == typeof(FormWindowState))
+            if (windowStateProp is not null && windowStateProp.PropertyType == typeof(FormWindowState))
             {
                 WindowState = (FormWindowState)windowStateProp.GetValue(component);
             }
@@ -314,7 +331,7 @@ namespace System.Windows.Forms.Design
             Debug.Assert(component is Form, "FormDocumentDesigner expects its component to be a form.");
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 host.LoadComplete += new EventHandler(OnLoadComplete);
                 host.Activated += new EventHandler(OnDesignerActivate);
@@ -329,7 +346,7 @@ namespace System.Windows.Forms.Design
             // Monitor component/remove add events for our tray
             //
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (cs is not null)
             {
                 cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
                 cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
@@ -349,11 +366,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called when a component is removed from the design container. Here, we check if a menu is being removed and handle removing the Form's mainmenu vs. other menus properly.
+        ///  Called when a component is removed from the design container. Here, we check if a menu is being removed
+        ///  and handle removing the Form's mainmenu vs. other menus properly.
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            if (ce.Component is ToolStrip && _toolStripAdornerWindowService != null)
+            if (ce.Component is ToolStrip && _toolStripAdornerWindowService is not null)
             {
                 _toolStripAdornerWindowService = null;
             }
@@ -376,11 +394,10 @@ namespace System.Windows.Forms.Design
         private unsafe void OnDesignerActivate(object source, EventArgs evevent)
         {
             // Paint the form's title bar UI-active
-            Control control = Control;
-            if (control != null && control.IsHandleCreated)
+            if (Control is { } control && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.TRUE);
-                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
+                PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)true);
+                PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
         }
 
@@ -389,22 +406,23 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
-            Control control = Control;
-            if (control != null && control.IsHandleCreated)
+            if (Control is { } control && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.FALSE);
-                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
+                PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)false);
+                PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
         }
 
         /// <summary>
-        ///  Called when our code loads.  Here we connect us as the selection UI handler for ourselves.  This is a special case because for the top level document, we are our own selection UI handler.
+        ///  Called when our code loads.  Here we connect us as the selection UI handler for ourselves.  This is a
+        ///  special case because for the top level document, we are our own selection UI handler.
         /// </summary>
         private void OnLoadComplete(object source, EventArgs evevent)
         {
             if (Control is Form form)
             {
-                // The form's ClientSize is reported including the ScrollBar's height. We need to account for this in order to display the form with  scrollbars correctly.
+                // The form's ClientSize is reported including the ScrollBar's height. We need to account for this in
+                // order to display the form with scrollbars correctly.
                 int clientWidth = form.ClientSize.Width;
                 int clientHeight = form.ClientSize.Height;
                 if (form.HorizontalScroll.Visible && form.AutoScroll)
@@ -441,7 +459,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, empty);
                 }
@@ -449,14 +467,14 @@ namespace System.Windows.Forms.Design
 
             // Mark auto scale base size as serializable again so we can monitor it for backwards compat.
             prop = (PropertyDescriptor)properties["AutoScaleBaseSize"];
-            if (prop != null)
+            if (prop is not null)
             {
                 properties["AutoScaleBaseSize"] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, DesignerSerializationVisibilityAttribute.Visible);
             }
 
             // And set the new default value attribute for client base size, and shadow it as well.
             prop = (PropertyDescriptor)properties["ClientSize"];
-            if (prop != null)
+            if (prop is not null)
             {
                 properties["ClientSize"] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, new DefaultValueAttribute(new Size(-1, -1)));
             }

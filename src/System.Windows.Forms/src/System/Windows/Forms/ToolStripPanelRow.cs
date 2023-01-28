@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             _state[s_stateVisible] = visible;
             _state[s_stateDisposing | s_stateLocked | s_stateInitialized] = false;
 
-            Debug.WriteLineIf(s_toolStripPanelRowCreationDebug.TraceVerbose, "Created new ToolStripPanelRow");
+            s_toolStripPanelRowCreationDebug.TraceVerbose("Created new ToolStripPanelRow");
 
             using (LayoutTransaction lt = new LayoutTransaction(parent, this, null))
             {
@@ -306,7 +306,7 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-                    Debug.WriteLineIf(s_toolStripPanelRowCreationDebug.TraceVerbose, "Disposed ToolStripPanelRow");
+                    s_toolStripPanelRowCreationDebug.TraceVerbose("Disposed ToolStripPanelRow");
                     _state[s_stateDisposing] = true;
                     ControlsInternal.Clear();
                 }
@@ -498,10 +498,7 @@ namespace System.Windows.Forms
                         // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
-                            if (cellOffsets is null)
-                            {
-                                cellOffsets = new int[Cells.Count];
-                            }
+                            cellOffsets ??= new int[Cells.Count];
 
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Width - cachedBounds.Width);
                         }
@@ -592,10 +589,7 @@ namespace System.Windows.Forms
                         // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
-                            if (cellOffsets is null)
-                            {
-                                cellOffsets = new int[Cells.Count];
-                            }
+                            cellOffsets ??= new int[Cells.Count];
 
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Height - cachedBounds.Height);
                         }

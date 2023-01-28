@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -24,7 +25,7 @@ namespace System.Windows.Forms.Design
 
             IUIService uiService = provider.GetService<IUIService>();
             IComponent component = context.Instance as IComponent;
-            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 _builderDialog ??= new DataGridViewCellStyleBuilder(provider, component);
                 if (uiService is not null)

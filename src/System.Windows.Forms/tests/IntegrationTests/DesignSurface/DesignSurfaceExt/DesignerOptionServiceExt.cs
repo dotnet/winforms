@@ -9,7 +9,7 @@ namespace DesignSurfaceExt
 
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {
-            if (null != options.Parent)
+            if (options.Parent is not null)
                 return;
 
             DesignerOptions ops = new DesignerOptions();
@@ -28,7 +28,7 @@ namespace DesignSurfaceExt
 
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {
-            if (null != options.Parent)
+            if (options.Parent is not null)
                 return;
 
             DesignerOptions ops = new DesignerOptions();
@@ -50,7 +50,7 @@ namespace DesignSurfaceExt
 
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {
-            if (null != options.Parent)
+            if (options.Parent is not null)
                 return;
 
             DesignerOptions ops = new DesignerOptions();
@@ -70,7 +70,7 @@ namespace DesignSurfaceExt
 
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {
-            if (null != options.Parent)
+            if (options.Parent is not null)
                 return;
 
             DesignerOptions ops = new DesignerOptions();

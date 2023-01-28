@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -29,7 +30,6 @@ namespace System.Windows.Forms
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
         private static readonly object s_rightToLeftChangedEvent = new object();
-
         private bool _autoSize = true;
         private int _largeChange = 5;
         private int _maximum = 10;
@@ -39,9 +39,8 @@ namespace System.Windows.Forms
         private int _smallChange = 1;
         private int _tickFrequency = 1;
         private TickStyle _tickStyle = TickStyle.BottomRight;
-
         private int _requestedDim;
-
+        private bool _autoDrawTicks;
         // Mouse wheel movement
         private int _cumulativeWheelData;
 
@@ -148,39 +147,52 @@ namespace System.Windows.Forms
         {
             get
             {
+                // If the user opts out of TrackBarModernRendering
+                // then _autoDrawTicks will be set to true
+                _autoDrawTicks = ShouldAutoDrawTicks();
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_TRACKBAR;
-
+                cp.ClassName = PInvoke.TRACKBAR_CLASS;
                 switch (_tickStyle)
                 {
                     case TickStyle.None:
-                        cp.Style |= (int)TBS.NOTICKS;
+                        cp.Style |= (int)PInvoke.TBS_NOTICKS;
                         break;
                     case TickStyle.TopLeft:
-                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.TOP);
+                        cp.Style |= (int)(PInvoke.TBS_TOP);
+                        EnableAutoTicksIfRequired();
                         break;
                     case TickStyle.BottomRight:
-                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTTOM);
+                        cp.Style |= (int)(PInvoke.TBS_BOTTOM);
+                        EnableAutoTicksIfRequired();
                         break;
                     case TickStyle.Both:
-                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTH);
+                        cp.Style |= (int)(PInvoke.TBS_BOTH);
+                        EnableAutoTicksIfRequired();
                         break;
                 }
 
                 if (_orientation == Orientation.Vertical)
                 {
-                    cp.Style |= (int)TBS.VERT;
+                    cp.Style |= (int)PInvoke.TBS_VERT;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     // We want to turn on mirroring for Trackbar explicitly.
                     // Don't need these styles when mirroring is turned on.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
+
+                void EnableAutoTicksIfRequired()
+                {
+                    if (_autoDrawTicks)
+                    {
+                        cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
+                    }
+                }
             }
         }
 
@@ -279,7 +291,7 @@ namespace System.Windows.Forms
                 _largeChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, value);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, 0, value);
                 }
             }
         }
@@ -409,7 +421,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int cyhscroll = User32.GetSystemMetrics(User32.SystemMetric.SM_CYHSCROLL);
+                int cyhscroll = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYHSCROLL);
                 return ((cyhscroll * 8) / 3);
             }
         }
@@ -424,7 +436,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
             Invalidate();
         }
 
@@ -482,7 +494,7 @@ namespace System.Windows.Forms
                 _smallChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, value);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, 0, value);
                 }
             }
         }
@@ -557,10 +569,24 @@ namespace System.Windows.Forms
                 }
 
                 _tickFrequency = value;
+                // Determine if the decision of whether the ticks drawing,
+                // is performed by the native control or the Windows Forms runtime
+                // is still valid. If it's no longer valid, we'll need to recreate the native control.
+                bool recreateHandle = ShouldRecreateHandle();
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, value);
-                    Invalidate();
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)value);
+                    // If user opts out of TrackBarModernRendering then recreateHandle
+                    // will always be false.
+                    if (recreateHandle)
+                    {
+                        RecreateHandle();
+                    }
+                    else
+                    {
+                        DrawTicks();
+                        Invalidate();
+                    }
                 }
             }
         }
@@ -731,7 +757,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ICC.BAR_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_BAR_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
                 }
@@ -742,6 +768,39 @@ namespace System.Windows.Forms
             }
 
             base.CreateHandle();
+        }
+
+        /// <summary>
+        ///  Check if the value of the max is greater then the taskbar size.
+        ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
+        /// </summary>
+        private void DrawTicks()
+        {
+            // Will be true if they opt out TrackBarModernRendering.
+            if (_tickStyle == TickStyle.None || _autoDrawTicks)
+            {
+                return;
+            }
+
+            int drawnTickFrequency = _tickFrequency;
+            // Divide by 2 because otherwise the ticks appear as a solid line.
+            int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
+            uint range = (uint)(_maximum - _minimum);
+            if (range > maxTickCount && maxTickCount != 0)
+            {
+                int calculatedTickFrequency = (int)(range / maxTickCount);
+                if (calculatedTickFrequency > drawnTickFrequency)
+                {
+                    drawnTickFrequency = calculatedTickFrequency;
+                }
+            }
+
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
+            for (int i = _minimum + drawnTickFrequency; i < _maximum - drawnTickFrequency; i += drawnTickFrequency)
+            {
+                LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
+                Debug.Assert((bool)(BOOL)lresult);
+            }
         }
 
         /// <summary>
@@ -759,7 +818,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                _value = (int)User32.SendMessageW(this, (User32.WM)TBM.GETPOS);
+                _value = (int)PInvoke.SendMessage(this, User32.WM.USER);
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
                 if (_orientation == Orientation.Vertical)
@@ -807,11 +866,13 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.FALSE, _maximum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, _tickFrequency);
-            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, _largeChange);
-            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, _smallChange);
+            Debug.Assert(_autoDrawTicks == ShouldAutoDrawTicks());
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
+            DrawTicks();
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -989,13 +1050,20 @@ namespace System.Windows.Forms
 
                 _minimum = minValue;
                 _maximum = maxValue;
-
-                if (IsHandleCreated)
+                // Determine if the decision of whether the ticks drawing,
+                // is performed by the native control or the Windows Forms runtime
+                // is still valid. If it's no longer valid, we'll need to recreate the native control.
+                bool recreateHandle = ShouldRecreateHandle();
+                // If user opts out of TrackBarModernRendering then recreateHandle
+                // will always be false.
+                if (IsHandleCreated && !recreateHandle)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
-
-                    // We must repaint the trackbar after changing the range.
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                    if (!_autoDrawTicks)
+                    {
+                        DrawTicks();
+                    }
 
                     Invalidate();
                 }
@@ -1013,7 +1081,16 @@ namespace System.Windows.Forms
                     _value = _maximum;
                 }
 
-                SetTrackBarPosition();
+                // If user opts out of TrackBarModernRendering then recreateHandle
+                // will always be false.
+                if (recreateHandle)
+                {
+                    RecreateHandle();
+                }
+                else
+                {
+                    SetTrackBarPosition();
+                }
             }
         }
 
@@ -1040,9 +1117,47 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - _value;
                 }
 
-                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, (nint)BOOL.TRUE, reflectedValue);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPOS, (WPARAM)(BOOL)true, (LPARAM)reflectedValue);
             }
         }
+
+        /// <summary>
+        /// This checks all the use cases that we potentially might want to keep `TBS_AUTOTICKS`.
+        /// </summary>
+        private bool ShouldAutoDrawTicks()
+        {
+            // If the user decides to opt out of TrackBarModernRendering for drawing ticks,
+            // by returning true autoticks will be set to true which will
+            // use the old way of rendering ticks on the trackbar.
+            // TBS_AUTOTICKS will be enabled and sending
+            // the TBM_SETTICFREQ message to set tick frequency.
+            if (!LocalAppContextSwitches.TrackBarModernRendering)
+            {
+                return true;
+            }
+
+            if (TickStyle == TickStyle.None)
+            {
+                return true;
+            }
+
+            int size = Orientation == Orientation.Horizontal ? Size.Width : Size.Height;
+            if (size == 0)
+            {
+                return true;
+            }
+
+            uint range = (uint)(_maximum - _minimum);
+            return range <= (size / 2);
+        }
+
+        /// <summary>
+        /// Determine if the decision of whether the ticks drawing,
+        /// is performed by the native control or the Windows Forms runtime
+        /// is still valid. If it's no longer valid, we'll need to recreate the native control.
+        /// If user opts out of TrackBarModernRendering then this will always return false.
+        /// </summary>
+        private bool ShouldRecreateHandle() => IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks();
 
         public override string ToString() => $"{base.ToString()}, Minimum: {Minimum}, Maximum: {Maximum}, Value: {_value}";
 
@@ -1052,7 +1167,7 @@ namespace System.Windows.Forms
             {
                 case User32.WM.REFLECT_HSCROLL:
                 case User32.WM.REFLECT_VSCROLL:
-                    switch (PARAM.LOWORD(m.WParamInternal))
+                    switch (m.WParamInternal.LOWORD)
                     {
                         case NativeMethods.TB_LINEUP:
                         case NativeMethods.TB_LINEDOWN:

@@ -5,8 +5,8 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
 using Microsoft.Win32;
+using Windows.Win32.UI.TextServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -40,19 +40,16 @@ namespace System.Windows.Forms
             get
             {
                 Application.OleRequired();
-                return new InputLanguage(User32.GetKeyboardLayout(0));
+                return new InputLanguage(PInvoke.GetKeyboardLayout(0));
             }
             set
             {
                 // OleInitialize needs to be called before we can call ActivateKeyboardLayout.
                 Application.OleRequired();
-                if (value is null)
-                {
-                    value = DefaultInputLanguage;
-                }
+                value ??= DefaultInputLanguage;
 
-                IntPtr handleOld = User32.ActivateKeyboardLayout(value.Handle, 0);
-                if (handleOld == IntPtr.Zero)
+                HKL handleOld = PInvoke.ActivateKeyboardLayout(new HKL(value.Handle), 0);
+                if (handleOld == default)
                 {
                     throw new ArgumentException(SR.ErrorBadInputLanguage, nameof(value));
                 }
@@ -66,8 +63,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr handle = IntPtr.Zero;
-                User32.SystemParametersInfoW(User32.SPI.GETDEFAULTINPUTLANG, ref handle);
+                nint handle = 0;
+                PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETDEFAULTINPUTLANG, ref handle);
                 return new InputLanguage(handle);
             }
         }
@@ -80,17 +77,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a list of all installed input languages.
         /// </summary>
-        public unsafe static InputLanguageCollection InstalledInputLanguages
+        public static unsafe InputLanguageCollection InstalledInputLanguages
         {
             get
             {
-                int size = User32.GetKeyboardLayoutList(0, null);
+                int size = PInvoke.GetKeyboardLayoutList(0, null);
 
-                var handles = new IntPtr[size];
-                fixed (IntPtr* pHandles = handles)
-                {
-                    User32.GetKeyboardLayoutList(size, pHandles);
-                }
+                var handles = new HKL[size];
+                PInvoke.GetKeyboardLayoutList(handles);
 
                 InputLanguage[] ils = new InputLanguage[size];
                 for (int i = 0; i < size; i++)
@@ -218,10 +212,7 @@ namespace System.Windows.Forms
 
                             // Default back to our legacy codepath and obtain the name
                             // directly through the registry value
-                            if (layoutName is null)
-                            {
-                                layoutName = (string?)key.GetValue("Layout Text");
-                            }
+                            layoutName ??= (string?)key.GetValue("Layout Text");
 
                             if (layoutName is not null)
                             {
@@ -258,10 +249,7 @@ namespace System.Windows.Forms
 
                                 // Default back to our legacy codepath and obtain the name
                                 // directly through the registry value
-                                if (layoutName is null)
-                                {
-                                    layoutName = (string?)key.GetValue("Layout Text");
-                                }
+                                layoutName ??= (string?)key.GetValue("Layout Text");
 
                                 if (layoutName is not null)
                                 {
@@ -285,11 +273,18 @@ namespace System.Windows.Forms
         {
             if (layoutDisplayName is not null)
             {
-                var sb = new StringBuilder(512);
-                HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
-                if (res == HRESULT.S_OK)
+                unsafe
                 {
-                    return sb.ToString();
+                    var ppvReserved = (void*)IntPtr.Zero;
+                    Span<char> buffer = stackalloc char[512];
+                    fixed (char* pBuffer = buffer)
+                    {
+                        HRESULT res = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
+                        if (res == HRESULT.S_OK)
+                        {
+                            return buffer.SliceAtFirstNull().ToString();
+                        }
+                    }
                 }
             }
 
@@ -301,7 +296,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangedEventArgs CreateInputLanguageChangedEventArgs(Message m)
         {
-            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParamInternal), (byte)m.WParamInternal);
+            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParamInternal), (byte)(nint)m.WParamInternal);
         }
 
         /// <summary>
@@ -312,7 +307,7 @@ namespace System.Windows.Forms
             var inputLanguage = new InputLanguage(m.LParamInternal);
 
             // NOTE: by default we should allow any locale switch
-            bool localeSupportedBySystem = m.WParamInternal != 0;
+            bool localeSupportedBySystem = m.WParamInternal != 0u;
             return new InputLanguageChangingEventArgs(inputLanguage, localeSupportedBySystem);
         }
 

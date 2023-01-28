@@ -147,10 +147,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             {
                 get
                 {
-                    if (_collection is null)
-                    {
-                        _collection = new GridEntryCollection();
-                    }
+                    _collection ??= new GridEntryCollection();
 
                     return _collection;
                 }

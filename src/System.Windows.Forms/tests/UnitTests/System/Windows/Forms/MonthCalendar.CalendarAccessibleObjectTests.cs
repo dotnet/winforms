@@ -315,5 +315,125 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleStates.None, calendar.State);
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void CalendarAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
+
+            Assert.Equal(controlAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfSingleMonthView()
+        {
+            using MonthCalendar control = new();
+            control.CreateControl();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+
+            CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects?.First?.Value;
+
+            Assert.NotNull(calendar);
+            Assert.Equal(controlAccessibleObject.TodayLinkAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        }
+
+        [WinFormsFact]
+        public void CalendarAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfMultiMonthView()
+        {
+            using MonthCalendar control = new()
+            {
+                CalendarDimensions = new Size { Width = 2, Height = 2 }
+            };
+            control.CreateControl();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+
+            LinkedList<CalendarAccessibleObject> calendars = controlAccessibleObject.CalendarsAccessibleObjects;
+            CalendarAccessibleObject calendar1 = calendars?.First?.Value;
+            CalendarAccessibleObject calendar2 = calendars?.First?.Next?.Value;
+            CalendarAccessibleObject calendar3 = calendars?.First?.Next?.Next?.Value;
+            CalendarAccessibleObject calendar4 = calendars?.First?.Next?.Next?.Next?.Value;
+
+            Assert.NotNull(calendar1);
+            Assert.NotNull(calendar2);
+            Assert.NotNull(calendar3);
+            Assert.NotNull(calendar4);
+
+            Assert.Equal(calendar2, calendar1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(calendar3, calendar2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(calendar4, calendar3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(controlAccessibleObject.TodayLinkAccessibleObject, calendar4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        }
+
+        [WinFormsFact]
+        public void CalendarAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected_IfSingleMonthView()
+        {
+            using MonthCalendar control = new();
+            control.CreateControl();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+
+            CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects?.First?.Value;
+
+            Assert.NotNull(calendar);
+            Assert.Equal(controlAccessibleObject.NextButtonAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        }
+
+        [WinFormsFact]
+        public void CalendarAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected_IfMultiMonthView()
+        {
+            using MonthCalendar control = new()
+            {
+                CalendarDimensions = new Size { Width = 2, Height = 2 }
+            };
+            control.CreateControl();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+
+            LinkedList<CalendarAccessibleObject> calendars = controlAccessibleObject.CalendarsAccessibleObjects;
+            CalendarAccessibleObject calendar1 = calendars?.First?.Value;
+            CalendarAccessibleObject calendar2 = calendars?.First?.Next?.Value;
+            CalendarAccessibleObject calendar3 = calendars?.First?.Next?.Next?.Value;
+            CalendarAccessibleObject calendar4 = calendars?.First?.Next?.Next?.Next?.Value;
+
+            Assert.NotNull(calendar1);
+            Assert.NotNull(calendar2);
+            Assert.NotNull(calendar3);
+            Assert.NotNull(calendar4);
+
+            Assert.Equal(controlAccessibleObject.NextButtonAccessibleObject, calendar1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(calendar1, calendar2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(calendar2, calendar3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(calendar3, calendar4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        }
+
+        [WinFormsFact]
+        public void CalendarAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
+
+            Assert.Equal(calendar.CalendarHeaderAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
+
+            Assert.Equal(calendar.CalendarBodyAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }

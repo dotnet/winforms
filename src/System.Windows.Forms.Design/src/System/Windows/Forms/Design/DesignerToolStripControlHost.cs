@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
@@ -31,10 +33,7 @@ namespace System.Windows.Forms.Design
 
         internal GlyphCollection GetGlyphs(ToolStrip parent, GlyphCollection glyphs, Behavior.Behavior standardBehavior)
         {
-            if (_behaviorService is null)
-            {
-                _behaviorService = (BehaviorService)parent.Site.GetService(typeof(BehaviorService));
-            }
+            _behaviorService ??= (BehaviorService)parent.Site.GetService(typeof(BehaviorService));
 
             Point loc = _behaviorService.ControlToAdornerWindow(Parent);
             Rectangle r = Bounds;

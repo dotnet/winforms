@@ -4,14 +4,13 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
-using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms
 {
@@ -25,7 +24,7 @@ namespace System.Windows.Forms
 
             private TypeConverter _converter;
             private UITypeEditor _editor;
-            private readonly ArrayList _updateAttributes = new();
+            private readonly List<Attribute> _updateAttributes = new();
             private int _flags;
 
             private const int FlagUpdatedEditorAndConverter = 0x00000001;
@@ -47,16 +46,16 @@ namespace System.Windows.Forms
                     // If it does, then it needs to be Browsable(true).
                     if (!IsBrowsable && !IsReadOnly)
                     {
-                        Guid g = GetPropertyPage((Ole32.DispatchID)_dispid.Value);
+                        Guid g = GetPropertyPage(_dispid.Value);
                         if (!Guid.Empty.Equals(g))
                         {
-                            Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"Making property: {Name} browsable because we found an property page.");
+                            s_axPropTraceSwitch.TraceVerbose($"Making property: {Name} browsable because we found an property page.");
                             AddAttribute(new BrowsableAttribute(true));
                         }
                     }
 
                     // Use the CategoryAttribute provided by the OCX.
-                    CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)_dispid.Value);
+                    CategoryAttribute cat = owner.GetCategoryForDispid(_dispid.Value);
                     if (cat is not null)
                     {
                         AddAttribute(cat);
@@ -93,10 +92,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal Ole32.DispatchID Dispid
+            internal int Dispid
                 => _baseDescriptor.TryGetAttribute(out DispIdAttribute dispid)
-                    ? (Ole32.DispatchID)dispid.Value
-                    : Ole32.DispatchID.UNKNOWN;
+                    ? dispid.Value
+                    : PInvoke.DISPID_UNKNOWN;
 
             public override bool IsReadOnly => _baseDescriptor.IsReadOnly;
 
@@ -121,15 +120,12 @@ namespace System.Windows.Forms
 
                 if (_dispid is not null)
                 {
-                    UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)_dispid.Value);
+                    UpdateTypeConverterAndTypeEditorInternal(false, _dispid.Value);
                 }
 
-                if (editorBaseType.Equals(typeof(UITypeEditor)) && _editor is not null)
-                {
-                    return _editor;
-                }
-
-                return base.GetEditor(editorBaseType);
+                return editorBaseType.Equals(typeof(UITypeEditor)) && _editor is not null
+                    ? _editor
+                    : base.GetEditor(editorBaseType);
             }
 
             private bool GetFlag(int flagValue)
@@ -137,18 +133,18 @@ namespace System.Windows.Forms
                 return ((_flags & flagValue) == flagValue);
             }
 
-            private unsafe Guid GetPropertyPage(Ole32.DispatchID dispid)
+            private unsafe Guid GetPropertyPage(int dispid)
             {
                 try
                 {
-                    Oleaut32.IPerPropertyBrowsing ippb = _owner.GetPerPropertyBrowsing();
+                    IPerPropertyBrowsing.Interface ippb = _owner.GetPerPropertyBrowsing();
                     if (ippb is null)
                     {
                         return Guid.Empty;
                     }
 
                     Guid rval = Guid.Empty;
-                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded())
+                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded)
                     {
                         return rval;
                     }
@@ -183,8 +179,7 @@ namespace System.Windows.Forms
                 {
                     if (!GetFlag(FlagCheckGetter))
                     {
-                        Debug.WriteLineIf(
-                            s_axPropTraceSwitch.TraceVerbose,
+                        s_axPropTraceSwitch.TraceVerbose(
                             $"Get failed for : {Name} with exception: {e.Message}. Making property non-browsable.");
                         SetFlag(FlagCheckGetter, true);
                         AddAttribute(new BrowsableAttribute(false));
@@ -251,7 +246,7 @@ namespace System.Windows.Forms
                 OnValueChanged(component);
                 if (_owner == component)
                 {
-                    _owner.SetAxState(AxHost.s_valueChanged, true);
+                    _owner.SetAxState(s_valueChanged, true);
                 }
             }
 
@@ -267,16 +262,9 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                ArrayList attributes = new ArrayList(AttributeArray);
-                foreach (Attribute attr in _updateAttributes)
-                {
-                    attributes.Add(attr);
-                }
-
-                Attribute[] temp = new Attribute[attributes.Count];
-                attributes.CopyTo(temp, 0);
-                AttributeArray = temp;
-
+                List<Attribute> attributes = new(AttributeArray);
+                attributes.AddRange(_updateAttributes);
+                AttributeArray = attributes.ToArray();
                 _updateAttributes.Clear();
             }
 
@@ -300,7 +288,7 @@ namespace System.Windows.Forms
             ///  This simply sets flags so this will happen, it doesn't actually to the update...
             ///  we wait and do that on-demand for perf.
             /// </summary>
-            internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, Ole32.DispatchID dispid)
+            internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, int dispid)
             {
                 // Check to see if we're being forced here or if the work really needs to be done.
                 if ((GetFlag(FlagUpdatedEditorAndConverter) && !force) || _owner.GetOcx() is null)
@@ -310,13 +298,13 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    Oleaut32.IPerPropertyBrowsing ppb = _owner.GetPerPropertyBrowsing();
+                    IPerPropertyBrowsing.Interface ppb = _owner.GetPerPropertyBrowsing();
 
                     if (ppb is not null)
                     {
                         // Check for enums
-                        Ole32.CALPOLESTR caStrings = default;
-                        Ole32.CADWORD caCookies = default;
+                        CALPOLESTR caStrings = default;
+                        CADWORD caCookies = default;
 
                         HRESULT hr = HRESULT.S_OK;
                         try
@@ -380,8 +368,7 @@ namespace System.Windows.Forms
                                     // Show any non-browsable property that has an editor through a property page.
                                     if (!IsBrowsable)
                                     {
-                                        Debug.WriteLineIf(
-                                            s_axPropTraceSwitch.TraceVerbose,
+                                        s_axPropTraceSwitch.TraceVerbose(
                                             $"Making property: {Name} browsable because we found an editor.");
 
                                         AddAttribute(new BrowsableAttribute(true));
@@ -395,7 +382,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"could not get the type editor for property: {Name} Exception: {e}");
+                    s_axPropTraceSwitch.TraceVerbose($"could not get the type editor for property: {Name} Exception: {e}");
                 }
             }
         }

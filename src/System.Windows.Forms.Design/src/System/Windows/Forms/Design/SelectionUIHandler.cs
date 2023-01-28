@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -38,7 +40,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
-            dragOffset = new Rectangle();
+            dragOffset = default(Rectangle);
             originalCoords = null;
             this.rules = rules;
 
@@ -47,7 +49,7 @@ namespace System.Windows.Forms.Design
             {
                 Debug.Assert(components[i] is IComponent, "Selection UI handler only deals with IComponents");
                 dragControls[i] = GetControl((IComponent)components[i]);
-                Debug.Assert(dragControls[i] != null, "Everyone must have a control");
+                Debug.Assert(dragControls[i] is not null, "Everyone must have a control");
             }
 
             // allow the cliprect to go just beyond the window by one grid.  This helps with round off
@@ -73,7 +75,7 @@ namespace System.Windows.Forms.Design
                 Rectangle containerRect = containerControl.RectangleToScreen(containerControl.ClientRectangle);
                 containerRect.Inflate(snapSize.Width, snapSize.Height);
                 ScrollableControl sc = GetControl() as ScrollableControl;
-                if (sc != null && sc.AutoScroll)
+                if (sc is not null && sc.AutoScroll)
                 {
                     Rectangle screen = SystemInformation.VirtualScreen;
                     containerRect.Width = screen.Width;
@@ -90,9 +92,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private static void CancelControlMove(Control[] controls, BoundsInfo[] bounds)
         {
-            Debug.Assert(bounds != null && controls != null && bounds.Length == controls.Length, "bounds->controls mismatch");
+            Debug.Assert(bounds is not null && controls is not null && bounds.Length == controls.Length, "bounds->controls mismatch");
 
-            Rectangle b = new Rectangle();
+            Rectangle b = default(Rectangle);
 
             // Whip through each of the controls.
             //
@@ -103,10 +105,7 @@ namespace System.Windows.Forms.Design
                 // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
-                if (parent != null)
-                {
-                    parent.SuspendLayout();
-                }
+                parent?.SuspendLayout();
 
                 b.X = bounds[i].X;
                 b.Y = bounds[i].Y;
@@ -121,10 +120,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < controls.Length; i++)
             {
                 Control parent = controls[i].Parent;
-                if (parent != null)
-                {
-                    parent.ResumeLayout();
-                }
+                parent?.ResumeLayout();
             }
         }
 
@@ -137,7 +133,7 @@ namespace System.Windows.Forms.Design
         {
             dragOffset = offset;
             MoveControls(components, false, false);
-            Debug.Assert(originalCoords != null, "We are keying off of originalCoords, but MoveControls didn't set it");
+            Debug.Assert(originalCoords is not null, "We are keying off of originalCoords, but MoveControls didn't set it");
         }
 
         /// <summary>
@@ -214,7 +210,7 @@ namespace System.Windows.Forms.Design
             Control[] controls = dragControls;
             Rectangle offset = dragOffset;
             BoundsInfo[] bounds = originalCoords;
-            Point adjustedLoc = new Point();
+            Point adjustedLoc = default(Point);
 
             // Erase the clipping and other state if this is the final move.
             //
@@ -254,7 +250,7 @@ namespace System.Windows.Forms.Design
             // the user cancels out of moving them.  So, we create a "BoundsInfo" object for
             // each control that saves this state.
             //
-            if (originalCoords == null && !finalMove)
+            if (originalCoords is null && !finalMove)
             {
                 originalCoords = new BoundsInfo[controls.Length];
                 for (int i = 0; i < controls.Length; i++)
@@ -277,10 +273,7 @@ namespace System.Windows.Forms.Design
                 // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
-                if (parent != null)
-                {
-                    parent.SuspendLayout();
-                }
+                parent?.SuspendLayout();
 
                 BoundsInfo ctlBounds = bounds[i];
 
@@ -338,7 +331,7 @@ namespace System.Windows.Forms.Design
                 //
 
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(host != null, "No designer host");
+                Debug.Assert(host is not null, "No designer host");
                 if (controls[i] == host.RootComponent)
                 {
                     targetX = 0;
@@ -397,7 +390,7 @@ namespace System.Windows.Forms.Design
                     //
                     PropertyDescriptor boundsProp = TypeDescriptor.GetProperties(components[i])["Bounds"];
 
-                    if (boundsProp != null && !boundsProp.IsReadOnly)
+                    if (boundsProp is not null && !boundsProp.IsReadOnly)
                     {
                         if (finalMove)
                         {
@@ -427,7 +420,7 @@ namespace System.Windows.Forms.Design
 
                     PropertyDescriptor trayProp = TypeDescriptor.GetProperties(components[i])["TrayLocation"];
 
-                    if (trayProp != null && !trayProp.IsReadOnly)
+                    if (trayProp is not null && !trayProp.IsReadOnly)
                     {
                         trayProp.SetValue(components[i], adjustedLoc);
                     }
@@ -439,7 +432,7 @@ namespace System.Windows.Forms.Design
                         //
                         PropertyDescriptor leftProp = TypeDescriptor.GetProperties(components[i])["Left"];
                         PropertyDescriptor topProp = TypeDescriptor.GetProperties(components[i])["Top"];
-                        if (topProp != null && !topProp.IsReadOnly)
+                        if (topProp is not null && !topProp.IsReadOnly)
                         {
                             if (finalMove)
                             {
@@ -452,7 +445,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (leftProp != null && !leftProp.IsReadOnly)
+                        if (leftProp is not null && !leftProp.IsReadOnly)
                         {
                             if (finalMove)
                             {
@@ -465,10 +458,10 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (leftProp == null || topProp == null)
+                        if (leftProp is null || topProp is null)
                         {
                             PropertyDescriptor locationProp = TypeDescriptor.GetProperties(components[i])["Location"];
-                            if (locationProp != null && !locationProp.IsReadOnly)
+                            if (locationProp is not null && !locationProp.IsReadOnly)
                             {
                                 locationProp.SetValue(components[i], adjustedLoc);
                             }
@@ -490,7 +483,7 @@ namespace System.Windows.Forms.Design
                     PropertyDescriptor widthProp = TypeDescriptor.GetProperties(components[i])["Width"];
                     PropertyDescriptor heightProp = TypeDescriptor.GetProperties(components[i])["Height"];
 
-                    if (widthProp != null && !widthProp.IsReadOnly && size.Width != (int)widthProp.GetValue(components[i]))
+                    if (widthProp is not null && !widthProp.IsReadOnly && size.Width != (int)widthProp.GetValue(components[i]))
                     {
                         if (finalMove)
                         {
@@ -503,7 +496,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    if (heightProp != null && !heightProp.IsReadOnly && size.Height != (int)heightProp.GetValue(components[i]))
+                    if (heightProp is not null && !heightProp.IsReadOnly && size.Height != (int)heightProp.GetValue(components[i]))
                     {
                         if (finalMove)
                         {
@@ -524,7 +517,7 @@ namespace System.Windows.Forms.Design
             {
                 Control parent = controls[i].Parent;
 
-                if (parent != null)
+                if (parent is not null)
                 {
                     parent.ResumeLayout();
                     parent.Update();
@@ -542,18 +535,18 @@ namespace System.Windows.Forms.Design
         public bool QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (cs is not null)
             {
                 try
                 {
-                    if (components != null && components.Length > 0)
+                    if (components is not null && components.Length > 0)
                     {
                         foreach (object c in components)
                         {
                             cs.OnComponentChanging(c, TypeDescriptor.GetProperties(c)["Location"]);
                             PropertyDescriptor sizeProp = TypeDescriptor.GetProperties(c)["Size"];
 
-                            if (sizeProp != null && sizeProp.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden))
+                            if (sizeProp is not null && sizeProp.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden))
                             {
                                 sizeProp = TypeDescriptor.GetProperties(c)["ClientSize"];
                             }
@@ -586,7 +579,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            return components != null && components.Length > 0;
+            return components is not null && components.Length > 0;
         }
 
         /// <summary>
@@ -637,7 +630,7 @@ namespace System.Windows.Forms.Design
                 Size sz;
                 Point loc;
 
-                if (sizeProp != null)
+                if (sizeProp is not null)
                 {
                     sz = (Size)sizeProp.GetValue(control);
                 }
@@ -646,7 +639,7 @@ namespace System.Windows.Forms.Design
                     sz = control.Size;
                 }
 
-                if (locProp != null)
+                if (locProp is not null)
                 {
                     loc = (Point)locProp.GetValue(control);
                 }

@@ -177,6 +177,11 @@
         <target state="translated">부모 행</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">액세스 거부됨</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">선택</target>
@@ -242,6 +247,31 @@
         <target state="translated">적용(&amp;A)</target>
         <note />
       </trans-unit>
+      <trans-unit id="Arg_ArrayPlusOffTooSmall">
+        <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
+        <target state="translated">대상 배열이 컬렉션의 모든 항목을 복사하기에 충분히 길지 않습니다. 배열 인덱스와 길이를 확인하세요.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_NonZeroLowerBound">
+        <source>The lower bound of target array must be zero.</source>
+        <target state="translated">대상 배열의 하한은 0이어야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_RankMultiDimNotSupported">
+        <source>Only single dimensional arrays are supported for the requested action.</source>
+        <target state="translated">요청한 동작에 대해 1차원 배열만 지원됩니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
+        <source>Non-negative number required.</source>
+        <target state="translated">음수가 아닌 수가 필요합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_IncompatibleArrayType">
+        <source>Target array type is not compatible with the type of items in the collection.</source>
+        <target state="translated">대상 배열 형식이 컬렉션의 항목 형식과 호환되지 않습니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">지정된 사용자 지정 소스를 사용하여 autoComplete를 초기화할 수 없습니다.</target>
@@ -260,6 +290,16 @@
       <trans-unit id="BadDataSourceForComplexBinding">
         <source>Complex DataBinding accepts as a data source either an IList or an IListSource.</source>
         <target state="translated">IList 또는 IListSource를 복합 DataBinding의 데이터 소스로 사용할 수 있습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="translated">바인딩 컨텍스트가 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="translated">이 바인딩 가능한 구성 요소에 대한 BindingContext를 가져오거나 설정합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1147,9 +1187,34 @@
         <target state="translated">열기</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="translated">Command 속성에 할당된 명령의 ICommand.CanExecute(object?) 상태가 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="translated">Command 속성의 할당된 ICommand 개체가 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="translated">이 구성 요소의 Click 이벤트가 호출될 때마다 Execute 대리자가 실행되는 ICommand 개체를 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="translated">실행 또는 실행 컨텍스트 요청 시 Command 속성의 개체에 전달되는 매개 변수를 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">새 명령 ID를 할당할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="translated">CommandParameter 속성의 값이 변경될 때 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1520,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">포인터가 컨트롤 위로 이동할 때 나타나는 커서입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="translated">DataContext 속성의 값이 변경되면 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4861,6 +4931,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">{0}의 인스턴스를 만드는 동안 예외가 발생했습니다. 예외는 "{1}"입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="translated">확장</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">외부 예외</target>
@@ -5472,11 +5547,6 @@ Do you want to replace it?</source>
         <target state="translated">null 값을 '{1}' 형식으로 변환할 수 없습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">GridItem은 삭제되었으며 더 이상 사용할 수 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">GridItem을 확장할 수 없습니다.</target>
@@ -5759,6 +5829,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">'{1}'의 InvalidArgument=Value는 '{0}'에 사용할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="translated">인수 '{0}'는 '{1}' 형식이어야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
@@ -6564,11 +6639,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="translated">현재 접근성 개체는 {0} 보기의 ListView에만 해당됩니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">현재 접근성 개체는 {0}, {1} 또는 {2} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
@@ -7384,11 +7454,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">확인</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">삭제된 '{0}'은(는) 더 이상 사용할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">
@@ -9911,6 +9976,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">컨트롤의 텍스트와 그래픽을 표시하는 데 사용할 배경색입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="translated">이 toolstrip 항목에 대한 BindingContext를 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">드롭다운 항목 컬렉션에 소유자 항목을 추가할 수 없습니다.</target>
@@ -10004,6 +10074,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripItemOnBackColorChangedDescr">
         <source>Occurs when the value of the BackColor property is changed on the item.</source>
         <target state="translated">항목에서 BackColor 속성 값이 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="translated">바인딩 가능한 명령이 변경될 때마다 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="translated">바인딩 컨텍스트가 변경될 때마다 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Specialized;
@@ -21,14 +23,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static CollectionCodeDomSerializer Default
+        internal static new CollectionCodeDomSerializer Default
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new CollectionCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new CollectionCodeDomSerializer();
 
                 return s_defaultSerializer;
             }
@@ -102,11 +101,8 @@ namespace System.ComponentModel.Design.Serialization
                         originalValues[value] = count;
                     }
                 }
-                else if (result is not null)
-                {
-                    // this one isn't in the old list, so add it to our  result list.
-                    result.Add(value);
-                }
+                else                     // this one isn't in the old list, so add it to our  result list.
+                    result?.Add(value);
 
                 // this item isn't in the list and we haven't yet created our array list so just keep on going.
             }
@@ -335,10 +331,7 @@ namespace System.ComponentModel.Design.Serialization
                 Trace("Searching for AddRange or Add");
                 // Use the TargetFrameworkProviderService to create a provider, or use the default for the collection if the service is not available.  Since TargetFrameworkProvider reflection types are not compatible with RuntimeTypes, they can only be used with other reflection types from the same provider.
                 TypeDescriptionProvider provider = GetTargetFrameworkProvider(manager, originalCollection);
-                if (provider is null)
-                {
-                    provider = TypeDescriptor.GetProvider(originalCollection);
-                }
+                provider ??= TypeDescriptor.GetProvider(originalCollection);
 
                 MethodInfo[] methods = provider.GetReflectionType(originalCollection).GetMethods(BindingFlags.Public | BindingFlags.Instance);
                 ParameterInfo[] parameters;
@@ -695,7 +688,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool shouldClear = false;
             PropertyDescriptor clearProp = manager.Properties["ClearCollections"];
-            if (clearProp is not null && clearProp.PropertyType == typeof(bool) && ((bool)clearProp.GetValue(manager) == true))
+            if (clearProp is not null && clearProp.PropertyType == typeof(bool) && ((bool)clearProp.GetValue(manager)))
             {
                 shouldClear = true;
             }

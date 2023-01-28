@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Tests
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-                Assert.Equal(WS.OVERLAPPED, provider.WindowStyle);
+                Assert.Equal(WINDOW_STYLE.WS_OVERLAPPED, provider.WindowStyle);
                 Assert.False(comboBox.IsHandleCreated);
                 Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
             }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms.Tests
             {
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-                LOGFONTW expected = new LOGFONTW();
+                LOGFONTW expected = default;
 
                 LOGFONTW actual = provider.Logfont;
 
@@ -687,8 +687,8 @@ namespace System.Windows.Forms.Tests
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            WS_EX actual = provider.WindowExStyle;
-            Assert.Equal(WS_EX.DEFAULT, actual);
+            WINDOW_EX_STYLE actual = provider.WindowExStyle;
+            Assert.Equal((WINDOW_EX_STYLE)0, actual);
             Assert.True(comboBox.IsHandleCreated);
             Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -703,9 +703,9 @@ namespace System.Windows.Forms.Tests
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-                WS_EX actual = provider.WindowExStyle;
+                WINDOW_EX_STYLE actual = provider.WindowExStyle;
 
-                Assert.Equal(WS_EX.LEFT, actual);
+                Assert.Equal(WINDOW_EX_STYLE.WS_EX_LEFT, actual);
                 Assert.False(comboBox.IsHandleCreated);
                 Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
             }
@@ -1089,7 +1089,7 @@ namespace System.Windows.Forms.Tests
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            int actualValue = (int)SendMessageW((IHandle)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETFIRSTVISIBLELINE);
+            int actualValue = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETFIRSTVISIBLELINE);
 
             Assert.Equal(actualValue, provider.FirstVisibleLine);
         }
@@ -1103,7 +1103,7 @@ namespace System.Windows.Forms.Tests
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            int actualValue = (int)SendMessageW((IHandle)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETLINECOUNT);
+            int actualValue = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETLINECOUNT);
 
             Assert.Equal(actualValue, provider.LinesCount);
         }
@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms.Tests
             comboBox.SelectedIndex = 0;
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            int expectedLine = (int)SendMessageW((IHandle)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.LINEFROMCHAR, charIndex);
+            int expectedLine = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.LINEFROMCHAR, (WPARAM)charIndex);
             int actualLine = provider.GetLineFromCharIndex(charIndex);
 
             Assert.Equal(expectedLine, actualLine);
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms.Tests
             comboBox.SelectedIndex = 0;
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            bool expectedValue = SendMessageW((IHandle)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.LINESCROLL, 0, newLine) != 0;
+            bool expectedValue = PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.LINESCROLL, 0, newLine) != 0;
 
             Assert.Equal(expectedValue, provider.LineScroll(0, newLine));
             Assert.True(comboBox.IsHandleCreated);

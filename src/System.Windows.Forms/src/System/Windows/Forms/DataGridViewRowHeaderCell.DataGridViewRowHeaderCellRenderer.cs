@@ -17,10 +17,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (s_visualStyleRenderer is null)
-                    {
-                        s_visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
-                    }
+                    s_visualStyleRenderer ??= new VisualStyleRenderer(s_headerElement);
 
                     return s_visualStyleRenderer;
                 }

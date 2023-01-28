@@ -8,9 +8,9 @@ internal static partial class Interop
     {
         public struct NMSELCHANGE
         {
-            public User32.NMHDR nmhdr;
-            public Kernel32.SYSTEMTIME stSelStart;
-            public Kernel32.SYSTEMTIME stSelEnd;
+            public NMHDR nmhdr;
+            public SYSTEMTIME stSelStart;
+            public SYSTEMTIME stSelEnd;
         }
     }
 }

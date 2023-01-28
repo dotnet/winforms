@@ -200,14 +200,6 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderFragment Implementation
 
-            internal override Rectangle BoundingRectangle
-            {
-                get
-                {
-                    return Bounds;
-                }
-            }
-
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
@@ -273,23 +265,18 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
-            {
-                switch (propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
+                propertyId switch
                 {
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return false;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _ownerDataGridView is null ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet) : _ownerDataGridView.Enabled;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                    case UiaCore.UIA.IsContentElementPropertyId:
-                        return true;
-                }
-
-                return base.GetPropertyValue(propertyId);
-            }
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => false,
+                    UiaCore.UIA.IsContentElementPropertyId => true,
+                    UiaCore.UIA.IsEnabledPropertyId => _ownerDataGridView is null
+                        ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet)
+                        : _ownerDataGridView.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
+                    UiaCore.UIA.IsOffscreenPropertyId => false,
+                    _ => base.GetPropertyValue(propertyId)
+                };
 
             #endregion
         }

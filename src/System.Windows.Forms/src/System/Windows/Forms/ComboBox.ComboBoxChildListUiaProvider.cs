@@ -29,7 +29,14 @@ namespace System.Windows.Forms
 
             private protected override string AutomationId => COMBO_BOX_LIST_AUTOMATION_ID;
 
-            internal override Rectangle BoundingRectangle => User32.GetWindowRect(_owningComboBox.GetListNativeWindow());
+            internal override Rectangle BoundingRectangle
+            {
+                get
+                {
+                    PInvoke.GetWindowRect(_owningComboBox.GetListNativeWindow(), out var rect);
+                    return rect;
+                }
+            }
 
             /// <summary>
             ///  Return the child object at the given screen coordinates.
@@ -63,7 +70,10 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!_owningComboBox.IsHandleCreated)
+                if (!_owningComboBox.IsHandleCreated ||
+                    // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
+                    // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
+                    !_owningComboBox.Created)
                 {
                     return null;
                 }
@@ -134,33 +144,20 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ListControlTypeId;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return false; // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _owningComboBox.Enabled;
-                    case UiaCore.UIA.NativeWindowHandlePropertyId:
-                        return _childListControlhandle;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                    case UiaCore.UIA.IsSelectionPatternAvailablePropertyId:
-                        return true;
-                    case UiaCore.UIA.SelectionCanSelectMultiplePropertyId:
-                        return CanSelectMultiple;
-                    case UiaCore.UIA.SelectionIsSelectionRequiredPropertyId:
-                        return IsSelectionRequired;
-
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListControlTypeId,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId =>
+                        // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
+                        false,
+                    UiaCore.UIA.IsEnabledPropertyId => _owningComboBox.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.IsOffscreenPropertyId => false,
+                    UiaCore.UIA.IsSelectionPatternAvailablePropertyId => true,
+                    UiaCore.UIA.NativeWindowHandlePropertyId => _childListControlhandle,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override UiaCore.IRawElementProviderFragment? GetFocus()
             {

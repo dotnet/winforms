@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -95,8 +96,8 @@ namespace System.Windows.Forms
                 // Add the style MDIS_ALLCHILDSTYLES
                 // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
                 // to make them not visible but still present.
-                cp.Style |= (int)(User32.WS.VSCROLL | User32.WS.HSCROLL);
-                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                cp.Style |= (int)(WINDOW_STYLE.WS_VSCROLL | WINDOW_STYLE.WS_HSCROLL);
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                 cp.Param = new User32.CLIENTCREATESTRUCT
                 {
                     idFirstChild = 1
@@ -104,16 +105,16 @@ namespace System.Windows.Forms
                 ISite? site = ParentInternal?.Site;
                 if (site is not null && site.DesignMode)
                 {
-                    cp.Style |= (int)User32.WS.DISABLED;
+                    cp.Style |= (int)WINDOW_STYLE.WS_DISABLED;
                     SetState(States.Enabled, false);
                 }
 
                 if (RightToLeft == RightToLeft.Yes && ParentInternal is not null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -152,16 +153,16 @@ namespace System.Windows.Forms
             switch (value)
             {
                 case MdiLayout.Cascade:
-                    User32.SendMessageW(this, User32.WM.MDICASCADE);
+                    PInvoke.SendMessage(this, User32.WM.MDICASCADE);
                     break;
                 case MdiLayout.TileVertical:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.VERTICAL);
+                    PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.VERTICAL);
                     break;
                 case MdiLayout.TileHorizontal:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.HORIZONTAL);
+                    PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.HORIZONTAL);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    User32.SendMessageW(this, User32.WM.MDIICONARRANGE);
+                    PInvoke.SendMessage(this, User32.WM.MDIICONARRANGE);
                     break;
             }
         }
@@ -220,17 +221,11 @@ namespace System.Windows.Forms
             base.ScaleControl(factor, specified);
         }
 
-        /// <summary>
-        ///  Sets the specified bounds of the control.
-        /// </summary>
-        /// <param name="x">The new <see cref="Control.Left" /> property value of the control.</param>
-        /// <param name="y">The new <see cref="Control.Top" /> property value of the control.</param>
-        /// <param name="width">The new <see cref="Control.Width" /> property value of the control.</param>
-        /// <param name="height">The new <see cref="Control.Height" /> property value of the control.</param>
-        /// <param name="specified">A bitwise combination of the enumeration values that specifies the bounds of the control to use.</param>
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        protected override unsafe void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            if (!IsHandleCreated || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false || ParentInternal?.Site?.DesignMode == true)
+            if (!IsHandleCreated
+                || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false
+                || ParentInternal?.Site?.DesignMode == true)
             {
                 base.SetBoundsCore(x, y, width, height, specified);
                 return;
@@ -241,38 +236,44 @@ namespace System.Windows.Forms
             Rectangle newBounds = Bounds;
 
             int yDelta = oldBounds.Height - newBounds.Height;
-            if (yDelta != 0)
+            if (yDelta == 0)
             {
-                // NOTE: This logic is to keep minimized MDI children anchored to
-                // the bottom left of the client area, normally they are anchored
-                // to the top left which just looks weird!
-                for (int i = 0; i < Controls.Count; i++)
-                {
-                    Control ctl = Controls[i];
-                    if (ctl is not null && ctl is Form child)
-                    {
-                        // Only adjust the window position for visible MDI Child windows to prevent
-                        // them from being re-displayed.
-                        if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
-                        {
-                            User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
-                            wp.ptMinPosition.Y -= yDelta;
-                            if (wp.ptMinPosition.Y == -1)
-                            {
-                                if (yDelta < 0)
-                                {
-                                    wp.ptMinPosition.Y = 0;
-                                }
-                                else
-                                {
-                                    wp.ptMinPosition.Y = -2;
-                                }
-                            }
+                return;
+            }
 
-                            wp.flags = User32.WPF.SETMINPOSITION;
-                            User32.SetWindowPlacement(child, ref wp);
+            // NOTE: This logic is to keep minimized MDI children anchored to
+            // the bottom left of the client area, normally they are anchored
+            // to the top left which just looks weird!
+            for (int i = 0; i < Controls.Count; i++)
+            {
+                // Only adjust the window position for visible MDI Child windows to prevent
+                // them from being re-displayed.
+                if (Controls[i] is Form child && child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
+                {
+                    WINDOWPLACEMENT wp = new()
+                    {
+                        length = (uint)sizeof(WINDOWPLACEMENT)
+                    };
+
+                    bool result = PInvoke.GetWindowPlacement(child.HWND, &wp);
+                    Debug.Assert(result);
+                    wp.ptMinPosition.Y -= yDelta;
+                    if (wp.ptMinPosition.Y == -1)
+                    {
+                        if (yDelta < 0)
+                        {
+                            wp.ptMinPosition.Y = 0;
+                        }
+                        else
+                        {
+                            wp.ptMinPosition.Y = -2;
                         }
                     }
+
+                    wp.flags = WINDOWPLACEMENT_FLAGS.WPF_SETMINPOSITION;
+                    PInvoke.SetWindowPlacement(child.HWND, &wp);
+
+                    GC.KeepAlive(child);
                 }
             }
         }
@@ -284,14 +285,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetWindowRgn()
         {
-            RECT rect = new RECT();
+            RECT rect = default(RECT);
             CreateParams cp = CreateParams;
 
-            AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
+            AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
             Rectangle bounds = Bounds;
-            using var rgn1 = new Gdi32.RegionScope(0, 0, bounds.Width, bounds.Height);
-            using var rgn2 = new Gdi32.RegionScope(
+            using PInvoke.RegionScope rgn1 = new(0, 0, bounds.Width, bounds.Height);
+            using PInvoke.RegionScope rgn2 = new(
                 -rect.left,
                 -rect.top,
                 bounds.Width - rect.right,
@@ -302,12 +303,12 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (Gdi32.CombineRgn(rgn1, rgn1, rgn2, Gdi32.RGN.DIFF) == 0)
+            if ((RegionType)PInvoke.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == RegionType.ERROR)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (User32.SetWindowRgn(this, rgn1, BOOL.TRUE) == 0)
+            if (PInvoke.SetWindowRgn(this, rgn1, true) == 0)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
@@ -381,7 +382,7 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-        internal override void OnInvokedSetScrollPosition(object sender, EventArgs e)
+        internal override void OnInvokedSetScrollPosition(object? sender, EventArgs e)
         {
             Application.Idle += new EventHandler(OnIdle); //do this on idle (it must be mega-delayed).
         }

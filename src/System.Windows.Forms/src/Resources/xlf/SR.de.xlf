@@ -177,6 +177,11 @@
         <target state="translated">Übergeordnete Zeilen</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">Zugriff verweigert</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">Aktivieren</target>
@@ -242,6 +247,31 @@
         <target state="translated">&amp;Anwenden</target>
         <note />
       </trans-unit>
+      <trans-unit id="Arg_ArrayPlusOffTooSmall">
+        <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
+        <target state="translated">Das Zielarray ist nicht lang genug, um alle Elemente in der Sammlung zu kopieren. Prüfen Sie den Index und die Länge des Arrays.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_NonZeroLowerBound">
+        <source>The lower bound of target array must be zero.</source>
+        <target state="translated">Die Untergrenze des Zielarrays muss bei null liegen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_RankMultiDimNotSupported">
+        <source>Only single dimensional arrays are supported for the requested action.</source>
+        <target state="translated">Nur eindimensionale Arrays werden für die angeforderte Aktion unterstützt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
+        <source>Non-negative number required.</source>
+        <target state="translated">Nicht negative Zahl erforderlich.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_IncompatibleArrayType">
+        <source>Target array type is not compatible with the type of items in the collection.</source>
+        <target state="translated">Der Typ des Zielarrays ist mit dem Typ der Elemente in der Sammlung nicht kompatibel.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">autoComplete kann mit der angegebenen benutzerdefinierten Quelle nicht initialisiert werden.</target>
@@ -260,6 +290,16 @@
       <trans-unit id="BadDataSourceForComplexBinding">
         <source>Complex DataBinding accepts as a data source either an IList or an IListSource.</source>
         <target state="translated">Das komplexe DataBinding akzeptiert als Datenquelle entweder IList oder IListSource.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="translated">Tritt auf, wenn sich der Bindungskontext geändert hat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="translated">Ruft den BindingContext für diese bindbare Komponente ab oder legt diesen fest.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1147,9 +1187,34 @@
         <target state="translated">Öffnen</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="translated">Tritt auf, wenn sich der ICommand.CanExecute(object?)-Status des Befehls, der der Command-Eigenschaft zugewiesen ist, geändert hat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="translated">Tritt auf, wenn sich das zugewiesene ICommand-Objekt der Command-Eigenschaft geändert hat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="translated">Ruft das ICommand-Objekt ab, dessen Execute-Delegat immer dann ausgeführt wird, wenn das Click-Ereignis dieser Komponente aufgerufen wird, oder legt es fest.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="translated">Ruft den Parameter ab, der bei der Ausführung oder bei der Ausführungskontextanforderung an das Objekt der Command-Eigenschaft übergeben wird, oder legt ihn fest.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Die neue Befehls-ID kann nicht zugeordnet werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="translated">Tritt auf, wenn sich der Wert der CommandParameter-Eigenschaft geändert hat.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1520,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">Der angezeigte Cursor, wenn der Zeiger über das Steuerelement bewegt wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="translated">Tritt auf, wenn sich der Wert der DataSource-Eigenschaft ändert.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4861,6 +4931,11 @@ Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den 
         <target state="translated">Ausnahme beim Erstellen einer Instanz von {0}: {1}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="translated">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">Externe Ausnahme.</target>
@@ -5472,11 +5547,6 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Der NULL-Wert kann nicht in den Typ {1} konvertiert werden.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">Das GridItem wurde entfernt und kann nicht mehr verwendet werden.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Das GridItem kann nicht erweitert werden.</target>
@@ -5759,6 +5829,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Value mit dem Wert {1} ist für {0} ungültig.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="translated">Das Argument „{0}“ muss vom Typ „{1}“ sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
@@ -6564,11 +6639,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="translated">Das aktuelle Objekt für Barrierefreiheit gilt nur für ListView in der Ansicht "{0}".</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Das aktuelle Objekt für Barrierefreiheit gilt nur für ListView in der Ansicht "{0}", "{1}" oder "{2}".</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
@@ -7384,11 +7454,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">{0} wurde entfernt und kann nicht mehr verwwendet werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">
@@ -9911,6 +9976,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Hintergrundfarbe, in der Text und Grafiken im Steuerelement angezeigt werden.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="translated">Ruft den BindingContext für dieses Toolstripelement ab oder legt diesen fest.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">Das Besitzerelement kann der Dropdownelementsammlung nicht hinzugefügt werden.</target>
@@ -10004,6 +10074,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ToolStripItemOnBackColorChangedDescr">
         <source>Occurs when the value of the BackColor property is changed on the item.</source>
         <target state="translated">Tritt ein, wenn der Wert der BackColor-Eigenschaft für das Element geändert wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="translated">Tritt ein, wenn sich der bindbare Befehl ändert.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="translated">Tritt auf, wenn sich der Bindungskontext ändert.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

@@ -180,10 +180,7 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if (_owner is not null)
-                {
-                    _owner.ClearSelected();
-                }
+                _owner?.ClearSelected();
             }
 
             public void Add(int index)

@@ -123,8 +123,7 @@ namespace System.Windows.Forms
 
             CheckListViewItems(group);
             group.ListView = _listView;
-            List.Add(group);
-            int index = List.Count - 1;
+            int index = ((IList)List).Add(group);
             if (_listView.IsHandleCreated)
             {
                 _listView.InsertGroupInListView(List.Count, group);
@@ -280,8 +279,12 @@ namespace System.Windows.Forms
 
         public void Remove(ListViewGroup group)
         {
+            if (!List.Remove(group))
+            {
+                return;
+            }
+
             group.ListView = null;
-            List.Remove(group);
             group.ReleaseUiaProvider();
 
             if (_listView.IsHandleCreated)

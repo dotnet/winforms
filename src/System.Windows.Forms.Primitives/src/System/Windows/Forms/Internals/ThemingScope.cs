@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using Windows.Win32.System.ApplicationInstallationAndServicing;
 
 namespace System.Windows.Forms
 {
@@ -11,19 +11,20 @@ namespace System.Windows.Forms
     /// </summary>
     internal static class ThemingScope
     {
-        private static Kernel32.ACTCTXW s_enableThemingActivationContext;
-        private static IntPtr s_hActCtx;
+        private static ACTCTXW s_enableThemingActivationContext;
+        private static nint s_hActCtx;
         private static bool s_contextCreationSucceeded;
 
         /// <summary>
         ///  We now use explicitactivate everywhere and use this method to determine if we
         ///  really need to activate the activationcontext.  This should be pretty fast.
         /// </summary>
-        private static bool IsContextActive()
+        private static unsafe bool IsContextActive()
         {
+            HANDLE current;
             return s_contextCreationSucceeded
-                && Kernel32.GetCurrentActCtx(out IntPtr current).IsTrue()
-                && current == s_hActCtx;
+                && PInvoke.GetCurrentActCtx(&current)
+                && (nint)current == s_hActCtx;
         }
 
         /// <summary>
@@ -32,14 +33,15 @@ namespace System.Windows.Forms
         ///  on the stack even if one is already present. In such cases, this method helps - you get to manage
         ///  the cookie yourself though.
         /// </summary>
-        public static IntPtr Activate(bool useVisualStyles)
+        public static unsafe nint Activate(bool useVisualStyles)
         {
-            if (IsContextActiveButNotCreated(useVisualStyles) && Kernel32.ActivateActCtx(s_hActCtx, out IntPtr userCookie).IsTrue())
+            nuint userCookie;
+            if (IsContextActiveButNotCreated(useVisualStyles) && PInvoke.ActivateActCtx((HANDLE)s_hActCtx, &userCookie))
             {
-                return userCookie;
+                return (nint)userCookie;
             }
 
-            return IntPtr.Zero;
+            return 0;
         }
 
         private static bool IsContextActiveButNotCreated(bool useVisualStyles)
@@ -50,7 +52,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static IntPtr Deactivate(IntPtr userCookie)
         {
-            if (userCookie == IntPtr.Zero || Kernel32.DeactivateActCtx(0, userCookie).IsTrue())
+            if (userCookie == IntPtr.Zero || PInvoke.DeactivateActCtx(0, (nuint)userCookie))
             {
                 return IntPtr.Zero;
             }
@@ -58,21 +60,24 @@ namespace System.Windows.Forms
             return userCookie;
         }
 
-        public unsafe static bool CreateActivationContext(IntPtr module, int nativeResourceManifestID)
+        public static unsafe bool CreateActivationContext(IntPtr module, int nativeResourceManifestID)
         {
             lock (typeof(ThemingScope))
             {
                 if (!s_contextCreationSucceeded)
                 {
-                    s_enableThemingActivationContext = new Kernel32.ACTCTXW
+                    s_enableThemingActivationContext = new ACTCTXW
                     {
-                        cbSize = (uint)sizeof(Kernel32.ACTCTXW),
-                        lpResourceName = (IntPtr)nativeResourceManifestID,
-                        dwFlags = Kernel32.ACTCTX_FLAG.HMODULE_VALID | Kernel32.ACTCTX_FLAG.RESOURCE_NAME_VALID,
-                        hModule = module
+                        cbSize = (uint)sizeof(ACTCTXW),
+                        lpResourceName = (char*)nativeResourceManifestID,
+                        dwFlags = PInvoke.ACTCTX_FLAG_HMODULE_VALID | PInvoke.ACTCTX_FLAG_RESOURCE_NAME_VALID,
+                        hModule = (HINSTANCE)module
                     };
 
-                    s_hActCtx = Kernel32.CreateActCtxW(ref s_enableThemingActivationContext);
+                    fixed (ACTCTXW* act = &s_enableThemingActivationContext)
+                    {
+                        s_hActCtx = PInvoke.CreateActCtx(act);
+                    }
 
                     s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
                 }
@@ -81,7 +86,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public unsafe static bool CreateActivationContext(Stream manifest)
+        public static unsafe bool CreateActivationContext(Stream manifest)
         {
             lock (typeof(ThemingScope))
             {
@@ -101,13 +106,16 @@ namespace System.Windows.Forms
 
                     fixed (char* p = tempFilePath)
                     {
-                        s_enableThemingActivationContext = new Kernel32.ACTCTXW
+                        s_enableThemingActivationContext = new ACTCTXW
                         {
-                            cbSize = (uint)sizeof(Kernel32.ACTCTXW),
+                            cbSize = (uint)sizeof(ACTCTXW),
                             lpSource = p
                         };
 
-                        s_hActCtx = Kernel32.CreateActCtxW(ref s_enableThemingActivationContext);
+                        fixed (ACTCTXW* act = &s_enableThemingActivationContext)
+                        {
+                            s_hActCtx = PInvoke.CreateActCtx(act);
+                        }
                     }
 
                     s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));

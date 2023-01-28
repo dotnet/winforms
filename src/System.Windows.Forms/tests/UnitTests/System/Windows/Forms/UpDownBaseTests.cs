@@ -7,12 +7,11 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class UpDownBaseTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -147,16 +146,17 @@ namespace System.Windows.Forms.Tests
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
 
-            Assert.Equal(User32.CS.DBLCLKS, (User32.CS)createParams.ClassStyle);
-            Assert.Equal(User32.WS.MAXIMIZEBOX | User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS | User32.WS.VISIBLE | User32.WS.CHILD, (User32.WS)createParams.Style);
+            Assert.Equal(WNDCLASS_STYLES.CS_DBLCLKS, (WNDCLASS_STYLES)createParams.ClassStyle);
+            Assert.Equal(WINDOW_STYLE.WS_MAXIMIZEBOX | WINDOW_STYLE.WS_CLIPCHILDREN | WINDOW_STYLE.WS_CLIPSIBLINGS |
+                WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD, (WINDOW_STYLE)createParams.Style);
 
             if (Application.UseVisualStyles)
             {
-                Assert.Equal(User32.WS_EX.CONTROLPARENT, (User32.WS_EX)createParams.ExStyle);
+                Assert.Equal(WINDOW_EX_STYLE.WS_EX_CONTROLPARENT, (WINDOW_EX_STYLE)createParams.ExStyle);
             }
             else
             {
-                Assert.Equal(User32.WS_EX.CLIENTEDGE | User32.WS_EX.CONTROLPARENT, (User32.WS_EX)createParams.ExStyle);
+                Assert.Equal(WINDOW_EX_STYLE.WS_EX_CLIENTEDGE | WINDOW_EX_STYLE.WS_EX_CONTROLPARENT, (WINDOW_EX_STYLE)createParams.ExStyle);
             }
 
             Assert.Equal(control.PreferredHeight, createParams.Height);

@@ -24,8 +24,11 @@ namespace Microsoft.VisualBasic.Devices.Tests
         [ConditionalFact(nameof(NoMousePresent))]
         public void Mouse_ButtonsSwapped_GetNoMousePresent_ThrowsInvalidOperationException()
         {
-            var mouse = new Mouse();
-            Assert.Throws<InvalidOperationException>(() => mouse.ButtonsSwapped);
+            if (NoMousePresent)
+            {
+                var mouse = new Mouse();
+                Assert.Throws<InvalidOperationException>(() => mouse.ButtonsSwapped);
+            }
         }
 
         [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent))]
@@ -39,23 +42,32 @@ namespace Microsoft.VisualBasic.Devices.Tests
         [ConditionalFact(nameof(NoMousePresent))]
         public void Mouse_WheelExists_GetNoMousePresent_ThrowsInvalidOperationException()
         {
-            var mouse = new Mouse();
-            Assert.Throws<InvalidOperationException>(() => mouse.WheelExists);
+            if (NoMousePresent)
+            {
+                var mouse = new Mouse();
+                Assert.Throws<InvalidOperationException>(() => mouse.WheelExists);
+            }
         }
 
         [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent), nameof(SystemInformation.MouseWheelPresent))]
         public void Mouse_WheelScrollLines_Get_ReturnsExpected()
         {
-            var mouse = new Mouse();
-            Assert.Equal(SystemInformation.MouseWheelScrollLines, mouse.WheelScrollLines);
-            Assert.Equal(mouse.WheelScrollLines, mouse.WheelScrollLines);
+            if (SystemInformation.MouseWheelPresent)
+            {
+                var mouse = new Mouse();
+                Assert.Equal(SystemInformation.MouseWheelScrollLines, mouse.WheelScrollLines);
+                Assert.Equal(mouse.WheelScrollLines, mouse.WheelScrollLines);
+            }
         }
 
         [ConditionalFact(nameof(NoMouseWheelPresent))]
         public void Mouse_WheelScrollLines_GetNoMouseWheelPresent_ThrowsInvalidOperationException()
         {
-            var mouse = new Mouse();
-            Assert.Throws<InvalidOperationException>(() => mouse.WheelScrollLines);
+            if (NoMouseWheelPresent)
+            {
+                var mouse = new Mouse();
+                Assert.Throws<InvalidOperationException>(() => mouse.WheelScrollLines);
+            }
         }
     }
 }

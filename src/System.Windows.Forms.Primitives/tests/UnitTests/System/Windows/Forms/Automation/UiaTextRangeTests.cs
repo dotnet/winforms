@@ -6,9 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Moq;
-using Xunit;
 using static Interop;
-using static Interop.Gdi32;
 using static Interop.UiaCore;
 using static Interop.User32;
 
@@ -230,7 +228,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
             UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
             UiaTextRange textRange1 = new UiaTextRange(enclosingElement, provider, start: 3, end: 9);
             UiaTextRange textRange2 = new UiaTextRange(enclosingElement, provider, start, end);
-            bool actual = ((ITextRangeProvider)textRange1).Compare(textRange2).IsTrue();
+            bool actual = ((ITextRangeProvider)textRange1).Compare(textRange2);
             Assert.Equal(expected, actual);
         }
 
@@ -386,7 +384,7 @@ this is the third line.";
 
             foreach (int textAttributeIdentifier in textAttributeIdentifiers)
             {
-                ITextRangeProvider? actual = ((ITextRangeProvider)textRange).FindAttribute(textAttributeIdentifier, new object(), backward.ToBOOL());
+                ITextRangeProvider? actual = ((ITextRangeProvider)textRange).FindAttribute(textAttributeIdentifier, new object(), backward);
                 Assert.Null(actual);
             }
         }
@@ -413,7 +411,7 @@ this is the third line.";
 
             ITextRangeProvider? actual = ((ITextRangeProvider)textRange).FindText(textToSearch, backward, ignoreCase);
 
-            if (foundText != null)
+            if (foundText is not null)
             {
                 Assert.Equal(foundText, actual?.GetText(5000));
             }
@@ -445,7 +443,7 @@ this is the third line.";
 
         public static object UiaGetReservedNotSupportedValue()
         {
-            if (notSupportedValue == null)
+            if (notSupportedValue is null)
             {
                 UiaGetReservedNotSupportedValue(out notSupportedValue);
             }
@@ -455,7 +453,7 @@ this is the third line.";
 
         public static IEnumerable<object[]> UiaTextRange_ITextRangeProvider_GetAttributeValue_Returns_Correct_TestData()
         {
-            yield return new object[] { TextAttributeIdentifier.BackgroundColorAttributeId, GetSysColor(COLOR.WINDOW) };
+            yield return new object[] { TextAttributeIdentifier.BackgroundColorAttributeId, (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW) };
             yield return new object[] { TextAttributeIdentifier.CapStyleAttributeId, CapStyle.None };
             yield return new object[] { TextAttributeIdentifier.FontNameAttributeId, "Segoe UI" };
             yield return new object[] { TextAttributeIdentifier.FontSizeAttributeId, 9.0 };
@@ -524,6 +522,7 @@ this is the third line.";
             enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
             IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.Text).Returns("");
             providerMock.Setup(p => p.TextLength).Returns(0);
             UiaTextProvider provider = providerMock.Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
@@ -538,7 +537,9 @@ this is the third line.";
             enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
             IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.Text).Returns("abcde");
             providerMock.Setup(p => p.TextLength).Returns(5);
+            providerMock.Setup(p => p.IsMultiline).Returns(false);
             UiaTextProvider provider = providerMock.Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
             var actual = ((ITextRangeProvider)textRange).GetBoundingRectangles();
@@ -552,14 +553,17 @@ this is the third line.";
             enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
             IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.Text).Returns("abc");
             providerMock.Setup(p => p.TextLength).Returns(3);
             providerMock.Setup(p => p.PointToScreen(It.IsAny<Point>())).Returns(Point.Empty);
             using Font font = new Font("Arial", 9f, FontStyle.Regular);
             providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
             UiaTextProvider provider = providerMock.Object;
+
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 3, end: 3);
             double actualWidth = ((ITextRangeProvider)textRange).GetBoundingRectangles()[2]; // {X,Y,Width,Height}
-            Assert.Equal(actualWidth, UiaTextProvider.EndOfLineWidth);
+
+            Assert.Equal(UiaTextProvider.EndOfLineWidth, actualWidth);
         }
 
         public static IEnumerable<object[]> UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_SingleLine_TestData()
@@ -598,44 +602,134 @@ this is the third line.";
 
         public static IEnumerable<object[]> UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_MultiLine_TestData()
         {
-            yield return new object[] { 18, 30, new double[] { 14, 51, 12, 13, 14, 66, 52, 13 } };
-            yield return new object[] { 32, 35, new double[] { 74, 66, 20, 13 } };
+            yield return new object[] { 0, 63, new double[] { 32, 131, 103, 12, 32, 148, 85, 12, 32, 165, 83, 12, 32, 182, 90, 12, 32, 199, 40, 12 } }; // Whole text
+            yield return new object[] { 23, 53, new double[] { 72, 148, 45, 12, 32, 165, 83, 12, 32, 182, 56, 12 } }; // "xt with several lines and num" text is selected
         }
 
+        /// <remark>All returned values of mock methods and properties were taken from a real TextBox.</remark>
         [StaTheory]
         [MemberData(nameof(UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_MultiLine_TestData))]
         public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_MultiLine(int start, int end, double[] expected)
         {
             string testText =
-@"Test text on line 1.
-Test text on line 2.";
+@"Some long long
+test text with several lines
+and numbers 12345";
+
             Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
-            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 56));
-            IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(27, 128, 128, 155));
+
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(m => m.IsReadingRTL).Returns(false);
+            providerMock.Setup(m => m.TextLength).Returns(testText.Length);
+            providerMock.Setup(m => m.Text).Returns(testText);
+            providerMock.Setup(m => m.BoundingRectangle).Returns(new Rectangle(5, 1, 118, 153));
+            providerMock.Setup(m => m.IsMultiline).Returns(true);
+            providerMock.Setup(m => m.FirstVisibleLine).Returns(0);
+            providerMock.Setup(m => m.LinesPerPage).Returns(9);
             using Font font = new Font("Arial", 9f, FontStyle.Regular);
             providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
-            providerMock.Setup(m => m.Text).Returns(testText);
+
+            // Offset by enclosing element's coordinates
+            providerMock.Setup(m => m.RectangleToScreen(It.IsAny<Rectangle>()))
+                .Returns((Rectangle rect) => new Rectangle(rect.X + 27, rect.Y + 128, rect.Width, rect.Height));
+
+            providerMock.Setup(m => m.GetLineFromCharIndex(0)).Returns(0);
+            providerMock.Setup(m => m.GetLineFromCharIndex(14)).Returns(0);
+            providerMock.Setup(m => m.GetLineFromCharIndex(23)).Returns(1);
+            providerMock.Setup(m => m.GetLineFromCharIndex(31)).Returns(2);
+            providerMock.Setup(m => m.GetLineFromCharIndex(44)).Returns(2);
+            providerMock.Setup(m => m.GetLineFromCharIndex(52)).Returns(3);
+            providerMock.Setup(m => m.GetLineFromCharIndex(58)).Returns(4);
+            providerMock.Setup(m => m.GetLineFromCharIndex(62)).Returns(4);
+
+            providerMock.Setup(m => m.GetPositionFromChar(0)).Returns(new Point(5, 1));
+            providerMock.Setup(m => m.GetPositionFromChar(16)).Returns(new Point(5, 18));
+            providerMock.Setup(m => m.GetPositionFromChar(23)).Returns(new Point(45, 18));
+            providerMock.Setup(m => m.GetPositionFromChar(31)).Returns(new Point(5, 35));
+            providerMock.Setup(m => m.GetPositionFromChar(46)).Returns(new Point(5, 52));
+            providerMock.Setup(m => m.GetPositionFromChar(58)).Returns(new Point(5, 69));
+
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(15, testText)).Returns(new Point(108, 1));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(30, testText)).Returns(new Point(90, 18));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(45, testText)).Returns(new Point(88, 35));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(52, testText)).Returns(new Point(61, 52));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(57, testText)).Returns(new Point(95, 52));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(62, testText)).Returns(new Point(45, 69));
+
+            providerMock.Setup(m => m.GetLineIndex(1)).Returns(16);
+            providerMock.Setup(m => m.GetLineIndex(2)).Returns(31);
+            providerMock.Setup(m => m.GetLineIndex(3)).Returns(46);
+            providerMock.Setup(m => m.GetLineIndex(4)).Returns(58);
+
+            UiaTextRange textRange = new UiaTextRange(enclosingElementMock.Object, providerMock.Object, start, end);
+            var actual = ((ITextRangeProvider)textRange).GetBoundingRectangles();
+            Assert.Equal(expected, actual);
+        }
+
+        public static IEnumerable<object[]> UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_MultiLine_And_RTL_TestData()
+        {
+            yield return new object[] { 0, 63, new double[] { 47, 131, 103, 12, 67, 148, 83, 12, 67, 165, 83, 12, 62, 182, 88, 12, 110, 199, 40, 12 } }; // Whole text
+            yield return new object[] { 23, 53, new double[] { 107, 148, 43, 12, 67, 165, 83, 12, 64, 182, 56, 12 } }; // "xt with several lines and num" text is selected
+        }
+
+        /// <remark>All returned values of mock methods and properties were taken from a real TextBox.</remark>
+        [StaTheory]
+        [MemberData(nameof(UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_MultiLine_And_RTL_TestData))]
+        public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_MultiLine_And_RTL(int start, int end, double[] expected)
+        {
+            string testText =
+@"Some long long
+test text with several lines
+and numbers 12345";
+
+            Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(27, 128, 128, 155));
+
+            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(m => m.IsReadingRTL).Returns(true);
             providerMock.Setup(m => m.TextLength).Returns(testText.Length);
+            providerMock.Setup(m => m.Text).Returns(testText);
+            providerMock.Setup(m => m.BoundingRectangle).Returns(new Rectangle(5, 1, 118, 153));
             providerMock.Setup(m => m.IsMultiline).Returns(true);
-            providerMock.Setup(m => m.BoundingRectangle).Returns(new Rectangle(4, 1, 88, 45));
-            providerMock.Setup(m => m.GetLineFromCharIndex(18)).Returns(1);
-            providerMock.Setup(m => m.GetLineFromCharIndex(29)).Returns(2);
-            providerMock.Setup(m => m.GetLineFromCharIndex(32)).Returns(2);
-            providerMock.Setup(m => m.GetLineFromCharIndex(34)).Returns(2);
             providerMock.Setup(m => m.FirstVisibleLine).Returns(0);
-            providerMock.Setup(m => m.LinesPerPage).Returns(3);
-            providerMock.Setup(m => m.GetLineIndex(1)).Returns(18);
-            providerMock.Setup(m => m.GetPositionFromChar(18)).Returns(new Point(4, 16));
-            providerMock.Setup(m => m.GetPositionFromChar(32)).Returns(new Point(64, 31));
-            providerMock.Setup(m => m.GetLineIndex(2)).Returns(22);
-            providerMock.Setup(m => m.GetPositionFromChar(21)).Returns(new Point(16, 16));
-            providerMock.Setup(m => m.GetPositionFromChar(22)).Returns(new Point(4, 31));
-            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(29, testText)).Returns(new Point(56, 31));
-            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(34, testText)).Returns(new Point(84, 31));
-            UiaTextProvider provider = providerMock.Object;
-            var t = provider.Logfont;
-            UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start, end);
+            providerMock.Setup(m => m.LinesPerPage).Returns(9);
+            using Font font = new Font("Arial", 9f, FontStyle.Regular);
+            providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
+
+            // Offset by enclosing element's coordinates
+            providerMock.Setup(m => m.RectangleToScreen(It.IsAny<Rectangle>()))
+                .Returns((Rectangle rect) => new Rectangle(rect.X + 27, rect.Y + 128, rect.Width, rect.Height));
+
+            providerMock.Setup(m => m.GetLineFromCharIndex(0)).Returns(0);
+            providerMock.Setup(m => m.GetLineFromCharIndex(14)).Returns(0);
+            providerMock.Setup(m => m.GetLineFromCharIndex(23)).Returns(1);
+            providerMock.Setup(m => m.GetLineFromCharIndex(31)).Returns(2);
+            providerMock.Setup(m => m.GetLineFromCharIndex(44)).Returns(2);
+            providerMock.Setup(m => m.GetLineFromCharIndex(52)).Returns(3);
+            providerMock.Setup(m => m.GetLineFromCharIndex(58)).Returns(4);
+            providerMock.Setup(m => m.GetLineFromCharIndex(62)).Returns(4);
+
+            providerMock.Setup(m => m.GetPositionFromChar(0)).Returns(new Point(22, 1));
+            providerMock.Setup(m => m.GetPositionFromChar(16)).Returns(new Point(42, 18));
+            providerMock.Setup(m => m.GetPositionFromChar(23)).Returns(new Point(82, 18));
+            providerMock.Setup(m => m.GetPositionFromChar(31)).Returns(new Point(42, 35));
+            providerMock.Setup(m => m.GetPositionFromChar(46)).Returns(new Point(37, 52));
+            providerMock.Setup(m => m.GetPositionFromChar(58)).Returns(new Point(83, 69));
+
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(15, testText)).Returns(new Point(125, 1));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(30, testText)).Returns(new Point(127, 18));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(45, testText)).Returns(new Point(125, 35));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(52, testText)).Returns(new Point(93, 52));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(57, testText)).Returns(new Point(127, 52));
+            providerMock.Setup(m => m.GetPositionFromCharForUpperRightCorner(62, testText)).Returns(new Point(123, 69));
+
+            providerMock.Setup(m => m.GetLineIndex(1)).Returns(16);
+            providerMock.Setup(m => m.GetLineIndex(2)).Returns(31);
+            providerMock.Setup(m => m.GetLineIndex(3)).Returns(46);
+            providerMock.Setup(m => m.GetLineIndex(4)).Returns(58);
+
+            UiaTextRange textRange = new UiaTextRange(enclosingElementMock.Object, providerMock.Object, start, end);
             var actual = ((ITextRangeProvider)textRange).GetBoundingRectangles();
             Assert.Equal(expected, actual);
         }
@@ -974,7 +1068,7 @@ This is the line 3";
         [InlineData("Some test text")]
         public void UiaTextRange_private_GetFontName_ReturnsExpectedValue(string faceName)
         {
-            LOGFONTW logfont = new LOGFONTW
+            LOGFONTW logfont = new()
             {
                 FaceName = faceName
             };
@@ -1019,7 +1113,7 @@ This is the line 3";
         [InlineData(FW.THIN)]
         public void UiaTextRange_private_GetFontWeight_ReturnsCorrectValue(object fontWeight)
         {
-            LOGFONTW logfont = new LOGFONTW() { lfWeight = (FW)fontWeight };
+            LOGFONTW logfont = new() { lfWeight = (int)fontWeight };
             FW actual = StaticNullTextRange.TestAccessor().GetFontWeight(logfont);
             Assert.Equal(fontWeight, actual);
         }

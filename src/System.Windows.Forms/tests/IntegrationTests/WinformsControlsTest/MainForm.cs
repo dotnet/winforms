@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -13,6 +14,7 @@ using WinformsControlsTest.UserControls;
 
 namespace WinformsControlsTest
 {
+    [DesignerCategory("code")]
     public partial class MainForm : Form
     {
         public MainForm()
@@ -190,6 +192,18 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.DragAndDrop,
                 new InitInfo("Drag and Drop", (obj, e) => new DragDrop().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.TextBoxesButton,
+                new InitInfo("TextBoxes", (obj, e) => new TextBoxes().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.MediaPlayerButton,
+                new InitInfo("MediaPlayer", (obj, e) => new MediaPlayer().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.FormOwnerTestButton,
+                new InitInfo("FormOwnerTest", (obj, e) => new FormOwnerTestForm().Show(this))
             }
         };
 

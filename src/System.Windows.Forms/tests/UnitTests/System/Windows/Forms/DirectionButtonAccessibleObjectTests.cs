@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
             domainUpDown.SelectedIndex = 1; // Select the second item
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = domainUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             // The selected index is not changed
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Tests
             domainUpDown.CreateControl();
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = domainUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             // The selected index is not changed
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
             numericUpDown.Value = testValue;
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = numericUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             // The value is not changed
@@ -73,11 +73,103 @@ namespace System.Windows.Forms.Tests
             numericUpDown.CreateControl();
 
             // UpButton has 0 childId, DownButton has 1 childId
-            AccessibleObject directionButton = numericUpDown.AccessibilityObject.GetChild(1).GetChild(childId);
+            AccessibleObject directionButton = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
             directionButton.Invoke();
 
             Assert.Equal(expected, numericUpDown.Value);
             Assert.True(numericUpDown.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, 1)]
+        [InlineData(1, null)]
+        public void DirectionButtonAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_InDomainUpDown(int childId, int? expectedChildId)
+        {
+            using DomainUpDown domainUpDown = new();
+
+            // UpButton has 0 childId, DownButton has 1 childId
+            AccessibleObject directionButton = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
+
+            if (expectedChildId is null)
+            {
+                Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            }
+            else
+            {
+                AccessibleObject expected = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
+                Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            }
+
+            Assert.False(domainUpDown.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, 1)]
+        [InlineData(1, null)]
+        public void DirectionButtonAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_InNumericUpDown(int childId, int? expectedChildId)
+        {
+            using NumericUpDown numericUpDown = new();
+
+            // UpButton has 0 childId, DownButton has 1 childId
+            AccessibleObject directionButton = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
+
+            if (expectedChildId is null)
+            {
+                Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            }
+            else
+            {
+                AccessibleObject expected = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
+                Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            }
+
+            Assert.False(numericUpDown.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, null)]
+        [InlineData(1, 0)]
+        public void DirectionButtonAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected_InDomainUpDown(int childId, int? expectedChildId)
+        {
+            using DomainUpDown domainUpDown = new();
+
+            // UpButton has 0 childId, DownButton has 1 childId
+            AccessibleObject directionButton = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
+
+            if (expectedChildId is null)
+            {
+                Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            }
+            else
+            {
+                AccessibleObject expected = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
+                Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            }
+
+            Assert.False(domainUpDown.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, null)]
+        [InlineData(1, 0)]
+        public void DirectionButtonAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected_InNumericUpDown(int childId, int? expectedChildId)
+        {
+            using NumericUpDown numericUpDown = new();
+
+            // UpButton has 0 childId, DownButton has 1 childId
+            AccessibleObject directionButton = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(childId);
+
+            if (expectedChildId is null)
+            {
+                Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            }
+            else
+            {
+                AccessibleObject expected = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
+                Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            }
+
+            Assert.False(numericUpDown.IsHandleCreated);
         }
     }
 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -30,25 +28,25 @@ namespace System.Windows.Forms
 
         private bool _checkOnClick;
         private bool _showShortcutKeys = true;
-        private ToolStrip _lastOwner;
+        private ToolStrip? _lastOwner;
 
         /// <summary>
         /// Support for mapping NATIVE menu commands to ToolStripMenuItems.
         /// It corresponds to <see cref="User32.MENUITEMINFOW.wID"/>.
         /// </summary>
         private readonly int _nativeMenuCommandID = -1;
-        private IntPtr _targetWindowHandle = IntPtr.Zero;
+        private HandleRef<HWND> _targetWindowHandle;
         private IntPtr _nativeMenuHandle = IntPtr.Zero;
 
         // Keep checked images shared between menu items, but per thread so we don't have locking issues in GDI+
         [ThreadStatic]
-        private static Image t_indeterminateCheckedImage;
+        private static Image? t_indeterminateCheckedImage;
 
         [ThreadStatic]
-        private static Image t_checkedImage;
+        private static Image? t_checkedImage;
 
-        private string _shortcutKeyDisplayString;
-        private string _cachedShortcutText;
+        private string? _shortcutKeyDisplayString;
+        private string? _cachedShortcutText;
         private Size _cachedShortcutSize = Size.Empty;
 
         private static readonly Padding s_defaultPadding = new Padding(4, 0, 4, 0);
@@ -63,42 +61,50 @@ namespace System.Windows.Forms
         private static readonly object s_eventCheckedChanged = new object();
         private static readonly object s_eventCheckStateChanged = new object();
 
-        public ToolStripMenuItem() : base()
+        public ToolStripMenuItem()
+            : base()
         {
             Initialize(); // all additional work should be done in Initialize
         }
 
-        public ToolStripMenuItem(string text) : base(text, null, (EventHandler)null)
+        public ToolStripMenuItem(string? text)
+            : base(text, image: null, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripMenuItem(Image image) : base(null, image, (EventHandler)null)
+        public ToolStripMenuItem(Image? image)
+            : base(text: null, image, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripMenuItem(string text, Image image) : base(text, image, (EventHandler)null)
+        public ToolStripMenuItem(string? text, Image? image)
+            : base(text, image, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripMenuItem(string text, Image image, EventHandler onClick) : base(text, image, onClick)
+        public ToolStripMenuItem(string? text, Image? image, EventHandler? onClick)
+            : base(text, image, onClick)
         {
             Initialize();
         }
 
-        public ToolStripMenuItem(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name)
+        public ToolStripMenuItem(string? text, Image? image, EventHandler? onClick, string? name)
+            : base(text, image, onClick, name)
         {
             Initialize();
         }
 
-        public ToolStripMenuItem(string text, Image image, params ToolStripItem[] dropDownItems) : base(text, image, dropDownItems)
+        public ToolStripMenuItem(string? text, Image? image, params ToolStripItem[]? dropDownItems)
+            : base(text, image, dropDownItems)
         {
             Initialize();
         }
 
-        public ToolStripMenuItem(string text, Image image, EventHandler onClick, Keys shortcutKeys) : base(text, image, onClick)
+        public ToolStripMenuItem(string? text, Image? image, EventHandler? onClick, Keys shortcutKeys)
+            : base(text, image, onClick)
         {
             Initialize();
             ShortcutKeys = shortcutKeys;
@@ -135,7 +141,7 @@ namespace System.Windows.Forms
             ImageScaling = ToolStripItemImageScaling.None;
 
             // fetch text
-            string text = GetNativeMenuItemTextAndShortcut();
+            string? text = GetNativeMenuItemTextAndShortcut();
 
             // the shortcut is tab separated from the item text.
             if (text is not null)
@@ -253,7 +259,7 @@ namespace System.Windows.Forms
                 {
                     // if we're based off a native menu item,
                     // we need to ask it if it's enabled.
-                    if (base.Enabled && _nativeMenuHandle != IntPtr.Zero && _targetWindowHandle != IntPtr.Zero)
+                    if (base.Enabled && _nativeMenuHandle != IntPtr.Zero && !_targetWindowHandle.IsNull)
                     {
                         return GetNativeMenuItemEnabled();
                     }
@@ -293,7 +299,7 @@ namespace System.Windows.Forms
         ///  Keeps a shared copy of the checked image between all menu items
         ///  Fishes out the appropriate one based on CheckState.
         /// </summary>
-        internal Image CheckedImage
+        internal Image? CheckedImage
         {
             get
             {
@@ -354,39 +360,31 @@ namespace System.Windows.Forms
             }
         }
 
-        private static Bitmap GetBitmapFromIcon(string iconName, Size desiredIconSize)
+        private static Bitmap? GetBitmapFromIcon(string iconName, Size desiredIconSize)
         {
-            Bitmap b = null;
+            Bitmap? b = null;
 
             Icon icon = new Icon(typeof(ToolStripMenuItem), iconName);
-            if (icon is not null)
-            {
-                Icon desiredIcon = new Icon(icon, desiredIconSize);
-                if (desiredIcon is not null)
-                {
-                    try
-                    {
-                        b = desiredIcon.ToBitmap();
+            Icon desiredIcon = new Icon(icon, desiredIconSize);
 
-                        if (b is not null)
-                        {
-                            if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
-                            {
-                                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
-                                if (scaledBitmap is not null)
-                                {
-                                    b.Dispose();
-                                    b = scaledBitmap;
-                                }
-                            }
-                        }
-                    }
-                    finally
+            try
+            {
+                b = desiredIcon.ToBitmap();
+
+                if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
+                {
+                    Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
+                    if (scaledBitmap is not null)
                     {
-                        icon.Dispose();
-                        desiredIcon.Dispose();
+                        b.Dispose();
+                        b = scaledBitmap;
                     }
                 }
+            }
+            finally
+            {
+                icon.Dispose();
+                desiredIcon.Dispose();
             }
 
             return b;
@@ -437,7 +435,7 @@ namespace System.Windows.Forms
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
-        public event EventHandler CheckedChanged
+        public event EventHandler? CheckedChanged
         {
             add => Events.AddHandler(s_eventCheckedChanged, value);
             remove => Events.RemoveHandler(s_eventCheckedChanged, value);
@@ -449,7 +447,7 @@ namespace System.Windows.Forms
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
-        public event EventHandler CheckStateChanged
+        public event EventHandler? CheckStateChanged
         {
             add => Events.AddHandler(s_eventCheckStateChanged, value);
             remove => Events.RemoveHandler(s_eventCheckStateChanged, value);
@@ -494,7 +492,7 @@ namespace System.Windows.Forms
                 if (originalShortcut != value)
                 {
                     ClearShortcutCache();
-                    ToolStrip owner = Owner;
+                    ToolStrip? owner = Owner;
                     if (owner is not null)
                     {
                         // add to the shortcut caching system.
@@ -503,7 +501,7 @@ namespace System.Windows.Forms
                             owner.Shortcuts.Remove(originalShortcut);
                         }
 
-                        if (owner.Shortcuts.Contains(value))
+                        if (owner.Shortcuts.ContainsKey(value))
                         {
                             // last one in wins.
                             owner.Shortcuts[value] = this;
@@ -532,7 +530,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(null)]
         [Localizable(true)]
-        public string ShortcutKeyDisplayString
+        public string? ShortcutKeyDisplayString
         {
             get => _shortcutKeyDisplayString;
             set
@@ -600,7 +598,7 @@ namespace System.Windows.Forms
         internal static MenuTimer MenuTimer => s_menuTimer;
 
         /// <summary> Tag property for internal use </summary>
-        internal Form MdiForm => Properties.ContainsObject(s_propMdiForm) ? Properties.GetObject(s_propMdiForm) as Form : null;
+        internal Form? MdiForm => Properties.ContainsObject(s_propMdiForm) ? Properties.GetObject(s_propMdiForm) as Form : null;
 
         internal ToolStripMenuItem Clone()
         {
@@ -686,7 +684,7 @@ namespace System.Windows.Forms
             {
                 if (_lastOwner is not null)
                 {
-                    Keys shortcut = this.ShortcutKeys;
+                    Keys shortcut = ShortcutKeys;
                     if (shortcut != Keys.None && _lastOwner.Shortcuts.ContainsKey(shortcut))
                     {
                         _lastOwner.Shortcuts.Remove(shortcut);
@@ -717,12 +715,12 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.STATE,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
             return (info.fState & User32.MFS.DISABLED) == 0;
         }
 
         // returns text and shortcut separated by tab.
-        private unsafe string GetNativeMenuItemTextAndShortcut()
+        private unsafe string? GetNativeMenuItemTextAndShortcut()
         {
             if (_nativeMenuCommandID == -1 || _nativeMenuHandle == IntPtr.Zero)
             {
@@ -730,7 +728,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            string text = null;
+            string? text = null;
 
             // fetch the string length
             var info = new User32.MENUITEMINFOW
@@ -739,7 +737,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.STRING,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
             if (info.cch > 0)
             {
@@ -751,7 +749,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+                    User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
                     // convert the string into managed data.
                     if (info.dwTypeData is not null)
@@ -773,7 +771,7 @@ namespace System.Windows.Forms
             return text;
         }
 
-        private unsafe Image GetNativeMenuItemImage()
+        private unsafe Image? GetNativeMenuItemImage()
         {
             if (_nativeMenuCommandID == -1 || _nativeMenuHandle == IntPtr.Zero)
             {
@@ -787,7 +785,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.BITMAP,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
             if (info.hbmpItem != IntPtr.Zero && PARAM.ToInt(info.hbmpItem) > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
@@ -849,7 +847,7 @@ namespace System.Windows.Forms
                 return Size.Empty;
             }
 
-            string shortcutString = GetShortcutText();
+            string? shortcutString = GetShortcutText();
             if (string.IsNullOrEmpty(shortcutString))
             {
                 return Size.Empty;
@@ -863,12 +861,9 @@ namespace System.Windows.Forms
             return _cachedShortcutSize;
         }
 
-        internal string GetShortcutText()
+        internal string? GetShortcutText()
         {
-            if (_cachedShortcutText is null)
-            {
-                _cachedShortcutText = ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
-            }
+            _cachedShortcutText ??= ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
 
             return _cachedShortcutText;
         }
@@ -909,14 +904,14 @@ namespace System.Windows.Forms
                 // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                 // the system message... if we use SendMessage the dismissal of our window
                 // breaks things like the modal sizing loop.
-                User32.PostMessageW(new HandleRef(this, _targetWindowHandle), User32.WM.SYSCOMMAND, (IntPtr)_nativeMenuCommandID);
+                PInvoke.PostMessage(_targetWindowHandle, User32.WM.SYSCOMMAND, (WPARAM)(uint)_nativeMenuCommandID);
             }
             else
             {
                 // These are user added items like ".Net Window..."
 
                 // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                User32.PostMessageW(new HandleRef(this, _targetWindowHandle), User32.WM.COMMAND, (IntPtr)_nativeMenuCommandID);
+                PInvoke.PostMessage(_targetWindowHandle, User32.WM.COMMAND, (WPARAM)(uint)_nativeMenuCommandID);
             }
 
             Invalidate();
@@ -928,7 +923,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
         {
-            ((EventHandler)Events[s_eventCheckedChanged])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventCheckedChanged])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -937,12 +932,12 @@ namespace System.Windows.Forms
         protected virtual void OnCheckStateChanged(EventArgs e)
         {
             AccessibilityNotifyClients(AccessibleEvents.StateChange);
-            ((EventHandler)Events[s_eventCheckStateChanged])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventCheckStateChanged])?.Invoke(this, e);
         }
 
         protected override void OnDropDownHide(EventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnDropDownHide] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnDropDownHide] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             base.OnDropDownHide(e);
         }
@@ -951,7 +946,7 @@ namespace System.Windows.Forms
         {
             // if someone has beaten us to the punch by arrowing around
             // cancel the current menu timer.
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnDropDownShow] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnDropDownShow] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             if (ParentInternal is not null)
             {
@@ -977,7 +972,7 @@ namespace System.Windows.Forms
             // Opening should happen on mouse down
             // we use a mouse down ID to ensure that the reshow
 
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseDown] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseDown] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             OnMouseButtonStateChange(e, /*isMouseDown=*/true);
         }
@@ -993,7 +988,7 @@ namespace System.Windows.Forms
             bool showDropDown = true;
             if (IsOnDropDown)
             {
-                ToolStripDropDown dropDown = GetCurrentParentDropDown() as ToolStripDropDown;
+                ToolStripDropDown dropDown = GetCurrentParentDropDown()!;
 
                 // Right click support for context menus.
                 // used in ToolStripItem to determine whether to fire click OnMouseUp.
@@ -1039,9 +1034,9 @@ namespace System.Windows.Forms
             // If we are in a submenu pop down the submenu.
             if (ParentInternal is not null && ParentInternal.MenuAutoExpand && Selected)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
+                ToolStripItem.s_mouseDebugging.TraceVerbose("received mouse enter - calling drop down");
 
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
+                ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
 
                 MenuTimer.Cancel(this);
                 MenuTimer.Start(this);
@@ -1052,7 +1047,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             base.OnMouseLeave(e);
         }
@@ -1062,14 +1057,11 @@ namespace System.Windows.Forms
             Keys shortcut = ShortcutKeys;
             if (shortcut != Keys.None)
             {
-                if (_lastOwner is not null)
-                {
-                    _lastOwner.Shortcuts.Remove(shortcut);
-                }
+                _lastOwner?.Shortcuts.Remove(shortcut);
 
                 if (Owner is not null)
                 {
-                    if (Owner.Shortcuts.Contains(shortcut))
+                    if (Owner.Shortcuts.ContainsKey(shortcut))
                     {
                         // last one in wins
                         Owner.Shortcuts[shortcut] = this;
@@ -1093,7 +1085,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolStripRenderer renderer = Renderer;
+            ToolStripRenderer renderer = Renderer!;
             Graphics g = e.Graphics;
             renderer.DrawMenuItemBackground(new ToolStripItemRenderEventArgs(g, this));
 
@@ -1210,7 +1202,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> overridden here so we scooch over when we're in the ToolStripDropDownMenu</summary>
-        internal protected override void SetBounds(Rectangle rect)
+        protected internal override void SetBounds(Rectangle rect)
         {
             if (InternalLayout is ToolStripMenuItemInternalLayout internalLayout && internalLayout.UseMenuLayout)
             {
@@ -1240,7 +1232,7 @@ namespace System.Windows.Forms
             _nativeMenuHandle = hMenu;
         }
 
-        internal static string ShortcutToText(Keys shortcutKeys, string shortcutKeyDisplayString)
+        internal static string? ShortcutToText(Keys shortcutKeys, string? shortcutKeyDisplayString)
         {
             if (!string.IsNullOrEmpty(shortcutKeyDisplayString))
             {

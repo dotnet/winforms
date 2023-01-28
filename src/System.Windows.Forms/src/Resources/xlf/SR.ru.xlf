@@ -177,6 +177,11 @@
         <target state="translated">Родительские строки</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">Отказано в доступе</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">Пометить</target>
@@ -242,6 +247,31 @@
         <target state="translated">&amp;Применить</target>
         <note />
       </trans-unit>
+      <trans-unit id="Arg_ArrayPlusOffTooSmall">
+        <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
+        <target state="translated">Длина конечного массива недостаточна для копирования всех элементов коллекции. Проверьте индекс и длину массива.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_NonZeroLowerBound">
+        <source>The lower bound of target array must be zero.</source>
+        <target state="translated">Нижняя граница целевого массива должна равняться нулю.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_RankMultiDimNotSupported">
+        <source>Only single dimensional arrays are supported for the requested action.</source>
+        <target state="translated">Для запрашиваемого действия поддерживаются только одномерные массивы.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
+        <source>Non-negative number required.</source>
+        <target state="translated">Требуется неотрицательное число.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_IncompatibleArrayType">
+        <source>Target array type is not compatible with the type of items in the collection.</source>
+        <target state="translated">Тип целевого массива несовместим с типом элементов в коллекции.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">Невозможно инициализировать autoComplete с данным пользовательским источником.</target>
@@ -260,6 +290,16 @@
       <trans-unit id="BadDataSourceForComplexBinding">
         <source>Complex DataBinding accepts as a data source either an IList or an IListSource.</source>
         <target state="translated">Для составного DataBinding источником данных может служить IList или IListSource.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="translated">Происходит при изменении контекста привязки.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="translated">Возвращает или задает BindingContext для этого привязываемого компонента.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
@@ -1147,9 +1187,34 @@
         <target state="translated">Открыть</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="translated">Происходит при изменении состояния ICommand.CanExecute(object?) команды, назначенной свойству Command.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="translated">Происходит при изменении назначенного объекта ICommand свойства Command.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="translated">Возвращает или задает объект ICommand, делегат Execute которого выполняется при каждом вызове события Click этого компонента.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="translated">Возвращает или задает параметр, передаваемый объекту свойства Command при выполнении или запросе контекста выполнения.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Выделение нового идентификатора команды невозможно.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="translated">Происходит при изменении значения свойства CommandParameter.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1520,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">Курсор, отображаемый при наведении указателя мыши на данный элемент управления.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="translated">Возникает при изменении значения свойства DataContext.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4862,6 +4932,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">Исключение при попытке создания экземпляра {0}. Исключение: "{1}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="translated">Развернуто</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExternalException">
         <source>External exception</source>
         <target state="translated">Внешнее исключение</target>
@@ -5473,11 +5548,6 @@ Do you want to replace it?</source>
         <target state="translated">Пустое значение невозможно привести к типу '{1}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">GridItem ликвидирован и не может использоваться в дальнейшем.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Невозможно расширить GridItem.</target>
@@ -5760,6 +5830,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Значение '{1}' недопустимо для '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="translated">Аргумент "{0}" должен относиться к типу "{1}".</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
@@ -6565,11 +6640,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлении {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлениях {0}, {1} или {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
@@ -7385,11 +7455,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">ОК</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Выгруженный '{0}' больше использовать нельзя.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">
@@ -9912,6 +9977,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Фоновый цвет для отображения текста и графики в данном элементе управления.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="translated">Возвращает или задает параметр BindingContext для этого элемента панели инструментов.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">Нельзя добавлять элемент-владелец к коллекции элементов выпадающего списка.</target>
@@ -10005,6 +10075,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripItemOnBackColorChangedDescr">
         <source>Occurs when the value of the BackColor property is changed on the item.</source>
         <target state="translated">Возникает при изменении значения свойства BackColor для данного элемента.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="translated">Происходит при каждом изменении привязываемой команды.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="translated">Происходит при каждом изменении контекста привязки.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

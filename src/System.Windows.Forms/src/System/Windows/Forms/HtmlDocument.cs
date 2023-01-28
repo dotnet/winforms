@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -371,7 +371,7 @@ namespace System.Windows.Forms
 
         public void Write(string text)
         {
-            object[] strs = new object[] { (object)text };
+            object[] strs = new object[] { text };
             NativeHtmlDocument2.Write(strs);
         }
 
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
 
         public HtmlDocument OpenNew(bool replaceInHistory)
         {
-            object name = (object)(replaceInHistory ? "replace" : "");
+            object name = (replaceInHistory ? "replace" : "");
             object nullObject = null;
             object ohtmlDocument = NativeHtmlDocument2.Open("text/html", name, nullObject, nullObject);
             return ohtmlDocument is IHTMLDocument iHTMLDocument ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
@@ -427,49 +427,56 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (NativeHtmlDocument2.GetScript() is Oleaut32.IDispatch scriptObject)
+                if (NativeHtmlDocument2.GetScript() is not Oleaut32.IDispatch scriptObject)
                 {
-                    Guid g = Guid.Empty;
-                    string[] names = new string[] { scriptName };
-                    Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
-                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
-                    {
-                        return null;
-                    }
+                    return null;
+                }
 
-                    if (args is not null)
-                    {
-                        // Reverse the arg order so that they read naturally after IDispatch.
-                        Array.Reverse(args);
-                    }
+                Guid g = Guid.Empty;
+                string[] names = new string[] { scriptName };
+                int dispid = PInvoke.DISPID_UNKNOWN;
+                HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+                {
+                    return null;
+                }
 
-                    using var vectorArgs = new Oleaut32.VARIANTVector(args);
-                    fixed (Oleaut32.VARIANT* pVariants = vectorArgs.Variants)
-                    {
-                        var dispParams = new Oleaut32.DISPPARAMS();
-                        dispParams.rgvarg = pVariants;
-                        dispParams.cArgs = (uint)vectorArgs.Variants.Length;
-                        dispParams.rgdispidNamedArgs = null;
-                        dispParams.cNamedArgs = 0;
+                if (args is not null)
+                {
+                    // Reverse the arg order so that they read naturally after IDispatch.
+                    Array.Reverse(args);
+                }
 
-                        var retVals = new object[1];
-                        var excepInfo = new Oleaut32.EXCEPINFO();
-                        hr = scriptObject.Invoke(
-                            dispid,
-                            &g,
-                            Kernel32.GetThreadLocale(),
-                            Oleaut32.DISPATCH.METHOD,
-                            &dispParams,
-                            retVals,
-                            &excepInfo,
-                            null);
-                        if (hr == HRESULT.S_OK)
-                        {
-                            return retVals[0];
-                        }
+                using VARIANTVector vectorArgs = new(args);
+                fixed (VARIANT* pVariants = vectorArgs.Variants)
+                {
+                    DISPPARAMS dispParams = new()
+                    {
+                        rgvarg = pVariants,
+                        cArgs = (uint)vectorArgs.Variants.Length,
+                        rgdispidNamedArgs = null,
+                        cNamedArgs = 0
+                    };
+
+                    var retVals = new object[1];
+                    EXCEPINFO excepInfo = default;
+                    hr = scriptObject.Invoke(
+                        dispid,
+                        &g,
+                        PInvoke.GetThreadLocale(),
+                        DISPATCH_FLAGS.DISPATCH_METHOD,
+                        &dispParams,
+                        retVals,
+                        &excepInfo,
+                        null);
+
+                    if (hr == HRESULT.S_OK)
+                    {
+                        return retVals[0];
                     }
                 }
+
+                return null;
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -486,19 +493,13 @@ namespace System.Windows.Forms
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim is not null)
-            {
-                shim.AttachEventHandler(eventName, eventHandler);
-            }
+            shim?.AttachEventHandler(eventName, eventHandler);
         }
 
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim is not null)
-            {
-                shim.DetachEventHandler(eventName, eventHandler);
-            }
+            shim?.DetachEventHandler(eventName, eventHandler);
         }
 
         public event HtmlElementEventHandler Click
@@ -575,7 +576,7 @@ namespace System.Windows.Forms
                     if (index >= 0)
                     {
                         // The string is of the form: #ff00a0. Skip past the #
-                        string hexColor = strColor.Substring(index + 1);
+                        string hexColor = strColor[(index + 1)..];
                         // The actual color is non-transparent. So set alpha = 255.
                         return Color.FromArgb(255, Color.FromArgb(int.Parse(hexColor, NumberStyles.HexNumber, CultureInfo.InvariantCulture)));
                     }
@@ -584,10 +585,10 @@ namespace System.Windows.Forms
                         return Color.FromName(strColor);
                     }
                 }
-                else if (oColor is int)
+                else if (oColor is int intColor)
                 {
                     // The actual color is non-transparent. So set alpha = 255.
-                    return Color.FromArgb(255, Color.FromArgb((int)oColor));
+                    return Color.FromArgb(255, Color.FromArgb(intColor));
                 }
             }
             catch (Exception ex)
@@ -601,57 +602,30 @@ namespace System.Windows.Forms
             return Color.Empty;
         }
 
-        #region operators
-
-        public static bool operator ==(HtmlDocument left, HtmlDocument right)
+        public static unsafe bool operator ==(HtmlDocument left, HtmlDocument right)
         {
-            //Not equal if only one's null.
+            // Not equal if only one's null.
             if (left is null != right is null)
             {
                 return false;
             }
 
-            //Equal if both are null.
+            // Equal if both are null.
             if (left is null)
             {
                 return true;
             }
 
-            //Neither are null.  Get the IUnknowns and compare them.
-            IntPtr leftPtr = IntPtr.Zero;
-            IntPtr rightPtr = IntPtr.Zero;
-            try
-            {
-                leftPtr = Marshal.GetIUnknownForObject(left.NativeHtmlDocument2);
-                rightPtr = Marshal.GetIUnknownForObject(right.NativeHtmlDocument2);
-                return leftPtr == rightPtr;
-            }
-            finally
-            {
-                if (leftPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(leftPtr);
-                }
-
-                if (rightPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(rightPtr);
-                }
-            }
+            // Neither are null.  Get the IUnknowns and compare them.
+            using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlDocument2);
+            using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlDocument2);
+            return leftUnknown.Value == rightUnknown.Value;
         }
 
-        public static bool operator !=(HtmlDocument left, HtmlDocument right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(HtmlDocument left, HtmlDocument right) => !(left == right);
 
         public override int GetHashCode() => _htmlDocument2?.GetHashCode() ?? 0;
 
-        public override bool Equals(object obj)
-        {
-            return (this == (HtmlDocument)obj);
-        }
-        #endregion
-
+        public override bool Equals(object obj) => this == (HtmlDocument)obj;
     }
 }

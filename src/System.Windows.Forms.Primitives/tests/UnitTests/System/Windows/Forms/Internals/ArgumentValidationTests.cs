@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Xunit;
-
 namespace System.Windows.Forms.Tests
 {
     public class ArgumentValidationTests
@@ -91,7 +89,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ThrowIfNull_HDC_ParamIsNull()
         {
-            var param = new global::Interop.Gdi32.HDC(IntPtr.Zero);
+            var param = new HDC(IntPtr.Zero);
             var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNull(param));
             Assert.Equal(nameof(param), exception.ParamName);
         }
@@ -99,14 +97,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ThrowIfNull_HDC_ParamIsNotNull()
         {
-            var param = new global::Interop.Gdi32.HDC(new IntPtr(24));
+            var param = new HDC(new IntPtr(24));
             ArgumentValidation.ThrowIfNull(param);
         }
 
         [Fact]
         public void ThrowIfNull_HDC_DifferentParamName()
         {
-            var param = new global::Interop.Gdi32.HDC(IntPtr.Zero);
+            var param = new HDC(IntPtr.Zero);
             var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNull(param, "paramName"));
             Assert.Equal("paramName", exception.ParamName);
         }

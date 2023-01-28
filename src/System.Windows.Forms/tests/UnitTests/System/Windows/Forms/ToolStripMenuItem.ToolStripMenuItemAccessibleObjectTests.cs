@@ -68,5 +68,146 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, actual);
         }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_PositionInSet_ReturnsExpected_IfNoParent()
+        {
+            using ToolStripMenuItem toolStripMenuItem = new();
+
+            AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
+
+            Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_PositionInSet_ReturnsExpected()
+        {
+            using MenuStrip menuStrip = new();
+
+            using ToolStripMenuItem item1 = new();
+            menuStrip.Items.Add(item1);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(1, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+
+            using ToolStripSeparator separator = new();
+            menuStrip.Items.Add(separator);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(2, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+
+            using ToolStripMenuItem item2 = new();
+            menuStrip.Items.Add(item2);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(3, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+            Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_SizeOfSet_ReturnsExpected_IfNoParent()
+        {
+            using ToolStripMenuItem toolStripMenuItem = new();
+
+            AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
+
+            Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_SizeOfSet_ReturnsExpected()
+        {
+            using MenuStrip menuStrip = new();
+
+            using ToolStripMenuItem item1 = new();
+            menuStrip.Items.Add(item1);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(1, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+
+            using ToolStripSeparator separator = new();
+            menuStrip.Items.Add(separator);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(2, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+
+            using ToolStripMenuItem item2 = new();
+            menuStrip.Items.Add(item2);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(3, menuStrip.Items.Count);
+            Assert.Equal(2, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+            Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, CheckState.Checked, true)]
+        [InlineData(true, CheckState.Unchecked, true)]
+        [InlineData(true, CheckState.Indeterminate, true)]
+        [InlineData(false, CheckState.Checked, true)]
+        [InlineData(false, CheckState.Unchecked, false)]
+        [InlineData(false, CheckState.Indeterminate, true)]
+        public void ToolStripMenuItemAccessibleObject_IsTogglePatternSupported_ReturnExpected(bool checkOnClick, CheckState checkState, bool expected)
+        {
+            using ToolStripMenuItem toolStripMenuItem = new()
+            {
+                CheckOnClick = checkOnClick,
+                CheckState = checkState
+            };
+
+            object actual = toolStripMenuItem.AccessibilityObject.IsPatternSupported(UiaCore.UIA.TogglePatternId);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsTheory]
+        [InlineData(CheckState.Checked, (int)UiaCore.ToggleState.On)]
+        [InlineData(CheckState.Unchecked, (int)UiaCore.ToggleState.Off)]
+        [InlineData(CheckState.Indeterminate, (int)UiaCore.ToggleState.Indeterminate)]
+        public void ToolStripMenuItemAccessibleObject_ToggleState_ReturnsExpected(CheckState checkState, int expectedToggleState)
+        {
+            using ToolStripMenuItem toolStripMenuItem = new()
+            {
+                CheckState = checkState
+            };
+
+            object actual = toolStripMenuItem.AccessibilityObject.ToggleState;
+
+            Assert.Equal((UiaCore.ToggleState)expectedToggleState, actual);
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_Toggle_Invoke()
+        {
+            using ToolStripMenuItem toolStripMenuItem = new()
+            {
+                CheckOnClick = true
+            };
+
+            int clickCounter = 0;
+
+            toolStripMenuItem.Click += (s, e) => { clickCounter++; };
+
+            Assert.Equal(UiaCore.ToggleState.Off, toolStripMenuItem.AccessibilityObject.ToggleState);
+
+            toolStripMenuItem.AccessibilityObject.Toggle();
+
+            Assert.Equal(UiaCore.ToggleState.On, toolStripMenuItem.AccessibilityObject.ToggleState);
+
+            toolStripMenuItem.AccessibilityObject.Toggle();
+
+            Assert.Equal(UiaCore.ToggleState.Off, toolStripMenuItem.AccessibilityObject.ToggleState);
+
+            Assert.Equal(0, clickCounter);
+        }
     }
 }

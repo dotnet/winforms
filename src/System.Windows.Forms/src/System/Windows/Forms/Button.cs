@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                cp.ClassName = PInvoke.WC_BUTTON;
                 if (GetStyle(ControlStyles.UserPaint))
                 {
                     cp.Style |= (int)User32.BS.OWNERDRAW;
@@ -261,9 +261,6 @@ namespace System.Windows.Forms
             base.OnFontChanged(e);
         }
 
-        /// <summary>
-        ///  Raises the <see cref="ButtonBase.OnMouseUp"/> event.
-        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
             if (mevent.Button == MouseButtons.Left && MouseIsPressed)
@@ -272,14 +269,13 @@ namespace System.Windows.Forms
 
                 if (GetStyle(ControlStyles.UserPaint))
                 {
-                    //Paint in raised state...
+                    // Paint in raised state.
                     ResetFlagsandPaint();
                 }
 
                 if (isMouseDown)
                 {
-                    Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
+                    if (PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND && !ValidationCancelled)
                     {
                         if (GetStyle(ControlStyles.UserPaint))
                         {
@@ -369,7 +365,7 @@ namespace System.Windows.Forms
             switch (m.MsgInternal)
             {
                 case User32.WM.REFLECT_COMMAND:
-                    if ((User32.BN)PARAM.HIWORD(m.WParamInternal) == User32.BN.CLICKED)
+                    if ((User32.BN)m.WParamInternal.HIWORD == User32.BN.CLICKED)
                     {
                         if (!ValidationCancelled)
                         {

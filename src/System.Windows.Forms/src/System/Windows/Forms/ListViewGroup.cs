@@ -3,12 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -409,26 +407,31 @@ namespace System.Windows.Forms
                 return ListViewGroupCollapsedState.Default;
             }
 
-            LVGS state = (LVGS)User32.SendMessageW(ListView, (User32.WM)LVM.GETGROUPSTATE, ID, (nint)(LVGS.COLLAPSIBLE | LVGS.COLLAPSED));
-            if (!state.HasFlag(LVGS.COLLAPSIBLE))
+            LIST_VIEW_GROUP_STATE_FLAGS state = (LIST_VIEW_GROUP_STATE_FLAGS)(uint)PInvoke.SendMessage(
+                ListView,
+                (User32.WM)PInvoke.LVM_GETGROUPSTATE,
+                (WPARAM)ID,
+                (LPARAM)(uint)(LIST_VIEW_GROUP_STATE_FLAGS.LVGS_COLLAPSIBLE | LIST_VIEW_GROUP_STATE_FLAGS.LVGS_COLLAPSED));
+
+            if (!state.HasFlag(LIST_VIEW_GROUP_STATE_FLAGS.LVGS_COLLAPSIBLE))
             {
                 return ListViewGroupCollapsedState.Default;
             }
 
-            return state.HasFlag(LVGS.COLLAPSED) ? ListViewGroupCollapsedState.Collapsed : ListViewGroupCollapsedState.Expanded;
+            return state.HasFlag(LIST_VIEW_GROUP_STATE_FLAGS.LVGS_COLLAPSED) ? ListViewGroupCollapsedState.Collapsed : ListViewGroupCollapsedState.Expanded;
         }
 
         internal void ReleaseUiaProvider()
         {
-            if (OsVersion.IsWindows8OrGreater && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
+            if (OsVersion.IsWindows8OrGreater() && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
             {
-                HRESULT result = UiaCore.UiaDisconnectProvider(accessibleObject);
-                Debug.Assert(result == HRESULT.S_OK);
-                _accessibilityObject = null;
+                UiaCore.UiaDisconnectProvider(accessibleObject);
             }
+
+            _accessibilityObject = null;
         }
 
-        // Should be used for the cases when sending the message `LVM.SETGROUPINFO` isn't required
+        // Should be used for the cases when sending the message `PInvoke.LVM_SETGROUPINFO` isn't required
         // (for example, collapsing/expanding groups with keyboard is performed inside the native control already, so this message isn't needed)
         internal void SetCollapsedStateInternal(ListViewGroupCollapsedState state)
         {

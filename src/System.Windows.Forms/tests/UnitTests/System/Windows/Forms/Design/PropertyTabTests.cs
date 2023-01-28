@@ -7,11 +7,10 @@ using System.Drawing;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    using Size = System.Drawing.Size;
-
     // NB: doesn't require thread affinity
     public class PropertyTabTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -57,12 +56,12 @@ namespace System.Windows.Forms.Design.Tests
 
             tab.Dispose();
             Assert.Null(tab.Bitmap);
-            Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+            Assert.Throws<ArgumentException>(() => bitmap.Size);
 
             // Dispose again.
             tab.Dispose();
             Assert.Null(tab.Bitmap);
-            Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+            Assert.Throws<ArgumentException>(() => bitmap.Size);
         }
 
         [Fact]
@@ -101,7 +100,7 @@ namespace System.Windows.Forms.Design.Tests
             if (disposing)
             {
                 Assert.Null(tab.Bitmap);
-                Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+                Assert.Throws<ArgumentException>(() => bitmap.Size);
             }
             else
             {
@@ -113,7 +112,7 @@ namespace System.Windows.Forms.Design.Tests
             if (disposing)
             {
                 Assert.Null(tab.Bitmap);
-                Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+                Assert.Throws<ArgumentException>(() => bitmap.Size);
             }
             else
             {

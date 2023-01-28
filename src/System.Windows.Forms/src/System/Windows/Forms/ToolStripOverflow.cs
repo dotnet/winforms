@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
@@ -15,12 +13,13 @@ namespace System.Windows.Forms
 #if DEBUG
         internal static readonly TraceSwitch PopupLayoutDebug = new TraceSwitch("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
 #else
-        internal static readonly TraceSwitch PopupLayoutDebug;
+        internal static readonly TraceSwitch? PopupLayoutDebug;
 #endif
 
-        private readonly ToolStripOverflowButton ownerItem;
+        private readonly ToolStripOverflowButton? ownerItem;
 
-        public ToolStripOverflow(ToolStripItem parentItem) : base(parentItem)
+        public ToolStripOverflow(ToolStripItem parentItem)
+            : base(parentItem)
         {
             ArgumentNullException.ThrowIfNull(parentItem);
 
@@ -37,7 +36,7 @@ namespace System.Windows.Forms
                     return items;
                 }
 
-                return new ToolStripItemCollection(null, false);
+                return new ToolStripItemCollection(owner: null, itemsCollection: false);
             }
         }
 
@@ -45,11 +44,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return new ToolStripItemCollection(null, /*ownedCollection=*/false, /*readonly=*/true);
+                return new ToolStripItemCollection(owner: null, itemsCollection: false, isReadOnly: true);
             }
         }
 
-        private ToolStrip ParentToolStrip
+        private ToolStrip? ParentToolStrip
         {
             get
             {
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
             get { return DisplayedItems; }
         }
 
-        IArrangedElement IArrangedElement.Container
+        IArrangedElement? IArrangedElement.Container
         {
             get { return ParentInternal; }
         }

@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms
 {
@@ -12,10 +12,10 @@ namespace System.Windows.Forms
     /// </summary>
     public enum WebBrowserReadyState
     {
-        Uninitialized = Ole32.READYSTATE.UNINITIALIZED,
-        Loading = Ole32.READYSTATE.LOADING,
-        Loaded = Ole32.READYSTATE.LOADED,
-        Interactive = Ole32.READYSTATE.INTERACTIVE,
-        Complete = Ole32.READYSTATE.COMPLETE
+        Uninitialized = READYSTATE.READYSTATE_UNINITIALIZED,
+        Loading = READYSTATE.READYSTATE_LOADING,
+        Loaded = READYSTATE.READYSTATE_LOADED,
+        Interactive = READYSTATE.READYSTATE_INTERACTIVE,
+        Complete = READYSTATE.READYSTATE_COMPLETE
     }
 }

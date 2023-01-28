@@ -159,10 +159,7 @@ namespace System.Windows.Forms
                         value.Disposed += disposedHandler;
                     }
 
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnCellContextMenuStripChanged(this);
-                    }
+                    DataGridView?.OnCellContextMenuStripChanged(this);
                 }
             }
         }
@@ -242,10 +239,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_errorBmp is null)
-                {
-                    s_errorBmp = GetBitmap("DataGridViewRow.error");
-                }
+                s_errorBmp ??= GetBitmap("DataGridViewRow.error");
 
                 return s_errorBmp;
             }
@@ -497,6 +491,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_propCellAccessibilityObject) is AccessibleObject;
+
         /// <summary>
         ///  Indicates whether or not the parent grid view for this element has an accessible object associated with it.
         /// </summary>
@@ -609,11 +605,11 @@ namespace System.Windows.Forms
             {
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.ReadOnly;
+                    State |= DataGridViewElementStates.ReadOnly;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.ReadOnly;
+                    State &= ~DataGridViewElementStates.ReadOnly;
                 }
 
                 DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
@@ -697,17 +693,14 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Selected);
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.Selected;
+                    State |= DataGridViewElementStates.Selected;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.Selected;
+                    State &= ~DataGridViewElementStates.Selected;
                 }
 
-                if (DataGridView is not null)
-                {
-                    DataGridView.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.Selected);
-                }
+                DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.Selected);
             }
         }
 
@@ -769,10 +762,7 @@ namespace System.Windows.Forms
 
                 if (value is not null || Properties.ContainsObject(s_propCellStyle))
                 {
-                    if (value is not null)
-                    {
-                        value.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-                    }
+                    value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
 
                     Properties.SetObject(s_propCellStyle, value);
                 }
@@ -1253,7 +1243,7 @@ namespace System.Windows.Forms
                         // We don't want the grid to get the keyboard focus
                         // when the editing control gets parented to the parking window,
                         // because some other window is in the middle of receiving the focus.
-                        User32.SetFocus(IntPtr.Zero);
+                        PInvoke.SetFocus(default);
                     }
                 }
 
@@ -1304,8 +1294,9 @@ namespace System.Windows.Forms
                 Type editingControlType = DataGridView.EditingControl.GetType();
 
                 return
-                    (editingControlType == typeof(DataGridViewComboBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewComboBoxEditingControl))) ||
-                    (editingControlType == typeof(DataGridViewTextBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewTextBoxEditingControl)));
+                    IsAccessibilityObjectCreated &&
+                    ((editingControlType == typeof(DataGridViewComboBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewComboBoxEditingControl))) ||
+                    (editingControlType == typeof(DataGridViewTextBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewTextBoxEditingControl))));
             }
         }
 
@@ -1858,7 +1849,7 @@ namespace System.Windows.Forms
             return formattedValue;
         }
 
-        static internal DataGridViewFreeDimension GetFreeDimensionFromConstraint(Size constraintSize)
+        internal static DataGridViewFreeDimension GetFreeDimensionFromConstraint(Size constraintSize)
         {
             if (constraintSize.Width < 0 || constraintSize.Height < 0)
             {
@@ -2947,7 +2938,7 @@ namespace System.Windows.Forms
             }
 
             // get the tool tip string
-            string toolTipText = GetToolTipText(rowIndex);
+            string toolTipText = GetInternalToolTipText(rowIndex);
 
             if (string.IsNullOrEmpty(toolTipText))
             {
@@ -3817,7 +3808,7 @@ namespace System.Windows.Forms
             return (paintParts & DataGridViewPaintParts.Focus) != 0;
         }
 
-        static internal void PaintPadding(Graphics graphics,
+        internal static void PaintPadding(Graphics graphics,
             Rectangle bounds,
             DataGridViewCellStyle cellStyle,
             Brush br,
@@ -4066,6 +4057,21 @@ namespace System.Windows.Forms
             DataGridView.EditingPanel.Location = new Point(xEditingPanel, yEditingPanel);
             DataGridView.EditingPanel.Size = new Size(wEditingPanel, hEditingPanel);
             return new Rectangle(xEditingControl, yEditingControl, wEditingControl, hEditingControl);
+        }
+
+        internal virtual void ReleaseUiaProvider()
+        {
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                UiaCore.UiaDisconnectProvider(AccessibilityObject);
+            }
+
+            Properties.SetObject(s_propCellAccessibilityObject, null);
         }
 
         protected virtual bool SetValue(int rowIndex, object value)

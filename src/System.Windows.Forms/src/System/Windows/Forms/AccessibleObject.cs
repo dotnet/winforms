@@ -11,20 +11,21 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
+using Windows.Win32.System.Ole;
+using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides an implementation for an object that can be inspected by an
-    ///  accessibility application.
+    ///  Provides an implementation for an object that can be inspected by an accessibility application.
     /// </summary>
     public partial class AccessibleObject :
         StandardOleMarshalObject,
         IReflect,
         IAccessible,
         UiaCore.IAccessibleEx,
-        Ole32.IServiceProvider,
+        ComIServiceProvider.Interface,
         UiaCore.IRawElementProviderSimple,
         UiaCore.IRawElementProviderFragment,
         UiaCore.IRawElementProviderFragmentRoot,
@@ -38,7 +39,7 @@ namespace System.Windows.Forms
         UiaCore.IGridProvider,
         UiaCore.IGridItemProvider,
         Oleaut32.IEnumVariant,
-        Ole32.IOleWindow,
+        IOleWindow.Interface,
         UiaCore.ILegacyIAccessibleProvider,
         UiaCore.ISelectionProvider,
         UiaCore.ISelectionItemProvider,
@@ -67,7 +68,7 @@ namespace System.Windows.Forms
         private Oleaut32.IEnumVariant? _enumVariant;
 
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
-        private Ole32.IOleWindow? _systemIOleWindow;
+        private IOleWindow.Interface? _systemIOleWindow;
 
         // Indicates this object is being used ONLY to wrap a system IAccessible
         private readonly bool _systemWrapper;
@@ -87,7 +88,10 @@ namespace System.Windows.Forms
         {
         }
 
-        // This constructor is used ONLY for wrapping system IAccessible objects
+        /// <devdoc>
+        ///  This constructor is used ONLY for wrapping system IAccessible objects
+        ///  that are returned by the IAccessible methods.
+        /// </devdoc>
         private AccessibleObject(IAccessible? accessible)
         {
             _systemIAccessible = new SystemIAccessibleWrapper(accessible);
@@ -376,7 +380,7 @@ namespace System.Windows.Forms
 
         internal virtual bool IsIAccessibleExSupported()
         {
-            // Override this, in your derived class, to enable IAccessibleEx support
+            // Override this, in your derived class, to enable IAccessibleEx support.
             return false;
         }
 
@@ -421,15 +425,18 @@ namespace System.Windows.Forms
         internal virtual object? GetPropertyValue(UiaCore.UIA propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsInvokePatternAvailable,
+                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
+                UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                 UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
-                UiaCore.UIA.NamePropertyId => Name,
-                UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+                UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                 UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
                 UiaCore.UIA.IsGridItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
                 UiaCore.UIA.IsGridPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridPatternId),
+                UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsInvokePatternAvailable,
                 UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
                 UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.MultipleViewPatternId),
+                UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+                UiaCore.UIA.IsPasswordPropertyId => false,
                 UiaCore.UIA.IsScrollItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollItemPatternId),
                 UiaCore.UIA.IsScrollPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollPatternId),
                 UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionItemPatternId),
@@ -441,16 +448,15 @@ namespace System.Windows.Forms
                 UiaCore.UIA.IsTogglePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TogglePatternId),
                 UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                 UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
-                UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
-                UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
                 UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
                 UiaCore.UIA.LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
+                UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
+                UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
+                UiaCore.UIA.NamePropertyId => Name,
+                UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                UiaCore.UIA.SelectionCanSelectMultiplePropertyId => CanSelectMultiple,
+                UiaCore.UIA.SelectionIsSelectionRequiredPropertyId => IsSelectionRequired,
                 UiaCore.UIA.ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
-                UiaCore.UIA.IsPasswordPropertyId => false,
-                UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
-                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
-                UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                 _ => null
             };
 
@@ -622,7 +628,7 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
         {
-            isActive = BOOL.FALSE;
+            isActive = false;
             Debug.Fail("Not implemented. GetTextCaretRange method should be overridden.");
             return null;
         }
@@ -704,7 +710,7 @@ namespace System.Windows.Forms
         {
         }
 
-        unsafe HRESULT Ole32.IServiceProvider.QueryService(Guid* service, Guid* riid, IntPtr* ppvObject)
+        unsafe HRESULT ComIServiceProvider.Interface.QueryService(Guid* service, Guid* riid, void** ppvObject)
         {
             if (service is null || riid is null)
             {
@@ -723,7 +729,7 @@ namespace System.Windows.Forms
                 {
                     // We want to return the internal, secure, object, which we don't have access here
                     // Return non-null, which will be interpreted in internal method, to mean returning casted object to IAccessibleEx
-                    *ppvObject = Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
+                    *ppvObject = (void*)Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
                     return HRESULT.S_OK;
                 }
             }
@@ -873,7 +879,7 @@ namespace System.Windows.Forms
         UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement) =>
             GetRangeFromAnnotation(annotationElement);
 
-        BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
+        BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? true : false;
 
         string? UiaCore.IValueProvider.Value => Value;
 
@@ -942,7 +948,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Perform a hit test
+        ///  Perform a hit test.
         /// </summary>
         object? IAccessible.accHitTest(int xLeft, int yTop)
         {
@@ -1103,12 +1109,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void DoDefaultAction()
         {
-            // By default, just does the system default action if available
+            // By default, does the system default action if available.
             _systemIAccessible.accDoDefaultAction(0);
         }
 
         /// <summary>
-        ///  Returns a child Accessible object
+        ///  Returns a child Accessible object.
         /// </summary>
         object? IAccessible.get_accChild(object childID)
         {
@@ -1120,7 +1126,7 @@ namespace System.Windows.Forms
                     CompModSwitches.MSAA.TraceInfo,
                     $"AccessibleObject.GetAccChild: this = {ToString()}, childID = {childID}");
 
-                // Return self for CHILDID_SELF
+                // Return self for CHILDID_SELF.
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
                 {
                     return AsIAccessible(this);
@@ -1233,7 +1239,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns the appropriate child from the Accessible Child Collection, if available
+        ///  Returns the appropriate child from the Accessible Child Collection, if available.
         /// </summary>
         private AccessibleObject? GetAccessibleChild(object childID)
         {
@@ -1607,8 +1613,13 @@ namespace System.Windows.Forms
         ///  accessible object, which will be able to return an hwnd back to the OS. So we are
         ///  effectively 'preempting' what WindowFromAccessibleObject() would do.
         /// </summary>
-        unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
+        unsafe HRESULT IOleWindow.Interface.GetWindow(HWND* phwnd)
         {
+            if (phwnd is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             // See if we have an inner object that can provide the window handle
             if (_systemIOleWindow is not null)
             {
@@ -1617,25 +1628,20 @@ namespace System.Windows.Forms
 
             // Otherwise delegate to the parent object
             AccessibleObject? parent = Parent;
-            if (parent is Ole32.IOleWindow parentWindow)
+            if (parent is IOleWindow.Interface parentWindow)
             {
                 return parentWindow.GetWindow(phwnd);
             }
 
             // Or fail if there is no parent
-            if (phwnd is null)
-            {
-                return HRESULT.E_POINTER;
-            }
-
-            *phwnd = IntPtr.Zero;
+            *phwnd = HWND.Null;
             return HRESULT.E_FAIL;
         }
 
         /// <summary>
         ///  See GetWindow() above for details.
         /// </summary>
-        HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
             // See if we have an inner object that can provide help
             if (_systemIOleWindow is not null)
@@ -1645,7 +1651,7 @@ namespace System.Windows.Forms
 
             // Otherwise delegate to the parent object
             AccessibleObject? parent = Parent;
-            if (parent is Ole32.IOleWindow parentWindow)
+            if (parent is IOleWindow.Interface parentWindow)
             {
                 return parentWindow.ContextSensitiveHelp(fEnterMode);
             }
@@ -1795,14 +1801,13 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID.IAccessible,
+                ref IID.GetRef<global::Windows.Win32.UI.Accessibility.IAccessible>(),
                 ref acc);
 
-            Guid IID_IEnumVariant = IID.IEnumVariant;
             Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID_IEnumVariant,
+                ref IID.GetRef<IEnumVARIANT>(),
                 out var enumVariantPtr);
 
             if (enumVariantPtr != IntPtr.Zero)
@@ -1814,7 +1819,7 @@ namespace System.Windows.Forms
             if (acc is not null)
             {
                 _systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)acc);
-                _systemIOleWindow = (Ole32.IOleWindow?)acc;
+                _systemIOleWindow = (IOleWindow.Interface?)acc;
             }
         }
 
@@ -1872,15 +1877,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private AccessibleObject? WrapIAccessible(object? iacc)
+        private AccessibleObject? WrapIAccessible(object? iAccessible)
         {
-            if (iacc is not IAccessible accessible)
+            if (iAccessible is not IAccessible accessible)
             {
                 return null;
             }
 
-            // Check to see if this object already wraps iacc
-            if (_systemIAccessible.SystemIAccessibleInternal == iacc)
+            // Check to see if this object already wraps iAccessible.
+            if (_systemIAccessible.SystemIAccessibleInternal == iAccessible)
             {
                 return this;
             }
@@ -2059,7 +2064,7 @@ namespace System.Windows.Forms
 
         void UiaCore.IMultipleViewProvider.SetCurrentView(int viewId) => SetMultiViewProviderCurrentView(viewId);
 
-        BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
+        BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? true : false;
 
         double UiaCore.IRangeValueProvider.LargeChange => LargeChange;
 
@@ -2075,9 +2080,9 @@ namespace System.Windows.Forms
 
         object[]? UiaCore.ISelectionProvider.GetSelection() => GetSelection();
 
-        BOOL UiaCore.ISelectionProvider.CanSelectMultiple => CanSelectMultiple ? BOOL.TRUE : BOOL.FALSE;
+        BOOL UiaCore.ISelectionProvider.CanSelectMultiple => CanSelectMultiple ? true : false;
 
-        BOOL UiaCore.ISelectionProvider.IsSelectionRequired => IsSelectionRequired ? BOOL.TRUE : BOOL.FALSE;
+        BOOL UiaCore.ISelectionProvider.IsSelectionRequired => IsSelectionRequired ? true : false;
 
         void UiaCore.ISelectionItemProvider.Select() => SelectItem();
 
@@ -2085,7 +2090,7 @@ namespace System.Windows.Forms
 
         void UiaCore.ISelectionItemProvider.RemoveFromSelection() => RemoveFromSelection();
 
-        BOOL UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected ? BOOL.TRUE : BOOL.FALSE;
+        BOOL UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected ? true : false;
 
         UiaCore.IRawElementProviderSimple? UiaCore.ISelectionItemProvider.SelectionContainer => ItemSelectionContainer;
 
@@ -2104,7 +2109,7 @@ namespace System.Windows.Forms
         public bool RaiseAutomationNotification(
             AutomationNotificationKind notificationKind,
             AutomationNotificationProcessing notificationProcessing,
-            string notificationText)
+            string? notificationText)
         {
             if (!s_notificationEventAvailable || !CanNotifyClients)
             {
@@ -2142,7 +2147,7 @@ namespace System.Windows.Forms
 
         internal virtual bool RaiseAutomationEvent(UiaCore.UIA eventId)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
+            if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
                 return result == HRESULT.S_OK;
@@ -2153,7 +2158,7 @@ namespace System.Windows.Forms
 
         internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
+            if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
                 return result == HRESULT.S_OK;
@@ -2167,7 +2172,7 @@ namespace System.Windows.Forms
             AutomationNotificationProcessing notificationProcessing,
             string notificationText)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening())
             {
                 return RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
             }
@@ -2177,7 +2182,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients)
+            if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
             {
                 HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
                 return result == HRESULT.S_OK;

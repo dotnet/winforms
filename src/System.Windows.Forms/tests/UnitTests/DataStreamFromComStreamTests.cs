@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Moq;
+using Windows.Win32.System.Com;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -14,11 +13,11 @@ namespace System.Windows.Forms.Tests
         [Theory,
             InlineData(0, 0, 1),
             InlineData(1, 1, 1)]
-        public void Write_ThrowsInvalidCount(int bufferSize, int index, int count)
+        public unsafe void Write_ThrowsInvalidCount(int bufferSize, int index, int count)
         {
-            // The mock should never be called in outlier cases
-            var comStreamMock = new Mock<Ole32.IStream>(MockBehavior.Strict);
-            var dataStream = new DataStreamFromComStream(comStreamMock.Object);
+            using MemoryStream memoryStream = new();
+            using var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream));
+            using DataStreamFromComStream dataStream = new(stream);
             Assert.Throws<IOException>(() => dataStream.Write(new byte[bufferSize], index, count));
         }
 
@@ -27,11 +26,11 @@ namespace System.Windows.Forms.Tests
             InlineData(0, 0, -1),
             InlineData(1, 1, 0),
             InlineData(1, 1, -1)]
-        public void Write_DoesNotThrowCountZeroOrLess(int bufferSize, int index, int count)
+        public unsafe void Write_DoesNotThrowCountZeroOrLess(int bufferSize, int index, int count)
         {
-            // The mock should never be called in outlier cases
-            var comStreamMock = new Mock<Ole32.IStream>(MockBehavior.Strict);
-            var dataStream = new DataStreamFromComStream(comStreamMock.Object);
+            using MemoryStream memoryStream = new();
+            using var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream));
+            using DataStreamFromComStream dataStream = new(stream);
             dataStream.Write(new byte[bufferSize], index, count);
         }
     }

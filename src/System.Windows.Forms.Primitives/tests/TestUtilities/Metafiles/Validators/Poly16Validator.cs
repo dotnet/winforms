@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Metafiles
                 Assert.Equal(_bounds.Value, (Rectangle)poly->rclBounds);
             }
 
-            if (_points != null)
+            if (_points is not null)
             {
                 Assert.Equal(_points.Length, (int)poly->cpts);
                 Assert.Equal(_points, poly->points.Transform<POINTS, Point>(p => p));

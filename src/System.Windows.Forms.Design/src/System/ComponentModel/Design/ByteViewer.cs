@@ -2,11 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
-using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -431,11 +432,11 @@ namespace System.ComponentModel.Design
             int size;
             fixed (byte* pDataBuff = _dataBuf)
             {
-                size = Kernel32.MultiByteToWideChar(Kernel32.CP.ACP, 0, pDataBuff, _dataBuf.Length, null, 0);
+                size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf.Length, null, 0);
                 text = new char[size + 1];
                 fixed (char* pText = text)
                 {
-                    size = Kernel32.MultiByteToWideChar(Kernel32.CP.ACP, 0, pDataBuff, size, pText, size);
+                    size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, size, pText, size);
                 }
             }
 

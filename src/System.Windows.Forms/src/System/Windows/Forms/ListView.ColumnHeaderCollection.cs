@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -275,25 +274,26 @@ namespace System.Windows.Forms
             {
                 ArgumentNullException.ThrowIfNull(values);
 
-                Hashtable usedIndices = new Hashtable();
+                HashSet<int> usedIndices = new();
                 int[] indices = new int[values.Length];
 
                 for (int i = 0; i < values.Length; i++)
                 {
-                    ArgumentNullException.ThrowIfNull(values[i], nameof(values));
+                    ColumnHeader? header = values[i];
+                    ArgumentNullException.ThrowIfNull(header, nameof(values));
 
-                    if (values[i].DisplayIndex == -1)
+                    if (header.DisplayIndex == -1)
                     {
-                        values[i].DisplayIndexInternal = i;
+                        header.DisplayIndexInternal = i;
                     }
 
-                    if (!usedIndices.ContainsKey(values[i].DisplayIndex) && values[i].DisplayIndex >= 0 && values[i].DisplayIndex < values.Length)
+                    if (!usedIndices.Contains(header.DisplayIndex) && header.DisplayIndex >= 0 && header.DisplayIndex < values.Length)
                     {
-                        usedIndices.Add(values[i].DisplayIndex, i);
+                        usedIndices.Add(header.DisplayIndex);
                     }
 
-                    indices[i] = values[i].DisplayIndex;
-                    Add(values[i]);
+                    indices[i] = header.DisplayIndex;
+                    Add(header);
                 }
 
                 if (usedIndices.Count == values.Length)
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
                             int w = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             if (_owner.IsHandleCreated)
                             {
-                                User32.SendMessageW(_owner, (User32.WM)LVM.DELETECOLUMN, colIdx);
+                                PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETECOLUMN, (WPARAM)colIdx);
                             }
 
                             _owner._columnHeaders[colIdx].OwnerListview = null;
@@ -523,8 +523,8 @@ namespace System.Windows.Forms
                 // in Tile view our ListView uses the column header collection to update the Tile Information
                 if (_owner.IsHandleCreated && _owner.View != View.Tile)
                 {
-                    int retval = (int)User32.SendMessageW(_owner, (User32.WM)LVM.DELETECOLUMN, index);
-                    if (0 == retval)
+                    int retval = (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETECOLUMN, (WPARAM)index);
+                    if (retval == 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }

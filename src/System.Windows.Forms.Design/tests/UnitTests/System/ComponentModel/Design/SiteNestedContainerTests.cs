@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design.Tests
     {
         public static IEnumerable<object[]> CreateNestedContainer_TestData()
         {
-            ISite CreateSite(string name)
+            static ISite CreateSite(string name)
             {
                 var mockSite = new Mock<ISite>(MockBehavior.Strict);
                 mockSite
@@ -93,7 +93,7 @@ namespace System.ComponentModel.Design.Tests
 
             // Add again.
             container.Add(component1, "newName");
-            if (component1.Site != null)
+            if (component1.Site is not null)
             {
                 Assert.Equal(componentName, component1.Site.Name);
             }

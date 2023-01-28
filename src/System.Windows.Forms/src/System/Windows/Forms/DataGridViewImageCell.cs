@@ -91,27 +91,21 @@ namespace System.Windows.Forms
             }
         }
 
-        static internal Bitmap ErrorBitmap
+        internal static Bitmap ErrorBitmap
         {
             get
             {
-                if (s_errorBitmap is null)
-                {
-                    s_errorBitmap = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
-                }
+                s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
 
                 return s_errorBitmap;
             }
         }
 
-        static internal Icon ErrorIcon
+        internal static Icon ErrorIcon
         {
             get
             {
-                if (s_errorIcon is null)
-                {
-                    s_errorIcon = new Icon(typeof(DataGridView), "IconInError");
-                }
+                s_errorIcon ??= new Icon(typeof(DataGridView), "IconInError");
 
                 return s_errorIcon;
             }

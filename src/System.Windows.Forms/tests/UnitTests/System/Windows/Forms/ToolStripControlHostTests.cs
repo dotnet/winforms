@@ -9,11 +9,10 @@ using System.Reflection;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class ToolStripControlHostTests
     {
         public static IEnumerable<object[]> Ctor_Control_TestData()
@@ -1814,7 +1813,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Site_GetControlSiteContainerAfterSettingNull_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Site_GetControlSiteContainerAfterSettingNull_IsNull()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
@@ -1831,11 +1830,11 @@ namespace System.Windows.Forms.Tests
             ISite oldSite = c.Site;
 
             item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.Container);
+            Assert.Null(oldSite.Container);
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Site_GetControlSiteDesignModeAfterSettingNull_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Site_GetControlSiteDesignModeAfterSettingNull_IsFalse()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
@@ -1852,11 +1851,11 @@ namespace System.Windows.Forms.Tests
             ISite oldSite = c.Site;
 
             item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.DesignMode);
+            Assert.False(oldSite.DesignMode);
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Site_GetControlSiteNameAfterSettingNull_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Site_GetControlSiteNameAfterSettingNull_IsNull()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
@@ -1873,7 +1872,7 @@ namespace System.Windows.Forms.Tests
             ISite oldSite = c.Site;
 
             item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.Name);
+            Assert.Null(oldSite.Name);
         }
 
         [WinFormsTheory]
@@ -1914,7 +1913,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Site_SetControlSiteNameAfterSettingNull_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Site_SetControlSiteNameAfterSettingNull_IsNull()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
@@ -1931,7 +1930,8 @@ namespace System.Windows.Forms.Tests
             ISite oldSite = c.Site;
 
             item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.Name = "name");
+            oldSite.Name = "name";
+            Assert.Null(oldSite.Name);
         }
 
         public static IEnumerable<object[]> Site_GetService_TestData()

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -23,7 +22,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  If true, will validate the state stays clean of transforms and clipping in debug builds. This is the
-        ///  default when constructing via an <see cref="Gdi32.HDC"/> as it, by definition, has no <see cref="Graphics"/>
+        ///  default when constructing via an <see cref="HDC"/> as it, by definition, has no <see cref="Graphics"/>
         ///  state.
         /// </summary>
         CheckState                  = 0b0000_0100

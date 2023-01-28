@@ -9,7 +9,7 @@ namespace System.Windows.Forms
 {
     public partial class ListViewItem
     {
-        internal class ListViewItemListAccessibleObject : ListViewItemBaseAccessibleObject
+        internal class ListViewItemListAccessibleObject : ListViewItemWithImageAccessibleObject
         {
             public ListViewItemListAccessibleObject(ListViewItem owningItem) : base(owningItem)
             {
@@ -23,6 +23,8 @@ namespace System.Windows.Forms
                         _owningListView.AccessibilityObject.Bounds.Y + _owningItem.Bounds.Y,
                         _owningItem.Bounds.Width,
                         _owningItem.Bounds.Height);
+
+            protected override View View => View.List;
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {

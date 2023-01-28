@@ -169,11 +169,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Displayed);
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.Displayed;
+                    State |= DataGridViewElementStates.Displayed;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.Displayed;
+                    State &= ~DataGridViewElementStates.Displayed;
                 }
 
                 if (DataGridView is not null)
@@ -239,11 +239,11 @@ namespace System.Windows.Forms
                     OnStateChanging(DataGridViewElementStates.Frozen);
                     if (value)
                     {
-                        State = State | DataGridViewElementStates.Frozen;
+                        State |= DataGridViewElementStates.Frozen;
                     }
                     else
                     {
-                        State = State & ~DataGridViewElementStates.Frozen;
+                        State &= ~DataGridViewElementStates.Frozen;
                     }
 
                     OnStateChanged(DataGridViewElementStates.Frozen);
@@ -486,11 +486,11 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            State = State | DataGridViewElementStates.ReadOnly;
+                            State |= DataGridViewElementStates.ReadOnly;
                         }
                         else
                         {
-                            State = State & ~DataGridViewElementStates.ReadOnly;
+                            State &= ~DataGridViewElementStates.ReadOnly;
                         }
                     }
                 }
@@ -504,11 +504,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != ReadOnly);
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.ReadOnly;
+                    State |= DataGridViewElementStates.ReadOnly;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.ReadOnly;
+                    State &= ~DataGridViewElementStates.ReadOnly;
                 }
 
                 Debug.Assert(DataGridView is not null);
@@ -544,20 +544,20 @@ namespace System.Windows.Forms
                 DataGridViewTriState oldResizable = Resizable;
                 if (value == DataGridViewTriState.NotSet)
                 {
-                    State = State & ~DataGridViewElementStates.ResizableSet;
+                    State &= ~DataGridViewElementStates.ResizableSet;
                 }
                 else
                 {
-                    State = State | DataGridViewElementStates.ResizableSet;
+                    State |= DataGridViewElementStates.ResizableSet;
                     if (((State & DataGridViewElementStates.Resizable) != 0) != (value == DataGridViewTriState.True))
                     {
                         if (value == DataGridViewTriState.True)
                         {
-                            State = State | DataGridViewElementStates.Resizable;
+                            State |= DataGridViewElementStates.Resizable;
                         }
                         else
                         {
-                            State = State & ~DataGridViewElementStates.Resizable;
+                            State &= ~DataGridViewElementStates.Resizable;
                         }
                     }
                 }
@@ -619,11 +619,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Selected);
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.Selected;
+                    State |= DataGridViewElementStates.Selected;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.Selected;
+                    State &= ~DataGridViewElementStates.Selected;
                 }
 
                 if (DataGridView is not null)
@@ -757,11 +757,11 @@ namespace System.Windows.Forms
                     OnStateChanging(DataGridViewElementStates.Visible);
                     if (value)
                     {
-                        State = State | DataGridViewElementStates.Visible;
+                        State |= DataGridViewElementStates.Visible;
                     }
                     else
                     {
-                        State = State & ~DataGridViewElementStates.Visible;
+                        State &= ~DataGridViewElementStates.Visible;
                     }
 
                     OnStateChanged(DataGridViewElementStates.Visible);

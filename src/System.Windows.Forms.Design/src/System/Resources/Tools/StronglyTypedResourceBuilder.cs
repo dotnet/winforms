@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.CodeDom;
 using System.Reflection;
@@ -52,7 +54,7 @@ namespace System.Resources.Tools
         // When fixing up identifiers, we will replace all these chars with ReplacementChar ('_').
         private static ReadOnlySpan<char> CharsToReplace => new char[]
         {
-            ' ', '\u00A0' /* non-breaking space */, '.', ',', ';', '|', '~','@', '#', '%', '^', '&', '*', '+', '-',
+            ' ', '\u00A0' /* non-breaking space */, '.', ',', ';', '|', '~', '@', '#', '%', '^', '&', '*', '+', '-',
             '/', '\\', '<', '>', '?', '[', ']', '(', ')', '{', '}', '\"', '\'', ':', '!'
         };
 

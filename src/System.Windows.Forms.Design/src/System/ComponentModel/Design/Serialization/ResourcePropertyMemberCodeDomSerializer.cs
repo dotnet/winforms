@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Diagnostics;
 using System.Globalization;
@@ -124,10 +126,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (inheritance is null)
                         {
                             inheritance = (InheritanceAttribute)TypeDescriptor.GetAttributes(value)[typeof(InheritanceAttribute)];
-                            if (inheritance is null)
-                            {
-                                inheritance = InheritanceAttribute.NotInherited;
-                            }
+                            inheritance ??= InheritanceAttribute.NotInherited;
                         }
 
                         if (inheritance.InheritanceLevel != InheritanceLevel.InheritedReadOnly)

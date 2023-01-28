@@ -29,6 +29,7 @@ namespace System.Windows.Forms
             private readonly IHTMLWindow2 _associatedWindow;
             private AxHost.ConnectionPointCookie _cookie;
             private HtmlDocument _htmlDocument;
+
             internal HtmlDocumentShim(HtmlDocument htmlDocument)
             {
                 _htmlDocument = htmlDocument;
@@ -76,10 +77,12 @@ namespace System.Windows.Forms
             {
                 if (_cookie is null || !_cookie.Connected)
                 {
-                    _cookie = new AxHost.ConnectionPointCookie(NativeHtmlDocument2,
-                                                                          new HTMLDocumentEvents2(_htmlDocument),
-                                                                          typeof(DHTMLDocumentEvents2),
-                                                                          /*throwException*/ false);
+                    _cookie = new AxHost.ConnectionPointCookie(
+                        NativeHtmlDocument2,
+                        new HTMLDocumentEvents2(_htmlDocument),
+                        typeof(DHTMLDocumentEvents2),
+                        throwException: false);
+
                     if (!_cookie.Connected)
                     {
                         _cookie = null;

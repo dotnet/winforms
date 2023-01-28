@@ -26,7 +26,7 @@ namespace System.Windows.Forms.UITests
         [InlineData(FormWindowState.Maximized)]
         public async Task Form_SnapsLeftAsync(FormWindowState windowState)
         {
-            if (!OsVersion.IsWindows11_OrGreater)
+            if (!OsVersion.IsWindows11_OrGreater())
             {
                 return;
             }
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.UITests
         [InlineData(FormWindowState.Maximized)]
         public async Task Form_SnapsRightAsync(FormWindowState windowState)
         {
-            if (!OsVersion.IsWindows11_OrGreater)
+            if (!OsVersion.IsWindows11_OrGreater())
             {
                 return;
             }

@@ -21,8 +21,12 @@ namespace Xunit
     {
         private readonly Lazy<CultureInfo> _culture;
         private readonly Lazy<CultureInfo> _uiCulture;
-        private CultureInfo _originalCulture;
-        private CultureInfo _originalUICulture;
+
+        // These will be set to a value that is never null in the Before method
+        // which will always run before it is used in the After method.
+        private CultureInfo _originalCulture = null!;
+        private CultureInfo _originalUICulture = null!;
+
         private bool _updateUnmanagedUiThreadCulture;
 
         /// <summary>

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -26,7 +28,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         private readonly DragComponent[] dragComponents;
-        private ArrayList dragObjects; // used to initialize the DragAssistanceManager
+        private List<IComponent> dragObjects; // used to initialize the DragAssistanceManager
         private readonly BehaviorDataObject data; //drag data that represents the controls we're dragging & the effect/action
         private readonly DragDropEffects allowedEffects; //initial allowed effects for the drag operation
         private DragDropEffects lastEffect; //the last effect we saw (used for determining a valid drop)
@@ -165,7 +167,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Point MapPointFromSourceToTarget(Point pt)
         {
-            if (srcHost != destHost && destHost != null)
+            if (srcHost != destHost && destHost is not null)
             {
                 pt = behaviorServiceSource.AdornerWindowPointToScreen(pt);
                 return behaviorServiceTarget.MapAdornerWindowPoint(IntPtr.Zero, pt);
@@ -178,7 +180,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Point MapPointFromTargetToSource(Point pt)
         {
-            if (srcHost != destHost && destHost != null)
+            if (srcHost != destHost && destHost is not null)
             {
                 pt = behaviorServiceTarget.AdornerWindowPointToScreen(pt);
                 return behaviorServiceSource.MapAdornerWindowPoint(IntPtr.Zero, pt);
@@ -199,20 +201,11 @@ namespace System.Windows.Forms.Design.Behavior
                 Rectangle rect = dragImageRect;
                 rect.Location = MapPointFromSourceToTarget(rect.Location);
 
-                if (graphicsTarget != null)
-                {
-                    graphicsTarget.SetClip(rect);
-                }
+                graphicsTarget?.SetClip(rect);
 
-                if (behaviorServiceTarget != null)
-                {
-                    behaviorServiceTarget.Invalidate(rect);
-                }
+                behaviorServiceTarget?.Invalidate(rect);
 
-                if (graphicsTarget != null)
-                {
-                    graphicsTarget.ResetClip();
-                }
+                graphicsTarget?.ResetClip();
             }
         }
 
@@ -225,7 +218,7 @@ namespace System.Windows.Forms.Design.Behavior
                 SetDesignerHost(control);
             }
 
-            if (c.Site != null && !(c.Site is INestedSite) && destHost != null)
+            if (c.Site is not null && !(c.Site is INestedSite) && destHost is not null)
             {
                 destHost.Container.Add(c);
             }
@@ -234,13 +227,13 @@ namespace System.Windows.Forms.Design.Behavior
         private void DropControl(int dragComponentIndex, Control dragTarget, Control dragSource, bool localDrag)
         {
             Control currentControl = dragComponents[dragComponentIndex].dragComponent as Control;
-            if (lastEffect == DragDropEffects.Copy || (srcHost != destHost && destHost != null))
+            if (lastEffect == DragDropEffects.Copy || (srcHost != destHost && destHost is not null))
             {
                 //between forms or copy
                 currentControl.Visible = true;
                 bool visibleState = true;
                 PropertyDescriptor propLoc = TypeDescriptor.GetProperties(currentControl)["Visible"];
-                if (propLoc != null)
+                if (propLoc is not null)
                 {
                     // store off the visible state. When adding the control to the new designer host, a new control designer will be created for the control. Since currentControl.Visible is currently FALSE (See InitiateDrag), the shadowed Visible property will be FALSE as well. This is not what we want.
                     visibleState = (bool)propLoc.GetValue(currentControl);
@@ -249,11 +242,8 @@ namespace System.Windows.Forms.Design.Behavior
                 // Hook the control to its new designerHost
                 SetDesignerHost(currentControl);
                 currentControl.Parent = dragTarget;
-                if (propLoc != null)
-                {
-                    //Make sure and set the Visible property to the correct value
-                    propLoc.SetValue(currentControl, visibleState);
-                }
+                //Make sure and set the Visible property to the correct value
+                propLoc?.SetValue(currentControl, visibleState);
             }
             else if (!localDrag && currentControl.Parent.Equals(dragSource))
             {
@@ -267,7 +257,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void SetLocationPropertyAndChildIndex(int dragComponentIndex, Control dragTarget, Point dropPoint, int newIndex, bool allowSetChildIndexOnDrop)
         {
             PropertyDescriptor propLoc = TypeDescriptor.GetProperties(dragComponents[dragComponentIndex].dragComponent)["Location"];
-            if ((propLoc != null) && (dragComponents[dragComponentIndex].dragComponent is Control currentControl))
+            if ((propLoc is not null) && (dragComponents[dragComponentIndex].dragComponent is Control currentControl))
             {
                 // ControlDesigner shadows the Location property. If the control is parented and the parent is a scrollable control, then it expects the Location to be in displayrectangle coordinates. At this point bounds are in clientrectangle coordinates, so we need to check if we need to adjust the coordinates.
                 Point pt = new Point(dropPoint.X, dropPoint.Y);
@@ -341,21 +331,18 @@ namespace System.Windows.Forms.Design.Behavior
             IComponentChangeService componentChangeSvcSource = (IComponentChangeService)serviceProviderSource.GetService(typeof(IComponentChangeService));
             IComponentChangeService componentChangeSvcTarget = (IComponentChangeService)serviceProviderTarget.GetService(typeof(IComponentChangeService));
 
-            if (dragAssistanceManager != null)
-            {
-                dragAssistanceManager.OnMouseUp();
-            }
+            dragAssistanceManager?.OnMouseUp();
 
             // If we are dropping between hosts, we want to set the selection in the new host to be the components that we are dropping. ... or if we are copying
             ISelectionService selSvc = null;
-            if (performCopy || (srcHost != destHost && destHost != null))
+            if (performCopy || (srcHost != destHost && destHost is not null))
             {
                 selSvc = (ISelectionService)serviceProviderTarget.GetService(typeof(ISelectionService));
             }
 
             try
             {
-                if (dragComponents != null && dragComponents.Length > 0)
+                if (dragComponents is not null && dragComponents.Length > 0)
                 {
                     DesignerTransaction transSource = null;
                     DesignerTransaction transTarget = null;
@@ -376,12 +363,12 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     // We don't want to create a transaction in the source, if we are doing a cross-form copy
-                    if (srcHost != null && !(srcHost != destHost && destHost != null && performCopy))
+                    if (srcHost is not null && !(srcHost != destHost && destHost is not null && performCopy))
                     {
                         transSource = srcHost.CreateTransaction(transDesc);
                     }
 
-                    if (srcHost != destHost && destHost != null)
+                    if (srcHost != destHost && destHost is not null)
                     {
                         transTarget = destHost.CreateTransaction(transDesc);
                     }
@@ -395,7 +382,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             // As part of a Ctrl-Drag, components might have been added to the component tray, make sure that their location gets updated as well (think ToolStrips). Get the current number of controls in the Component Tray in the target
                             tray = serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
-                            numberOfOriginalTrayControls = tray != null ? tray.Controls.Count : 0;
+                            numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
                             // Get the objects to copy
                             ArrayList temp = new ArrayList();
@@ -422,7 +409,7 @@ namespace System.Windows.Forms.Design.Behavior
                             }
                         }
 
-                        if ((!localDrag || performCopy) && componentChangeSvcSource != null && componentChangeSvcTarget != null)
+                        if ((!localDrag || performCopy) && componentChangeSvcSource is not null && componentChangeSvcTarget is not null)
                         {
                             componentChangeSvcTarget.OnComponentChanging(dragTarget, targetProp);
                             // If we are performing a copy, then the dragSource will not change
@@ -448,7 +435,7 @@ namespace System.Windows.Forms.Design.Behavior
                         // check permission to do that
                         Control primaryComponent = dragComponents[primaryComponentIndex].dragComponent as Control;
                         PropertyDescriptor propLoc = TypeDescriptor.GetProperties(primaryComponent)["Location"];
-                        if (primaryComponent != null && propLoc != null)
+                        if (primaryComponent is not null && propLoc is not null)
                         {
                             try
                             {
@@ -469,10 +456,7 @@ namespace System.Windows.Forms.Design.Behavior
                         // everything is fine, carry on...
                         SetLocationPropertyAndChildIndex(primaryComponentIndex, dragTarget, initialDropPoint,
                                                             shareParent ? dragComponents[primaryComponentIndex].zorderIndex : 0, allowSetChildIndexOnDrop);
-                        if (selSvc != null)
-                        {
-                            selSvc.SetSelectedComponents(new object[] { dragComponents[primaryComponentIndex].dragComponent }, SelectionTypes.Primary | SelectionTypes.Replace);
-                        }
+                        selSvc?.SetSelectedComponents(new object[] { dragComponents[primaryComponentIndex].dragComponent }, SelectionTypes.Primary | SelectionTypes.Replace);
 
                         for (int i = 0; i < dragComponents.Length; i++)
                         {
@@ -487,13 +471,10 @@ namespace System.Windows.Forms.Design.Behavior
                                                             initialDropPoint.Y + dragComponents[i].positionOffset.Y);
                             SetLocationPropertyAndChildIndex(i, dragTarget, dropPoint,
                                                                 shareParent ? dragComponents[i].zorderIndex : 0, allowSetChildIndexOnDrop);
-                            if (selSvc != null)
-                            {
-                                selSvc.SetSelectedComponents(new object[] { dragComponents[i].dragComponent }, SelectionTypes.Add);
-                            }
+                            selSvc?.SetSelectedComponents(new object[] { dragComponents[i].dragComponent }, SelectionTypes.Add);
                         }
 
-                        if ((!localDrag || performCopy) && componentChangeSvcSource != null && componentChangeSvcTarget != null)
+                        if ((!localDrag || performCopy) && componentChangeSvcSource is not null && componentChangeSvcTarget is not null)
                         {
                             componentChangeSvcTarget.OnComponentChanged(dragTarget, targetProp, dragTarget.Controls, dragTarget.Controls);
                             if (!performCopy)
@@ -503,7 +484,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
 
                         // If we did a Copy, then restore the old controls to make sure we set state correctly
-                        if (originalControls != null)
+                        if (originalControls is not null)
                         {
                             for (int i = 0; i < originalControls.Count; i++)
                             {
@@ -516,19 +497,16 @@ namespace System.Windows.Forms.Design.Behavior
                         // Rearrange the Component Tray - if we have to
                         if (performCopy)
                         {
-                            if (tray is null)
-                            {
-                                // the target did not have a tray already, so let's go get it - if there is one
-                                tray = serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
-                            }
+                            // the target did not have a tray already, so let's go get it - if there is one
+                            tray ??= serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
 
-                            if (tray != null)
+                            if (tray is not null)
                             {
                                 int numberOfTrayControlsAdded = tray.Controls.Count - numberOfOriginalTrayControls;
 
                                 if (numberOfTrayControlsAdded > 0)
                                 {
-                                    ArrayList listOfTrayControls = new ArrayList();
+                                    List<Control> listOfTrayControls = new();
                                     for (int i = 0; i < numberOfTrayControlsAdded; i++)
                                     {
                                         listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
@@ -541,13 +519,13 @@ namespace System.Windows.Forms.Design.Behavior
 
                         // We need to CleanupDrag BEFORE we commit the transaction.  The reason is that cleaning up can potentially cause a layout, and then any changes that happen due to the layout would be in a separate UndoUnit. We want the D&D to be undoable in one step.
                         CleanupDrag(false);
-                        if (transSource != null)
+                        if (transSource is not null)
                         {
                             transSource.Commit();
                             transSource = null;
                         }
 
-                        if (transTarget != null)
+                        if (transTarget is not null)
                         {
                             transTarget.Commit();
                             transTarget = null;
@@ -556,22 +534,16 @@ namespace System.Windows.Forms.Design.Behavior
 
                     finally
                     {
-                        if (transSource != null)
-                        {
-                            transSource.Cancel();
-                        }
+                        transSource?.Cancel();
 
-                        if (transTarget != null)
-                        {
-                            transTarget.Cancel();
-                        }
+                        transTarget?.Cancel();
                     }
                 }
             }
             finally
             {
                 // If we did a Copy, then restore the old controls to make sure we set state correctly
-                if (originalControls != null)
+                if (originalControls is not null)
                 {
                     for (int i = 0; i < originalControls.Count; i++)
                     {
@@ -581,12 +553,9 @@ namespace System.Windows.Forms.Design.Behavior
 
                 // Even though we call CleanupDrag(false) twice (see above), this method guards against doing the wrong thing.
                 CleanupDrag(false);
-                if (statusCommandUITarget != null)
-                {
-                    // if selSvs is not null, then we either did a copy, or moved between forms, so use it to set the right info
-                    statusCommandUITarget.SetStatusInformation(selSvc is null ? dragComponents[primaryComponentIndex].dragComponent as Component :
-                                                                                selSvc.PrimarySelection as Component);
-                }
+                // if selSvs is not null, then we either did a copy, or moved between forms, so use it to set the right info
+                statusCommandUITarget?.SetStatusInformation(selSvc is null ? dragComponents[primaryComponentIndex].dragComponent as Component :
+                                                                            selSvc.PrimarySelection as Component);
             }
 
             // clear the last feedback loc
@@ -610,10 +579,7 @@ namespace System.Windows.Forms.Design.Behavior
                     clearDragImageRect = dragImageRect;
                 }
 
-                if (dragAssistanceManager != null)
-                {
-                    dragAssistanceManager.EraseSnapLines();
-                }
+                dragAssistanceManager?.EraseSnapLines();
 
                 return;
             }
@@ -621,7 +587,7 @@ namespace System.Windows.Forms.Design.Behavior
             bool createNewDragAssistance = false;
             Point mouseLoc = Control.MousePosition;
             bool altKeyPressed = Control.ModifierKeys == Keys.Alt;
-            if (altKeyPressed && dragAssistanceManager != null)
+            if (altKeyPressed && dragAssistanceManager is not null)
             {
                 //erase any snaplines (if we had any)
                 dragAssistanceManager.EraseSnapLines();
@@ -640,7 +606,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             // only do this drawing when the mouse pointer has actually moved so we don't continuously redraw and flicker like mad.
             Control target = data.Target as Control;
-            if ((mouseLoc != lastFeedbackLocation) || (altKeyPressed && dragAssistanceManager != null))
+            if ((mouseLoc != lastFeedbackLocation) || (altKeyPressed && dragAssistanceManager is not null))
             {
                 if (!data.Target.Equals(lastDropTarget))
                 {
@@ -667,7 +633,7 @@ namespace System.Windows.Forms.Design.Behavior
                     // Spin up new stuff if the host changes, or if this is the first time through (lastDropTarget will be null in this case)
                     if ((lastDropTarget is null) || (newDestHost != destHost))
                     {
-                        if (destHost != null && destHost != srcHost)
+                        if (destHost is not null && destHost != srcHost)
                         {
                             // re-enable all glyphs in the old host... need to do this before we get the new behaviorservice
                             behaviorServiceTarget.EnableAllAdorners(true);
@@ -691,7 +657,7 @@ namespace System.Windows.Forms.Design.Behavior
                         ClearAllDragImages();
 
                         // Build a new dragImageRegion -- but only if we are changing hosts
-                        if (lastDropTarget != null)
+                        if (lastDropTarget is not null)
                         {
                             for (int i = 0; i < dragObjects.Count; i++)
                             {
@@ -702,10 +668,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 controlRect.Location = behaviorServiceTarget.MapAdornerWindowPoint(IntPtr.Zero, controlRect.Location);
                                 if (i == 0)
                                 {
-                                    if (dragImageRegion != null)
-                                    {
-                                        dragImageRegion.Dispose();
-                                    }
+                                    dragImageRegion?.Dispose();
 
                                     dragImageRegion = new Region(controlRect);
                                 }
@@ -716,10 +679,7 @@ namespace System.Windows.Forms.Design.Behavior
                             }
                         }
 
-                        if (graphicsTarget != null)
-                        {
-                            graphicsTarget.Dispose();
-                        }
+                        graphicsTarget?.Dispose();
 
                         graphicsTarget = behaviorServiceTarget.AdornerWindowGraphics;
 
@@ -739,11 +699,8 @@ namespace System.Windows.Forms.Design.Behavior
                 // Create new dragassistancemanager if needed
                 if (createNewDragAssistance && behaviorServiceTarget.UseSnapLines)
                 {
-                    if (dragAssistanceManager != null)
-                    {
-                        //erase any snaplines (if we had any)
-                        dragAssistanceManager.EraseSnapLines();
-                    }
+                    //erase any snaplines (if we had any)
+                    dragAssistanceManager?.EraseSnapLines();
 
                     dragAssistanceManager = new DragAssistanceManager(serviceProviderTarget, graphicsTarget, dragObjects, null, lastEffect == DragDropEffects.Copy);
                 }
@@ -758,7 +715,7 @@ namespace System.Windows.Forms.Design.Behavior
                                                     dragComponents[primaryComponentIndex].dragImage.Width,
                                                     dragComponents[primaryComponentIndex].dragImage.Height);
                 //if we have a valid snapline engine - ask it to offset our drag
-                if (dragAssistanceManager != null)
+                if (dragAssistanceManager is not null)
                 {
                     if (targetAllowsSnapLines && !altKeyPressed)
                     {
@@ -814,7 +771,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
 
                 invalidRegion.Dispose();
-                if (graphicsTarget != null)
+                if (graphicsTarget is not null)
                 {
                     graphicsTarget.SetClip(newImageRect);
                     graphicsTarget.DrawImage(dragImage, newImageRect.X, newImageRect.Y);
@@ -832,14 +789,11 @@ namespace System.Windows.Forms.Design.Behavior
                         dropPoint.Offset(-c.Width, 0);
                     }
 
-                    if (statusCommandUITarget != null)
-                    {
-                        statusCommandUITarget.SetStatusInformation(c, dropPoint);
-                    }
+                    statusCommandUITarget?.SetStatusInformation(c, dropPoint);
                 }
 
                 // allow any snaplines to be drawn above our drag images as long as the alt key is not pressed and the mouse is over the root comp
-                if (dragAssistanceManager != null && !altKeyPressed && targetAllowsSnapLines)
+                if (dragAssistanceManager is not null && !altKeyPressed && targetAllowsSnapLines)
                 {
                     dragAssistanceManager.RenderSnapLinesInternal();
                 }
@@ -876,20 +830,20 @@ namespace System.Windows.Forms.Design.Behavior
         {
             // Clear out whatever value we might have had stored off
             parentGridSize = Size.Empty;
-            if (bhvSvc != null && !bhvSvc.UseSnapLines)
+            if (bhvSvc is not null && !bhvSvc.UseSnapLines)
             {
                 PropertyDescriptor snapProp = TypeDescriptor.GetProperties(parentControl)["SnapToGrid"];
-                if (snapProp != null && (bool)snapProp.GetValue(parentControl))
+                if (snapProp is not null && (bool)snapProp.GetValue(parentControl))
                 {
                     PropertyDescriptor gridProp = TypeDescriptor.GetProperties(parentControl)["GridSize"];
-                    if (gridProp != null)
+                    if (gridProp is not null)
                     {
                         //cache of the gridsize and the location of the parent on the adornerwindow
                         if (dragComponents[primaryComponentIndex].dragComponent is Control)
                         {
                             parentGridSize = (Size)gridProp.GetValue(parentControl);
                             parentLocation = bhvSvc.MapAdornerWindowPoint(parentControl.Handle, Point.Empty);
-                            if (parentControl.Parent != null && parentControl.Parent.IsMirrored)
+                            if (parentControl.Parent is not null && parentControl.Parent.IsMirrored)
                             {
                                 parentLocation.Offset(-parentControl.Width, 0);
                             }
@@ -904,7 +858,7 @@ namespace System.Windows.Forms.Design.Behavior
             // find our body glyph adorner offered by the behavior service we don't want to disable the transparent body glyphs
             Adorner bodyGlyphAdorner = null;
             SelectionManager selMgr = (SelectionManager)serviceProvider.GetService(typeof(SelectionManager));
-            if (selMgr != null)
+            if (selMgr is not null)
             {
                 bodyGlyphAdorner = selMgr.BodyGlyphAdorner;
             }
@@ -912,7 +866,7 @@ namespace System.Windows.Forms.Design.Behavior
             //disable all adorners except for body glyph adorner
             foreach (Adorner a in behaviorService.Adorners)
             {
-                if (bodyGlyphAdorner != null && a.Equals(bodyGlyphAdorner))
+                if (bodyGlyphAdorner is not null && a.Equals(bodyGlyphAdorner))
                 {
                     continue;
                 }
@@ -933,11 +887,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void InitiateDrag(Point initialMouseLocation, ICollection dragComps)
         {
-            dragObjects = new ArrayList(dragComps);
+            dragObjects = dragComps.Cast<IComponent>().ToList();
             DisableAdorners(serviceProviderSource, behaviorServiceSource, false);
             Control primaryControl = dragObjects[0] as Control;
             Control primaryParent = primaryControl?.Parent;
-            Color backColor = primaryParent != null ? primaryParent.BackColor : Color.Empty;
+            Color backColor = primaryParent is not null ? primaryParent.BackColor : Color.Empty;
             dragImageRect = Rectangle.Empty;
             clearDragImageRect = Rectangle.Empty;
             initialMouseLoc = initialMouseLocation;
@@ -969,7 +923,7 @@ namespace System.Windows.Forms.Design.Behavior
                 DesignerUtils.GenerateSnapShot(dragControl, ref dragComponents[i].dragImage, i == 0 ? 2 : 1, 1, backColor);
 
                 // The dragged components are not in any specific order. If they all share the same parent, we will sort them by their index in that parent's control's collection to preserve correct Z-order
-                if (primaryParent != null && shareParent)
+                if (primaryParent is not null && shareParent)
                 {
                     dragComponents[i].zorderIndex = primaryParent.Controls.GetChildIndex(dragControl, false /*throwException*/);
                     if (dragComponents[i].zorderIndex == -1)
@@ -996,7 +950,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             Debug.Assert(primaryComponentIndex != -1, "primaryComponentIndex was not set!");
             //suspend layout of the parent
-            if (primaryParent != null)
+            if (primaryParent is not null)
             {
                 suspendedParent = primaryParent;
                 suspendedParent.SuspendLayout();
@@ -1056,7 +1010,7 @@ namespace System.Windows.Forms.Design.Behavior
             //create our list of controls-to-drag
             ArrayList dragControls = new ArrayList();
             primaryControlIndex = -1;
-            if ((dragComponents != null) && (dragComponents.Length > 0))
+            if ((dragComponents is not null) && (dragComponents.Length > 0))
             {
                 primaryControlIndex = primaryComponentIndex;
                 for (int i = 0; i < dragComponents.Length; i++)
@@ -1074,7 +1028,7 @@ namespace System.Windows.Forms.Design.Behavior
         internal void QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
             //Clean up if the action was cancelled, or we had no effect when dropped. Otherwise EndDragDrop() will do this after the locations have been properly changed.
-            if (behaviorServiceSource != null && behaviorServiceSource.CancelDrag)
+            if (behaviorServiceSource is not null && behaviorServiceSource.CancelDrag)
             {
                 e.Action = DragAction.Cancel;
                 CleanupDrag(true);
@@ -1106,7 +1060,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             currentShowState = show;
-            if (dragComponents != null)
+            if (dragComponents is not null)
             {
                 for (int i = 0; i < dragComponents.Length; i++)
                 {
@@ -1137,10 +1091,7 @@ namespace System.Windows.Forms.Design.Behavior
                 ShowHideDragControls(true);
                 try
                 {
-                    if (suspendedParent != null)
-                    {
-                        suspendedParent.ResumeLayout();
-                    }
+                    suspendedParent?.ResumeLayout();
                 }
 
                 finally
@@ -1148,35 +1099,32 @@ namespace System.Windows.Forms.Design.Behavior
                     suspendedParent = null;
                     //re-enable all glyphs in all adorners
                     behaviorServiceSource.EnableAllAdorners(true);
-                    if (destHost != srcHost && destHost != null)
+                    if (destHost != srcHost && destHost is not null)
                     {
                         behaviorServiceTarget.EnableAllAdorners(true);
                         behaviorServiceTarget.SyncSelection();
                     }
 
                     // Layout may have caused controls to resize, which would mean their BodyGlyphs are wrong.  We need to sync these.
-                    if (behaviorServiceSource != null)
-                    {
-                        behaviorServiceSource.SyncSelection();
-                    }
+                    behaviorServiceSource?.SyncSelection();
 
-                    if (dragImageRegion != null)
+                    if (dragImageRegion is not null)
                     {
                         dragImageRegion.Dispose();
                         dragImageRegion = null;
                     }
 
-                    if (dragImage != null)
+                    if (dragImage is not null)
                     {
                         dragImage.Dispose();
                         dragImage = null;
                     }
 
-                    if (dragComponents != null)
+                    if (dragComponents is not null)
                     {
                         for (int i = 0; i < dragComponents.Length; i++)
                         {
-                            if (dragComponents[i].dragImage != null)
+                            if (dragComponents[i].dragImage is not null)
                             {
                                 dragComponents[i].dragImage.Dispose();
                                 dragComponents[i].dragImage = null;
@@ -1184,7 +1132,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
 
-                    if (graphicsTarget != null)
+                    if (graphicsTarget is not null)
                     {
                         graphicsTarget.Dispose();
                         graphicsTarget = null;

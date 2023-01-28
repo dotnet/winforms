@@ -81,7 +81,7 @@ namespace WinformsControlsTest
             item2.SubItems.Add("4");
             item2.SubItems.Add("5");
             item2.SubItems.Add("6");
-            ListViewItem item3 = new("item3", 0)
+            ListViewItem item3 = new("item3")
             {
                 // Place a check mark next to the item.
                 Checked = true
@@ -170,6 +170,7 @@ namespace WinformsControlsTest
         private void AddGroupTasks()
         {
             listView1.Groups[0].TaskLink = "Task";
+            listView1.Groups[0].Subtitle = "Subtitle";
             listView1.GroupTaskLinkClick += listView1_GroupTaskLinkClick;
 
             var lvgroup1 = new ListViewGroup

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
@@ -129,10 +131,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void AddItems(IList instances)
             {
-                if (_createdItems is null)
-                {
-                    _createdItems = new ArrayList();
-                }
+                _createdItems ??= new ArrayList();
 
                 _listbox.BeginUpdate();
                 try
@@ -271,10 +270,7 @@ namespace System.ComponentModel.Design
                         _createdItems.Clear();
                     }
 
-                    if (_removedItems is not null)
-                    {
-                        _removedItems.Clear();
-                    }
+                    _removedItems?.Clear();
 
                     // Restore the original contents. Because objects get parented during CreateAndAddInstance, the underlying collection
                     // gets changed during add, but not other operations. Not all consumers of this dialog can roll back every single change,
@@ -759,10 +755,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // Remember these contents for cancellation
-                if (_originalItems is null)
-                {
-                    _originalItems = new ArrayList();
-                }
+                _originalItems ??= new ArrayList();
 
                 _originalItems.Clear();
 
@@ -910,10 +903,7 @@ namespace System.ComponentModel.Design
                         {
                             if (CanRemoveInstance(item.Value))
                             {
-                                if (_removedItems is null)
-                                {
-                                    _removedItems = new ArrayList();
-                                }
+                                _removedItems ??= new ArrayList();
 
                                 _removedItems.Add(item.Value);
                                 _listbox.Items.Remove(item);
@@ -1376,10 +1366,7 @@ namespace System.ComponentModel.Design
                         if (_uiTypeEditor is null)
                         {
                             _uiTypeEditor = TypeDescriptor.GetEditor(_value, typeof(UITypeEditor));
-                            if (_uiTypeEditor is null)
-                            {
-                                _uiTypeEditor = this;
-                            }
+                            _uiTypeEditor ??= this;
                         }
 
                         if (_uiTypeEditor != this)

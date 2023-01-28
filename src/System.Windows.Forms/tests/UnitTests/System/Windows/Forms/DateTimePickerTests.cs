@@ -6,13 +6,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop.Kernel32;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class DateTimePickerTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -213,7 +211,7 @@ namespace System.Windows.Forms.Tests
                 // An empty SYSTEMTIME has year, month and day as 0, but DateTime can't have these parameters.
                 // So an empty SYSTEMTIME is incorrect in this case.
                 SYSTEMTIME systemTime = new SYSTEMTIME();
-                DateTime dateTime = systemTime;
+                DateTime dateTime = (DateTime)systemTime;
                 Assert.Equal(DateTime.MinValue, dateTime);
             }
         }

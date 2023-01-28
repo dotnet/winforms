@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 
@@ -19,13 +17,13 @@ namespace System.Windows.Forms
 
         public ToolStripSplitStackDragDropHandler(ToolStrip owner)
         {
-            this._owner = owner.OrThrowIfNull();
+            _owner = owner.OrThrowIfNull();
         }
 
         public void OnDragEnter(DragEventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragEnter: " + e.ToString());
-            if (e.Data.GetDataPresent(typeof(ToolStripItem)))
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragEnter: {e}");
+            if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 e.Effect = DragDropEffects.Move;
                 ShowItemDropPoint(_owner.PointToClient(new Point(e.X, e.Y)));
@@ -34,26 +32,26 @@ namespace System.Windows.Forms
 
         public void OnDragLeave(EventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragLeave: " + e.ToString());
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragLeave: {e}");
             _owner.ClearInsertionMark();
         }
 
         public void OnDragDrop(DragEventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragDrop: " + e.ToString());
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragDrop: {e}");
 
-            if (e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
-                ToolStripItem item = (ToolStripItem)e.Data.GetData(typeof(ToolStripItem));
+                ToolStripItem item = (ToolStripItem)e.Data.GetData(typeof(ToolStripItem))!;
                 OnDropItem(item, _owner.PointToClient(new Point(e.X, e.Y)));
             }
         }
 
         public void OnDragOver(DragEventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragOver: " + e.ToString());
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragOver: {e}");
 
-            if (e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 if (ShowItemDropPoint(_owner.PointToClient(new Point(e.X, e.Y))))
                 {
@@ -61,10 +59,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_owner is not null)
-                    {
-                        _owner.ClearInsertionMark();
-                    }
+                    _owner?.ClearInsertionMark();
 
                     e.Effect = DragDropEffects.None;
                 }
@@ -151,8 +146,8 @@ namespace System.Windows.Forms
                 ToolStripItem item = _owner.Items[i];
                 RelativeLocation relativeLocation = ComparePositions(item.Bounds, ownerClientAreaRelativeDropPoint);
 
-                Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "Drop relative loc " + relativeLocation);
-                Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "Index " + i);
+                ToolStrip.s_itemReorderDebug.TraceVerbose($"Drop relative loc {relativeLocation}");
+                ToolStrip.s_itemReorderDebug.TraceVerbose($"Index {i}");
 
                 Rectangle insertionRect = Rectangle.Empty;
                 switch (relativeLocation)
@@ -193,7 +188,7 @@ namespace System.Windows.Forms
                 bounds.Inflate(_owner.DisplayedItems[i].Margin.Size);
                 if (bounds.Contains(ownerClientAreaRelativeDropPoint))
                 {
-                    Debug.WriteLineIf(ToolStrip.s_dropTargetDebug.TraceVerbose, "MATCH " + _owner.DisplayedItems[i].Text + " Bounds: " + _owner.DisplayedItems[i].Bounds.ToString());
+                    ToolStrip.s_dropTargetDebug.TraceVerbose($"MATCH {_owner.DisplayedItems[i].Text} Bounds: {_owner.DisplayedItems[i].Bounds}");
 
                     // consider what to do about items not in the display
                     return _owner.Items.IndexOf(_owner.DisplayedItems[i]);

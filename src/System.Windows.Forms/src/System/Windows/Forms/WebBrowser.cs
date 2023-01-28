@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -21,7 +23,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(DocumentCompleted))]
     [Docking(DockingBehavior.AutoDock)]
     [SRDescription(nameof(SR.DescriptionWebBrowser))]
-    [Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.WebBrowserDesigner, {AssemblyRef.SystemDesign}")]
     public partial class WebBrowser : WebBrowserBase
     {
         // Reference to the native ActiveX control's IWebBrowser2
@@ -29,7 +31,7 @@ namespace System.Windows.Forms
         // property instead.
         private Mshtml.IWebBrowser2 axIWebBrowser2;
 
-        private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native WebBrowser
+        private AxHost.ConnectionPointCookie _cookie;   // To hook up events from the native WebBrowser
         private Stream documentStreamToSetOnLoad;
         private WebBrowserEncryptionLevel encryptionLevel = WebBrowserEncryptionLevel.Insecure;
         private object objectForScripting;
@@ -277,7 +279,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Stream DocumentStream
+        public unsafe Stream DocumentStream
         {
             get
             {
@@ -288,7 +290,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
+                    IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
                     if (psi is null)
                     {
@@ -297,8 +299,8 @@ namespace System.Windows.Forms
                     else
                     {
                         MemoryStream memoryStream = new MemoryStream();
-                        Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(memoryStream);
-                        psi.Save(iStream, BOOL.FALSE);
+                        using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(memoryStream));
+                        psi.Save(pStream, fClearDirty: false);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                     }
                 }
@@ -340,10 +342,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 //string length is a good initial guess for capacity --
                 //if it needs more room, it'll take it.
@@ -796,7 +795,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -882,7 +881,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PAGESETUP, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PAGESETUP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -897,7 +896,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -911,7 +910,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINTPREVIEW, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINTPREVIEW, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -926,7 +925,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PROPERTIES, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PROPERTIES, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -941,7 +940,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.SAVEAS, Ole32.OLECMDEXECOPT.DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+                AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_SAVEAS, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -1076,8 +1075,8 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr hwndFocus = User32.GetFocus();
-                return hwndFocus != IntPtr.Zero && User32.IsChild(new HandleRef(this, Handle), hwndFocus).IsTrue();
+                HWND hwndFocus = PInvoke.GetFocus();
+                return !hwndFocus.IsNull && PInvoke.IsChild(this, hwndFocus);
             }
         }
 
@@ -1085,10 +1084,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager is not null)
-                {
-                    htmlShimManager.Dispose();
-                }
+                htmlShimManager?.Dispose();
 
                 DetachSink();
                 ActiveXSite.Dispose();
@@ -1131,14 +1127,16 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void CreateSink()
         {
-            object ax = activeXInstance;
-            if (ax is not null)
+            if (_activeXInstance is { } ax)
             {
+                _cookie?.Disconnect();
+
                 webBrowserEvent = new WebBrowserEvent(this)
                 {
                     AllowNavigation = AllowNavigation
                 };
-                cookie = new AxHost.ConnectionPointCookie(ax, webBrowserEvent, typeof(SHDocVw.DWebBrowserEvents2));
+
+                _cookie = new AxHost.ConnectionPointCookie(ax, webBrowserEvent, typeof(SHDocVw.DWebBrowserEvents2));
             }
         }
 
@@ -1148,10 +1146,10 @@ namespace System.Windows.Forms
         protected override void DetachSink()
         {
             // If we have a cookie get rid of it
-            if (cookie is not null)
+            if (_cookie is not null)
             {
-                cookie.Disconnect();
-                cookie = null;
+                _cookie.Disconnect();
+                _cookie = null;
             }
         }
 
@@ -1269,10 +1267,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (htmlShimManager is null)
-                {
-                    htmlShimManager = new HtmlShimManager();
-                }
+                htmlShimManager ??= new HtmlShimManager();
 
                 return htmlShimManager;
             }
@@ -1390,10 +1385,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip is not null)
-                    {
-                        contextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    }
+                    contextMenuStrip?.ShowInternal(this, client, keyboardActivated);
 
                     return true;
                 }
@@ -1431,24 +1423,14 @@ namespace System.Windows.Forms
             {
                 if (axIWebBrowser2 is null)
                 {
-                    if (!IsDisposed)
-                    {
-                        // This should call AttachInterfaces
-                        TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
-                    }
-                    else
-                    {
-                        throw new ObjectDisposedException(GetType().Name);
-                    }
+                    ObjectDisposedException.ThrowIf(IsDisposed, this);
+
+                    // This should call AttachInterfaces
+                    TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
                 }
 
                 // We still don't have this.axIWebBrowser2. Throw an exception.
-                if (axIWebBrowser2 is null)
-                {
-                    throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
-                }
-
-                return axIWebBrowser2;
+                return axIWebBrowser2 ?? throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
             }
         }
     }

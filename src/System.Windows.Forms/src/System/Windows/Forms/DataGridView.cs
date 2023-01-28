@@ -4,13 +4,11 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -232,7 +230,7 @@ namespace System.Windows.Forms
             OperationTrackColRelocation | OperationTrackColHeadersResize | OperationTrackRowHeadersResize;
         private const int OperationKeyboardOperationMask = OperationTrackKeyboardColResize;
 
-        private readonly static Size s_dragSize = SystemInformation.DragSize;
+        private static readonly Size s_dragSize = SystemInformation.DragSize;
 
         private const byte ColumnSizingHotZone = 6;
         private const byte RowSizingHotZone = 5;
@@ -295,7 +293,7 @@ namespace System.Windows.Forms
         private ScrollBars _scrollBars;
         private LayoutData _layout;
         private Rectangle _normalClientRectangle;
-        private readonly ArrayList _lstRows;
+        private readonly List<DataGridViewRow> _lstRows;
         private int _availableWidthForFillColumns;
 
         private BorderStyle _borderStyle;
@@ -352,7 +350,7 @@ namespace System.Windows.Forms
 
         private Timer _vertScrollTimer, _horizScrollTimer;
 
-        private readonly Hashtable _converters;
+        private readonly Dictionary<Type, TypeConverter> _converters;
         private static Color s_defaultBackColor = SystemColors.Window;
         private static Color s_defaultBackgroundColor = SystemColors.ControlDark;
         private Color _backgroundColor = s_defaultBackgroundColor;
@@ -412,9 +410,9 @@ namespace System.Windows.Forms
                                     | State2_UsedFillWeightsDirty] = true;
 
             DisplayedBandsInfo = new DisplayedBandsData();
-            _lstRows = new ArrayList();
+            _lstRows = new List<DataGridViewRow>();
 
-            _converters = new Hashtable(8);
+            _converters = new(8);
             GridPenColor = DefaultGridColor;
 
             _selectedBandIndexes = new DataGridViewIntLinkedList();
@@ -1065,7 +1063,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -1120,7 +1118,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -1128,7 +1126,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -1416,10 +1414,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcpe is null)
-                {
-                    _dgvcpe = new DataGridViewCellPaintingEventArgs(this);
-                }
+                _dgvcpe ??= new DataGridViewCellPaintingEventArgs(this);
 
                 return _dgvcpe;
             }
@@ -1429,10 +1424,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcsce is null)
-                {
-                    _dgvcsce = new DataGridViewCellStyleChangedEventArgs();
-                }
+                _dgvcsce ??= new DataGridViewCellStyleChangedEventArgs();
 
                 return _dgvcsce;
             }
@@ -1442,10 +1434,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcve is null)
-                {
-                    _dgvcve = new DataGridViewCellValueEventArgs();
-                }
+                _dgvcve ??= new DataGridViewCellValueEventArgs();
 
                 return _dgvcve;
             }
@@ -1617,10 +1606,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_columnHeadersDefaultCellStyle is null)
-                {
-                    _columnHeadersDefaultCellStyle = DefaultColumnHeadersDefaultCellStyle;
-                }
+                _columnHeadersDefaultCellStyle ??= DefaultColumnHeadersDefaultCellStyle;
 
                 return _columnHeadersDefaultCellStyle;
             }
@@ -1718,7 +1704,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeColumnHeadersHeight()
         {
-            return ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && DefaultColumnHeadersHeight != ColumnHeadersHeight;
+            return ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && ColumnHeadersHeight != DefaultColumnHeadersHeight;
         }
 
         /// <summary>
@@ -1813,10 +1799,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dataGridViewColumns is null)
-                {
-                    _dataGridViewColumns = CreateColumnsInstance();
-                }
+                _dataGridViewColumns ??= CreateColumnsInstance();
 
                 return _dataGridViewColumns;
             }
@@ -1920,8 +1903,8 @@ namespace System.Windows.Forms
 
                 Debug.Assert(_ptCurrentCell.Y != -1);
 
-                bool previousVisibleColumnExists = (null != Columns.GetPreviousColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
-                bool previousVisibleRowExists = (-1 != Rows.GetPreviousRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible));
+                bool previousVisibleColumnExists = (Columns.GetPreviousColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None) is not null);
+                bool previousVisibleRowExists = (Rows.GetPreviousRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible) != -1);
 
                 return !previousVisibleColumnExists && !previousVisibleRowExists;
             }
@@ -1938,8 +1921,8 @@ namespace System.Windows.Forms
 
                 Debug.Assert(_ptCurrentCell.Y != -1);
 
-                bool nextVisibleColumnExists = (null != Columns.GetNextColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
-                bool nextVisibleRowExists = (-1 != Rows.GetNextRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible));
+                bool nextVisibleColumnExists = (Columns.GetNextColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None) is not null);
+                bool nextVisibleRowExists = (Rows.GetNextRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible) != -1);
 
                 return !nextVisibleColumnExists && !nextVisibleRowExists;
             }
@@ -2019,10 +2002,7 @@ namespace System.Windows.Forms
                 if (value != DataMember)
                 {
                     CurrentCell = null;
-                    if (DataConnection is null)
-                    {
-                        DataConnection = new DataGridViewDataConnection(this);
-                    }
+                    DataConnection ??= new DataGridViewDataConnection(this);
 
                     DataConnection.SetDataConnection(DataSource, value);
                     OnDataMemberChanged(EventArgs.Empty);
@@ -2135,7 +2115,7 @@ namespace System.Windows.Forms
 
                     if (_defaultCellStyle.ForeColor == Color.Empty)
                     {
-                        defaultCellStyleTmp.ForeColor = base.ForeColor;
+                        defaultCellStyleTmp.ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor;
                         _dataGridViewState1[State1_AmbientForeColor] = true;
                     }
 
@@ -2202,7 +2182,7 @@ namespace System.Windows.Forms
                 DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = s_defaultBackColor,
-                    ForeColor = base.ForeColor,
+                    ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor,
                     SelectionBackColor = DefaultSelectionBackBrush.Color,
                     SelectionForeColor = DefaultSelectionForeBrush.Color,
                     Font = base.Font,
@@ -2431,13 +2411,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_editingPanel is null)
+                _editingPanel ??= new DataGridViewEditingPanel(this)
                 {
-                    _editingPanel = new DataGridViewEditingPanel(this)
-                    {
-                        AccessibleName = SR.DataGridView_AccEditingPanelAccName
-                    };
-                }
+                    AccessibleName = SR.DataGridView_AccEditingPanelAccName
+                };
 
                 return _editingPanel;
             }
@@ -2447,10 +2424,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_editingPanelAccessibleObject is null)
-                {
-                    _editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, EditingPanel);
-                }
+                _editingPanelAccessibleObject ??= new DataGridViewEditingPanelAccessibleObject(this, EditingPanel);
 
                 return _editingPanelAccessibleObject;
             }
@@ -2811,7 +2785,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -2827,7 +2801,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler FontChanged
+        public new event EventHandler FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -3542,10 +3516,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rowHeadersDefaultCellStyle is null)
-                {
-                    _rowHeadersDefaultCellStyle = DefaultRowHeadersDefaultCellStyle;
-                }
+                _rowHeadersDefaultCellStyle ??= DefaultRowHeadersDefaultCellStyle;
 
                 return _rowHeadersDefaultCellStyle;
             }
@@ -3690,7 +3661,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeRowHeadersWidth()
         {
             return (_rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || _rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing) &&
-                   DefaultRowHeadersWidth != RowHeadersWidth;
+                   RowHeadersWidth != DefaultRowHeadersWidth;
         }
 
         /// <summary>
@@ -3733,10 +3704,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dataGridViewRows is null)
-                {
-                    _dataGridViewRows = CreateRowsInstance();
-                }
+                _dataGridViewRows ??= CreateRowsInstance();
 
                 return _dataGridViewRows;
             }
@@ -3791,10 +3759,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rowTemplate is null)
-                {
-                    _rowTemplate = new DataGridViewRow();
-                }
+                _rowTemplate ??= new DataGridViewRow();
 
                 return _rowTemplate;
             }
@@ -4286,7 +4251,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -4474,7 +4439,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return -1 != Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                return Rows.GetFirstRow(DataGridViewElementStates.Visible) != -1;
             }
         }
 
@@ -5072,10 +5037,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrhine is null)
-                {
-                    _dgvrhine = new DataGridViewRowHeightInfoNeededEventArgs();
-                }
+                _dgvrhine ??= new DataGridViewRowHeightInfoNeededEventArgs();
 
                 return _dgvrhine;
             }
@@ -5118,10 +5080,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrpope is null)
-                {
-                    _dgvrpope = new DataGridViewRowPostPaintEventArgs(this);
-                }
+                _dgvrpope ??= new DataGridViewRowPostPaintEventArgs(this);
 
                 return _dgvrpope;
             }
@@ -5139,10 +5098,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrprpe is null)
-                {
-                    _dgvrprpe = new DataGridViewRowPrePaintEventArgs(this);
-                }
+                _dgvrprpe ??= new DataGridViewRowPrePaintEventArgs(this);
 
                 return _dgvrprpe;
             }
@@ -5232,7 +5188,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler StyleChanged
+        public new event EventHandler StyleChanged
         {
             add => base.StyleChanged += value;
             remove => base.StyleChanged -= value;

@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System
 {
     internal class EditClass : WindowClass
     {
-        public EditClass() : base(ComCtl32.WindowClasses.WC_EDIT)
+        public EditClass() : base(PInvoke.WC_EDIT)
         {
         }
     }

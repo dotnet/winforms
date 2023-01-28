@@ -135,7 +135,7 @@ namespace WinformsControlsTest
                 _customerInEdit = null;
                 _rowInEdit = -1;
             }
-            else if (_customerInEdit != null && e.RowIndex < _customers.Count)
+            else if (_customerInEdit is not null && e.RowIndex < _customers.Count)
             {
                 // Save the modified TestCustomer object in the data store
                 _customers[e.RowIndex] = _customerInEdit;

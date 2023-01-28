@@ -2,11 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
 {
@@ -41,7 +44,7 @@ namespace System.ComponentModel.Design
         internal SelectionService(IServiceProvider provider) : base()
         {
             _provider = provider;
-            _state = new BitVector32();
+            _state = default(BitVector32);
             _events = new EventHandlerList();
             _statusCommandUI = new StatusCommandUI(provider);
         }
@@ -175,10 +178,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void RemoveSelection(object sel)
         {
-            if (_selection is not null)
-            {
-                _selection.Remove(sel);
-            }
+            _selection?.Remove(sel);
         }
 
         private void ApplicationIdle(object source, EventArgs args)
@@ -392,10 +392,7 @@ namespace System.ComponentModel.Design
             bool fAuto = !(fToggle | fAdd | fRemove | fReplace);
 
             // We always want to allow NULL arrays coming in.
-            if (components is null)
-            {
-                components = Array.Empty<object>();
-            }
+            components ??= Array.Empty<object>();
 
             // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifier keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)
@@ -415,7 +412,7 @@ namespace System.ComponentModel.Design
             object requestedPrimary = null;
             int primaryIndex;
 
-            if (fPrimary && 1 == components.Count)
+            if (fPrimary && components.Count == 1)
             {
                 foreach (object o in components)
                 {

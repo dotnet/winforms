@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using static Interop;
 
@@ -31,35 +30,28 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    RECT rect = new RECT();
+                    RECT rect = default(RECT);
                     CreateParams cp = CreateParams;
 
-                    AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
+                    AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
                     // the coordinates we get back are negative, we need to translate this back to positive.
                     int offsetX = -rect.left; // one to get back to 0,0, another to translate
                     int offsetY = -rect.top;
 
                     // fetch the client rect, then apply the offset.
-                    User32.GetClientRect(new HandleRef(this, Handle), ref rect);
+                    PInvoke.GetClientRect(this, out var clientRect);
 
-                    rect.left += offsetX;
-                    rect.right += offsetX;
-                    rect.top += offsetY;
-                    rect.bottom += offsetY;
+                    clientRect.left += offsetX;
+                    clientRect.right += offsetX;
+                    clientRect.top += offsetY;
+                    clientRect.bottom += offsetY;
 
-                    return rect;
+                    return clientRect;
                 }
             }
 
-            private Rectangle AbsoluteClientRectangle
-            {
-                get
-                {
-                    RECT rect = AbsoluteClientRECT;
-                    return Rectangle.FromLTRB(rect.top, rect.top, rect.right, rect.bottom);
-                }
-            }
+            private Rectangle AbsoluteClientRectangle => AbsoluteClientRECT;
 
             private ProfessionalColorTable ColorTable
             {
@@ -115,8 +107,6 @@ namespace System.Windows.Forms
 
             public ToolStripTextBox? Owner { get; set; }
 
-            internal override bool SupportsUiaProviders => true;
-
             private unsafe void InvalidateNonClient()
             {
                 if (!IsPopupTextBox)
@@ -124,26 +114,26 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                RECT absoluteClientRectangle = AbsoluteClientRECT;
+                var absoluteClientRectangle = AbsoluteClientRECT;
 
                 // Get the total client area, then exclude the client by using XOR
-                using var hTotalRegion = new Gdi32.RegionScope(0, 0, Width, Height);
-                using var hClientRegion = new Gdi32.RegionScope(
+                using PInvoke.RegionScope hTotalRegion = new(0, 0, Width, Height);
+                using PInvoke.RegionScope hClientRegion = new(
                     absoluteClientRectangle.left,
                     absoluteClientRectangle.top,
                     absoluteClientRectangle.right,
                     absoluteClientRectangle.bottom);
-                using var hNonClientRegion = new Gdi32.RegionScope(0, 0, 0, 0);
+                using PInvoke.RegionScope hNonClientRegion = new(0, 0, 0, 0);
 
-                Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.RGN.XOR);
+                PInvoke.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
 
                 // Call RedrawWindow with the region.
-                User32.RedrawWindow(
+                PInvoke.RedrawWindow(
                     this,
-                    null,
+                    lprcUpdate: null,
                     hNonClientRegion,
-                    User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.UPDATENOW
-                        | User32.RDW.ERASENOW | User32.RDW.FRAME);
+                    REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_ERASE | REDRAW_WINDOW_FLAGS.RDW_UPDATENOW
+                        | REDRAW_WINDOW_FLAGS.RDW_ERASENOW | REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
 
             protected override void OnGotFocus(EventArgs e)
@@ -252,8 +242,9 @@ namespace System.Windows.Forms
 
                 // Don't set the clipping region based on the WParam - windows seems to take out the two pixels intended for the non-client border.
 
-                Color outerBorderColor = (MouseIsOver || Focused) ? ColorTable.TextBoxBorder : BackColor;
-                Color innerBorderColor = BackColor;
+                bool focused = MouseIsOver || Focused;
+                Color outerBorderColor = focused ? ColorTable.TextBoxBorder : BackColor;
+                Color innerBorderColor = SystemInformation.HighContrast && !focused ? ColorTable.MenuBorder : BackColor;
 
                 if (!Enabled)
                 {
@@ -276,7 +267,7 @@ namespace System.Windows.Forms
                 g.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
 
                 // We've handled WM_NCPAINT.
-                m.ResultInternal = 0;
+                m.ResultInternal = (LRESULT)0;
             }
 
             protected override void WndProc(ref Message m)

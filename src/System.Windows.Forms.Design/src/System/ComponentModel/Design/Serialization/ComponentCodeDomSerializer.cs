@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Configuration;
 using System.Diagnostics;
@@ -18,13 +20,10 @@ namespace System.ComponentModel.Design.Serialization
 
         private Type[] GetContainerConstructor(IDesignerSerializationManager manager)
         {
-            if (_containerConstructor is null)
-            {
-                _containerConstructor = new Type[]
+            _containerConstructor ??= new Type[]
                 {
                     GetReflectionTypeFromTypeHelper(manager, typeof(IContainer))
                 };
-            }
 
             return _containerConstructor;
         }
@@ -32,7 +31,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static ComponentCodeDomSerializer Default
+        internal static new ComponentCodeDomSerializer Default
         {
             get
             {
@@ -67,10 +66,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (props is null)
-                {
-                    props = TypeDescriptor.GetProperties(comp);
-                }
+                props ??= TypeDescriptor.GetProperties(comp);
 
                 foreach (PropertyDescriptor property in props)
                 {
@@ -241,10 +237,7 @@ namespace System.ComponentModel.Design.Serialization
                                     PropertyDescriptor modifiersProp = props["Modifiers"];
                                     MemberAttributes fieldAttrs;
 
-                                    if (modifiersProp is null)
-                                    {
-                                        modifiersProp = props["DefaultModifiers"];
-                                    }
+                                    modifiersProp ??= props["DefaultModifiers"];
 
                                     if (modifiersProp is not null && modifiersProp.PropertyType == typeof(MemberAttributes))
                                     {
@@ -375,7 +368,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (persistSettings)
                             {
-                                reflectionType = reflectionType ?? GetReflectionTypeHelper(manager, value);
+                                reflectionType ??= GetReflectionTypeHelper(manager, value);
                                 persistSettings = GetReflectionTypeFromTypeHelper(manager, typeof(IPersistComponentSettings)).IsAssignableFrom(reflectionType);
                             }
 

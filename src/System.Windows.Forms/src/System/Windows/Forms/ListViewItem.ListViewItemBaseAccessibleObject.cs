@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Accessibility;
 using static Interop;
 
@@ -19,7 +18,7 @@ namespace System.Windows.Forms
         ///  The implementation of this class fully corresponds to the behavior of the ListViewItem accessibility object
         ///  when the ListView is in "LargeIcon" or "SmallIcon" view.
         /// </remarks>
-        internal class ListViewItemBaseAccessibleObject : AccessibleObject
+        internal abstract class ListViewItemBaseAccessibleObject : AccessibleObject
         {
             private protected readonly ListView _owningListView;
             private protected readonly ListViewItem _owningItem;
@@ -37,7 +36,7 @@ namespace System.Windows.Forms
                 : null;
 
             private protected override string AutomationId
-                => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
+                => $"{nameof(ListViewItem)}-{CurrentIndex}";
 
             public override Rectangle Bounds
                 => !_owningListView.IsHandleCreated || OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
@@ -51,8 +50,12 @@ namespace System.Windows.Forms
             internal int CurrentIndex
                 => _owningItem.Index;
 
+            internal virtual int FirstSubItemIndex => 0;
+
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => _owningListView.AccessibilityObject;
+
+            protected bool HasImage => _owningItem.ImageIndex != ImageList.Indexer.DefaultIndex;
 
             internal override bool IsItemSelected
                 => (State & AccessibleStates.Selected) != 0;
@@ -77,7 +80,9 @@ namespace System.Windows.Forms
             ///  Gets the accessible role.
             /// </summary>
             public override AccessibleRole Role
-                => AccessibleRole.ListItem;
+                => _owningListView.CheckBoxes
+                    ? AccessibleRole.CheckButton
+                    : AccessibleRole.ListItem;
 
             /// <summary>
             ///  Gets the accessible state.
@@ -103,14 +108,35 @@ namespace System.Windows.Forms
                 }
             }
 
+            protected abstract View View { get; }
+
             internal override void AddToSelection()
                 => SelectItem();
 
             public override string DefaultAction
-                => SR.AccessibleActionDoubleClick;
+            {
+                get
+                {
+                    if (_owningListView.CheckBoxes)
+                    {
+                        return _owningItem.Checked
+                            ? SR.AccessibleActionUncheck
+                            : SR.AccessibleActionCheck;
+                    }
+
+                    return SR.AccessibleActionDoubleClick;
+                }
+            }
 
             public override void DoDefaultAction()
-                => SetFocus();
+            {
+                if (_owningListView.CheckBoxes)
+                {
+                    Toggle();
+                }
+
+                SetFocus();
+            }
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
@@ -135,12 +161,9 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetChild(int index)
             {
-                if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
+                if (_owningListView.View != View)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
-                        nameof(View.LargeIcon),
-                        nameof(View.List),
-                        nameof(View.SmallIcon)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
                 }
 
                 return null;
@@ -150,12 +173,9 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
-                if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
+                if (_owningListView.View != View)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
-                        nameof(View.LargeIcon),
-                        nameof(View.List),
-                        nameof(View.SmallIcon)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
                 }
 
                 return InvalidIndex;
@@ -168,15 +188,15 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => OwningListItemFocused,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-                    UiaCore.UIA.IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
-                                                        || (bool)(base.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId) ?? false),
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed ||
+                                                         (bool)(base.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId) ?? false),
                     UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.InternalHandle,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-            internal virtual Rectangle GetSubItemBounds(int subItemIndex) => Rectangle.Empty;
+            internal virtual Rectangle GetSubItemBounds(int index) => Rectangle.Empty;
 
             internal override int[] RuntimeId
             {
@@ -241,12 +261,12 @@ namespace System.Windows.Forms
 
             internal override void ScrollIntoView() => _owningItem.EnsureVisible();
 
-            internal unsafe override void SelectItem()
+            internal override unsafe void SelectItem()
             {
                 if (_owningListView.IsHandleCreated)
                 {
                     _owningListView.SelectedIndices.Add(CurrentIndex);
-                    User32.InvalidateRect(new HandleRef(this, _owningListView.Handle), null, BOOL.FALSE);
+                    PInvoke.InvalidateRect(_owningListView, lpRect: null, bErase: false);
                 }
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

@@ -8,7 +8,6 @@ using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -81,7 +80,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control2.IsHandleCreated);
 
                 // Add existing.
-                Assert.Throws<ArgumentException>(null, () => collection.Add(control2));
+                Assert.Throws<ArgumentException>(() => collection.Add(control2));
                 Assert.Equal(new Control[] { control1, control2 }, collection.Cast<Control>());
                 Assert.Same(owner, control1.Parent);
                 Assert.Equal(0, control1.TabIndex);
@@ -408,7 +407,7 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            Assert.Throws<ArgumentException>(null, () => collection.Add(control));
+            Assert.Throws<ArgumentException>(() => collection.Add(control));
             Assert.Same(control, Assert.Single(collection));
             Assert.Same(owner, control.Parent);
             Assert.Equal(visible, control.Visible);
@@ -448,7 +447,7 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += (sender, e) => createdCallCount++;
 
             collection.Add(control);
-            Assert.Equal(owner.Handle, User32.GetParent(control.Handle));
+            Assert.Equal(owner.Handle, PInvoke.GetParent(control));
             Assert.Same(control, Assert.Single(collection));
             Assert.Same(owner, control.Parent);
             Assert.Equal(visible, control.Visible);
@@ -1115,7 +1114,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             control.SetTopLevel(true);
             var collection = new Control.ControlCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(control));
+            Assert.Throws<ArgumentException>(() => collection.Add(control));
         }
 
         [Fact] // cross-thread access
@@ -1132,7 +1131,7 @@ namespace System.Windows.Forms.Tests
 
             using var control = new Control();
             var collection = new Control.ControlCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(control));
+            Assert.Throws<ArgumentException>(() => collection.Add(control));
         }
 
         [Fact] // cross-thread access
@@ -1149,7 +1148,7 @@ namespace System.Windows.Forms.Tests
 
             using var owner = new Control();
             var collection = new Control.ControlCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(control));
+            Assert.Throws<ArgumentException>(() => collection.Add(control));
         }
 
         [WinFormsFact]
@@ -1157,7 +1156,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new Control();
             var collection = new Control.ControlCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(owner));
+            Assert.Throws<ArgumentException>(() => collection.Add(owner));
         }
 
         [WinFormsFact]
@@ -1169,7 +1168,7 @@ namespace System.Windows.Forms.Tests
                 Parent = parent
             };
             var collection = new Control.ControlCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(parent));
+            Assert.Throws<ArgumentException>(() => collection.Add(parent));
         }
 
         [WinFormsFact]
@@ -1185,7 +1184,7 @@ namespace System.Windows.Forms.Tests
                 Parent = parent
             };
             var collection = new Control.ControlCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(grandparent));
+            Assert.Throws<ArgumentException>(() => collection.Add(grandparent));
         }
 
         [WinFormsFact]
@@ -1563,8 +1562,8 @@ namespace System.Windows.Forms.Tests
             collection.Add(child1);
             collection.Add(child2);
 
-            Assert.Throws<ArgumentException>(null, () => collection.GetChildIndex(child));
-            Assert.Throws<ArgumentException>(null, () => collection.GetChildIndex(child));
+            Assert.Throws<ArgumentException>(() => collection.GetChildIndex(child));
+            Assert.Throws<ArgumentException>(() => collection.GetChildIndex(child));
         }
 
         [WinFormsFact]

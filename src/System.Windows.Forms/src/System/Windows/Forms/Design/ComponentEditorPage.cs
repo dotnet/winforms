@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -82,7 +81,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style &= ~(int)(User32.WS.BORDER | User32.WS.OVERLAPPED | User32.WS.DLGFRAME);
+                cp.Style &= ~(int)(WINDOW_STYLE.WS_BORDER | WINDOW_STYLE.WS_OVERLAPPED | WINDOW_STYLE.WS_DLGFRAME);
                 return cp;
             }
         }

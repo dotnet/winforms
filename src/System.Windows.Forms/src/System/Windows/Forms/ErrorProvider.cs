@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -31,7 +28,7 @@ namespace System.Windows.Forms
         private readonly Dictionary<Control, ControlItem> _items = new();
         private readonly Dictionary<Control, ErrorWindow> _windows = new();
         private Icon _icon = DefaultIcon;
-        private IconRegion _region;
+        private IconRegion? _region;
         private int _itemIdCounter;
         private int _blinkRate;
         private ErrorBlinkStyle _blinkStyle;
@@ -41,23 +38,23 @@ namespace System.Windows.Forms
         private bool _initializing;
 
         [ThreadStatic]
-        private static Icon t_defaultIcon;
+        private static Icon? t_defaultIcon;
 
         private const int DefaultBlinkRate = 250;
         private const ErrorBlinkStyle DefaultBlinkStyle = ErrorBlinkStyle.BlinkIfDifferentError;
         private const ErrorIconAlignment DefaultIconAlignment = ErrorIconAlignment.MiddleRight;
 
         // data binding
-        private ContainerControl _parentControl;
-        private object _dataSource;
-        private string _dataMember;
-        private BindingManagerBase _errorManager;
+        private ContainerControl? _parentControl;
+        private object? _dataSource;
+        private string? _dataMember;
+        private BindingManagerBase? _errorManager;
         private readonly EventHandler _currentChanged;
 
         // listen to the OnPropertyChanged event in the ContainerControl
-        private readonly EventHandler _propChangedEvent;
+        private readonly EventHandler? _propChangedEvent;
 
-        private EventHandler _onRightToLeftChanged;
+        private EventHandler? _onRightToLeftChanged;
 
         private bool _rightToLeft;
 
@@ -66,13 +63,13 @@ namespace System.Windows.Forms
         /// </summary>
         public ErrorProvider()
         {
-            _icon = DefaultIcon;
             _blinkRate = DefaultBlinkRate;
             _blinkStyle = DefaultBlinkStyle;
             _currentChanged = new EventHandler(ErrorManager_CurrentChanged);
         }
 
-        public ErrorProvider(ContainerControl parentControl) : this()
+        public ErrorProvider(ContainerControl parentControl)
+            : this()
         {
             ArgumentNullException.ThrowIfNull(parentControl);
 
@@ -81,14 +78,15 @@ namespace System.Windows.Forms
             parentControl.BindingContextChanged += _propChangedEvent;
         }
 
-        public ErrorProvider(IContainer container) : this()
+        public ErrorProvider(IContainer container)
+            : this()
         {
             ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }
 
-        public override ISite Site
+        public override ISite? Site
         {
             set
             {
@@ -166,7 +164,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.ErrorProviderContainerControlDescr))]
-        public ContainerControl ContainerControl
+        public ContainerControl? ContainerControl
         {
             get => _parentControl;
             set
@@ -228,7 +226,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
-        public event EventHandler RightToLeftChanged
+        public event EventHandler? RightToLeftChanged
         {
             add => _onRightToLeftChanged += value;
             remove => _onRightToLeftChanged -= value;
@@ -243,9 +241,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
-        private void SetErrorManager(object newDataSource, string newDataMember, bool force)
+        private void SetErrorManager(object? newDataSource, string? newDataMember, bool force)
         {
             if (_inSetErrorManager)
             {
@@ -311,7 +309,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [AttributeProvider(typeof(IListSource))]
         [SRDescription(nameof(SR.ErrorProviderDataSourceDescr))]
-        public object DataSource
+        public object? DataSource
         {
             get => _dataSource;
             set
@@ -343,15 +341,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         [SRDescription(nameof(SR.ErrorProviderDataMemberDescr))]
-        public string DataMember
+        public string? DataMember
         {
             get => _dataMember;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 SetErrorManager(DataSource, value, false);
             }
@@ -359,12 +354,12 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDataMember() => !string.IsNullOrEmpty(_dataMember);
 
-        public void BindToDataAndErrors(object newDataSource, string newDataMember)
+        public void BindToDataAndErrors(object? newDataSource, string? newDataMember)
         {
             SetErrorManager(newDataSource, newDataMember, false);
         }
 
-        private void WireEvents(BindingManagerBase listManager)
+        private void WireEvents(BindingManagerBase? listManager)
         {
             if (listManager is null)
             {
@@ -381,7 +376,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UnwireEvents(BindingManagerBase listManager)
+        private void UnwireEvents(BindingManagerBase? listManager)
         {
             if (listManager is null)
             {
@@ -398,21 +393,21 @@ namespace System.Windows.Forms
             }
         }
 
-        private void ErrorManager_BindingComplete(object sender, BindingCompleteEventArgs e)
+        private void ErrorManager_BindingComplete(object? sender, BindingCompleteEventArgs e)
         {
-            Binding binding = e.Binding;
+            Binding? binding = e.Binding;
             if (binding is not null && binding.Control is not null)
             {
                 SetError(binding.Control, (e.ErrorText ?? string.Empty));
             }
         }
 
-        private void ErrorManager_BindingsChanged(object sender, CollectionChangeEventArgs e)
+        private void ErrorManager_BindingsChanged(object? sender, CollectionChangeEventArgs e)
         {
             ErrorManager_CurrentChanged(_errorManager, e);
         }
 
-        private void ParentControl_BindingContextChanged(object sender, EventArgs e)
+        private void ParentControl_BindingContextChanged(object? sender, EventArgs e)
         {
             SetErrorManager(DataSource, DataMember, true);
         }
@@ -422,8 +417,13 @@ namespace System.Windows.Forms
             ErrorManager_CurrentChanged(_errorManager, EventArgs.Empty);
         }
 
-        private void ErrorManager_ItemChanged(object sender, ItemChangedEventArgs e)
+        private void ErrorManager_ItemChanged(object? sender, ItemChangedEventArgs e)
         {
+            if (_errorManager is null)
+            {
+                return;
+            }
+
             BindingsCollection errBindings = _errorManager.Bindings;
             int bindingsCount = errBindings.Count;
 
@@ -445,8 +445,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void ErrorManager_CurrentChanged(object sender, EventArgs e)
+        private void ErrorManager_CurrentChanged(object? sender, EventArgs e)
         {
+            if (_errorManager is null)
+            {
+                return;
+            }
+
             Debug.Assert(sender == _errorManager, "who else can send us messages?");
 
             // Flush the old list
@@ -456,7 +461,7 @@ namespace System.Windows.Forms
             }
 
             object value = _errorManager.Current;
-            if (!(value is IDataErrorInfo))
+            if (value is not IDataErrorInfo)
             {
                 return;
             }
@@ -485,10 +490,7 @@ namespace System.Windows.Forms
                 Binding dataBinding = errBindings[j];
                 string error = ((IDataErrorInfo)value)[dataBinding.BindingMemberInfo.BindingField];
 
-                if (error is null)
-                {
-                    error = string.Empty;
-                }
+                error ??= string.Empty;
 
                 string outputError = string.Empty;
                 if (controlError.ContainsKey(dataBinding.Control))
@@ -509,11 +511,9 @@ namespace System.Windows.Forms
                 controlError[dataBinding.Control] = outputError;
             }
 
-            IEnumerator enumerator = controlError.GetEnumerator();
-            while (enumerator.MoveNext())
+            foreach (KeyValuePair<Control, string> entry in controlError)
             {
-                DictionaryEntry entry = (DictionaryEntry)enumerator.Current;
-                SetError((Control)entry.Key, (string)entry.Value);
+                SetError(entry.Key, entry.Value);
             }
         }
 
@@ -550,44 +550,20 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (t_defaultIcon is null)
+                lock (typeof(ErrorProvider))
                 {
-                    lock (typeof(ErrorProvider))
+                    if (t_defaultIcon is null)
                     {
-                        t_defaultIcon ??= GetDefaultIcon();
+                        // Error provider uses small Icon.
+                        int width = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON);
+                        int height = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON);
+                        using var defaultIcon = new Icon(typeof(ErrorProvider), "Error");
+
+                        t_defaultIcon = new Icon(defaultIcon, width, height);
                     }
                 }
 
                 return t_defaultIcon;
-
-                static unsafe Icon GetDefaultIcon()
-                {
-                    Icon systemErrorIcon = null;
-
-                    Shell32.SHSTOCKICONINFO sii = new Shell32.SHSTOCKICONINFO()
-                    {
-                        cbSize = (uint)sizeof(Shell32.SHSTOCKICONINFO)
-                    };
-
-                    HRESULT hr = Shell32.SHGetStockIconInfo(Shell32.SHSTOCKICONID.ERROR,
-                                                            Shell32.SHGSI.ICON | Shell32.SHGSI.SMALLICON,
-                                                            &sii);
-
-                    if (hr.Succeeded())
-                    {
-                        try
-                        {
-                            // Icon.FromHandle does not take ownership of the handle.
-                            systemErrorIcon = (Icon)Icon.FromHandle(sii.hIcon).Clone();
-                        }
-                        finally
-                        {
-                            User32.DestroyIcon(sii.hIcon);
-                        }
-                    }
-
-                    return systemErrorIcon ?? new Icon(typeof(ErrorProvider), "Error");
-                }
             }
         }
 
@@ -607,6 +583,7 @@ namespace System.Windows.Forms
             }
             set
             {
+                _icon.Dispose();
                 _icon = value.OrThrowIfNull();
                 DisposeRegion();
                 ErrorWindow[] array = _windows.Values.ToArray();
@@ -666,9 +643,9 @@ namespace System.Windows.Forms
         ///  This situation can arise if the call to the DataSource's EndInit() method comes after the call to the
         ///  BindingSource's EndInit() method (since code-generated ordering of these calls is non-deterministic).
         /// </summary>
-        private void DataSource_Initialized(object sender, EventArgs e)
+        private void DataSource_Initialized(object? sender, EventArgs e)
         {
-            ISupportInitializeNotification dsInit = (DataSource as ISupportInitializeNotification);
+            ISupportInitializeNotification? dsInit = DataSource as ISupportInitializeNotification;
 
             Debug.Assert(dsInit is not null, "ErrorProvider: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
             Debug.Assert(dsInit.IsInitialized, "ErrorProvider: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
@@ -704,9 +681,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns whether a control can be extended.
         /// </summary>
-        public bool CanExtend(object extendee)
+        public bool CanExtend(object? extendee)
         {
-            return extendee is Control && !(extendee is Form);
+            return extendee is Control && extendee is not Form;
         }
 
         /// <summary>
@@ -744,7 +721,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(control);
 
-            if (!_items.TryGetValue(control, out ControlItem item))
+            if (!_items.TryGetValue(control, out ControlItem? item))
             {
                 item = new ControlItem(this, control, (IntPtr)(++_itemIdCounter));
                 _items[control] = item;
@@ -758,7 +735,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal ErrorWindow EnsureErrorWindow(Control parent)
         {
-            if (!_windows.TryGetValue(parent, out ErrorWindow window))
+            if (!_windows.TryGetValue(parent, out ErrorWindow? window))
             {
                 window = new ErrorWindow(this, parent);
                 _windows[parent] = window;
@@ -810,11 +787,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the error description string for the specified control.
         /// </summary>
-        public void SetError(Control control, string value)
+        public void SetError(Control control, string? value)
         {
             EnsureControlItem(control).Error = value;
 
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening())
             {
                 control.AccessibilityObject.RaiseAutomationNotification(
                     Automation.AutomationNotificationKind.ActionAborted,

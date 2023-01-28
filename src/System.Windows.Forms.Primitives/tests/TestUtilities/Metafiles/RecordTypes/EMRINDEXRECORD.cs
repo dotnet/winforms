@@ -5,7 +5,6 @@
 #nullable enable
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -26,7 +25,7 @@ namespace System.Windows.Forms.Metafiles
         public uint index;
 
         public bool IsStockObject => (index & 0x80000000) != 0;
-        public Gdi32.StockObject StockObject => (Gdi32.StockObject)(index & ~0x80000000);
+        public GET_STOCK_OBJECT_FLAGS StockObject => (GET_STOCK_OBJECT_FLAGS)(index & ~0x80000000);
 
         public override string ToString()
             => IsStockObject

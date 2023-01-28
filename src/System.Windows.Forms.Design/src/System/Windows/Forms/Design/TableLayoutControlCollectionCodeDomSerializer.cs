@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Collections;
 using System.ComponentModel;
@@ -31,14 +33,14 @@ namespace System.Windows.Forms.Design
                 bool isTargetInherited = false;
                 ExpressionContext ctx = manager.Context[typeof(ExpressionContext)] as ExpressionContext;
 
-                if (ctx != null && ctx.Expression == targetExpression)
+                if (ctx is not null && ctx.Expression == targetExpression)
                 {
                     IComponent comp = ctx.Owner as IComponent;
 
-                    if (comp != null)
+                    if (comp is not null)
                     {
                         InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(comp)[typeof(InheritanceAttribute)];
-                        isTargetInherited = (ia != null && ia.InheritanceLevel == InheritanceLevel.Inherited);
+                        isTargetInherited = (ia is not null && ia.InheritanceLevel == InheritanceLevel.Inherited);
                     }
                 }
 
@@ -50,7 +52,7 @@ namespace System.Windows.Forms.Design
                     {
                         InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)];
 
-                        if (ia != null)
+                        if (ia is not null)
                         {
                             if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                                 genCode = false;
@@ -71,12 +73,12 @@ namespace System.Windows.Forms.Design
                         statement.Method = methodRef;
                         CodeExpression serializedObj = SerializeToExpression(manager, o);
 
-                        if (serializedObj != null && !typeof(Control).IsAssignableFrom(o.GetType()))
+                        if (serializedObj is not null && !typeof(Control).IsAssignableFrom(o.GetType()))
                         {
                             serializedObj = new CodeCastExpression(typeof(Control), serializedObj);
                         }
 
-                        if (serializedObj != null)
+                        if (serializedObj is not null)
                         {
                             int col, row;
                             col = tableCollection.Container.GetColumn((Control)o);

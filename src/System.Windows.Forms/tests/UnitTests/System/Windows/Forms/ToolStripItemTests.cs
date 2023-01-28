@@ -9,11 +9,10 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class ToolStripItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -4516,7 +4515,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageIndex = value;
                 Assert.Equal(expected, item.ImageIndex);
                 Assert.Empty(item.ImageKey);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(1, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
 
@@ -4524,7 +4523,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageIndex = value;
                 Assert.Equal(expected, item.ImageIndex);
                 Assert.Empty(item.ImageKey);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(2, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
             }
@@ -5018,7 +5017,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageKey = value;
                 Assert.Equal(expected, item.ImageKey);
                 Assert.Equal(-1, item.ImageIndex);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(1, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
 
@@ -5026,7 +5025,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageKey = value;
                 Assert.Equal(expected, item.ImageKey);
                 Assert.Equal(-1, item.ImageIndex);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(2, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
             }
@@ -7061,6 +7060,28 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(otherParent.Items);
             Assert.Empty(statusParent.Items);
             Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Releases_UiaProvider()
+        {
+            using ToolStripWithDisconnectCount toolStrip = new();
+
+            using ToolStripDropDownItemWithAccessibleObjectFieldAccessor toolStripDropDownItem1 = new();
+            toolStrip.Items.Add(toolStripDropDownItem1);
+
+            using ToolStripDropDownItemWithAccessibleObjectFieldAccessor toolStripDropDownItem2 = new();
+            toolStripDropDownItem1.DropDownItems.Add(toolStripDropDownItem2);
+
+            _ = toolStrip.AccessibilityObject;
+            Assert.True(toolStrip.IsAccessibilityObjectCreated);
+
+            toolStrip.ReleaseUiaProvider(toolStrip.HWND);
+
+            Assert.Equal(1, toolStrip.Disconnects);
+            Assert.True(toolStripDropDownItem1.IsAccessibleObjectCleared());
+            Assert.True(toolStripDropDownItem2.IsAccessibleObjectCleared());
+            Assert.True(toolStrip.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -14251,11 +14272,11 @@ namespace System.Windows.Forms.Tests
             };
 
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
 
             // Select again.
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
         }
 
         public static IEnumerable<object[]> Select_WithoutToolStripItemAccessibleObject_TestData()
@@ -15545,6 +15566,33 @@ namespace System.Windows.Forms.Tests
             public new void SetBounds(Rectangle bounds) => base.SetBounds(bounds);
 
             public new void SetVisibleCore(bool visible) => base.SetVisibleCore(visible);
+        }
+
+        private class  ToolStripWithDisconnectCount : ToolStrip
+        {
+            public ToolStripWithDisconnectCount() : base() { }
+
+            public int Disconnects { get; private set; }
+
+            internal new void ReleaseUiaProvider(HWND handle)
+            {
+                base.ReleaseUiaProvider(handle);
+
+                Disconnects++;
+            }
+        }
+
+        private class ToolStripDropDownItemWithAccessibleObjectFieldAccessor : ToolStripDropDownItem
+        {
+            public ToolStripDropDownItemWithAccessibleObjectFieldAccessor() : base() { }
+
+            public bool IsAccessibleObjectCleared()
+            {
+                var key = this.TestAccessor().Dynamic.s_accessibilityProperty;
+                var accessibleObject = Properties.GetObject(key) as AccessibleObject;
+
+                return accessibleObject is null;
+            }
         }
     }
 }

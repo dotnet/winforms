@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Tests
                     foreach (bool virtualMode in new[] { true, false })
                     {
                         // View.Tile is not supported by ListView in virtual mode
-                        if (view == View.Tile)
+                        if (view == View.Tile && virtualMode)
                         {
                             continue;
                         }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
                 foreach (bool virtualMode in new[] { true, false })
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (view == View.Tile)
+                    if (view == View.Tile && virtualMode)
                     {
                         continue;
                     }
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && view == View.Tile)
                     {
                         continue;
                     }
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.Tests
             foreach (View view in Enum.GetValues(typeof(View)))
             {
                 // View.Tile does not support enabled CheckBoxes
-                if (View.Tile == view)
+                if (view == View.Tile)
                 {
                     continue;
                 }
@@ -860,7 +860,7 @@ namespace System.Windows.Forms.Tests
             foreach (View view in Enum.GetValues(typeof(View)))
             {
                 // View.Tile does not support enabled CheckBoxes
-                if (View.Tile == view)
+                if (view == View.Tile)
                 {
                     continue;
                 }
@@ -1608,6 +1608,27 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsExpected_Image(bool hasImage, int expectedFirstSubItemIndex)
+        {
+            using ImageList imageCollection = new();
+            imageCollection.Images.Add(Form.DefaultIcon);
+            using ListView listView = new()
+            {
+                View = View.Details,
+                SmallImageList = imageCollection
+            };
+            listView.Columns.Add(new ColumnHeader());
+            var listViewItem = new ListViewItem("Item 1", imageIndex: hasImage ? 0 : -1);
+            listView.Items.Add(listViewItem);
+            var accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
+            
+            Assert.Equal(expectedFirstSubItemIndex, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData(View.Details)]
         [InlineData(View.LargeIcon)]
         [InlineData(View.List)]
@@ -1642,11 +1663,13 @@ namespace System.Windows.Forms.Tests
                     Assert.IsType<ListViewItemDetailsAccessibleObject>(listView.Items[0].AccessibilityObject);
                     break;
                 case View.LargeIcon:
-                case View.SmallIcon:
-                    Assert.IsType<ListViewItemBaseAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    Assert.IsType<ListViewItemLargeIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                     break;
                 case View.List:
                     Assert.IsType<ListViewItemListAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    break;
+                case View.SmallIcon:
+                    Assert.IsType<ListViewItemSmallIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                     break;
                 case View.Tile:
                     Assert.IsType<ListViewItemTileAccessibleObject>(listView.Items[0].AccessibilityObject);
@@ -1688,11 +1711,13 @@ namespace System.Windows.Forms.Tests
                         Assert.IsType<ListViewItemDetailsAccessibleObject>(listView.Items[0].AccessibilityObject);
                         break;
                     case View.LargeIcon:
-                    case View.SmallIcon:
-                        Assert.IsType<ListViewItemBaseAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        Assert.IsType<ListViewItemLargeIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                         break;
                     case View.List:
                         Assert.IsType<ListViewItemListAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        break;
+                    case View.SmallIcon:
+                        Assert.IsType<ListViewItemSmallIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                         break;
                     case View.Tile:
                         Assert.IsType<ListViewItemTileAccessibleObject>(listView.Items[0].AccessibilityObject);
@@ -1707,10 +1732,16 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Details, View.SmallIcon)]
         [InlineData(View.Details, View.Tile)]
         [InlineData(View.LargeIcon, View.Details)]
+        [InlineData(View.LargeIcon, View.List)]
+        [InlineData(View.LargeIcon, View.SmallIcon)]
         [InlineData(View.LargeIcon, View.Tile)]
         [InlineData(View.List, View.Details)]
+        [InlineData(View.List, View.LargeIcon)]
+        [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.List, View.Tile)]
         [InlineData(View.SmallIcon, View.Details)]
+        [InlineData(View.SmallIcon, View.LargeIcon)]
+        [InlineData(View.SmallIcon, View.List)]
         [InlineData(View.SmallIcon, View.Tile)]
         [InlineData(View.Tile, View.Details)]
         [InlineData(View.Tile, View.LargeIcon)]
@@ -1729,34 +1760,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(View.LargeIcon, View.List)]
-        [InlineData(View.LargeIcon, View.SmallIcon)]
-        [InlineData(View.List, View.LargeIcon)]
-        [InlineData(View.List, View.SmallIcon)]
-        [InlineData(View.SmallIcon, View.LargeIcon)]
-        [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChild_DoesNotReturnException_AfterChangingView(View oldView, View newView)
-        {
-            using ListView listView = new() { View = oldView };
-            listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
-            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
-            Assert.Null(accessibleObject.GetChild(0));
-
-            listView.View = newView;
-
-            Assert.Null(accessibleObject.GetChild(0));
-        }
-
-        [WinFormsTheory]
         [InlineData(View.Details, View.LargeIcon)]
         [InlineData(View.Details, View.List)]
         [InlineData(View.Details, View.SmallIcon)]
         [InlineData(View.Details, View.Tile)]
         [InlineData(View.LargeIcon, View.Details)]
+        [InlineData(View.LargeIcon, View.List)]
+        [InlineData(View.LargeIcon, View.SmallIcon)]
         [InlineData(View.LargeIcon, View.Tile)]
         [InlineData(View.List, View.Details)]
+        [InlineData(View.List, View.LargeIcon)]
+        [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.List, View.Tile)]
         [InlineData(View.SmallIcon, View.Details)]
+        [InlineData(View.SmallIcon, View.LargeIcon)]
+        [InlineData(View.SmallIcon, View.List)]
         [InlineData(View.SmallIcon, View.Tile)]
         [InlineData(View.Tile, View.Details)]
         [InlineData(View.Tile, View.LargeIcon)]
@@ -1772,25 +1790,6 @@ namespace System.Windows.Forms.Tests
             listView.View = newView;
 
             Assert.Throws<InvalidOperationException>(() => accessibleObject.GetChildCount());
-        }
-
-        [WinFormsTheory]
-        [InlineData(View.LargeIcon, View.List)]
-        [InlineData(View.LargeIcon, View.SmallIcon)]
-        [InlineData(View.List, View.LargeIcon)]
-        [InlineData(View.List, View.SmallIcon)]
-        [InlineData(View.SmallIcon, View.LargeIcon)]
-        [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChildCount_DoesNotReturnException_AfterChangingView(View oldView, View newView)
-        {
-            using ListView listView = new() { View = oldView };
-            listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
-            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
-            Assert.NotEqual(2, accessibleObject.GetChildCount());
-
-            listView.View = newView;
-
-            Assert.NotEqual(2, accessibleObject.GetChildCount());
         }
 
         public static IEnumerable<object[]> ListViewItemAccessibleObject_GetPropertyValue_TestData()
@@ -1847,7 +1846,7 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(item);
             EnforceAccessibleObjectCreation(item);
 
-            listView.ReleaseUiaProvider(listView.Handle);
+            listView.ReleaseUiaProvider(listView.HWND);
 
             Assert.Null(item.TestAccessor().Dynamic._accessibilityObject);
             Assert.True(listView.IsHandleCreated);

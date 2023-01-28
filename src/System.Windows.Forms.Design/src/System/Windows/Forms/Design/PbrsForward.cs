@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
+#nullable disable
+
 using System.ComponentModel.Design;
 using static Interop;
 
@@ -17,7 +18,7 @@ namespace System.Windows.Forms.Design
         // the properties window...
         //
         private Message lastKeyDown;
-        private ArrayList bufferedChars;
+        private List<BufferedKey> bufferedChars;
 
         private const int WM_PRIVATE_POSTCHAR = (int)User32.WM.USER + 0x1598;
         private bool postCharMessage;
@@ -40,7 +41,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (menuCommandSvc == null && sp != null)
+                if (menuCommandSvc is null && sp is not null)
                 {
                     menuCommandSvc = (IMenuCommandService)sp.GetService(typeof(IMenuCommandService));
                 }
@@ -50,17 +51,9 @@ namespace System.Windows.Forms.Design
         }
 
         private ISupportInSituService InSituSupportService
-        {
-            get
-            {
-                return (ISupportInSituService)sp.GetService(typeof(ISupportInSituService));
-            }
-        }
+            => (ISupportInSituService)sp.GetService(typeof(ISupportInSituService));
 
-        public void Dispose()
-        {
-            target.WindowTarget = oldTarget;
-        }
+        public void Dispose() => target.WindowTarget = oldTarget;
 
         /// <summary>
         ///  Called when the window handle of the control has changed.
@@ -84,7 +77,7 @@ namespace System.Windows.Forms.Design
             if ((m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
                || (m.Msg >= (int)User32.WM.IME_STARTCOMPOSITION && m.Msg <= (int)User32.WM.IME_COMPOSITION))
             {
-                if (InSituSupportService != null)
+                if (InSituSupportService is not null)
                 {
                     ignoreMessages = InSituSupportService.IgnoreMessages;
                 }
@@ -94,30 +87,18 @@ namespace System.Windows.Forms.Design
             {
                 case WM_PRIVATE_POSTCHAR:
 
-                    if (bufferedChars == null)
+                    if (bufferedChars is null)
                     {
                         return;
                     }
 
                     // recreate the keystroke to the newly activated window
-                    IntPtr hWnd;
-                    if (!ignoreMessages)
-                    {
-                        hWnd = User32.GetFocus();
-                    }
-                    else
-                    {
-                        if (InSituSupportService != null)
-                        {
-                            hWnd = InSituSupportService.GetEditWindow();
-                        }
-                        else
-                        {
-                            hWnd = User32.GetFocus();
-                        }
-                    }
+                    HWND hwnd;
+                    hwnd = !ignoreMessages || InSituSupportService is null
+                        ? PInvoke.GetFocus()
+                        : (HWND)InSituSupportService.GetEditWindow();
 
-                    if (hWnd != m.HWnd)
+                    if (hwnd != m.HWnd)
                     {
                         foreach (BufferedKey bk in bufferedChars)
                         {
@@ -125,18 +106,18 @@ namespace System.Windows.Forms.Design
                             {
                                 if (bk.KeyDown.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
+                                    PInvoke.SendMessage(hwnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
                                 }
 
-                                User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                                PInvoke.SendMessage(hwnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                                 if (bk.KeyUp.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
+                                    PInvoke.SendMessage(hwnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
                                 }
                             }
                             else
                             {
-                                User32.SendMessageW(hWnd, bk.KeyChar.MsgInternal, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                                PInvoke.SendMessage(hwnd, bk.KeyChar.MsgInternal, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                             }
                         }
                     }
@@ -161,14 +142,10 @@ namespace System.Windows.Forms.Design
                         break;
                     }
 
-                    if (bufferedChars == null)
-                    {
-                        bufferedChars = new ArrayList();
-                    }
-
+                    bufferedChars ??= new();
                     bufferedChars.Add(new BufferedKey(lastKeyDown, m, lastKeyDown));
 
-                    if (!ignoreMessages && MenuCommandService != null)
+                    if (!ignoreMessages && MenuCommandService is not null)
                     {
                         // throw the properties window command, we will redo the keystroke when we actually
                         // lose focus
@@ -177,7 +154,7 @@ namespace System.Windows.Forms.Design
                     }
                     else if (ignoreMessages && m.Msg != (int)User32.WM.IME_COMPOSITION)
                     {
-                        if (InSituSupportService != null)
+                        if (InSituSupportService is not null)
                         {
                             postCharMessage = true;
                             InSituSupportService.HandleKeyChar();
@@ -213,10 +190,7 @@ namespace System.Windows.Forms.Design
                     break;
             }
 
-            if (oldTarget != null)
-            {
-                oldTarget.OnMessage(ref m);
-            }
+            oldTarget?.OnMessage(ref m);
         }
     }
 }

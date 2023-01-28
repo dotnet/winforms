@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             CheckCanAddOrInsertItem(value);
 
             SetOwner(value);
-            int retVal = InnerList.Add(value);
+            int retVal = ((IList)InnerList).Add(value);
             if (_itemsCollection && _owner is not null)
             {
                 _owner.OnItemAddedInternal(value);
@@ -181,10 +181,7 @@ namespace System.Windows.Forms
             {
                 _owner.SuspendLayout();
                 overflow = _owner.GetOverflow();
-                if (overflow is not null)
-                {
-                    overflow.SuspendLayout();
-                }
+                overflow?.SuspendLayout();
             }
 
             try
@@ -196,10 +193,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (overflow is not null)
-                {
-                    overflow.ResumeLayout(false);
-                }
+                overflow?.ResumeLayout(false);
 
                 if (_owner is not null && !_owner.IsDisposingItems)
                 {
@@ -297,7 +291,7 @@ namespace System.Windows.Forms
         public override bool IsReadOnly { get { return _isReadOnly; } }
 
         void IList.Clear() { Clear(); }
-        bool IList.IsFixedSize { get { return InnerList.IsFixedSize; } }
+        bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
         bool IList.Contains(object value) { return InnerList.Contains(value); }
         void IList.RemoveAt(int index) { RemoveAt(index); }
         void IList.Remove(object value) { Remove(value as ToolStripItem); }
@@ -423,7 +417,11 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
 
-            InnerList.Remove(value);
+            if (!InnerList.Remove(value))
+            {
+                return;
+            }
+
             OnAfterRemove(value);
         }
 
@@ -466,7 +464,6 @@ namespace System.Windows.Forms
             InnerList.CopyTo(array, index);
         }
 
-        //
         internal void MoveItem(ToolStripItem value)
         {
             if (value.ParentInternal is not null)
@@ -514,16 +511,10 @@ namespace System.Windows.Forms
             {
                 if (item is not null)
                 {
-                    if (item.Owner is not null)
-                    {
-                        item.Owner.Items.Remove(item);
-                    }
+                    item.Owner?.Items.Remove(item);
 
                     item.SetOwner(_owner);
-                    if (item.Renderer is not null)
-                    {
-                        item.Renderer.InitializeItem(item);
-                    }
+                    item.Renderer?.InitializeItem(item);
                 }
             }
         }

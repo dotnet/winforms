@@ -1,0 +1,60 @@
+﻿<!--
+  We cannot build Framework projects using dotnet build when there are unsupported tasks involved such as ResolveComReferences.
+  This project is an adapter to use the Framework version of msbuild from dotnet build.
+-->
+<Project Sdk="Microsoft.Build.NoTargets/3.6.0">
+  <ItemGroup>
+    <PackageReference Include="vswhere" Version="$(VsWherePackageVersion)" IsImplicitlyDefined="true" GeneratePathProperty="true" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <_AxHostsPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', 'System.Windows.Forms', 'tests', 'AxHosts', 'AxHosts.csproj'))</_AxHostsPath>
+    <_ProjectArgs>/p:Configuration=$(Configuration) /p:Platform=AnyCPU</_ProjectArgs>
+  </PropertyGroup>
+
+  <Target Name="BuildAxHosts" BeforeTargets="AfterBuild" DependsOnTargets="FindFrameworkMsbuild">
+    <Exec
+      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs)"
+      WorkingDirectory="$(_MSBuildCurrentPath)"/>
+  </Target>
+
+  <Target Name="CleanAxHosts" BeforeTargets="AfterClean" DependsOnTargets="FindFrameworkMsbuild">
+    <Exec
+      Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /t:Clean"
+      WorkingDirectory="$(_MSBuildCurrentPath)"/>
+  </Target>
+
+  <Target Name="FindFrameworkMsbuild">
+
+    <Error
+      Text="Pkgvswhere is not set."
+      Condition="'$(Pkgvswhere)' == ''" />
+
+    <PropertyGroup>
+      <VSWherePath>$([MSBuild]::NormalizePath('$(Pkgvswhere)', 'tools'))</VSWherePath>
+    </PropertyGroup>
+
+    <!-- Work out VS installation path, so we can find MSBuild.exe -->
+    <Exec
+      Command="vswhere.exe -latest -prerelease -property installationPath -requires Microsoft.Component.MSBuild"
+      WorkingDirectory="$(VSWherePath)"
+      EchoOff="true"
+      ConsoleToMsBuild="true"
+      StandardOutputImportance="Low">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_VSInstallPath"/>
+    </Exec>
+
+    <Error
+      Text="Could not find VS install path. '%24%28_VSInstallPath%29' == '$(_VSInstallPath)'"
+      Condition="'$(_VSInstallPath)' == '' Or !Exists('$(_VSInstallPath)')" />
+
+    <PropertyGroup>
+      <_MSBuildCurrentPath>$([MSBuild]::NormalizePath('$(_VSInstallPath)', 'MSBuild', 'Current', 'Bin'))</_MSBuildCurrentPath>
+    </PropertyGroup>
+
+    <Error
+      Text="Could not find MSBuild path. '%24%28_MSBuildCurrentPath%29' == '$(_MSBuildCurrentPath)'"
+      Condition="!Exists('$(_MSBuildCurrentPath)')" />
+
+  </Target>
+</Project>

@@ -23,11 +23,11 @@ namespace System.Windows.Forms.Design
                 ICollection valuesToSerialize)
             {
                 ArrayList subset = new ArrayList();
-                if (valuesToSerialize != null && valuesToSerialize.Count > 0)
+                if (valuesToSerialize is not null && valuesToSerialize.Count > 0)
                 {
                     foreach (object val in valuesToSerialize)
                     {
-                        if (val is IComponent comp && comp.Site != null && !(comp.Site is INestedSite))
+                        if (val is IComponent comp && comp.Site is not null && !(comp.Site is INestedSite))
                         {
                             subset.Add(comp);
                         }

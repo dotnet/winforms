@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 
 namespace System.ComponentModel.Design.Serialization
@@ -18,14 +20,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static ContainerCodeDomSerializer Default
+        internal static new ContainerCodeDomSerializer Default
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new ContainerCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new ContainerCodeDomSerializer();
 
                 return s_defaultSerializer;
             }
@@ -90,4 +89,3 @@ namespace System.ComponentModel.Design.Serialization
         }
     }
 }
-

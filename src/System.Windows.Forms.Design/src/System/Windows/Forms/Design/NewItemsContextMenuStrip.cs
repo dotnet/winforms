@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 
 namespace System.Windows.Forms.Design
@@ -39,7 +41,7 @@ namespace System.Windows.Forms.Design
                 Groups["StandardList"].Items.Add(item);
                 if (_convertTo)
                 {
-                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem != null && toolItem.ItemType == _currentItem.GetType())
+                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem is not null && toolItem.ItemType == _currentItem.GetType())
                     {
                         toolItem.Enabled = false;
                     }
@@ -51,7 +53,7 @@ namespace System.Windows.Forms.Design
                 Groups["CustomList"].Items.Add(item);
                 if (_convertTo)
                 {
-                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem != null && toolItem.ItemType == _currentItem.GetType())
+                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem is not null && toolItem.ItemType == _currentItem.GetType())
                     {
                         toolItem.Enabled = false;
                     }

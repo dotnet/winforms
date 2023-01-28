@@ -28,16 +28,15 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        if (!_owningLinkLabel.IsHandleCreated)
+                        if (!_owningLinkLabel.IsHandleCreated || _owningLink.Owner is null)
                         {
                             return Rectangle.Empty;
                         }
 
-                        Region region = _owningLink.VisualRegion;
+                        Region? region = _owningLink.VisualRegion;
                         using Graphics graphics = Graphics.FromHwnd(_owningLink.Owner.Handle);
 
                         // Make sure we have a region for this link
-                        //
                         if (region is null)
                         {
                             _owningLinkLabel.EnsureRun(graphics);
@@ -52,7 +51,6 @@ namespace System.Windows.Forms
                         rect = Rectangle.Ceiling(region.GetBounds(graphics));
 
                         // Translate rect to screen coordinates
-                        //
                         return _owningLinkLabel.RectangleToScreen(rect);
                     }
                 }
@@ -61,7 +59,7 @@ namespace System.Windows.Forms
 
                 public override string DefaultAction => SR.AccessibleActionClick;
 
-                public override string Description => _owningLink.Description;
+                public override string? Description => _owningLink.Description;
 
                 public override void DoDefaultAction()
                 {
@@ -87,10 +85,10 @@ namespace System.Windows.Forms
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                     => propertyID switch
                     {
-                        UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HyperlinkControlTypeId,
-                        UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
+                        UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
+                        UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         _ => base.GetPropertyValue(propertyID)
                     };
 

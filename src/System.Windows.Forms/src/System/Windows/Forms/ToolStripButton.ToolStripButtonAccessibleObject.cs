@@ -20,18 +20,17 @@ namespace System.Windows.Forms
                 _ownerItem = ownerItem;
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                // If we don't set a default role for the accessible object
-                // it will be retrieved from Windows.
-                // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId && _ownerItem.CheckOnClick)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    return UiaCore.UIA.ButtonControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    // If we don't set a default role for the accessible object
+                    // it will be retrieved from Windows.
+                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                    UiaCore.UIA.ControlTypePropertyId when
+                        _ownerItem.CheckOnClick
+                        => UiaCore.UIA.ButtonControlTypeId,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             public override AccessibleRole Role
             {

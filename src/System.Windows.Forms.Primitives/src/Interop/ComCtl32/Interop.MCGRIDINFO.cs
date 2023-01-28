@@ -16,14 +16,14 @@ internal static partial class Interop
         public unsafe struct MCGRIDINFO
         {
             public uint cbSize;
-            public MCGIP dwPart;
-            public MCGIF dwFlags;
+            public MCGRIDINFO_PART dwPart;
+            public MCGRIDINFO_FLAGS dwFlags;
             public int iCalendar;
             public int iRow;
             public int iCol;
             public BOOL bSelected;
-            public Kernel32.SYSTEMTIME stStart;
-            public Kernel32.SYSTEMTIME stEnd;
+            public SYSTEMTIME stStart;
+            public SYSTEMTIME stEnd;
             public RECT rc;
             public char* pszName;
             public UIntPtr cchName;

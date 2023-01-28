@@ -36,13 +36,24 @@ namespace System.Windows.Forms.Tests
             SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, true);
 
             toolStrip.Items.Add(ownerItem);
-            ownerItem.TestAccessor().Dynamic.dropDown = dropDownMenu;
+            ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 3"));
             dropDownMenu.UpdateDisplayedItems();
 
             AccessibleObject accessibleObject = dropDownMenu.AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+
+            if (!createControl)
+            {
+                return;
+            }
+
+            dropDownMenu.CreateControl(ignoreVisible: true);
+
             AccessibleObject upScrollButtonAccessibleObject = dropDownMenu.UpScrollButton.AccessibilityObject;
             AccessibleObject itemAccessibleObject1 = dropDownMenu.Items[0].AccessibilityObject;
             AccessibleObject itemAccessibleObject2 = dropDownMenu.Items[1].AccessibilityObject;
@@ -87,13 +98,24 @@ namespace System.Windows.Forms.Tests
             SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, false);
 
             toolStrip.Items.Add(ownerItem);
-            ownerItem.TestAccessor().Dynamic.dropDown = dropDownMenu;
+            ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
 
             dropDownMenu.UpdateDisplayedItems();
 
             AccessibleObject accessibleObject = dropDownMenu.AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+
+            if (!createControl)
+            {
+                return;
+            }
+
+            dropDownMenu.CreateControl(ignoreVisible: true);
+
             AccessibleObject itemAccessibleObject1 = dropDownMenu.Items[0].AccessibilityObject;
             AccessibleObject itemAccessibleObject2 = dropDownMenu.Items[1].AccessibilityObject;
 
@@ -114,7 +136,7 @@ namespace System.Windows.Forms.Tests
             SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, true);
 
             toolStrip.Items.Add(ownerItem);
-            ownerItem.TestAccessor().Dynamic.dropDown = dropDownMenu;
+            ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
             dropDownMenu.UpdateDisplayedItems();

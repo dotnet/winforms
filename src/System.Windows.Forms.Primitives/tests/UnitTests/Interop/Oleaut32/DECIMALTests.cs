@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Xunit;
 using static Interop;
-using static Interop.Oleaut32;
 
 namespace System.Windows.Forms.Tests.Interop.Oleaut32
 {

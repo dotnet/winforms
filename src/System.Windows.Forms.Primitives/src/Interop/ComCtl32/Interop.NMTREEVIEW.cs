@@ -10,8 +10,8 @@ internal static partial class Interop
     {
         public struct NMTREEVIEW
         {
-            public User32.NMHDR nmhdr;
-            public TVC action;
+            public NMHDR nmhdr;
+            public NM_TREEVIEW_ACTION action;
             public TVITEMW itemOld;
             public TVITEMW itemNew;
             public Point ptDrag;

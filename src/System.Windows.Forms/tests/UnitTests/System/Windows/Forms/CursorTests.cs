@@ -58,6 +58,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void Cursor_Ctor_Stream_NonStartPosition()
+        {
+            using var stream = new MemoryStream(File.ReadAllBytes(Path.Combine("bitmaps", "cursor.cur")));
+            stream.Position = 5;
+            using var cursor = new Cursor(stream);
+            Assert.NotNull(cursor);
+        }
+
+        [Fact]
+        public void Cursor_Ctor_EmptyStream_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>("stream", () => new Cursor(new MemoryStream()));
+        }
+
+        [Fact]
         public void Cursor_Ctor_NullStream_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("stream", () => new Cursor((Stream)null));
@@ -158,14 +173,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Cursor_Clip_Set_GetReturnsExpected()
         {
-            IntPtr oldDpiAwarenessContext = Interop.User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
+            DPI_AWARENESS_CONTEXT oldDpiAwarenessContext = DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
             Rectangle clip = Cursor.Clip;
             try
             {
                 // The clipping area is always defined in physical pixels (disregarding DPI) while
                 // the virtual screen area depends on the DPI awareness of the thread querying for it.
                 // Cannot use DpiAwarenessScope because it rejects to change the DPI awareness.
-                oldDpiAwarenessContext = Interop.User32.SetThreadDpiAwarenessContext(Interop.User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+                oldDpiAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
                 // Set non-empty.
                 Cursor.Clip = new Rectangle(1, 2, 3, 4);
@@ -186,8 +201,8 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                if (oldDpiAwarenessContext != Interop.User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT)
-                    Interop.User32.SetThreadDpiAwarenessContext(oldDpiAwarenessContext);
+                if (oldDpiAwarenessContext != DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT)
+                    PInvoke.SetThreadDpiAwarenessContextInternal(oldDpiAwarenessContext);
 
                 Cursor.Clip = clip;
             }
@@ -322,7 +337,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Cursor_Dispose_InvokeNotOwned_Success()
         {
-            var cursor = new Cursor((IntPtr)2);
+            var cursor = new Cursor(2);
             cursor.Dispose();
             Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
             Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);
@@ -378,7 +393,7 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
-            Assert.Throws<ArgumentException>(null, () => cursor.Draw(graphics, new Rectangle(Point.Empty, cursor.Size)));
+            Assert.Throws<ArgumentException>(() => cursor.Draw(graphics, new Rectangle(Point.Empty, cursor.Size)));
         }
 
         [Theory]
@@ -415,7 +430,7 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
-            Assert.Throws<ArgumentException>(null, () => cursor.DrawStretched(graphics, new Rectangle(Point.Empty, cursor.Size)));
+            Assert.Throws<ArgumentException>(() => cursor.DrawStretched(graphics, new Rectangle(Point.Empty, cursor.Size)));
         }
 
         public static IEnumerable<object[]> Equals_Object_TestData()

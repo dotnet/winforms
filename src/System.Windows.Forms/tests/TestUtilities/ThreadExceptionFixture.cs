@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace System
 {
+    /// <summary>
+    ///  Prevents the exception dialog from firing.
+    /// </summary>
     public class ThreadExceptionFixture : IDisposable
     {
         public ThreadExceptionFixture()
@@ -22,7 +25,6 @@ namespace System
         public virtual void Dispose()
         {
             Application.ThreadException -= OnThreadException;
-            //Xunit.Assert.Equal(new Drawing.Point(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height), Cursor.Position);
         }
 
         private void OnThreadException(object sender, ThreadExceptionEventArgs e)

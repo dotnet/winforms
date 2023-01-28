@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListViewItemBaseAccessibleObject_Ctor_OwnerListViewItemCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ListViewItemBaseAccessibleObject(null));
+            Assert.Throws<ArgumentNullException>(() => new SubListViewItemBaseAccessibleObject(null));
         }
 
         [WinFormsFact]
@@ -279,6 +279,55 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewItemBaseAccessibleObject_IsCheckable_IfListViewHasCheckBoxes(bool itemIsChecked)
+        {
+            using ListView listView = new();
+            listView.CheckBoxes = true;
+            ListViewItem item = new();
+            listView.Items.Add(item);
+            item.Checked = itemIsChecked;
+
+            AccessibleObject itemAccessibleObject = item.AccessibilityObject;
+            itemAccessibleObject.DoDefaultAction();
+
+            Assert.Equal(!itemIsChecked, item.Checked);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewItemBaseAccessibleObject_IfCheckableListViewItem_HasCheckButtonRole()
+        {
+            using ListView listView = new();
+            listView.CheckBoxes = true;
+            ListViewItem item = new();
+            listView.Items.Add(item);
+
+            AccessibleObject itemAccessibleObject = item.AccessibilityObject;
+
+            Assert.Equal(AccessibleRole.CheckButton, itemAccessibleObject.Role);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewItemBaseAccessibleObject_IfCheckableListViewItem_HasExpectedDefaultAction(bool itemIsChecked)
+        {
+            using ListView listView = new();
+            listView.CheckBoxes = true;
+            ListViewItem item = new();
+            item.Checked = itemIsChecked;
+            listView.Items.Add(item);
+
+            AccessibleObject itemAccessibleObject = item.AccessibilityObject;
+
+            Assert.Equal(itemIsChecked ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck, itemAccessibleObject.DefaultAction);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.ScrollItemPatternId)]
         [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
         [InlineData((int)UiaCore.UIA.SelectionItemPatternId)]
@@ -345,9 +394,20 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(item);
             var accessibleObject = (ListViewItemBaseAccessibleObject)item.AccessibilityObject;
 
-            var expected = string.Format("{0}-{1}", typeof(ListViewItem).Name, accessibleObject.CurrentIndex);
+            var expected = string.Format("{0}-{1}", nameof(ListViewItem), accessibleObject.CurrentIndex);
             Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
             Assert.False(listView.IsHandleCreated);
         }
+
+        private class SubListViewItemBaseAccessibleObject : ListViewItemBaseAccessibleObject
+        {
+            protected override View View => View.List;
+
+            public SubListViewItemBaseAccessibleObject(ListViewItem owningItem) : base(owningItem)
+            {
+            }
+        }
+
+        // More tests for this class has been created already in ListViewItem_ListViewItemAccessibleObjectTests
     }
 }

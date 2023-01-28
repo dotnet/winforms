@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -18,13 +17,14 @@ using System.Windows.Forms.ComponentModel.Com2Interop;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.PropertyGridInternal;
 using Microsoft.Win32;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     [Designer($"System.Windows.Forms.Design.PropertyGridDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
-    public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
+    public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IPropertyNotifySink.Interface
     {
         private readonly HelpPane _helpPane;
         private int _helpPaneSizeRatio = -1;
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
         private IDesignerHost _designerHost;
         private IDesignerEventService _designerEventService;
 
-        private Hashtable _designerSelections;
+        private Dictionary<int, int> _designerSelections;
 
         private GridEntry _defaultEntry;
         private GridEntry _rootEntry;
@@ -344,7 +344,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -591,7 +591,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -604,9 +604,9 @@ namespace System.Windows.Forms
             {
                 if (value && IsHandleCreated && Visible)
                 {
-                    if (0 == _paintFrozen++)
+                    if (_paintFrozen++ == 0)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                     }
                 }
 
@@ -617,9 +617,9 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    if (0 == --_paintFrozen)
+                    if (--_paintFrozen == 0)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                         Invalidate(true);
                     }
                 }
@@ -1106,7 +1106,7 @@ namespace System.Windows.Forms
                     object designerKey = ActiveDesigner;
 
                     // Get the active designer and see if we've stashed away state for it.
-                    if (TryGetSavedTabSelection(out int selectedTab))
+                    if (TryGetSavedTabIndex(out int selectedTab))
                     {
                         if (selectedTab < _tabs.Count && (selectedTab == PropertiesTabIndex || _tabs[selectedTab].Button.Visible))
                         {
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms
 
                 if (_selectedObjects.Length > 0)
                 {
-                    SaveTabSelection();
+                    SaveSelectedTabIndex();
                 }
             }
         }
@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -1866,6 +1866,24 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
+        internal override void ReleaseUiaProvider(HWND handle)
+        {
+            if (_viewTabProperties?.Count > 0)
+            {
+                foreach (GridEntry gridEntry in _viewTabProperties.Values)
+                {
+                    gridEntry.ReleaseUiaProvider();
+                }
+            }
+
+            _helpPane?.ReleaseUiaProvider(HWND.Null);
+            _commandsPane?.ReleaseUiaProvider(HWND.Null);
+            _toolStrip?.ReleaseUiaProvider(HWND.Null);
+            _rootEntry?.ReleaseUiaProvider();
+
+            base.ReleaseUiaProvider(handle);
+        }
+
         private void DividerDraw(int y)
         {
             if (y == -1)
@@ -2337,7 +2355,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called when a property on an Ole32 Object changes.
         /// </summary>
-        HRESULT Ole32.IPropertyNotifySink.OnChanged(Ole32.DispatchID dispID)
+        HRESULT IPropertyNotifySink.Interface.OnChanged(int dispID)
         {
             // We don't want the grid's own property sets doing this, but if we're getting
             // an OnChanged that isn't the DispID of the property we're currently changing,
@@ -2350,7 +2368,7 @@ namespace System.Windows.Forms
                 if (selectedEntry.PropertyDescriptor.TryGetAttribute(out DispIdAttribute dispIdAttribute)
                     && !dispIdAttribute.IsDefaultAttribute())
                 {
-                    fullRefresh = dispID != (Ole32.DispatchID)dispIdAttribute.Value;
+                    fullRefresh = dispID != dispIdAttribute.Value;
                 }
             }
 
@@ -2363,7 +2381,7 @@ namespace System.Windows.Forms
 
                 // This is so changes to names of native objects will be reflected in the combo box.
                 object obj = GetUnwrappedObject(0);
-                if (ComNativeDescriptor.IsNameDispId(obj, dispID) || dispID == Ole32.DispatchID.Name)
+                if (ComNativeDescriptor.IsNameDispId(obj, dispID) || dispID == PInvoke.DISPID_Name)
                 {
                     OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
                 }
@@ -2810,7 +2828,7 @@ namespace System.Windows.Forms
         ///  Called when a property on an Ole32 Object that is tagged with "requestedit" is
         ///  about to be edited. See IPropertyNotifySink::OnRequestEdit
         /// </summary>
-        HRESULT Ole32.IPropertyNotifySink.OnRequestEdit(Ole32.DispatchID dispID)
+        HRESULT IPropertyNotifySink.Interface.OnRequestEdit(int dispID)
         {
             // Don't do anything here.
             return HRESULT.S_OK;
@@ -3066,7 +3084,7 @@ namespace System.Windows.Forms
             {
                 SelectViewTabButton((ToolStripButton)sender, true);
                 OnLayoutInternal(dividerOnly: false);
-                SaveTabSelection();
+                SaveSelectedTabIndex();
             }
 
             OnButtonClick(sender, e);
@@ -3299,10 +3317,10 @@ namespace System.Windows.Forms
                     // If we're not hosted in a windows forms thing, just give the parent the focus.
                     if (!result && Parent is null)
                     {
-                        IntPtr hWndParent = User32.GetParent(this);
-                        if (hWndParent != IntPtr.Zero)
+                        HWND hWndParent = PInvoke.GetParent(this);
+                        if (!hWndParent.IsNull)
                         {
-                            User32.SetFocus(hWndParent);
+                            PInvoke.SetFocus(hWndParent);
                         }
                     }
 
@@ -3541,7 +3559,7 @@ namespace System.Windows.Forms
             }
 
             // Remove this tab from our "last selected" group
-            if (!GetFlag(Flags.ReInitTab) && TryGetSavedTabSelection(out int selectedTab) && selectedTab == tabIndex)
+            if (!GetFlag(Flags.ReInitTab) && TryGetSavedTabIndex(out int selectedTab) && selectedTab == tabIndex)
             {
                 _designerSelections.Remove(ActiveDesigner.GetHashCode());
             }
@@ -3620,18 +3638,18 @@ namespace System.Windows.Forms
 
         public void ResetSelectedProperty() => _gridView.Reset();
 
-        private void SaveTabSelection()
+        private void SaveSelectedTabIndex()
         {
             if (_designerHost is not null)
             {
                 _designerSelections ??= new();
-                _designerSelections[_designerHost.GetHashCode()] = _selectedTab;
+                _designerSelections[_designerHost.GetHashCode()] = _tabs.IndexOf(_selectedTab);
             }
         }
 
-        private bool TryGetSavedTabSelection(out int selectedTab)
+        private bool TryGetSavedTabIndex(out int selectedTabIndex)
         {
-            selectedTab = -1;
+            selectedTabIndex = -1;
             if (_designerSelections is null || ActiveDesigner is null)
             {
                 return false;
@@ -3643,7 +3661,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            selectedTab = (int)_designerSelections[hashCode];
+            selectedTabIndex = _designerSelections[hashCode];
             return true;
         }
 
@@ -3990,7 +4008,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sinks the property notify events on all the COM objects we are currently browsing.
         ///
-        ///  <see cref="Ole32.IPropertyNotifySink"/>
+        ///  <see cref="IPropertyNotifySink"/>
         /// </summary>
         private void SinkPropertyNotifyEvents()
         {
@@ -4027,7 +4045,7 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    _connectionPointCookies[i] = new(obj, this, typeof(Ole32.IPropertyNotifySink), throwException: false);
+                    _connectionPointCookies[i] = new(obj, this, typeof(IPropertyNotifySink.Interface), throwException: false);
                 }
                 catch
                 {
@@ -4195,7 +4213,7 @@ namespace System.Windows.Forms
             _toolStripButtonPaddingY = LogicalToDeviceUnits(ToolStripButtonPaddingY);
         }
 
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch (m.MsgInternal)
             {
@@ -4206,7 +4224,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanUndo ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanUndo;
                     }
 
                     return;
@@ -4217,7 +4235,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanCut ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanCut;
                     }
 
                     return;
@@ -4229,7 +4247,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanCopy ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanCopy;
                     }
 
                     return;
@@ -4241,13 +4259,13 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanPaste ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanPaste;
                     }
 
                     return;
 
                 case User32.WM.COPYDATA:
-                    var cds = (User32.COPYDATASTRUCT*)m.LParamInternal;
+                    var cds = (User32.COPYDATASTRUCT*)(nint)m.LParamInternal;
 
                     if (cds is not null && cds->lpData != IntPtr.Zero)
                     {
@@ -4255,12 +4273,12 @@ namespace System.Windows.Forms
                         _copyDataMessage = (int)cds->dwData;
                     }
 
-                    m.ResultInternal = 1;
+                    m.ResultInternal = (LRESULT)1;
                     return;
                 case (User32.WM)AutomationMessages.PGM_GETBUTTONCOUNT:
                     if (_toolStrip is not null)
                     {
-                        m.ResultInternal = _toolStrip.Items.Count;
+                        m.ResultInternal = (LRESULT)_toolStrip.Items.Count;
                         return;
                     }
 
@@ -4273,11 +4291,11 @@ namespace System.Windows.Forms
                         {
                             if (_toolStrip.Items[index] is ToolStripButton button)
                             {
-                                m.ResultInternal = button.Checked ? 1 : 0;
+                                m.ResultInternal = (LRESULT)(nint)(BOOL)button.Checked;
                             }
                             else
                             {
-                                m.ResultInternal = 0;
+                                m.ResultInternal = (LRESULT)0;
                             }
                         }
 
@@ -4336,7 +4354,7 @@ namespace System.Windows.Forms
                             }
 
                             // Write text into test file.
-                            m.ResultInternal = AutomationMessages.WriteAutomationText(text);
+                            m.ResultInternal = (LRESULT)AutomationMessages.WriteAutomationText(text);
                         }
 
                         return;
@@ -4348,24 +4366,24 @@ namespace System.Windows.Forms
                     {
                         // Get "testing info" string for Nth grid entry (or active entry if N < 0)
                         string testingInfo = _gridView.GetTestingInfo((int)m.WParamInternal);
-                        m.ResultInternal = AutomationMessages.WriteAutomationText(testingInfo);
+                        m.ResultInternal = (LRESULT)AutomationMessages.WriteAutomationText(testingInfo);
                         return;
                     }
 
                 case (User32.WM)AutomationMessages.PGM_GETROWCOORDS:
                     if (m.Msg == _copyDataMessage)
                     {
-                        m.ResultInternal = _gridView.GetPropertyLocation(
+                        m.ResultInternal = (LRESULT)_gridView.GetPropertyLocation(
                             _propertyName,
                             getXY: m.LParamInternal == 0,
-                            rowValue: m.WParamInternal == 0);
+                            rowValue: m.WParamInternal == 0u);
                         return;
                     }
 
                     break;
                 case (User32.WM)AutomationMessages.PGM_GETSELECTEDROW:
                 case (User32.WM)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.ResultInternal = User32.SendMessageW(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    m.ResultInternal = (LRESULT)PInvoke.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
                 case (User32.WM)AutomationMessages.PGM_SETSELECTEDTAB:
                     if (m.LParamInternal != 0)
@@ -4380,13 +4398,13 @@ namespace System.Windows.Forms
 
                                 // This gets set again to 0 below. This seems wrong, but has always been this way.
                                 // Leaving this should we find we need to return instead of break.
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 break;
                             }
                         }
                     }
 
-                    m.ResultInternal = 0;
+                    m.ResultInternal = (LRESULT)0;
                     return;
             }
 

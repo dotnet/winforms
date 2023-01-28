@@ -1,6 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -27,13 +29,13 @@ namespace System.Windows.Forms.Design
 
             protected IComponent GetBaseComponent(object o)
             {
-                if (baseComponent == null)
+                if (baseComponent is null)
                 {
                     ISite site = ((IComponent)o).Site;
-                    if (site != null)
+                    if (site is not null)
                     {
                         IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-                        if (host != null)
+                        if (host is not null)
                         {
                             baseComponent = host.RootComponent;
                         }
@@ -80,7 +82,7 @@ namespace System.Windows.Forms.Design
             public virtual string GetName(IComponent comp)
             {
                 ISite site = comp.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     return site.Name;
                 }
@@ -95,7 +97,7 @@ namespace System.Windows.Forms.Design
             public static void SetName(IComponent comp, string newName)
             {
                 ISite site = comp.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     site.Name = newName;
                 }
@@ -103,4 +105,3 @@ namespace System.Windows.Forms.Design
         }
     }
 }
-

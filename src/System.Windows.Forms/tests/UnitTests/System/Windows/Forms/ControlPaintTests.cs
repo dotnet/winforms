@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -35,11 +34,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ControlCreateHBitmap16Bit_TestData))]
         public void ControlPaint_CreateHBitmap16Bit_Invoke_ReturnsExpected(Bitmap bitmap, Color background)
         {
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, background);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, background);
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -48,7 +47,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -60,11 +59,11 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, Color.Red);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, Color.Red);
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
@@ -76,7 +75,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -106,11 +105,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CreateHBitmapColorMask_TestData))]
         public void ControlPaint_CreateHBitmapColorMask_Invoke_ReturnsExpected(Bitmap bitmap, IntPtr monochromeMask)
         {
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, monochromeMask);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, monochromeMask);
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -119,7 +118,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -130,7 +129,7 @@ namespace System.Windows.Forms.Tests
             mask.SetPixel(0, 0, Color.FromArgb(255, 255, 0, 0));
             mask.SetPixel(1, 0, Color.FromArgb(255, 0, 255, 0));
             mask.SetPixel(2, 0, Color.FromArgb(0, 0, 0, 255));
-            Gdi32.HBITMAP monochromeMask = (Gdi32.HBITMAP)mask.GetHbitmap();
+            HBITMAP monochromeMask = (HBITMAP)mask.GetHbitmap();
             try
             {
                 using var bitmap = new Bitmap(3, 1);
@@ -138,11 +137,11 @@ namespace System.Windows.Forms.Tests
                 bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
                 bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-                Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)monochromeMask);
+                HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)monochromeMask);
                 try
                 {
                     Assert.False(hBitmap.IsNull);
-                    Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                    Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                     using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                     Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -154,12 +153,12 @@ namespace System.Windows.Forms.Tests
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hBitmap);
+                    PInvoke.DeleteObject(hBitmap);
                 }
             }
             finally
             {
-                Gdi32.DeleteObject(monochromeMask);
+                PInvoke.DeleteObject(monochromeMask);
             }
         }
 
@@ -171,11 +170,11 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, IntPtr.Zero);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, IntPtr.Zero);
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
@@ -187,7 +186,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -214,11 +213,11 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CreateHBitmapTransparencyMask_TestData))]
         public void ControlPaint_CreateHBitmapTransparencyMask_Invoke_ReturnsExpected(Bitmap bitmap)
         {
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
@@ -227,7 +226,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -239,11 +238,11 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
             try
             {
                 Assert.False(hBitmap.IsNull);
-                Assert.Equal(Gdi32.OBJ.BITMAP, Gdi32.GetObjectType(hBitmap));
+                Assert.Equal(OBJ_TYPE.OBJ_BITMAP, (OBJ_TYPE)PInvoke.GetObjectType(hBitmap));
 
                 using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
@@ -255,7 +254,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap);
             }
         }
 
@@ -263,6 +262,25 @@ namespace System.Windows.Forms.Tests
         public void ControlPaint_CreateHBitmapTransparencyMask_NullBitmap_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("bitmap", () => ControlPaint.CreateHBitmapTransparencyMask(null));
+        }
+
+        public static IEnumerable<object[]> CreateBitmapWithInvertedForeColor_TestData()
+        {
+            yield return new object[] { Color.White, Color.FromArgb(255, 0, 0, 0) };
+            yield return new object[] { Color.Black, Color.FromArgb(255, 255, 255, 255) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(CreateBitmapWithInvertedForeColor_TestData))]
+        public void ControlPaint_CreateBitmapWithInvertedForeColor(Color imageColor, Color expected)
+        {
+            using Bitmap bitmap = new(1, 1);
+            bitmap.SetPixel(0, 0, imageColor);
+
+            using Bitmap invertedBitmap = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Color.LightGray);
+            Color newColor = invertedBitmap.GetPixel(0, 0);
+
+            Assert.Equal(expected, newColor);
         }
 
         public static IEnumerable<object[]> Dark_Color_TestData()
@@ -847,8 +865,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawButton(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawButton(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawButton(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawButton(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -930,8 +948,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCaptionButton(graphics, new Rectangle(0, 0, width, height), CaptionButton.Close, state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCaptionButton(graphics, 0, 0, width, height, CaptionButton.Close, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCaptionButton(graphics, new Rectangle(0, 0, width, height), CaptionButton.Close, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCaptionButton(graphics, 0, 0, width, height, CaptionButton.Close, state));
         }
 
         [WinFormsTheory]
@@ -1011,8 +1029,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCheckBox(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCheckBox(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCheckBox(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCheckBox(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1091,8 +1109,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawComboButton(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawComboButton(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawComboButton(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawComboButton(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1470,8 +1488,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMenuGlyph(graphics, new Rectangle(0, 0, width, height), glyph));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMenuGlyph(graphics, 0, 0, width, height, glyph));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMenuGlyph(graphics, new Rectangle(0, 0, width, height), glyph));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMenuGlyph(graphics, 0, 0, width, height, glyph));
         }
 
         [WinFormsTheory]
@@ -1552,8 +1570,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMixedCheckBox(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMixedCheckBox(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMixedCheckBox(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMixedCheckBox(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1632,8 +1650,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawRadioButton(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawRadioButton(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawRadioButton(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawRadioButton(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1770,8 +1788,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawScrollButton(graphics, new Rectangle(0, 0, width, height), ScrollButton.Up, state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawScrollButton(graphics, 0, 0, width, height, ScrollButton.Up, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawScrollButton(graphics, new Rectangle(0, 0, width, height), ScrollButton.Up, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawScrollButton(graphics, 0, 0, width, height, ScrollButton.Up, state));
         }
 
         [WinFormsTheory]
@@ -2012,6 +2030,21 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             ControlPaint.FillReversibleRectangle(rectangle, backColor);
+        }
+
+        public static IEnumerable<object[]> IsDark_TestData()
+        {
+            yield return new object[] { Color.White, false };
+            yield return new object[] { Color.Black, true };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsDark_TestData))]
+        public void ControlPaint_IsDark(Color color, bool expected)
+        {
+            bool result = ControlPaint.IsDark(color);
+
+            Assert.Equal(expected, result);
         }
 
         public static IEnumerable<object[]> Light_Color_TestData()

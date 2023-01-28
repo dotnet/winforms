@@ -7,11 +7,10 @@ using System.Drawing;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class ToolStripSeparatorTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

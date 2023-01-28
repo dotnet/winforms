@@ -11,8 +11,8 @@ internal static partial class Interop
         public struct LVTILEVIEWINFO
         {
             public uint cbSize;
-            public LVTVIM dwMask;
-            public LVTVIF dwFlags;
+            public LVTILEVIEWINFO_MASK dwMask;
+            public LVTILEVIEWINFO_FLAGS dwFlags;
             public Size sizeTile;
             public int cLines;
             public RECT rcLabelMargin;

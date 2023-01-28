@@ -41,7 +41,7 @@ Contributions must maintain [API signature][breaking-changes-public-contract] an
 
 ## Up for Grabs
 
-The team marks the most straightforward issues as [up for grabs](https://github.com/dotnet/winforms/labels/up-for-grabs). This set of issues is the place to start if you are interested in contributing but new to the codebase.
+The team marks the most straightforward issues as [good first issue](https://github.com/dotnet/winforms/labels/good%20first%20issue) and  [help wanted](https://github.com/dotnet/winforms/labels/help%20wanted). This set of issues is the place to start if you are interested in contributing but new to the codebase.
 
 ## PR Feedback
 

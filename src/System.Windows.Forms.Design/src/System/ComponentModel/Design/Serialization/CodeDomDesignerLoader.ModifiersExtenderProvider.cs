@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Windows.Forms;
 
@@ -172,10 +174,7 @@ namespace System.ComponentModel.Design.Serialization
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
                 bool oldValue = GetGenerateMember(comp);
 
-                if (dictionary is not null)
-                {
-                    dictionary.SetValue("GenerateMember", generate);
-                }
+                dictionary?.SetValue("GenerateMember", generate);
 
                 // If the old value was true and the new value is false, we've got
                 // to remove the existing member declaration for this
@@ -219,13 +218,8 @@ namespace System.ComponentModel.Design.Serialization
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (dictionary is not null)
-                {
-                    dictionary.SetValue("Modifiers", modifiers);
-                }
+                dictionary?.SetValue("Modifiers", modifiers);
             }
         }
     }
 }
-
-

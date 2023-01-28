@@ -8,12 +8,12 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial Gdi32.HDC GetDC(IntPtr hWnd);
+        [DllImport(Libraries.User32)]
+        public static extern HDC GetDC(IntPtr hWnd);
 
-        public static Gdi32.HDC GetDC(HandleRef hWnd)
+        public static HDC GetDC(HandleRef hWnd)
         {
-            Gdi32.HDC dc = GetDC(hWnd.Handle);
+            HDC dc = GetDC(hWnd.Handle);
             GC.KeepAlive(hWnd.Wrapper);
             return dc;
         }

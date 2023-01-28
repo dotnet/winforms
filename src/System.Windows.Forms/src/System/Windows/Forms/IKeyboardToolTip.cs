@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a caption set for this tool by the provided ToolTip
         /// </summary>
-        string GetCaptionForTool(ToolTip toolTip);
+        string? GetCaptionForTool(ToolTip toolTip);
 
         /// <summary>
         ///  Returns false if this tool's own keyboard tooltip is not expected to be shown (e.g. it is just a container for other tools)

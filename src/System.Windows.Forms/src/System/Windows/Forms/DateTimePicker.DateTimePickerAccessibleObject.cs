@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
-using static Interop.ComCtl32;
 using static Interop.User32;
 
 namespace System.Windows.Forms
@@ -102,14 +101,13 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.LocalizedControlTypePropertyId =>
+                    UiaCore.UIA.LocalizedControlTypePropertyId when
                         // We define a custom "LocalizedControlType" by default.
                         // If DateTimePicker.AccessibleRole value is customized by a user
                         // then "LocalizedControlType" value will be based on "ControlType"
                         // which depends on DateTimePicker.AccessibleRole.
                         Owner.AccessibleRole == AccessibleRole.Default
-                            ? s_dateTimePickerLocalizedControlTypeString
-                            : base.GetPropertyValue(propertyID),
+                        => s_dateTimePickerLocalizedControlTypeString,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -171,7 +169,7 @@ namespace System.Windows.Forms
             {
                 if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
                 {
-                    SendMessageW(Owner, WM.SYSKEYDOWN, (nint)Keys.Down);
+                    PInvoke.SendMessage(Owner, WM.SYSKEYDOWN, (WPARAM)(int)Keys.Down);
                 }
             }
 
@@ -179,7 +177,7 @@ namespace System.Windows.Forms
             {
                 if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
                 {
-                    SendMessageW(Owner, (WM)DTM.CLOSEMONTHCAL);
+                    PInvoke.SendMessage(Owner, (WM)PInvoke.DTM_CLOSEMONTHCAL);
                 }
             }
 

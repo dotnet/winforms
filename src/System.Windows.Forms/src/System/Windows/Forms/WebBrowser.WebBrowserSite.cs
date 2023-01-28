@@ -5,9 +5,11 @@
 #nullable disable
 
 using System.Drawing;
+using Windows.Win32.System.Ole;
 using static Interop;
 using static Interop.Mshtml;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Ole = Windows.Win32.System.Ole;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms
 {
@@ -97,10 +99,10 @@ namespace System.Windows.Forms
 
             HRESULT IDocHostUIHandler.ShowUI(
                 uint dwID,
-                Ole32.IOleInPlaceActiveObject activeObject,
-                Ole32.IOleCommandTarget commandTarget,
-                Ole32.IOleInPlaceFrame frame,
-                Ole32.IOleInPlaceUIWindow doc)
+                IOleInPlaceActiveObject.Interface activeObject,
+                IOleCommandTarget.Interface commandTarget,
+                IOleInPlaceFrame.Interface frame,
+                IOleInPlaceUIWindow.Interface doc)
             {
                 return HRESULT.S_FALSE;
             }
@@ -125,7 +127,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            unsafe HRESULT IDocHostUIHandler.ResizeBorder(RECT* rect, Ole32.IOleInPlaceUIWindow doc, BOOL fFrameWindow)
+            unsafe HRESULT IDocHostUIHandler.ResizeBorder(RECT* rect, IOleInPlaceUIWindow.Interface doc, BOOL fFrameWindow)
             {
                 return HRESULT.E_NOTIMPL;
             }
@@ -135,7 +137,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT IDocHostUIHandler.GetDropTarget(Ole32.IDropTarget pDropTarget, out Ole32.IDropTarget ppDropTarget)
+            HRESULT IDocHostUIHandler.GetDropTarget(Ole.IDropTarget.Interface pDropTarget, out Ole.IDropTarget.Interface ppDropTarget)
             {
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
@@ -150,7 +152,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IDocHostUIHandler.TranslateAccelerator(User32.MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
+            unsafe HRESULT IDocHostUIHandler.TranslateAccelerator(MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
             {
                 if (lpMsg is null || pguidCmdGroup is null)
                 {
@@ -162,8 +164,8 @@ namespace System.Windows.Forms
                 WebBrowser wb = (WebBrowser)Host;
                 if (!wb.WebBrowserShortcutsEnabled)
                 {
-                    int keyCode = (int)lpMsg->wParam | (int)Control.ModifierKeys;
-                    if (lpMsg->message != User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                    int keyCode = (int)(uint)lpMsg->wParam | (int)ModifierKeys;
+                    if (lpMsg->message != (uint)User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                     {
                         return HRESULT.S_OK;
                     }
@@ -180,7 +182,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            HRESULT IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
+            HRESULT IDocHostUIHandler.FilterDataObject(ComTypes.IDataObject pDO, out ComTypes.IDataObject ppDORet)
             {
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
@@ -188,12 +190,9 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            //
-            // Internal methods
-            //
-            internal override void OnPropertyChanged(Ole32.DispatchID dispid)
+            internal override void OnPropertyChanged(int dispid)
             {
-                if (dispid != Ole32.DispatchID.READYSTATE)
+                if (dispid != PInvoke.DISPID_READYSTATE)
                 {
                     base.OnPropertyChanged(dispid);
                 }

@@ -28,14 +28,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the bindings in the collection as an object.
         /// </summary>
-        protected override ArrayList List => _list ?? (_list = new ArrayList());
+        protected override ArrayList List => _list ??= new ArrayList();
 
         /// <summary>
         ///  Gets the <see cref="Binding"/> at the specified index.
         /// </summary>
         public Binding this[int index] => (Binding)List[index];
 
-        internal protected void Add(Binding binding)
+        protected internal void Add(Binding binding)
         {
             var eventArgs = new CollectionChangeEventArgs(CollectionChangeAction.Add, binding);
             OnCollectionChanging(eventArgs);
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
             remove => _onCollectionChanged -= value;
         }
 
-        internal protected void Clear()
+        protected internal void Clear()
         {
             var eventArgs = new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null);
             OnCollectionChanging(eventArgs);
@@ -102,7 +102,7 @@ namespace System.Windows.Forms
             _onCollectionChanged?.Invoke(this, ccevent);
         }
 
-        internal protected void Remove(Binding binding)
+        protected internal void Remove(Binding binding)
         {
             var eventArgs = new CollectionChangeEventArgs(CollectionChangeAction.Remove, binding);
             OnCollectionChanging(eventArgs);
@@ -110,13 +110,13 @@ namespace System.Windows.Forms
             OnCollectionChanged(eventArgs);
         }
 
-        internal protected void RemoveAt(int index) => Remove(this[index]);
+        protected internal void RemoveAt(int index) => Remove(this[index]);
 
         /// <summary>
         ///  Removes the specified <see cref="Binding"/> from the collection.
         /// </summary>
         protected virtual void RemoveCore(Binding dataBinding) => List.Remove(dataBinding);
 
-        internal protected bool ShouldSerializeMyAll() => Count > 0;
+        protected internal bool ShouldSerializeMyAll() => Count > 0;
     }
 }

@@ -7,7 +7,6 @@ using System.Drawing.Design;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Xunit;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Misc", Assert.IsType<CategoryAttribute>(property.Attributes[typeof(CategoryAttribute)]).Category);
             Assert.Empty(Assert.IsType<DescriptionAttribute>(property.Attributes[typeof(DescriptionAttribute)]).Description);
             Assert.False(Assert.IsType<ReadOnlyAttribute>(property.Attributes[typeof(ReadOnlyAttribute)]).IsReadOnly);
-            Assert.Equal((int)DispatchID.TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
+            Assert.Equal(PInvoke.DISPID_TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -61,7 +60,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Misc", Assert.IsType<CategoryAttribute>(property.Attributes[typeof(CategoryAttribute)]).Category);
             Assert.Empty(Assert.IsType<DescriptionAttribute>(property.Attributes[typeof(DescriptionAttribute)]).Description);
             Assert.False(Assert.IsType<ReadOnlyAttribute>(property.Attributes[typeof(ReadOnlyAttribute)]).IsReadOnly);
-            Assert.Equal((int)DispatchID.TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
+            Assert.Equal(PInvoke.DISPID_TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -77,7 +76,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Misc", Assert.IsType<CategoryAttribute>(property.Attributes[typeof(CategoryAttribute)]).Category);
             Assert.Empty(Assert.IsType<DescriptionAttribute>(property.Attributes[typeof(DescriptionAttribute)]).Description);
             Assert.True(Assert.IsType<ReadOnlyAttribute>(property.Attributes[typeof(ReadOnlyAttribute)]).IsReadOnly);
-            Assert.Equal((int)DispatchID.TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
+            Assert.Equal(PInvoke.DISPID_TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -93,7 +92,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Misc", Assert.IsType<CategoryAttribute>(property.Attributes[typeof(CategoryAttribute)]).Category);
             Assert.Empty(Assert.IsType<DescriptionAttribute>(property.Attributes[typeof(DescriptionAttribute)]).Description);
             Assert.True(Assert.IsType<ReadOnlyAttribute>(property.Attributes[typeof(ReadOnlyAttribute)]).IsReadOnly);
-            Assert.Equal((int)DispatchID.TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
+            Assert.Equal(PInvoke.DISPID_TEXT, Assert.IsType<DispIdAttribute>(property.Attributes[typeof(DispIdAttribute)]).Value);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -1110,7 +1109,7 @@ namespace System.Windows.Forms.Tests
             PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
             PropertyDescriptor property = events[propertyName];
 
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Null(control.CustomProperty);
             Assert.True(Assert.IsType<BrowsableAttribute>(property.Attributes[typeof(BrowsableAttribute)]).Browsable);
             Assert.True(control.IsHandleCreated);
@@ -1119,7 +1118,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call again.
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Null(control.CustomProperty);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1158,7 +1157,7 @@ namespace System.Windows.Forms.Tests
             PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
             PropertyDescriptor property = events[nameof(CustomAxHost.IntProperty)];
 
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Equal(0, control.IntProperty);
             Assert.True(Assert.IsType<BrowsableAttribute>(property.Attributes[typeof(BrowsableAttribute)]).Browsable);
             Assert.True(control.IsHandleCreated);
@@ -1167,7 +1166,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call again.
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Equal(0, control.IntProperty);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1423,7 +1422,7 @@ namespace System.Windows.Forms.Tests
             [Category("Category")]
             public string CategoryProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             [Description("Description")]
             public string DescriptionProperty { get; set; }
 
@@ -1433,30 +1432,30 @@ namespace System.Windows.Forms.Tests
             [ReadOnly(true)]
             public string ReadOnlyProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             public string DispIdProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             public DataSource DispIdDataSourceProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             [Browsable(false)]
             public string DispIdNotBrowsableProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             [ReadOnly(true)]
             public string DispIdReadOnlyProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             [ReadOnly(true)]
             [Browsable(false)]
             public string DispIdNotBrowsableReadOnlyProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             [Editor(typeof(CustomEditor), typeof(object))]
             public string DispIdEditorProperty { get; set; }
 
-            [DispId((int)DispatchID.TEXT)]
+            [DispId(PInvoke.DISPID_TEXT)]
             [Editor(typeof(CustomUITypeEditor), typeof(UITypeEditor))]
             public string DispIdUITypeEditorProperty { get; set; }
         }

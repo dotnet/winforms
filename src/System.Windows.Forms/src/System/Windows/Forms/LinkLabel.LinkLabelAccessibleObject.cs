@@ -59,8 +59,8 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                 }
 
                 Point p = Owner.PointToClient(new Point(x, y));
-                Link hit = _owningLinkLabel.PointInLink(p.X, p.Y);
+                Link? hit = _owningLinkLabel.PointInLink(p.X, p.Y);
 
                 if (hit is not null)
                 {

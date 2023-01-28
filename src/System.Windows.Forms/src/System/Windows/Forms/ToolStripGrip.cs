@@ -143,10 +143,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             // all the grip painting should be on the ToolStrip itself.
-            if (ParentInternal is not null)
-            {
-                ParentInternal.OnPaintGrip(e);
-            }
+            ParentInternal?.OnPaintGrip(e);
         }
 
         /// <summary>
@@ -237,7 +234,7 @@ namespace System.Windows.Forms
         /// <param name="e"></param>
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (_oldCursor is not null && !ParentInternal.IsInDesignMode)
+            if (_oldCursor is not null && ParentInternal is not null && !ParentInternal.IsInDesignMode)
             {
                 ParentInternal.Cursor = _oldCursor;
             }
@@ -258,7 +255,7 @@ namespace System.Windows.Forms
                 ToolStripPanelRow.ToolStripPanel.MoveControl(ParentInternal, /*startLocation,*/endLocation);
             }
 
-            if (!ParentInternal.IsInDesignMode)
+            if (ParentInternal is not null && !ParentInternal.IsInDesignMode)
             {
                 ParentInternal.Cursor = _oldCursor;
             }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -326,11 +328,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool ContainsMaskDescriptor(MaskDescriptor maskDescriptor)
         {
-            Debug.Assert(maskDescriptor != null, "Null mask descriptor.");
+            Debug.Assert(maskDescriptor is not null, "Null mask descriptor.");
 
             foreach (MaskDescriptor descriptor in _maskDescriptors)
             {
-                Debug.Assert(descriptor != null, "Null mask descriptor in the collection.");
+                Debug.Assert(descriptor is not null, "Null mask descriptor in the collection.");
 
                 if (maskDescriptor.Equals(descriptor) || maskDescriptor.Name.Trim() == descriptor.Name.Trim())
                 {
@@ -484,7 +486,7 @@ namespace System.Windows.Forms.Design
             // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
             // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
 
-            User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+            PInvoke.SendMessage(_listViewCannedMasks, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
 
             try
             {
@@ -494,7 +496,7 @@ namespace System.Windows.Forms.Design
 
                 foreach (MaskDescriptor maskDescriptor in _maskDescriptors)
                 {
-                    string validatingType = maskDescriptor.ValidatingType != null ? maskDescriptor.ValidatingType.Name : nullEntry;
+                    string validatingType = maskDescriptor.ValidatingType is not null ? maskDescriptor.ValidatingType.Name : nullEntry;
 
                     // Make sure the sample displays literals.
                     MaskedTextProvider mtp = new MaskedTextProvider(maskDescriptor.Mask, maskDescriptor.Culture);
@@ -510,7 +512,7 @@ namespace System.Windows.Forms.Design
                 _maskDescriptors.Add(_customMaskDescriptor);
                 _listViewCannedMasks.Items.Add(new ListViewItem(new string[] { _customMaskDescriptor.Name, "", nullEntry }));
 
-                if (selectedMaskDex != null)
+                if (selectedMaskDex is not null)
                 {
                     SetSelectedMaskDescriptor(selectedMaskDex);
                 }
@@ -518,7 +520,7 @@ namespace System.Windows.Forms.Design
             finally
             {
                 // Resume redraw.
-                User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                PInvoke.SendMessage(_listViewCannedMasks, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                 _listViewCannedMasks.Invalidate();
             }
         }
@@ -586,7 +588,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void listViewCannedMasks_Enter(object sender, EventArgs e)
         {
-            if (_listViewCannedMasks.FocusedItem != null || _listViewCannedMasks.Items.Count <= 0)
+            if (_listViewCannedMasks.FocusedItem is not null || _listViewCannedMasks.Items.Count <= 0)
             {
                 return;
             }
@@ -648,7 +650,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void ShowHelp()
         {
-            if (_helpService != null)
+            if (_helpService is not null)
             {
                 _helpService.ShowHelpFromKeyword(HelpTopic);
             }

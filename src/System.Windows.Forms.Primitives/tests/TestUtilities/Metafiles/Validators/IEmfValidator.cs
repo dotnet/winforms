@@ -5,7 +5,6 @@
 #nullable enable
 
 using System.Windows.Forms.Metafiles;
-using static Interop;
 
 namespace System
 {
@@ -14,7 +13,7 @@ namespace System
         /// <summary>
         ///  Returns true if the given <paramref name="recordType"/> should be validated by this validator.
         /// </summary>
-        bool ShouldValidate(Gdi32.EMR recordType);
+        bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType);
 
         /// <summary>
         ///  Validates the given <paramref name="record"/>.

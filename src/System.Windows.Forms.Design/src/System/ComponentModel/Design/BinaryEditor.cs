@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Text;
@@ -102,11 +104,8 @@ namespace System.ComponentModel.Design
                 return value;
             }
 
-            if (_binaryUI is null)
-            {
-                // Child modal dialog- launching in SystemAware mode.
-                _binaryUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));
-            }
+            // Child modal dialog- launching in SystemAware mode.
+            _binaryUI ??= DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));
 
             _binaryUI.Value = value;
             if (editorService.ShowDialog(_binaryUI) == DialogResult.OK)
@@ -135,5 +134,3 @@ namespace System.ComponentModel.Design
         }
     }
 }
-
-

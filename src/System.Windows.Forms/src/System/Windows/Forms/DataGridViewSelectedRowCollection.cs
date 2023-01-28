@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class DataGridViewSelectedRowCollection : BaseCollection, IList
     {
-        private readonly ArrayList _items = new ArrayList();
+        private readonly List<DataGridViewRow> _items = new();
 
         int IList.Add(object value)
         {
@@ -28,15 +28,9 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        bool IList.Contains(object value)
-        {
-            return _items.Contains(value);
-        }
+        bool IList.Contains(object value) => ((IList)_items).Contains(value);
 
-        int IList.IndexOf(object value)
-        {
-            return _items.IndexOf(value);
-        }
+        int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
 
         void IList.Insert(int index, object value)
         {
@@ -53,15 +47,9 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        bool IList.IsFixedSize
-        {
-            get { return true; }
-        }
+        bool IList.IsFixedSize => true;
 
-        bool IList.IsReadOnly
-        {
-            get { return true; }
-        }
+        bool IList.IsReadOnly => true;
 
         object IList.this[int index]
         {
@@ -69,58 +57,28 @@ namespace System.Windows.Forms
             set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }
         }
 
-        void ICollection.CopyTo(Array array, int index)
-        {
-            _items.CopyTo(array, index);
-        }
+        void ICollection.CopyTo(Array array, int index) => ((ICollection)_items).CopyTo(array, index);
 
-        int ICollection.Count
-        {
-            get { return _items.Count; }
-        }
+        int ICollection.Count => _items.Count;
 
-        bool ICollection.IsSynchronized
-        {
-            get { return false; }
-        }
+        bool ICollection.IsSynchronized => false;
 
-        object ICollection.SyncRoot
-        {
-            get { return this; }
-        }
+        object ICollection.SyncRoot => this;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
         internal DataGridViewSelectedRowCollection()
         {
         }
 
-        protected override ArrayList List
-        {
-            get
-            {
-                return _items;
-            }
-        }
+        protected override ArrayList List => ArrayList.Adapter(_items);
 
-        public DataGridViewRow this[int index]
-        {
-            get
-            {
-                return (DataGridViewRow)_items[index];
-            }
-        }
+        public DataGridViewRow this[int index] => _items[index];
 
         /// <summary>
         ///  Adds a <see cref="DataGridViewCell"/> to this collection.
         /// </summary>
-        internal int Add(DataGridViewRow dataGridViewRow)
-        {
-            return _items.Add(dataGridViewRow);
-        }
+        internal int Add(DataGridViewRow dataGridViewRow) => ((IList)_items).Add(dataGridViewRow);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Clear()
@@ -131,15 +89,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Checks to see if a DataGridViewCell is contained in this collection.
         /// </summary>
-        public bool Contains(DataGridViewRow dataGridViewRow)
-        {
-            return _items.IndexOf(dataGridViewRow) != -1;
-        }
+        public bool Contains(DataGridViewRow dataGridViewRow) => ((IList)_items).Contains(dataGridViewRow);
 
-        public void CopyTo(DataGridViewRow[] array, int index)
-        {
-            _items.CopyTo(array, index);
-        }
+        public void CopyTo(DataGridViewRow[] array, int index) => _items.CopyTo(array, index);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Insert(int index, DataGridViewRow dataGridViewRow)

@@ -20,6 +20,14 @@ namespace System.Windows.Forms
                         => menu.OwnerItem?.AccessibilityObject,
                     _ => base.FragmentNavigate(direction)
                 };
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
+                {
+                    UiaCore.UIA.IsControlElementPropertyId => true,
+                    UiaCore.UIA.IsContentElementPropertyId => Owner is ContextMenuStrip,
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }

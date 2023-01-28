@@ -61,10 +61,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_items is null)
-                    {
-                        _items = new ItemArray(_owner);
-                    }
+                    _items ??= new ItemArray(_owner);
 
                     return _items;
                 }
@@ -136,11 +133,8 @@ namespace System.Windows.Forms
                         {
                             _owner.NativeInsert(index, item);
                             _owner.UpdateMaxItemWidth(item, false);
-                            if (_owner._selectedItems is not null)
-                            {
-                                // Sorting may throw the LB contents and the selectedItem array out of synch.
-                                _owner._selectedItems.Dirty();
-                            }
+                            // Sorting may throw the LB contents and the selectedItem array out of synch.
+                            _owner._selectedItems?.Dirty();
                         }
                     }
                     else
@@ -251,7 +245,6 @@ namespace System.Windows.Forms
             {
                 //update the width.. to reset Scrollbars..
                 // Clear the selection state.
-                //
                 int cnt = _owner.Items.Count;
                 for (int i = 0; i < cnt; i++)
                 {
@@ -266,6 +259,7 @@ namespace System.Windows.Forms
                 InnerArray.Clear();
                 _owner._maxWidth = -1;
                 _owner.UpdateHorizontalExtent();
+                _owner.ClearListItemAccessibleObjects();
             }
 
             public bool Contains(object value)
@@ -343,7 +337,6 @@ namespace System.Windows.Forms
 
                 // If the List box is sorted, then nust treat this like an add
                 // because we are going to twiddle the index anyway.
-                //
                 if (_owner._sorted)
                 {
                     Add(item);
@@ -406,6 +399,10 @@ namespace System.Windows.Forms
                 }
 
                 _owner.UpdateMaxItemWidth(InnerArray.GetItem(index), true);
+
+                // Remove AccessibleObject before removing item from InnerArray because AccessibleObject relies on
+                // item's presence in InnerArray
+                _owner.RemoveListItemAccessibleObjectAt(index);
 
                 // Update InnerArray before calling NativeRemoveAt to ensure that when
                 // SelectedIndexChanged is raised (by NativeRemoveAt), InnerArray's state matches wrapped LB state.

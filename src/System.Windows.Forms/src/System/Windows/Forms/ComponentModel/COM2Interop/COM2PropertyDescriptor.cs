@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,1589 +11,1008 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Diagnostics.Debug;
+using Windows.Win32.System.Ole;
 using static Interop;
-using static Interop.Ole32;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+/// <summary>
+///  <para>
+///   This class wraps a com native property in a property descriptor. It maintains all information relative to the
+///   basic (e.g. ITypeInfo) information about the member dispid function, and converts that info to meaningful
+///   managed code information.
+///  </para>
+///  <para>
+///   It also allows other objects to register listeners to add extended information at runtime such as attributes
+///   of <see cref="TypeConverter"/>s.
+///  </para>
+/// </summary>
+internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
 {
-    /// <summary>
-    ///  This class wraps a com native property in a property descriptor.
-    ///  It maintains all information relative to the basic (e.g. ITypeInfo)
-    ///  information about the member dispid function, and converts that info
-    ///  to meaningful managed code information.
-    ///
-    ///  It also allows other objects to register listeners to add extended
-    ///  information at runtime such as attributes of TypeConverters.
-    /// </summary>
-    internal class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
+    private EventHandlerList? _events;
+
+    // Is this property read only?
+    private readonly bool _baseReadOnly;
+    private bool _readOnly;
+
+    // The resolved native type -> clr type
+    private readonly Type? _propertyType;
+    private TypeConverter? _converter;
+    private object? _editor;
+
+    private string? _displayName;
+
+    // This is any extra data needed. For IDispatch types, it's the GUID of the interface, etc.
+    private readonly object? _typeData;
+
+    // Keeps track of which data members need to be refreshed.
+    private int _refreshState;
+
+    // Our original baseline properties
+    private Attribute[]? _baseAttributes;
+
+    // Our cached last value -- this is only for checking if we should ask for a display value.
+    private object? _lastValue;
+
+    // For Object and dispatch types, we hide them by default.
+    private readonly bool _typeHide;
+
+    // This property is hidden because its get didn't return S_OK.
+    private bool _hrHidden;
+
+    // Our event signatures.
+    private static readonly object EventGetBaseAttributes = new();
+    private static readonly object EventGetDynamicAttributes = new();
+    private static readonly object EventShouldRefresh = new();
+    private static readonly object EventGetDisplayName = new();
+    private static readonly object EventGetDisplayValue = new();
+    private static readonly object EventGetIsReadOnly = new();
+    private static readonly object EventGetTypeConverterAndTypeEditor = new();
+    private static readonly object EventShouldSerializeValue = new();
+    private static readonly object EventCanResetValue = new();
+    private static readonly object EventResetValue = new();
+
+    private static readonly Guid GUID_COLOR = new("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
+
+    // Our map of native types that we can map to managed types for editors
+    private static readonly IDictionary s_oleConverters = new SortedList
     {
-        private EventHandlerList events;
+        [GUID_COLOR] = typeof(Com2ColorConverter),
+        [IID.GetRef<IFontDisp>()] = typeof(Com2FontConverter),
+        [IID.GetRef<IFont>()] = typeof(Com2FontConverter),
+        [IID.GetRef<IPictureDisp>()] = typeof(Com2PictureConverter),
+        [IID.GetRef<IPicture>()] = typeof(Com2PictureConverter)
+    };
 
-        /// <summary>
-        ///  Is this guy read only?
-        /// </summary>
-        private readonly bool baseReadOnly;
-        private bool readOnly;
+    private readonly Com2DataTypeToManagedDataTypeConverter? _valueConverter;
 
-        /// <summary>
-        ///  The resolved native type -> clr type
-        /// </summary>
-        private readonly Type propertyType;
+    public Com2PropertyDescriptor(
+        int dispid,
+        string name,
+        Attribute[] attributes,
+        bool readOnly,
+        Type? propertyType,
+        object? typeData,
+        bool hrHidden)
+        : base(name, attributes)
+    {
+        _baseReadOnly = readOnly;
+        _readOnly = readOnly;
 
-        /// <summary>
-        ///  The dispid. This is also in a DispIDAttribute, but we
-        ///  need it a lot.
-        /// </summary>
-        private readonly DispatchID dispid;
+        _baseAttributes = attributes;
+        SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, true);
 
-        private TypeConverter converter;
-        private object editor;
+        _hrHidden = hrHidden;
 
-        /// <summary>
-        ///  The current display name to show for this property
-        /// </summary>
-        private string displayName;
+        // Readonly to begin with is always read only.
+        SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, readOnly);
 
-        /// <summary>
-        ///  This is any extra data needed.  For IDispatch types, it's the GUID of
-        ///  the interface, etc.
-        /// </summary>
-        private readonly object typeData;
+        _propertyType = propertyType;
 
-        /// <summary>
-        ///  Keeps track of which data members need to be refreshed.
-        /// </summary>
-        private int refreshState;
+        DISPID = dispid;
 
-        /// <summary>
-        ///  Our properties manager
-        /// </summary>
-        private Com2Properties com2props;
-
-        /// <summary>
-        ///  Our original baseline properties
-        /// </summary>
-        private Attribute[] baseAttrs;
-
-        /// <summary>
-        ///  Our cached last value -- this is only
-        ///  for checking if we should ask for a display value
-        /// </summary>
-        private object lastValue;
-
-        /// <summary>
-        ///  For Object and dispatch types, we hide them by default.
-        /// </summary>
-        private readonly bool typeHide;
-
-        /// <summary>
-        ///  Set if the metadata causes this property to always be hidden
-        /// </summary>
-        private readonly bool canShow;
-
-        /// <summary>
-        ///  This property is hidden because its get didn't return S_OK
-        /// </summary>
-        private bool hrHidden;
-
-        /// <summary>
-        ///  Set if we are in the process of asking handlers for attributes
-        /// </summary>
-        private bool inAttrQuery;
-
-        /// <summary>
-        ///  Our event signatures.
-        /// </summary>
-        private static readonly object EventGetBaseAttributes = new object();
-        private static readonly object EventGetDynamicAttributes = new object();
-        private static readonly object EventShouldRefresh = new object();
-        private static readonly object EventGetDisplayName = new object();
-        private static readonly object EventGetDisplayValue = new object();
-        private static readonly object EventGetIsReadOnly = new object();
-        private static readonly object EventGetTypeConverterAndTypeEditor = new object();
-        private static readonly object EventShouldSerializeValue = new object();
-        private static readonly object EventCanResetValue = new object();
-        private static readonly object EventResetValue = new object();
-
-        private static readonly Guid GUID_COLOR = new Guid("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
-
-        /// <summary>
-        ///  Our map of native types that we can map to managed types for editors
-        /// </summary>
-        private static readonly IDictionary oleConverters = new SortedList
+        if (typeData is not null)
         {
-            [GUID_COLOR] = typeof(Com2ColorConverter),
-            [typeof(IFontDisp).GUID] = typeof(Com2FontConverter),
-            [typeof(IFont).GUID] = typeof(Com2FontConverter),
-            [typeof(IPictureDisp).GUID] = typeof(Com2PictureConverter),
-            [typeof(IPicture).GUID] = typeof(Com2PictureConverter)
-        };
-
-        /// <summary>
-        ///  Should we convert our type?
-        /// </summary>
-        private readonly Com2DataTypeToManagedDataTypeConverter valueConverter;
-
-        /// <summary>
-        ///  Ctor.
-        /// </summary>
-        public Com2PropertyDescriptor(DispatchID dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
-            : base(name, attrs)
-        {
-            baseReadOnly = readOnly;
-            this.readOnly = readOnly;
-
-            baseAttrs = attrs;
-            SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, true);
-
-            this.hrHidden = hrHidden;
-
-            // readonly to begin with are always read only
-            SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, readOnly);
-
-            propertyType = propType;
-
-            this.dispid = dispid;
-
-            if (typeData is not null)
+            _typeData = typeData;
+            if (typeData is Com2Enum comEnum)
             {
-                this.typeData = typeData;
-                if (typeData is Com2Enum)
-                {
-                    converter = new Com2EnumConverter((Com2Enum)typeData);
-                }
-                else if (typeData is Guid)
-                {
-                    valueConverter = CreateOleTypeConverter((Type)oleConverters[(Guid)typeData]);
-                }
+                _converter = new Com2EnumConverter(comEnum);
             }
-
-            // check if this thing is hidden from metadata
-            canShow = true;
-
-            if (attrs is not null)
+            else if (typeData is Guid guid)
             {
-                for (int i = 0; i < attrs.Length; i++)
-                {
-                    if (attrs[i].Equals(BrowsableAttribute.No) && !hrHidden)
-                    {
-                        canShow = false;
-                        break;
-                    }
-                }
-            }
-
-            if (canShow && (propType == typeof(object) || (valueConverter is null && propType == typeof(Oleaut32.IDispatch))))
-            {
-                typeHide = true;
+                _valueConverter = CreateOleTypeConverter((Type?)s_oleConverters[guid]);
             }
         }
 
-        protected Attribute[] BaseAttributes
+        // Check if this is hidden from metadata.
+        CanShow = true;
+
+        if (attributes is not null)
         {
-            get
+            for (int i = 0; i < attributes.Length; i++)
             {
-                if (GetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes))
+                if (attributes[i].Equals(BrowsableAttribute.No) && !hrHidden)
                 {
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, false);
-
-                    int baseCount = baseAttrs is null ? 0 : baseAttrs.Length;
-
-                    ArrayList attrList = new ArrayList();
-
-                    if (baseCount != 0)
-                    {
-                        attrList.AddRange(baseAttrs);
-                    }
-
-                    OnGetBaseAttributes(new GetAttributesEvent(attrList));
-
-                    if (attrList.Count != baseCount)
-                    {
-                        baseAttrs = new Attribute[attrList.Count];
-                    }
-
-                    if (baseAttrs is not null)
-                    {
-                        attrList.CopyTo(baseAttrs, 0);
-                    }
-                    else
-                    {
-                        baseAttrs = Array.Empty<Attribute>();
-                    }
+                    CanShow = false;
+                    break;
                 }
-
-                return baseAttrs;
-            }
-            set
-            {
-                baseAttrs = value;
             }
         }
 
-        /// <summary>
-        ///  Attributes
-        /// </summary>
-        public override AttributeCollection Attributes
+        if (CanShow && (propertyType == typeof(object) || (_valueConverter is null && propertyType == typeof(Oleaut32.IDispatch))))
         {
-            get
+            _typeHide = true;
+        }
+    }
+
+    protected Attribute[] BaseAttributes
+    {
+        get
+        {
+            if (!GetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes))
             {
-                if (AttributesValid || InAttrQuery)
-                {
-                    return base.Attributes;
-                }
+                Debug.Assert(_baseAttributes is not null);
+                return _baseAttributes ??= Array.Empty<Attribute>();
+            }
 
-                // restore our base attributes
-                AttributeArray = BaseAttributes;
+            SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, false);
 
-                ArrayList newAttributes = null;
+            int baseCount = _baseAttributes is null ? 0 : _baseAttributes.Length;
 
-                // if we are forcing a hide
-                if (typeHide && canShow)
-                {
-                    if (newAttributes is null)
-                    {
-                        newAttributes = new ArrayList(AttributeArray);
-                    }
+            List<Attribute> attributes = new();
 
-                    newAttributes.Add(new BrowsableAttribute(false));
-                }
-                else if (hrHidden)
-                {
-                    // check to see if the get still fails
-                    object target = TargetObject;
-                    if (target is not null)
-                    {
-                        HRESULT hr = ComNativeDescriptor.GetPropertyValue(target, dispid, new object[1]);
+            if (_baseAttributes is not null)
+            {
+                attributes.AddRange(_baseAttributes);
+            }
 
-                        // if not, go ahead and make this a browsable item
-                        if (hr.Succeeded())
-                        {
-                            // make it browsable
-                            if (newAttributes is null)
-                            {
-                                newAttributes = new ArrayList(AttributeArray);
-                            }
+            OnGetBaseAttributes(new GetAttributesEvent(attributes));
 
-                            newAttributes.Add(new BrowsableAttribute(true));
-                            hrHidden = false;
-                        }
-                    }
-                }
+            if (attributes.Count != baseCount)
+            {
+                _baseAttributes = new Attribute[attributes.Count];
+            }
 
-                inAttrQuery = true;
-                try
-                {
-                    // demand get any extended attributes
-                    ArrayList attrList = new ArrayList();
+            if (_baseAttributes is not null)
+            {
+                attributes.CopyTo(_baseAttributes, 0);
+            }
+            else
+            {
+                _baseAttributes = Array.Empty<Attribute>();
+            }
 
-                    OnGetDynamicAttributes(new GetAttributesEvent(attrList));
+            return _baseAttributes;
+        }
+    }
 
-                    Attribute ma;
-
-                    if (attrList.Count != 0 && newAttributes is null)
-                    {
-                        newAttributes = new ArrayList(AttributeArray);
-                    }
-
-                    // push any new attributes into the base type
-                    for (int i = 0; i < attrList.Count; i++)
-                    {
-                        ma = (Attribute)attrList[i];
-                        newAttributes.Add(ma);
-                    }
-                }
-                finally
-                {
-                    inAttrQuery = false;
-                }
-
-                // these are now valid.
-                SetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes, false);
-
-                // If we reconfigured attributes, then poke the new set back in.
-                //
-                if (newAttributes is not null)
-                {
-                    Attribute[] temp = new Attribute[newAttributes.Count];
-                    newAttributes.CopyTo(temp, 0);
-                    AttributeArray = temp;
-                }
-
+    public override AttributeCollection Attributes
+    {
+        get
+        {
+            if (AttributesValid || InAttributeQuery)
+            {
                 return base.Attributes;
             }
-        }
 
-        /// <summary>
-        ///  Checks if the attributes are valid.  Asks any clients if they
-        ///  would like attributes required.
-        /// </summary>
-        protected bool AttributesValid
-        {
-            get
+            // Restore our base attributes
+            AttributeArray = BaseAttributes;
+
+            List<Attribute>? newAttributes = null;
+
+            // If we are forcing a hide.
+            if (_typeHide && CanShow)
             {
-                bool currentRefresh = !GetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes);
-
-                return currentRefresh;
+                newAttributes ??= new(AttributeArray);
+                newAttributes.Add(new BrowsableAttribute(false));
             }
-        }
-
-        /// <summary>
-        ///  Checks if this item can be shown.
-        /// </summary>
-        public bool CanShow
-        {
-            get
+            else if (_hrHidden)
             {
-                return canShow;
-            }
-        }
-
-        /// <summary>
-        ///  Retrieves the type of the component this PropertyDescriptor is bound to.
-        /// </summary>
-        public override Type ComponentType => typeof(Oleaut32.IDispatch);
-
-        /// <summary>
-        ///  Retrieves the type converter for this property.
-        /// </summary>
-        public override TypeConverter Converter
-        {
-            [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
-            get
-            {
-                if (TypeConverterValid)
+                // Check to see if the get still fails.
+                object? target = TargetObject;
+                if (target is not null)
                 {
-                    return converter;
-                }
+                    HRESULT hr = ComNativeDescriptor.GetPropertyValue(target, DISPID, out _);
 
-                object typeEd = null;
-
-                GetTypeConverterAndTypeEditor(ref converter, typeof(UITypeEditor), ref typeEd);
-
-                if (!TypeEditorValid)
-                {
-                    editor = typeEd;
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
-                }
-
-                SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
-
-                return converter;
-            }
-        }
-
-        /// <summary>
-        ///  Retrieves whether this component is applying a type conversion...
-        /// </summary>
-        public bool ConvertingNativeType
-        {
-            get
-            {
-                return (valueConverter is not null);
-            }
-        }
-
-        /// <summary>
-        ///  Retrieves the default value for this property.
-        /// </summary>
-        protected virtual object DefaultValue
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///  Retrieves the DISPID for this item
-        /// </summary>
-        public DispatchID DISPID
-        {
-            get
-            {
-                return dispid;
-            }
-        }
-
-        /// <summary>
-        ///  Gets the friendly name that should be displayed to the user in a window like
-        ///  the Property Browser.
-        /// </summary>
-        public override string DisplayName
-        {
-            get
-            {
-                if (!DisplayNameValid)
-                {
-                    GetNameItemEvent gni = new GetNameItemEvent(base.DisplayName);
-                    OnGetDisplayName(gni);
-                    displayName = gni.NameString;
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName, false);
-                }
-
-                return displayName;
-            }
-        }
-
-        /// <summary>
-        ///  Checks if the property display name is valid
-        ///  asks clients if they would like display name required.
-        /// </summary>
-        protected bool DisplayNameValid
-        {
-            get
-            {
-                bool currentRefresh = !(displayName is null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName));
-
-                return currentRefresh;
-            }
-        }
-
-        protected EventHandlerList Events
-        {
-            get
-            {
-                if (events is null)
-                {
-                    events = new EventHandlerList();
-                }
-
-                return events;
-            }
-        }
-
-        protected bool InAttrQuery
-        {
-            get
-            {
-                return inAttrQuery;
-            }
-        }
-
-        /// <summary>
-        ///  Indicates whether this property is read only.
-        /// </summary>
-        public override bool IsReadOnly
-        {
-            get
-            {
-                if (!ReadOnlyValid)
-                {
-                    readOnly |= (Attributes[typeof(ReadOnlyAttribute)].Equals(ReadOnlyAttribute.Yes));
-                    GetBoolValueEvent gbv = new GetBoolValueEvent(readOnly);
-                    OnGetIsReadOnly(gbv);
-                    readOnly = gbv.Value;
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, false);
-                }
-
-                return readOnly;
-            }
-        }
-
-        internal Com2Properties PropertyManager
-        {
-            set
-            {
-                com2props = value;
-            }
-            get
-            {
-                return com2props;
-            }
-        }
-
-        /// <summary>
-        ///  Retrieves the type of the property.
-        /// </summary>
-        public override Type PropertyType
-        {
-            get
-            {
-                // replace the type with the mapped converter type
-                if (valueConverter is not null)
-                {
-                    return valueConverter.ManagedType;
-                }
-                else
-                {
-                    return propertyType;
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Checks if the read only state is valid.
-        ///  Asks clients if they would like read-only required.
-        /// </summary>
-        protected bool ReadOnlyValid
-        {
-            get
-            {
-                if (baseReadOnly)
-                {
-                    return true;
-                }
-
-                bool currentRefresh = !GetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly);
-
-                return currentRefresh;
-            }
-        }
-
-        /// <summary>
-        ///  Gets the Object that this descriptor was created for.
-        ///  May be null if the Object's ref has died.
-        /// </summary>
-        public virtual object TargetObject
-        {
-            get
-            {
-                if (com2props is not null)
-                {
-                    return com2props.TargetObject;
-                }
-
-                return null;
-            }
-        }
-
-        protected bool TypeConverterValid
-        {
-            get
-            {
-                bool currentRefresh = !(converter is null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter));
-
-                return currentRefresh;
-            }
-        }
-
-        protected bool TypeEditorValid
-        {
-            get
-            {
-                bool currentRefresh = !(editor is null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor));
-
-                return currentRefresh;
-            }
-        }
-
-        public event GetBoolValueEventHandler QueryCanResetValue
-        {
-            add => Events.AddHandler(EventCanResetValue, value);
-            remove => Events.RemoveHandler(EventCanResetValue, value);
-        }
-
-        public event GetAttributesEventHandler QueryGetBaseAttributes
-        {
-            add => Events.AddHandler(EventGetBaseAttributes, value);
-            remove => Events.RemoveHandler(EventGetBaseAttributes, value);
-        }
-
-        public event GetAttributesEventHandler QueryGetDynamicAttributes
-        {
-            add => Events.AddHandler(EventGetDynamicAttributes, value);
-            remove => Events.RemoveHandler(EventGetDynamicAttributes, value);
-        }
-
-        public event GetNameItemEventHandler QueryGetDisplayName
-        {
-            add => Events.AddHandler(EventGetDisplayName, value);
-            remove => Events.RemoveHandler(EventGetDisplayName, value);
-        }
-
-        public event GetNameItemEventHandler QueryGetDisplayValue
-        {
-            add => Events.AddHandler(EventGetDisplayValue, value);
-            remove => Events.RemoveHandler(EventGetDisplayValue, value);
-        }
-
-        public event GetBoolValueEventHandler QueryGetIsReadOnly
-        {
-            add => Events.AddHandler(EventGetIsReadOnly, value);
-            remove => Events.RemoveHandler(EventGetIsReadOnly, value);
-        }
-
-        public event GetTypeConverterAndTypeEditorEventHandler QueryGetTypeConverterAndTypeEditor
-        {
-            add => Events.AddHandler(EventGetTypeConverterAndTypeEditor, value);
-            remove => Events.RemoveHandler(EventGetTypeConverterAndTypeEditor, value);
-        }
-
-        public event Com2EventHandler QueryResetValue
-        {
-            add => Events.AddHandler(EventResetValue, value);
-            remove => Events.RemoveHandler(EventResetValue, value);
-        }
-
-        public event GetBoolValueEventHandler QueryShouldSerializeValue
-        {
-            add => Events.AddHandler(EventShouldSerializeValue, value);
-            remove => Events.RemoveHandler(EventShouldSerializeValue, value);
-        }
-
-        /// <summary>
-        ///  Indicates whether reset will change the value of the component.  If there
-        ///  is a DefaultValueAttribute, then this will return true if getValue returns
-        ///  something different than the default value.  If there is a reset method and
-        ///  a shouldPersist method, this will return what shouldPersist returns.
-        ///  If there is just a reset method, this always returns true.  If none of these
-        ///  cases apply, this returns false.
-        /// </summary>
-        public override bool CanResetValue(object component)
-        {
-            if (component is ICustomTypeDescriptor)
-            {
-                component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
-            }
-
-            if (component == TargetObject)
-            {
-                GetBoolValueEvent gbv = new GetBoolValueEvent(false);
-                OnCanResetValue(gbv);
-                return gbv.Value;
-            }
-
-            return false;
-        }
-
-        public object Clone()
-        {
-            return new Com2PropertyDescriptor(dispid, Name, (Attribute[])baseAttrs.Clone(), readOnly, propertyType, typeData, hrHidden);
-        }
-
-        /// <summary>
-        ///  Creates a converter Object, first by looking for a ctor with a Com2PropertyDescriptor
-        ///  parameter, then using the default ctor if it is not found.
-        /// </summary>
-        private Com2DataTypeToManagedDataTypeConverter CreateOleTypeConverter(Type t)
-        {
-            if (t is null)
-            {
-                return null;
-            }
-
-            ConstructorInfo ctor = t.GetConstructor(new Type[] { typeof(Com2PropertyDescriptor) });
-            Com2DataTypeToManagedDataTypeConverter converter;
-            if (ctor is not null)
-            {
-                converter = (Com2DataTypeToManagedDataTypeConverter)ctor.Invoke(new object[] { this });
-            }
-            else
-            {
-                converter = (Com2DataTypeToManagedDataTypeConverter)Activator.CreateInstance(t);
-            }
-
-            return converter;
-        }
-
-        /// <summary>
-        ///  Creates an instance of the member attribute collection. This can
-        ///  be overriden by subclasses to return a subclass of AttributeCollection.
-        /// </summary>
-        protected override AttributeCollection CreateAttributeCollection()
-        {
-            return new AttributeCollection(AttributeArray);
-        }
-
-        private TypeConverter GetBaseTypeConverter()
-        {
-            if (PropertyType is null)
-            {
-                return new TypeConverter();
-            }
-
-            TypeConverter localConverter = null;
-
-            TypeConverterAttribute attr = (TypeConverterAttribute)Attributes[typeof(TypeConverterAttribute)];
-            if (attr is not null)
-            {
-                string converterTypeName = attr.ConverterTypeName;
-                if (converterTypeName is not null && converterTypeName.Length > 0)
-                {
-                    Type converterType = Type.GetType(converterTypeName);
-                    if (converterType is not null && typeof(TypeConverter).IsAssignableFrom(converterType))
+                    // If not, go ahead and make this a browsable item.
+                    if (hr.Succeeded)
                     {
-                        try
-                        {
-                            localConverter = (TypeConverter)Activator.CreateInstance(converterType);
-                            if (localConverter is not null)
-                            {
-                                refreshState |= Com2PropertyDescriptorRefresh.TypeConverterAttr;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.Fail("Failed to create TypeConverter of type '" + attr.ConverterTypeName + "' from Attribute", ex.ToString());
-                        }
+                        // Make it browsable.
+                        newAttributes ??= new(AttributeArray);
+                        newAttributes.Add(new BrowsableAttribute(true));
+                        _hrHidden = false;
                     }
                 }
             }
 
-            // if we didn't get one from the attribute, ask the type descriptor
-            if (localConverter is null)
+            InAttributeQuery = true;
+            try
             {
-                // we don't want to create the value editor for the IDispatch props because
-                // that will create the reference editor.  We don't want that guy!
-                //
-                if (!typeof(Oleaut32.IDispatch).IsAssignableFrom(PropertyType))
+                // Demand get any extended attributes
+                List<Attribute> attributeList = new();
+
+                OnGetDynamicAttributes(new GetAttributesEvent(attributeList));
+
+                if (attributeList.Count > 0)
                 {
-                    localConverter = base.Converter;
-                }
-                else
-                {
-                    localConverter = new Com2IDispatchConverter(this, false);
-                }
-            }
+                    newAttributes ??= new(AttributeArray);
 
-            if (localConverter is null)
-            {
-                localConverter = new TypeConverter();
-            }
-
-            return localConverter;
-        }
-
-        private object GetBaseTypeEditor(Type editorBaseType)
-        {
-            if (PropertyType is null)
-            {
-                return null;
-            }
-
-            object localEditor = null;
-            EditorAttribute attr = (EditorAttribute)Attributes[typeof(EditorAttribute)];
-            if (attr is not null)
-            {
-                string editorTypeName = attr.EditorBaseTypeName;
-
-                if (editorTypeName is not null && editorTypeName.Length > 0)
-                {
-                    Type attrEditorBaseType = Type.GetType(editorTypeName);
-                    if (attrEditorBaseType is not null && attrEditorBaseType == editorBaseType)
+                    // Push any new attributes into the base type.
+                    for (int i = 0; i < attributeList.Count; i++)
                     {
-                        Type type = Type.GetType(attr.EditorTypeName);
-                        if (type is not null)
-                        {
-                            try
-                            {
-                                localEditor = Activator.CreateInstance(type);
-                                if (localEditor is not null)
-                                {
-                                    refreshState |= Com2PropertyDescriptorRefresh.TypeEditorAttr;
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.Fail("Failed to create editor of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
-                            }
-                        }
+                        newAttributes.Add(attributeList[i]);
                     }
                 }
             }
-
-            if (localEditor is null)
+            finally
             {
-                localEditor = base.GetEditor(editorBaseType);
+                InAttributeQuery = false;
             }
 
-            return localEditor;
+            // These are now valid.
+            SetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes, false);
+
+            // If we reconfigured attributes, then poke the new set back in.
+            if (newAttributes is not null)
+            {
+                Attribute[] temp = new Attribute[newAttributes.Count];
+                newAttributes.CopyTo(temp, 0);
+                AttributeArray = temp;
+            }
+
+            return base.Attributes;
         }
+    }
 
-        /// <summary>
-        ///  Gets the value that should be displayed to the user, such as in
-        ///  the Property Browser.
-        /// </summary>
-        public virtual string GetDisplayValue(string defaultValue)
+    /// <summary>
+    ///  Checks if the attributes are valid. Asks any clients if they  would like attributes required.
+    /// </summary>
+    protected bool AttributesValid => !GetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes);
+
+    /// <summary>
+    ///  Checks if this item can be shown.
+    /// </summary>
+    public bool CanShow { get; }
+
+    /// <summary>
+    ///  Retrieves the type of the component this PropertyDescriptor is bound to.
+    /// </summary>
+    public override Type ComponentType => typeof(Oleaut32.IDispatch);
+
+    /// <summary>
+    ///  Retrieves the type converter for this property.
+    /// </summary>
+    public override TypeConverter Converter
+    {
+        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
+        get
         {
-            GetNameItemEvent nie = new GetNameItemEvent(defaultValue);
-            OnGetDisplayValue(nie);
-
-            string str = (nie.Name?.ToString());
-            return str;
-        }
-
-        /// <summary>
-        ///  Retrieves an editor of the requested type.
-        /// </summary>
-        [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode + " " + TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
-        public override object GetEditor(Type editorBaseType)
-        {
-            if (TypeEditorValid)
+            if (TypeConverterValid)
             {
-                return editor;
+                return _converter;
             }
 
-            if (PropertyType is null)
+            object? typeEditor = null;
+
+            GetTypeConverterAndTypeEditor(ref _converter, typeof(UITypeEditor), ref typeEditor);
+
+            if (!TypeEditorValid)
             {
-                return null;
-            }
-
-            if (editorBaseType == typeof(UITypeEditor))
-            {
-                TypeConverter c = null;
-                GetTypeConverterAndTypeEditor(ref c, editorBaseType, ref editor);
-
-                if (!TypeConverterValid)
-                {
-                    converter = c;
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
-                }
-
+                _editor = typeEditor;
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
             }
-            else
+
+            SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
+
+            return _converter;
+        }
+    }
+
+    /// <summary>
+    ///  Retrieves whether this component is applying a type conversion...
+    /// </summary>
+    [MemberNotNullWhen(true, nameof(_valueConverter))]
+    public bool ConvertingNativeType => _valueConverter is not null;
+
+    /// <summary>
+    ///  Retrieves the default value for this property.
+    /// </summary>
+    protected virtual object? DefaultValue => null;
+
+    /// <summary>
+    ///  Retrieves the DISPID for this item
+    /// </summary>
+    public int DISPID { get; }
+
+    /// <summary>
+    ///  Gets the friendly name that should be displayed to the user in a window like the Property Browser.
+    /// </summary>
+    public override string DisplayName
+    {
+        get
+        {
+            if (!DisplayNameValid)
             {
-                editor = base.GetEditor(editorBaseType);
+                GetNameItemEvent getNameEvent = new(base.DisplayName);
+                OnGetDisplayName(getNameEvent);
+                _displayName = getNameEvent.NameString;
+                SetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName, false);
             }
 
-            return editor;
+            return _displayName;
+        }
+    }
+
+    /// <summary>
+    ///  Checks if the property display name is valid.
+    /// </summary>
+    [MemberNotNullWhen(true, nameof(_displayName))]
+    protected bool DisplayNameValid
+        => _displayName is not null && !GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName);
+
+    protected EventHandlerList Events => _events ??= new EventHandlerList();
+
+    protected bool InAttributeQuery { get; private set; }
+
+    public override bool IsReadOnly
+    {
+        get
+        {
+            if (!ReadOnlyValid)
+            {
+                _readOnly |= Attributes[typeof(ReadOnlyAttribute)]?.Equals(ReadOnlyAttribute.Yes) ?? false;
+                GetBoolValueEvent getBoolEvent = new(_readOnly);
+                OnGetIsReadOnly(getBoolEvent);
+                _readOnly = getBoolEvent.Value;
+                SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, false);
+            }
+
+            return _readOnly;
+        }
+    }
+
+    internal Com2Properties? PropertyManager { get; set; }
+
+#pragma warning disable CS8764 // Nullability of return type doesn't match overridden member (possibly because of nullability attributes).
+    // Unfortunately we buck the annotations on PropertyDescriptor here. In cases where we can't resolve a
+    // type for a COM object's property, we create descriptors that are marked as non browsable. It isn't clear
+    // what the repercussions would be of not creating the descriptor so we'll continue to create them this way
+    // and mark as nullable here and try to guard where we can.
+
+    /// <inheritdoc/>
+    public override Type? PropertyType
+         // Replace the type with the mapped converter type
+         => _valueConverter is not null ? _valueConverter.ManagedType : _propertyType;
+#pragma warning restore CS8764
+
+    /// <summary>
+    ///  Checks if the read only state is valid. Asks clients if they would like read-only required.
+    /// </summary>
+    protected bool ReadOnlyValid => _baseReadOnly || !GetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly);
+
+    /// <summary>
+    ///  Gets the Object that this descriptor was created for.
+    ///  May be null if the Object's reference has died.
+    /// </summary>
+    public virtual object? TargetObject => PropertyManager?.TargetObject;
+
+    [MemberNotNullWhen(true, nameof(_converter))]
+    protected bool TypeConverterValid
+        => _converter is not null && !GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter);
+
+    [MemberNotNullWhen(true, nameof(_editor))]
+    protected bool TypeEditorValid
+        => _editor is not null && !GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor);
+
+    public event GetBoolValueEventHandler QueryCanResetValue
+    {
+        add => Events.AddHandler(EventCanResetValue, value);
+        remove => Events.RemoveHandler(EventCanResetValue, value);
+    }
+
+    public event GetAttributesEventHandler QueryGetBaseAttributes
+    {
+        add => Events.AddHandler(EventGetBaseAttributes, value);
+        remove => Events.RemoveHandler(EventGetBaseAttributes, value);
+    }
+
+    public event GetAttributesEventHandler QueryGetDynamicAttributes
+    {
+        add => Events.AddHandler(EventGetDynamicAttributes, value);
+        remove => Events.RemoveHandler(EventGetDynamicAttributes, value);
+    }
+
+    public event GetNameItemEventHandler QueryGetDisplayName
+    {
+        add => Events.AddHandler(EventGetDisplayName, value);
+        remove => Events.RemoveHandler(EventGetDisplayName, value);
+    }
+
+    public event GetNameItemEventHandler QueryGetDisplayValue
+    {
+        add => Events.AddHandler(EventGetDisplayValue, value);
+        remove => Events.RemoveHandler(EventGetDisplayValue, value);
+    }
+
+    public event GetBoolValueEventHandler QueryGetIsReadOnly
+    {
+        add => Events.AddHandler(EventGetIsReadOnly, value);
+        remove => Events.RemoveHandler(EventGetIsReadOnly, value);
+    }
+
+    public event GetTypeConverterAndTypeEditorEventHandler QueryGetTypeConverterAndTypeEditor
+    {
+        add => Events.AddHandler(EventGetTypeConverterAndTypeEditor, value);
+        remove => Events.RemoveHandler(EventGetTypeConverterAndTypeEditor, value);
+    }
+
+    public event Com2EventHandler QueryResetValue
+    {
+        add => Events.AddHandler(EventResetValue, value);
+        remove => Events.RemoveHandler(EventResetValue, value);
+    }
+
+    public event GetBoolValueEventHandler QueryShouldSerializeValue
+    {
+        add => Events.AddHandler(EventShouldSerializeValue, value);
+        remove => Events.RemoveHandler(EventShouldSerializeValue, value);
+    }
+
+    /// <summary>
+    ///  Indicates whether reset will change the value of the component.  If there
+    ///  is a DefaultValueAttribute, then this will return true if getValue returns
+    ///  something different than the default value.  If there is a reset method and
+    ///  a shouldPersist method, this will return what shouldPersist returns.
+    ///  If there is just a reset method, this always returns true.  If none of these
+    ///  cases apply, this returns false.
+    /// </summary>
+    public override bool CanResetValue(object component)
+    {
+        if (component is ICustomTypeDescriptor descriptor)
+        {
+            object? owner = descriptor.GetPropertyOwner(this);
+            if (owner is null)
+            {
+                return false;
+            }
+
+            component = owner;
         }
 
-        /// <summary>
-        ///  Retrieves the current native value of the property on component,
-        ///  invoking the getXXX method.  An exception in the getXXX
-        ///  method will pass through.
-        /// </summary>
-        public unsafe object GetNativeValue(object component)
+        if (component == TargetObject)
         {
-            if (component is null)
-            {
-                return null;
-            }
-
-            if (component is ICustomTypeDescriptor)
-            {
-                component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
-            }
-
-            if (component is null || !Marshal.IsComObject(component) || !(component is Oleaut32.IDispatch))
-            {
-                return null;
-            }
-
-            Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)component;
-            object[] pVarResult = new object[1];
-            var pExcepInfo = new Oleaut32.EXCEPINFO();
-            var dispParams = new Oleaut32.DISPPARAMS();
-            Guid g = Guid.Empty;
-
-            HRESULT hr = pDisp.Invoke(
-                dispid,
-                &g,
-                Kernel32.GetThreadLocale(),
-                Oleaut32.DISPATCH.PROPERTYGET,
-                &dispParams,
-                pVarResult,
-                &pExcepInfo,
-                null);
-
-            switch (hr)
-            {
-                case HRESULT.S_OK:
-                case HRESULT.S_FALSE:
-
-                    if (pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]))
-                    {
-                        lastValue = null;
-                    }
-                    else
-                    {
-                        lastValue = pVarResult[0];
-                    }
-
-                    return lastValue;
-                case HRESULT.DISP_E_EXCEPTION:
-                    return null;
-                default:
-                    throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
-            }
+            GetBoolValueEvent boolEvent = new(defaultValue: false);
+            OnCanResetValue(boolEvent);
+            return boolEvent.Value;
         }
 
-        /// <summary>
-        ///  Checks whether the particular item(s) need refreshing.
-        /// </summary>
-        private bool GetNeedsRefresh(int mask)
+        return false;
+    }
+
+    public object Clone()
+        => new Com2PropertyDescriptor(
+            DISPID,
+            Name,
+            (Attribute[])(_baseAttributes?.Clone() ?? Array.Empty<Attribute>()),
+            _readOnly,
+            _propertyType,
+            _typeData,
+            _hrHidden);
+
+    /// <summary>
+    ///  Creates a converter Object, first by looking for a ctor with a Com2PropertyDescriptor
+    ///  parameter, then using the default ctor if it is not found.
+    /// </summary>
+    private Com2DataTypeToManagedDataTypeConverter? CreateOleTypeConverter(Type? type)
+    {
+        if (type is null)
         {
-            return (refreshState & mask) != 0;
+            return null;
         }
 
-        /// <summary>
-        ///  Retrieves the current value of the property on component,
-        ///  invoking the getXXX method.  An exception in the getXXX
-        ///  method will pass through.
-        /// </summary>
-        public override object GetValue(object component)
+        ConstructorInfo? constructor = type.GetConstructor(new Type[] { typeof(Com2PropertyDescriptor) });
+        Com2DataTypeToManagedDataTypeConverter? converter = constructor is not null
+            ? (Com2DataTypeToManagedDataTypeConverter)constructor.Invoke(new object[] { this })
+            : (Com2DataTypeToManagedDataTypeConverter?)Activator.CreateInstance(type);
+
+        return converter;
+    }
+
+    /// <summary>
+    ///  Creates an instance of the member attribute collection. This can
+    ///  be overriden by subclasses to return a subclass of AttributeCollection.
+    /// </summary>
+    protected override AttributeCollection CreateAttributeCollection() => new AttributeCollection(AttributeArray);
+
+    private TypeConverter GetBaseTypeConverter()
+    {
+        if (PropertyType is null)
         {
-            lastValue = GetNativeValue(component);
-            // do we need to convert the type?
-            if (ConvertingNativeType && lastValue is not null)
+            return new TypeConverter();
+        }
+
+        TypeConverter? localConverter = null;
+
+        if (Attributes[typeof(TypeConverterAttribute)] is TypeConverterAttribute attribute)
+        {
+            string converterTypeName = attribute.ConverterTypeName;
+            if (!string.IsNullOrEmpty(converterTypeName)
+                && Type.GetType(converterTypeName) is { } converterType
+                && typeof(TypeConverter).IsAssignableFrom(converterType))
             {
-                lastValue = valueConverter.ConvertNativeToManaged(lastValue, this);
-            }
-            else if (lastValue is not null && propertyType is not null && propertyType.IsEnum && lastValue.GetType().IsPrimitive)
-            {
-                // we've got to convert the value here -- we built the enum but the native object returns
-                // us values as integers
-                //
                 try
                 {
-                    lastValue = Enum.ToObject(propertyType, lastValue);
+                    localConverter = (TypeConverter?)Activator.CreateInstance(converterType);
+                    if (localConverter is not null)
+                    {
+                        _refreshState |= Com2PropertyDescriptorRefresh.TypeConverterAttr;
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Debug.Fail($"Failed to create TypeConverter of type '{attribute.ConverterTypeName}' from Attribute", ex.ToString());
                 }
             }
-
-            return lastValue;
         }
 
-        /// <summary>
-        ///  Retrieves the value editor for the property.  If a value editor is passed
-        ///  in as a TypeConverterAttribute, that value editor will be instantiated.
-        ///  If no such attribute was found, a system value editor will be looked for.
-        ///  See TypeConverter for a description of how system value editors are found.
-        ///  If there is no system value editor, null is returned.  If the value editor found
-        ///  takes an IEditorSite in its constructor, the parameter will be passed in.
-        /// </summary>
-        public void GetTypeConverterAndTypeEditor(ref TypeConverter typeConverter, Type editorBaseType, ref object typeEditor)
+        // If we didn't get one from the attribute, ask the type descriptor. We don't want to create the value
+        // editor for the IDispatch properties because that will create the reference editor.
+        localConverter ??= typeof(Oleaut32.IDispatch).IsAssignableFrom(PropertyType)
+            ? new Com2IDispatchConverter(this, allowExpand: false)
+            : base.Converter;
+
+        return localConverter ?? new TypeConverter();
+    }
+
+    private object? GetBaseTypeEditor(Type editorBaseType)
+    {
+        if (PropertyType is null)
         {
-            // get the base editor and converter, attributes first
-            TypeConverter localConverter = typeConverter;
-            object localEditor = typeEditor;
+            return null;
+        }
 
-            if (localConverter is null)
-            {
-                localConverter = GetBaseTypeConverter();
-            }
+        if (Attributes[typeof(EditorAttribute)] is EditorAttribute attribute)
+        {
+            string? editorTypeName = attribute.EditorBaseTypeName;
 
-            if (localEditor is null)
+            if (!string.IsNullOrEmpty(editorTypeName)
+                && Type.GetType(editorTypeName) is { } attributeEditorBaseType
+                && attributeEditorBaseType == editorBaseType
+                && Type.GetType(attribute.EditorTypeName) is { } type)
             {
-                localEditor = GetBaseTypeEditor(editorBaseType);
-            }
-
-            // if this is a object, get the value and attempt to create the correct value editor based on that value.
-            // we don't do this if the state came from an attribute
-            //
-            if (0 == (refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) && PropertyType == typeof(Com2Variant))
-            {
-                Type editorType = PropertyType;
-                object value = GetValue(TargetObject);
-                if (value is not null)
+                try
                 {
-                    editorType = value.GetType();
+                    if (Activator.CreateInstance(type) is { } localEditor)
+                    {
+                        _refreshState |= Com2PropertyDescriptorRefresh.TypeEditorAttr;
+                        return localEditor;
+                    }
                 }
-
-                ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor(value, ref localConverter, editorBaseType, ref localEditor);
+                catch (Exception ex)
+                {
+                    Debug.Fail($"Failed to create editor of type '{attribute.EditorTypeName}' from Attribute", ex.ToString());
+                }
             }
-
-            // now see if someone else would like to serve up a value editor
-            //
-
-            // unwrap the editor if it's one of ours.
-            if (localConverter is Com2PropDescMainConverter)
-            {
-                localConverter = ((Com2PropDescMainConverter)localConverter).InnerConverter;
-            }
-
-            GetTypeConverterAndTypeEditorEvent e = new GetTypeConverterAndTypeEditorEvent(localConverter, localEditor);
-            OnGetTypeConverterAndTypeEditor(e);
-            localConverter = e.TypeConverter;
-            localEditor = e.TypeEditor;
-
-            // just in case one of the handlers removed our editor...
-            //
-            if (localConverter is null)
-            {
-                localConverter = GetBaseTypeConverter();
-            }
-
-            if (localEditor is null)
-            {
-                localEditor = GetBaseTypeEditor(editorBaseType);
-            }
-
-            // wrap the value editor in our main value editor, but only if it isn't "TypeConverter" or already a Com2PropDescMainTypeConverter
-            //
-            Type localConverterType = localConverter.GetType();
-            if (localConverterType != typeof(TypeConverter) && localConverterType != (typeof(Com2PropDescMainConverter)))
-            {
-                localConverter = new Com2PropDescMainConverter(this, localConverter);
-            }
-
-            // save the values back to the variables.
-            //
-            typeConverter = localConverter;
-            typeEditor = localEditor;
         }
 
-        /// <summary>
-        ///  Is the given value equal to the last known value for this object?
-        /// </summary>
-        public bool IsCurrentValue(object value)
+        return base.GetEditor(editorBaseType);
+    }
+
+    /// <summary>
+    ///  Gets the value that should be displayed to the user, such as in the Property Browser.
+    /// </summary>
+    public virtual string? GetDisplayValue(string? defaultValue)
+    {
+        GetNameItemEvent name = new(defaultValue);
+        OnGetDisplayValue(name);
+
+        return name.Name?.ToString();
+    }
+
+    /// <summary>
+    ///  Retrieves an editor of the requested type.
+    /// </summary>
+    [RequiresUnreferencedCode($"{TrimmingConstants.EditorRequiresUnreferencedCode} {TrimmingConstants.PropertyDescriptorPropertyTypeMessage}")]
+    public override object? GetEditor(Type editorBaseType)
+    {
+        if (TypeEditorValid)
         {
-            return (value == lastValue || (lastValue is not null && lastValue.Equals(value)));
+            return _editor;
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnCanResetValue(GetBoolValueEvent gvbe)
+        if (PropertyType is null)
         {
-            RaiseGetBoolValueEvent(EventCanResetValue, gvbe);
+            return null;
         }
 
-        protected void OnGetBaseAttributes(GetAttributesEvent e)
+        if (editorBaseType == typeof(UITypeEditor))
         {
+            TypeConverter? converter = null;
+            GetTypeConverterAndTypeEditor(ref converter, editorBaseType, ref _editor);
+
+            if (!TypeConverterValid)
+            {
+                _converter = converter;
+                SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
+            }
+
+            SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
+        }
+        else
+        {
+            _editor = base.GetEditor(editorBaseType);
+        }
+
+        return _editor;
+    }
+
+    /// <summary>
+    ///  Retrieves the current native value of the property on component, invoking the getXXX method.
+    ///  An exception in the getXXX method will pass through.
+    /// </summary>
+    public unsafe object? GetNativeValue(object? component)
+    {
+        if (component is null)
+        {
+            return null;
+        }
+
+        if (component is ICustomTypeDescriptor descriptor)
+        {
+            component = descriptor.GetPropertyOwner(this);
+        }
+
+        if (component is null || component is not IDispatch.Interface dispatch)
+        {
+            return null;
+        }
+
+        VARIANT result = default;
+        EXCEPINFO pExcepInfo = default;
+        DISPPARAMS dispParams = default;
+        Guid guid = Guid.Empty;
+
+        HRESULT hr = dispatch.Invoke(
+            (int)DISPID,
+            &guid,
+            PInvoke.GetThreadLocale(),
+            DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
+            &dispParams,
+            &result,
+            &pExcepInfo,
+            null);
+
+        if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
+        {
+            _lastValue = result.ToObject();
+            return _lastValue;
+        }
+        else
+        {
+            return hr == HRESULT.DISP_E_EXCEPTION
+                ? null
+                : throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
+        }
+    }
+
+    /// <summary>
+    ///  Checks whether the particular item(s) need refreshing.
+    /// </summary>
+    private bool GetNeedsRefresh(int mask) => (_refreshState & mask) != 0;
+
+    /// <summary>
+    ///  Retrieves the current value of the property on component, invoking the getXXX method. An exception in
+    ///  the getXXX method will pass through.
+    /// </summary>
+    public override object? GetValue(object? component)
+    {
+        _lastValue = GetNativeValue(component);
+
+        // Do we need to convert the type?
+        if (ConvertingNativeType && _lastValue is not null)
+        {
+            _lastValue = _valueConverter.ConvertNativeToManaged(_lastValue, this);
+        }
+        else if (_lastValue is not null && _propertyType is not null && _propertyType.IsEnum && _lastValue.GetType().IsPrimitive)
+        {
+            // We've got to convert the value here. We built the enum but the native object returns values as integers.
             try
             {
-                com2props.AlwaysValid = com2props.CheckValid();
-
-                ((GetAttributesEventHandler)Events[EventGetBaseAttributes])?.Invoke(this, e);
+                _lastValue = Enum.ToObject(_propertyType, _lastValue);
             }
-            finally
+            catch
             {
-                com2props.AlwaysValid = false;
             }
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnGetDisplayName(GetNameItemEvent gnie)
+        return _lastValue;
+    }
+
+    /// <summary>
+    ///  Retrieves the value editor for the property.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   If a value editor is passed in as a <see cref="TypeConverterAttribute"/>, that value editor will be
+    ///   instantiated. If no such attribute was found, a system value editor will be looked for. See
+    ///   <see cref="TypeConverter"/> for a description of how system value editors are found. If there is no
+    ///   system value editor, null is returned. If the value editor found takes an IEditorSite in its constructor,
+    ///   the parameter will be passed in.
+    ///  </para>
+    /// </remarks>
+    public void GetTypeConverterAndTypeEditor([NotNull] ref TypeConverter? typeConverter, Type editorBaseType, ref object? typeEditor)
+    {
+        // Get the base editor and converter, attributes first.
+        TypeConverter? localConverter = typeConverter;
+        object? localEditor = typeEditor;
+
+        localConverter ??= GetBaseTypeConverter();
+        localEditor ??= GetBaseTypeEditor(editorBaseType);
+
+        // If this is a object, get the value and attempt to create the correct value editor based on that value.
+        // We don't do this if the state came from an attribute.
+        if ((_refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) == 0 && PropertyType == typeof(Com2Variant))
         {
-            RaiseGetNameItemEvent(EventGetDisplayName, gnie);
+            Type editorType = PropertyType;
+            object? value = GetValue(TargetObject);
+            if (value is not null)
+            {
+                editorType = value.GetType();
+            }
+
+            ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor(value, ref localConverter, editorBaseType, ref localEditor);
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnGetDisplayValue(GetNameItemEvent gnie)
+        // Now see if someone else would like to serve up a value editor.
+
+        // Unwrap the editor if it's one of ours.
+        if (localConverter is Com2PropDescMainConverter mainConverter)
         {
-            RaiseGetNameItemEvent(EventGetDisplayValue, gnie);
+            localConverter = mainConverter.InnerConverter;
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnGetDynamicAttributes(GetAttributesEvent e)
+        GetTypeConverterAndTypeEditorEvent e = new(localConverter, localEditor);
+        OnGetTypeConverterAndTypeEditor(e);
+        localConverter = e.TypeConverter;
+        localEditor = e.TypeEditor;
+
+        // Just in case one of the handlers removed our editor.
+        localConverter ??= GetBaseTypeConverter();
+        localEditor ??= GetBaseTypeEditor(editorBaseType);
+
+        // Wrap the value editor in our main value editor, but only if it isn't "TypeConverter" or already a Com2PropDescMainTypeConverter
+        Type localConverterType = localConverter.GetType();
+        if (localConverterType != typeof(TypeConverter) && localConverterType != typeof(Com2PropDescMainConverter))
         {
-            try
-            {
-                com2props.AlwaysValid = com2props.CheckValid();
-                ((GetAttributesEventHandler)Events[EventGetDynamicAttributes])?.Invoke(this, e);
-            }
-            finally
-            {
-                com2props.AlwaysValid = false;
-            }
+            localConverter = new Com2PropDescMainConverter(this, localConverter);
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnGetIsReadOnly(GetBoolValueEvent gvbe)
+        // Save the values back to the variables.
+        typeConverter = localConverter;
+        typeEditor = localEditor;
+    }
+
+    /// <summary>
+    ///  Is the given value equal to the last known value for this object?
+    /// </summary>
+    public bool IsCurrentValue(object? value) => value == _lastValue || (_lastValue is not null && _lastValue.Equals(value));
+
+    protected void OnCanResetValue(GetBoolValueEvent gvbe) => RaiseGetBoolValueEvent(EventCanResetValue, gvbe);
+
+    protected void OnGetBaseAttributes(GetAttributesEvent e)
+    {
+        using ValidityScope scope = new(PropertyManager);
+        ((GetAttributesEventHandler?)Events[EventGetBaseAttributes])?.Invoke(this, e);
+    }
+
+    protected void OnGetDisplayName(GetNameItemEvent gnie) => RaiseGetNameItemEvent(EventGetDisplayName, gnie);
+
+    protected void OnGetDisplayValue(GetNameItemEvent gnie) => RaiseGetNameItemEvent(EventGetDisplayValue, gnie);
+
+    protected void OnGetDynamicAttributes(GetAttributesEvent e)
+    {
+        using ValidityScope scope = new(PropertyManager);
+        ((GetAttributesEventHandler?)Events[EventGetDynamicAttributes])?.Invoke(this, e);
+    }
+
+    protected void OnGetIsReadOnly(GetBoolValueEvent gvbe) => RaiseGetBoolValueEvent(EventGetIsReadOnly, gvbe);
+
+    protected void OnGetTypeConverterAndTypeEditor(GetTypeConverterAndTypeEditorEvent e)
+    {
+        using ValidityScope scope = new(PropertyManager);
+        ((GetTypeConverterAndTypeEditorEventHandler?)Events[EventGetTypeConverterAndTypeEditor])?.Invoke(this, e);
+    }
+
+    protected void OnResetValue(EventArgs e) => RaiseCom2Event(EventResetValue, e);
+
+    protected void OnShouldSerializeValue(GetBoolValueEvent gvbe) => RaiseGetBoolValueEvent(EventShouldSerializeValue, gvbe);
+
+    protected void OnShouldRefresh(GetRefreshStateEvent gvbe) => RaiseGetBoolValueEvent(EventShouldRefresh, gvbe);
+
+    private void RaiseGetBoolValueEvent(object key, GetBoolValueEvent e)
+    {
+        using ValidityScope scope = new(PropertyManager);
+        ((GetBoolValueEventHandler?)Events[key])?.Invoke(this, e);
+    }
+
+    private void RaiseCom2Event(object key, EventArgs e)
+    {
+        using ValidityScope scope = new(PropertyManager);
+        ((Com2EventHandler?)Events[key])?.Invoke(this, e);
+    }
+
+    private void RaiseGetNameItemEvent(object key, GetNameItemEvent e)
+    {
+        using ValidityScope scope = new(PropertyManager);
+        ((GetNameItemEventHandler?)Events[key])?.Invoke(this, e);
+    }
+
+    public override void ResetValue(object? component)
+    {
+        if (component is ICustomTypeDescriptor descriptor)
         {
-            RaiseGetBoolValueEvent(EventGetIsReadOnly, gvbe);
+            component = descriptor.GetPropertyOwner(this);
         }
 
-        protected void OnGetTypeConverterAndTypeEditor(GetTypeConverterAndTypeEditorEvent e)
+        if (component == TargetObject)
         {
-            try
-            {
-                com2props.AlwaysValid = com2props.CheckValid();
-                ((GetTypeConverterAndTypeEditorEventHandler)Events[EventGetTypeConverterAndTypeEditor])?.Invoke(this, e);
-            }
-            finally
-            {
-                com2props.AlwaysValid = false;
-            }
+            OnResetValue(EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    ///  Sets whether the particular item(s) need refreshing.
+    /// </summary>
+    internal void SetNeedsRefresh(int mask, bool value)
+    {
+        if (value)
+        {
+            _refreshState |= mask;
+        }
+        else
+        {
+            _refreshState &= ~mask;
+        }
+    }
+
+    public override unsafe void SetValue(object? component, object? value)
+    {
+        if (_readOnly)
+        {
+            throw new NotSupportedException(string.Format(SR.COM2ReadonlyProperty, Name));
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnResetValue(EventArgs e)
+        object? owner = component;
+        if (owner is ICustomTypeDescriptor descriptor)
         {
-            RaiseCom2Event(EventResetValue, e);
+            owner = descriptor.GetPropertyOwner(this);
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnShouldSerializeValue(GetBoolValueEvent gvbe)
+        if (owner is null || !Marshal.IsComObject(owner) || owner is not IDispatch.Interface)
         {
-            RaiseGetBoolValueEvent(EventShouldSerializeValue, gvbe);
+            return;
         }
 
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        protected void OnShouldRefresh(GetRefreshStateEvent gvbe)
+        // Do we need to convert the type?
+        if (_valueConverter is not null)
         {
-            RaiseGetBoolValueEvent(EventShouldRefresh, gvbe);
-        }
-
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        private void RaiseGetBoolValueEvent(object key, GetBoolValueEvent e)
-        {
-            try
-            {
-                com2props.AlwaysValid = com2props.CheckValid();
-                ((GetBoolValueEventHandler)Events[key])?.Invoke(this, e);
-            }
-            finally
-            {
-                com2props.AlwaysValid = false;
-            }
-        }
-
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        private void RaiseCom2Event(object key, EventArgs e)
-        {
-            try
-            {
-                com2props.AlwaysValid = com2props.CheckValid();
-                ((Com2EventHandler)Events[key])?.Invoke(this, e);
-            }
-            finally
-            {
-                com2props.AlwaysValid = false;
-            }
-        }
-
-        /// <summary>
-        ///  Raises the appropriate event
-        /// </summary>
-        private void RaiseGetNameItemEvent(object key, GetNameItemEvent e)
-        {
-            try
-            {
-                com2props.AlwaysValid = com2props.CheckValid();
-                ((GetNameItemEventHandler)Events[key])?.Invoke(this, e);
-            }
-            finally
-            {
-                com2props.AlwaysValid = false;
-            }
-        }
-
-        /// <summary>
-        ///  Will reset the default value for this property on the component.  If
-        ///  there was a default value passed in as a DefaultValueAttribute, that
-        ///  value will be set as the value of the property on the component.  If
-        ///  there was no default value passed in, a ResetXXX method will be looked
-        ///  for.  If one is found, it will be invoked.  If one is not found, this
-        ///  is a nop.
-        /// </summary>
-        public override void ResetValue(object component)
-        {
-            if (component is ICustomTypeDescriptor)
-            {
-                component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
-            }
-
-            if (component == TargetObject)
-            {
-                OnResetValue(EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
-        ///  Sets whether the particular item(s) need refreshing.
-        /// </summary>
-        internal void SetNeedsRefresh(int mask, bool value)
-        {
-            if (value)
-            {
-                refreshState |= mask;
-            }
-            else
-            {
-                refreshState &= ~mask;
-            }
-        }
-
-        /// <summary>
-        ///  This will set value to be the new value of this property on the
-        ///  component by invoking the setXXX method on the component.  If the
-        ///  value specified is invalid, the component should throw an exception
-        ///  which will be passed up.  The component designer should design the
-        ///  property so that getXXX following a setXXX should return the value
-        ///  passed in if no exception was thrown in the setXXX call.
-        /// </summary>
-        public unsafe override void SetValue(object component, object value)
-        {
-            if (readOnly)
-            {
-                throw new NotSupportedException(string.Format(SR.COM2ReadonlyProperty, Name));
-            }
-
-            object owner = component;
-            if (owner is ICustomTypeDescriptor)
-            {
-                owner = ((ICustomTypeDescriptor)owner).GetPropertyOwner(this);
-            }
-
-            if (owner is null || !Marshal.IsComObject(owner) || !(owner is Oleaut32.IDispatch))
+            bool cancel = false;
+            value = _valueConverter.ConvertManagedToNative(value, this, ref cancel);
+            if (cancel)
             {
                 return;
             }
+        }
 
-            // do we need to convert the type?
-            if (valueConverter is not null)
+        IDispatch.Interface dispatch = (IDispatch.Interface)owner;
+
+        EXCEPINFO excepInfo = default;
+        int namedArg = PInvoke.DISPID_PROPERTYPUT;
+        DISPPARAMS dispParams = new()
+        {
+            cArgs = 1,
+            cNamedArgs = 1,
+            rgdispidNamedArgs = (int*)&namedArg
+        };
+
+        using VARIANT variant = default;
+        Marshal.GetNativeVariantForObject(value, (IntPtr)(&variant));
+        dispParams.rgvarg = &variant;
+        Guid guid = Guid.Empty;
+        HRESULT hr = dispatch.Invoke(
+            DISPID,
+            &guid,
+            PInvoke.GetThreadLocale(),
+            DISPATCH_FLAGS.DISPATCH_PROPERTYPUT,
+            &dispParams,
+            null,
+            &excepInfo,
+            null);
+
+        string? errorText = null;
+        if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
+        {
+            hr = (HRESULT)excepInfo.scode;
+            if (!excepInfo.bstrDescription.IsNull)
             {
-                bool cancel = false;
-                value = valueConverter.ConvertManagedToNative(value, this, ref cancel);
-                if (cancel)
-                {
-                    return;
-                }
+                errorText = excepInfo.bstrDescription.ToString();
             }
+        }
 
-            Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)owner;
+        if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
+        {
+            OnValueChanged(component, EventArgs.Empty);
+            _lastValue = value;
+            return;
+        }
 
-            var excepInfo = new Oleaut32.EXCEPINFO();
-            Ole32.DispatchID namedArg = Ole32.DispatchID.PROPERTYPUT;
-            var dispParams = new Oleaut32.DISPPARAMS
+        if (hr == HRESULT.E_ABORT || hr == HRESULT.OLE_E_PROMPTSAVECANCELLED)
+        {
+            // Cancelled checkout, etc.
+            return;
+        }
+
+        if (dispatch is ISupportErrorInfo.Interface iSupportErrorInfo)
+        {
+            guid = typeof(Oleaut32.IDispatch).GUID;
+            if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&guid) == HRESULT.S_OK)
             {
-                cArgs = 1,
-                cNamedArgs = 1,
-                rgdispidNamedArgs = &namedArg
-            };
+                Oleaut32.GetErrorInfo(out WinFormsComWrappers.ErrorInfoWrapper? errorInfo);
 
-            using var variant = new Oleaut32.VARIANT();
-            Marshal.GetNativeVariantForObject(value, (IntPtr)(&variant));
-            dispParams.rgvarg = &variant;
-            Guid g = Guid.Empty;
-            HRESULT hr = pDisp.Invoke(
-                dispid,
-                &g,
-                Kernel32.GetThreadLocale(),
-                Oleaut32.DISPATCH.PROPERTYPUT,
-                &dispParams,
-                null,
-                &excepInfo,
-                null);
-
-            string errorInfo = null;
-            if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
-            {
-                hr = excepInfo.scode;
-                if (excepInfo.bstrDescription != IntPtr.Zero)
+                if (errorInfo is not null)
                 {
-                    errorInfo = Marshal.PtrToStringBSTR(excepInfo.bstrDescription);
-                }
-            }
-
-            switch (hr)
-            {
-                case HRESULT.E_ABORT:
-                case HRESULT.OLE_E_PROMPTSAVECANCELLED:
-                    // cancelled checkout, etc.
-                    return;
-                case HRESULT.S_OK:
-                case HRESULT.S_FALSE:
-                    OnValueChanged(component, EventArgs.Empty);
-                    lastValue = value;
-                    return;
-                default:
-                    if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
+                    if (errorInfo.GetDescription(out string? description))
                     {
-                        g = typeof(Oleaut32.IDispatch).GUID;
-                        if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
-                        {
-                            WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
-                            Oleaut32.GetErrorInfo(out pErrorInfo);
-
-                            if (pErrorInfo is not null)
-                            {
-                                string info;
-                                if (pErrorInfo.GetDescription(out info))
-                                {
-                                    errorInfo = info;
-                                }
-
-                                pErrorInfo.Dispose();
-                            }
-                        }
-                    }
-                    else if (errorInfo is null)
-                    {
-                        StringBuilder strMessage = new StringBuilder(256);
-
-                        uint result = Kernel32.FormatMessageW(
-                            Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
-                            IntPtr.Zero,
-                            (uint)hr,
-                            Kernel32.GetThreadLocale().RawValue,
-                            strMessage,
-                            255,
-                            IntPtr.Zero);
-
-                        if (result == 0)
-                        {
-                            errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
-                        }
-                        else
-                        {
-                            errorInfo = TrimNewline(strMessage);
-                        }
+                        errorText = description;
                     }
 
-                    throw new ExternalException(errorInfo, (int)hr);
-            }
-        }
-
-        private static string TrimNewline(StringBuilder errorInfo)
-        {
-            int index = errorInfo.Length - 1;
-            while (index >= 0 && (errorInfo[index] == '\n' || errorInfo[index] == '\r'))
-            {
-                index--;
-            }
-
-            return errorInfo.ToString(0, index + 1);
-        }
-
-        /// <summary>
-        ///  Indicates whether the value of this property needs to be persisted. In
-        ///  other words, it indicates whether the state of the property is distinct
-        ///  from when the component is first instantiated. If there is a default
-        ///  value specified in this PropertyDescriptor, it will be compared against the
-        ///  property's current value to determine this.  If there isn't, the
-        ///  shouldPersistXXX method is looked for and invoked if found.  If both
-        ///  these routes fail, true will be returned.
-        ///
-        ///  If this returns false, a tool should not persist this property's value.
-        /// </summary>
-        public override bool ShouldSerializeValue(object component)
-        {
-            GetBoolValueEvent gbv = new GetBoolValueEvent(false);
-            OnShouldSerializeValue(gbv);
-            return gbv.Value;
-        }
-
-        /// <summary>
-        ///  we wrap all value editors in this one so we can intercept
-        ///  the GetTextFromValue calls for objects that would like
-        ///  to modify the display name
-        /// </summary>
-        private class Com2PropDescMainConverter : Com2ExtendedTypeConverter
-        {
-            readonly Com2PropertyDescriptor pd;
-
-            private const int CheckSubprops = 0;
-            private const int AllowSubprops = 1;
-            private const int SuppressSubprops = 2;
-
-            private int subprops = CheckSubprops;
-
-            public Com2PropDescMainConverter(Com2PropertyDescriptor pd, TypeConverter baseConverter) : base(baseConverter)
-            {
-                this.pd = pd;
-            }
-
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-            {
-                object baseConversion = base.ConvertTo(context, culture, value, destinationType);
-                if (destinationType == typeof(string))
-                {
-                    // if this is our current value, ask if it should be changed for display,
-                    // otherwise we'll ask for our enum drop downs, which we don't wanna do!
-                    //
-                    if (pd.IsCurrentValue(value))
-                    {
-                        // don't ever do this for enum types
-                        if (!pd.PropertyType.IsEnum)
-                        {
-                            Com2EnumConverter baseConverter = (Com2EnumConverter)GetWrappedConverter(typeof(Com2EnumConverter));
-                            if (baseConverter is null)
-                            {
-                                return pd.GetDisplayValue((string)baseConversion);
-                            }
-                            else
-                            {
-                                return baseConverter.ConvertTo(value, destinationType);
-                            }
-                        }
-                    }
+                    errorInfo.Dispose();
                 }
-
-                return baseConversion;
-            }
-
-            [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
-            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-            {
-                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);
-
-                if (props is not null && props.Count > 0)
-                {
-                    // Return sorted read-only collection (can't sort original because its read-only)
-                    props = props.Sort();
-                    PropertyDescriptor[] descs = new PropertyDescriptor[props.Count];
-                    props.CopyTo(descs, 0);
-                    props = new PropertyDescriptorCollection(descs, true);
-                }
-
-                return props;
-            }
-
-            public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-            {
-                if (subprops == CheckSubprops)
-                {
-                    if (!base.GetPropertiesSupported(context))
-                    {
-                        subprops = SuppressSubprops;
-                    }
-                    else
-                    {
-                        // special case the font converter here.
-                        //
-                        if ((pd.valueConverter is not null && pd.valueConverter.AllowExpand) || Com2IVsPerPropertyBrowsingHandler.AllowChildProperties(pd))
-                        {
-                            subprops = AllowSubprops;
-                        }
-                    }
-                }
-
-                return (subprops == AllowSubprops);
             }
         }
+        else if (errorText is null)
+        {
+            char[] buffer = ArrayPool<char>.Shared.Rent(256 + 1);
+
+            fixed (char* b = buffer)
+            {
+                uint result = PInvoke.FormatMessage(
+                    FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_IGNORE_INSERTS,
+                    null,
+                    (uint)hr,
+                    PInvoke.GetThreadLocale(),
+                    b,
+                    255,
+                    null);
+
+                errorText = result == 0
+                    ? string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr)
+                    : buffer.AsSpan()[..(int)result].TrimEnd(CharacterConstants.NewLine).ToString();
+            }
+
+            ArrayPool<char>.Shared.Return(buffer);
+        }
+
+        throw new ExternalException(errorText, (int)hr);
     }
 
-    internal class GetAttributesEvent : EventArgs
+    /// <summary>
+    ///  Indicates whether the value of this property needs to be persisted. In
+    ///  other words, it indicates whether the state of the property is distinct
+    ///  from when the component is first instantiated. If there is a default
+    ///  value specified in this PropertyDescriptor, it will be compared against the
+    ///  property's current value to determine this.  If there isn't, the
+    ///  shouldPersistXXX method is looked for and invoked if found.  If both
+    ///  these routes fail, true will be returned.
+    ///
+    ///  If this returns false, a tool should not persist this property's value.
+    /// </summary>
+    public override bool ShouldSerializeValue(object component)
     {
-        private readonly ArrayList attrList;
-
-        public GetAttributesEvent(ArrayList attrList)
-        {
-            this.attrList = attrList;
-        }
-
-        public void Add(Attribute attribute)
-        {
-            attrList.Add(attribute);
-        }
-    }
-
-    internal delegate void Com2EventHandler(Com2PropertyDescriptor sender, EventArgs e);
-
-    internal delegate void GetAttributesEventHandler(Com2PropertyDescriptor sender, GetAttributesEvent gaevent);
-
-    internal class GetNameItemEvent : EventArgs
-    {
-        private object nameItem;
-
-        public GetNameItemEvent(object defName)
-        {
-            nameItem = defName;
-        }
-
-        public object Name
-        {
-            get
-            {
-                return nameItem;
-            }
-            set
-            {
-                nameItem = value;
-            }
-        }
-
-        public string NameString
-        {
-            get
-            {
-                if (nameItem is not null)
-                {
-                    return nameItem.ToString();
-                }
-
-                return "";
-            }
-        }
-    }
-
-    internal delegate void GetNameItemEventHandler(Com2PropertyDescriptor sender, GetNameItemEvent gnievent);
-
-    internal class GetBoolValueEvent : EventArgs
-    {
-        private bool value;
-
-        public GetBoolValueEvent(bool defValue)
-        {
-            value = defValue;
-        }
-
-        public bool Value
-        {
-            get
-            {
-                return value;
-            }
-            set
-            {
-                this.value = value;
-            }
-        }
-    }
-
-    internal delegate void GetBoolValueEventHandler(Com2PropertyDescriptor sender, GetBoolValueEvent gbeevent);
-
-    internal class GetRefreshStateEvent : GetBoolValueEvent
-    {
-        readonly Com2ShouldRefreshTypes item;
-
-        public GetRefreshStateEvent(Com2ShouldRefreshTypes item, bool defValue) : base(defValue)
-        {
-            this.item = item;
-        }
-    }
-
-    internal delegate void GetTypeConverterAndTypeEditorEventHandler(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent e);
-
-    internal class GetTypeConverterAndTypeEditorEvent : EventArgs
-    {
-        private TypeConverter typeConverter;
-        private object typeEditor;
-
-        public GetTypeConverterAndTypeEditorEvent(TypeConverter typeConverter, object typeEditor)
-        {
-            this.typeEditor = typeEditor;
-            this.typeConverter = typeConverter;
-        }
-
-        public TypeConverter TypeConverter
-        {
-            get
-            {
-                return typeConverter;
-            }
-            set
-            {
-                typeConverter = value;
-            }
-        }
-
-        public object TypeEditor
-        {
-            get
-            {
-                return typeEditor;
-            }
-            set
-            {
-                typeEditor = value;
-            }
-        }
+        GetBoolValueEvent gbv = new GetBoolValueEvent(false);
+        OnShouldSerializeValue(gbv);
+        return gbv.Value;
     }
 }

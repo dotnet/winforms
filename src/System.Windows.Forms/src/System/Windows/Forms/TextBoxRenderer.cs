@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer? t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer;
         private static readonly VisualStyleElement s_textBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 
         /// <summary>

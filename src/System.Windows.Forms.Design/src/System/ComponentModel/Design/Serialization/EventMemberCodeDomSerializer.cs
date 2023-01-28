@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Reflection;
 
@@ -19,10 +21,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default is null)
-                {
-                    s_default = new EventMemberCodeDomSerializer();
-                }
+                s_default ??= new EventMemberCodeDomSerializer();
 
                 return s_default;
             }

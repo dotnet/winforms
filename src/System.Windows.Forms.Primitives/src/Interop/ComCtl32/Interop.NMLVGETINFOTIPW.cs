@@ -8,8 +8,8 @@ internal static partial class Interop
     {
         public struct NMLVGETINFOTIPW
         {
-            public User32.NMHDR nmhdr;
-            public LVGIT flags;
+            public NMHDR nmhdr;
+            public NMLVGETINFOTIP_FLAGS flags;
             public IntPtr lpszText;
             public int cchTextMax;
             public int item;

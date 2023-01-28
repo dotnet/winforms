@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -22,7 +24,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists == null)
+                if (_actionLists is null)
                 {
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new TextBoxActionList(this));
@@ -57,7 +59,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxDesigner), prop, empty);
                 }
@@ -75,7 +77,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 TextBox tb = Control as TextBox;
-                Debug.Assert(tb != null, "Designed control is not a TextBox.");
+                Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
                 if (tb.UseSystemPasswordChar)
                 {
@@ -89,7 +91,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 TextBox tb = Control as TextBox;
-                Debug.Assert(tb != null, "Designed control is not a TextBox.");
+                Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
                 passwordChar = value;
                 tb.PasswordChar = value;

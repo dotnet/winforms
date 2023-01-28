@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
@@ -32,33 +30,33 @@ namespace System.Windows.Forms
         private static Size s_onePixel = new Size(1, 1);
         internal static Point s_invalidMouseEnter = new Point(int.MaxValue, int.MaxValue);
 
-        private ToolStripItemCollection _toolStripItemCollection;
-        private ToolStripOverflowButton _toolStripOverflowButton;
-        private ToolStripGrip _toolStripGrip;
-        private ToolStripItemCollection _displayedItems;
-        private ToolStripItemCollection _overflowItems;
-        private ToolStripDropTargetManager _dropTargetManager;
-        private IntPtr _hwndThatLostFocus = IntPtr.Zero;
-        private ToolStripItem _lastMouseActiveItem;
-        private ToolStripItem _lastMouseDownedItem;
+        private ToolStripItemCollection? _toolStripItemCollection;
+        private ToolStripOverflowButton? _toolStripOverflowButton;
+        private ToolStripGrip? _toolStripGrip;
+        private ToolStripItemCollection? _displayedItems;
+        private ToolStripItemCollection? _overflowItems;
+        private ToolStripDropTargetManager? _dropTargetManager;
+        private HWND _hwndThatLostFocus;
+        private ToolStripItem? _lastMouseActiveItem;
+        private ToolStripItem? _lastMouseDownedItem;
         private LayoutEngine _layoutEngine;
         private ToolStripLayoutStyle _layoutStyle = ToolStripLayoutStyle.StackWithOverflow;
         private Rectangle _lastInsertionMarkRect = Rectangle.Empty;
-        private ImageList _imageList;
+        private ImageList? _imageList;
         private ToolStripGripStyle _toolStripGripStyle = ToolStripGripStyle.Visible;
         private int _toolStripState;
         private bool _showItemToolTips;
-        private MouseHoverTimer _mouseHoverTimer;
-        private ToolStripItem _currentlyActiveTooltipItem;
-        private NativeWindow _dropDownOwnerWindow;
+        private MouseHoverTimer? _mouseHoverTimer;
+        private ToolStripItem? _currentlyActiveTooltipItem;
+        private NativeWindow? _dropDownOwnerWindow;
         private byte _mouseDownID;  // NEVER use this directly from another class, 0 should never be returned to another class.
-        private ToolStripRenderer _renderer;
+        private ToolStripRenderer? _renderer;
         private Type _currentRendererType = typeof(Type);
-        private Hashtable _shortcuts;
-        private Stack<MergeHistory> _mergeHistoryStack;
+        private Dictionary<Keys, ToolStripMenuItem>? _shortcuts;
+        private Stack<MergeHistory>? _mergeHistoryStack;
         private ToolStripDropDownDirection _toolStripDropDownDirection = ToolStripDropDownDirection.Default;
         private Size _largestDisplayedItemSize = Size.Empty;
-        private CachedItemHdcInfo _cachedItemHdcInfo;
+        private CachedItemHdcInfo? _cachedItemHdcInfo;
         private bool _alreadyHooked;
 
         private Size _imageScalingSize;
@@ -66,8 +64,8 @@ namespace System.Windows.Forms
         private static int s_iconWidth = IconDimension;
         private static int s_iconHeight = IconDimension;
 
-        private Font _defaultFont;
-        private RestoreFocusMessageFilter _restoreFocusFilter;
+        private Font? _defaultFont;
+        private RestoreFocusMessageFilter? _restoreFocusFilter;
         private static readonly Padding s_defaultPadding = new Padding(0, 0, 1, 0);
         private static readonly Padding s_defaultGripMargin = new Padding(2);
         private Padding _scaledDefaultPadding = s_defaultPadding;
@@ -125,21 +123,21 @@ namespace System.Windows.Forms
         internal static readonly TraceSwitch s_menuAutoExpandDebug = new TraceSwitch("MenuAutoExpand", "Debug menu auto expand");
         internal static readonly TraceSwitch s_controlTabDebug = new TraceSwitch("ControlTab", "Debug ToolStrip Control+Tab selection");
 #else
-        internal static readonly TraceSwitch s_selectionDebug;
-        internal static readonly TraceSwitch s_dropTargetDebug;
-        internal static readonly TraceSwitch s_layoutDebugSwitch;
-        internal static readonly TraceSwitch s_mouseActivateDebug;
-        internal static readonly TraceSwitch s_mergeDebug;
-        internal static readonly TraceSwitch s_snapFocusDebug;
-        internal static readonly TraceSwitch s_flickerDebug;
-        internal static readonly TraceSwitch s_itemReorderDebug;
-        internal static readonly TraceSwitch s_mdiMergeDebug;
-        internal static readonly TraceSwitch s_menuAutoExpandDebug;
-        internal static readonly TraceSwitch s_controlTabDebug;
+        internal static readonly TraceSwitch? s_selectionDebug;
+        internal static readonly TraceSwitch? s_dropTargetDebug;
+        internal static readonly TraceSwitch? s_layoutDebugSwitch;
+        internal static readonly TraceSwitch? s_mouseActivateDebug;
+        internal static readonly TraceSwitch? s_mergeDebug;
+        internal static readonly TraceSwitch? s_snapFocusDebug;
+        internal static readonly TraceSwitch? s_flickerDebug;
+        internal static readonly TraceSwitch? s_itemReorderDebug;
+        internal static readonly TraceSwitch? s_mdiMergeDebug;
+        internal static readonly TraceSwitch? s_menuAutoExpandDebug;
+        internal static readonly TraceSwitch? s_controlTabDebug;
 #endif
 
         private delegate void BooleanMethodInvoker(bool arg);
-        internal Action<int, int> _rescaleConstsCallbackDelegate;
+        internal Action<int, int>? _rescaleConstsCallbackDelegate;
 
         public ToolStrip()
         {
@@ -192,12 +190,13 @@ namespace System.Windows.Forms
             ResumeLayout(true);
         }
 
-        public ToolStrip(params ToolStripItem[] items) : this()
+        public ToolStrip(params ToolStripItem[] items)
+            : this()
         {
             Items.AddRange(items);
         }
 
-        internal ArrayList ActiveDropDowns { get; } = new ArrayList(1);
+        internal List<ToolStripDropDown> ActiveDropDowns { get; } = new List<ToolStripDropDown>(1);
 
         // returns true when entered into menu mode through this toolstrip/menustrip
         // this is only really supported for menustrip active event, but to prevent casting everywhere...
@@ -248,7 +247,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -337,8 +336,6 @@ namespace System.Windows.Forms
 
                     SetToolStripState(STATE_ALLOWITEMREORDER, value);
 
-                    //
-
                     if (value)
                     {
                         ToolStripSplitStackDragDropHandler dragDropHandler = new ToolStripSplitStackDragDropHandler(this);
@@ -399,28 +396,27 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolStripOnBeginDrag))]
-        public event EventHandler BeginDrag
+        public event EventHandler? BeginDrag
         {
             add => Events.AddHandler(s_eventBeginDrag, value);
             remove => Events.RemoveHandler(s_eventBeginDrag, value);
         }
 
-        public override BindingContext BindingContext
+        public override BindingContext? BindingContext
         {
             get
             {
-                BindingContext bc = (BindingContext)Properties.GetObject(s_propBindingContext);
+                BindingContext? bc = (BindingContext?)Properties.GetObject(s_propBindingContext);
                 if (bc is not null)
                 {
                     return bc;
                 }
 
                 // try the parent
-                //
-                Control p = ParentInternal;
-                if (p is not null && p.CanAccessProperties)
+                Control? parent = ParentInternal;
+                if (parent is not null && parent.CanAccessProperties)
                 {
-                    return p.BindingContext;
+                    return parent.BindingContext;
                 }
 
                 // we don't have a binding context
@@ -494,7 +490,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public new event EventHandler CausesValidationChanged
+        public new event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -509,7 +505,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event ControlEventHandler ControlAdded
+        public new event ControlEventHandler? ControlAdded
         {
             add => base.ControlAdded += value;
             remove => base.ControlAdded -= value;
@@ -517,6 +513,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override Cursor Cursor
         {
             get => base.Cursor;
@@ -527,7 +524,7 @@ namespace System.Windows.Forms
         ///  Hide browsable property
         /// </summary>
         [Browsable(false)]
-        public new event EventHandler CursorChanged
+        public new event EventHandler? CursorChanged
         {
             add => base.CursorChanged += value;
             remove => base.CursorChanged -= value;
@@ -535,7 +532,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event ControlEventHandler ControlRemoved
+        public new event ControlEventHandler? ControlRemoved
         {
             add => base.ControlRemoved += value;
             remove => base.ControlRemoved -= value;
@@ -543,12 +540,13 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolStripOnEndDrag))]
-        public event EventHandler EndDrag
+        public event EventHandler? EndDrag
         {
             add => Events.AddHandler(s_eventEndDrag, value);
             remove => Events.RemoveHandler(s_eventEndDrag, value);
         }
 
+        [AllowNull]
         public override Font Font
         {
             get
@@ -558,13 +556,10 @@ namespace System.Windows.Forms
                     return base.Font;
                 }
 
-                if (_defaultFont is null)
-                {
-                    // since toolstrip manager default font is thread static, hold onto a copy of the
-                    // pointer in an instance variable for perf so we don't have to keep fishing into
-                    // thread local storage for it.
-                    _defaultFont = ToolStripManager.DefaultFont;
-                }
+                // since toolstrip manager default font is thread static, hold onto a copy of the
+                // pointer in an instance variable for perf so we don't have to keep fishing into
+                // thread local storage for it.
+                _defaultFont ??= ToolStripManager.DefaultFont;
 
                 return _defaultFont;
             }
@@ -736,16 +731,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dropDownOwnerWindow is null)
-                {
-                    _dropDownOwnerWindow = new NativeWindow();
-                }
+                _dropDownOwnerWindow ??= new NativeWindow();
 
                 if (_dropDownOwnerWindow.Handle == IntPtr.Zero)
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
+                        ExStyle = (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW
                     };
                     _dropDownOwnerWindow.CreateHandle(cp);
                 }
@@ -759,14 +751,12 @@ namespace System.Windows.Forms
         ///  items and this ToolStrip share.  this is necessary as
         ///  RegisterDragDrop requires an HWND.
         /// </summary>
+        [AllowNull]
         internal ToolStripDropTargetManager DropTargetManager
         {
             get
             {
-                if (_dropTargetManager is null)
-                {
-                    _dropTargetManager = new ToolStripDropTargetManager(this);
-                }
+                _dropTargetManager ??= new ToolStripDropTargetManager(this);
 
                 return _dropTargetManager;
             }
@@ -783,10 +773,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_displayedItems is null)
-                {
-                    _displayedItems = new ToolStripItemCollection(this, false);
-                }
+                _displayedItems ??= new ToolStripItemCollection(this, false);
 
                 return _displayedItems;
             }
@@ -839,7 +826,7 @@ namespace System.Windows.Forms
         ///  [ToolStrip ForeColorChanged event, overriden to turn browsing off.]
         /// </summary>
         [Browsable(false)]
-        public new event EventHandler ForeColorChanged
+        public new event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -857,17 +844,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_toolStripGrip is null)
+                _toolStripGrip ??= new ToolStripGrip
                 {
-                    _toolStripGrip = new ToolStripGrip
-                    {
-                        Overflow = ToolStripItemOverflow.Never,
-                        Visible = _toolStripGripStyle == ToolStripGripStyle.Visible,
-                        AutoSize = false,
-                        ParentInternal = this,
-                        Margin = DefaultGripMargin
-                    };
-                }
+                    Overflow = ToolStripItemOverflow.Never,
+                    Visible = _toolStripGripStyle == ToolStripGripStyle.Visible,
+                    AutoSize = false,
+                    ParentInternal = this,
+                    Margin = DefaultGripMargin
+                };
 
                 return _toolStripGrip;
             }
@@ -976,7 +960,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public HScrollProperties HorizontalScroll
+        public new HScrollProperties HorizontalScroll
         {
             get => base.HorizontalScroll;
         }
@@ -1024,7 +1008,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripImageListDescr))]
         [Browsable(false)]
-        public ImageList ImageList
+        public ImageList? ImageList
         {
             get
             {
@@ -1036,8 +1020,7 @@ namespace System.Windows.Forms
                 {
                     EventHandler handler = new EventHandler(ImageListRecreateHandle);
 
-                    // Remove the previous imagelist handle recreate handler
-                    //
+                    // Remove the previous imagelist handle recreate handler.
                     if (_imageList is not null)
                     {
                         _imageList.RecreateHandle -= handler;
@@ -1045,8 +1028,7 @@ namespace System.Windows.Forms
 
                     _imageList = value;
 
-                    // Add the new imagelist handle recreate handler
-                    //
+                    // Add the new imagelist handle recreate handler.
                     if (value is not null)
                     {
                         value.RecreateHandle += handler;
@@ -1123,10 +1105,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_toolStripItemCollection is null)
-                {
-                    _toolStripItemCollection = new ToolStripItemCollection(this, true);
-                }
+                _toolStripItemCollection ??= new ToolStripItemCollection(this, true);
 
                 return _toolStripItemCollection;
             }
@@ -1134,7 +1113,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripItemAddedDescr))]
-        public event ToolStripItemEventHandler ItemAdded
+        public event ToolStripItemEventHandler? ItemAdded
         {
             add => Events.AddHandler(s_eventItemAdded, value);
             remove => Events.RemoveHandler(s_eventItemAdded, value);
@@ -1145,7 +1124,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
-        public event ToolStripItemClickedEventHandler ItemClicked
+        public event ToolStripItemClickedEventHandler? ItemClicked
         {
             add => Events.AddHandler(s_eventItemClicked, value);
             remove => Events.RemoveHandler(s_eventItemClicked, value);
@@ -1169,10 +1148,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_cachedItemHdcInfo is null)
-                {
-                    _cachedItemHdcInfo = new CachedItemHdcInfo();
-                }
+                _cachedItemHdcInfo ??= new CachedItemHdcInfo();
 
                 return _cachedItemHdcInfo;
             }
@@ -1180,7 +1156,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
-        public event ToolStripItemEventHandler ItemRemoved
+        public event ToolStripItemEventHandler? ItemRemoved
         {
             add => Events.AddHandler(s_eventItemRemoved, value);
             remove => Events.RemoveHandler(s_eventItemRemoved, value);
@@ -1207,7 +1183,7 @@ namespace System.Windows.Forms
         ///  This allows us to have methods that handle drag/drop of the ToolStrip items
         ///  without calling back on the user's code
         /// </summary>
-        internal IDropTarget ItemReorderDropTarget { get; set; }
+        internal IDropTarget? ItemReorderDropTarget { get; set; }
 
         /// <summary>
         ///  The OnQueryContinueDrag and OnGiveFeedback methods that will be called if
@@ -1216,7 +1192,7 @@ namespace System.Windows.Forms
         ///  This allows us to have methods that handle drag/drop of the ToolStrip items
         ///  without calling back on the user's code
         /// </summary>
-        internal ISupportOleDropSource ItemReorderDropSource { get; set; }
+        internal ISupportOleDropSource? ItemReorderDropSource { get; set; }
 
         internal bool IsInDesignMode
         {
@@ -1231,7 +1207,7 @@ namespace System.Windows.Forms
             get { return GetToolStripState(STATE_LASTMOUSEDOWNEDITEMCAPTURE); }
         }
 
-        internal ToolStripItem LastMouseDownedItem
+        internal ToolStripItem? LastMouseDownedItem
         {
             get
             {
@@ -1249,7 +1225,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public LayoutSettings LayoutSettings { get; set; }
+        public LayoutSettings? LayoutSettings { get; set; }
 
         /// <summary>
         ///  Specifies whether we're horizontal or vertical
@@ -1344,7 +1320,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
-        public event EventHandler LayoutCompleted
+        public event EventHandler? LayoutCompleted
         {
             add => Events.AddHandler(s_eventLayoutCompleted, value);
             remove => Events.RemoveHandler(s_eventLayoutCompleted, value);
@@ -1354,7 +1330,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
-        public event EventHandler LayoutStyleChanged
+        public event EventHandler? LayoutStyleChanged
         {
             add => Events.AddHandler(s_eventLayoutStyleChanged, value);
             remove => Events.RemoveHandler(s_eventLayoutStyleChanged, value);
@@ -1364,7 +1340,6 @@ namespace System.Windows.Forms
         {
             get
             {
-                //
                 return _layoutEngine;
             }
         }
@@ -1416,10 +1391,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_mergeHistoryStack is null)
-                {
-                    _mergeHistoryStack = new Stack<MergeHistory>();
-                }
+                _mergeHistoryStack ??= new Stack<MergeHistory>();
 
                 return _mergeHistoryStack;
             }
@@ -1429,10 +1401,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_mouseHoverTimer is null)
-                {
-                    _mouseHoverTimer = new MouseHoverTimer();
-                }
+                _mouseHoverTimer ??= new MouseHoverTimer();
 
                 return _mouseHoverTimer;
             }
@@ -1459,17 +1428,11 @@ namespace System.Windows.Forms
             }
         }
 
-        //
-        //
-
         internal ToolStripItemCollection OverflowItems
         {
             get
             {
-                if (_overflowItems is null)
-                {
-                    _overflowItems = new ToolStripItemCollection(this, false);
-                }
+                _overflowItems ??= new ToolStripItemCollection(this, false);
 
                 return _overflowItems;
             }
@@ -1480,7 +1443,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripPaintGripDescr))]
-        public event PaintEventHandler PaintGrip
+        public event PaintEventHandler? PaintGrip
         {
             add => Events.AddHandler(s_eventPaintGrip, value);
             remove => Events.RemoveHandler(s_eventPaintGrip, value);
@@ -1490,10 +1453,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_restoreFocusFilter is null)
-                {
-                    _restoreFocusFilter = new RestoreFocusMessageFilter(this);
-                }
+                _restoreFocusFilter ??= new RestoreFocusMessageFilter(this);
 
                 return _restoreFocusFilter;
             }
@@ -1510,16 +1470,16 @@ namespace System.Windows.Forms
         }
 
         // fetches the Cell associated with this toolstrip.
-        ToolStripPanelCell ISupportToolStripPanel.ToolStripPanelCell
+        ToolStripPanelCell? ISupportToolStripPanel.ToolStripPanelCell
         {
             get
             {
-                ToolStripPanelCell toolStripPanelCell = null;
+                ToolStripPanelCell? toolStripPanelCell = null;
                 if (!IsDropDown && !IsDisposed)
                 {
                     if (Properties.ContainsObject(ToolStrip.s_propToolStripPanelCell))
                     {
-                        toolStripPanelCell = (ToolStripPanelCell)Properties.GetObject(ToolStrip.s_propToolStripPanelCell);
+                        toolStripPanelCell = (ToolStripPanelCell?)Properties.GetObject(ToolStrip.s_propToolStripPanelCell);
                     }
                     else
                     {
@@ -1532,7 +1492,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ToolStripPanelRow ISupportToolStripPanel.ToolStripPanelRow
+        ToolStripPanelRow? ISupportToolStripPanel.ToolStripPanelRow
         {
             get
             {
@@ -1613,6 +1573,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public ToolStripRenderer Renderer
         {
             get
@@ -1620,7 +1581,7 @@ namespace System.Windows.Forms
                 if (IsDropDown)
                 {
                     // PERF: since this is called a lot we don't want to make it virtual
-                    ToolStripDropDown dropDown = this as ToolStripDropDown;
+                    var dropDown = (ToolStripDropDown)this;
                     if (dropDown is ToolStripOverflow || dropDown.IsAutoGenerated)
                     {
                         if (dropDown.OwnerToolStrip is not null)
@@ -1641,7 +1602,9 @@ namespace System.Windows.Forms
                 SetToolStripState(STATE_USEDEFAULTRENDERER, false);
                 if (_renderer is null)
                 {
-                    Renderer = ToolStripManager.CreateRenderer(RenderMode);
+                    _renderer = ToolStripManager.CreateRenderer(RenderMode);
+                    _currentRendererType = _renderer.GetType();
+                    OnRendererChanged(EventArgs.Empty);
                 }
 
                 return _renderer;
@@ -1660,7 +1623,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public event EventHandler RendererChanged
+        public event EventHandler? RendererChanged
         {
             add => Events.AddHandler(s_eventRendererChanged, value);
             remove => Events.RemoveHandler(s_eventRendererChanged, value);
@@ -1777,14 +1740,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary> internal lookup table for shortcuts... intended to speed search time </summary>
-        internal Hashtable Shortcuts
+        internal Dictionary<Keys, ToolStripMenuItem> Shortcuts
         {
             get
             {
-                if (_shortcuts is null)
-                {
-                    _shortcuts = new Hashtable(1);
-                }
+                _shortcuts ??= new Dictionary<Keys, ToolStripMenuItem>(1);
 
                 return _shortcuts;
             }
@@ -1796,14 +1756,14 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
-        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [DispId(PInvoke.DISPID_TABSTOP)]
         [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
         }
-
+#nullable disable
         /// <summary> this is the ToolTip used for the individual items
         ///  it only works if ShowItemToolTips = true
         /// </summary>
@@ -1867,7 +1827,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public VScrollProperties VerticalScroll
+        public new VScrollProperties VerticalScroll
         {
             get => base.VerticalScroll;
         }
@@ -1901,7 +1861,7 @@ namespace System.Windows.Forms
                 {
                     if (_hwndThatLostFocus == IntPtr.Zero)
                     {
-                        SnapFocus(User32.GetFocus());
+                        SnapFocus(PInvoke.GetFocus());
                     }
 
                     controlHost.Control.Select();
@@ -1953,41 +1913,40 @@ namespace System.Windows.Forms
             Rectangle regionRect = (item is null) ? Rectangle.Empty : item.Bounds;
             Region region = null;
 
+            // Copy displayed items collection so it doesn't mutate when we begin to hide items.
+            ToolStripItem[] displayedItems = new ToolStripItem[DisplayedItems.Count];
+            DisplayedItems.CopyTo(displayedItems, 0);
+
             try
             {
-                for (int i = 0; i < DisplayedItems.Count; i++)
+                for (int i = 0; i < displayedItems.Length; i++)
                 {
-                    if (DisplayedItems[i] == item)
+                    if (displayedItems[i] == item)
                     {
                         continue;
                     }
-                    else if (item is not null && DisplayedItems[i].Pressed)
-                    {
-                        //
 
-                        if (DisplayedItems[i] is ToolStripDropDownItem dropDownItem && dropDownItem.HasDropDownItems)
-                        {
-                            dropDownItem.AutoHide(item);
-                        }
+                    if (item is not null
+                        && displayedItems[i] is ToolStripDropDownItem dropDownItem
+                        && dropDownItem.Pressed
+                        && dropDownItem.HasDropDownItems)
+                    {
+                        dropDownItem.AutoHide(item);
                     }
 
                     bool invalidate = false;
-                    if (DisplayedItems[i].Selected)
+                    if (displayedItems[i].Selected)
                     {
-                        DisplayedItems[i].Unselect();
-                        Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG ClearAllSelectionsExcept] Unselecting " + DisplayedItems[i].Text);
+                        displayedItems[i].Unselect();
+                        s_selectionDebug.TraceVerbose($"[SelectDBG ClearAllSelectionsExcept] Unselecting {displayedItems[i].Text}");
                         invalidate = true;
                     }
 
                     if (invalidate)
                     {
                         // since regions are heavy weight - only use if we need it.
-                        if (region is null)
-                        {
-                            region = new Region(regionRect);
-                        }
-
-                        region.Union(DisplayedItems[i].Bounds);
+                        region ??= new Region(regionRect);
+                        region.Union(displayedItems[i].Bounds);
                     }
                 }
 
@@ -2005,16 +1964,13 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (region is not null)
-                {
-                    region.Dispose();
-                }
+                region?.Dispose();
             }
 
             // fire accessibility
             if (IsHandleCreated && item is not null)
             {
-                int focusIndex = DisplayedItems.IndexOf(item);
+                int focusIndex = Array.IndexOf(displayedItems, item);
                 AccessibilityNotifyClients(AccessibleEvents.Focus, focusIndex);
             }
         }
@@ -2041,10 +1997,7 @@ namespace System.Windows.Forms
             if (IsSelectionSuspended)
             {
                 SetToolStripState(STATE_LASTMOUSEDOWNEDITEMCAPTURE, false);
-                if (lastItem is not null)
-                {
-                    lastItem.Invalidate();
-                }
+                lastItem?.Invalidate();
             }
         }
 
@@ -2060,10 +2013,7 @@ namespace System.Windows.Forms
                 try
                 {
                     SuspendLayout();
-                    if (overflow is not null)
-                    {
-                        overflow.SuspendLayout();
-                    }
+                    overflow?.SuspendLayout();
 
                     // if there's a problem in config, don't be a leaker.
                     SetToolStripState(STATE_DISPOSINGITEMS, true);
@@ -2076,21 +2026,12 @@ namespace System.Windows.Forms
                         toolStripPanelCell.Dispose();
                     }
 
-                    if (_cachedItemHdcInfo is not null)
-                    {
-                        _cachedItemHdcInfo.Dispose();
-                    }
+                    _cachedItemHdcInfo?.Dispose();
 
-                    if (_mouseHoverTimer is not null)
-                    {
-                        _mouseHoverTimer.Dispose();
-                    }
+                    _mouseHoverTimer?.Dispose();
 
                     ToolTip toolTip = (ToolTip)Properties.GetObject(ToolStrip.s_propToolTip);
-                    if (toolTip is not null)
-                    {
-                        toolTip.Dispose();
-                    }
+                    toolTip?.Dispose();
 
                     if (!Items.IsReadOnly)
                     {
@@ -2104,15 +2045,9 @@ namespace System.Windows.Forms
                     }
 
                     // clean up items not in the Items list
-                    if (_toolStripGrip is not null)
-                    {
-                        _toolStripGrip.Dispose();
-                    }
+                    _toolStripGrip?.Dispose();
 
-                    if (_toolStripOverflowButton is not null)
-                    {
-                        _toolStripOverflowButton.Dispose();
-                    }
+                    _toolStripOverflowButton?.Dispose();
 
                     // remove the restore focus filter
                     if (_restoreFocusFilter is not null)
@@ -2134,7 +2069,7 @@ namespace System.Windows.Forms
                     // if we were the last toolstrip in the queue, exit menu mode.
                     if (exitMenuMode && ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "Exiting menu mode because we're the last toolstrip in the queue, and we've disposed.");
+                        ToolStrip.s_snapFocusDebug.TraceVerbose("Exiting menu mode because we're the last toolstrip in the queue, and we've disposed.");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                     }
 
@@ -2143,10 +2078,7 @@ namespace System.Windows.Forms
                 finally
                 {
                     ResumeLayout(false);
-                    if (overflow is not null)
-                    {
-                        overflow.ResumeLayout(false);
-                    }
+                    overflow?.ResumeLayout(false);
 
                     SetToolStripState(STATE_DISPOSINGITEMS, false);
                 }
@@ -2272,19 +2204,16 @@ namespace System.Windows.Forms
 
             ToolStripDropDown dropDown = this as ToolStripDropDown;
 
-            if (start is null)
-            {
-                // The navigation should be consistent when navigating in forward and
-                // backward direction entering the toolstrip, it means that the first
-                // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
-                // is pressed.
-                start = GetStartItem(forward, dropDown is not null);
-            }
+            // The navigation should be consistent when navigating in forward and
+            // backward direction entering the toolstrip, it means that the first
+            // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
+            // is pressed.
+            start ??= GetStartItem(forward, dropDown is not null);
 
             int current = DisplayedItems.IndexOf(start);
             if (current == -1)
             {
-                Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "Started from a visible = false item");
+                s_selectionDebug.TraceVerbose("Started from a visible = false item");
                 return null;
             }
 
@@ -2311,7 +2240,7 @@ namespace System.Windows.Forms
 
                 if (DisplayedItems[current].CanKeyboardSelect)
                 {
-                    Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG GetNextToolStripItem] selecting " + DisplayedItems[current].Text);
+                    s_selectionDebug.TraceVerbose($"[SelectDBG GetNextToolStripItem] selecting {DisplayedItems[current].Text}");
                     //ClearAllSelectionsExcept(Items[current]);
                     return DisplayedItems[current];
                 }
@@ -2672,12 +2601,12 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "firing mouse leave on " + _lastMouseActiveItem.ToString());
+                    ToolStripItem.s_mouseDebugging.TraceVerbose($"firing mouse leave on {_lastMouseActiveItem}");
                     _lastMouseActiveItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseLeave);
                 }
                 finally
                 {
-                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "setting last active item to null");
+                    ToolStripItem.s_mouseDebugging.TraceVerbose("setting last active item to null");
                     _lastMouseActiveItem = null;
                 }
             }
@@ -2894,21 +2823,21 @@ namespace System.Windows.Forms
 
         // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
         // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
-        private protected override void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(HDC hDC, IntPtr lParam, Rectangle bounds)
         {
             using Bitmap image = new Bitmap(bounds.Width, bounds.Height);
             using Graphics g = Graphics.FromImage(image);
             using var imageHdc = new DeviceContextHdcScope(g, applyGraphicsState: false);
 
             // Send the actual wm_print message
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 this,
                 User32.WM.PRINT,
-                imageHdc.HDC,
-                (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                (WPARAM)imageHdc,
+                (LPARAM)(uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
             // Now BLT the result to the destination bitmap.
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 hDC,
                 bounds.X,
                 bounds.Y,
@@ -2917,7 +2846,7 @@ namespace System.Windows.Forms
                 imageHdc,
                 0,
                 0,
-                Gdi32.ROP.SRCCOPY);
+                ROP_CODE.SRCCOPY);
         }
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -2928,7 +2857,7 @@ namespace System.Windows.Forms
                 {
                     ClearAllSelections();
                     ToolStripManager.ModalMenuFilter.MenuKeyToggle = true;
-                    Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.ProcessCmdKey] Detected a second ALT keypress while in Menu Mode.");
+                    s_snapFocusDebug.TraceVerbose("[ToolStrip.ProcessCmdKey] Detected a second ALT keypress while in Menu Mode.");
                     ToolStripManager.ModalMenuFilter.ExitMenuMode();
                 }
             }
@@ -3064,7 +2993,7 @@ namespace System.Windows.Forms
                 return retVal;
             }
 
-            Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] calling base");
+            s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] calling base");
             return base.ProcessDialogKey(keyData);
         }
 
@@ -3300,7 +3229,7 @@ namespace System.Windows.Forms
         internal virtual bool ProcessArrowKey(Keys keyCode)
         {
             bool retVal = false;
-            Debug.WriteLineIf(s_menuAutoExpandDebug.TraceVerbose, "[ToolStrip.ProcessArrowKey] MenuTimer.Cancel called");
+            s_menuAutoExpandDebug.TraceVerbose("[ToolStrip.ProcessArrowKey] MenuTimer.Cancel called");
             ToolStripMenuItem.MenuTimer.Cancel();
 
             switch (keyCode)
@@ -3355,12 +3284,12 @@ namespace System.Windows.Forms
         {
             if (item is null)
             {
-                Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG NotifySelectionChange] none should be selected");
+                s_selectionDebug.TraceVerbose("[SelectDBG NotifySelectionChange] none should be selected");
                 ClearAllSelections();
             }
             else if (item.Selected)
             {
-                Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG NotifySelectionChange] Notify selection change: " + item.ToString() + ": " + item.Selected.ToString());
+                s_selectionDebug.TraceVerbose($"[SelectDBG NotifySelectionChange] Notify selection change: {item}: {item.Selected}");
                 ClearAllSelectionsExcept(item);
             }
         }
@@ -3485,11 +3414,8 @@ namespace System.Windows.Forms
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            if (DropTargetManager is not null)
-            {
-                // Make sure we unregister ourselves as a drop target
-                DropTargetManager.EnsureUnRegistered();
-            }
+            // Make sure we unregister ourselves as a drop target
+            DropTargetManager?.EnsureUnRegistered();
 
             base.OnHandleDestroyed(e);
         }
@@ -3571,10 +3497,7 @@ namespace System.Windows.Forms
             OnLayoutCompleted(EventArgs.Empty);
             Invalidate();
 
-            if (overflow is not null)
-            {
-                overflow.ResumeLayout();
-            }
+            overflow?.ResumeLayout();
         }
 
         protected virtual void OnLayoutCompleted(EventArgs e)
@@ -3598,7 +3521,7 @@ namespace System.Windows.Forms
             base.OnLeave(e);
             if (!IsDropDown)
             {
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "uninstalling RestoreFocusFilter");
+                s_snapFocusDebug.TraceVerbose("uninstalling RestoreFocusFilter");
 
                 // PERF,
 
@@ -3654,7 +3577,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs mea)
         {
-            Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "OnMouseMove called");
+            ToolStripItem.s_mouseDebugging.TraceVerbose("OnMouseMove called");
 
             ToolStripItem item = GetItemAt(mea.X, mea.Y);
 
@@ -3666,10 +3589,10 @@ namespace System.Windows.Forms
                 // control's WM_MOUSEMOVE. Waiting until this event gives us
                 // the actual coordinates.
 
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}", (item is null) ? "null" : item.ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}", (item is null) ? "null" : item.ToString()));
                 if (item != _lastMouseActiveItem)
                 {
-                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
+                    ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
 
                     // notify the item that we've moved on
                     HandleMouseLeave();
@@ -3679,7 +3602,7 @@ namespace System.Windows.Forms
 
                     if (_lastMouseActiveItem is not null)
                     {
-                        Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
+                        ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
                         item.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
 
@@ -3698,7 +3621,7 @@ namespace System.Windows.Forms
 
             if (item is not null)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item is null) ? "null" : item.ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item is null) ? "null" : item.ToString()));
 
                 // Fire mouse move on the item
                 // Transpose this to "client coordinates" of the ToolStripItem.
@@ -3708,7 +3631,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (this is null) ? "null" : ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (this is null) ? "null" : ToString()));
 
                 base.OnMouseMove(mea);
             }
@@ -3810,7 +3733,7 @@ namespace System.Windows.Forms
                 using (var toolStripHDC = new DeviceContextHdcScope(toolstripGraphics, ApplyGraphicsProperties.Clipping))
                 {
                     // Get the cached item HDC.
-                    Gdi32.HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
+                    HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
                     Graphics itemGraphics = itemHDC.CreateGraphics();
                     try
@@ -3868,7 +3791,7 @@ namespace System.Windows.Forms
 
                                 // PERF - consider - we only actually need to copy the clipping rect.
                                 // copy the background from the toolstrip onto the offscreen bitmap
-                                Gdi32.BitBlt(
+                                PInvoke.BitBlt(
                                     ItemHdcInfo,
                                     0,
                                     0,
@@ -3877,7 +3800,7 @@ namespace System.Windows.Forms
                                     toolStripHDC,
                                     item.Bounds.X,
                                     item.Bounds.Y,
-                                    Gdi32.ROP.SRCCOPY);
+                                    ROP_CODE.SRCCOPY);
 
                                 // Paint the item into the offscreen bitmap
                                 using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
@@ -3886,7 +3809,7 @@ namespace System.Windows.Forms
                                 }
 
                                 // copy the item back onto the toolstrip
-                                Gdi32.BitBlt(
+                                PInvoke.BitBlt(
                                     toolStripHDC,
                                     item.Bounds.X,
                                     item.Bounds.Y,
@@ -3895,7 +3818,7 @@ namespace System.Windows.Forms
                                     ItemHdcInfo,
                                     0,
                                     0,
-                                    Gdi32.ROP.SRCCOPY);
+                                    ROP_CODE.SRCCOPY);
 
                                 GC.KeepAlive(ItemHdcInfo);
                             }
@@ -3903,10 +3826,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (itemGraphics is not null)
-                        {
-                            itemGraphics.Dispose();
-                        }
+                        itemGraphics?.Dispose();
                     }
                 }
             }
@@ -3941,15 +3861,9 @@ namespace System.Windows.Forms
                     Items[i].OnParentRightToLeftChanged(e);
                 }
 
-                if (_toolStripOverflowButton is not null)
-                {
-                    _toolStripOverflowButton.OnParentRightToLeftChanged(e);
-                }
+                _toolStripOverflowButton?.OnParentRightToLeftChanged(e);
 
-                if (_toolStripGrip is not null)
-                {
-                    _toolStripGrip.OnParentRightToLeftChanged(e);
-                }
+                _toolStripGrip?.OnParentRightToLeftChanged(e);
             }
         }
 
@@ -4005,7 +3919,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal protected virtual void OnPaintGrip(PaintEventArgs e)
+        protected internal virtual void OnPaintGrip(PaintEventArgs e)
         {
             Renderer.DrawGrip(new ToolStripGripRenderEventArgs(e.Graphics, this));
 
@@ -4065,10 +3979,7 @@ namespace System.Windows.Forms
                     ResetScaling(deviceDpiNew);
 
                     // We need to scale the one Grip per ToolStrip as well (if present).
-                    if (_toolStripGrip is not null)
-                    {
-                        _toolStripGrip.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
-                    }
+                    _toolStripGrip?.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
 
                     // ToolStripItems are components and have Font property. Components do not receive WM_DPICHANGED messages, nor they have
                     // parent-child relationship with owners and, thus, do not get scaled by parent/Container. For these reasons, they need the font
@@ -4256,6 +4167,44 @@ namespace System.Windows.Forms
             return null;
         }
 
+        internal override void ReleaseUiaProvider(HWND handle)
+        {
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                ReleaseToolStripItemsProviders(Items);
+
+                _toolStripGrip?.ReleaseUiaProvider();
+                _toolStripOverflowButton?.ReleaseUiaProvider();
+            }
+
+            base.ReleaseUiaProvider(handle);
+        }
+
+        /// <summary>
+        ///  Call UiaDisconnectProvider for all ToolsStripItem Accessible objects.
+        ///  This method is invoked from ReleaseUiaProvider method.
+        /// </summary>
+        /// <param name="items">contains ToolStrip or ToolStripDropDown items to disconnect</param>
+        internal virtual void ReleaseToolStripItemsProviders(ToolStripItemCollection items)
+        {
+            ToolStripItem[] itemsArray = items.Cast<ToolStripItem>().ToArray();
+            foreach (ToolStripItem toolStripItem in itemsArray)
+            {
+                if (toolStripItem is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 0)
+                {
+                    ToolStripItemCollection dropDownMenuItems = dropDownItem.DropDownItems;
+                    ReleaseToolStripItemsProviders(dropDownMenuItems);
+                }
+
+                toolStripItem.ReleaseUiaProvider();
+            }
+        }
+
         private void RestoreFocusInternal(bool wasInMenuMode)
         {
             // This is called from the RestoreFocusFilter.  If the state of MenuMode has changed
@@ -4276,14 +4225,14 @@ namespace System.Windows.Forms
             ClearAllSelections();
             _lastMouseDownedItem = null;
 
-            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocus] Someone has called RestoreFocus, exiting MenuMode.");
+            s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocus] Someone has called RestoreFocus, exiting MenuMode.");
             ToolStripManager.ModalMenuFilter.ExitMenuMode();
 
             if (!IsDropDown)
             {
                 // reset menu auto expansion.
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocus] Setting menu auto expand to false");
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocus] uninstalling RestoreFocusFilter");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocus] Setting menu auto expand to false");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocus] uninstalling RestoreFocusFilter");
 
                 // PERF,
 
@@ -4312,25 +4261,27 @@ namespace System.Windows.Forms
         {
             bool focusSuccess = false;
 
-            if ((_hwndThatLostFocus != IntPtr.Zero) && (_hwndThatLostFocus != Handle))
+            if (!_hwndThatLostFocus.IsNull && (_hwndThatLostFocus != Handle))
             {
-                Control c = Control.FromHandle(_hwndThatLostFocus);
+                Control control = FromHandle(_hwndThatLostFocus);
 
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip RestoreFocus]: Will Restore Focus to: " + WindowsFormsUtils.GetControlInformation(_hwndThatLostFocus));
-                _hwndThatLostFocus = IntPtr.Zero;
+                s_snapFocusDebug.TraceVerbose(
+                    $"[ToolStrip RestoreFocus]: Will Restore Focus to: {WindowsFormsUtils.GetControlInformation(_hwndThatLostFocus)}");
 
-                if ((c is not null) && c.Visible)
+                _hwndThatLostFocus = default;
+
+                if ((control is not null) && control.Visible)
                 {
-                    focusSuccess = c.Focus();
+                    focusSuccess = control.Focus();
                 }
             }
 
-            _hwndThatLostFocus = IntPtr.Zero;
+            _hwndThatLostFocus = default;
 
             if (!focusSuccess)
             {
-                // clear out the focus, we have focus, we're not supposed to anymore.
-                User32.SetFocus(IntPtr.Zero);
+                // Clear out the focus, we have focus, we're not supposed to anymore.
+                PInvoke.SetFocus(default);
             }
         }
 
@@ -4416,10 +4367,7 @@ namespace System.Windows.Forms
 
                 _lastMouseDownedItem = null;
 
-                if (lastInfo is not null)
-                {
-                    lastInfo.Dispose();
-                }
+                lastInfo?.Dispose();
             }
 
             base.SetVisibleCore(visible);
@@ -4434,19 +4382,19 @@ namespace System.Windows.Forms
             // which could accidentally change selection.
             if (_mouseEnterWhenShown == s_invalidMouseEnter)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] MouseEnter already reset.");
+                ToolStripItem.s_mouseDebugging.TraceVerbose("[TS: ShouldSelectItem] MouseEnter already reset.");
                 return true;
             }
 
             Point mousePosition = WindowsFormsUtils.LastCursorPoint;
             if (_mouseEnterWhenShown != mousePosition)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse position has changed - call Select().");
+                ToolStripItem.s_mouseDebugging.TraceVerbose("[TS: ShouldSelectItem] Mouse position has changed - call Select().");
                 _mouseEnterWhenShown = s_invalidMouseEnter;
                 return true;
             }
 
-            Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse hasnt actually moved yet.");
+            ToolStripItem.s_mouseDebugging.TraceVerbose("[TS: ShouldSelectItem] Mouse hasnt actually moved yet.");
 
             return false;
         }
@@ -4482,12 +4430,12 @@ namespace System.Windows.Forms
         {
             if (TabStop)
             {
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.SetFocus] Focusing toolstrip.");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.SetFocus] Focusing toolstrip.");
                 Focus();
             }
             else
             {
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.SetFocus] Entering menu mode.");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.SetFocus] Entering menu mode.");
                 ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, /*menuKeyPressed=*/false);
             }
         }
@@ -4534,7 +4482,7 @@ namespace System.Windows.Forms
         ///  Sets the size of the auto-scroll margins.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public void SetAutoScrollMargin(int x, int y)
+        public new void SetAutoScrollMargin(int x, int y)
         {
             base.SetAutoScrollMargin(x, y);
         }
@@ -4568,7 +4516,7 @@ namespace System.Windows.Forms
 
             if (LayoutEngine is ToolStripSplitStackLayout)
             {
-                if (ToolStripGripStyle.Visible == GripStyle)
+                if (GripStyle == ToolStripGripStyle.Visible)
                 {
                     DisplayedItems.Add(Grip);
                     SetupGrip();
@@ -4653,7 +4601,7 @@ namespace System.Windows.Forms
             {
                 // NOT a SplitStack layout.  We don't change the order of the displayed items collection
                 // for custom keyboard handling override GetNextItem.
-                Debug.WriteLineIf(s_layoutDebugSwitch.TraceVerbose, "Setting Displayed Items: Current bounds: " + Bounds.ToString());
+                s_layoutDebugSwitch.TraceVerbose($"Setting Displayed Items: Current bounds: {Bounds}");
                 Rectangle clientBounds = ClientRectangle;
 
                 // for all other layout managers, we ignore overflow placement
@@ -4688,7 +4636,7 @@ namespace System.Windows.Forms
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
 
-                    Debug.WriteLineIf(s_layoutDebugSwitch.TraceVerbose, item.ToString() + Items[j].Bounds);
+                    s_layoutDebugSwitch.TraceVerbose(item.ToString() + Items[j].Bounds);
                 }
 
                 // For performance we calculate this here, since we're already iterating over the items.
@@ -4726,7 +4674,7 @@ namespace System.Windows.Forms
         ///  - make sure it's not a child control of this control.
         ///  - make sure the control is on this window
         /// </summary>
-        private void SnapFocus(IntPtr otherHwnd)
+        private void SnapFocus(HWND otherHwnd)
         {
 #if DEBUG
             Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"{!Environment.StackTrace.Contains("FocusInternal")}", "who is setting focus to us?");
@@ -4754,17 +4702,19 @@ namespace System.Windows.Forms
                     SnapMouseLocation();
 
                     // make sure the otherHandle is not a child of thisHandle
-                    if ((Handle != otherHwnd) && !User32.IsChild(new HandleRef(this, Handle), otherHwnd).IsTrue())
+                    if ((Handle != otherHwnd) && !PInvoke.IsChild(this, otherHwnd))
                     {
                         // make sure the root window of the otherHwnd is the same as
                         // the root window of thisHwnd.
-                        IntPtr thisHwndRoot = User32.GetAncestor(this, User32.GA.ROOT);
-                        IntPtr otherHwndRoot = User32.GetAncestor(otherHwnd, User32.GA.ROOT);
+                        HWND thisHwndRoot = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        HWND otherHwndRoot = PInvoke.GetAncestor(otherHwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
-                        if (thisHwndRoot == otherHwndRoot && (thisHwndRoot != IntPtr.Zero))
+                        if (thisHwndRoot == otherHwndRoot && !thisHwndRoot.IsNull)
                         {
-                            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip SnapFocus]: Caching for return focus:" + WindowsFormsUtils.GetControlInformation(otherHwnd));
-                            // we know we're in the same window heirarchy.
+                            s_snapFocusDebug.TraceVerbose(
+                                $"[ToolStrip SnapFocus]: Caching for return focus:{WindowsFormsUtils.GetControlInformation(otherHwnd)}");
+
+                            // We know we're in the same window heirarchy.
                             _hwndThatLostFocus = otherHwnd;
                         }
                     }
@@ -4920,39 +4870,40 @@ namespace System.Windows.Forms
         {
             if (m.MsgInternal == User32.WM.SETFOCUS)
             {
-                SnapFocus(m.WParamInternal);
+                SnapFocus((HWND)(nint)m.WParamInternal);
             }
 
             if (m.MsgInternal == User32.WM.MOUSEACTIVATE)
             {
-                // we want to prevent taking focus if someone clicks on the toolstrip dropdown
-                // itself.  the mouse message will still go through, but focus won't be taken.
-                // if someone clicks on a child control (combobox, textbox, etc) focus will
-                // be taken - but we'll handle that in WM_NCACTIVATE handler.
+                // We want to prevent taking focus if someone clicks on the toolstrip dropdown itself. The mouse message
+                // will still go through, but focus won't be taken. If someone clicks on a child control (combobox,
+                // textbox, etc) focus will be taken - but we'll handle that in WM_NCACTIVATE handler.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
-                IntPtr hwndClicked = User32.ChildWindowFromPointEx(this, pt, User32.CWP.SKIPINVISIBLE | User32.CWP.SKIPDISABLED | User32.CWP.SKIPTRANSPARENT);
+                HWND hwndClicked = PInvoke.ChildWindowFromPointEx(
+                    this,
+                    pt,
+                    CWP_FLAGS.CWP_SKIPINVISIBLE | CWP_FLAGS.CWP_SKIPDISABLED | CWP_FLAGS.CWP_SKIPTRANSPARENT);
 
-                // if we click on the toolstrip itself, eat the activation.
-                // if we click on a child control, allow the toolstrip to activate.
-                if (hwndClicked == Handle)
+                // If we click on the toolstrip itself, eat the activation.
+                // If we click on a child control, allow the toolstrip to activate.
+                if (hwndClicked == HWND)
                 {
                     _lastMouseDownedItem = null;
-                    m.ResultInternal = (nint)User32.MA.NOACTIVATE;
+                    m.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
-                        // If our root HWND is not the active hwnd,
-                        // eat the mouse message and bring the form to the front.
-                        IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
-                        if (rootHwnd != IntPtr.Zero)
+                        // If our root HWND is not the active hwnd,eat the mouse message and bring the form to the front.
+                        HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        if (!rootHwnd.IsNull)
                         {
                             // snap the active window and compare to our root window.
-                            IntPtr hwndActive = User32.GetActiveWindow();
+                            HWND hwndActive = PInvoke.GetActiveWindow();
                             if (hwndActive != rootHwnd)
                             {
                                 // Activate the window, and discard the mouse message.
                                 // this appears to be the same behavior as office.
-                                m.ResultInternal = (nint)User32.MA.ACTIVATEANDEAT;
+                                m.ResultInternal = (LRESULT)(nint)User32.MA.ACTIVATEANDEAT;
                             }
                         }
                     }
@@ -4963,10 +4914,10 @@ namespace System.Windows.Forms
                 {
                     // we're setting focus to a child control - remember who gave it to us
                     // so we can restore it on ESC.
-                    SnapFocus(User32.GetFocus());
+                    SnapFocus(PInvoke.GetFocus());
                     if (!IsDropDown && !TabStop)
                     {
-                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "Installing restoreFocusFilter");
+                        s_snapFocusDebug.TraceVerbose("Installing restoreFocusFilter");
                         // PERF,
 
                         Application.ThreadContext.FromCurrent().AddMessageFilter(RestoreFocusFilter);
@@ -4983,10 +4934,7 @@ namespace System.Windows.Forms
                 // that point our handle is not actually destroyed so
                 // destroying our parent actually causes a recursive
                 // WM_DESTROY.
-                if (_dropDownOwnerWindow is not null)
-                {
-                    _dropDownOwnerWindow.DestroyHandle();
-                }
+                _dropDownOwnerWindow?.DestroyHandle();
             }
         }
 

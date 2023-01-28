@@ -11,7 +11,7 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct LVBKIMAGEW
         {
-            public LVBKIF ulFlags;
+            public LIST_VIEW_BACKGROUND_IMAGE_FLAGS ulFlags;
             public IntPtr hbm;
             public char* pszImage;
             public uint cchImageMax;

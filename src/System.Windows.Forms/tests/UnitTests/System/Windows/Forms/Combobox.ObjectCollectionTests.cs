@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Tests
 
             ObjectCollection comboBoxObjectCollection = new ObjectCollection(comboBox);
 
-            Assert.Throws<ArgumentException>(null, () => comboBoxObjectCollection.Add("a"));
+            Assert.Throws<ArgumentException>(() => comboBoxObjectCollection.Add("a"));
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 
@@ -393,7 +393,7 @@ namespace System.Windows.Forms.Tests
 
             ObjectCollection comboBoxObjectCollection = new ObjectCollection(comboBox);
 
-            Assert.Throws<ArgumentException>(null, () => comboBoxObjectCollection.AddRange(new string[] { "a", "b" }));
+            Assert.Throws<ArgumentException>(() => comboBoxObjectCollection.AddRange(new string[] { "a", "b" }));
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 
@@ -461,7 +461,7 @@ namespace System.Windows.Forms.Tests
 
             ObjectCollection comboBoxObjectCollection = new ObjectCollection(comboBox);
 
-            Assert.Throws<ArgumentException>(null, () => comboBoxObjectCollection.Clear());
+            Assert.Throws<ArgumentException>(() => comboBoxObjectCollection.Clear());
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 
@@ -815,7 +815,7 @@ namespace System.Windows.Forms.Tests
 
             ObjectCollection comboBoxObjectCollection = new ObjectCollection(comboBox);
 
-            Assert.Throws<ArgumentException>(null, () => comboBoxObjectCollection.Insert(3, 1));
+            Assert.Throws<ArgumentException>(() => comboBoxObjectCollection.Insert(3, 1));
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 
@@ -914,7 +914,7 @@ namespace System.Windows.Forms.Tests
 
             ObjectCollection comboBoxObjectCollection = new ObjectCollection(comboBox);
 
-            Assert.Throws<ArgumentException>(null, () => comboBoxObjectCollection.RemoveAt(0));
+            Assert.Throws<ArgumentException>(() => comboBoxObjectCollection.RemoveAt(0));
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 
@@ -1051,7 +1051,7 @@ namespace System.Windows.Forms.Tests
             comboBoxObjectCollection.Add("a");
             comboBox.DataSource = new string[] { "b" };
 
-            Assert.Throws<ArgumentException>(null, () => comboBoxObjectCollection.Remove("a"));
+            Assert.Throws<ArgumentException>(() => comboBoxObjectCollection.Remove("a"));
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 
@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms.Tests
             comboBoxObjectCollection.Add("a");
             comboBox.DataSource = new string[] { "b" };
 
-            Assert.Throws<ArgumentException>(null, () => comboBoxObjectCollection[0] = 1);
+            Assert.Throws<ArgumentException>(() => comboBoxObjectCollection[0] = 1);
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 

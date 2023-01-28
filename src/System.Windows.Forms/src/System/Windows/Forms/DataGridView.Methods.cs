@@ -937,10 +937,7 @@ namespace System.Windows.Forms
                             numVisibleFillColumns++;
                             requiredWidthSum += dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
                             weightSum += dataGridViewColumn.FillWeight;
-                            if (autoFillColumns is null)
-                            {
-                                autoFillColumns = new ArrayList(Columns.Count);
-                            }
+                            autoFillColumns ??= new ArrayList(Columns.Count);
 
                             autoFillColumns.Add(dataGridViewColumn);
                         }
@@ -3161,7 +3158,7 @@ namespace System.Windows.Forms
                 int oldCurrentCellX = _ptCurrentCell.X;
                 DataGridViewDataErrorEventArgs dgvdee = CancelEditPrivate(/*ref dataGridViewCurrentCell, context*/);
 
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -3331,7 +3328,7 @@ namespace System.Windows.Forms
                             {
                                 if (!IsColumnOutOfBounds(oldCurrentCellX) && Columns[oldCurrentCellX].Visible)
                                 {
-                                    Debug.Assert(0 == Rows.GetFirstRow(DataGridViewElementStates.Visible));
+                                    Debug.Assert(Rows.GetFirstRow(DataGridViewElementStates.Visible) == 0);
                                     // Setting the current cell to the current column in the first row
                                     // will create the new row if the user was editing the cell.
                                     SetAndSelectCurrentCellAddress(oldCurrentCellX,
@@ -3869,7 +3866,7 @@ namespace System.Windows.Forms
                     false /*fireRowLeave*/,
                     false /*fireRowEnter*/,
                     false /*fireLeave*/);
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -4123,7 +4120,7 @@ namespace System.Windows.Forms
                 forCurrentRowChange /*fireRowLeave*/,
                 forCurrentRowChange /*fireRowEnter*/,
                 false /*fireLeave*/);
-            if (null != dgvdee)
+            if (dgvdee is not null)
             {
                 if (dgvdee.ThrowException)
                 {
@@ -4137,7 +4134,7 @@ namespace System.Windows.Forms
 
                 // Restore old value
                 dgvdee = CancelEditPrivate();
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -5494,7 +5491,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.Index = dataGridViewRow.Index - 1;
+                    dataGridViewRow.Index--;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
@@ -5520,7 +5517,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.Index = dataGridViewRow.Index + insertionCount;
+                    dataGridViewRow.Index += insertionCount;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
@@ -5571,10 +5568,10 @@ namespace System.Windows.Forms
 
             using (Region region = new Region(scroll))
             {
-                Gdi32.HRGN hrgn = default;
+                HRGN hrgn = default;
                 using (Graphics graphics = CreateGraphicsInternal())
                 {
-                    hrgn = (Gdi32.HRGN)region.GetHrgn(graphics);
+                    hrgn = (HRGN)region.GetHrgn(graphics);
                 }
 
                 if (!hrgn.IsNull)
@@ -5847,17 +5844,17 @@ namespace System.Windows.Forms
         {
             const byte DATAGRIDVIEW_shadowEdgeThickness = 3;
 
-            using var dc = new User32.GetDcScope(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            Gdi32.HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
+            using User32.GetDcScope dc = new(Handle, default, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
 
-            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(dc, r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(dc, r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(dc, r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            PInvoke.PatBlt(dc, r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
+            PInvoke.PatBlt(dc, r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
+            PInvoke.PatBlt(dc, r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
+            PInvoke.PatBlt(dc, r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
 
-            Gdi32.SelectObject(dc, saveBrush);
-            Gdi32.DeleteObject(halftone);
+            PInvoke.SelectObject(dc, saveBrush);
+            PInvoke.DeleteObject(halftone);
         }
 
         /// <summary>
@@ -5866,12 +5863,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitBar(Rectangle r)
         {
-            Gdi32.HDC dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            Gdi32.HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
-            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
-            Gdi32.SelectObject(dc, saveBrush);
-            Gdi32.DeleteObject(halftone);
+            HDC dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
+            PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
+            PInvoke.SelectObject(dc, saveBrush);
+            PInvoke.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(this, Handle), dc);
         }
 
@@ -6322,7 +6319,7 @@ namespace System.Windows.Forms
 
                     // Restore old value
                     dgvdee = CancelEditPrivate();
-                    if (null != dgvdee)
+                    if (dgvdee is not null)
                     {
                         if (dgvdee.ThrowException)
                         {
@@ -6926,12 +6923,12 @@ namespace System.Windows.Forms
 
         internal TypeConverter GetCachedTypeConverter(Type type)
         {
-            if (_converters.ContainsKey(type))
+            if (_converters.TryGetValue(type, out TypeConverter converter))
             {
-                return (TypeConverter)_converters[type];
+                return converter;
             }
 
-            TypeConverter converter = TypeDescriptor.GetConverter(type);
+            converter = TypeDescriptor.GetConverter(type);
             _converters.Add(type, converter);
             return converter;
         }
@@ -10578,7 +10575,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                _layout.ResizeBoxRect = new Rectangle();
+                _layout.ResizeBoxRect = default(Rectangle);
                 if (needVertScrollbar && needHorizScrollbar)
                 {
                     _layout.ResizeBoxRect = new Rectangle(
@@ -13765,10 +13762,7 @@ namespace System.Windows.Forms
             _dataGridViewState2[State2_RaiseSelectionChanged] = _selectedBandIndexes.Count > 0 ||
                                                                                 _individualSelectedCells.Count > 0;
             _selectedBandIndexes.Clear();
-            if (_selectedBandSnapshotIndexes is not null)
-            {
-                _selectedBandSnapshotIndexes.Clear();
-            }
+            _selectedBandSnapshotIndexes?.Clear();
 
             _individualSelectedCells.Clear();
             _individualReadOnlyCells.Clear();
@@ -14406,7 +14400,7 @@ namespace System.Windows.Forms
                                         success = SetCurrentCellAddressCore(hti._col, rowIndex, !isShiftDown, false, true);
                                         Debug.Assert(success);
                                     }
-                                    else if (-1 != _ptCurrentCell.X)
+                                    else if (_ptCurrentCell.X != -1)
                                     {
                                         // Potentially have to give focus back to the current edited cell.
                                         bool success = SetCurrentCellAddressCore(_ptCurrentCell.X, _ptCurrentCell.Y, false /*setAnchorCellAddress*/, false /*validateCurrentCell*/, false /*throughMouseClick*/);
@@ -15121,7 +15115,7 @@ namespace System.Windows.Forms
 
             if (CurrentCell is not null && (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell?.ErrorText))))
             {
-                ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
+                ActivateToolTip(false /*activate*/, string.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
             }
         }
@@ -15784,7 +15778,7 @@ namespace System.Windows.Forms
                 AccessibilityNotifyCurrentCellChanged(_ptCurrentCell);
                 if (CurrentCell is not null && (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell.ErrorText))))
                 {
-                    ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
+                    ActivateToolTip(false /*activate*/, string.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
                 }
             }
@@ -18717,7 +18711,7 @@ namespace System.Windows.Forms
                                         success = SetCurrentCellAddressCore(dataGridViewColumn.Index, hti._row, !selectRowRange, false, true);
                                         Debug.Assert(success);
                                     }
-                                    else if (-1 != _ptCurrentCell.Y)
+                                    else if (_ptCurrentCell.Y != -1)
                                     {
                                         // Potentially have to give focus back to the current edited cell.
                                         bool success = SetCurrentCellAddressCore(_ptCurrentCell.X, _ptCurrentCell.Y,
@@ -19328,7 +19322,7 @@ namespace System.Windows.Forms
 
         internal void OnRowUnshared(DataGridViewRow dataGridViewRow)
         {
-            if (-1 != _ptCurrentCell.X && dataGridViewRow.Index == _ptCurrentCell.Y && EditingControl is not null)
+            if (_ptCurrentCell.X != -1 && dataGridViewRow.Index == _ptCurrentCell.Y && EditingControl is not null)
             {
                 CurrentCellInternal.CacheEditingControl();
             }
@@ -19485,7 +19479,7 @@ namespace System.Windows.Forms
                 InvalidateGridFocusOnScroll(newValue - oldValue, orientation);
             }
 
-            if (ScrollOrientation.VerticalScroll == orientation)
+            if (orientation == ScrollOrientation.VerticalScroll)
             {
                 if (se.NewValue != newValue)
                 {
@@ -19621,7 +19615,7 @@ namespace System.Windows.Forms
             if (MultiSelect)
             {
                 SelectAll();
-                if (-1 != _ptCurrentCell.X)
+                if (_ptCurrentCell.X != -1)
                 {
                     // Potentially have to give focus back to the current edited cell.
                     bool success = SetCurrentCellAddressCore(_ptCurrentCell.X, _ptCurrentCell.Y,
@@ -22039,7 +22033,7 @@ namespace System.Windows.Forms
                             false /*fireRowLeave*/,
                             false /*fireRowEnter*/,
                             false /*fireLeave*/);
-                        if (null != dgvdee)
+                        if (dgvdee is not null)
                         {
                             if (dgvdee.ThrowException)
                             {
@@ -22480,7 +22474,7 @@ namespace System.Windows.Forms
                         !IsSharedCellReadOnly(dataGridViewCell, _ptCurrentCell.Y) &&
                         (EditMode == DataGridViewEditMode.EditOnKeystroke || EditMode == DataGridViewEditMode.EditOnKeystrokeOrF2))
                     {
-                        KeyEventArgs ke = new KeyEventArgs((Keys)m.WParamInternal | ModifierKeys);
+                        KeyEventArgs ke = new KeyEventArgs((Keys)(nint)m.WParamInternal | ModifierKeys);
                         if (ke.KeyCode != Keys.ProcessKey || m.LParamInternal != 0x01) // Changing IME context does not trigger editing mode
                         {
                             Type editControlType = dataGridViewCell.EditType;
@@ -22502,7 +22496,7 @@ namespace System.Windows.Forms
                                     // Forward the key message to the editing control if any
                                     if (EditingControl is not null)
                                     {
-                                        User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                                        PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                                         _dataGridViewState1[State1_ForwardCharMessage] = true;
                                         return true;
                                     }
@@ -22518,7 +22512,7 @@ namespace System.Windows.Forms
                 _dataGridViewState1[State1_ForwardCharMessage] = false;
                 if (EditingControl is not null)
                 {
-                    User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return true;
                 }
             }
@@ -22529,7 +22523,7 @@ namespace System.Windows.Forms
         protected override bool ProcessKeyPreview(ref Message m)
         {
             bool dataGridViewWantsInputKey;
-            KeyEventArgs ke = new KeyEventArgs((Keys)m.WParamInternal | ModifierKeys);
+            KeyEventArgs ke = new KeyEventArgs((Keys)(nint)m.WParamInternal | ModifierKeys);
 
             // Refactor the special keys into two parts.
             // 1. Escape and Space exist in both WM_CHAR and WM_KEYDOWN, WM_KEYUP.
@@ -22656,7 +22650,7 @@ namespace System.Windows.Forms
 
             DataGridViewCell dataGridViewCell = CurrentCell;
 
-            ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+            ActivateToolTip(false /*activate*/, string.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
             if (KeyboardToolTip.IsActivatedByKeyboard)
             {
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
@@ -26110,6 +26104,44 @@ namespace System.Windows.Forms
             Capture = false;
         }
 
+        internal override void ReleaseUiaProvider(HWND handle)
+        {
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                foreach (DataGridViewRow row in Rows)
+                {
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        cell.ReleaseUiaProvider();
+                    }
+
+                    row.HeaderCell.ReleaseUiaProvider();
+                    row.ReleaseUiaProvider();
+                }
+
+                foreach (DataGridViewColumn column in Columns)
+                {
+                    column.HeaderCell.ReleaseUiaProvider();
+                }
+
+                _editingPanel?.ReleaseUiaProvider(HWND.Null);
+                _editingPanelAccessibleObject = null;
+                _topLeftHeaderCell?.ReleaseUiaProvider();
+
+                if (AccessibilityObject is DataGridViewAccessibleObject accessibleObject)
+                {
+                    accessibleObject.ReleaseChildUiaProviders();
+                }
+            }
+
+            base.ReleaseUiaProvider(handle);
+        }
+
         private void RemoveIndividualReadOnlyCellsInColumn(int columnIndex)
         {
             int cellIndex = 0;
@@ -28694,7 +28726,7 @@ namespace System.Windows.Forms
                     int rowVFIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                     Debug.Assert(rowVFIndex != -1);
                     Rows.SetRowState(rowVFIndex, DataGridViewElementStates.Frozen, false);
-                    Debug.Assert(0 == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen));
+                    Debug.Assert(Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen) == 0);
                 }
 
                 if (SortedColumn is not null &&
@@ -30337,12 +30369,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetDlgCode(ref Message m)
         {
-            m.ResultInternal = m.ResultInternal | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS;
+            m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)User32.DLGC.WANTARROWS | (nint)User32.DLGC.WANTCHARS);
 
             Keys modifierKeys = ModifierKeys;
             if (GetTabKeyEffective((modifierKeys & Keys.Shift) == Keys.Shift, (modifierKeys & Keys.Control) == Keys.Control))
             {
-                m.ResultInternal = m.ResultInternal | (int)User32.DLGC.WANTTAB;
+                m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)User32.DLGC.WANTTAB);
             }
         }
 
@@ -30353,24 +30385,24 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
-            if (nmhdr->code == (int)ComCtl32.TTN.GETDISPINFOW && !DesignMode)
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+            if ((int)nmhdr->code == (int)ComCtl32.TTN.GETDISPINFOW && !DesignMode)
             {
                 string toolTip = ToolTipPrivate;
 
                 if (!string.IsNullOrEmpty(toolTip))
                 {
                     // Setting the max width has the added benefit of enabling multiline tool tips
-                    User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    PInvoke.SendMessage(nmhdr->hwndFrom, (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
-                    ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)m.LParamInternal;
+                    ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)(nint)m.LParamInternal;
                     _toolTipBuffer.SetText(toolTip);
                     ttt->lpszText = _toolTipBuffer.Buffer;
                     ttt->hinst = IntPtr.Zero;
 
                     if (RightToLeft == RightToLeft.Yes)
                     {
-                        ttt->uFlags |= ComCtl32.TTF.RTLREADING;
+                        ttt->uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                     }
 
                     return true;
@@ -30415,7 +30447,7 @@ namespace System.Windows.Forms
                     if (EditingControl is not null)
                     {
                         // Make sure that the first character is forwarded to the editing control.
-                        User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                        PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     }
 
                     break;

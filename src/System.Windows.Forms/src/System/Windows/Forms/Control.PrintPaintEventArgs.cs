@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -13,7 +12,7 @@ namespace System.Windows.Forms
         {
             internal Message Message { get; }
 
-            internal PrintPaintEventArgs(Message m, Gdi32.HDC dc, Rectangle clipRect)
+            internal PrintPaintEventArgs(Message m, HDC dc, Rectangle clipRect)
                 : base(dc, clipRect, DrawingEventFlags.SaveState)
             {
                 Message = m;

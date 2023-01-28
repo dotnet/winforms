@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
@@ -68,13 +70,13 @@ namespace System.Windows.Forms.Design
         protected override void PreFilterProperties(IDictionary properties)
         {
             PropertyDescriptor integralHeightProp = (PropertyDescriptor)properties["IntegralHeight"];
-            if (integralHeightProp != null)
+            if (integralHeightProp is not null)
             {
                 properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, Array.Empty<Attribute>());
             }
 
             PropertyDescriptor dockProp = (PropertyDescriptor)properties["Dock"];
-            if (dockProp != null)
+            if (dockProp is not null)
             {
                 properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, Array.Empty<Attribute>());
             }
@@ -93,7 +95,7 @@ namespace System.Windows.Forms.Design
                 // list box.
                 //
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                     cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
@@ -111,7 +113,7 @@ namespace System.Windows.Forms.Design
             base.Initialize(component);
 
             ListBox listBox = component as ListBox;
-            if (null != listBox)
+            if (listBox is not null)
                 IntegralHeight = listBox.IntegralHeight;
 
             AutoResizeHandles = true;
@@ -120,7 +122,7 @@ namespace System.Windows.Forms.Design
             // list box.
             //
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (cs is not null)
             {
                 cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
                 cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
@@ -138,7 +140,7 @@ namespace System.Windows.Forms.Design
             // OnCreateHandle so let's set it here again. We need to keep setting the text in
             // OnCreateHandle, otherwise we introduce VSWhidbey 498162.
             PropertyDescriptor nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-            if (nameProp != null)
+            if (nameProp is not null)
             {
                 UpdateControlName(nameProp.GetValue(Component).ToString());
             }
@@ -162,10 +164,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
-            if (e.Component == Component && e.Member != null && e.Member.Name == "Items")
+            if (e.Component == Component && e.Member is not null && e.Member.Name == "Items")
             {
                 PropertyDescriptor nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-                if (nameProp != null)
+                if (nameProp is not null)
                 {
                     UpdateControlName(nameProp.GetValue(Component).ToString());
                 }
@@ -179,7 +181,7 @@ namespace System.Windows.Forms.Design
         {
             base.OnCreateHandle();
             PropertyDescriptor nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-            if (nameProp != null)
+            if (nameProp is not null)
             {
                 UpdateControlName(nameProp.GetValue(Component).ToString());
             }
@@ -194,8 +196,8 @@ namespace System.Windows.Forms.Design
             ListBox lb = (ListBox)Control;
             if (lb.IsHandleCreated && lb.Items.Count == 0)
             {
-                User32.SendMessageW(lb, (User32.WM)User32.LB.RESETCONTENT);
-                User32.SendMessageW(lb, (User32.WM)User32.LB.ADDSTRING, 0, name);
+                PInvoke.SendMessage(lb, (User32.WM)User32.LB.RESETCONTENT);
+                PInvoke.SendMessage(lb, (User32.WM)User32.LB.ADDSTRING, 0, name);
             }
         }
 
@@ -203,7 +205,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists == null)
+                if (_actionLists is null)
                 {
                     _actionLists = new DesignerActionListCollection();
                     if (Component is CheckedListBox)
@@ -231,4 +233,3 @@ namespace System.Windows.Forms.Design
         }
     }
 }
-

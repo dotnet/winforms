@@ -11,13 +11,11 @@ using Xunit;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
-using System.Runtime.InteropServices;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ListViewTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -517,7 +515,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56);
-            Assert.Equal(0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
+            Assert.Equal(0x563412, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.LVM_GETBKCOLOR));
         }
 
         [WinFormsFact]
@@ -1379,7 +1377,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+            Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.LVM_GETTEXTCOLOR));
         }
 
         [WinFormsFact]
@@ -1849,7 +1847,7 @@ namespace System.Windows.Forms.Tests
                 BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
+            Assert.Equal(0x563412, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.LVM_GETBKCOLOR));
         }
 
         [WinFormsFact]
@@ -1860,7 +1858,7 @@ namespace System.Windows.Forms.Tests
                 ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+            Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.LVM_GETTEXTCOLOR));
         }
 
         [WinFormsTheory]
@@ -1871,7 +1869,7 @@ namespace System.Windows.Forms.Tests
             {
                 ShowGroups = showGroups
             };
-            Assert.Equal(0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETGROUPCOUNT));
         }
 
         public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
@@ -1933,7 +1931,7 @@ namespace System.Windows.Forms.Tests
                     listView.Groups.Add(group1);
                     listView.Groups.Add(group2);
 
-                    Assert.Equal(2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+                    Assert.Equal(2, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETGROUPCOUNT));
 
                     var lvgroup1 = new LVGROUPW
                     {
@@ -1944,7 +1942,7 @@ namespace System.Windows.Forms.Tests
                         pszFooter = footerBuffer,
                         cchFooter = 256,
                     };
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup1));
+                    Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETGROUPINFOBYINDEX, 0, ref lvgroup1));
                     Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
                     Assert.Empty(new string(lvgroup1.pszFooter));
                     Assert.True(lvgroup1.iGroupId >= 0);
@@ -1959,7 +1957,7 @@ namespace System.Windows.Forms.Tests
                         pszFooter = footerBuffer,
                         cchFooter = 256,
                     };
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 1, ref lvgroup2));
+                    Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETGROUPINFOBYINDEX, 1, ref lvgroup2));
                     Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
                     Assert.Equal(expectedFooterText, new string(lvgroup2.pszFooter));
                     Assert.True(lvgroup2.iGroupId > 0);
@@ -1979,7 +1977,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             nint expected = unchecked((nint)0xFFFFFFFF);
-            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTBKCOLOR));
+            Assert.Equal(expected, (nint)PInvoke.SendMessage(control, (User32.WM)PInvoke.LVM_GETTEXTBKCOLOR));
         }
 
         [WinFormsFact]
@@ -1988,7 +1986,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int version = Application.UseVisualStyles ? 6 : 5;
-            Assert.Equal(version, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+            Assert.Equal(version, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.CCM_GETVERSION));
         }
 
         public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
@@ -2018,14 +2016,14 @@ namespace System.Windows.Forms.Tests
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)CCM.GETVERSION)
+                if (m.Msg == (int)PInvoke.CCM_GETVERSION)
                 {
                     Assert.Equal(IntPtr.Zero, m.WParam);
                     Assert.Equal(IntPtr.Zero, m.LParam);
                     m.Result = GetVersionResult;
                     return;
                 }
-                else if (m.Msg == (int)CCM.SETVERSION)
+                else if (m.Msg == (int)PInvoke.CCM_SETVERSION)
                 {
                     Assert.Equal((IntPtr)5, m.WParam);
                     Assert.Equal(IntPtr.Zero, m.LParam);
@@ -4168,9 +4166,9 @@ namespace System.Windows.Forms.Tests
         {
             public RECT GetItemRectResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
-                if (m.Msg == (int)LVM.GETITEMRECT)
+                if (m.Msg == (int)PInvoke.LVM_GETITEMRECT)
                 {
                     RECT* pRect = (RECT*)m.LParam;
                     *pRect = GetItemRectResult;
@@ -4198,9 +4196,9 @@ namespace System.Windows.Forms.Tests
         {
             public bool MakeInvalid { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
-                if (MakeInvalid && m.Msg == (int)LVM.GETITEMRECT)
+                if (MakeInvalid && m.Msg == (int)PInvoke.LVM_GETITEMRECT)
                 {
                     RECT* pRect = (RECT*)m.LParam;
                     *pRect = new RECT(1, 2, 3, 4);
@@ -4454,7 +4452,7 @@ namespace System.Windows.Forms.Tests
             control.Items.Add(new ListViewItem());
             control.Items.Add(new ListViewItem());
             control.CreateControl();
-            User32.SendMessageW(control, User32.WM.KEYDOWN);
+            PInvoke.SendMessage(control, User32.WM.KEYDOWN);
             Assert.Equal(0, control.SelectedItems.Count);
         }
 
@@ -4486,14 +4484,8 @@ namespace System.Windows.Forms.Tests
             item1.Selected = selectItems;
             item2.Selected = selectItems;
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)Keys.Space;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, Keys.Space);
 
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Equal(selectItems ? 2 : 0, control.SelectedItems.Count);
             Assert.Equal(!checkItem && selectItems && focusItem, item2.Checked);
         }
@@ -4517,15 +4509,8 @@ namespace System.Windows.Forms.Tests
             control.Groups.Add(group);
             control.CreateControl();
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)key;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, key);
 
-            // If control doesn't have selected items none will be focused.
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Empty(control.SelectedIndices);
             Assert.Null(control.FocusedItem);
             Assert.Null(control.FocusedGroup);
@@ -4562,14 +4547,9 @@ namespace System.Windows.Forms.Tests
 
                 item2.Selected = true;
 
-                // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-                // The MSDN page tells us what bits of lParam to use for each of the parameters.
-                // All we need to do is some bit shifting to assemble lParam
-                // lParam = repeatCount | (scanCode << 16)
-                uint keyCode = (uint)(key_s == "Keys.Down" ? Keys.Down : Keys.Up);
-                uint lParam = (0x00000001 | keyCode << 16);
+                var key = key_s == "Keys.Down" ? Keys.Down : Keys.Up;
+                KeyboardSimulator.KeyDown(control, key);
 
-                User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
                 Assert.False(control.GroupsEnabled);
                 Assert.True(control.Items.Count > 0);
                 int expectedGroupIndex = int.Parse(expectedGroupIndex_s);
@@ -4606,15 +4586,8 @@ namespace System.Windows.Forms.Tests
 
             control.CreateControl();
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)key;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, key);
 
-            // Actually ListView in VirtualMode can't have Groups
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Null(control.FocusedGroup);
         }
 
@@ -4648,15 +4621,8 @@ namespace System.Windows.Forms.Tests
             item2.Checked = false;
             control.FocusedItem = item1;
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)Keys.Space;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, Keys.Space);
 
-            // Actually ListView in VirtualMode doesn't check items here
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.False(item2.Checked);
         }
 
@@ -4667,7 +4633,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && view == View.Tile)
                     {
                         continue;
                     }
@@ -4733,7 +4699,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && view == View.Tile)
                     {
                         continue;
                     }
@@ -4815,7 +4781,7 @@ namespace System.Windows.Forms.Tests
             using var listView = new ListView();
             listView.ShowItemToolTips = showItemToolTips;
             ToolTip toolTip = useKeyboardToolTip ? listView.KeyboardToolTip : new ToolTip();
-            ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+            ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
 
             Assert.Equal("Test caption", wrapper.Text);
             //Assert.Equal method does not work because char* cannot be used as an argument to it
@@ -4828,7 +4794,7 @@ namespace System.Windows.Forms.Tests
             using var listView = new ListView();
             listView.ShowItemToolTips = true;
             ToolTip toolTip = new ToolTip();
-            ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+            ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
             char* expected = (char*)(-1);
 
             Assert.Null(wrapper.Text);
@@ -5360,7 +5326,7 @@ namespace System.Windows.Forms.Tests
 
             listView.CreateControl();
 
-            User32.SetFocus(new HandleRef(listView, listView.Handle));
+            PInvoke.SetFocus(listView);
             listView.Items[0].Selected = true;
 
             // Add a pixel both to x and y as the left-upper corner is not a part of subitem
@@ -5368,16 +5334,16 @@ namespace System.Windows.Forms.Tests
             // The mouse down handler will wait for mouse up event, so we need to put it on the message queue
             // before invoking mouse down.
             User32.PostMessageW(listView, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(subItemLocation));
-            User32.SendMessageW(listView, User32.WM.LBUTTONDOWN, 1, PARAM.FromPoint(subItemLocation));
+            PInvoke.SendMessage(listView, User32.WM.LBUTTONDOWN, 1, PARAM.FromPoint(subItemLocation));
 
             // Start editing immediately (if it was queued).
-            User32.SendMessageW(listView, User32.WM.TIMER, (nint)listView.TestAccessor().Dynamic.LVLABELEDITTIMER);
+            PInvoke.SendMessage(listView, User32.WM.TIMER, (WPARAM)(nint)listView.TestAccessor().Dynamic.LVLABELEDITTIMER);
 
-            nint editControlHandle = User32.SendMessageW(listView, (User32.WM)LVM.GETEDITCONTROL);
+            nint editControlHandle = PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETEDITCONTROL);
 
             // End the edit because this more closely resembles real live usage. Additionally
             // when edit box is open, the native ListView will move focus to items being removed.
-            User32.SendMessageW(listView, (User32.WM)LVM.CANCELEDITLABEL);
+            PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_CANCELEDITLABEL);
 
             if (isEditControlCreated)
             {
@@ -5406,7 +5372,7 @@ namespace System.Windows.Forms.Tests
             // lParam = repeatCount | (scanCode << 16)
             nint keyCode = (nint)key;
             nint lParam = 0x00000001 | keyCode << 16;
-            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+            PInvoke.SendMessage(listView, User32.WM.KEYUP, (WPARAM)keyCode, (LPARAM)lParam);
 
             Assert.True(listView.IsHandleCreated);
         }
@@ -5773,6 +5739,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(listView.FocusedItem);
         }
 
+        [WinFormsFact]
+        public void ListView_ReleaseUiaProvider_DoesNotForceDefaultGroupCreation()
+        {
+            using ListView listView = new();
+            _ = listView.AccessibilityObject;
+
+            listView.ReleaseUiaProvider(listView.HWND);
+
+            Assert.Null(listView.TestAccessor().Dynamic._defaultGroup);
+            Assert.True(listView.IsHandleCreated);
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }
@@ -5786,6 +5764,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubListViewItemAccessibleObject : ListViewItemBaseAccessibleObject
         {
+            protected override View View => View.List;
+
             public int RaiseAutomationEventCalls;
 
             public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem)

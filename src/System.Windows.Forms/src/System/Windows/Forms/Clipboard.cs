@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                 retry = retryTimes;
                 do
                 {
-                    hr = Ole32.OleFlushClipboard();
+                    hr = PInvoke.OleFlushClipboard();
                     if (hr != HRESULT.S_OK)
                     {
                         if (retry == 0)

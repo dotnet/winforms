@@ -9,7 +9,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -20,13 +19,13 @@ namespace System.Windows.Forms
     ///  Toolbar. You can add either bitmaps or Icons to the ImageList, and the
     ///  other controls will be able to use the Images as they desire.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ImageListDesigner, {AssemblyRef.SystemDesign}")]
     [ToolboxItemFilter("System.Windows.Forms")]
     [DefaultProperty(nameof(Images))]
     [TypeConverter(typeof(ImageListConverter))]
-    [DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [DesignerSerializer($"System.Windows.Forms.Design.ImageListCodeDomSerializer, {AssemblyRef.SystemDesign}", "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionImageList))]
-    public sealed partial class ImageList : Component, IHandle
+    public sealed partial class ImageList : Component, IHandle, IHandle<HIMAGELIST>
     {
         private static readonly Color s_fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
         private static readonly Size s_defaultImageSize = new Size(16, 16);
@@ -38,7 +37,7 @@ namespace System.Windows.Forms
 
         private NativeImageList? _nativeImageList;
 
-        private ColorDepth _colorDepth = ColorDepth.Depth8Bit;
+        private ColorDepth _colorDepth = ColorDepth.Depth32Bit;
         private Size _imageSize = s_defaultImageSize;
 
         private ImageCollection? _imageCollection;
@@ -104,7 +103,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeColorDepth() => Images.Count == 0;
 
-        private void ResetColorDepth() => ColorDepth = ColorDepth.Depth8Bit;
+        private void ResetColorDepth() => ColorDepth = ColorDepth.Depth32Bit;
 
         /// <summary>
         ///  The handle of the ImageList object. This corresponds to a win32
@@ -123,7 +122,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                return _nativeImageList.Handle;
+                return _nativeImageList.HIMAGELIST;
             }
         }
 
@@ -219,16 +218,15 @@ namespace System.Windows.Forms
                     DestroyHandle();
                     _originals = null;
                     _nativeImageList = himl.Duplicate();
-                    if (ComCtl32.ImageList.GetIconSize(new HandleRef(this, _nativeImageList.Handle), out int x, out int y).IsTrue())
+                    if (PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), out int x, out int y))
                     {
                         _imageSize = new Size(x, y);
                     }
 
                     // need to get the image bpp
-                    var imageInfo = new ComCtl32.IMAGEINFO();
-                    if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, _nativeImageList.Handle), 0, ref imageInfo).IsTrue())
+                    if (PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo))
                     {
-                        Gdi32.GetObjectW(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
+                        PInvoke.GetObject(imageInfo.hbmImage, out BITMAP bmp);
                         _colorDepth = bmp.bmBitsPixel switch
                         {
                             4 => ColorDepth.Depth4Bit,
@@ -359,7 +357,7 @@ namespace System.Windows.Forms
             try
             {
                 Debug.Assert(HandleCreated, "Calling AddIconToHandle when there is no handle");
-                int index = ComCtl32.ImageList.ReplaceIcon(this, -1, new HandleRef(icon, icon.Handle));
+                int index = PInvoke.ImageList.ReplaceIcon(this, -1, new HandleRef<HICON>(icon, (HICON)icon.Handle));
                 if (index == -1)
                 {
                     throw new InvalidOperationException(SR.ImageListAddFailed);
@@ -385,20 +383,20 @@ namespace System.Windows.Forms
             Debug.Assert(HandleCreated, "Calling AddToHandle when there is no handle");
 
             // Calls GDI to create Bitmap.
-            Gdi32.HBITMAP hMask = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            HBITMAP hMask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
 
             // Calls GDI+ to create Bitmap
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
 
             int index;
             try
             {
-                index = ComCtl32.ImageList.Add(this, hBitmap, hMask);
+                index = PInvoke.ImageList.Add(this, hBitmap, hMask);
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
-                Gdi32.DeleteObject(hMask);
+                PInvoke.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hMask);
             }
 
             if (index == -1)
@@ -419,23 +417,23 @@ namespace System.Windows.Forms
         {
             Debug.Assert(_nativeImageList is null, "Handle already created, this may be a source of temporary GDI leaks");
 
-            ComCtl32.ILC flags = ComCtl32.ILC.MASK;
+            IMAGELIST_CREATION_FLAGS flags = IMAGELIST_CREATION_FLAGS.ILC_MASK;
             switch (_colorDepth)
             {
                 case ColorDepth.Depth4Bit:
-                    flags |= ComCtl32.ILC.COLOR4;
+                    flags |= IMAGELIST_CREATION_FLAGS.ILC_COLOR4;
                     break;
                 case ColorDepth.Depth8Bit:
-                    flags |= ComCtl32.ILC.COLOR8;
+                    flags |= IMAGELIST_CREATION_FLAGS.ILC_COLOR8;
                     break;
                 case ColorDepth.Depth16Bit:
-                    flags |= ComCtl32.ILC.COLOR16;
+                    flags |= IMAGELIST_CREATION_FLAGS.ILC_COLOR16;
                     break;
                 case ColorDepth.Depth24Bit:
-                    flags |= ComCtl32.ILC.COLOR24;
+                    flags |= IMAGELIST_CREATION_FLAGS.ILC_COLOR24;
                     break;
                 case ColorDepth.Depth32Bit:
-                    flags |= ComCtl32.ILC.COLOR32;
+                    flags |= IMAGELIST_CREATION_FLAGS.ILC_COLOR32;
                     break;
                 default:
                     Debug.Fail("Unknown color depth in ImageList");
@@ -462,7 +460,7 @@ namespace System.Windows.Forms
                 ThemingScope.Deactivate(userCookie);
             }
 
-            ComCtl32.ImageList.SetBkColor(this, ComCtl32.CLR.NONE);
+            PInvoke.ImageList.SetBkColor(this, Color.FromArgb(PInvoke.CLR_NONE));
 
             Debug.Assert(_originals is not null, "Handle not yet created, yet original images are gone");
             for (int i = 0; i < _originals.Count; i++)
@@ -558,20 +556,20 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            IntPtr dc = g.GetHdc();
+            HDC dc = (HDC)g.GetHdc();
             try
             {
-                ComCtl32.ImageList.DrawEx(
+                PInvoke.ImageList.DrawEx(
                     this,
                     index,
-                    new HandleRef(g, dc),
+                    new HandleRef<HDC>(g, dc),
                     x,
                     y,
                     width,
                     height,
-                    ComCtl32.CLR.NONE,
-                    ComCtl32.CLR.NONE,
-                    ComCtl32.ILD.TRANSPARENT);
+                    Color.FromArgb(PInvoke.CLR_NONE),
+                    Color.FromArgb(PInvoke.CLR_NONE),
+                    (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
             }
             finally
             {
@@ -601,36 +599,27 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool BitmapHasAlpha(BitmapData bmpData)
+        private static unsafe bool BitmapHasAlpha(BitmapData bmpData)
         {
-            if (bmpData.PixelFormat != PixelFormat.Format32bppArgb && bmpData.PixelFormat != PixelFormat.Format32bppRgb)
+            if (bmpData.PixelFormat is not PixelFormat.Format32bppArgb and not PixelFormat.Format32bppRgb)
             {
                 return false;
             }
 
-            bool hasAlpha = false;
-            unsafe
+            for (int i = 0; i < bmpData.Height; i++)
             {
-                for (int i = 0; i < bmpData.Height; i++)
+                int offsetRow = i * bmpData.Stride;
+                for (int j = 3; j < bmpData.Width * 4; j += 4) // *4 is safe since we know PixelFormat is ARGB
                 {
-                    int offsetRow = i * bmpData.Stride;
-                    for (int j = 3; j < bmpData.Width * 4; j += 4)
-                    { // *4 is safe since we know PixelFormat is ARGB
-                        unsafe
-                        {
-                            byte* candidate = ((byte*)bmpData.Scan0.ToPointer()) + offsetRow + j;
-                            if (*candidate != 0)
-                            {
-                                hasAlpha = true;
-                                goto Found; // gotos are not the best, but it's the best thing here...
-                            }
-                        }
+                    byte* candidate = ((byte*)bmpData.Scan0.ToPointer()) + offsetRow + j;
+                    if (*candidate != 0)
+                    {
+                        return true;
                     }
                 }
-
-            Found:
-                return hasAlpha;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -657,8 +646,7 @@ namespace System.Windows.Forms
 
             if (ColorDepth == ColorDepth.Depth32Bit)
             {
-                var imageInfo = new ComCtl32.IMAGEINFO();
-                if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, Handle), index, ref imageInfo).IsTrue())
+                if (PInvoke.ImageList.GetImageInfo(this, index, out IMAGEINFO imageInfo))
                 {
                     Bitmap? tmpBitmap = null;
                     BitmapData? bmpData = null;
@@ -706,20 +694,20 @@ namespace System.Windows.Forms
                 Graphics graphics = Graphics.FromImage(result);
                 try
                 {
-                    IntPtr dc = graphics.GetHdc();
+                    HDC dc = (HDC)graphics.GetHdc();
                     try
                     {
-                        ComCtl32.ImageList.DrawEx(
+                        PInvoke.ImageList.DrawEx(
                             this,
                             index,
-                            new HandleRef(graphics, dc),
+                            new HandleRef<HDC>(graphics, dc),
                             0,
                             0,
                             _imageSize.Width,
                             _imageSize.Height,
-                            ComCtl32.CLR.NONE,
-                            ComCtl32.CLR.NONE,
-                            ComCtl32.ILD.TRANSPARENT);
+                            Color.FromArgb(PInvoke.CLR_NONE),
+                            Color.FromArgb(PInvoke.CLR_NONE),
+                            (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
                     }
                     finally
                     {
@@ -797,14 +785,12 @@ namespace System.Windows.Forms
         ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
-        {
-            string s = base.ToString();
-            if (Images is not null)
-            {
-                return s + " Images.Count: " + Images.Count.ToString(CultureInfo.CurrentCulture) + ", ImageSize: " + ImageSize.ToString();
-            }
+            => Images is null
+               ? base.ToString()
+               : $"{base.ToString()} Images.Count: {Images.Count.ToString(CultureInfo.CurrentCulture)}, ImageSize: {ImageSize}";
 
-            return s;
-        }
+        HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
+
+        internal HIMAGELIST HIMAGELIST => (HIMAGELIST)Handle;
     }
 }

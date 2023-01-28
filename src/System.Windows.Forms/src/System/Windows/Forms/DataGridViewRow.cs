@@ -242,6 +242,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_propRowAccessibilityObject) is AccessibleObject;
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsNewRow
@@ -1726,6 +1728,21 @@ namespace System.Windows.Forms
                         paintParts);
                 }
             }
+        }
+
+        internal void ReleaseUiaProvider()
+        {
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                Interop.UiaCore.UiaDisconnectProvider(AccessibilityObject);
+            }
+
+            Properties.SetObject(s_propRowAccessibilityObject, null);
         }
 
         internal void SetReadOnlyCellCore(DataGridViewCell dataGridViewCell, bool readOnly)

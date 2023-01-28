@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using static Interop.User32;
 
 namespace System.Drawing.Design
 {
@@ -32,7 +30,7 @@ namespace System.Drawing.Design
                         get
                         {
                             Point cellPt = Get2DFrom1D(_cell);
-                            Rectangle rect = new Rectangle();
+                            Rectangle rect = default(Rectangle);
                             FillRectWithCellBounds(cellPt.X, cellPt.Y, ref rect);
 
                             // Translate rect to screen coordinates
@@ -41,7 +39,7 @@ namespace System.Drawing.Design
 
                             if (palette.IsHandleCreated)
                             {
-                                ClientToScreen(new HandleRef(palette, palette.Handle), ref pt);
+                                PInvoke.ClientToScreen(palette, ref pt);
                             }
 
                             return new Rectangle(pt.X, pt.Y, rect.Width, rect.Height);

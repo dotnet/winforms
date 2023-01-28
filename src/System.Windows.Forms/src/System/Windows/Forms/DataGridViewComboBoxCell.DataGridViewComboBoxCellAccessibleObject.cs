@@ -23,8 +23,8 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => IsInComboBoxMode
-                                                            ? UiaCore.UIA.ComboBoxControlTypeId
-                                                            : UiaCore.UIA.DataItemControlTypeId,
+                        ? UiaCore.UIA.ComboBoxControlTypeId
+                        : UiaCore.UIA.DataItemControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

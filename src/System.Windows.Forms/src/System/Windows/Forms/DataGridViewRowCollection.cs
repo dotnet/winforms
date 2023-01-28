@@ -217,11 +217,7 @@ namespace System.Windows.Forms
                         // Simply update the index and return the current row without cloning it.
                         dataGridViewRow.Index = index;
                         dataGridViewRow.State = SharedRowState(index);
-                        if (DataGridView is not null)
-                        {
-                            DataGridView.OnRowUnshared(dataGridViewRow);
-                        }
-
+                        DataGridView?.OnRowUnshared(dataGridViewRow);
                         return dataGridViewRow;
                     }
 
@@ -246,10 +242,7 @@ namespace System.Windows.Forms
                         newDataGridViewRow.HeaderCell.OwningRow = newDataGridViewRow;
                     }
 
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnRowUnshared(newDataGridViewRow);
-                    }
+                    DataGridView?.OnRowUnshared(newDataGridViewRow);
 
                     return newDataGridViewRow;
                 }
@@ -304,7 +297,7 @@ namespace System.Windows.Forms
                 // Note that we allow the 'new' row to be frozen.
                 Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
                 // Make sure the 'new row' is visible even when the row template isn't
-                dataGridViewRow.State = dataGridViewRow.State | DataGridViewElementStates.Visible;
+                dataGridViewRow.State |= DataGridViewElementStates.Visible;
                 foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
                 {
                     dataGridViewCell.Value = dataGridViewCell.DefaultNewRowValue;
@@ -2263,6 +2256,17 @@ namespace System.Windows.Forms
             if (DataGridView.NoDimensionChangeAllowed)
             {
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
+            }
+
+            if (DataGridView.IsAccessibilityObjectCreated && OsVersion.IsWindows8OrGreater() && this[index] is DataGridViewRow row)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    cell.ReleaseUiaProvider();
+                }
+
+                row.HeaderCell.ReleaseUiaProvider();
+                row.ReleaseUiaProvider();
             }
 
             if (DataGridView.DataSource is not null)

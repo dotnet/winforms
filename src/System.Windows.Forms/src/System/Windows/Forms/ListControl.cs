@@ -205,10 +205,7 @@ namespace System.Windows.Forms
             get => _formatString;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!value.Equals(_formatString))
                 {
@@ -295,10 +292,7 @@ namespace System.Windows.Forms
             get => _valueMember.BindingMember;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 BindingMemberInfo newValueMember = new BindingMemberInfo(value);
                 BindingMemberInfo oldValueMember = _valueMember;
@@ -534,14 +528,19 @@ namespace System.Windows.Forms
             }
 
             // Try Formatter.FormatObject
-            if (_stringTypeConverter is null)
-            {
-                _stringTypeConverter = TypeDescriptor.GetConverter(typeof(string));
-            }
+            _stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
 
             try
             {
-                return (string)Formatter.FormatObject(filteredItem, typeof(string), DisplayMemberConverter, _stringTypeConverter, _formatString, _formatInfo, null, DBNull.Value);
+                return (string?)Formatter.FormatObject(
+                    filteredItem,
+                    typeof(string),
+                    DisplayMemberConverter,
+                    _stringTypeConverter,
+                    _formatString,
+                    _formatInfo,
+                    formattedNullValue: null,
+                    DBNull.Value);
             }
             catch (Exception exception) when (!ClientUtils.IsCriticalException(exception))
             {

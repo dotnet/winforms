@@ -17,10 +17,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (s_visualStyleRenderer is null)
-                    {
-                        s_visualStyleRenderer = new VisualStyleRenderer(CheckBoxElement);
-                    }
+                    s_visualStyleRenderer ??= new VisualStyleRenderer(CheckBoxElement);
 
                     return s_visualStyleRenderer;
                 }

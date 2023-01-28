@@ -694,15 +694,15 @@ namespace System.Windows.Forms.Tests
 
         private class CustomClass : Control
         {
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.WM.CHOOSEFONT_GETLOGFONT)
                 {
-                    using var font = new Font("Arial", 8.25f);
-                    User32.LOGFONTW* pLogfont = (User32.LOGFONTW*)m.LParam;
-                    object lf = new User32.LOGFONTW();
+                    using Font font = new("Arial", 8.25f);
+                    LOGFONTW* pLogfont = (LOGFONTW*)m.LParam;
+                    object lf = new LOGFONTW();
                     font.ToLogFont(lf);
-                    *pLogfont = (User32.LOGFONTW)lf;
+                    *pLogfont = (LOGFONTW)lf;
                 }
 
                 base.WndProc(ref m);
@@ -719,7 +719,7 @@ namespace System.Windows.Forms.Tests
             };
             int applyCallCount = 0;
             dialog.Apply += (sender, e) => applyCallCount++;
-            Assert.Throws<ArgumentException>(null, () => dialog.HookProc(IntPtr.Zero, (int)User32.WM.COMMAND, (IntPtr)0x402, IntPtr.Zero));
+            Assert.Throws<ArgumentException>(() => dialog.HookProc(IntPtr.Zero, (int)User32.WM.COMMAND, (IntPtr)0x402, IntPtr.Zero));
         }
 
         [WinFormsTheory]

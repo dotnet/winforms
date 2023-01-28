@@ -120,7 +120,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                ((DesignerVerb)e.Link.LinkData).Invoke();
+                ((DesignerVerb?)e.Link.LinkData)?.Invoke();
             }
             catch (Exception ex)
             {

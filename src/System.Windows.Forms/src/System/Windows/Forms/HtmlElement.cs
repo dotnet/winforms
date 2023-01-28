@@ -7,6 +7,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -446,49 +447,56 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (NativeHtmlElement is Oleaut32.IDispatch scriptObject)
+                if (NativeHtmlElement is not Oleaut32.IDispatch scriptObject)
                 {
-                    Guid g = Guid.Empty;
-                    var names = new string[] { methodName };
-                    Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
-                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
-                    {
-                        return null;
-                    }
+                    return null;
+                }
 
-                    if (parameter is not null)
-                    {
-                        // Reverse the parameter order so that they read naturally after IDispatch.
-                        Array.Reverse(parameter);
-                    }
+                Guid g = Guid.Empty;
+                var names = new string[] { methodName };
+                int dispid = PInvoke.DISPID_UNKNOWN;
+                HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+                {
+                    return null;
+                }
 
-                    using var vectorArgs = new Oleaut32.VARIANTVector(parameter);
-                    fixed (Oleaut32.VARIANT* pVariant = vectorArgs.Variants)
-                    {
-                        var dispParams = new Oleaut32.DISPPARAMS();
-                        dispParams.rgvarg = pVariant;
-                        dispParams.cArgs = (uint)vectorArgs.Variants.Length;
-                        dispParams.rgdispidNamedArgs = null;
-                        dispParams.cNamedArgs = 0;
+                if (parameter is not null)
+                {
+                    // Reverse the parameter order so that they read naturally after IDispatch.
+                    Array.Reverse(parameter);
+                }
 
-                        var retVals = new object[1];
-                        var excepInfo = new Oleaut32.EXCEPINFO();
-                        hr = scriptObject.Invoke(
-                            dispid,
-                            &g,
-                            Kernel32.GetThreadLocale(),
-                            Oleaut32.DISPATCH.METHOD,
-                            &dispParams,
-                            retVals,
-                            &excepInfo,
-                            null);
-                        if (hr == HRESULT.S_OK)
-                        {
-                            return retVals[0];
-                        }
+                using VARIANTVector vectorArgs = new(parameter);
+                fixed (VARIANT* pVariant = vectorArgs.Variants)
+                {
+                    DISPPARAMS dispParams = new()
+                    {
+                        rgvarg = pVariant,
+                        cArgs = (uint)vectorArgs.Variants.Length,
+                        rgdispidNamedArgs = null,
+                        cNamedArgs = 0
+                    };
+
+                    var retVals = new object[1];
+                    EXCEPINFO excepInfo = default;
+                    hr = scriptObject.Invoke(
+                        dispid,
+                        &g,
+                        PInvoke.GetThreadLocale(),
+                        DISPATCH_FLAGS.DISPATCH_METHOD,
+                        &dispParams,
+                        retVals,
+                        &excepInfo,
+                        null);
+
+                    if (hr == HRESULT.S_OK)
+                    {
+                        return retVals[0];
                     }
                 }
+
+                return null;
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -510,14 +518,14 @@ namespace System.Windows.Forms
 
         public void ScrollIntoView(bool alignWithTop)
         {
-            NativeHtmlElement.ScrollIntoView((object)alignWithTop);
+            NativeHtmlElement.ScrollIntoView(alignWithTop);
         }
 
         public void SetAttribute(string attributeName, string value)
         {
             try
             {
-                NativeHtmlElement.SetAttribute(attributeName, (object)value, 0);
+                NativeHtmlElement.SetAttribute(attributeName, value, 0);
             }
             catch (COMException comException)
             {
@@ -653,58 +661,30 @@ namespace System.Windows.Forms
             remove => ElementShim.RemoveHandler(s_eventMouseLeave, value);
         }
 
-        #region operators
-        public static bool operator ==(HtmlElement left, HtmlElement right)
+        public static unsafe bool operator ==(HtmlElement left, HtmlElement right)
         {
-            //Not equal if only one's null.
+            // Not equal if only one's null.
             if (left is null != right is null)
             {
                 return false;
             }
 
-            //Equal if both are null.
+            // Equal if both are null.
             if (left is null)
             {
                 return true;
             }
 
-            //Neither are null.  Get the IUnknowns and compare them.
-            IntPtr leftPtr = IntPtr.Zero;
-            IntPtr rightPtr = IntPtr.Zero;
-            try
-            {
-                leftPtr = Marshal.GetIUnknownForObject(left.NativeHtmlElement);
-                rightPtr = Marshal.GetIUnknownForObject(right.NativeHtmlElement);
-                return leftPtr == rightPtr;
-            }
-            finally
-            {
-                if (leftPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(leftPtr);
-                }
-
-                if (rightPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(rightPtr);
-                }
-            }
+            // Neither are null. Get the IUnknowns and compare them.
+            using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlElement);
+            using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlElement);
+            return leftUnknown.Value == rightUnknown.Value;
         }
 
-        public static bool operator !=(HtmlElement left, HtmlElement right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
 
         public override int GetHashCode() => _htmlElement?.GetHashCode() ?? 0;
 
-        public override bool Equals(object obj)
-        {
-            //If obj isn't an HtmlElement, we want Equals to return false.  this will
-            //never be null, so now it will return false as expected (not throw).
-            return this == (obj as HtmlElement);
-        }
-        #endregion
-
+        public override bool Equals(object obj) => this == (obj as HtmlElement);
     }
 }

@@ -5,12 +5,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {
@@ -237,9 +237,9 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var dropTarget = new CustomDropTarget();
+            DropTargetMock dropTarget = new();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.S_OK, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.S_OK, PInvoke.RegisterDragDrop(control, dropTarget));
 
             control.AllowDrop = value;
             Assert.Equal(value, control.AllowDrop);
@@ -263,29 +263,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        private class CustomDropTarget : Ole32.IDropTarget
-        {
-            public HRESULT DragEnter([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragLeave()
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT Drop([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         [Fact] // non-UI thread
@@ -1607,7 +1584,7 @@ namespace System.Windows.Forms.Tests
         public void Control_BackColor_SetTransparent_ThrowsArgmentException()
         {
             using var control = new Control();
-            Assert.Throws<ArgumentException>(null, () => control.BackColor = Color.FromArgb(254, 1, 2, 3));
+            Assert.Throws<ArgumentException>(() => control.BackColor = Color.FromArgb(254, 1, 2, 3));
         }
 
         [WinFormsFact]
@@ -6661,7 +6638,7 @@ namespace System.Windows.Forms.Tests
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     return cp;
                 }
             }
@@ -9283,13 +9260,13 @@ namespace System.Windows.Forms.Tests
             var keyState = new byte[256];
             fixed (byte* b = keyState)
             {
-                Assert.True(User32.GetKeyboardState(b).IsTrue());
+                Assert.True(PInvoke.GetKeyboardState(b));
                 keyState[(int)Keys.LButton] = lState;
                 keyState[(int)Keys.MButton] = mState;
                 keyState[(int)Keys.RButton] = rState;
                 keyState[(int)Keys.XButton1] = xState1;
                 keyState[(int)Keys.XButton2] = xState2;
-                User32.SetKeyboardState(b);
+                PInvoke.SetKeyboardState(b);
             }
 
             Assert.Equal(expected, Control.MouseButtons);
@@ -9817,7 +9794,7 @@ namespace System.Windows.Forms.Tests
         public void Control_Parent_SetSame_ThrowsArgumentException()
         {
             using var control = new Control();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Throws<ArgumentException>(() => control.Parent = control);
             Assert.Null(control.Parent);
         }
 
@@ -9828,7 +9805,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             control.Controls.Add(child);
 
-            Assert.Throws<ArgumentException>(null, () => control.Parent = child);
+            Assert.Throws<ArgumentException>(() => control.Parent = child);
             Assert.Null(control.Parent);
         }
 
@@ -9839,7 +9816,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             control.SetTopLevel(true);
 
-            Assert.Throws<ArgumentException>(null, () => control.Parent = parent);
+            Assert.Throws<ArgumentException>(() => control.Parent = parent);
             Assert.Null(control.Parent);
         }
 
@@ -9913,13 +9890,13 @@ namespace System.Windows.Forms.Tests
 
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.False(control.IsHandleCreated);
         }
 
@@ -9972,7 +9949,7 @@ namespace System.Windows.Forms.Tests
 
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -9981,7 +9958,7 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -10537,7 +10514,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control.Handle, User32.WM.UPDATEUISTATE, wParam);
+            PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
             Assert.Equal(expected, control.ShowFocusCues);
         }
 
@@ -10596,7 +10573,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control.Handle, User32.WM.UPDATEUISTATE, wParam);
+            PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
             Assert.Equal(expected, control.ShowKeyboardCues);
         }
 

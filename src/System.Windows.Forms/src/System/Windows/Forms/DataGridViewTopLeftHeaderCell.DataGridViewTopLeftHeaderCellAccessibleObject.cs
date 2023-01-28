@@ -291,21 +291,15 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
-            {
-                switch (propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
+                propertyId switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.HeaderControlTypeId;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return Owner?.DataGridView?.Enabled ?? false;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                }
-
-                return base.GetPropertyValue(propertyId);
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HeaderControlTypeId,
+                    UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
+                    UiaCore.UIA.IsOffscreenPropertyId => false,
+                    _ => base.GetPropertyValue(propertyId)
+                };
 
             #endregion
         }

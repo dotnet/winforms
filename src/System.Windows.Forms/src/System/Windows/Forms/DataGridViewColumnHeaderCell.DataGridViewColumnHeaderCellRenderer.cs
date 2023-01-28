@@ -17,10 +17,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (s_visualStyleRenderer is null)
-                    {
-                        s_visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
-                    }
+                    s_visualStyleRenderer ??= new VisualStyleRenderer(s_headerElement);
 
                     return s_visualStyleRenderer;
                 }
@@ -29,7 +26,7 @@ namespace System.Windows.Forms
             public static void DrawHeader(Graphics g, Rectangle bounds, int headerState)
             {
                 Rectangle rectClip = Rectangle.Truncate(g.ClipBounds);
-                if ((int)HeaderItemState.Hot == headerState)
+                if (headerState == (int)HeaderItemState.Hot)
                 {
                     // Workaround for a
                     VisualStyleRenderer.SetParameters(s_headerElement);

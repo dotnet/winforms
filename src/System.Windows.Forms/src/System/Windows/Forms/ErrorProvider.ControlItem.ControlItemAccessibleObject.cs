@@ -9,18 +9,22 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         internal partial class ControlItem
         {
             private class ControlItemAccessibleObject : AccessibleObject
             {
                 private readonly ControlItem _controlItem;
-                private readonly ErrorWindow _window;
+                private readonly ErrorWindow? _window;
                 private readonly Control _control;
                 private readonly ErrorProvider _provider;
 
-                public ControlItemAccessibleObject(ControlItem controlItem, ErrorWindow window, Control control, ErrorProvider provider)
+                public ControlItemAccessibleObject(
+                    ControlItem controlItem,
+                    ErrorWindow? window,
+                    Control control,
+                    ErrorProvider provider)
                 {
                     _controlItem = controlItem;
                     _window = window;
@@ -28,16 +32,14 @@ namespace System.Windows.Forms
                     _provider = provider;
                 }
 
-                internal override Rectangle BoundingRectangle => Bounds;
-
                 public override Rectangle Bounds
-                    => _control.IsHandleCreated
-                        ? _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
+                    => _control.ParentInternal is not null && _control.ParentInternal.IsHandleCreated
+                        ? _control.ParentInternal.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
                         : Rectangle.Empty;
 
-                private int ControlItemsCount => _window.ControlItems.Count;
+                private int ControlItemsCount => _window?.ControlItems.Count ?? 0;
 
-                private int CurrentIndex => _window.ControlItems.IndexOf(_controlItem);
+                private int CurrentIndex => _window?.ControlItems.IndexOf(_controlItem) ?? -1;
 
                 /// <summary>
                 ///  Returns the element in the specified direction.
@@ -59,7 +61,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
+                internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => Parent;
 
                 internal override int GetChildId()
                 {
@@ -76,7 +78,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    return _window.ControlItems[currentIndex + 1].AccessibilityObject;
+                    return _window?.ControlItems[currentIndex + 1].AccessibilityObject;
                 }
 
                 private AccessibleObject? GetPreviousSibling()
@@ -89,7 +91,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    return _window.ControlItems[currentIndex - 1].AccessibilityObject;
+                    return _window?.ControlItems[currentIndex - 1].AccessibilityObject;
                 }
 
                 /// <summary>
@@ -97,20 +99,13 @@ namespace System.Windows.Forms
                 /// </summary>
                 /// <param name="propertyID">The accessible property ID.</param>
                 /// <returns>The accessible property value.</returns>
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                {
-                    switch (propertyID)
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                    propertyID switch
                     {
-                        case UiaCore.UIA.ControlTypePropertyId:
-                            return UiaCore.UIA.ImageControlTypeId;
-                        case UiaCore.UIA.BoundingRectanglePropertyId:
-                            return BoundingRectangle;
-                        case UiaCore.UIA.NativeWindowHandlePropertyId:
-                            return _window.Handle;
-                        default:
-                            return base.GetPropertyValue(propertyID);
-                    }
-                }
+                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ImageControlTypeId,
+                        UiaCore.UIA.NativeWindowHandlePropertyId => _window?.Handle,
+                        _ => base.GetPropertyValue(propertyID)
+                    };
 
                 internal override bool IsIAccessibleExSupported() => true;
 
@@ -133,7 +128,7 @@ namespace System.Windows.Forms
                     set => base.Name = value;
                 }
 
-                public override AccessibleObject Parent => _window.AccessibilityObject;
+                public override AccessibleObject? Parent => _window?.AccessibilityObject;
 
                 public override AccessibleRole Role => AccessibleRole.Alert;
 
@@ -144,6 +139,14 @@ namespace System.Windows.Forms
                 {
                     get
                     {
+                        if (_window is null)
+                        {
+                            return new int[]
+                            {
+                                _controlItem.GetHashCode()
+                            };
+                        }
+
                         Debug.Assert(_window.AccessibilityObject.RuntimeId.Length >= 3);
 
                         return new int[]

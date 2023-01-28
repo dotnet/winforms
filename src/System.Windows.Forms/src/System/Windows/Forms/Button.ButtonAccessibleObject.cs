@@ -24,13 +24,12 @@ namespace System.Windows.Forms
                         => Owner.AccessibleRole == AccessibleRole.Default
                            ? UIA.ButtonControlTypeId
                            : base.GetPropertyValue(propertyID),
+                    UIA.HasKeyboardFocusPropertyId => Owner.Focused,
                     UIA.IsKeyboardFocusablePropertyId
                         =>
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.
                         true,
-                    UIA.HasKeyboardFocusPropertyId
-                        => Owner.Focused,
                     _ => base.GetPropertyValue(propertyID)
                 };
         }

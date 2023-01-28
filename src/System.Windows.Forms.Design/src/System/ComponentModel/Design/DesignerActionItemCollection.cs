@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design
     {
         public DesignerActionItem this[int index]
         {
-            get => (DesignerActionItem)(List[index]);
+            get => (DesignerActionItem)List[index]!;
             set => List[index] = value;
         }
 

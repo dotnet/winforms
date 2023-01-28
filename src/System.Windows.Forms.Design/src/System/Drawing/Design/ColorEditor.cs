@@ -14,14 +14,14 @@ namespace System.Drawing.Design
     [CLSCompliant(false)]
     public partial class ColorEditor : UITypeEditor
     {
-        private ColorUI _colorUI;
+        private ColorUI? _colorUI;
 
         /// <summary>
         ///  Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
         /// </summary>
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+            if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
             {
                 return value;
             }
@@ -41,10 +41,10 @@ namespace System.Drawing.Design
         }
 
         /// <inheritdoc />
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;
 
         /// <inheritdoc />
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
         /// <inheritdoc />
         public override void PaintValue(PaintValueEventArgs e)

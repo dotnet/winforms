@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public delegate BOOL EnumWindowsCallback(IntPtr hWnd);
+        public delegate BOOL EnumWindowsCallback(HWND hWnd);
 
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        private static unsafe partial BOOL EnumWindows(delegate* unmanaged<IntPtr, IntPtr, BOOL> lpEnumFunc, IntPtr lParam);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        private static extern unsafe BOOL EnumWindows(delegate* unmanaged<HWND, IntPtr, BOOL> lpEnumFunc, IntPtr lParam);
 
         public static unsafe BOOL EnumWindows(EnumWindowsCallback lpEnumFunc)
         {
@@ -30,7 +30,7 @@ internal static partial class Interop
         }
 
         [UnmanagedCallersOnly]
-        private static BOOL HandleEnumWindowsNativeCallback(IntPtr hWnd, IntPtr lParam)
+        private static BOOL HandleEnumWindowsNativeCallback(HWND hWnd, IntPtr lParam)
         {
             return ((EnumWindowsCallback)((GCHandle)lParam).Target!)(hWnd);
         }

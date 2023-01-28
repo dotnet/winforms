@@ -6,7 +6,7 @@ namespace System.Windows.Forms.Design
 {
     internal class ContextMenuStripGroup
     {
-        private List<ToolStripItem> _items;
+        private List<ToolStripItem>? _items;
         private readonly string _name;
 
         public ContextMenuStripGroup(string name) => _name = name;
@@ -15,10 +15,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_items is null)
-                {
-                    _items = new List<ToolStripItem>();
-                }
+                _items ??= new List<ToolStripItem>();
 
                 return _items;
             }

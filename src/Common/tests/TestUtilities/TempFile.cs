@@ -23,7 +23,7 @@ namespace System.IO
         {
         }
 
-        public TempFile(string path, byte[] data)
+        public TempFile(string path, byte[]? data)
         {
             Path = path;
 
@@ -44,19 +44,19 @@ namespace System.IO
 
         public static TempFile Create(
             byte[] bytes,
-            [CallerMemberName] string memberName = null,
+            [CallerMemberName] string? memberName = null,
             [CallerLineNumber] int lineNumber = 0)
             => new(GetFilePath(memberName, lineNumber), bytes);
 
         public static TempFile Create(
             string text,
-            [CallerMemberName] string memberName = null,
+            [CallerMemberName] string? memberName = null,
             [CallerLineNumber] int lineNumber = 0)
             => new(GetFilePath(memberName, lineNumber), text);
 
         public static TempFile Create(
             long length = -1,
-            [CallerMemberName] string memberName = null,
+            [CallerMemberName] string? memberName = null,
             [CallerLineNumber] int lineNumber = 0)
             => new(GetFilePath(memberName, lineNumber), length);
 
@@ -77,7 +77,7 @@ namespace System.IO
             catch { /* Ignore exceptions on disposal paths */ }
         }
 
-        private static string GetFilePath(string memberName, int lineNumber)
+        private static string GetFilePath(string? memberName, int lineNumber)
         {
             string file = $"{IO.Path.GetRandomFileName()}_{memberName}_{lineNumber}";
             return IO.Path.Combine(IO.Path.GetTempPath(), file);

@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial int ReleaseDC(IntPtr hWnd, Gdi32.HDC hDC);
+        [DllImport(Libraries.User32)]
+        public static extern int ReleaseDC(IntPtr hWnd, HDC hDC);
 
-        public static int ReleaseDC(HandleRef hWnd, Gdi32.HDC hDC)
+        public static int ReleaseDC(HandleRef hWnd, HDC hDC)
         {
             int result = ReleaseDC(hWnd.Handle, hDC);
             GC.KeepAlive(hWnd.Wrapper);

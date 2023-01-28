@@ -45,5 +45,29 @@ namespace System.Windows.Forms.VisualStyles
         public TextMetricsPitchAndFamilyValues PitchAndFamily { get; set; }
 
         public TextMetricsCharacterSet CharSet { get; set; }
+
+        internal static TextMetrics FromTEXTMETRICW(TEXTMETRICW metrics) => new()
+        {
+            Height = metrics.tmHeight,
+            Ascent = metrics.tmAscent,
+            Descent = metrics.tmDescent,
+            InternalLeading = metrics.tmInternalLeading,
+            ExternalLeading = metrics.tmExternalLeading,
+            AverageCharWidth = metrics.tmAveCharWidth,
+            MaxCharWidth = metrics.tmMaxCharWidth,
+            Weight = metrics.tmWeight,
+            Overhang = metrics.tmOverhang,
+            DigitizedAspectX = metrics.tmDigitizedAspectX,
+            DigitizedAspectY = metrics.tmDigitizedAspectY,
+            FirstChar = metrics.tmFirstChar,
+            LastChar = metrics.tmLastChar,
+            DefaultChar = metrics.tmDefaultChar,
+            BreakChar = metrics.tmBreakChar,
+            Italic = metrics.tmItalic != 0,
+            Underlined = metrics.tmUnderlined != 0,
+            StruckOut = metrics.tmStruckOut != 0,
+            PitchAndFamily = (TextMetricsPitchAndFamilyValues)metrics.tmPitchAndFamily,
+            CharSet = (TextMetricsCharacterSet)metrics.tmCharSet
+        };
     }
 }

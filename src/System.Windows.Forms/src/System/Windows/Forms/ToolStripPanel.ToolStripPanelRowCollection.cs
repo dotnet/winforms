@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             {
                 ArgumentNullException.ThrowIfNull(value);
 
-                int retVal = InnerList.Add(value);
+                int retVal = ((IList)InnerList).Add(value);
                 OnAdd(value, retVal);
                 return retVal;
             }
@@ -56,10 +56,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(value);
 
                 ToolStripPanel currentOwner = _owner;
-                if (currentOwner is not null)
-                {
-                    currentOwner.SuspendLayout();
-                }
+                currentOwner?.SuspendLayout();
 
                 try
                 {
@@ -70,10 +67,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
-                    {
-                        currentOwner.ResumeLayout();
-                    }
+                    currentOwner?.ResumeLayout();
                 }
             }
 
@@ -82,10 +76,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(value);
 
                 ToolStripPanel currentOwner = _owner;
-                if (currentOwner is not null)
-                {
-                    currentOwner.SuspendLayout();
-                }
+                currentOwner?.SuspendLayout();
 
                 try
                 {
@@ -97,10 +88,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
-                    {
-                        currentOwner.ResumeLayout();
-                    }
+                    currentOwner?.ResumeLayout();
                 }
             }
 
@@ -111,10 +99,7 @@ namespace System.Windows.Forms
 
             public virtual void Clear()
             {
-                if (_owner is not null)
-                {
-                    _owner.SuspendLayout();
-                }
+                _owner?.SuspendLayout();
 
                 try
                 {
@@ -125,17 +110,14 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (_owner is not null)
-                    {
-                        _owner.ResumeLayout();
-                    }
+                    _owner?.ResumeLayout();
                 }
             }
 
             void IList.Clear() { Clear(); }
-            bool IList.IsFixedSize { get { return InnerList.IsFixedSize; } }
+            bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
             bool IList.Contains(object value) { return InnerList.Contains(value); }
-            bool IList.IsReadOnly { get { return InnerList.IsReadOnly; } }
+            bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
             void IList.RemoveAt(int index) { RemoveAt(index); }
             void IList.Remove(object value) { Remove(value as ToolStripPanelRow); }
             int IList.Add(object value) { return Add(value as ToolStripPanelRow); }

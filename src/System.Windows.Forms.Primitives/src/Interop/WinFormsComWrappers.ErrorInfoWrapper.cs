@@ -32,7 +32,7 @@ internal partial class Interop
                 IntPtr descriptionPtr;
                 var result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 5 /* IErrorInfo.GetDescription */)))
                     (_wrappedInstance, &descriptionPtr);
-                if (result.Succeeded())
+                if (result.Succeeded)
                 {
                     pBstrDescription = Marshal.PtrToStringUni(descriptionPtr);
                     Marshal.FreeBSTR(descriptionPtr);
@@ -42,7 +42,7 @@ internal partial class Interop
                     pBstrDescription = null;
                 }
 
-                return result.Succeeded();
+                return result.Succeeded;
             }
         }
     }

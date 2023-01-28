@@ -159,6 +159,61 @@ namespace System.Windows.Forms.Tests
             Assert.False(upDownBase.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void UpDownButtonsAccessibleObject_FragmentNavigate_Parent_ReturnsNull()
+        {
+            using UpDownBase upDownBase = new SubUpDownBase();
+            using UpDownButtons upDownButtons = new UpDownButtons(upDownBase);
+            UpDownButtonsAccessibleObject accessibleObject = new UpDownButtonsAccessibleObject(upDownButtons);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.False(upDownBase.IsHandleCreated);
+            Assert.False(upDownButtons.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void UpDownButtonsAccessibleObject_FragmentNavigate_Sibling_ReturnsNull()
+        {
+            using UpDownBase upDownBase = new SubUpDownBase();
+            using UpDownButtons upDownButtons = new UpDownButtons(upDownBase);
+            UpDownButtonsAccessibleObject accessibleObject = new UpDownButtonsAccessibleObject(upDownButtons);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(upDownBase.IsHandleCreated);
+            Assert.False(upDownButtons.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void UpDownButtonsAccessibleObject_FragmentNavigate_Child_ReturnsExpected_InNumericUpDown()
+        {
+            using NumericUpDown numericUpDown = new();
+            UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)numericUpDown.UpDownButtonsInternal.AccessibilityObject;
+
+            // UpButton has 0 childId, DownButton has 1 childId
+            AccessibleObject upButton = accessibleObject.GetChild(0);
+            AccessibleObject downButton = accessibleObject.GetChild(1);
+
+            Assert.Equal(upButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(downButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            Assert.False(numericUpDown.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void UpDownButtonsAccessibleObject_FragmentNavigate_Child_ReturnsExpected_InDomainUpDown()
+        {
+            using DomainUpDown domainUpDown = new();
+            UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)domainUpDown.UpDownButtonsInternal.AccessibilityObject;
+
+            // UpButton has 0 childId, DownButton has 1 childId
+            AccessibleObject upButton = accessibleObject.GetChild(0);
+            AccessibleObject downButton = accessibleObject.GetChild(1);
+
+            Assert.Equal(upButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(downButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            Assert.False(domainUpDown.IsHandleCreated);
+        }
+
         private class SubUpDownBase : UpDownBase
         {
             protected override void UpdateEditText() => throw new NotImplementedException();

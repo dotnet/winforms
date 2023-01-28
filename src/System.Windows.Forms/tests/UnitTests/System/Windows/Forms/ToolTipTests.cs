@@ -297,7 +297,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolTip_IsPersistent_Get_ReturnsExpected()
         {
-            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater;
+            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater();
 
             using var toolTip = new ToolTip();
             Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolTip_IsPersistent_Get_ReturnsExpected_AutoPopChanged()
         {
-            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater;
+            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater();
 
             using var toolTip = new ToolTip();
             // IsPersistent is not set until the tooltip window is created.
@@ -821,8 +821,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
+        public unsafe void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
         {
+            using NoAssertContext context = new();
             Mock<TabControl> mockTabControl = new() { CallBase = true, Object = { ShowToolTips = true } };
             Mock<Control.ControlAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, mockTabControl.Object);
             mockAccessibleObject
@@ -851,13 +852,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(mockAccessibleObject.Object, tabControl.AccessibilityObject);
 
             // Post MOUSEMOVE to the tooltip queue and then just remove it from the queue without handling.
-            // This will update the point returned by GetMessagePos which is used by TTM.POPUP to determine the tool to display.
-            Assert.True(User32.PostMessageW(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)).IsTrue());
-            User32.MSG msg = default;
-            Assert.True(User32.PeekMessageW(ref msg, toolTip, User32.WM.MOUSEMOVE, User32.WM.MOUSEMOVE, User32.PM.REMOVE).IsTrue());
+            // This will update the point returned by GetMessagePos which is used by PInvoke.TTM_POPUP to determine the tool to display.
+            Assert.True(User32.PostMessageW(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
+            MSG msg = default;
+            Assert.True(PInvoke.PeekMessage(&msg, toolTip, (uint)User32.WM.MOUSEMOVE, (uint)User32.WM.MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
 
             // Show the tooltip.
-            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.POPUP);
+            PInvoke.SendMessage(toolTip, (User32.WM)PInvoke.TTM_POPUP);
 
             mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
                 AutomationNotificationKind.ActionCompleted,
@@ -886,7 +887,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(toolTip.GetHandleCreated());
 
             // Only tools for TabPages were added.
-            Assert.Equal(tabControl.TabCount, User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.GETTOOLCOUNT));
+            Assert.Equal(tabControl.TabCount, (int)PInvoke.SendMessage(toolTip, (User32.WM)PInvoke.TTM_GETTOOLCOUNT));
         }
 
         private class SubToolTip : ToolTip

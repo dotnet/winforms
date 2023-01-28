@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -1428,11 +1427,11 @@ namespace System.Windows.Forms
                                     {
                                         offscreen.Clear(Color.Transparent);
                                         using var hdc = new DeviceContextHdcScope(offscreen);
-                                        User32.DrawFrameControl(
+                                        PInvoke.DrawFrameControl(
                                             hdc,
                                             ref rcCheck,
-                                            User32.DFC.MENU,
-                                            User32.DFCS.MENUCHECK);
+                                            DFC_TYPE.DFC_MENU,
+                                            DFCS_STATE.DFCS_MENUCHECK);
                                     }
 
                                     bitmap.MakeTransparent();

@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMLVLINK
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public LITEM link;
             public int iItem;
             public int iSubItem;

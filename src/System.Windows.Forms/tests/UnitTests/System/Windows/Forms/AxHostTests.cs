@@ -7,16 +7,16 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class AxHostTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -1435,26 +1435,16 @@ namespace System.Windows.Forms.Tests
         {
             using var font = new Font("Arial", 10);
             object disp = SubAxHost.GetIFontDispFromFont(font);
-            Ole32.IFont iFont = (Ole32.IFont)disp;
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
-            Assert.False(iFont.Bold.IsTrue());
-            Assert.False(iFont.Italic.IsTrue());
-            Assert.False(iFont.Underline.IsTrue());
-            Assert.False(iFont.Strikethrough.IsTrue());
+            IFont.Interface iFont = (IFont.Interface)disp;
+            Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
+            Assert.Equal(97500, iFont.Size.int64);
+            Assert.False(iFont.Bold);
+            Assert.False(iFont.Italic);
+            Assert.False(iFont.Underline);
+            Assert.False(iFont.Strikethrough);
             // Charset is locale specific
             // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
-
-            Ole32.IFontDisp iFontDisp = (Ole32.IFontDisp)disp;
-            Assert.Equal(font.Name, iFontDisp.Name);
-            Assert.Equal(10, iFontDisp.Size);
-            Assert.False(iFontDisp.Bold);
-            Assert.False(iFontDisp.Italic);
-            Assert.False(iFontDisp.Underline);
-            Assert.False(iFontDisp.Strikethrough);
-            // Charset is locale specific
-            // Assert.Equal(0, iFontDisp.Charset);
 
             Font result = SubAxHost.GetFontFromIFont(iFont);
             Assert.Equal(font.Name, result.Name);
@@ -1462,7 +1452,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(font.Style, result.Style);
             Assert.Equal(1, result.GdiCharSet);
 
-            result = SubAxHost.GetFontFromIFont(iFontDisp);
+            result = SubAxHost.GetFontFromIFont((IFontDisp.Interface)disp);
             Assert.Equal(font.Name, result.Name);
             Assert.Equal(9.75, result.Size);
             Assert.Equal(font.Style, result.Style);
@@ -1475,24 +1465,15 @@ namespace System.Windows.Forms.Tests
             using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
             object disp = SubAxHost.GetIFontDispFromFont(font);
 
-            Ole32.IFont iFont = (Ole32.IFont)disp;
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
-            Assert.True(iFont.Bold.IsTrue());
-            Assert.True(iFont.Italic.IsTrue());
-            Assert.True(iFont.Underline.IsTrue());
-            Assert.True(iFont.Strikethrough.IsTrue());
+            IFont.Interface iFont = (IFont.Interface)disp;
+            Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
+            Assert.Equal(97500, iFont.Size.int64);
+            Assert.True(iFont.Bold);
+            Assert.True(iFont.Italic);
+            Assert.True(iFont.Underline);
+            Assert.True(iFont.Strikethrough);
             Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
-
-            Ole32.IFontDisp iFontDisp = (Ole32.IFontDisp)disp;
-            Assert.Equal(font.Name, iFontDisp.Name);
-            Assert.Equal(10, iFontDisp.Size);
-            Assert.True(iFontDisp.Bold);
-            Assert.True(iFontDisp.Italic);
-            Assert.True(iFontDisp.Underline);
-            Assert.True(iFontDisp.Strikethrough);
-            Assert.Equal(0, iFontDisp.Charset);
 
             Font result = SubAxHost.GetFontFromIFont(iFont);
             Assert.Equal(font.Name, result.Name);
@@ -1500,7 +1481,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(font.Style, result.Style);
             Assert.Equal(10, result.GdiCharSet);
 
-            result = SubAxHost.GetFontFromIFont(iFontDisp);
+            result = SubAxHost.GetFontFromIFont((IFontDisp.Interface)disp);
             Assert.Equal(font.Name, result.Name);
             Assert.Equal(9.75, result.Size);
             Assert.Equal(font.Style, result.Style);
@@ -1529,13 +1510,13 @@ namespace System.Windows.Forms.Tests
         public void AxHost_GetIFontFromFont_InvokeSimpleStyle_Roundtrips()
         {
             using var font = new Font("Arial", 10);
-            Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
-            Assert.False(iFont.Bold.IsTrue());
-            Assert.False(iFont.Italic.IsTrue());
-            Assert.False(iFont.Underline.IsTrue());
-            Assert.False(iFont.Strikethrough.IsTrue());
+            IFont.Interface iFont = (IFont.Interface)SubAxHost.GetIFontFromFont(font);
+            Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
+            Assert.Equal(97500, iFont.Size.int64);
+            Assert.False(iFont.Bold);
+            Assert.False(iFont.Italic);
+            Assert.False(iFont.Underline);
+            Assert.False(iFont.Strikethrough);
             // Charset is locale specific
             // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
@@ -1551,13 +1532,13 @@ namespace System.Windows.Forms.Tests
         public void AxHost_GetIFontFromFont_InvokeComplexStyle_Roundtrips()
         {
             using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
-            Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
-            Assert.True(iFont.Bold.IsTrue());
-            Assert.True(iFont.Italic.IsTrue());
-            Assert.True(iFont.Underline.IsTrue());
-            Assert.True(iFont.Strikethrough.IsTrue());
+            IFont.Interface iFont = (IFont.Interface)SubAxHost.GetIFontFromFont(font);
+            Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
+            Assert.Equal(97500, iFont.Size.int64);
+            Assert.True(iFont.Bold);
+            Assert.True(iFont.Italic);
+            Assert.True(iFont.Underline);
+            Assert.True(iFont.Strikethrough);
             Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
@@ -1587,85 +1568,73 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureFromCursor_Invoke_Roundtrips()
+        public unsafe void AxHost_GetIPictureFromCursor_Invoke_Roundtrips()
         {
             var original = new Cursor("bitmaps/cursor.cur");
-            IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromCursor(original);
+            IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Throws<COMException>(() => iPicture.hPal);
-            Assert.Equal(3, iPicture.Type);
-            Assert.Equal(847, iPicture.Width);
-            Assert.Equal(847, iPicture.Height);
+
+            OLE_HANDLE handle = iPicture.Handle;
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
+
+            Assert.NotEqual(0u, handle);
+            Assert.True(iPicture.get_hPal(out _).Failed);
+            Assert.Equal(3, type);
+            Assert.Equal(847, width);
+            Assert.Equal(847, height);
             Assert.Throws<COMException>(() => iPicture.CurDC);
-            Assert.Equal(2u, iPicture.Attributes);
+            Assert.Equal(2u, attributes);
 
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureDispFromPicture_InvokeBitmap_Roundtrips()
+        public unsafe void AxHost_GetIPictureDispFromPicture_InvokeBitmap_Roundtrips()
         {
             var original = new Bitmap(10, 11);
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
-            IPicture iPicture = (IPicture)disp;
-            Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Equal(0, iPicture.hPal);
-            Assert.Equal(1, iPicture.Type);
-            Assert.Equal(265, iPicture.Width);
-            Assert.Equal(291, iPicture.Height);
-            Assert.Equal(0, iPicture.CurDC);
-            Assert.Equal(0u, iPicture.Attributes);
+            using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
 
-            Ole32.IPictureDisp iPictureDisp = (Ole32.IPictureDisp)disp;
-            Assert.NotNull(iPictureDisp);
-            Assert.NotEqual(0, iPictureDisp.Handle);
-            Assert.Equal(0, iPictureDisp.hPal);
-            Assert.Equal(1, iPictureDisp.Type);
-            Assert.Equal(265, iPictureDisp.Width);
-            Assert.Equal(291, iPictureDisp.Height);
+            VARIANT variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE);
+            Assert.NotEqual(0u, variant.data.uintVal);
+            variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HPAL);
+            Assert.Equal(0u, variant.data.uintVal);
+            variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_TYPE);
+            Assert.Equal(1, variant.data.iVal);
+            variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_WIDTH);
+            Assert.Equal(265u, variant.data.uintVal);
+            variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT);
+            Assert.Equal(291u, variant.data.uintVal);
 
-            var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
-            Assert.Equal(original.Size, result.Size);
-            Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
-            Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
-
-            result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPictureDisp));
+            var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
             Assert.Equal(original.Size, result.Size);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
+        public unsafe void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
-            IPicture iPicture = (IPicture)disp;
-            Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Throws<COMException>(() => iPicture.hPal);
-            Assert.Equal(4, iPicture.Type);
-            Assert.Equal(19972, iPicture.Width);
-            Assert.Equal(28332, iPicture.Height);
-            Assert.Throws<COMException>(() => iPicture.CurDC);
-            Assert.Equal(3u, iPicture.Attributes);
+            using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp);
 
-            Ole32.IPictureDisp iPictureDisp = (Ole32.IPictureDisp)disp;
-            Assert.NotNull(iPictureDisp);
-            Assert.NotEqual(0, iPictureDisp.Handle);
-            Assert.Throws<COMException>(() => iPictureDisp.hPal);
-            Assert.Equal(4, iPictureDisp.Type);
-            Assert.Equal(19972, iPictureDisp.Width);
-            Assert.Equal(28332, iPictureDisp.Height);
+            VARIANT variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE);
+            Assert.NotEqual(0u, variant.data.uintVal);
+            Assert.True(iPictureDisp.Value->TryGetProperty(PInvoke.DISPID_PICT_HPAL, &variant).Failed);
+            variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_TYPE);
+            Assert.Equal(4, variant.data.iVal);
+            variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_WIDTH);
+            Assert.Equal(19972u, variant.data.uintVal);
+            variant = iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT);
+            Assert.Equal(28332u, variant.data.uintVal);
 
-            var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
-            Assert.Equal(new Size(759, 1073), result.Size);
-
-            result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPictureDisp));
+            var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));
             Assert.Equal(new Size(759, 1073), result.Size);
         }
 
@@ -1683,19 +1652,28 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureFromPicture_InvokeBitmap_Roundtrips()
+        public unsafe void AxHost_GetIPictureFromPicture_InvokeBitmap_Roundtrips()
         {
             var original = new Bitmap(10, 11);
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
-            IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromPicture(original);
+            IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Equal(0, iPicture.hPal);
-            Assert.Equal(1, iPicture.Type);
-            Assert.Equal(265, iPicture.Width);
-            Assert.Equal(291, iPicture.Height);
-            Assert.Equal(0, iPicture.CurDC);
-            Assert.Equal(0u, iPicture.Attributes);
+
+            OLE_HANDLE handle = iPicture.Handle;
+            iPicture.get_hPal(out OLE_HANDLE hPal).ThrowOnFailure();
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
+            HDC curDc = iPicture.CurDC;
+
+            Assert.NotEqual(0u, handle);
+            Assert.Equal(0u, hPal);
+            Assert.Equal(1, type);
+            Assert.Equal(265, width);
+            Assert.Equal(291, height);
+            Assert.Equal(HDC.Null, curDc);
+            Assert.Equal(0u, attributes);
 
             var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
             Assert.Equal(original.Size, result.Size);
@@ -1704,18 +1682,25 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureFromPicture_InvokeEnhancedMetafile_Roundtrips()
+        public unsafe void AxHost_GetIPictureFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
-            IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromPicture(original);
+            IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Throws<COMException>(() => iPicture.hPal);
-            Assert.Equal(4, iPicture.Type);
-            Assert.Equal(19972, iPicture.Width);
-            Assert.Equal(28332, iPicture.Height);
+
+            OLE_HANDLE handle = iPicture.Handle;
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
+
+            Assert.NotEqual(0u, handle);
+            Assert.True(iPicture.get_hPal(out _).Failed);
+            Assert.Equal(4, type);
+            Assert.Equal(19972, width);
+            Assert.Equal(28332, height);
             Assert.Throws<COMException>(() => iPicture.CurDC);
-            Assert.Equal(3u, iPicture.Attributes);
+            Assert.Equal(3u, attributes);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
             Assert.Equal(new Size(759, 1073), result.Size);
@@ -3205,80 +3190,27 @@ namespace System.Windows.Forms.Tests
 
             public new void DetachSink() => base.DetachSink();
 
-            public new static Font GetFontFromIFont(object font) => AxHost.GetFontFromIFont(font);
+            public static new Font GetFontFromIFont(object font) => AxHost.GetFontFromIFont(font);
 
-            public new static object GetIFontDispFromFont(Font font) => AxHost.GetIFontDispFromFont(font);
+            public static new object GetIFontDispFromFont(Font font) => AxHost.GetIFontDispFromFont(font);
 
-            public new static object GetIFontFromFont(Font font) => AxHost.GetIFontFromFont(font);
+            public static new object GetIFontFromFont(Font font) => AxHost.GetIFontFromFont(font);
 
-            public new static object GetIPictureFromCursor(Cursor cursor) => AxHost.GetIPictureFromCursor(cursor);
+            public static new object GetIPictureFromCursor(Cursor cursor) => AxHost.GetIPictureFromCursor(cursor);
 
-            public new static object GetIPictureDispFromPicture(Image image) => AxHost.GetIPictureDispFromPicture(image);
+            public static new object GetIPictureDispFromPicture(Image image) => AxHost.GetIPictureDispFromPicture(image);
 
-            public new static object GetIPictureFromPicture(Image image) => AxHost.GetIPictureFromPicture(image);
+            public static new object GetIPictureFromPicture(Image image) => AxHost.GetIPictureFromPicture(image);
 
-            public new static Image GetPictureFromIPicture(object picture) => AxHost.GetPictureFromIPicture(picture);
+            public static new Image GetPictureFromIPicture(object picture) => AxHost.GetPictureFromIPicture(picture);
+
+            public static new Image GetPictureFromIPictureDisp(object picture) => AxHost.GetPictureFromIPictureDisp(picture);
 
             public new void OnEnter(EventArgs e) => base.OnEnter(e);
 
             public new void OnLeave(EventArgs e) => base.OnLeave(e);
 
             public new void OnMouseCaptureChanged(EventArgs e) => base.OnMouseCaptureChanged(e);
-        }
-
-        /// <remarks>
-        /// A duplicate as Interop.Ole32.IPicture is only partially implemented to make RCW smaller
-        /// </remarks>
-        [ComImport]
-        [Guid("7BF80980-BF32-101A-8BBB-00AA00300CAB")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private unsafe interface IPicture
-        {
-            int Handle { get; }
-
-            int hPal { get; }
-
-            short Type { get; }
-
-            int Width { get; }
-
-            int Height { get; }
-
-            [PreserveSig]
-            HRESULT Render(
-                IntPtr hDC,
-                int x,
-                int y,
-                int cx,
-                int cy,
-                long xSrc,
-                long ySrc,
-                long cxSrc,
-                long cySrc,
-                RECT* pRcWBounds);
-
-            void SetHPal(int hPal);
-
-            int CurDC { get; }
-
-            [PreserveSig]
-            HRESULT SelectPicture(
-                IntPtr hDCIn,
-                IntPtr* phDCOut,
-                int* phBmpOut);
-
-            BOOL KeepOriginalFormat { get; set; }
-
-            [PreserveSig]
-            HRESULT PictureChanged();
-
-            [PreserveSig]
-            HRESULT SaveAsFile(
-                IntPtr pStream,
-                BOOL fSaveMemCopy,
-                int* pCbSize);
-
-            uint Attributes { get; }
         }
     }
 }

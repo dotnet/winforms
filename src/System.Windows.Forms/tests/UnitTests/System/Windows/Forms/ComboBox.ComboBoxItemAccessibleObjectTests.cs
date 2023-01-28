@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Tests
 
             itemAccessibleObject.ScrollIntoView();
 
-            int actual = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
+            int actual = (int)PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_GETTOPINDEX);
 
             Assert.Equal(0, actual); // ScrollIntoView didn't scroll to the tested item because the combobox is disabled
         }
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Tests
             else
             {
                 // Scroll to the bottom and test the method when scrolling up
-                User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETTOPINDEX, (IntPtr)(itemsCount - 1));
+                PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_SETTOPINDEX, (WPARAM)(itemsCount - 1));
 
                 if (dropDownRect.IntersectsWith(itemAccessibleObject.Bounds))
                 {
@@ -356,7 +356,7 @@ namespace System.Windows.Forms.Tests
 
             itemAccessibleObject.ScrollIntoView();
 
-            int actual = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
+            int actual = (int)PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_GETTOPINDEX);
 
             Assert.Equal(expected, actual);
         }
@@ -519,9 +519,9 @@ namespace System.Windows.Forms.Tests
             ComboBox.ComboBoxItemAccessibleObject comboBoxItem3 = (ComboBox.ComboBoxItemAccessibleObject)comboBoxItem2
                     .FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling);
 
-            Assert.Equal(comboBoxItem1.State, InvisibleItemState); // comboBoxItem1 above the visible area
-            Assert.Equal(comboBoxItem2.State, VisibleItemState); // comboBoxItem2 in the visible area
-            Assert.Equal(comboBoxItem3.State, InvisibleItemState); // comboBoxItem3 below the visible area
+            Assert.Equal(InvisibleItemState, comboBoxItem1.State); // comboBoxItem1 above the visible area
+            Assert.Equal(VisibleItemState, comboBoxItem2.State); // comboBoxItem2 in the visible area
+            Assert.Equal(InvisibleItemState, comboBoxItem3.State); // comboBoxItem3 below the visible area
         }
 
         [WinFormsTheory]
@@ -538,9 +538,9 @@ namespace System.Windows.Forms.Tests
             ComboBox.ComboBoxItemAccessibleObject comboBoxItem3 = (ComboBox.ComboBoxItemAccessibleObject)comboBoxItem2
                     .FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling);
 
-            Assert.Equal(comboBoxItem1.State, InvisibleItemState); // comboBoxItem1 above the visible area
-            Assert.Equal(comboBoxItem2.State, VisibleItemState); // comboBoxItem2 in the visible area
-            Assert.Equal(comboBoxItem3.State, InvisibleItemState); // comboBoxItem3 below the visible area
+            Assert.Equal(InvisibleItemState, comboBoxItem1.State); // comboBoxItem1 above the visible area
+            Assert.Equal(VisibleItemState, comboBoxItem2.State); // comboBoxItem2 in the visible area
+            Assert.Equal(InvisibleItemState, comboBoxItem3.State); // comboBoxItem3 below the visible area
         }
 
         [WinFormsTheory]
@@ -555,8 +555,8 @@ namespace System.Windows.Forms.Tests
             ComboBox.ComboBoxItemAccessibleObject comboBoxItem2 = (ComboBox.ComboBoxItemAccessibleObject)comboBoxItem1
                     .FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling);
 
-            Assert.Equal(comboBoxItem1.State, InvisibleItemState);
-            Assert.Equal(comboBoxItem2.State, InvisibleItemState);
+            Assert.Equal(InvisibleItemState, comboBoxItem1.State);
+            Assert.Equal(InvisibleItemState, comboBoxItem2.State);
         }
 
         [WinFormsFact]
@@ -573,9 +573,9 @@ namespace System.Windows.Forms.Tests
 
             AccessibleStates itemState = AccessibleStates.Invisible | AccessibleStates.Selected | AccessibleStates.Focusable | AccessibleStates.Selectable;
 
-            Assert.Equal(comboBoxItem1.State, InvisibleItemState); // comboBoxItem1 above the visible area
-            Assert.Equal(comboBoxItem2.State, itemState); // comboBoxItem2 in the visible area
-            Assert.Equal(comboBoxItem3.State, InvisibleItemState); // comboBoxItem3 below the visible area
+            Assert.Equal(InvisibleItemState, comboBoxItem1.State); // comboBoxItem1 above the visible area
+            Assert.Equal(itemState, comboBoxItem2.State); // comboBoxItem2 in the visible area
+            Assert.Equal(InvisibleItemState, comboBoxItem3.State); // comboBoxItem3 below the visible area
         }
 
         [WinFormsTheory]

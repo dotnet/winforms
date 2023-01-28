@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-
+using Windows.Win32.UI.Controls.RichEdit;
 internal partial class Interop
 {
     internal static partial class Richedit
@@ -11,7 +11,7 @@ internal partial class Interop
         [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
         public struct SELCHANGE
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public CHARRANGE chrg;
             public SEL seltyp;
         }

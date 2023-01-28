@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
@@ -45,7 +47,7 @@ namespace System.Windows.Forms.Design
             if (disposing)
             {
                 // Hook up the property change notification so that we can dirty the SelectionUIItem when needed.
-                if (propChanged != null)
+                if (propChanged is not null)
                 {
                     ((ComboBox)Control).StyleChanged -= propChanged;
                 }
@@ -79,7 +81,7 @@ namespace System.Windows.Forms.Design
             ((ComboBox)Component).FormattingEnabled = true;
 
             PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
-            if (textProp != null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
+            if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
             {
                 textProp.SetValue(Component, "");
             }
@@ -90,10 +92,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnControlPropertyChanged(object sender, EventArgs e)
         {
-            if (BehaviorService != null)
-            {
-                BehaviorService.SyncSelection();
-            }
+            BehaviorService?.SyncSelection();
         }
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace System.Windows.Forms.Design
                 object component = Component;
 
                 PropertyDescriptor propStyle = TypeDescriptor.GetProperties(component)["DropDownStyle"];
-                if (propStyle != null)
+                if (propStyle is not null)
                 {
                     ComboBoxStyle style = (ComboBoxStyle)propStyle.GetValue(component);
 
@@ -128,7 +127,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists == null)
+                if (_actionLists is null)
                 {
                     _actionLists = new DesignerActionListCollection();
 
@@ -150,4 +149,3 @@ namespace System.Windows.Forms.Design
         }
     }
 }
-

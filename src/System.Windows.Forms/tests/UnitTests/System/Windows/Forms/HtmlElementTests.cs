@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms.Tests
@@ -1748,7 +1747,7 @@ namespace System.Windows.Forms.Tests
             const string Html = "<html><body><div id=\"id\"></div></body></html>";
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
-            Assert.Throws<ArgumentException>(null, () => element.GetAttribute(null));
+            Assert.Throws<ArgumentException>(() => element.GetAttribute(null));
         }
 
         [WinFormsFact]
@@ -1788,7 +1787,7 @@ namespace System.Windows.Forms.Tests
             const string Html = "<html><body><div id=\"id\"></div></body></html>";
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
-            Assert.Throws<ArgumentException>(null, () => element.GetElementsByTagName(null));
+            Assert.Throws<ArgumentException>(() => element.GetElementsByTagName(null));
         }
 
         [WinFormsFact]
@@ -2164,7 +2163,7 @@ namespace System.Windows.Forms.Tests
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
             HtmlElement newElement = document.CreateElement("H1");
-            Assert.Throws<ArgumentException>(null, () => element.InsertAdjacentElement(orient, newElement));
+            Assert.Throws<ArgumentException>(() => element.InsertAdjacentElement(orient, newElement));
         }
 
         [WinFormsFact]
@@ -2301,7 +2300,7 @@ namespace System.Windows.Forms.Tests
             const string Html = "<html><body><div id=\"id\"></div></body></html>";
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
-            Assert.Throws<ArgumentException>(null, () => element.SetAttribute(null, "value"));
+            Assert.Throws<ArgumentException>(() => element.SetAttribute(null, "value"));
         }
 
         [WinFormsFact]
@@ -2320,7 +2319,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
         }
 
-#pragma warning disable CS1718 // Disable "Comparison made to same variable" warning.
+#pragma warning disable CS1718, CSIsNull001, CSIsNull002 // Disable "Comparison made to same variable" warning.
         [WinFormsFact]
         public async Task HtmlElement_OperatorEquals_Invoke_ReturnsExpected()
         {
@@ -2339,7 +2338,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(element1 == element1);
             Assert.True(element1 == element2);
             Assert.False(element1 == element3);
-            Assert.False((HtmlElement)null == element1);
+            Assert.False(element1 == (HtmlElement)null);
             Assert.False(element1 == (HtmlElement)null);
             Assert.True((HtmlElement)null == (HtmlElement)null);
         }
@@ -2362,11 +2361,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(element1 != element1);
             Assert.False(element1 != element2);
             Assert.True(element1 != element3);
-            Assert.True((HtmlElement)null != element1);
+            Assert.True(element1 != (HtmlElement)null);
             Assert.True(element1 != (HtmlElement)null);
             Assert.False((HtmlElement)null != (HtmlElement)null);
         }
-#pragma warning restore CS1718
+#pragma warning restore CS1718, CSIsNull001, CSIsNull002
 
         [WinFormsFact]
         public async Task HtmlElement_Click_InvokeEvent_Success()
@@ -2976,7 +2975,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        private async static Task<HtmlDocument> GetDocument(WebBrowser control, string html)
+        private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
         {
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);

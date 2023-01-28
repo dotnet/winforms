@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design.Behavior.Tests
                 .Union(EnumerateFilterMarginPaths(SnapLine.MarginTop, SnapLine.MarginBottom, SnapLine.PaddingTop))
                 .Union(EnumerateFilterMarginPaths(SnapLine.MarginBottom, SnapLine.MarginTop, SnapLine.PaddingBottom));
 
-            IEnumerable<object[]> EnumerateFilterMarginPaths(string snapLine1Filter, string snapLine2MarginFilter, string snapLine2PaddingFilter)
+            static IEnumerable<object[]> EnumerateFilterMarginPaths(string snapLine1Filter, string snapLine2MarginFilter, string snapLine2PaddingFilter)
             {
                 // happy paths
                 yield return new object[] { snapLine1Filter, snapLine2MarginFilter, true };
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Design.Behavior.Tests
                 .Union(EnumerateFilterPaddingPaths(SnapLine.PaddingTop, SnapLine.MarginTop))
                 .Union(EnumerateFilterPaddingPaths(SnapLine.PaddingBottom, SnapLine.MarginBottom));
 
-            IEnumerable<object[]> EnumerateFilterPaddingPaths(string snapLine1Filter, string snapLine2Filter)
+            static IEnumerable<object[]> EnumerateFilterPaddingPaths(string snapLine1Filter, string snapLine2Filter)
             {
                 // happy paths
                 yield return new object[] { snapLine1Filter, snapLine2Filter, true };

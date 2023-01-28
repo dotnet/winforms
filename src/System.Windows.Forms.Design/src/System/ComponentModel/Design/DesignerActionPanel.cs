@@ -1,6 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.Collections;
 using System.Collections.Specialized;
@@ -154,9 +156,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_filteredCommandIDs is null)
-                {
-                    _filteredCommandIDs = new CommandID[]
+                _filteredCommandIDs ??= new CommandID[]
                     {
                         StandardCommands.Copy,
                         StandardCommands.Cut,
@@ -192,7 +192,6 @@ namespace System.ComponentModel.Design
                         MenuCommands.KeyShiftEnd,
                         MenuCommands.KeyShiftHome,
                     };
-                }
 
                 return _filteredCommandIDs;
             }
@@ -287,10 +286,7 @@ namespace System.ComponentModel.Design
         private static void AddToCategories(LineInfo lineInfo, ListDictionary categories)
         {
             string categoryName = lineInfo.Item.Category;
-            if (categoryName is null)
-            {
-                categoryName = string.Empty;
-            }
+            categoryName ??= string.Empty;
 
             ListDictionary category = (ListDictionary)categories[categoryName];
             if (category is null)
@@ -699,10 +695,7 @@ namespace System.ComponentModel.Design
             {
                 // Try to use the component's service provider if it exists so that we end up getting the right IDesignerHost.
                 IServiceProvider serviceProvider = relatedComponent.Site;
-                if (serviceProvider is null)
-                {
-                    serviceProvider = ServiceProvider;
-                }
+                serviceProvider ??= ServiceProvider;
 
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
                 if (host is not null)

@@ -38,6 +38,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Url where error occurred
         /// </summary>
-        public Uri Url => _url ?? (_url = new Uri(_urlString));
+        public Uri Url => _url ??= new Uri(_urlString);
     }
 }

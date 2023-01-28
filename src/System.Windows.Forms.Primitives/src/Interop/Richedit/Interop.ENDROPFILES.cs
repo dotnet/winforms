@@ -11,7 +11,7 @@ internal partial class Interop
         [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
         public struct ENDROPFILES
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public IntPtr hDrop;
             public int cp;
             public BOOL fProtected;

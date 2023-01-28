@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void AddRange(ToolStripItem[] value)
         {
-            for (int i = 0; (i < value.Length); i = (i + 1))
+            for (int i = 0; (i < value.Length); i++)
             {
                 Add(value[i]);
             }

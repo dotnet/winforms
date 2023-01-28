@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -125,10 +127,10 @@ namespace System.Windows.Forms.Design.Behavior
             }
             else if (!_ignoreNextMouseUp)
             {
-                if (_serviceProvider != null)
+                if (_serviceProvider is not null)
                 {
                     ISelectionService selectionService = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-                    if (selectionService != null)
+                    if (selectionService is not null)
                     {
                         if (selectionService.PrimarySelection != RelatedComponent)
                         {

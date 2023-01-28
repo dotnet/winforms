@@ -31,6 +31,8 @@ namespace System.Windows.Forms.Tests
             Assert.Same(provider.Icon, provider.Icon);
             Assert.Null(provider.Site);
             Assert.Null(provider.Tag);
+            Assert.Equal(provider.Icon.Width, PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON));
+            Assert.Equal(provider.Icon.Height, PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON));
         }
 
         [WinFormsFact]
@@ -359,7 +361,7 @@ namespace System.Windows.Forms.Tests
                 ContainerControl = containerControl,
                 DataSource = value
             };
-            Assert.Throws<ArgumentException>(null, () => provider.DataMember = "NoSuchValue");
+            Assert.Throws<ArgumentException>(() => provider.DataMember = "NoSuchValue");
             Assert.Same(value, provider.DataSource);
             Assert.Equal("NoSuchValue", provider.DataMember);
         }
@@ -835,7 +837,7 @@ namespace System.Windows.Forms.Tests
                 ContainerControl = containerControl
             };
             var newDataSource = new DataClass();
-            Assert.Throws<ArgumentException>(null, () => provider.BindToDataAndErrors(newDataSource, "NoSuchValue"));
+            Assert.Throws<ArgumentException>(() => provider.BindToDataAndErrors(newDataSource, "NoSuchValue"));
             Assert.Same(newDataSource, provider.DataSource);
             Assert.Equal("NoSuchValue", provider.DataMember);
 
@@ -1242,6 +1244,26 @@ namespace System.Windows.Forms.Tests
 
             provider.Clear();
             Assert.False(provider.HasErrors);
+        }
+
+        [WinFormsFact]
+        public void ErrorProvider_CustomDataSource_DoesNotThrowInvalidCastException()
+        {
+            using Form form = new();
+            CustomDataSource customDataSource = new();
+            form.DataBindings.Add("Text", customDataSource, "Error");
+            using ErrorProvider errorProvider = new(form);
+
+            var exception = Record.Exception(() => errorProvider.DataSource = customDataSource);
+
+            Assert.Null(exception);
+        }
+
+        private class CustomDataSource : IDataErrorInfo
+        {
+            public string this[string columnName] => string.Empty;
+
+            public string Error => string.Empty;
         }
 
         private class SubErrorProvider : ErrorProvider

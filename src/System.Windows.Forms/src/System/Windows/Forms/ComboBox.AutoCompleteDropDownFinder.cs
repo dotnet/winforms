@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-using System.Text;
-using static Interop;
+using System.Runtime.CompilerServices;
 using static Interop.User32;
 
 namespace System.Windows.Forms
@@ -16,7 +14,6 @@ namespace System.Windows.Forms
         /// </summary>
         private class AutoCompleteDropDownFinder
         {
-            private const int MaxClassName = 256;
             private const string AutoCompleteClassName = "Auto-Suggest Dropdown";
             private bool _shouldSubClass;
 
@@ -36,28 +33,26 @@ namespace System.Windows.Forms
                 // Look for a popped up dropdown
                 _shouldSubClass = subclass;
                 EnumThreadWindows(
-                    Kernel32.GetCurrentThreadId(),
+                    PInvoke.GetCurrentThreadId(),
                     Callback);
             }
 
-            private BOOL Callback(IntPtr hWnd)
+            [SkipLocalsInit]
+            private unsafe BOOL Callback(HWND hwnd)
             {
-                HandleRef hRef = new HandleRef(null, hWnd);
-
-                // Check class name and see if it's visible
-                if (GetClassName(hRef) == AutoCompleteClassName)
+                Span<char> buffer = stackalloc char[AutoCompleteClassName.Length + 2];
+                fixed (char* b = buffer)
                 {
-                    ACNativeWindow.RegisterACWindow(hRef.Handle, _shouldSubClass);
+                    int length = PInvoke.GetClassName(hwnd, (PWSTR)b, buffer.Length);
+
+                    // Check class name and see if it's visible
+                    if (length == AutoCompleteClassName.Length && buffer.StartsWith(AutoCompleteClassName))
+                    {
+                        ACNativeWindow.RegisterACWindow(hwnd, _shouldSubClass);
+                    }
                 }
 
-                return BOOL.TRUE;
-            }
-
-            static string GetClassName(HandleRef hRef)
-            {
-                StringBuilder sb = new StringBuilder(MaxClassName);
-                UnsafeNativeMethods.GetClassName(hRef, sb, MaxClassName);
-                return sb.ToString();
+                return true;
             }
         }
     }

@@ -5,7 +5,6 @@
 #nullable enable
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -22,7 +21,7 @@ namespace System.Windows.Forms.Metafiles
         {
         }
 
-        public override bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.POLYLINE16;
+        public override bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => recordType == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYLINE16;
 
         public override unsafe void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {

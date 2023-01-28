@@ -3,114 +3,101 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
-using static Interop;
+using Windows.Win32.System.Com;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
 {
-    internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
+    private readonly Com2PropertyDescriptor _propertyDescriptor;
+    private readonly Guid _guid;
+
+    public Com2PropertyPageUITypeEditor(
+        Com2PropertyDescriptor propertyDescriptor,
+        Guid guid,
+        UITypeEditor? baseEditor) : base(baseEditor)
     {
-        private readonly Com2PropertyDescriptor _propDesc;
-        private readonly Guid _guid;
+        _propertyDescriptor = propertyDescriptor;
+        _guid = guid;
+    }
 
-        public Com2PropertyPageUITypeEditor(Com2PropertyDescriptor pd, Guid guid, UITypeEditor baseEditor) : base(baseEditor)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+    {
+        HWND hWndParent = PInvoke.GetFocus();
+
+        try
         {
-            _propDesc = pd;
-            _guid = guid;
-        }
-
-        /// <summary>
-        ///  Takes the value returned from valueAccess.getValue() and modifies or replaces
-        ///  the value, passing the result into valueAccess.setValue().  This is where
-        ///  an editor can launch a modal dialog or create a drop down editor to allow
-        ///  the user to modify the value.  Host assistance in presenting UI to the user
-        ///  can be found through the valueAccess.getService function.
-        /// </summary>
-        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
-        {
-            IntPtr hWndParent = User32.GetFocus(); // Windows.GetForegroundWindow
-
-            try
+            if (!provider.TryGetService(out ICom2PropertyPageDisplayService? propertyPageService))
             {
-                ICom2PropertyPageDisplayService? propPageSvc = (ICom2PropertyPageDisplayService?)provider.GetService(typeof(ICom2PropertyPageDisplayService));
-
-                if (propPageSvc is null)
-                {
-                    propPageSvc = this;
-                }
-
-                object? instance = context?.Instance;
-
-                if (instance is not null && !instance.GetType().IsArray)
-                {
-                    instance = _propDesc.TargetObject;
-                    if (instance is ICustomTypeDescriptor customTypeDescriptor)
-                    {
-                        instance = customTypeDescriptor.GetPropertyOwner(_propDesc);
-                    }
-                }
-
-                propPageSvc.ShowPropertyPage(_propDesc.Name, instance, (int)_propDesc.DISPID, _guid, hWndParent);
+                propertyPageService ??= this;
             }
-            catch (Exception ex)
+
+            object? instance = context?.Instance;
+
+            if (instance is not null && !instance.GetType().IsArray)
             {
-                IUIService? uiSvc = (IUIService?)provider?.GetService(typeof(IUIService));
-                if (uiSvc is not null)
+                instance = _propertyDescriptor.TargetObject;
+                if (instance is ICustomTypeDescriptor customTypeDescriptor)
                 {
-                    uiSvc.ShowError(ex, SR.ErrorTypeConverterFailed);
+                    instance = customTypeDescriptor.GetPropertyOwner(_propertyDescriptor);
                 }
             }
 
-            return value;
+            Debug.Assert(instance is not null);
+            propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, _propertyDescriptor.DISPID, _guid, hWndParent);
         }
-
-        /// <summary>
-        ///  Retrieves the editing style of the Edit method.  If the method
-        ///  is not supported, this will return None.
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
+        catch (Exception ex)
         {
-            return UITypeEditorEditStyle.Modal;
-        }
-
-        public unsafe void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, IntPtr parentHandle)
-        {
-            object[] objs = component.GetType().IsArray ? (object[])component : new object[] { component };
-            IntPtr[] objAddrs = new IntPtr[objs.Length];
-
-            try
+            if (provider.TryGetService(out IUIService? uiService))
             {
-                for (int i = 0; i < objAddrs.Length; i++)
-                {
-                    objAddrs[i] = Marshal.GetIUnknownForObject(objs[i]);
-                }
-
-                fixed (IntPtr* pObjAddrs = objAddrs)
-                {
-                    Oleaut32.OleCreatePropertyFrame(
-                        parentHandle,
-                        0,
-                        0,
-                        title,
-                        (uint)objAddrs.Length,
-                        pObjAddrs,
-                        1,
-                        &pageGuid,
-                        Kernel32.GetThreadLocale(),
-                        0,
-                        IntPtr.Zero);
-                }
+                uiService?.ShowError(ex, SR.ErrorTypeConverterFailed);
             }
-            finally
+        }
+
+        return value;
+    }
+
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
+
+    public void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, nint parentHandle)
+    {
+        object[] objs = component.GetType().IsArray ? (object[])component : new object[] { component };
+        nint[] objAddrs = new nint[objs.Length];
+
+        try
+        {
+            for (int i = 0; i < objAddrs.Length; i++)
             {
-                for (int i = 0; i < objAddrs.Length; i++)
+                objAddrs[i] = (nint)ComHelpers.GetComPointer<IUnknown>(objs[i]);
+            }
+
+            fixed (void* pObjAddrs = objAddrs)
+            {
+                PInvoke.OleCreatePropertyFrame(
+                    (HWND)parentHandle,
+                    0,
+                    0,
+                    title,
+                    (uint)objAddrs.Length,
+                    (IUnknown**)pObjAddrs,
+                    1,
+                    pageGuid,
+                    PInvoke.GetThreadLocale(),
+                    0,
+                    null);
+            }
+        }
+        finally
+        {
+            for (int i = 0; i < objAddrs.Length; i++)
+            {
+                if (objAddrs[i] != 0)
                 {
-                    if (objAddrs[i] != IntPtr.Zero)
-                    {
-                        Marshal.Release(objAddrs[i]);
-                    }
+                    Marshal.Release(objAddrs[i]);
                 }
             }
         }

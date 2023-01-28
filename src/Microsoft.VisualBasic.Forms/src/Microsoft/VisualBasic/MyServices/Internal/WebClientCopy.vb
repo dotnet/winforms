@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' <summary>
     '''  Class that controls the thread that does the actual work of downloading or uploading.
     ''' </summary>
-    Friend Class WebClientCopy
+    Friend NotInheritable Class WebClientCopy
 
         ''' <summary>
         ''' Creates an instance of a WebClientCopy, used to download or upload a file

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -60,13 +62,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void AddInheritedControl(Control c, InheritanceLevel level)
         {
-            if (_tooltip is null)
-            {
-                _tooltip = new ToolTip
+            _tooltip ??= new ToolTip
                 {
                     ShowAlways = true
                 };
-            }
 
             Debug.Assert(level != InheritanceLevel.NotInherited, "This should only be called for inherited components.");
             string text;
@@ -93,10 +92,7 @@ namespace System.Windows.Forms.Design
 
         public void Dispose()
         {
-            if (_tooltip != null)
-            {
-                _tooltip.Dispose();
-            }
+            _tooltip?.Dispose();
         }
 
         /// <summary>
@@ -104,7 +100,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void RemoveInheritedControl(Control c)
         {
-            if (_tooltip != null && _tooltip.GetToolTip(c).Length > 0)
+            if (_tooltip is not null && _tooltip.GetToolTip(c).Length > 0)
             {
                 _tooltip.SetToolTip(c, null);
                 // Also, set all of its non-sited children

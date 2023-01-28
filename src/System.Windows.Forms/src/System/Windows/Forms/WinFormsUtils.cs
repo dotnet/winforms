@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -28,7 +29,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int lastXY = (int)User32.GetMessagePos();
+                int lastXY = (int)PInvoke.GetMessagePos();
                 return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }
@@ -38,7 +39,7 @@ namespace System.Windows.Forms
         ///  this is your function. If you have a character "t" and want match it to &amp;Text
         ///  Control.IsMnemonic is a better bet.
         /// </summary>
-        public static bool ContainsMnemonic(string? text)
+        public static bool ContainsMnemonic([NotNullWhen(true)] string? text)
         {
             if (text is not null)
             {
@@ -157,11 +158,11 @@ namespace System.Windows.Forms
         ///  use AssertControlInformation if sticking in an assert - then the work
         ///  to figure out the control info will only be done when the assertion is false.
         /// </summary>
-        internal static string GetControlInformation(IntPtr hwnd)
+        internal static string GetControlInformation(HWND hwnd)
         {
-            if (hwnd == IntPtr.Zero)
+            if (hwnd.IsNull)
             {
-                return "Handle is IntPtr.Zero";
+                return "Handle is null";
             }
 
 #if DEBUG
@@ -183,12 +184,12 @@ namespace System.Windows.Forms
                     // Add some extra debug info for ToolStripDropDowns.
                     if (c is ToolStripDropDown dd && dd.OwnerItem is not null)
                     {
-                        nameOfControl += Environment.NewLine + "\tOwnerItem: " + dd.OwnerItem.ToString();
+                        nameOfControl += $"{Environment.NewLine}\tOwnerItem: {dd.OwnerItem}";
                     }
                 }
             }
 
-            return windowText + Environment.NewLine + "\tType: " + typeOfControl + Environment.NewLine + "\t" + nameOfControl + Environment.NewLine;
+            return $"{windowText}{Environment.NewLine}\tType: {typeOfControl}{Environment.NewLine}\t{nameOfControl}{Environment.NewLine}";
 #else
             return string.Empty;
 #endif
@@ -281,7 +282,7 @@ namespace System.Windows.Forms
         /// </remarks>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
-            User32.MapWindowPoint(fromControl, toControl, ref point);
+            PInvoke.MapWindowPoints(fromControl, toControl, ref point);
             return point;
         }
 
@@ -313,7 +314,7 @@ namespace System.Windows.Forms
             return string.Compare(string1, string2, ignoreCase, CultureInfo.InvariantCulture) == 0;
         }
 
-        public static string GetComponentName(IComponent component, string defaultNameValue)
+        public static string GetComponentName(IComponent component, string? defaultNameValue)
         {
             Debug.Assert(component is not null, "component passed here cannot be null");
             if (string.IsNullOrEmpty(defaultNameValue))

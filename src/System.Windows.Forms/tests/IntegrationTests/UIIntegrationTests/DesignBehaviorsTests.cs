@@ -49,7 +49,7 @@ namespace System.Windows.Forms.UITests
                 ToolboxItem toolboxItem = new()
                 {
                     TypeName = typeof(SampleControl).FullName,
-                    DisplayName = typeof(SampleControl).Name,
+                    DisplayName = nameof(SampleControl),
                     AssemblyName = typeof(SampleControl).Assembly.GetName()
                 };
 
@@ -309,7 +309,7 @@ namespace System.Windows.Forms.UITests
 
             protected override void PerformLoad(IDesignerSerializationManager serializationManager)
             {
-                if (LoaderHost == null)
+                if (LoaderHost is null)
                     return;
 
                 ArrayList errors = new();

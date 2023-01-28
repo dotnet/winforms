@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal partial class ComCtl32
     {
-        [LibraryImport(Libraries.Comctl32, EntryPoint = "InitCommonControlsEx")]
-        private static partial BOOL InitCommonControlsExInternal(ref INITCOMMONCONTROLSEX picce);
+        [DllImport(Libraries.Comctl32, EntryPoint = "InitCommonControlsEx")]
+        private static extern BOOL InitCommonControlsExInternal(ref INITCOMMONCONTROLSEX picce);
 
         public static BOOL InitCommonControlsEx(ref INITCOMMONCONTROLSEX picce)
         {
@@ -20,7 +20,7 @@ internal partial class Interop
         public struct INITCOMMONCONTROLSEX
         {
             public uint dwSize;
-            public ICC dwICC;
+            public INITCOMMONCONTROLSEX_ICC dwICC;
         }
     }
 }

@@ -10,12 +10,12 @@ namespace System.ComponentModel.Design
     {
         public class SelectorNode : TreeNode
         {
-            public object value;
+            public object? value;
 
             /// <summary>
             ///  Sets label and value to given.
             /// </summary>
-            public SelectorNode(string label, object value) : base(label)
+            public SelectorNode(string label, object? value) : base(label)
             {
                 this.value = value;
             }

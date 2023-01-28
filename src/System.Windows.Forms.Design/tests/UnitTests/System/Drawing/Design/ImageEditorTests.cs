@@ -148,7 +148,7 @@ namespace System.Drawing.Design.Tests
             var editor = new SubImageEditor();
             using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
             {
-                Assert.Throws<ArgumentException>(null, () => editor.LoadFromStream(stream));
+                Assert.Throws<ArgumentException>(() => editor.LoadFromStream(stream));
             }
         }
 

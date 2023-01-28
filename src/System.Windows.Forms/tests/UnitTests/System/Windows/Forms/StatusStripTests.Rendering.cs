@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -40,7 +39,8 @@ namespace System.Windows.Forms.Tests
             Rectangle polylineBounds = new Rectangle(bounds.X, 0, bounds.Width - 1, 15);
 
             // This is the default pen style GDI+ renders polylines with
-            Gdi32.PS penStyle = Gdi32.PS.SOLID | Gdi32.PS.JOIN_ROUND | Gdi32.PS.COSMETIC | Gdi32.PS.ENDCAP_FLAT | Gdi32.PS.JOIN_MITER | Gdi32.PS.GEOMETRIC;
+            PEN_STYLE penStyle = PEN_STYLE.PS_SOLID | PEN_STYLE.PS_JOIN_ROUND | PEN_STYLE.PS_COSMETIC |
+                PEN_STYLE.PS_ENDCAP_FLAT | PEN_STYLE.PS_JOIN_MITER | PEN_STYLE.PS_GEOMETRIC;
 
             emf.Validate(
                state,

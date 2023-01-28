@@ -15,6 +15,8 @@ namespace System.Windows.Forms
             {
             }
 
+            protected override View View => View.Tile;
+
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)

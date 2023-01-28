@@ -60,15 +60,14 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-        {
-            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && _owner.Owner is ToolStripDropDown)
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+            propertyID switch
             {
-                return !((ToolStripDropDown)_owner.Owner).Visible;
-            }
-
-            return base.GetPropertyValue(propertyID);
-        }
+                UiaCore.UIA.IsOffscreenPropertyId when
+                    _owner.Owner is ToolStripDropDown toolStripDropDown
+                    => !toolStripDropDown.Visible,
+                _ => base.GetPropertyValue(propertyID)
+            };
 
         internal override void Expand()
             => DoDefaultAction();

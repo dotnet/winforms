@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Layout
 
             public override int GetHashCode()
             {
-                var hash = new HashCode();
+                var hash = default(HashCode);
                 hash.Add(RowStart);
                 hash.Add(ColumnStart);
                 hash.Add(RowSpan);

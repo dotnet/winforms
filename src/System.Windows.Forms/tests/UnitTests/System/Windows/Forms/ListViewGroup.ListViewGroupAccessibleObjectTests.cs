@@ -110,6 +110,25 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_GetPropertyValue_ReturnsExpected_WithSubtitle()
+        {
+            using ListView list = new ListView();
+            const string name = "Group1";
+            const string subtitle = "Subtitle";
+            ListViewGroup listGroup = new ListViewGroup(name) { Subtitle = subtitle };
+            listGroup.Items.Add(new ListViewItem());
+            list.Groups.Add(listGroup);
+
+            AccessibleObject accessibleObject = listGroup.AccessibilityObject;
+            Assert.False(list.IsHandleCreated);
+
+            object accessibleName = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+            Assert.Equal($"{name}. {subtitle}", accessibleName);
+
+            Assert.False(list.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [MemberData(nameof(ListViewGroupAccessibleObject_TestData))]
         public void ListViewGroupAccessibleObject_FragmentNavigate_ReturnsExpected_WithDefaultGroup(View view, bool showGroups, bool createHandle)
@@ -275,7 +294,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(list.IsHandleCreated);
 
                 RECT groupRect = new RECT();
-                User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, listGroup.ID, ref groupRect);
+                PInvoke.SendMessage(list, (User32.WM)PInvoke.LVM_GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
 
                 int actualWidth = group1AccObj.Bounds.Width;
                 int expectedWidth = groupRect.Width;
@@ -311,7 +330,7 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(new ListViewItem("a", group));
 
             RECT groupRect = new RECT();
-            User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETGROUPRECT, group.ID, ref groupRect);
+            PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
 
             AccessibleObject groupAccObj = group.AccessibilityObject;
 
@@ -540,7 +559,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && view == View.Tile)
                     {
                         continue;
                     }
@@ -617,7 +636,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && view == View.Tile)
                     {
                         continue;
                     }
@@ -740,44 +759,24 @@ namespace System.Windows.Forms.Tests
             Assert.True(listView.IsHandleCreated);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            nint keyCode = (nint)Keys.Up;
-            nint lParam = 0x00000001 | keyCode << 16;
-            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
-            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
-
-            keyCode = (nint)Keys.Left;
-            lParam = 0x00000001 | keyCode << 16;
-            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
-            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+            KeyboardSimulator.KeyPress(listView, Keys.Up);
+            KeyboardSimulator.KeyPress(listView, Keys.Left);
 
             Assert.Equal(ListViewGroupCollapsedState.Collapsed, listViewGroup.GetNativeCollapsedState());
             Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
-            keyCode = (nint)Keys.Left;
-            lParam = 0x00000001 | keyCode << 16;
-            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
-            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+            KeyboardSimulator.KeyPress(listView, Keys.Left);
 
             // The second left key pressing should not change Collapsed state
             Assert.Equal(ListViewGroupCollapsedState.Collapsed, listViewGroup.GetNativeCollapsedState());
             Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
-            keyCode = (nint)Keys.Right;
-            lParam = 0x00000001 | keyCode << 16;
-            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
-            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+            KeyboardSimulator.KeyPress(listView, Keys.Right);
 
             Assert.Equal(ListViewGroupCollapsedState.Expanded, listViewGroup.GetNativeCollapsedState());
             Assert.Equal(ExpandCollapseState.Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
-            keyCode = (nint)Keys.Right;
-            lParam = 0x00000001 | keyCode << 16;
-            User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
-            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+            KeyboardSimulator.KeyPress(listView, Keys.Right);
 
             // The second right key pressing should not change Expanded state
             Assert.Equal(ListViewGroupCollapsedState.Expanded, listViewGroup.GetNativeCollapsedState());
@@ -810,12 +809,12 @@ namespace System.Windows.Forms.Tests
             listView.GroupCollapsedStateChanged += (_, e) => eventGroupIndices.Add(e.GroupIndex);
 
             // Navigate to the second group
-            SimulateKeyPress(Keys.Down);
+            KeyboardSimulator.KeyPress(listView, Keys.Down);
 
             if (firstGroupSate == ListViewGroupCollapsedState.Collapsed)
             {
                 // This action is necessary to navigate to the second group correctly in this specific case.
-                SimulateKeyPress(Keys.Up);
+                KeyboardSimulator.KeyPress(listView, Keys.Up);
             }
 
             // Simulate multiple selection of several groups to test a specific case,
@@ -825,7 +824,7 @@ namespace System.Windows.Forms.Tests
             item3.Selected = true;
 
             // Simulate the second group collapse action via keyboard.
-            SimulateKeyPress(Keys.Left);
+            KeyboardSimulator.KeyPress(listView, Keys.Left);
 
             Assert.Equal(firstGroupSate, group1.GetNativeCollapsedState());
             Assert.Equal(firstGroupSate, group1.CollapsedState);
@@ -843,18 +842,6 @@ namespace System.Windows.Forms.Tests
             // are still selected after keyboard navigation simulations.
             Assert.Equal(3, listView.SelectedItems.Count);
             Assert.True(listView.IsHandleCreated);
-
-            void SimulateKeyPress(Keys key)
-            {
-                // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
-                // The MSDN page tells us what bits of lParam to use for each of the parameters.
-                // All we need to do is some bit shifting to assemble lParam
-                // lParam = repeatCount | (scanCode << 16)
-                nint keyCode = (nint)key;
-                nint lParam = 0x00000001 | keyCode << 16;
-                User32.SendMessageW(listView, User32.WM.KEYDOWN, keyCode, lParam);
-                User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
-            }
         }
 
         [WinFormsTheory]
@@ -1366,7 +1353,7 @@ namespace System.Windows.Forms.Tests
             EnforceAccessibleObjectCreation(group);
             EnforceAccessibleObjectCreation(listView.DefaultGroup);
 
-            listView.ReleaseUiaProvider(listView.Handle);
+            listView.ReleaseUiaProvider(listView.HWND);
 
             Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
             Assert.Null(listView.DefaultGroup.TestAccessor().Dynamic._accessibilityObject);

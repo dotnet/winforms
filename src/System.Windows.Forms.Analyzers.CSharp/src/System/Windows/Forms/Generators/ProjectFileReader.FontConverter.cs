@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Generators
                     // Parse size.
                     (string? size, string? unit) unitTokens = ParseSizeTokens(sizeStr, separator);
 
-                    if (unitTokens.size != null)
+                    if (unitTokens.size is not null)
                     {
                         try
                         {
@@ -84,13 +84,13 @@ namespace System.Windows.Forms.Generators
                         }
                     }
 
-                    if (unitTokens.unit != null)
+                    if (unitTokens.unit is not null)
                     {
                         // ParseGraphicsUnits throws an ArgumentException if format is invalid.
                         units = ParseGraphicsUnits(unitTokens.unit);
                     }
 
-                    if (style != null)
+                    if (style is not null)
                     {
                         // Parse FontStyle
                         style = style.Substring(6); // style string always starts with style=

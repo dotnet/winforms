@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
     public abstract class TableLayoutStyleCollection : IList
     {
         private IArrangedElement _owner;
-        private readonly ArrayList _innerList = new ArrayList();
+        private readonly List<TableLayoutStyle> _innerList = new();
 
         internal TableLayoutStyleCollection(IArrangedElement owner)
         {
@@ -24,64 +22,81 @@ namespace System.Windows.Forms
 
         internal IArrangedElement Owner => _owner;
 
-        internal virtual string PropertyName => null;
+        internal virtual string? PropertyName => null;
 
-        int IList.Add(object style)
+        int IList.Add(object? style) => Add((TableLayoutStyle)style!);
+
+        public int Add(TableLayoutStyle style)
         {
             ArgumentNullException.ThrowIfNull(style);
+            if (style is not TableLayoutStyle tableLayoutStyle)
+            {
+                throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(style), typeof(TableLayoutStyle)), nameof(style));
+            }
 
-            EnsureNotOwned((TableLayoutStyle)style);
-            ((TableLayoutStyle)style).Owner = Owner;
-            int index = _innerList.Add(style);
+            EnsureNotOwned(tableLayoutStyle);
+            tableLayoutStyle.Owner = Owner;
+            int index = ((IList)_innerList).Add(tableLayoutStyle);
             PerformLayoutIfOwned();
             return index;
         }
 
-        public int Add(TableLayoutStyle style)
-        {
-            return ((IList)this).Add(style);
-        }
-
-        void IList.Insert(int index, object style)
+        void IList.Insert(int index, object? style)
         {
             ArgumentNullException.ThrowIfNull(style);
+            if (style is not TableLayoutStyle tableLayoutStyle)
+            {
+                throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(style), typeof(TableLayoutStyle)), nameof(style));
+            }
 
-            EnsureNotOwned((TableLayoutStyle)style);
-            ((TableLayoutStyle)style).Owner = Owner;
-            _innerList.Insert(index, style);
+            EnsureNotOwned(tableLayoutStyle);
+            tableLayoutStyle.Owner = Owner;
+            _innerList.Insert(index, tableLayoutStyle);
             PerformLayoutIfOwned();
         }
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get => _innerList[index];
             set
             {
                 ArgumentNullException.ThrowIfNull(value);
+                if (value is not TableLayoutStyle tableLayoutStyle)
+                {
+                    throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(value), typeof(TableLayoutStyle)), nameof(value));
+                }
 
-                TableLayoutStyle style = (TableLayoutStyle)value;
-                EnsureNotOwned(style);
-                style.Owner = Owner;
-                _innerList[index] = style;
+                EnsureNotOwned(tableLayoutStyle);
+                tableLayoutStyle.Owner = Owner;
+                _innerList[index] = tableLayoutStyle;
                 PerformLayoutIfOwned();
             }
         }
 
         public TableLayoutStyle this[int index]
         {
-            get => (TableLayoutStyle)((IList)this)[index];
+            get => (TableLayoutStyle)((IList)this)[index]!;
             set => ((IList)this)[index] = value;
         }
 
-        void IList.Remove(object style)
+        void IList.Remove(object? style)
         {
             if (style is null)
             {
                 return;
             }
 
-            ((TableLayoutStyle)style).Owner = null;
-            _innerList.Remove(style);
+            if (style is not TableLayoutStyle tableLayoutStyle)
+            {
+                throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(style), typeof(TableLayoutStyle)), nameof(style));
+            }
+
+            if (!_innerList.Remove(tableLayoutStyle))
+            {
+                return;
+            }
+
+            tableLayoutStyle.Owner = null;
             PerformLayoutIfOwned();
         }
 
@@ -98,27 +113,27 @@ namespace System.Windows.Forms
 
         public void RemoveAt(int index)
         {
-            TableLayoutStyle style = (TableLayoutStyle)_innerList[index];
+            TableLayoutStyle style = _innerList[index];
             style.Owner = null;
             _innerList.RemoveAt(index);
             PerformLayoutIfOwned();
         }
 
-        bool IList.Contains(object style) => _innerList.Contains(style);
+        bool IList.Contains(object? style) => ((IList)_innerList).Contains(style);
 
-        int IList.IndexOf(object style) => _innerList.IndexOf(style);
+        int IList.IndexOf(object? style) => ((IList)_innerList).IndexOf(style);
 
-        bool IList.IsFixedSize => _innerList.IsFixedSize;
+        bool IList.IsFixedSize => ((IList)_innerList).IsFixedSize;
 
-        bool IList.IsReadOnly => _innerList.IsReadOnly;
+        bool IList.IsReadOnly => ((IList)_innerList).IsReadOnly;
 
-        void ICollection.CopyTo(Array array, int startIndex) => _innerList.CopyTo(array, startIndex);
+        void ICollection.CopyTo(Array array, int startIndex) => ((ICollection)_innerList).CopyTo(array, startIndex);
 
         public int Count => _innerList.Count;
 
-        bool ICollection.IsSynchronized => _innerList.IsSynchronized;
+        bool ICollection.IsSynchronized => ((ICollection)_innerList).IsSynchronized;
 
-        object ICollection.SyncRoot => _innerList.SyncRoot;
+        object ICollection.SyncRoot => ((ICollection)_innerList).SyncRoot;
 
         IEnumerator IEnumerable.GetEnumerator() => _innerList.GetEnumerator();
 

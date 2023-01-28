@@ -151,10 +151,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    if (_selectedCellsAccessibilityObject is null)
-                    {
-                        _selectedCellsAccessibilityObject = new DataGridViewSelectedRowCellsAccessibleObject(_owningDataGridViewRow);
-                    }
+                    _selectedCellsAccessibilityObject ??= new DataGridViewSelectedRowCellsAccessibleObject(_owningDataGridViewRow);
 
                     return _selectedCellsAccessibilityObject;
                 }
@@ -489,19 +486,14 @@ namespace System.Windows.Forms
 
             internal override bool IsReadOnly => _owningDataGridViewRow?.ReadOnly ?? false;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
-            {
-                switch (propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
+                propertyId switch
                 {
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return Owner?.DataGridView?.Enabled ?? false;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return string.Empty;
-                }
-
-                return base.GetPropertyValue(propertyId);
-            }
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => string.Empty,
+                    UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => string.Empty,
+                    _ => base.GetPropertyValue(propertyId)
+                };
         }
     }
 }

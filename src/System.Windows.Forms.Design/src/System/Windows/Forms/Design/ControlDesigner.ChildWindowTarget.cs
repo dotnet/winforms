@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
         {
             private readonly ControlDesigner _designer;
             private readonly Control _childControl;
-            private IntPtr _handle = IntPtr.Zero;
+            private HWND _handle = HWND.Null;
 
             public ChildWindowTarget(ControlDesigner designer, Control childControl, IWindowTarget oldWindowTarget)
             {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
 
             public void OnHandleChange(IntPtr newHandle)
             {
-                _handle = newHandle;
+                _handle = (HWND)newHandle;
                 OldWindowTarget.OnHandleChange(newHandle);
             }
 
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Design
                     if (m.Msg == (int)User32.WM.CREATE)
                     {
                         Debug.Assert(_handle != IntPtr.Zero, "Handle for control not created");
-                        Ole32.RevokeDragDrop(_handle);
+                        PInvoke.RevokeDragDrop(_handle);
                     }
                 }
             }

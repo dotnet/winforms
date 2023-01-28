@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -49,7 +51,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             designer = controlDesigner;
             //check to see if the current designer participate with SnapLines
-            if (controlDesigner != null && !controlDesigner.ParticipatesWithSnapLines)
+            if (controlDesigner is not null && !controlDesigner.ParticipatesWithSnapLines)
             {
                 targetAllowsSnapLines = false;
             }
@@ -79,10 +81,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 if (isPushed)
                 {
-                    if (dragManager == null)
-                    {
-                        dragManager = new DragAssistanceManager(serviceProvider);
-                    }
+                    dragManager ??= new DragAssistanceManager(serviceProvider);
                 }
                 else
                 {
@@ -96,7 +95,7 @@ namespace System.Windows.Forms.Design.Behavior
                     lastRectangle = Rectangle.Empty;
 
                     //destroy the snapline engine (if we used it)
-                    if (dragManager != null)
+                    if (dragManager is not null)
                     {
                         dragManager.OnMouseUp();
                         dragManager = null;
@@ -121,7 +120,7 @@ namespace System.Windows.Forms.Design.Behavior
             bool horizontalComponentIdentified = false;
             bool verticalComponentIdentified = false;
 
-            if (dragManager != null)
+            if (dragManager is not null)
             {
                 DragAssistanceManager.Line[] lines = dragManager.GetRecentLines();
 
@@ -283,7 +282,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             Adorner bodyAdorner = null;
             SelectionManager selMgr = (SelectionManager)serviceProvider.GetService(typeof(SelectionManager));
-            if (selMgr != null)
+            if (selMgr is not null)
             {
                 bodyAdorner = selMgr.BodyGlyphAdorner;
             }
@@ -292,7 +291,7 @@ namespace System.Windows.Forms.Design.Behavior
             foreach (ControlBodyGlyph body in bodyAdorner.Glyphs)
             {
                 Control ctl = body.RelatedComponent as Control;
-                if (ctl != null)
+                if (ctl is not null)
                 {
                     if (!ctl.AllowDrop)
                     {
@@ -311,7 +310,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             bool altKeyPressed = Control.ModifierKeys == Keys.Alt;
 
-            if (altKeyPressed && dragManager != null)
+            if (altKeyPressed && dragManager is not null)
             {
                 //erase any snaplines (if we had any)
                 dragManager.EraseSnapLines();
@@ -327,7 +326,7 @@ namespace System.Windows.Forms.Design.Behavior
             //don't do anything if the loc is the same
             if (newRectangle != lastRectangle)
             {
-                if (dragManager != null && targetAllowsSnapLines && !altKeyPressed)
+                if (dragManager is not null && targetAllowsSnapLines && !altKeyPressed)
                 {
                     lastOffset = dragManager.OnMouseMove(newRectangle, GenerateNewToolSnapLines(newRectangle));
                     newRectangle.Offset(lastOffset.X, lastOffset.Y);
@@ -354,21 +353,18 @@ namespace System.Windows.Forms.Design.Behavior
 
                 //offset the mouse loc to screen coords for calculations on drops
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     Control baseControl = host.RootComponent as Control;
-                    if (baseControl != null)
+                    if (baseControl is not null)
                     {
                         Point adornerServiceOrigin = behaviorService.MapAdornerWindowPoint(baseControl.Handle, new Point(0, 0));
                         Rectangle statusRect = new Rectangle(newRectangle.X - adornerServiceOrigin.X, newRectangle.Y - adornerServiceOrigin.Y, 0, 0);
-                        if (statusCommandUI != null)
-                        {
-                            statusCommandUI.SetStatusInformation(statusRect);
-                        }
+                        statusCommandUI?.SetStatusInformation(statusRect);
                     }
                 }
 
-                if (dragManager != null && targetAllowsSnapLines && !altKeyPressed)
+                if (dragManager is not null && targetAllowsSnapLines && !altKeyPressed)
                 {
                     dragManager.RenderSnapLinesInternal();
                 }

@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, StringMarshalling = StringMarshalling.Utf16)]
-        public static partial WM RegisterWindowMessageW(string lpString);
+        [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
+        public static extern WM RegisterWindowMessageW(string lpString);
     }
 }

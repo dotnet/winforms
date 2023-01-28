@@ -4,43 +4,39 @@
 
 using System.Runtime.InteropServices;
 
-internal static partial class Interop
+namespace Windows.Win32.System.Com;
+
+internal unsafe ref struct VARIANTVector
 {
-    internal static partial class Oleaut32
+    public VARIANT[] Variants;
+
+    public VARIANTVector(object[]? values)
     {
-        public unsafe ref struct VARIANTVector
+        if (values is null)
         {
-            public VARIANT[] Variants;
+            Variants = Array.Empty<VARIANT>();
+            return;
+        }
 
-            public VARIANTVector(object[]? values)
+        var variants = new VARIANT[values.Length];
+        fixed (VARIANT* pVariants = variants)
+        {
+            for (int i = 0; i < values.Length; ++i)
             {
-                if (values is null)
-                {
-                    Variants = Array.Empty<VARIANT>();
-                    return;
-                }
-
-                var variants = new VARIANT[values.Length];
-                fixed (VARIANT* pVariants = variants)
-                {
-                    for (int i = 0; i < values.Length; ++i)
-                    {
-                        Marshal.GetNativeVariantForObject(values[i], (IntPtr)(&pVariants[i]));
-                    }
-                }
-
-                Variants = variants;
-            }
-
-            public void Dispose()
-            {
-                foreach (VARIANT variant in Variants)
-                {
-                    variant.Dispose();
-                }
-
-                Variants = Array.Empty<VARIANT>();
+                Marshal.GetNativeVariantForObject(values[i], (IntPtr)(&pVariants[i]));
             }
         }
+
+        Variants = variants;
+    }
+
+    public void Dispose()
+    {
+        foreach (VARIANT variant in Variants)
+        {
+            variant.Dispose();
+        }
+
+        Variants = Array.Empty<VARIANT>();
     }
 }

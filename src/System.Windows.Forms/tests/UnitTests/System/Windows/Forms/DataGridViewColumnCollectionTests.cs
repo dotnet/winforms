@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(control, collection.DataGridView);
             Assert.False(collection.IsReadOnly);
             Assert.False(collection.IsSynchronized);
-            Assert.IsType<ArrayList>(collection.List);
+            Assert.True(collection.List is ArrayList);
             Assert.Empty(collection.List);
             Assert.Same(collection, collection.SyncRoot);
         }

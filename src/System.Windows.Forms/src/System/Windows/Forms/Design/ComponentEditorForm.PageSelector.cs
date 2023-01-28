@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design
             private const int STATE_SELECTED = 1;
             private const int STATE_HOT = 2;
 
-            private Gdi32.HBRUSH _hbrushDither;
+            private HBRUSH _hbrushDither;
 
             public PageSelector()
             {
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
                 {
                     CreateParams cp = base.CreateParams;
 
-                    cp.ExStyle |= (int)User32.WS_EX.STATICEDGE;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_STATICEDGE;
                     return cp;
                 }
             }
@@ -69,42 +69,42 @@ namespace System.Windows.Forms.Design
                     unchecked((short)0x5555)
                 };
 
-                Gdi32.HBITMAP hbitmapTemp = Gdi32.CreateBitmap(8, 8, 1, 1, patternBits);
+                HBITMAP hbitmapTemp = PInvoke.CreateBitmap(8, 8, 1, 1, patternBits);
                 Debug.Assert(
                     !hbitmapTemp.IsNull,
                     "could not create dither bitmap. Page selector UI will not be correct");
 
                 if (!hbitmapTemp.IsNull)
                 {
-                    _hbrushDither = Gdi32.CreatePatternBrush(hbitmapTemp);
+                    _hbrushDither = PInvoke.CreatePatternBrush(hbitmapTemp);
 
                     Debug.Assert(
                         !_hbrushDither.IsNull,
                         "Unable to created dithered brush. Page selector UI will not be correct");
 
-                    Gdi32.DeleteObject(hbitmapTemp);
+                    PInvoke.DeleteObject(hbitmapTemp);
                 }
             }
 
             private unsafe void DrawTreeItem(
                 string itemText,
                 int imageIndex,
-                Gdi32.HDC dc,
+                HDC dc,
                 RECT rcIn,
                 int state,
-                int backColor,
-                int textColor)
+                COLORREF backColor,
+                COLORREF textColor)
             {
-                Size size = new Size();
-                var rc2 = new RECT();
-                var rc = new RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
+                Size size = default(Size);
+                RECT rc2 = default(RECT);
+                RECT rc = rcIn;
                 ImageList imagelist = ImageList;
 
                 // Select the font of the dialog, so we don't get the underlined font
                 // when the item is being tracked
-                using var fontSelection = new Gdi32.SelectObjectScope(
+                using PInvoke.SelectObjectScope fontSelection = new(
                     dc,
-                    (state & STATE_HOT) != 0 ? (Gdi32.HGDIOBJ)Parent!.FontHandle : default);
+                    (state & STATE_HOT) != 0 ? (HGDIOBJ)Parent!.FontHandle : default);
 
                 GC.KeepAlive(Parent);
 
@@ -112,23 +112,26 @@ namespace System.Windows.Forms.Design
                 if (((state & STATE_SELECTED) != 0) && !_hbrushDither.IsNull)
                 {
                     FillRectDither(dc, rcIn);
-                    Gdi32.SetBkMode(dc, Gdi32.BKMODE.TRANSPARENT);
+                    PInvoke.SetBkMode(dc, BACKGROUND_MODE.TRANSPARENT);
                 }
                 else
                 {
-                    Gdi32.SetBkColor(dc, backColor);
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.CLIPPED | Gdi32.ETO.OPAQUE, ref rc, null, 0, null);
+                    PInvoke.SetBkColor(dc, backColor);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_CLIPPED | ETO_OPTIONS.ETO_OPAQUE, &rc, lpString: null, 0, lpDx: null);
                 }
 
-                // Get the height of the font
-                Gdi32.GetTextExtentPoint32W(dc, itemText, itemText.Length, ref size);
+                fixed (char* pItemText = itemText)
+                {
+                    // Get the height of the font
+                    PInvoke.GetTextExtentPoint32W(dc, pItemText, itemText.Length, (SIZE*)(void*)&size);
+                }
 
                 // Draw the caption
                 rc2.left = rc.left + SIZE_ICON_X + 2 * PADDING_HORZ;
                 rc2.top = rc.top + (((rc.bottom - rc.top) - size.Height) >> 1);
                 rc2.bottom = rc2.top + size.Height;
                 rc2.right = rc.right;
-                Gdi32.SetTextColor(dc, textColor);
+                PInvoke.SetTextColor(dc, textColor);
                 User32.DrawTextW(
                     dc,
                     itemText,
@@ -136,42 +139,42 @@ namespace System.Windows.Forms.Design
                     ref rc2,
                     User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
 
-                ComCtl32.ImageList.Draw(
+                PInvoke.ImageList.Draw(
                     imagelist,
                     imageIndex,
                     dc,
                     PADDING_HORZ,
                     rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
-                    ComCtl32.ILD.TRANSPARENT);
+                    (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
 
                 // Draw the hot-tracking border if needed
                 if ((state & STATE_HOT) != 0)
                 {
-                    int savedColor;
+                    COLORREF savedColor;
 
                     // top left
-                    savedColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                    savedColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     rc2.left = rc.left;
                     rc2.top = rc.top;
                     rc2.bottom = rc.top + 1;
                     rc2.right = rc.right;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
                     rc2.bottom = rc.bottom;
                     rc2.right = rc.left + 1;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
 
                     // bottom right
-                    Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.ControlDark));
+                    PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlDark));
                     rc2.left = rc.left;
                     rc2.right = rc.right;
                     rc2.top = rc.bottom - 1;
                     rc2.bottom = rc.bottom;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
                     rc2.left = rc.right - 1;
                     rc2.top = rc.top;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
 
-                    Gdi32.SetBkColor(dc, savedColor);
+                    PInvoke.SetBkColor(dc, savedColor);
                 }
             }
 
@@ -179,9 +182,9 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleCreated(e);
 
-                int itemHeight = (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.GETITEMHEIGHT);
+                int itemHeight = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMHEIGHT);
                 itemHeight += 2 * PADDING_VERT;
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.SETITEMHEIGHT, itemHeight);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
 
                 if (_hbrushDither.IsNull)
                 {
@@ -191,25 +194,27 @@ namespace System.Windows.Forms.Design
 
             private unsafe void OnCustomDraw(ref Message m)
             {
-                ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)m.LParamInternal;
+                NMTVCUSTOMDRAW* nmtvcd = (NMTVCUSTOMDRAW*)(nint)m.LParamInternal;
+
                 switch (nmtvcd->nmcd.dwDrawStage)
                 {
-                    case ComCtl32.CDDS.PREPAINT:
-                        m.ResultInternal = (nint)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
+                    case NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT:
+                        m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NOTIFYITEMDRAW | PInvoke.CDRF_NOTIFYPOSTPAINT);
                         break;
-                    case ComCtl32.CDDS.ITEMPREPAINT:
+                    case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                         {
-                            TreeNode itemNode = TreeNode.FromHandle(this, nmtvcd->nmcd.dwItemSpec);
+                            TreeNode itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
                             if (itemNode is not null)
                             {
                                 int state = STATE_NORMAL;
-                                ComCtl32.CDIS itemState = nmtvcd->nmcd.uItemState;
-                                if (((itemState & ComCtl32.CDIS.HOT) != 0) || ((itemState & ComCtl32.CDIS.FOCUS) != 0))
+                                NMCUSTOMDRAW_DRAW_STATE_FLAGS itemState = nmtvcd->nmcd.uItemState;
+                                if (((itemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT) != 0) ||
+                                    ((itemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS) != 0))
                                 {
                                     state |= STATE_HOT;
                                 }
 
-                                if ((itemState & ComCtl32.CDIS.SELECTED) != 0)
+                                if ((itemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED) != 0)
                                 {
                                     state |= STATE_SELECTED;
                                 }
@@ -220,19 +225,19 @@ namespace System.Windows.Forms.Design
                                     nmtvcd->nmcd.hdc,
                                     nmtvcd->nmcd.rc,
                                     state,
-                                    ColorTranslator.ToWin32(SystemColors.Control),
-                                    ColorTranslator.ToWin32(SystemColors.ControlText));
+                                    (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control),
+                                    (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
 
-                            m.ResultInternal = (nint)ComCtl32.CDRF.SKIPDEFAULT;
+                            m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
                         }
 
                         break;
-                    case ComCtl32.CDDS.POSTPAINT:
-                        m.ResultInternal = (nint)ComCtl32.CDRF.SKIPDEFAULT;
+                    case NMCUSTOMDRAW_DRAW_STAGE.CDDS_POSTPAINT:
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
                         break;
                     default:
-                        m.ResultInternal = (nint)ComCtl32.CDRF.DODEFAULT;
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
                         break;
                 }
             }
@@ -243,32 +248,32 @@ namespace System.Windows.Forms.Design
 
                 if (!RecreatingHandle && !_hbrushDither.IsNull)
                 {
-                    Gdi32.DeleteObject(_hbrushDither);
+                    PInvoke.DeleteObject(_hbrushDither);
                     _hbrushDither = default;
                 }
             }
 
-            private void FillRectDither(Gdi32.HDC dc, RECT rc)
+            private void FillRectDither(HDC dc, RECT rc)
             {
-                Gdi32.HGDIOBJ hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
+                HGDIOBJ hbrushOld = PInvoke.SelectObject(dc, _hbrushDither);
 
                 if (!hbrushOld.IsNull)
                 {
-                    int oldTextColor = Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
-                    int oldBackColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.Control));
+                    COLORREF oldTextColor = PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                    COLORREF oldBackColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control));
 
-                    Gdi32.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, Gdi32.ROP.PATCOPY);
-                    Gdi32.SetTextColor(dc, oldTextColor);
-                    Gdi32.SetBkColor(dc, oldBackColor);
+                    PInvoke.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, ROP_CODE.PATCOPY);
+                    PInvoke.SetTextColor(dc, oldTextColor);
+                    PInvoke.SetBkColor(dc, oldBackColor);
                 }
             }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.MsgInternal == User32.WM.REFLECT_NOTIFY)
                 {
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
-                    if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                    if ((int)nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);
                         return;

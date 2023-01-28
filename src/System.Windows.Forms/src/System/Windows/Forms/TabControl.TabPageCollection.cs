@@ -340,6 +340,10 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(value);
 
                 _owner.Controls.Remove(value);
+                if (value.IsHandleCreated)
+                {
+                    value.ReleaseUiaProvider(value.HWNDInternal);
+                }
             }
 
             void IList.Remove(object? value)

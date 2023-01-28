@@ -48,13 +48,13 @@ namespace System.Windows.Forms
                         }
 
                         // Previously bounds was provided using MSAA,
-                        // but using UIA we found out that SendMessageW work incorrectly.
+                        // but using UIA we found out that PInvoke.SendMessage work incorrectly.
                         // When we need to get bounds for first sub item it will return width of all item.
                         int width = bounds.Width;
 
-                        if (!_owningListView.FullRowSelect && index == 0 && _owningListView.Columns.Count > 1)
+                        if (!_owningListView.FullRowSelect && index == ParentInternal.FirstSubItemIndex && _owningListView.Columns.Count > 1)
                         {
-                            width = ParentInternal.GetSubItemBounds(subItemIndex: 1).X - bounds.X;
+                            width = ParentInternal.GetSubItemBounds(ParentInternal.FirstSubItemIndex + 1).X - bounds.X;
                         }
 
                         if (width <= 0)
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
                 internal override int Column
                     => _owningListView.View == View.Details
-                        ? ParentInternal.GetChildIndex(this)
+                        ? ParentInternal.GetChildIndex(this) - ParentInternal.FirstSubItemIndex
                         : InvalidIndex;
 
                 /// <summary>
@@ -127,10 +127,10 @@ namespace System.Windows.Forms
                         // has the "edit" control type, and it supports the Text pattern. And its owning subitem accessible
                         // object has the "text" control type, because it is just a container for the edit field.
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
-                        UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,
-                        UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
+                        UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                        UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
                         _ => base.GetPropertyValue(propertyID)
                     };
 
@@ -146,7 +146,9 @@ namespace System.Windows.Forms
                 internal override int Row => _owningItem.Index;
 
                 internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
-                    => new UiaCore.IRawElementProviderSimple[] { _owningListView.Columns[Column].AccessibilityObject };
+                    => _owningListView.View == View.Details
+                        ? new UiaCore.IRawElementProviderSimple[] { _owningListView.Columns[Column].AccessibilityObject }
+                        : null;
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
@@ -160,7 +162,7 @@ namespace System.Windows.Forms
                 }
 
                 private protected override string AutomationId
-                    => $"{typeof(ListViewItem.ListViewSubItem).Name}-{ParentInternal.GetChildIndex(this)}";
+                    => $"{nameof(ListViewSubItem)}-{ParentInternal.GetChildIndex(this)}";
             }
         }
     }

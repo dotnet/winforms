@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
@@ -22,17 +19,18 @@ namespace System.Windows.Forms
         ///  Gets a collection of standard values for the data type this validator is
         ///  designed for.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             StandardValuesCollection values = base.GetStandardValues(context);
-            ArrayList list = new ArrayList();
-            int count = values.Count;
-            for (int i = 0; i < count; i++)
+            List<object> list = new();
+            for (int i = 0; i < values.Count; i++)
             {
-                string currentItemText = values[i].ToString();
-                if (!currentItemText.Equals("ListItems"))
+                if (values[i] is object currentItem)
                 {
-                    list.Add(values[i]);
+                    if (string.Equals(currentItem.ToString(), "ListItems"))
+                    {
+                        list.Add(currentItem);
+                    }
                 }
             }
 

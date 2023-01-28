@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
@@ -29,10 +30,10 @@ internal partial class Interop
             [PreserveSig]
             HRESULT ShowUI(
                 uint dwID,
-                Ole32.IOleInPlaceActiveObject activeObject,
-                Ole32.IOleCommandTarget commandTarget,
-                Ole32.IOleInPlaceFrame frame,
-                Ole32.IOleInPlaceUIWindow doc);
+                IOleInPlaceActiveObject.Interface activeObject,
+                IOleCommandTarget.Interface commandTarget,
+                IOleInPlaceFrame.Interface frame,
+                IOleInPlaceUIWindow.Interface doc);
 
             [PreserveSig]
             HRESULT HideUI();
@@ -55,12 +56,12 @@ internal partial class Interop
             [PreserveSig]
             HRESULT ResizeBorder(
                 RECT* rect,
-                Ole32.IOleInPlaceUIWindow doc,
+                IOleInPlaceUIWindow.Interface doc,
                 BOOL fFrameWindow);
 
             [PreserveSig]
             HRESULT TranslateAccelerator(
-                User32.MSG* lpMsg,
+                MSG* lpMsg,
                 Guid* pguidCmdGroup,
                 uint nCmdID);
 
@@ -71,8 +72,8 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetDropTarget(
-                Ole32.IDropTarget pDropTarget,
-                out Ole32.IDropTarget ppDropTarget);
+                IDropTarget.Interface pDropTarget,
+                out IDropTarget.Interface ppDropTarget);
 
             [PreserveSig]
             HRESULT GetExternal(

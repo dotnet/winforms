@@ -36,16 +36,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.IsOffscreenPropertyId => false,
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }

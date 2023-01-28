@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace System.Windows.Forms.PrivateSourceGenerators
 {
-    internal class SyntaxReceiver : ISyntaxReceiver
+    internal sealed class SyntaxReceiver : ISyntaxReceiver
     {
         public List<SyntaxNode> ArgumentsToValidate { get; } = new();
 
@@ -16,37 +16,19 @@ namespace System.Windows.Forms.PrivateSourceGenerators
 #pragma warning disable SA1513 // Closing brace should be followed by blank line
             if (syntaxNode is InvocationExpressionSyntax
                 {
-                    ArgumentList:
+                    ArgumentList.Arguments:
                     {
-                        Arguments:
-                        {
-                            Count: <= 2                           // 1 parameter for the enum value, 1 optional for the parameter name
-                        } arguments
-                    },
+                        Count: <= 2                           // 1 parameter for the enum value, 1 optional for the parameter name
+                    } arguments,
                     Expression: MemberAccessExpressionSyntax
                     {
-                        Name:
-                        {
-                            Identifier:
-                            {
-                                ValueText: "Validate"
-                            }
-                        },
+                        Name.Identifier.ValueText: "Validate",
                         Expression: MemberAccessExpressionSyntax  // For: SourceGenerated.EnumValidator.Validate(..)
                         {
-                            Name:
-                            {
-                                Identifier:
-                                {
-                                    ValueText: "EnumValidator"
-                                }
-                            }
+                            Name.Identifier.ValueText: "EnumValidator"
                         } or IdentifierNameSyntax                 // For: EnumValidator.Validate(..) with a using statement
                         {
-                            Identifier:
-                            {
-                                ValueText: "EnumValidator"
-                            }
+                            Identifier.ValueText: "EnumValidator"
                         }
                     }
                 })

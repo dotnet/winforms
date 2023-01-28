@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             }
 
             public override Rectangle Bounds
-                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(ComCtl32.MCGIP.FOOTER);
+                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_FOOTER);
 
             public override string Description => SR.CalendarTodayLinkAccessibleObjectDescription;
 

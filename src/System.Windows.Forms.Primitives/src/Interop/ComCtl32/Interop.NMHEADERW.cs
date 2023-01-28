@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public unsafe struct NMHEADERW
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public int iItem;
             public int iButton;
             public HDITEMW* pitem;

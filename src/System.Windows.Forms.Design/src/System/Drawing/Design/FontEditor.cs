@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Drawing.Design
 {
@@ -37,7 +38,7 @@ namespace System.Drawing.Design
                 _fontDialog.Font = fontValue;
             }
 
-            IntPtr hwndFocus = User32.GetFocus();
+            HWND hwndFocus = PInvoke.GetFocus();
             try
             {
                 if (_fontDialog.ShowDialog() == DialogResult.OK)
@@ -47,16 +48,15 @@ namespace System.Drawing.Design
             }
             finally
             {
-                if (hwndFocus != IntPtr.Zero)
+                if (!hwndFocus.IsNull)
                 {
-                    User32.SetFocus(hwndFocus);
+                    PInvoke.SetFocus(hwndFocus);
                 }
             }
 
             return value;
         }
 
-        /// <inheritdoc />
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
     }
 }

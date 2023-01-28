@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Forms;
@@ -32,10 +34,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_propDesc is null)
-                    {
-                        _propDesc = TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
-                    }
+                    _propDesc ??= TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
 
                     return _propDesc;
                 }
@@ -50,10 +49,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_typeDescriptorContext is null)
-                    {
-                        _typeDescriptorContext = new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
-                    }
+                    _typeDescriptorContext ??= new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
 
                     return _typeDescriptorContext;
                 }

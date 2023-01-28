@@ -8,9 +8,9 @@ namespace System
 {
     internal static class SystemCOLORs
     {
-        private readonly static Dictionary<COLORREF, List<User32.COLOR>> s_systemColors = CreateColorDictionary();
+        private static readonly Dictionary<COLORREF, List<User32.COLOR>> s_systemColors = CreateColorDictionary();
 
-        private readonly static Dictionary<User32.COLOR, string> s_names = new Dictionary<User32.COLOR, string>
+        private static readonly Dictionary<User32.COLOR, string> s_names = new Dictionary<User32.COLOR, string>
         {
             { User32.COLOR.SCROLLBAR, "COLOR_SCROLLBAR" },
             { User32.COLOR.BACKGROUND, "COLOR_BACKGROUND" },
@@ -81,7 +81,7 @@ namespace System
                     continue;
                 }
 
-                COLORREF colorRef = User32.GetSysColor((User32.COLOR)i);
+                COLORREF colorRef = (COLORREF)PInvoke.GetSysColor((SYS_COLOR_INDEX)i);
 
                 if (dictionary.TryGetValue(colorRef, out List<User32.COLOR> colors))
                 {

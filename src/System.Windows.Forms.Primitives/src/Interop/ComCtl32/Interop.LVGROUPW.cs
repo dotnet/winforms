@@ -18,9 +18,9 @@ internal static partial class Interop
             public char* pszFooter;
             public int cchFooter;
             public int iGroupId;
-            public LVGS stateMask;
-            public LVGS state;
-            public LVGA uAlign;
+            public LIST_VIEW_GROUP_STATE_FLAGS stateMask;
+            public LIST_VIEW_GROUP_STATE_FLAGS state;
+            public LIST_VIEW_GROUP_ALIGN_FLAGS uAlign;
 
             public char* pszSubtitle;
             public uint cchSubtitle;

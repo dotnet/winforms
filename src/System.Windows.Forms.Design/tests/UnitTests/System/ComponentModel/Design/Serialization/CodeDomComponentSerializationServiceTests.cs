@@ -157,8 +157,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState2[4]);
             Assert.Null(valueState2[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
-            Assert.Equal(new ArrayList { "name1", "name2" }, names);
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
+            Assert.Equal(new List<string> { "name1", "name2" }, names);
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Equal(typeof(DataClass).Assembly.GetName(true).FullName, Assert.Single(assemblies).FullName);
@@ -250,7 +250,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState[4]);
             Assert.Null(valueState[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
             Assert.Equal("name", Assert.Single(names));
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
@@ -357,7 +357,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState[4]);
             Assert.Null(valueState[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
             Assert.Equal("name", Assert.Single(names));
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
@@ -407,7 +407,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState[4]);
             Assert.Null(valueState[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
             Assert.Equal("name", Assert.Single(names));
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
@@ -458,7 +458,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState[4]);
             Assert.Null(valueState[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
             Assert.Equal("name", Assert.Single(names));
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
@@ -509,7 +509,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState[4]);
             Assert.Null(valueState[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
             Assert.Equal("name", Assert.Single(names));
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
@@ -563,7 +563,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState[4]);
             Assert.Null(valueState[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
             Assert.Equal("name", Assert.Single(names));
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
@@ -617,7 +617,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Null(valueState[4]);
             Assert.Null(valueState[5]);
 
-            ArrayList names = Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)));
+            List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
             Assert.Equal("name", Assert.Single(names));
 
             AssemblyName[] assemblies = Assert.IsType<AssemblyName[]>(info.GetValue("Assemblies", typeof(AssemblyName[])));
@@ -673,7 +673,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             serializable.GetObjectData(info, new StreamingContext());
 
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            Assert.Empty(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList))));
+            Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>))));
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
             Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
@@ -691,7 +691,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            Assert.NotEmpty(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList))));
+            Assert.NotEmpty(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>))));
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
             Assert.Empty(Assert.IsType<List<string>>(info.GetValue("Shim", typeof(List<string>))));
@@ -739,7 +739,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -750,7 +750,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -776,7 +776,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -789,7 +789,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -824,7 +824,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -838,7 +838,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -883,7 +883,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -896,7 +896,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -947,7 +947,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -958,7 +958,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -984,7 +984,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -997,7 +997,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1032,7 +1032,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1046,7 +1046,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1091,7 +1091,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1104,7 +1104,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1157,7 +1157,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1168,7 +1168,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1179,7 +1179,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1207,7 +1207,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1220,7 +1220,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1233,7 +1233,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1270,7 +1270,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1284,7 +1284,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1298,7 +1298,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1345,7 +1345,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1358,7 +1358,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1371,7 +1371,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1436,7 +1436,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1447,7 +1447,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1458,7 +1458,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1486,7 +1486,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1499,7 +1499,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1512,7 +1512,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches("^object_........_...._...._...._............$", nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1549,7 +1549,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1563,7 +1563,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1577,7 +1577,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
             Assert.Null(info.GetValue("State", typeof(Hashtable)));
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1624,7 +1624,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             var info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            string nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1637,7 +1637,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));
@@ -1650,7 +1650,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             info = new SerializationInfo(store.GetType(), new FormatterConverter());
             serializable.GetObjectData(info, new StreamingContext());
-            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<ArrayList>(info.GetValue("Names", typeof(ArrayList)))));
+            nameResult = Assert.IsType<string>(Assert.Single(Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)))));
             Assert.Matches(expectedPattern, nameResult);
             Assert.Null(info.GetValue("Assemblies", typeof(AssemblyName[])));
             Assert.Null(info.GetValue("Resources", typeof(Hashtable)));

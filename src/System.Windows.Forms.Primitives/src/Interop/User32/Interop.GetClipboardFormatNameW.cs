@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        private static unsafe partial int GetClipboardFormatNameW(uint format, char* lpszFormatName, int cchMaxCount);
+        [DllImport(Libraries.User32)]
+        private static extern unsafe int GetClipboardFormatNameW(uint format, char* lpszFormatName, int cchMaxCount);
 
         public static unsafe string? GetClipboardFormatNameW(uint format)
         {

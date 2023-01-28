@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using static Interop;
 
@@ -218,7 +217,7 @@ namespace System.Windows.Forms
                 ThemingScope.Deactivate(userCookie);
             }
 
-            if (_nativeImageList.Handle == IntPtr.Zero)
+            if (_nativeImageList.HIMAGELIST.IsNull)
             {
                 throw new InvalidOperationException(SR.ImageListStreamerLoadFailed);
             }
@@ -250,17 +249,17 @@ namespace System.Windows.Forms
 
         private bool WriteImageList(Stream stream)
         {
-            IntPtr handle = IntPtr.Zero;
+            HIMAGELIST handle = HIMAGELIST.Null;
             if (_imageList is not null)
             {
-                handle = _imageList.Handle;
+                handle = (HIMAGELIST)_imageList.Handle;
             }
             else if (_nativeImageList is not null)
             {
-                handle = _nativeImageList.Handle;
+                handle = _nativeImageList.HIMAGELIST;
             }
 
-            if (handle == IntPtr.Zero)
+            if (handle.IsNull)
             {
                 return false;
             }
@@ -271,15 +270,17 @@ namespace System.Windows.Forms
 
             try
             {
-                HRESULT hr = ComCtl32.ImageList.WriteEx(new HandleRef(this, handle), ComCtl32.ILP.DOWNLEVEL, new Ole32.GPStream(stream));
-                return hr == HRESULT.S_OK;
+                return PInvoke.ImageList.WriteEx(
+                    new HandleRef<HIMAGELIST>(this, handle),
+                    IMAGE_LIST_WRITE_STREAM_FLAGS.ILP_DOWNLEVEL,
+                    new Ole32.GPStream(stream)).Succeeded;
             }
             catch (EntryPointNotFoundException)
             {
                 // WriteEx wasn't found - that's fine - we will use Write.
             }
 
-            return ComCtl32.ImageList.Write(new HandleRef(this, handle), new Ole32.GPStream(stream)).IsTrue();
+            return PInvoke.ImageList.Write(new HandleRef<HIMAGELIST>(this, handle), new Ole32.GPStream(stream));
         }
 
         /// <summary>

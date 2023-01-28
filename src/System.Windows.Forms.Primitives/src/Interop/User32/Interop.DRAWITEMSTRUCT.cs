@@ -14,7 +14,7 @@ internal static partial class Interop
             public ODA itemAction;
             public ODS itemState;
             public IntPtr hwndItem;
-            public Gdi32.HDC hDC;
+            public HDC hDC;
             public RECT rcItem;
             public IntPtr itemData;
         }

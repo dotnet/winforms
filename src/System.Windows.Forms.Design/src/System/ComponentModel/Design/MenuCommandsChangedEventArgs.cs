@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design
         ///  and the remaining commands left for the object.  "command" can be null
         ///  to signify multiple commands changed at once.
         /// </summary>
-        public MenuCommandsChangedEventArgs(MenuCommandsChangedType changeType, MenuCommand command)
+        public MenuCommandsChangedEventArgs(MenuCommandsChangedType changeType, MenuCommand? command)
         {
             ChangeType = changeType;
             Command = command;
@@ -31,7 +31,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  The command that was added/removed/changed.  This can be null if more than one command changed at once.
         /// </summary>
-        public MenuCommand Command { get; }
+        public MenuCommand? Command { get; }
     }
 }
-

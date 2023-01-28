@@ -6,7 +6,6 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -15,21 +14,21 @@ namespace System.Windows.Forms.Metafiles
     {
         public EMR emr;
         public uint cbRgnData;          // Size of region data in bytes
-        public Gdi32.RGN iMode;
+        public RGN_COMBINE_MODE iMode;
         public byte RgnData;
 
-        public Gdi32.RGNDATAHEADER* RegionDataHeader
+        public RGNDATAHEADER* RegionDataHeader
         {
             get
             {
                 fixed (void* data = &RgnData)
                 {
-                    return cbRgnData >= sizeof(Gdi32.RGNDATAHEADER) ? (Gdi32.RGNDATAHEADER*)data : null;
+                    return cbRgnData >= sizeof(RGNDATAHEADER) ? (RGNDATAHEADER*)data : null;
                 }
             }
         }
 
-        public RECT[] ClippingRectangles => Gdi32.RGNDATAHEADER.GetRegionRects(RegionDataHeader);
+        public RECT[] ClippingRectangles => RGNDATAHEADER.GetRegionRects(RegionDataHeader);
 
         public override string ToString()
         {

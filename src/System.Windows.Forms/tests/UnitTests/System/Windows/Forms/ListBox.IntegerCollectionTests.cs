@@ -1715,7 +1715,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection[index] = item);
+            Assert.Throws<ArgumentException>(() => collection[index] = item);
         }
 
         [WinFormsTheory]
@@ -1935,7 +1935,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(item));
+            Assert.Throws<ArgumentException>(() => collection.Add(item));
         }
 
         [WinFormsFact]
@@ -2525,7 +2525,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Remove(item));
+            Assert.Throws<ArgumentException>(() => collection.Remove(item));
         }
 
         [WinFormsTheory]

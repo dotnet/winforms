@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.ComponentModel.Design
 {
     /// <summary>
@@ -100,7 +102,7 @@ namespace System.ComponentModel.Design
 
             if (serviceType == typeof(IServiceContainer))
             {
-                return _services ?? (_services = new ServiceContainer(_host));
+                return _services ??= new ServiceContainer(_host);
             }
 
             if (_services is not null)

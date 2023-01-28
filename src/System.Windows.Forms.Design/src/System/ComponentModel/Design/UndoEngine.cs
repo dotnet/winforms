@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -473,10 +475,7 @@ namespace System.ComponentModel.Design
                                 {
                                     propsToUpdate = new List<ReferencingComponent>();
 
-                                    if (_refToRemovedComponent is null)
-                                    {
-                                        _refToRemovedComponent = new Dictionary<IComponent, List<ReferencingComponent>>();
-                                    }
+                                    _refToRemovedComponent ??= new Dictionary<IComponent, List<ReferencingComponent>>();
 
                                     _refToRemovedComponent[e.Component] = propsToUpdate;
                                 }
@@ -574,20 +573,17 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected class UndoUnit
         {
-            private ArrayList _events; // the list of events we've captured
-            private ArrayList _changeEvents; // the list of change events we're currently capturing.  Only valid until Commit is called.
-            private ArrayList _removeEvents; // the list of remove events we're currently capturing.  Only valid until a matching Removed is encountered.
-            private ArrayList _ignoreAddingList; // the list of objects that are currently being added.  We ignore change events between adding and added.
-            private ArrayList _ignoreAddedList; // the list of objects that are added. We do not serialize before state for change events that happen in the same transaction
+            private List<UndoEvent> _events; // the list of events we've captured
+            private List<ChangeUndoEvent> _changeEvents; // the list of change events we're currently capturing.  Only valid until Commit is called.
+            private List<AddRemoveUndoEvent> _removeEvents; // the list of remove events we're currently capturing.  Only valid until a matching Removed is encountered.
+            private List<IComponent> _ignoreAddingList; // the list of objects that are currently being added.  We ignore change events between adding and added.
+            private List<IComponent> _ignoreAddedList; // the list of objects that are added. We do not serialize before state for change events that happen in the same transaction
             private bool _reverse; // if true, we walk the events list from the bottom up
-            private readonly Hashtable _lastSelection; // the selection as it was before we gathered undo info
+            private readonly Dictionary<string, IContainer> _lastSelection; // the selection as it was before we gathered undo info
 
             public UndoUnit(UndoEngine engine, string name)
             {
-                if (name is null)
-                {
-                    name = string.Empty;
-                }
+                name ??= string.Empty;
 
                 UndoEngine.Trace("Creating undo unit '{0}'", name);
 
@@ -597,7 +593,7 @@ namespace System.ComponentModel.Design
                 if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                 {
                     ICollection selection = ss.GetSelectedComponents();
-                    Hashtable selectedNames = new Hashtable();
+                    Dictionary<string, IContainer> selectedNames = new();
                     foreach (object sel in selection)
                     {
                         if (sel is IComponent comp && comp.Site is not null)
@@ -624,10 +620,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void AddEvent(UndoEvent e)
             {
-                if (_events is null)
-                {
-                    _events = new ArrayList();
-                }
+                _events ??= new();
 
                 _events.Add(e);
             }
@@ -675,15 +668,9 @@ namespace System.ComponentModel.Design
                     AddEvent(new AddRemoveUndoEvent(UndoEngine, e.Component, true));
                 }
 
-                if (_ignoreAddingList is not null)
-                {
-                    _ignoreAddingList.Remove(e.Component);
-                }
+                _ignoreAddingList?.Remove(e.Component);
 
-                if (_ignoreAddedList is null)
-                {
-                    _ignoreAddedList = new ArrayList();
-                }
+                _ignoreAddedList ??= new();
 
                 _ignoreAddedList.Add(e.Component);
             }
@@ -693,10 +680,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void ComponentAdding(ComponentEventArgs e)
             {
-                if (_ignoreAddingList is null)
-                {
-                    _ignoreAddingList = new ArrayList();
-                }
+                _ignoreAddingList ??= new();
 
                 _ignoreAddingList.Add(e.Component);
             }
@@ -773,10 +757,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (_changeEvents is null)
-                {
-                    _changeEvents = new ArrayList();
-                }
+                _changeEvents ??= new();
 
                 // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.
                 if (UndoEngine.GetName(e.Component, false) is not null)
@@ -786,7 +767,7 @@ namespace System.ComponentModel.Design
 
                     for (int idx = 0; idx < _changeEvents.Count; idx++)
                     {
-                        ChangeUndoEvent ce = (ChangeUndoEvent)_changeEvents[idx];
+                        ChangeUndoEvent ce = _changeEvents[idx];
                         if (ce.OpenComponent == e.Component && ce.ContainsChange(e.Member))
                         {
                             hasChange = true;
@@ -909,10 +890,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (_removeEvents is null)
-                {
-                    _removeEvents = new ArrayList();
-                }
+                _removeEvents ??= new();
 
                 try
                 {
@@ -975,10 +953,7 @@ namespace System.ComponentModel.Design
                 }
                 finally
                 {
-                    if (transaction is not null)
-                    {
-                        transaction.Commit();
-                    }
+                    transaction?.Commit();
 
                     UndoEngine._executingUnit = savedUnit;
                     if (savedUnit is null)
@@ -1006,7 +981,7 @@ namespace System.ComponentModel.Design
                             int groupEndIdx = idx;
                             for (int groupIdx = idx; groupIdx >= 0; groupIdx--)
                             {
-                                if (((UndoEvent)_events[groupIdx]).CausesSideEffects)
+                                if (_events[groupIdx].CausesSideEffects)
                                 {
                                     groupEndIdx = groupIdx;
                                 }
@@ -1018,12 +993,12 @@ namespace System.ComponentModel.Design
 
                             for (int beforeIdx = idx; beforeIdx >= groupEndIdx; beforeIdx--)
                             {
-                                ((UndoEvent)_events[beforeIdx]).BeforeUndo(UndoEngine);
+                                (_events[beforeIdx]).BeforeUndo(UndoEngine);
                             }
 
                             for (int undoIdx = idx; undoIdx >= groupEndIdx; undoIdx--)
                             {
-                                ((UndoEvent)_events[undoIdx]).Undo(UndoEngine);
+                                (_events[undoIdx]).Undo(UndoEngine);
                             }
 
                             Debug.Assert(idx >= groupEndIdx, "We're going backwards");
@@ -1035,18 +1010,13 @@ namespace System.ComponentModel.Design
                         {
                             if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                             {
-                                string[] names = new string[_lastSelection.Keys.Count];
-                                _lastSelection.Keys.CopyTo(names, 0);
-                                ArrayList list = new ArrayList(names.Length);
-                                foreach (string name in names)
+                                List<IComponent> list = new(_lastSelection.Keys.Count);
+                                foreach ((string name, IContainer container) in _lastSelection)
                                 {
-                                    if (name is not null)
+                                    IComponent comp = container.Components[name];
+                                    if (comp is not null)
                                     {
-                                        object comp = ((Container)_lastSelection[name]).Components[name];
-                                        if (comp is not null)
-                                        {
-                                            list.Add(comp);
-                                        }
+                                        list.Add(comp);
                                     }
                                 }
 
@@ -1063,7 +1033,7 @@ namespace System.ComponentModel.Design
 
                             for (int groupIdx = idx; groupIdx < count; groupIdx++)
                             {
-                                if (((UndoEvent)_events[groupIdx]).CausesSideEffects)
+                                if (_events[groupIdx].CausesSideEffects)
                                 {
                                     groupEndIdx = groupIdx;
                                 }
@@ -1075,12 +1045,12 @@ namespace System.ComponentModel.Design
 
                             for (int beforeIdx = idx; beforeIdx <= groupEndIdx; beforeIdx++)
                             {
-                                ((UndoEvent)_events[beforeIdx]).BeforeUndo(UndoEngine);
+                                (_events[beforeIdx]).BeforeUndo(UndoEngine);
                             }
 
                             for (int undoIdx = idx; undoIdx <= groupEndIdx; undoIdx++)
                             {
-                                ((UndoEvent)_events[undoIdx]).Undo(UndoEngine);
+                                (_events[undoIdx]).Undo(UndoEngine);
                             }
 
                             Debug.Assert(idx <= groupEndIdx, "We're going backwards");

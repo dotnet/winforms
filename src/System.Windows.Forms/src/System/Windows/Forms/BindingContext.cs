@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace System.Windows.Forms
 {
@@ -16,16 +13,16 @@ namespace System.Windows.Forms
     ///  objects for a Win Form.
     /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
-    public class BindingContext : ICollection
+    public partial class BindingContext : ICollection
     {
-        private readonly Hashtable _listManagers;
+        private readonly Dictionary<HashKey, WeakReference> _listManagers;
 
         /// <summary>
         ///  Initializes a new instance of the System.Windows.Forms.BindingContext class.
         /// </summary>
         public BindingContext()
         {
-            _listManagers = new Hashtable();
+            _listManagers = new();
         }
 
         /// <summary>
@@ -47,7 +44,7 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-            _listManagers.CopyTo(ar, index);
+            _listManagers.HashtableCopyTo(ar, index);
         }
 
         /// <summary>
@@ -56,7 +53,7 @@ namespace System.Windows.Forms
         IEnumerator IEnumerable.GetEnumerator()
         {
             ScrubWeakRefs();
-            return _listManagers.GetEnumerator();
+            return ((IDictionary)_listManagers).GetEnumerator();
         }
 
         /// <summary>
@@ -84,7 +81,7 @@ namespace System.Windows.Forms
         ///  Gets the System.Windows.Forms.BindingManagerBase associated with the specified
         ///  data source and data member.
         /// </summary>
-        public BindingManagerBase this[object dataSource, string dataMember]
+        public BindingManagerBase this[object dataSource, string? dataMember]
         {
             get => EnsureListManager(dataSource, dataMember);
         }
@@ -125,7 +122,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.collectionChangedEventDescr))]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Browsable(false)]
-        public event CollectionChangeEventHandler CollectionChanged
+        public event CollectionChangeEventHandler? CollectionChanged
         {
             add
             {
@@ -167,48 +164,14 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether the System.Windows.Forms.BindingContext
         ///  contains the specified data source and data member.
         /// </summary>
-        public bool Contains(object dataSource, string dataMember)
+        public bool Contains(object dataSource, string? dataMember)
         {
             return _listManagers.ContainsKey(GetKey(dataSource, dataMember));
         }
 
-        private static HashKey GetKey(object dataSource, string dataMember)
+        private static HashKey GetKey(object dataSource, string? dataMember)
         {
             return new HashKey(dataSource, dataMember);
-        }
-
-        private class HashKey
-        {
-            private readonly WeakReference _wRef;
-            private readonly int _dataSourceHashCode;
-            private readonly string _dataMember;
-
-            internal HashKey(object dataSource, string dataMember)
-            {
-                ArgumentNullException.ThrowIfNull(dataSource);
-                if (dataMember is null)
-                {
-                    dataMember = string.Empty;
-                }
-
-                // The dataMember should be case insensitive, so convert the
-                // dataMember to lower case
-                _wRef = new WeakReference(dataSource, false);
-                _dataSourceHashCode = dataSource.GetHashCode();
-                _dataMember = dataMember.ToLower(CultureInfo.InvariantCulture);
-            }
-
-            public override int GetHashCode() => HashCode.Combine(_dataSourceHashCode, _dataMember);
-
-            public override bool Equals(object target)
-            {
-                if (!(target is HashKey keyTarget))
-                {
-                    return false;
-                }
-
-                return _wRef.Target == keyTarget._wRef.Target && _dataMember == keyTarget._dataMember;
-            }
         }
 
         /// <summary>
@@ -249,14 +212,11 @@ namespace System.Windows.Forms
         ///  - If the data source is an ICurrencyManagerProvider, just delegate to the data
         ///  source.
         /// </summary>
-        private BindingManagerBase EnsureListManager(object dataSource, string dataMember)
+        private BindingManagerBase EnsureListManager(object dataSource, string? dataMember)
         {
-            BindingManagerBase bindingManagerBase = null;
+            BindingManagerBase? bindingManagerBase = null;
 
-            if (dataMember is null)
-            {
-                dataMember = string.Empty;
-            }
+            dataMember ??= string.Empty;
 
             // Check whether data source wants to provide its own binding managers
             // (but fall through to old logic if it fails to provide us with one)
@@ -271,10 +231,9 @@ namespace System.Windows.Forms
 
             // Check for previously created binding manager
             HashKey key = GetKey(dataSource, dataMember);
-            WeakReference wRef = _listManagers[key] as WeakReference;
-            if (wRef is not null)
+            if (_listManagers.TryGetValue(key, out WeakReference? wRef) && wRef is not null)
             {
-                bindingManagerBase = (BindingManagerBase)wRef.Target;
+                bindingManagerBase = (BindingManagerBase?)wRef.Target;
             }
 
             if (bindingManagerBase is not null)
@@ -285,7 +244,7 @@ namespace System.Windows.Forms
             if (dataMember.Length == 0)
             {
                 // No data member specified, so create binding manager directly on the data source
-                if (dataSource is IList || dataSource is IListSource)
+                if (dataSource is IList or IListSource)
                 {
                     // IListSource so we can bind the dataGrid to a table and a dataSet
                     bindingManagerBase = new CurrencyManager(dataSource);
@@ -300,25 +259,20 @@ namespace System.Windows.Forms
             {
                 // Data member specified, so get data source's binding manager, and hook a 'related' binding manager to it
                 int lastDot = dataMember.LastIndexOf('.');
-                string dataPath = (lastDot == -1) ? string.Empty : dataMember.Substring(0, lastDot);
-                string dataField = dataMember.Substring(lastDot + 1);
+                string dataPath = (lastDot == -1) ? string.Empty : dataMember[..lastDot];
+                string dataField = dataMember[(lastDot + 1)..];
 
                 BindingManagerBase formerManager = EnsureListManager(dataSource, dataPath);
 
-                PropertyDescriptor prop = formerManager.GetItemProperties().Find(dataField, true);
+                PropertyDescriptor? prop = formerManager.GetItemProperties().Find(dataField, true);
                 if (prop is null)
                 {
                     throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
                 }
 
-                if (typeof(IList).IsAssignableFrom(prop.PropertyType))
-                {
-                    bindingManagerBase = new RelatedCurrencyManager(formerManager, dataField);
-                }
-                else
-                {
-                    bindingManagerBase = new RelatedPropertyManager(formerManager, dataField);
-                }
+                bindingManagerBase = typeof(IList).IsAssignableFrom(prop.PropertyType)
+                    ? new RelatedCurrencyManager(formerManager, dataField)
+                    : new RelatedPropertyManager(formerManager, dataField);
             }
 
             // if wRef is null, then it is the first time we want this bindingManagerBase: so add it
@@ -367,16 +321,12 @@ namespace System.Windows.Forms
 
         private void ScrubWeakRefs()
         {
-            ArrayList cleanupList = null;
-            foreach (DictionaryEntry de in _listManagers)
+            List<HashKey>? cleanupList = null;
+            foreach (KeyValuePair<HashKey, WeakReference> de in _listManagers)
             {
-                WeakReference wRef = (WeakReference)de.Value;
-                if (wRef.Target is null)
+                if (de.Value.Target is null)
                 {
-                    if (cleanupList is null)
-                    {
-                        cleanupList = new ArrayList();
-                    }
+                    cleanupList ??= new();
 
                     cleanupList.Add(de.Key);
                 }
@@ -384,9 +334,9 @@ namespace System.Windows.Forms
 
             if (cleanupList is not null)
             {
-                foreach (object o in cleanupList)
+                foreach (HashKey key in cleanupList)
                 {
-                    _listManagers.Remove(o);
+                    _listManagers.Remove(key);
                 }
             }
         }
@@ -396,15 +346,12 @@ namespace System.Windows.Forms
         ///  that support IBindableComponent, to update their Bindings when the value of
         ///  IBindableComponent.BindingContext is changed.
         /// </summary>
-        public static void UpdateBinding(BindingContext newBindingContext, Binding binding)
+        public static void UpdateBinding(BindingContext? newBindingContext, Binding binding)
         {
             ArgumentNullException.ThrowIfNull(binding);
 
             BindingManagerBase oldManager = binding.BindingManagerBase;
-            if (oldManager is not null)
-            {
-                oldManager.Bindings.Remove(binding);
-            }
+            oldManager?.Bindings.Remove(binding);
 
             if (newBindingContext is not null)
             {

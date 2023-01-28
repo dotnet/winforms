@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Controls.RichEdit;
 
 internal partial class Interop
 {

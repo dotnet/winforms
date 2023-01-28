@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -33,7 +35,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_treeView != null)
+                if (_treeView is not null)
                 {
                     _treeView.AfterExpand -= TreeViewInvalidate;
                     _treeView.AfterCollapse -= TreeViewInvalidate;
@@ -54,7 +56,7 @@ namespace System.Windows.Forms.Design
         {
             point = Control.PointToClient(point);
             _tvhit.pt = point;
-            User32.SendMessageW(Control, (User32.WM)ComCtl32.TVM.HITTEST, 0, ref _tvhit);
+            PInvoke.SendMessage(Control, (User32.WM)PInvoke.TVM_HITTEST, 0, ref _tvhit);
             return _tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON;
         }
 
@@ -62,8 +64,8 @@ namespace System.Windows.Forms.Design
         {
             base.Initialize(component);
             _treeView = component as TreeView;
-            Debug.Assert(_treeView != null, "TreeView is null in TreeViewDesigner");
-            if (_treeView != null)
+            Debug.Assert(_treeView is not null, "TreeView is null in TreeViewDesigner");
+            if (_treeView is not null)
             {
                 _treeView.AfterExpand += TreeViewInvalidate;
                 _treeView.AfterCollapse += TreeViewInvalidate;

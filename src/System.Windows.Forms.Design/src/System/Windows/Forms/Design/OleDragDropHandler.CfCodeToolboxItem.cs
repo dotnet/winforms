@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -50,7 +52,7 @@ namespace System.Windows.Forms.Design
             protected override void Serialize(SerializationInfo info, StreamingContext context)
             {
                 base.Serialize(info, context);
-                if (_serializationData != null)
+                if (_serializationData is not null)
                 {
                     info.AddValue("CfCodeToolboxItem.serializationData", _serializationData);
                 }
@@ -77,7 +79,7 @@ namespace System.Windows.Forms.Design
             protected override IComponent[] CreateComponentsCore(IDesignerHost host, IDictionary defaultValues)
             {
                 IDesignerSerializationService ds = (IDesignerSerializationService)host.GetService(typeof(IDesignerSerializationService));
-                if (ds == null)
+                if (ds is null)
                 {
                     return null;
                 }
@@ -88,7 +90,7 @@ namespace System.Windows.Forms.Design
                 ArrayList components = new ArrayList();
                 foreach (object obj in objects)
                 {
-                    if (obj != null && obj is IComponent)
+                    if (obj is not null && obj is IComponent)
                     {
                         components.Add(obj);
                     }
@@ -97,17 +99,14 @@ namespace System.Windows.Forms.Design
                 IComponent[] componentsArray = new IComponent[components.Count];
                 components.CopyTo(componentsArray, 0);
 
-                ArrayList trayComponents = null;
-
                 // Parent and locate each Control
                 //
-                if (defaultValues == null)
-                    defaultValues = new Hashtable();
+                defaultValues ??= new Hashtable();
                 Control parentControl = defaultValues["Parent"] as Control;
-                if (parentControl != null)
+                if (parentControl is not null)
                 {
                     ParentControlDesigner parentControlDesigner = host.GetDesigner(parentControl) as ParentControlDesigner;
-                    if (parentControlDesigner != null)
+                    if (parentControlDesigner is not null)
                     {
                         // Determine bounds of all controls
                         //
@@ -117,7 +116,7 @@ namespace System.Windows.Forms.Design
                         {
                             Control childControl = component as Control;
 
-                            if (childControl != null && childControl != parentControl && childControl.Parent == null)
+                            if (childControl is not null && childControl != parentControl && childControl.Parent is null)
                             {
                                 if (bounds.IsEmpty)
                                 {
@@ -135,9 +134,9 @@ namespace System.Windows.Forms.Design
                         {
                             Control childControl = component as Control;
                             Form form = childControl as Form;
-                            if (childControl != null
-                                && !(form != null && form.TopLevel) // Don't add top-level forms
-                                && childControl.Parent == null)
+                            if (childControl is not null
+                                && !(form is not null && form.TopLevel) // Don't add top-level forms
+                                && childControl.Parent is null)
                             {
                                 defaultValues["Offset"] = new Size(childControl.Bounds.X - bounds.X, childControl.Bounds.Y - bounds.Y);
                                 parentControlDesigner.AddControl(childControl, defaultValues);
@@ -152,25 +151,22 @@ namespace System.Windows.Forms.Design
                 // arrange them properly.
                 //
                 ComponentTray tray = (ComponentTray)host.GetService(typeof(ComponentTray));
-
-                if (tray != null)
+                List<Control> trayComponents = null;
+                if (tray is not null)
                 {
                     foreach (IComponent component in componentsArray)
                     {
                         ComponentTray.TrayControl c = ComponentTray.GetTrayControlFromComponent(component);
 
-                        if (c != null)
+                        if (c is not null)
                         {
-                            if (trayComponents == null)
-                            {
-                                trayComponents = new ArrayList();
-                            }
+                            trayComponents ??= new();
 
                             trayComponents.Add(c);
                         }
                     }
 
-                    if (trayComponents != null)
+                    if (trayComponents is not null)
                     {
                         tray.UpdatePastePositions(trayComponents);
                     }

@@ -26,6 +26,11 @@ namespace System.Windows.Forms
                 _ownerControl = ownerControl;
             }
 
+            internal void ClearParent()
+            {
+                _parentAccessibleObject = null;
+            }
+
             public override AccessibleObject? Parent
             {
                 get

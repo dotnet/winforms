@@ -57,7 +57,7 @@ internal partial class Interop
 
             public HRESULT Clone(Oleaut32.IEnumVariant[]? ppEnum)
             {
-                if (ppEnum == null || ppEnum.Length == 0)
+                if (ppEnum is null || ppEnum.Length == 0)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -65,7 +65,7 @@ internal partial class Interop
                 IntPtr resultPtr;
                 var result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 6)))
                     (_wrappedInstance, &resultPtr);
-                if (result.Failed())
+                if (result.Failed)
                 {
                     ppEnum = null;
                     return result;

@@ -2,117 +2,117 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DEBUG
 using System.Diagnostics;
-#endif
 using System.Drawing;
-using static Interop;
-using static Interop.ComCtl32;
+using Windows.Win32.System.Com;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed partial class ImageList
 {
-    public sealed partial class ImageList
+    internal class NativeImageList : IDisposable, IHandle<HIMAGELIST>
     {
-        internal class NativeImageList : IDisposable, IHandle
-        {
 #if DEBUG
-            private readonly string _callStack = new StackTrace().ToString();
+        private readonly string _callStack = new StackTrace().ToString();
 #endif
-            private const int GrowBy = 4;
-            private const int InitialCapacity = 4;
+        private const int GrowBy = 4;
+        private const int InitialCapacity = 4;
 
-            private static readonly object s_syncLock = new object();
+        private static readonly object s_syncLock = new object();
 
-            public NativeImageList(Ole32.IStream pstm)
+        public unsafe NativeImageList(IStream.Interface pstm)
+        {
+            HIMAGELIST himl;
+            lock (s_syncLock)
             {
-                IntPtr himl;
-                lock (s_syncLock)
-                {
-                    himl = ComCtl32.ImageList.Read(pstm);
-                    Init(himl);
-                }
+                using var stream = ComHelpers.TryGetComScope<IStream>(pstm, out HRESULT hr);
+                Debug.Assert(hr.Succeeded);
+                himl = PInvoke.ImageList_Read(stream);
+                Init(himl);
+            }
+        }
+
+        public NativeImageList(Size imageSize, IMAGELIST_CREATION_FLAGS flags)
+        {
+            HIMAGELIST himl;
+            lock (s_syncLock)
+            {
+                himl = PInvoke.ImageList_Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
+                Init(himl);
+            }
+        }
+
+        private NativeImageList(HIMAGELIST himl)
+        {
+            HIMAGELIST = himl;
+        }
+
+        private void Init(HIMAGELIST himl)
+        {
+            if (!himl.IsNull)
+            {
+                HIMAGELIST = himl;
+                return;
             }
 
-            public NativeImageList(Size imageSize, ILC flags)
-            {
-                IntPtr himl;
-                lock (s_syncLock)
-                {
-                    himl = ComCtl32.ImageList.Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
-                    Init(himl);
-                }
-            }
+#if DEBUG
+            Debug.Fail($"{nameof(NativeImageList)} could not be created. Originating stack:\n{_callStack}");
+#endif
+            throw new InvalidOperationException(SR.ImageListCreateFailed);
+        }
 
-            private NativeImageList(IntPtr himl)
-            {
-                Handle = himl;
-            }
+        HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
 
-            private void Init(IntPtr himl)
+        internal HIMAGELIST HIMAGELIST { get; private set; }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            lock (s_syncLock)
             {
-                if (himl != IntPtr.Zero)
+                if (HIMAGELIST.IsNull)
                 {
-                    Handle = himl;
                     return;
                 }
 
-#if DEBUG
-                Debug.Fail($"{nameof(NativeImageList)} could not be created. Originating stack:\n{_callStack}");
-#endif
-                throw new InvalidOperationException(SR.ImageListCreateFailed);
+                PInvoke.ImageList.Destroy(this);
+                HIMAGELIST = HIMAGELIST.Null;
             }
+        }
 
-            public IntPtr Handle { get; private set; }
+        ~NativeImageList()
+        {
+            // There are certain code paths where we are unable to track the lifetime of the object,
+            // for example in the following scenarios:
+            //
+            //      this.imageList1.ImageStream = (System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream"));
+            // or
+            //      resources.ApplyResources(this.listView1, "listView1");
+            //
+            // In those cases the loose instances will be collected by the GC.
+            Dispose(false);
+        }
 
-            public void Dispose()
+        internal NativeImageList Duplicate()
+        {
+            lock (s_syncLock)
             {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-
-            private void Dispose(bool disposing)
-            {
-                lock (s_syncLock)
+                HIMAGELIST himl = PInvoke.ImageList_Duplicate(HIMAGELIST);
+                if (!HIMAGELIST.IsNull)
                 {
-                    if (Handle == IntPtr.Zero)
-                    {
-                        return;
-                    }
-
-                    ComCtl32.ImageList.Destroy(Handle);
-                    Handle = IntPtr.Zero;
+                    return new NativeImageList(himl);
                 }
             }
 
-            ~NativeImageList()
-            {
-                // There are certain code paths where we are unable to track the lifetime of the object,
-                // for example in the following scenarios:
-                //
-                //      this.imageList1.ImageStream = (System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream"));
-                // or
-                //      resources.ApplyResources(this.listView1, "listView1");
-                //
-                // In those cases the loose instances will be collected by the GC.
-                Dispose(false);
-            }
-
-            internal NativeImageList Duplicate()
-            {
-                lock (s_syncLock)
-                {
-                    IntPtr himl = ComCtl32.ImageList.Duplicate(Handle);
-                    if (himl != IntPtr.Zero)
-                    {
-                        return new NativeImageList(himl);
-                    }
-                }
-
 #if DEBUG
-                Debug.Fail($"{nameof(NativeImageList)} could not be duplicated. Originating stack:\n{_callStack}");
+            Debug.Fail($"{nameof(NativeImageList)} could not be duplicated. Originating stack:\n{_callStack}");
 #endif
-                throw new InvalidOperationException(SR.ImageListDuplicateFailed);
-            }
+            throw new InvalidOperationException(SR.ImageListDuplicateFailed);
         }
     }
 }

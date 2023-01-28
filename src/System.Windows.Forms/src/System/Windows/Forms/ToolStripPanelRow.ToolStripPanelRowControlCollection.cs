@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -30,7 +29,7 @@ namespace System.Windows.Forms
         ///  is responsible for parenting and unparenting the controls (ToolStripPanelRows do NOT derive from
         ///  Control and thus are NOT hwnd backed).
         /// </summary>
-        internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
+        internal partial class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
         {
             private readonly ToolStripPanelRow _owner;
             private ArrangedElementCollection _cellCollection;
@@ -58,10 +57,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_cellCollection is null)
-                    {
-                        _cellCollection = new ArrangedElementCollection(InnerList);
-                    }
+                    _cellCollection ??= new ArrangedElementCollection(InnerList);
 
                     return _cellCollection;
                 }
@@ -82,10 +78,10 @@ namespace System.Windows.Forms
 
                 if (!(value is ISupportToolStripPanel control))
                 {
-                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
-                int index = InnerList.Add(control.ToolStripPanelCell);
+                int index = ((IList)InnerList).Add(control.ToolStripPanelCell);
 
                 OnAdd(control, index);
                 return index;
@@ -98,10 +94,7 @@ namespace System.Windows.Forms
 
                 ToolStripPanel currentOwner = ToolStripPanel;
 
-                if (currentOwner is not null)
-                {
-                    currentOwner.SuspendLayout();
-                }
+                currentOwner?.SuspendLayout();
 
                 try
                 {
@@ -112,10 +105,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
-                    {
-                        currentOwner.ResumeLayout();
-                    }
+                    currentOwner?.ResumeLayout();
                 }
             }
 
@@ -155,7 +145,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override IEnumerator GetEnumerator() { return new ToolStripPanelCellToControlEnumerator(InnerList); }
+            public override IEnumerator GetEnumerator() { return new ToolStripPanelCellToControlEnumerator(InnerList.GetEnumerator()); }
 
             private Control GetControl(int index)
             {
@@ -187,11 +177,11 @@ namespace System.Windows.Forms
 
             void IList.Clear() { Clear(); }
 
-            bool IList.IsFixedSize { get { return InnerList.IsFixedSize; } }
+            bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
 
             bool IList.Contains(object value) { return InnerList.Contains(value); }
 
-            bool IList.IsReadOnly { get { return InnerList.IsReadOnly; } }
+            bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
 
             void IList.RemoveAt(int index) { RemoveAt(index); }
 
@@ -223,7 +213,7 @@ namespace System.Windows.Forms
 
                 if (!(value is ISupportToolStripPanel control))
                 {
-                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
                 InnerList.Insert(index, control.ToolStripPanelCell);
@@ -273,10 +263,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (layoutTransaction is not null)
-                        {
-                            layoutTransaction.Dispose();
-                        }
+                        layoutTransaction?.Dispose();
                     }
                 }
             }
@@ -318,44 +305,6 @@ namespace System.Windows.Forms
                 for (int i = 0; i < InnerList.Count; i++)
                 {
                     array[index++] = GetControl(i);
-                }
-            }
-
-            ///  We want to pretend like we're only holding controls... so everywhere we've returned controls.
-            ///  but the problem is if you do a foreach, you'll get the cells not the controls.  So we've got
-            ///  to sort of write a wrapper class around the ArrayList enumerator.
-            private class ToolStripPanelCellToControlEnumerator : IEnumerator, ICloneable
-            {
-                private readonly IEnumerator _arrayListEnumerator;
-
-                internal ToolStripPanelCellToControlEnumerator(ArrayList list)
-                {
-                    _arrayListEnumerator = ((IEnumerable)list).GetEnumerator();
-                }
-
-                public virtual object Current
-                {
-                    get
-                    {
-                        ToolStripPanelCell cell = _arrayListEnumerator.Current as ToolStripPanelCell;
-                        Debug.Assert(cell is not null, "Expected ToolStripPanel cells only!!!" + _arrayListEnumerator.Current.GetType().ToString());
-                        return cell?.Control;
-                    }
-                }
-
-                public object Clone()
-                {
-                    return MemberwiseClone();
-                }
-
-                public virtual bool MoveNext()
-                {
-                    return _arrayListEnumerator.MoveNext();
-                }
-
-                public virtual void Reset()
-                {
-                    _arrayListEnumerator.Reset();
                 }
             }
         }

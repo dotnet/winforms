@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using static Interop;
 
@@ -86,12 +88,9 @@ namespace System.Windows.Forms.Design
             //
             if (Inherited)
             {
-                if (inheritanceUI == null)
-                {
-                    inheritanceUI = (InheritanceUI)GetService(typeof(InheritanceUI));
-                }
+                inheritanceUI ??= (InheritanceUI)GetService(typeof(InheritanceUI));
 
-                if (inheritanceUI != null)
+                if (inheritanceUI is not null)
                 {
                     pe.Graphics.DrawImage(InheritanceUI.InheritanceGlyph, 0, 0);
                 }
@@ -115,7 +114,7 @@ namespace System.Windows.Forms.Design
 
                     if (m.ResultInternal == (int)User32.HT.TRANSPARENT)
                     {
-                        m.ResultInternal = (nint)User32.HT.CLIENT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.CLIENT;
                     }
 
                     break;
@@ -138,4 +137,3 @@ namespace System.Windows.Forms.Design
 #endif
     }
 }
-

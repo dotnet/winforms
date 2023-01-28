@@ -5,7 +5,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer? t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer;
         private static readonly VisualStyleElement ComboBoxElement = VisualStyleElement.ComboBox.DropDownButton.Normal;
         private static readonly VisualStyleElement TextBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 
@@ -101,21 +100,20 @@ namespace System.Windows.Forms
         public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state)
         {
             using var hdc = new DeviceContextHdcScope(g);
-            DrawDropDownButtonForHandle(hdc, bounds, state, IntPtr.Zero);
+            DrawDropDownButtonForHandle(hdc, bounds, state, HWND.Null);
         }
 
         /// <summary>
         ///  Renders a ComboBox drop-down button in per-monitor scenario.
         /// </summary>
-        /// <param name="hdc">device context</param>
-        /// <param name="bounds">dropdown button bounds</param>
-        /// <param name="state"> state</param>
-        /// <param name="handle"> handle of the control</param>
-        internal static void DrawDropDownButtonForHandle(Gdi32.HDC hdc, Rectangle bounds, ComboBoxState state, IntPtr handle)
+        /// <param name="hdc">Device context.</param>
+        /// <param name="bounds">Dropdown button bounds.</param>
+        /// <param name="state">State.</param>
+        /// <param name="hwnd">Handle of the control.</param>
+        internal static void DrawDropDownButtonForHandle(HDC hdc, Rectangle bounds, ComboBoxState state, HWND hwnd)
         {
             InitializeRenderer(ComboBoxElement, (int)state);
-
-            t_visualStyleRenderer.DrawBackground(hdc, bounds, handle);
+            t_visualStyleRenderer.DrawBackground(hdc, bounds, hwnd);
         }
 
         [MemberNotNull(nameof(t_visualStyleRenderer))]

@@ -83,8 +83,8 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-                => _ownerItem.RootToolStrip.AccessibilityObject;
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+                => _ownerItem.RootToolStrip?.AccessibilityObject;
         }
     }
 }

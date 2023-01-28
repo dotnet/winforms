@@ -2,285 +2,251 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.System.Com;
+using Microsoft.VisualStudio.Shell;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
 {
-    internal class Com2IManagedPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
+    public override Type Interface => typeof(IVSMDPerPropertyBrowsing.Interface);
+
+    public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
     {
-        public override Type Interface => typeof(VSSDK.IVSMDPerPropertyBrowsing);
-
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
+        if (propDesc is null)
         {
-            if (propDesc is null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < propDesc.Length; i++)
-            {
-                propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetAttributes);
-            }
+            return;
         }
 
-        /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-        /// </summary>
-        private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
+        for (int i = 0; i < propDesc.Length; i++)
         {
-            object target = sender.TargetObject;
+            propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetAttributes);
+        }
+    }
 
-            if (target is VSSDK.IVSMDPerPropertyBrowsing browsing)
+    /// <summary>
+    ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.
+    ///  Hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+    /// </summary>
+    private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
+    {
+        object? target = sender.TargetObject;
+
+        if (target is IVSMDPerPropertyBrowsing.Interface browsing)
+        {
+            Attribute[] attrs = GetComponentAttributes(browsing, sender.DISPID);
+            for (int i = 0; i < attrs.Length; i++)
             {
-                Attribute[] attrs = GetComponentAttributes(browsing, sender.DISPID);
-                for (int i = 0; i < attrs.Length; i++)
-                {
-                    attrEvent.Add(attrs[i]);
-                }
+                attrEvent.Add(attrs[i]);
             }
         }
+    }
 
-        internal unsafe static Attribute[] GetComponentAttributes(VSSDK.IVSMDPerPropertyBrowsing target, Ole32.DispatchID dispid)
+    internal static unsafe Attribute[] GetComponentAttributes(IVSMDPerPropertyBrowsing.Interface target, int dispid)
+    {
+        uint cItems = 0;
+        BSTR* pbstrs = null;
+        VARIANT* pvars = null;
+
+        HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
+        if (hr != HRESULT.S_OK || cItems == 0 || pvars is null)
         {
-            uint cItems = 0;
-            IntPtr pbstrs = IntPtr.Zero;
-            Oleaut32.VARIANT* pvars = null;
+            return Array.Empty<Attribute>();
+        }
 
-            HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
-            if (hr != HRESULT.S_OK || cItems == 0 || pvars is null)
+        List<Attribute> attrs = new();
+
+        string[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
+        object?[] varParams = GetVariantsFromPtr(pvars, cItems);
+
+        Debug.Assert(attrTypeNames.Length == varParams.Length, "Mismatched parameter and attribute name length");
+        if (attrTypeNames.Length != varParams.Length)
+        {
+            return Array.Empty<Attribute>();
+        }
+
+        // Get the types.
+        for (int i = 0; i < attrTypeNames.Length; i++)
+        {
+            string attrName = attrTypeNames[i];
+
+            // Try the name first.
+            Type? t = null;
+            if (attrName.Length > 0)
             {
-                return Array.Empty<Attribute>();
+                t = Type.GetType(attrName);
             }
 
-            ArrayList attrs = new ArrayList();
+            Assembly? a = t?.Assembly;
 
-            string[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
-            object?[] varParams = GetVariantsFromPtr(pvars, cItems);
-
-            Debug.Assert(attrTypeNames.Length == varParams.Length, "Mismatched parameter and attribute name length");
-            if (attrTypeNames.Length != varParams.Length)
+            if (t is null)
             {
-                return Array.Empty<Attribute>();
-            }
+                // Check for an assembly name.
+                string assemblyName = string.Empty;
 
-            // get the types
-            for (int i = 0; i < attrTypeNames.Length; i++)
-            {
-                string attrName = attrTypeNames[i];
+                int comma = attrName.LastIndexOf(',');
 
-                // try the name first
-                Type? t = null;
-                if (attrName.Length > 0)
+                if (comma != -1)
                 {
-                    t = Type.GetType(attrName);
+                    assemblyName = attrName[comma..];
+                    attrName = attrName[..comma];
                 }
 
-                Assembly? a = t?.Assembly;
+                string fieldName;
+                int lastDot = attrName.LastIndexOf('.');
+                if (lastDot != -1)
+                {
+                    fieldName = attrName[(lastDot + 1)..];
+                }
+                else
+                {
+                    Debug.Fail("No dot in class name?");
+                    continue;
+                }
+
+                // Try to get the field value
+                t = a is null
+                    ? Type.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName))
+                    : a.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
 
                 if (t is null)
                 {
-                    // check for an assembly name.
-                    string assemblyName = string.Empty;
-
-                    int comma = attrName.LastIndexOf(',');
-
-                    if (comma != -1)
-                    {
-                        assemblyName = attrName.Substring(comma);
-                        attrName = attrName.Substring(0, comma);
-                    }
-
-                    string fieldName;
-                    int lastDot = attrName.LastIndexOf('.');
-                    if (lastDot != -1)
-                    {
-                        fieldName = attrName.Substring(lastDot + 1);
-                    }
-                    else
-                    {
-                        // something's odd
-                        Debug.Fail("No dot in class name?");
-                        continue;
-                    }
-
-                    // try to get the field value
-                    if (a is null)
-                    {
-                        t = Type.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
-                    }
-                    else
-                    {
-                        t = a.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
-                    }
-
-                    if (t is null)
-                    {
-                        Debug.Fail("Failed load attribute '" + attrName + assemblyName + "'.  It's Type could not be found.");
-                        continue;
-                    }
-
-                    Debug.Assert(typeof(Attribute).IsAssignableFrom(t), "Attribute type " + t.FullName + " does not derive from Attribute");
-                    if (!typeof(Attribute).IsAssignableFrom(t))
-                    {
-                        continue;
-                    }
-
-                    if (t is not null)
-                    {
-                        FieldInfo? fi = t.GetField(fieldName);
-
-                        // only if it's static
-                        if (fi is not null && fi.IsStatic)
-                        {
-                            object? fieldValue = fi.GetValue(null);
-                            if (fieldValue is Attribute)
-                            {
-                                // add it to the list
-                                attrs.Add(fieldValue);
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            Debug.Fail("Couldn't load field '" + fieldName + "' from type '" + attrName.Substring(0, lastDot) + "'.  It does not exist or is not static");
-                        }
-                    }
+                    Debug.Fail($"Failed load attribute '{attrName}{assemblyName}'.  It's Type could not be found.");
+                    continue;
                 }
 
-                Debug.Assert(typeof(Attribute).IsAssignableFrom(t), "Attribute type " + t.FullName + " does not derive from Attribute");
+                Debug.Assert(typeof(Attribute).IsAssignableFrom(t), $"Attribute type {t.FullName} does not derive from Attribute");
                 if (!typeof(Attribute).IsAssignableFrom(t))
                 {
                     continue;
                 }
 
-                Attribute? attr;
-
-                // okay, if we got here, we need to build the attribute...
-                // get the initializer value if we've got a one item ctor
-
-                var varParam = varParams[i];
-                if (!Convert.IsDBNull(varParam) && varParam is not null)
+                if (t is not null)
                 {
-                    ConstructorInfo[] ctors = t.GetConstructors();
-                    for (int c = 0; c < ctors.Length; c++)
+                    FieldInfo? fi = t.GetField(fieldName);
+
+                    // Only if it's static
+                    if (fi is not null && fi.IsStatic)
                     {
-                        ParameterInfo[] pis = ctors[c].GetParameters();
-                        if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParam.GetType()))
+                        if (fi.GetValue(null) is Attribute attribute)
                         {
-                            // found a one-parameter ctor, use it
-                            // try to construct a default one
-                            try
-                            {
-                                attr = (Attribute?)Activator.CreateInstance(t, new object[] { varParam });
-                                attrs.Add(attr);
-                            }
-                            catch
-                            {
-                                // nevermind
-                                Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
-                                continue;
-                            }
+                            attrs.Add(attribute);
+                            continue;
                         }
                     }
-                }
-                else
-                {
-                    // try to construct a default one
-                    try
+                    else
                     {
-                        attr = (Attribute?)Activator.CreateInstance(t);
-                        attrs.Add(attr);
-                    }
-                    catch
-                    {
-                        // nevermind
-                        Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
-                        continue;
+                        Debug.Fail($"Couldn't load field '{fieldName}' from type '{attrName[..lastDot]}'.  It does not exist or is not static");
                     }
                 }
             }
 
-            Attribute[] temp = new Attribute[attrs.Count];
-            attrs.CopyTo(temp, 0);
-            return temp;
-        }
-
-        private static string[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
-        {
-            if (ptr != IntPtr.Zero)
+            Debug.Assert(typeof(Attribute).IsAssignableFrom(t), $"Attribute type {t.FullName} does not derive from Attribute");
+            if (!typeof(Attribute).IsAssignableFrom(t))
             {
-                string[] strs = new string[cStrings];
-                IntPtr bstr;
-                for (int i = 0; i < cStrings; i++)
+                continue;
+            }
+
+            Attribute? attr;
+
+            // Okay, if we got here, we need to build the attribute.
+            // Get the initializer value if we've got a one item constructor.
+
+            var varParam = varParams[i];
+            if (!Convert.IsDBNull(varParam) && varParam is not null)
+            {
+                ConstructorInfo[] ctors = t.GetConstructors();
+                for (int c = 0; c < ctors.Length; c++)
                 {
-                    try
+                    ParameterInfo[] pis = ctors[c].GetParameters();
+                    if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParam.GetType()))
                     {
-                        bstr = Marshal.ReadIntPtr(ptr, i * 4);
-                        if (bstr != IntPtr.Zero)
+                        // Found a one-parameter ctor, use it to try to construct a default one.
+                        try
                         {
-                            strs[i] = Marshal.PtrToStringUni(bstr)!;
-                            Oleaut32.SysFreeString(bstr);
+                            attr = (Attribute?)Activator.CreateInstance(t, new object[] { varParam });
+                            if (attr is not null) attrs.Add(attr);
                         }
-                        else
+                        catch
                         {
-                            strs[i] = string.Empty;
+                            Debug.Fail($"Attribute {t.FullName} did not have a initializer specified and has no default constructor");
+                            continue;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Debug.Fail("Failed to marshal component attribute BSTR " + i.ToString(CultureInfo.InvariantCulture), ex.ToString());
-                    }
                 }
-
-                try
-                {
-                    Marshal.FreeCoTaskMem(ptr);
-                }
-                catch (Exception ex)
-                {
-                    Debug.Fail("Failed to free BSTR array memory", ex.ToString());
-                }
-
-                return strs;
             }
             else
             {
-                return Array.Empty<string>();
+                // Try to construct a default one.
+                try
+                {
+                    attr = (Attribute?)Activator.CreateInstance(t);
+                    if (attr is not null) attrs.Add(attr);
+                }
+                catch
+                {
+                    Debug.Fail($"Attribute {t.FullName} did not have a initializer specified and has no default constructor");
+                    continue;
+                }
             }
         }
 
-        private unsafe static object?[] GetVariantsFromPtr(Oleaut32.VARIANT* ptr, uint cVariants)
-        {
-            var objects = new object?[cVariants];
-            for (int i = 0; i < cVariants; i++)
-            {
-                try
-                {
-                    using Oleaut32.VARIANT variant = ptr[i];
-                    objects[i] = variant.ToObject();
-                }
-                catch (Exception ex)
-                {
-                    Debug.Fail("Failed to marshal component attribute VARIANT " + i, ex.ToString());
-                }
-            }
+        return attrs.ToArray();
+    }
 
+    private static string[] GetStringsFromPtr(BSTR* bstrs, uint count)
+    {
+        if (bstrs is null)
+        {
+            return Array.Empty<string>();
+        }
+
+        string[] strings = new string[count];
+        for (int i = 0; i < count; i++)
+        {
+            strings[i] = bstrs[i].ToStringAndFree();
+        }
+
+        try
+        {
+            Marshal.FreeCoTaskMem((nint)(void*)bstrs);
+        }
+        catch (Exception ex)
+        {
+            Debug.Fail("Failed to free BSTR array memory", ex.ToString());
+        }
+
+        return strings;
+    }
+
+    private static unsafe object?[] GetVariantsFromPtr(VARIANT* ptr, uint cVariants)
+    {
+        var objects = new object?[cVariants];
+        for (int i = 0; i < cVariants; i++)
+        {
             try
             {
-                Marshal.FreeCoTaskMem((IntPtr)ptr);
+                using VARIANT variant = ptr[i];
+                objects[i] = variant.ToObject();
             }
             catch (Exception ex)
             {
-                Debug.Fail("Failed to free VARIANT array memory", ex.ToString());
+                Debug.Fail($"Failed to marshal component attribute VARIANT {i}", ex.ToString());
             }
-
-            return objects;
         }
+
+        try
+        {
+            Marshal.FreeCoTaskMem((IntPtr)ptr);
+        }
+        catch (Exception ex)
+        {
+            Debug.Fail("Failed to free VARIANT array memory", ex.ToString());
+        }
+
+        return objects;
     }
 }

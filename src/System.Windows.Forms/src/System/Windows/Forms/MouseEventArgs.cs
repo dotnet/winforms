@@ -64,6 +64,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the location of the mouse during MouseEvent.
         /// </summary>
-        public Point Location => new Point(X, Y);
+        public Point Location => new(X, Y);
     }
 }

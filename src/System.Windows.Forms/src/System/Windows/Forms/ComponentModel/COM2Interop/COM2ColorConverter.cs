@@ -12,25 +12,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2ColorConverter : Com2DataTypeToManagedDataTypeConverter
     {
-        /// <summary>
-        ///  Returns the managed type that this editor maps the property type to.
-        /// </summary>
-        public override Type ManagedType
-        {
-            get
-            {
-                return typeof(Color);
-            }
-        }
+        public override Type ManagedType => typeof(Color);
 
-        /// <summary>
-        ///  Converts the native value into a managed value
-        /// </summary>
         public override object ConvertNativeToManaged(object? nativeValue, Com2PropertyDescriptor pd)
         {
             int intVal = 0;
 
-            // get the integer value out of the native...
+            // Get the integer value.
             if (nativeValue is uint nativeValueAsUint)
             {
                 intVal = (int)nativeValueAsUint;
@@ -43,26 +31,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return ColorTranslator.FromOle(intVal);
         }
 
-        /// <summary>
-        ///  Converts the managed value into a native value
-        /// </summary>
         public override object ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
-            // don't cancel the set
+            // Don't cancel the set.
             cancelSet = false;
 
-            // we default to black.
-            if (managedValue is null)
-            {
-                managedValue = Color.Black;
-            }
+            // We default to black.
+            managedValue ??= Color.Black;
 
             if (managedValue is Color managedValueAsColor)
             {
                 return ColorTranslator.ToOle(managedValueAsColor);
             }
 
-            Debug.Fail("Don't know how to set type:" + managedValue.GetType().Name);
+            Debug.Fail($"Don't know how to set type:{managedValue.GetType().Name}");
             return 0;
         }
     }

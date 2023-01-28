@@ -26,7 +26,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
+                if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
                 {
                     _owner.SplitEnd(false);
                 }

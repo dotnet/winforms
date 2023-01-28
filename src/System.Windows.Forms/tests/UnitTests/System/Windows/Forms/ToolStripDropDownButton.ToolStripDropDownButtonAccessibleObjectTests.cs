@@ -68,5 +68,31 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, actual);
         }
+
+        [WinFormsFact]
+        public void ToolStripDropDownButtonAccessibleObject_FragmentNavigate_Child_ReturnExpected()
+        {
+            using ToolStrip toolStrip = new();
+
+            using ToolStripDropDownButton dropDownItem = new ToolStripDropDownButton();
+            dropDownItem.DropDownItems.Add(string.Empty);
+
+            toolStrip.Items.Add(dropDownItem);
+
+            toolStrip.CreateControl();
+            toolStrip.PerformLayout();
+
+            AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            dropDownItem.DropDown.Show();
+
+            AccessibleObject expected = dropDownItem.DropDown.AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        }
     }
 }

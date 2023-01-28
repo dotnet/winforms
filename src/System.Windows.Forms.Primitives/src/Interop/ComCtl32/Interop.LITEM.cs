@@ -14,10 +14,10 @@ internal static partial class Interop
             private const int MAX_LINKID_TEXT = 48;
             private const int L_MAX_URL_LENGTH = 2048 + 32 + 3;
 
-            public LIF mask;
+            public LIST_ITEM_FLAGS mask;
             public int iLink;
-            public LIS state;
-            public LIS stateMask;
+            public LIST_ITEM_STATE_FLAGS state;
+            public LIST_ITEM_STATE_FLAGS stateMask;
             public fixed char szID[MAX_LINKID_TEXT];
             public fixed char szUrl[L_MAX_URL_LENGTH];
         }

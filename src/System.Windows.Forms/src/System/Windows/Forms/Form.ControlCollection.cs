@@ -54,10 +54,7 @@ namespace System.Windows.Forms
 
                 base.Add(value);
 
-                if (_owner._ctlClient is not null)
-                {
-                    _owner._ctlClient.SendToBack();
-                }
+                _owner._ctlClient?.SendToBack();
             }
 
             /// <summary>

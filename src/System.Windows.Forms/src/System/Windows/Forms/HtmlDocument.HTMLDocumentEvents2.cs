@@ -195,10 +195,7 @@ namespace System.Windows.Forms
 
             private void FireEvent(object key, EventArgs e)
             {
-                if (_parent is not null)
-                {
-                    _parent.DocumentShim.FireEvent(key, e);
-                }
+                _parent?.DocumentShim.FireEvent(key, e);
             }
         }
     }

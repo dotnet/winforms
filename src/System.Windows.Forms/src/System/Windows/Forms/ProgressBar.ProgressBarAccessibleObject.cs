@@ -29,32 +29,26 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
+                    UiaCore.UIA.ControlTypePropertyId when
                         // If we don't set a default role for the accessible object
                         // it will be retrieved from Windows.
                         // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                        return Owner.AccessibleRole == AccessibleRole.Default
-                               ? UiaCore.UIA.ProgressBarControlTypeId
-                               : base.GetPropertyValue(propertyID);
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                        Owner.AccessibleRole == AccessibleRole.Default
+                        => UiaCore.UIA.ProgressBarControlTypeId,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId =>
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                        return true;
-                    case UiaCore.UIA.IsRangeValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.RangeValueIsReadOnlyPropertyId:
-                        return true;
-                    case UiaCore.UIA.RangeValueLargeChangePropertyId:
-                    case UiaCore.UIA.RangeValueSmallChangePropertyId:
-                        return double.NaN;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                        true,
+                    UiaCore.UIA.IsRangeValuePatternAvailablePropertyId => true,
+                    UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
+                    UiaCore.UIA.RangeValueIsReadOnlyPropertyId => true,
+                    UiaCore.UIA.RangeValueLargeChangePropertyId => double.NaN,
+                    UiaCore.UIA.RangeValueSmallChangePropertyId => double.NaN,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override void SetValue(double newValue)
             {

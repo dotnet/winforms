@@ -5,17 +5,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///
-    ///  Displays a list with a checkbox to the left
-    ///
-    ///  of each item.
+    ///  Displays a list with a checkbox to the left of each item.
     /// </summary>
     [LookupBindingProperties]
     [SRDescription(nameof(SR.DescriptionCheckedListBox))]
@@ -55,8 +50,8 @@ namespace System.Windows.Forms
         private CheckedItemCollection? _checkedItemCollection;
         private CheckedIndexCollection? _checkedIndexCollection;
 
-        private static readonly WM LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
-        private static readonly WM LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
+        private static readonly User32.WM LBC_GETCHECKSTATE = User32.RegisterWindowMessageW("LBC_GETCHECKSTATE");
+        private static readonly User32.WM LBC_SETCHECKSTATE = User32.RegisterWindowMessageW("LBC_SETCHECKSTATE");
 
         /// <summary>
         ///  Creates a new CheckedListBox for the user.
@@ -92,10 +87,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedIndexCollection is null)
-                {
-                    _checkedIndexCollection = new CheckedIndexCollection(this);
-                }
+                _checkedIndexCollection ??= new CheckedIndexCollection(this);
 
                 return _checkedIndexCollection;
             }
@@ -110,10 +102,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedItemCollection is null)
-                {
-                    _checkedItemCollection = new CheckedItemCollection(this);
-                }
+                _checkedItemCollection ??= new CheckedItemCollection(this);
 
                 return _checkedItemCollection;
             }
@@ -130,7 +119,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= (int)(LBS.OWNERDRAWFIXED | LBS.WANTKEYBOARDINPUT);
+                cp.Style |= (int)(User32.LBS.OWNERDRAWFIXED | User32.LBS.WANTKEYBOARDINPUT);
                 return cp;
             }
         }
@@ -196,7 +185,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRDescription(nameof(SR.ListBoxItemsDescr))]
         [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        new public ObjectCollection Items
+        public new ObjectCollection Items
         {
             get
             {
@@ -311,7 +300,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? DataSourceChanged
+        public new event EventHandler? DataSourceChanged
         {
             add => base.DataSourceChanged += value;
             remove => base.DataSourceChanged -= value;
@@ -319,7 +308,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? DisplayMemberChanged
+        public new event EventHandler? DisplayMemberChanged
         {
             add => base.DisplayMemberChanged += value;
             remove => base.DisplayMemberChanged -= value;
@@ -380,7 +369,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? ValueMemberChanged
+        public new event EventHandler? ValueMemberChanged
         {
             add => base.ValueMemberChanged += value;
             remove => base.ValueMemberChanged -= value;
@@ -427,9 +416,9 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                var rect = new RECT();
-                SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect);
-                InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
+                var rect = default(RECT);
+                PInvoke.SendMessage(this, (User32.WM)User32.LB.GETITEMRECT, (WPARAM)index, ref rect);
+                PInvoke.InvalidateRect(this, &rect, bErase: false);
             }
         }
 
@@ -462,7 +451,7 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.Selection, index);
 
             //# VS7 86
-            if (!_killnextselect && (index == _lastSelected || CheckOnClick == true))
+            if (!_killnextselect && (index == _lastSelected || CheckOnClick))
             {
                 CheckState currentValue = CheckedItems.GetCheckedState(index);
                 CheckState newValue = (currentValue != CheckState.Unchecked)
@@ -500,7 +489,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
+            PInvoke.SendMessage(this, (User32.WM)User32.LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
         }
 
         /// <summary>
@@ -564,7 +553,7 @@ namespace System.Windows.Forms
                         isMixed: false,
                         (e.State & DrawItemState.HotLight) == DrawItemState.HotLight);
 
-                    _idealCheckSize = CheckBoxRenderer.GetGlyphSize(e, cbState, HandleInternal).Width;
+                    _idealCheckSize = CheckBoxRenderer.GetGlyphSize(e, cbState, HWNDInternal).Width;
                 }
 
                 // Determine bounds for the checkbox
@@ -599,7 +588,7 @@ namespace System.Windows.Forms
                         isMixed: false,
                         ((e.State & DrawItemState.HotLight) == DrawItemState.HotLight));
 
-                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(e, new Point(box.X, box.Y), cbState, HandleInternal);
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(e, new Point(box.X, box.Y), cbState, HWNDInternal);
                 }
                 else
                 {
@@ -655,8 +644,8 @@ namespace System.Windows.Forms
 
                 if (!backColor.HasTransparency())
                 {
-                    using var hdc = new DeviceContextHdcScope(e);
-                    using var hbrush = new Gdi32.CreateBrushScope(backColor);
+                    using DeviceContextHdcScope hdc = new(e);
+                    using PInvoke.CreateBrushScope hbrush = new(backColor);
                     hdc.FillRectangle(textBounds, hbrush);
                 }
                 else
@@ -786,13 +775,13 @@ namespace System.Windows.Forms
             }
         }
 
-        protected unsafe override void OnBackColorChanged(EventArgs e)
+        protected override unsafe void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
 
             if (IsHandleCreated)
             {
-                InvalidateRect(new HandleRef(this, Handle), null, BOOL.TRUE);
+                PInvoke.InvalidateRect(this, null, true);
             }
         }
 
@@ -801,7 +790,7 @@ namespace System.Windows.Forms
             // Update the item height
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
+                PInvoke.SendMessage(this, (User32.WM)User32.LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
@@ -841,10 +830,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject? checkedItem = AccessibilityObject.GetChild(ice.Index);
 
-                if (checkedItem is not null)
-                {
-                    checkedItem.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
-                }
+                checkedItem?.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
             }
         }
 
@@ -936,7 +922,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WmReflectCommand(ref Message m)
         {
-            switch ((User32.LBN)PARAM.HIWORD(m.WParamInternal))
+            switch ((User32.LBN)m.WParamInternal.SIGNEDHIWORD)
             {
                 case User32.LBN.SELCHANGE:
                     LbnSelChange();
@@ -961,7 +947,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectVKeyToItem(ref Message m)
         {
-            Keys keycode = (Keys)PARAM.LOWORD(m.WParamInternal);
+            Keys keycode = (Keys)m.WParamInternal.LOWORD;
             switch (keycode)
             {
                 case Keys.Up:
@@ -979,7 +965,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            m.ResultInternal = -1;
+            m.ResultInternal = (LRESULT)(-1);
         }
 
         /// <summary>
@@ -991,10 +977,10 @@ namespace System.Windows.Forms
         {
             switch (m.MsgInternal)
             {
-                case WM.REFLECT_CHARTOITEM:
-                    m.ResultInternal = -1;
+                case User32.WM.REFLECT_CHARTOITEM:
+                    m.ResultInternal = (LRESULT)(-1);
                     break;
-                case WM.REFLECT_VKEYTOITEM:
+                case User32.WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:
@@ -1003,11 +989,11 @@ namespace System.Windows.Forms
                         int item = (int)m.WParamInternal;
                         if (item < 0 || item >= Items.Count)
                         {
-                            m.ResultInternal = LB_ERR;
+                            m.ResultInternal = (LRESULT)User32.LB_ERR;
                         }
                         else
                         {
-                            m.ResultInternal = GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED;
+                            m.ResultInternal = (LRESULT)(GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED);
                         }
                     }
                     else if (m.MsgInternal == LBC_SETCHECKSTATE)
@@ -1016,12 +1002,12 @@ namespace System.Windows.Forms
                         int state = (int)m.LParamInternal;
                         if (item < 0 || item >= Items.Count || (state != LB_CHECKED && state != LB_UNCHECKED))
                         {
-                            m.ResultInternal = 0;
+                            m.ResultInternal = (LRESULT)0;
                         }
                         else
                         {
                             SetItemChecked(item, (state == LB_CHECKED));
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                         }
                     }
                     else

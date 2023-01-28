@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -213,7 +215,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 // We keep track of any failures here.  If we failed to find a type this
                 // array list will contain a list of strings listing what we have tried.
-                ArrayList failures = null;
+                List<string> failures = null;
                 bool firstClass = true;
 
                 if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] is not null)
@@ -248,11 +250,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (t is null)
                             {
-                                if (failures is null)
-                                {
-                                    failures = new ArrayList();
-                                }
-
+                                failures ??= new();
                                 failures.Add(string.Format(SR.CodeDomDesignerLoaderDocumentFailureTypeNotFound, typeDecl.Name, typeRef.BaseType));
                             }
                         }
@@ -271,13 +269,10 @@ namespace System.ComponentModel.Design.Serialization
 
                             foreach (Attribute attr in attributes)
                             {
-                                if (attr is RootDesignerSerializerAttribute)
+                                if (attr is RootDesignerSerializerAttribute ra)
                                 {
-                                    RootDesignerSerializerAttribute ra = (RootDesignerSerializerAttribute)attr;
-                                    string typeName = ra.SerializerBaseTypeName;
-
                                     // This serializer must support a CodeDomSerializer or we're not interested.
-                                    if (typeName is not null && LoaderHost.GetType(typeName) == typeof(CodeDomSerializer))
+                                    if (ra.SerializerBaseTypeName is not null && LoaderHost.GetType(ra.SerializerBaseTypeName) == typeof(CodeDomSerializer))
                                     {
                                         Type serializerType = LoaderHost.GetType(ra.SerializerTypeName);
 
@@ -317,10 +312,7 @@ namespace System.ComponentModel.Design.Serialization
                             // If we didn't find a serializer for this type, report it.
                             if (_rootSerializer is null && _typeSerializer is null)
                             {
-                                if (failures is null)
-                                {
-                                    failures = new ArrayList();
-                                }
+                                failures ??= new();
 
                                 if (foundAttribute)
                                 {
@@ -432,7 +424,9 @@ namespace System.ComponentModel.Design.Serialization
             bool lockField = false;
             int methodInsertLocation = 0;
             bool lockMethod = false;
-            IDictionary docMemberHash = new HybridDictionary(docDecl.Members.Count, caseInsensitive);
+            Dictionary<string, int> docMemberHash = new(docDecl.Members.Count, caseInsensitive
+                ? StringComparer.InvariantCultureIgnoreCase
+                : StringComparer.InvariantCulture);
             int memberCount = docDecl.Members.Count;
 
             for (int i = 0; i < memberCount; i++)
@@ -489,26 +483,13 @@ namespace System.ComponentModel.Design.Serialization
             // Now start looking through the new declaration and process it.
             // We are index driven, so if we need to add new values we put
             // them into an array list, and post process them.
-            ArrayList newElements = new ArrayList();
+            List<CodeTypeMember> newElements = new();
 
             foreach (CodeTypeMember member in newDecl.Members)
             {
-                string memberName;
-
-                if (member is CodeConstructor)
+                string memberName = member is CodeConstructor ? ".ctor" : member.Name;
+                if (docMemberHash.TryGetValue(memberName, out int slot))
                 {
-                    memberName = ".ctor";
-                }
-                else
-                {
-                    memberName = member.Name;
-                }
-
-                object existingSlot = docMemberHash[memberName];
-
-                if (existingSlot is not null)
-                {
-                    int slot = (int)existingSlot;
                     CodeTypeMember existingMember = docDecl.Members[slot];
 
                     if (existingMember == member)
@@ -516,13 +497,10 @@ namespace System.ComponentModel.Design.Serialization
                         continue;
                     }
 
-                    if (member is CodeMemberField)
+                    if (member is CodeMemberField newField)
                     {
-                        if (existingMember is CodeMemberField)
+                        if (existingMember is CodeMemberField docField)
                         {
-                            CodeMemberField docField = (CodeMemberField)existingMember;
-                            CodeMemberField newField = (CodeMemberField)member;
-
                             // We will be case-sensitive always in working out whether to replace the field
                             if ((string.Equals(newField.Name, docField.Name)) && newField.Attributes == docField.Attributes && TypesEqual(newField.Type, docField.Type))
                             {
@@ -540,22 +518,18 @@ namespace System.ComponentModel.Design.Serialization
                             newElements.Add(member);
                         }
                     }
-                    else if (member is CodeMemberMethod)
+                    else if (member is CodeMemberMethod newMethod)
                     {
-                        if (existingMember is CodeMemberMethod)
+                        if (existingMember is CodeMemberMethod and not CodeConstructor)
                         {
                             // If there is an existing constructor, preserve it.
-                            if (!(existingMember is CodeConstructor))
-                            {
-                                // For methods, we do not want to replace the method; rather, we
-                                // just want to replace its contents.  This helps to preserve
-                                // the layout of the file.
-                                CodeMemberMethod existingMethod = (CodeMemberMethod)existingMember;
-                                CodeMemberMethod newMethod = (CodeMemberMethod)member;
+                            // For methods, we do not want to replace the method; rather, we
+                            // just want to replace its contents.  This helps to preserve
+                            // the layout of the file.
+                            CodeMemberMethod existingMethod = (CodeMemberMethod)existingMember;
 
-                                existingMethod.Statements.Clear();
-                                existingMethod.Statements.AddRange(newMethod.Statements);
-                            }
+                            existingMethod.Statements.Clear();
+                            existingMethod.Statements.AddRange(newMethod.Statements);
                         }
                     }
                     else
@@ -1085,10 +1059,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         object IDesignerSerializationService.Serialize(ICollection objects)
         {
-            if (objects is null)
-            {
-                objects = Array.Empty<object>();
-            }
+            objects ??= Array.Empty<object>();
 
             ComponentSerializationService css = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
 
@@ -1145,13 +1116,13 @@ namespace System.ComponentModel.Design.Serialization
 
             // Now hash up all of the member variable names using a case insensitive hash.
             CodeTypeDeclaration type = _documentType;
-            Hashtable memberHash = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
+            HashSet<string> memberHash = new(StringComparer.CurrentCultureIgnoreCase);
 
             if (type is not null)
             {
                 foreach (CodeTypeMember member in type.Members)
                 {
-                    memberHash[member.Name] = member;
+                    memberHash.Add(member.Name);
                 }
             }
 
@@ -1176,7 +1147,7 @@ namespace System.ComponentModel.Design.Serialization
                         conflict = true;
                     }
 
-                    if (!conflict && memberHash[finalName] is not null)
+                    if (!conflict && memberHash.Contains(finalName))
                     {
                         conflict = true;
                     }

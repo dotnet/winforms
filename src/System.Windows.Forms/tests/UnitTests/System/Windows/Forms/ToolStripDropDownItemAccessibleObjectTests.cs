@@ -204,6 +204,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, accessibleObject.GetChildFragmentIndex(accessibleObjectNotItem));
         }
 
+        [WinFormsFact]
+        public void ToolStripDropDownItemAccessibleObject_ReleaseUiaProvider_DropDown()
+        {
+            using NoAssertContext context = new();
+            using var toolStripDropDownItem = new SubToolStripDropDownItem();
+
+            _ = toolStripDropDownItem.AccessibilityObject;
+            _ = toolStripDropDownItem.DropDown.AccessibilityObject;
+
+            Assert.True(toolStripDropDownItem.DropDown.IsAccessibilityObjectCreated);
+
+            toolStripDropDownItem.ReleaseUiaProvider();
+
+            Assert.False(toolStripDropDownItem.DropDown.IsAccessibilityObjectCreated);
+        }
+
         private class SubToolStripDropDownItem : ToolStripDropDownItem
         {
             public SubToolStripDropDownItem() : base() { }

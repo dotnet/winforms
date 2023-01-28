@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -34,7 +33,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner.IsHandleCreated)
                     {
-                        int cnt = (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETSELECTEDCOUNT);
+                        int cnt = (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETSELECTEDCOUNT);
 
                         ListViewItem[] lvitems = new ListViewItem[cnt];
 
@@ -42,7 +41,12 @@ namespace System.Windows.Forms
 
                         for (int i = 0; i < cnt; i++)
                         {
-                            int fidx = (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETNEXTITEM, displayIndex, (nint)LVNI.SELECTED);
+                            int fidx = (int)PInvoke.SendMessage(
+                                _owner,
+                                (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                                (WPARAM)displayIndex,
+                                (LPARAM)(uint)PInvoke.LVNI_SELECTED);
+
                             if (fidx > -1)
                             {
                                 lvitems[i] = _owner.Items[fidx];
@@ -91,7 +95,7 @@ namespace System.Windows.Forms
 
                     if (_owner.IsHandleCreated)
                     {
-                        return (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETSELECTEDCOUNT);
+                        return (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETSELECTEDCOUNT);
                     }
                     else
                     {
@@ -128,7 +132,12 @@ namespace System.Windows.Forms
                         int fidx = -1;
                         for (int count = 0; count <= index; count++)
                         {
-                            fidx = (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETNEXTITEM, fidx, (nint)LVNI.SELECTED);
+                            fidx = (int)PInvoke.SendMessage(
+                                _owner,
+                                (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                                (WPARAM)fidx,
+                                (LPARAM)(uint)PInvoke.LVNI_SELECTED);
+
                             Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");
                         }
 

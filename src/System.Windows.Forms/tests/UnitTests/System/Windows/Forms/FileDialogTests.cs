@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32.UI.Controls.Dialogs;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -645,7 +645,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void FileDialog_RunDialog_NonVista_Success(bool result)
+        public unsafe void FileDialog_RunDialog_NonVista_Success(bool result)
         {
             using var dialog = new SubFileDialog
             {
@@ -653,37 +653,38 @@ namespace System.Windows.Forms.Tests
             };
             dialog.RunFileDialogAction = o =>
             {
-                Assert.Equal(Marshal.SizeOf<NativeMethods.OPENFILENAME_I>(), o.lStructSize);
-                Assert.Equal((IntPtr)1, o.hwndOwner);
+                Assert.Equal(sizeof(OPENFILENAME), (int)o.lStructSize);
+                Assert.Equal((HWND)1, o.hwndOwner);
                 Assert.Equal(dialog.Instance, o.hInstance);
-                Assert.Equal(" \0*.*\0\0", o.lpstrFilter);
-                Assert.Equal(IntPtr.Zero, o.lpstrCustomFilter);
-                Assert.Equal(0, o.nMaxCustFilter);
-                Assert.Equal(1, o.nFilterIndex);
-                Assert.NotEqual(IntPtr.Zero, o.lpstrFile);
-                Assert.Equal(8192, o.nMaxFile);
-                Assert.Equal(IntPtr.Zero, o.lpstrFileTitle);
-                Assert.Equal(260, o.nMaxFileTitle);
-                Assert.Null(o.lpstrInitialDir);
-                Assert.Null(o.lpstrTitle);
-                Assert.Equal(8914980, o.Flags);
+                ReadOnlySpan<char> filter = new(o.lpstrFilter.Value, o.lpstrFilter.StringListLength);
+                Assert.True(filter.SequenceEqual(" \0*.*"));
+                Assert.True(o.lpstrCustomFilter.IsNull);
+                Assert.Equal(0u, o.nMaxCustFilter);
+                Assert.Equal(1u, o.nFilterIndex);
+                Assert.False(o.lpstrFile.IsNull);
+                Assert.Equal(8192u, o.nMaxFile);
+                Assert.True(o.lpstrFileTitle.IsNull);
+                Assert.Equal(0u, o.nMaxFileTitle);
+                Assert.True(o.lpstrInitialDir.IsNull);
+                Assert.True(o.lpstrTitle.IsNull);
+                Assert.Equal((OPEN_FILENAME_FLAGS)8914980, o.Flags);
                 Assert.Equal(0, o.nFileOffset);
                 Assert.Equal(0, o.nFileExtension);
-                Assert.Null(o.lpstrDefExt);
-                Assert.Equal(IntPtr.Zero, o.lCustData);
-                Assert.NotNull(o.lpfnHook);
-                Assert.Null(o.lpTemplateName);
-                Assert.Equal(IntPtr.Zero, o.pvReserved);
-                Assert.Equal(0, o.dwReserved);
-                Assert.Equal(0, o.FlagsEx);
+                Assert.True(o.lpstrDefExt.IsNull);
+                Assert.Equal((LPARAM)0, o.lCustData);
+                Assert.False(o.lpfnHook is null);
+                Assert.True(o.lpTemplateName.IsNull);
+                Assert.True(o.pvReserved is null);
+                Assert.Equal(0u, o.dwReserved);
+                Assert.Equal((OPEN_FILENAME_FLAGS_EX)0, o.FlagsEx);
                 return result;
             };
-            Assert.Equal(result, dialog.RunDialog((IntPtr)1));
+            Assert.Equal(result, dialog.RunDialog(1));
         }
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void FileDialog_RunDialog_NonVistaAdvanced_Success(bool result)
+        public unsafe void FileDialog_RunDialog_NonVistaAdvanced_Success(bool result)
         {
             using var dialog = new SubFileDialog
             {
@@ -707,31 +708,32 @@ namespace System.Windows.Forms.Tests
                 Title = "Title",
                 ValidateNames = false
             };
+
             dialog.RunFileDialogAction = o =>
             {
-                Assert.Equal(Marshal.SizeOf<NativeMethods.OPENFILENAME_I>(), o.lStructSize);
+                Assert.Equal(sizeof(OPENFILENAME), (int)o.lStructSize);
                 Assert.Equal((IntPtr)1, o.hwndOwner);
                 Assert.Equal(dialog.Instance, o.hInstance);
-                Assert.Null(o.lpstrFilter);
-                Assert.Equal(IntPtr.Zero, o.lpstrCustomFilter);
-                Assert.Equal(0, o.nMaxCustFilter);
-                Assert.Equal(2, o.nFilterIndex);
-                Assert.NotEqual(IntPtr.Zero, o.lpstrFile);
-                Assert.Equal(8192, o.nMaxFile);
-                Assert.Equal(IntPtr.Zero, o.lpstrFileTitle);
-                Assert.Equal(260, o.nMaxFileTitle);
-                Assert.Equal("InitialDirectory", o.lpstrInitialDir);
-                Assert.Equal("Title", o.lpstrTitle);
-                Assert.Equal(314310972, o.Flags);
-                Assert.Equal(0, o.nFileOffset);
-                Assert.Equal(0, o.nFileExtension);
-                Assert.Equal(result ? "DefaultExt" : null, o.lpstrDefExt);
-                Assert.Equal(IntPtr.Zero, o.lCustData);
-                Assert.NotNull(o.lpfnHook);
-                Assert.Null(o.lpTemplateName);
-                Assert.Equal(IntPtr.Zero, o.pvReserved);
-                Assert.Equal(0, o.dwReserved);
-                Assert.Equal(0, o.FlagsEx);
+                Assert.True(o.lpstrFilter.IsNull);
+                Assert.True(o.lpstrCustomFilter.IsNull);
+                Assert.Equal(0u, o.nMaxCustFilter);
+                Assert.Equal(2u, o.nFilterIndex);
+                Assert.False(o.lpstrFile.IsNull);
+                Assert.Equal(8192u, o.nMaxFile);
+                Assert.True(o.lpstrFileTitle.IsNull);
+                Assert.Equal(0u, o.nMaxFileTitle);
+                Assert.Equal("InitialDirectory", o.lpstrInitialDir.ToString());
+                Assert.Equal("Title", o.lpstrTitle.ToString());
+                Assert.Equal((OPEN_FILENAME_FLAGS)314310972, o.Flags);
+                Assert.Equal(0u, o.nFileOffset);
+                Assert.Equal(0u, o.nFileExtension);
+                Assert.Equal(result ? "DefaultExt" : null, o.lpstrDefExt.ToString());
+                Assert.Equal((LPARAM)0, o.lCustData);
+                Assert.False(o.lpfnHook is null);
+                Assert.True(o.lpTemplateName.IsNull);
+                Assert.True(o.pvReserved is null);
+                Assert.Equal(0u, o.dwReserved);
+                Assert.Equal((OPEN_FILENAME_FLAGS_EX)0, o.FlagsEx);
                 return result;
             };
             Assert.Equal(result, dialog.RunDialog((IntPtr)1));
@@ -739,7 +741,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void FileDialog_RunDialog_ShowHelp_Success(bool result)
+        public unsafe void FileDialog_RunDialog_ShowHelp_Success(bool result)
         {
             using var dialog = new SubFileDialog
             {
@@ -747,32 +749,33 @@ namespace System.Windows.Forms.Tests
             };
             dialog.RunFileDialogAction = o =>
             {
-                Assert.Equal(Marshal.SizeOf<NativeMethods.OPENFILENAME_I>(), o.lStructSize);
-                Assert.Equal((IntPtr)1, o.hwndOwner);
+                Assert.Equal(sizeof(OPENFILENAME), (int)o.lStructSize);
+                Assert.Equal((HWND)1, o.hwndOwner);
                 Assert.Equal(dialog.Instance, o.hInstance);
-                Assert.Equal(" \0*.*\0\0", o.lpstrFilter);
-                Assert.Equal(IntPtr.Zero, o.lpstrCustomFilter);
-                Assert.Equal(0, o.nMaxCustFilter);
-                Assert.Equal(1, o.nFilterIndex);
-                Assert.NotEqual(IntPtr.Zero, o.lpstrFile);
-                Assert.Equal(8192, o.nMaxFile);
-                Assert.Equal(IntPtr.Zero, o.lpstrFileTitle);
-                Assert.Equal(260, o.nMaxFileTitle);
-                Assert.Null(o.lpstrInitialDir);
-                Assert.Null(o.lpstrTitle);
-                Assert.Equal(8914996, o.Flags);
-                Assert.Equal(0, o.nFileOffset);
-                Assert.Equal(0, o.nFileExtension);
-                Assert.Null(o.lpstrDefExt);
-                Assert.Equal(IntPtr.Zero, o.lCustData);
-                Assert.NotNull(o.lpfnHook);
-                Assert.Null(o.lpTemplateName);
-                Assert.Equal(IntPtr.Zero, o.pvReserved);
-                Assert.Equal(0, o.dwReserved);
-                Assert.Equal(0, o.FlagsEx);
+                ReadOnlySpan<char> filter = new(o.lpstrFilter.Value, o.lpstrFilter.StringListLength);
+                Assert.True(filter.SequenceEqual(" \0*.*"));
+                Assert.True(o.lpstrCustomFilter.IsNull);
+                Assert.Equal(0u, o.nMaxCustFilter);
+                Assert.Equal(1u, o.nFilterIndex);
+                Assert.False(o.lpstrFile.IsNull);
+                Assert.Equal(8192u, o.nMaxFile);
+                Assert.True(o.lpstrFileTitle.IsNull);
+                Assert.Equal(0u, o.nMaxFileTitle);
+                Assert.True(o.lpstrInitialDir.IsNull);
+                Assert.True(o.lpstrTitle.IsNull);
+                Assert.Equal((OPEN_FILENAME_FLAGS)8914996, o.Flags);
+                Assert.Equal(0u, o.nFileOffset);
+                Assert.Equal(0u, o.nFileExtension);
+                Assert.True(o.lpstrDefExt.IsNull);
+                Assert.Equal((LPARAM)0, o.lCustData);
+                Assert.False(o.lpfnHook is null);
+                Assert.True(o.lpTemplateName.IsNull);
+                Assert.True(o.pvReserved is null);
+                Assert.Equal(0u, o.dwReserved);
+                Assert.Equal((OPEN_FILENAME_FLAGS_EX)0, o.FlagsEx);
                 return result;
             };
-            Assert.Equal(result, dialog.RunDialog((IntPtr)1));
+            Assert.Equal(result, dialog.RunDialog(1));
         }
 
         public static IEnumerable<object[]> ToString_TestData()
@@ -788,9 +791,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, dialog.ToString());
         }
 
-        private class SubFileDialog : FileDialog
+        private unsafe class SubFileDialog : FileDialog
         {
-            public new static readonly object EventFileOk = FileDialog.EventFileOk;
+            public static new readonly object EventFileOk = FileDialog.EventFileOk;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
@@ -802,16 +805,16 @@ namespace System.Windows.Forms.Tests
 
             public new int Options => base.Options;
 
-            public Func<NativeMethods.OPENFILENAME_I, bool> RunFileDialogAction { get; set; }
+            public Func<OPENFILENAME, bool> RunFileDialogAction { get; set; }
 
-            private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
+            private protected override bool RunFileDialog(OPENFILENAME* ofn)
             {
-                return RunFileDialogAction(ofn);
+                return RunFileDialogAction(*ofn);
             }
 
-            private protected override Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog() => null;
+            private protected override IFileDialog* CreateVistaDialog() => null;
 
-            private protected override string[] ProcessVistaFiles(Interop.WinFormsComWrappers.FileDialogWrapper dialog) => null;
+            private protected override string[] ProcessVistaFiles(IFileDialog* dialog) => null;
 
             public new void OnFileOk(CancelEventArgs e) => base.OnFileOk(e);
 

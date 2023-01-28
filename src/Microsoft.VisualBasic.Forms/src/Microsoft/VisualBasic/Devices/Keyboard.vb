@@ -32,9 +32,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="wait">Wait for messages to be processed before returning.</param>
         Public Sub SendKeys(keys As String, wait As Boolean)
             If wait Then
-                Windows.Forms.SendKeys.SendWait(keys)
+                System.Windows.Forms.SendKeys.SendWait(keys)
             Else
-                Windows.Forms.SendKeys.Send(keys)
+                System.Windows.Forms.SendKeys.Send(keys)
             End If
         End Sub
 

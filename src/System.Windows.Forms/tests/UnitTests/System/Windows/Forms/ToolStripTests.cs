@@ -5,17 +5,16 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public partial class ToolStripTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -460,9 +459,9 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var dropTarget = new CustomDropTarget();
+            DropTargetMock dropTarget = new();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.S_OK, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.S_OK, PInvoke.RegisterDragDrop(control, dropTarget));
 
             try
             {
@@ -491,30 +490,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Ole32.RevokeDragDrop(control.Handle);
-            }
-        }
-
-        private class CustomDropTarget : Ole32.IDropTarget
-        {
-            public HRESULT DragEnter([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragLeave()
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT Drop([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
+                PInvoke.RevokeDragDrop((HWND)control.Handle);
             }
         }
 
@@ -601,7 +577,7 @@ namespace System.Windows.Forms.Tests
             {
                 AllowItemReorder = true
             };
-            Assert.Throws<ArgumentException>(null, () => control.AllowDrop = true);
+            Assert.Throws<ArgumentException>(() => control.AllowDrop = true);
             Assert.False(control.AllowDrop);
 
             control.AllowDrop = false;
@@ -702,7 +678,7 @@ namespace System.Windows.Forms.Tests
             {
                 AllowDrop = true
             };
-            Assert.Throws<ArgumentException>(null, () => control.AllowItemReorder = true);
+            Assert.Throws<ArgumentException>(() => control.AllowItemReorder = true);
             Assert.False(control.AllowItemReorder);
 
             control.AllowItemReorder = false;
@@ -5792,7 +5768,7 @@ namespace System.Windows.Forms.Tests
             toolStrip.SetDisplayedItems();
 
             toolStrip.OnMouseMove(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
 
             toolStrip.OnMouseLeave(new EventArgs());
             Assert.False(item.Selected);
@@ -5888,7 +5864,7 @@ namespace System.Windows.Forms.Tests
                         {
                             foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
                             {
-                                int expected = backgroundImage != null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (hScroll || vScroll) ? 0 : 1;
+                                int expected = backgroundImage is not null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (hScroll || vScroll) ? 0 : 1;
                                 yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
                                 yield return new object[] { parent, hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
                                 yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
@@ -5947,8 +5923,7 @@ namespace System.Windows.Forms.Tests
 
                                 int expected = parent == tabPage
                                     ? 0
-                                    : backgroundImage != null
-                                        && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center)
+                                    : backgroundImage is not null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center)
                                         && (hScroll || vScroll)
                                             ? 1
                                             : 2;

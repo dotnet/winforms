@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
@@ -57,9 +59,9 @@ namespace System.Windows.Forms.Design
 
             Debug.Assert(_handlers.Count > 0, "Should have handlers to look through.");
 
-            object handler = _handlers.FirstOrDefault(h => handlerType.IsInstanceOfType(h));
+            object handler = _handlers.FirstOrDefault(handlerType.IsInstanceOfType);
 
-            if (handler != null)
+            if (handler is not null)
             {
                 _lastHandler = handler;
                 _lastHandlerType = handlerType;
@@ -76,7 +78,7 @@ namespace System.Windows.Forms.Design
             ArgumentNullException.ThrowIfNull(handler);
 
             var node = _handlers.Find(handler);
-            if (node != null)
+            if (node is not null)
             {
                 _handlers.Remove(node);
                 _lastHandler = null;

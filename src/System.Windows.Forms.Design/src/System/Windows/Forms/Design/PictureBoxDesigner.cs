@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
@@ -86,7 +88,7 @@ namespace System.Windows.Forms.Design
                 object component = Component;
 
                 PropertyDescriptor propSizeMode = TypeDescriptor.GetProperties(Component)["SizeMode"];
-                if (propSizeMode != null)
+                if (propSizeMode is not null)
                 {
                     PictureBoxSizeMode sizeMode = (PictureBoxSizeMode)propSizeMode.GetValue(component);
 
@@ -104,7 +106,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists == null)
+                if (_actionLists is null)
                 {
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new PictureBoxActionList(this));
@@ -115,4 +117,3 @@ namespace System.Windows.Forms.Design
         }
     }
 }
-

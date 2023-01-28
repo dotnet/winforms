@@ -9,12 +9,11 @@ using System.Globalization;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ListControlTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -1404,17 +1403,17 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.FormatInfo = CultureInfo.CurrentCulture;
-            Assert.Same(CultureInfo.CurrentCulture, control.FormatInfo);
+            Assert.Equal(CultureInfo.CurrentCulture, control.FormatInfo);
             Assert.Equal(1, callCount);
 
             // Set same.
             control.FormatInfo = CultureInfo.CurrentCulture;
-            Assert.Same(CultureInfo.CurrentCulture, control.FormatInfo);
+            Assert.Equal(CultureInfo.CurrentCulture, control.FormatInfo);
             Assert.Equal(1, callCount);
 
             // Set different.
             control.FormatInfo = CultureInfo.InvariantCulture;
-            Assert.Same(CultureInfo.InvariantCulture, control.FormatInfo);
+            Assert.Equal(CultureInfo.InvariantCulture, control.FormatInfo);
             Assert.Equal(2, callCount);
 
             // Set null.
@@ -1438,17 +1437,17 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.FormatInfo = CultureInfo.CurrentCulture;
-            Assert.Same(CultureInfo.CurrentCulture, control.FormatInfo);
+            Assert.Equal(CultureInfo.CurrentCulture, control.FormatInfo);
             Assert.Equal(1, callCount);
 
             // Set same.
             control.FormatInfo = CultureInfo.CurrentCulture;
-            Assert.Same(CultureInfo.CurrentCulture, control.FormatInfo);
+            Assert.Equal(CultureInfo.CurrentCulture, control.FormatInfo);
             Assert.Equal(1, callCount);
 
             // Set different.
             control.FormatInfo = CultureInfo.InvariantCulture;
-            Assert.Same(CultureInfo.InvariantCulture, control.FormatInfo);
+            Assert.Equal(CultureInfo.InvariantCulture, control.FormatInfo);
             Assert.Equal(2, callCount);
 
             // Set null.
@@ -1459,7 +1458,7 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.FormatInfoChanged -= handler;
             control.FormatInfo = CultureInfo.CurrentCulture;
-            Assert.Same(CultureInfo.CurrentCulture, control.FormatInfo);
+            Assert.Equal(CultureInfo.CurrentCulture, control.FormatInfo);
             Assert.Equal(3, callCount);
         }
 

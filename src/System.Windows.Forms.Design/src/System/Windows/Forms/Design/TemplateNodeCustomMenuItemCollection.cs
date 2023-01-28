@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -63,7 +65,7 @@ namespace System.Windows.Forms.Design
         private void InsertToolStripItem(Type t)
         {
             IDesignerHost designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-            Debug.Assert(designerHost != null, "Why didn't we get a designer host?");
+            Debug.Assert(designerHost is not null, "Why didn't we get a designer host?");
             ToolStrip parent = ParentTool;
             int dummyIndex = parent.Items.IndexOf(_currentItem);
             DesignerTransaction newItemTransaction = designerHost.CreateTransaction(SR.ToolStripAddingItem);
@@ -96,39 +98,30 @@ namespace System.Windows.Forms.Design
                     }
 
                     PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(component)["Image"];
-                    Debug.Assert(imageProperty != null, "Could not find 'Image' property in ToolStripItem.");
-                    if (imageProperty != null && image != null)
+                    Debug.Assert(imageProperty is not null, "Could not find 'Image' property in ToolStripItem.");
+                    if (imageProperty is not null && image is not null)
                     {
                         imageProperty.SetValue(component, image);
                     }
 
                     PropertyDescriptor dispProperty = TypeDescriptor.GetProperties(component)["DisplayStyle"];
-                    Debug.Assert(dispProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                    if (dispProperty != null)
-                    {
-                        dispProperty.SetValue(component, ToolStripItemDisplayStyle.Image);
-                    }
+                    Debug.Assert(dispProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                    dispProperty?.SetValue(component, ToolStripItemDisplayStyle.Image);
 
                     PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(component)["ImageTransparentColor"];
-                    Debug.Assert(imageTransProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                    if (imageTransProperty != null)
-                    {
-                        imageTransProperty.SetValue(component, Color.Magenta);
-                    }
+                    Debug.Assert(imageTransProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                    imageTransProperty?.SetValue(component, Color.Magenta);
                 }
 
                 Debug.Assert(dummyIndex != -1, "Why is the index of the Item negative?");
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                 ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
-                }
+                selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
             }
             catch (Exception ex)
             {
-                if (newItemTransaction != null)
+                if (newItemTransaction is not null)
                 {
                     newItemTransaction.Cancel();
                     newItemTransaction = null;
@@ -141,10 +134,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (newItemTransaction != null)
-                {
-                    newItemTransaction.Commit();
-                }
+                newItemTransaction?.Commit();
 
                 // turn off Adding/Added events listened to by the ToolStripDesigner...
                 ToolStripDesigner.s_autoAddNewItems = true;

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using static Interop;
 
@@ -12,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class GridToolTip : Control
     {
         private readonly Control[] _controls;
-        private string _toolTipText;
+        private string? _toolTipText;
         private bool _dontShow;
         private const int MaximumToolTipLength = 1000;
 
@@ -34,7 +32,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public string ToolTip
+        public string? ToolTip
         {
             get => _toolTipText;
             set
@@ -67,7 +65,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     for (int i = 0; i < _controls.Length; i++)
                     {
                         ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
-                        info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
+                        info.SendMessage(this, (User32.WM)PInvoke.TTM_UPDATETIPTEXTW);
                     }
 
                     if (visible && !_dontShow)
@@ -87,7 +85,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 var icc = new ComCtl32.INITCOMMONCONTROLSEX
                 {
-                    dwICC = ComCtl32.ICC.TAB_CLASSES
+                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
                 };
 
                 ComCtl32.InitCommonControlsEx(ref icc);
@@ -95,10 +93,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var cp = new CreateParams
                 {
                     Parent = IntPtr.Zero,
-                    ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS
+                    ClassName = PInvoke.TOOLTIPS_CLASS
                 };
 
-                cp.Style |= (int)(ComCtl32.TTS.ALWAYSTIP | ComCtl32.TTS.NOPREFIX);
+                cp.Style |= (int)(PInvoke.TTS_ALWAYSTIP | PInvoke.TTS_NOPREFIX);
                 cp.ExStyle = 0;
                 cp.Caption = ToolTip;
                 return cp;
@@ -106,15 +104,15 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control c)
-            => new(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, _toolTipText);
+            => new(c, TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS, _toolTipText);
 
-        private void OnControlCreateHandle(object sender, EventArgs e) => SetupToolTip((Control)sender);
+        private void OnControlCreateHandle(object? sender, EventArgs e) => SetupToolTip((Control?)sender);
 
-        private void OnControlDestroyHandle(object sender, EventArgs e)
+        private void OnControlDestroyHandle(object? sender, EventArgs e)
         {
-            if (IsHandleCreated)
+            if (IsHandleCreated && sender is not null)
             {
-                GetTOOLINFO((Control)sender).SendMessage(this, (User32.WM)ComCtl32.TTM.DELTOOLW);
+                GetTOOLINFO((Control)sender).SendMessage(this, (User32.WM)PInvoke.TTM_DELTOOLW);
             }
         }
 
@@ -130,27 +128,28 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void SetupToolTip(Control control)
+        private void SetupToolTip(Control? control)
         {
-            if (IsHandleCreated)
+            if (IsHandleCreated && control is not null)
             {
-                User32.SetWindowPos(
+                PInvoke.SetWindowPos(
                     this,
-                    User32.HWND_TOPMOST,
-                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                    HWND.HWND_TOPMOST,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(control);
-                if (info.SendMessage(this, (User32.WM)ComCtl32.TTM.ADDTOOLW) == 0)
+                if (info.SendMessage(this, (User32.WM)PInvoke.TTM_ADDTOOLW) == 0)
                 {
                     Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
                 }
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(
+                PInvoke.SendMessage(
                     this,
-                    (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
-                    0,
-                    SystemInformation.MaxWindowTrackSize.Width);
+                    (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH,
+                    (WPARAM)0,
+                    (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -160,17 +159,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             // then reenter. So we set the tooltip to null, update the text, then it back to
             // what it was, so the tooltip thinks it's back in the regular state again.
 
-            string oldText = ToolTip;
+            string? oldText = ToolTip;
             _toolTipText = string.Empty;
 
             for (int i = 0; i < _controls.Length; i++)
             {
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
-                info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
+                info.SendMessage(this, (User32.WM)PInvoke.TTM_UPDATETIPTEXTW);
             }
 
             _toolTipText = oldText;
-            User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.UPDATE);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TTM_UPDATE);
         }
 
         protected override void WndProc(ref Message msg)
@@ -180,7 +179,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case User32.WM.SHOWWINDOW:
                     if ((int)msg.WParamInternal != 0 && _dontShow)
                     {
-                        msg.WParamInternal = 0;
+                        msg.WParamInternal = 0u;
                     }
 
                     break;
@@ -190,7 +189,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
                     // functional changes between v5 and v6, and the specific way the property grid drives its tooltip.
                     // Workaround is to just force HTTRANSPARENT all the time.
-                    msg.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                    msg.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                     return;
             }
 

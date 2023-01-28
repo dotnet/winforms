@@ -6,16 +6,15 @@
 
 using System.Drawing;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     internal class BrushValidator : IStateValidator
     {
         private readonly Color _brushColor;
-        private readonly Gdi32.BS _brushStyle;
+        private readonly BRUSH_STYLE _brushStyle;
 
-        public BrushValidator(Color brushColor, Gdi32.BS brushStyle)
+        public BrushValidator(Color brushColor, BRUSH_STYLE brushStyle)
         {
             _brushColor = brushColor;
             _brushStyle = brushStyle;

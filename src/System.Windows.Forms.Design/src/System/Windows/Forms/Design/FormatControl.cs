@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 using System.Globalization;
 
@@ -36,7 +38,7 @@ namespace System.Windows.Forms.Design
             {
                 FormatTypeClass formatType = formatTypeListBox.SelectedItem as FormatTypeClass;
 
-                if (formatType != null)
+                if (formatType is not null)
                 {
                     return formatType.ToString();
                 }
@@ -436,11 +438,11 @@ namespace System.Windows.Forms.Design
             FormatStringDialog fsd = null;
             Control ctl = Parent;
 
-            while (ctl != null)
+            while (ctl is not null)
             {
                 fsd = ctl as FormatStringDialog;
 
-                if (fsd != null)
+                if (fsd is not null)
                 {
                     break;
                 }
@@ -448,10 +450,7 @@ namespace System.Windows.Forms.Design
                 ctl = ctl.Parent;
             }
 
-            if (fsd != null)
-            {
-                fsd.FormatControlFinishedLoading();
-            }
+            fsd?.FormatControlFinishedLoading();
         }
 
         private class DateTimeFormatsListBoxItem

@@ -6,9 +6,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Threading;
 using Xunit;
 using Xunit.Abstractions;
-using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
@@ -53,7 +53,8 @@ namespace System.Windows.Forms.UITests
                 GC.WaitForPendingFinalizers();
                 GC.Collect(0);
 
-                uint result = User32.GetGuiResources(Process.GetCurrentProcess().Handle, User32.GR.GDIOBJECTS);
+                uint result = PInvoke.GetGuiResources((HANDLE)Process.GetCurrentProcess().Handle,
+                    GET_GUI_RESOURCES_FLAGS.GR_GDIOBJECTS);
                 if (result == 0)
                 {
                     int lastWin32Error = Marshal.GetLastWin32Error();

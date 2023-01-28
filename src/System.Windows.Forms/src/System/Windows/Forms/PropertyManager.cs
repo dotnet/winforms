@@ -158,7 +158,7 @@ namespace System.Windows.Forms
         ///  Raises the <see cref="BindingManagerBase.CurrentChanged" /> event.
         /// </summary>
         /// <param name="ea">The event data.</param>
-        internal protected override void OnCurrentChanged(EventArgs ea)
+        protected internal override void OnCurrentChanged(EventArgs ea)
         {
             PushData();
 
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
         ///  Raises the <see cref="BindingManagerBase.CurrentItemChanged" /> event.
         /// </summary>
         /// <param name="ea">The event data.</param>
-        internal protected override void OnCurrentItemChanged(EventArgs ea)
+        protected internal override void OnCurrentItemChanged(EventArgs ea)
         {
             PushData();
 

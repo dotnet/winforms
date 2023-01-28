@@ -12,6 +12,7 @@ namespace System.Windows.Forms
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
             private int[]? runtimeId; // Used by UIAutomation
+            private bool? _isModal;
 
             private readonly DataGridView _ownerDataGridView;
             private DataGridViewTopRowAccessibleObject? _topRowAccessibilityObject;
@@ -21,6 +22,35 @@ namespace System.Windows.Forms
                 : base(owner) => _ownerDataGridView = owner;
 
             internal override bool IsReadOnly => _ownerDataGridView.ReadOnly;
+
+            private bool IsModal
+            {
+                get
+                {
+                    _isModal ??= _ownerDataGridView.TopMostParent is Form { Modal: true };
+                    return _isModal.Value;
+                }
+            }
+
+            internal void ReleaseChildUiaProviders()
+            {
+                if (!OsVersion.IsWindows8OrGreater())
+                {
+                    return;
+                }
+
+                if (_topRowAccessibilityObject is not null)
+                {
+                    UiaCore.UiaDisconnectProvider(_topRowAccessibilityObject);
+                    _topRowAccessibilityObject = null;
+                }
+
+                if (_selectedCellsAccessibilityObject is not null)
+                {
+                    UiaCore.UiaDisconnectProvider(_selectedCellsAccessibilityObject);
+                    _selectedCellsAccessibilityObject = null;
+                }
+            }
 
             public override AccessibleRole Role
             {
@@ -41,10 +71,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_topRowAccessibilityObject is null)
-                    {
-                        _topRowAccessibilityObject = new DataGridViewTopRowAccessibleObject(_ownerDataGridView);
-                    }
+                    _topRowAccessibilityObject ??= new DataGridViewTopRowAccessibleObject(_ownerDataGridView);
 
                     return _topRowAccessibilityObject;
                 }
@@ -54,10 +81,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_selectedCellsAccessibilityObject is null)
-                    {
-                        _selectedCellsAccessibilityObject = new DataGridViewSelectedCellsAccessibleObject(_ownerDataGridView);
-                    }
+                    _selectedCellsAccessibilityObject ??= new DataGridViewSelectedCellsAccessibleObject(_ownerDataGridView);
 
                     return _selectedCellsAccessibilityObject;
                 }
@@ -237,20 +261,18 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.ControlTypePropertyId:
                         return _ownerDataGridView.AccessibleRole == AccessibleRole.Default
-                               ? UiaCore.UIA.DataGridControlTypeId
-                               : base.GetPropertyValue(propertyID);
+                            ? UiaCore.UIA.DataGridControlTypeId
+                            : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         // If no inner cell entire DGV should be announced as focused by Narrator.
                         // Else only inner cell should be announced as focused by Narrator but not entire DGV.
-                        return _ownerDataGridView.Focused;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return _ownerDataGridView.CanFocus;
+                        return (IsModal || RowCount == 0) && _ownerDataGridView.Focused;
                     case UiaCore.UIA.IsControlElementPropertyId:
                         return true;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                        return _ownerDataGridView.CanFocus;
                     case UiaCore.UIA.ItemStatusPropertyId:
-                        // Whether the _ownerDataGridView DataGridView can be sorted by some column.
-                        // If so, provide not-sorted/sorted-by item status.
-                        bool canSort = false;
+                        var canSort = false;
                         for (int i = 0; i < ColumnCount; i++)
                         {
                             int columnIndex = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
@@ -279,10 +301,10 @@ namespace System.Windows.Forms
                             return SR.NotSortedAccessibleStatus;
                         }
 
-                        break;
+                        return base.GetPropertyValue(propertyID);
+                    default:
+                        return base.GetPropertyValue(propertyID);
                 }
-
-                return base.GetPropertyValue(propertyID);
             }
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
@@ -364,14 +386,6 @@ namespace System.Windows.Forms
             }
 
             #region IRawElementProviderFragment Implementation
-
-            internal override Rectangle BoundingRectangle
-            {
-                get
-                {
-                    return Bounds;
-                }
-            }
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {

@@ -6,7 +6,6 @@
 
 using System.Numerics;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -15,7 +14,7 @@ namespace System.Windows.Forms.Metafiles
     {
         public EMR emr;
         public Matrix3x2 xform;
-        public Gdi32.MWT iMode;
+        public MODIFY_WORLD_TRANSFORM_MODE iMode;
 
         public override string ToString() => $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
     }

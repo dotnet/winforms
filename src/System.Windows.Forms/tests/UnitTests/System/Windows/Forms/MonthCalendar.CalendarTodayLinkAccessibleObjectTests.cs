@@ -78,5 +78,42 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void CalendarTodayLinkAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = new(control);
+            CalendarTodayLinkAccessibleObject todayLink = new(controlAccessibleObject);
+
+            Assert.Equal(controlAccessibleObject, todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarTodayLinkAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = new(control);
+            CalendarTodayLinkAccessibleObject todayLink = new(controlAccessibleObject);
+
+            AccessibleObject lastCalendar = controlAccessibleObject.CalendarsAccessibleObjects?.Last?.Value;
+
+            Assert.Equal(lastCalendar, todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarTodayLinkAccessibleObject_FragmentNavigate_Child_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = new(control);
+            CalendarTodayLinkAccessibleObject todayLink = new(controlAccessibleObject);
+
+            Assert.Null(todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }

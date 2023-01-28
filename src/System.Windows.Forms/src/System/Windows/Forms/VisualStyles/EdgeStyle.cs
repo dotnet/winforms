@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms.VisualStyles
 {
     public enum EdgeStyle
     {
-        Raised = (int)User32.EDGE.RAISED,
-        Sunken = (int)User32.EDGE.SUNKEN,
-        Etched = (int)User32.EDGE.ETCHED,
-        Bump = (int)User32.EDGE.BUMP
+        Raised = (int)DRAWEDGE_FLAGS.EDGE_RAISED,
+        Sunken = (int)DRAWEDGE_FLAGS.EDGE_SUNKEN,
+        Etched = (int)DRAWEDGE_FLAGS.EDGE_ETCHED,
+        Bump = (int)DRAWEDGE_FLAGS.EDGE_BUMP
     }
 }

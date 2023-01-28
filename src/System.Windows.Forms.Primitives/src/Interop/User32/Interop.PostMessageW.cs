@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL PostMessageW(
+        [DllImport(Libraries.User32)]
+        public static extern BOOL PostMessageW(
             IntPtr hWnd,
             WM Msg,
             nint wParam = default,
@@ -23,17 +23,6 @@ internal static partial class Interop
         {
             BOOL result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd);
-            return result;
-        }
-
-        public static BOOL PostMessageW(
-            HandleRef hWnd,
-            WM Msg,
-            nint wParam = default,
-            nint lParam = default)
-        {
-            BOOL result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
-            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }

@@ -56,7 +56,7 @@ namespace System.Windows.Forms
                 => new int[]
                 {
                     RuntimeIDFirstItem,
-                    _monthCalendarAccessibleObject.Owner.InternalHandle.ToInt32(),
+                    ((nint)_monthCalendarAccessibleObject.Owner.InternalHandle).ToInt32(),
                     GetChildId()
                 };
 

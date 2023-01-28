@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -47,7 +49,7 @@ namespace System.Windows.Forms.Design
             object codeObject = baseSerializer.Serialize(manager, value);
             ImageList imageList = value as ImageList;
 
-            if (imageList != null)
+            if (imageList is not null)
             {
                 StringCollection imageKeys = imageList.Images.Keys;
 
@@ -55,15 +57,15 @@ namespace System.Windows.Forms.Design
                 {
                     CodeExpression imageListObject = GetExpression(manager, value);
 
-                    if (imageListObject != null)
+                    if (imageListObject is not null)
                     {
                         CodeExpression imageListImagesProperty = new CodePropertyReferenceExpression(imageListObject, "Images");
 
-                        if (imageListImagesProperty != null)
+                        if (imageListImagesProperty is not null)
                         {
                             for (int i = 0; i < imageKeys.Count; i++)
                             {
-                                if ((imageKeys[i] != null) || (imageKeys[i].Length != 0))
+                                if ((imageKeys[i] is not null) || (imageKeys[i].Length != 0))
                                 {
                                     CodeMethodInvokeExpression setNameMethodCall
                                         = new(imageListImagesProperty, "SetKeyName",

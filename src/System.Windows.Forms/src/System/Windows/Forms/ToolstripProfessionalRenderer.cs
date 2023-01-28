@@ -86,10 +86,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripHighContrastRenderer is null)
-                {
-                    toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/false);
-                }
+                toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(/*renderLikeSystem*/false);
 
                 return toolStripHighContrastRenderer;
             }
@@ -99,10 +96,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripLowResolutionRenderer is null)
-                {
-                    toolStripLowResolutionRenderer = new ToolStripProfessionalLowResolutionRenderer();
-                }
+                toolStripLowResolutionRenderer ??= new ToolStripProfessionalLowResolutionRenderer();
 
                 return toolStripLowResolutionRenderer;
             }

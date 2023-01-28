@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -29,10 +31,9 @@ namespace System.Windows.Forms.Design
             static string GetToolTip(Binding binding)
             {
                 string name = "";
-                if (binding.DataSource is IComponent)
+                if (binding.DataSource is IComponent comp)
                 {
-                    IComponent comp = (IComponent)binding.DataSource;
-                    if (comp.Site != null)
+                    if (comp.Site is not null)
                     {
                         name = comp.Site.Name;
                     }

@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Layout
 
                 // if we are not wrapping contents, then the breakIndex (as set in MeasureRow)
                 // should be equal to the count of child items in the container.
-                Debug.Assert(wrapContents == true || breakIndex == container.Children.Count,
+                Debug.Assert(wrapContents || breakIndex == container.Children.Count,
                     "We should not be trying to break the row if we are not wrapping contents.");
 
                 if (!measureOnly)

@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             private readonly ToolStripItem _ownerItem;
             private ButtonBaseAdapter.LayoutData? _layoutData;
             private const int BorderWidth = 2;
-            private readonly static Size s_invalidSize = new Size(int.MinValue, int.MinValue);
+            private static readonly Size s_invalidSize = new Size(int.MinValue, int.MinValue);
 
             private Size _lastPreferredSize = s_invalidSize;
             private ToolStripLayoutData? _parentLayoutData;
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
                 layoutOptions.TextAlign = Owner.TextAlign;
                 layoutOptions.HintTextUp = false;
                 layoutOptions.ShadowedText = !_ownerItem.Enabled;
-                layoutOptions.LayoutRTL = RightToLeft.Yes == Owner.RightToLeft;
+                layoutOptions.LayoutRTL = Owner.RightToLeft == RightToLeft.Yes;
                 layoutOptions.TextImageRelation = Owner.TextImageRelation;
                 // Set textImageInset to 0 since we don't draw 3D border for ToolStripItems.
                 layoutOptions.TextImageInset = 0;

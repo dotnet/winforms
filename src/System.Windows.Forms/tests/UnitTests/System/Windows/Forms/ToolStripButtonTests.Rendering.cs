@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -60,7 +59,7 @@ namespace System.Windows.Forms.Tests
                Validate.Polygon16(
                     bounds: null,
                     points: null,
-                    State.Brush(Color.Blue, Gdi32.BS.SOLID)));
+                    State.Brush(Color.Blue, BRUSH_STYLE.BS_SOLID)));
         }
 
         [WinFormsFact]
@@ -85,8 +84,8 @@ namespace System.Windows.Forms.Tests
                Validate.Polygon16(
                     bounds: null,
                     points: null,
-                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2));
+                    State.Brush(SystemColors.Highlight, BRUSH_STYLE.BS_SOLID)),
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16), 2));
         }
 
         [WinFormsFact]
@@ -111,8 +110,8 @@ namespace System.Windows.Forms.Tests
                Validate.Polygon16(
                     bounds: null,
                     points: null,
-                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.SkipType(Gdi32.EMR.POLYGON16));
+                    State.Brush(SystemColors.Highlight, BRUSH_STYLE.BS_SOLID)),
+               Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16));
         }
 
         [WinFormsFact]
@@ -137,9 +136,9 @@ namespace System.Windows.Forms.Tests
                Validate.Polygon16(
                     bounds: null,
                     points: null,
-                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 1));
+                    State.Brush(SystemColors.Highlight, BRUSH_STYLE.BS_SOLID)),
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16), 2),
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16), 1));
         }
 
         [WinFormsFact]
@@ -164,9 +163,9 @@ namespace System.Windows.Forms.Tests
                Validate.Polygon16(
                     bounds: null,
                     points: null,
-                    State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 2));
+                    State.Brush(SystemColors.Highlight, BRUSH_STYLE.BS_SOLID)),
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16), 2),
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16), 2));
         }
 
         private class ToolStripSystemHighContrastRenderer : ToolStripSystemRenderer

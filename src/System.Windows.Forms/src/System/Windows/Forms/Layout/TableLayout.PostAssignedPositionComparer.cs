@@ -2,15 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
-
 namespace System.Windows.Forms.Layout
 {
     internal partial class TableLayout
     {
-        private class PostAssignedPositionComparer : IComparer
+        private class PostAssignedPositionComparer : IComparer<LayoutInfo>
         {
             private static readonly PostAssignedPositionComparer instance = new PostAssignedPositionComparer();
 
@@ -19,26 +15,39 @@ namespace System.Windows.Forms.Layout
                 get { return instance; }
             }
 
-            public int Compare(object x, object y)
+            public int Compare(LayoutInfo? x, LayoutInfo? y)
             {
-                LayoutInfo xInfo = (LayoutInfo)x;
-                LayoutInfo yInfo = (LayoutInfo)y;
-                if (xInfo.RowStart < yInfo.RowStart)
+                if (x is null && y is null)
+                {
+                    return 0;
+                }
+
+                if (x is null)
                 {
                     return -1;
                 }
 
-                if (xInfo.RowStart > yInfo.RowStart)
+                if (y is null)
                 {
                     return 1;
                 }
 
-                if (xInfo.ColumnStart < yInfo.ColumnStart)
+                if (x.RowStart < y.RowStart)
                 {
                     return -1;
                 }
 
-                if (xInfo.ColumnStart > yInfo.ColumnStart)
+                if (x.RowStart > y.RowStart)
+                {
+                    return 1;
+                }
+
+                if (x.ColumnStart < y.ColumnStart)
+                {
+                    return -1;
+                }
+
+                if (x.ColumnStart > y.ColumnStart)
                 {
                     return 1;
                 }

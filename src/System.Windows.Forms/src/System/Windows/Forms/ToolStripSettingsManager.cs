@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,7 +25,7 @@ namespace System.Windows.Forms
 
         internal void Load()
         {
-            ArrayList savedToolStripSettingsObjects = new ArrayList();
+            List<SettingsStub> savedToolStripSettingsObjects = new();
 
             List<ToolStrip> toolStripControls = new();
             FindControls(true, form.Controls, toolStripControls);
@@ -88,7 +87,7 @@ namespace System.Windows.Forms
             return itemNames.ToString();
         }
 
-        private void ApplySettings(ArrayList toolStripSettingsToApply)
+        private void ApplySettings(List<SettingsStub> toolStripSettingsToApply)
         {
             if (toolStripSettingsToApply.Count == 0)
             {
@@ -151,10 +150,8 @@ namespace System.Windows.Forms
 
                 toolStripPanel.BeginInit();
                 // get the associated toolstrips for this panel
-                if (toolStripPanelDestinationHash.ContainsKey(toolStripPanelName))
+                if (toolStripPanelDestinationHash.TryGetValue(toolStripPanelName, out List<SettingsStub>? stubSettings))
                 {
-                    List<SettingsStub> stubSettings = toolStripPanelDestinationHash[toolStripPanelName];
-
                     if (stubSettings is not null)
                     {
                         foreach (SettingsStub settings in stubSettings)
@@ -197,9 +194,9 @@ namespace System.Windows.Forms
                         if (match.Success)
                         {
                             string key = match.Value;
-                            if (!string.IsNullOrEmpty(key) && itemLocationHash.ContainsKey(key))
+                            if (!string.IsNullOrEmpty(key) && itemLocationHash.TryGetValue(key, out ToolStrip? value))
                             {
-                                toolStrip.Items.Insert(i, itemLocationHash[key].Items[key]);
+                                toolStrip.Items.Insert(i, value.Items[key]);
                             }
                         }
                     }

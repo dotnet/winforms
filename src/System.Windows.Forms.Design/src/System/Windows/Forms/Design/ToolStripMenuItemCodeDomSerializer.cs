@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 
@@ -41,7 +43,7 @@ namespace System.Windows.Forms.Design
             ToolStrip parent = item.GetCurrentParent();
 
             // Don't Serialize if we are Dummy Item ...
-            if ((item != null) && !(item.IsOnDropDown) && (parent != null) && (parent.Site is null))
+            if ((item is not null) && !(item.IsOnDropDown) && (parent is not null) && (parent.Site is null))
             {
                 //don't serialize anything...
                 return null;

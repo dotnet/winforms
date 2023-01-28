@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 
 namespace System.Windows.Forms.Tests.Interop.GdiPlus
 {

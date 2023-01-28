@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -17,7 +16,7 @@ namespace System.Windows.Forms
     {
         // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer? t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer;
         private static readonly VisualStyleElement s_groupBoxElement = VisualStyleElement.Button.GroupBox.Normal;
         private const int TextOffset = 8;
         private const int BoxHeaderWidth = 7;    // The groupbox frame shows 7 pixels before the caption.
@@ -329,7 +328,7 @@ namespace System.Windows.Forms
                 bounds.Width - 2, boxTop - 1, bounds.Width - 2, bounds.Height - 2                   // Right
             };
 
-            using var hpenDark = new Gdi32.CreatePenScope(SystemColors.ControlDark);
+            using PInvoke.CreatePenScope hpenDark = new(SystemColors.ControlDark);
             hdc.DrawLines(hpenDark, darkLines);
 
             ReadOnlySpan<int> lightLines = stackalloc int[]
@@ -341,7 +340,7 @@ namespace System.Windows.Forms
                 bounds.Width - 1, boxTop, bounds.Width - 1, bounds.Height - 1                       // Right
             };
 
-            using var hpenLight = new Gdi32.CreatePenScope(SystemColors.ControlLight);
+            using PInvoke.CreatePenScope hpenLight = new(SystemColors.ControlLight);
             hdc.DrawLines(hpenLight, lightLines);
         }
 

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -66,10 +68,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (modifierConverter is null)
-                {
-                    modifierConverter = TypeDescriptor.GetConverter(typeof(MemberAttributes));
-                }
+                modifierConverter ??= TypeDescriptor.GetConverter(typeof(MemberAttributes));
 
                 return modifierConverter;
             }
@@ -122,7 +121,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (needMassage)
                     {
-                        ArrayList list = new ArrayList(values.Count);
+                        List<MemberAttributes> list = new(values.Count);
 
                         foreach (MemberAttributes value in values)
                         {
@@ -165,5 +164,3 @@ namespace System.ComponentModel.Design.Serialization
         }
     }
 }
-
-

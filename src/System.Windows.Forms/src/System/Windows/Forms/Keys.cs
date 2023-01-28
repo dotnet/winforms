@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     /// </summary>
     [Flags]
     [TypeConverter(typeof(KeysConverter))]
-    [Editor("System.Windows.Forms.Design.ShortcutKeysEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ShortcutKeysEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     public enum Keys
     {
         /// <summary>

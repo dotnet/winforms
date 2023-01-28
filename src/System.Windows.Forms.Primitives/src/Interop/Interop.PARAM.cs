@@ -48,7 +48,7 @@ internal partial class Interop
             => (short)LOWORD(n);
 
         public static nint FromBool(bool value)
-            => (nint)(value ? BOOL.TRUE : BOOL.FALSE);
+            => (nint)(BOOL)(value);
 
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
