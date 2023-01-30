@@ -111,6 +111,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(language.GetHashCode(), language.GetHashCode());
         }
 
+        public static IEnumerable<object[]> GetKeyboardLayoutNameForHKL_TestData()
+        {
+            yield return new object[] { unchecked((nint)0x0000000000000409), "00000409" }; // US
+            yield return new object[] { unchecked((nint)0x0000000004090409), "00000409" }; // US
+            yield return new object[] { unchecked((nint)0x00000000040c0409), "0000040c" }; // French
+            yield return new object[] { unchecked((nint)0xfffffffff0200409), "00011009" }; // Canadian Multilingual Standard
+            yield return new object[] { unchecked((nint)0xfffffffff0b42400), "000c0c00" }; // Gothic
+        }
+
+        [Theory]
+        [MemberData(nameof(GetKeyboardLayoutNameForHKL_TestData))]
+        public void InputLanguage_GetKeyboardLayoutNameForHKL_Invoke_ReturnsExpected(IntPtr handle, string keyboardName)
+        {
+            Assert.Equal(keyboardName, InputLanguage.GetKeyboardLayoutNameForHKL(handle));
+        }
+
         private static void VerifyInputLanguage(InputLanguage language)
         {
             Assert.NotEqual(IntPtr.Zero, language.Handle);
