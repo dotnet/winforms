@@ -13,9 +13,9 @@ namespace System.ComponentModel.Design
 {
     /// <summary>
     ///  The selection service handles selection within a form.
-    ///  There is one selection service for each designer host.
-    ///  A selection consists of an array of objects.
-    ///  One objects is designated the "primary" selection.
+    ///  There is one selection service for each <see cref="DesignerHost"/>.
+    ///  A selection consists of an list of <see cref="IComponent"/>.
+    ///  The first component in the list is designated the <see cref="PrimarySelection"/>.
     /// </summary>
     internal sealed class SelectionService : ISelectionService, IDisposable
     {
@@ -56,6 +56,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void AddSelection(IComponent selection)
         {
+            if (selection is null)
+            {
+                return;
+            }
+
             if (_selection is null)
             {
                 _selection = new();
@@ -164,15 +169,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnTransactionOpened(object? sender, EventArgs e) => _state[s_stateTransaction] = true;
 
-        internal IComponent? PrimarySelection
-        {
-            get => _selection?.Count > 0 ? _selection[0] : null;
-        }
+        internal IComponent? PrimarySelection => _selection?.Count > 0 ? _selection[0] : null;
 
         /// <summary>
         ///  Removes the given selection from the selection list.
         /// </summary>
-        internal void RemoveSelection(IComponent sel) => _selection?.Remove(sel);
+        internal void RemoveSelection(IComponent selection) => _selection?.Remove(selection);
 
         private void ApplicationIdle(object? source, EventArgs args)
         {
