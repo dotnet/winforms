@@ -395,6 +395,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        // Note if we fix this issue https://github.com/dotnet/winforms/issues/6930#issuecomment-1090213559 then we will have to edit this test.
         [WinFormsTheory]
         [MemberData(nameof(Displayed_GetShared_TestData))]
         public void DataGridViewHeaderCell_Displayed_GetSharedWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
@@ -422,14 +423,18 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
+            // DataGridViewHeaderCell with OwningRow will be visible only if: gridVisible && rowHeadersVisible && OwningRow.Displayed.
+            // And OwningRow.Displayed will be true if columnVisible.
+            // See https://github.com/dotnet/winforms/pull/6957 and
+            // DataGridViewCell_Displayed_GetWithSharedDataGridViewWithHandle_ReturnsExpected test for details.
             DataGridViewCell cell = Assert.IsType<DataGridViewHeaderCell>(row.Cells[0]);
-            if (gridVisible && rowHeadersVisible)
+            if (gridVisible && rowHeadersVisible && !columnVisible)
             {
                 Assert.Throws<InvalidOperationException>(() => cell.Displayed);
             }
             else
             {
-                Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
+                Assert.Equal(gridVisible && rowHeadersVisible && columnVisible, cell.Displayed);
             }
 
             Assert.True(control.IsHandleCreated);
