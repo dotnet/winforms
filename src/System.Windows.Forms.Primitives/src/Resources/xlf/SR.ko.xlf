@@ -22,6 +22,21 @@
         <target state="translated">텍스트("{0}")를 구문 분석하지 못했습니다. "{1}" 서식의 텍스트가 필요합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32GetThreadsDpiContextFailed">
+        <source>Failed to get threads DpiAwareness context.</source>
+        <target state="new">Failed to get threads DpiAwareness context.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiContextFailed">
+        <source>Failed to set threads DpiAwareness context {0}.</source>
+        <target state="new">Failed to set threads DpiAwareness context {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiHostingBehaviorFailed">
+        <source>Failed to set threads DPI hosting behavior {0}.</source>
+        <target state="new">Failed to set threads DPI hosting behavior {0}.</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

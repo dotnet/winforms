@@ -128,5 +128,14 @@
   </data>
   <data name="General_MissingService" xml:space="preserve">
     <value>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</value>
+  </data>  
+  <data name="Win32SetThreadsDpiContextFailed" xml:space="preserve">
+    <value>Failed to set threads DpiAwareness context {0}.</value>
+  </data>
+  <data name="Win32GetThreadsDpiContextFailed" xml:space="preserve">
+    <value>Failed to get threads DpiAwareness context.</value>
+  </data>
+  <data name="Win32SetThreadsDpiHostingBehaviorFailed" xml:space="preserve">
+    <value>Failed to set threads DPI hosting behavior {0}.</value>
   </data>
 </root>

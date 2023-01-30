@@ -17,8 +17,7 @@ namespace System.Windows.Forms.Tests
                 return;
             }
 
-            // set thread awareness context to PermonitorV2(PMv2).
-            // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
+            // Set thread awareness context to PermonitorV2(PMv2). If process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
@@ -44,7 +43,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                // reset back to original awareness context.
+                // Reset back to original awareness context.
                 PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
