@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
         private BitVector32 _state; // state of the selection service
         private readonly EventHandlerList _events; // the events we raise
         private List<IComponent>? _selection; // list of selected objects
-        private string[]? _contextAttributes; // help context information we have pushed to the help service.
+        private List<string>? _contextAttributes; // help context information we have pushed to the help service.
         private short _contextKeyword; // the offset into the selection keywords for the current selection.
         private StatusCommandUI _statusCommandUI; // UI for setting the StatusBar Information..
 
@@ -210,7 +210,7 @@ namespace System.ComponentModel.Design
                     helpService.RemoveContextAttribute("Keyword", s);
                 }
 
-                _contextAttributes = null;
+                _contextAttributes.Clear();
             }
 
             // Clear the selection keyword
@@ -230,11 +230,10 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            _contextAttributes = new string[_selection.Count];
+            _contextAttributes ??= new(_selection.Count);
 
-            for (int i = 0; i < _selection.Count; i++)
+            foreach (IComponent component in _selection)
             {
-                object component = _selection[i];
                 string? helpContext = TypeDescriptor.GetClassName(component);
                 HelpKeywordAttribute? contextAttribute = (HelpKeywordAttribute?)TypeDescriptor.GetAttributes(component)[typeof(HelpKeywordAttribute)];
                 if (contextAttribute is not null && !contextAttribute.IsDefaultAttribute())
@@ -244,7 +243,7 @@ namespace System.ComponentModel.Design
 
                 if (helpContext is not null)
                 {
-                    _contextAttributes[i] = helpContext;
+                    _contextAttributes.Add(helpContext);
                 }
             }
 
