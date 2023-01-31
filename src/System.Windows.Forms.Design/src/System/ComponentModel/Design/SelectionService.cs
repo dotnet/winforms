@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
         private BitVector32 _state; // state of the selection service
         private readonly EventHandlerList _events; // the events we raise
         private List<IComponent>? _selection; // list of selected objects
-        private List<string>? _contextAttributes; // help context information we have pushed to the help service.
+        private string?[]? _contextAttributes; // help context information we have pushed to the help service.
         private short _contextKeyword; // the offset into the selection keywords for the current selection.
         private StatusCommandUI _statusCommandUI; // UI for setting the StatusBar Information..
 
@@ -205,12 +205,15 @@ namespace System.ComponentModel.Design
             // If there is an old set of context attributes, remove them.
             if (_contextAttributes is not null)
             {
-                foreach (string s in _contextAttributes)
+                foreach (string? helpContext in _contextAttributes)
                 {
-                    helpService.RemoveContextAttribute("Keyword", s);
+                    if (helpContext is not null)
+                    {
+                        helpService.RemoveContextAttribute("Keyword", helpContext);
+                    }
                 }
 
-                _contextAttributes.Clear();
+                _contextAttributes = null;
             }
 
             // Clear the selection keyword
@@ -230,10 +233,11 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            _contextAttributes ??= new(_selection.Count);
+            _contextAttributes = new string?[_selection.Count];
 
-            foreach (IComponent component in _selection)
+            for (int i = 0; i < _selection.Count; i++)
             {
+                object component = _selection[i];
                 string? helpContext = TypeDescriptor.GetClassName(component);
                 HelpKeywordAttribute? contextAttribute = (HelpKeywordAttribute?)TypeDescriptor.GetAttributes(component)[typeof(HelpKeywordAttribute)];
                 if (contextAttribute is not null && !contextAttribute.IsDefaultAttribute())
@@ -243,15 +247,18 @@ namespace System.ComponentModel.Design
 
                 if (helpContext is not null)
                 {
-                    _contextAttributes.Add(helpContext);
+                    _contextAttributes[i] = helpContext;
                 }
             }
 
             // And push them into the help context as keywords.
             HelpKeywordType selectionType = baseComponentSelected ? HelpKeywordType.GeneralKeyword : HelpKeywordType.F1Keyword;
-            foreach (string helpContext in _contextAttributes)
+            foreach (string? helpContext in _contextAttributes)
             {
-                helpService.AddContextAttribute("Keyword", helpContext, selectionType);
+                if (helpContext is not null)
+                {
+                    helpService.AddContextAttribute("Keyword", helpContext, selectionType);
+                }
             }
 
             // Now add the appropriate selection keyword.
