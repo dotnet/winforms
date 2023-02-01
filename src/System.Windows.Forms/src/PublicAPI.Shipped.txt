@@ -784,6 +784,7 @@ System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter! tex
 ~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue) -> void
 ~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) -> void
 ~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, System.IFormatProvider formatInfo) -> void
+~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, System.IFormatProvider formatInfo, bool invokeControl) -> void
 ~System.Windows.Forms.Binding.BindingManagerBase.get -> System.Windows.Forms.BindingManagerBase
 ~System.Windows.Forms.Binding.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.Binding.DataSource.get -> object

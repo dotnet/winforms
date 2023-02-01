@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                s_ctorTypes ??= new Type[] { typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider) };
+                s_ctorTypes ??= new Type[] { typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider), typeof(bool) };
 
                 return s_ctorTypes;
             }
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                s_ctorParamProps ??= new string?[] { null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo", };
+                s_ctorParamProps ??= new string?[] { null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo", "InvokeControl" };
 
                 return s_ctorParamProps;
             }
