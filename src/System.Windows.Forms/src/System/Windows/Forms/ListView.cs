@@ -7024,6 +7024,7 @@ namespace System.Windows.Forms
                         }
                     }
 
+                    base.WndProc(ref m);
                     break;
 
                 case User32.WM.LBUTTONDBLCLK:
