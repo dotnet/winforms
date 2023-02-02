@@ -18,18 +18,18 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Adds a baseline SnapLine to the list of SnapLines related to this control.
         /// </summary>
-        public override IList? SnapLines
+        public override IList SnapLines
         {
             get
             {
-                ArrayList? snapLines = base.SnapLines as ArrayList;
+                IList snapLines = base.SnapLines;
 
                 // A single text-baseline for the label (and linklabel) control.
                 int baseline = DesignerUtils.GetTextBaseline(Control, ContentAlignment.MiddleLeft);
 
                 // DateTimePicker doesn't have an alignment, so we use MiddleLeft and add a fudge-factor.
                 baseline += 2;
-                snapLines?.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
+                snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
                 return snapLines;
             }
@@ -41,13 +41,6 @@ namespace System.Windows.Forms.Design
         ///  provides rules for a component, the component will not get any UI services.
         /// </summary>
         public override SelectionRules SelectionRules
-        {
-            get
-            {
-                SelectionRules rules = base.SelectionRules;
-                rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
-                return rules;
-            }
-        }
+            => base.SelectionRules & ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
     }
 }
