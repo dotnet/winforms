@@ -15,9 +15,11 @@ namespace System.Windows.Forms.Primitives
         // for more details on how to enable these switches in the application.
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
         internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
+        internal const string ServicePointManagerCheckCRLSwitchName = "System.Windows.Forms.ServicePointManagerCheckCRL";
         internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
         private static int s_AnchorLayoutV2;
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
+        private static int s_servicePointManagerCheckCRL;
         private static int s_trackBarModernRendering;
         private static FrameworkName? s_targetFrameworkName;
 
@@ -112,6 +114,11 @@ namespace System.Windows.Forms.Primitives
                         {
                             return true;
                         }
+
+                        if (switchName == ServicePointManagerCheckCRLSwitchName)
+                        {
+                            return true;
+                        }
                     }
                 }
 
@@ -129,6 +136,17 @@ namespace System.Windows.Forms.Primitives
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => GetCachedSwitchValue(TrackBarModernRenderingSwitchName, ref s_trackBarModernRendering);
+        }
+
+        /// <summary>
+        ///  Indicates whether certificates are checked against the certificate authority revocation list.
+        ///  If true, revoked certificates will be accepted by WebRequests and WebClients as invalid.
+        ///  Otherwise, revoked certificates will be accepted as valid.
+        /// </summary>
+        public static bool ServicePointManagerCheckCRL
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(ServicePointManagerCheckCRLSwitchName, ref s_servicePointManagerCheckCRL);
         }
     }
 }

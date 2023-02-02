@@ -4,8 +4,9 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Moq;
+using System.Windows.Forms.Primitives;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -15,7 +16,7 @@ namespace System.Windows.Forms.Tests
     public class PictureBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
-        private const string UrlImageLocation = "https://github.com/dotnet/runtime-assets/raw/master/src/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
+        private const string UrlImageLocation = "https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/bitmaps/nature24bits.jpg?raw=true";
 
         [WinFormsFact]
         public void PictureBox_Ctor_Default()
@@ -1990,7 +1991,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_GetReturnsExpected()
+        public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_Disabled_GetReturnsExpected()
         {
             try
             {
@@ -1999,14 +2000,45 @@ namespace System.Windows.Forms.Tests
                     WaitOnLoad = true
                 };
 
+                AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCRLSwitchName, false);
+                Size expectedImageSize = new(110, 100);
+
                 pictureBox.ImageLocation = UrlImageLocation;
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
 
                 // Call again.
                 pictureBox.ImageLocation = UrlImageLocation;
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
+            }
+            catch
+            {
+                // Swallow network errors.
+            }
+        }
+
+        [WinFormsFact]
+        public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_Enabled_GetReturnsExpected()
+        {
+            try
+            {
+                using var pictureBox = new PictureBox
+                {
+                    WaitOnLoad = true
+                };
+
+                AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCRLSwitchName, true);
+                Size expectedImageSize = new(110, 100);
+
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
+
+                // Call again.
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             }
             catch
             {
