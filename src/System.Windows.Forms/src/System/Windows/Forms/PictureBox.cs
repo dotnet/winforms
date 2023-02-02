@@ -516,10 +516,10 @@ namespace System.Windows.Forms
                 }
 
 #pragma warning disable SYSLIB0014 // Type or member is obsolete
-                using (WebClient wc = new WebClient()) // lgtm[cs/webrequest-checkcertrevlist-disabled] - Having ServicePointManager.CheckCertificateRevocationList set to true has a slim chance of resulting in failure. We have an opt-out for this rare event.
+                using (WebClient webClient = new()) // lgtm[cs/webrequest-checkcertrevlist-disabled] - Having ServicePointManager.CheckCertificateRevocationList set to true has a slim chance of resulting in failure. We have an opt-out for this rare event.
 #pragma warning restore SYSLIB0014 // Type or member is obsolete
                 {
-                    _uriImageStream = wc.OpenRead(uri.ToString());
+                    _uriImageStream = webClient.OpenRead(uri.ToString());
                     img = Image.FromStream(_uriImageStream);
                 }
             }

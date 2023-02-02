@@ -40,20 +40,6 @@ namespace System.Windows.Forms.Primitives
         /// </summary>
         public static bool IsNetCoreApp => string.Equals(TargetFrameworkName?.Identifier, ".NETCoreApp");
 
-        /// <summary>
-        ///  Indicates whether AnchorLayoutV2 feature is enabled.
-        /// </summary>
-        /// <devdoc>
-        ///  Returns AnchorLayoutV2 switch value from runtimeconfig.json. Defaults to true if application is targeting .NET 8.0 and beyond.
-        ///  Refer to
-        ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
-        /// </devdoc>
-        public static bool AnchorLayoutV2
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_AnchorLayoutV2);
-        }
-
         private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
         {
             // The cached switch value has 3 states: 0 - unknown, 1 - true, -1 - false
@@ -96,34 +82,46 @@ namespace System.Windows.Forms.Primitives
 
                 // We are introducing switch defaults in .NET 8.0+ and support matrix for this product is
                 // limited to Windows 10 and above versions.
-                if (OsVersion.IsWindows10_1703OrGreater())
+                if (OsVersion.IsWindows10_1703OrGreater() && TargetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
                 {
-                    if (TargetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
+                    if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
                     {
-                        if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
-                        {
-                            return true;
-                        }
-
-                        if (switchName == AnchorLayoutV2SwitchName)
-                        {
-                            return true;
-                        }
-
-                        if (switchName == TrackBarModernRenderingSwitchName)
-                        {
-                            return true;
-                        }
-
-                        if (switchName == ServicePointManagerCheckCRLSwitchName)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
+
+                    if (switchName == AnchorLayoutV2SwitchName)
+                    {
+                        return true;
+                    }
+
+                    if (switchName == TrackBarModernRenderingSwitchName)
+                    {
+                        return true;
+                    }
+
+                    if (switchName == ServicePointManagerCheckCRLSwitchName)
+                    {
+                        return true;
+                    }
+
                 }
 
                 return false;
             }
+        }
+
+        /// <summary>
+        ///  Indicates whether AnchorLayoutV2 feature is enabled.
+        /// </summary>
+        /// <devdoc>
+        ///  Returns AnchorLayoutV2 switch value from runtimeconfig.json. Defaults to true if application is targeting .NET 8.0 and beyond.
+        ///  Refer to
+        ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
+        /// </devdoc>
+        public static bool AnchorLayoutV2
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_AnchorLayoutV2);
         }
 
         public static bool ScaleTopLevelFormMinMaxSizeForDpi

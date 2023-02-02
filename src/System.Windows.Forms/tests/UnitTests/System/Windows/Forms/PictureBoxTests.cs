@@ -722,18 +722,20 @@ namespace System.Windows.Forms.Tests
                 WaitOnLoad = true
             };
 
+            Size expectedImageSize = new(110, 100);
+
             pictureBox.ImageLocation = PathImageLocation;
-            Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+            Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             Assert.Equal(PathImageLocation, pictureBox.ImageLocation);
 
             // Set same.
             pictureBox.ImageLocation = PathImageLocation;
-            Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+            Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             Assert.Equal(PathImageLocation, pictureBox.ImageLocation);
         }
 
         [WinFormsFact]
-        public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_GetReturnsExpected()
+        public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_Disabled_GetReturnsExpected()
         {
             try
             {
@@ -742,13 +744,44 @@ namespace System.Windows.Forms.Tests
                     WaitOnLoad = true
                 };
 
-                pictureBox.Load(UrlImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCRLSwitchName, false);
+                Size expectedImageSize = new(110, 100);
+
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
 
                 // Set same.
-                pictureBox.Load(UrlImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
+                Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
+            }
+            catch
+            {
+                // Swallow network errors.
+            }
+        }
+
+        [WinFormsFact]
+        public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_Enabled_GetReturnsExpected()
+        {
+            try
+            {
+                using var pictureBox = new PictureBox
+                {
+                    WaitOnLoad = true
+                };
+
+                AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCRLSwitchName, true);
+                Size expectedImageSize = new(110, 100);
+
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
+                Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
+
+                // Set same.
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
             }
             catch
@@ -2003,12 +2036,12 @@ namespace System.Windows.Forms.Tests
                 AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCRLSwitchName, false);
                 Size expectedImageSize = new(110, 100);
 
-                pictureBox.ImageLocation = UrlImageLocation;
+                pictureBox.Load(UrlImageLocation);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
                 Assert.Equal(expectedImageSize, pictureBox.Image.Size);
 
                 // Call again.
-                pictureBox.ImageLocation = UrlImageLocation;
+                pictureBox.Load(UrlImageLocation);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
                 Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             }
@@ -2031,12 +2064,12 @@ namespace System.Windows.Forms.Tests
                 AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCRLSwitchName, true);
                 Size expectedImageSize = new(110, 100);
 
-                pictureBox.ImageLocation = UrlImageLocation;
+                pictureBox.Load(UrlImageLocation);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
                 Assert.Equal(expectedImageSize, pictureBox.Image.Size);
 
                 // Call again.
-                pictureBox.ImageLocation = UrlImageLocation;
+                pictureBox.Load(UrlImageLocation);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
                 Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             }
