@@ -35,6 +35,7 @@ using System.Runtime.CompilerServices;
 // internal designers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ButtonBaseDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ComboBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DateTimePickerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormDocumentDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.GroupBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.LabelDesigner))]

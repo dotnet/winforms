@@ -134,6 +134,8 @@ namespace TestConsole
                             pb1.Image = new Icon("painter.ico").ToBitmap();
 
                             ContextMenuStrip cm1 = surface.CreateComponent<ContextMenuStrip>();
+
+                            surface.CreateControl<DateTimePicker>(new Size(200, 23), new Point(172, 150));
                         }
 
                         break;
