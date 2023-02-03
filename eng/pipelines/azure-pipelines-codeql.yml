@@ -24,6 +24,7 @@ variables:
   value: Release
 - name: NativeToolsOnMachine
   value: true
+- template: /eng/common/templates/variables/pool-providers.yml
 
 trigger: none
 
@@ -41,7 +42,7 @@ jobs:
 - job: codeql
   displayName: CodeQL
   pool:
-    name: NetCore1ESPool-Internal
+    name: $(DncEngInternalBuildPool)
     demands: ImageOverride -equals 1es-windows-2022
   timeoutInMinutes: 90
 
