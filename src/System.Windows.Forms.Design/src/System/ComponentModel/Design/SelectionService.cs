@@ -227,7 +227,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            _contextAttributes = new(_selection.Count);
+            _contextAttributes = new();
 
             for (int i = 0; i < _selection.Count; i++)
             {
