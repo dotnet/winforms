@@ -157,13 +157,15 @@ stages:
   - stage: PublishAssetRegistry
     displayName: Publish to Build Asset Registry
     dependsOn: Build
+    variables:
+    - template: /eng/common/templates/variables/pool-providers.yml
     jobs:
     # Publish to Build Asset Registry in order to generate the ReleaseConfigs artifact.
     - template: /eng/common/templates/job/publish-build-assets.yml
       parameters:
         publishUsingPipelines: true
         pool:
-          name: NetCore1ESPool-Internal
+          name: $(DncEngInternalBuildPool)
           demands: ImageOverride -equals windows.vs2022preview.amd64
 
 

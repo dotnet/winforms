@@ -8,16 +8,19 @@ parameters:
   enablePublishBuildAssets: true
   enablePublishUsingPipelines: true
 
+variables:
+- template: /eng/common/templates/variables/pool-providers.yml
+
 jobs:
   - job: ${{ parameters.name }}
     displayName: ${{ parameters.name }}
     timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
     pool:
       ${{ if eq(variables['System.TeamProject'], 'public') }}:
-        name: NetCore-Public
+        name: $(DncEngPublicBuildPool)
         demands: ImageOverride -equals windows.vs2022preview.amd64.open
       ${{ if ne(variables['System.TeamProject'], 'public') }}:
-        name: NetCore1ESPool-Internal
+        name: $(DncEngInternalBuildPool)
         demands: ImageOverride -equals windows.vs2022preview.amd64
     strategy:
       matrix:
