@@ -645,11 +645,11 @@
           {
             "name": "addMilestone",
             "parameters": {
-              "milestoneName": "8.0 Preview1"
+              "milestoneName": "8.0 Preview2"
             }
           }
         ],
-        "taskName": "Apply milestone '7.0' to PRs on the main branch",
+        "taskName": "Apply milestone to PRs on the main branch",
         "dangerZone": {
           "respondToBotActions": true,
           "acceptRespondToBotActions": true
@@ -1687,6 +1687,81 @@
           {
             "name": "removeMilestone",
             "parameters": {}
+          }
+        ]
+      }
+    },
+    {
+      "taskType": "trigger",
+      "capabilityId": "IssueResponder",
+      "subCapability": "PullRequestResponder",
+      "version": "1.0",
+      "config": {
+        "conditions": {
+          "operator": "and",
+          "operands": [
+            {
+              "operator": "or",
+              "operands": [
+                {
+                  "name": "isAction",
+                  "parameters": {
+                    "action": "merged"
+                  }
+                },
+                {
+                  "name": "isAction",
+                  "parameters": {
+                    "action": "closed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "eventType": "pull_request",
+        "eventNames": [
+          "pull_request",
+          "issues",
+          "project_card"
+        ],
+        "taskName": "Remove invalid labels after PR is merged.",
+        "actions": [
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": ":construction: work in progress"
+            }
+          },
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": ":mailbox_with_mail: waiting-for-testing"
+            }
+          },
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": ":mailbox_with_no_mail: waiting-author-feedback"
+            }
+          },
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": "ready-to-merge"
+            }
+          },
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": "waiting-on-team"
+            }
+          },
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": "waiting-review"
+            }
           }
         ]
       }
