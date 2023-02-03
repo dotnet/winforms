@@ -22,7 +22,6 @@ namespace System.Windows.Forms.Primitives
         private static int s_servicePointManagerCheckCrl;
         private static int s_trackBarModernRendering;
         private static FrameworkName? s_targetFrameworkName;
-        private static Version? s_minimumSupportVersion;
 
         /// <summary>
         ///  The <see cref="TargetFrameworkAttribute"/> value for the entry assembly, if any.
@@ -33,18 +32,6 @@ namespace System.Windows.Forms.Primitives
             {
                 s_targetFrameworkName ??= AppContext.TargetFrameworkName is { } name ? new(name) : null;
                 return s_targetFrameworkName;
-            }
-        }
-
-        /// <summary>
-        ///  The earliest <see cref="Version"/> switches are supported in.
-        /// </summary>
-        private static Version MinimumSupportVersion
-        {
-            get
-            {
-                s_minimumSupportVersion ??= new("8.0");
-                return s_minimumSupportVersion;
             }
         }
 
@@ -93,23 +80,31 @@ namespace System.Windows.Forms.Primitives
                     return false;
                 }
 
-                // We are introducing switch defaults in .NET 8.0+ and support matrix for this product is
-                // limited to Windows 10 and above versions.
-                if (OsVersion.IsWindows10_1703OrGreater() && TargetFrameworkName?.Version.CompareTo(MinimumSupportVersion) >= 0)
+                if (TargetFrameworkName is not { } framework)
                 {
-                    if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
-                    {
-                        return true;
-                    }
+                    return false;
+                }
 
-                    if (switchName == AnchorLayoutV2SwitchName)
+                // Switches added in .NET 8.
+                if (framework.Version.Major >= 8)
+                {
+                    // The support matrix for these switches is limited to Windows 10 and above versions.
+                    if (OsVersion.IsWindows10_1703OrGreater())
                     {
-                        return true;
-                    }
+                        if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
+                        {
+                            return true;
+                        }
 
-                    if (switchName == TrackBarModernRenderingSwitchName)
-                    {
-                        return true;
+                        if (switchName == AnchorLayoutV2SwitchName)
+                        {
+                            return true;
+                        }
+
+                        if (switchName == TrackBarModernRenderingSwitchName)
+                        {
+                            return true;
+                        }
                     }
 
                     if (switchName == ServicePointManagerCheckCrlSwitchName)
