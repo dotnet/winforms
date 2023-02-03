@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
         private BitVector32 _state; // state of the selection service
         private readonly EventHandlerList _events; // the events we raise
         private List<IComponent>? _selection; // list of selected objects
-        private string?[]? _contextAttributes; // help context information we have pushed to the help service.
+        private List<string>? _contextAttributes; // help context information we have pushed to the help service.
         private short _contextKeyword; // the offset into the selection keywords for the current selection.
         private StatusCommandUI _statusCommandUI; // UI for setting the StatusBar Information..
 
@@ -54,12 +54,9 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Adds the given selection to our selection list.
         /// </summary>
-        internal void AddSelection(IComponent? selection)
+        internal void AddSelection(IComponent selection)
         {
-            if (selection is null)
-            {
-                return;
-            }
+            ArgumentNullException.ThrowIfNull(selection, nameof(selection));
 
             if (_selection is null)
             {
@@ -205,12 +202,9 @@ namespace System.ComponentModel.Design
             // If there is an old set of context attributes, remove them.
             if (_contextAttributes is not null)
             {
-                foreach (string? helpContext in _contextAttributes)
+                foreach (string helpContext in _contextAttributes)
                 {
-                    if (helpContext is not null)
-                    {
-                        helpService.RemoveContextAttribute("Keyword", helpContext);
-                    }
+                    helpService.RemoveContextAttribute("Keyword", helpContext);
                 }
 
                 _contextAttributes = null;
@@ -233,7 +227,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            _contextAttributes = new string?[_selection.Count];
+            _contextAttributes = new(_selection.Count);
 
             for (int i = 0; i < _selection.Count; i++)
             {
@@ -247,18 +241,15 @@ namespace System.ComponentModel.Design
 
                 if (helpContext is not null)
                 {
-                    _contextAttributes[i] = helpContext;
+                    _contextAttributes.Add(helpContext);
                 }
             }
 
             // And push them into the help context as keywords.
             HelpKeywordType selectionType = baseComponentSelected ? HelpKeywordType.GeneralKeyword : HelpKeywordType.F1Keyword;
-            foreach (string? helpContext in _contextAttributes)
+            foreach (string helpContext in _contextAttributes)
             {
-                if (helpContext is not null)
-                {
-                    helpService.AddContextAttribute("Keyword", helpContext, selectionType);
-                }
+                helpService.AddContextAttribute("Keyword", helpContext, selectionType);
             }
 
             // Now add the appropriate selection keyword.
