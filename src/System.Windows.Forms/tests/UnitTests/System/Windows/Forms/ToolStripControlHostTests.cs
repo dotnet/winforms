@@ -153,13 +153,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_AccessibleDefaultActionDescription_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_AccessibleDefaultActionDescription_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.AccessibleDefaultActionDescription = "value");
+            Assert.Throws<ObjectDisposedException>(() => item.AccessibleDefaultActionDescription = "value");
         }
 
         [WinFormsTheory]
@@ -183,13 +183,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_AccessibleDescription_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_AccessibleDescription_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.AccessibleDescription = "value");
+            Assert.Throws<ObjectDisposedException>(() => item.AccessibleDescription = "value");
         }
 
         [WinFormsTheory]
@@ -213,13 +213,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_AccessibleName_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_AccessibleName_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.AccessibleName = "value");
+            Assert.Throws<ObjectDisposedException>(() => item.AccessibleName = "value");
         }
 
         [WinFormsTheory]
@@ -252,13 +252,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_BackColor_GetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_BackColor_GetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.BackColor);
+            Assert.Throws<ObjectDisposedException>(() => item.BackColor);
         }
 
         [WinFormsTheory]
@@ -318,13 +318,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_BackColor_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_BackColor_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.BackColor = Color.Red);
+            Assert.Throws<ObjectDisposedException>(() => item.BackColor = Color.Red);
         }
 
         [WinFormsFact]
@@ -345,7 +345,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_BackColor_ResetValueDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_BackColor_ResetValueDisposed_ThrowsObjectDisposedException()
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripControlHost))[nameof(ToolStripControlHost.BackColor)];
             using var c = new Control();
@@ -354,7 +354,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.CanResetValue(item));
 
             TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => property.ResetValue(item));
-            Assert.IsType<NullReferenceException>(ex.InnerException);
+            Assert.IsType<ObjectDisposedException>(ex.InnerException);
             Assert.False(property.CanResetValue(item));
         }
 
@@ -386,13 +386,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_BackgroundImage_GetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_BackgroundImage_GetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.BackgroundImage);
+            Assert.Throws<ObjectDisposedException>(() => item.BackgroundImage);
         }
 
         public static IEnumerable<object[]> BackgroundImage_Set_TestData()
@@ -424,24 +424,24 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_BackgroundImage_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_BackgroundImage_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
             using var value = new Bitmap(10, 10);
-            Assert.Throws<NullReferenceException>(() => item.BackgroundImage = value);
+            Assert.Throws<ObjectDisposedException>(() => item.BackgroundImage = value);
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_BackgroundImageLayout_GetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_BackgroundImageLayout_GetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.BackgroundImageLayout);
+            Assert.Throws<ObjectDisposedException>(() => item.BackgroundImageLayout);
         }
 
         [WinFormsTheory]
@@ -465,13 +465,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_BackgroundImageLayout_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_BackgroundImageLayout_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.BackgroundImageLayout = ImageLayout.Zoom);
+            Assert.Throws<ObjectDisposedException>(() => item.BackgroundImageLayout = ImageLayout.Zoom);
         }
 
         [WinFormsTheory]
@@ -838,13 +838,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Enabled_GetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Enabled_GetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.Enabled);
+            Assert.Throws<ObjectDisposedException>(() => item.Enabled);
         }
 
         public static IEnumerable<object[]> Enabled_Set_TestData()
@@ -923,33 +923,33 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Enabled_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Enabled_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.Enabled = false);
+            Assert.Throws<ObjectDisposedException>(() => item.Enabled = false);
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Focused_GetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Focused_GetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.Focused);
+            Assert.Throws<ObjectDisposedException>(() => item.Focused);
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Font_GetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Font_GetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.Font);
+            Assert.Throws<ObjectDisposedException>(() => item.Font);
         }
 
         public static IEnumerable<object[]> Font_Set_TestData()
@@ -984,14 +984,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Font_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Font_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
             using var font = new Font("Arial", 8.25f);
-            Assert.Throws<NullReferenceException>(() => item.Font = font);
+            Assert.Throws<ObjectDisposedException>(() => item.Font = font);
         }
 
         [WinFormsFact]
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Font_ResetValueDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Font_ResetValueDisposed_ThrowsObjectDisposedException()
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripControlHost))[nameof(ToolStripControlHost.Font)];
             using var c = new Control();
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.CanResetValue(item));
 
             TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => property.ResetValue(item));
-            Assert.IsType<NullReferenceException>(ex.InnerException);
+            Assert.IsType<ObjectDisposedException>(ex.InnerException);
             Assert.False(property.CanResetValue(item));
         }
 
@@ -1071,13 +1071,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_ForeColor_GetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_ForeColor_GetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.ForeColor);
+            Assert.Throws<ObjectDisposedException>(() => item.ForeColor);
         }
 
         [WinFormsTheory]
@@ -1137,13 +1137,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_ForeColor_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_ForeColor_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.ForeColor = Color.Red);
+            Assert.Throws<ObjectDisposedException>(() => item.ForeColor = Color.Red);
         }
 
         [WinFormsFact]
@@ -1164,7 +1164,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_ForeColor_ResetValueDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_ForeColor_ResetValueDisposed_ThrowsObjectDisposedException()
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripControlHost))[nameof(ToolStripControlHost.ForeColor)];
             using var c = new Control();
@@ -1173,7 +1173,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.CanResetValue(item));
 
             TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => property.ResetValue(item));
-            Assert.IsType<NullReferenceException>(ex.InnerException);
+            Assert.IsType<ObjectDisposedException>(ex.InnerException);
             Assert.False(property.CanResetValue(item));
         }
 
@@ -1533,7 +1533,7 @@ namespace System.Windows.Forms.Tests
             using var item = new SubToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.Parent = parent);
+            Assert.Throws<ObjectDisposedException>(() => item.Parent = parent);
             Assert.Same(parent, item.Parent);
             Assert.Same(parent, item.GetCurrentParent());
             Assert.Null(item.Owner);
@@ -2175,7 +2175,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Site_SetDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Site_SetDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
@@ -2185,7 +2185,7 @@ namespace System.Windows.Forms.Tests
             mockSite
                 .Setup(s => s.Container)
                 .Returns((IContainer)null);
-            Assert.Throws<NullReferenceException>(() => item.Site = mockSite.Object);
+            Assert.Throws<ObjectDisposedException>(() => item.Site = mockSite.Object);
             Assert.Equal(mockSite.Object, item.Site);
         }
 
@@ -2698,13 +2698,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_Focus_InvokeDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_Focus_InvokeDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.Focus());
+            Assert.Throws<ObjectDisposedException>(() => item.Focus());
         }
 
         public static IEnumerable<object[]> GetPreferredSize_TestData()
@@ -2751,16 +2751,16 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(GetPreferredSize_TestData))]
-        public void ToolStripControlHost_GetPreferredSize_InvokeDisposed_ThrowsNullReferenceException(Size proposedSize)
+        public void ToolStripControlHost_GetPreferredSize_InvokeDisposed_ThrowsObjectDisposedException(Size proposedSize)
         {
             using var c = new Control();
             using var item = new ToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.GetPreferredSize(proposedSize));
+            Assert.Throws<ObjectDisposedException>(() => item.GetPreferredSize(proposedSize));
 
             // Call again.
-            Assert.Throws<NullReferenceException>(() => item.GetPreferredSize(proposedSize));
+            Assert.Throws<ObjectDisposedException>(() => item.GetPreferredSize(proposedSize));
         }
 
         [WinFormsTheory]
@@ -4352,7 +4352,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ToolStripControlHost_ProcessMnemonic_InvokeDisposed_ThrowsNullReferenceException(bool enabled)
+        public void ToolStripControlHost_ProcessMnemonic_InvokeDisposed_ThrowsObjectDisposedException(bool enabled)
         {
             using var c = new Control();
             using var item = new SubToolStripControlHost(c)
@@ -4363,7 +4363,7 @@ namespace System.Windows.Forms.Tests
 
             int clickCallCount = 0;
             item.Click += (sender, e) => clickCallCount++;
-            Assert.Throws<NullReferenceException>(() => item.ProcessMnemonic('a'));
+            Assert.Throws<ObjectDisposedException>(() => item.ProcessMnemonic('a'));
             Assert.Equal(0, clickCallCount);
             Assert.False(item.Pressed);
         }
@@ -4407,13 +4407,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_ResetBackColor_InvokeDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_ResetBackColor_InvokeDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new SubToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.ResetBackColor());
+            Assert.Throws<ObjectDisposedException>(() => item.ResetBackColor());
         }
 
         [WinFormsFact]
@@ -4440,13 +4440,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripControlHost_ResetForeColor_InvokeDisposed_ThrowsNullReferenceException()
+        public void ToolStripControlHost_ResetForeColor_InvokeDisposed_ThrowsObjectDisposedException()
         {
             using var c = new Control();
             using var item = new SubToolStripControlHost(c);
             item.Dispose();
 
-            Assert.Throws<NullReferenceException>(() => item.ResetForeColor());
+            Assert.Throws<ObjectDisposedException>(() => item.ResetForeColor());
         }
 
         [WinFormsTheory]

@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -56,8 +57,8 @@ namespace System.Windows.Forms
 
         public override Color BackColor
         {
-            get => Control.BackColor;
-            set => Control.BackColor = value;
+            get => ControlInternal.BackColor;
+            set => ControlInternal.BackColor = value;
         }
 
         /// <summary>
@@ -69,8 +70,8 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         public override Image BackgroundImage
         {
-            get => Control.BackgroundImage;
-            set => Control.BackgroundImage = value;
+            get => ControlInternal.BackgroundImage;
+            set => ControlInternal.BackgroundImage = value;
         }
 
         [SRCategory(nameof(SR.CatAppearance))]
@@ -79,33 +80,22 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
         public override ImageLayout BackgroundImageLayout
         {
-            get => Control.BackgroundImageLayout;
-            set => Control.BackgroundImageLayout = value;
+            get => ControlInternal.BackgroundImageLayout;
+            set => ControlInternal.BackgroundImageLayout = value;
         }
 
         /// <summary>
-        ///  Overriden to return value from Control.CanSelect.
+        ///  Overridden to return value from Control.CanSelect.
         /// </summary>
-        public override bool CanSelect
-        {
-            get
-            {
-                if (_control is not null)
-                {
-                    return (DesignMode || Control.CanSelect);
-                }
-
-                return false;
-            }
-        }
+        public override bool CanSelect => _control is not null && (DesignMode || _control.CanSelect);
 
         [SRCategory(nameof(SR.CatFocus))]
         [DefaultValue(true)]
         [SRDescription(nameof(SR.ControlCausesValidationDescr))]
         public bool CausesValidation
         {
-            get => Control.CausesValidation;
-            set => Control.CausesValidation = value;
+            get => ControlInternal.CausesValidation;
+            set => ControlInternal.CausesValidation = value;
         }
 
         [DefaultValue(ContentAlignment.MiddleCenter)]
@@ -132,7 +122,20 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Control Control => _control;
 
-        internal AccessibleObject ControlAccessibilityObject => Control?.AccessibilityObject;
+        /// <summary>
+        ///  The control that this item is hosting.
+        /// </summary>
+        private Control ControlInternal
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                ObjectDisposedException.ThrowIf(_control is null, _control);
+                return _control;
+            }
+        }
+
+        internal AccessibleObject ControlAccessibilityObject => _control?.AccessibilityObject;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
@@ -142,11 +145,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Control is not null)
+                if (_control is not null)
                 {
                     // When you create the control - it sets up its size as its default size.
                     // Since the property is protected we don't know for sure, but this is a pretty good guess.
-                    return Control.Size;
+                    return _control.Size;
                 }
 
                 return base.DefaultSize;
@@ -186,14 +189,14 @@ namespace System.Windows.Forms
 
         public override Font Font
         {
-            get => Control.Font;
-            set => Control.Font = value;
+            get => ControlInternal.Font;
+            set => ControlInternal.Font = value;
         }
 
         public override bool Enabled
         {
-            get => Control.Enabled;
-            set => Control.Enabled = value;
+            get => ControlInternal.Enabled;
+            set => ControlInternal.Enabled = value;
         }
 
         [SRCategory(nameof(SR.CatFocus))]
@@ -206,12 +209,12 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public virtual bool Focused => Control.Focused;
+        public virtual bool Focused => ControlInternal.Focused;
 
         public override Color ForeColor
         {
-            get => Control.ForeColor;
-            set => Control.ForeColor = value;
+            get => ControlInternal.ForeColor;
+            set => ControlInternal.ForeColor = value;
         }
 
         [SRCategory(nameof(SR.CatFocus))]
@@ -323,19 +326,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_control is not null)
-                {
-                    return _control.RightToLeft;
-                }
-
-                return base.RightToLeft;
+                return _control is not null ? _control.RightToLeft : base.RightToLeft;
             }
             set
             {
-                if (_control is not null)
+                if (_control is null)
                 {
-                    _control.RightToLeft = value;
+                    return;
                 }
+
+                _control.RightToLeft = value;
             }
         }
 
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
             set => base.RightToLeftAutoMirrorImage = value;
         }
 
-        public override bool Selected => Control is not null && Control.Focused;
+        public override bool Selected => _control is not null && _control.Focused;
 
         public override Size Size
         {
@@ -380,7 +380,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Overriden to set the Site for the control hosted. This is set at DesignTime when the component is added to the Container.
+        ///  Overridden to set the Site for the control hosted.
+        ///  This is set at DesignTime when the component is added to the Container.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site
@@ -389,25 +390,20 @@ namespace System.Windows.Forms
             set
             {
                 base.Site = value;
-                if (value is not null)
-                {
-                    Control.Site = new StubSite(Control, this);
-                }
-                else
-                {
-                    Control.Site = null;
-                }
+                ControlInternal.Site = value is not null
+                    ? new StubSite(ControlInternal, this)
+                    : (ISite)null;
             }
         }
 
         /// <summary>
-        ///  Overriden to modify hosted control's text.
+        ///  Overridden to modify hosted control's text.
         /// </summary>
         [DefaultValue("")]
         public override string Text
         {
-            get => Control.Text;
-            set => Control.Text = value;
+            get => ControlInternal.Text;
+            set => ControlInternal.Text = value;
         }
 
         [Browsable(false)]
@@ -461,27 +457,24 @@ namespace System.Windows.Forms
             // will be correctly unparented before being disposed.
             base.Dispose(disposing);
 
-            if (disposing && Control is not null)
+            if (disposing && _control is not null)
             {
-                OnUnsubscribeControlEvents(Control);
+                OnUnsubscribeControlEvents(_control);
 
                 // we only call control.Dispose if we are NOT being disposed in the finalizer.
-                Control.Dispose();
+                _control.Dispose();
                 _control = null;
             }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void Focus() => Control.Focus();
+        public void Focus() => ControlInternal.Focus();
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            if (_control is not null)
-            {
-                return Control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size;
-            }
-
-            return base.GetPreferredSize(constrainingSize);
+            return _control is not null
+                ? _control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size
+                : base.GetPreferredSize(constrainingSize);
         }
 
         ///  Handle* wrappers:
@@ -590,12 +583,12 @@ namespace System.Windows.Forms
             // check the STATE_VISIBLE flag rather than using Control.Visible.
             // if we check while it's unparented it will return visible false.
             // the easiest way to do this is to use ParticipatesInLayout.
-            bool controlVisibleStateFlag = ((IArrangedElement)Control).ParticipatesInLayout;
+            bool controlVisibleStateFlag = ((IArrangedElement)ControlInternal).ParticipatesInLayout;
             bool itemVisibleStateFlag = ((IArrangedElement)(this)).ParticipatesInLayout;
 
             if (itemVisibleStateFlag != controlVisibleStateFlag)
             {
-                Visible = Control.Visible;
+                Visible = ControlInternal.Visible;
                 // this should fire the OnVisibleChanged and raise events appropriately.
             }
         }
@@ -606,22 +599,22 @@ namespace System.Windows.Forms
 
         internal override void OnAccessibleDescriptionChanged(EventArgs e)
         {
-            Control.AccessibleDescription = AccessibleDescription;
+            ControlInternal.AccessibleDescription = AccessibleDescription;
         }
 
         internal override void OnAccessibleNameChanged(EventArgs e)
         {
-            Control.AccessibleName = AccessibleName;
+            ControlInternal.AccessibleName = AccessibleName;
         }
 
         internal override void OnAccessibleDefaultActionDescriptionChanged(EventArgs e)
         {
-            Control.AccessibleDefaultActionDescription = AccessibleDefaultActionDescription;
+            ControlInternal.AccessibleDefaultActionDescription = AccessibleDefaultActionDescription;
         }
 
         internal override void OnAccessibleRoleChanged(EventArgs e)
         {
-            Control.AccessibleRole = AccessibleRole;
+            ControlInternal.AccessibleRole = AccessibleRole;
         }
 
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
@@ -651,7 +644,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnBoundsChanged()
         {
-            if (!(_control is IArrangedElement element))
+            if (_control is not IArrangedElement element)
             {
                 return;
             }
@@ -693,13 +686,13 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent)
         {
-            if (oldParent is not null && Owner is null && newParent is null && Control is not null)
+            if (oldParent is not null && Owner is null && newParent is null && _control is not null)
             {
                 // if we've really been removed from the item collection,
                 // politely remove ourselves from the control collection
                 ReadOnlyControlCollection oldControlCollection
-                                = GetControlCollection(Control.ParentInternal as ToolStrip);
-                oldControlCollection?.RemoveInternal(Control);
+                                = GetControlCollection(_control.ParentInternal as ToolStrip);
+                oldControlCollection?.RemoveInternal(_control);
             }
             else
             {
@@ -815,26 +808,19 @@ namespace System.Windows.Forms
         private void SyncControlParent()
         {
             ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
-            newControls?.AddInternal(Control);
+            newControls?.AddInternal(_control);
         }
 
         protected virtual void OnHostedControlResize(EventArgs e)
         {
             // support for syncing the wrapper when the control size has changed
-            Size = Control.Size;
+            Size = ControlInternal.Size;
         }
 
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
         protected internal override bool ProcessMnemonic(char charCode)
-        {
-            if (_control is not null)
-            {
-                return _control.ProcessMnemonic(charCode);
-            }
-
-            return base.ProcessMnemonic(charCode);
-        }
+            => _control is not null ? _control.ProcessMnemonic(charCode) : base.ProcessMnemonic(charCode);
 
         protected internal override bool ProcessDialogKey(Keys keyData) => false;
 
@@ -848,14 +834,14 @@ namespace System.Windows.Forms
             }
 
             _inSetVisibleCore = true;
-            Control.SuspendLayout();
+            ControlInternal.SuspendLayout();
             try
             {
-                Control.Visible = visible;
+                ControlInternal.Visible = visible;
             }
             finally
             {
-                Control.ResumeLayout(false);
+                ControlInternal.ResumeLayout(false);
                 // this will go ahead and perform layout.
                 base.SetVisibleCore(visible);
                 _inSetVisibleCore = false;
@@ -863,10 +849,10 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void ResetBackColor() => Control.ResetBackColor();
+        public override void ResetBackColor() => ControlInternal.ResetBackColor();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void ResetForeColor() => Control.ResetForeColor();
+        public override void ResetForeColor() => ControlInternal.ResetForeColor();
 
         private void SuspendSizeSync() => _suspendSyncSizeCount++;
 
@@ -879,57 +865,29 @@ namespace System.Windows.Forms
         private void ResumeSizeSync() => _suspendSyncSizeCount--;
 
         internal override bool ShouldSerializeBackColor()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeBackColor();
-            }
-
-            return base.ShouldSerializeBackColor();
-        }
+            => _control is not null ? _control.ShouldSerializeBackColor() : base.ShouldSerializeBackColor();
 
         internal override bool ShouldSerializeForeColor()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeForeColor();
-            }
-
-            return base.ShouldSerializeForeColor();
-        }
+            => _control is not null ? _control.ShouldSerializeForeColor() : base.ShouldSerializeForeColor();
 
         internal override bool ShouldSerializeFont()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeFont();
-            }
-
-            return base.ShouldSerializeFont();
-        }
+            => _control is not null ? _control.ShouldSerializeFont() : base.ShouldSerializeFont();
 
         internal override bool ShouldSerializeRightToLeft()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeRightToLeft();
-            }
-
-            return base.ShouldSerializeRightToLeft();
-        }
+            => _control is not null ? _control.ShouldSerializeRightToLeft() : base.ShouldSerializeRightToLeft();
 
         internal override void OnKeyboardToolTipHook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipHook(toolTip);
 
-            KeyboardToolTipStateMachine.Instance.Hook(Control, toolTip);
+            KeyboardToolTipStateMachine.Instance.Hook(ControlInternal, toolTip);
         }
 
         internal override void OnKeyboardToolTipUnhook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipUnhook(toolTip);
 
-            KeyboardToolTipStateMachine.Instance.Unhook(Control, toolTip);
+            KeyboardToolTipStateMachine.Instance.Unhook(ControlInternal, toolTip);
         }
 
         /// <summary>
