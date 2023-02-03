@@ -54,7 +54,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Adds the given selection to our selection list.
         /// </summary>
-        internal void AddSelection(IComponent selection)
+        internal void AddSelection(IComponent? selection)
         {
             if (selection is null)
             {
