@@ -4628,6 +4628,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(item2.Checked);
         }
 
+        [WinFormsFact]
+        public void ListView_KeyUp_Event_Triggers()
+        {
+            using ListView control = new();
+            int callCount = 0;
+            control.KeyUp += (_, _) => callCount++;
+
+            KeyboardSimulator.KeyPress(control, Keys.Enter);
+
+            Assert.Equal(1, callCount);
+        }
+
         public static IEnumerable<object[]> ListView_SelectedIndexies_Contains_Invoke_TestData()
         {
             foreach (bool virtualMode in new[] { true, false })
