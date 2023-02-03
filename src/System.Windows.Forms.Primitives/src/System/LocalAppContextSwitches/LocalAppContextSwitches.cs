@@ -103,7 +103,6 @@ namespace System.Windows.Forms.Primitives
                     {
                         return true;
                     }
-
                 }
 
                 return false;
