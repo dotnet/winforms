@@ -15,24 +15,26 @@ namespace System.Windows.Forms.Tests
             testAccessor.s_AnchorLayoutV2 = 0;
             testAccessor.s_scaleTopLevelFormMinMaxSizeForDpi = 0;
             testAccessor.s_trackBarModernRendering = 0;
+            testAccessor.s_servicePointManagerCheckCrl = 0;
         }
 
         [WinFormsTheory]
         [InlineData(".NETCoreApp,Version=v8.0", true)]
         [InlineData(".NETCoreApp,Version=v7.0", false)]
         [InlineData(".NET Framework,Version=v4.8", false)]
-        public void Validate_Default_Switch_Values(string tragetFrameworkName, bool expected)
+        public void Validate_Default_Switch_Values(string targetFrameworkName, bool expected)
         {
             FrameworkName? previousTestTargetFramework = LocalAppContextSwitches.TargetFrameworkName;
             dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
 
             try
             {
-                testAccessor.s_targetFrameworkName = new FrameworkName(tragetFrameworkName);
+                testAccessor.s_targetFrameworkName = new FrameworkName(targetFrameworkName);
 
                 Assert.Equal(expected, LocalAppContextSwitches.TrackBarModernRendering);
                 Assert.Equal(expected, LocalAppContextSwitches.AnchorLayoutV2);
                 Assert.Equal(expected, LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi);
+                Assert.Equal(expected, LocalAppContextSwitches.ServicePointManagerCheckCrl);
             }
             finally
             {
@@ -46,14 +48,14 @@ namespace System.Windows.Forms.Tests
         [InlineData(".NETCoreApp,Version=v8.0", true)]
         [InlineData(".NETCoreApp,Version=v7.0", true)]
         [InlineData(".NET Framework,Version=v4.8", false)]
-        public void Validate_TargetFramework_Is_NETCore(string tragetFrameworkName, bool isNetCoreApp)
+        public void Validate_TargetFramework_Is_NETCore(string targetFrameworkName, bool isNetCoreApp)
         {
             FrameworkName? previousTestTargetFramework = LocalAppContextSwitches.TargetFrameworkName;
             dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
 
             try
             {
-                testAccessor.s_targetFrameworkName = new FrameworkName(tragetFrameworkName);
+                testAccessor.s_targetFrameworkName = new FrameworkName(targetFrameworkName);
                 bool isCoreApplication = LocalAppContextSwitches.IsNetCoreApp;
                 Assert.Equal(isNetCoreApp, isCoreApplication);
             }

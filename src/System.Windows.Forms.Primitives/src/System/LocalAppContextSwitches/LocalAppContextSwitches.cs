@@ -15,13 +15,14 @@ namespace System.Windows.Forms.Primitives
         // for more details on how to enable these switches in the application.
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
         internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
-        internal const string ServicePointManagerCheckCRLSwitchName = "System.Windows.Forms.ServicePointManagerCheckCRL";
+        internal const string ServicePointManagerCheckCrlSwitchName = "System.Windows.Forms.ServicePointManagerCheckCrl";
         internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
         private static int s_AnchorLayoutV2;
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
-        private static int s_servicePointManagerCheckCRL;
+        private static int s_servicePointManagerCheckCrl;
         private static int s_trackBarModernRendering;
         private static FrameworkName? s_targetFrameworkName;
+        private static Version? s_minimumSupportVersion;
 
         /// <summary>
         ///  The <see cref="TargetFrameworkAttribute"/> value for the entry assembly, if any.
@@ -32,6 +33,18 @@ namespace System.Windows.Forms.Primitives
             {
                 s_targetFrameworkName ??= AppContext.TargetFrameworkName is { } name ? new(name) : null;
                 return s_targetFrameworkName;
+            }
+        }
+
+        /// <summary>
+        ///  The earliest <see cref="Version"/> switches are supported in.
+        /// </summary>
+        private static Version MinimumSupportVersion
+        {
+            get
+            {
+                s_minimumSupportVersion ??= new("8.0");
+                return s_minimumSupportVersion;
             }
         }
 
@@ -82,7 +95,7 @@ namespace System.Windows.Forms.Primitives
 
                 // We are introducing switch defaults in .NET 8.0+ and support matrix for this product is
                 // limited to Windows 10 and above versions.
-                if (OsVersion.IsWindows10_1703OrGreater() && TargetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
+                if (OsVersion.IsWindows10_1703OrGreater() && TargetFrameworkName?.Version.CompareTo(MinimumSupportVersion) >= 0)
                 {
                     if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
                     {
@@ -99,7 +112,7 @@ namespace System.Windows.Forms.Primitives
                         return true;
                     }
 
-                    if (switchName == ServicePointManagerCheckCRLSwitchName)
+                    if (switchName == ServicePointManagerCheckCrlSwitchName)
                     {
                         return true;
                     }
@@ -137,13 +150,13 @@ namespace System.Windows.Forms.Primitives
 
         /// <summary>
         ///  Indicates whether certificates are checked against the certificate authority revocation list.
-        ///  If true, revoked certificates will be accepted by WebRequests and WebClients as invalid.
+        ///  If true, revoked certificates will not be accepted by WebRequests and WebClients as valid.
         ///  Otherwise, revoked certificates will be accepted as valid.
         /// </summary>
-        public static bool ServicePointManagerCheckCRL
+        public static bool ServicePointManagerCheckCrl
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue(ServicePointManagerCheckCRLSwitchName, ref s_servicePointManagerCheckCRL);
+            get => GetCachedSwitchValue(ServicePointManagerCheckCrlSwitchName, ref s_servicePointManagerCheckCrl);
         }
     }
 }

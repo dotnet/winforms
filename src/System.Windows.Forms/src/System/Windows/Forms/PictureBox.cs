@@ -510,7 +510,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (LocalAppContextSwitches.ServicePointManagerCheckCRL)
+                if (LocalAppContextSwitches.ServicePointManagerCheckCrl)
                 {
                     ServicePointManager.CheckCertificateRevocationList = true;
                 }
