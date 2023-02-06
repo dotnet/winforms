@@ -142,40 +142,39 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ColumnHeadersHeight_SetWithHandle_TestData()
         {
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 4, 18, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, DefaultColumnHeadersHeight, 18, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 32768, 18, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 4, 18, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, DefaultColumnHeadersHeight, 18, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 32768, 18, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 4, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 32768, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 4, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 32768, DefaultColumnHeadersHeight, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 4, 18 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, DefaultColumnHeadersHeight, 18 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 32768, 18 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 4, 18 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, DefaultColumnHeadersHeight, 18 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 32768, 18 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 4, DefaultColumnHeadersHeight };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 32768, DefaultColumnHeadersHeight };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 4, DefaultColumnHeadersHeight };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 32768, DefaultColumnHeadersHeight };
 
             foreach (bool columnHeadersVisible in new bool[] { true, false })
             {
                 foreach (DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode in new DataGridViewColumnHeadersHeightSizeMode[] { DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DataGridViewColumnHeadersHeightSizeMode.DisableResizing })
                 {
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 4, 4, 1 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 4, 4, columnHeadersVisible ? 1 : 0 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 32768, 32768, 1 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 32768, 32768, columnHeadersVisible ? 1 : 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 4, 4 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 4, 4 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 32768, 32768 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 32768, 32768 };
                 }
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
         [WinFormsTheory]
-        [SkipOnArchitecture(TestArchitectures.X64,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
         [MemberData(nameof(ColumnHeadersHeight_SetWithHandle_TestData))]
-        public void DataGridView_ColumnHeadersHeight_SetWithHandle_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue, int expectedInvalidatedCallCount)
+        public void DataGridView_ColumnHeadersHeight_SetWithHandle_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView
             {
                 ColumnHeadersHeightSizeMode = columnHeadersWidthSizeMode,
@@ -183,8 +182,6 @@ namespace System.Windows.Forms.Tests
                 AutoSize = autoSize
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -196,7 +193,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedValue, control.ColumnHeadersHeight);
             Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -205,47 +201,45 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedValue, control.ColumnHeadersHeight);
             Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> ColumnHeadersHeight_SetWithParentWithHandle_TestData()
         {
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 4, 18, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, DefaultColumnHeadersHeight, 18, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 32768, 18, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 4, 18, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, DefaultColumnHeadersHeight, 18, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 32768, 18, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 4, DefaultColumnHeadersHeight, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 32768, DefaultColumnHeadersHeight, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 4, DefaultColumnHeadersHeight, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, 0 };
-            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 32768, DefaultColumnHeadersHeight, 0, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 4, 18, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, DefaultColumnHeadersHeight, 18, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, true, 32768, 18, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 4, 18, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, DefaultColumnHeadersHeight, 18, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, true, false, 32768, 18, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 4, DefaultColumnHeadersHeight, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, true, 32768, DefaultColumnHeadersHeight, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 4, DefaultColumnHeadersHeight, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+            yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, false, false, 32768, DefaultColumnHeadersHeight, 0, 0 };
 
             foreach (bool columnHeadersVisible in new bool[] { true, false })
             {
                 foreach (DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode in new DataGridViewColumnHeadersHeightSizeMode[] { DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DataGridViewColumnHeadersHeightSizeMode.DisableResizing })
                 {
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 4, 4, 1, 0, 1 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, 0 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 32768, 32768, columnHeadersVisible ? 3 : 1, columnHeadersVisible ? 1 : 0, 1 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 4, 4, columnHeadersVisible ? 1 : 0, 0, 0 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, 0 };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 32768, 32768, columnHeadersVisible ? 1 : 0, 0, 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 4, 4, 0, 1 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 32768, 32768, columnHeadersVisible ? 1 : 0, 1 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 4, 4, 0, 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 32768, 32768, 0, 0 };
                 }
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
         [WinFormsTheory]
-        [SkipOnArchitecture(TestArchitectures.X64,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
         [MemberData(nameof(ColumnHeadersHeight_SetWithParentWithHandle_TestData))]
-        public void DataGridView_ColumnHeadersHeight_SetWithParentWithHandle_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue, int expectedInvalidatedCallCount, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
+        public void DataGridView_ColumnHeadersHeight_SetWithParentWithHandle_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var parent = new Control();
             using var control = new DataGridView
             {
@@ -255,8 +249,6 @@ namespace System.Windows.Forms.Tests
                 Parent = parent
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -280,8 +272,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedValue, control.ColumnHeadersHeight);
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+                Assert.True(control.IsHandleCreated);;
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
 
@@ -291,7 +282,6 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
                 Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
             }
@@ -522,28 +512,25 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ColumnHeadersHeightSizeMode_SetWithHandle_TestData()
         {
-            yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.AutoSize, 18, 2 };
-            yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.AutoSize, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight, 0 };
-            yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight, 0 };
+            yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.AutoSize, 18};
+            yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight };
+            yield return new object[] { true, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight };
+            yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.AutoSize, DefaultColumnHeadersHeight };
+            yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DefaultColumnHeadersHeight };
+            yield return new object[] { false, DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DefaultColumnHeadersHeight };
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
         [WinFormsTheory]
-        [SkipOnArchitecture(TestArchitectures.X64,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
         [MemberData(nameof(ColumnHeadersHeightSizeMode_SetWithHandle_TestData))]
-        public void DataGridView_ColumnHeadersHeightSizeMode_SetWithHandle_GetReturnsExpected(bool columnHeadersVisible, DataGridViewColumnHeadersHeightSizeMode value, int expectedColumnHeadersHeight, int expectedInvalidatedCallCount)
+        public void DataGridView_ColumnHeadersHeightSizeMode_SetWithHandle_GetReturnsExpected(bool columnHeadersVisible, DataGridViewColumnHeadersHeightSizeMode value, int expectedColumnHeadersHeight)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView
             {
                 ColumnHeadersVisible = columnHeadersVisible
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -553,7 +540,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.ColumnHeadersHeightSizeMode);
             Assert.Equal(expectedColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -562,27 +548,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.ColumnHeadersHeightSizeMode);
             Assert.Equal(expectedColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
         [WinFormsTheory]
-        [SkipOnArchitecture(TestArchitectures.X64,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
         [InlineData(DataGridViewColumnHeadersHeightSizeMode.DisableResizing, DataGridViewColumnHeadersHeightSizeMode.AutoSize)]
         [InlineData(DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DataGridViewColumnHeadersHeightSizeMode.AutoSize)]
         public void DataGridView_ColumnHeadersHeightSizeMode_SetNonResizeThenResize_RestoresOldValue(DataGridViewColumnHeadersHeightSizeMode originalColumnHeadersHeightSizeMode, DataGridViewColumnHeadersHeightSizeMode value)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView
             {
                 ColumnHeadersHeightSizeMode = originalColumnHeadersHeightSizeMode,
                 ColumnHeadersHeight = 30
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -595,7 +577,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(18, control.ColumnHeadersHeight);
             Assert.Equal(1, columnHeadersWidthChangedCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -604,7 +585,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(originalColumnHeadersHeightSizeMode, control.ColumnHeadersHeightSizeMode);
             Assert.Equal(30, control.ColumnHeadersHeight);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(3, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -885,10 +865,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Parent_Set_TestData))]
         public void DataGridView_Parent_SetWithHandle_GetReturnsExpected(Control value)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -897,7 +877,6 @@ namespace System.Windows.Forms.Tests
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -905,7 +884,6 @@ namespace System.Windows.Forms.Tests
             control.Parent = value;
             Assert.Same(value, control.Parent);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -1080,39 +1058,40 @@ namespace System.Windows.Forms.Tests
         {
             foreach (DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode in new DataGridViewRowHeadersWidthSizeMode[] { DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders, DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader })
             {
-                yield return new object[] { rowHeadersWidthSizeMode, true, true, 4, 21, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, true, DefaultRowHeadersWidth, 21, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, true, 32768, 21, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, false, 4, 21, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, false, DefaultRowHeadersWidth, 21, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, false, 32768, 21, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, true, 4, DefaultRowHeadersWidth, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, true, 32768, DefaultRowHeadersWidth, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, false, 4, DefaultRowHeadersWidth, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, false, 32768, DefaultRowHeadersWidth, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, true, 4, 21 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, true, DefaultRowHeadersWidth, 21 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, true, 32768, 21 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, false, 4, 21 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, false, DefaultRowHeadersWidth, 21 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, false, 32768, 21 };
+                yield return new object[] { rowHeadersWidthSizeMode, false, true, 4, DefaultRowHeadersWidth };
+                yield return new object[] { rowHeadersWidthSizeMode, false, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth };
+                yield return new object[] { rowHeadersWidthSizeMode, false, true, 32768, DefaultRowHeadersWidth };
+                yield return new object[] { rowHeadersWidthSizeMode, false, false, 4, DefaultRowHeadersWidth };
+                yield return new object[] { rowHeadersWidthSizeMode, false, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth };
+                yield return new object[] { rowHeadersWidthSizeMode, false, false, 32768, DefaultRowHeadersWidth };
             }
 
             foreach (bool rowHeadersVisible in new bool[] { true, false })
             {
                 foreach (DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode in new DataGridViewRowHeadersWidthSizeMode[] { DataGridViewRowHeadersWidthSizeMode.EnableResizing, DataGridViewRowHeadersWidthSizeMode.DisableResizing })
                 {
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 4, 4, 1 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 4, 4, rowHeadersVisible ? 1 : 0 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 32768, 32768, 1 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 32768, 32768, rowHeadersVisible ? 1 : 0 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 4, 4 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 4, 4 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 32768, 32768 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 32768, 32768 };
                 }
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6739")]
-        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6739")]
+        [WinFormsTheory]
         [MemberData(nameof(RowHeadersWidth_SetWithHandle_TestData))]
-        public void DataGridView_RowHeadersWidth_SetWithHandle_GetReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, bool autoSize, int value, int expectedValue, int expectedInvalidatedCallCount)
+        public void DataGridView_RowHeadersWidth_SetWithHandle_GetReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, bool autoSize, int value, int expectedValue)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView
             {
                 RowHeadersWidthSizeMode = rowHeadersWidthSizeMode,
@@ -1120,12 +1099,6 @@ namespace System.Windows.Forms.Tests
                 AutoSize = autoSize
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) =>
-            {
-                Assert.True(++invalidatedCallCount <= expectedInvalidatedCallCount,
-                    $"Extra ({invalidatedCallCount}) invalidate, must be <= {expectedInvalidatedCallCount}.");
-            };
 
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
@@ -1138,7 +1111,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedValue, control.RowHeadersWidth);
             Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -1147,7 +1119,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedValue, control.RowHeadersWidth);
             Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -1156,39 +1127,40 @@ namespace System.Windows.Forms.Tests
         {
             foreach (DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode in new DataGridViewRowHeadersWidthSizeMode[] { DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders, DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader })
             {
-                yield return new object[] { rowHeadersWidthSizeMode, true, true, 4, 21, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, true, DefaultRowHeadersWidth, 21, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, true, 32768, 21, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, false, 4, 21, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, false, DefaultRowHeadersWidth, 21, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, true, false, 32768, 21, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, true, 4, DefaultRowHeadersWidth, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, true, 32768, DefaultRowHeadersWidth, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, false, 4, DefaultRowHeadersWidth, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0, 0 };
-                yield return new object[] { rowHeadersWidthSizeMode, false, false, 32768, DefaultRowHeadersWidth, 0, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, true, 4, 21, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, true, DefaultRowHeadersWidth, 21, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, true, 32768, 21, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, false, 4, 21, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, false, DefaultRowHeadersWidth, 21, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, true, false, 32768, 21, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, false, true, 4, DefaultRowHeadersWidth, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, false, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, false, true, 32768, DefaultRowHeadersWidth, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, false, false, 4, DefaultRowHeadersWidth, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, false, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0 };
+                yield return new object[] { rowHeadersWidthSizeMode, false, false, 32768, DefaultRowHeadersWidth, 0, 0 };
             }
 
             foreach (bool rowHeadersVisible in new bool[] { true, false })
             {
                 foreach (DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode in new DataGridViewRowHeadersWidthSizeMode[] { DataGridViewRowHeadersWidthSizeMode.EnableResizing, DataGridViewRowHeadersWidthSizeMode.DisableResizing })
                 {
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 4, 4, 1, 0, 1 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0, 0 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 32768, 32768, rowHeadersVisible ? 3 : 1, rowHeadersVisible ? 1 : 0, 1 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 4, 4, rowHeadersVisible ? 1 : 0, 0, 0 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0, 0 };
-                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 32768, 32768, rowHeadersVisible ? 1 : 0, 0, 0 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 4, 4, 0, 1 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, true, 32768, 32768, rowHeadersVisible ? 1 : 0, 1 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 4, 4, 0, 0 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, DefaultRowHeadersWidth, DefaultRowHeadersWidth, 0, 0 };
+                    yield return new object[] { rowHeadersWidthSizeMode, rowHeadersVisible, false, 32768, 32768, 0, 0 };
                 }
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
-        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
+        [WinFormsTheory]
         [MemberData(nameof(RowHeadersWidth_SetWithParentWithHandle_TestData))]
-        public void DataGridView_RowHeadersWidth_SetWithParentWithHandle_GetReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, bool autoSize, int value, int expectedValue, int expectedInvalidatedCallCount, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
+        public void DataGridView_RowHeadersWidth_SetWithParentWithHandle_GetReturnsExpected(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, bool autoSize, int value, int expectedValue, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var parent = new Control();
             using var control = new DataGridView
             {
@@ -1198,8 +1170,6 @@ namespace System.Windows.Forms.Tests
                 Parent = parent
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1224,7 +1194,6 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
                 Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
 
@@ -1234,7 +1203,6 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
                 Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
             }
@@ -1469,32 +1437,29 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> RowHeadersWidthSizeMode_SetWithHandle_TestData()
         {
-            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders, 21, 2 };
-            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders, 21, 2 };
-            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader, 21, 2 };
-            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.DisableResizing, DefaultRowHeadersWidth, 0 };
-            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.EnableResizing, DefaultRowHeadersWidth, 0 };
-            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders, DefaultRowHeadersWidth, 0 };
-            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders, DefaultRowHeadersWidth, 0 };
-            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader, DefaultRowHeadersWidth, 0 };
-            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.DisableResizing, DefaultRowHeadersWidth, 0 };
-            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.EnableResizing, DefaultRowHeadersWidth, 0 };
+            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders, 21 };
+            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders, 21 };
+            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader, 21 };
+            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.DisableResizing, DefaultRowHeadersWidth };
+            yield return new object[] { true, DataGridViewRowHeadersWidthSizeMode.EnableResizing, DefaultRowHeadersWidth };
+            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders, DefaultRowHeadersWidth };
+            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders, DefaultRowHeadersWidth };
+            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader, DefaultRowHeadersWidth };
+            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.DisableResizing, DefaultRowHeadersWidth };
+            yield return new object[] { false, DataGridViewRowHeadersWidthSizeMode.EnableResizing, DefaultRowHeadersWidth };
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
         [WinFormsTheory]
-        [SkipOnArchitecture(TestArchitectures.X64,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
         [MemberData(nameof(RowHeadersWidthSizeMode_SetWithHandle_TestData))]
-        public void DataGridView_RowHeadersWidthSizeMode_SetWithHandle_GetReturnsExpected(bool rowHeadersVisible, DataGridViewRowHeadersWidthSizeMode value, int expectedRowHeadersWidth, int expectedInvalidatedCallCount)
+        public void DataGridView_RowHeadersWidthSizeMode_SetWithHandle_GetReturnsExpected(bool rowHeadersVisible, DataGridViewRowHeadersWidthSizeMode value, int expectedRowHeadersWidth)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView
             {
                 RowHeadersVisible = rowHeadersVisible
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1504,7 +1469,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.RowHeadersWidthSizeMode);
             Assert.Equal(expectedRowHeadersWidth, control.RowHeadersWidth);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -1513,15 +1477,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.RowHeadersWidthSizeMode);
             Assert.Equal(expectedRowHeadersWidth, control.RowHeadersWidth);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
         [WinFormsTheory]
-        [SkipOnArchitecture(TestArchitectures.X64,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
         [InlineData(DataGridViewRowHeadersWidthSizeMode.DisableResizing, DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders)]
         [InlineData(DataGridViewRowHeadersWidthSizeMode.DisableResizing, DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders)]
         [InlineData(DataGridViewRowHeadersWidthSizeMode.DisableResizing, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader)]
@@ -1530,14 +1490,14 @@ namespace System.Windows.Forms.Tests
         [InlineData(DataGridViewRowHeadersWidthSizeMode.EnableResizing, DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader)]
         public void DataGridView_RowHeadersWidthSizeMode_SetNonResizeThenResize_RestoresOldValue(DataGridViewRowHeadersWidthSizeMode originalRowHeadersWidthSizeMode, DataGridViewRowHeadersWidthSizeMode value)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView
             {
                 RowHeadersWidthSizeMode = originalRowHeadersWidthSizeMode,
                 RowHeadersWidth = 30
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1550,7 +1510,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(21, control.RowHeadersWidth);
             Assert.Equal(1, rowHeadersWidthChangedCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -1559,7 +1518,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(originalRowHeadersWidthSizeMode, control.RowHeadersWidthSizeMode);
             Assert.Equal(30, control.RowHeadersWidth);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(3, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -1809,12 +1767,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(true, true, 1)]
-        [InlineData(true, false, 0)]
-        [InlineData(false, true, 0)]
-        [InlineData(false, false, 0)]
-        public void DataGridView_TopLeftHeaderCell_SetWithHandle_GetReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible, int expectedInvalidatedCallCount)
+        [InlineData(true, true)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void DataGridView_TopLeftHeaderCell_SetWithHandle_GetReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var cell1 = new DataGridViewHeaderCell();
             using var control = new DataGridView
             {
@@ -1822,8 +1782,6 @@ namespace System.Windows.Forms.Tests
                 ColumnHeadersVisible = columnHeadersVisible
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1835,7 +1793,6 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell1.OwningColumn);
             Assert.Null(cell1.OwningRow);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -1846,7 +1803,6 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell1.OwningColumn);
             Assert.Null(cell1.OwningRow);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -1861,7 +1817,6 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell2.OwningColumn);
             Assert.Null(cell2.OwningRow);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -1879,7 +1834,6 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell2.OwningColumn);
             Assert.Null(cell2.OwningRow);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount * 4, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -1905,20 +1859,20 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(true, true, 1)]
-        [InlineData(true, false, 0)]
-        [InlineData(false, true, 0)]
-        [InlineData(false, false, 0)]
-        public void DataGridView_TopLeftHeaderCell_GetWithHandle_ReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible, int expectedInvalidatedCallCount)
+        [InlineData(true, true)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void DataGridView_TopLeftHeaderCell_GetWithHandle_ReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new DataGridView
             {
                 RowHeadersVisible = rowHeadersVisible,
                 ColumnHeadersVisible = columnHeadersVisible
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -1930,7 +1884,6 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.OwningRow);
             Assert.Same(control.TopLeftHeaderCell, control.TopLeftHeaderCell);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -1977,21 +1930,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6926")]
         [WinFormsTheory]
         [MemberData(nameof(OnColumnHeadersHeightChanged_TestData))]
         public void DataGridView_OnColumnHeadersHeightChanged_InvokeWithHandle_CallsColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, EventArgs eventArgs)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new SubDataGridView
             {
                 ColumnHeadersHeightSizeMode = columnHeadersWidthSizeMode,
                 ColumnHeadersVisible = columnHeadersVisible
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            control.Invalidated += (sender, e) =>
-            {
-                throw new Xunit.Sdk.XunitException("Invalidated event occurred.");
-            };
 
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
@@ -2177,13 +2127,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(OnColumnHeadersHeightSizeModeChanged_WithHandle_TestData))]
         public void DataGridView_OnColumnHeadersHeightSizeModeChanged_InvokeWithHandle_CallsColumnHeadersHeightSizeModeChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, DataGridViewAutoSizeModeEventArgs eventArgs, int expectedColumnHeadersHeight)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new SubDataGridView
             {
                 ColumnHeadersHeightSizeMode = columnHeadersWidthSizeMode
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -2202,7 +2152,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(expectedColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -2212,7 +2161,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(expectedColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -2456,19 +2404,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6597")]
-        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6597")]
+        [WinFormsTheory]
         [MemberData(nameof(OnRowHeadersWidthChanged_TestData))]
         public void DataGridView_OnRowHeadersWidthChanged_InvokeWithHandle_CallsRowHeadersWidthChanged(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, bool rowHeadersVisible, EventArgs eventArgs)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new SubDataGridView
             {
                 RowHeadersWidthSizeMode = rowHeadersWidthSizeMode,
                 RowHeadersVisible = rowHeadersVisible
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -2486,7 +2433,6 @@ namespace System.Windows.Forms.Tests
             control.OnRowHeadersWidthChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -2495,7 +2441,6 @@ namespace System.Windows.Forms.Tests
             control.OnRowHeadersWidthChanged(eventArgs);
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -2663,13 +2608,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(OnRowHeadersWidthSizeModeChanged_WithHandle_TestData))]
         public void DataGridView_OnRowHeadersWidthSizeModeChanged_InvokeWithHandle_CallsRowHeadersWidthSizeModeChanged(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode, DataGridViewAutoSizeModeEventArgs eventArgs, int expectedRowHeadersWidth)
         {
+            // Invalidation checks are omitted due to https://github.com/dotnet/winforms/issues/7799
+
             using var control = new SubDataGridView
             {
                 RowHeadersWidthSizeMode = rowHeadersWidthSizeMode
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
@@ -2688,7 +2633,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(expectedRowHeadersWidth, control.RowHeadersWidth);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -2698,7 +2642,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(expectedRowHeadersWidth, control.RowHeadersWidth);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
