@@ -888,9 +888,9 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        internal HashSet<IDesignerSerializationProvider>? SerializationProviders
+        internal HashSet<IDesignerSerializationProvider> SerializationProviders
         {
-            get => designerSerializationProviders;
+            get => designerSerializationProviders ??= new();
         }
 
         /// <summary>
