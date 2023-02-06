@@ -88,9 +88,14 @@ namespace System.Windows.Forms
 
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString, IFormatProvider formatInfo)
         {
+            return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo, false);
+        }
+
+        public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString, IFormatProvider formatInfo, bool invokeControl)
+        {
             ArgumentNullException.ThrowIfNull(dataSource);
 
-            var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo);
+            var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo, invokeControl);
             Add(binding);
             return binding;
         }

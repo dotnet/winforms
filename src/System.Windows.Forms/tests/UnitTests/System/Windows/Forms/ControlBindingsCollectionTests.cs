@@ -224,6 +224,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Add_StringObjectStringBoolDataSourceUpdateModeObjectStringIFormatProviderBool_Success()
+        {
+            using var control = new Control();
+            var collection = new ControlBindingsCollection(control);
+            Binding binding = collection.Add(nameof(Control.Text), 1, "dataMember", true, DataSourceUpdateMode.OnPropertyChanged, "null", "formatString", CultureInfo.CurrentCulture, true);
+            Assert.Same(binding, Assert.Single(collection));
+            Assert.Same(control, binding.BindableComponent);
+            Assert.Equal(nameof(Control.Text), binding.PropertyName);
+            Assert.Equal(1, binding.DataSource);
+            Assert.True(binding.FormattingEnabled);
+            Assert.Equal(DataSourceUpdateMode.OnPropertyChanged, binding.DataSourceUpdateMode);
+            Assert.Equal("null", binding.NullValue);
+            Assert.Equal("formatString", binding.FormatString);
+            Assert.Equal(CultureInfo.CurrentCulture, binding.FormatInfo);
+        }
+
+        [WinFormsFact]
         public void Add_NullDataSource_ThrowsArgumentNullException()
         {
             using var control = new Control();

@@ -876,6 +876,7 @@ System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvok
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object nullValue) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object nullValue, string formatString) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object nullValue, string formatString, System.IFormatProvider formatInfo) -> System.Windows.Forms.Binding
+~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object nullValue, string formatString, System.IFormatProvider formatInfo, bool invokeControl) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(System.Windows.Forms.Binding binding) -> void
 ~System.Windows.Forms.ControlBindingsCollection.BindableComponent.get -> System.Windows.Forms.IBindableComponent
 ~System.Windows.Forms.ControlBindingsCollection.Control.get -> System.Windows.Forms.Control
