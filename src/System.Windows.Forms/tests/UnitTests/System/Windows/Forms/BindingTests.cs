@@ -186,6 +186,35 @@ namespace System.Windows.Forms.Tests
             Assert.Same(propertyName, binding.PropertyName);
         }
 
+        public static IEnumerable<object[]> Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider_Bool_TestData()
+        {
+            yield return new object[] { null, null, null, true, DataSourceUpdateMode.OnValidation, null, null, null, true };
+            yield return new object[] { string.Empty, new object(), string.Empty, true, DataSourceUpdateMode.OnValidation - 1, DBNull.Value, string.Empty, CultureInfo.CurrentCulture, true };
+            yield return new object[] { "propertyName", new object(), "dataMember", false, DataSourceUpdateMode.Never, new object(), "formatString", CultureInfo.InvariantCulture, true };
+            yield return new object[] { "propertyName", new object(), "dataMember.subDataMember", false, DataSourceUpdateMode.Never + 1, new object(), "formatString", CultureInfo.CurrentCulture, true };
+        }
+
+        [Theory]
+        [MemberData(nameof(Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider_Bool_TestData))]
+        public void Binding_Ctor_String_Object_String_Bool_DataSourceUpdateMode_Object_String_IFormatProvider_Bool(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo, bool invokeControl)
+        {
+            var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, formatInfo, invokeControl);
+            Assert.Null(binding.BindableComponent);
+            Assert.Null(binding.BindingManagerBase);
+            Assert.Equal(new BindingMemberInfo(dataMember), binding.BindingMemberInfo);
+            Assert.Null(binding.Control);
+            Assert.Equal(ControlUpdateMode.OnPropertyChanged, binding.ControlUpdateMode);
+            Assert.Same(dataSource, binding.DataSource);
+            Assert.Same(DBNull.Value, binding.DataSourceNullValue);
+            Assert.Equal(dataSourceUpdateMode, binding.DataSourceUpdateMode);
+            Assert.Equal(formatInfo, binding.FormatInfo);
+            Assert.Same(formatString, binding.FormatString);
+            Assert.Equal(formattingEnabled, binding.FormattingEnabled);
+            Assert.False(binding.IsBinding);
+            Assert.Same(nullValue, binding.NullValue);
+            Assert.Same(propertyName, binding.PropertyName);
+        }
+
         public static IEnumerable<object[]> DataSourceNullValue_Set_TestData()
         {
             yield return new object[] { null };
