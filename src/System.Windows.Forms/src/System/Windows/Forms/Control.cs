@@ -764,15 +764,9 @@ namespace System.Windows.Forms
         [DefaultValue(typeof(Point), "0, 0")]
         public virtual Point AutoScrollOffset
         {
-            get
-            {
-                if (Properties.TryGetObject(s_autoScrollOffsetProperty, out Point point))
-                {
-                    return point;
-                }
-
-                return Point.Empty;
-            }
+            get => Properties.TryGetObject(s_autoScrollOffsetProperty, out Point point)
+                    ? point
+                    : Point.Empty;
             set
             {
                 if (AutoScrollOffset != value)
@@ -858,15 +852,9 @@ namespace System.Windows.Forms
         [Bindable(true)]
         public virtual object? DataContext
         {
-            get
-            {
-                if (Properties.TryGetObject(s_dataContextProperty, out object? value))
-                {
-                    return value;
-                }
-
-                return ParentInternal?.DataContext;
-            }
+            get => Properties.TryGetObject(s_dataContextProperty, out object? value)
+                    ? value
+                    : ParentInternal?.DataContext;
             set
             {
                 if (Equals(value, DataContext))
@@ -1012,15 +1000,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
         public virtual ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                if (Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout))
-                {
-                    return imageLayout;
-                }
-
-                return ImageLayout.Tile;
-            }
+            get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
+                    ? imageLayout
+                    : ImageLayout.Tile;
             set
             {
                 if (BackgroundImageLayout != value)

@@ -516,15 +516,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
         public virtual ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                if (Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout))
-                {
-                    return imageLayout;
-                }
-
-                return ImageLayout.Tile;
-            }
+            get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
+                ? imageLayout
+                : ImageLayout.Tile;
             set
             {
                 if (BackgroundImageLayout != value)
@@ -1890,15 +1884,7 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(StringConverter))]
         public object? Tag
         {
-            get
-            {
-                if (Properties.TryGetObject(ToolStripItem.s_tagProperty, out object? tag))
-                {
-                    return tag;
-                }
-
-                return null;
-            }
+            get => Properties.TryGetObject(ToolStripItem.s_tagProperty, out object? tag) ? tag : null;
             set => Properties.SetObject(ToolStripItem.s_tagProperty, value);
         }
 
@@ -1911,15 +1897,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripItemTextDescr))]
         public virtual string? Text
         {
-            get
-            {
-                if (Properties.TryGetObject(ToolStripItem.s_textProperty, out string? text))
-                {
-                    return text;
-                }
-
-                return string.Empty;
-            }
+            get => Properties.TryGetObject(ToolStripItem.s_textProperty, out string? text)
+                ? text
+                : string.Empty;
             set
             {
                 if (value != Text)

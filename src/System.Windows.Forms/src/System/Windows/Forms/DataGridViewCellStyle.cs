@@ -146,15 +146,9 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object DataSourceNullValue
         {
-            get
-            {
-                if (Properties.TryGetObject(PropDataSourceNullValue, out object value))
-                {
-                    return value;
-                }
-
-                return DBNull.Value;
-            }
+            get => Properties.TryGetObject(PropDataSourceNullValue, out object value)
+                ? value
+                : DBNull.Value;
             set
             {
                 object oldDataSourceNullValue = DataSourceNullValue;
@@ -334,15 +328,9 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         public object NullValue
         {
-            get
-            {
-                if (Properties.TryGetObject(PropNullValue, out object value))
-                {
-                    return value;
-                }
-
-                return string.Empty;
-            }
+            get => Properties.TryGetObject(PropNullValue, out object value)
+                ? value
+                : string.Empty;
             set
             {
                 object oldNullValue = NullValue;
