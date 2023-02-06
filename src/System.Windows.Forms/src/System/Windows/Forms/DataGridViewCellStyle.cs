@@ -148,12 +148,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(PropDataSourceNullValue))
+                if (Properties.TryGetObject(PropDataSourceNullValue, out object value))
                 {
-                    return Properties.GetObject(PropDataSourceNullValue);
+                    return value;
                 }
 
-                return System.DBNull.Value;
+                return DBNull.Value;
             }
             set
             {
@@ -295,12 +295,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!Properties.ContainsObject(PropDataSourceNullValue))
+                if (!Properties.TryGetObject(PropDataSourceNullValue, out object value))
                 {
                     return true;
                 }
 
-                return Properties.GetObject(PropDataSourceNullValue) == System.DBNull.Value;
+                return value == DBNull.Value;
             }
         }
 
@@ -320,12 +320,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!Properties.ContainsObject(PropNullValue))
+                if (!Properties.TryGetObject(PropNullValue, out object nullValue))
                 {
                     return true;
                 }
 
-                object nullValue = Properties.GetObject(PropNullValue);
                 return nullValue is string nullValueString && nullValueString.Length == 0;
             }
         }
@@ -337,9 +336,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(PropNullValue))
+                if (Properties.TryGetObject(PropNullValue, out object value))
                 {
-                    return Properties.GetObject(PropNullValue);
+                    return value;
                 }
 
                 return string.Empty;

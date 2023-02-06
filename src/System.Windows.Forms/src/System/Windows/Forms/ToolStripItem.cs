@@ -518,13 +518,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
-                if (!found)
+                if (Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout))
                 {
-                    return ImageLayout.Tile;
+                    return imageLayout;
                 }
 
-                return (ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty)!;
+                return ImageLayout.Tile;
             }
             set
             {
@@ -1893,9 +1892,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(ToolStripItem.s_tagProperty))
+                if (Properties.TryGetObject(ToolStripItem.s_tagProperty, out object? tag))
                 {
-                    return Properties.GetObject(ToolStripItem.s_tagProperty);
+                    return tag;
                 }
 
                 return null;
@@ -1914,9 +1913,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(ToolStripItem.s_textProperty))
+                if (Properties.TryGetObject(ToolStripItem.s_textProperty, out string? text))
                 {
-                    return (string?)Properties.GetObject(ToolStripItem.s_textProperty);
+                    return text;
                 }
 
                 return string.Empty;
@@ -1968,9 +1967,9 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-                if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
+                if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
                 {
-                    textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty)!;
+                    textDirection = direction;
                 }
 
                 if (textDirection == ToolStripTextDirection.Inherit)
@@ -3062,9 +3061,9 @@ namespace System.Windows.Forms
         internal void OnOwnerTextDirectionChanged()
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
+            if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
             {
-                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty)!;
+                textDirection = direction;
             }
 
             if (textDirection == ToolStripTextDirection.Inherit)
@@ -3457,9 +3456,9 @@ namespace System.Windows.Forms
         private bool ShouldSerializeTextDirection()
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
+            if (Properties.TryGetObject(ToolStripItem.s_textDirectionProperty, out ToolStripTextDirection direction))
             {
-                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty)!;
+                textDirection = direction;
             }
 
             return textDirection != ToolStripTextDirection.Inherit;

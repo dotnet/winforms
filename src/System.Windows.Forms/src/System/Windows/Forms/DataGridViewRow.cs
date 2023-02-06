@@ -198,7 +198,7 @@ namespace System.Windows.Forms
 
         private bool HasErrorText
         {
-            get => Properties.ContainsObject(s_propRowErrorText) && Properties.GetObject(s_propRowErrorText) is not null;
+            get => Properties.TryGetObject(s_propRowErrorText, out object value) && value is not null;
         }
 
         [Browsable(false)]

@@ -766,9 +766,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(s_autoScrollOffsetProperty))
+                if (Properties.TryGetObject(s_autoScrollOffsetProperty, out Point point))
                 {
-                    return (Point)Properties.GetObject(s_autoScrollOffsetProperty)!;
+                    return point;
                 }
 
                 return Point.Empty;
@@ -860,9 +860,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(s_dataContextProperty))
+                if (Properties.TryGetObject(s_dataContextProperty, out object? value))
                 {
-                    return Properties.GetObject(s_dataContextProperty);
+                    return value;
                 }
 
                 return ParentInternal?.DataContext;
@@ -1014,15 +1014,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
-                if (!found)
+                if (Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout))
                 {
-                    return ImageLayout.Tile;
+                    return imageLayout;
                 }
-                else
-                {
-                    return (ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty)!;
-                }
+
+                return ImageLayout.Tile;
             }
             set
             {

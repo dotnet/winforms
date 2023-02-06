@@ -1127,9 +1127,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(PropMdiChildFocusable))
+                if (Properties.TryGetObject(PropMdiChildFocusable, out bool value))
                 {
-                    return (bool)Properties.GetObject(PropMdiChildFocusable)!;
+                    return value;
                 }
 
                 return false;
