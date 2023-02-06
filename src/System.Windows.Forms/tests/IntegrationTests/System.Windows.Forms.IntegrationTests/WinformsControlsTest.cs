@@ -223,5 +223,23 @@ namespace System.Windows.Forms.IntegrationTests
             // bindings unset
             Assert.False(mainObject.IsPropertyChangedAssigned);
         }
+
+        //#if MAUI
+        [Fact]
+        //#endif
+        public void DataBindings_Update_thread_throws()
+        {
+            var mainObject = new Mocks.MainObject();
+            mainObject.Text = "Test text";
+            Form form = new Form();
+            TextBox textBox = new TextBox();
+            Binding binding = new Binding("Text", mainObject, "Text");
+            textBox.DataBindings.Add(binding);
+            textBox.Parent = form;
+            form.Show();
+
+            var thread = new Thread(() => Assert.Throws<InvalidOperationException>(() => textBox.Text = "Updated test text"));
+            thread.Start();
+        }
     }
 }
