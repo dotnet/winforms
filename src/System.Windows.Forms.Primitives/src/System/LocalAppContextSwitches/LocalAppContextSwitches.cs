@@ -15,9 +15,11 @@ namespace System.Windows.Forms.Primitives
         // for more details on how to enable these switches in the application.
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
         internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
+        internal const string ServicePointManagerCheckCrlSwitchName = "System.Windows.Forms.ServicePointManagerCheckCrl";
         internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
         private static int s_AnchorLayoutV2;
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
+        private static int s_servicePointManagerCheckCrl;
         private static int s_trackBarModernRendering;
         private static FrameworkName? s_targetFrameworkName;
 
@@ -37,20 +39,6 @@ namespace System.Windows.Forms.Primitives
         ///  Returns <see langword="true"/> if the <see cref="TargetFrameworkAttribute"/> value for the entry assembly specifies .NET Core.
         /// </summary>
         public static bool IsNetCoreApp => string.Equals(TargetFrameworkName?.Identifier, ".NETCoreApp");
-
-        /// <summary>
-        ///  Indicates whether AnchorLayoutV2 feature is enabled.
-        /// </summary>
-        /// <devdoc>
-        ///  Returns AnchorLayoutV2 switch value from runtimeconfig.json. Defaults to true if application is targeting .NET 8.0 and beyond.
-        ///  Refer to
-        ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
-        /// </devdoc>
-        public static bool AnchorLayoutV2
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_AnchorLayoutV2);
-        }
 
         private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
         {
@@ -92,11 +80,16 @@ namespace System.Windows.Forms.Primitives
                     return false;
                 }
 
-                // We are introducing switch defaults in .NET 8.0+ and support matrix for this product is
-                // limited to Windows 10 and above versions.
-                if (OsVersion.IsWindows10_1703OrGreater())
+                if (TargetFrameworkName is not { } framework)
                 {
-                    if (TargetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
+                    return false;
+                }
+
+                // Switches added in .NET 8.
+                if (framework.Version.Major >= 8)
+                {
+                    // The support matrix for these switches is limited to Windows 10 and above versions.
+                    if (OsVersion.IsWindows10_1703OrGreater())
                     {
                         if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
                         {
@@ -113,10 +106,29 @@ namespace System.Windows.Forms.Primitives
                             return true;
                         }
                     }
+
+                    if (switchName == ServicePointManagerCheckCrlSwitchName)
+                    {
+                        return true;
+                    }
                 }
 
                 return false;
             }
+        }
+
+        /// <summary>
+        ///  Indicates whether AnchorLayoutV2 feature is enabled.
+        /// </summary>
+        /// <devdoc>
+        ///  Returns AnchorLayoutV2 switch value from runtimeconfig.json. Defaults to true if application is targeting .NET 8.0 and beyond.
+        ///  Refer to
+        ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
+        /// </devdoc>
+        public static bool AnchorLayoutV2
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_AnchorLayoutV2);
         }
 
         public static bool ScaleTopLevelFormMinMaxSizeForDpi
@@ -129,6 +141,17 @@ namespace System.Windows.Forms.Primitives
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => GetCachedSwitchValue(TrackBarModernRenderingSwitchName, ref s_trackBarModernRendering);
+        }
+
+        /// <summary>
+        ///  Indicates whether certificates are checked against the certificate authority revocation list.
+        ///  If true, revoked certificates will not be accepted by WebRequests and WebClients as valid.
+        ///  Otherwise, revoked certificates will be accepted as valid.
+        /// </summary>
+        public static bool ServicePointManagerCheckCrl
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(ServicePointManagerCheckCrlSwitchName, ref s_servicePointManagerCheckCrl);
         }
     }
 }

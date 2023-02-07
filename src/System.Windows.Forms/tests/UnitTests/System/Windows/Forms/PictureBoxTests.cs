@@ -4,8 +4,9 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Moq;
+using System.Windows.Forms.Primitives;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -15,7 +16,7 @@ namespace System.Windows.Forms.Tests
     public class PictureBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
-        private const string UrlImageLocation = "https://github.com/dotnet/runtime-assets/raw/master/src/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
+        private const string UrlImageLocation = "https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/bitmaps/nature24bits.jpg?raw=true";
 
         [WinFormsFact]
         public void PictureBox_Ctor_Default()
@@ -721,38 +722,52 @@ namespace System.Windows.Forms.Tests
                 WaitOnLoad = true
             };
 
+            Size expectedImageSize = new(110, 100);
+
             pictureBox.ImageLocation = PathImageLocation;
-            Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+            Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             Assert.Equal(PathImageLocation, pictureBox.ImageLocation);
 
             // Set same.
             pictureBox.ImageLocation = PathImageLocation;
-            Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+            Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             Assert.Equal(PathImageLocation, pictureBox.ImageLocation);
         }
 
-        [WinFormsFact]
-        public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_GetReturnsExpected()
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_GetReturnsExpected(bool switchValue)
         {
+            dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
+
             try
             {
+                AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCrlSwitchName, switchValue);
+                Assert.Equal(switchValue, LocalAppContextSwitches.ServicePointManagerCheckCrl);
+
                 using var pictureBox = new PictureBox
                 {
                     WaitOnLoad = true
                 };
 
-                pictureBox.Load(UrlImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                Size expectedImageSize = new(110, 100);
+
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
 
                 // Set same.
-                pictureBox.Load(UrlImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                pictureBox.ImageLocation = UrlImageLocation;
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
             }
             catch
             {
                 // Swallow network errors.
+            }
+            finally
+            {
+                testAccessor.s_servicePointManagerCheckCrl = 0;
             }
         }
 
@@ -1989,28 +2004,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
         }
 
-        [WinFormsFact]
-        public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_GetReturnsExpected()
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_ConfigSwitch_CheckCRL_GetReturnsExpected(bool switchValue)
         {
+            dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
+
             try
             {
+                AppContext.SetSwitch(LocalAppContextSwitches.ServicePointManagerCheckCrlSwitchName, switchValue);
+                Assert.Equal(switchValue, LocalAppContextSwitches.ServicePointManagerCheckCrl);
+
                 using var pictureBox = new PictureBox
                 {
                     WaitOnLoad = true
                 };
 
-                pictureBox.ImageLocation = UrlImageLocation;
+                Size expectedImageSize = new(110, 100);
+
+                pictureBox.Load(UrlImageLocation);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
 
                 // Call again.
-                pictureBox.ImageLocation = UrlImageLocation;
+                pictureBox.Load(UrlImageLocation);
                 Assert.Same(UrlImageLocation, pictureBox.ImageLocation);
-                Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
+                Assert.Equal(expectedImageSize, pictureBox.Image.Size);
             }
             catch
             {
                 // Swallow network errors.
+            }
+            finally
+            {
+                testAccessor.s_servicePointManagerCheckCrl = 0;
             }
         }
 
