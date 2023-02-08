@@ -2269,14 +2269,12 @@ namespace System.Windows.Forms
 
             if (selectedItem is null)
             {
-                ToolStripItem? item = GetNextItemHorizontal(selectedItem, down);
-                return item;
+                return GetNextItemHorizontal(selectedItem, down);
             }
 
             if (this is ToolStripDropDown dropDown && dropDown.OwnerItem is not null && (dropDown.OwnerItem.IsInDesignMode || (dropDown.OwnerItem.Owner is not null && dropDown.OwnerItem.Owner.IsInDesignMode)))
             {
-                ToolStripItem? item = GetNextItemHorizontal(selectedItem, down);
-                return item;
+                return GetNextItemHorizontal(selectedItem, down);
             }
 
             Point midPointOfCurrent = new Point(selectedItem.Bounds.X + selectedItem.Width / 2,
