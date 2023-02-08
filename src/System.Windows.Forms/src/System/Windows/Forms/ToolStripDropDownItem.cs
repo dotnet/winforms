@@ -542,18 +542,18 @@ namespace System.Windows.Forms
         {
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
 
+            // Items on the overflow should have the same kind of keyboard handling as a toplevel.
+            bool isTopLevel = (!IsOnDropDown || IsOnOverflow);
+
             if (HasDropDownItems)
             {
-                // Items on the overflow should have the same kind of keyboard handling as a toplevel
-                bool isToplevel = (!IsOnDropDown || IsOnOverflow);
-
-                if (isToplevel && (keyCode == Keys.Down || keyCode == Keys.Up || keyCode == Keys.Enter || (SupportsSpaceKey && keyCode == Keys.Space)))
+                if (isTopLevel && (keyCode == Keys.Down || keyCode == Keys.Up || keyCode == Keys.Enter || (SupportsSpaceKey && keyCode == Keys.Space)))
                 {
                     ToolStrip.s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] open submenu from toplevel item");
 
                     if (Enabled || DesignMode)
                     {
-                        // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu
+                        // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu.
                         ShowDropDown();
                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                         DropDown.SelectNextToolStripItem(null, true);
@@ -561,7 +561,7 @@ namespace System.Windows.Forms
 
                     return true;
                 }
-                else if (!isToplevel)
+                else if (!isTopLevel)
                 {
                     // if we're on a DropDown - then cascade out.
                     bool menusCascadeRight = (((int)DropDownDirection & 0x0001) == 0);
@@ -581,6 +581,14 @@ namespace System.Windows.Forms
 
                         return true;
                     }
+                }
+            }
+            else
+            {
+                // For a top-level item without sub-items: do nothing on Up/Down.
+                if (isTopLevel && (keyCode == Keys.Down || keyCode == Keys.Up))
+                {
+                    return true;
                 }
             }
 
