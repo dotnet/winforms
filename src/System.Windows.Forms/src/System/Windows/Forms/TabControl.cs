@@ -1621,7 +1621,6 @@ namespace System.Windows.Forms
 
             if (index < _tabPages.Count)
             {
-                _tabPages[index] = null;
                 _tabPages.RemoveAt(index);
             }
 
