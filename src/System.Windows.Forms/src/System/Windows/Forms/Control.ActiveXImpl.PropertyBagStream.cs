@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
@@ -67,29 +68,32 @@ public partial class Control
 
             HRESULT IPropertyBag.Interface.Read(PCWSTR pszPropName, VARIANT* pVar, IErrorLog* pErrorLog)
             {
-                if (pVar is null)
+                if (pVar is null || pszPropName.Value is null)
                 {
                     return HRESULT.E_POINTER;
                 }
 
-                if (!_bag.Contains(pszPropName))
+                string name = pszPropName.ToString();
+                if (!_bag.Contains(name))
                 {
                     *pVar = default;
                     return HRESULT.E_INVALIDARG;
                 }
 
-                *pVar = (VARIANT)_bag[pszPropName]!;
+                Debug.Assert(_bag[name] is string);
+                *pVar = VARIANT.FromObject(_bag[name]);
                 return HRESULT.S_OK;
             }
 
             HRESULT IPropertyBag.Interface.Write(PCWSTR pszPropName, VARIANT* pVar)
             {
-                if (pVar is null)
+                if (pVar is null || pszPropName.Value is null)
                 {
                     return HRESULT.E_POINTER;
                 }
 
-                _bag[pszPropName] = *pVar;
+                Debug.Assert(pVar->vt == VARENUM.VT_BSTR);
+                _bag[pszPropName.ToString()] = pVar->ToObject();
                 return HRESULT.S_OK;
             }
 

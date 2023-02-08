@@ -861,6 +861,23 @@ internal unsafe partial struct VARIANT : IDisposable
         => variant.vt == VT_BSTR ? variant.data.bstrVal : ThrowInvalidCast<BSTR>();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(string value)
+        => new()
+        {
+            // Runtime marshalling converts strings to BSTR variants
+            vt = VT_BSTR,
+            data = new() { bstrVal = new(value) }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(BSTR value)
+        => new()
+        {
+            vt = VT_BSTR,
+            data = new() { bstrVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator CY(VARIANT variant)
         => variant.vt == VT_CY ? variant.data.cyVal : ThrowInvalidCast<CY>();
 
@@ -875,12 +892,33 @@ internal unsafe partial struct VARIANT : IDisposable
     public static explicit operator VARIANT(IUnknown* unknown)
         => new VARIANT()
         {
-            vt = VARENUM.VT_UNKNOWN,
+            vt = VT_UNKNOWN,
             data = new() { punkVal = unknown }
         };
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static T ThrowInvalidCast<T>() => throw new InvalidCastException();
+
+    /// <summary>
+    ///  Converts the given object to <see cref="VARIANT"/>. WARNING: Only handles <see cref="string"/>.
+    /// </summary>
+    public static VARIANT FromObject(object? value)
+    {
+        if (value is null)
+        {
+            return Empty;
+        }
+
+        if (value is string stringValue)
+        {
+            return (VARIANT)stringValue;
+        }
+
+        // Need to fill out to match Marshal behavior.
+        // https://github.com/dotnet/winforms/issues/8596
+
+        throw new InvalidCastException();
+    }
 
     internal partial struct _Anonymous_e__Union
     {
