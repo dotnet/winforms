@@ -509,7 +509,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool HasItems => Properties.TryGetObject(s_propComboBoxCellItems, out object value) && value is not null;
+        internal bool HasItems => Properties.ContainsObjectThatIsNotNull(s_propComboBoxCellItems);
 
         [Browsable(false)]
         public virtual ObjectCollection Items

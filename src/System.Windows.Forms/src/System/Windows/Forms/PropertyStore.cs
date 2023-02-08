@@ -194,6 +194,12 @@ namespace System.Windows.Forms
             return found;
         }
 
+        public bool ContainsObjectThatIsNotNull(int key)
+        {
+            object? entry = GetObject(key, out bool found);
+            return found && entry is not null;
+        }
+
         /// <summary>
         ///  Retrieves an object value from our property list.
         ///  This will set value to null and return false if the
