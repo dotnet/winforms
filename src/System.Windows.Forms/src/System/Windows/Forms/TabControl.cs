@@ -1164,7 +1164,7 @@ namespace System.Windows.Forms
 
         internal void Insert(int index, TabPage tabPage)
         {
-            _tabPages ??= new List<TabPage>(4);
+            _tabPages ??= new List<TabPage>();
 
             _tabPages.Insert(index, tabPage);
 
