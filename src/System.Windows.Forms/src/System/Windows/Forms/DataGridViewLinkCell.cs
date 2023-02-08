@@ -50,9 +50,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(s_propLinkCellActiveLinkColor))
+                if (Properties.TryGetObject(s_propLinkCellActiveLinkColor, out Color color))
                 {
-                    return (Color)Properties.GetObject(s_propLinkCellActiveLinkColor);
+                    return color;
                 }
                 else if (SystemInformation.HighContrast)
                 {
@@ -174,9 +174,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(s_propLinkCellLinkColor))
+                if (Properties.TryGetObject(s_propLinkCellLinkColor, out Color color))
                 {
-                    return (Color)Properties.GetObject(s_propLinkCellLinkColor);
+                    return color;
                 }
                 else if (SystemInformation.HighContrast)
                 {
@@ -371,9 +371,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Properties.ContainsObject(s_propLinkCellVisitedLinkColor))
+                if (Properties.TryGetObject(s_propLinkCellVisitedLinkColor, out Color color))
                 {
-                    return (Color)Properties.GetObject(s_propLinkCellVisitedLinkColor);
+                    return color;
                 }
                 else if (SystemInformation.HighContrast)
                 {

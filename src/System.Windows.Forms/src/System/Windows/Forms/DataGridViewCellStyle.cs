@@ -146,15 +146,9 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object DataSourceNullValue
         {
-            get
-            {
-                if (Properties.ContainsObject(PropDataSourceNullValue))
-                {
-                    return Properties.GetObject(PropDataSourceNullValue);
-                }
-
-                return System.DBNull.Value;
-            }
+            get => Properties.TryGetObject(PropDataSourceNullValue, out object value)
+                ? value
+                : DBNull.Value;
             set
             {
                 object oldDataSourceNullValue = DataSourceNullValue;
@@ -295,12 +289,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!Properties.ContainsObject(PropDataSourceNullValue))
+                if (!Properties.TryGetObject(PropDataSourceNullValue, out object value))
                 {
                     return true;
                 }
 
-                return Properties.GetObject(PropDataSourceNullValue) == System.DBNull.Value;
+                return value == DBNull.Value;
             }
         }
 
@@ -320,12 +314,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!Properties.ContainsObject(PropNullValue))
+                if (!Properties.TryGetObject(PropNullValue, out object nullValue))
                 {
                     return true;
                 }
 
-                object nullValue = Properties.GetObject(PropNullValue);
                 return nullValue is string nullValueString && nullValueString.Length == 0;
             }
         }
@@ -335,15 +328,9 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         public object NullValue
         {
-            get
-            {
-                if (Properties.ContainsObject(PropNullValue))
-                {
-                    return Properties.GetObject(PropNullValue);
-                }
-
-                return string.Empty;
-            }
+            get => Properties.TryGetObject(PropNullValue, out object value)
+                ? value
+                : string.Empty;
             set
             {
                 object oldNullValue = NullValue;

@@ -150,7 +150,7 @@ namespace System.Windows.Forms
 
         private protected override bool HasValueType
         {
-            get => Properties.ContainsObject(s_propValueType) && Properties.GetObject(s_propValueType) is not null;
+            get => Properties.TryGetObject(s_propValueType, out object value) && value is not null;
         }
 
         [Browsable(false)]

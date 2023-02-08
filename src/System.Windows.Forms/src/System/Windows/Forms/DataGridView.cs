@@ -3130,21 +3130,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolTip toolTip;
-                if (!Properties.ContainsObject(s_propToolTip))
+                if (Properties.TryGetObject(s_propToolTip, out ToolTip toolTip))
                 {
-                    toolTip = new ToolTip
-                    {
-                        ReshowDelay = 500,
-                        InitialDelay = 500
-                    };
+                    return toolTip;
+                }
 
-                    Properties.SetObject(s_propToolTip, toolTip);
-                }
-                else
+                toolTip = new ToolTip
                 {
-                    toolTip = (ToolTip)Properties.GetObject(s_propToolTip);
-                }
+                    ReshowDelay = 500,
+                    InitialDelay = 500
+                };
+
+                Properties.SetObject(s_propToolTip, toolTip);
 
                 return toolTip;
             }

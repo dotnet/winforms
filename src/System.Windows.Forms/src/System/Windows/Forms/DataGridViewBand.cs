@@ -254,17 +254,17 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public bool HasDefaultCellStyle
         {
-            get => Properties.ContainsObject(s_propDefaultCellStyle) && Properties.GetObject(s_propDefaultCellStyle) is not null;
+            get => Properties.TryGetObject(s_propDefaultCellStyle, out object? value) && value is not null;
         }
 
         internal bool HasDefaultHeaderCellType
         {
-            get => Properties.ContainsObject(s_propDefaultHeaderCellType) && Properties.GetObject(s_propDefaultHeaderCellType) is not null;
+            get => Properties.TryGetObject(s_propDefaultHeaderCellType, out object? value) && value is not null;
         }
 
         internal bool HasHeaderCell
         {
-            get => Properties.ContainsObject(s_propHeaderCell) && Properties.GetObject(s_propHeaderCell) is not null;
+            get => Properties.TryGetObject(s_propHeaderCell, out object? value) && value is not null;
         }
 
         [Browsable(false)]

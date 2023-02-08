@@ -1125,15 +1125,9 @@ namespace System.Windows.Forms
         // so that WM_SETFOCUS sent to MDIClient does not activate that child. (See MdiClient.WndProc).
         internal bool IsMdiChildFocusable
         {
-            get
-            {
-                if (Properties.ContainsObject(PropMdiChildFocusable))
-                {
-                    return (bool)Properties.GetObject(PropMdiChildFocusable)!;
-                }
-
-                return false;
-            }
+            get => Properties.TryGetObject(PropMdiChildFocusable, out bool value)
+                ? value
+                : false;
             set
             {
                 if (value != IsMdiChildFocusable)

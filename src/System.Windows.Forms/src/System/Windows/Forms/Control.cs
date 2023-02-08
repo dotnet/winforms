@@ -764,15 +764,9 @@ namespace System.Windows.Forms
         [DefaultValue(typeof(Point), "0, 0")]
         public virtual Point AutoScrollOffset
         {
-            get
-            {
-                if (Properties.ContainsObject(s_autoScrollOffsetProperty))
-                {
-                    return (Point)Properties.GetObject(s_autoScrollOffsetProperty)!;
-                }
-
-                return Point.Empty;
-            }
+            get => Properties.TryGetObject(s_autoScrollOffsetProperty, out Point point)
+                    ? point
+                    : Point.Empty;
             set
             {
                 if (AutoScrollOffset != value)
@@ -858,15 +852,9 @@ namespace System.Windows.Forms
         [Bindable(true)]
         public virtual object? DataContext
         {
-            get
-            {
-                if (Properties.ContainsObject(s_dataContextProperty))
-                {
-                    return Properties.GetObject(s_dataContextProperty);
-                }
-
-                return ParentInternal?.DataContext;
-            }
+            get => Properties.TryGetObject(s_dataContextProperty, out object? value)
+                    ? value
+                    : ParentInternal?.DataContext;
             set
             {
                 if (Equals(value, DataContext))
@@ -1012,18 +1000,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
         public virtual ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                bool found = Properties.ContainsObject(s_backgroundImageLayoutProperty);
-                if (!found)
-                {
-                    return ImageLayout.Tile;
-                }
-                else
-                {
-                    return (ImageLayout)Properties.GetObject(s_backgroundImageLayoutProperty)!;
-                }
-            }
+            get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
+                    ? imageLayout
+                    : ImageLayout.Tile;
             set
             {
                 if (BackgroundImageLayout != value)

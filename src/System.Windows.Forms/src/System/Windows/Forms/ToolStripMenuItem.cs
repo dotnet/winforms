@@ -598,7 +598,7 @@ namespace System.Windows.Forms
         internal static MenuTimer MenuTimer => s_menuTimer;
 
         /// <summary> Tag property for internal use </summary>
-        internal Form? MdiForm => Properties.ContainsObject(s_propMdiForm) ? Properties.GetObject(s_propMdiForm) as Form : null;
+        internal Form? MdiForm => Properties.TryGetObject(s_propMdiForm, out Form? form) ? form : null;
 
         internal ToolStripMenuItem Clone()
         {

@@ -357,37 +357,19 @@ namespace System.Windows.Forms
 
         private bool HasErrorText
         {
-            get => Properties.ContainsObject(s_propCellErrorText) && Properties.GetObject(s_propCellErrorText) is not null;
+            get => Properties.TryGetObject(s_propCellErrorText, out object value) && value is not null;
         }
 
         [Browsable(false)]
-        public bool HasStyle
-        {
-            get
-            {
-                return Properties.ContainsObject(s_propCellStyle) && Properties.GetObject(s_propCellStyle) is not null;
-            }
-        }
+        public bool HasStyle => Properties.TryGetObject(s_propCellStyle, out object value) && value is not null;
 
-        internal bool HasToolTipText
-        {
-            get
-            {
-                return Properties.ContainsObject(s_propCellToolTipText) && Properties.GetObject(s_propCellToolTipText) is not null;
-            }
-        }
+        internal bool HasToolTipText => Properties.TryGetObject(s_propCellToolTipText, out object value) && value is not null;
 
-        internal bool HasValue
-        {
-            get
-            {
-                return Properties.ContainsObject(s_propCellValue) && Properties.GetObject(s_propCellValue) is not null;
-            }
-        }
+        internal bool HasValue => Properties.TryGetObject(s_propCellValue, out object value) && value is not null;
 
         private protected virtual bool HasValueType
         {
-            get => Properties.ContainsObject(s_propCellValueType) && Properties.GetObject(s_propCellValueType) is not null;
+            get => Properties.TryGetObject(s_propCellValueType, out object value) && value is not null;
         }
 
         #region IKeyboardToolTip implementation

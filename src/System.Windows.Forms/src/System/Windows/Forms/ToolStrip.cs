@@ -1477,11 +1477,7 @@ namespace System.Windows.Forms
                 ToolStripPanelCell? toolStripPanelCell = null;
                 if (!IsDropDown && !IsDisposed)
                 {
-                    if (Properties.ContainsObject(ToolStrip.s_propToolStripPanelCell))
-                    {
-                        toolStripPanelCell = (ToolStripPanelCell?)Properties.GetObject(ToolStrip.s_propToolStripPanelCell);
-                    }
-                    else
+                    if (!Properties.TryGetObject(ToolStrip.s_propToolStripPanelCell, out toolStripPanelCell))
                     {
                         toolStripPanelCell = new ToolStripPanelCell(this);
                         Properties.SetObject(ToolStrip.s_propToolStripPanelCell, toolStripPanelCell);
@@ -1771,15 +1767,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolTip toolTip;
-                if (!Properties.ContainsObject(ToolStrip.s_propToolTip))
+                if (!Properties.TryGetObject(ToolStrip.s_propToolTip, out ToolTip toolTip))
                 {
                     toolTip = new ToolTip();
                     Properties.SetObject(ToolStrip.s_propToolTip, toolTip);
-                }
-                else
-                {
-                    toolTip = (ToolTip)Properties.GetObject(ToolStrip.s_propToolTip);
                 }
 
                 return toolTip;
@@ -1794,9 +1785,9 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-                if (Properties.ContainsObject(ToolStrip.s_propTextDirection))
+                if (Properties.TryGetObject(ToolStrip.s_propTextDirection, out ToolStripTextDirection direction))
                 {
-                    textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStrip.s_propTextDirection);
+                    textDirection = direction;
                 }
 
                 if (textDirection == ToolStripTextDirection.Inherit)
