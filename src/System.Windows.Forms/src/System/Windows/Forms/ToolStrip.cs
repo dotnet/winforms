@@ -2203,7 +2203,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Debug.WriteLineIf(s_selectionDebug!.TraceVerbose && (current != -1), "[SelectDBG GetNextToolStripItem] Last selected item was " + ((current != -1) ? DisplayedItems[current].Text : ""));
+            Debug.WriteLineIf(s_selectionDebug!.TraceVerbose && (current != -1), $"[SelectDBG GetNextToolStripItem] Last selected item was {DisplayedItems[current].Text}");
             Debug.WriteLineIf(s_selectionDebug!.TraceVerbose && (current == -1), "[SelectDBG GetNextToolStripItem] Last selected item was null");
 
             int count = DisplayedItems.Count;
