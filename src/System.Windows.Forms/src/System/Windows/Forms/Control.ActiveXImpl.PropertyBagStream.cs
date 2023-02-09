@@ -19,7 +19,7 @@ public partial class Control
         /// </summary>
         private class PropertyBagStream : IPropertyBag.Interface, IManagedWrapper<IPropertyBag>
         {
-            private Hashtable _bag = new Hashtable();
+            private Hashtable _bag = new();
 
             internal void Read(IStream* istream)
             {
@@ -47,7 +47,7 @@ public partial class Control
 
                 MemoryStream stream = new(streamData);
 
-                BinaryFormatter formatter = new BinaryFormatter();
+                BinaryFormatter formatter = new();
                 try
                 {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete

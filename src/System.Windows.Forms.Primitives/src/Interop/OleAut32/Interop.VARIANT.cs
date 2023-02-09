@@ -845,20 +845,60 @@ internal unsafe partial struct VARIANT : IDisposable
         }
     }
 
-    private static Span<T> GetSpan<T>(Array arr)
-        => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(arr, 0).ToPointer()), arr.Length);
+    private static Span<T> GetSpan<T>(Array array)
+        => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToPointer()), array.Length);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator bool(VARIANT variant)
-        => variant.vt == VT_BOOL ? variant.data.boolVal != VARIANT_BOOL.VARIANT_FALSE : ThrowInvalidCast<bool>();
+    public static explicit operator bool(VARIANT value)
+        => value.vt == VT_BOOL ? value.data.boolVal != VARIANT_BOOL.VARIANT_FALSE : ThrowInvalidCast<bool>();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator short(VARIANT variant)
-        => variant.vt == VT_I2 ? variant.data.iVal : ThrowInvalidCast<short>();
+    public static explicit operator VARIANT(bool value)
+        => new()
+        {
+            vt = VT_BOOL,
+            data = new() { boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE }
+        };
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator BSTR(VARIANT variant)
-        => variant.vt == VT_BSTR ? variant.data.bstrVal : ThrowInvalidCast<BSTR>();
+    public static explicit operator short(VARIANT value)
+        => value.vt == VT_I2 ? value.data.iVal : ThrowInvalidCast<short>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(short value)
+        => new()
+        {
+            vt = VT_I2,
+            data = new() { iVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator int(VARIANT value)
+        => value.vt is VT_I4 or VT_INT ? value.data.intVal : ThrowInvalidCast<int>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(int value)
+        => new()
+        {
+            vt = VT_I4,
+            data = new() { intVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator uint(VARIANT value)
+        => value.vt is VT_UI4 or VT_UINT ? value.data.uintVal : ThrowInvalidCast<uint>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(uint value)
+        => new()
+        {
+            vt = VT_UI4,
+            data = new() { uintVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator BSTR(VARIANT value)
+        => value.vt == VT_BSTR ? value.data.bstrVal : ThrowInvalidCast<BSTR>();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator VARIANT(string value)
@@ -878,13 +918,13 @@ internal unsafe partial struct VARIANT : IDisposable
         };
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator CY(VARIANT variant)
-        => variant.vt == VT_CY ? variant.data.cyVal : ThrowInvalidCast<CY>();
+    public static explicit operator CY(VARIANT value)
+        => value.vt == VT_CY ? value.data.cyVal : ThrowInvalidCast<CY>();
 
-    public static explicit operator decimal(VARIANT variant) => variant.vt switch
+    public static explicit operator decimal(VARIANT value) => value.vt switch
     {
-        VT_DECIMAL => variant.Anonymous.decVal.ToDecimal(),
-        VT_CY => decimal.FromOACurrency(variant.data.cyVal.int64),
+        VT_DECIMAL => value.Anonymous.decVal.ToDecimal(),
+        VT_CY => decimal.FromOACurrency(value.data.cyVal.int64),
         _ => ThrowInvalidCast<decimal>(),
     };
 
@@ -913,11 +953,29 @@ internal unsafe partial struct VARIANT : IDisposable
         {
             return (VARIANT)stringValue;
         }
+        else if (value is bool boolValue)
+        {
+            return (VARIANT)boolValue;
+        }
+        else if (value is short shortValue)
+        {
+            return (VARIANT)shortValue;
+        }
+        else if (value is int intValue)
+        {
+            return (VARIANT)intValue;
+        }
+        else if (value is uint uintValue)
+        {
+            return (VARIANT)uintValue;
+        }
 
-        // Need to fill out to match Marshal behavior.
+        // Need to fill out to match Marshal behavior so we can remove the call.
         // https://github.com/dotnet/winforms/issues/8596
 
-        throw new InvalidCastException();
+        VARIANT variant = default;
+        Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+        return variant;
     }
 
     internal partial struct _Anonymous_e__Union
