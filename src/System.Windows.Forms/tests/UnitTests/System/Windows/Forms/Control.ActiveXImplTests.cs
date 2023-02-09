@@ -46,7 +46,7 @@ public unsafe class Control_ActiveXImplTests : IClassFixture<ThreadExceptionFixt
         using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
         HRESULT hr = persistStream.Save(istream.Value, fClearDirty: BOOL.FALSE);
         Assert.True(hr.Succeeded);
-        control.DataContext = null;
+        control.SerializableValue = default;
 
         istream.Value->Seek(0, SeekOrigin.Begin);
         hr = persistStream.Load(istream.Value);
