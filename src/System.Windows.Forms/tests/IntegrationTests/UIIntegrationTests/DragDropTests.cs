@@ -137,7 +137,7 @@ public class DragDropTests : ControlTestBase
         Assert.Equal(button?.Text, ((Button)data).Text);
     }
 
-    [WinFormsFact]
+    [WinFormsFact(Skip = "Crashes dotnet.exe, see: https://github.com/dotnet/winforms/issues/8598")]
     public async Task DragDrop_RTF_FromExplorer_ToRichTextBox_ReturnsExpected_Async()
     {
         await RunTestAsync(async dragDropForm =>
