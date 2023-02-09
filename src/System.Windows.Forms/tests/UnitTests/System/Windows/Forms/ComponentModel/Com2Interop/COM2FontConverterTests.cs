@@ -54,7 +54,7 @@ public unsafe class COM2FontConverterTests : IClassFixture<ThreadExceptionFixtur
         }
     }
 
-    [Fact]
+    [Fact (Skip = "Flaky test being investigated. See:https://github.com/dotnet/winforms/issues/8602")]
     public void COM2FontConverter_ConvertManagedToNative()
     {
         fixed (char* n = "Arial")

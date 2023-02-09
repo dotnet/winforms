@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             Assert.Same(exclamationIcon, Instance.ConvertNativeToManaged(picture, null));
         }
 
-        [Fact(Skip = "Flaky test being investigated. see:https://github.com/dotnet/winforms/issues/8602")]
+        [Fact(Skip = "Flaky test being investigated. see:https://github.com/dotnet/winforms/issues/8609")]
         public unsafe void ConvertManagedToNative_Bitmap()
         {
             bool cancelSet = true;
