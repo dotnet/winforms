@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Tests
         public static TheoryData ExpectedCursorNames()
              => (TheoryData)s_expectedCursorNames.Split(Environment.NewLine).ToTheoryData();
 
-        [Theory]
+        [Theory(Skip = "Flaky test being investigated. See: https://github.com/dotnet/winforms/issues/8601")]
         [MemberData(nameof(ExpectedCursorNames))]
         public void EmbeddedResource_ResourcesExist_Cursor(string resourceName)
         {

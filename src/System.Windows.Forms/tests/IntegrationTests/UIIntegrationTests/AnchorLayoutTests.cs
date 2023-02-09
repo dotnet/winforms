@@ -159,13 +159,18 @@ namespace System.Windows.Forms.UITests
         private static void LaunchFormAndVerify(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
         {
             (Form form, Button button) = GetFormWithAnchoredButton(anchors);
-
+            Rectangle newButtonBounds = button.Bounds;
             try
             {
                 form.ResumeLayout(true);
                 form.Controls.Add(button);
                 form.Shown += OnFormShown;
                 form.ShowDialog();
+
+                Assert.Equal(expectedX, newButtonBounds.X);
+                Assert.Equal(expectedY, newButtonBounds.Y);
+                Assert.Equal(expectedWidth, newButtonBounds.Width);
+                Assert.Equal(expectedHeight, newButtonBounds.Height);
             }
             finally
             {
@@ -178,13 +183,7 @@ namespace System.Windows.Forms.UITests
             {
                 // Resize the form to compute button anchors.
                 form.Size = new Size(400, 600);
-                Rectangle buttonBounds = button.Bounds;
-
-                Assert.Equal(expectedX, buttonBounds.X);
-                Assert.Equal(expectedY, buttonBounds.Y);
-                Assert.Equal(expectedWidth, buttonBounds.Width);
-                Assert.Equal(expectedHeight, buttonBounds.Height);
-
+                newButtonBounds = button.Bounds;
                 form.Close();
             }
         }
