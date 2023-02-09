@@ -4752,20 +4752,35 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(null, direction));
         }
 
-        [WinFormsTheory]
-        [InlineData(RightToLeft.No)]
-        [InlineData(RightToLeft.Yes)]
-        public void ToolStrip_GetNextItem_ReturnsForwardItem(RightToLeft rightToLeft)
+        public static IEnumerable<object[]> ToolStrip_GetNextItem_TestData()
         {
-            using ToolStrip toolStrip = new()
+            foreach (RightToLeft rtl in Enum.GetValues(typeof(RightToLeft)))
             {
-                RightToLeft = rightToLeft,
-                TabStop = false
-            };
+                foreach (bool tabStop in new bool[] { true, false })
+                {
+                    foreach (bool useTabKey in new bool[] { true, false })
+                    {
+                        yield return new object[] { rtl, tabStop, useTabKey };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStrip_GetNextItem_TestData))]
+        public void ToolStrip_GetNextItem_ReturnsForwardItem(RightToLeft rightToLeft, bool tabStop, bool useTabKey)
+        {
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = tabStop };
             using ToolStripButton toolStripButton1 = new();
             using ToolStripButton toolStripButton2 = new();
             using ToolStripButton toolStripButton3 = new();
             toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+
+            if (useTabKey)
+            {
+                toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Tab;
+            }
+
             ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Right);
 
             Assert.Equal(toolStripButton2, actual);
@@ -4773,15 +4788,20 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(RightToLeft.No)]
-        [InlineData(RightToLeft.Yes)]
-        public void ToolStrip_GetNextItem_CyclesForwardExpected(RightToLeft rightToLeft)
+        [MemberData(nameof(ToolStrip_GetNextItem_TestData))]
+        public void ToolStrip_GetNextItem_CyclesForwardExpected(RightToLeft rightToLeft, bool tabStop, bool useTabKey)
         {
-            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = false };
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = tabStop };
             using ToolStripButton toolStripButton1 = new();
             using ToolStripButton toolStripButton2 = new();
             using ToolStripButton toolStripButton3 = new();
             toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+
+            if (useTabKey)
+            {
+                toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Tab;
+            }
+
             ToolStripItem nextToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Right);
             ToolStripItem nextToolStripItem2 = toolStrip.GetNextItem(toolStripButton2, ArrowDirection.Right);
             ToolStripItem nextToolStripItem3 = toolStrip.GetNextItem(toolStripButton3, ArrowDirection.Right);
@@ -4793,20 +4813,20 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(RightToLeft.No)]
-        [InlineData(RightToLeft.Yes)]
-        public void ToolStrip_GetNextItem_ReturnsBackwardItem(RightToLeft rightToLeft)
+        [MemberData(nameof(ToolStrip_GetNextItem_TestData))]
+        public void ToolStrip_GetNextItem_ReturnsBackwardItem(RightToLeft rightToLeft, bool tabStop, bool useTabKey)
         {
-            using ToolStrip toolStrip = new()
-            {
-                RightToLeft = rightToLeft,
-                TabStop = false
-            };
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = tabStop };
             using ToolStripButton toolStripButton1 = new();
             using ToolStripButton toolStripButton2 = new();
             using ToolStripButton toolStripButton3 = new();
             toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
-            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+
+            if (useTabKey)
+            {
+                toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            }
+
             ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Left);
 
             Assert.Equal(toolStripButton3, actual);
@@ -4814,16 +4834,20 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(RightToLeft.No)]
-        [InlineData(RightToLeft.Yes)]
-        public void ToolStrip_GetNextItem_CyclesBackwardExpected(RightToLeft rightToLeft)
+        [MemberData(nameof(ToolStrip_GetNextItem_TestData))]
+        public void ToolStrip_GetNextItem_CyclesBackwardExpected(RightToLeft rightToLeft, bool tabStop, bool useTabKey)
         {
-            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = false };
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = tabStop };
             using ToolStripButton toolStripButton1 = new();
             using ToolStripButton toolStripButton2 = new();
             using ToolStripButton toolStripButton3 = new();
             toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
-            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+
+            if (useTabKey)
+            {
+                toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            }
+
             ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Left);
             ToolStripItem previousToolStripItem2 = toolStrip.GetNextItem(toolStripButton3, ArrowDirection.Left);
             ToolStripItem previousToolStripItem3 = toolStrip.GetNextItem(toolStripButton2, ArrowDirection.Left);
