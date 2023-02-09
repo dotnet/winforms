@@ -359,15 +359,15 @@ System.ComponentModel.Design.ProjectTargetFrameworkAttribute.TargetFrameworkMoni
 ~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception ex, System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomSerializerException.LinePragma.get -> System.CodeDom.CodeLinePragma
 ~System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo method) -> bool
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.Container.get -> System.ComponentModel.IContainer
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.Container.set -> void
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.CreateSession() -> System.IDisposable
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.DesignerSerializationManager(System.IServiceProvider provider) -> void
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.Errors.get -> System.Collections.IList
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetRuntimeType(string typeName) -> System.Type
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetSerializer(System.Type objectType, System.Type serializerType) -> object
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.PropertyProvider.get -> object
-~System.ComponentModel.Design.Serialization.DesignerSerializationManager.PropertyProvider.set -> void
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.Container.get -> System.ComponentModel.IContainer?
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.Container.set -> void
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.CreateSession() -> System.IDisposable!
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.DesignerSerializationManager(System.IServiceProvider? provider) -> void
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.Errors.get -> System.Collections.IList!
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetRuntimeType(string? typeName) -> System.Type?
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetSerializer(System.Type? objectType, System.Type! serializerType) -> object?
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.PropertyProvider.get -> object?
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.PropertyProvider.set -> void
 ~System.ComponentModel.Design.Serialization.ExpressionContext.Expression.get -> System.CodeDom.CodeExpression
 ~System.ComponentModel.Design.Serialization.ExpressionContext.ExpressionContext(System.CodeDom.CodeExpression expression, System.Type expressionType, object owner) -> void
 ~System.ComponentModel.Design.Serialization.ExpressionContext.ExpressionContext(System.CodeDom.CodeExpression expression, System.Type expressionType, object owner, object presetValue) -> void
@@ -635,12 +635,12 @@ virtual System.ComponentModel.Design.DesignerCommandSet.GetCommands(string! name
 ~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMember(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object owningObject, System.ComponentModel.MemberDescriptor member) -> System.CodeDom.CodeStatementCollection
 ~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object owningObject, System.ComponentModel.MemberDescriptor member) -> System.CodeDom.CodeStatementCollection
 ~virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeExpression targetExpression, System.Type targetType, System.Collections.ICollection originalCollection, System.Collections.ICollection valuesToSerialize) -> object
-~virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.CreateInstance(System.Type type, System.Collections.ICollection arguments, string name, bool addToContainer) -> object
-~virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetService(System.Type serviceType) -> object
-~virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetType(string typeName) -> System.Type
-~virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnResolveName(System.ComponentModel.Design.Serialization.ResolveNameEventArgs e) -> void
-~virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnSessionCreated(System.EventArgs e) -> void
-~virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnSessionDisposed(System.EventArgs e) -> void
+virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.CreateInstance(System.Type! type, System.Collections.ICollection? arguments, string? name, bool addToContainer) -> object!
+virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetService(System.Type! serviceType) -> object?
+virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetType(string? typeName) -> System.Type?
+virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnResolveName(System.ComponentModel.Design.Serialization.ResolveNameEventArgs! e) -> void
+virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnSessionCreated(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnSessionDisposed(System.EventArgs! e) -> void
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> object
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethod(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration, object value) -> System.CodeDom.CodeMemberMethod
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethods(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> System.CodeDom.CodeMemberMethod[]
@@ -892,8 +892,8 @@ System.ComponentModel.Design.Serialization.DesignerSerializationManager.Preserve
 System.ComponentModel.Design.Serialization.DesignerSerializationManager.PreserveNames.set -> void
 System.ComponentModel.Design.Serialization.DesignerSerializationManager.RecycleInstances.get -> bool
 System.ComponentModel.Design.Serialization.DesignerSerializationManager.RecycleInstances.set -> void
-System.ComponentModel.Design.Serialization.DesignerSerializationManager.SessionCreated -> System.EventHandler
-System.ComponentModel.Design.Serialization.DesignerSerializationManager.SessionDisposed -> System.EventHandler
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.SessionCreated -> System.EventHandler?
+System.ComponentModel.Design.Serialization.DesignerSerializationManager.SessionDisposed -> System.EventHandler?
 System.ComponentModel.Design.Serialization.DesignerSerializationManager.ValidateRecycledTypes.get -> bool
 System.ComponentModel.Design.Serialization.DesignerSerializationManager.ValidateRecycledTypes.set -> void
 System.ComponentModel.Design.Serialization.ExpressionContext

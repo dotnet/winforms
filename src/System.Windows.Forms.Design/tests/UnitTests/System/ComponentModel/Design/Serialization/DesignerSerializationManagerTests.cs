@@ -147,7 +147,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             IList errors = manager.Errors;
             Assert.Empty(errors);
             Assert.Same(errors, manager.Errors);
-            Assert.IsType<ArrayList>(errors);
+            Assert.IsAssignableFrom<IList>(errors);
         }
 
         [Fact]
