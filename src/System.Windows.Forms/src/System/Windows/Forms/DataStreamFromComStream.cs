@@ -4,159 +4,151 @@
 
 using Windows.Win32.System.Com;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal unsafe class DataStreamFromComStream : Stream
 {
-    internal unsafe class DataStreamFromComStream : Stream
+    private IStream* _comStream;
+
+    /// <summary>
+    ///  Initializes a new instance that does not take ownership of <paramref name="comStream"/>.
+    /// </summary>
+    public DataStreamFromComStream(IStream* comStream) : base()
     {
-        private IStream* _comStream;
+        _comStream = comStream;
+    }
 
-        /// <summary>
-        ///  Initializes a new instance that does not take ownership of <paramref name="comStream"/>.
-        /// </summary>
-        public DataStreamFromComStream(IStream* comStream) : base()
+    public override long Position
+    {
+        get => Seek(0, SeekOrigin.Current);
+        set => Seek(value, SeekOrigin.Begin);
+    }
+
+    public override bool CanWrite => true;
+
+    public override bool CanSeek => true;
+
+    public override bool CanRead => true;
+
+    public override long Length
+    {
+        get
         {
-            _comStream = comStream;
+            long curPos = Position;
+            long endPos = Seek(0, SeekOrigin.End);
+            Position = curPos;
+            return endPos - curPos;
+        }
+    }
+
+    public override void Flush()
+    {
+    }
+
+    /// <summary>
+    ///  Read the data into the given buffer
+    /// </summary>
+    /// <param name="buffer">The buffer receiving the data</param>
+    /// <param name="index">The offset from the beginning of the buffer</param>
+    /// <param name="count">The number of bytes to read</param>
+    /// <returns>The number of bytes read</returns>
+    public override int Read(byte[] buffer, int index, int count)
+    {
+        int bytesRead = 0;
+        if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
+        {
+            var span = new Span<byte>(buffer, index, count);
+            bytesRead = Read(span);
         }
 
-        public override long Position
+        return bytesRead;
+    }
+
+    /// <summary>
+    ///  Read the data into the given buffer
+    /// </summary>
+    /// <param name="buffer">The buffer receiving the data</param>
+    /// <returns>The number of bytes read</returns>
+    public override int Read(Span<byte> buffer)
+    {
+        uint bytesRead = 0;
+        if (!buffer.IsEmpty)
         {
-            get
+            fixed (byte* ch = &buffer[0])
             {
-                return Seek(0, SeekOrigin.Current);
-            }
-
-            set
-            {
-                Seek(value, SeekOrigin.Begin);
+                _comStream->Read(ch, (uint)buffer.Length, &bytesRead);
             }
         }
 
-        public override bool CanWrite => true;
+        return (int)bytesRead;
+    }
 
-        public override bool CanSeek => true;
+    public override void SetLength(long value)
+    {
+        _comStream->SetSize((ulong)value);
+    }
 
-        public override bool CanRead => true;
+    public override long Seek(long offset, SeekOrigin origin)
+    {
+        ulong newPosition = 0;
+        _comStream->Seek(offset, origin, &newPosition);
+        return (long)newPosition;
+    }
 
-        public override long Length
+    /// <summary>
+    ///  Writes the data contained in the given buffer
+    /// </summary>
+    /// <param name="buffer">The buffer containing the data to write</param>
+    /// <param name="index">The offset from the beginning of the buffer</param>
+    /// <param name="count">The number of bytes to write</param>
+    public override void Write(byte[] buffer, int index, int count)
+    {
+        if (count <= 0)
         {
-            get
-            {
-                long curPos = Position;
-                long endPos = Seek(0, SeekOrigin.End);
-                Position = curPos;
-                return endPos - curPos;
-            }
+            return;
         }
 
-        public override void Flush()
+        if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
         {
+            var span = new ReadOnlySpan<byte>(buffer, index, count);
+            Write(span);
+            return;
         }
 
-        /// <summary>
-        ///  Read the data into the given buffer
-        /// </summary>
-        /// <param name="buffer">The buffer receiving the data</param>
-        /// <param name="index">The offset from the beginning of the buffer</param>
-        /// <param name="count">The number of bytes to read</param>
-        /// <returns>The number of bytes read</returns>
-        public override int Read(byte[] buffer, int index, int count)
-        {
-            int bytesRead = 0;
-            if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
-            {
-                var span = new Span<byte>(buffer, index, count);
-                bytesRead = Read(span);
-            }
+        throw new IOException(SR.DataStreamWrite);
+    }
 
-            return bytesRead;
+    /// <summary>
+    ///  Writes the data contained in the given buffer
+    /// </summary>
+    /// <param name="buffer">The buffer to write</param>
+    public override void Write(ReadOnlySpan<byte> buffer)
+    {
+        if (buffer.IsEmpty)
+        {
+            return;
         }
 
-        /// <summary>
-        ///  Read the data into the given buffer
-        /// </summary>
-        /// <param name="buffer">The buffer receiving the data</param>
-        /// <returns>The number of bytes read</returns>
-        public override int Read(Span<byte> buffer)
+        uint bytesWritten = 0;
+        fixed (byte* b = &buffer[0])
         {
-            uint bytesRead = 0;
-            if (!buffer.IsEmpty)
-            {
-                fixed (byte* ch = &buffer[0])
-                {
-                    _comStream->Read(ch, (uint)buffer.Length, &bytesRead);
-                }
-            }
-
-            return (int)bytesRead;
+            _comStream->Write(b, (uint)buffer.Length, &bytesWritten);
         }
 
-        public override void SetLength(long value)
+        if (bytesWritten < buffer.Length)
         {
-            _comStream->SetSize((ulong)value);
-        }
-
-        public override long Seek(long offset, SeekOrigin origin)
-        {
-            ulong newPosition = 0;
-            _comStream->Seek(offset, origin, &newPosition);
-            return (long)newPosition;
-        }
-
-        /// <summary>
-        ///  Writes the data contained in the given buffer
-        /// </summary>
-        /// <param name="buffer">The buffer containing the data to write</param>
-        /// <param name="index">The offset from the beginning of the buffer</param>
-        /// <param name="count">The number of bytes to write</param>
-        public override void Write(byte[] buffer, int index, int count)
-        {
-            if (count <= 0)
-            {
-                return;
-            }
-
-            if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
-            {
-                var span = new ReadOnlySpan<byte>(buffer, index, count);
-                Write(span);
-                return;
-            }
-
             throw new IOException(SR.DataStreamWrite);
         }
+    }
 
-        /// <summary>
-        ///  Writes the data contained in the given buffer
-        /// </summary>
-        /// <param name="buffer">The buffer to write</param>
-        public override void Write(ReadOnlySpan<byte> buffer)
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && _comStream is not null)
         {
-            if (buffer.IsEmpty)
-            {
-                return;
-            }
-
-            uint bytesWritten = 0;
-            fixed (byte* b = &buffer[0])
-            {
-                _comStream->Write(b, (uint)buffer.Length, &bytesWritten);
-            }
-
-            if (bytesWritten < buffer.Length)
-            {
-                throw new IOException(SR.DataStreamWrite);
-            }
+            _comStream->Commit(STGC.STGC_DEFAULT);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _comStream is not null)
-            {
-                _comStream->Commit(STGC.STGC_DEFAULT);
-            }
-
-            _comStream = null;
-            base.Dispose(disposing);
-        }
+        _comStream = null;
+        base.Dispose(disposing);
     }
 }

@@ -10,6 +10,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
@@ -1018,17 +1020,37 @@ public partial class Control
         internal HRESULT IsDirty() => _activeXState[s_isDirty] ? HRESULT.S_OK : HRESULT.S_FALSE;
 
         /// <summary>
+        ///  Looks at the property to see if it should be loaded / saved as a resource or
+        ///  through a type converter.
+        /// </summary>
+        private bool IsResourceProperty(PropertyDescriptor property)
+        {
+            TypeConverter converter = property.Converter;
+
+            // If we have a converter round trip through string or byte[], it should be used
+            if ((converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
+                || (converter.CanConvertTo(typeof(byte[])) && converter.CanConvertFrom(typeof(byte))))
+            {
+                return false;
+            }
+
+            // Otherwise we require the type explicitly implements ISerializable.
+            return property.GetValue(_control) is ISerializable;
+        }
+
+        /// <summary>
         ///  Implements IPersistStorage::Load
         /// </summary>
         internal HRESULT Load(IStorage* stg)
         {
             using ComScope<IStream> stream = new(null);
             HRESULT hr = stg->OpenStream(
-                    GetStreamName(),
-                    null,
-                    STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
-                    0,
-                    stream);
+                GetStreamName(),
+                null,
+                STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
+                0,
+                stream);
+
             if (hr == HRESULT.STG_E_FILENOTFOUND)
             {
                 // For backward compatibility: We were earlier using GetType().FullName
@@ -1058,39 +1080,42 @@ public partial class Control
             // in them.  So, load through that method.
             PropertyBagStream bagStream = new();
             bagStream.Read(stream);
-            Load(ComHelpers.GetComPointer<IPropertyBag>(bagStream), pErrorLog: null);
+            Load(ComHelpers.GetComPointer<IPropertyBag>(bagStream), errorLog: null);
         }
 
         /// <summary>
         ///  Implements IPersistPropertyBag::Load
         /// </summary>
-        internal unsafe void Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
+        internal unsafe void Load(IPropertyBag* propertyBag, IErrorLog* errorLog)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
 
-            using ComScope<IPropertyBag> scope = new(pPropBag);
+            using ComScope<IPropertyBag> scope = new(propertyBag);
 
             for (int i = 0; i < props.Count; i++)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Loading property {props[i].Name}");
+                PropertyDescriptor currentProperty = props[i];
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Loading property {currentProperty.Name}");
 
                 try
                 {
-                    HRESULT hr = HRESULT.S_OK;
-                    object? obj = null;
+                    object? value = null;
                     using (VARIANT variant = default)
                     {
-                        fixed (char* pszPropName = props[i].Name)
+                        fixed (char* n = currentProperty.Name)
                         {
-                            hr = pPropBag->Read(pszPropName, &variant, pErrorLog);
+                            if (propertyBag->Read(n, &variant, errorLog).Failed)
+                            {
+                                continue;
+                            }
                         }
 
-                        obj = variant.ToObject();
+                        value = variant.ToObject();
                     }
 
-                    if (!hr.Succeeded || obj is null)
+                    if (value is null)
                     {
                         continue;
                     }
@@ -1103,39 +1128,10 @@ public partial class Control
 
                     try
                     {
-                        string? value = obj as string ?? Convert.ToString(obj, CultureInfo.InvariantCulture);
-
-                        if (value is null)
+                        if (!SetValue(currentProperty, value))
                         {
-                            Debug.Fail($"Couldn't convert {props[i].Name} to string.");
                             continue;
                         }
-
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "It's a standard property");
-
-                        // Not a resource property.  Use TypeConverters to convert the string back to the data type.  We do
-                        // not check for CanConvertFrom here -- we the conversion fails the type converter will throw,
-                        // and we will log it into the COM error log.
-                        TypeConverter converter = props[i].Converter;
-                        Debug.Assert(converter is not null, $"No type converter for property '{props[i].Name}' on class {_control.GetType().FullName}");
-
-                        // Check to see if the type converter can convert from a string.  If it can,.
-                        // use that as it is the best format for IPropertyBag.  Otherwise, check to see
-                        // if it can convert from a byte array.  If it can, get the string, decode it
-                        // to a byte array, and then set the value.
-                        object? newValue = null;
-
-                        if (converter.CanConvertFrom(typeof(string)))
-                        {
-                            newValue = converter.ConvertFromInvariantString(value);
-                        }
-                        else if (converter.CanConvertFrom(typeof(byte[])))
-                        {
-                            newValue = converter.ConvertFrom(null, CultureInfo.InvariantCulture, FromBase64WrappedString(value));
-                        }
-
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Converter returned {newValue}");
-                        props[i].SetValue(_control, newValue);
                     }
                     catch (Exception e)
                     {
@@ -1146,7 +1142,7 @@ public partial class Control
                     if (errorString is not null)
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Exception converting property: {errorString}");
-                        if (pErrorLog is not null)
+                        if (errorLog is not null)
                         {
                             using BSTR bstrSource = new(_control.GetType().FullName!);
                             using BSTR bstrDescription = new(errorString);
@@ -1157,7 +1153,7 @@ public partial class Control
                                 scode = errorCode
                             };
 
-                            pErrorLog->AddError(props[i].Name, in err);
+                            errorLog->AddError(currentProperty.Name, in err);
                         }
                     }
 
@@ -1172,6 +1168,63 @@ public partial class Control
                         throw;
                     }
                 }
+            }
+
+            bool SetValue(PropertyDescriptor currentProperty, object data)
+            {
+                string? value = data as string ?? Convert.ToString(data, CultureInfo.InvariantCulture);
+
+                if (value is null)
+                {
+                    Debug.Fail($"Couldn't convert {currentProperty.Name} to string.");
+                    return false;
+                }
+
+                if (IsResourceProperty(currentProperty))
+                {
+                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "It's a resource property");
+
+                    // Resource property. We encode these as base 64 strings. To load them, we convert
+                    // to a binary blob and then de-serialize.
+                    byte[] bytes = Convert.FromBase64String(value);
+                    using MemoryStream stream = new MemoryStream(bytes);
+                    BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                    currentProperty.SetValue(_control, formatter.Deserialize(stream));
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+
+                    return true;
+                }
+
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "It's a standard property");
+
+                // Not a resource property.  Use TypeConverters to convert the string back to the data type.  We do
+                // not check for CanConvertFrom here -- we the conversion fails the type converter will throw,
+                // and we will log it into the COM error log.
+                TypeConverter converter = currentProperty.Converter;
+                Debug.Assert(
+                    converter is not null,
+                    $"No type converter for property '{currentProperty.Name}' on class {_control.GetType().FullName}");
+
+                // Check to see if the type converter can convert from a string.  If it can,.
+                // use that as it is the best format for IPropertyBag.  Otherwise, check to see
+                // if it can convert from a byte array.  If it can, get the string, decode it
+                // to a byte array, and then set the value.
+                object? newValue = null;
+
+                if (converter.CanConvertFrom(typeof(string)))
+                {
+                    newValue = converter.ConvertFromInvariantString(value);
+                }
+                else if (converter.CanConvertFrom(typeof(byte[])))
+                {
+                    newValue = converter.ConvertFrom(null, CultureInfo.InvariantCulture, FromBase64WrappedString(value));
+                }
+
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Converter returned {newValue}");
+                currentProperty.SetValue(_control, newValue);
+
+                return true;
             }
         }
 
@@ -1461,10 +1514,10 @@ public partial class Control
         /// <summary>
         ///  Implements IPersistStorage::Save
         /// </summary>
-        internal HRESULT Save(IStorage* stg, BOOL fSameAsLoad)
+        internal HRESULT Save(IStorage* storage, BOOL fSameAsLoad)
         {
             using ComScope<IStream> stream = new(null);
-            HRESULT hr = stg->CreateStream(
+            HRESULT hr = storage->CreateStream(
                 GetStreamName(),
                 STGM.STGM_WRITE | STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE,
                 0,
@@ -1489,41 +1542,58 @@ public partial class Control
             // We do everything through property bags because we support full fidelity in them.
             // So, save through that method.
             PropertyBagStream bagStream = new();
-            Save(ComHelpers.GetComPointer<IPropertyBag>(bagStream), fClearDirty, fSaveAllProperties: false);
+            Save(ComHelpers.GetComPointer<IPropertyBag>(bagStream), fClearDirty, saveAllProperties: false);
             bagStream.Write(stream);
         }
 
         /// <summary>
-        ///  Implements IPersistPropertyBag::Save. Releases <paramref name="pPropBag"/> when finished.
+        ///  Implements IPersistPropertyBag::Save. Releases <paramref name="propertyBag"/> when finished.
         /// </summary>
-        internal void Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+        internal void Save(IPropertyBag* propertyBag, BOOL clearDirty, BOOL saveAllProperties)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
 
-            using ComScope<IPropertyBag> scope = new(pPropBag);
+            using ComScope<IPropertyBag> scope = new(propertyBag);
 
             for (int i = 0; i < props.Count; i++)
             {
-                if (!fSaveAllProperties && !props[i].ShouldSerializeValue(_control))
+                PropertyDescriptor currentProperty = props[i];
+                if (!saveAllProperties && !currentProperty.ShouldSerializeValue(_control))
                 {
                     continue;
                 }
 
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Saving property {props[i].Name}");
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Saving property {currentProperty.Name}");
 
                 object? value = null;
 
+                if (IsResourceProperty(currentProperty))
+                {
+                    // Resource property.  Save this to the bag as a 64bit encoded string.
+                    using MemoryStream stream = new MemoryStream();
+                    BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                    formatter.Serialize(stream, props[i].GetValue(_control)!);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    byte[] bytes = new byte[(int)stream.Length];
+                    stream.Position = 0;
+                    stream.Read(bytes, 0, bytes.Length);
+                    using VARIANT data = (VARIANT)new BSTR(Convert.ToBase64String(bytes));
+                    propertyBag->Write(props[i].Name, data);
+                    continue;
+                }
+
                 // Not a resource property.  Persist this using standard type converters.
-                TypeConverter converter = props[i].Converter;
+                TypeConverter converter = currentProperty.Converter;
                 Debug.Assert(
                     converter is not null,
-                    $"No type converter for property '{props[i].Name}' on class {_control.GetType().FullName}");
+                    $"No type converter for property '{currentProperty.Name}' on class {_control.GetType().FullName}");
 
                 if (converter.CanConvertFrom(typeof(string)))
                 {
-                    value = converter.ConvertToInvariantString(props[i].GetValue(_control));
+                    value = converter.ConvertToInvariantString(currentProperty.GetValue(_control));
                 }
                 else if (converter.CanConvertFrom(typeof(byte[])))
                 {
@@ -1540,11 +1610,11 @@ public partial class Control
                 Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
                 fixed (char* pszPropName = props[i].Name)
                 {
-                    pPropBag->Write(pszPropName, &variant);
+                    propertyBag->Write(pszPropName, &variant);
                 }
             }
 
-            if (fClearDirty)
+            if (clearDirty)
             {
                 _activeXState[s_isDirty] = false;
             }
