@@ -18,7 +18,7 @@ public unsafe class Control_ActiveXFontMarshalerTests : IClassFixture<ThreadExce
             typeof(Control).Assembly.GetType("System.Windows.Forms.Control+ActiveXFontMarshaler")!,
             nonPublic: true)!;
 
-    [StaFact]
+    [StaFact(Skip = "Flaky test being investigated. see: https://github.com/dotnet/winforms/issues/8608")]
     public void ActiveXFontMarshaler_RoundTripManagedFont()
     {
         using Font font = new("Arial", 11.0f, GraphicsUnit.Point);
