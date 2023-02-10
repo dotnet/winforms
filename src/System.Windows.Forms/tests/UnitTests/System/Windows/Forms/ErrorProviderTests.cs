@@ -1259,6 +1259,20 @@ namespace System.Windows.Forms.Tests
             Assert.Null(exception);
         }
 
+        [WinFormsFact]
+        public void ErrorProvider_Icon_NotDisposed_Unexpectedly()
+        {
+            // Unit test for https://github.com/dotnet/winforms/issues/8513.
+            using var provider = new SubErrorProvider();
+            var Icon = provider.Icon;
+            Assert.NotNull(Icon);
+            nint handle = Icon.Handle;
+
+            provider.Icon = new Icon(typeof(ErrorProvider), "Error");
+            Assert.NotNull(provider.Icon);
+            Assert.Equal(handle, Icon.Handle);
+        }
+
         private class CustomDataSource : IDataErrorInfo
         {
             public string this[string columnName] => string.Empty;
