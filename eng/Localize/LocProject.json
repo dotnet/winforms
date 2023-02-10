@@ -179,6 +179,16 @@
                          "LssFiles":  [
                                           "wxl_loc.lss"
                                       ]
+                     },
+                     {
+                         "LanguageSet":  "VS_Main_Languages",
+                         "CloneLanguageSet":  "VS_macOS_CloneLanguages",
+                         "LocItems":  [
+
+                                      ],
+                         "LssFiles":  [
+                                          ".\\eng\\common\\loc\\P22DotNetHtmlLocalization.lss"
+                                      ]
                      }
                  ]
 }
