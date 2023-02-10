@@ -1418,7 +1418,7 @@ namespace System.Windows.Forms
 
             if (itemOnPreviousMenuToSelect is not null)
             {
-                itemOnPreviousMenuToSelect.Select();
+                itemOnPreviousMenuToSelect.Select(forceRaiseAccessibilityFocusChanged: true);
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(itemOnPreviousMenuToSelect);
 

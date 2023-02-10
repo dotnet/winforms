@@ -3204,6 +3204,11 @@ namespace System.Windows.Forms
 
         public void Select()
         {
+            Select(forceRaiseAccessibilityFocusChanged: false);
+        }
+
+        internal void Select(bool forceRaiseAccessibilityFocusChanged)
+        {
 #if DEBUG
             // let's not snap the stack trace unless we're debugging selection.
             if (ToolStrip.s_selectionDebug.TraceVerbose)
@@ -3248,6 +3253,11 @@ namespace System.Windows.Forms
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
 
+                forceRaiseAccessibilityFocusChanged = true;
+            }
+
+            if (forceRaiseAccessibilityFocusChanged)
+            {
                 bool accessibilityIsOn = IsAccessibilityObjectCreated ||
                     // When ToolStripItem is selected automatically for the first time
                     // (for example, when menu bar gets focus or a sub menu is opened, its first item is selected automatically),
