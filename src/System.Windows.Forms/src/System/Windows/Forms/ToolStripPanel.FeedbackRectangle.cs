@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         // API so the underlying implementation can be replaced if necessary.
         private partial class FeedbackRectangle : IDisposable
         {
-            private FeedbackDropDown _dropDown;
+            private FeedbackDropDown? _dropDown;
 
             public FeedbackRectangle(Rectangle bounds)
             {
@@ -42,12 +42,12 @@ namespace System.Windows.Forms
 
             public void Show(Point newLocation)
             {
-                _dropDown.Show(newLocation);
+                _dropDown?.Show(newLocation);
             }
 
             public void Move(Point newLocation)
             {
-                _dropDown.MoveTo(newLocation);
+                _dropDown?.MoveTo(newLocation);
             }
 
             protected void Dispose(bool disposing)
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
                     {
                         Visible = false;
                         _dropDown.Dispose();
-                        _dropDown = null!;
+                        _dropDown = null;
                     }
                 }
             }
