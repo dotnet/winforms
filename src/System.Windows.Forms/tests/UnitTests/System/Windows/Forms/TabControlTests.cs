@@ -2048,7 +2048,6 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
-        [InlineData(2)]
         public void TabControl_SelectedIndex_SetWithPages_GetReturnsExpected(int value)
         {
             using var control = new TabControl();

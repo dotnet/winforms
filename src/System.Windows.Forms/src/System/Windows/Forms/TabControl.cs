@@ -729,7 +729,7 @@ namespace System.Windows.Forms
             get
             {
                 int index = SelectedIndex;
-                if (index == -1 || _tabPages is null || index > _tabPages.Count - 1)
+                if (index == -1 || _tabPages is null)
                 {
                     return null;
                 }
