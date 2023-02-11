@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
     public sealed class WindowsFormsSynchronizationContext : SynchronizationContext, IDisposable
     {
         private Control controlToSendTo;
-        private WeakReference destinationThreadRef;
+        private WeakReference? destinationThreadRef;
 
         //ThreadStatics won't get initialized per thread: easiest to just invert the value.
         [ThreadStatic]
@@ -25,7 +23,7 @@ namespace System.Windows.Forms
         private static bool inSyncContextInstallation;
 
         [ThreadStatic]
-        private static SynchronizationContext previousSyncContext;
+        private static SynchronizationContext? previousSyncContext;
 
         public WindowsFormsSynchronizationContext()
         {
@@ -34,7 +32,7 @@ namespace System.Windows.Forms
             Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
-        private WindowsFormsSynchronizationContext(Control marshalingControl, Thread destinationThread)
+        private WindowsFormsSynchronizationContext(Control marshalingControl, Thread? destinationThread)
         {
             controlToSendTo = marshalingControl;
             DestinationThread = destinationThread;
@@ -42,7 +40,7 @@ namespace System.Windows.Forms
         }
 
         // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
-        private Thread DestinationThread
+        private Thread? DestinationThread
         {
             get
             {
@@ -71,25 +69,25 @@ namespace System.Windows.Forms
                     controlToSendTo.Dispose();
                 }
 
-                controlToSendTo = null;
+                controlToSendTo = null!;
             }
         }
 
         // This is never called because we decide whether to Send or Post and we always post
-        public override void Send(SendOrPostCallback d, object state)
+        public override void Send(SendOrPostCallback d, object? state)
         {
-            Thread destinationThread = DestinationThread;
+            Thread? destinationThread = DestinationThread;
             if (destinationThread is null || !destinationThread.IsAlive)
             {
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
 
-            controlToSendTo?.Invoke(d, new object[] { state });
+            controlToSendTo?.Invoke(d, new object?[] { state });
         }
 
-        public override void Post(SendOrPostCallback d, object state)
+        public override void Post(SendOrPostCallback d, object? state)
         {
-            controlToSendTo?.BeginInvoke(d, new object[] { state });
+            controlToSendTo?.BeginInvoke(d, new object?[] { state });
         }
 
         public override SynchronizationContext CreateCopy()
