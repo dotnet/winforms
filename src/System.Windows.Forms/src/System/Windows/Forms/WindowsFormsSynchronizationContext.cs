@@ -12,8 +12,8 @@ namespace System.Windows.Forms
     /// </summary>
     public sealed class WindowsFormsSynchronizationContext : SynchronizationContext, IDisposable
     {
-        private Control controlToSendTo;
-        private WeakReference? destinationThreadRef;
+        private Control _controlToSendTo;
+        private WeakReference? _destinationThreadRef;
 
         //ThreadStatics won't get initialized per thread: easiest to just invert the value.
         [ThreadStatic]
@@ -28,15 +28,15 @@ namespace System.Windows.Forms
         public WindowsFormsSynchronizationContext()
         {
             DestinationThread = Thread.CurrentThread;   //store the current thread to ensure its still alive during an invoke.
-            controlToSendTo = Application.ThreadContext.FromCurrent().MarshalingControl;
-            Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
+            _controlToSendTo = Application.ThreadContext.FromCurrent().MarshalingControl;
+            Debug.Assert(_controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
         private WindowsFormsSynchronizationContext(Control marshalingControl, Thread? destinationThread)
         {
-            controlToSendTo = marshalingControl;
+            _controlToSendTo = marshalingControl;
             DestinationThread = destinationThread;
-            Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
+            Debug.Assert(_controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
         // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
@@ -44,9 +44,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if ((destinationThreadRef is not null) && (destinationThreadRef.IsAlive))
+                if ((_destinationThreadRef is not null) && (_destinationThreadRef.IsAlive))
                 {
-                    return destinationThreadRef.Target as Thread;
+                    return _destinationThreadRef.Target as Thread;
                 }
 
                 return null;
@@ -55,21 +55,21 @@ namespace System.Windows.Forms
             {
                 if (value is not null)
                 {
-                    destinationThreadRef = new WeakReference(value);
+                    _destinationThreadRef = new WeakReference(value);
                 }
             }
         }
 
         public void Dispose()
         {
-            if (controlToSendTo is not null)
+            if (_controlToSendTo is not null)
             {
-                if (!controlToSendTo.IsDisposed)
+                if (!_controlToSendTo.IsDisposed)
                 {
-                    controlToSendTo.Dispose();
+                    _controlToSendTo.Dispose();
                 }
 
-                controlToSendTo = null!;
+                _controlToSendTo = null!;
             }
         }
 
@@ -82,17 +82,17 @@ namespace System.Windows.Forms
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
 
-            controlToSendTo?.Invoke(d, new object?[] { state });
+            _controlToSendTo?.Invoke(d, new object?[] { state });
         }
 
         public override void Post(SendOrPostCallback d, object? state)
         {
-            controlToSendTo?.BeginInvoke(d, new object?[] { state });
+            _controlToSendTo?.BeginInvoke(d, new object?[] { state });
         }
 
         public override SynchronizationContext CreateCopy()
         {
-            return new WindowsFormsSynchronizationContext(controlToSendTo, DestinationThread);
+            return new WindowsFormsSynchronizationContext(_controlToSendTo, DestinationThread);
         }
 
         // Determines whether we install the WindowsFormsSynchronizationContext when we create a control, or
