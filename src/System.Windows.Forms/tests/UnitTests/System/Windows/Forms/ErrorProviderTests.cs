@@ -1263,13 +1263,13 @@ namespace System.Windows.Forms.Tests
         public void ErrorProvider_Icon_NotDisposed_Unexpectedly()
         {
             // Unit test for https://github.com/dotnet/winforms/issues/8513.
-            using var provider = new SubErrorProvider();
+            using var provider = new ErrorProvider();
             var icon = provider.Icon;
 
             Assert.NotNull(icon);
 
             nint handle = icon.Handle;
-            using Icon newIcon = new (typeof(ErrorProvider), "Error");
+            using Icon newIcon = new("bitmaps/10x16_one_entry_32bit.ico");
             provider.Icon = newIcon;
 
             Assert.NotNull(provider.Icon);
