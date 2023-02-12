@@ -802,10 +802,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TabBaseTabCountDescr))]
-        public int TabCount
-        {
-            get { return _tabPages?.Count ?? 0; }
-        }
+        public int TabCount => _tabPages?.Count ?? 0;
 
         /// <summary>
         ///  Returns the Collection of TabPages.
@@ -933,7 +930,7 @@ namespace System.Windows.Forms
 
         private int AddNativeTabPage(TabPage tabPage)
         {
-            int index = SendMessage(PInvoke.TCM_INSERTITEMW, (_tabPages?.Count ?? 0) + 1, tabPage);
+            int index = SendMessage(PInvoke.TCM_INSERTITEMW, TabCount + 1, tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -1074,7 +1071,7 @@ namespace System.Windows.Forms
 
         internal TabPage GetTabPage(int index)
         {
-            if (index < 0 || index >= (_tabPages?.Count ?? 0))
+            if (index < 0 || index >= TabCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1100,7 +1097,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual object[] GetItems(Type baseType)
         {
-            int tabPageCount = _tabPages?.Count ?? 0;
+            int tabPageCount = TabCount;
             object[] result = (object[])Array.CreateInstance(baseType, tabPageCount);
             if (tabPageCount > 0)
             {
@@ -1123,7 +1120,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle GetTabRect(int index)
         {
-            if (index < 0 || (index >= (_tabPages?.Count ?? 0) && !GetState(State.GetTabRectfromItemSize)))
+            if (index < 0 || (index >= TabCount && !GetState(State.GetTabRectfromItemSize)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1181,7 +1178,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InsertItem(int index, TabPage tabPage)
         {
-            if (index < 0 || index > (_tabPages?.Count ?? 0))
+            if (index < 0 || index > TabCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1614,7 +1611,7 @@ namespace System.Windows.Forms
 
         private void RemoveTabPage(int index)
         {
-            if (index < 0 || index >= (_tabPages?.Count ?? 0))
+            if (index < 0 || index >= TabCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1669,7 +1666,7 @@ namespace System.Windows.Forms
 
         private void SetTabPage(int index, TabPage value)
         {
-            if (index < 0 || index >= (_tabPages?.Count ?? 0))
+            if (index < 0 || index >= TabCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }

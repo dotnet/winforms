@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             }
 
             [Browsable(false)]
-            public int Count => _owner._tabPages?.Count ?? 0;
+            public int Count => _owner.TabCount;
 
             object ICollection.SyncRoot => this;
 
