@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
 
         public int Column { get; set; }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             if (other is not TableLayoutPanelCellPosition otherCellPosition)
             {

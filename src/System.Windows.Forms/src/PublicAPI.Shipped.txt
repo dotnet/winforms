@@ -417,8 +417,8 @@ override System.Windows.Forms.StatusStrip.OnPaintBackground(System.Windows.Forms
 ~override System.Windows.Forms.TabControl.Text.get -> string
 ~override System.Windows.Forms.TabControl.Text.set -> void
 ~override System.Windows.Forms.TabControl.ToString() -> string
-~override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object other) -> bool
-~override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string
+override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object? other) -> bool
+override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string!
 override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext?
 override System.Windows.Forms.ToolStrip.BindingContext.set -> void
 ~override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
