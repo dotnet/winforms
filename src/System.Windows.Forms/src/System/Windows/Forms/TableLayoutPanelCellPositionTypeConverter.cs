@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
 {
     internal class TableLayoutPanelCellPositionTypeConverter : TypeConverter
     {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
             {
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
             return base.CanConvertTo(context, destinationType);
         }
 
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string))
             {
@@ -34,7 +32,7 @@ namespace System.Windows.Forms
             return base.CanConvertFrom(context, sourceType);
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             if (value is string stringValue)
             {
@@ -64,7 +62,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < values.Length; i++)
                 {
                     // Note: ConvertFromString will raise exception if value cannot be converted.
-                    values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i]);
+                    values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
                 }
 
                 return new TableLayoutPanelCellPosition(values[0], values[1]);
@@ -73,7 +71,7 @@ namespace System.Windows.Forms
             return base.ConvertFrom(context, culture, value);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor) && value is TableLayoutPanelCellPosition cellPosition)
             {
@@ -85,15 +83,15 @@ namespace System.Windows.Forms
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+        public override object? CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
         {
             ArgumentNullException.ThrowIfNull(propertyValues);
 
             try
             {
                 return new TableLayoutPanelCellPosition(
-                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Column)],
-                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Row)]);
+                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Column)]!,
+                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Row)]!);
             }
             catch (InvalidCastException invalidCast)
             {
@@ -105,16 +103,16 @@ namespace System.Windows.Forms
             }
         }
 
-        public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) => true;
+        public override bool GetCreateInstanceSupported(ITypeDescriptorContext? context) => true;
 
         [RequiresUnreferencedCode(TrimmingConstants.TypeOrValueNotDiscoverableMessage)]
         [DynamicDependency(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields, typeof(BrowsableAttribute))]
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(TableLayoutPanelCellPosition), attributes);
             return props.Sort(new string[] { nameof(TableLayoutPanelCellPosition.Column), nameof(TableLayoutPanelCellPosition.Row) });
         }
 
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => true;
     }
 }
