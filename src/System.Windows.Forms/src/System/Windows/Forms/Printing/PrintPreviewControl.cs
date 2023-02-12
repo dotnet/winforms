@@ -447,7 +447,7 @@ namespace System.Windows.Forms
 
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
-                Debug.Assert(pageInfo is not null, "PreviewPrintController did not give us preview info");
+                Debug.Assert(pageInfo is not null, $"{nameof(PreviewPrintController)} did not give us preview info.");
 
                 document.PrintController = oldController;
             }
