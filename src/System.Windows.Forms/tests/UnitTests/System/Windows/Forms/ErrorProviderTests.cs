@@ -1259,6 +1259,25 @@ namespace System.Windows.Forms.Tests
             Assert.Null(exception);
         }
 
+        [WinFormsFact]
+        public void ErrorProvider_Icon_NotDisposed_Unexpectedly()
+        {
+            // Unit test for https://github.com/dotnet/winforms/issues/8513.
+            using var provider = new ErrorProvider();
+            var icon = provider.Icon;
+
+            Assert.NotNull(icon);
+
+            nint handle = icon.Handle;
+            using Icon newIcon = new("bitmaps/10x16_one_entry_32bit.ico");
+            provider.Icon = newIcon;
+
+            Assert.NotNull(provider.Icon);
+
+            // Make sure the old icon that is not owned by us, is not disposed
+            Assert.Equal(handle, icon.Handle);
+        }
+
         private class CustomDataSource : IDataErrorInfo
         {
             public string this[string columnName] => string.Empty;
