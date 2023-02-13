@@ -6,9 +6,9 @@ namespace System.Windows.Forms
 {
     internal interface ISupportToolStripPanel
     {
-        ToolStripPanelRow ToolStripPanelRow { get; set; }
+        ToolStripPanelRow? ToolStripPanelRow { get; set; }
 
-        ToolStripPanelCell ToolStripPanelCell { get; }
+        ToolStripPanelCell? ToolStripPanelCell { get; }
 
         bool Stretch { get; set; }
 
