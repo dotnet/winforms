@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -20,7 +18,7 @@ namespace System.Windows.Forms
             _isReadOnly = isReadOnly;
         }
 
-        public override void Add(Control value)
+        public override void Add(Control? value)
         {
             if (IsReadOnly)
             {
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             AddInternal(value);
         }
 
-        internal virtual void AddInternal(Control value) => base.Add(value);
+        internal virtual void AddInternal(Control? value) => base.Add(value);
 
         public override void Clear()
         {
@@ -44,7 +42,7 @@ namespace System.Windows.Forms
 
         internal virtual void RemoveInternal(Control value) => base.Remove(value);
 
-        public override void RemoveByKey(string key)
+        public override void RemoveByKey(string? key)
         {
             if (IsReadOnly)
             {

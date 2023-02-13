@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -25,9 +23,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override string PropertyLabel => $"[{_index}]";
 
-        public override Type PropertyType => ParentGridEntry.PropertyType.GetElementType();
+        public override Type? PropertyType => ParentGridEntry.PropertyType.GetElementType();
 
-        public override object PropertyValue
+        public override object? PropertyValue
         {
             get
             {

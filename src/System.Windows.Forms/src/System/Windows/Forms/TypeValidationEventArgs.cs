@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -11,7 +9,7 @@ namespace System.Windows.Forms
     /// </summary>
     public class TypeValidationEventArgs : EventArgs
     {
-        public TypeValidationEventArgs(Type validatingType, bool isValidInput, object returnValue, string message)
+        public TypeValidationEventArgs(Type? validatingType, bool isValidInput, object? returnValue, string? message)
         {
             ValidatingType = validatingType;
             IsValidInput = isValidInput;
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The position where the test failed the mask constraint.
         /// </summary>
-        public Type ValidatingType { get; }
+        public Type? ValidatingType { get; }
 
         /// <summary>
         ///  The exception thrown by the validating object while performing the data validation.
@@ -33,12 +31,12 @@ namespace System.Windows.Forms
         ///  A message about the validation operation. Intended to be populated with
         ///  an exception information if any thrown.
         /// </summary>
-        public string Message { get; }
+        public string? Message { get; }
 
         /// <summary>
         ///  The value returned from the Parse method.
         /// </summary>
-        public object ReturnValue { get; }
+        public object? ReturnValue { get; }
 
         /// <summary>
         ///  Specifies whether focus should be allowed to be shifted from the control.

@@ -60,7 +60,7 @@ override System.Windows.Forms.BindingMemberInfo.Equals(object? otherObject) -> b
 ~override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.DataGridView.DataGridViewControlCollection.Remove(System.Windows.Forms.Control value) -> void
+override System.Windows.Forms.DataGridView.DataGridViewControlCollection.Remove(System.Windows.Forms.Control? value) -> void
 ~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.DataGridView.Font.set -> void
 ~override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject
@@ -166,7 +166,7 @@ override System.Windows.Forms.BindingMemberInfo.Equals(object? otherObject) -> b
 ~override System.Windows.Forms.DataGridViewColumn.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~override System.Windows.Forms.DataGridViewColumn.ToString() -> string
 ~override System.Windows.Forms.DataGridViewColumnCollection.List.get -> System.Collections.ArrayList
-~override System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Equals(object obj) -> bool
+override System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Equals(object? obj) -> bool
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
@@ -591,9 +591,9 @@ static readonly System.Resources.ResXResourceWriter.ResourceSchema -> string!
 static readonly System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType -> string!
 static readonly System.Resources.ResXResourceWriter.Version -> string!
 ~static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo
-~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
-~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
-~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
+static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute!
+static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute!
+static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute!
 static System.Resources.ResXResourceReader.FromFileContents(string! fileContents) -> System.Resources.ResXResourceReader!
 static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> System.Resources.ResXResourceReader!
 static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.Reflection.AssemblyName![]! assemblyNames) -> System.Resources.ResXResourceReader!
@@ -774,9 +774,9 @@ System.Windows.Forms.AxHost.ClsidAttribute.Value.get -> string!
 ~System.Windows.Forms.AxHost.RaiseOnMouseUp(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.AboutBoxDelegate d) -> void
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
-~System.Windows.Forms.BaseCollection.CopyTo(System.Array ar, int index) -> void
-~System.Windows.Forms.BaseCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.BaseCollection.SyncRoot.get -> object
+System.Windows.Forms.BaseCollection.CopyTo(System.Array! ar, int index) -> void
+System.Windows.Forms.BaseCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.BaseCollection.SyncRoot.get -> object!
 ~System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent
 ~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember) -> void
 ~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> void
@@ -893,9 +893,9 @@ System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvok
 ~System.Windows.Forms.DataGridView.CurrentCell.get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridView.CurrentCell.set -> void
 ~System.Windows.Forms.DataGridView.CurrentRow.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridView.DataGridViewControlCollection.CopyTo(System.Windows.Forms.Control[] array, int index) -> void
-~System.Windows.Forms.DataGridView.DataGridViewControlCollection.DataGridViewControlCollection(System.Windows.Forms.DataGridView owner) -> void
-~System.Windows.Forms.DataGridView.DataGridViewControlCollection.Insert(int index, System.Windows.Forms.Control value) -> void
+System.Windows.Forms.DataGridView.DataGridViewControlCollection.CopyTo(System.Windows.Forms.Control![]! array, int index) -> void
+System.Windows.Forms.DataGridView.DataGridViewControlCollection.DataGridViewControlCollection(System.Windows.Forms.DataGridView! owner) -> void
+System.Windows.Forms.DataGridView.DataGridViewControlCollection.Insert(int index, System.Windows.Forms.Control! value) -> void
 ~System.Windows.Forms.DataGridView.DataMember.get -> string
 ~System.Windows.Forms.DataGridView.DataMember.set -> void
 ~System.Windows.Forms.DataGridView.DataSource.get -> object
@@ -1072,10 +1072,10 @@ System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvok
 ~System.Windows.Forms.DataGridViewSelectedRowCollection.CopyTo(System.Windows.Forms.DataGridViewRow[] array, int index) -> void
 ~System.Windows.Forms.DataGridViewSelectedRowCollection.Insert(int index, System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
 ~System.Windows.Forms.DataGridViewSelectedRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue1.get -> object
-~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
-~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
+System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue1.get -> object!
+System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object!
+System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn!
+System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn, object! cellValue1, object! cellValue2, int rowIndex1, int rowIndex2) -> void
 ~System.Windows.Forms.Design.IUIService.CanShowComponentEditor(object component) -> bool
 ~System.Windows.Forms.Design.IUIService.GetDialogOwnerWindow() -> System.Windows.Forms.IWin32Window
 ~System.Windows.Forms.Design.IUIService.ShowComponentEditor(object component, System.Windows.Forms.IWin32Window parent) -> bool
@@ -1211,9 +1211,9 @@ System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.For
 System.Windows.Forms.ICurrencyManagerProvider.CurrencyManager.get -> System.Windows.Forms.CurrencyManager?
 System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string? dataMember) -> System.Windows.Forms.CurrencyManager?
 System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control! editingControl) -> void
-~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object
-~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.set -> void
-~System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
+System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object!
+System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.set -> void
+System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 System.Windows.Forms.IFileReaderService.OpenFileFromSource(string! relativePath) -> System.IO.Stream!
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.LinkLabel.Link.Description.get -> string?
@@ -1372,22 +1372,22 @@ System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
 ~System.Windows.Forms.TabControl.SelectTab(string tabPageName) -> void
 ~System.Windows.Forms.TabControl.SelectTab(System.Windows.Forms.TabPage tabPage) -> void
 ~System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection
-~System.Windows.Forms.TableLayoutColumnStyleCollection.Add(System.Windows.Forms.ColumnStyle columnStyle) -> int
-~System.Windows.Forms.TableLayoutColumnStyleCollection.Contains(System.Windows.Forms.ColumnStyle columnStyle) -> bool
-~System.Windows.Forms.TableLayoutColumnStyleCollection.IndexOf(System.Windows.Forms.ColumnStyle columnStyle) -> int
-~System.Windows.Forms.TableLayoutColumnStyleCollection.Insert(int index, System.Windows.Forms.ColumnStyle columnStyle) -> void
-~System.Windows.Forms.TableLayoutColumnStyleCollection.Remove(System.Windows.Forms.ColumnStyle columnStyle) -> void
-~System.Windows.Forms.TableLayoutColumnStyleCollection.this[int index].get -> System.Windows.Forms.ColumnStyle
-~System.Windows.Forms.TableLayoutColumnStyleCollection.this[int index].set -> void
-~System.Windows.Forms.TableLayoutControlCollection.Container.get -> System.Windows.Forms.TableLayoutPanel
-~System.Windows.Forms.TableLayoutControlCollection.TableLayoutControlCollection(System.Windows.Forms.TableLayoutPanel container) -> void
-~System.Windows.Forms.TableLayoutRowStyleCollection.Add(System.Windows.Forms.RowStyle rowStyle) -> int
-~System.Windows.Forms.TableLayoutRowStyleCollection.Contains(System.Windows.Forms.RowStyle rowStyle) -> bool
-~System.Windows.Forms.TableLayoutRowStyleCollection.IndexOf(System.Windows.Forms.RowStyle rowStyle) -> int
-~System.Windows.Forms.TableLayoutRowStyleCollection.Insert(int index, System.Windows.Forms.RowStyle rowStyle) -> void
-~System.Windows.Forms.TableLayoutRowStyleCollection.Remove(System.Windows.Forms.RowStyle rowStyle) -> void
-~System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].get -> System.Windows.Forms.RowStyle
-~System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].set -> void
+System.Windows.Forms.TableLayoutColumnStyleCollection.Add(System.Windows.Forms.ColumnStyle! columnStyle) -> int
+System.Windows.Forms.TableLayoutColumnStyleCollection.Contains(System.Windows.Forms.ColumnStyle! columnStyle) -> bool
+System.Windows.Forms.TableLayoutColumnStyleCollection.IndexOf(System.Windows.Forms.ColumnStyle! columnStyle) -> int
+System.Windows.Forms.TableLayoutColumnStyleCollection.Insert(int index, System.Windows.Forms.ColumnStyle! columnStyle) -> void
+System.Windows.Forms.TableLayoutColumnStyleCollection.Remove(System.Windows.Forms.ColumnStyle! columnStyle) -> void
+System.Windows.Forms.TableLayoutColumnStyleCollection.this[int index].get -> System.Windows.Forms.ColumnStyle!
+System.Windows.Forms.TableLayoutColumnStyleCollection.this[int index].set -> void
+System.Windows.Forms.TableLayoutControlCollection.Container.get -> System.Windows.Forms.TableLayoutPanel!
+System.Windows.Forms.TableLayoutControlCollection.TableLayoutControlCollection(System.Windows.Forms.TableLayoutPanel! container) -> void
+System.Windows.Forms.TableLayoutRowStyleCollection.Add(System.Windows.Forms.RowStyle! rowStyle) -> int
+System.Windows.Forms.TableLayoutRowStyleCollection.Contains(System.Windows.Forms.RowStyle! rowStyle) -> bool
+System.Windows.Forms.TableLayoutRowStyleCollection.IndexOf(System.Windows.Forms.RowStyle! rowStyle) -> int
+System.Windows.Forms.TableLayoutRowStyleCollection.Insert(int index, System.Windows.Forms.RowStyle! rowStyle) -> void
+System.Windows.Forms.TableLayoutRowStyleCollection.Remove(System.Windows.Forms.RowStyle! rowStyle) -> void
+System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].get -> System.Windows.Forms.RowStyle!
+System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].set -> void
 System.Windows.Forms.TableLayoutStyleCollection.Add(System.Windows.Forms.TableLayoutStyle! style) -> int
 System.Windows.Forms.TableLayoutStyleCollection.this[int index].get -> System.Windows.Forms.TableLayoutStyle!
 System.Windows.Forms.TableLayoutStyleCollection.this[int index].set -> void
@@ -1628,10 +1628,10 @@ System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Cont
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-~System.Windows.Forms.TypeValidationEventArgs.Message.get -> string
-~System.Windows.Forms.TypeValidationEventArgs.ReturnValue.get -> object
-~System.Windows.Forms.TypeValidationEventArgs.TypeValidationEventArgs(System.Type validatingType, bool isValidInput, object returnValue, string message) -> void
-~System.Windows.Forms.TypeValidationEventArgs.ValidatingType.get -> System.Type
+System.Windows.Forms.TypeValidationEventArgs.Message.get -> string?
+System.Windows.Forms.TypeValidationEventArgs.ReturnValue.get -> object?
+System.Windows.Forms.TypeValidationEventArgs.TypeValidationEventArgs(System.Type? validatingType, bool isValidInput, object? returnValue, string? message) -> void
+System.Windows.Forms.TypeValidationEventArgs.ValidatingType.get -> System.Type?
 ~System.Windows.Forms.WebBrowser.Document.get -> System.Windows.Forms.HtmlDocument
 ~System.Windows.Forms.WebBrowser.DocumentStream.get -> System.IO.Stream
 ~System.Windows.Forms.WebBrowser.DocumentStream.set -> void
@@ -1660,7 +1660,7 @@ virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Dr
 virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string?
 virtual System.Resources.ResXResourceWriter.AddAlias(string? aliasName, System.Reflection.AssemblyName! assemblyName) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
-~virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList
+virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList!
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
@@ -2082,7 +2082,7 @@ virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.Eve
 ~virtual System.Windows.Forms.TabControl.OnSelected(System.Windows.Forms.TabControlEventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
+virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control! control, int column, int row) -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
 virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection!

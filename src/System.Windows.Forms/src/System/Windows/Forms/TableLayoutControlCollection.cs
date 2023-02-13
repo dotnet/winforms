@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 
@@ -13,7 +11,7 @@ namespace System.Windows.Forms
     ///  Represents a collection of controls on the TableLayoutPanel.
     /// </summary>
     [ListBindable(false)]
-    [DesignerSerializer("System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [DesignerSerializer($"System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, {AssemblyRef.SystemDesign}", $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
     public class TableLayoutControlCollection : Control.ControlCollection
     {
         public TableLayoutControlCollection(TableLayoutPanel container) : base(container.OrThrowIfNull())
@@ -21,7 +19,9 @@ namespace System.Windows.Forms
             Container = container;
         }
 
-        //the container of this TableLayoutControlCollection
+        /// <summary>
+        /// Gets the parent <see cref="TableLayoutPanel"/> that contains the controls in the collection.
+        /// </summary>
         public TableLayoutPanel Container { get; }
 
         /// <summary>

@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.Windows.Forms
 {
     public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
-        private sealed class ItemComparer : IComparer<object>
+        private sealed class ItemComparer : IComparer<object?>
         {
             private readonly DataGridViewComboBoxCell dataGridViewComboBoxCell;
 
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
                 this.dataGridViewComboBoxCell = dataGridViewComboBoxCell;
             }
 
-            public int Compare(object item1, object item2)
+            public int Compare(object? item1, object? item2)
             {
                 if (item1 is null)
                 {
