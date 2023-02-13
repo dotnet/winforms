@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -55,7 +54,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
         }
     }
 
-    private static Hashtable? s_builtEnums;
+    private static Dictionary<string, Type>? s_builtEnums;
     private static Dictionary<Guid, CachedProperties>? s_processedLibraries;
 
     /// <summary>
@@ -829,18 +828,13 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 if (strings.Count > 0)
                 {
                     string enumName = $"ITypeInfo_{enumNameBstr.AsSpan()}";
-
-                    if (s_builtEnums is null)
+                    s_builtEnums ??= new();
+                    if (s_builtEnums.TryGetValue(enumName, out Type? typeValue))
                     {
-                        s_builtEnums = new Hashtable();
-                    }
-                    else if (s_builtEnums.ContainsKey(enumName))
-                    {
-                        return (Type?)s_builtEnums[enumName];
+                        return typeValue;
                     }
 
                     Type enumType = typeof(int);
-
                     if (vars.Count > 0 && vars[0] is { } var)
                     {
                         enumType = var.GetType();
