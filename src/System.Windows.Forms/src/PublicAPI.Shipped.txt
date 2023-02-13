@@ -698,7 +698,7 @@ static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? o
 ~System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
 ~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
-~System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler handler, string tooltip) -> void
+System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image! uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler! handler, string? tooltip) -> void
 System.Resources.ResXDataNode.Comment.get -> string!
 System.Resources.ResXDataNode.Comment.set -> void
 System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef?
@@ -761,8 +761,8 @@ System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter! tex
 ~System.Windows.Forms.AutoCompleteStringCollection.this[int index].set -> void
 ~System.Windows.Forms.AxHost.AxHost(string clsid) -> void
 ~System.Windows.Forms.AxHost.AxHost(string clsid, int flags) -> void
-~System.Windows.Forms.AxHost.ClsidAttribute.ClsidAttribute(string clsid) -> void
-~System.Windows.Forms.AxHost.ClsidAttribute.Value.get -> string
+System.Windows.Forms.AxHost.ClsidAttribute.ClsidAttribute(string! clsid) -> void
+System.Windows.Forms.AxHost.ClsidAttribute.Value.get -> string!
 ~System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl
 ~System.Windows.Forms.AxHost.ContainingControl.set -> void
 ~System.Windows.Forms.AxHost.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
@@ -1208,13 +1208,13 @@ System.Windows.Forms.HtmlHistory.Go(System.Uri! url) -> void
 ~System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow
 ~System.Windows.Forms.HtmlWindowCollection.this[string windowId].get -> System.Windows.Forms.HtmlWindow
 System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.Forms.Control!
-~System.Windows.Forms.ICurrencyManagerProvider.CurrencyManager.get -> System.Windows.Forms.CurrencyManager
-~System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string dataMember) -> System.Windows.Forms.CurrencyManager
-~System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control editingControl) -> void
+System.Windows.Forms.ICurrencyManagerProvider.CurrencyManager.get -> System.Windows.Forms.CurrencyManager?
+System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string? dataMember) -> System.Windows.Forms.CurrencyManager?
+System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control! editingControl) -> void
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object
 ~System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.set -> void
 ~System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
+System.Windows.Forms.IFileReaderService.OpenFileFromSource(string! relativePath) -> System.IO.Stream!
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.LinkLabel.Link.Description.get -> string?
 System.Windows.Forms.LinkLabel.Link.Description.set -> void
@@ -1655,9 +1655,9 @@ System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Cont
 ~System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser host) -> void
 ~System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object
 ~System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
-~virtual System.Drawing.Design.PropertyValueUIItem.Image.get -> System.Drawing.Image
-~virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Drawing.Design.PropertyValueUIItemInvokeHandler
-~virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string
+virtual System.Drawing.Design.PropertyValueUIItem.Image.get -> System.Drawing.Image!
+virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Drawing.Design.PropertyValueUIItemInvokeHandler!
+virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string?
 virtual System.Resources.ResXResourceWriter.AddAlias(string? aliasName, System.Reflection.AssemblyName! assemblyName) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
 ~virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList

@@ -899,8 +899,8 @@ namespace System.Windows.Forms
             if (pointInCurrentRow)
             {
                 // Point INSIDE same rafting row
-                s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow.DragBounds}");
-                draggedControl.ToolStripPanelRow.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), clientLocation);
+                s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow?.DragBounds}");
+                draggedControl.ToolStripPanelRow?.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), clientLocation);
             }
             else
             {
@@ -955,7 +955,7 @@ namespace System.Windows.Forms
                         if (toolStripToDrag.IsInDesignMode)
                         {
                             Point endLocation = (Orientation == Orientation.Horizontal) ? new Point(clientLocation.X, row.Bounds.Y) : new Point(row.Bounds.X, clientLocation.Y);
-                            draggedControl.ToolStripPanelRow.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), endLocation);
+                            draggedControl.ToolStripPanelRow?.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), endLocation);
                         }
                     }
                     else
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms
                 {
                     if (cell.Control is not null)
                     {
-                        ToolStripPanelRow currentlyAssignedRow = ((ISupportToolStripPanel)cell.Control).ToolStripPanelRow;
+                        ToolStripPanelRow? currentlyAssignedRow = ((ISupportToolStripPanel)cell.Control).ToolStripPanelRow;
                         if (currentlyAssignedRow != row)
                         {
                             int goodRowIndex = (currentlyAssignedRow is not null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
@@ -1188,14 +1188,14 @@ namespace System.Windows.Forms
                             c1.Name ?? "",
                             c1.Bounds,
                             !RowsInternal.Contains(draggedToolStrip1.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip1.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
-                            draggedToolStrip1.ToolStripPanelRow.Bounds);
+                            draggedToolStrip1.ToolStripPanelRow?.Bounds);
 
                         fail += string.Format(CultureInfo.CurrentCulture,
                             "\r\n{0}: {1} row {2} row bounds {3}",
                             c2.Name ?? "",
                             c2.Bounds,
                             !RowsInternal.Contains(draggedToolStrip2.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip2.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
-                            draggedToolStrip2.ToolStripPanelRow.Bounds);
+                            draggedToolStrip2.ToolStripPanelRow?.Bounds);
                         Debug.Fail(fail);
                     }
                 }
