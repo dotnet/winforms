@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         // API so the underlying implementation can be replaced if necessary.
         private partial class FeedbackRectangle : IDisposable
         {
-            private FeedbackDropDown _dropDown;
+            private FeedbackDropDown? _dropDown;
 
             public FeedbackRectangle(Rectangle bounds)
             {
@@ -44,12 +42,12 @@ namespace System.Windows.Forms
 
             public void Show(Point newLocation)
             {
-                _dropDown.Show(newLocation);
+                _dropDown?.Show(newLocation);
             }
 
             public void Move(Point newLocation)
             {
-                _dropDown.MoveTo(newLocation);
+                _dropDown?.MoveTo(newLocation);
             }
 
             protected void Dispose(bool disposing)
