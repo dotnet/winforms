@@ -1274,7 +1274,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotNull(provider.Icon);
 
-            // Make sure old icon that is not owned by us, is not disposed
+            // Make sure the old icon that is not owned by us, is not disposed
             Assert.Equal(handle, icon.Handle);
         }
 
