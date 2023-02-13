@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         ///  the edit box.
         /// </summary>
         private int _requestedHeight;
-        bool _integralHeightAdjust;
+        private bool _integralHeightAdjust;
 
         //these indices are used to cache the values of the selection, by doing this
         //if the handle isn't created yet, we don't force a creation.
@@ -1961,7 +1961,7 @@ namespace System.Windows.Forms
         ///  as opposed to RICHEDIT which does it always as character positions.
         ///  This method is used when handling the WM_GETSEL message.
         /// </summary>
-        static void ToUnicodeOffsets(string str, ref int start, ref int end)
+        private static void ToUnicodeOffsets(string str, ref int start, ref int end)
         {
             Encoding e = Encoding.Default;
 
@@ -2116,7 +2116,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void WmSetFont(ref Message m)
+        private void WmSetFont(ref Message m)
         {
             base.WndProc(ref m);
             if (!_textBoxFlags[multiline])
@@ -2125,7 +2125,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void WmGetDlgCode(ref Message m)
+        private void WmGetDlgCode(ref Message m)
         {
             base.WndProc(ref m);
             if (AcceptsTab)

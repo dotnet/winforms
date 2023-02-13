@@ -615,7 +615,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 internal static ComponentListCodeDomSerializer s_instance = new ComponentListCodeDomSerializer();
                 private Hashtable _statementsTable;
-                Dictionary<string, List<CodeExpression>> _expressions;
+                private Dictionary<string, List<CodeExpression>> _expressions;
                 private Hashtable _objectState; // only used during deserialization
                 private bool _applyDefaults = true;
                 private readonly Hashtable _nameResolveGuard = new Hashtable();
@@ -1465,8 +1465,8 @@ namespace System.ComponentModel.Design.Serialization
 
             private class PassThroughSerializationManager : IDesignerSerializationManager
             {
-                readonly Hashtable _resolved = new Hashtable();
-                readonly DesignerSerializationManager _manager;
+                private readonly Hashtable _resolved = new Hashtable();
+                private readonly DesignerSerializationManager _manager;
                 private ResolveNameEventHandler _resolveNameEventHandler;
 
                 public PassThroughSerializationManager(DesignerSerializationManager manager) => _manager = manager;

@@ -320,7 +320,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnBoundsChanged(object? sender, EventArgs e) => UpdateWindow();
 
-            void OnParentVisibleChanged(object? sender, EventArgs e)
+            private void OnParentVisibleChanged(object? sender, EventArgs e)
             {
                 BlinkPhase = 0;
                 RemoveFromWindow();

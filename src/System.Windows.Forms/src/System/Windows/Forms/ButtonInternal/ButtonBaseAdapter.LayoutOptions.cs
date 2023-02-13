@@ -309,7 +309,7 @@ namespace System.Windows.Forms.ButtonInternal
                 return layout;
             }
 
-            TextImageRelation RtlTranslateRelation(TextImageRelation relation)
+            private TextImageRelation RtlTranslateRelation(TextImageRelation relation)
             {
                 // If RTL, we swap ImageBeforeText and TextBeforeImage.
                 if (LayoutRTL)
@@ -353,7 +353,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             private int FullCheckSize => CheckSize + CheckPaddingSize;
 
-            void CalcCheckmarkRectangle(LayoutData layout)
+            private void CalcCheckmarkRectangle(LayoutData layout)
             {
                 int checkSizeFull = FullCheckSize;
                 layout.CheckBounds = new Rectangle(Client.X, Client.Y, checkSizeFull, checkSizeFull);

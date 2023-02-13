@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms
             return IsValidUrl;
         }
 
-        bool IsValidUrl
+        private bool IsValidUrl
         {
             get
             {

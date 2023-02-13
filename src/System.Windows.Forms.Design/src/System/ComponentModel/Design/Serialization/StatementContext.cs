@@ -192,7 +192,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             private readonly ObjectStatementCollection _table;
             private readonly int _version;
-            int _position;
+            private int _position;
 
             public TableEnumerator(ObjectStatementCollection table)
             {

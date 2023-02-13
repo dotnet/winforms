@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    class WebBrowserUriTypeConverter : UriTypeConverter
+    internal class WebBrowserUriTypeConverter : UriTypeConverter
     {
         public override object? ConvertFrom(ITypeDescriptorContext? context, Globalization.CultureInfo? culture, object value)
         {

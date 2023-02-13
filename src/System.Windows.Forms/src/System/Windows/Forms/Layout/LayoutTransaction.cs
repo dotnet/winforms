@@ -26,11 +26,11 @@ namespace System.Windows.Forms.Layout
     // it didn't seem significant (we were spinning off more from LayoutEventArgs.)
     internal sealed class LayoutTransaction : IDisposable
     {
-        readonly Control? _controlToLayout;
-        readonly bool _resumeLayout;
+        private readonly Control? _controlToLayout;
+        private readonly bool _resumeLayout;
 
 #if DEBUG
-        readonly int _layoutSuspendCount;
+        private readonly int _layoutSuspendCount;
 #endif
         public LayoutTransaction(Control? controlToLayout, IArrangedElement controlCausingLayout, string? property)
             : this(controlToLayout, controlCausingLayout, property, true)

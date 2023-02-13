@@ -105,7 +105,7 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/8635")]
         public async Task Button_AchorNone_NoResizeOnWindowSizeWiderAsync()
         {
             await RunTestAsync(async (form, button) =>

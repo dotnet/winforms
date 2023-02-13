@@ -11,9 +11,9 @@ namespace System.Windows.Forms.Design
 {
     internal partial class DesignBindingValueUIHandler
     {
-        class LocalUIItem : PropertyValueUIItem
+        private class LocalUIItem : PropertyValueUIItem
         {
-            readonly Binding binding;
+            private readonly Binding binding;
 
             internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(OnPropertyValueUIItemInvoke), GetToolTip(binding))
             {
@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            static string GetToolTip(Binding binding)
+            private static string GetToolTip(Binding binding)
             {
                 string name = "";
                 if (binding.DataSource is IComponent comp)

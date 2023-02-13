@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
         private bool selected;
         private ControlBodyGlyph dummyToolStripGlyph;
         private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
-        FormDocumentDesigner parentFormDesigner;
+        private FormDocumentDesigner parentFormDesigner;
         internal ToolStripMenuItem currentParent;
         private INestedContainer _nestedContainer; //NestedContainer for our DesignTime MenuItem.
         private UndoEngine _undoEngine;
@@ -746,7 +746,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal class ContextMenuStripBehavior : Behavior.Behavior
         {
-            readonly ToolStripMenuItem _item;
+            private readonly ToolStripMenuItem _item;
             internal ContextMenuStripBehavior(ToolStripMenuItem menuItem)
             {
                 _item = menuItem;
