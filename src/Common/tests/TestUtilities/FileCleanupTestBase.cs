@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Microsoft.VisualBasic.Tests
+namespace System
 {
     public abstract class FileCleanupTestBase : IDisposable
     {
-        internal readonly string TestDirectory;
+        public readonly string TestDirectory;
 
         protected FileCleanupTestBase()
         {
@@ -36,9 +36,9 @@ namespace Microsoft.VisualBasic.Tests
             }
         }
 
-        internal string GetTestFilePath() => Path.Combine(TestDirectory, GetTestFileName());
+        public string GetTestFilePath() => Path.Combine(TestDirectory, GetTestFileName());
 
-        internal string GetTestFileName() => GetUniqueName();
+        public string GetTestFileName() => GetUniqueName();
 
         private static string GetUniqueName() => Guid.NewGuid().ToString("D");
     }

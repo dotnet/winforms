@@ -9,7 +9,7 @@ using SearchOption = Microsoft.VisualBasic.FileIO.SearchOption;
 namespace Microsoft.VisualBasic.MyServices.Tests
 {
     // File tests cloned from Microsoft.VisualBasic.FileIO.Tests.FileSystemTests.
-    public class FileSystemProxyTests : Microsoft.VisualBasic.Tests.FileCleanupTestBase
+    public class FileSystemProxyTests : FileCleanupTestBase
     {
         private const string DestData = "xXy";
         private const string SourceData = "aAb";

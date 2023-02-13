@@ -30,6 +30,19 @@ namespace System
         public static bool IsDrawingSupported => (IsNotWindowsNanoServer && IsNotWindowsIoTCore);
         public static bool IsArmProcess => RuntimeInformation.ProcessArchitecture == Architecture.Arm;
         public static bool IsNotArmProcess => !IsArmProcess;
+        public static bool IsArm64Process => RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
+        public static bool IsNotArm64Process => !IsArm64Process;
+        public static bool IsArmOrArm64Process => IsArmProcess || IsArm64Process;
+        public static bool Is32BitProcess => IntPtr.Size == 4;
+
+        public static bool IsMonoRuntime => Type.GetType("Mono.RuntimeStructs") is object;
+        public static bool IsNotMonoRuntime => !IsMonoRuntime;
+        public static bool IsMonoInterpreter => GetIsRunningOnMonoInterpreter();
+        public static bool IsNativeAot => IsNotMonoRuntime && !IsReflectionEmitSupported;
+
+        // Changed to `true` when trimming
+        public static bool IsBuiltWithAggressiveTrimming => IsNativeAot;
+        public static bool IsNotBuiltWithAggressiveTrimming => !IsBuiltWithAggressiveTrimming;
 
         public static bool IsNotInAppContainer => !IsInAppContainer;
         public static bool IsWinRTSupported => IsWindows && !IsWindows7;
@@ -124,13 +137,27 @@ namespace System
 
         private static volatile Tuple<bool> s_lazyNonZeroLowerBoundArraySupported;
 
-        public static bool IsReflectionEmitSupported = !PlatformDetection.IsNetNative;
-
         // Tracked in: https://github.com/dotnet/corert/issues/3643 in case we change our mind about this.
         public static bool IsInvokingStaticConstructorsSupported => !PlatformDetection.IsNetNative;
 
         // System.Security.Cryptography.Xml.XmlDsigXsltTransform.GetOutput() relies on XslCompiledTransform which relies
         // heavily on Reflection.Emit
         public static bool IsXmlDsigXsltTransformSupported => !PlatformDetection.IsUap;
+
+        private static bool GetIsRunningOnMonoInterpreter()
+        {
+#if NETCOREAPP
+            return IsMonoRuntime && RuntimeFeature.IsDynamicCodeSupported && !RuntimeFeature.IsDynamicCodeCompiled;
+#else
+            return false;
+#endif
+        }
+
+#if NETCOREAPP
+        public static bool IsReflectionEmitSupported => RuntimeFeature.IsDynamicCodeSupported;
+        public static bool IsNotReflectionEmitSupported => !IsReflectionEmitSupported;
+#else
+        public static bool IsReflectionEmitSupported => true;
+#endif
     }
 }

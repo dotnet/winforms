@@ -16,7 +16,7 @@
   
   <!-- to prevent using MS.NC.Platforms from SDK, which is lagging behind the version that WinForms gets from the CoreFx packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Set code coverage properties that reference properties not available in Directory.Build.props -->
@@ -86,5 +86,38 @@
     <!-- If TargetFramework is not net8.x, then reset RuntimeFrameworkVersion -->
     <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('$(RedistTargetFrameworkName)'))" />
   </PropertyGroup>
+
+  <!-- Adds Nullable annotation attributes to C# non .NETCoreApp builds. -->
+  <ItemGroup Condition="'$(Nullable)' != '' and
+                        '$(Nullable)' != 'disable' and
+                        '$(MSBuildProjectExtension)' == '.csproj' and
+                        '$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
+    <Compile Include="$(RepoRoot)src\Common\src\NullableAttributes.cs" />
+  </ItemGroup>
+
+  <Choose>
+    <When Condition="'$(IncludeInternalObsoleteAttribute)' == 'true' and '$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
+      <ItemGroup>
+        <Compile Include="$(RepoRoot)src\Common\src\ObsoleteAttribute.cs" />
+      </ItemGroup>
+      <PropertyGroup>
+        <!-- Suppress CS0436 to allow ObsoleteAttribute to be internally defined and used in .NET Standard. -->
+        <NoWarn>$(NoWarn);CS0436</NoWarn>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <!-- If a tfm doesn't target .NETCoreApp but uses the platform support attributes, then we include the
+       System.Runtime.Versioning*Platform* annotation attribute classes in the project as internal.
+
+       If a project has specified assembly-level SupportedOSPlatforms or UnsupportedOSPlatforms,
+       we can infer the need without having IncludePlatformAttributes set. -->
+  <PropertyGroup>
+    <IncludePlatformAttributes Condition="'$(IncludePlatformAttributes)' == '' and ('$(SupportedOSPlatforms)' != '' or '$(UnsupportedOSPlatforms)' != '')">true</IncludePlatformAttributes>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IncludePlatformAttributes)' == 'true' and '$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
+    <Compile Include="$(RepoRoot)src\Common\src\PlatformAttributes.cs" />
+  </ItemGroup>
 
 </Project>

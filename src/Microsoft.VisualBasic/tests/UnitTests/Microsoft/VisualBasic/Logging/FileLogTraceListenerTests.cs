@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Microsoft.VisualBasic.Logging.Tests
 {
-    public class FileLogTraceListenerTests : Microsoft.VisualBasic.Tests.FileCleanupTestBase
+    public class FileLogTraceListenerTests : FileCleanupTestBase
     {
         [Fact]
         public void Properties()

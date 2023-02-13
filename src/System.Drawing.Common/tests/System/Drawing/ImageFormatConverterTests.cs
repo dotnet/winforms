@@ -5,7 +5,6 @@ using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.Tests;
 using Xunit;
 
 namespace System.ComponentModel.TypeConverterTests

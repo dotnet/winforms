@@ -35,7 +35,6 @@
     <MicrosoftWin32SystemEventsPackageVersion>8.0.0-preview.2.23110.16</MicrosoftWin32SystemEventsPackageVersion>
     <SystemCodeDomPackageVersion>8.0.0-preview.2.23110.16</SystemCodeDomPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>8.0.0-preview.2.23110.16</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>8.0.0-preview.2.23110.16</SystemDrawingCommonPackageVersion>
     <SystemResourcesExtensionsPackageVersion>8.0.0-preview.2.23110.16</SystemResourcesExtensionsPackageVersion>
     <SystemSecurityPermissionsPackageVersion>8.0.0-preview.2.23110.16</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>8.0.0-preview.2.23110.16</SystemWindowsExtensionsPackageVersion>
@@ -76,6 +75,9 @@
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
     <MicrosoftWindowsCompatibilityVersion>8.0.0-preview.2.23110.16</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
+    <SystemComponentModelTypeConverterTestDataVersion>8.0.0-beta.23107.1</SystemComponentModelTypeConverterTestDataVersion>
+    <SystemDrawingCommonTestDataVersion>8.0.0-beta.23107.1</SystemDrawingCommonTestDataVersion>
+    <SystemWindowsExtensionsTestDataVersion>8.0.0-beta.23107.1</SystemWindowsExtensionsTestDataVersion>
     <VerifyXunitVersion>14.2.0</VerifyXunitVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
