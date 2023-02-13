@@ -562,9 +562,8 @@ namespace System.Windows.Forms
                             Row.ControlsInternal.Add(toolStripToDrag);
 
 #if DEBUG
-                            ISupportToolStripPanel ctg = toolStripToDrag as ISupportToolStripPanel;
-                            ToolStripPanelRow? newPanelRow = ctg.ToolStripPanelRow;
-                            Debug.Assert(newPanelRow == Row, "we should now be in the new panel row.");
+                            ISupportToolStripPanel ctg = toolStripToDrag;
+                            Debug.Assert(ctg.ToolStripPanelRow == Row, "we should now be in the new panel row.");
 #endif
                             if (Row.Cells.Count > 0)
                             {
