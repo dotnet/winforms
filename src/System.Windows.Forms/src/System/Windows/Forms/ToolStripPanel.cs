@@ -899,8 +899,8 @@ namespace System.Windows.Forms
             if (pointInCurrentRow)
             {
                 // Point INSIDE same rafting row
-                s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow.DragBounds}");
-                draggedControl.ToolStripPanelRow.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), clientLocation);
+                s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow?.DragBounds}");
+                draggedControl.ToolStripPanelRow?.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), clientLocation);
             }
             else
             {

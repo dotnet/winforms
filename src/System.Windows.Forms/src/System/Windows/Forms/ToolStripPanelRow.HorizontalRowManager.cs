@@ -548,7 +548,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
                             ISupportToolStripPanel ctg = toolStripToDrag as ISupportToolStripPanel;
-                            ToolStripPanelRow newPanelRow = ctg.ToolStripPanelRow;
+                            ToolStripPanelRow? newPanelRow = ctg.ToolStripPanelRow;
                             Debug.Assert(newPanelRow == Row, "we should now be in the new panel row.");
 #endif
                             if (Row.Cells.Count > 0 || toolStripToDrag.IsInDesignMode)
