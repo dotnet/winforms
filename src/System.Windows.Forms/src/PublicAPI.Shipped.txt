@@ -1319,11 +1319,11 @@ System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
 ~System.Windows.Forms.PropertyGrid.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.PropertyGrid.OnComComponentNameChanged(System.ComponentModel.Design.ComponentRenameEventArgs e) -> void
 ~System.Windows.Forms.PropertyGrid.OnNotifyPropertyValueUIItemsChanged(object sender, System.EventArgs e) -> void
-~System.Windows.Forms.PropertyGrid.PropertyTabCollection.AddTabType(System.Type propertyTabType) -> void
-~System.Windows.Forms.PropertyGrid.PropertyTabCollection.AddTabType(System.Type propertyTabType, System.ComponentModel.PropertyTabScope tabScope) -> void
-~System.Windows.Forms.PropertyGrid.PropertyTabCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.PropertyGrid.PropertyTabCollection.RemoveTabType(System.Type propertyTabType) -> void
-~System.Windows.Forms.PropertyGrid.PropertyTabCollection.this[int index].get -> System.Windows.Forms.Design.PropertyTab
+System.Windows.Forms.PropertyGrid.PropertyTabCollection.AddTabType(System.Type! propertyTabType) -> void
+System.Windows.Forms.PropertyGrid.PropertyTabCollection.AddTabType(System.Type! propertyTabType, System.ComponentModel.PropertyTabScope tabScope) -> void
+System.Windows.Forms.PropertyGrid.PropertyTabCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.PropertyGrid.PropertyTabCollection.RemoveTabType(System.Type! propertyTabType) -> void
+System.Windows.Forms.PropertyGrid.PropertyTabCollection.this[int index].get -> System.Windows.Forms.Design.PropertyTab!
 ~System.Windows.Forms.PropertyGrid.PropertyTabs.get -> System.Windows.Forms.PropertyGrid.PropertyTabCollection
 ~System.Windows.Forms.PropertyGrid.SelectedGridItem.get -> System.Windows.Forms.GridItem
 ~System.Windows.Forms.PropertyGrid.SelectedGridItem.set -> void
