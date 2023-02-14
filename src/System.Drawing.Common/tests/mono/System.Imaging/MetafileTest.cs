@@ -41,7 +41,6 @@ namespace MonoTests.System.Drawing.Imaging
     [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
     public class MetafileTest
     {
-
         public const string Bitmap = "non-inverted.bmp";
         public const string WmfPlaceable = "telescope_01.wmf";
         public const string Emf = "milkmateya01.emf";

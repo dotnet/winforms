@@ -1,19 +1,27 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using Xunit;
 using Xunit.Sdk;
+using static Interop;
 
 namespace System
 {
     public static class AssertExtensions
     {
         private static bool IsNetFramework => RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework");
+
+        internal static void True(AccessibleObject accessibleObject, UiaCore.UIA propertyId)
+        {
+            Assert.True((bool)accessibleObject.GetPropertyValue(propertyId));
+        }
+
+        internal static void False(AccessibleObject accessibleObject, UiaCore.UIA propertyId)
+        {
+            Assert.False((bool)accessibleObject.GetPropertyValue(propertyId));
+        }
 
         public static void Throws<T>(Action action, string expectedMessage)
             where T : Exception
@@ -32,7 +40,7 @@ namespace System
         {
             T exception = Assert.Throws<T>(action);
 
-            if (netFxParamName == null && IsNetFramework)
+            if (netFxParamName is null && IsNetFramework)
             {
                 // Param name varies between .NET Framework versions -- skip checking it
                 return exception;
@@ -51,7 +59,7 @@ namespace System
         {
             T exception = Assert.Throws<T>(testCode);
 
-            if (netFxParamName == null && IsNetFramework)
+            if (netFxParamName is null && IsNetFramework)
             {
                 // Param name varies between .NET Framework versions -- skip checking it
                 return;
@@ -99,7 +107,7 @@ namespace System
             catch (Exception ex) when (returned)
             {
                 string resultStr;
-                if (result == null)
+                if (result is null)
                 {
                     resultStr = "(null)";
                 }
@@ -270,7 +278,7 @@ namespace System
 
         private static string AddOptionalUserMessage(string message, string userMessage)
         {
-            if (userMessage == null)
+            if (userMessage is null)
                 return message;
             else
                 return $"{message} {userMessage}";
@@ -301,9 +309,9 @@ namespace System
         /// <param name="greaterThan">The value that <paramref name="actual"/> should be greater than.</param>
         public static void GreaterThan<T>(T actual, T greaterThan, string userMessage = null) where T : IComparable
         {
-            if (actual == null)
+            if (actual is null)
                 throw new XunitException(
-                    greaterThan == null
+                    greaterThan is null
                         ? AddOptionalUserMessage($"Expected: <null> to be greater than <null>.", userMessage)
                         : AddOptionalUserMessage($"Expected: <null> to be greater than {greaterThan}.", userMessage));
 
@@ -318,9 +326,9 @@ namespace System
         /// <param name="lessThan">The value that <paramref name="actual"/> should be less than.</param>
         public static void LessThan<T>(T actual, T lessThan, string userMessage = null) where T : IComparable
         {
-            if (actual == null)
+            if (actual is null)
             {
-                if (lessThan == null)
+                if (lessThan is null)
                 {
                     throw new XunitException(AddOptionalUserMessage($"Expected: <null> to be less than <null>.", userMessage));
                 }
@@ -343,7 +351,7 @@ namespace System
         public static void LessThanOrEqualTo<T>(T actual, T lessThanOrEqualTo, string userMessage = null) where T : IComparable
         {
             // null, by definition is always less than or equal to
-            if (actual == null)
+            if (actual is null)
                 return;
 
             if (actual.CompareTo(lessThanOrEqualTo) > 0)
@@ -358,9 +366,9 @@ namespace System
         public static void GreaterThanOrEqualTo<T>(T actual, T greaterThanOrEqualTo, string userMessage = null) where T : IComparable
         {
             // null, by definition is always less than or equal to
-            if (actual == null)
+            if (actual is null)
             {
-                if (greaterThanOrEqualTo == null)
+                if (greaterThanOrEqualTo is null)
                 {
                     // We're equal
                     return;
@@ -630,10 +638,10 @@ namespace System
             }
         }
 
-        /// <summary>Verifies that two <see cref="double"/> values are equal, within the <paramref name="allowedVariance"/>.</summary>
+        /// <summary>Verifies that two <see cref="double"/> values are equal, within the <paramref name="variance"/>.</summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The value to be compared against</param>
-        /// <param name="allowedVariance">The total variance allowed between the expected and actual results.</param>
+        /// <param name="variance">The total variance allowed between the expected and actual results.</param>
         /// <exception cref="EqualException">Thrown when the values are not equal</exception>
         public static void Equal(double expected, double actual, double variance)
         {

@@ -13,11 +13,11 @@ namespace System.ComponentModel.TypeConverterTests
     [ConditionalClass(typeof(PlatformDetection), nameof(PlatformDetection.IsNotWindowsIoTCore))]
     public class IconConverterTest
     {
-        private readonly Icon _icon = null;
-        private readonly IconConverter _icoConv = null;
-        private readonly IconConverter _icoConvFrmTD = null;
-        private readonly string _iconStr = null;
-        private readonly byte[] _iconBytes = null;
+        private readonly Icon _icon;
+        private readonly IconConverter _icoConv;
+        private readonly IconConverter _icoConvFrmTD;
+        private readonly string _iconStr;
+        private readonly byte[] _iconBytes;
 
         public IconConverterTest()
         {

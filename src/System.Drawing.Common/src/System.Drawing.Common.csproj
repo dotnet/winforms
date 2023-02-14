@@ -10,6 +10,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <CLSCompliant>true</CLSCompliant>
     <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageValidationBaselineVersion>7.0.0</PackageValidationBaselineVersion>
     <AddXamarinPlaceholderFilesToPackage>true</AddXamarinPlaceholderFilesToPackage>
     <PackageDescription>Provides access to GDI+ graphics functionality.
@@ -26,17 +27,10 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
   </PropertyGroup>
 
   <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
-  <PropertyGroup>
-    <IncludeInternalObsoleteAttribute Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETStandard'">true</IncludeInternalObsoleteAttribute>
+  <PropertyGroup Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETStandard'">
+    <IncludeInternalObsoleteAttribute>true</IncludeInternalObsoleteAttribute>
     <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="Forwards.cs"
-             Condition="'$(TargetFrameworkIdentifier)' != '.NETStandard'" />
-    <Compile Include="NotSupported.cs"
-             Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'" />
-  </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
     <Compile Include="SRDescriptionAttribute.cs" />
@@ -316,6 +310,15 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
              Link="Common\DisableRuntimeMarshalling.cs" />
     <Compile Include="..\..\Common\src\HandleRefMarshaller.cs"
              Link="Common\HandleRefMarshaller.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETStandard'">
+    <Compile Include="Forwards.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'">
+    <Compile Include="NotSupported.cs" />
+    <Compile Include="$(RepoRoot)src\Common\src\NullableAttributes.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">

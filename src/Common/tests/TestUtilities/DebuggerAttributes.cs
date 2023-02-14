@@ -1,11 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
 
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -78,7 +75,7 @@ namespace System.Diagnostics
         {
             // The debugger doesn't evaluate non-public members of type proxies. GetGetMethod returns null if the getter is non-public.
             IEnumerable<PropertyInfo> visibleProperties = debuggerAttributeType.GetProperties()
-                .Where(pi => pi.GetGetMethod() != null && GetDebuggerBrowsableState(pi) != DebuggerBrowsableState.Never);
+                .Where(pi => pi.GetGetMethod() is object && GetDebuggerBrowsableState(pi) != DebuggerBrowsableState.Never);
             return visibleProperties;
         }
 
@@ -176,7 +173,7 @@ namespace System.Diagnostics
         private static string GetDebuggerMemberString(object member, bool noQuotes)
         {
             string memberString = "null";
-            if (member != null)
+            if (member is object)
             {
                 memberString = member.ToString();
                 if (member is string)
@@ -205,14 +202,14 @@ namespace System.Diagnostics
         private static bool TryEvaluateReference(object obj, string reference, out object member)
         {
             PropertyInfo pi = GetProperty(obj, reference);
-            if (pi != null)
+            if (pi is object)
             {
                 member = pi.GetValue(obj);
                 return true;
             }
 
             FieldInfo fi = GetField(obj, reference);
-            if (fi != null)
+            if (fi is object)
             {
                 member = fi.GetValue(obj);
                 return true;
@@ -224,10 +221,10 @@ namespace System.Diagnostics
 
         private static FieldInfo GetField(object obj, string fieldName)
         {
-            for (Type t = obj.GetType(); t != null; t = t.GetTypeInfo().BaseType)
+            for (Type t = obj.GetType(); t is object; t = t.GetTypeInfo().BaseType)
             {
                 FieldInfo fi = t.GetTypeInfo().GetDeclaredField(fieldName);
-                if (fi != null)
+                if (fi is object)
                 {
                     return fi;
                 }
@@ -238,10 +235,10 @@ namespace System.Diagnostics
 
         private static PropertyInfo GetProperty(object obj, string propertyName)
         {
-            for (Type t = obj.GetType(); t != null; t = t.GetTypeInfo().BaseType)
+            for (Type t = obj.GetType(); t is object; t = t.GetTypeInfo().BaseType)
             {
                 PropertyInfo pi = t.GetTypeInfo().GetDeclaredProperty(propertyName);
-                if (pi != null)
+                if (pi is object)
                 {
                     return pi;
                 }

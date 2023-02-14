@@ -87,14 +87,6 @@
     <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('$(RedistTargetFrameworkName)'))" />
   </PropertyGroup>
 
-  <!-- Adds Nullable annotation attributes to C# non .NETCoreApp builds. -->
-  <ItemGroup Condition="'$(Nullable)' != '' and
-                        '$(Nullable)' != 'disable' and
-                        '$(MSBuildProjectExtension)' == '.csproj' and
-                        '$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-    <Compile Include="$(RepoRoot)src\Common\src\NullableAttributes.cs" />
-  </ItemGroup>
-
   <Choose>
     <When Condition="'$(IncludeInternalObsoleteAttribute)' == 'true' and '$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
       <ItemGroup>

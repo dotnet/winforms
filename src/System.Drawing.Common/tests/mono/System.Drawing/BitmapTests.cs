@@ -47,7 +47,6 @@ namespace MonoTests.System.Drawing
 {
     public class TestBitmap
     {
-
         [ConditionalFact(Helpers.IsDrawingSupported)]
         public void TestPixels()
         {
@@ -562,7 +561,6 @@ namespace MonoTests.System.Drawing
                 {
                     for (int x = 0; x < bd.Width; x++)
                     {
-
                         /* Read the pixels*/
                         for (int bt = 0; bt < bbps / 8; bt++, index++)
                         {

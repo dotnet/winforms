@@ -149,16 +149,16 @@ namespace System.Drawing
         private static extern int GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO monitorInfo);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr GetForegroundWindow();
+        internal static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
-        public static extern int GetGuiResources(IntPtr hProcess, uint flags);
+        internal static extern int GetGuiResources(IntPtr hProcess, uint flags);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr GetDC(IntPtr hWnd);
+        internal static extern IntPtr GetDC(IntPtr hWnd);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr GetWindowDC(IntPtr hWnd);
+        internal static extern IntPtr GetWindowDC(IntPtr hWnd);
 
         public static Rectangle GetWindowDCRect(IntPtr hdc) => GetHWndRect(WindowFromDC(hdc));
 

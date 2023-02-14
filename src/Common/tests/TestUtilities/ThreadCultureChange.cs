@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Globalization;
@@ -11,7 +11,7 @@ namespace System
         private readonly CultureInfo _origUICulture = CultureInfo.CurrentUICulture;
 
         public ThreadCultureChange(string? cultureName) :
-            this(cultureName != null ? new CultureInfo(cultureName) : null)
+            this(cultureName is object ? new CultureInfo(cultureName) : null)
         {
         }
 
@@ -22,13 +22,13 @@ namespace System
 
         public ThreadCultureChange(CultureInfo? newCulture, CultureInfo? newUICulture)
         {
-            if (newCulture != null)
+            if (newCulture is object)
             {
                 _origCulture = CultureInfo.CurrentCulture;
                 CultureInfo.CurrentCulture = newCulture;
             }
 
-            if (newUICulture != null)
+            if (newUICulture is object)
             {
                 _origUICulture = CultureInfo.CurrentUICulture;
                 CultureInfo.CurrentUICulture = newUICulture;

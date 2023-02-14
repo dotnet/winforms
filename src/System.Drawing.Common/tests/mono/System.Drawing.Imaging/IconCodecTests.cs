@@ -37,7 +37,6 @@ using Xunit;
 
 namespace MonoTests.System.Drawing.Imaging
 {
-
     public class IconCodecTest
     {
         [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]

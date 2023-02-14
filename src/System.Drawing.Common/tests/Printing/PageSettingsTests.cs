@@ -31,7 +31,6 @@ using Xunit;
 
 namespace System.Drawing.Printing.Tests
 {
-
     public class PageSettingsTests
     {
         [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247

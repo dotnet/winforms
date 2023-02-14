@@ -99,7 +99,6 @@ namespace System.Drawing.Printing.Tests
         [Fact]
         public void ConvertFrom_Throws()
         {
-
             MarginsConverter mc = new MarginsConverter();
             CultureInfo culture = CultureInfo.InvariantCulture;
 
