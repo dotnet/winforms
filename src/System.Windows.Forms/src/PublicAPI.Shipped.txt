@@ -1660,7 +1660,7 @@ virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Dr
 virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string?
 virtual System.Resources.ResXResourceWriter.AddAlias(string? aliasName, System.Reflection.AssemblyName! assemblyName) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
-virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList!
+virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList?
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void

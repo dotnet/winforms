@@ -17,14 +17,14 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public virtual int Count => List.Count;
+        public virtual int Count => List!.Count;
 
-        public void CopyTo(Array ar, int index) => List.CopyTo(ar, index);
+        public void CopyTo(Array ar, int index) => List!.CopyTo(ar, index);
 
         /// <summary>
         ///  Gets an IEnumerator for the collection.
         /// </summary>
-        public IEnumerator GetEnumerator() => List.GetEnumerator();
+        public IEnumerator GetEnumerator() => List!.GetEnumerator();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -38,6 +38,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public object SyncRoot => this;
 
-        protected virtual ArrayList List => new();
+        protected virtual ArrayList? List => null;
     }
 }
