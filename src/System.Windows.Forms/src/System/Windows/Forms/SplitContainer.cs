@@ -63,10 +63,10 @@ namespace System.Windows.Forms
         private bool _splitBreak;
 
         // Split Cursor
-        Cursor? _overrideCursor;
+        private Cursor? _overrideCursor;
 
         // Needed For Tabbing
-        Control? _nextActiveControl;
+        private Control? _nextActiveControl;
         private bool _callBaseVersion;
         private bool _splitterFocused;
 

@@ -72,7 +72,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
         }
 
-        void PaintFlatWorker(PaintEventArgs e, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
+        private void PaintFlatWorker(PaintEventArgs e, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
         {
             LayoutData layout = Layout(e).Layout();
             PaintButtonBackground(e, Control.ClientRectangle, null);

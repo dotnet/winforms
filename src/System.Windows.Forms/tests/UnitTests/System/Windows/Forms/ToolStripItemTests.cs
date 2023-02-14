@@ -5360,7 +5360,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.ShouldSerializeValue(item));
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/8636")]
         public void ToolStripItem_ImageKey_ShouldSerializeValueWithOwnerWithImageList_Success()
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolStripItem))[nameof(ToolStripItem.ImageKey)];

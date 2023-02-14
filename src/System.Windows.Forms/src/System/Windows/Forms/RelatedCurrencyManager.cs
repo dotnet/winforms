@@ -16,10 +16,10 @@ namespace System.Windows.Forms
     /// </summary>
     internal class RelatedCurrencyManager : CurrencyManager
     {
-        BindingManagerBase parentManager;
-        string dataField;
-        PropertyDescriptor fieldInfo;
-        static readonly List<BindingManagerBase> IgnoreItemChangedTable = new List<BindingManagerBase>();
+        private BindingManagerBase parentManager;
+        private string dataField;
+        private PropertyDescriptor fieldInfo;
+        private static readonly List<BindingManagerBase> IgnoreItemChangedTable = new List<BindingManagerBase>();
 
         internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField) : base(null)
         {

@@ -98,7 +98,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Make sure the error window is created, and the tooltip window is created.
             /// </summary>
-            bool EnsureCreated()
+            private bool EnsureCreated()
             {
                 if (Handle == IntPtr.Zero)
                 {

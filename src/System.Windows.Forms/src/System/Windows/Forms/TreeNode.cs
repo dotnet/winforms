@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         private bool expandOnRealization;
         private bool collapseOnRealization;
         private TreeNodeCollection nodes;
-        object userData;
+        private object userData;
 
         private const TVITEM_MASK InsertMask =
             TVITEM_MASK.TVIF_TEXT

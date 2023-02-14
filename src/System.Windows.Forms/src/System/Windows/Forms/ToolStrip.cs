@@ -1055,6 +1055,7 @@ namespace System.Windows.Forms
             }
         }
 
+        [MemberNotNullWhen(true, nameof(ToolStripPanelRow))]
         internal bool IsInToolStripPanel
         {
             get
@@ -1459,12 +1460,12 @@ namespace System.Windows.Forms
             }
         }
 
-        internal ToolStripPanelCell ToolStripPanelCell
+        internal ToolStripPanelCell? ToolStripPanelCell
         {
             get { return ((ISupportToolStripPanel)this).ToolStripPanelCell; }
         }
 
-        internal ToolStripPanelRow ToolStripPanelRow
+        internal ToolStripPanelRow? ToolStripPanelRow
         {
             get { return ((ISupportToolStripPanel)this).ToolStripPanelRow; }
         }
@@ -1492,21 +1493,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStripPanelCell cell = ToolStripPanelCell;
-                if (cell is null)
-                {
-                    return null;
-                }
-
-                return ToolStripPanelCell.ToolStripPanelRow;
+                return ToolStripPanelCell?.ToolStripPanelRow;
             }
             set
             {
-                ToolStripPanelRow oldToolStripPanelRow = ToolStripPanelRow;
+                ToolStripPanelRow? oldToolStripPanelRow = ToolStripPanelRow;
 
                 if (oldToolStripPanelRow != value)
                 {
-                    ToolStripPanelCell cell = ToolStripPanelCell;
+                    ToolStripPanelCell? cell = ToolStripPanelCell;
                     if (cell is null)
                     {
                         return;

@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
             private bool _editing;
             private bool _escapePressed;
             private bool _ctrlEnterPressed;
-            SolidBrush _watermarkBrush;
+            private SolidBrush _watermarkBrush;
             private Size _watermarkSize = Size.Empty;
             private readonly Dictionary<int, Font> _fallbackFonts;
             private bool _firstTimeResizeToContent = true;

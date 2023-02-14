@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Windows.Forms;
 
 namespace System.Drawing.Design
@@ -17,7 +15,7 @@ namespace System.Drawing.Design
         /// <param name="uiItemImage"><see cref="Drawing.Image"/> representing the 8 x 8 icon to display.</param>
         /// <param name="handler">The <see cref="PropertyValueUIItemInvokeHandler"/> to invoke when the item is double clicked.</param>
         /// <param name="tooltip">The ToolTip to display for this item.</param>
-        public PropertyValueUIItem(Image uiItemImage, PropertyValueUIItemInvokeHandler handler, string tooltip)
+        public PropertyValueUIItem(Image uiItemImage, PropertyValueUIItemInvokeHandler handler, string? tooltip)
         {
             Image = uiItemImage.OrThrowIfNull();
             InvokeHandler = handler.OrThrowIfNull();
@@ -31,7 +29,7 @@ namespace System.Drawing.Design
         public virtual PropertyValueUIItemInvokeHandler InvokeHandler { get; }
 
         /// <summary>Gets the ToolTip to display for this item.</summary>
-        public virtual string ToolTip { get; }
+        public virtual string? ToolTip { get; }
 
         /// <summary>Resets the UI item.</summary>
         public virtual void Reset() { }

@@ -704,7 +704,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Helper to dispose the cached icon region.
         /// </summary>
-        void DisposeRegion()
+        private void DisposeRegion()
         {
             if (_region is not null)
             {

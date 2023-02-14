@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms.Design;
@@ -18,9 +16,7 @@ namespace System.Windows.Forms
 
             internal PropertyTabCollection(PropertyGrid ownerPropertyGrid)
             {
-                // Probably we should throw an ArgumentNullException(nameof(ownerPropertyGrid))
-                // to make sure _ownerPropertyGrid never be null
-                _ownerPropertyGrid = ownerPropertyGrid;
+                _ownerPropertyGrid = ownerPropertyGrid.OrThrowIfNull();
             }
 
             /// <summary>

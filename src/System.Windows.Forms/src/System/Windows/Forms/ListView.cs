@@ -2621,7 +2621,7 @@ namespace System.Windows.Forms
         ///  If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view)
         ///  events and let the user do the drawing.
         /// </summary>
-        unsafe void CustomDraw(ref Message m)
+        private unsafe void CustomDraw(ref Message m)
         {
             bool dontmess = false;
             bool itemDrawDefault = false;

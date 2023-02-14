@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
         private static VisualStyleRenderer? t_visualStyleRenderer;
-        const int lineWidth = 2;
+        private const int lineWidth = 2;
 
         /// <summary>
         ///  Returns true if this class is supported for the current OS and user/application settings,
