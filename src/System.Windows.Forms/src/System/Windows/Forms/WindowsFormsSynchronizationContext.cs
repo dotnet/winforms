@@ -42,15 +42,9 @@ namespace System.Windows.Forms
         // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
         private Thread? DestinationThread
         {
-            get
-            {
-                if ((_destinationThreadRef is not null) && (_destinationThreadRef.IsAlive))
-                {
-                    return _destinationThreadRef.Target as Thread;
-                }
-
-                return null;
-            }
+            get => _destinationThreadRef?.IsAlive == true
+                ? _destinationThreadRef.Target as Thread
+                : null;
             set
             {
                 if (value is not null)
