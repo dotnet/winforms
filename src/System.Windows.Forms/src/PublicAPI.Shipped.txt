@@ -580,9 +580,9 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~override System.Windows.Forms.WebBrowserBase.Site.set -> void
 ~override System.Windows.Forms.WebBrowserBase.Text.get -> string
 ~override System.Windows.Forms.WebBrowserBase.Text.set -> void
-~override System.Windows.Forms.WindowsFormsSynchronizationContext.CreateCopy() -> System.Threading.SynchronizationContext
-~override System.Windows.Forms.WindowsFormsSynchronizationContext.Post(System.Threading.SendOrPostCallback d, object state) -> void
-~override System.Windows.Forms.WindowsFormsSynchronizationContext.Send(System.Threading.SendOrPostCallback d, object state) -> void
+override System.Windows.Forms.WindowsFormsSynchronizationContext.CreateCopy() -> System.Threading.SynchronizationContext!
+override System.Windows.Forms.WindowsFormsSynchronizationContext.Post(System.Threading.SendOrPostCallback! d, object? state) -> void
+override System.Windows.Forms.WindowsFormsSynchronizationContext.Send(System.Threading.SendOrPostCallback! d, object? state) -> void
 static readonly System.Resources.ResXResourceWriter.BinSerializedObjectMimeType -> string!
 static readonly System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType -> string!
 static readonly System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType -> string!
