@@ -19,19 +19,9 @@ namespace System.Windows.Forms
 
             public int Compare(object? item1, object? item2)
             {
-                if (item1 is null)
+                if (IComparerHelpers.CompareReturnIfNull(item1, item2, out int? returnValue))
                 {
-                    if (item2 is null)
-                    {
-                        return 0; //both null, then they are equal
-                    }
-
-                    return -1; //item1 is null, but item2 is valid (greater)
-                }
-
-                if (item2 is null)
-                {
-                    return 1; //item2 is null, so item 1 is greater
+                    return (int)returnValue;
                 }
 
                 string itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
