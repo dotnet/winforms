@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using static Interop;
@@ -44,7 +43,7 @@ namespace System.Windows.Forms
         private bool _auto = true;
         private bool _showAlways;
         private ToolTipNativeWindow _window;
-        private Control _topLevelControl;
+        private Control? _topLevelControl;
         private bool active = true;
         private Color _backColor = SystemColors.Info;
         private Color _foreColor = SystemColors.InfoText;
@@ -52,7 +51,7 @@ namespace System.Windows.Forms
         private bool _isDisposing;
         private string _toolTipTitle = string.Empty;
         private ToolTipIcon _toolTipIcon = ToolTipIcon.None;
-        private ToolTipTimer _timer;
+        private ToolTipTimer? _timer;
         private readonly Dictionary<HWND, Control> _owners = new();
         private bool _stripAmpersands;
         private bool _useAnimation = true;
@@ -65,8 +64,8 @@ namespace System.Windows.Forms
         /// </summary>
         private bool _trackPosition;
 
-        private PopupEventHandler _onPopup;
-        private DrawToolTipEventHandler _onDraw;
+        private PopupEventHandler? _onPopup;
+        private DrawToolTipEventHandler? _onDraw;
 
         /// <summary>
         ///  Adding a tool twice breaks the ToolTip, so we need to track which
@@ -79,9 +78,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="ToolTip"/> class, given the container.
         /// </summary>
-        public ToolTip(IContainer cont) : this()
+        public ToolTip(IContainer cont)
+            : this()
         {
-            _ = cont.OrThrowIfNull();
+            ArgumentNullException.ThrowIfNull(cont);
 
             cont.Add(this);
 
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
 
         internal void HideToolTip(IKeyboardToolTip currentTool)
         {
-            IWin32Window ownerWindow = currentTool.GetOwnerWindow();
+            IWin32Window? ownerWindow = currentTool.GetOwnerWindow();
             if (ownerWindow is not null)
             {
                 Hide(ownerWindow);
@@ -154,9 +154,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal string GetCaptionForTool(Control tool)
+        internal string? GetCaptionForTool(Control tool)
         {
-            return _tools.TryGetValue(tool, out TipInfo tipInfo) ? tipInfo.Caption : null;
+            return _tools.TryGetValue(tool, out TipInfo? tipInfo) ? tipInfo.Caption : null;
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
                 HWND rootHwnd = PInvoke.GetAncestor(control, GET_ANCESTOR_FLAGS.GA_ROOT);
                 if (hwnd != rootHwnd)
                 {
-                    if (_tools.TryGetValue(control, out TipInfo tt) && (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
+                    if (_tools.TryGetValue(control, out TipInfo? tt) && (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
                     {
                         _tools.Remove(control);
                         DestroyRegion(control);
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  Gets or sets an Icon on the ToolTip.
@@ -468,6 +468,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue("")]
         [SRDescription(nameof(SR.ToolTipTitleDescr))]
+        [AllowNull]
         public string ToolTipTitle
         {
             get => _toolTipTitle;
@@ -490,7 +491,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Control TopLevelControl
+        private Control? TopLevelControl
         {
             get
             {
@@ -499,7 +500,7 @@ namespace System.Windows.Forms
                     return _topLevelControl;
                 }
 
-                Control currentTopLevel = null;
+                Control? currentTopLevel = null;
                 Control[] controls = _tools.Keys.ToArray();
                 for (int i = 0; i < controls.Length; i++)
                 {
@@ -601,7 +602,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolTipDrawEventDescr))]
-        public event DrawToolTipEventHandler Draw
+        public event DrawToolTipEventHandler? Draw
         {
             add => _onDraw += value;
             remove => _onDraw -= value;
@@ -612,7 +613,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolTipPopupEventDescr))]
-        public event PopupEventHandler Popup
+        public event PopupEventHandler? Popup
         {
             add => _onPopup += value;
             remove => _onPopup -= value;
@@ -676,13 +677,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnPopup(PopupEventArgs e) => _onPopup?.Invoke(this, e);
 
-        private void TopLevelCreated(object sender, EventArgs eventargs)
+        private void TopLevelCreated(object? sender, EventArgs eventargs)
         {
             CreateHandle();
             CreateAllRegions();
         }
 
-        private void TopLevelDestroyed(object sender, EventArgs eventargs)
+        private void TopLevelDestroyed(object? sender, EventArgs eventargs)
         {
             DestroyAllRegions();
             DestroyHandle();
@@ -886,9 +887,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void MouseMove(object sender, MouseEventArgs me)
+        private void MouseMove(object? sender, MouseEventArgs me)
         {
-            var control = (Control)sender;
+            if (sender is not Control control)
+            {
+                return;
+            }
+
             if (!_created.Contains(control) && control.IsHandleCreated && TopLevelControl is not null)
             {
                 CreateRegion(control);
@@ -933,7 +938,7 @@ namespace System.Windows.Forms
                 control.RemoveToolTip(this);
             }
         }
-
+#nullable disable
         /// <summary>
         ///  Disposes of the <see cref="ToolTip"/> component.
         /// </summary>

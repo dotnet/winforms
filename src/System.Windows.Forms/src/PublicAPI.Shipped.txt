@@ -1554,7 +1554,7 @@ System.Windows.Forms.ToolStripTextBox.SelectedText.set -> void
 System.Windows.Forms.ToolStripTextBox.TextBox.get -> System.Windows.Forms.TextBox!
 System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(string? name) -> void
 System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Control! c) -> void
-~System.Windows.Forms.ToolTip.CanExtend(object target) -> bool
+System.Windows.Forms.ToolTip.CanExtend(object! target) -> bool
 ~System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control control) -> string
 ~System.Windows.Forms.ToolTip.Hide(System.Windows.Forms.IWin32Window win) -> void
 ~System.Windows.Forms.ToolTip.SetToolTip(System.Windows.Forms.Control control, string caption) -> void
@@ -1564,11 +1564,11 @@ System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Cont
 ~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, int x, int y, int duration) -> void
 ~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, System.Drawing.Point point) -> void
 ~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, System.Drawing.Point point, int duration) -> void
-~System.Windows.Forms.ToolTip.Tag.get -> object
-~System.Windows.Forms.ToolTip.Tag.set -> void
-~System.Windows.Forms.ToolTip.ToolTip(System.ComponentModel.IContainer cont) -> void
-~System.Windows.Forms.ToolTip.ToolTipTitle.get -> string
-~System.Windows.Forms.ToolTip.ToolTipTitle.set -> void
+System.Windows.Forms.ToolTip.Tag.get -> object?
+System.Windows.Forms.ToolTip.Tag.set -> void
+System.Windows.Forms.ToolTip.ToolTip(System.ComponentModel.IContainer! cont) -> void
+System.Windows.Forms.ToolTip.ToolTipTitle.get -> string!
+System.Windows.Forms.ToolTip.ToolTipTitle.set -> void
 ~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeNode.FullPath.get -> string
 ~System.Windows.Forms.TreeNode.ImageKey.get -> string
@@ -2194,7 +2194,7 @@ virtual System.Windows.Forms.ToolStripTextBox.OnHideSelectionChanged(System.Even
 virtual System.Windows.Forms.ToolStripTextBox.OnModifiedChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripTextBox.OnMultilineChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripTextBox.OnReadOnlyChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.ToolTip.CreateParams.get -> System.Windows.Forms.CreateParams
+virtual System.Windows.Forms.ToolTip.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~virtual System.Windows.Forms.TreeNode.Clone() -> object
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
@@ -11717,7 +11717,7 @@ System.Windows.Forms.ToolTip.AutoPopDelay.get -> int
 System.Windows.Forms.ToolTip.AutoPopDelay.set -> void
 System.Windows.Forms.ToolTip.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolTip.BackColor.set -> void
-System.Windows.Forms.ToolTip.Draw -> System.Windows.Forms.DrawToolTipEventHandler
+System.Windows.Forms.ToolTip.Draw -> System.Windows.Forms.DrawToolTipEventHandler?
 System.Windows.Forms.ToolTip.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolTip.ForeColor.set -> void
 System.Windows.Forms.ToolTip.InitialDelay.get -> int
@@ -11726,7 +11726,7 @@ System.Windows.Forms.ToolTip.IsBalloon.get -> bool
 System.Windows.Forms.ToolTip.IsBalloon.set -> void
 System.Windows.Forms.ToolTip.OwnerDraw.get -> bool
 System.Windows.Forms.ToolTip.OwnerDraw.set -> void
-System.Windows.Forms.ToolTip.Popup -> System.Windows.Forms.PopupEventHandler
+System.Windows.Forms.ToolTip.Popup -> System.Windows.Forms.PopupEventHandler?
 System.Windows.Forms.ToolTip.RemoveAll() -> void
 System.Windows.Forms.ToolTip.ReshowDelay.get -> int
 System.Windows.Forms.ToolTip.ReshowDelay.set -> void
