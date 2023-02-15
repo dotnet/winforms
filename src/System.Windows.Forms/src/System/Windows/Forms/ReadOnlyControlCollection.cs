@@ -20,6 +20,11 @@ namespace System.Windows.Forms
 
         public override void Add(Control? value)
         {
+            if (value is null)
+            {
+                return;
+            }
+
             if (IsReadOnly)
             {
                 throw new NotSupportedException(SR.ReadonlyControlsCollection);

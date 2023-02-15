@@ -39,12 +39,13 @@ namespace System.Windows.Forms
                     };
                 }
 
-                if (activate)
+                if (activate && ToolTip is not null)
                 {
-                    ToolTip!.Active = true;
+                    ToolTip.Active = true;
                     ToolTip.Show(_dataGridView.ToolTipPrivate, _dataGridView);
                 }
-                else if (ToolTip is not null)
+
+                if (ToolTip is not null)
                 {
                     ToolTip.Hide(_dataGridView);
                     ToolTip.Active = false;

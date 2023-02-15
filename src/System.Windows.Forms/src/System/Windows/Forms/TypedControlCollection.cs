@@ -29,10 +29,13 @@ namespace System.Windows.Forms
 
         public override void Add(Control? value)
         {
+            if (value is null)
+            {
+                return;
+            }
+
             // Check parenting first for consistency
             Control.CheckParentingCycle(_ownerControl, value);
-
-            ArgumentNullException.ThrowIfNull(value);
 
             if (IsReadOnly)
             {

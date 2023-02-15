@@ -22,7 +22,10 @@ namespace System.Windows.Forms
 
             public override void Add(Control? value)
             {
-                ArgumentNullException.ThrowIfNull(value);
+                if (value is null)
+                {
+                    return;
+                }
 
                 if (IsReadOnly)
                 {
