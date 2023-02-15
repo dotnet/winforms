@@ -17,19 +17,9 @@ namespace System.Windows.Forms.Layout
 
             public int Compare(LayoutInfo? x, LayoutInfo? y)
             {
-                if (x is null && y is null)
+                if (IComparerHelpers.CompareReturnIfNull(x, y, out int? returnValue))
                 {
-                    return 0;
-                }
-
-                if (x is null)
-                {
-                    return -1;
-                }
-
-                if (y is null)
-                {
-                    return 1;
+                    return (int)returnValue;
                 }
 
                 if (x.RowStart < y.RowStart)

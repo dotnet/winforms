@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class DataGridView
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
 
             public bool Activated { get; private set; }
 
-            public ToolTip ToolTip { get; private set; }
+            public ToolTip? ToolTip { get; private set; }
 
             public void Activate(bool activate)
             {
@@ -28,10 +26,10 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Create the tool tip handle on demand.
-                if (activate && ToolTip is null)
+                if (activate)
                 {
-                    ToolTip = new ToolTip
+                    // Create the tool tip handle on demand.
+                    ToolTip ??= new ToolTip
                     {
                         ShowAlways = true,
                         InitialDelay = 0,
@@ -39,10 +37,7 @@ namespace System.Windows.Forms
                         UseAnimation = false,
                         AutoPopDelay = 0
                     };
-                }
 
-                if (activate)
-                {
                     ToolTip.Active = true;
                     ToolTip.Show(_dataGridView.ToolTipPrivate, _dataGridView);
                 }

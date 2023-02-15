@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -30,8 +28,13 @@ namespace System.Windows.Forms
                 ((IList)this).Insert(index, (object)value);
             }
 
-            public override void Remove(Control value)
+            public override void Remove(Control? value)
             {
+                if (value is null)
+                {
+                    return;
+                }
+
                 if (value != _owner._horizScrollBar && value != _owner._vertScrollBar && value != _owner._editingPanel)
                 {
                     base.Remove(value);
