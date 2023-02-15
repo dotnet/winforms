@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override ControlCollection CreateControlsInstance() => new TabPageControlCollection(this);
 
-        private protected override string GetCaptionForTool(ToolTip toolTip)
+        private protected override string? GetCaptionForTool(ToolTip toolTip)
         {
             // Return the internal toolTip text if it is set
             if (!string.IsNullOrEmpty(_toolTipText))
