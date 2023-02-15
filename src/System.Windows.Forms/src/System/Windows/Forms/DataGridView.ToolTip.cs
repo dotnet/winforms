@@ -26,10 +26,10 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Create the tool tip handle on demand.
-                if (activate && ToolTip is null)
+                if (activate)
                 {
-                    ToolTip = new ToolTip
+                    // Create the tool tip handle on demand.
+                    ToolTip ??= new ToolTip
                     {
                         ShowAlways = true,
                         InitialDelay = 0,
@@ -37,15 +37,11 @@ namespace System.Windows.Forms
                         UseAnimation = false,
                         AutoPopDelay = 0
                     };
-                }
 
-                if (activate && ToolTip is not null)
-                {
                     ToolTip.Active = true;
                     ToolTip.Show(_dataGridView.ToolTipPrivate, _dataGridView);
                 }
-
-                if (ToolTip is not null)
+                else if (ToolTip is not null)
                 {
                     ToolTip.Hide(_dataGridView);
                     ToolTip.Active = false;
