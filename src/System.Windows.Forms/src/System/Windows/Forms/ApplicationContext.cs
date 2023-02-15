@@ -16,16 +16,6 @@ namespace System.Windows.Forms
     /// </summary>
     public class ApplicationContext : IDisposable
     {
-        /// <summary>
-        ///  These are subclasses of the <see cref="ApplicationContext"/> for which we don't need to call the finalizer,
-        ///  because it's empty. See https://github.com/dotnet/winforms/issues/6858.
-        /// </summary>
-        private static readonly HashSet<Type> s_typesWithEmptyFinalizer = new()
-        {
-            typeof(ApplicationContext),
-            Application.s_typeOfModalApplicationContext
-        };
-
         private Form? _mainForm;
 
         /// <summary>
@@ -42,14 +32,16 @@ namespace System.Windows.Forms
         /// </summary>
         public ApplicationContext(Form? mainForm)
         {
-            if (s_typesWithEmptyFinalizer.Contains(GetType()))
+            //  These are subclasses of the ApplicationContext for which we don't need to call the finalizer,
+            //  because it's empty. See https://github.com/dotnet/winforms/issues/6858.
+            if (GetType() == typeof(ApplicationContext) || GetType() == Application.s_typeOfModalApplicationContext)
                 GC.SuppressFinalize(this);
 
             MainForm = mainForm;
         }
 
         // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
-        // All classes that are not need to be finalized contains in ApplicationContext.s_typesWithEmptyFinalizer collection.
+        // All classes that are not need to be finalized must be checked in ApplicationContext(Form? mainForm) constructor.
         // Consider to modify it if needed.
         ~ApplicationContext() => Dispose(false);
 

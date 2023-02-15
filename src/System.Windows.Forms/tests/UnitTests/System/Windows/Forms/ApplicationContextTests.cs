@@ -379,15 +379,12 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ApplicationContext_Subclasses_SuppressFinalizeCall()
         {
-            TestAccessor<ApplicationContext> testAccessor = new(null);
-            var typesWithEmptyFinalizer = testAccessor.Dynamic.s_typesWithEmptyFinalizer as HashSet<Type>;
-
             foreach (var type in typeof(ApplicationContext).Assembly.GetTypes().
                 Where(type => type == typeof(ApplicationContext) || type.IsSubclassOf(typeof(ApplicationContext))))
             {
-                Assert.True(typesWithEmptyFinalizer.Contains(type),
-                    $"Type {type} is not present in the ApplicationContext.s_typesWithEmptyFinalizer collection. " +
-                    $"Consider adding it or add exclusion to this test (if a new class really needs a finalizer).");
+                Assert.True(type == typeof(ApplicationContext) || type == Application.s_typeOfModalApplicationContext,
+                    $"Type {type} is not one of [{typeof(ApplicationContext)}, {Application.s_typeOfModalApplicationContext}]. " +
+                    $"Consider adding it here and to the ApplicationContext(Form? mainForm) constructor. Or add exclusion to this test (if a new class really needs a finalizer).");
             }
         }
 
