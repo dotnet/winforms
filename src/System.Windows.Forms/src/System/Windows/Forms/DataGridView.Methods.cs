@@ -926,7 +926,7 @@ namespace System.Windows.Forms
                 int imposedWidthSum = 0;        // total width of columns that don't have a flexible width.
                 int requiredWidthSum = 0;       // total of the minimum widths of the visible auto filled columns.
                 float weightSum = 0F;           // total of the weights of the visible auto filled columns.
-                ArrayList autoFillColumns = null;
+                List<DataGridViewColumn> autoFillColumns = null;
                 foreach (DataGridViewColumn dataGridViewColumn in Columns)
                 {
                     if (dataGridViewColumn.Visible)
@@ -937,7 +937,7 @@ namespace System.Windows.Forms
                             numVisibleFillColumns++;
                             requiredWidthSum += dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
                             weightSum += dataGridViewColumn.FillWeight;
-                            autoFillColumns ??= new ArrayList(Columns.Count);
+                            autoFillColumns ??= new(Columns.Count);
 
                             autoFillColumns.Add(dataGridViewColumn);
                         }
@@ -981,7 +981,7 @@ namespace System.Windows.Forms
                         availableWidth = 0;
                         for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                         {
-                            DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                            DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                             int minimumWidth = dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
                             if (dataGridViewColumn.Thickness != minimumWidth)
                             {
@@ -997,7 +997,7 @@ namespace System.Windows.Forms
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
                                 // Make sure the UsedFillWeight correspond to the actual column width
-                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                 dataGridViewColumn.UsedFillWeight = dataGridViewColumn.Width * weightSum / availableWidth;
                             }
 
@@ -1020,7 +1020,7 @@ namespace System.Windows.Forms
                         bool desiredWidthTooSmall = false;
                         for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                         {
-                            DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                            DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                             if (columnEntry == autoFillColumns.Count - 1)
                             {
                                 dataGridViewColumn.DesiredFillWidth = availableWidth - usedWidth;
@@ -1048,7 +1048,7 @@ namespace System.Windows.Forms
                             float weightSumNoneMinimal = weightSum;
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
-                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                 if (dataGridViewColumn.DesiredFillWidth == -1)
                                 {
                                     int minimumWidth = dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
 
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
-                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                 if (dataGridViewColumn.DesiredFillWidth != -1)
                                 {
                                     dataGridViewColumn.UsedFillWeight = dataGridViewColumn.FillWeight * usedWeightSumNoneMinimal / weightSumNoneMinimal;
@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms
                             // Each UsedFillWeight simply equals the FillWeight
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
-                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                 dataGridViewColumn.UsedFillWeight = dataGridViewColumn.FillWeight;
                             }
                         }
@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms
                             // Allocate additional width according to UsedFillWeight and FillWeight values
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
-                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                 dataGridViewColumn.DesiredFillWidth = dataGridViewColumn.Width;
                             }
 
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms
                                 bool minimumColumnExists = false;
                                 for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                                 {
-                                    DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                    DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                     fillWeightRatioSum += dataGridViewColumn.FillWeight / dataGridViewColumn.UsedFillWeight;
                                     if (dataGridViewColumn.DesiredFillWidth <= dataGridViewColumn.MinimumWidth)
                                     {
@@ -1112,7 +1112,7 @@ namespace System.Windows.Forms
 
                                 for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                                 {
-                                    DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                    DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                     if (gain == 0)
                                     {
                                         floatDesiredWidths[columnEntry] = _availableWidthForFillColumns * dataGridViewColumn.UsedFillWeight / weightSum;
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms
 
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
-                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                 dataGridViewColumn.UsedFillWeight = weightSum / availableWidth * floatDesiredWidths[columnEntry];
                             }
                         }
@@ -1142,7 +1142,7 @@ namespace System.Windows.Forms
                             int cumulatedWidthLoss = 0;
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
-                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                 dataGridViewColumn.DesiredFillWidth = dataGridViewColumn.Width;
                             }
 
@@ -1161,7 +1161,7 @@ namespace System.Windows.Forms
                                     DataGridViewColumn mostDeservingDataGridViewColumn = null;
                                     for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                                     {
-                                        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                        DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                         if (dataGridViewColumn.DesiredFillWidth > dataGridViewColumn.MinimumWidth)
                                         {
                                             fillWeightRatio = dataGridViewColumn.UsedFillWeight / dataGridViewColumn.FillWeight;
@@ -1177,9 +1177,9 @@ namespace System.Windows.Forms
                                     if (mostDeservingDataGridViewColumn is not null)
                                     {
                                         float floatDesiredWidth = (stepDownAvailableWidthForFillColumns * mostDeservingDataGridViewColumn.UsedFillWeight / weightSum) - widthLoss * mostDeservingDataGridViewColumn.UsedFillWeight / mostDeservingDataGridViewColumn.FillWeight / fillWeightRatioSum;
-                                        if (floatDesiredWidth < (float)mostDeservingDataGridViewColumn.MinimumWidth)
+                                        if (floatDesiredWidth < mostDeservingDataGridViewColumn.MinimumWidth)
                                         {
-                                            floatDesiredWidth = (int)mostDeservingDataGridViewColumn.MinimumWidth;
+                                            floatDesiredWidth = mostDeservingDataGridViewColumn.MinimumWidth;
                                         }
 
                                         int oldDesiredWidth = mostDeservingDataGridViewColumn.DesiredFillWidth;
@@ -1198,7 +1198,7 @@ namespace System.Windows.Forms
                                             stepDownAvailableWidthForFillColumns -= oldDesiredWidth - mostDeservingDataGridViewColumn.DesiredFillWidth;
                                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                                             {
-                                                DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                                DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                                 dataGridViewColumn.UsedFillWeight = weightSum / stepDownAvailableWidthForFillColumns * dataGridViewColumn.DesiredFillWidth;
                                             }
                                         }
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms
                     float weightSumDbg = 0F;
                     for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                     {
-                        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                        DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                         weightSumDbg += dataGridViewColumn.UsedFillWeight;
                     }
 
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms
                             DataGridViewColumn mostDeservingDataGridViewColumn = null;
                             if (autoFillColumns.Count == 1)
                             {
-                                mostDeservingDataGridViewColumn = (DataGridViewColumn)autoFillColumns[0];
+                                mostDeservingDataGridViewColumn = autoFillColumns[0];
                                 mostDeservingDataGridViewColumn.DesiredFillWidth = Math.Max(availableWidth - usedWidth, mostDeservingDataGridViewColumn.MinimumWidth);
                                 autoFillColumns.Clear();
                             }
@@ -1245,7 +1245,7 @@ namespace System.Windows.Forms
                                 float biggestWeightDiscrepancy = 0F, weightDiscrepancy;
                                 for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                                 {
-                                    DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
+                                    DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                                     weightDiscrepancy = Math.Abs(dataGridViewColumn.UsedFillWeight - dataGridViewColumn.FillWeight) / dataGridViewColumn.FillWeight;
                                     if (weightDiscrepancy > biggestWeightDiscrepancy || mostDeservingDataGridViewColumn is null)
                                     {
