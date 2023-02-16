@@ -109,19 +109,14 @@ namespace System.Windows.Forms
         /// </summary>
         internal override string GetListName()
         {
-            string name = GetListName(new ArrayList());
-            if (name.Length > 0)
-            {
-                return name;
-            }
-
-            return base.GetListName();
+            string name = GetListName(new());
+            return name.Length > 0 ? name : base.GetListName();
         }
 
         /// <summary>
         ///  Gets the name of the specified list.
         /// </summary>
-        protected internal override string GetListName(ArrayList listAccessors)
+        protected internal override string GetListName(List<PropertyDescriptor> listAccessors)
         {
             listAccessors.Insert(0, fieldInfo);
             return parentManager.GetListName(listAccessors);

@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -120,7 +119,7 @@ namespace System.Windows.Forms
         ///  Gets the name of the list supplying the data for the binding.
         /// </summary>
         /// <returns>Always returns an empty string.</returns>
-        protected internal override string GetListName(ArrayList listAccessors) => string.Empty;
+        protected internal override string GetListName(List<PropertyDescriptor> listAccessors) => string.Empty;
 
         /// <summary>
         ///  Cancels the current edit.

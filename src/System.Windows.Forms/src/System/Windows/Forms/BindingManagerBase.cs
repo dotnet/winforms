@@ -224,7 +224,7 @@ namespace System.Windows.Forms
 
         protected abstract void UpdateIsBinding();
 
-        protected internal abstract string GetListName(ArrayList? listAccessors);
+        protected internal abstract string GetListName(List<PropertyDescriptor>? listAccessors);
 
         public abstract void SuspendBinding();
 

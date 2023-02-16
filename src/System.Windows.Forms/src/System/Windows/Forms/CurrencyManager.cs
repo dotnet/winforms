@@ -623,26 +623,19 @@ namespace System.Windows.Forms
         /// </summary>
         internal override string GetListName()
         {
-            if (list is ITypedList)
-            {
-                return ((ITypedList)list).GetListName(null);
-            }
-            else
-            {
-                return finalType.Name;
-            }
+            return list is ITypedList typedList ? typedList.GetListName(null) : finalType.Name;
         }
 
         /// <summary>
         ///  Gets the name of the specified list.
         /// </summary>
-        protected internal override string GetListName(ArrayList listAccessors)
+        protected internal override string GetListName(List<PropertyDescriptor> listAccessors)
         {
-            if (list is ITypedList)
+            if (list is ITypedList typedList)
             {
                 PropertyDescriptor[] properties = new PropertyDescriptor[listAccessors.Count];
                 listAccessors.CopyTo(properties, 0);
-                return ((ITypedList)list).GetListName(properties);
+                return typedList.GetListName(properties);
             }
 
             return "";

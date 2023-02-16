@@ -375,7 +375,6 @@ override System.Windows.Forms.MonthCalendar.ToString() -> string!
 ~override System.Windows.Forms.PropertyGrid.Text.get -> string
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
 ~override System.Windows.Forms.PropertyManager.Current.get -> object
-~override System.Windows.Forms.PropertyManager.GetListName(System.Collections.ArrayList listAccessors) -> string
 ~override System.Windows.Forms.PropertyManager.OnCurrentChanged(System.EventArgs ea) -> void
 ~override System.Windows.Forms.PropertyManager.OnCurrentItemChanged(System.EventArgs ea) -> void
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image
@@ -2254,7 +2253,6 @@ abstract System.Windows.Forms.BindingManagerBase.CancelCurrentEdit() -> void
 abstract System.Windows.Forms.BindingManagerBase.Count.get -> int
 abstract System.Windows.Forms.BindingManagerBase.Current.get -> object!
 abstract System.Windows.Forms.BindingManagerBase.EndCurrentEdit() -> void
-abstract System.Windows.Forms.BindingManagerBase.GetListName(System.Collections.ArrayList? listAccessors) -> string!
 abstract System.Windows.Forms.BindingManagerBase.OnCurrentChanged(System.EventArgs! e) -> void
 abstract System.Windows.Forms.BindingManagerBase.OnCurrentItemChanged(System.EventArgs! e) -> void
 abstract System.Windows.Forms.BindingManagerBase.Position.get -> int

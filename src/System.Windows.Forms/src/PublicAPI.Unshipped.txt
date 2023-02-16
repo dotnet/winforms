@@ -3,6 +3,7 @@ System.Windows.Forms.PrintPreviewControl.TabStop.get -> bool
 System.Windows.Forms.PrintPreviewControl.TabStop.set -> void
 System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
 *REMOVED*override System.Windows.Forms.ToolStripButton.CanSelect.get -> bool
+abstract System.Windows.Forms.BindingManagerBase.GetListName(System.Collections.Generic.List<System.ComponentModel.PropertyDescriptor!>? listAccessors) -> string!
 override System.Windows.Forms.MaskedTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.MaskedTextBox.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.MaskedTextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
@@ -12,3 +13,4 @@ virtual System.Windows.Forms.AxHost.State.Dispose(bool disposing) -> void
 *REMOVED*override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 virtual System.Windows.Forms.NativeWindow.WmDpiChangedAfterParent(ref System.Windows.Forms.Message m) -> void
 virtual System.Windows.Forms.NativeWindow.WmDpiChangedBeforeParent(ref System.Windows.Forms.Message m) -> void
+~override System.Windows.Forms.PropertyManager.GetListName(System.Collections.Generic.List<System.ComponentModel.PropertyDescriptor> listAccessors) -> string
