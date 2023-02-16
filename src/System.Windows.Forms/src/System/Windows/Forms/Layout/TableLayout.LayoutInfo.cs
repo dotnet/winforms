@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.Layout
 {
     internal partial class TableLayout
@@ -57,14 +55,11 @@ namespace System.Windows.Forms.Layout
                 ColumnPosition = ColumnPosition
             };
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
-                if (!(obj is LayoutInfo other))
-                {
-                    return false;
-                }
-
-                return other.RowStart == RowStart
+                return obj is not LayoutInfo other
+                    ? false
+                    : other.RowStart == RowStart
                     && other.ColumnStart == ColumnStart
                     && other.RowSpan == RowSpan
                     && other.ColumnSpan == ColumnSpan

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
     internal class DataGridViewCellLinkedListElement
     {
         private readonly DataGridViewCell dataGridViewCell;
-        private DataGridViewCellLinkedListElement next;
+        private DataGridViewCellLinkedListElement? next;
 
         public DataGridViewCellLinkedListElement(DataGridViewCell dataGridViewCell)
         {
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public DataGridViewCellLinkedListElement Next
+        public DataGridViewCellLinkedListElement? Next
         {
             get
             {

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
@@ -40,40 +38,42 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // Create a new instance of the value and set it into the parent grid entry.
                 object owner = GetValueOwner();
+                object? newObject = null;
                 GridEntry parentEntry = InstanceParentGridEntry;
                 TypeConverter parentConverter = parentEntry.TypeConverter;
 
-                PropertyDescriptorCollection properties = parentConverter.GetProperties(parentEntry, owner);
-                IDictionary values = new Hashtable(properties.Count);
-                object newObject;
+                PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
+                if (properties is not null)
+                {
+                    IDictionary values = new Hashtable(properties.Count);
+                    for (int i = 0; i < properties.Count; i++)
+                    {
+                        if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
+                        {
+                            values[properties[i].Name] = value;
+                        }
+                        else
+                        {
+                            values[properties[i].Name] = properties[i].GetValue(owner);
+                        }
+                    }
 
-                for (int i = 0; i < properties.Count; i++)
-                {
-                    if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
+                    try
                     {
-                        values[properties[i].Name] = value;
+                        newObject = parentConverter.CreateInstance(parentEntry, values);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        values[properties[i].Name] = properties[i].GetValue(owner);
-                    }
-                }
-
-                try
-                {
-                    newObject = parentConverter.CreateInstance(parentEntry, values);
-                }
-                catch (Exception e)
-                {
-                    if (string.IsNullOrEmpty(e.Message))
-                    {
-                        throw new TargetInvocationException(
-                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e.ToString()),
-                            e);
-                    }
-                    else
-                    {
-                        throw; // rethrow the same exception
+                        if (string.IsNullOrEmpty(e.Message))
+                        {
+                            throw new TargetInvocationException(
+                                string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e.ToString()),
+                                e);
+                        }
+                        else
+                        {
+                            throw; // rethrow the same exception
+                        }
                     }
                 }
 

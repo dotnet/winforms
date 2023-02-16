@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -18,7 +16,7 @@ namespace System.Windows.Forms
     {
         private readonly List<DataGridViewRow> _items = new();
 
-        int IList.Add(object value)
+        int IList.Add(object? value)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
@@ -28,16 +26,16 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        bool IList.Contains(object value) => ((IList)_items).Contains(value);
+        bool IList.Contains(object? value) => ((IList)_items).Contains(value);
 
-        int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
+        int IList.IndexOf(object? value) => ((IList)_items).IndexOf(value);
 
-        void IList.Insert(int index, object value)
+        void IList.Insert(int index, object? value)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        void IList.Remove(object value)
+        void IList.Remove(object? value)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
@@ -51,7 +49,7 @@ namespace System.Windows.Forms
 
         bool IList.IsReadOnly => true;
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get { return _items[index]; }
             set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }
