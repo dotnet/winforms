@@ -828,7 +828,7 @@ System.Windows.Forms.BindingNavigator.MovePreviousItem.get -> System.Windows.For
 System.Windows.Forms.BindingNavigator.MovePreviousItem.set -> void
 System.Windows.Forms.BindingNavigator.PositionItem.get -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.BindingNavigator.PositionItem.set -> void
-~System.Windows.Forms.BindingsCollection.this[int index].get -> System.Windows.Forms.Binding
+System.Windows.Forms.BindingsCollection.this[int index].get -> System.Windows.Forms.Binding!
 ~System.Windows.Forms.BindingSource.BindingSource(object dataSource, string dataMember) -> void
 ~System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer container) -> void
 ~System.Windows.Forms.BindingSource.Current.get -> object
@@ -5305,8 +5305,8 @@ System.Windows.Forms.BindingNavigator.EndInit() -> void
 System.Windows.Forms.BindingNavigator.RefreshItems -> System.EventHandler?
 System.Windows.Forms.BindingNavigator.Validate() -> bool
 System.Windows.Forms.BindingsCollection
-System.Windows.Forms.BindingsCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler
-System.Windows.Forms.BindingsCollection.CollectionChanging -> System.ComponentModel.CollectionChangeEventHandler
+System.Windows.Forms.BindingsCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
+System.Windows.Forms.BindingsCollection.CollectionChanging -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.BindingSource
 System.Windows.Forms.BindingSource.AddingNew -> System.ComponentModel.AddingNewEventHandler
 System.Windows.Forms.BindingSource.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler
