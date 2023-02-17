@@ -880,11 +880,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControlControlCollection_Add_NullValue_ThrowsNullReferenceException()
+        public void TabControlControlCollection_Add_NullValue_ThrowsArgumentNullException()
         {
             using var owner = new TabControl();
             var collection = new TabControl.ControlCollection(owner);
-            Assert.Throws<NullReferenceException>(() => collection.Add(null));
+            Assert.Throws<ArgumentNullException>(() => collection.Add(null));
         }
 
         [WinFormsFact]

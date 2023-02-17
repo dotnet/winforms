@@ -16,34 +16,19 @@ namespace System.Windows.Forms
     {
         private readonly List<DataGridViewRow> _items = new();
 
-        int IList.Add(object? value)
-        {
-            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
-        }
+        int IList.Add(object? value) => throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
 
-        void IList.Clear()
-        {
-            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
-        }
+        void IList.Clear() => throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
 
         bool IList.Contains(object? value) => ((IList)_items).Contains(value);
 
         int IList.IndexOf(object? value) => ((IList)_items).IndexOf(value);
 
-        void IList.Insert(int index, object? value)
-        {
-            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
-        }
+        void IList.Insert(int index, object? value) => throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
 
-        void IList.Remove(object? value)
-        {
-            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
-        }
+        void IList.Remove(object? value) => throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
 
-        void IList.RemoveAt(int index)
-        {
-            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
-        }
+        void IList.RemoveAt(int index) => throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
 
         bool IList.IsFixedSize => true;
 
@@ -79,10 +64,7 @@ namespace System.Windows.Forms
         internal int Add(DataGridViewRow dataGridViewRow) => ((IList)_items).Add(dataGridViewRow);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Clear()
-        {
-            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
-        }
+        public void Clear() => throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
 
         /// <summary>
         ///  Checks to see if a DataGridViewCell is contained in this collection.
@@ -92,9 +74,6 @@ namespace System.Windows.Forms
         public void CopyTo(DataGridViewRow[] array, int index) => _items.CopyTo(array, index);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Insert(int index, DataGridViewRow dataGridViewRow)
-        {
-            throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
-        }
+        public void Insert(int index, DataGridViewRow dataGridViewRow) => throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
     }
 }

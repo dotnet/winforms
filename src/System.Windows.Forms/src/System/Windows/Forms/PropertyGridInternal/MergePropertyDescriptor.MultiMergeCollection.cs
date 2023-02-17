@@ -10,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private class MultiMergeCollection : ICollection
         {
-            private object[]? _items;
+            private object?[]? _items;
 
             public MultiMergeCollection(ICollection original)
             {
@@ -65,12 +65,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                object[] newItems = new object[collection.Count];
+                object?[] newItems = new object?[collection.Count];
                 collection.CopyTo(newItems, 0);
                 for (int i = 0; i < newItems.Length; i++)
                 {
                     if (((newItems[i] is null) != (_items[i] is null)) ||
-                        (_items[i] is not null && !_items[i].Equals(newItems[i])))
+                        (_items[i] is object item && !item.Equals(newItems[i])))
                     {
                         _items = Array.Empty<object>();
                         return false;

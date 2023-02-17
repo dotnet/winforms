@@ -19,12 +19,12 @@ namespace System.Windows.Forms
 
             public override void Add(Control? value)
             {
-                if (value is not TabPage)
+                value.OrThrowIfNull(nameof(value));
+
+                if (value is not TabPage tabPage)
                 {
                     throw new ArgumentException(string.Format(SR.TabControlInvalidTabPageType, value?.GetType().Name));
                 }
-
-                TabPage tabPage = (TabPage)value;
 
                 // See InsertingItem property
                 if (!_owner.InsertingItem)
