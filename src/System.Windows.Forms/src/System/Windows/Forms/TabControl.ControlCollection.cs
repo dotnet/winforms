@@ -67,12 +67,12 @@ namespace System.Windows.Forms
             public override void Remove(Control? value)
             {
                 base.Remove(value);
-                if (value is not TabPage)
+                if (value is not TabPage tabPage)
                 {
                     return;
                 }
 
-                int index = _owner.FindTabPage((TabPage)value);
+                int index = _owner.FindTabPage(tabPage);
                 int curSelectedIndex = _owner.SelectedIndex;
                 if (index != -1)
                 {
