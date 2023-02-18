@@ -302,10 +302,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool IsFormatProviderDefault
         {
-            get
-            {
-                return Properties.GetObject(PropFormatProvider) is null;
-            }
+            get => !Properties.ContainsObjectThatIsNotNull(PropFormatProvider);
         }
 
         [Browsable(false)]
@@ -687,7 +684,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeFont()
         {
-            return Properties.GetObject(PropFont) is not null;
+            return Properties.ContainsObjectThatIsNotNull(PropFont);
         }
 
         private bool ShouldSerializeForeColor()
@@ -698,7 +695,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeFormatProvider()
         {
-            return Properties.GetObject(PropFormatProvider) is not null;
+            return Properties.ContainsObjectThatIsNotNull(PropFormatProvider);
         }
 
         private bool ShouldSerializePadding()
