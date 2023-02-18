@@ -2256,15 +2256,13 @@ namespace System.Windows.Forms
         private void ApplyUpdateCachedItems()
         {
             // first check if there is a delayed update array
-            List<ListViewItem>? newItems = (List<ListViewItem>?)Properties.GetObject(PropDelayedUpdateItems);
-            if (newItems is not null)
+            if (Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? newItems))
             {
                 // if there is, clear it and push the items in.
                 Properties.SetObject(PropDelayedUpdateItems, null);
-                ListViewItem[] items = newItems.ToArray();
-                if (items.Length > 0)
+                if (newItems.Count > 0)
                 {
-                    InsertItems(_itemCount, items, false /*checkHosting*/);
+                    InsertItems(_itemCount, newItems.ToArray(), checkHosting: false);
                 }
             }
         }
@@ -4096,7 +4094,7 @@ namespace System.Windows.Forms
 
             // if we're in the middle of a Begin/EndUpdate, just push the items into our array list
             // as they'll get processed on EndUpdate.
-            if (_updateCounter > 0 && Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
+            if (_updateCounter > 0 && Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? itemList))
             {
                 // CheckHosting.
                 if (checkHosting)
@@ -4110,7 +4108,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-                List<ListViewItem>? itemList = (List<ListViewItem>?)Properties.GetObject(PropDelayedUpdateItems);
                 Debug.Assert(itemList is not null, "In Begin/EndUpdate with no delayed array!");
                 itemList?.AddRange(items);
 
