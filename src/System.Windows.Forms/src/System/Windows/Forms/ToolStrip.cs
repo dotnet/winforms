@@ -2679,7 +2679,7 @@ namespace System.Windows.Forms
 
         internal void InvalidateTextItems()
         {
-            using (new LayoutTransaction(this, this, "ShowKeyboardFocusCues", /*PerformLayout=*/Visible))
+            using (new LayoutTransaction(this, this, "ShowKeyboardFocusCues", resumeLayout: Visible))
             {
                 for (int j = 0; j < DisplayedItems.Count; j++)
                 {
@@ -2881,11 +2881,11 @@ namespace System.Windows.Forms
                     bool handled = false;
                     if ((keyData & Keys.Shift) == Keys.None)
                     {
-                        handled = ToolStripManager.SelectNextToolStrip(this, /*forward*/true);
+                        handled = ToolStripManager.SelectNextToolStrip(this, forward: true);
                     }
                     else
                     {
-                        handled = ToolStripManager.SelectNextToolStrip(this, /*forward*/false);
+                        handled = ToolStripManager.SelectNextToolStrip(this, forward: false);
                     }
 
                     if (handled)
@@ -2955,11 +2955,11 @@ namespace System.Windows.Forms
                     retVal = ProcessArrowKey(keyCode);
                     break;
                 case Keys.Home:
-                    SelectNextToolStripItem(null, /*forward =*/ true);
+                    SelectNextToolStripItem(null, forward: true);
                     retVal = true;
                     break;
                 case Keys.End:
-                    SelectNextToolStripItem(null, /*forward =*/ false);
+                    SelectNextToolStripItem(null, forward: false);
                     retVal = true;
                     break;
                 case Keys.Escape: // escape and menu key should restore focus
