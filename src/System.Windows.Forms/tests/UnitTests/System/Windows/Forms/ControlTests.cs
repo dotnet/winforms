@@ -1090,6 +1090,37 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsFact]
+        public void Control_OnCreateControl_Triggered_Once_Expected()
+        {
+            // regression test for https://github.com/dotnet/winforms/issues/8495 and https://github.com/dotnet/winforms/issues/8489
+            // In both issues CreateControl method was not exiting early when the control was already created
+            // causing various unexpected behavior. This test ensures that a control does not try to go through
+            // CreateControl more than expected.
+            using Form form = new();
+            using OnCreateControlCounter control = new();
+            form.Controls.Add(control);
+            form.Shown += (s, e) => { form.Close(); };
+
+            form.ShowDialog();
+
+            // Calling show on the form will cause the control to be created and trigger OnCreateControl. Once
+            // the control is created, another show message will dispatch, which should cause CreateControl method to
+            // exit early, avoiding another trigger to OnCreateControl.
+            Assert.Equal(1, control.OnCreateControlCount);
+        }
+
+        private class OnCreateControlCounter : Control
+        {
+            public int OnCreateControlCount { get; set; }
+
+            protected override void OnCreateControl()
+            {
+                base.OnCreateControl();
+                OnCreateControlCount++;
+            }
+        }
+
         private class SubControl : Control
         {
             public SubControl() : base()
