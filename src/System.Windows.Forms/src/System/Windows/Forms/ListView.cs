@@ -2393,7 +2393,7 @@ namespace System.Windows.Forms
 
             // if this is the first BeginUpdate call, push an ArrayList into the PropertyStore so
             // we can cache up any items that have been added while this is active.
-            if (_updateCounter++ == 0 && Properties.GetObject(PropDelayedUpdateItems) is null)
+            if (_updateCounter++ == 0 && !Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
             {
                 Properties.SetObject(PropDelayedUpdateItems, new ArrayList());
             }
@@ -3222,7 +3222,7 @@ namespace System.Windows.Forms
         {
             // On the final EndUpdate, check to see if we've got any cached items.
             // If we do, insert them as normal, then turn off the painting freeze.
-            if (--_updateCounter == 0 && Properties.GetObject(PropDelayedUpdateItems) is not null)
+            if (--_updateCounter == 0 && Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
             {
                 ApplyUpdateCachedItems();
             }
@@ -4097,7 +4097,7 @@ namespace System.Windows.Forms
 
             // if we're in the middle of a Begin/EndUpdate, just push the items into our array list
             // as they'll get processed on EndUpdate.
-            if (_updateCounter > 0 && Properties.GetObject(PropDelayedUpdateItems) is not null)
+            if (_updateCounter > 0 && Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
             {
                 // CheckHosting.
                 if (checkHosting)

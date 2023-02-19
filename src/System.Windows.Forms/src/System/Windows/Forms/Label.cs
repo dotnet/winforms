@@ -1460,7 +1460,7 @@ namespace System.Windows.Forms
 
         private void ResetImage() => Image = null;
 
-        private bool ShouldSerializeImage() => Properties.GetObject(s_propImage) is not null;
+        private bool ShouldSerializeImage() => Properties.ContainsObjectThatIsNotNull(s_propImage);
 
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.

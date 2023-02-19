@@ -912,7 +912,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDefaultHeaderCellType()
         {
-            return Properties.GetObject(s_propDefaultHeaderCellType) is not null;
+            return Properties.ContainsObjectThatIsNotNull(s_propDefaultHeaderCellType);
         }
 
         // internal because DataGridViewColumn needs to access it

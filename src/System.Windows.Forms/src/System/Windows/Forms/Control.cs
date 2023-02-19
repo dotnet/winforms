@@ -4556,7 +4556,7 @@ namespace System.Windows.Forms
                     OnRightToLeftChanged(EventArgs.Empty);
                 }
 
-                if (Properties.GetObject(s_bindingManagerProperty) is null && Created)
+                if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty) && Created)
                 {
                     // We do not want to call our parent's BindingContext property here.
                     // We have no idea if us or any of our children are using data binding,
@@ -4905,7 +4905,7 @@ namespace System.Windows.Forms
             bool controlIsAlreadyCreated = Created;
             CreateControl(false);
 
-            if (Properties.GetObject(s_bindingManagerProperty) is null && ParentInternal is not null && !controlIsAlreadyCreated)
+            if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty) && ParentInternal is not null && !controlIsAlreadyCreated)
             {
                 // We do not want to call our parent's BindingContext property here.
                 // We have no idea if us or any of our children are using data binding,
@@ -6608,7 +6608,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsFontSet()
         {
-            if (Properties.GetObject(s_fontProperty) is not null)
+            if (Properties.ContainsObjectThatIsNotNull(s_fontProperty))
             {
                 return true;
             }
@@ -7139,7 +7139,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_bindingsProperty) is not null)
+            if (Properties.ContainsObjectThatIsNotNull(s_bindingsProperty))
             {
                 UpdateBindings();
             }
@@ -7427,7 +7427,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_bindingManagerProperty) is null)
+            if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty))
             {
                 OnBindingContextChanged(e);
             }
@@ -7436,7 +7436,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_cursorProperty) is null)
+            if (!Properties.ContainsObjectThatIsNotNull(s_cursorProperty))
             {
                 OnCursorChanged(e);
             }
@@ -11162,8 +11162,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor()
         {
-            object? cursor = Properties.GetObject(s_cursorProperty, out bool found);
-            return (found && cursor is not null);
+            return Properties.ContainsObjectThatIsNotNull(s_cursorProperty);
         }
 
         /// <summary>
@@ -11191,8 +11190,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            object? font = Properties.GetObject(s_fontProperty, out bool found);
-            return (found && font is not null);
+            return Properties.ContainsObjectThatIsNotNull(s_fontProperty);
         }
 
         /// <summary>

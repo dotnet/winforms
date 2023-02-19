@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms.Layout
 
         private static bool HasCachedBounds(IArrangedElement container)
         {
-            return container is not null && container.Properties.GetObject(s_cachedBoundsProperty) is not null;
+            return container is not null && container.Properties.ContainsObjectThatIsNotNull(s_cachedBoundsProperty);
         }
 
         private static void ApplyCachedBounds(IArrangedElement container)

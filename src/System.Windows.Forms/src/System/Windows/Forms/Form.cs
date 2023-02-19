@@ -1115,10 +1115,7 @@ namespace System.Windows.Forms
         [MemberNotNullWhen(true, nameof(MdiParentInternal))]
         public bool IsMdiChild
         {
-            get
-            {
-                return Properties.GetObject(PropFormMdiParent) is not null;
-            }
+            get => Properties.ContainsObjectThatIsNotNull(PropFormMdiParent);
         }
 
         // Deactivates active MDI child and temporarily marks it as unfocusable,
@@ -6406,7 +6403,7 @@ namespace System.Windows.Forms
         private void WmMdiActivate(ref Message m)
         {
             base.WndProc(ref m);
-            Debug.Assert(Properties.GetObject(PropFormMdiParent) is not null, "how is formMdiParent null?");
+            Debug.Assert(Properties.ContainsObjectThatIsNotNull(PropFormMdiParent), "how is formMdiParent null?");
             Debug.Assert(IsHandleCreated, "how is handle 0?");
 
             Form? formMdiParent = (Form?)Properties.GetObject(PropFormMdiParent);
