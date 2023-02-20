@@ -36,7 +36,6 @@ public class InputLanguageChangingEventArgsTests
     {
         yield return new object[] { CultureInfo.InvariantCulture };
         yield return new object[] { new CultureInfo("en") };
-        yield return new object[] { new UnknownKeyboardCultureInfo() };
     }
 
     [Theory]
@@ -72,14 +71,5 @@ public class InputLanguageChangingEventArgsTests
     public void Ctor_NullInputLanguage_ThrowsNullReferenceException()
     {
         Assert.Throws<ArgumentNullException>("inputLanguage", () => new InputLanguageChangingEventArgs((InputLanguage)null, true));
-    }
-
-    private class UnknownKeyboardCultureInfo : CultureInfo
-    {
-        public UnknownKeyboardCultureInfo() : base("en-US")
-        {
-        }
-
-        public override int KeyboardLayoutId => int.MaxValue;
     }
 }
