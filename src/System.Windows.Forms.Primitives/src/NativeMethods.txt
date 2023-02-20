@@ -505,6 +505,7 @@ RegisterClass
 RegisterClipboardFormat
 RegisterDragDrop
 RegisterWindowMessage
+RegLoadMUIString
 ReleaseCapture
 ReleaseStgMedium
 RestoreDC
@@ -578,7 +579,6 @@ SHGetSpecialFolderLocation
 ShowCaret
 ShowCursor
 SHGetSpecialFolderLocation
-SHLoadIndirectString
 ShowWindow
 SHParseDisplayName
 SIATTRIBFLAGS

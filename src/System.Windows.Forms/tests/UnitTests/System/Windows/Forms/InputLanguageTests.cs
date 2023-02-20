@@ -4,10 +4,12 @@
 
 using System.Globalization;
 using System.Reflection;
+using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
 // NB: doesn't require thread affinity
+[UseDefaultXunitCulture(SetUnmanagedUiThreadCulture = true)]
 public class InputLanguageTests
 {
     [Fact]
@@ -110,20 +112,43 @@ public class InputLanguageTests
         Assert.Equal(language.GetHashCode(), language.GetHashCode());
     }
 
-    public static IEnumerable<object[]> GetKeyboardLayoutNameForHKL_TestData()
+    public static IEnumerable<object[]> InputLanguageLayoutId_TestData()
     {
-        yield return new object[] { unchecked((nint)0x0000000000000409), "00000409" }; // US
-        yield return new object[] { unchecked((nint)0x0000000004090409), "00000409" }; // US
-        yield return new object[] { unchecked((nint)0x00000000040c0409), "0000040c" }; // French
-        yield return new object[] { unchecked((nint)0xfffffffff0200409), "00011009" }; // Canadian Multilingual Standard
-        yield return new object[] { unchecked((nint)0xfffffffff0b42400), "000c0c00" }; // Gothic
+        yield return new object[] { 0x0409, 0x0000, "en-US", "00000409", "US" };
+        yield return new object[] { 0x0409, 0x0409, "en-US", "00000409", "US" };
+        yield return new object[] { 0x0409, 0x040c, "en-US", "0000040C", "French" };
+        yield return new object[] { 0x0409, 0xf020, "en-US", "00011009", "Canadian Multilingual Standard" };
+        yield return new object[] { 0x0c0c, 0x1009, "fr-CA", "00001009", "Canadian French" };
+        yield return new object[] { 0x0c0c, 0xf020, "fr-CA", "00011009", "Canadian Multilingual Standard" };
     }
 
     [Theory]
-    [MemberData(nameof(GetKeyboardLayoutNameForHKL_TestData))]
-    public void InputLanguage_GetKeyboardLayoutNameForHKL_Invoke_ReturnsExpected(IntPtr handle, string keyboardName)
+    [MemberData(nameof(InputLanguageLayoutId_TestData))]
+    public void InputLanguage_InputLanguageLayoutId_Expected(int langId, int device, string languageTag, string layoutId, string layoutName)
     {
-        Assert.Equal(keyboardName, InputLanguage.GetKeyboardLayoutNameForHKL(handle));
+        var language = new InputLanguage(PARAM.FromLowHigh(langId, device));
+        Assert.Equal(languageTag, language.Culture.Name);
+        Assert.Equal(layoutId, language.LayoutId);
+        Assert.Equal(layoutName, language.LayoutName);
+        VerifyInputLanguage(language);
+    }
+
+    [Theory]
+    [InlineData(0x0000, 0x0409)]
+    [InlineData(0xffff, 0x0409)]
+    public void InputLanguage_Culture_ThrowsArgumentException(int langId, int device)
+    {
+        var language = new InputLanguage(PARAM.FromLowHigh(langId, device));
+        Assert.ThrowsAny<ArgumentException>(() => language.Culture);
+    }
+
+    [Theory]
+    [InlineData(0x0409, 0xf000)]
+    [InlineData(0x0409, 0xffff)]
+    public void InputLanguage_LayoutName_UnknownExpected(int langId, int device)
+    {
+        var language = new InputLanguage(PARAM.FromLowHigh(langId, device));
+        Assert.Equal(SR.UnknownInputLanguageLayout, language.LayoutName);
     }
 
     private static void VerifyInputLanguage(InputLanguage language)
@@ -132,6 +157,7 @@ public class InputLanguageTests
         Assert.NotNull(language.Culture);
         Assert.NotNull(language.LayoutName);
         Assert.NotEmpty(language.LayoutName);
+        Assert.NotEqual(SR.UnknownInputLanguageLayout, language.LayoutName);
         Assert.DoesNotContain('\0', language.LayoutName);
     }
 

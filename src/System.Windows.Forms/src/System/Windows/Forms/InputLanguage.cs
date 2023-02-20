@@ -17,7 +17,7 @@ public sealed class InputLanguage
     /// <summary>
     ///  The HKL handle.
     /// </summary>
-    private readonly IntPtr _handle;
+    private readonly nint _handle;
 
     internal InputLanguage(IntPtr handle)
     {
@@ -94,7 +94,7 @@ public sealed class InputLanguage
         }
     }
 
-    private static string KeyboardLayoutsRegistryPath => @"SYSTEM\CurrentControlSet\Control\Keyboard Layouts";
+    private static string s_keyboardLayoutsRegistryPath => @"SYSTEM\CurrentControlSet\Control\Keyboard Layouts";
 
     /// <summary>
     ///  Returns the name of the current keyboard layout as it appears in the Windows
@@ -104,100 +104,80 @@ public sealed class InputLanguage
     {
         get
         {
-            // There is no good way to do this in Windows. GetKeyboardLayoutName does what we want, but only for the
-            // current input language; setting and resetting the current input language would generate spurious
-            // InputLanguageChanged events.
-            // Try to extract needed information manually.
-            string layoutName = GetKeyboardLayoutNameForHKL(_handle);
-
             // https://learn.microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
-            using RegistryKey? key = Registry.LocalMachine.OpenSubKey($@"{KeyboardLayoutsRegistryPath}\{layoutName}");
-            if (key is not null)
-            {
-                // Localizable string resource associated with the keyboard layout
-                if (key.GetValue("Layout Display Name") is string layoutDisplayName &&
-                    SHLoadIndirectString(ref layoutDisplayName))
-                {
-                    return layoutDisplayName;
-                }
-
-                // Fallback to human-readable name for backward compatibility
-                if (key.GetValue("Layout Text") is string layoutText)
-                {
-                    return layoutText;
-                }
-            }
-
-            return SR.UnknownInputLanguageLayout;
+            using RegistryKey? key = Registry.LocalMachine.OpenSubKey($@"{s_keyboardLayoutsRegistryPath}\{LayoutId}");
+            return key.GetMUIString("Layout Display Name", "Layout Text") ?? SR.UnknownInputLanguageLayout;
         }
     }
 
     /// <summary>
-    /// Returns the keyboard layout name for the provided <see cref="HKL"/> handle.
+    /// Returns the <see href="https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutnamew">
+    /// keyboard layout identifier</see> of the current input language.
     /// </summary>
-    /// <param name="hkl">The <see cref="HKL"/> input locale identifier representing the input language.</param>
-    /// <returns>
-    /// <c>KLID</c> (Keyboard layout ID) string in the same format as in <see
-    /// href="https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutnamew">GetKeyboardLayoutName</see>
-    /// (8 hex chars with leading zeros when needed).
-    /// </returns>
-    /// <seealso href="https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-language-pack-default-values">
+    /// <seealso
+    /// href="https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-language-pack-default-values">
     /// Keyboard identifiers and input method editors for Windows</seealso>
-    internal static string GetKeyboardLayoutNameForHKL(IntPtr hkl)
+    internal string LayoutId
     {
-        // According to the GetKeyboardLayout API function docs low word of HKL contains input language.
-        int language = PARAM.LOWORD(hkl);
-
-        // High word of HKL contains a device handle to the physical layout of the keyboard but exact format of this
-        // handle is not documented. For older keyboard layouts device handle seems contains keyboard layout
-        // language which we can use as KLID.
-        int device = PARAM.HIWORD(hkl);
-
-        // But for newer keyboard layouts device handle contains layout id if its high nibble is 0xF. This id may be
-        // used to search for keyboard layout under registry.
-        // NOTE: this logic may break in future versions of Windows since it is not documented.
-        if ((device & 0xF000) == 0xF000)
+        get
         {
-            // Extract layout id from the device handle
-            int layoutId = device & 0x0FFF;
+            // There is no good way to do this in Windows. GetKeyboardLayoutName does what we want, but only for the
+            // current input language; setting and resetting the current input language would generate spurious
+            // InputLanguageChanged events. Try to extract needed information manually.
 
-            using RegistryKey? key = Registry.LocalMachine.OpenSubKey(KeyboardLayoutsRegistryPath);
-            if (key is not null)
+            // High word of HKL contains a device handle to the physical layout of the keyboard but exact format of this
+            // handle is not documented. For older keyboard layouts device handle seems contains keyboard layout
+            // identifier.
+            int device = PARAM.HIWORD(_handle);
+
+            // But for newer keyboard layouts device handle contains special layout id if its high nibble is 0xF. This
+            // id may be used to search for keyboard layout under registry.
+            //
+            // NOTE: this logic may break in future versions of Windows since it is not documented.
+            if ((device & 0xF000) == 0xF000)
             {
-                // Match keyboard layout by layout id
-                foreach (string subKeyName in key.GetSubKeyNames())
+                // Extract special layout id from the device handle
+                int layoutId = device & 0x0FFF;
+
+                using RegistryKey? key = Registry.LocalMachine.OpenSubKey(s_keyboardLayoutsRegistryPath);
+                if (key is not null)
                 {
-                    using RegistryKey? subKey = key.OpenSubKey(subKeyName);
-                    if (subKey is null)
+                    // Match keyboard layout by layout id
+                    foreach (string subKeyName in key.GetSubKeyNames())
                     {
-                        continue;
-                    }
+                        using RegistryKey? subKey = key.OpenSubKey(subKeyName);
+                        if (subKey is null)
+                        {
+                            continue;
+                        }
 
-                    if (subKey.GetValue("Layout Id") is not string subKeyLayoutId)
-                    {
-                        continue;
-                    }
+                        if (subKey.GetValue("Layout Id") is not string subKeyLayoutId)
+                        {
+                            continue;
+                        }
 
-                    if (layoutId == Convert.ToInt32(subKeyLayoutId, 16))
-                    {
-                        Debug.Assert(subKeyName.Length == 8, $"unexpected key length in registry: {subKey.Name}");
-                        return subKeyName;
+                        if (layoutId == Convert.ToInt32(subKeyLayoutId, 16))
+                        {
+                            Debug.Assert(subKeyName.Length == 8, $"unexpected key length in registry: {subKey.Name}");
+                            return subKeyName.ToUpperInvariant();
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            // Keyboard layout language overrides input language, if available. This is crucial in cases when
-            // keyboard is installed more than once or under different languages. For example when French keyboard
-            // is installed under US input language we need to return French keyboard name.
-            if (device != 0)
+            else
             {
-                language = device;
+                // Use input language only if keyboard layout language is not available. This is crucial in cases when
+                // keyboard is installed more than once or under different languages. For example when French keyboard
+                // is installed under US input language we need to return French keyboard identifier.
+                if (device == 0)
+                {
+                    // According to the GetKeyboardLayout API function docs low word of HKL contains input language.
+                    device = PARAM.LOWORD(_handle);
+                }
             }
-        }
 
-        return language.ToString("x8");
+            return device.ToString("X8");
+        }
     }
 
     /// <summary>
@@ -251,21 +231,5 @@ public sealed class InputLanguage
     /// <summary>
     ///  Hash code for this input language.
     /// </summary>
-    public override int GetHashCode() => unchecked((int)(long)_handle);
-
-    internal static unsafe bool SHLoadIndirectString(ref string source)
-    {
-        var ppvReserved = (void*)IntPtr.Zero;
-        Span<char> buffer = stackalloc char[512];
-        fixed (char* pBuffer = buffer)
-        {
-            if (PInvoke.SHLoadIndirectString(source, pBuffer, (uint)buffer.Length, ref ppvReserved) == HRESULT.S_OK)
-            {
-                source = buffer.SliceAtFirstNull().ToString();
-                return true;
-            }
-        }
-
-        return false;
-    }
+    public override int GetHashCode() => (int)_handle;
 }
