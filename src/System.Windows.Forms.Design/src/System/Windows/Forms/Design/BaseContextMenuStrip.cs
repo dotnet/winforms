@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -80,7 +79,7 @@ namespace System.Windows.Forms.Design
                 Items.Remove(selectionMenuItem);
             }
 
-            ArrayList parentControls = new ArrayList();
+            List<IComponent> parentControls = new();
             int nParentControls = 0;
 
             // Get the currently selected Control
@@ -127,9 +126,9 @@ namespace System.Windows.Forms.Design
                     selectionMenuItem.DropDown.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
                     //Set the right Font
                     selectionMenuItem.DropDown.Font = (Font)uis.Styles["DialogFont"];
-                    if (uis.Styles["VsColorPanelText"] is Color)
+                    if (uis.Styles["VsColorPanelText"] is Color color)
                     {
-                        selectionMenuItem.DropDown.ForeColor = (Color)uis.Styles["VsColorPanelText"];
+                        selectionMenuItem.DropDown.ForeColor = color;
                     }
                 }
 
