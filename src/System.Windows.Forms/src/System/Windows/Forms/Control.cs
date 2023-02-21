@@ -4927,7 +4927,7 @@ namespace System.Windows.Forms
         {
             // Unless specified otherwise, only "create" the control if it is visible for performance. This has the
             // effect of delayed handle creation of hidden controls.
-            if (!ignoreVisible && !GetState(States.Created) && !Visible)
+            if (!ignoreVisible && (GetState(States.Created) || !Visible))
             {
                 return;
             }
