@@ -122,23 +122,17 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                ArrayList sitedChildren = null;
-                foreach (Control c in Control.Controls)
+                List<IComponent> sitedChildren = null;
+                foreach (Control control in Control.Controls)
                 {
-                    if (c.Site is not null)
+                    if (control.Site is not null)
                     {
-                        sitedChildren ??= new ArrayList();
-
-                        sitedChildren.Add(c);
+                        sitedChildren ??= new();
+                        sitedChildren.Add(control);
                     }
                 }
 
-                if (sitedChildren is not null)
-                {
-                    return sitedChildren;
-                }
-
-                return base.AssociatedComponents;
+                return sitedChildren ?? base.AssociatedComponents;
             }
         }
 
@@ -1430,7 +1424,7 @@ namespace System.Windows.Forms.Design
             if (BehaviorService is not null && selectionService is not null)
             {
                 // create our list of controls-to-drag
-                ArrayList dragControls = new ArrayList();
+                List<IComponent> dragControls = new();
                 ICollection selComps = selectionService.GetSelectedComponents();
 
                 // must identify a required parent to avoid dragging mixes of children
