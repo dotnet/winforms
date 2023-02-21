@@ -2256,7 +2256,7 @@ namespace System.Windows.Forms
         private void ApplyUpdateCachedItems()
         {
             // first check if there is a delayed update array
-            if (Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? newItems))
+            if (Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? newItems) && newItems is not null)
             {
                 // if there is, clear it and push the items in.
                 Properties.SetObject(PropDelayedUpdateItems, null);
@@ -4094,7 +4094,7 @@ namespace System.Windows.Forms
 
             // if we're in the middle of a Begin/EndUpdate, just push the items into our array list
             // as they'll get processed on EndUpdate.
-            if (_updateCounter > 0 && Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? itemList))
+            if (_updateCounter > 0 && Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? itemList) && itemList is not null)
             {
                 // CheckHosting.
                 if (checkHosting)
