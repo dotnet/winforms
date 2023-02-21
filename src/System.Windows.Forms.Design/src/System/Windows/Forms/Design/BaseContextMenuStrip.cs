@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Design
                 Items.Remove(selectionMenuItem);
             }
 
-            List<IComponent> parentControls = new();
+            List<Component> parentControls = new();
             int nParentControls = 0;
 
             // Get the currently selected Control

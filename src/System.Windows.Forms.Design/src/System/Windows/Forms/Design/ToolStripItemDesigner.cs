@@ -248,9 +248,9 @@ namespace System.Windows.Forms.Design
         ///  Base ContextMenu provider. This way the ToolStripItem can show the right parents in
         ///  the contextMenu.
         /// </summary>
-        internal List<IComponent> AddParentTree()
+        internal List<Component> AddParentTree()
         {
-            List<IComponent> parentControls = new();
+            List<Component> parentControls = new();
             if (!TryGetService(out IDesignerHost designerHost))
             {
                 return parentControls;
