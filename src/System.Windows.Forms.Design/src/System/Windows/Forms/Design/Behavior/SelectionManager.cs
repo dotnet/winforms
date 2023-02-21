@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Adorner _bodyAdorner;                       //used to track all body glyphs for each control
         private BehaviorService _behaviorService;           //ptr back to our BehaviorService
         private IServiceProvider _serviceProvider;          //standard service provider
-        private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    //used for quick look up of designers related to comps
+        private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    //used for quick look up of designers related to components
         private readonly Control _rootComponent;            //root component being designed
         private ISelectionService _selSvc;                  //we cache the selection service for perf.
         private IDesignerHost _designerHost;                //we cache the designerhost for perf.
@@ -65,8 +65,8 @@ namespace System.Windows.Forms.Design.Behavior
             _selectionAdorner = new Adorner();
             _bodyAdorner = new Adorner();
             behaviorService.Adorners.Add(_bodyAdorner);
-            behaviorService.Adorners.Add(_selectionAdorner); //adding this will cause the adorner to get setup with a ptr
-                                                             //to the beh.svc.
+            behaviorService.Adorners.Add(_selectionAdorner); // adding this will cause the adorner to get setup with a ptr
+                                                             // to the beh.svc.
 
             _componentToDesigner = new();
 
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void AddControlGlyphs(Control control, GlyphSelectionType selType)
         {
-            if (_componentToDesigner.TryGetValue(control, out ControlDesigner controlDesigner))
+            if (_componentToDesigner.TryGetValue(control, out ControlDesigner controlDesigner) && controlDesigner is not null)
             {
                 ControlBodyGlyph bodyGlyph = controlDesigner.GetControlGlyphInternal(selType);
                 if (bodyGlyph is not null)
