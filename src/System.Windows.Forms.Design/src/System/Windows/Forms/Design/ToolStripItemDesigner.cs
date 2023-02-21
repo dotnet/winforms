@@ -244,13 +244,13 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This method adds the Parent Hierarchy to arraylist and returns that arraylist to the
+        ///  This method adds the Parent Hierarchy to a list and returns that list to the
         ///  Base ContextMenu provider. This way the ToolStripItem can show the right parents in
         ///  the contextMenu.
         /// </summary>
-        internal ArrayList AddParentTree()
+        internal List<Component> AddParentTree()
         {
-            ArrayList parentControls = new ArrayList();
+            List<Component> parentControls = new();
             if (!TryGetService(out IDesignerHost designerHost))
             {
                 return parentControls;
