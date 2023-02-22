@@ -1005,10 +1005,10 @@ namespace System.Windows.Forms.Design.Behavior
             cleanedUpDrag = false;
         }
 
-        internal ArrayList GetSortedDragControls(ref int primaryControlIndex)
+        internal List<IComponent> GetSortedDragControls(ref int primaryControlIndex)
         {
             //create our list of controls-to-drag
-            ArrayList dragControls = new ArrayList();
+            List<IComponent> dragControls = new();
             primaryControlIndex = -1;
             if ((dragComponents is not null) && (dragComponents.Length > 0))
             {

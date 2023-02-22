@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  This method fist calls the recursive AddControlGlyphs() method. When finished, we add the final glyph(s)
         ///  to the root comp.
         /// </summary>
-        private void AddAllControlGlyphs(Control parent, ArrayList selComps, object primarySelection)
+        private void AddAllControlGlyphs(Control parent, List<IComponent> selComps, object primarySelection)
         {
             foreach (Control control in parent.Controls)
             {
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _selectionAdorner.Glyphs.Clear();
                 _bodyAdorner.Glyphs.Clear();
 
-                ArrayList selComps = new ArrayList(_selSvc.GetSelectedComponents());
+                List<IComponent> selComps = _selSvc.GetSelectedComponents().Cast<IComponent>().ToList();
                 object primarySelection = _selSvc.PrimarySelection;
 
                 //add all control glyphs to all controls on rootComp
