@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
-using System.Collections;
 using System.Diagnostics;
 using System.Resources;
 
@@ -32,7 +29,7 @@ namespace System.ComponentModel.Design.Serialization
     internal class LocalizationCodeDomSerializer : CodeDomSerializer
     {
         private readonly CodeDomLocalizationModel _model;
-        private readonly CodeDomSerializer _currentSerializer;
+        private readonly CodeDomSerializer? _currentSerializer;
 
         /// <summary>
         ///  Only we can create an instance of this. Everyone else accesses it though
@@ -51,31 +48,25 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private static bool EmitApplyMethod(IDesignerSerializationManager manager, object owner)
         {
-            ApplyMethodTable table = (ApplyMethodTable)manager.Context[typeof(ApplyMethodTable)];
+            ApplyMethodTable? table = (ApplyMethodTable?)manager.Context[typeof(ApplyMethodTable)];
 
             if (table is null)
             {
-                table = new ApplyMethodTable();
+                table = new();
                 manager.Context.Append(table);
             }
 
-            if (!table.Contains(owner))
-            {
-                table.Add(owner);
-                return true;
-            }
-
-            return false;
+            return table.Add(owner);
         }
 
         /// <summary>
         ///  Serializes the given object into a CodeDom object.  This uses the stock
         ///  resource serialization scheme and retains the expression it provides.
         /// </summary>
-        public override object Serialize(IDesignerSerializationManager manager, object value)
+        public override object? Serialize(IDesignerSerializationManager manager, object value)
         {
-            PropertyDescriptor desc = (PropertyDescriptor)manager.Context[typeof(PropertyDescriptor)];
-            ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
+            PropertyDescriptor? descriptor = (PropertyDescriptor?)manager.Context[typeof(PropertyDescriptor)];
+            ExpressionContext? tree = (ExpressionContext?)manager.Context[typeof(ExpressionContext)];
             bool isSerializable = (value is not null) ? GetReflectionTypeHelper(manager, value).IsSerializable : true;
 
             // If value is not serializable, we have no option but to call the original serializer,
@@ -85,7 +76,7 @@ namespace System.ComponentModel.Design.Serialization
             // Compat: If we are serializing content, we need to skip property reflection to preserve compatibility,
             //         since tools like WinRes expect items in collections (like TreeNodes and ListViewItems)
             //         to be serialized as binary blobs.
-            bool serializingContent = (desc is not null && desc.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content));
+            bool serializingContent = (descriptor is not null && descriptor.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content));
 
             // We also skip back to the original serializer if there is a preset value for this object.
             if (!callExistingSerializer)
@@ -99,17 +90,17 @@ namespace System.ComponentModel.Design.Serialization
                 // the object we are serializing against and inject an "ApplyResources" method
                 // against the object and its name.  If any of this machinery fails we will
                 // just return the existing expression which will default to the original behavior.
-                CodeStatementCollection statements = (CodeStatementCollection)manager.Context[typeof(CodeStatementCollection)];
+                CodeStatementCollection? statements = (CodeStatementCollection?)manager.Context[typeof(CodeStatementCollection)];
 
                 // In the case of extender properties, we don't want to serialize using the property
                 // reflecting model.  In this case we'll skip it and fall through to the
                 // property assignment model.
                 bool skipPropertyReflect = false;
 
-                if (desc is not null)
+                if (descriptor is not null)
                 {
-                    var attr = desc.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
-                    if (attr is not null && attr.ExtenderProperty is not null)
+                    var attribute = descriptor.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
+                    if (attribute is not null && attribute.ExtenderProperty is not null)
                     {
                         skipPropertyReflect = true;
                     }
@@ -117,14 +108,14 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (!skipPropertyReflect && tree is not null && statements is not null)
                 {
-                    string name = manager.GetName(tree.Owner);
+                    string? name = manager.GetName(tree.Owner);
                     CodeExpression ownerExpression = SerializeToExpression(manager, tree.Owner);
 
                     if (name is not null && ownerExpression is not null)
                     {
-                        RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
+                        RootContext? rootContext = manager.Context[typeof(RootContext)] as RootContext;
 
-                        if (rootCtx is not null && rootCtx.Value == tree.Owner)
+                        if (rootContext is not null && rootContext.Value == tree.Owner)
                         {
                             name = "$this";
                         }
@@ -135,31 +126,29 @@ namespace System.ComponentModel.Design.Serialization
 
                         if (EmitApplyMethod(manager, tree.Owner))
                         {
-                            ResourceManager rm = manager.Context[typeof(ResourceManager)] as ResourceManager;
-                            Debug.Assert(rm is not null, "No resource manager available in context.");
-                            CodeExpression rmExpression = GetExpression(manager, rm);
+                            ResourceManager? resourceManager = manager.Context[typeof(ResourceManager)] as ResourceManager;
+                            Debug.Assert(resourceManager is not null, "No resource manager available in context.");
+                            CodeExpression rmExpression = GetExpression(manager, resourceManager);
                             Debug.Assert(rmExpression is not null, "No expression available for resource manager.");
 
                             CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(rmExpression, "ApplyResources");
-                            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
-
-                            methodInvoke.Method = methodRef;
+                            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+                            {
+                                Method = methodRef
+                            };
                             methodInvoke.Parameters.Add(ownerExpression);
                             methodInvoke.Parameters.Add(new CodePrimitiveExpression(name));
                             statements.Add(methodInvoke);
                         }
 
-                        return null;    // we have already worked our statements into the tree.
+                        return null; // we have already worked our statements into the tree.
                     }
                 }
             }
 
-            if (callExistingSerializer)
-            {
-                return _currentSerializer.Serialize(manager, value);
-            }
-
-            return SerializeToResourceExpression(manager, value);
+            return callExistingSerializer
+                ? _currentSerializer?.Serialize(manager, value)
+                : SerializeToResourceExpression(manager, value);
         }
 
         /// <summary>
@@ -167,11 +156,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private class ApplyMethodTable
         {
-            private readonly Hashtable _table = new Hashtable();
+            private readonly HashSet<object> _table = new();
 
-            internal bool Contains(object value) => _table.ContainsKey(value);
-
-            internal void Add(object value) => _table.Add(value, value);
+            internal bool Add(object value) => _table.Add(value);
         }
     }
 }
