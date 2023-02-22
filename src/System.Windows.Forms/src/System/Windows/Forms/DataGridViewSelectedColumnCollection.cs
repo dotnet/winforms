@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
     {
         private readonly List<DataGridViewColumn> _items = new();
 
-        int IList.Add(object value)
+        int IList.Add(object? value)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
@@ -24,16 +22,16 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        bool IList.Contains(object value) => ((IList)_items).Contains(value);
+        bool IList.Contains(object? value) => ((IList)_items).Contains(value);
 
-        int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
+        int IList.IndexOf(object? value) => ((IList)_items).IndexOf(value);
 
-        void IList.Insert(int index, object value)
+        void IList.Insert(int index, object? value)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        void IList.Remove(object value)
+        void IList.Remove(object? value)
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
@@ -47,7 +45,7 @@ namespace System.Windows.Forms
 
         bool IList.IsReadOnly => true;
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get { return _items[index]; }
             set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }
@@ -69,13 +67,7 @@ namespace System.Windows.Forms
 
         protected override ArrayList List => ArrayList.Adapter(_items);
 
-        public DataGridViewColumn this[int index]
-        {
-            get
-            {
-                return _items[index];
-            }
-        }
+        public DataGridViewColumn this[int index] => _items[index];
 
         /// <summary>
         ///  Adds a <see cref="DataGridViewCell"/> to this collection.

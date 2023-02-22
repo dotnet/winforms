@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -12,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private class MultiMergeCollection : ICollection
         {
-            private object[] _items;
+            private object?[]? _items;
 
             public MultiMergeCollection(ICollection original)
             {
@@ -61,18 +59,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return true;
                 }
 
-                if (_items.Length != collection.Count)
+                if (_items is null || _items.Length != collection.Count)
                 {
                     _items = Array.Empty<object>();
                     return false;
                 }
 
-                object[] newItems = new object[collection.Count];
+                object?[] newItems = new object?[collection.Count];
                 collection.CopyTo(newItems, 0);
                 for (int i = 0; i < newItems.Length; i++)
                 {
                     if (((newItems[i] is null) != (_items[i] is null)) ||
-                        (_items[i] is not null && !_items[i].Equals(newItems[i])))
+                        (_items[i] is object item && !item.Equals(newItems[i])))
                     {
                         _items = Array.Empty<object>();
                         return false;

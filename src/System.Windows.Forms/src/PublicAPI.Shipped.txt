@@ -289,9 +289,9 @@ override System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Equal
 ~override System.Windows.Forms.DataGridViewTextBoxCell.PositionEditingControl(bool setLocation, bool setSize, System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> void
 ~override System.Windows.Forms.DataGridViewTextBoxCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewTextBoxCell.ValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewTextBoxColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell!
+override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewTextBoxColumn.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -323,8 +323,8 @@ override System.Windows.Forms.LinkLabel.OnTextChanged(System.EventArgs! e) -> vo
 override System.Windows.Forms.LinkLabel.Text.get -> string!
 override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
-~override System.Windows.Forms.MdiClient.ControlCollection.Add(System.Windows.Forms.Control value) -> void
-~override System.Windows.Forms.MdiClient.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
+override System.Windows.Forms.MdiClient.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
+override System.Windows.Forms.MdiClient.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
 override System.Windows.Forms.MenuStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
 override System.Windows.Forms.MonthCalendar.BackgroundImage.get -> System.Drawing.Image?
@@ -399,8 +399,8 @@ override System.Windows.Forms.StatusStrip.OnLayout(System.Windows.Forms.LayoutEv
 override System.Windows.Forms.StatusStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.TabControl.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TabControl.BackgroundImage.set -> void
-~override System.Windows.Forms.TabControl.ControlCollection.Add(System.Windows.Forms.Control value) -> void
-~override System.Windows.Forms.TabControl.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
+override System.Windows.Forms.TabControl.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
+override System.Windows.Forms.TabControl.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
 ~override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.TabControl.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.TabControl.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -695,9 +695,9 @@ static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? o
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
-~System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
-~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
-~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
+System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler! newHandler) -> void
+System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! propDesc) -> System.Drawing.Design.PropertyValueUIItem![]!
+System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler! newHandler) -> void
 System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image! uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler! handler, string? tooltip) -> void
 System.Resources.ResXDataNode.Comment.get -> string!
 System.Resources.ResXDataNode.Comment.set -> void
@@ -1064,29 +1064,29 @@ System.Windows.Forms.DataGridView.DataGridViewControlCollection.Insert(int index
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell[] array, int index) -> void
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridViewSelectedColumnCollection.Contains(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> bool
-~System.Windows.Forms.DataGridViewSelectedColumnCollection.CopyTo(System.Windows.Forms.DataGridViewColumn[] array, int index) -> void
-~System.Windows.Forms.DataGridViewSelectedColumnCollection.Insert(int index, System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> void
-~System.Windows.Forms.DataGridViewSelectedColumnCollection.this[int index].get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewSelectedRowCollection.Contains(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> bool
-~System.Windows.Forms.DataGridViewSelectedRowCollection.CopyTo(System.Windows.Forms.DataGridViewRow[] array, int index) -> void
-~System.Windows.Forms.DataGridViewSelectedRowCollection.Insert(int index, System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~System.Windows.Forms.DataGridViewSelectedRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow
+System.Windows.Forms.DataGridViewSelectedColumnCollection.Contains(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> bool
+System.Windows.Forms.DataGridViewSelectedColumnCollection.CopyTo(System.Windows.Forms.DataGridViewColumn![]! array, int index) -> void
+System.Windows.Forms.DataGridViewSelectedColumnCollection.Insert(int index, System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> void
+System.Windows.Forms.DataGridViewSelectedColumnCollection.this[int index].get -> System.Windows.Forms.DataGridViewColumn!
+System.Windows.Forms.DataGridViewSelectedRowCollection.Contains(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> bool
+System.Windows.Forms.DataGridViewSelectedRowCollection.CopyTo(System.Windows.Forms.DataGridViewRow![]! array, int index) -> void
+System.Windows.Forms.DataGridViewSelectedRowCollection.Insert(int index, System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> void
+System.Windows.Forms.DataGridViewSelectedRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow!
 System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue1.get -> object!
 System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object!
 System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn!
 System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn, object! cellValue1, object! cellValue2, int rowIndex1, int rowIndex2) -> void
-~System.Windows.Forms.Design.IUIService.CanShowComponentEditor(object component) -> bool
-~System.Windows.Forms.Design.IUIService.GetDialogOwnerWindow() -> System.Windows.Forms.IWin32Window
-~System.Windows.Forms.Design.IUIService.ShowComponentEditor(object component, System.Windows.Forms.IWin32Window parent) -> bool
-~System.Windows.Forms.Design.IUIService.ShowDialog(System.Windows.Forms.Form form) -> System.Windows.Forms.DialogResult
-~System.Windows.Forms.Design.IUIService.ShowError(string message) -> void
-~System.Windows.Forms.Design.IUIService.ShowError(System.Exception ex) -> void
-~System.Windows.Forms.Design.IUIService.ShowError(System.Exception ex, string message) -> void
-~System.Windows.Forms.Design.IUIService.ShowMessage(string message) -> void
-~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption) -> void
-~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
-~System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary
+System.Windows.Forms.Design.IUIService.CanShowComponentEditor(object! component) -> bool
+System.Windows.Forms.Design.IUIService.GetDialogOwnerWindow() -> System.Windows.Forms.IWin32Window!
+System.Windows.Forms.Design.IUIService.ShowComponentEditor(object! component, System.Windows.Forms.IWin32Window! parent) -> bool
+System.Windows.Forms.Design.IUIService.ShowDialog(System.Windows.Forms.Form! form) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Design.IUIService.ShowError(string! message) -> void
+System.Windows.Forms.Design.IUIService.ShowError(System.Exception! ex) -> void
+System.Windows.Forms.Design.IUIService.ShowError(System.Exception! ex, string! message) -> void
+System.Windows.Forms.Design.IUIService.ShowMessage(string! message) -> void
+System.Windows.Forms.Design.IUIService.ShowMessage(string! message, string! caption) -> void
+System.Windows.Forms.Design.IUIService.ShowMessage(string! message, string! caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary!
 System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object? newDataSource, string? newDataMember) -> void
 System.Windows.Forms.ErrorProvider.CanExtend(object? extendee) -> bool
 System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl?
@@ -1290,7 +1290,7 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.ListViewItem.Text.set -> void
 ~System.Windows.Forms.ListViewItem.ToolTipText.get -> string
 ~System.Windows.Forms.ListViewItem.ToolTipText.set -> void
-~System.Windows.Forms.MdiClient.ControlCollection.ControlCollection(System.Windows.Forms.MdiClient owner) -> void
+System.Windows.Forms.MdiClient.ControlCollection.ControlCollection(System.Windows.Forms.MdiClient! owner) -> void
 System.Windows.Forms.MenuStrip.MdiWindowListItem.get -> System.Windows.Forms.ToolStripMenuItem?
 System.Windows.Forms.MenuStrip.MdiWindowListItem.set -> void
 System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.get -> System.DateTime[]!
@@ -1360,7 +1360,7 @@ System.Windows.Forms.PropertyGrid.PropertyTabCollection.this[int index].get -> S
 ~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
-~System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windows.Forms.TabControl owner) -> void
+System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windows.Forms.TabControl! owner) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(string tabPageName) -> void
 ~System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage tabPage) -> void
 ~System.Windows.Forms.TabControl.GetControl(int index) -> System.Windows.Forms.Control
@@ -4857,7 +4857,7 @@ static System.Windows.Forms.WindowsFormsSynchronizationContext.AutoInstall.set -
 static System.Windows.Forms.WindowsFormsSynchronizationContext.Uninstall() -> void
 System.Drawing.Design.IPropertyValueUIService
 System.Drawing.Design.IPropertyValueUIService.NotifyPropertyValueUIItemsChanged() -> void
-System.Drawing.Design.IPropertyValueUIService.PropertyUIValueItemsChanged -> System.EventHandler
+System.Drawing.Design.IPropertyValueUIService.PropertyUIValueItemsChanged -> System.EventHandler?
 System.Drawing.Design.PaintValueEventArgs
 System.Drawing.Design.PaintValueEventArgs.Bounds.get -> System.Drawing.Rectangle
 System.Drawing.Design.PaintValueEventArgs.Context.get -> System.ComponentModel.ITypeDescriptorContext?

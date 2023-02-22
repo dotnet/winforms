@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Drawing.Design
@@ -16,7 +14,7 @@ namespace System.Drawing.Design
         ///  <summary>
         ///  Adds or removes an <see cref="EventHandler"/> that will be invoked when the global list of <see cref="PropertyValueUIItem"/> is modified.
         ///  </summary>
-        event EventHandler PropertyUIValueItemsChanged;
+        event EventHandler? PropertyUIValueItemsChanged;
 
         /// <summary>
         ///  Adds the specified <see cref="PropertyValueUIHandler" /> to this service.
