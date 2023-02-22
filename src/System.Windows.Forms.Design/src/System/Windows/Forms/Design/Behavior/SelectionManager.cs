@@ -281,17 +281,13 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnBeginDrag(object source, BehaviorDragDropEventArgs e)
         {
-            ArrayList dragComps = new ArrayList(e.DragComponents);
-            ArrayList glyphsToRemove = new ArrayList();
+            List<IComponent> dragComps = e.DragComponents.Cast<IComponent>().ToList();
+            List<Glyph> glyphsToRemove = new();
             foreach (ControlBodyGlyph g in _bodyAdorner.Glyphs)
             {
-                if (g.RelatedComponent is Control)
+                if (g.RelatedComponent is Control control && (dragComps.Contains(g.RelatedComponent) || !control.AllowDrop))
                 {
-                    if (dragComps.Contains(g.RelatedComponent) ||
-                        !((Control)g.RelatedComponent).AllowDrop)
-                    {
-                        glyphsToRemove.Add(g);
-                    }
+                    glyphsToRemove.Add(g);
                 }
             }
 
@@ -330,7 +326,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            _componentToDesigner.Remove(ce.Component);
+                _componentToDesigner.Remove(ce.Component);
 
             //remove the associated designeractionpanel
             _designerActionUI?.RemoveActionGlyph(ce.Component);
