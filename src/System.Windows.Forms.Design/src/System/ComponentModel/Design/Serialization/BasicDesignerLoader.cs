@@ -200,7 +200,7 @@ namespace System.ComponentModel.Design.Serialization
             //
             // StartTimingMark();
             bool successful = true;
-            ArrayList localErrorList = null;
+            List<object> localErrorList = null;
             IDesignerLoaderService ls = GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
 
             try
@@ -224,8 +224,7 @@ namespace System.ComponentModel.Design.Serialization
                     e = e.InnerException;
                 }
 
-                localErrorList = new ArrayList();
-                localErrorList.Add(e);
+                localErrorList = new() { e };
                 successful = false;
             }
 

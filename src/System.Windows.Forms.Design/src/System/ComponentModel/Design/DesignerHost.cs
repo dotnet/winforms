@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design
         private readonly Dictionary<IComponent, IDesigner> _designers;  // designer -> component mapping
         private readonly EventHandlerList _events; // event list
         private DesignerLoader _loader; // the loader that loads our designers
-        private List<string> _savedSelection; // set of selected components saved across reloads
+        private List<string> _savedSelection; // set of selected components names saved across reloads
         private HostDesigntimeLicenseContext _licenseCtx;
         private IDesignerEventService _designerEventService;
         private static readonly object s_selfLock = new object();
@@ -1184,13 +1184,13 @@ namespace System.ComponentModel.Design
             // If the loader indicated success, but it never created a component, that is an error.
             if (successful && _rootComponent is null)
             {
-                List<object> errorList = new();
-                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                errorCollection = new List<object>()
                 {
-                    HelpLink = SR.DesignerHostNoBaseClass
+                    new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                    {
+                        HelpLink = SR.DesignerHostNoBaseClass
+                    }
                 };
-                errorList.Add(ex);
-                errorCollection = errorList;
                 successful = false;
             }
 
@@ -1229,7 +1229,7 @@ namespace System.ComponentModel.Design
                         _state[s_stateLoading] = true;
                         Unload();
 
-                        errorCollection ??= new List<object>();
+                        errorCollection = errorCollection is null ? new List<object>() : errorCollection.Cast<object>().ToList();
                         if (errorCollection is List<object> errorList)
                         {
                             errorList.Insert(0, ex);
