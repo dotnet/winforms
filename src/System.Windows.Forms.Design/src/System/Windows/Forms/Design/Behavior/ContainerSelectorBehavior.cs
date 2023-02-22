@@ -207,7 +207,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             //must identify a required parent to avoid dragging mixes of children
             Control requiredParent = _containerControl.Parent;
-            ArrayList dragControls = new ArrayList();
+            List<IComponent> dragControls = new();
             ICollection selComps = selSvc.GetSelectedComponents();
             //create our list of controls-to-drag
             foreach (IComponent comp in selComps)

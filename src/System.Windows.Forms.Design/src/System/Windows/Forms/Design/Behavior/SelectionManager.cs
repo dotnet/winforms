@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -126,7 +125,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  This method fist calls the recursive AddControlGlyphs() method. When finished, we add the final glyph(s)
         ///  to the root comp.
         /// </summary>
-        private void AddAllControlGlyphs(Control parent, ArrayList selComps, object primarySelection)
+        private void AddAllControlGlyphs(Control parent, List<IComponent> selComps, object primarySelection)
         {
             foreach (Control control in parent.Controls)
             {
@@ -281,17 +280,13 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnBeginDrag(object source, BehaviorDragDropEventArgs e)
         {
-            ArrayList dragComps = new ArrayList(e.DragComponents);
-            ArrayList glyphsToRemove = new ArrayList();
+            List<IComponent> dragComps = e.DragComponents.Cast<IComponent>().ToList();
+            List<Glyph> glyphsToRemove = new();
             foreach (ControlBodyGlyph g in _bodyAdorner.Glyphs)
             {
-                if (g.RelatedComponent is Control)
+                if (g.RelatedComponent is Control control && (dragComps.Contains(g.RelatedComponent) || !control.AllowDrop))
                 {
-                    if (dragComps.Contains(g.RelatedComponent) ||
-                        !((Control)g.RelatedComponent).AllowDrop)
-                    {
-                        glyphsToRemove.Add(g);
-                    }
+                    glyphsToRemove.Add(g);
                 }
             }
 
@@ -330,7 +325,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            _componentToDesigner.Remove(ce.Component);
+                _componentToDesigner.Remove(ce.Component);
 
             //remove the associated designeractionpanel
             _designerActionUI?.RemoveActionGlyph(ce.Component);
@@ -440,7 +435,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _selectionAdorner.Glyphs.Clear();
                 _bodyAdorner.Glyphs.Clear();
 
-                ArrayList selComps = new ArrayList(_selSvc.GetSelectedComponents());
+                List<IComponent> selComps = _selSvc.GetSelectedComponents().Cast<IComponent>().ToList();
                 object primarySelection = _selSvc.PrimarySelection;
 
                 //add all control glyphs to all controls on rootComp

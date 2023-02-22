@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             internal void CleanupDrag() => _sourceBehavior.CleanupDrag();
 
-            internal ArrayList GetSortedDragControls(ref int primaryControlIndex) => _sourceBehavior.GetSortedDragControls(ref primaryControlIndex);
+            internal List<IComponent> GetSortedDragControls(ref int primaryControlIndex) => _sourceBehavior.GetSortedDragControls(ref primaryControlIndex);
         }
     }
 }
