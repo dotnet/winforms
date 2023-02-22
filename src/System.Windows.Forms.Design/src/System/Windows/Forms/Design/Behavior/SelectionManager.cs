@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Adorner _bodyAdorner;                       //used to track all body glyphs for each control
         private BehaviorService _behaviorService;           //ptr back to our BehaviorService
         private IServiceProvider _serviceProvider;          //standard service provider
-        private readonly Hashtable _componentToDesigner;    //used for quick look up of designers related to comps
+        private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    //used for quick look up of designers related to components
         private readonly Control _rootComponent;            //root component being designed
         private ISelectionService _selSvc;                  //we cache the selection service for perf.
         private IDesignerHost _designerHost;                //we cache the designerhost for perf.
@@ -65,10 +65,10 @@ namespace System.Windows.Forms.Design.Behavior
             _selectionAdorner = new Adorner();
             _bodyAdorner = new Adorner();
             behaviorService.Adorners.Add(_bodyAdorner);
-            behaviorService.Adorners.Add(_selectionAdorner); //adding this will cause the adorner to get setup with a ptr
-                                                            //to the beh.svc.
+            behaviorService.Adorners.Add(_selectionAdorner); // adding this will cause the adorner to get setup with a ptr
+                                                             // to the beh.svc.
 
-            _componentToDesigner = new Hashtable();
+            _componentToDesigner = new();
 
             IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
             if (cs is not null)
@@ -152,12 +152,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  Recursive method that goes through and adds all the glyphs of every child to our global Adorner.
         /// </summary>
-        private void AddControlGlyphs(Control c, GlyphSelectionType selType)
+        private void AddControlGlyphs(Control control, GlyphSelectionType selType)
         {
-            ControlDesigner cd = (ControlDesigner)_componentToDesigner[c];
-            if (cd is not null)
+            if (_componentToDesigner.TryGetValue(control, out ControlDesigner controlDesigner) && controlDesigner is not null)
             {
-                ControlBodyGlyph bodyGlyph = cd.GetControlGlyphInternal(selType);
+                ControlBodyGlyph bodyGlyph = controlDesigner.GetControlGlyphInternal(selType);
                 if (bodyGlyph is not null)
                 {
                     _bodyAdorner.Glyphs.Add(bodyGlyph);
@@ -175,7 +174,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                GlyphCollection glyphs = cd.GetGlyphs(selType);
+                GlyphCollection glyphs = controlDesigner.GetGlyphs(selType);
                 if (glyphs is not null)
                 {
                     _selectionAdorner.Glyphs.AddRange(glyphs);
@@ -271,9 +270,9 @@ namespace System.Windows.Forms.Design.Behavior
         {
             IComponent component = ce.Component;
             IDesigner designer = _designerHost.GetDesigner(component);
-            if (designer is ControlDesigner)
+            if (designer is ControlDesigner controlDesigner)
             {
-                _componentToDesigner.Add(component, designer);
+                _componentToDesigner.Add(component, controlDesigner);
             }
         }
 
@@ -331,10 +330,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            if (_componentToDesigner.Contains(ce.Component))
-            {
-                _componentToDesigner.Remove(ce.Component);
-            }
+            _componentToDesigner.Remove(ce.Component);
 
             //remove the associated designeractionpanel
             _designerActionUI?.RemoveActionGlyph(ce.Component);
