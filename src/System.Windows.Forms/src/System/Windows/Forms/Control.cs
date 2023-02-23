@@ -365,7 +365,7 @@ namespace System.Windows.Forms
 #if DEBUG
             if (s_assertOnControlCreateSwitch.Enabled)
             {
-                Debug.Assert(GetType().BaseType != typeof(Control), "Direct derivative of Control Created: " + GetType().FullName);
+                Debug.Assert(GetType().BaseType != typeof(Control), $"Direct derivative of Control Created: {GetType().FullName}");
                 Debug.Assert(GetType() != typeof(Control), "Control Created!");
             }
 #endif
