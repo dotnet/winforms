@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
             private static int s_template;
             private bool _displayNameSet;
 
-            public CfCodeToolboxItem(object serializationData) : base()
+            public CfCodeToolboxItem(object? serializationData) : base()
             {
                 _serializationData = serializationData;
             }
