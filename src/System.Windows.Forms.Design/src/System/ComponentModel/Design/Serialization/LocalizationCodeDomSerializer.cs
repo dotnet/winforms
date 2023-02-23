@@ -99,7 +99,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (descriptor is not null)
                 {
-                    var attribute = descriptor.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
+                    ExtenderProvidedPropertyAttribute? attribute = descriptor.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
                     if (attribute is not null && attribute.ExtenderProperty is not null)
                     {
                         skipPropertyReflect = true;
@@ -109,7 +109,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (!skipPropertyReflect && tree is not null && statements is not null)
                 {
                     string? name = manager.GetName(tree.Owner);
-                    CodeExpression ownerExpression = SerializeToExpression(manager, tree.Owner);
+                    CodeExpression? ownerExpression = SerializeToExpression(manager, tree.Owner);
 
                     if (name is not null && ownerExpression is not null)
                     {
@@ -128,13 +128,12 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             ResourceManager? resourceManager = manager.Context[typeof(ResourceManager)] as ResourceManager;
                             Debug.Assert(resourceManager is not null, "No resource manager available in context.");
-                            CodeExpression rmExpression = GetExpression(manager, resourceManager);
+                            CodeExpression? rmExpression = GetExpression(manager, resourceManager);
                             Debug.Assert(rmExpression is not null, "No expression available for resource manager.");
 
-                            CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(rmExpression, "ApplyResources");
-                            CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
+                            CodeMethodInvokeExpression methodInvoke = new()
                             {
-                                Method = methodRef
+                                Method = new CodeMethodReferenceExpression(rmExpression, "ApplyResources")
                             };
                             methodInvoke.Parameters.Add(ownerExpression);
                             methodInvoke.Parameters.Add(new CodePrimitiveExpression(name));
