@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -20,13 +18,13 @@ namespace System.Windows.Forms.Design
         [Serializable] // designer related
         internal class CfCodeToolboxItem : ToolboxItem
         {
-            private object _serializationData;
+            private object? _serializationData;
             private static int s_template;
             private bool _displayNameSet;
 
-            public CfCodeToolboxItem(object serializationData) : base()
+            public CfCodeToolboxItem(object? serializationData) : base()
             {
-                this._serializationData = serializationData;
+                _serializationData = serializationData;
             }
 
             private CfCodeToolboxItem(SerializationInfo info, StreamingContext context)
@@ -76,64 +74,50 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            protected override IComponent[] CreateComponentsCore(IDesignerHost host, IDictionary defaultValues)
+            protected override IComponent[]? CreateComponentsCore(IDesignerHost host, IDictionary? defaultValues)
             {
-                IDesignerSerializationService ds = (IDesignerSerializationService)host.GetService(typeof(IDesignerSerializationService));
-                if (ds is null)
+                IDesignerSerializationService? ds = host.GetService<IDesignerSerializationService>();
+                if (ds is null || _serializationData is null)
                 {
                     return null;
                 }
 
                 // Deserialize to components collection
-                //
                 ICollection objects = ds.Deserialize(_serializationData);
-                ArrayList components = new ArrayList();
-                foreach (object obj in objects)
+                List<IComponent> components = new();
+                foreach (object item in objects)
                 {
-                    if (obj is not null && obj is IComponent)
+                    if (item is not null and IComponent component)
                     {
-                        components.Add(obj);
+                        components.Add(component);
                     }
                 }
 
-                IComponent[] componentsArray = new IComponent[components.Count];
-                components.CopyTo(componentsArray, 0);
-
                 // Parent and locate each Control
-                //
-                defaultValues ??= new Hashtable();
-                Control parentControl = defaultValues["Parent"] as Control;
+                defaultValues ??= new Dictionary<string, object>();
+                Control? parentControl = defaultValues["Parent"] as Control;
                 if (parentControl is not null)
                 {
-                    ParentControlDesigner parentControlDesigner = host.GetDesigner(parentControl) as ParentControlDesigner;
+                    ParentControlDesigner? parentControlDesigner = host.GetDesigner(parentControl) as ParentControlDesigner;
                     if (parentControlDesigner is not null)
                     {
                         // Determine bounds of all controls
-                        //
                         Rectangle bounds = Rectangle.Empty;
 
-                        foreach (IComponent component in componentsArray)
+                        foreach (IComponent component in components)
                         {
-                            Control childControl = component as Control;
-
+                            Control? childControl = component as Control;
                             if (childControl is not null && childControl != parentControl && childControl.Parent is null)
                             {
-                                if (bounds.IsEmpty)
-                                {
-                                    bounds = childControl.Bounds;
-                                }
-                                else
-                                {
-                                    bounds = Rectangle.Union(bounds, childControl.Bounds);
-                                }
+                                bounds = bounds.IsEmpty ? childControl.Bounds : Rectangle.Union(bounds, childControl.Bounds);
                             }
                         }
 
-                        defaultValues.Remove("Size");    // don't care about the drag size
-                        foreach (IComponent component in componentsArray)
+                        defaultValues.Remove("Size"); // don't care about the drag size
+                        foreach (IComponent component in components)
                         {
-                            Control childControl = component as Control;
-                            Form form = childControl as Form;
+                            Control? childControl = component as Control;
+                            Form? form = childControl as Form;
                             if (childControl is not null
                                 && !(form is not null && form.TopLevel) // Don't add top-level forms
                                 && childControl.Parent is null)
@@ -149,20 +133,18 @@ namespace System.Windows.Forms.Design
                 // an old location stored in them, so they may show up on top of other items.
                 // So we need to call UpdatePastePositions for each one to get the tray to
                 // arrange them properly.
-                //
-                ComponentTray tray = (ComponentTray)host.GetService(typeof(ComponentTray));
-                List<Control> trayComponents = null;
+                ComponentTray? tray = host.GetService<ComponentTray>();
+                List<Control>? trayComponents = null;
                 if (tray is not null)
                 {
-                    foreach (IComponent component in componentsArray)
+                    foreach (IComponent component in components)
                     {
-                        ComponentTray.TrayControl c = ComponentTray.GetTrayControlFromComponent(component);
+                        ComponentTray.TrayControl trayControl = ComponentTray.GetTrayControlFromComponent(component);
 
-                        if (c is not null)
+                        if (trayControl is not null)
                         {
                             trayComponents ??= new();
-
-                            trayComponents.Add(c);
+                            trayComponents.Add(trayControl);
                         }
                     }
 
@@ -172,13 +154,10 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                return componentsArray;
+                return components.ToArray();
             }
 
-            protected override IComponent[] CreateComponentsCore(IDesignerHost host)
-            {
-                return CreateComponentsCore(host, null);
-            }
+            protected override IComponent[]? CreateComponentsCore(IDesignerHost host) => CreateComponentsCore(host, null);
         }
     }
 }
