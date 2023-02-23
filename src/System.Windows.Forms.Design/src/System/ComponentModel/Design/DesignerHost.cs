@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design
         private readonly Dictionary<IComponent, IDesigner> _designers;  // designer -> component mapping
         private readonly EventHandlerList _events; // event list
         private DesignerLoader _loader; // the loader that loads our designers
-        private ICollection _savedSelection; // set of selected components saved across reloads
+        private List<string> _savedSelection; // set of selected components names saved across reloads
         private HostDesigntimeLicenseContext _licenseCtx;
         private IDesignerEventService _designerEventService;
         private static readonly object s_selfLock = new object();
@@ -1162,7 +1162,10 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This is called by the designer loader to indicate that the load has  terminated.  If there were errors, they should be passed in the errorCollection as a collection of exceptions (if they are not exceptions the designer loader host may just call ToString on them).  If the load was successful then errorCollection should either be null or contain an empty collection.
+        ///  This is called by the designer loader to indicate that the load has terminated.
+        ///  If there were errors, they should be passed in the errorCollection as a collection of exceptions
+        ///  (if they are not exceptions the designer loader host may just call ToString on them).
+        ///  If the load was successful then errorCollection should either be null or contain an empty collection.
         /// </summary>
         void IDesignerLoaderHost.EndLoad(string rootClassName, bool successful, ICollection errorCollection)
         {
@@ -1181,13 +1184,13 @@ namespace System.ComponentModel.Design
             // If the loader indicated success, but it never created a component, that is an error.
             if (successful && _rootComponent is null)
             {
-                ArrayList errorList = new ArrayList();
-                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                errorCollection = new List<object>()
                 {
-                    HelpLink = SR.DesignerHostNoBaseClass
+                    new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                    {
+                        HelpLink = SR.DesignerHostNoBaseClass
+                    }
                 };
-                errorList.Add(ex);
-                errorCollection = errorList;
                 successful = false;
             }
 
@@ -1226,16 +1229,12 @@ namespace System.ComponentModel.Design
                         _state[s_stateLoading] = true;
                         Unload();
 
-                        ArrayList errorList = new ArrayList
+                        errorCollection = errorCollection is null ? new List<object>() : errorCollection.Cast<object>().ToList();
+                        if (errorCollection is List<object> errorList)
                         {
-                            ex
-                        };
-                        if (errorCollection is not null)
-                        {
-                            errorList.AddRange(errorCollection);
+                            errorList.Insert(0, ex);
                         }
 
-                        errorCollection = errorList;
                         successful = false;
 
                         _surface?.OnLoaded(successful, errorCollection);
@@ -1249,7 +1248,7 @@ namespace System.ComponentModel.Design
                     {
                         if (GetService(typeof(ISelectionService)) is ISelectionService ss)
                         {
-                            ArrayList selectedComponents = new ArrayList(_savedSelection.Count);
+                            List<IComponent> selectedComponents = new(_savedSelection.Count);
                             foreach (string name in _savedSelection)
                             {
                                 IComponent comp = Components[name];
@@ -1268,7 +1267,9 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This is called by the designer loader when it wishes to reload the design document.  The reload will happen immediately so the caller should ensure that it is in a state where BeginLoad may be called again.
+        ///  This is called by the designer loader when it wishes to reload the design document.
+        ///  The reload will happen immediately so the caller should ensure that it is in a state
+        ///  where BeginLoad may be called again.
         /// </summary>
         void IDesignerLoaderHost.Reload()
         {
@@ -1279,12 +1280,12 @@ namespace System.ComponentModel.Design
                 // Next, stash off the set of selected objects by name.  After the reload we will attempt to re-select them.
                 if (GetService(typeof(ISelectionService)) is ISelectionService ss)
                 {
-                    ArrayList list = new ArrayList(ss.SelectionCount);
-                    foreach (object o in ss.GetSelectedComponents())
+                    List<string> list = new(ss.SelectionCount);
+                    foreach (object item in ss.GetSelectedComponents())
                     {
-                        if (o is IComponent comp && comp.Site is not null && comp.Site.Name is not null)
+                        if (item is IComponent component && component.Site is not null && component.Site.Name is not null)
                         {
-                            list.Add(comp.Site.Name);
+                            list.Add(component.Site.Name);
                         }
                     }
 
