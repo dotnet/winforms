@@ -899,8 +899,7 @@ namespace System.Resources.Tools
                     }
 
                     // Now see if we've already mapped another key to the same name.
-                    string oldDuplicateKey = reverseFixupTable[newKey];
-                    if (oldDuplicateKey is not null)
+                    if (reverseFixupTable.TryGetValue(newKey, out string oldDuplicateKey))
                     {
                         // We can't handle this key nor the previous one. Remove the old one.
                         if (!errors.Contains(oldDuplicateKey))
@@ -930,8 +929,7 @@ namespace System.Resources.Tools
                 {
                     // There was a case-insensitive conflict between two keys. Or possibly one key was fixed up in a
                     // way that conflicts with another key (ie, "A B" and "A_B").
-                    string fixedUp = (string)reverseFixupTable[key];
-                    if (fixedUp is not null)
+                    if (reverseFixupTable.TryGetValue(key, out string fixedUp))
                     {
                         if (!errors.Contains(fixedUp))
                         {
