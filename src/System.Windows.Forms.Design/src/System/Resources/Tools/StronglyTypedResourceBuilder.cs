@@ -322,7 +322,7 @@ namespace System.Resources.Tools
 
             // Verify the resource names are valid property names, and they don't conflict.  This includes checking for
             // language-specific keywords, translating spaces to underscores, etc.
-            var cleanedResourceList = VerifyResourceNames(resourceList, codeProvider, errors, out Hashtable reverseFixupTable);
+            var cleanedResourceList = VerifyResourceNames(resourceList, codeProvider, errors, out Dictionary<string, string> reverseFixupTable);
 
             // Verify the class name is legal.
             string className = baseName;
@@ -418,7 +418,8 @@ namespace System.Resources.Tools
             foreach ((string propertyName, ResourceData resource) in cleanedResourceList)
             {
                 // The resourceName will be the original value, before fixups, if any.
-                string resourceName = (string)reverseFixupTable[propertyName] ?? propertyName;
+                reverseFixupTable.TryGetValue(propertyName, out string resourceName);
+                resourceName ??= propertyName;
                 if (!DefineResourceFetchingProperty(
                     propertyName,
                     resourceName,
@@ -861,9 +862,9 @@ namespace System.Resources.Tools
             Dictionary<string, ResourceData> resourceList,
             CodeDomProvider codeProvider,
             List<string> errors,
-            out Hashtable reverseFixupTable)
+            out Dictionary<string, string> reverseFixupTable)
         {
-            reverseFixupTable = new Hashtable(0, StringComparer.InvariantCultureIgnoreCase);
+            reverseFixupTable = new(0, StringComparer.InvariantCultureIgnoreCase);
             SortedList<string, ResourceData> cleanedResourceList = new(resourceList.Count, StringComparer.InvariantCultureIgnoreCase);
 
             foreach (KeyValuePair<string, ResourceData> entry in resourceList)
@@ -898,8 +899,7 @@ namespace System.Resources.Tools
                     }
 
                     // Now see if we've already mapped another key to the same name.
-                    string oldDuplicateKey = (string)reverseFixupTable[newKey];
-                    if (oldDuplicateKey is not null)
+                    if (reverseFixupTable.TryGetValue(newKey, out string oldDuplicateKey) && oldDuplicateKey is not null)
                     {
                         // We can't handle this key nor the previous one. Remove the old one.
                         if (!errors.Contains(oldDuplicateKey))
@@ -929,8 +929,7 @@ namespace System.Resources.Tools
                 {
                     // There was a case-insensitive conflict between two keys. Or possibly one key was fixed up in a
                     // way that conflicts with another key (ie, "A B" and "A_B").
-                    string fixedUp = (string)reverseFixupTable[key];
-                    if (fixedUp is not null)
+                    if (reverseFixupTable.TryGetValue(key, out string fixedUp) && fixedUp is not null)
                     {
                         if (!errors.Contains(fixedUp))
                         {
