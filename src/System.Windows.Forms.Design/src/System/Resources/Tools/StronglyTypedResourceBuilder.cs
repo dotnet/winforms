@@ -418,7 +418,8 @@ namespace System.Resources.Tools
             foreach ((string propertyName, ResourceData resource) in cleanedResourceList)
             {
                 // The resourceName will be the original value, before fixups, if any.
-                string resourceName = reverseFixupTable[propertyName] ?? propertyName;
+                reverseFixupTable.TryGetValue(propertyName, out string resourceName);
+                resourceName ??= propertyName;
                 if (!DefineResourceFetchingProperty(
                     propertyName,
                     resourceName,
@@ -898,7 +899,7 @@ namespace System.Resources.Tools
                     }
 
                     // Now see if we've already mapped another key to the same name.
-                    string oldDuplicateKey = (string)reverseFixupTable[newKey];
+                    string oldDuplicateKey = reverseFixupTable[newKey];
                     if (oldDuplicateKey is not null)
                     {
                         // We can't handle this key nor the previous one. Remove the old one.
