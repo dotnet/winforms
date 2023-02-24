@@ -2407,7 +2407,7 @@ namespace System.Windows.Forms
         internal static Size GetPreferredSizeHorizontal(IArrangedElement container, Size proposedConstraints)
         {
             Size maxSize = Size.Empty;
-            ToolStrip toolStrip = (container as ToolStrip)!;
+            ToolStrip toolStrip = (ToolStrip)container;
 
             // ensure preferred size respects default size as a minimum.
             Size defaultSize = toolStrip.DefaultSize - toolStrip.Padding.Size;
@@ -2471,7 +2471,7 @@ namespace System.Windows.Forms
         {
             Size maxSize = Size.Empty;
             bool requiresOverflow = false;
-            ToolStrip toolStrip = (container as ToolStrip)!;
+            ToolStrip toolStrip = (ToolStrip)container;
 
             bool foundItemParticipatingInLayout = false;
 
