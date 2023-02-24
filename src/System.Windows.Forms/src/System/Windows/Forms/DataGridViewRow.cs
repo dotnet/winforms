@@ -19,6 +19,7 @@ namespace System.Windows.Forms
     public partial class DataGridViewRow : DataGridViewBand
     {
         private static readonly Type s_rowType = typeof(DataGridViewRow);
+        private static int s_defaultHeight = -1;
         private static readonly int s_propRowErrorText = PropertyStore.CreateKey();
         private static readonly int s_propRowAccessibilityObject = PropertyStore.CreateKey();
 
@@ -34,7 +35,7 @@ namespace System.Windows.Forms
         public DataGridViewRow() : base()
         {
             MinimumThickness = DefaultMinRowThickness;
-            Thickness = Control.DefaultFont.Height + 9;
+            Thickness = DefaultHeight;
         }
 
         [Browsable(false)]
@@ -151,6 +152,19 @@ namespace System.Windows.Forms
             set => ErrorTextInternal = value;
         }
 
+        private static int DefaultHeight
+        {
+            get
+            {
+                if (s_defaultHeight == -1)
+                {
+                    s_defaultHeight = Control.DefaultFont.Height + 9;
+                }
+
+                return s_defaultHeight;
+            }
+        }
+
         private string ErrorTextInternal
         {
             get
@@ -209,7 +223,6 @@ namespace System.Windows.Forms
             set => base.HeaderCellCore = value;
         }
 
-        [DefaultValue(22)]
         [NotifyParentProperty(true)]
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.DataGridView_RowHeightDescr))]
@@ -1730,6 +1743,12 @@ namespace System.Windows.Forms
             }
         }
 
+        // ShouldSerialize and Reset Methods are being used by Designer via reflection.
+        private void ResetHeight()
+        {
+            Height = DefaultHeight;
+        }
+
         internal void ReleaseUiaProvider()
         {
             if (!IsAccessibilityObjectCreated)
@@ -1807,6 +1826,12 @@ namespace System.Windows.Forms
             }
 
             return setResult && values.Length <= cellCount;
+        }
+
+        // ShouldSerialize and Reset Methods are being used by Designer via reflection.
+        private bool ShouldSerializeHeight()
+        {
+            return Height != DefaultHeight;
         }
 
         public override string ToString()
