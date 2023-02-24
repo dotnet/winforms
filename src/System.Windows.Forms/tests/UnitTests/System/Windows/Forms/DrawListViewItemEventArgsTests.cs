@@ -9,7 +9,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DrawListViewItemEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DrawListViewItemEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData()
         {

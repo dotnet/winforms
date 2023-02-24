@@ -8,7 +8,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class WebBrowser_WebBrowserAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class WebBrowser_WebBrowserAccessibleObjectTests
     {
         [WinFormsFact]
         public void WebBrowserAccessibleObject_Ctor_Default()

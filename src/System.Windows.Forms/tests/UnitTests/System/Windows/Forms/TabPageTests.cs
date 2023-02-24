@@ -16,7 +16,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabPageTests : IClassFixture<ThreadExceptionFixture>
+    public class TabPageTests
     {
         [WinFormsFact]
         public void TabPage_Ctor_Default()

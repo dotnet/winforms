@@ -21,7 +21,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class RichTextBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class RichTextBoxTests
     {
         private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 

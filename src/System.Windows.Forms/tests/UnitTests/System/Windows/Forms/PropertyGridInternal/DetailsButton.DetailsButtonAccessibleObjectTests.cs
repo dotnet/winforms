@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class DetailsButton_DetailsButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DetailsButton_DetailsButtonAccessibleObjectTests
     {
         [WinFormsFact]
         public void DetailsButtonAccessibleObject_Ctor_Default()

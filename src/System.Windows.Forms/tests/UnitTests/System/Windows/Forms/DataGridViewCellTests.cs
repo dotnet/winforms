@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewCellTests
     {
         [WinFormsFact]
         public void DataGridViewCell_Ctor_Default()

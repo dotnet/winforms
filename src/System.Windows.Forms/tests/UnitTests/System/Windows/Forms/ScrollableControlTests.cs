@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ScrollableControlTests : IClassFixture<ThreadExceptionFixture>
+    public class ScrollableControlTests
     {
         [WinFormsFact]
         public void ScrollableControl_Ctor_Default()

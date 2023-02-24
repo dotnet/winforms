@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataStreamFromComStreamTests : IClassFixture<ThreadExceptionFixture>
+    public class DataStreamFromComStreamTests
     {
         [Theory,
             InlineData(0, 0, 1),

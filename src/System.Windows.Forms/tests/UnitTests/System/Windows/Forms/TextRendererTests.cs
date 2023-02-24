@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TextRendererTests : IClassFixture<ThreadExceptionFixture>
+    public class TextRendererTests
     {
         public static IEnumerable<object[]> DrawText_IDeviceContext_String_Font_Point_Color_TestData()
         {

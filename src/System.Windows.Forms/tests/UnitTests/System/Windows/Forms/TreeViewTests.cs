@@ -12,7 +12,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeViewTests : IClassFixture<ThreadExceptionFixture>
+    public class TreeViewTests
     {
         [WinFormsFact]
         public void TreeView_Ctor_Default()

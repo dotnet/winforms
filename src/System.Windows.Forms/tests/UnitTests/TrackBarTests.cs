@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TrackBarTests : IClassFixture<ThreadExceptionFixture>
+    public class TrackBarTests
     {
         public static readonly int s_dimension = (SystemInformation.HorizontalScrollBarHeight * 8) / 3;
 

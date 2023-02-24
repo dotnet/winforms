@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ComponentEditorFormTests : IClassFixture<ThreadExceptionFixture>
+    public class ComponentEditorFormTests
     {
         [WinFormsFact]
         public void ComponentEditorComponentEditorForm_Ctor_Default()

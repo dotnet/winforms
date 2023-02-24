@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
     {
         [WinFormsFact]
         public void ToolStripAccessibleObjectWrapperForItemsOnOverflow_Ctor_Default()

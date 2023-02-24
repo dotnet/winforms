@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripDropDown_ToolStripDropDownAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripDropDown_ToolStripDropDownAccessibleObjectTests
     {
         [WinFormsFact]
         public void ToolStripDropDownAccessibleObject_ctor_default()

@@ -8,8 +8,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ScrollBar_ScrollBarAccessibleObjectTests :
-        IClassFixture<ThreadExceptionFixture>
+    public class ScrollBar_ScrollBarAccessibleObjectTests
     {
         [WinFormsFact]
         public void ScrollBarAccessibleObject_ctor_ThrowsException_IfScrollBarAccessibleObjectIsNull()

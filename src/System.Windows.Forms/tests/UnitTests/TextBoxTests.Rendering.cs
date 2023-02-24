@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class TextBoxTests : IClassFixture<ThreadExceptionFixture>
+    public partial class TextBoxTests
     {
         [WinFormsFact]
         public void TextBox_Disabled_PlaceholderText_RendersBackgroundCorrectly()

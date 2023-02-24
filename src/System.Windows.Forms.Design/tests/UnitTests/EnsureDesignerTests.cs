@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Editors.Tests
 {
-    public class EnsureDesignerTests : IClassFixture<ThreadExceptionFixture>
+    public class EnsureDesignerTests
     {
         [WinFormsFact]
         public void Ensure_designer_type_forwarded()

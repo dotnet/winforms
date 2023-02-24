@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBox_ComboBoxChildNativeWindowTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ComboBoxChildNativeWindowTests
     {
         [WinFormsFact]
         public void ComboBoxChildNativeWindow_GetChildAccessibleObject()

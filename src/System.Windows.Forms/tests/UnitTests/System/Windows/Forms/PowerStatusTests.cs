@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class PowerStatusTests : IClassFixture<ThreadExceptionFixture>
+    public class PowerStatusTests
     {
         [Fact]
         public void PowerStatus_BatteryChargeStatus_Get_ReturnsExpected()

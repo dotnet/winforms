@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewSelectedColumnCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewSelectedColumnCollectionTests
     {
         [WinFormsFact]
         public void DataGridViewSelectedColumnCollection_Properties_GetEmpty_ReturnsExpected()

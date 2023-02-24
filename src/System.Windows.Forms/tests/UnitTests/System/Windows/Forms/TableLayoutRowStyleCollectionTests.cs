@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutRowStyleCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class TableLayoutRowStyleCollectionTests
     {
         [WinFormsFact]
         public void TableLayoutRowStyleCollection_Add_RowStyle_Success()

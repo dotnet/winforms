@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
     {
         [WinFormsFact]
         public void PropertyGridToolStripAccessibleObject_Ctor_Default()

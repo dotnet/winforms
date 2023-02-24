@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class AnchorEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class AnchorEditorTests
     {
         [Fact]
         public void AnchorEditor_Ctor_Default()

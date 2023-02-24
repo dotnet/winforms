@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class TabControlControlCollectionTests
     {
         [WinFormsFact]
         public void TabControlControlCollection_Ctor_TabControl()

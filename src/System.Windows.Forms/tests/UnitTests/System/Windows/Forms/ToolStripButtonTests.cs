@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class ToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ToolStripButtonTests
     {
         [WinFormsFact]
         public void ToolStripButton_Ctor_Default()

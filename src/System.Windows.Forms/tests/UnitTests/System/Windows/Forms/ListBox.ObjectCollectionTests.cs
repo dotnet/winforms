@@ -8,7 +8,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListBoxObjectCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ListBoxObjectCollectionTests
     {
         [WinFormsFact]
         public void ListBoxObjectCollection_Ctor_ListBox()

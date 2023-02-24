@@ -14,7 +14,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBoxTests
     {
         [WinFormsFact]
         public void ComboBox_Ctor_Default()

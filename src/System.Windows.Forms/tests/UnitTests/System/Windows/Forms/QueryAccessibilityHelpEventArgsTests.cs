@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class QueryAccessibilityHelpEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class QueryAccessibilityHelpEventArgsTests
     {
         [Fact]
         public void Ctor_Default()

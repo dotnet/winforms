@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewRowAccessibleObjectTests : DataGridViewRow, IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     {
         [Fact]
         public void DataGridViewRowAccessibleObject_Ctor_Default()

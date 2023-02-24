@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject : IClassFixture<ThreadExceptionFixture>
+    public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
     {
         [WinFormsFact]
         public void UpDownButtonsAccessibleObject_Ctor_Default()

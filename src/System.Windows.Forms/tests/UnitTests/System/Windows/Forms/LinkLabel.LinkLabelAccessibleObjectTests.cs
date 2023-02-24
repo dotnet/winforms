@@ -10,7 +10,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class LinkLabel_LinkLabelAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class LinkLabel_LinkLabelAccessibleObjectTests
     {
         [WinFormsFact]
         public void LinkLabelAccessibleObject_Ctor_Default()

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ApplicationTests : IClassFixture<ThreadExceptionFixture>
+    public class ApplicationTests
     {
         [WinFormsFact]
         public void Application_CurrentCulture_Get_ReturnsExpected()

@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class SRDescriptionAttributeTests : IClassFixture<ThreadExceptionFixture>
+    public class SRDescriptionAttributeTests
     {
         [Fact]
         public void VerifyDescriptionAttributeValue()

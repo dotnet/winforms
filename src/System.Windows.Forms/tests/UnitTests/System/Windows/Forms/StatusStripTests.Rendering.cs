@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class StatusStripTests : IClassFixture<ThreadExceptionFixture>
+    public partial class StatusStripTests
     {
         [WinFormsFact]
         public void StatusStrip_RendersBorderCorrectly()

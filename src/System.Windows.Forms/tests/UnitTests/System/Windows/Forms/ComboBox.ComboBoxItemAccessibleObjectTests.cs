@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBox_ComboBoxItemAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ComboBoxItemAccessibleObjectTests
     {
         private const AccessibleStates InvisibleItemState = AccessibleStates.Invisible | AccessibleStates.Offscreen | AccessibleStates.Focusable | AccessibleStates.Selectable;
         private const AccessibleStates VisibleItemState = AccessibleStates.Selected | AccessibleStates.Focusable | AccessibleStates.Selectable;

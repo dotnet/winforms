@@ -9,7 +9,7 @@ using Xunit;
 namespace System.Resources.Tests
 {
     // NB: doesn't require thread affinity
-    public class ResXFileRef_Converter : IClassFixture<ThreadExceptionFixture>
+    public class ResXFileRef_Converter
     {
         [Theory]
         [InlineData("\"File Name.txt\";", new[] { "File Name.txt", "" })]

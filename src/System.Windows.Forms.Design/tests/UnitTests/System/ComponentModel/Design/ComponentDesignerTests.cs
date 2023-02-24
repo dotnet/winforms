@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ComponentDesignerTests : IClassFixture<ThreadExceptionFixture>
+    public class ComponentDesignerTests
     {
         [Fact]
         public void ComponentDesigner_Ctor_Default()

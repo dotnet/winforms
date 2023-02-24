@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class ToolStripTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ToolStripTests
     {
         [WinFormsFact]
         public void ToolStrip_RendersBackgroundCorrectly()

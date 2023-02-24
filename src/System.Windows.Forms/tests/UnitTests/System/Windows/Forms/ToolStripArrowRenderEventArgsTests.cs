@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripArrowRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripArrowRenderEventArgsTests
     {
         [WinFormsFact]
         public void ToolStripArrowRenderEventArgs_NullGraphics_ThrowsArgumentNullException()

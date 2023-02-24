@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class WindowsFormsDesignerOptionServiceTests : IClassFixture<ThreadExceptionFixture>
+    public class WindowsFormsDesignerOptionServiceTests
     {
         [Fact]
         public void WindowsFormsDesignerOptionService_Ctor_Default()

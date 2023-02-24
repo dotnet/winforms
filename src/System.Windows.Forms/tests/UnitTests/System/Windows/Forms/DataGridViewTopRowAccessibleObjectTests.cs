@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewTopRowAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewTopRowAccessibleObjectTests
     {
         [WinFormsFact]
         public void DataGridViewTopRowAccessibleObject_FragmentNavigate_ReturnsExpected_AllowUserToAddRowsEnabled()

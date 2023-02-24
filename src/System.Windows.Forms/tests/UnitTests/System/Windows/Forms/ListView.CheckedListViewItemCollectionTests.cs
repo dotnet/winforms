@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListView_CheckedListViewItemCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ListView_CheckedListViewItemCollectionTests
     {
         [WinFormsFact]
         public void CheckedListViewItemCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException()

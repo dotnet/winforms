@@ -14,7 +14,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class CollectionEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class CollectionEditorTests
     {
         [Theory]
         [InlineData(typeof(object), typeof(object))]

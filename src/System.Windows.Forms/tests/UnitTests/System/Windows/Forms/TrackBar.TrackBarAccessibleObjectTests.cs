@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TrackBarAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TrackBarAccessibleObjectTests
     {
         [WinFormsFact]
         public void TrackBarAccessibilityObject_Properties_ReturnsExpected_IfHandleIsCreated()

@@ -9,7 +9,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DpiHelperTests : IClassFixture<ThreadExceptionFixture>
+    public class DpiHelperTests
     {
         /// <summary>
         ///  Data for the LogicalToDeviceUnits test

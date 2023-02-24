@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignerActionListCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class DesignerActionListCollectionTests
     {
         [Fact]
         public void DesignerActionListCollection_Ctor_Default()

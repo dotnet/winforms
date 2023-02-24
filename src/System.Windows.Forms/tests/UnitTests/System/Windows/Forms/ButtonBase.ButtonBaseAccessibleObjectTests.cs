@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ButtonBase_ButtonBaseAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ButtonBase_ButtonBaseAccessibleObjectTests
     {
         [WinFormsFact]
         public void ButtonBaseAccessibleObject_Ctor_NullControl_ThrowsArgumentException()

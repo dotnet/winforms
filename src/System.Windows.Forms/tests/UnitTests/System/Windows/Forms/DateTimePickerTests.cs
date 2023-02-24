@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DateTimePickerTests : IClassFixture<ThreadExceptionFixture>
+    public class DateTimePickerTests
     {
         [WinFormsFact]
         public void DateTimePicker_Ctor_Default()

@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ProfessionalColorTableTests : IClassFixture<ThreadExceptionFixture>
+    public class ProfessionalColorTableTests
     {
         [WinFormsFact]
         public void ProfessionalColorTable_Ctor_Default()

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowErrorTextNeededEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewRowErrorTextNeededEventArgsTests
     {
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]

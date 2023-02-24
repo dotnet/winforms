@@ -15,7 +15,7 @@ using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class ToolStripTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ToolStripTests
     {
         [WinFormsFact]
         public void ToolStrip_Ctor_Default()

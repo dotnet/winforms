@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Resources.Tests
 {
     // NB: doesn't require thread affinity
-    public class ResXResourceSetTests : IClassFixture<ThreadExceptionFixture>
+    public class ResXResourceSetTests
     {
         [Theory]
         [InlineData("TestResources.resx", "SomeMissingTest1", null)]

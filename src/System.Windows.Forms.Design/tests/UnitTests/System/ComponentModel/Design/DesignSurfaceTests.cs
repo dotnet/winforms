@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignSurfaceTests : IClassFixture<ThreadExceptionFixture>
+    public class DesignSurfaceTests
     {
         [WinFormsFact]
         public void DesignSurface_Ctor_Default()

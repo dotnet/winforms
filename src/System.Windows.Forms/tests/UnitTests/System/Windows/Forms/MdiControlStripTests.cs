@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MdiControlStripTests : IClassFixture<ThreadExceptionFixture>
+    public class MdiControlStripTests
     {
         [WinFormsFact]
         public void MdiControlStrip_Ctor_Default()

@@ -15,7 +15,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class TextBoxBaseTests : IClassFixture<ThreadExceptionFixture>
+    public partial class TextBoxBaseTests
     {
         private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 

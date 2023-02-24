@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class TableLayoutCellPaintEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class TableLayoutCellPaintEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Rectangle_Rectangle_Int_Int_TestData()
         {

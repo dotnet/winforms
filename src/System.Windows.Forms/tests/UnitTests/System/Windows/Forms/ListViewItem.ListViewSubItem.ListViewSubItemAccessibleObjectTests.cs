@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
     {
         [WinFormsFact]
         public void ListViewSubItemAccessibleObject_GetChild_ReturnCorrectValue()

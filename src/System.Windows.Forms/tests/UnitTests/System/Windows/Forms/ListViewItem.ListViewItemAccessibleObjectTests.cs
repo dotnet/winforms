@@ -11,7 +11,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewItem_ListViewItemAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewItem_ListViewItemAccessibleObjectTests
     {
         [WinFormsFact]
         public void ListViewItemAccessibleObject_Ctor_ThrowsArgumentNullException()

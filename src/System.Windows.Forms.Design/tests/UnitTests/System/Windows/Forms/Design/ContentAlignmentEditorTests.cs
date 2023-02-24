@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ContentAlignmentEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class ContentAlignmentEditorTests
     {
         [Theory]
         [InlineData("_topLeft")]

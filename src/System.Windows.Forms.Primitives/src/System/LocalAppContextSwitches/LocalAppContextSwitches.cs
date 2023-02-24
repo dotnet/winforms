@@ -10,6 +10,9 @@ namespace System.Windows.Forms.Primitives
     // Borrowed from https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/LocalAppContextSwitches.Common.cs
     internal static partial class LocalAppContextSwitches
     {
+        // Enabling switches in Core is different from Framework. See https://learn.microsoft.com/dotnet/core/runtime-config/
+        // for details on how to set switches.
+
         // Switch names declared internal below are used in unit/integration tests. Refer to
         // https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md
         // for more details on how to enable these switches in the application.
@@ -17,11 +20,26 @@ namespace System.Windows.Forms.Primitives
         internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
         internal const string ServicePointManagerCheckCrlSwitchName = "System.Windows.Forms.ServicePointManagerCheckCrl";
         internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
-        private static int s_AnchorLayoutV2;
+        private const string DoNotCatchUnhandledExceptionsSwitchName = "System.Windows.Forms.DoNotCatchUnhandledExceptions";
+
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
+        private static int s_anchorLayoutV2;
         private static int s_servicePointManagerCheckCrl;
         private static int s_trackBarModernRendering;
+        private static int s_doNotCatchUnhandledExceptions;
+
         private static FrameworkName? s_targetFrameworkName;
+
+        /// <summary>
+        ///  When there is no exception handler registered for a thread, rethrows the exception. The exception will
+        ///  not be presented in a dialog or swallowed when not in interactive mode. This is always opt-in and is
+        ///  intended for scenarios where setting handlers for threads isn't practical.
+        /// </summary>
+        public static bool DoNotCatchUnhandledExceptions
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(DoNotCatchUnhandledExceptionsSwitchName, ref s_doNotCatchUnhandledExceptions);
+        }
 
         /// <summary>
         ///  The <see cref="TargetFrameworkAttribute"/> value for the entry assembly, if any.
@@ -34,11 +52,6 @@ namespace System.Windows.Forms.Primitives
                 return s_targetFrameworkName;
             }
         }
-
-        /// <summary>
-        ///  Returns <see langword="true"/> if the <see cref="TargetFrameworkAttribute"/> value for the entry assembly specifies .NET Core.
-        /// </summary>
-        public static bool IsNetCoreApp => string.Equals(TargetFrameworkName?.Identifier, ".NETCoreApp");
 
         private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
         {
@@ -64,7 +77,6 @@ namespace System.Windows.Forms.Primitives
                 isSwitchEnabled = GetSwitchDefaultValue(switchName);
             }
 
-            // Is caching of the switches disabled?
             AppContext.TryGetSwitch("TestSwitch.LocalAppContext.DisableCaching", out bool disableCaching);
             if (!disableCaching)
             {
@@ -75,36 +87,28 @@ namespace System.Windows.Forms.Primitives
 
             static bool GetSwitchDefaultValue(string switchName)
             {
-                if (!IsNetCoreApp)
-                {
-                    return false;
-                }
-
                 if (TargetFrameworkName is not { } framework)
                 {
                     return false;
                 }
 
-                // Switches added in .NET 8.
                 if (framework.Version.Major >= 8)
                 {
-                    // The support matrix for these switches is limited to Windows 10 and above versions.
-                    if (OsVersion.IsWindows10_1703OrGreater())
+                    // Behavior changes added in .NET 8
+
+                    if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
                     {
-                        if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        if (switchName == AnchorLayoutV2SwitchName)
-                        {
-                            return true;
-                        }
+                    if (switchName == AnchorLayoutV2SwitchName)
+                    {
+                        return true;
+                    }
 
-                        if (switchName == TrackBarModernRenderingSwitchName)
-                        {
-                            return true;
-                        }
+                    if (switchName == TrackBarModernRenderingSwitchName)
+                    {
+                        return true;
                     }
 
                     if (switchName == ServicePointManagerCheckCrlSwitchName)
@@ -128,7 +132,7 @@ namespace System.Windows.Forms.Primitives
         public static bool AnchorLayoutV2
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_AnchorLayoutV2);
+            get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_anchorLayoutV2);
         }
 
         public static bool ScaleTopLevelFormMinMaxSizeForDpi

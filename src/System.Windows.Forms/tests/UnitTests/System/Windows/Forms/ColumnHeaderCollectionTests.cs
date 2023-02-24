@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ColumnHeaderCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ColumnHeaderCollectionTests
     {
         [WinFormsFact]
         public void ColumnHeaderCollection_Ctor_ListView()

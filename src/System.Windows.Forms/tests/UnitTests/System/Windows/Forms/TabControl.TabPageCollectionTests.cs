@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabControlTabPageCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class TabControlTabPageCollectionTests
     {
         public static IEnumerable<object[]> Add_TestData()
         {

@@ -7,7 +7,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
     {
         public static IEnumerable<object[]> ToolStripDropDownMenuAccessible_FragmentNavigate_WithoutItem_TestData()
         {

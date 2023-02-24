@@ -9,7 +9,7 @@ using Windows.Win32.System.Ole;
 namespace System.Windows.Forms.Tests
 {
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
-    public class AxHostConnectionPointCookieTests : IClassFixture<ThreadExceptionFixture>
+    public class AxHostConnectionPointCookieTests
     {
         private static readonly Guid CLSID_WebBrowser = new Guid("8856f961-340a-11d0-a96b-00c04fd705a2");
 

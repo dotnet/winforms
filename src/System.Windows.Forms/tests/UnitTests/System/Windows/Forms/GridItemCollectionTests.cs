@@ -10,7 +10,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class GridItemCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class GridItemCollectionTests
     {
         [Fact]
         public void GridItemCollection_Empty_Get_ReturnsExpected()

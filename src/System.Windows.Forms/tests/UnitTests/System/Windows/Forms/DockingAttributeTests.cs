@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DockingAttributeTests : IClassFixture<ThreadExceptionFixture>
+    public class DockingAttributeTests
     {
         [Fact]
         public void DockingAttribute_Ctor_Default()

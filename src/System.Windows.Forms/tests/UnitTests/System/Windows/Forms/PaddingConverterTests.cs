@@ -13,7 +13,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class PaddingConverterTests : IClassFixture<ThreadExceptionFixture>
+    public class PaddingConverterTests
     {
         [Theory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]

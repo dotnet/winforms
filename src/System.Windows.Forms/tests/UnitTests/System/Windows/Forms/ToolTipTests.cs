@@ -13,7 +13,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolTipTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolTipTests
     {
         [WinFormsFact]
         public void ToolTip_Ctor_Default()

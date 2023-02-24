@@ -8,7 +8,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Layout.Tests
 {
-    public partial class FlowLayoutTests : IClassFixture<ThreadExceptionFixture>
+    public partial class FlowLayoutTests
     {
         [WinFormsFact]
         public void LayoutEngine_InitLayout_ValidChild_Nop()

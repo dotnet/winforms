@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class Control_ControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class Control_ControlAccessibleObjectTests
     {
         // These controls return an empty "AccessKey" property because they have a ControlStyles.UseTextForAccessibility flag
         // with "false" value, which prohibits the use of text to create the AccessKey.

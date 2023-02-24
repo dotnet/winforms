@@ -10,7 +10,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBox_ComboBoxUiaTextProviderTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ComboBoxUiaTextProviderTests
     {
         [WinFormsTheory]
         [InlineData(ComboBoxStyle.DropDown)]

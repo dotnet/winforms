@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
     {
         [WinFormsFact]
         public void DataGridViewEditingPanelAccessibleObject_FirstAndLastChildren_AreNull()

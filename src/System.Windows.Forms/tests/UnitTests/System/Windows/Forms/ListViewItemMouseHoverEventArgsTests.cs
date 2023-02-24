@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class ListViewItemMouseHoverEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewItemMouseHoverEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_ListViewItem_TestData()
         {

@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutPanel_TableLayoutPanelAccessibilityObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TableLayoutPanel_TableLayoutPanelAccessibilityObjectTests
     {
         [WinFormsFact]
         public void TableLayoutPanelAccessibilityObject_Ctor_Default()

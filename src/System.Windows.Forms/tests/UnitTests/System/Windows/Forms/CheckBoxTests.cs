@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CheckBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class CheckBoxTests
     {
         [WinFormsFact]
         public void CheckBox_Ctor_Default()

@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewAutoSizeColumnsModeEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewAutoSizeColumnsModeEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_DataGridViewAutoSizeColumnModeArray_TestData()
         {

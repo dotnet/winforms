@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class CursorEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class CursorEditorTests
     {
         [Fact]
         public void CursorEditor_Ctor_Default()

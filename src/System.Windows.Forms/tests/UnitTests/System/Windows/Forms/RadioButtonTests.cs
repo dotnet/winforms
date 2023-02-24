@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class RadioButtonTests : IClassFixture<ThreadExceptionFixture>
+    public class RadioButtonTests
     {
         [WinFormsFact]
         public void RadioButton_Ctor_Default()

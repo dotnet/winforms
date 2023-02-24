@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests;
 
-public class AxHostVisualBasic6Tests : IClassFixture<ThreadExceptionFixture>
+public class AxHostVisualBasic6Tests
 {
     [WinFormsFact(Skip = "Causes test run to abort, must be run manually.")]
     public void AxHost_SimpleControl_Create()

@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DateTimePicker_DateTimePickerAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DateTimePicker_DateTimePickerAccessibleObjectTests
     {
         [WinFormsFact]
         public void DateTimePickerAccessibleObject_Ctor_Default()

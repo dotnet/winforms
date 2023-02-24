@@ -7,7 +7,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class AccessibleRoleControlTypeMapTests : IClassFixture<ThreadExceptionFixture>
+    public class AccessibleRoleControlTypeMapTests
     {
         public static IEnumerable<object[]> AccessibleRoleControlTypeMap_Contains_AllRoles_TestData()
         {

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FlowLayoutSettingsTests : IClassFixture<ThreadExceptionFixture>
+    public class FlowLayoutSettingsTests
     {
         [WinFormsTheory]
         [InlineData(FlowDirection.BottomUp, 1)]

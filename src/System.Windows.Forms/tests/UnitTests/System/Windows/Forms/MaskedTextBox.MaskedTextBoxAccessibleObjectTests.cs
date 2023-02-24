@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MaskedTextBoxAccessibilityObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class MaskedTextBoxAccessibilityObjectTests
     {
         [WinFormsFact]
         public void MaskedTextBoxAccessibilityObject_Ctor_Default()

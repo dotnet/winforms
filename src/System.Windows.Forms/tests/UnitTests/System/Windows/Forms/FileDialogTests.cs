@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FileDialogTests : IClassFixture<ThreadExceptionFixture>
+    public class FileDialogTests
     {
         [WinFormsFact]
         public void FileDialog_Ctor_Default()

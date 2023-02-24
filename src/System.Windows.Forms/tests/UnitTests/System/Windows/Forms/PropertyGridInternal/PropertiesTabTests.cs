@@ -9,7 +9,7 @@ using Xunit;
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
     // NB: doesn't require thread affinity
-    public class PropertiesTabTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertiesTabTests
     {
         [Fact]
         public void PropertiesTab_Ctor_Default()

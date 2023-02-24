@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class HScrollBar_HScrollBarAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class HScrollBar_HScrollBarAccessibleObjectTests
     {
         [WinFormsFact]
         public void HScrollBarAccessibleObject_ctor_ThrowsException_HScrollBarAccessibleObjectIsNull()

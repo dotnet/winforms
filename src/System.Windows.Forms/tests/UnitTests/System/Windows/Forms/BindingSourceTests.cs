@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingSourceTests : IClassFixture<ThreadExceptionFixture>
+    public class BindingSourceTests
     {
         [WinFormsFact]
         public void Ctor_Default()

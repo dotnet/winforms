@@ -11,7 +11,7 @@ using Xunit;
 namespace System.Windows.Forms.Design.Tests
 {
     // NB: doesn't require thread affinity
-    public class EventsTabTests : IClassFixture<ThreadExceptionFixture>
+    public class EventsTabTests
     {
         [Fact]
         public void EventsTab_Ctor_IServiceProvider()

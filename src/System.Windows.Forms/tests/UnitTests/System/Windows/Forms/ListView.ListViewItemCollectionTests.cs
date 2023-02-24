@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListView_ListViewItemCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ListView_ListViewItemCollectionTests
     {
         [WinFormsTheory]
         [InlineData("name2")]

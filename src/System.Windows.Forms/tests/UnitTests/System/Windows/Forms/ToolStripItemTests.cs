@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripItemTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripItemTests
     {
         [WinFormsFact]
         public void ToolStripItem_Ctor_Default()

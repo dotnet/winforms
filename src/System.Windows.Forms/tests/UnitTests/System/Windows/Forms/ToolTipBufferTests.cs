@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class ToolTipBufferTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ToolTipBufferTests
     {
         [WinFormsFact]
         public void ToolTipBuffer_Buffer_GetEmpty_ReturnsZero()

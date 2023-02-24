@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class DesignerActionUIStateChangeEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DesignerActionUIStateChangeEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Object_DesignerActionUIStateChangeType_TestData()
         {

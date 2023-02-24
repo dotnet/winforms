@@ -11,7 +11,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     [Collection("Sequential")] // ImageList doesn't appear to behave well under stress in multi-threaded env
-    public class ImageListTests : IClassFixture<ThreadExceptionFixture>
+    public class ImageListTests
     {
         [WinFormsFact]
         public void ImageList_Ctor_Default()

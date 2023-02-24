@@ -10,7 +10,7 @@ using static System.Windows.Forms.ScrollBar;
 
 namespace System.Windows.Forms.Tests
 {
-    public class VScrollBar_ScrollBarThumbAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class VScrollBar_ScrollBarThumbAccessibleObjectTests
     {
         [WinFormsTheory]
         [CommonMemberData(typeof(ScrollBarTestHelper), nameof(ScrollBarTestHelper.ScrollBarAccessibleObject_TestData))]

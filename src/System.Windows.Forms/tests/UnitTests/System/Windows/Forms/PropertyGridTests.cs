@@ -16,7 +16,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class PropertyGridTests : IClassFixture<ThreadExceptionFixture>
+    public partial class PropertyGridTests
     {
         [WinFormsFact]
         public void PropertyGrid_Ctor_Default()

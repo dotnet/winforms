@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListView_ListViewAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ListView_ListViewAccessibleObjectTests
     {
         [WinFormsFact]
         public void ListViewAccessibleObject_Ctor_Default()

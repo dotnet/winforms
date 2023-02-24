@@ -12,7 +12,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class LinkAreaConverterTests : IClassFixture<ThreadExceptionFixture>
+    public class LinkAreaConverterTests
     {
         [Theory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]

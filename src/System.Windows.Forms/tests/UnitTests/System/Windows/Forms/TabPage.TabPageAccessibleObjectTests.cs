@@ -9,7 +9,7 @@ using static System.Windows.Forms.TabPage;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabPage_TabPageAccessibilityObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TabPage_TabPageAccessibilityObjectTests
     {
         [WinFormsFact]
         public void TabPageAccessibilityObject_Ctor_Default()

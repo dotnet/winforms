@@ -9,7 +9,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class SpecialFolderEnumConverterTests : IClassFixture<ThreadExceptionFixture>
+    public class SpecialFolderEnumConverterTests
     {
         [Fact]
         public void SpecialFolderEnumConverter_ConvertFrom_String_Success()

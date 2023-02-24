@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ProfessionalColorsTests : IClassFixture<ThreadExceptionFixture>
+    public class ProfessionalColorsTests
     {
         public static IEnumerable<object[]> Properties_TestData()
         {

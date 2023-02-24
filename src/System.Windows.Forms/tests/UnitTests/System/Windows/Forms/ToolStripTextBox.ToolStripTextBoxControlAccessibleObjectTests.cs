@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     {
         [WinFormsFact]
         public void ToolStripTextBoxControlAccessibleObject_ctor_default()

@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DomainUpDownAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DomainUpDownAccessibleObjectTests
     {
         [WinFormsFact]
         public void DomainUpDownAccessibleObject_Ctor_Default()

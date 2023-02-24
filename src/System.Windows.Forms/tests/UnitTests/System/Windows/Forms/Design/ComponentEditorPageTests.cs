@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ComponentEditorPageTests : IClassFixture<ThreadExceptionFixture>
+    public class ComponentEditorPageTests
     {
         [WinFormsFact]
         public void ComponentEditorPagePanel_Ctor_Default()

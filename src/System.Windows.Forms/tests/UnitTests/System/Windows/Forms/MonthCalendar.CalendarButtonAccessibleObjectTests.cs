@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MonthCalendar_CalendarButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class MonthCalendar_CalendarButtonAccessibleObjectTests
     {
         [WinFormsFact]
         public void CalendarButtonAccessibleObject_ctor_default()

@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MdiClientTests : IClassFixture<ThreadExceptionFixture>
+    public class MdiClientTests
     {
         [WinFormsFact]
         public void MdiClient_Ctor_Default()
