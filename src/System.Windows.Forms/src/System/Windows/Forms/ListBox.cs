@@ -62,8 +62,9 @@ namespace System.Windows.Forms
         private SelectedIndexCollection? _selectedIndices;
         private ObjectCollection? _itemsCollection;
 
-        private int _itemHeight = DefaultItemHeight;
+        private int _itemHeight = DefaultListBoxItemHeight;
         private int _columnWidth;
+        private static int s_defaultListBoxItemHeight = -1;
         private int _requestedHeight;
         private int _topIndex;
         private int _horizontalExtent;
@@ -389,6 +390,19 @@ namespace System.Windows.Forms
             }
         }
 
+        private static int DefaultListBoxItemHeight
+        {
+            get
+            {
+                if (s_defaultListBoxItemHeight == -1)
+                {
+                    s_defaultListBoxItemHeight = DefaultFont.Height;
+                }
+
+                return s_defaultListBoxItemHeight;
+            }
+        }
+
         protected override Size DefaultSize
         {
             get
@@ -586,7 +600,6 @@ namespace System.Windows.Forms
         ///  the height of an item in an owner-draw list box.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(DefaultItemHeight)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ListBoxItemHeightDescr))]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -2107,9 +2120,10 @@ namespace System.Windows.Forms
             base.ResetForeColor();
         }
 
+        // ShouldSerialize and Reset Methods are being used by Designer via reflection.
         private void ResetItemHeight()
         {
-            _itemHeight = DefaultItemHeight;
+            _itemHeight = DefaultListBoxItemHeight;
         }
 
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -2206,6 +2220,12 @@ namespace System.Windows.Forms
 
             SelectedItems.Dirty();
             OnSelectedIndexChanged(EventArgs.Empty);
+        }
+
+        // ShouldSerialize and Reset Methods are being used by Designer via reflection.
+        private bool ShouldSerializeItemHeight()
+        {
+            return ItemHeight != DefaultListBoxItemHeight;
         }
 
         /// <summary>
