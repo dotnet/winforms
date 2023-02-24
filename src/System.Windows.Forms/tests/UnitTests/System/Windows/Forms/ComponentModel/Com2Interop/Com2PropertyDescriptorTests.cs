@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
 {
     // NB: doesn't require thread affinity
-    public class Com2PropertyDescriptorTests : IClassFixture<ThreadExceptionFixture>
+    public class Com2PropertyDescriptorTests
     {
         private static MethodInfo s_miVersionInfo;
         private static Type s_typeCom2PropertyDescriptor;

@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MenuStripTests : IClassFixture<ThreadExceptionFixture>
+    public class MenuStripTests
     {
         [WinFormsFact]
         public void MenuStrip_Ctor_Default()

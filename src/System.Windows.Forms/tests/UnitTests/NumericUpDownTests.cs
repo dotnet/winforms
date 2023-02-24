@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class NumericUpDownTests : IClassFixture<ThreadExceptionFixture>
+    public class NumericUpDownTests
     {
         [WinFormsFact]
         public void NumericUpDown_Constructor()

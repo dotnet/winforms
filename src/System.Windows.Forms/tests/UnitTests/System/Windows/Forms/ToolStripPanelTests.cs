@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripPanelTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripPanelTests
     {
         [WinFormsFact]
         public void ToolStripPanel_Ctor_Default()

@@ -13,7 +13,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class ListBoxTests
     {
         [WinFormsFact]
         public void ListBox_Ctor_Default()

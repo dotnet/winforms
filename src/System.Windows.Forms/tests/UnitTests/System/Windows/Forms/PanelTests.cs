@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PanelTests : IClassFixture<ThreadExceptionFixture>
+    public class PanelTests
     {
         [WinFormsFact]
         public void Panel_Ctor_Default()

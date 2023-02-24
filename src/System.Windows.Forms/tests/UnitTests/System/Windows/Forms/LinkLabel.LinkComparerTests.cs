@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class LinkLabel_LinkComparerTests : IClassFixture<ThreadExceptionFixture>
+    public class LinkLabel_LinkComparerTests
     {
         public static IEnumerable<object[]> LinkCompare_Return_IsExpected_TestData()
         {

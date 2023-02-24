@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListView_SelectedListViewItemCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ListView_SelectedListViewItemCollectionTests
     {
         [WinFormsFact]
         public void SelectedListViewItemCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException()

@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FlowLayoutPanelTests : IClassFixture<ThreadExceptionFixture>
+    public class FlowLayoutPanelTests
     {
         [WinFormsFact]
         public void FlowLayoutPanel_Ctor_Default()

@@ -12,7 +12,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CommonDialogTests : IClassFixture<ThreadExceptionFixture>
+    public class CommonDialogTests
     {
         [WinFormsFact]
         public void Ctor_Default()

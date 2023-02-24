@@ -8,7 +8,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripPanel_ToolStripPanelAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripPanel_ToolStripPanelAccessibleObjectTests
     {
         [WinFormsFact]
         public void ToolStripPanelAccessibleObject_Ctor_Default()

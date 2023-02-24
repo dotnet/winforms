@@ -12,7 +12,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
-    public class ControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ControlControlCollectionTests
     {
         [WinFormsFact]
         public void ControlCollection_Ctor_Control()

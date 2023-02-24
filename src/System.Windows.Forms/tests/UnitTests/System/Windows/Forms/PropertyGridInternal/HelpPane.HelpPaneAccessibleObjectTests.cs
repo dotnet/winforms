@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class HelpPane_HelpPaneAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class HelpPane_HelpPaneAccessibleObjectTests
     {
         [WinFormsFact]
         public void HelpPaneAccessibleObject_Ctor_Default()

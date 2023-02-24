@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 namespace System.Windows.Forms.Design.Tests
 {
     // NB: doesn't require thread affinity
-    public class PropertyTabTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyTabTests
     {
         [Fact]
         public void PropertyTab_Ctor_Default()

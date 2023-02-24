@@ -7,7 +7,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
     {
         [WinFormsFact]
         public void PrintPreviewControlAccessibleObject_Ctor_Default()

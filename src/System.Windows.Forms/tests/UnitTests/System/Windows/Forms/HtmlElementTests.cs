@@ -12,7 +12,7 @@ using static Interop.Mshtml;
 namespace System.Windows.Forms.Tests
 {
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads
-    public class HtmlElementTests : IClassFixture<ThreadExceptionFixture>
+    public class HtmlElementTests
     {
         [WinFormsFact]
         public async Task HtmlElement_All_Get_ReturnsExpected()

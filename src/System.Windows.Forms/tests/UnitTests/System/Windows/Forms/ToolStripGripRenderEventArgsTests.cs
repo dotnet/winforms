@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripGripRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripGripRenderEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Null_Graphics_ToolStrip_TestData()
         {

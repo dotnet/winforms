@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListBoxIntegerCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ListBoxIntegerCollectionTests
     {
         [WinFormsFact]
         public void ListBoxIntegerCollection_Ctor_ListBox()

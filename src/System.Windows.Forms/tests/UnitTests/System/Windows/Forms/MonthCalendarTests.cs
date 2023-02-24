@@ -14,7 +14,7 @@ using Size = System.Drawing.Size;
 namespace System.Windows.Forms.Tests
 {
     [UseDefaultXunitCulture]
-    public class MonthCalendarTests : IClassFixture<ThreadExceptionFixture>
+    public class MonthCalendarTests
     {
         [WinFormsFact]
         public void MonthCalendar_Ctor_Default()

@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FormTests : IClassFixture<ThreadExceptionFixture>
+    public class FormTests
     {
         [WinFormsFact]
         public void Form_Ctor_Default()

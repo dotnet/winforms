@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class WindowsFormsSynchronizationContextTests : IClassFixture<ThreadExceptionFixture>
+    public partial class WindowsFormsSynchronizationContextTests
     {
         [WinFormsFact]
         public void WindowsFormsSynchronizationContext_CreateCopy_Invoke_Success()

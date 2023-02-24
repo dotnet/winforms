@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class ScrollEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ScrollEventArgsTests
     {
         [Theory]
         [InlineData((ScrollEventType)(ScrollEventType.EndScroll + 1), -2)]

@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class BindingManagerBaseTests : IClassFixture<ThreadExceptionFixture>
+    public class BindingManagerBaseTests
     {
         [Fact]
         public void Bindings_Get_ReturnsExpected()

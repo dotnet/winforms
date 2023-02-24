@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public partial class ColorEditor_CustomColorDialogTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ColorEditor_CustomColorDialogTests
     {
         [WinFormsFact]
         public void CustomColorDialog_Ctor_Default()

@@ -8,7 +8,7 @@ using static System.Windows.Forms.ListViewItem;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewItem_IKeyboardToolTipTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewItem_IKeyboardToolTipTests
     {
         [WinFormsTheory]
         [InlineData(true, true, true)]

@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripSeparatorTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripSeparatorTests
     {
         [WinFormsFact]
         public void ToolStripSeparator_Ctor_Default()

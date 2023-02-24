@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ByteViewerTests : IClassFixture<ThreadExceptionFixture>
+    public class ByteViewerTests
     {
         [WinFormsFact]
         public void ByteViewer_Ctor_Default()

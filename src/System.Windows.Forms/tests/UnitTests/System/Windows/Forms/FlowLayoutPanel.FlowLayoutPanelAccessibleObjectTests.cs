@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FlowLayoutPanelAccessibilityObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class FlowLayoutPanelAccessibilityObjectTests
     {
         [WinFormsFact]
         public void FlowLayoutPanelAccessibilityObject_Ctor_Default()

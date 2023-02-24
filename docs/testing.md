@@ -192,16 +192,7 @@ When writing theories note the following:
 
 
 Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
-  
-### Throw unhandled exceptions
 
-We have been observing unexplainable deadlocked tests. To get better handle on the situation we have started trapping `ThreadException`s.
-Each test class must implement the `IClassFixture<ThreadExceptionFixture>` interface similar to the one below:
-  ```cs
-    public class ButtonBaseTests : IClassFixture<ThreadExceptionFixture>
-    {
-    }
-  ```
 
 #### Strategy
 

@@ -11,7 +11,7 @@ using static Interop;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell, IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     {
         [WinFormsFact]
         public void DataGridViewCellAccessibleObject_Ctor_Default()

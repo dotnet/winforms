@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class LabelTests : IClassFixture<ThreadExceptionFixture>
+    public class LabelTests
     {
         [WinFormsFact]
         public void Label_Ctor_Default()

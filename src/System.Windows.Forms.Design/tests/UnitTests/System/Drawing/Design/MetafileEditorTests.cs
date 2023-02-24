@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class MetafileEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class MetafileEditorTests
     {
         [Fact]
         public void MetafileEditor_Ctor_Default()

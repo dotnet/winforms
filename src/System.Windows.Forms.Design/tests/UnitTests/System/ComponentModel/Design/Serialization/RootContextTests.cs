@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
-    public class RootContextTests : IClassFixture<ThreadExceptionFixture>
+    public class RootContextTests
     {
         [Fact]
         public void RootContext_Ctor_CodeExpression_Object()

@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UpDownBaseTests : IClassFixture<ThreadExceptionFixture>
+    public class UpDownBaseTests
     {
         [WinFormsFact]
         public void UpDownBase_Ctor_Default()

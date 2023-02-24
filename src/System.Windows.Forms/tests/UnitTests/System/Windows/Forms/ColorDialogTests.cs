@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ColorDialogTests : IClassFixture<ThreadExceptionFixture>
+    public class ColorDialogTests
     {
         [WinFormsFact]
         public void ColorDialog_Ctor_Default()

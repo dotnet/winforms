@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class ToolboxComponentsCreatedEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolboxComponentsCreatedEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_IComponentArray_TestData()
         {

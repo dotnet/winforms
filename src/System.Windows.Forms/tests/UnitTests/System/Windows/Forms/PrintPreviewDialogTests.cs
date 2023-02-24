@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PrintPreviewDialogTests : IClassFixture<ThreadExceptionFixture>
+    public class PrintPreviewDialogTests
     {
         [WinFormsTheory]
         [InlineData(Keys.D1, 1, 1)]

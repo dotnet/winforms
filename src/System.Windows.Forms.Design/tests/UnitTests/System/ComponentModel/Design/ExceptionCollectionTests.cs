@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ExceptionCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ExceptionCollectionTests
     {
         public static IEnumerable<object[]> Ctor_ArrayList_TestData()
         {

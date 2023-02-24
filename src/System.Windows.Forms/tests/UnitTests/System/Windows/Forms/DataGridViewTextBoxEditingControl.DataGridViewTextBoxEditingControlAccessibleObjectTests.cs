@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControlAccessibleObjectTests
     {
         [WinFormsFact]
         public void DataGridViewTextBoxEditingControlAccessibleObject_Ctor_Default()

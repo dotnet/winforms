@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PictureBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class PictureBoxTests
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
         private const string UrlImageLocation = "https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/bitmaps/nature24bits.jpg?raw=true";

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ClipboardTests : IClassFixture<ThreadExceptionFixture>
+    public class ClipboardTests
     {
         [WinFormsFact]
         public void Clipboard_Clear_InvokeMultipleTimes_Success()

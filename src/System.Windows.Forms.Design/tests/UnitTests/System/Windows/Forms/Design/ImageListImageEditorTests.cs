@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ImageListImageEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class ImageListImageEditorTests
     {
         [Fact]
         public void ImageListImageEditor_LoadImageFromStream_BitmapStream_ReturnsExpected()

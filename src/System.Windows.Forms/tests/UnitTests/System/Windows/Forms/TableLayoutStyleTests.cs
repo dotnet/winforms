@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutStyleTests : IClassFixture<ThreadExceptionFixture>
+    public class TableLayoutStyleTests
     {
         [WinFormsFact]
         public void TableLayoutStyle_Ctor_Default()

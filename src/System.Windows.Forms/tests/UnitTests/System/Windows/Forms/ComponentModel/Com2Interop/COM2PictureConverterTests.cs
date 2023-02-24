@@ -11,7 +11,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
 {
     // NB: doesn't require thread affinity
-    public class COM2PictureConverterTests : IClassFixture<ThreadExceptionFixture>
+    public class COM2PictureConverterTests
     {
         private static Com2PictureConverter Instance { get; } = new Com2PictureConverter(new Com2PropertyDescriptor(
             default,

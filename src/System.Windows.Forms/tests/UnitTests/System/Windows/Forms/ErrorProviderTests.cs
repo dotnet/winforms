@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ErrorProviderTests : IClassFixture<ThreadExceptionFixture>
+    public class ErrorProviderTests
     {
         [WinFormsFact]
         public void ErrorProvider_Ctor_Default()

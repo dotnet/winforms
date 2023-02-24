@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripMenuItemTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripMenuItemTests
     {
         [WinFormsFact]
         public void ToolStripMenuItem_Ctor_Default()

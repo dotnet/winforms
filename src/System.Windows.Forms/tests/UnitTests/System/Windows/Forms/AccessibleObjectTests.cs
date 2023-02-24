@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace System.Windows.Forms.Tests
 {
-    public partial class AccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public partial class AccessibleObjectTests
     {
         [WinFormsFact]
         public void AccessibleObject_Ctor_Default()

@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class SRCategoryAttributeTests : IClassFixture<ThreadExceptionFixture>
+    public class SRCategoryAttributeTests
     {
         [Fact]
         public void VerifyCategoryForValidCategoryAttribute()

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ColumnHeaderCollectionEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class ColumnHeaderCollectionEditorTests
     {
         [Fact]
         public void ColumnHeaderCollectionEditor_Ctor_Default()

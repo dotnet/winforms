@@ -10,7 +10,7 @@ using Xunit;
 namespace System.Drawing.Design.Tests
 {
     // NB: doesn't require thread affinity
-    public class UITypeEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class UITypeEditorTests
     {
         [Fact]
         public void UITypeEditor_Ctor_Default()

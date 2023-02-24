@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class FolderNameEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class FolderNameEditorTests
     {
         [Fact]
         public void FolderNameEditor_Ctor_Default()

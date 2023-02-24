@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Resources.Tests
 {
-    public class ResXResourceReaderTests : IClassFixture<ThreadExceptionFixture>
+    public class ResXResourceReaderTests
     {
         [Fact]
         public void ResXResourceReader_Deserialize_AxHost_Success_ResourceWriter_Throws()

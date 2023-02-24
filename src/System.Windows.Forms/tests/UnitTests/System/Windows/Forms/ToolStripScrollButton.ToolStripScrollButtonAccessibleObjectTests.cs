@@ -7,7 +7,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessibleObjectTests
     {
         public static IEnumerable<object[]> ToolStripScrollButtonAccessibleObject_FragmentNavigate_TestData()
         {

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class RowStyleTests : IClassFixture<ThreadExceptionFixture>
+    public class RowStyleTests
     {
         [WinFormsFact]
         public void RowStyle_Ctor_Default()

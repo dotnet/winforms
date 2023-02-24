@@ -11,7 +11,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TextBoxBase_TextBoxBaseUiaTextProviderTests : IClassFixture<ThreadExceptionFixture>
+    public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         [WinFormsFact]
         public void TextBoxBaseUiaTextProvider_ctor_DoesntCreateControlHandle()

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ApplicationContextTests : IClassFixture<ThreadExceptionFixture>
+    public class ApplicationContextTests
     {
         [WinFormsFact]
         public void Ctor_Default()

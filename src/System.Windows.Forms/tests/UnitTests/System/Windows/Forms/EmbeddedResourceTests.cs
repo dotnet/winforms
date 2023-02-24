@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class EmbeddedResourceTests : IClassFixture<ThreadExceptionFixture>
+    public class EmbeddedResourceTests
     {
         // Get System.Windows.Forms assembly to verify that it contains all the resources that the code uses.
         private readonly Assembly assembly = Assembly.GetAssembly(typeof(AccessibleObject));

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class EventHandlerServiceTests : IClassFixture<ThreadExceptionFixture>
+    public class EventHandlerServiceTests
     {
         [Fact]
         public void ctor_should_set_FocusWindow()

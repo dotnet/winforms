@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripItemCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripItemCollectionTests
     {
         [WinFormsTheory]
         [InlineData("name2")]

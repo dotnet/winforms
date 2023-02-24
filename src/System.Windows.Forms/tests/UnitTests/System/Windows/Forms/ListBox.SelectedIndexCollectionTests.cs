@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListBoxSelectedIndexCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ListBoxSelectedIndexCollectionTests
     {
         [WinFormsFact]
         public void ListBoxSelectedIndexCollection_Ctor_ListBox()

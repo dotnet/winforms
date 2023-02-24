@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewRowDividerDoubleClickEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewRowDividerDoubleClickEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Int_HandledMouseEventArgs_TestData()
         {

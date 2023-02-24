@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBox_ChildAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ChildAccessibleObjectTests
     {
         [WinFormsFact]
         public void ChildAccessibleObject_Ctor_NullOwner_ThrowsArgumentNullException()

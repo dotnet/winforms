@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TrackBar_TrackBarThumbAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TrackBar_TrackBarThumbAccessibleObjectTests
     {
         [WinFormsTheory]
         [CommonMemberData(typeof(TrackBarTestHelper), nameof(TrackBarTestHelper.TrackBarAccessibleObject_WithoutCreateControl_TestData))]

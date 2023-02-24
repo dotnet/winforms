@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BaseCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class BaseCollectionTests
     {
         [WinFormsFact]
         public void BaseCollection_Ctor_Default()

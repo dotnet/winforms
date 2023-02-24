@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutPanelTests : IClassFixture<ThreadExceptionFixture>
+    public class TableLayoutPanelTests
     {
         [WinFormsFact]
         public void TableLayoutPanel_Ctor_Default()

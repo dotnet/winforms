@@ -14,7 +14,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
-    public class CodeDomComponentSerializationServiceTests : IClassFixture<ThreadExceptionFixture>
+    public class CodeDomComponentSerializationServiceTests
     {
         private Mock<ISite> GetDefaultMockSite(string name)
         {

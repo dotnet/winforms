@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripItemTextRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripItemTextRenderEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags_TestData()
         {

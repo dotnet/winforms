@@ -10,7 +10,7 @@ using static System.Windows.Forms.TabPage;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabPage_TabAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TabPage_TabAccessibleObjectTests
     {
         [WinFormsTheory]
         [InlineData(true, false)]

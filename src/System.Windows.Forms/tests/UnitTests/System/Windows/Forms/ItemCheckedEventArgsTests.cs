@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class ItemCheckedEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ItemCheckedEventArgsTests
     {
         [WinFormsFact]
         public void ItemCheckedEventArgs_Ctor_NullListViewItem_ThrowsArgumentNullException()

@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class DropDownButton_DropDownButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DropDownButton_DropDownButtonAccessibleObjectTests
     {
         [WinFormsFact]
         public void DropDownButtonAccessibleObject_Ctor_Default()

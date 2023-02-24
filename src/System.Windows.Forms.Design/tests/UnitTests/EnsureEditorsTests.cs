@@ -13,7 +13,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Editors.Tests
 {
-    public class EnsureEditorsTests : IClassFixture<ThreadExceptionFixture>
+    public class EnsureEditorsTests
     {
         [WinFormsFact]
         public void Ensure_editors_type_forwarded()

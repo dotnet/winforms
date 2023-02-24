@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TaskDialogTests : IClassFixture<ThreadExceptionFixture>
+    public class TaskDialogTests
     {
         [WinFormsFact]
         public void TaskDialog_ShowDialog_SetProperty_SameThread_Success()

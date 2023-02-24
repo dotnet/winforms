@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class BitmapEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class BitmapEditorTests
     {
         [Fact]
         public void BitmapEditor_Ctor_Default()

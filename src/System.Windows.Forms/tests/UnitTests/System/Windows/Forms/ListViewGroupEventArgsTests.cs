@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class ListViewGroupEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewGroupEventArgsTests
     {
         [Theory]
         [InlineData(-1)]

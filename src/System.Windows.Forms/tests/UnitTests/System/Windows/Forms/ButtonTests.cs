@@ -16,7 +16,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ButtonTests : IClassFixture<ThreadExceptionFixture>
+    public class ButtonTests
     {
         [WinFormsFact]
         public void Button_Ctor_Default()

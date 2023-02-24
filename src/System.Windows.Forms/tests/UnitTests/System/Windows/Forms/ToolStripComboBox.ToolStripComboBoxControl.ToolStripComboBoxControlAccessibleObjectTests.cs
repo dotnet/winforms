@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControlAccessibleObjectTests
     {
         [WinFormsFact]
         public void ToolStripComboBoxControlAccessibleObject_ctor_default()

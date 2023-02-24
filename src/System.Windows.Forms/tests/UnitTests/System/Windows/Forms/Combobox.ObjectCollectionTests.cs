@@ -10,7 +10,7 @@ using static System.Windows.Forms.ComboBox.ObjectCollection;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBox_ComboBoxObjectCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ComboBoxObjectCollectionTests
     {
         [WinFormsTheory]
         [InlineData(true)]

@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyGrid_PropertyGridAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyGrid_PropertyGridAccessibleObjectTests
     {
         [WinFormsFact]
         public void PropertyGridAccessibleObject_Ctor_Default()

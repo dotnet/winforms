@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewHeaderCellTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewHeaderCellTests
     {
         [WinFormsFact]
         public void DataGridViewHeaderCell_Ctor_Default()

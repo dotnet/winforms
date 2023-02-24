@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutControlCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class TableLayoutControlCollectionTests
     {
         [WinFormsFact]
         public void TableLayoutControlCollection_Ctor_TableLayoutPanel()

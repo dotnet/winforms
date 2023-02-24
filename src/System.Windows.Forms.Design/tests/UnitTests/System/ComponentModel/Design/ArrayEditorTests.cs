@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ArrayEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class ArrayEditorTests
     {
         [Theory]
         [InlineData(typeof(object), null)]

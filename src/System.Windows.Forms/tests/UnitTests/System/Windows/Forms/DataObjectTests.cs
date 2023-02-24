@@ -18,7 +18,7 @@ using Point = System.Drawing.Point;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DataObjectTests
     {
         private static readonly string[] s_clipboardFormats =
         {

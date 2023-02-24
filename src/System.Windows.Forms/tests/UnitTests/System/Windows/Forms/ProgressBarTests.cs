@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ProgressBarTests : IClassFixture<ThreadExceptionFixture>
+    public class ProgressBarTests
     {
         [WinFormsFact]
         public void ProgressBar_Ctor_Default()

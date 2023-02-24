@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FontDialogTests : IClassFixture<ThreadExceptionFixture>
+    public class FontDialogTests
     {
         [WinFormsFact]
         public void FontDialog_Ctor_Default()

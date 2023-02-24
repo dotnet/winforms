@@ -12,7 +12,7 @@ using IStream = Windows.Win32.System.Com.IStream;
 
 namespace System.Windows.Forms.Tests;
 
-public class DragDropFormatTests : IClassFixture<ThreadExceptionFixture>
+public class DragDropFormatTests
 {
     public static IEnumerable<object[]> DragDropFormat_TestData()
     {

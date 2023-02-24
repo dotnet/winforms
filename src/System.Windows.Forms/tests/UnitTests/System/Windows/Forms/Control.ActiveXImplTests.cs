@@ -10,7 +10,7 @@ using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests;
 
-public unsafe class Control_ActiveXImplTests : IClassFixture<ThreadExceptionFixture>
+public unsafe class Control_ActiveXImplTests
 {
     [WinFormsFact]
     public void ActiveXImpl_SaveLoad_RoundTrip()

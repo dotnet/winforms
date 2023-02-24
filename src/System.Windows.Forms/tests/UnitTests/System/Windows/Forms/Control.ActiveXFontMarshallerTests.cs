@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests;
 
-public unsafe class Control_ActiveXFontMarshalerTests : IClassFixture<ThreadExceptionFixture>
+public unsafe class Control_ActiveXFontMarshalerTests
 {
     private static readonly ICustomMarshaler s_marshaler =
         (ICustomMarshaler)Activator.CreateInstance(

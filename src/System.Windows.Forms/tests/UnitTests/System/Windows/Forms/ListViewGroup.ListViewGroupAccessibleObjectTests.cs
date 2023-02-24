@@ -13,7 +13,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewGroup_ListViewGroupAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewGroup_ListViewGroupAccessibleObjectTests
     {
         [WinFormsFact]
         public void ListViewGroupAccessibleObject_Ctor_ThrowsArgumentNullException()

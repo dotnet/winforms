@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class NavigateEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class NavigateEventArgsTests
     {
         [Theory]
         [InlineData(true)]

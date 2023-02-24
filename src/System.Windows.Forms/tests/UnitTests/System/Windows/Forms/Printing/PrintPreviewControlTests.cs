@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class PrintPreviewControlTests : IClassFixture<ThreadExceptionFixture>
+    public class PrintPreviewControlTests
     {
         private const int emptyColorArgb = 0;
         private const int blueColorArgb = -16776961;

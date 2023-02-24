@@ -12,7 +12,7 @@ using Xunit;
 namespace System.Windows.Forms.Layout.Tests
 {
     // NB: doesn't require thread affinity
-    public class TableLayoutSettingsTypeConverterTests : IClassFixture<ThreadExceptionFixture>
+    public class TableLayoutSettingsTypeConverterTests
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
             CommonTestHelper.GetConvertFromTheoryData();

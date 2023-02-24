@@ -12,7 +12,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyGridView_PropertyGridViewAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyGridView_PropertyGridViewAccessibleObjectTests
     {
         [WinFormsFact]
         public void PropertyGridViewAccessibleObject_Ctor_Default()

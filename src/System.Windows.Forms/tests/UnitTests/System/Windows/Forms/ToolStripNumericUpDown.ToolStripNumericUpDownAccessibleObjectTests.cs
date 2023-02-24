@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
     {
         [WinFormsFact]
         public void ToolStripNumericUpDownAccessibleObject_Ctor_Default()

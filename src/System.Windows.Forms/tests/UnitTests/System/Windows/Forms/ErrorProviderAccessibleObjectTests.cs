@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ErrorProviderAccessibleObjectTests : IDisposable, IClassFixture<ThreadExceptionFixture>
+    public class ErrorProviderAccessibleObjectTests : IDisposable
     {
         private readonly Form _form;
         private readonly Control _control1;

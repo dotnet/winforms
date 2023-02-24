@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Resources.Tests
 {
     // NB: doesn't require thread affinity
-    public class ResXResourceWriterTests : IClassFixture<ThreadExceptionFixture>
+    public class ResXResourceWriterTests
     {
         [Fact]
         public void TestRoundTrip()

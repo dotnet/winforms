@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class MenuCommandsTests : IClassFixture<ThreadExceptionFixture>
+    public class MenuCommandsTests
     {
         [Fact]
         public void MenuCommands_Ctor_Default()

@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBox_ComboBoxChildListUiaProviderTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ComboBoxChildListUiaProviderTests
     {
         public static IEnumerable<object[]> ChildListAccessibleObject_FragmentNavigate_TestData()
         {

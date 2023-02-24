@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ThreadContextTests : IClassFixture<ThreadExceptionFixture>
+    public class ThreadContextTests
     {
         private delegate bool MessageCallback(ref Message m);
 

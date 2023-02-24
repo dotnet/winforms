@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CheckedListBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class CheckedListBoxTests
     {
         [WinFormsFact]
         public void CheckedListBox_Constructor()

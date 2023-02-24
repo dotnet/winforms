@@ -12,7 +12,7 @@ using Size = System.Drawing.Size;
 namespace System.Windows.Forms.Tests
 {
     [Collection("Sequential")] // ImageList doesn't appear to behave well under stress in multi-threaded env
-    public class ImageCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class ImageCollectionTests
     {
         [WinFormsFact]
         public void ImageCollection_Count_GetEmptyWithHandle_ReturnsExpected()

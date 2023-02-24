@@ -7,7 +7,7 @@ using static System.Windows.Forms.MonthCalendar;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
     {
         [WinFormsFact]
         public void CalendarPreviousButtonAccessibleObject_ctor_default()

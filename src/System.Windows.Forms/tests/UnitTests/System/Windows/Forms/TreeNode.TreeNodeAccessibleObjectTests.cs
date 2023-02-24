@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeNodeAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TreeNodeAccessibleObjectTests
     {
         [WinFormsFact]
         public void TreeNodeAccessibleObject_Ctor_Default()
