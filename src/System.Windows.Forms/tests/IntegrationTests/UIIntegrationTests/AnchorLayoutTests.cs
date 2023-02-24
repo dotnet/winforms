@@ -216,8 +216,8 @@ namespace System.Windows.Forms.UITests
             // explicitly setting and unsetting the switch.
             // Switch value has 3 states: 0 - unknown, 1 - true, -1 - false
             dynamic localAppContextSwitches = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
-            int previousSwitchValue = localAppContextSwitches.s_AnchorLayoutV2;
-            localAppContextSwitches.s_AnchorLayoutV2 = value;
+            int previousSwitchValue = localAppContextSwitches.s_anchorLayoutV2;
+            localAppContextSwitches.s_anchorLayoutV2 = value;
 
             return previousSwitchValue;
         }
