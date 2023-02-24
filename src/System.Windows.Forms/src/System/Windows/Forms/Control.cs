@@ -10726,7 +10726,7 @@ namespace System.Windows.Forms
         protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             Debug.WriteLineIf(CompModSwitches.SetBounds.TraceInfo,
-                $"{Name}::SetBoundsCore(x={x} y={y} width={width} height={height} specified={specified}");
+                $"{Name}::SetBoundsCore(x={x} y={y} width={width} height={height} specified={specified})");
             // SetWindowPos below sends a WmWindowPositionChanged (not posts) so we immediately
             // end up in WmWindowPositionChanged which may cause the parent to layout.  We need to
             // suspend/resume to defer the parent from laying out until after InitLayout has been called
@@ -11510,7 +11510,6 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLine($"""
                         WARNING: Bounds changed during OnLocationChanged()
-
                         before={originalBounds} after={Bounds}
                         """);
                 }
@@ -11534,7 +11533,6 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLine($"""
                         WARNING: Bounds changed during OnSizeChanged()
-
                         before={originalBounds} after={Bounds}
                         """);
                 }
