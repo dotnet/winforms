@@ -362,25 +362,25 @@
 ~override System.Windows.Forms.TabControl.ToString() -> string
 ~override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStrip.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnMouseCaptureChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnMouseDown(System.Windows.Forms.MouseEventArgs mea) -> void
-~override System.Windows.Forms.ToolStrip.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnMouseMove(System.Windows.Forms.MouseEventArgs mea) -> void
-~override System.Windows.Forms.ToolStrip.OnMouseUp(System.Windows.Forms.MouseEventArgs mea) -> void
-~override System.Windows.Forms.ToolStrip.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnRightToLeftChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnMouseCaptureChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnMouseDown(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStrip.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnMouseMove(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStrip.OnMouseUp(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStrip.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnRightToLeftChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ToolStrip.OnScroll(System.Windows.Forms.ScrollEventArgs se) -> void
 ~override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ToolStrip.ToString() -> string
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
@@ -1407,15 +1407,15 @@
 ~virtual System.Windows.Forms.TabControl.OnSelected(System.Windows.Forms.TabControlEventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnItemAdded(System.Windows.Forms.ToolStripItemEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnItemRemoved(System.Windows.Forms.ToolStripItemEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnLayoutCompleted(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnLayoutStyleChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnItemAdded(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnItemRemoved(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnLayoutCompleted(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnLayoutStyleChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnPaintGrip(System.Windows.Forms.PaintEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs e) -> void

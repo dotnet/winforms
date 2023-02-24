@@ -2981,7 +2981,7 @@ namespace System.Windows.Forms
             s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] calling base");
             return base.ProcessDialogKey(keyData);
         }
-#nullable disable
+
         internal virtual void ProcessDuplicateMnemonic(ToolStripItem item, char charCode)
         {
             if (!CanProcessMnemonic())
@@ -3047,7 +3047,7 @@ namespace System.Windows.Forms
             }
 
             // at this point we assume we can process mnemonics as process mnemonic has filtered for use.
-            ToolStripItem startingItem = GetSelectedItem();
+            ToolStripItem? startingItem = GetSelectedItem();
             int startIndex = 0;
             if (startingItem is not null)
             {
@@ -3056,7 +3056,7 @@ namespace System.Windows.Forms
 
             startIndex = Math.Max(0, startIndex);
 
-            ToolStripItem firstMatch = null;
+            ToolStripItem? firstMatch = null;
             bool foundMenuItem = false;
             int index = startIndex;
 
@@ -3227,10 +3227,10 @@ namespace System.Windows.Forms
                 case Keys.Down:
                     if (IsDropDown || Orientation != Orientation.Horizontal)
                     {
-                        ToolStripItem currentSel = GetSelectedItem();
+                        ToolStripItem? currentSel = GetSelectedItem();
                         if (keyCode == Keys.Down)
                         {
-                            ToolStripItem nextItem = GetNextItem(currentSel, ArrowDirection.Down);
+                            ToolStripItem? nextItem = GetNextItem(currentSel, ArrowDirection.Down);
                             if (nextItem is not null)
                             {
                                 ChangeSelection(nextItem);
@@ -3239,7 +3239,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            ToolStripItem nextItem = GetNextItem(currentSel, ArrowDirection.Up);
+                            ToolStripItem? nextItem = GetNextItem(currentSel, ArrowDirection.Up);
                             if (nextItem is not null)
                             {
                                 ChangeSelection(nextItem);
@@ -3260,12 +3260,12 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ProcessLeftRightArrowKey(bool right)
         {
-            ToolStripItem selectedItem = GetSelectedItem();
+            ToolStripItem? selectedItem = GetSelectedItem();
             ToolStripItem nextItem = SelectNextToolStripItem(GetSelectedItem(), right);
             return true;
         }
 
-        internal void NotifySelectionChange(ToolStripItem item)
+        internal void NotifySelectionChange(ToolStripItem? item)
         {
             if (item is null)
             {
@@ -3279,7 +3279,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnDefaultRendererChanged(object sender, EventArgs e)
+        private void OnDefaultRendererChanged(object? sender, EventArgs e)
         {
             // callback from static event
             if (GetToolStripState(STATE_USEDEFAULTRENDERER))
@@ -3293,13 +3293,13 @@ namespace System.Windows.Forms
             SetToolStripState(STATE_DRAGGING, true);
             ClearAllSelections();
             UpdateToolTip(null); // suppress the tooltip.
-            ((EventHandler)Events[s_eventBeginDrag])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventBeginDrag])?.Invoke(this, e);
         }
 
         protected virtual void OnEndDrag(EventArgs e)
         {
             SetToolStripState(STATE_DRAGGING, false);
-            ((EventHandler)Events[s_eventEndDrag])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventEndDrag])?.Invoke(this, e);
         }
 
         protected override void OnDockChanged(EventArgs e)
@@ -3311,7 +3311,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(Renderer);
 
-            ((EventHandler)Events[s_eventRendererChanged])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventRendererChanged])?.Invoke(this, e);
         }
 
         protected override void OnEnabledChanged(EventArgs e)
@@ -3365,7 +3365,7 @@ namespace System.Windows.Forms
                 {
                     if (IsDropDown)
                     {
-                        ToolStripItem item = ((ToolStripDropDown)this).OwnerItem;
+                        ToolStripItem? item = ((ToolStripDropDown)this).OwnerItem;
                         if (item is not null && item.Name is not null)
                         {
                             name = item.Name = ".DropDown";
@@ -3417,7 +3417,7 @@ namespace System.Windows.Forms
                 HasVisibleItems = true;
             }
 
-            ((ToolStripItemEventHandler)Events[s_eventItemAdded])?.Invoke(this, e);
+            ((ToolStripItemEventHandler?)Events[s_eventItemAdded])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -3425,15 +3425,15 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnItemClicked(ToolStripItemClickedEventArgs e)
         {
-            ((ToolStripItemClickedEventHandler)Events[s_eventItemClicked])?.Invoke(this, e);
+            ((ToolStripItemClickedEventHandler?)Events[s_eventItemClicked])?.Invoke(this, e);
         }
 
         protected internal virtual void OnItemRemoved(ToolStripItemEventArgs e)
         {
             // clear cached item states.
-            OnItemVisibleChanged(e, /*performlayout*/true);
+            OnItemVisibleChanged(e, performLayout: true);
 
-            ((ToolStripItemEventHandler)Events[s_eventItemRemoved])?.Invoke(this, e);
+            ((ToolStripItemEventHandler?)Events[s_eventItemRemoved])?.Invoke(this, e);
         }
 
         internal void OnItemVisibleChanged(ToolStripItemEventArgs e, bool performLayout)
@@ -3465,11 +3465,11 @@ namespace System.Windows.Forms
             LayoutRequired = false;
 
             // we need to do this to prevent autosizing to happen while we're reparenting.
-            ToolStripOverflow overflow = GetOverflow();
+            ToolStripOverflow? overflow = GetOverflow();
             if (overflow is not null)
             {
                 overflow.SuspendLayout();
-                _toolStripOverflowButton.Size = _toolStripOverflowButton.GetPreferredSize(DisplayRectangle.Size - Padding.Size);
+                _toolStripOverflowButton!.Size = _toolStripOverflowButton.GetPreferredSize(DisplayRectangle.Size - Padding.Size);
             }
 
             for (int j = 0; j < Items.Count; j++)
@@ -3487,12 +3487,12 @@ namespace System.Windows.Forms
 
         protected virtual void OnLayoutCompleted(EventArgs e)
         {
-            ((EventHandler)Events[s_eventLayoutCompleted])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventLayoutCompleted])?.Invoke(this, e);
         }
 
         protected virtual void OnLayoutStyleChanged(EventArgs e)
         {
-            ((EventHandler)Events[s_eventLayoutStyleChanged])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventLayoutStyleChanged])?.Invoke(this, e);
         }
 
         protected override void OnLostFocus(EventArgs e)
@@ -3516,7 +3516,7 @@ namespace System.Windows.Forms
 
         internal virtual void OnLocationChanging(ToolStripLocationCancelEventArgs e)
         {
-            ((ToolStripLocationCancelEventHandler)Events[s_eventLocationChanging])?.Invoke(this, e);
+            ((ToolStripLocationCancelEventHandler?)Events[s_eventLocationChanging])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -3549,7 +3549,7 @@ namespace System.Windows.Forms
                 }
 
                 _lastMouseDownedItem = item;
-                item.FireEvent(mea, ToolStripItemEventType.MouseDown);
+                item.FireEvent(mea!, ToolStripItemEventType.MouseDown);
             }
             else
             {
@@ -3588,10 +3588,8 @@ namespace System.Windows.Forms
                     if (_lastMouseActiveItem is not null)
                     {
                         ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
-                        item.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
+                        item!.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
-
-                    //
 
                     if (!DesignMode)
                     {
@@ -3610,7 +3608,7 @@ namespace System.Windows.Forms
 
                 // Fire mouse move on the item
                 // Transpose this to "client coordinates" of the ToolStripItem.
-                Point itemRelativePoint = item.TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripCoords, ToolStripPointType.ToolStripItemCoords);
+                Point itemRelativePoint = item!.TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripCoords, ToolStripPointType.ToolStripItemCoords);
                 mea = new MouseEventArgs(mea.Button, mea.Clicks, itemRelativePoint.X, itemRelativePoint.Y, mea.Delta);
                 item.FireEvent(mea, ToolStripItemEventType.MouseMove);
             }
@@ -3660,7 +3658,7 @@ namespace System.Windows.Forms
                     mea = new MouseEventArgs(mea.Button, mea.Clicks, itemRelativePoint.X, itemRelativePoint.Y, mea.Delta);
                 }
 
-                item.FireEvent(mea, ToolStripItemEventType.MouseUp);
+                item.FireEvent(mea!, ToolStripItemEventType.MouseUp);
             }
             else
             {
@@ -3679,7 +3677,7 @@ namespace System.Windows.Forms
             bool excludedTransparentRegion = false;
 
             Rectangle viewableArea = DisplayRectangle;
-            using Region transparentRegion = Renderer.GetTransparentRegion(this);
+            using Region? transparentRegion = Renderer.GetTransparentRegion(this);
 
             // Paint the items
             //
@@ -3824,7 +3822,7 @@ namespace System.Windows.Forms
             // the transparent region should be added back in as the insertion mark should paint over it.
             if (excludedTransparentRegion)
             {
-                toolstripGraphics.SetClip(transparentRegion, CombineMode.Union);
+                toolstripGraphics.SetClip(transparentRegion!, CombineMode.Union);
             }
 
             // Paint the item re-order insertion mark...
@@ -3867,7 +3865,7 @@ namespace System.Windows.Forms
             GraphicsState graphicsState = g.Save();
             try
             {
-                using (Region transparentRegion = Renderer.GetTransparentRegion(this))
+                using (Region? transparentRegion = Renderer.GetTransparentRegion(this))
                 {
                     if (transparentRegion is not null)
                     {
@@ -3895,7 +3893,7 @@ namespace System.Windows.Forms
                 HookStaticEvents(Visible);
             }
         }
-
+#nullable disable
         private void EraseCorners(PaintEventArgs e, Region transparentRegion)
         {
             if (transparentRegion is not null)

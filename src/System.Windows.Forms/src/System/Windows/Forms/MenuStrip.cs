@@ -228,7 +228,7 @@ namespace System.Windows.Forms
                     // has focus.
                     if (Focused || !ContainsFocus)
                     {
-                        NotifySelectionChange(null);
+                        NotifySelectionChange(item: null);
                         ToolStrip.s_snapFocusDebug.TraceVerbose("[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
 
