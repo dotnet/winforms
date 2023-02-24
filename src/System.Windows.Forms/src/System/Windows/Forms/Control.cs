@@ -11362,7 +11362,7 @@ namespace System.Windows.Forms
 
             Debug.Assert(LayoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
             Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
-                $"{GetType().Name} ::SuspendLayout( newCount = {LayoutSuspendCount}");
+                $"{GetType().Name}::SuspendLayout(newCount = {LayoutSuspendCount})");
         }
 
         /// <summary>
