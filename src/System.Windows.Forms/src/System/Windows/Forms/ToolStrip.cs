@@ -1754,7 +1754,7 @@ namespace System.Windows.Forms
             get => base.TabStop;
             set => base.TabStop = value;
         }
-#nullable disable
+
         /// <summary> this is the ToolTip used for the individual items
         ///  it only works if ShowItemToolTips = true
         /// </summary>
@@ -1762,7 +1762,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!Properties.TryGetObject(ToolStrip.s_propToolTip, out ToolTip toolTip))
+                if (!Properties.TryGetObject(ToolStrip.s_propToolTip, out ToolTip? toolTip))
                 {
                     toolTip = new ToolTip();
                     Properties.SetObject(ToolStrip.s_propToolTip, toolTip);
@@ -1824,11 +1824,11 @@ namespace System.Windows.Forms
         }
 
         // Internal so that it's not a public API.
-        internal virtual void ChangeSelection(ToolStripItem nextItem)
+        internal virtual void ChangeSelection(ToolStripItem? nextItem)
         {
             if (nextItem is not null)
             {
-                ToolStripControlHost controlHost = nextItem as ToolStripControlHost;
+                ToolStripControlHost? controlHost = nextItem as ToolStripControlHost;
                 // if we contain focus, we should set focus to ourselves
                 // so we get the focus off the thing that's currently focused
                 // e.g. go from a text box to a toolstrip button
@@ -1864,7 +1864,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual LayoutSettings CreateLayoutSettings(ToolStripLayoutStyle layoutStyle)
+        protected virtual LayoutSettings? CreateLayoutSettings(ToolStripLayoutStyle layoutStyle)
         {
             switch (layoutStyle)
             {
@@ -1877,7 +1877,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected internal virtual ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick)
+        protected internal virtual ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick)
         {
             if (text == "-")
             {
@@ -1894,10 +1894,10 @@ namespace System.Windows.Forms
             ClearAllSelectionsExcept(null);
         }
 
-        private void ClearAllSelectionsExcept(ToolStripItem item)
+        private void ClearAllSelectionsExcept(ToolStripItem? item)
         {
             Rectangle regionRect = (item is null) ? Rectangle.Empty : item.Bounds;
-            Region region = null;
+            Region? region = null;
 
             // Copy displayed items collection so it doesn't mutate when we begin to hide items.
             ToolStripItem[] displayedItems = new ToolStripItem[DisplayedItems.Count];
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms
 
         private void ClearLastMouseDownedItem()
         {
-            ToolStripItem lastItem = _lastMouseDownedItem;
+            ToolStripItem? lastItem = _lastMouseDownedItem;
             _lastMouseDownedItem = null;
             if (IsSelectionSuspended)
             {
@@ -1994,7 +1994,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                ToolStripOverflow overflow = GetOverflow();
+                ToolStripOverflow? overflow = GetOverflow();
 
                 try
                 {
@@ -2016,7 +2016,7 @@ namespace System.Windows.Forms
 
                     _mouseHoverTimer?.Dispose();
 
-                    ToolTip toolTip = (ToolTip)Properties.GetObject(ToolStrip.s_propToolTip);
+                    ToolTip? toolTip = (ToolTip?)Properties.GetObject(ToolStrip.s_propToolTip);
                     toolTip?.Dispose();
 
                     if (!Items.IsReadOnly)
@@ -2121,7 +2121,7 @@ namespace System.Windows.Forms
             OnEndDrag(EventArgs.Empty);
         }
 
-        internal ToolStripOverflow GetOverflow()
+        internal ToolStripOverflow? GetOverflow()
         {
             return (_toolStripOverflowButton is null || !_toolStripOverflowButton.HasDropDown) ? null : _toolStripOverflowButton.DropDown as ToolStripOverflow;
         }
@@ -2137,7 +2137,7 @@ namespace System.Windows.Forms
             return _mouseDownID;
         }
 
-        internal virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware)
+        internal virtual ToolStripItem? GetNextItem(ToolStripItem? start, ArrowDirection direction, bool rtlAware)
         {
             if (rtlAware && RightToLeft == RightToLeft.Yes)
             {
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms
         ///  - This function will only surf the items in the current container
         ///  - Overriding this function will change the tab ordering and accessible child ordering.
         /// </summary>
-        public virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction)
+        public virtual ToolStripItem? GetNextItem(ToolStripItem? start, ArrowDirection direction)
         {
             switch (direction)
             {
@@ -2181,14 +2181,14 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  Helper function for GetNextItem - do not directly call this.
         /// </remarks>
-        private ToolStripItem GetNextItemHorizontal(ToolStripItem start, bool forward)
+        private ToolStripItem? GetNextItemHorizontal(ToolStripItem? start, bool forward)
         {
             if (DisplayedItems.Count <= 0)
             {
                 return null;
             }
 
-            ToolStripDropDown dropDown = this as ToolStripDropDown;
+            ToolStripDropDown? dropDown = this as ToolStripDropDown;
 
             // The navigation should be consistent when navigating in forward and
             // backward direction entering the toolstrip, it means that the first
@@ -2203,8 +2203,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Debug.WriteLineIf(s_selectionDebug.TraceVerbose && (current != -1), "[SelectDBG GetNextToolStripItem] Last selected item was " + ((current != -1) ? DisplayedItems[current].Text : ""));
-            Debug.WriteLineIf(s_selectionDebug.TraceVerbose && (current == -1), "[SelectDBG GetNextToolStripItem] Last selected item was null");
+            Debug.WriteLineIf(s_selectionDebug!.TraceVerbose && (current != -1), $"[SelectDBG GetNextToolStripItem] Last selected item was {DisplayedItems[current].Text}");
+            Debug.WriteLineIf(s_selectionDebug!.TraceVerbose && (current == -1), "[SelectDBG GetNextToolStripItem] Last selected item was null");
 
             int count = DisplayedItems.Count;
 
@@ -2215,7 +2215,8 @@ namespace System.Windows.Forms
                     current = ++current % count;
                 }
                 else
-                {  // provide negative wrap if necessary
+                {
+                    // Provide negative wrap if necessary.
                     current = (--current < 0) ? count + current : current;
                 }
 
@@ -2256,10 +2257,10 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  Helper function for GetNextItem - do not directly call this.
         /// </remarks>
-        private ToolStripItem GetNextItemVertical(ToolStripItem selectedItem, bool down)
+        private ToolStripItem? GetNextItemVertical(ToolStripItem? selectedItem, bool down)
         {
-            ToolStripItem tanWinner = null;
-            ToolStripItem hypotenuseWinner = null;
+            ToolStripItem? tanWinner = null;
+            ToolStripItem? hypotenuseWinner = null;
 
             double minHypotenuse = double.MaxValue;
             double minTan = double.MaxValue;
@@ -2268,14 +2269,12 @@ namespace System.Windows.Forms
 
             if (selectedItem is null)
             {
-                ToolStripItem item = GetNextItemHorizontal(selectedItem, down);
-                return item;
+                return GetNextItemHorizontal(selectedItem, down);
             }
 
             if (this is ToolStripDropDown dropDown && dropDown.OwnerItem is not null && (dropDown.OwnerItem.IsInDesignMode || (dropDown.OwnerItem.Owner is not null && dropDown.OwnerItem.Owner.IsInDesignMode)))
             {
-                ToolStripItem item = GetNextItemHorizontal(selectedItem, down);
-                return item;
+                return GetNextItemHorizontal(selectedItem, down);
             }
 
             Point midPointOfCurrent = new Point(selectedItem.Bounds.X + selectedItem.Width / 2,
@@ -2408,7 +2407,7 @@ namespace System.Windows.Forms
         internal static Size GetPreferredSizeHorizontal(IArrangedElement container, Size proposedConstraints)
         {
             Size maxSize = Size.Empty;
-            ToolStrip toolStrip = container as ToolStrip;
+            ToolStrip toolStrip = (ToolStrip)container;
 
             // ensure preferred size respects default size as a minimum.
             Size defaultSize = toolStrip.DefaultSize - toolStrip.Padding.Size;
@@ -2472,7 +2471,7 @@ namespace System.Windows.Forms
         {
             Size maxSize = Size.Empty;
             bool requiresOverflow = false;
-            ToolStrip toolStrip = container as ToolStrip;
+            ToolStrip toolStrip = (ToolStrip)container;
 
             bool foundItemParticipatingInLayout = false;
 
@@ -2537,9 +2536,9 @@ namespace System.Windows.Forms
         }
 #endregion
 
-        internal ToolStripItem GetSelectedItem()
+        internal ToolStripItem? GetSelectedItem()
         {
-            ToolStripItem selectedItem = null;
+            ToolStripItem? selectedItem = null;
 
             for (int i = 0; i < DisplayedItems.Count; i++)
             {
@@ -2560,7 +2559,7 @@ namespace System.Windows.Forms
             return (_toolStripState & flag) != 0;
         }
 
-        internal virtual ToolStrip GetToplevelOwnerToolStrip()
+        internal virtual ToolStrip? GetToplevelOwnerToolStrip()
         {
             return this;
         }
@@ -2680,7 +2679,7 @@ namespace System.Windows.Forms
 
         internal void InvalidateTextItems()
         {
-            using (new LayoutTransaction(this, this, "ShowKeyboardFocusCues", /*PerformLayout=*/Visible))
+            using (new LayoutTransaction(this, this, "ShowKeyboardFocusCues", resumeLayout: Visible))
             {
                 for (int j = 0; j < DisplayedItems.Count; j++)
                 {
@@ -2694,8 +2693,8 @@ namespace System.Windows.Forms
 
         protected override bool IsInputKey(Keys keyData)
         {
-            ToolStripItem item = GetSelectedItem();
-            if ((item is not null) && item.IsInputKey(keyData))
+            ToolStripItem? item = GetSelectedItem();
+            if (item is not null && item.IsInputKey(keyData))
             {
                 return true;
             }
@@ -2705,8 +2704,8 @@ namespace System.Windows.Forms
 
         protected override bool IsInputChar(char charCode)
         {
-            ToolStripItem item = GetSelectedItem();
-            if ((item is not null) && item.IsInputChar(charCode))
+            ToolStripItem? item = GetSelectedItem();
+            if (item is not null && item.IsInputChar(charCode))
             {
                 return true;
             }
@@ -2743,7 +2742,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the <see cref="Forms.ImageList"/> that contains the <see cref="Image"/> displayed on a label control
         /// </summary>
-        private void ImageListRecreateHandle(object sender, EventArgs e)
+        private void ImageListRecreateHandle(object? sender, EventArgs e)
         {
             Invalidate();
         }
@@ -2782,7 +2781,7 @@ namespace System.Windows.Forms
             {
                 if (IsCurrentlyDragging)
                 {
-                    Region transparentRegion = Renderer.GetTransparentRegion(this);
+                    Region? transparentRegion = Renderer.GetTransparentRegion(this);
                     if (transparentRegion is not null && (location.X != x || location.Y != y))
                     {
                         try
@@ -2850,7 +2849,7 @@ namespace System.Windows.Forms
 
             // Give the ToolStripItem very first chance at
             // processing keys (except for ALT handling)
-            ToolStripItem selectedItem = GetSelectedItem();
+            ToolStripItem? selectedItem = GetSelectedItem();
             if (selectedItem is not null)
             {
                 if (selectedItem.ProcessCmdKey(ref m, keyData))
@@ -2882,11 +2881,11 @@ namespace System.Windows.Forms
                     bool handled = false;
                     if ((keyData & Keys.Shift) == Keys.None)
                     {
-                        handled = ToolStripManager.SelectNextToolStrip(this, /*forward*/true);
+                        handled = ToolStripManager.SelectNextToolStrip(this, forward: true);
                     }
                     else
                     {
-                        handled = ToolStripManager.SelectNextToolStrip(this, /*forward*/false);
+                        handled = ToolStripManager.SelectNextToolStrip(this, forward: false);
                     }
 
                     if (handled)
@@ -2914,7 +2913,7 @@ namespace System.Windows.Forms
             LastKeyData = keyData;
 
             // Give the ToolStripItem first dibs
-            ToolStripItem item = GetSelectedItem();
+            ToolStripItem? item = GetSelectedItem();
             if (item is not null)
             {
                 if (item.ProcessDialogKey(keyData))
@@ -2956,11 +2955,11 @@ namespace System.Windows.Forms
                     retVal = ProcessArrowKey(keyCode);
                     break;
                 case Keys.Home:
-                    SelectNextToolStripItem(null, /*forward =*/ true);
+                    SelectNextToolStripItem(null, forward: true);
                     retVal = true;
                     break;
                 case Keys.End:
-                    SelectNextToolStripItem(null, /*forward =*/ false);
+                    SelectNextToolStripItem(null, forward: false);
                     retVal = true;
                     break;
                 case Keys.Escape: // escape and menu key should restore focus
@@ -2982,7 +2981,7 @@ namespace System.Windows.Forms
             s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] calling base");
             return base.ProcessDialogKey(keyData);
         }
-
+#nullable disable
         internal virtual void ProcessDuplicateMnemonic(ToolStripItem item, char charCode)
         {
             if (!CanProcessMnemonic())

@@ -156,9 +156,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware)
+        internal override ToolStripItem? GetNextItem(ToolStripItem? start, ArrowDirection direction, bool rtlAware)
         {
-            ToolStripItem nextItem = base.GetNextItem(start, direction, rtlAware);
+            ToolStripItem? nextItem = base.GetNextItem(start, direction, rtlAware);
             if (nextItem is MdiControlStrip.SystemMenuItem)
             {
                 nextItem = base.GetNextItem(nextItem, direction, rtlAware);

@@ -471,7 +471,7 @@ override System.Windows.Forms.ToolStripComboBox.ToString() -> string!
 ~override System.Windows.Forms.ToolStripControlHost.Text.get -> string
 ~override System.Windows.Forms.ToolStripControlHost.Text.set -> void
 override System.Windows.Forms.ToolStripDropDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.ToolStripDropDown.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle style) -> System.Windows.Forms.LayoutSettings!
+override System.Windows.Forms.ToolStripDropDown.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle style) -> System.Windows.Forms.LayoutSettings?
 override System.Windows.Forms.ToolStripDropDown.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.ToolStripDropDown.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.ToolStripDropDown.Font.set -> void
@@ -1406,7 +1406,7 @@ System.Windows.Forms.ToolStrip.Renderer.get -> System.Windows.Forms.ToolStripRen
 System.Windows.Forms.ToolStrip.Renderer.set -> void
 ~System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem item, System.Drawing.Point location) -> void
 System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem![]! items) -> void
-~System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
+System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties!
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text) -> void
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
@@ -2083,10 +2083,10 @@ virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.Eve
 ~virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs e) -> void
 virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control! control, int column, int row) -> void
-~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
-~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
+virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
+virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings?
 virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection!
-~virtual System.Windows.Forms.ToolStrip.GetNextItem(System.Windows.Forms.ToolStripItem start, System.Windows.Forms.ArrowDirection direction) -> System.Windows.Forms.ToolStripItem
+virtual System.Windows.Forms.ToolStrip.GetNextItem(System.Windows.Forms.ToolStripItem? start, System.Windows.Forms.ArrowDirection direction) -> System.Windows.Forms.ToolStripItem?
 virtual System.Windows.Forms.ToolStrip.Items.get -> System.Windows.Forms.ToolStripItemCollection!
 ~virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs e) -> void
