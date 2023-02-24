@@ -1346,7 +1346,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControlControlCollection_Remove_SelectedTabWithoutHandle_SetsSelectedToZero()
+        public void TabControlControlCollection_Remove_SelectedTabWithoutHandle_ThrowsArgumentOutOfRangeException()
         {
             using var owner = new TabControl();
             using var value1 = new TabPage();
@@ -1364,22 +1364,22 @@ namespace System.Windows.Forms.Tests
             // Remove other.
             collection.Remove(value2);
             Assert.Equal(new Control[] { value1, value3, value4 }, collection.Cast<TabPage>());
-            Assert.Null(owner.SelectedTab);
+            Assert.Throws<ArgumentOutOfRangeException>(() => owner.SelectedTab);
 
             // Remove selected.
             collection.Remove(value4);
             Assert.Equal(new Control[] { value1, value3 }, collection.Cast<TabPage>());
-            Assert.Null(owner.SelectedTab);
+            Assert.Throws<ArgumentOutOfRangeException>(() => owner.SelectedTab);
 
             // Remove selected again.
             collection.Remove(value1);
             Assert.Equal(new Control[] { value3 }, collection.Cast<TabPage>());
-            Assert.Null(owner.SelectedTab);
+            Assert.Throws<ArgumentOutOfRangeException>(() => owner.SelectedTab);
 
             // Remove selected again.
             collection.Remove(value3);
             Assert.Empty(collection);
-            Assert.Null(owner.SelectedTab);
+            Assert.Throws<ArgumentOutOfRangeException>(() => owner.SelectedTab);
         }
 
         [WinFormsFact]
