@@ -28,8 +28,6 @@ namespace System.Windows.Forms
         private const int HighContrastThreshold = 2000;
         private const int MaxToolTipLength = 288;
         private const int MaxToolTipCutOff = 256;
-        private const int ToolTipEllipsisLength = 3;
-        private const string ToolTipEllipsis = "...";
         private const byte FlagAreaNotSet = 0x00;
         private const byte FlagDataArea = 0x01;
         private const byte FlagErrorArea = 0x02;
@@ -4154,16 +4152,14 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "DataGridViewCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
+            return $"DataGridViewCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
         }
 
         private static string TruncateToolTipText(string toolTipText)
         {
             if (toolTipText.Length > MaxToolTipLength)
             {
-                StringBuilder sb = new StringBuilder(toolTipText.Substring(0, MaxToolTipCutOff), MaxToolTipCutOff + ToolTipEllipsisLength);
-                sb.Append(ToolTipEllipsis);
-                return sb.ToString();
+                return $"{toolTipText.AsSpan(0, MaxToolTipCutOff)}...";
             }
 
             return toolTipText;

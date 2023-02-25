@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms
@@ -1148,7 +1147,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            return "DataGridViewLinkCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
+            return $"DataGridViewLinkCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
         }
     }
 }

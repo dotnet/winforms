@@ -3724,7 +3724,7 @@ namespace System.Windows.Forms
 
         private bool ColumnEditable(int columnIndex)
         {
-            Debug.Assert(columnIndex >= 0 && columnIndex < Columns.Count, "Invalid columnIndex: " + columnIndex);
+            Debug.Assert(columnIndex >= 0 && columnIndex < Columns.Count, $"Invalid columnIndex: {columnIndex}");
             if (Columns[columnIndex].IsDataBound &&
                 DataConnection is not null &&
                 !DataConnection.AllowEdit)
@@ -17252,9 +17252,8 @@ namespace System.Windows.Forms
             }
             catch (Exception ex)
             {
-#if DEBUG
-                Debug.Fail("DataGridView.OnPaint exception: " + ex.Message + " stack trace " + ex.StackTrace);
-#endif
+                Debug.Fail($"DataGridView.OnPaint exception: {ex.Message} stack trace {ex.StackTrace}");
+
                 if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
