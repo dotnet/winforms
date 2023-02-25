@@ -3260,7 +3260,6 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ProcessLeftRightArrowKey(bool right)
         {
-            ToolStripItem? selectedItem = GetSelectedItem();
             ToolStripItem nextItem = SelectNextToolStripItem(GetSelectedItem(), right);
             return true;
         }
