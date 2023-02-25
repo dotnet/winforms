@@ -3892,7 +3892,7 @@ namespace System.Windows.Forms
                 HookStaticEvents(Visible);
             }
         }
-#nullable disable
+
         private void EraseCorners(PaintEventArgs e, Region transparentRegion)
         {
             if (transparentRegion is not null)
@@ -3905,7 +3905,7 @@ namespace System.Windows.Forms
         {
             Renderer.DrawGrip(new ToolStripGripRenderEventArgs(e.Graphics, this));
 
-            ((PaintEventHandler)Events[s_eventPaintGrip])?.Invoke(this, e);
+            ((PaintEventHandler?)Events[s_eventPaintGrip])?.Invoke(this, e);
         }
 
         protected override void OnScroll(ScrollEventArgs se)
@@ -3938,7 +3938,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.Selectable, TabStop);
             base.OnTabStopChanged(e);
         }
-
+#nullable disable
         /// <summary>
         ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
         ///  Must call the base class method to get the current DPI values. This method is invoked only when

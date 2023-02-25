@@ -378,8 +378,8 @@ override System.Windows.Forms.ToolStrip.OnMouseUp(System.Windows.Forms.MouseEven
 override System.Windows.Forms.ToolStrip.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.ToolStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.ToolStrip.OnRightToLeftChanged(System.EventArgs! e) -> void
-~override System.Windows.Forms.ToolStrip.OnScroll(System.Windows.Forms.ScrollEventArgs se) -> void
-~override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStrip.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
+override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ToolStrip.ToString() -> string
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
@@ -1414,7 +1414,7 @@ virtual System.Windows.Forms.ToolStrip.OnItemClicked(System.Windows.Forms.ToolSt
 virtual System.Windows.Forms.ToolStrip.OnItemRemoved(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnLayoutCompleted(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnLayoutStyleChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStrip.OnPaintGrip(System.Windows.Forms.PaintEventArgs e) -> void
+virtual System.Windows.Forms.ToolStrip.OnPaintGrip(System.Windows.Forms.PaintEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs e) -> void
