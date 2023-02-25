@@ -535,15 +535,15 @@
 ~System.Windows.Forms.ComboBox.FindStringExact(string s) -> int
 ~System.Windows.Forms.ComboBox.FindStringExact(string s, int startIndex) -> int
 ~System.Windows.Forms.ComboBox.Items.get -> System.Windows.Forms.ComboBox.ObjectCollection
-~System.Windows.Forms.ComboBox.ObjectCollection.Add(object item) -> int
-~System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object[] items) -> void
-~System.Windows.Forms.ComboBox.ObjectCollection.Contains(object value) -> bool
-~System.Windows.Forms.ComboBox.ObjectCollection.CopyTo(object[] destination, int arrayIndex) -> void
-~System.Windows.Forms.ComboBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ComboBox.ObjectCollection.IndexOf(object value) -> int
-~System.Windows.Forms.ComboBox.ObjectCollection.Insert(int index, object item) -> void
-~System.Windows.Forms.ComboBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ComboBox owner) -> void
-~System.Windows.Forms.ComboBox.ObjectCollection.Remove(object value) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object![]! items) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.Contains(object? value) -> bool
+System.Windows.Forms.ComboBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ComboBox.ObjectCollection.IndexOf(object? value) -> int
+System.Windows.Forms.ComboBox.ObjectCollection.Insert(int index, object? item) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ComboBox! owner) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.Remove(object? value) -> void
 ~System.Windows.Forms.ComboBox.SelectedItem.get -> object
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
@@ -1116,8 +1116,8 @@
 ~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
 ~virtual System.Windows.Forms.ComboBox.AddItemsCore(object[] value) -> void
-~virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].get -> object
-~virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].set -> void
+virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].get -> object?
+virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.ComboBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnDropDown(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnDropDownClosed(System.EventArgs e) -> void
