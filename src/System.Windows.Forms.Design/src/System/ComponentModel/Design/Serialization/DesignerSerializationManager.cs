@@ -179,7 +179,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Used to verify that there is an open session.  If there isn't, this method throws.
+        ///  Used to verify that there is an open session. If there isn't, this method throws.
         /// </summary>
         private void CheckSession()
         {
@@ -210,10 +210,7 @@ namespace System.ComponentModel.Design.Serialization
             // If we have been asked to recycle instances, look in our nametable and container first for an object matching this name and type.  If we find it, we will use it.
             if (RecycleInstances && name is not null)
             {
-                if (instancesByName is not null)
-                {
-                    instance = instancesByName[name];
-                }
+                instancesByName?.TryGetValue(name, out instance);
 
                 if (instance is null && addToContainer && Container is not null)
                 {
@@ -420,9 +417,8 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (serializers is not null)
                 {
-                    // I don't double hash here.  It will be a very rare day where multiple types of serializers will be used in the same scheme. We still handle it, but we just don't cache.
-                    serializer = serializers[objectType];
-                    if (serializer is not null && !serializerType.IsAssignableFrom(serializer.GetType()))
+                    // I don't double hash here. It will be a very rare day where multiple types of serializers will be used in the same scheme. We still handle it, but we just don't cache.
+                    if (serializers.TryGetValue(objectType, out serializer) && !serializerType.IsAssignableFrom(serializer.GetType()))
                     {
                         serializer = null;
                     }
@@ -804,26 +800,22 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         string? IDesignerSerializationManager.GetName(object value)
         {
-            string? name = null;
             ArgumentNullException.ThrowIfNull(value);
 
             CheckSession();
             // Check our local nametable first
-            if (namesByInstance is not null)
+            if (namesByInstance is not null && namesByInstance.TryGetValue(value, out string? name))
             {
-                name = namesByInstance[value];
+                return name;
             }
 
-            if (name is null && value is IComponent component)
+            if (value is not IComponent component)
             {
-                ISite? site = component.Site;
-                if (site is not null)
-                {
-                    name = site is INestedSite nestedSite ? nestedSite.FullName : site.Name;
-                }
+                return null;
             }
 
-            return name;
+            ISite? site = component.Site;
+            return site is null ? null : site is INestedSite nestedSite ? nestedSite.FullName : site.Name;
         }
 
         /// <summary>
