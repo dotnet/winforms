@@ -11,7 +11,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms
 {
-    [Designer("System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner, {AssemblyRef.SystemDesign}")]
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     [ToolboxBitmap(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")]
     public class DataGridViewComboBoxColumn : DataGridViewColumn
@@ -134,8 +134,8 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayMemberDescr))]
-        [TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign)]
-        [Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
+        [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public string DisplayMember
         {
             get
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [Editor("System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.DataGridView_ComboBoxColumnItemsDescr))]
@@ -349,8 +349,8 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.DataGridView_ComboBoxColumnValueMemberDescr))]
-        [TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign)]
-        [Editor("System.Windows.Forms.Design.DataMemberFieldEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
+        [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public string ValueMember
         {
             get

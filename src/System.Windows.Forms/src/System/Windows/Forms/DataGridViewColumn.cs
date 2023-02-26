@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Base class for the columns in a data grid view.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.DataGridViewColumnDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.DataGridViewColumnDesigner, {AssemblyRef.SystemDesign}")]
     [DesignTimeVisible(false)]
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     [ToolboxItem(false)]
@@ -179,8 +179,8 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [DefaultValue("")]
-        [TypeConverter("System.Windows.Forms.Design.DataMemberFieldConverter, " + AssemblyRef.SystemDesign)]
-        [Editor("System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
+        [Editor($"System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
         [SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr))]
         [SRCategory(nameof(SR.CatData))]
         public string DataPropertyName

@@ -13,7 +13,7 @@ using System.Text;
 namespace System.Windows.Forms
 {
     [TypeConverter(typeof(DataGridViewCellStyleConverter))]
-    [Editor("System.Windows.Forms.Design.DataGridViewCellStyleEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataGridViewCellStyleEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     public class DataGridViewCellStyle : ICloneable
     {
         private static readonly int PropAlignment = PropertyStore.CreateKey();
@@ -224,7 +224,7 @@ namespace System.Windows.Forms
         }
 
         [DefaultValue("")]
-        [Editor("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.FormatStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRCategory(nameof(SR.CatBehavior))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public string Format
