@@ -7,7 +7,6 @@
 using System.Collections;
 using System.Configuration;
 using System.Diagnostics;
-using System.Globalization;
 using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
@@ -466,7 +465,7 @@ namespace System.ComponentModel.Design
                         {
                             if (rootComponent is not null && rootComponent != persistableComponent)
                             {
-                                ShadowProperties[SettingsKeyName] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
+                                ShadowProperties[SettingsKeyName] = $"{rootComponent.Site.Name}.{Component.Site.Name}";
                             }
                             else
                             {

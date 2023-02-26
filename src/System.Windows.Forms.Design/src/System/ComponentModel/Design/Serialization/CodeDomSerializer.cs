@@ -6,7 +6,6 @@
 
 using System.CodeDom;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -106,7 +105,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(codeObject is CodeStatement statement))
                         {
                             Debug.Fail("CodeDomSerializer::Deserialize requires a CodeExpression, CodeStatement or CodeStatementCollection to parse");
-                            string supportedTypes = string.Format(CultureInfo.CurrentCulture, "{0}, {1}, {2}", nameof(CodeExpression), nameof(CodeStatement), nameof(CodeStatementCollection));
+                            string supportedTypes = $"{nameof(CodeExpression)}, {nameof(CodeStatement)}, {nameof(CodeStatementCollection)}";
                             throw new ArgumentException(string.Format(SR.SerializerBadElementTypes, codeObject.GetType().Name, supportedTypes));
                         }
                     }
@@ -168,7 +167,7 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(manager);
             ArgumentNullException.ThrowIfNull(value);
 
-            using (TraceScope("CodeDomSerializer::" + nameof(Serialize)))
+            using (TraceScope($"CodeDomSerializer::{nameof(Serialize)}"))
             {
                 Trace("Type: {0}", value.GetType().Name);
 
@@ -338,7 +337,7 @@ namespace System.ComponentModel.Design.Serialization
         protected CodeExpression SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;
-            using (TraceScope("CodeDomSerializer::" + nameof(SerializeToReferenceExpression)))
+            using (TraceScope($"CodeDomSerializer::{nameof(SerializeToReferenceExpression)}"))
             {
                 // First - try GetExpression
                 expression = GetExpression(manager, value);

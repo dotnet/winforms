@@ -6,7 +6,6 @@
 
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Design;
@@ -68,7 +67,7 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Searching for inherited components on '" + type.FullName + "'.");
+            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Searching for inherited components on '{type.FullName}'.");
             Debug.Indent();
             ISite site = component.Site;
             IComponentChangeService cs = null;
@@ -90,7 +89,7 @@ namespace System.ComponentModel.Design
                 {
                     Type reflect = TypeDescriptor.GetReflectionType(type);
                     FieldInfo[] fields = reflect.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic);
-                    Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...found " + fields.Length.ToString(CultureInfo.InvariantCulture) + " fields.");
+                    Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...found {fields.Length} fields.");
                     for (int i = 0; i < fields.Length; i++)
                     {
                         FieldInfo field = fields[i];
@@ -100,7 +99,7 @@ namespace System.ComponentModel.Design
                         Type reflectionType = GetReflectionTypeFromTypeHelper(field.FieldType);
                         if (!GetReflectionTypeFromTypeHelper(typeof(IComponent)).IsAssignableFrom(reflectionType))
                         {
-                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...skipping " + name + ": Not IComponent");
+                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...skipping {name}: Not IComponent");
                             continue;
                         }
 
@@ -111,7 +110,7 @@ namespace System.ComponentModel.Design
                         object value = field.GetValue(component);
                         if (value is null)
                         {
-                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...skipping " + name + ": Contains NULL");
+                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...skipping {name}: Contains NULL");
                             continue;
                         }
 
@@ -148,9 +147,9 @@ namespace System.ComponentModel.Design
                         bool ignoreMember = IgnoreInheritedMember(member, component);
 
                         // We now have an inherited member.  Gather some information about it and then add it to our list.  We must always add to our list, but we may not want to  add it to the container.  That is up to the IgnoreInheritedMember method. We add here because there are components in the world that, when sited, add their children to the container too. That's fine, but we want to make sure we account for them in the inheritance service too.
-                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...found inherited member '" + name + "'");
+                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...found inherited member '{name}'");
                         Debug.Indent();
-                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Type: " + field.FieldType.FullName);
+                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Type: {field.FieldType.FullName}");
 
                         InheritanceAttribute attr;
 

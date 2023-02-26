@@ -116,7 +116,7 @@ namespace System.ComponentModel.Design
             }
 
             command.CommandChanged += _commandChangedHandler;
-            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Command added: " + command.ToString());
+            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Command added: {command}");
 
             // raise event
             OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandAdded, command));
@@ -345,7 +345,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected MenuCommand FindCommand(Guid guid, int id)
         {
-            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "MCS Searching for command: " + guid.ToString() + " : " + id.ToString(CultureInfo.CurrentCulture));
+            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"MCS Searching for command: {guid} : {id}");
 
             // Search in the list of commands only if the command group is known
             List<MenuCommand> commands;
@@ -475,7 +475,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnCommandChanged(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Command dirty: " + ((sender is not null) ? sender.ToString() : "(null sender)"));
+            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Command dirty: {((sender is not null) ? sender.ToString() : "(null sender)")}");
             OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandChanged, (MenuCommand)sender));
         }
 
@@ -538,7 +538,7 @@ namespace System.ComponentModel.Design
 
                         command.CommandChanged -= _commandChangedHandler;
 
-                        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Command removed: " + command.ToString());
+                        Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Command removed: {command}");
 
                         // raise event
                         OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandRemoved, command));
@@ -548,7 +548,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Unable to remove command: " + command.ToString());
+            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Unable to remove command: {command}");
         }
 
         /// <summary>

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Diagnostics;
-using System.Globalization;
 
 namespace System.ComponentModel.Design
 {
@@ -54,7 +53,7 @@ namespace System.ComponentModel.Design
             {
                 if (property.IsReadOnly)
                 {
-                    CreateReferences(string.Format(CultureInfo.CurrentCulture, "{0}.{1}", trailingName, property.Name), property.GetValue(reference), sitedComponent);
+                    CreateReferences($"{trailingName}.{property.Name}", property.GetValue(reference), sitedComponent);
                 }
             }
         }
@@ -319,16 +318,12 @@ namespace System.ComponentModel.Design
 
                 Debug.Assert(trailingName is not null, "Expected a trailing name");
                 Debug.Assert(reference is not null, "Expected a reference");
-#if DEBUG
                 Debug.Assert(sitedComponent is not null, "Expected a sited component");
+#if DEBUG
                 if (sitedComponent is not null)
                 {
-                    Debug.Assert(sitedComponent.Site is not null, "Sited component is not really sited: " + sitedComponent.ToString());
-                }
-
-                if (sitedComponent is not null)
-                {
-                    Debug.Assert(TypeDescriptor.GetComponentName(sitedComponent) is not null, "Sited component has no name: " + sitedComponent.ToString());
+                    Debug.Assert(sitedComponent.Site is not null, $"Sited component is not really sited: {sitedComponent}");
+                    Debug.Assert(TypeDescriptor.GetComponentName(sitedComponent) is not null, $"Sited component has no name: {sitedComponent}");
                 }
 #endif // DEBUG
             }
@@ -355,12 +350,11 @@ namespace System.ComponentModel.Design
                             string siteName = TypeDescriptor.GetComponentName(_sitedComponent);
                             if (siteName is not null)
                             {
-                                _fullName = string.Format(CultureInfo.CurrentCulture, "{0}{1}", siteName, _trailingName);
+                                _fullName = $"{siteName}{_trailingName}";
                             }
-#if DEBUG
-                            Debug.Assert(_sitedComponent.Site is not null, "Sited component is not really sited: " + _sitedComponent.ToString());
-                            Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) is not null, "Sited component has no name: " + _sitedComponent.ToString());
-#endif // DEBUG
+
+                            Debug.Assert(_sitedComponent.Site is not null, $"Sited component is not really sited: {_sitedComponent}");
+                            Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) is not null, $"Sited component has no name: {_sitedComponent}");
                         }
 
                         _fullName = string.Empty;

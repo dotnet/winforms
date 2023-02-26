@@ -459,7 +459,7 @@ namespace System.ComponentModel.Design.Serialization
                         foreach (string name in _objectNames)
                         {
                             object instance = ((IDesignerSerializationManager)delegator.Manager).GetInstance(name);
-                            Debug.Assert(instance is not null, "Failed to deserialize object " + name);
+                            Debug.Assert(instance is not null, $"Failed to deserialize object {name}");
                             if (instance is not null)
                             {
                                 objects.Add(instance);
@@ -503,9 +503,12 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 Guid guid = Guid.NewGuid();
-                string guidStr = guid.ToString();
-                guidStr = guidStr.Replace("-", "_");
-                return string.Format(CultureInfo.CurrentCulture, "object_{0}", guidStr);
+                string prefix = "object_";
+                Span<char> chars = stackalloc char[prefix.Length + 36];
+                prefix.CopyTo(chars);
+                guid.TryFormat(chars[prefix.Length..], out _);
+                chars[prefix.Length..].Replace('-', '_');
+                return chars.ToString();
             }
 
             /// <summary>
@@ -579,8 +582,8 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    sw.Write("Unknown code type: " + code.GetType().Name);
-                    sw.Write("\r\n");
+                    sw.Write("Unknown code type: ");
+                    sw.WriteLine(code.GetType().Name);
                 }
 
                 // spit this line by line so it respects the indent.
@@ -648,7 +651,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        Debug.Fail("No case for " + data.GetType().Name);
+                        Debug.Fail($"No case for {data.GetType().Name}");
                     }
                 }
 
@@ -856,7 +859,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-                            Debug.Fail("Unable to resolve nested component: " + name);
+                            Debug.Fail($"Unable to resolve nested component: {name}");
                         }
                     }
 
@@ -1017,7 +1020,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(resolved || (!resolved && !canInvokeManager)))
                         {
                             manager.ReportError(new CodeDomSerializerException(string.Format(SR.CodeDomComponentSerializationServiceDeserializationError, name), manager));
-                            Debug.Fail("No statements or instance for name and no lone expressions: " + name);
+                            Debug.Fail($"No statements or instance for name and no lone expressions: {name}");
                         }
                     }
 

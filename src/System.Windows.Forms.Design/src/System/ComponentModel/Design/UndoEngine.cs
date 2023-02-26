@@ -788,7 +788,7 @@ namespace System.ComponentModel.Design
 
                         if (name is not null)
                         {
-                            Debug.WriteLineIf(s_traceUndo.TraceVerbose && hasChange, "Adding second ChangeEvent for " + name + " Member: " + memberName);
+                            Debug.WriteLineIf(s_traceUndo.TraceVerbose && hasChange, $"Adding second ChangeEvent for {name} Member: {memberName}");
                         }
                         else
                         {

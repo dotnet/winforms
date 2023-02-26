@@ -46,7 +46,7 @@ namespace System.ComponentModel.Design.Serialization
             IEnumerator modifiedEnum = modified.GetEnumerator();
             if (modifiedEnum is null)
             {
-                Debug.Fail("Collection of type " + modified.GetType().FullName + " doesn't return an enumerator");
+                Debug.Fail($"Collection of type {modified.GetType().FullName} doesn't return an enumerator");
                 return modified;
             }
 
@@ -145,7 +145,7 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(value);
 
             object result = null;
-            using (TraceScope("CollectionCodeDomSerializer::" + nameof(Serialize)))
+            using (TraceScope($"CollectionCodeDomSerializer::{nameof(Serialize)}"))
             {
                 // We serialize collections as follows:
                 //      If the collection is an array, we write out the array.
@@ -227,7 +227,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    Debug.Fail("Collection serializer invoked for non-collection: " + (value is null ? "(null)" : value.GetType().Name));
+                    Debug.Fail($"Collection serializer invoked for non-collection: {(value is null ? "(null)" : value.GetType().Name)}");
                     TraceError("Collection serializer invoked for non collection: {0}", (value is null ? "(null)" : value.GetType().Name));
                 }
             }
@@ -401,7 +401,7 @@ namespace System.ComponentModel.Design.Serialization
         private CodeArrayCreateExpression SerializeArray(IDesignerSerializationManager manager, Type targetType, ICollection array, ICollection valuesToSerialize)
         {
             CodeArrayCreateExpression result = null;
-            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeArray)))
+            using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeArray)}"))
             {
                 if (((Array)array).Rank != 1)
                 {
@@ -489,7 +489,7 @@ namespace System.ComponentModel.Design.Serialization
             ICollection valuesToSerialize)
         {
             CodeStatementCollection statements = new CodeStatementCollection();
-            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeViaAdd)))
+            using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAdd)}"))
             {
                 Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
                 // Here we need to invoke Add once for each and every item in the collection. We can re-use the property reference and method reference, but we will need to recreate the invoke statement each time.
@@ -582,7 +582,7 @@ namespace System.ComponentModel.Design.Serialization
             ICollection valuesToSerialize)
         {
             CodeStatementCollection statements = new CodeStatementCollection();
-            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeViaAddRange)))
+            using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAddRange)}"))
             {
                 Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
 

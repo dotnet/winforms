@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             CodeExpression expression = null;
 
-            using (TraceScope("EnumCodeDomSerializer::" + nameof(Serialize)))
+            using (TraceScope($"EnumCodeDomSerializer::{nameof(Serialize)}"))
             {
                 Trace("Type: {0}", (value is null ? "(null)" : value.GetType().Name));
                 if (value is Enum)

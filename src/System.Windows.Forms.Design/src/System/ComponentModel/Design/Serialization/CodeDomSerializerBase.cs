@@ -23,7 +23,7 @@ namespace System.ComponentModel.Design.Serialization
         private static readonly Attribute[] runTimeProperties = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly TraceSwitch traceSerialization = new TraceSwitch("DesignerSerialization", "Trace design time serialization");
 #pragma warning disable CS0649
-        private static Stack traceScope;
+        private static Stack<string> traceScope;
 #pragma warning restore CS0649
         /// <summary>
         ///  Internal constructor so only we can derive from this class.
@@ -455,7 +455,7 @@ namespace System.ComponentModel.Design.Serialization
         internal static IDisposable TraceScope(string name)
         {
 #if DEBUG
-            traceScope ??= new Stack();
+            traceScope ??= new ();
 
             Trace(name);
             traceScope.Push(name);
@@ -511,7 +511,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void DeserializeStatement(IDesignerSerializationManager manager, CodeStatement statement)
         {
-            using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeStatement)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeStatement)}"))
             {
                 Trace("Statement : {0}", statement.GetType().Name);
 
@@ -618,7 +618,7 @@ namespace System.ComponentModel.Design.Serialization
 
         private void DeserializeDetachEventStatement(IDesignerSerializationManager manager, CodeRemoveEventStatement statement)
         {
-            using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeDetachEventStatement)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeDetachEventStatement)}"))
             {
                 object eventListener = DeserializeExpression(manager, null, statement.Listener);
                 TraceErrorIf(!(eventListener is CodeDelegateCreateExpression), "Unable to simplify event attach RHS to a delegate create.");
@@ -659,7 +659,7 @@ namespace System.ComponentModel.Design.Serialization
 
         private void DeserializeAssignStatement(IDesignerSerializationManager manager, CodeAssignStatement statement)
         {
-            using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeAssignStatement)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeAssignStatement)}"))
             {
                 // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.
                 //Perf: is -> as changes, change ordering based on possibility of occurrence
@@ -826,23 +826,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (traceSerialization.TraceError)
             {
-                string scope = string.Empty;
-                if (traceScope is not null)
-                {
-                    foreach (string scopeName in traceScope)
-                    {
-                        if (scope.Length > 0)
-                        {
-                            scope = "/" + scope;
-                        }
-
-                        scope = scopeName + scope;
-                    }
-                }
+                string scope = traceScope is not null ? string.Join('/', traceScope.Reverse()) : string.Empty;
 
                 Debug.WriteLine("***************************************************");
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "*** ERROR :{0}", string.Format(CultureInfo.CurrentCulture, message, values)));
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "*** SCOPE :{0}", scope));
+                Debug.WriteLine($"*** ERROR :{string.Format(CultureInfo.CurrentCulture, message, values)}");
+                Debug.WriteLine($"*** SCOPE :{scope}");
                 Debug.WriteLine("***************************************************");
             }
         }
@@ -855,7 +843,7 @@ namespace System.ComponentModel.Design.Serialization
         protected object DeserializeExpression(IDesignerSerializationManager manager, string name, CodeExpression expression)
         {
             object result = expression;
-            using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeExpression)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeExpression)}"))
             {
                 // Perf: is -> as changes, change ordering based on possibility of occurrence
                 // If you are adding to this, use as instead of is + cast and order new expressions in order of frequency in typical user code.
@@ -1230,7 +1218,7 @@ namespace System.ComponentModel.Design.Serialization
                             else if (arrayCreateEx.SizeExpression is not null)
                             {
                                 object o = DeserializeExpression(manager, name, arrayCreateEx.SizeExpression);
-                                Debug.Assert(o is IConvertible, "Array size expression could not be resolved to IConvertible: " + (o is null ? "(null)" : o.GetType().Name));
+                                Debug.Assert(o is IConvertible, $"Array size expression could not be resolved to IConvertible: {(o is null ? "(null)" : o.GetType().Name)}");
 
                                 if (o is IConvertible ic)
                                 {
@@ -1429,7 +1417,7 @@ namespace System.ComponentModel.Design.Serialization
                     else
                     {
                         // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evaluator,  or that someone assigned result to a value without breaking out of the loop.
-                        Debug.Fail("Unrecognized expression type: " + result.GetType().Name);
+                        Debug.Fail($"Unrecognized expression type: {result.GetType().Name}");
                         break;
                     }
                 }
@@ -1440,7 +1428,7 @@ namespace System.ComponentModel.Design.Serialization
 
         private void DeserializeAttachEventStatement(IDesignerSerializationManager manager, CodeAttachEventStatement statement)
         {
-            using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeAttachEventStatement)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeAttachEventStatement)}"))
             {
                 string handlerMethodName = null;
                 object eventAttachObject = null;
@@ -1583,7 +1571,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            Debug.Fail("Unsupported binary operator type: " + op.ToString());
+            Debug.Fail($"Unsupported binary operator type: {op}");
             return left;
         }
 
@@ -1934,8 +1922,8 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 Debug.WriteLine("***************************************************");
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "*** WARNING :{0}", string.Format(CultureInfo.CurrentCulture, message, values)));
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "*** SCOPE :{0}", scope));
+                Debug.WriteLine($"*** WARNING :{string.Format(CultureInfo.CurrentCulture, message, values)}");
+                Debug.WriteLine($"*** SCOPE :{scope}");
                 Debug.WriteLine("***************************************************");
             }
         }
@@ -2472,7 +2460,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        Debug.Fail("Unrecognized reflection type in instance descriptor: " + descriptor.MemberInfo.GetType().Name);
+                        Debug.Fail($"Unrecognized reflection type in instance descriptor: {descriptor.MemberInfo.GetType().Name}");
                     }
 
                     // Finally, check to see if our value is assignable from the expression type.  If not,  then supply a cast.  The value may be an internal or protected type; if it is, then walk up its hierarchy until we find one that is public.
@@ -2527,7 +2515,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Declare this name to the serializer.  If there is already a name defined, keep trying.
                 while (true)
                 {
-                    name = string.Format(CultureInfo.CurrentCulture, "{0}{1}", baseName, suffixIndex);
+                    name = $"{baseName}{suffixIndex}";
                     if (manager.GetInstance(name) is null && (cache is null || !cache.ContainsLocalName(name)))
                     {
                         manager.SetName(value, name);
@@ -2556,7 +2544,7 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(value);
             ArgumentNullException.ThrowIfNull(descriptor);
 
-            using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeEvent)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(SerializeEvent)}"))
             {
                 Trace("Name: {0}", descriptor.Name);
                 // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
@@ -2586,7 +2574,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeEvents(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, params Attribute[] filter)
         {
-            Trace("CodeDomSerializerBase::" + nameof(SerializeEvents));
+            Trace("CodeDomSerializerBase::{0}", nameof(SerializeEvents));
             EventDescriptorCollection events = GetEventsHelper(manager, value, filter).Sort();
             foreach (EventDescriptor evt in events)
             {
@@ -2599,7 +2587,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeProperties(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, Attribute[] filter)
         {
-            using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeProperties)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(SerializeProperties)}"))
             {
                 PropertyDescriptorCollection properties = GetFilteredProperties(manager, value, filter).Sort();
                 InheritanceAttribute inheritance = (InheritanceAttribute)GetAttributesHelper(manager, value)[typeof(InheritanceAttribute)];
@@ -2657,7 +2645,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializePropertiesToResources(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, Attribute[] filter)
         {
-            using (TraceScope("ComponentCodeDomSerializerBase::" + nameof(SerializePropertiesToResources)))
+            using (TraceScope($"ComponentCodeDomSerializerBase::{nameof(SerializePropertiesToResources)}"))
             {
                 PropertyDescriptorCollection props = GetPropertiesHelper(manager, value, filter);
                 manager.Context.Push(statements);
@@ -2669,7 +2657,7 @@ namespace System.ComponentModel.Design.Serialization
                         CodePropertyReferenceExpression propertyRef = new CodePropertyReferenceExpression(target, string.Empty);
                         foreach (PropertyDescriptor property in props)
                         {
-                            TraceWarningIf(property.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content), "PersistContents property " + property.Name + " cannot be serialized to resources.");
+                            TraceWarningIf(property.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content), "PersistContents property {0} cannot be serialized to resources.", property.Name);
                             ExpressionContext tree = new ExpressionContext(propertyRef, property.PropertyType, value);
                             manager.Context.Push(tree);
                             try
@@ -2689,7 +2677,7 @@ namespace System.ComponentModel.Design.Serialization
                                         name = manager.GetName(value);
                                     }
 
-                                    name = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", name, property.Name);
+                                    name = $"{name}.{property.Name}";
                                     ResourceCodeDomSerializer.Default.SerializeMetadata(manager, name, property.GetValue(value), property.ShouldSerializeValue(value));
                                 }
                             }
@@ -2719,7 +2707,7 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(propertyToSerialize);
             ArgumentNullException.ThrowIfNull(statements);
 
-            Trace("CodeDomSerializerBase::" + nameof(SerializeProperty) + " {0}", propertyToSerialize.Name);
+            Trace("CodeDomSerializerBase::{0} {1}", nameof(SerializeProperty), propertyToSerialize.Name);
             // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
             manager.Context.Push(statements);
             manager.Context.Push(propertyToSerialize);
@@ -2777,7 +2765,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             CodeExpression expression = null;
 
-            using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeToExpression)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(SerializeToExpression)}"))
             {
                 // We do several things here:
                 // First, we check to see if there is already an expression for this object by calling IsSerialized / GetExpression.
@@ -3083,7 +3071,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeExpression existingExpression = table.GetExpression(value);
             if (existingExpression is not null && !isPreset)
             {
-                Debug.Fail("There shouldn't be an expression already associated with this object : " + manager.GetName(value));
+                Debug.Fail($"There shouldn't be an expression already associated with this object : {manager.GetName(value)}");
                 if (!(existingExpression.UserData["StackTrace"] is string stack))
                 {
                     stack = "unknown";
@@ -3102,7 +3090,7 @@ namespace System.ComponentModel.Design.Serialization
 
         internal static void FillStatementTable(IDesignerSerializationManager manager, IDictionary table, Dictionary<string, string> names, CodeStatementCollection statements, string className)
         {
-            using (TraceScope("CodeDomSerializerBase::" + nameof(FillStatementTable)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(FillStatementTable)}"))
             {
                 // Look in the method body to try to find statements with a LHS that points to a name in our nametable.
                 foreach (CodeStatement statement in statements)
