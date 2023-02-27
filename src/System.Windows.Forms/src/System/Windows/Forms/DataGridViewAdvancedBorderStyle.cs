@@ -292,7 +292,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            return "DataGridViewAdvancedBorderStyle { All=" + All.ToString() + ", Left=" + Left.ToString() + ", Right=" + Right.ToString() + ", Top=" + Top.ToString() + ", Bottom=" + Bottom.ToString() + " }";
+            return $"DataGridViewAdvancedBorderStyle {{ All={All}, Left={Left}, Right={Right}, Top={Top}, Bottom={Bottom} }}";
         }
 
         object ICloneable.Clone()

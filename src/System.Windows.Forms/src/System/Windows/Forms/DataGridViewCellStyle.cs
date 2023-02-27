@@ -13,7 +13,7 @@ using System.Text;
 namespace System.Windows.Forms
 {
     [TypeConverter(typeof(DataGridViewCellStyleConverter))]
-    [Editor("System.Windows.Forms.Design.DataGridViewCellStyleEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.DataGridViewCellStyleEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     public class DataGridViewCellStyle : ICloneable
     {
         private static readonly int PropAlignment = PropertyStore.CreateKey();
@@ -224,7 +224,7 @@ namespace System.Windows.Forms
         }
 
         [DefaultValue("")]
-        [Editor("System.Windows.Forms.Design.FormatStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.FormatStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRCategory(nameof(SR.CatBehavior))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public string Format
@@ -722,7 +722,7 @@ namespace System.Windows.Forms
             bool firstPropAdded = true;
             if (BackColor != Color.Empty)
             {
-                sb.Append(" BackColor=" + BackColor.ToString());
+                sb.Append($" BackColor={BackColor}");
                 firstPropAdded = false;
             }
 
@@ -733,7 +733,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" ForeColor=" + ForeColor.ToString());
+                sb.Append($" ForeColor={ForeColor}");
                 firstPropAdded = false;
             }
 
@@ -744,7 +744,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" SelectionBackColor=" + SelectionBackColor.ToString());
+                sb.Append($" SelectionBackColor={SelectionBackColor}");
                 firstPropAdded = false;
             }
 
@@ -755,7 +755,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" SelectionForeColor=" + SelectionForeColor.ToString());
+                sb.Append($" SelectionForeColor={SelectionForeColor}");
                 firstPropAdded = false;
             }
 
@@ -766,7 +766,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" Font=" + Font.ToString());
+                sb.Append($" Font={Font}");
                 firstPropAdded = false;
             }
 
@@ -777,7 +777,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" NullValue=" + NullValue.ToString());
+                sb.Append($" NullValue={NullValue}");
                 firstPropAdded = false;
             }
 
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" DataSourceNullValue=" + DataSourceNullValue.ToString());
+                sb.Append($" DataSourceNullValue={DataSourceNullValue}");
                 firstPropAdded = false;
             }
 
@@ -799,7 +799,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" Format=" + Format);
+                sb.Append($" Format={Format}");
                 firstPropAdded = false;
             }
 
@@ -810,7 +810,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" WrapMode=" + WrapMode.ToString());
+                sb.Append($" WrapMode={WrapMode}");
                 firstPropAdded = false;
             }
 
@@ -821,7 +821,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" Alignment=" + Alignment.ToString());
+                sb.Append($" Alignment={Alignment}");
                 firstPropAdded = false;
             }
 
@@ -832,7 +832,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" Padding=" + Padding.ToString());
+                sb.Append($" Padding={Padding}");
                 firstPropAdded = false;
             }
 
@@ -843,7 +843,7 @@ namespace System.Windows.Forms
                     sb.Append(',');
                 }
 
-                sb.Append(" Tag=" + Tag.ToString());
+                sb.Append($" Tag={Tag}");
                 firstPropAdded = false;
             }
 

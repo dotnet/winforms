@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -56,37 +55,18 @@ namespace System.Windows.Forms
 
             public override string ToString()
             {
-                StringBuilder sb = new StringBuilder(100);
-                sb.Append(base.ToString());
-                sb.Append(" { \n");
-                sb.Append("ClientRectangle = ");
-                sb.Append(ClientRectangle.ToString());
-                sb.Append('\n');
-                sb.Append("Inside = ");
-                sb.Append(Inside.ToString());
-                sb.Append('\n');
-                sb.Append("TopLeftHeader = ");
-                sb.Append(TopLeftHeader.ToString());
-                sb.Append('\n');
-                sb.Append("ColumnHeaders = ");
-                sb.Append(ColumnHeaders.ToString());
-                sb.Append('\n');
-                sb.Append("RowHeaders = ");
-                sb.Append(RowHeaders.ToString());
-                sb.Append('\n');
-                sb.Append("Data = ");
-                sb.Append(Data.ToString());
-                sb.Append('\n');
-                sb.Append("ResizeBoxRect = ");
-                sb.Append(ResizeBoxRect.ToString());
-                sb.Append('\n');
-                sb.Append("ColumnHeadersVisible = ");
-                sb.Append(ColumnHeadersVisible);
-                sb.Append('\n');
-                sb.Append("RowHeadersVisible = ");
-                sb.Append(RowHeadersVisible);
-                sb.Append(" }");
-                return sb.ToString();
+                return $$"""
+                    {{base.ToString()}} {
+                    ClientRectangle = {{ClientRectangle}}
+                    Inside = {{Inside}}
+                    TopLeftHeader = {{TopLeftHeader}}
+                    ColumnHeaders = {{ColumnHeaders}}
+                    RowHeaders = {{RowHeaders}}
+                    Data = {{Data}}
+                    ResizeBoxRect = {{ResizeBoxRect}}
+                    ColumnHeadersVisible = {{ColumnHeadersVisible}}
+                    RowHeadersVisible = {{RowHeadersVisible}} }
+                    """;
             }
         }
     }

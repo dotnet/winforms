@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Globalization;
-
 namespace System.Windows.Forms
 {
     public partial class DataGridView
@@ -119,7 +117,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override string ToString()
             {
-                return "{ Type:" + _type.ToString() + ", Column:" + _col.ToString(CultureInfo.CurrentCulture) + ", Row:" + _row.ToString(CultureInfo.CurrentCulture) + " }";
+                return $"{{ Type:{_type}, Column:{_col}, Row:{_row} }}";
             }
         }
     }

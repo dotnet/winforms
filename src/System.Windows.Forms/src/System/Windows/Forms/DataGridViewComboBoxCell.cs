@@ -2553,7 +2553,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "DataGridViewComboBoxCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
+            return $"DataGridViewComboBoxCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
         }
 
         private void UnwireDataSource()

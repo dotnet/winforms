@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[]
             {
                 new DataGridViewCellStyle { Font = SystemFonts.DefaultFont },
-                "DataGridViewCellStyle { Font=" + SystemFonts.DefaultFont.ToString() + " }"
+                $"DataGridViewCellStyle {{ Font={SystemFonts.DefaultFont} }}"
             };
             yield return new object[]
             {

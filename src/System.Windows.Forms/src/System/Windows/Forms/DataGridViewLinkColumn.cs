@@ -7,8 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Globalization;
-using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -363,13 +361,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(64);
-            sb.Append("DataGridViewLinkColumn { Name=");
-            sb.Append(Name);
-            sb.Append(", Index=");
-            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
-            sb.Append(" }");
-            return sb.ToString();
+            return $"DataGridViewLinkColumn {{ Name={Name}, Index={Index} }}";
         }
     }
 }

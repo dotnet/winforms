@@ -7,8 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -1836,11 +1834,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            var sb = new StringBuilder(36);
-            sb.Append("DataGridViewRow { Index=");
-            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
-            sb.Append(" }");
-            return sb.ToString();
+            return $"DataGridViewRow {{ Index={Index} }}";
         }
     }
 }
