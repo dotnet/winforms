@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -117,7 +115,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
@@ -127,14 +125,14 @@ namespace System.Windows.Forms
                 {
                     this[index] = value is ListViewItem item
                         ? item
-                        : new ListViewItem(value.ToString(), -1);
+                        : new ListViewItem(value!.ToString(), -1);
                 }
             }
 
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual ListViewItem this[string key]
+            public virtual ListViewItem? this[string key]
             {
                 get
                 {
@@ -160,12 +158,12 @@ namespace System.Windows.Forms
             ///  the correct sorted position, or, if no sorting is set, at the end
             ///  of the list.
             /// </summary>
-            public virtual ListViewItem Add(string text)
+            public virtual ListViewItem Add(string? text)
             {
                 return Add(text, -1);
             }
 
-            int IList.Add(object item)
+            int IList.Add(object? item)
             {
                 if (item is ListViewItem listViewItem)
                 {
@@ -185,7 +183,7 @@ namespace System.Windows.Forms
             ///  the correct sorted position, or, if no sorting is set, at the end
             ///  of the list.
             /// </summary>
-            public virtual ListViewItem Add(string text, int imageIndex)
+            public virtual ListViewItem Add(string? text, int imageIndex)
             {
                 ListViewItem item = new(text, imageIndex);
                 Add(item);
@@ -210,7 +208,7 @@ namespace System.Windows.Forms
             ///  the correct sorted position, or, if no sorting is set, at the end
             ///  of the list.
             /// </summary>
-            public virtual ListViewItem Add(string text, string imageKey)
+            public virtual ListViewItem Add(string? text, string? imageKey)
             {
                 ListViewItem item = new(text, imageKey);
                 Add(item);
@@ -222,7 +220,7 @@ namespace System.Windows.Forms
             ///  the correct sorted position, or, if no sorting is set, at the end
             ///  of the list.
             /// </summary>
-            public virtual ListViewItem Add(string key, string text, string imageKey)
+            public virtual ListViewItem Add(string? key, string? text, string? imageKey)
             {
                 ListViewItem item = new(text, imageKey)
                 {
@@ -237,7 +235,7 @@ namespace System.Windows.Forms
             ///  the correct sorted position, or, if no sorting is set, at the end
             ///  of the list.
             /// </summary>
-            public virtual ListViewItem Add(string key, string text, int imageIndex)
+            public virtual ListViewItem Add(string? key, string? text, int imageIndex)
             {
                 ListViewItem item = new(text, imageIndex)
                 {
@@ -278,13 +276,13 @@ namespace System.Windows.Forms
                 return InnerList.Contains(item);
             }
 
-            bool IList.Contains(object item)
+            bool IList.Contains(object? item)
                 => item is ListViewItem listViewItem && Contains(listViewItem);
 
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key)
+            public virtual bool ContainsKey(string? key)
             {
                 return IsValidIndex(IndexOfKey(key));
             }
@@ -312,7 +310,7 @@ namespace System.Windows.Forms
             ///  Searches for Controls by their Name property, builds up a list
             ///  of all the controls that match.
             /// </summary>
-            private static void FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, List<ListViewItem> foundItems)
+            private static void FindInternal(string? key, bool searchAllSubItems, ListViewItemCollection listViewItems, List<ListViewItem> foundItems)
             {
                 for (int i = 0; i < listViewItems.Count; i++)
                 {
@@ -362,13 +360,13 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IList.IndexOf(object item)
+            int IList.IndexOf(object? item)
                 => item is ListViewItem listViewItem ? IndexOf(listViewItem) : -1;
 
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
@@ -419,17 +417,17 @@ namespace System.Windows.Forms
                 return item;
             }
 
-            public ListViewItem Insert(int index, string text)
+            public ListViewItem Insert(int index, string? text)
             {
                 return Insert(index, new ListViewItem(text));
             }
 
-            public ListViewItem Insert(int index, string text, int imageIndex)
+            public ListViewItem Insert(int index, string? text, int imageIndex)
             {
                 return Insert(index, new ListViewItem(text, imageIndex));
             }
 
-            void IList.Insert(int index, object item)
+            void IList.Insert(int index, object? item)
             {
                 if (item is ListViewItem listViewItem)
                 {
@@ -443,16 +441,16 @@ namespace System.Windows.Forms
 
             // <-- NEW INSERT OVERLOADS IN WHIDBEY
 
-            public ListViewItem Insert(int index, string text, string imageKey)
+            public ListViewItem Insert(int index, string? text, string? imageKey)
                 => Insert(index, new ListViewItem(text, imageKey));
 
-            public virtual ListViewItem Insert(int index, string key, string text, string imageKey)
+            public virtual ListViewItem Insert(int index, string? key, string? text, string? imageKey)
                 => Insert(index, new ListViewItem(text, imageKey)
                     {
                         Name = key
                     });
 
-            public virtual ListViewItem Insert(int index, string key, string text, int imageIndex)
+            public virtual ListViewItem Insert(int index, string? key, string? text, int imageIndex)
                 => Insert(index, new ListViewItem(text, imageIndex)
                     {
                         Name = key
@@ -493,7 +491,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            void IList.Remove(object item)
+            void IList.Remove(object? item)
             {
                 if (item is ListViewItem listViewItem)
                 {
