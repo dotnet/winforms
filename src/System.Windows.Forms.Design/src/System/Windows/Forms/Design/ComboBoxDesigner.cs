@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Design
             PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
             if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
             {
-                textProp.SetValue(Component, "");
+                textProp.SetValue(Component, string.Empty);
             }
         }
 
