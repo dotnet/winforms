@@ -833,9 +833,9 @@
 ~System.Windows.Forms.HtmlWindow.StatusBarText.set -> void
 ~System.Windows.Forms.HtmlWindow.Url.get -> System.Uri
 ~System.Windows.Forms.HtmlWindow.WindowFrameElement.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlWindowCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow
-~System.Windows.Forms.HtmlWindowCollection.this[string windowId].get -> System.Windows.Forms.HtmlWindow
+System.Windows.Forms.HtmlWindowCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow?
+System.Windows.Forms.HtmlWindowCollection.this[string! windowId].get -> System.Windows.Forms.HtmlWindow?
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection items) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem[] items) -> void

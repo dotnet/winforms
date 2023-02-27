@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -32,7 +30,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public HtmlWindow this[int index]
+        public HtmlWindow? this[int index]
         {
             get
             {
@@ -42,27 +40,30 @@ namespace System.Windows.Forms
                 }
 
                 object oIndex = (object)index;
-                return (NativeHTMLFramesCollection2.Item(ref oIndex) is IHTMLWindow2 htmlWindow2) ? new HtmlWindow(shimManager, htmlWindow2) : null;
+                return (NativeHTMLFramesCollection2.Item(ref oIndex) is IHTMLWindow2 htmlWindow2)
+                    ? new HtmlWindow(shimManager, htmlWindow2)
+                    : null;
             }
         }
 
-        public HtmlWindow this[string windowId]
+        public HtmlWindow? this[string windowId]
         {
             get
             {
                 object oWindowId = (object)windowId;
-                IHTMLWindow2 htmlWindow2 = null;
+                IHTMLWindow2? htmlWindow2 = null;
                 try
                 {
-                    htmlWindow2 = htmlFramesCollection2.Item(ref oWindowId)
-                            as IHTMLWindow2;
+                    htmlWindow2 = htmlFramesCollection2.Item(ref oWindowId) as IHTMLWindow2;
                 }
                 catch (COMException)
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(windowId), windowId), nameof(windowId));
                 }
 
-                return (htmlWindow2 is not null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
+                return (htmlWindow2 is not null)
+                    ? new HtmlWindow(shimManager, htmlWindow2)
+                    : null;
             }
         }
 
