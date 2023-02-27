@@ -10,9 +10,9 @@ namespace System
     {
         public static bool CompareReturnIfNull<T>([NotNullWhen(false)] T x, [NotNullWhen(false)] T y, [NotNullWhen(true)] out int? compareReturnValue)
         {
-            compareReturnValue = null;
             if (x is not null && y is not null)
             {
+                compareReturnValue = null;
                 return false;
             }
 
@@ -28,13 +28,9 @@ namespace System
                 return true;
             }
 
-            if (y is null)
-            {
-                compareReturnValue = 1;
-                return true;
-            }
-
-            return false;
+            // y is null.
+            compareReturnValue = 1;
+            return true;
         }
     }
 }

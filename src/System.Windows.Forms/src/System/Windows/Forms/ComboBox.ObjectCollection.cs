@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -18,15 +16,15 @@ namespace System.Windows.Forms
         public partial class ObjectCollection : IList, IComparer<Entry>
         {
             private readonly ComboBox _owner;
-            private ComboBoxAccessibleObject _ownerComboBoxAccessibleObject;
-            private List<Entry> _innerList;
+            private ComboBoxAccessibleObject? _ownerComboBoxAccessibleObject;
+            private List<Entry>? _innerList;
 
             public ObjectCollection(ComboBox owner)
             {
                 _owner = owner;
             }
 
-            private ComboBoxAccessibleObject OwnerComboBoxAccessibleObject
+            private ComboBoxAccessibleObject? OwnerComboBoxAccessibleObject
             {
                 get
                 {
@@ -173,9 +171,9 @@ namespace System.Windows.Forms
                 return index;
             }
 
-            int IList.Add(object item)
+            int IList.Add(object? item)
             {
-                return Add(item);
+                return Add(item!);
             }
 
             public void AddRange(object[] items)
@@ -215,7 +213,7 @@ namespace System.Windows.Forms
             /// </summary>
             [Browsable(false)]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public virtual object this[int index]
+            public virtual object? this[int index]
             {
                 get
                 {
@@ -229,7 +227,7 @@ namespace System.Windows.Forms
                 set
                 {
                     _owner.CheckNoDataSource();
-                    SetItemInternal(index, value);
+                    SetItemInternal(index, value!);
                 }
             }
 
@@ -259,7 +257,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public bool Contains(object value)
+            public bool Contains(object? value)
             {
                 return IndexOf(value) != -1;
             }
@@ -315,7 +313,7 @@ namespace System.Windows.Forms
             ///  A SystemException occurs if there is insufficient space available to
             ///  store the new item.
             /// </summary>
-            public void Insert(int index, object item)
+            public void Insert(int index, object? item)
             {
                 _owner.CheckNoDataSource();
 
@@ -407,7 +405,7 @@ namespace System.Windows.Forms
             ///  Removes the given item from the ComboBox, provided that it is
             ///  actually in the list.
             /// </summary>
-            public void Remove(object value)
+            public void Remove(object? value)
             {
                 int index = IndexOf(value);
 
@@ -460,7 +458,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public int IndexOf(object value)
+            public int IndexOf(object? value)
             {
                 int virtualIndex = -1;
 
@@ -476,14 +474,19 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            int IComparer<Entry>.Compare(Entry entry1, Entry entry2)
+            int IComparer<Entry>.Compare(Entry? entry1, Entry? entry2)
             {
-                string itemName1 = _owner.GetItemText(entry1.Item);
-                string itemName2 = _owner.GetItemText(entry2.Item);
+                if (IComparerHelpers.CompareReturnIfNull(entry1, entry2, out int? returnValue))
+                {
+                    return (int)returnValue;
+                }
+
+                string? itemName1 = _owner.GetItemText(entry1.Item);
+                string? itemName2 = _owner.GetItemText(entry2.Item);
 
                 CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
             }
-        } // end ObjectCollection
+        }
     }
 }
