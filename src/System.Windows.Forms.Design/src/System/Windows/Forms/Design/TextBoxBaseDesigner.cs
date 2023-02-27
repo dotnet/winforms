@@ -142,20 +142,15 @@ namespace System.Windows.Forms.Design
                 rules |= SelectionRules.AllSizeable;
 
                 PropertyDescriptor? prop = TypeDescriptor.GetProperties(component)["Multiline"];
-                if (prop is not null)
+
+                object? value = prop?.GetValue(component);
+                if (value is bool valueAsBool && !valueAsBool)
                 {
-                    object? value = prop.GetValue(component);
-                    if (value is bool valueAsBool && !valueAsBool)
+                    PropertyDescriptor? propAuto = TypeDescriptor.GetProperties(component)["AutoSize"];
+                    object? auto = propAuto?.GetValue(component);
+                    if (auto is bool autoAsBool && autoAsBool)
                     {
-                        PropertyDescriptor? propAuto = TypeDescriptor.GetProperties(component)["AutoSize"];
-                        if (propAuto is not null)
-                        {
-                            object? auto = propAuto.GetValue(component);
-                            if (auto is bool autoAsBool && autoAsBool)
-                            {
-                                rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
-                            }
-                        }
+                        rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
                     }
                 }
 
