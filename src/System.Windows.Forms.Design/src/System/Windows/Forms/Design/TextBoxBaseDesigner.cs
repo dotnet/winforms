@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                ArrayList snapLines = (base.SnapLines as ArrayList)!;
+                ArrayList snapLines = (ArrayList)base.SnapLines;
 
                 int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
 
