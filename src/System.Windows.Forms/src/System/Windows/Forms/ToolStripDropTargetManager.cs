@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Takes a screen point and converts it into an item. May return null.
         /// </summary>
-        private ToolStripItem FindItemAtPoint(int x, int y)
+        private ToolStripItem? FindItemAtPoint(int x, int y)
         {
             return _owner.GetItemAt(_owner.PointToClient(new Point(x, y)));
         }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                ToolStripItem item = FindItemAtPoint(e.X, e.Y);
+                ToolStripItem? item = FindItemAtPoint(e.X, e.Y);
 
                 if ((item is not null) && (item.AllowDrop))
                 {
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                ToolStripItem item = FindItemAtPoint(e.X, e.Y);
+                ToolStripItem? item = FindItemAtPoint(e.X, e.Y);
 
                 if ((item is not null) && (item.AllowDrop))
                 {

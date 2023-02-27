@@ -3220,7 +3220,7 @@ namespace System.Windows.Forms
                         // We need to select first ToolStrip item, otherwise ToolStrip container has the focus.
                         if (_toolStrip.Items.Count > 0)
                         {
-                            _toolStrip.SelectNextToolStripItem(null, forward: true);
+                            _toolStrip.SelectNextToolStripItem(start: null, forward: true);
                         }
                     }
                     else

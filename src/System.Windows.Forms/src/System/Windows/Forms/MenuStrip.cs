@@ -201,12 +201,12 @@ namespace System.Windows.Forms
                 {
                     if (DisplayedItems[0] is MdiControlStrip.SystemMenuItem)
                     {
-                        SelectNextToolStripItem(DisplayedItems[0], /*forward=*/true);
+                        SelectNextToolStripItem(DisplayedItems[0], forward: true);
                     }
                     else
                     {
                         // first alt should select "File".  Future keydowns of alt should restore focus.
-                        SelectNextToolStripItem(null, /*forward=*/(RightToLeft == RightToLeft.No));
+                        SelectNextToolStripItem(null, forward: RightToLeft == RightToLeft.No);
                     }
                 }
 
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
             {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
-                ToolStripItem item = GetItemAt(pt);
+                ToolStripItem? item = GetItemAt(pt);
                 if (item is not null && !(item is ToolStripControlHost))
                 {
                     // verify the place where we've clicked is a place where we have to do "fake" focus

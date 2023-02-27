@@ -19,7 +19,7 @@ namespace System.Windows.Forms
                 if (Visible && ShortcutKeys == keyData)
                 {
                     ShowDropDown();
-                    DropDown.SelectNextToolStripItem(null, true);
+                    DropDown.SelectNextToolStripItem(start: null, forward: true);
                     return true;
                 }
 
