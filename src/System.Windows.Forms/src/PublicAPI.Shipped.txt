@@ -837,18 +837,18 @@
 ~System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow
 ~System.Windows.Forms.HtmlWindowCollection.this[string windowId].get -> System.Windows.Forms.HtmlWindow
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection items) -> void
-~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem[] items) -> void
-~System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
-~System.Windows.Forms.ListView.ListViewItemCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.ListView.ListViewItemCollection.Find(string key, bool searchAllSubItems) -> System.Windows.Forms.ListViewItem[]
-~System.Windows.Forms.ListView.ListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListView.ListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem item) -> int
-~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string text) -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string text, string imageKey) -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, System.Windows.Forms.ListViewItem item) -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView owner) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection! items) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem![]! items) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem! item) -> bool
+System.Windows.Forms.ListView.ListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.Find(string! key, bool searchAllSubItems) -> System.Windows.Forms.ListViewItem![]!
+System.Windows.Forms.ListView.ListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.ListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem! item) -> int
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text) -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, System.Windows.Forms.ListViewItem! item) -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
 ~System.Windows.Forms.ListViewItem.FindNearestItem(System.Windows.Forms.SearchDirectionHint searchDirection) -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListViewItem.Font.get -> System.Drawing.Font
 ~System.Windows.Forms.ListViewItem.Font.set -> void
@@ -1359,21 +1359,21 @@
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string text) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string text, int imageIndex) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string text, string imageKey) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(System.Windows.Forms.ListViewItem value) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.Remove(System.Windows.Forms.ListViewItem item) -> void
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].set -> void
-~virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? key, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? key, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(System.Windows.Forms.ListViewItem! value) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListView.ListViewItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? key, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? key, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Remove(System.Windows.Forms.ListViewItem! item) -> void
+virtual System.Windows.Forms.ListView.ListViewItemCollection.RemoveByKey(string! key) -> void
+virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].set -> void
+virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string! key].get -> System.Windows.Forms.ListViewItem?
 ~virtual System.Windows.Forms.ListViewItem.Clone() -> object
 ~virtual System.Windows.Forms.ListViewItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
