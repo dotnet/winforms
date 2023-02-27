@@ -1067,7 +1067,7 @@ namespace System.Windows.Forms.Design
 
         public void DoOleDragOver(DragEventArgs de)
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\tOleDragDropHandler.OnDragOver: " + de.ToString());
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tOleDragDropHandler.OnDragOver: {de}");
             if (!localDrag && !dragOk)
             {
                 de.Effect = DragDropEffects.None;
@@ -1109,7 +1109,7 @@ namespace System.Windows.Forms.Design
 
                 if (newOffset != localDragOffset)
                 {
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\tParentControlDesigner.OnDragOver: " + de.ToString());
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
                     DrawDragFrames(dragComps, localDragOffset, localDragEffect,
                                    newOffset, de.Effect, forceDrawFrames);
                     localDragOffset = newOffset;

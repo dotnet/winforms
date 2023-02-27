@@ -8,7 +8,6 @@ using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.Design
@@ -39,7 +38,7 @@ namespace System.Windows.Forms.Design
                 if (!_displayNameSet)
                 {
                     _displayNameSet = true;
-                    DisplayName = "Template" + (++s_template).ToString(CultureInfo.CurrentCulture);
+                    DisplayName = $"Template{++s_template}";
                 }
             }
 

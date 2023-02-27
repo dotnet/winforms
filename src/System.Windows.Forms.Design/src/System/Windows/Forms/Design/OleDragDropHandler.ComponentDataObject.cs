@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
                             object[] comps = new object[components.Length];
                             for (int i = 0; i < components.Length; i++)
                             {
-                                Debug.Assert(components[i] is IComponent, "Item " + components[i].GetType().Name + " is not an IComponent");
+                                Debug.Assert(components[i] is IComponent, $"Item {components[i].GetType().Name} is not an IComponent");
                                 comps[i] = (IComponent)components[i];
                             }
 

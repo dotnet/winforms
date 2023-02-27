@@ -221,7 +221,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                     else
                     {
-                        Debug.Fail("Initiating resize. Could not get the designer for " + _resizeComponents[i].resizeControl.ToString());
+                        Debug.Fail($"Initiating resize. Could not get the designer for {_resizeComponents[i].resizeControl}");
                         _resizeComponents[i].resizeRules = SelectionRules.None;
                     }
                 }

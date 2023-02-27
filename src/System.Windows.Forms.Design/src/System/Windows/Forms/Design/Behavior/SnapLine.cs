@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public override string ToString()
         {
-            return "SnapLine: {type = " + SnapLineType + ", offset = " + Offset + ", priority = " + Priority + ", filter = " + (Filter is null ? "<null>" : Filter) + "}";
+            return $"SnapLine: {{type = {SnapLineType}, offset = {Offset}, priority = {Priority}, filter = {Filter ?? "<null>"}}}";
         }
     }
 }

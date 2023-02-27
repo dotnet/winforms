@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Design
                 //Add Text for Debugging Non Sited DropDown..
                 if (MenuItem.DropDown.Site is null)
                 {
-                    MenuItem.DropDown.Text = MenuItem.Name + ".DropDown";
+                    MenuItem.DropDown.Text = $"{MenuItem.Name}.DropDown";
                 }
             }
             else if (typeHereNode is not null && MenuItem.DropDownItems.IndexOf(typeHereNode) == -1)

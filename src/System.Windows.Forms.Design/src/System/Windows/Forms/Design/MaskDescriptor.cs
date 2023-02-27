@@ -147,23 +147,13 @@ namespace System.Windows.Forms.Design
 
         public override int GetHashCode()
         {
-            string hash = Mask;
-
-            if (ValidatingType is not null)
-            {
-                hash += ValidatingType.ToString();
-            }
-
+            string hash = string.Concat(Mask, ValidatingType?.ToString());
             return hash.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "{0}<Name={1}, Mask={2}, ValidatingType={3}",
-                GetType(),
-                Name ?? "null",
-                Mask ?? "null",
-                ValidatingType is not null ? ValidatingType.ToString() : "null");
+            return $"{GetType()}<Name={Name ?? "null"}, Mask={Mask ?? "null"}, ValidatingType={(ValidatingType is not null ? ValidatingType.ToString() : "null")}";
         }
     }
 }

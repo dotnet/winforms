@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
                 {
                     while (_host.Container.Components[name] is not null)
                     {
-                        name = defaultName + (index++).ToString(CultureInfo.InvariantCulture);
+                        name = $"{defaultName}{index++}";
                     }
                 }
 
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Design
                 {
                     while (_host.Container.Components[name] is not null)
                     {
-                        name = defaultName + (index++).ToString(CultureInfo.InvariantCulture);
+                        name = $"{defaultName}{index++}";
                     }
                 }
 
@@ -508,7 +508,7 @@ namespace System.Windows.Forms.Design
                 string newName = baseName;
                 for (int indexer = 1; !nameCreationService.IsValidName(newName); indexer++)
                 {
-                    newName = baseName + indexer.ToString(CultureInfo.InvariantCulture);
+                    newName = $"{baseName}{indexer}";
                 }
 
                 return newName;

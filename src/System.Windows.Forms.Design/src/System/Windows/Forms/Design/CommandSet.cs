@@ -852,7 +852,7 @@ namespace System.Windows.Forms.Design
                             }
                             else
                             {
-                                Debug.Fail("Unknown command mapped to OnKeyMove: " + cmd.ToString());
+                                Debug.Fail($"Unknown command mapped to OnKeyMove: {cmd}");
                             }
 
                             DesignerTransaction trans = selSvc.SelectionCount > 1
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            Debug.Fail("Unrecognized command: " + id.ToString());
+                            Debug.Fail($"Unrecognized command: {id}");
                         }
 
                         if (firstTry && !CanCheckout(comp))
