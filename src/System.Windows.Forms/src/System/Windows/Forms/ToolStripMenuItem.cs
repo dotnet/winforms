@@ -17,7 +17,8 @@ namespace System.Windows.Forms
     ///  ToolStripMenuItem
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
-    [DesignerSerializer("System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [DesignerSerializer($"System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer, {AssemblyRef.SystemDesign}",
+        $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
     public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         private static readonly MenuTimer s_menuTimer = new MenuTimer();

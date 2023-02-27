@@ -10,7 +10,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
@@ -20,8 +19,9 @@ namespace System.Windows.Forms
     /// <summary>
     ///  ToolStrip control.
     /// </summary>
-    [DesignerSerializer("System.Windows.Forms.Design.ToolStripCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
-    [Designer("System.Windows.Forms.Design.ToolStripDesigner, " + AssemblyRef.SystemDesign)]
+    [DesignerSerializer($"System.Windows.Forms.Design.ToolStripCodeDomSerializer, {AssemblyRef.SystemDesign}",
+        $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
+    [Designer($"System.Windows.Forms.Design.ToolStripDesigner, {AssemblyRef.SystemDesign}")]
     [DefaultProperty(nameof(Items))]
     [SRDescription(nameof(SR.DescriptionToolStrip))]
     [DefaultEvent(nameof(ItemClicked))]
@@ -3378,7 +3378,7 @@ namespace System.Windows.Forms
                 }
 
                 // for debugging VS we want to filter out the propgrid toolstrip
-                Debug.WriteLineIf(!(ParentInternal is PropertyGrid), "Invalidate called on: " + name + new StackTrace().ToString());
+                Debug.WriteLineIf(ParentInternal is not PropertyGrid, $"Invalidate called on: {name}{new StackTrace()}");
             }
         }
 #pragma warning restore RS0016 // Add public types and members to the declared API
@@ -3573,10 +3573,10 @@ namespace System.Windows.Forms
                 // control's WM_MOUSEMOVE. Waiting until this event gives us
                 // the actual coordinates.
 
-                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}", (item is null) ? "null" : item.ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose($"Item to get mouse move: {(item is null ? "null" : item.ToString())}");
                 if (item != _lastMouseActiveItem)
                 {
-                    ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
+                    ToolStripItem.s_mouseDebugging.TraceVerbose($"This is a new item - last item to get was {(_lastMouseActiveItem is null ? "null" : _lastMouseActiveItem.ToString())}");
 
                     // notify the item that we've moved on
                     HandleMouseLeave();
@@ -3586,7 +3586,7 @@ namespace System.Windows.Forms
 
                     if (_lastMouseActiveItem is not null)
                     {
-                        ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
+                        ToolStripItem.s_mouseDebugging.TraceVerbose($"Firing MouseEnter on: {_lastMouseActiveItem}");
                         item!.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
 
@@ -3603,7 +3603,7 @@ namespace System.Windows.Forms
 
             if (item is not null)
             {
-                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item is null) ? "null" : item.ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose($"Firing MouseMove on: {item}");
 
                 // Fire mouse move on the item
                 // Transpose this to "client coordinates" of the ToolStripItem.
@@ -3613,7 +3613,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (this is null) ? "null" : ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose($"Firing MouseMove on: {(this is null ? "null" : ToString())}");
 
                 base.OnMouseMove(mea);
             }
@@ -4728,11 +4728,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(base.ToString());
-            sb.Append(", Name: ");
-            sb.Append(Name);
-            sb.Append(", Items: ").Append(Items.Count);
-            return sb.ToString();
+            return $"{base.ToString()}, Name: {Name}, Items: {Items.Count}";
         }
 
         /// <summary>

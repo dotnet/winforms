@@ -9,7 +9,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.Runtime.Versioning;
 using System.Windows.Forms.Layout;
 using Windows.Win32.System.Ole;
@@ -20,7 +19,7 @@ namespace System.Windows.Forms
 {
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
     [DesignTimeVisible(false)]
-    [Designer("System.Windows.Forms.Design.ToolStripItemDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ToolStripItemDesigner, {AssemblyRef.SystemDesign}")]
     [DefaultEvent(nameof(Click))]
     [ToolboxItem(false)]
     [DefaultProperty(nameof(Text))]
@@ -1199,7 +1198,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [TypeConverter(typeof(ImageKeyConverter))]
         [RefreshProperties(RefreshProperties.Repaint)]
-        [Editor("System.Windows.Forms.Design.ToolStripImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ToolStripImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Browsable(false)]
         [RelatedImageList("Owner.ImageList")]
         [AllowNull]
@@ -2006,7 +2005,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRDescription(nameof(SR.ToolStripItemToolTipTextDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
-        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Localizable(true)]
         public string? ToolTipText
         {
@@ -3209,13 +3208,13 @@ namespace System.Windows.Forms
 
         internal void Select(bool forceRaiseAccessibilityFocusChanged)
         {
-#if DEBUG
             // let's not snap the stack trace unless we're debugging selection.
-            if (ToolStrip.s_selectionDebug.TraceVerbose)
-            {
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", ToString(), new StackTrace().ToString().Substring(0, 200)));
-            }
-#endif
+            ToolStrip.s_selectionDebug.TraceVerbose($"""
+                [Selection DBG] WBI.Select: {ToString()}
+                {new StackTrace().ToString().AsSpan(0, 200)}
+
+                """);
+
             if (!CanSelect)
             {
                 return;
@@ -3634,7 +3633,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void Unselect()
         {
-            ToolStrip.s_selectionDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", ToString()));
+            ToolStrip.s_selectionDebug.TraceVerbose($"[Selection DBG] WBI.Unselect: {ToString()}");
             if (_state[s_stateSelected])
             {
                 _state[s_stateSelected] = false;

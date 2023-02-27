@@ -12,7 +12,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    [Designer("System.Windows.Forms.Design.ToolStripPanelDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ToolStripPanelDesigner, {AssemblyRef.SystemDesign}")]
     [ToolboxBitmap(typeof(ToolStripPanel), "ToolStripPanel_standalone")]
     public partial class ToolStripPanel : ContainerControl, IArrangedElement
     {
@@ -831,7 +831,7 @@ namespace System.Windows.Forms
             Point clientLocation = PointToClient(screenLocation);
             if (!DragBounds.Contains(clientLocation))
             {
-                s_toolStripPanelDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, $"RC.MoveControl - Point {{0}} is not in current rafting container drag bounds {{1}}, calling MoveOutsideContainer", clientLocation, DragBounds));
+                s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point {clientLocation} is not in current rafting container drag bounds {DragBounds}, calling MoveOutsideContainer");
                 MoveOutsideContainer(toolStripToDrag, screenLocation);
                 return;
             }
@@ -911,7 +911,7 @@ namespace System.Windows.Forms
                 ToolStripPanelRow? row = PointToRow(clientLocation);
                 if (row is null)
                 {
-                    s_toolStripPanelDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
+                    s_toolStripPanelDebug.TraceVerbose("\tThere is no row corresponding to this point, creating a new one.");
 
                     // there's no row at this point so lets create one
                     int index = RowsInternal.Count;
@@ -968,9 +968,9 @@ namespace System.Windows.Forms
                 }
                 else if (!row.CanMove(toolStripToDrag))
                 {
-                    ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we can't add the control to it, creating/inserting new row."));
+                    ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("\tThere was a row, but we can't add the control to it, creating/inserting new row.");
 
-                    // we have a row at that point, but its too full or doesnt want
+                    // we have a row at that point, but it's too full or doesn't want
                     // anyone to join it.
                     int index = RowsInternal.IndexOf(row);
 
@@ -978,7 +978,7 @@ namespace System.Windows.Forms
                     {
                         if (index > 0 && index - 1 == RowsInternal.IndexOf(currentToolStripPanelRow))
                         {
-                            ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tAttempts to leave the current row failed as there's no space in the next row.  Since there's only one control, just keep the row."));
+                            ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("\tAttempts to leave the current row failed as there's no space in the next row.  Since there's only one control, just keep the row.");
                             return;
                         }
                     }
@@ -1002,7 +1002,7 @@ namespace System.Windows.Forms
 
                 if (changedRow)
                 {
-                    s_toolStripPanelDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
+                    s_toolStripPanelDebug.TraceVerbose("\tCalling JoinRow.");
                     currentToolStripPanelRow?.LeaveRow(toolStripToDrag);
 
                     row.JoinRow(toolStripToDrag, clientLocation);
@@ -1126,11 +1126,11 @@ namespace System.Windows.Forms
                             int goodRowIndex = (currentlyAssignedRow is not null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
                             if (goodRowIndex == -1)
                             {
-                                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ToolStripPanelRow has not been assigned!  Should be set to {0}.", i));
+                                Debug.Fail($"ToolStripPanelRow has not been assigned!  Should be set to {i}.");
                             }
                             else
                             {
-                                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Detected orphan cell! {0} is in row {1}. It shouldn't have a cell in {2}! \r\n\r\nTurn on DEBUG_PAINT in ToolStripPanel and ToolStripPanelRow to investigate.", cell.Control.Name, goodRowIndex, i));
+                                Debug.Fail($"Detected orphan cell! {cell.Control.Name} is in row {goodRowIndex}. It shouldn't have a cell in {i}! \r\n\r\nTurn on DEBUG_PAINT in ToolStripPanel and ToolStripPanelRow to investigate.");
                             }
                         }
                     }
@@ -1147,10 +1147,10 @@ namespace System.Windows.Forms
         {
             for (int i = 0; i < RowsInternal.Count; i++)
             {
-                Debug.Write("Row " + i.ToString(CultureInfo.CurrentCulture) + ": ");
+                Debug.Write($"Row {i}: ");
                 for (int j = 0; j < RowsInternal[i].ControlsInternal.Count; j++)
                 {
-                    Debug.Write(string.Format(CultureInfo.CurrentCulture, "[{0} {1}] ", RowsInternal[i].ControlsInternal[j].Name, ((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin));
+                    Debug.Write($"[{RowsInternal[i].ControlsInternal[j].Name} {((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin}] ");
                 }
 
                 Debug.Write("\r\n");
@@ -1183,20 +1183,17 @@ namespace System.Windows.Forms
                         ISupportToolStripPanel draggedToolStrip1 = (c1 as ISupportToolStripPanel)!;
                         ISupportToolStripPanel draggedToolStrip2 = (c2 as ISupportToolStripPanel)!;
 
-                        string fail = string.Format(CultureInfo.CurrentCulture,
-                            "OVERLAP detection:\r\n{0}: {1} row {2} row bounds {3}",
-                            c1.Name ?? "",
-                            c1.Bounds,
-                            !RowsInternal.Contains(draggedToolStrip1.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip1.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
-                            draggedToolStrip1.ToolStripPanelRow?.Bounds);
+                        static object GetRow(ISupportToolStripPanel draggedToolStrip, ToolStripPanelRowCollection rows)
+                        {
+                            int rowIndex = rows.IndexOf(draggedToolStrip.ToolStripPanelRow);
+                            return rowIndex == -1
+                                ? "unknown"
+                                : rowIndex;
+                        }
 
-                        fail += string.Format(CultureInfo.CurrentCulture,
-                            "\r\n{0}: {1} row {2} row bounds {3}",
-                            c2.Name ?? "",
-                            c2.Bounds,
-                            !RowsInternal.Contains(draggedToolStrip2.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip2.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
-                            draggedToolStrip2.ToolStripPanelRow?.Bounds);
-                        Debug.Fail(fail);
+                        Debug.Fail($@"OVERLAP detection:
+{c1.Name ?? ""}: {c1.Bounds} row {GetRow(draggedToolStrip1, RowsInternal)} row bounds {draggedToolStrip1.ToolStripPanelRow?.Bounds}
+{c2.Name ?? ""}: {c2.Bounds} row {GetRow(draggedToolStrip2, RowsInternal)} row bounds {draggedToolStrip2.ToolStripPanelRow?.Bounds}");
                     }
                 }
             }
