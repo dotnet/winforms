@@ -4076,33 +4076,21 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new Control? GetChildAtPoint(Point point)
-        {
-            return base.GetChildAtPoint(point);
-        }
+        public new Control? GetChildAtPoint(Point point) => base.GetChildAtPoint(point);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new Control? GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue)
-        {
-            return base.GetChildAtPoint(pt, skipValue);
-        }
+        public new Control? GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue) => base.GetChildAtPoint(pt, skipValue);
 
         // GetNextControl for ToolStrip should always return null
         // we do our own tabbing/etc - this allows us to pretend
         // we don't have child controls.
-        internal override Control? GetFirstChildControlInTabOrder(bool forward)
-        {
-            return null;
-        }
+        internal override Control? GetFirstChildControlInTabOrder(bool forward) => null;
 
         /// <summary>
         ///  Finds the ToolStripItem contained within a specified client coordinate point
         ///  If item not found - returns null
         /// </summary>
-        public ToolStripItem? GetItemAt(int x, int y)
-        {
-            return GetItemAt(new Point(x, y));
-        }
+        public ToolStripItem? GetItemAt(int x, int y) => GetItemAt(new Point(x, y));
 
         /// <summary>
         ///  Finds the ToolStripItem contained within a specified client coordinate point
