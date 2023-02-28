@@ -2312,7 +2312,7 @@ namespace System.Windows.Forms
                     // we won't raise mouse events though.
                     if (!Enabled && ParentInternal is not null)
                     {
-                        ParentInternal.UpdateToolTip(null);
+                        ParentInternal.UpdateToolTip(item: null);
                         HandleLeave();
                     }
                     else
@@ -2929,7 +2929,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         /// </summary>
-        protected virtual void OnMouseLeave(EventArgs e) => ParentInternal?.UpdateToolTip(null);
+        protected virtual void OnMouseLeave(EventArgs e) => ParentInternal?.UpdateToolTip(item: null);
 
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.

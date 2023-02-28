@@ -556,7 +556,7 @@ namespace System.Windows.Forms
                         // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu.
                         ShowDropDown();
                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                        DropDown.SelectNextToolStripItem(null, true);
+                        DropDown.SelectNextToolStripItem(start: null, forward: true);
                     }// else eat the key
 
                     return true;
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
                         {
                             ShowDropDown();
                             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                            DropDown.SelectNextToolStripItem(null, true);
+                            DropDown.SelectNextToolStripItem(start: null, forward: true);
                         } // else eat the key
 
                         return true;
