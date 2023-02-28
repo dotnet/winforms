@@ -508,8 +508,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            string s = base.ToString();
-            return s + ",  Font: " + Font.ToString();
+            return $"{base.ToString()},  Font: {Font}";
         }
 
         private void UpdateColor(int rgb)

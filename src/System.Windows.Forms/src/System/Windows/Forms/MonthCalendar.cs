@@ -55,7 +55,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(SelectionRange))]
     [DefaultEvent(nameof(DateChanged))]
     [DefaultBindingProperty(nameof(SelectionRange))]
-    [Designer("System.Windows.Forms.Design.MonthCalendarDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.MonthCalendarDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionMonthCalendar))]
     public partial class MonthCalendar : Control
     {
@@ -2070,7 +2070,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", " + SelectionRange.ToString();
+            return $"{s}, {SelectionRange}";
         }
 
         /// <summary>

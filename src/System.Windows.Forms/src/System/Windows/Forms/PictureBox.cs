@@ -367,7 +367,7 @@ namespace System.Windows.Forms
                         break;
 
                     default:
-                        Debug.Fail("Unsupported PictureBoxSizeMode value: " + mode);
+                        Debug.Fail($"Unsupported PictureBoxSizeMode value: {mode}");
                         break;
                 }
             }
@@ -1212,7 +1212,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", SizeMode: " + _sizeMode.ToString("G");
+            return $"{s}, SizeMode: {_sizeMode:G}";
         }
 
         [SRCategory(nameof(SR.CatAsynchronous))]

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements the basic functionality required by a button control.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ButtonBaseDesigner, {AssemblyRef.SystemDesign}")]
     public abstract partial class ButtonBase : Control, ICommandBindingTargetProvider
     {
         private FlatStyle _flatStyle = FlatStyle.Standard;
@@ -486,7 +486,7 @@ namespace System.Windows.Forms
         ///  displayed on the button control.
         /// </summary>
         [TypeConverter(typeof(ImageIndexConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Localizable(true)]
         [DefaultValue(ImageList.Indexer.DefaultIndex)]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -532,7 +532,7 @@ namespace System.Windows.Forms
         ///  displayed on the button control.  Note - setting this unsets the ImageIndex
         /// </summary>
         [TypeConverter(typeof(ImageKeyConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Localizable(true)]
         [DefaultValue(ImageList.Indexer.DefaultKey)]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -732,7 +732,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor)),
             SettingsBindable(true)]
         [AllowNull]
         public override string Text
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms
                             ;
                             break;
                         default:
-                            Debug.Fail("Unsupported FlatStyle: '" + FlatStyle + '"');
+                            Debug.Fail($"Unsupported FlatStyle: \"{FlatStyle}\"");
                             break;
                     }
 

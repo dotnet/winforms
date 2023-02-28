@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Defines a base class for controls that support auto-scrolling behavior.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.ScrollableControlDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ScrollableControlDesigner, {AssemblyRef.SystemDesign}")]
     public partial class ScrollableControl : Control, IArrangedElement
     {
 #if DEBUG
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
 
         private bool ApplyScrollbarChanges(Rectangle display)
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ApplyScrollbarChanges(" + display + ") {");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ApplyScrollbarChanges({display}) {{");
             Debug.Indent();
 
             bool needLayout = false;
@@ -547,8 +547,8 @@ namespace System.Windows.Forms
                 maxY = clientToBe.Height;
             }
 
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Current scrollbars(" + HScroll + ", " + VScroll + ")");
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Needed  scrollbars(" + needHscroll + ", " + needVscroll + ")");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Current scrollbars({HScroll}, {VScroll})");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Needed  scrollbars({needHscroll}, {needVscroll})");
 
             // Show the needed scrollbars
             needLayout = (SetVisibleScrollbars(needHscroll, needVscroll) || needLayout);

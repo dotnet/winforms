@@ -6742,23 +6742,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool IsMnemonic(char charCode, string? text)
         {
-#if DEBUG
-            if (s_controlKeyboardRouting.TraceVerbose)
-            {
-                Debug.Write($"Control.IsMnemonic({charCode}, ");
-
-                if (text is not null)
-                {
-                    Debug.Write(text);
-                }
-                else
-                {
-                    Debug.Write("null");
-                }
-
-                Debug.WriteLine(")");
-            }
-#endif
+            s_controlKeyboardRouting.TraceVerbose($"Control.IsMnemonic({charCode}, {(text is not null ? text : "null")})");
 
             // Special case handling:
             if (charCode == '&')

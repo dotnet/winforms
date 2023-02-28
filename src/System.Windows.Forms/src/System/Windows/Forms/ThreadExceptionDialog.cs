@@ -166,7 +166,6 @@ namespace System.Windows.Forms
             }
 
             StringBuilder detailsTextBuilder = new StringBuilder();
-            string newline = "\r\n";
             string separator = SR.ExDlgMsgSeparator;
             string sectionseparator = SR.ExDlgMsgSectionSeparator;
             if (Application.CustomThreadExceptionHandlerAttached)
@@ -178,11 +177,10 @@ namespace System.Windows.Forms
                 detailsTextBuilder.Append(SR.ExDlgMsgHeaderSwitchable);
             }
 
-            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgExceptionSection));
-            detailsTextBuilder.Append(t.ToString());
-            detailsTextBuilder.Append(newline);
-            detailsTextBuilder.Append(newline);
-            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection));
+            detailsTextBuilder.AppendFormat(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgExceptionSection);
+            detailsTextBuilder.AppendLine(t.ToString());
+            detailsTextBuilder.AppendLine();
+            detailsTextBuilder.AppendFormat(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection);
 
 #pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308.
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
@@ -205,23 +203,22 @@ namespace System.Windows.Forms
                 {
                 }
 
-                detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
+                detailsTextBuilder.AppendFormat(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase);
                 detailsTextBuilder.Append(separator);
             }
 #pragma warning restore SYSLIB0044 // Type or member is obsolete
 
-            detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection));
+            detailsTextBuilder.AppendFormat(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection);
             if (Application.CustomThreadExceptionHandlerAttached)
             {
-                detailsTextBuilder.Append(SR.ExDlgMsgFooterNonSwitchable);
+                detailsTextBuilder.AppendLine(SR.ExDlgMsgFooterNonSwitchable);
             }
             else
             {
-                detailsTextBuilder.Append(SR.ExDlgMsgFooterSwitchable);
+                detailsTextBuilder.AppendLine(SR.ExDlgMsgFooterSwitchable);
             }
 
-            detailsTextBuilder.Append(newline);
-            detailsTextBuilder.Append(newline);
+            detailsTextBuilder.AppendLine();
 
             string detailsText = detailsTextBuilder.ToString();
 

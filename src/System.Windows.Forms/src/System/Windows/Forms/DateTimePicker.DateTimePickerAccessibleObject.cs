@@ -29,7 +29,7 @@ namespace System.Windows.Forms
                         char previousLabelMnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, false /*convertToUpperCase*/);
                         if (previousLabelMnemonic != (char)0)
                         {
-                            return "Alt+" + previousLabelMnemonic;
+                            return $"Alt+{previousLabelMnemonic}";
                         }
                     }
 
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
                         char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(Owner.Text, false /*convertToUpperCase*/);
                         if (ownerTextMnemonic != (char)0)
                         {
-                            return "Alt+" + ownerTextMnemonic;
+                            return $"Alt+{ownerTextMnemonic}";
                         }
                     }
 

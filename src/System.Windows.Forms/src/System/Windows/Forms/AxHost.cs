@@ -2782,7 +2782,7 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage + " " + TrimmingConstants.FilterRequiresUnreferencedCodeMessage)]
+        [RequiresUnreferencedCode($"{TrimmingConstants.PropertyDescriptorPropertyTypeMessage} {TrimmingConstants.FilterRequiresUnreferencedCodeMessage}")]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
         {
             return FillProperties(attributes);

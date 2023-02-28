@@ -36,7 +36,7 @@ namespace System.Windows.Forms
     ///     "D" };
     /// </code>
     /// </summary>
-    [Designer("System.Windows.Forms.Design.ListBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ListBoxDesigner, {AssemblyRef.SystemDesign}")]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [DefaultProperty(nameof(Items))]
     [DefaultBindingProperty(nameof(SelectedValue))]
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ListBoxItemsDescr))]
-        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [MergableProperty(false)]
         public ObjectCollection Items
         {
@@ -2271,14 +2271,14 @@ namespace System.Windows.Forms
             string s = base.ToString();
             if (_itemsCollection is not null)
             {
-                s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
+                s += $", Items.Count: {Items.Count}";
                 if (Items.Count > 0)
                 {
                     string? z = GetItemText(Items[0]);
                     if (z is not null)
                     {
-                        string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
-                        s += ", Items[0]: " + txt;
+                        ReadOnlySpan<char> txt = (z.Length > 40) ? z.AsSpan(0, 40) : z;
+                        s += $", Items[0]: {txt}";
                     }
                 }
             }
