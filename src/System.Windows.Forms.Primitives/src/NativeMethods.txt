@@ -257,7 +257,7 @@ GetThemeSysInt
 GetThemeTextExtent
 GetThemeTextMetrics
 GetThreadDpiAwarenessContext
-GetWindowDpiHostingBehavior
+GetThreadDpiHostingBehavior
 GetThreadLocale
 GetTickCount
 GetUpdateRect
