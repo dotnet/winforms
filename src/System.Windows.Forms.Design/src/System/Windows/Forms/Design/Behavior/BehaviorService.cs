@@ -791,7 +791,7 @@ namespace System.Windows.Forms.Design.Behavior
             string snapLineInfo = string.Empty;
             if (_testHook_RecentSnapLines is not null)
             {
-                snapLineInfo = string.Join('\n', _testHook_RecentSnapLines) + "\n";
+                snapLineInfo = string.Join(Environment.NewLine, _testHook_RecentSnapLines) + Environment.NewLine;
             }
 
             TestHook_SetText(ref m, snapLineInfo);

@@ -2503,7 +2503,7 @@ namespace System.Windows.Forms.Design
 
             string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
             string typeName = owner.GetType().FullName;
-            string stack = string.Join("\r\n", exceptionLines.Where(l => l.Contains(typeName)));
+            string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
 
             Exception wrapper = new Exception(
                 string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),
