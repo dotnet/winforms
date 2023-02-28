@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
@@ -50,7 +49,8 @@ namespace System.Windows.Forms
             OnSubscribeControlEvents(c);
         }
 
-        public ToolStripControlHost(Control c, string name) : this(c)
+        public ToolStripControlHost(Control c, string name)
+            : this(c)
         {
             Name = name;
         }
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripItemImageDescr))]
         [DefaultValue(null)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => ControlInternal.BackgroundImage;
             set => ControlInternal.BackgroundImage = value;
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal AccessibleObject ControlAccessibilityObject => _control?.AccessibilityObject;
+        internal AccessibleObject? ControlAccessibilityObject => _control?.AccessibilityObject;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DisplayStyleChanged
+        public new event EventHandler? DisplayStyleChanged
         {
             add => Events.AddHandler(s_displayStyleChangedEvent, value);
             remove => Events.RemoveHandler(s_displayStyleChangedEvent, value);
@@ -187,6 +187,7 @@ namespace System.Windows.Forms
             set => base.DoubleClickEnabled = value;
         }
 
+        [AllowNull]
         public override Font Font
         {
             get => ControlInternal.Font;
@@ -201,7 +202,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnEnterDescr))]
-        public event EventHandler Enter
+        public event EventHandler? Enter
         {
             add => Events.AddHandler(s_enterEvent, value);
             remove => Events.RemoveHandler(s_enterEvent, value);
@@ -221,7 +222,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripItemOnGotFocusDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler GotFocus
+        public event EventHandler? GotFocus
         {
             add => Events.AddHandler(s_gotFocusEvent, value);
             remove => Events.RemoveHandler(s_gotFocusEvent, value);
@@ -230,7 +231,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image Image
+        public override Image? Image
         {
             get => base.Image;
             set => base.Image = value;
@@ -265,7 +266,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnLeaveDescr))]
-        public event EventHandler Leave
+        public event EventHandler? Leave
         {
             add => Events.AddHandler(s_leaveEvent, value);
             remove => Events.RemoveHandler(s_leaveEvent, value);
@@ -278,7 +279,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripItemOnLostFocusDescr))]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler LostFocus
+        public event EventHandler? LostFocus
         {
             add => Events.AddHandler(s_lostFocusEvent, value);
             remove => Events.RemoveHandler(s_lostFocusEvent, value);
@@ -289,7 +290,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyDownDescr))]
-        public event KeyEventHandler KeyDown
+        public event KeyEventHandler? KeyDown
         {
             add => Events.AddHandler(s_keyDownEvent, value);
             remove => Events.RemoveHandler(s_keyDownEvent, value);
@@ -300,7 +301,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyPressDescr))]
-        public event KeyPressEventHandler KeyPress
+        public event KeyPressEventHandler? KeyPress
         {
             add => Events.AddHandler(s_keyPressEvent, value);
             remove => Events.RemoveHandler(s_keyPressEvent, value);
@@ -311,7 +312,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatKey))]
         [SRDescription(nameof(SR.ControlOnKeyUpDescr))]
-        public event KeyEventHandler KeyUp
+        public event KeyEventHandler? KeyUp
         {
             add => Events.AddHandler(s_keyUpEvent, value);
             remove => Events.RemoveHandler(s_keyUpEvent, value);
@@ -384,7 +385,7 @@ namespace System.Windows.Forms
         ///  This is set at DesignTime when the component is added to the Container.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public override ISite Site
+        public override ISite? Site
         {
             get => base.Site;
             set
@@ -392,7 +393,7 @@ namespace System.Windows.Forms
                 base.Site = value;
                 ControlInternal.Site = value is not null
                     ? new StubSite(ControlInternal, this)
-                    : (ISite)null;
+                    : (ISite?)null;
             }
         }
 
@@ -400,6 +401,7 @@ namespace System.Windows.Forms
         ///  Overridden to modify hosted control's text.
         /// </summary>
         [DefaultValue("")]
+        [AllowNull]
         public override string Text
         {
             get => ControlInternal.Text;
@@ -433,7 +435,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnValidatingDescr))]
-        public event CancelEventHandler Validating
+        public event CancelEventHandler? Validating
         {
             add => Events.AddHandler(s_validatingEvent, value);
             remove => Events.RemoveHandler(s_validatingEvent, value);
@@ -441,7 +443,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatFocus))]
         [SRDescription(nameof(SR.ControlOnValidatedDescr))]
-        public event EventHandler Validated
+        public event EventHandler? Validated
         {
             add => Events.AddHandler(s_validatedEvent, value);
             remove => Events.RemoveHandler(s_validatedEvent, value);
@@ -463,7 +465,7 @@ namespace System.Windows.Forms
 
                 // we only call control.Dispose if we are NOT being disposed in the finalizer.
                 _control.Dispose();
-                _control = null;
+                _control = null!;
             }
         }
 
@@ -479,96 +481,96 @@ namespace System.Windows.Forms
 
         ///  Handle* wrappers:
         ///  We sync the event from the hosted control and call resurface it on ToolStripItem.
-        private void HandleClick(object sender, EventArgs e) => OnClick(e);
+        private void HandleClick(object? sender, EventArgs e) => OnClick(e);
 
-        private void HandleBackColorChanged(object sender, EventArgs e) => OnBackColorChanged(e);
+        private void HandleBackColorChanged(object? sender, EventArgs e) => OnBackColorChanged(e);
 
-        private void HandleDoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
+        private void HandleDoubleClick(object? sender, EventArgs e) => OnDoubleClick(e);
 
-        private void HandleDragDrop(object sender, DragEventArgs e) => OnDragDrop(e);
+        private void HandleDragDrop(object? sender, DragEventArgs e) => OnDragDrop(e);
 
-        private void HandleDragEnter(object sender, DragEventArgs e) => OnDragEnter(e);
+        private void HandleDragEnter(object? sender, DragEventArgs e) => OnDragEnter(e);
 
-        private void HandleDragLeave(object sender, EventArgs e) => OnDragLeave(e);
+        private void HandleDragLeave(object? sender, EventArgs e) => OnDragLeave(e);
 
-        private void HandleDragOver(object sender, DragEventArgs e) => OnDragOver(e);
+        private void HandleDragOver(object? sender, DragEventArgs e) => OnDragOver(e);
 
-        private void HandleEnter(object sender, EventArgs e) => OnEnter(e);
+        private void HandleEnter(object? sender, EventArgs e) => OnEnter(e);
 
-        private void HandleEnabledChanged(object sender, EventArgs e) => OnEnabledChanged(e);
+        private void HandleEnabledChanged(object? sender, EventArgs e) => OnEnabledChanged(e);
 
-        private void HandleForeColorChanged(object sender, EventArgs e) => OnForeColorChanged(e);
+        private void HandleForeColorChanged(object? sender, EventArgs e) => OnForeColorChanged(e);
 
-        private void HandleGiveFeedback(object sender, GiveFeedbackEventArgs e) => OnGiveFeedback(e);
+        private void HandleGiveFeedback(object? sender, GiveFeedbackEventArgs e) => OnGiveFeedback(e);
 
-        private void HandleGotFocus(object sender, EventArgs e) => OnGotFocus(e);
+        private void HandleGotFocus(object? sender, EventArgs e) => OnGotFocus(e);
 
-        private void HandleLocationChanged(object sender, EventArgs e) => OnLocationChanged(e);
+        private void HandleLocationChanged(object? sender, EventArgs e) => OnLocationChanged(e);
 
-        private void HandleLostFocus(object sender, EventArgs e) => OnLostFocus(e);
+        private void HandleLostFocus(object? sender, EventArgs e) => OnLostFocus(e);
 
-        private void HandleKeyDown(object sender, KeyEventArgs e) => OnKeyDown(e);
+        private void HandleKeyDown(object? sender, KeyEventArgs e) => OnKeyDown(e);
 
-        private void HandleKeyPress(object sender, KeyPressEventArgs e) => OnKeyPress(e);
+        private void HandleKeyPress(object? sender, KeyPressEventArgs e) => OnKeyPress(e);
 
-        private void HandleKeyUp(object sender, KeyEventArgs e) => OnKeyUp(e);
+        private void HandleKeyUp(object? sender, KeyEventArgs e) => OnKeyUp(e);
 
-        private void HandleLeave(object sender, EventArgs e) => OnLeave(e);
+        private void HandleLeave(object? sender, EventArgs e) => OnLeave(e);
 
-        private void HandleMouseDown(object sender, MouseEventArgs e)
+        private void HandleMouseDown(object? sender, MouseEventArgs e)
         {
             OnMouseDown(e);
-            RaiseMouseEvent(ToolStripItem.s_mouseDownEvent, e);
+            RaiseMouseEvent(s_mouseDownEvent, e);
         }
 
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
-        private void HandleMouseEnter(object sender, EventArgs e)
+        private void HandleMouseEnter(object? sender, EventArgs e)
         {
             OnMouseEnter(e);
-            RaiseEvent(ToolStripItem.s_mouseEnterEvent, e);
+            RaiseEvent(s_mouseEnterEvent, e);
         }
 
-        private void HandleMouseLeave(object sender, EventArgs e)
+        private void HandleMouseLeave(object? sender, EventArgs e)
         {
             OnMouseLeave(e);
-            RaiseEvent(ToolStripItem.s_mouseLeaveEvent, e);
+            RaiseEvent(s_mouseLeaveEvent, e);
         }
 
-        private void HandleMouseHover(object sender, EventArgs e)
+        private void HandleMouseHover(object? sender, EventArgs e)
         {
             OnMouseHover(e);
-            RaiseEvent(ToolStripItem.s_mouseHoverEvent, e);
+            RaiseEvent(s_mouseHoverEvent, e);
         }
 #pragma warning restore CA2252
 
-        private void HandleMouseMove(object sender, MouseEventArgs e)
+        private void HandleMouseMove(object? sender, MouseEventArgs e)
         {
             OnMouseMove(e);
-            RaiseMouseEvent(ToolStripItem.s_mouseMoveEvent, e);
+            RaiseMouseEvent(s_mouseMoveEvent, e);
         }
 
-        private void HandleMouseUp(object sender, MouseEventArgs e)
+        private void HandleMouseUp(object? sender, MouseEventArgs e)
         {
             OnMouseUp(e);
-            RaiseMouseEvent(ToolStripItem.s_mouseUpEvent, e);
+            RaiseMouseEvent(s_mouseUpEvent, e);
         }
 
-        private void HandlePaint(object sender, PaintEventArgs e)
+        private void HandlePaint(object? sender, PaintEventArgs e)
         {
             OnPaint(e);
-            RaisePaintEvent(ToolStripItem.s_paintEvent, e);
+            RaisePaintEvent(s_paintEvent, e);
         }
 
-        private void HandleQueryAccessibilityHelp(object sender, QueryAccessibilityHelpEventArgs e)
+        private void HandleQueryAccessibilityHelp(object? sender, QueryAccessibilityHelpEventArgs e)
         {
-            ((QueryAccessibilityHelpEventHandler)Events[ToolStripItem.s_queryAccessibilityHelpEvent])?.Invoke(this, e);
+            ((QueryAccessibilityHelpEventHandler?)Events[s_queryAccessibilityHelpEvent])?.Invoke(this, e);
         }
 
-        private void HandleQueryContinueDrag(object sender, QueryContinueDragEventArgs e) => OnQueryContinueDrag(e);
+        private void HandleQueryContinueDrag(object? sender, QueryContinueDragEventArgs e) => OnQueryContinueDrag(e);
 
-        private void HandleRightToLeftChanged(object sender, EventArgs e) => OnRightToLeftChanged(e);
+        private void HandleRightToLeftChanged(object? sender, EventArgs e) => OnRightToLeftChanged(e);
 
-        private void HandleResize(object sender, EventArgs e)
+        private void HandleResize(object? sender, EventArgs e)
         {
             if (_suspendSyncSizeCount == 0)
             {
@@ -576,9 +578,9 @@ namespace System.Windows.Forms
             }
         }
 
-        private void HandleTextChanged(object sender, EventArgs e) => OnTextChanged(e);
+        private void HandleTextChanged(object? sender, EventArgs e) => OnTextChanged(e);
 
-        private void HandleControlVisibleChanged(object sender, EventArgs e)
+        private void HandleControlVisibleChanged(object? sender, EventArgs e)
         {
             // check the STATE_VISIBLE flag rather than using Control.Visible.
             // if we check while it's unparented it will return visible false.
@@ -593,9 +595,9 @@ namespace System.Windows.Forms
             }
         }
 
-        private void HandleValidating(object sender, CancelEventArgs e) => OnValidating(e);
+        private void HandleValidating(object? sender, CancelEventArgs e) => OnValidating(e);
 
-        private void HandleValidated(object sender, EventArgs e) => OnValidated(e);
+        private void HandleValidated(object? sender, EventArgs e) => OnValidated(e);
 
         internal override void OnAccessibleDescriptionChanged(EventArgs e)
         {
@@ -684,13 +686,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called when the item's parent has been changed.
         /// </summary>
-        protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent)
+        protected override void OnParentChanged(ToolStrip? oldParent, ToolStrip? newParent)
         {
             if (oldParent is not null && Owner is null && newParent is null && _control is not null)
             {
                 // if we've really been removed from the item collection,
                 // politely remove ourselves from the control collection
-                ReadOnlyControlCollection oldControlCollection
+                ReadOnlyControlCollection? oldControlCollection
                                 = GetControlCollection(_control.ParentInternal as ToolStrip);
                 oldControlCollection?.RemoveInternal(_control);
             }
@@ -707,7 +709,7 @@ namespace System.Windows.Forms
         ///  Override to add/prevent syncing of control events.
         ///  NOTE: if you override and hook up events here, you should unhook in OnUnsubscribeControlEvents.
         /// </summary>
-        protected virtual void OnSubscribeControlEvents(Control control)
+        protected virtual void OnSubscribeControlEvents(Control? control)
         {
             if (control is not null)
             {
@@ -752,7 +754,7 @@ namespace System.Windows.Forms
         ///  The events from the hosted control are unsubscribed here.
         ///  Override to unhook events subscribed in OnSubscribeControlEvents.
         /// </summary>
-        protected virtual void OnUnsubscribeControlEvents(Control control)
+        protected virtual void OnUnsubscribeControlEvents(Control? control)
         {
             if (control is not null)
             {
@@ -799,15 +801,15 @@ namespace System.Windows.Forms
         protected virtual void OnValidated(EventArgs e) => RaiseEvent(s_validatedEvent, e);
 #pragma warning restore CA2252
 
-        private static ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
-            => (ReadOnlyControlCollection)toolStrip?.Controls;
+        private static ReadOnlyControlCollection? GetControlCollection(ToolStrip? toolStrip)
+            => (ReadOnlyControlCollection?)toolStrip?.Controls;
 
         /// <remarks>
         ///  Ensures the hosted Control is parented to the ToolStrip hosting this ToolStripItem.
         /// </remarks>
         private void SyncControlParent()
         {
-            ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
+            ReadOnlyControlCollection? newControls = GetControlCollection(ParentInternal);
             newControls?.AddInternal(_control);
         }
 
