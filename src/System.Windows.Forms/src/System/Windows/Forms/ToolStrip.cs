@@ -4403,7 +4403,7 @@ namespace System.Windows.Forms
 
         internal ToolStripItem? SelectNextToolStripItem(ToolStripItem? start, bool forward)
         {
-            ToolStripItem? nextItem = GetNextItem(start, forward ? ArrowDirection.Right : ArrowDirection.Left, /*RTLAware=*/true);
+            ToolStripItem? nextItem = GetNextItem(start, forward ? ArrowDirection.Right : ArrowDirection.Left, rtlAware: true);
             ChangeSelection(nextItem);
             return nextItem;
         }
