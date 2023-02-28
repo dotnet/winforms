@@ -28,8 +28,6 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                ArrayList snapLines = (ArrayList)base.SnapLines;
-
                 int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
 
                 BorderStyle borderStyle = BorderStyle.Fixed3D;
@@ -56,6 +54,8 @@ namespace System.Windows.Forms.Design
                     Debug.Fail("Unknown borderstyle");
                     baseline += 0;
                 }
+
+                IList snapLines = base.SnapLines;
 
                 snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
