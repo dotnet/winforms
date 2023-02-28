@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public InheritedPropertyDescriptor(PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, Array.Empty<Attribute>())
         {
-            Debug.Assert(!(propertyDescriptor is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
+            Debug.Assert(propertyDescriptor is not InheritedPropertyDescriptor, $"Recursive inheritance propertyDescriptor {propertyDescriptor}");
             this.propertyDescriptor = propertyDescriptor;
 
             InitInheritedDefaultValue(component);
@@ -150,7 +150,7 @@ namespace System.ComponentModel.Design
             }
             set
             {
-                Debug.Assert(!(value is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
+                Debug.Assert(value is not InheritedPropertyDescriptor, $"Recursive inheritance propertyDescriptor {propertyDescriptor}");
                 propertyDescriptor = value;
             }
         }

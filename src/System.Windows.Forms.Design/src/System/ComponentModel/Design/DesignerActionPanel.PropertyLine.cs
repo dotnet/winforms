@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design
 
             public sealed override string FocusId
             {
-                get => "PROPERTY:" + _actionList.GetType().FullName + "." + _propertyItem.MemberName;
+                get => $"PROPERTY:{_actionList.GetType().FullName}.{_propertyItem.MemberName}";
             }
 
             protected PropertyDescriptor PropertyDescriptor
