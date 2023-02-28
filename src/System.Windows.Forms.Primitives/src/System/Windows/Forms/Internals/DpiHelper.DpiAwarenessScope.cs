@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                 }
 
                 // No-op when requested DpiContext and current threads context is same.
-                if (PInvoke.AreDpiAwarenessContextsEqual(_originalDpiAwarenessContext, context))
+                if (!PInvoke.AreDpiAwarenessContextsEqual(_originalDpiAwarenessContext, context))
                 {
                     if (PInvoke.AreDpiAwarenessContextsEqual(_originalDpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
                     {
