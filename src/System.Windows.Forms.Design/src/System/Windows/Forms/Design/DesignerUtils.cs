@@ -12,7 +12,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
 using static Interop;
 
@@ -692,7 +691,7 @@ namespace System.Windows.Forms.Design
                 string nameN = name;
                 for (int i = 1; !nameCreationService.IsValidName(nameN); ++i)
                 {
-                    nameN = name + i.ToString(CultureInfo.InvariantCulture);
+                    nameN = $"{name}{i}";
                 }
 
                 return nameN;

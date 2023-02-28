@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Design
             }
 
             CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
-            Debug.Assert(itemsEditor is not null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
+            Debug.Assert(itemsEditor is not null, $"Didn't get a collection editor for type '{_targetProperty.PropertyType.FullName}'");
             itemsEditor?.EditValue(this, this, propertyValue);
         }
     }

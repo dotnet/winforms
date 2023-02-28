@@ -412,7 +412,7 @@ namespace System.Windows.Forms.Design.Behavior
             int index = _behaviorStack.IndexOf(behavior);
             if (index == -1)
             {
-                Debug.Assert(false, "Could not find the behavior to pop - did it already get popped off? " + behavior.ToString());
+                Debug.Assert(false, $"Could not find the behavior to pop - did it already get popped off? {behavior}");
                 return null;
             }
 
@@ -791,10 +791,7 @@ namespace System.Windows.Forms.Design.Behavior
             string snapLineInfo = string.Empty;
             if (_testHook_RecentSnapLines is not null)
             {
-                foreach (string line in _testHook_RecentSnapLines)
-                {
-                    snapLineInfo += line + "\n";
-                }
+                snapLineInfo = string.Join(Environment.NewLine, _testHook_RecentSnapLines) + Environment.NewLine;
             }
 
             TestHook_SetText(ref m, snapLineInfo);
@@ -846,7 +843,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     foreach (SnapLine line in designer.SnapLines)
                     {
-                        snapLineInfo += line.ToString() + "\tAssociated Control = " + designer.Control.Name + ":::";
+                        snapLineInfo += $"{line}\tAssociated Control = {designer.Control.Name}:::";
                     }
                 }
             }

@@ -1174,7 +1174,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             public override string ToString()
             {
-                return "Line, type = " + _lineType + ", dims =(" + x1 + ", " + y1 + ")->(" + x2 + ", " + y2 + ")";
+                return $"Line, type = {_lineType}, dims =({x1}, {y1})->({x2}, {y2})";
             }
         }
 

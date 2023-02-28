@@ -353,8 +353,7 @@ namespace System.Windows.Forms.Design
             // Look to see if we have already cached the ToolboxItem.
             if (axTools is not null && axTools.TryGetValue(clsid, out AxToolboxItem tool))
             {
-                if (AxToolSwitch.TraceVerbose)
-                    Debug.WriteLine("Found AxToolboxItem in tool cache");
+                Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Found AxToolboxItem in tool cache");
                 return tool;
             }
 

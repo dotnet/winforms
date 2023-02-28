@@ -11,7 +11,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
 using static Interop;
 
@@ -2502,16 +2501,9 @@ namespace System.Windows.Forms.Design
             _thrownException = exception;
             owner ??= Control;
 
-            string stack = string.Empty;
             string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
             string typeName = owner.GetType().FullName;
-            foreach (string line in exceptionLines)
-            {
-                if (line.IndexOf(typeName) != -1)
-                {
-                    stack = string.Format(CultureInfo.CurrentCulture, "{0}\r\n{1}", stack, line);
-                }
-            }
+            string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
 
             Exception wrapper = new Exception(
                 string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),

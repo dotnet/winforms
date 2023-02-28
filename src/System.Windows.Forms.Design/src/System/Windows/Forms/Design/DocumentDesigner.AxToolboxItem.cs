@@ -194,13 +194,13 @@ namespace System.Windows.Forms.Design
 
                 FileInfo file = new FileInfo(path);
                 string fullPath = file.FullName;
-                Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Checking: " + fullPath);
+                Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Checking: {fullPath}");
 
                 ITypeResolutionService trs = (ITypeResolutionService)host.GetService(typeof(ITypeResolutionService));
                 Debug.Assert(trs is not null, "No type resolution service found.");
 
                 Assembly a = trs.GetAssembly(AssemblyName.GetAssemblyName(fullPath));
-                Debug.Assert(a is not null, "No assembly found at " + fullPath);
+                Debug.Assert(a is not null, $"No assembly found at {fullPath}");
 
                 return GetAxTypeFromAssembly(a);
             }
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     object[] attrs = t.GetCustomAttributes(typeof(AxHost.ClsidAttribute), false);
-                    Debug.Assert(attrs is not null && attrs.Length == 1, "Invalid number of GuidAttributes found on: " + t.FullName);
+                    Debug.Assert(attrs is not null && attrs.Length == 1, $"Invalid number of GuidAttributes found on: {t.FullName}");
 
                     AxHost.ClsidAttribute guid = (AxHost.ClsidAttribute)attrs[0];
                     if (string.Equals(guid.Value, clsid, StringComparison.OrdinalIgnoreCase))
@@ -245,8 +245,7 @@ namespace System.Windows.Forms.Design
             {
                 Debug.Assert(host is not null, "Null Designer Host");
 
-                Type type;
-                type = Type.GetType("EnvDTE.ProjectItem, " + AssemblyRef.EnvDTE);
+                Type type = Type.GetType($"EnvDTE.ProjectItem, {AssemblyRef.EnvDTE}");
 
                 if (type is null)
                 {
@@ -260,13 +259,13 @@ namespace System.Windows.Forms.Design
                 string name = ext.GetType().InvokeMember("Name", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture).ToString();
 
                 object project = ext.GetType().InvokeMember("ContainingProject", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture);
-                Debug.Assert(project is not null, "No DTE Project for the current project item: " + name);
+                Debug.Assert(project is not null, $"No DTE Project for the current project item: {name}");
 
                 object vsproject = project.GetType().InvokeMember("Object", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, project, null, CultureInfo.InvariantCulture);
-                Debug.Assert(vsproject is not null, "No VS Project for the current project item: " + name);
+                Debug.Assert(vsproject is not null, $"No VS Project for the current project item: {name}");
 
                 object references = vsproject.GetType().InvokeMember("References", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, vsproject, null, CultureInfo.InvariantCulture);
-                Debug.Assert(references is not null, "No References for the current project item: " + name);
+                Debug.Assert(references is not null, $"No References for the current project item: {name}");
 
                 return references;
             }
@@ -281,7 +280,7 @@ namespace System.Windows.Forms.Design
                 if (key is null)
                 {
                     if (AxToolSwitch.TraceVerbose)
-                        Debug.WriteLine("No registry key found for: " + controlKey);
+                        Debug.WriteLine($"No registry key found for: {controlKey}");
                     throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
                 }
 
@@ -380,7 +379,7 @@ namespace System.Windows.Forms.Design
             protected override void Serialize(SerializationInfo info, StreamingContext context)
             {
                 if (AxToolSwitch.TraceVerbose)
-                    Debug.WriteLine("Serializing AxToolboxItem:" + clsid);
+                    Debug.WriteLine($"Serializing AxToolboxItem:{clsid}");
                 base.Serialize(info, context);
                 info.AddValue("Clsid", clsid);
             }

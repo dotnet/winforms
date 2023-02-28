@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Configuration;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design
@@ -171,7 +170,7 @@ namespace System.Windows.Forms.Design
                             IComponent rootComponent = host.RootComponent;
                             if (rootComponent is not null && rootComponent != persistableComponent)
                             {
-                                ShadowProperties[SettingsKeyName] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
+                                ShadowProperties[SettingsKeyName] = $"{rootComponent.Site.Name}.{Component.Site.Name}";
                             }
                             else
                             {
