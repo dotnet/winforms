@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Layout.Tests
         public void TableLayoutSettingsTypeConverter_ConvertFrom_InvalidStyleSize_ThrowsArgumentException(string style)
         {
             var converter = new TableLayoutSettingsTypeConverter();
-            Assert.Throws<ArgumentException>(() => converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root><Columns Styles=""" + style + @""" /></Root>"));
+            Assert.Throws<ArgumentException>(() => converter.ConvertFrom($@"<?xml version=""1.0"" encoding=""utf-16""?><Root><Columns Styles=""{style}"" /></Root>"));
         }
 
         [Theory]
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.Layout.Tests
         public void TableLayoutSettingsTypeConverter_ConvertFrom_InvalidStyleWidth_ThrowsIndexOutOfRangeException(string style)
         {
             var converter = new TableLayoutSettingsTypeConverter();
-            Assert.Throws<IndexOutOfRangeException>(() => converter.ConvertFrom(@"<?xml version=""1.0"" encoding=""utf-16""?><Root><Columns Styles=""" + style + @""" /></Root>"));
+            Assert.Throws<IndexOutOfRangeException>(() => converter.ConvertFrom($@"<?xml version=""1.0"" encoding=""utf-16""?><Root><Columns Styles=""{style}"" /></Root>"));
         }
 
         [Theory]

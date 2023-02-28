@@ -220,7 +220,7 @@ namespace TestConsole
                 if (view is null)
                     return;
                 //- change some properties
-                view.Text = "Test Form N. " + n.ToString();
+                view.Text = $"Test Form N. {n}";
                 view.Dock = DockStyle.Fill;
                 //- Note these assignments
                 switch (n)
@@ -244,7 +244,7 @@ namespace TestConsole
             }//end_try
             catch (Exception)
             {
-                Console.WriteLine(Name + " the DesignSurface N. " + n.ToString() + " has generated errors during loading!");
+                Console.WriteLine($"{Name} the DesignSurface N. {n} has generated errors during loading!");
                 return;
             }//end_catch
         }

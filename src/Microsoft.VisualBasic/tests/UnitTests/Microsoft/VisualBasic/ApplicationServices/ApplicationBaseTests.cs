@@ -59,7 +59,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         {
             var app = new ApplicationBase();
             var key = GetEnvironmentVariables().LastOrDefault().Item1 ?? "";
-            var ex = Assert.Throws<ArgumentException>(() => app.GetEnvironmentVariable(key + "z"));
+            var ex = Assert.Throws<ArgumentException>(() => app.GetEnvironmentVariable($"{key}z"));
             _ = ex.ToString(); // ensure message can be formatted
         }
 

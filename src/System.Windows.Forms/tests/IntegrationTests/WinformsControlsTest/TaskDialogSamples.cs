@@ -183,7 +183,6 @@ namespace WinformsControlsTest
 
         private void ShowAutoClosingTaskDialog()
         {
-            const string textFormat = "Reconnecting in {0} seconds...";
             int remainingTenthSeconds = 50;
 
             var reconnectButton = new TaskDialogButton("&Reconnect now");
@@ -192,7 +191,7 @@ namespace WinformsControlsTest
             var page = new TaskDialogPage()
             {
                 Heading = "Connection lost; reconnecting...",
-                Text = string.Format(textFormat, (remainingTenthSeconds + 9) / 10),
+                Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...",
                 // Display the form's icon in the task dialog.
                 // Note however that the task dialog will not scale the icon.
                 Icon = new TaskDialogIcon(this.Icon),
@@ -220,7 +219,7 @@ namespace WinformsControlsTest
                     if (remainingTenthSeconds > 0)
                     {
                         // Update the remaining time and progress bar.
-                        page.Text = string.Format(textFormat, (remainingTenthSeconds + 9) / 10);
+                        page.Text = $"Reconnecting in {(remainingTenthSeconds + 9) / 10} seconds...";
                         page.ProgressBar.Value = 100 - remainingTenthSeconds * 2;
                     }
                     else

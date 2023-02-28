@@ -106,7 +106,7 @@ namespace DesignSurfaceExt
                 //- else do the initialization
                 BeginLoad(typeof(TControl));
                 if (LoadErrors.Count > 0)
-                    throw new Exception("the BeginLoad() failed! Some error during " + typeof(TControl).FullName + " loding");
+                    throw new Exception($"the BeginLoad() failed! Some error during {typeof(TControl).FullName} loding");
                 //-
                 //-
                 //- step.3
@@ -143,14 +143,14 @@ namespace DesignSurfaceExt
                 }
                 else
                 {
-                    throw new Exception("Undefined Host Type: " + hostType.ToString());
+                    throw new Exception($"Undefined Host Type: {hostType}");
                 }
 
                 return (TControl)ihost.RootComponent;
             }//end_try
             catch (Exception ex)
             {
-                throw new Exception(_Name_ + "::CreateRootComponent() - Exception: (see Inner Exception)", ex);
+                throw new Exception($"{_Name_}::CreateRootComponent() - Exception: (see Inner Exception)", ex);
             }//end_catch
         }
 
@@ -186,7 +186,7 @@ namespace DesignSurfaceExt
             }//end_try
             catch (Exception ex)
             {
-                throw new Exception(_Name_ + "::CreateControl() - Exception: (see Inner Exception)", ex);
+                throw new Exception($"{_Name_}::CreateControl() - Exception: (see Inner Exception)", ex);
             }//end_catch
         }
 
@@ -398,7 +398,7 @@ namespace DesignSurfaceExt
             }//end_try
             catch (Exception ex)
             {
-                throw new Exception(_Name_ + "::DoAction() - Exception: error in performing the action: " + command + "(see Inner Exception)", ex);
+                throw new Exception($"{_Name_}::DoAction() - Exception: error in performing the action: {command}(see Inner Exception)", ex);
             }//end_catch
         }
     }//end_class

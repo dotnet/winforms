@@ -23,9 +23,9 @@ namespace Accessibility_Core_App
             for (int i = 0; i < 20; i++)
             {
                 DataRow dataRow = dataTable.NewRow();
-                dataRow[0] = "Jack" + i.ToString();
+                dataRow[0] = $"Jack{i}";
                 dataRow[1] = i * 10;
-                dataRow[2] = "I like" + i.ToString();
+                dataRow[2] = $"I like{i}";
                 dataTable.Rows.Add(dataRow);
             }
 

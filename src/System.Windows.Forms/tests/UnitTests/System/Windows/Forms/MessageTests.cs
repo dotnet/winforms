@@ -506,7 +506,7 @@ namespace System.Windows.Forms.Tests
         {
             Message message = Message.Create((IntPtr)1, msg, (IntPtr)2, (IntPtr)3);
             message.Result = (IntPtr)4;
-            Assert.Equal("msg=0x" + Convert.ToString(msg, 16) + expected + " hwnd=0x1 wparam=0x2 lparam=0x3" + additionalMsg + " result=0x4", message.ToString());
+            Assert.Equal($"msg=0x{msg:x}{expected} hwnd=0x1 wparam=0x2 lparam=0x3{additionalMsg} result=0x4", message.ToString());
         }
     }
 }
