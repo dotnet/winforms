@@ -307,7 +307,7 @@ namespace Paint
 
             CSharpGeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
             driver.RunGeneratorsAndUpdateCompilation(compilation, out Compilation outputCompilation, out ImmutableArray<Diagnostic> diagnostics);
-            Assert.False(diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error), "Failed: " + diagnostics.FirstOrDefault()?.GetMessage());
+            Assert.False(diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error), $"Failed: {diagnostics.FirstOrDefault()?.GetMessage()}");
 
             string output = outputCompilation.SyntaxTrees.Skip(1).First().ToString();
 

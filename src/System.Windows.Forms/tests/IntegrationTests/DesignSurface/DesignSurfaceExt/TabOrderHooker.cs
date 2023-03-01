@@ -16,7 +16,7 @@ namespace DesignSurfaceExt
             //- the TabOrder must be called AFTER the DesignSurface has been loaded
             //- therefore we do a little check
             if (host.RootComponent is null)
-                throw new Exception(_Name_ + "::HookTabOrder() - Exception: the TabOrder must be invoked after the DesignSurface has been loaded! ");
+                throw new Exception($"{_Name_}::HookTabOrder() - Exception: the TabOrder must be invoked after the DesignSurface has been loaded! ");
 
             try
             {
@@ -34,7 +34,7 @@ namespace DesignSurfaceExt
             }//end_try
             catch (Exception ex)
             {
-                throw new Exception(_Name_ + "::HookTabOrder() - Exception: (see Inner Exception)", ex);
+                throw new Exception($"{_Name_}::HookTabOrder() - Exception: (see Inner Exception)", ex);
             }//end_catch
         }
 
@@ -52,7 +52,7 @@ namespace DesignSurfaceExt
             }
             catch (Exception ex)
             {
-                throw new Exception(_Name_ + "::DisposeTabOrder() - Exception: (see Inner Exception)", ex);
+                throw new Exception($"{_Name_}::DisposeTabOrder() - Exception: (see Inner Exception)", ex);
             }//end_catch
         }
     }//end_class

@@ -74,8 +74,16 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
                 suffix = suffix.Remove(index);
             }
 
-            return $"LinkText: {e.LinkText}\nLinkStart: {e.LinkStart}\nLinkLength: {e.LinkLength}\n\n"
-                + $"Span prefix: {prefix}\nSpan content: {content}\nSpan suffix: {suffix}";
+            return
+                $"""
+                    LinkText: {e.LinkText}
+                    LinkStart: {e.LinkStart}
+                    LinkLength: {e.LinkLength}
+
+                    Span prefix: {prefix}
+                    Span content: {content}
+                    Span suffix: {suffix}
+                    """;
         }
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)

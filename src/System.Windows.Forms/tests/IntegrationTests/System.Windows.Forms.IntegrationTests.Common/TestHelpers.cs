@@ -105,7 +105,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         {
             var dotnetPath = GetDotNetPath();
             if (!Directory.Exists(dotnetPath))
-                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
+                throw new DirectoryNotFoundException($"{dotnetPath} directory cannot be found.");
 
             var process = new Process();
 
@@ -337,7 +337,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
         public static bool SendAltKeyToProcess(Process process, char letter, bool switchToMainWindow = true)
         {
-            return SendKeysToProcess(process, "%{" + letter + "}", switchToMainWindow);
+            return SendKeysToProcess(process, $"%{{{letter}}}", switchToMainWindow);
         }
 
         /// <summary>
@@ -414,17 +414,17 @@ namespace System.Windows.Forms.IntegrationTests.Common
         {
             if (process is null)
             {
-                throw new ArgumentException(nameof(process) + " must not be null.");
+                throw new ArgumentException($"{nameof(process)} must not be null.");
             }
 
             if (process.HasExited)
             {
-                throw new ArgumentException(nameof(process) + " must not have exited.");
+                throw new ArgumentException($"{nameof(process)} must not have exited.");
             }
 
             if (string.IsNullOrEmpty(keys))
             {
-                throw new ArgumentException(nameof(keys) + " must not be null or empty.");
+                throw new ArgumentException($"{nameof(keys)} must not be null or empty.");
             }
 
             HWND mainWindowHandle = (HWND)process.MainWindowHandle;

@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Metafiles
             RECT[] clippingRects = ClippingRectangles;
             for (int i = 0; i < clippingRects.Length; i++)
             {
-                sb.AppendFormat("\n\tRect index {0}: {1}", i, clippingRects[i]);
+                sb.Append($"\n\tRect index {i}: {clippingRects[i]}");
             }
 
             return sb.ToString();

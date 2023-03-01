@@ -44,14 +44,11 @@ namespace System.Windows.Forms.Metafiles
             {
                 if (state is null)
                 {
-                    sb.AppendFormat("\n\tPoly index {0}: {1}", i, string.Join(' ', GetPointsForPoly(i).ToArray()));
+                    sb.Append($"\n\tPoly index {i}: {string.Join(' ', GetPointsForPoly(i).ToArray())}");
                 }
                 else
                 {
-                    sb.AppendFormat(
-                        "\n\tPoly index {0}: {1}",
-                        i,
-                        string.Join(' ', GetPointsForPoly(i).Transform(p => state.TransformPoint(p))));
+                    sb.Append($"\n\tPoly index {i}: {string.Join(' ', GetPointsForPoly(i).Transform(p => state.TransformPoint(p)))}");
                 }
             }
 
