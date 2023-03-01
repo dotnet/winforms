@@ -777,9 +777,9 @@ namespace System.ComponentModel.Design
             if (_transactions is not null && _transactions.Count > 0)
             {
                 Debug.Fail("There are open transactions at unload");
-                while (_transactions.TryPeek(out DesignerTransaction trans))  // it'll get popped in the OnCommit for DesignerHostTransaction
+                while (_transactions.TryPeek(out DesignerTransaction transaction))  // it'll get popped in the OnCommit for DesignerHostTransaction
                 {
-                    trans.Commit();
+                    transaction.Commit();
                 }
             }
 
