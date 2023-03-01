@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ///  Displays text that can contain a hyperlink.
     /// </summary>
     [DefaultEvent(nameof(LinkClicked))]
-    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
+    [ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionLinkLabel))]
     public partial class LinkLabel : Label, IButtonControl
     {

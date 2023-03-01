@@ -14,8 +14,8 @@ namespace System.Windows.Forms
     ///  Represents the collection of data bindings for a control.
     /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
-    [Editor("System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing, typeof(UITypeEditor))]
-    [TypeConverter("System.Windows.Forms.Design.ControlBindingsConverter, " + AssemblyRef.SystemDesign)]
+    [Editor($"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}", typeof(UITypeEditor))]
+    [TypeConverter($"System.Windows.Forms.Design.ControlBindingsConverter, {AssemblyRef.SystemDesign}")]
     public class ControlBindingsCollection : BindingsCollection
     {
         private readonly IBindableComponent _control;

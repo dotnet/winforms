@@ -399,7 +399,7 @@ namespace System.Windows.Forms
         ///  <see cref="Label"/>.
         /// </summary>
         [TypeConverter(typeof(ImageIndexConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [DefaultValue(ImageList.Indexer.DefaultIndex)]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
         ///  <see cref="Label"/>.
         /// </summary>
         [TypeConverter(typeof(ImageKeyConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [DefaultValue(ImageList.Indexer.DefaultKey)]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the text in the Label. Since we can have multiline support
         ///  this property just overrides the base to pluck in the Multiline editor.
         /// </summary>
-        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor)),
         SettingsBindable(true)]
         [AllowNull]
         public override string Text
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", Text: " + Text;
+            return $"{s}, Text: {Text}";
         }
 
         /// <summary>

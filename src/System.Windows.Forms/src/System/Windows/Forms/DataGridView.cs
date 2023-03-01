@@ -237,10 +237,6 @@ namespace System.Windows.Forms
         private const byte InsertionBarWidth = 3;
         private const byte BulkPaintThreshold = 8;
 
-        private const string HtmlPrefix = "Version:1.0\r\nStartHTML:00000097\r\nEndHTML:{0}\r\nStartFragment:00000133\r\nEndFragment:{1}\r\n";
-        private const string HtmlStartFragment = "<HTML>\r\n<BODY>\r\n<!--StartFragment-->";
-        private const string HtmlEndFragment = "\r\n<!--EndFragment-->\r\n</BODY>\r\n</HTML>";
-
         private const int FocusRectOffset = 2;
 
         private BitVector32 _dataGridViewState1;  // see State1_ consts above

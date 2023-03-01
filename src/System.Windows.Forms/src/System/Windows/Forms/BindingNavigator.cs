@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 {
     [DefaultProperty(nameof(BindingSource))]
     [DefaultEvent(nameof(RefreshItems))]
-    [Designer("System.Windows.Forms.Design.BindingNavigatorDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.BindingNavigatorDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionBindingNavigator))]
     public class BindingNavigator : ToolStrip, ISupportInitialize
     {
@@ -151,17 +151,17 @@ namespace System.Windows.Forms
             // vb dev.
             char ch = string.IsNullOrEmpty(Name) || char.IsLower(Name[0]) ? 'b' : 'B';
 
-            MoveFirstItem.Name = ch + "indingNavigatorMoveFirstItem";
-            MovePreviousItem.Name = ch + "indingNavigatorMovePreviousItem";
-            MoveNextItem.Name = ch + "indingNavigatorMoveNextItem";
-            MoveLastItem.Name = ch + "indingNavigatorMoveLastItem";
-            PositionItem.Name = ch + "indingNavigatorPositionItem";
-            CountItem.Name = ch + "indingNavigatorCountItem";
-            AddNewItem.Name = ch + "indingNavigatorAddNewItem";
-            DeleteItem.Name = ch + "indingNavigatorDeleteItem";
-            separator1.Name = ch + "indingNavigatorSeparator";
-            separator2.Name = ch + "indingNavigatorSeparator";
-            separator3.Name = ch + "indingNavigatorSeparator";
+            MoveFirstItem.Name = $"{ch}indingNavigatorMoveFirstItem";
+            MovePreviousItem.Name = $"{ch}indingNavigatorMovePreviousItem";
+            MoveNextItem.Name = $"{ch}indingNavigatorMoveNextItem";
+            MoveLastItem.Name = $"{ch}indingNavigatorMoveLastItem";
+            PositionItem.Name = $"{ch}indingNavigatorPositionItem";
+            CountItem.Name = $"{ch}indingNavigatorCountItem";
+            AddNewItem.Name = $"{ch}indingNavigatorAddNewItem";
+            DeleteItem.Name = $"{ch}indingNavigatorDeleteItem";
+            separator1.Name = $"{ch}indingNavigatorSeparator";
+            separator2.Name = $"{ch}indingNavigatorSeparator";
+            separator3.Name = $"{ch}indingNavigatorSeparator";
 
             MoveFirstItem.Text = SR.BindingNavigatorMoveFirstItemText;
             MovePreviousItem.Text = SR.BindingNavigatorMovePreviousItemText;

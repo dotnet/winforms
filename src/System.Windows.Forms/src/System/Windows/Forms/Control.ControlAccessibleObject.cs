@@ -271,7 +271,7 @@ namespace System.Windows.Forms
                     // For controls, the default keyboard shortcut comes directly from the accessible
                     // name property. This matches the default behavior of OLEACC.DLL exactly.
                     char mnemonic = WindowsFormsUtils.GetMnemonic(TextLabel, false);
-                    return (mnemonic == (char)0) ? null : ("Alt+" + mnemonic);
+                    return (mnemonic == (char)0) ? null : $"Alt+{mnemonic}";
                 }
             }
 

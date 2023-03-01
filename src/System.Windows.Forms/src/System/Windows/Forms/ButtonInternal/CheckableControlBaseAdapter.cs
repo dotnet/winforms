@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ButtonInternal
                     return radioButton.Appearance;
                 }
 
-                Debug.Fail("Unexpected control type '" + Control.GetType().FullName + "'");
+                Debug.Fail($"Unexpected control type '{Control.GetType().FullName}'");
                 return Appearance.Normal;
             }
         }

@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [DefaultProperty(nameof(Items))]
     [DefaultBindingProperty(nameof(Text))]
-    [Designer("System.Windows.Forms.Design.ComboBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ComboBoxDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionComboBox))]
     public partial class ComboBox : ListControl
     {
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr))]
-        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         public AutoCompleteStringCollection AutoCompleteCustomSource
@@ -707,7 +707,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ComboBoxItemsDescr))]
-        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [MergableProperty(false)]
         public ObjectCollection Items
         {
@@ -3517,7 +3517,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", Items.Count: " + ((_itemsCollection is null) ? "0" : _itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
+            return $"{s}, Items.Count: {_itemsCollection?.Count ?? 0}";
         }
 
         private void UpdateDropDownHeight()

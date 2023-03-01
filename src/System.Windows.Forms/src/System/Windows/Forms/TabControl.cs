@@ -8,7 +8,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -810,7 +809,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.TabControlTabsDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Editor("System.Windows.Forms.Design.TabPageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.TabPageCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [MergableProperty(false)]
         public TabPageCollection TabPages
         {
@@ -1813,10 +1812,10 @@ namespace System.Windows.Forms
             string s = base.ToString();
             if (TabPages is not null)
             {
-                s += ", TabPages.Count: " + TabPages.Count.ToString(CultureInfo.CurrentCulture);
+                s += $", TabPages.Count: {TabPages.Count}";
                 if (TabPages.Count > 0)
                 {
-                    s += ", TabPages[0]: " + TabPages[0].ToString();
+                    s += $", TabPages[0]: {TabPages[0]}";
                 }
             }
 

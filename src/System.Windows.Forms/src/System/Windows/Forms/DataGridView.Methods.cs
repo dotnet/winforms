@@ -8243,9 +8243,24 @@ namespace System.Windows.Forms
 
             int bytecountEndOfFragment = 135 + destinationBytes.Length;
             int bytecountEndOfHtml = bytecountEndOfFragment + 36;
-            string prefix = string.Format(CultureInfo.InvariantCulture, HtmlPrefix, bytecountEndOfHtml.ToString("00000000", CultureInfo.InvariantCulture), bytecountEndOfFragment.ToString("00000000", CultureInfo.InvariantCulture)) + HtmlStartFragment;
+            string prefix = $"""
+                Version:1.0
+                StartHTML:00000097
+                EndHTML:{bytecountEndOfHtml:00000000}
+                StartFragment:00000133
+                EndFragment:{bytecountEndOfFragment:00000000}
+                <HTML>
+                <BODY>
+                <!--StartFragment-->
+
+                """;
             sbContent.Insert(0, prefix);
-            sbContent.Append(HtmlEndFragment);
+            sbContent.Append("""
+
+                <!--EndFragment-->
+                </BODY>
+                </HTML>
+                """);
 
             sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
             destinationBytes = Encoding.Convert(Encoding.Unicode, Encoding.UTF8, sourceBytes);
@@ -8254,12 +8269,10 @@ namespace System.Windows.Forms
             utf8Stream.Write(destinationBytes, 0, bytecountEndOfHtml);
             utf8Stream.WriteByte((byte)0);
 
-#if DEBUG
             Debug.Assert(destinationBytes[97] == '<');
             Debug.Assert(destinationBytes[bytecountEndOfHtml - 1] == '>');
             Debug.Assert(destinationBytes[133] == '<');
             Debug.Assert(destinationBytes[bytecountEndOfFragment] == '<');
-#endif
         }
 
         // Rectangle returned includes the potential column header

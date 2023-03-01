@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     ///  views. Each item displays a caption and optionally an image.
     /// </summary>
     [Docking(DockingBehavior.Ask)]
-    [Designer("System.Windows.Forms.Design.ListViewDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ListViewDesigner, {AssemblyRef.SystemDesign}")]
     [DefaultProperty(nameof(Items))]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [SRDescription(nameof(SR.DescriptionListView))]
@@ -622,7 +622,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [Editor("System.Windows.Forms.Design.ColumnHeaderCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ColumnHeaderCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.ListViewColumnsDescr))]
         [Localizable(true)]
         [MergableProperty(false)]
@@ -995,7 +995,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
-        [Editor("System.Windows.Forms.Design.ListViewGroupCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListViewGroupCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.ListViewGroupsDescr))]
         [MergableProperty(false)]
         public ListViewGroupCollection Groups
@@ -1164,7 +1164,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
-        [Editor("System.Windows.Forms.Design.ListViewItemCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListViewItemCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.ListViewItemsDescr))]
         [MergableProperty(false)]
         public ListViewItemCollection Items
@@ -5659,22 +5659,22 @@ namespace System.Windows.Forms
 
             if (_listViewItems is not null)
             {
-                s += ", Items.Count: " + _listViewItems.Count.ToString(CultureInfo.CurrentCulture);
+                s += $", Items.Count: {_listViewItems.Count}";
                 if (_listViewItems.Count > 0)
                 {
                     string z = _listViewItems[0].ToString();
-                    string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
-                    s += ", Items[0]: " + txt;
+                    ReadOnlySpan<char> txt = (z.Length > 40) ? z.AsSpan(0, 40) : z;
+                    s += $", Items[0]: {txt}";
                 }
             }
             else if (Items is not null)
             {
-                s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
+                s += $", Items.Count: {Items.Count}";
                 if (Items.Count > 0 && !VirtualMode)
                 {
                     string z = (Items[0] is null) ? "null" : Items[0].ToString();
-                    string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
-                    s += ", Items[0]: " + txt;
+                    ReadOnlySpan<char> txt = (z.Length > 40) ? z.AsSpan(0, 40) : z;
+                    s += $", Items[0]: {txt}";
                 }
             }
 

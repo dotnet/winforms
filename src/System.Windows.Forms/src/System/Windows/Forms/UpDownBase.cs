@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements the basic functionality required by an up-down control.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.UpDownBaseDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.UpDownBaseDesigner, {AssemblyRef.SystemDesign}")]
     public abstract partial class UpDownBase : ContainerControl
     {
         private const int DefaultWheelScrollLinesPerPage = 1;

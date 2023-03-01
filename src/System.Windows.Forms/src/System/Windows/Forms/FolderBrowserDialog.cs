@@ -151,7 +151,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(true)]
         [DefaultValue("")]
-        [Editor("System.Windows.Forms.Design.SelectedPathEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.SelectedPathEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Localizable(true)]
         [SRCategory(nameof(SR.CatFolderBrowsing))]
         [SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))]

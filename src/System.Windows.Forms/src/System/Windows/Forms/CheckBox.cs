@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -608,7 +607,7 @@ namespace System.Windows.Forms
             string s = base.ToString();
             // We shouldn't need to convert the enum to int
             int checkState = (int)CheckState;
-            return s + ", CheckState: " + checkState.ToString(CultureInfo.InvariantCulture);
+            return $"{s}, CheckState: {checkState}";
         }
     }
 }

@@ -685,23 +685,25 @@ namespace System.Windows.Forms.ButtonInternal
             public override string ToString()
             {
                 return
-                    "{ client = " + Client + "\n" +
-                    "OnePixExtraBorder = " + OnePixExtraBorder + "\n" +
-                    "borderSize = " + BorderSize + "\n" +
-                    "paddingSize = " + PaddingSize + "\n" +
-                    "maxFocus = " + MaxFocus + "\n" +
-                    "font = " + Font + "\n" +
-                    "text = " + Text + "\n" +
-                    "imageSize = " + ImageSize + "\n" +
-                    "checkSize = " + CheckSize + "\n" +
-                    "checkPaddingSize = " + CheckPaddingSize + "\n" +
-                    "checkAlign = " + CheckAlign + "\n" +
-                    "imageAlign = " + ImageAlign + "\n" +
-                    "textAlign = " + TextAlign + "\n" +
-                    "textOffset = " + TextOffset + "\n" +
-                    "shadowedText = " + ShadowedText + "\n" +
-                    "textImageRelation = " + TextImageRelation + "\n" +
-                    "layoutRTL = " + LayoutRTL + " }";
+                    $$"""
+                        { client = {{Client}}
+                        OnePixExtraBorder = {{OnePixExtraBorder}}
+                        borderSize = {{BorderSize}}
+                        paddingSize = {{PaddingSize}}
+                        maxFocus = {{MaxFocus}}
+                        font = {{Font}}
+                        text = {{Text}}
+                        imageSize = {{ImageSize}}
+                        checkSize = {{CheckSize}}
+                        checkPaddingSize = {{CheckPaddingSize}}
+                        checkAlign = {{CheckAlign}}
+                        imageAlign = {{ImageAlign}}
+                        textAlign = {{TextAlign}}
+                        textOffset = {{TextOffset}}
+                        shadowedText = {{ShadowedText}}
+                        textImageRelation = {{TextImageRelation}}
+                        layoutRTL = {{LayoutRTL}} }
+                        """;
             }
 #endif
         }

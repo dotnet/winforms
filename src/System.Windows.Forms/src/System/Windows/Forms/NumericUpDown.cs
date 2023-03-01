@@ -667,8 +667,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            s += ", Minimum = " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum = " + Maximum.ToString(CultureInfo.CurrentCulture);
-            return s;
+            return $"{s}, Minimum = {Minimum}, Maximum = {Maximum}";
         }
 
         /// <summary>
@@ -718,7 +717,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                text = num.ToString((ThousandsSeparator ? "N" : "F") + DecimalPlaces.ToString(CultureInfo.CurrentCulture), CultureInfo.CurrentCulture);
+                text = num.ToString($"{(ThousandsSeparator ? "N" : "F")}{DecimalPlaces}", CultureInfo.CurrentCulture);
             }
 
             return text;
