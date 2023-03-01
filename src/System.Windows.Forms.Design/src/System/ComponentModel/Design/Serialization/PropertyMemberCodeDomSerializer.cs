@@ -116,7 +116,7 @@ namespace System.ComponentModel.Design.Serialization
                 bool isExtender = (exAttr is not null && exAttr.Provider is not null);
                 bool serializeContents = propertyToSerialize.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content);
 
-                CodeDomSerializer.Trace("Serializing property {0}", propertyToSerialize.Name);
+                CodeDomSerializer.Trace(TraceLevel.Verbose, $"Serializing property {propertyToSerialize.Name}");
                 if (serializeContents)
                 {
                     SerializeContentProperty(manager, value, propertyToSerialize, isExtender, statements);
@@ -149,7 +149,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void SerializeContentProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, bool isExtender, CodeStatementCollection statements)
         {
-            CodeDomSerializer.Trace("Property is marked as Visibility.Content.  Recursing.");
+            CodeDomSerializer.Trace(TraceLevel.Verbose, "Property is marked as Visibility.Content.  Recursing.");
 
             object propertyValue = GetPropertyValue(manager, property, value, out bool validValue);
 
@@ -158,7 +158,7 @@ namespace System.ComponentModel.Design.Serialization
             //
             if (propertyValue is null)
             {
-                CodeDomSerializer.TraceError("Property {0} is marked as Visibility.Content but it is returning null.", property.Name);
+                CodeDomSerializer.Trace(TraceLevel.Error, $"Property {property.Name} is marked as Visibility.Content but it is returning null.");
 
                 string name = manager.GetName(value);
 
@@ -178,7 +178,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (target is null)
                     {
-                        CodeDomSerializer.TraceWarning("Unable to convert value to expression object");
+                        CodeDomSerializer.Trace(TraceLevel.Warning, "Unable to convert value to expression object");
                     }
                     else
                     {
@@ -186,7 +186,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         if (isExtender)
                         {
-                            CodeDomSerializer.Trace("Content property is an extender.");
+                            CodeDomSerializer.Trace(TraceLevel.Verbose, "Content property is an extender.");
                             ExtenderProvidedPropertyAttribute exAttr = (ExtenderProvidedPropertyAttribute)property.Attributes[typeof(ExtenderProvidedPropertyAttribute)];
 
                             // Extender properties are method invokes on a target "extender" object.
@@ -194,8 +194,8 @@ namespace System.ComponentModel.Design.Serialization
                             CodeExpression extender = SerializeToExpression(manager, exAttr.Provider);
                             CodeExpression extended = SerializeToExpression(manager, value);
 
-                            CodeDomSerializer.TraceWarningIf(extender is null, "Extender object {0} could not be serialized.", manager.GetName(exAttr.Provider));
-                            CodeDomSerializer.TraceWarningIf(extended is null, "Extended object {0} could not be serialized.", manager.GetName(value));
+                            CodeDomSerializer.TraceIf(TraceLevel.Warning, extender is null, $"Extender object {manager.GetName(exAttr.Provider)} could not be serialized.");
+                            CodeDomSerializer.TraceIf(TraceLevel.Warning, extended is null, $"Extended object {manager.GetName(value)} could not be serialized.");
                             if (extender is not null && extended is not null)
                             {
                                 CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, $"Get{property.Name}");
@@ -257,7 +257,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    CodeDomSerializer.TraceError("Property {0} is marked as Visibility.Content but there is no serializer for it.", property.Name);
+                    CodeDomSerializer.Trace(TraceLevel.Error, $"Property {property.Name} is marked as Visibility.Content but there is no serializer for it.");
 
                     manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, property.PropertyType.FullName), manager));
                 }
@@ -280,8 +280,8 @@ namespace System.ComponentModel.Design.Serialization
                 CodeExpression extender = SerializeToExpression(manager, exAttr.Provider);
                 CodeExpression extended = SerializeToExpression(manager, value);
 
-                CodeDomSerializer.TraceWarningIf(extender is null, "Extender object {0} could not be serialized.", manager.GetName(exAttr.Provider));
-                CodeDomSerializer.TraceWarningIf(extended is null, "Extended object {0} could not be serialized.", manager.GetName(value));
+                CodeDomSerializer.TraceIf(TraceLevel.Warning, extender is null, $"Extender object {manager.GetName(exAttr.Provider)} could not be serialized.");
+                CodeDomSerializer.TraceIf(TraceLevel.Warning, extended is null, $"Extended object {manager.GetName(value)} could not be serialized.");
                 if (extender is not null && extended is not null)
                 {
                     CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, $"Set{property.Name}");
@@ -339,7 +339,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CodeExpression target = SerializeToExpression(manager, value);
 
-                CodeDomSerializer.TraceWarningIf(target is null, "Unable to serialize target for property {0}", property.Name);
+                CodeDomSerializer.TraceIf(TraceLevel.Warning, target is null, $"Unable to serialize target for property {property.Name}");
                 if (target is not null)
                 {
                     CodeExpression propertyRef = new CodePropertyReferenceExpression(target, property.Name);

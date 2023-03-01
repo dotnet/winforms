@@ -38,7 +38,7 @@ namespace System.ComponentModel.Design.Serialization
 
             using (TraceScope($"EnumCodeDomSerializer::{nameof(Serialize)}"))
             {
-                Trace("Type: {0}", (value is null ? "(null)" : value.GetType().Name));
+                Trace(TraceLevel.Verbose, $"Type: {(value is null ? "(null)" : value.GetType().Name)}");
                 if (value is Enum)
                 {
                     bool needCast = false;
@@ -64,8 +64,8 @@ namespace System.ComponentModel.Design.Serialization
                     // If names is of length 1, then this is a simple field reference. Otherwise,
                     // it is an or-d combination of expressions.
                     //
-                    TraceIf(values.Length == 1, "Single field entity.");
-                    TraceIf(values.Length > 1, "Multi field entity.");
+                    TraceIf(TraceLevel.Verbose, values.Length == 1, "Single field entity.");
+                    TraceIf(TraceLevel.Verbose, values.Length > 1, "Multi field entity.");
 
                     // We now need to serialize the enum terms as fields. We new up an EnumConverter to do
                     // that. We cannot use the type's own converter since it might have a different string
@@ -100,7 +100,7 @@ namespace System.ComponentModel.Design.Serialization
                 else
                 {
                     Debug.Fail("Enum serializer called for non-enum object.");
-                    TraceError("Enum serializer called for non-enum object {0}", (value is null ? "(null)" : value.GetType().Name));
+                    Trace(TraceLevel.Error, $"Enum serializer called for non-enum object {(value is null ? "(null)" : value.GetType().Name)}");
                 }
             }
 

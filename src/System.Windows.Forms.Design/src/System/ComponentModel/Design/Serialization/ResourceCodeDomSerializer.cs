@@ -107,7 +107,7 @@ namespace System.ComponentModel.Design.Serialization
                             // We create the resource manager ourselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
                             if (element is CodeVariableDeclarationStatement statement)
                             {
-                                TraceWarningIf(!statement.Name.Equals(ResourceManagerName), "WARNING: Resource manager serializer being invoked to deserialize a collection we didn't create.");
+                                TraceIf(TraceLevel.Warning, !statement.Name.Equals(ResourceManagerName), "WARNING: Resource manager serializer being invoked to deserialize a collection we didn't create.");
                                 if (statement.Name.Equals(ResourceManagerName))
                                 {
                                     instance = CreateResourceManager(manager);
@@ -144,9 +144,9 @@ namespace System.ComponentModel.Design.Serialization
 
         private static SerializationResourceManager CreateResourceManager(IDesignerSerializationManager manager)
         {
-            Trace("Variable is our resource manager.  Creating it");
+            Trace(TraceLevel.Verbose, "Variable is our resource manager.  Creating it");
             SerializationResourceManager sm = GetResourceManager(manager);
-            TraceWarningIf(sm.DeclarationAdded, "We have already created a resource manager.");
+            TraceIf(TraceLevel.Warning, sm.DeclarationAdded, "We have already created a resource manager.");
             if (!sm.DeclarationAdded)
             {
                 sm.DeclarationAdded = true;
@@ -209,7 +209,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // Object is null. Nothing we can do
-            TraceError("We need to supply a cast, but we cannot determine the cast type.");
+            Trace(TraceLevel.Error, "We need to supply a cast, but we cannot determine the cast type.");
             return null;
         }
 
@@ -291,7 +291,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         sm.DeclarationAdded = true;
                         // If we have a root context, then we can write out a reasonable resource manager constructor. If not, then we're a bit hobbled because we have to guess at the resource name.
-                        TraceWarningIf(statements is null, "No CodeStatementCollection on serialization stack, we cannot serialize resource manager creation statements.");
+                        TraceIf(TraceLevel.Warning, statements is null, "No CodeStatementCollection on serialization stack, we cannot serialize resource manager creation statements.");
                         if (statements is not null)
                         {
                             CodeExpression[] parameters;
@@ -302,7 +302,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                TraceWarning("No root context, we can only assume the resource manager resource name.");
+                                Trace(TraceLevel.Warning, "No root context, we can only assume the resource manager resource name.");
                                 parameters = new CodeExpression[] { new CodePrimitiveExpression(ResourceManagerName) };
                             }
 
@@ -329,7 +329,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 // Retrieve the ExpressionContext on the context stack, and save the value as a resource.
                 ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
-                TraceWarningIf(tree is null, "No ExpressionContext on stack.  We can serialize, but we cannot create a well-formed name.");
+                TraceIf(TraceLevel.Warning, tree is null, "No ExpressionContext on stack.  We can serialize, but we cannot create a well-formed name.");
                 string resourceName = sm.SetValue(manager, tree, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, false);
                 // Now the next step is to discover the type of the given value.  If it is a string, we will invoke "GetString"  Otherwise, we will invoke "GetObject" and supply a cast to the proper value.
                 bool needCast;
@@ -347,7 +347,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 // Finally, all we need to do is create a CodeExpression that represents the resource manager method invoke.
-                Trace("Creating method invoke to {0}.{1}", ResourceManagerName, methodName);
+                Trace(TraceLevel.Verbose, $"Creating method invoke to {ResourceManagerName}.{methodName}");
                 CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
                 {
                     Method = new CodeMethodReferenceExpression(new CodeVariableReferenceExpression(ResourceManagerName), methodName)
@@ -358,7 +358,7 @@ namespace System.ComponentModel.Design.Serialization
                     Type castTo = GetCastType(manager, value);
                     if (castTo is not null)
                     {
-                        Trace("Supplying cast to {0}", castTo.Name);
+                        Trace(TraceLevel.Verbose, $"Supplying cast to {castTo.Name}");
                         expression = new CodeCastExpression(castTo, methodInvoke);
                     }
                     else
@@ -391,8 +391,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope($"ResourceCodeDomSerializer::{nameof(SerializeMetadata)}"))
             {
-                Trace("Name: {0}", name);
-                Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
+                Trace(TraceLevel.Verbose, $"Name: {name}");
+                Trace(TraceLevel.Verbose, $"Value: {(value is null ? "(null)" : value.ToString())}");
                 SerializationResourceManager sm = GetResourceManager(manager);
                 sm.SetMetadata(manager, name, value, shouldSerializeValue, false);
             }
@@ -419,8 +419,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope($"ResourceCodeDomSerializer::{calleeName}"))
             {
-                Trace("Name: {0}", name);
-                Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
+                Trace(TraceLevel.Verbose, $"Name: {name}");
+                Trace(TraceLevel.Verbose, $"Value: {(value is null ? "(null)" : value.ToString())}");
                 SerializationResourceManager sm = GetResourceManager(manager);
                 sm.SetValue(manager, name, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, applyingCachedResources);
             }

@@ -97,7 +97,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (instance is not null)
             {
-                Trace("Deserializing design time properties for {0}", manager.GetName(instance));
+                Trace(TraceLevel.Verbose, $"Deserializing design time properties for {manager.GetName(instance)}");
                 DeserializePropertiesFromResources(manager, instance, _designTimeFilter);
             }
 
@@ -134,7 +134,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 // First, skip everything if we're privately inherited.  We cannot write any code that would affect this
                 // component.
-                TraceIf(inheritanceLevel == InheritanceLevel.InheritedReadOnly, "Skipping read only inherited component");
+                TraceIf(TraceLevel.Verbose, inheritanceLevel == InheritanceLevel.InheritedReadOnly, "Skipping read only inherited component");
                 if (inheritanceLevel != InheritanceLevel.InheritedReadOnly)
                 {
                     // Things we need to know:
@@ -165,7 +165,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (assignLhs is not null)
                     {
-                        Trace("Existing expression for LHS of value");
+                        Trace(TraceLevel.Verbose, "Existing expression for LHS of value");
                         generateLocal = false;
                         generateField = false;
                         generateObject = false;
@@ -187,7 +187,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        Trace("Creating LHS expression");
+                        Trace(TraceLevel.Verbose, "Creating LHS expression");
                         if (inheritanceLevel == InheritanceLevel.NotInherited)
                         {
                             // See if there is a "GenerateMember" property.  If so,
@@ -196,7 +196,7 @@ namespace System.ComponentModel.Design.Serialization
                             PropertyDescriptor generateProp = props["GenerateMember"];
                             if (generateProp is not null && generateProp.PropertyType == typeof(bool) && !(bool)generateProp.GetValue(value))
                             {
-                                Trace("Object GenerateMember property wants a local variable");
+                                Trace(TraceLevel.Verbose, "Object GenerateMember property wants a local variable");
                                 generateLocal = true;
                                 generateField = false;
                             }
@@ -245,13 +245,13 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                     else
                                     {
-                                        TraceWarning("No Modifiers or DefaultModifiers property on component {0}. We must assume private.", name);
+                                        Trace(TraceLevel.Warning, $"No Modifiers or DefaultModifiers property on component {name}. We must assume private.");
                                         fieldAttrs = MemberAttributes.Private;
                                     }
 
                                     field.Attributes = fieldAttrs;
                                     typeDecl.Members.Add(field);
-                                    Trace("Field {0} {1} {2} created.", fieldAttrs, typeName, name);
+                                    Trace(TraceLevel.Verbose, $"Field {fieldAttrs} {typeName} {name} created.");
                                 }
 
                                 // Next, create a nice LHS for our pending assign statement, when we hook up the variable.
@@ -264,7 +264,7 @@ namespace System.ComponentModel.Design.Serialization
                                     CodeVariableDeclarationStatement local = new CodeVariableDeclarationStatement(typeName, name);
 
                                     statements.Add(local);
-                                    Trace("Local {0} {1} created.", typeName, name);
+                                    Trace(TraceLevel.Verbose, $"Local {typeName} {name} created.");
                                 }
 
                                 assignLhs = new CodeVariableReferenceExpression(name);
@@ -289,7 +289,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (ctor is not null)
                             {
-                                Trace("Component has IContainer constructor.");
+                                Trace(TraceLevel.Verbose, "Component has IContainer constructor.");
                                 assignRhs = new CodeObjectCreateExpression(typeName, new CodeExpression[]
                                 {
                                     SerializeToExpression(manager, container)
@@ -302,7 +302,7 @@ namespace System.ComponentModel.Design.Serialization
                                 Debug.Assert(isCompleteOld == isComplete, "CCDS Differing");
                             }
 
-                            TraceErrorIf(assignRhs is null, "No RHS code assign for object {0}", value);
+                            TraceIf(TraceLevel.Error, assignRhs is null, $"No RHS code assign for object {value}");
                             if (assignRhs is not null)
                             {
                                 if (assignLhs is null)
@@ -316,7 +316,7 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                     else
                                     {
-                                        TraceError("Incomplete serialization of object, abandoning serialization.");
+                                        Trace(TraceLevel.Error, "Incomplete serialization of object, abandoning serialization.");
                                     }
                                 }
                                 else
@@ -378,7 +378,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (supportInitialize)
                             {
-                                Trace("Object implements ISupportInitialize.");
+                                Trace(TraceLevel.Verbose, "Object implements ISupportInitialize.");
                                 SerializeSupportInitialize(manager, statements, assignLhs, value, "BeginInit");
                             }
 
@@ -537,7 +537,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private static void SerializeLoadComponentSettings(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value)
         {
-            Trace("Emitting LoadComponentSettings");
+            Trace(TraceLevel.Verbose, "Emitting LoadComponentSettings");
 
             CodeTypeReference type = new CodeTypeReference(typeof(IPersistComponentSettings));
             CodeCastExpression castExp = new CodeCastExpression(type, valueExpression);
@@ -558,7 +558,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private static void SerializeSupportInitialize(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value, string methodName)
         {
-            Trace("Emitting {0}", methodName);
+            Trace(TraceLevel.Verbose, $"Emitting {methodName}");
 
             CodeTypeReference type = new CodeTypeReference(typeof(ISupportInitialize));
             CodeCastExpression castExp = new CodeCastExpression(type, valueExpression);
