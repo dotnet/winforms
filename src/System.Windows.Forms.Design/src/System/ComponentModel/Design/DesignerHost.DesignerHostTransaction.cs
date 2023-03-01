@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
-
 namespace System.ComponentModel.Design
 {
     internal sealed partial class DesignerHost
