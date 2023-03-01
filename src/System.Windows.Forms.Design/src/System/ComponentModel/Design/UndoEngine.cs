@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design
         private static readonly TraceSwitch s_traceUndo = new TraceSwitch("UndoEngine", "Trace UndoRedo");
 
         private IServiceProvider _provider;
-        private readonly Stack _unitStack; // the stack of active (non-committed) units.
+        private readonly Stack<UndoUnit> _unitStack; // the stack of active (non-committed) units.
         private UndoUnit _executingUnit; // the unit currently executing an undo.
         private readonly IDesignerHost _host;
         private readonly ComponentSerializationService _serializationService;
@@ -45,7 +45,7 @@ namespace System.ComponentModel.Design
         protected UndoEngine(IServiceProvider provider)
         {
             _provider = provider.OrThrowIfNull();
-            _unitStack = new Stack();
+            _unitStack = new Stack<UndoUnit>();
             _enabled = true;
 
             // Validate that all required services are available.  Because undo is a passive activity we must know up front if it is going to work or not.
@@ -72,9 +72,9 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_unitStack.Count > 0)
+                if (_unitStack.TryPeek(out UndoUnit current))
                 {
-                    return (UndoUnit)_unitStack.Peek();
+                    return current;
                 }
 
                 return null;
@@ -154,7 +154,7 @@ namespace System.ComponentModel.Design
             if (reason != PopUnitReason.Normal || !_host.InTransaction)
             {
                 Trace("Popping unit {0}.  Reason: {1}", _unitStack.Peek(), reason);
-                UndoUnit unit = (UndoUnit)_unitStack.Pop();
+                UndoUnit unit = _unitStack.Pop();
 
                 if (!unit.IsEmpty)
                 {

@@ -20,7 +20,7 @@ namespace System.ComponentModel.Design
             public DesignerHostTransaction(DesignerHost host, string description) : base(description)
             {
                 _host = host;
-                _host._transactions ??= new Stack();
+                _host._transactions ??= new Stack<DesignerTransaction>();
 
                 _host._transactions.Push(this);
                 _host.OnTransactionOpening(EventArgs.Empty);
@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design
                 {
                     if (_host._transactions.Peek() != this)
                     {
-                        string nestedDescription = ((DesignerTransaction)_host._transactions.Peek()).Description;
+                        string nestedDescription = _host._transactions.Peek().Description;
                         throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
                     }
 
@@ -65,7 +65,7 @@ namespace System.ComponentModel.Design
                 {
                     if (_host._transactions.Peek() != this)
                     {
-                        string nestedDescription = ((DesignerTransaction)_host._transactions.Peek()).Description;
+                        string nestedDescription = _host._transactions.Peek().Description;
                         throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
                     }
 
