@@ -94,7 +94,7 @@ namespace System.Windows.Forms
             if (value is double val && destinationType == typeof(string))
             {
                 int perc = (int)(val * 100.0);
-                return perc.ToString(CultureInfo.CurrentCulture) + "%";
+                return $"{perc}%";
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

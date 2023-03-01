@@ -22,23 +22,17 @@ namespace System.Windows.Forms.Layout
         private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
         {
 #if DEBUG
-            if (CompModSwitches.FlowLayout.TraceInfo)
-            {
-                Debug.WriteLine("FlowLayout::Layout("
-                    + "container=" + container.ToString() + ", "
-                    + "displayRect=" + container.DisplayRectangle.ToString() + ", "
-                    + "args=" + args.ToString() + ")");
-            }
-
+            Debug.WriteLineIf(CompModSwitches.FlowLayout.TraceInfo,
+                $"FlowLayout::Layout(container={container}, displayRect={container.DisplayRectangle}, args={args})");
             Debug.Indent();
 #endif
 
             // ScrollableControl will first try to get the layoutbounds from the derived control when
             // trying to figure out if ScrollBars should be added.
             CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, /* measureOnly = */ false));
-#if DEBUG
+
             Debug.Unindent();
-#endif
+
             return CommonProperties.GetAutoSize(container);
         }
 
@@ -47,9 +41,7 @@ namespace System.Windows.Forms.Layout
 #if DEBUG
             if (CompModSwitches.FlowLayout.TraceInfo)
             {
-                Debug.WriteLine("FlowLayout::GetPreferredSize("
-                    + "container=" + container.ToString() + ", "
-                    + "proposedConstraints=" + proposedConstraints.ToString() + ")");
+                Debug.WriteLine($"FlowLayout::GetPreferredSize(container={container}, proposedConstraints={proposedConstraints})");
                 Debug.Indent();
             }
 #endif
@@ -69,7 +61,7 @@ namespace System.Windows.Forms.Layout
             if (CompModSwitches.FlowLayout.TraceInfo)
             {
                 Debug.Unindent();
-                Debug.WriteLine("GetPreferredSize returned " + prefSize);
+                Debug.WriteLine($"GetPreferredSize returned {prefSize}");
             }
 #endif
             return prefSize;

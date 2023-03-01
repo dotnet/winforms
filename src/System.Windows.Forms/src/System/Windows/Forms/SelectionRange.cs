@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "SelectionRange: Start: " + start.ToString() + ", End: " + end.ToString();
+            return $"SelectionRange: Start: {start}, End: {end}";
         }
     }
 }

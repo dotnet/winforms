@@ -847,7 +847,7 @@ namespace System.Windows.Forms
 
                 if (currentKeyIndex == entryKey)
                 {
-                    Debug.Assert(index == idx, "GetIntegerEntry in property store broken. index is " + index + " while it should be " + idx + "length of the array is " + length);
+                    Debug.Assert(index == idx, $"GetIntegerEntry in property store broken. index is {index} while it should be {idx}length of the array is {length}");
                 }
                 else if (entryKey < currentKeyIndex)
                 {
@@ -866,7 +866,7 @@ namespace System.Windows.Forms
                 idx++;
             }
 
-            Debug.Assert(index == idx, "GetIntegerEntry in property store broken. index is " + index + " while it should be " + idx + "length of the array is " + length);
+            Debug.Assert(index == idx, $"GetIntegerEntry in property store broken. index is {index} while it should be {idx}length of the array is {length}");
         }
 
         [Conditional("DEBUG_PROPERTYSTORE")]
@@ -883,7 +883,7 @@ namespace System.Windows.Forms
 
                 if (currentKeyIndex == entryKey)
                 {
-                    Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
+                    Debug.Assert(index == idx, $"GetObjEntry in property store broken. index is {index} while is should be {idx}length of the array is {length}");
                 }
                 else if (entryKey < currentKeyIndex)
                 {
@@ -901,7 +901,7 @@ namespace System.Windows.Forms
                 idx++;
             }
 
-            Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
+            Debug.Assert(index == idx, $"GetObjEntry in property store broken. index is {index} while is should be {idx}length of the array is {length}");
         }
 
         /// <summary>

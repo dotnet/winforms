@@ -223,7 +223,7 @@ namespace System.Windows.Forms
                 string? name = User32.GetClipboardFormatNameW(clampedId);
                 // This can happen if windows adds a standard format that we don't know about,
                 // so we should play it safe.
-                name ??= "Format" + clampedId;
+                name ??= $"Format{clampedId}";
 
                 EnsureFormatSpace(1);
                 s_formatList[s_formatCount] = new Format(name, clampedId);

@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
                                                               text,
-                                                              "Start" + separator + " End"));
+                                                              $"Start{separator} End"));
                 }
             }
             else if (value is DateTime dt)

@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Localizable(true)]
         [DefaultValue(null)]
-        [Editor("System.Windows.Forms.Design.HelpNamespaceEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.HelpNamespaceEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.HelpProviderHelpNamespaceDescr))]
         public virtual string? HelpNamespace { get; set; }
 

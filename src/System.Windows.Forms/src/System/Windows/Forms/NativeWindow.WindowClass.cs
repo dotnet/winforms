@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -101,16 +100,6 @@ namespace System.Windows.Forms
             /// </summary>
             private static string GetFullClassName(string className)
             {
-                StringBuilder b = new StringBuilder(50);
-                b.Append(Application.WindowsFormsVersion);
-                b.Append('.');
-                b.Append(className);
-
-                // While we don't have multiple AppDomains any more, we'll still include the information
-                // to keep the names in the same historical format for now.
-
-                b.Append(".app.0.");
-
                 // VersioningHelper does a lot of string allocations, and on .NET Core for our purposes
                 // it always returns the exact same string (process is hardcoded to r3 and the AppDomain
                 // id is always 1 as there is only one AppDomain).
@@ -118,11 +107,12 @@ namespace System.Windows.Forms
                 const string versionSuffix = "_r3_ad1";
                 Debug.Assert(string.Equals(
                     VersioningHelper.MakeVersionSafeName(s_currentAppDomainHash, ResourceScope.Process, ResourceScope.AppDomain),
-                    s_currentAppDomainHash + versionSuffix));
-                b.Append(s_currentAppDomainHash);
-                b.Append(versionSuffix);
+                    $"{s_currentAppDomainHash}{versionSuffix}"));
 
-                return b.ToString();
+                // While we don't have multiple AppDomains any more, we'll still include the information
+                // to keep the names in the same historical format for now.
+
+                return $"{Application.WindowsFormsVersion}.{className}.app.0.{s_currentAppDomainHash}{versionSuffix}";
             }
 
             /// <summary>

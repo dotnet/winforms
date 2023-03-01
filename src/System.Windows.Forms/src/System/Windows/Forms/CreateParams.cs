@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Text;
-
 namespace System.Windows.Forms
 {
     public class CreateParams
@@ -72,26 +70,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            var builder = new StringBuilder(64);
-            builder.Append("CreateParams {'");
-            builder.Append(ClassName);
-            builder.Append("', '");
-            builder.Append(Caption);
-            builder.Append("', 0x");
-            builder.Append(Convert.ToString(Style, 16));
-            builder.Append(", 0x");
-            builder.Append(Convert.ToString(ExStyle, 16));
-            builder.Append(", {");
-            builder.Append(X);
-            builder.Append(", ");
-            builder.Append(Y);
-            builder.Append(", ");
-            builder.Append(Width);
-            builder.Append(", ");
-            builder.Append(Height);
-            builder.Append('}');
-            builder.Append('}');
-            return builder.ToString();
+            return $"CreateParams {{'{ClassName}', '{Caption}', 0x{Style:x}, 0x{ExStyle:x}, {{{X}, {Y}, {Width}, {Height}}}}}";
         }
     }
 }

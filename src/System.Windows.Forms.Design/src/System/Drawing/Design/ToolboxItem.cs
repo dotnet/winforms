@@ -810,11 +810,10 @@ namespace System.Drawing.Design
         /// </summary>
         protected virtual void Serialize(SerializationInfo info, StreamingContext context)
         {
-            if (s_toolboxItemPersist.TraceVerbose)
-            {
-                Debug.WriteLine("Persisting: " + GetType().Name);
-                Debug.WriteLine("\tDisplay Name: " + DisplayName);
-            }
+            Debug.WriteLineIf(s_toolboxItemPersist.TraceVerbose, $"""
+                    Persisting: {GetType().Name}
+                    	Display Name: {DisplayName}
+                    """);
 
             info.AddValue(nameof(Locked), Locked);
             List<string> propertyNames = new(Properties.Count);

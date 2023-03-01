@@ -72,7 +72,7 @@ namespace System.Windows.Forms
 
         internal override string GetListName()
         {
-            return TypeDescriptor.GetClassName(_dataSource) + "." + _propName;
+            return $"{TypeDescriptor.GetClassName(_dataSource)}.{_propName}";
         }
 
         public override void SuspendBinding()
