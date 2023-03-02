@@ -27,20 +27,28 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Creates a new ApplicationContext with the specified mainForm.
-        ///  If OnMainFormClosed is not overriden, the thread's message
+        ///  If OnMainFormClosed is not overridden, the thread's message
         ///  loop will be terminated when mainForm is closed.
         /// </summary>
         public ApplicationContext(Form? mainForm)
         {
+            //  These are subclasses of the ApplicationContext for which we don't need to call the finalizer,
+            //  because it's empty. See https://github.com/dotnet/winforms/issues/6858.
+            if (GetType() == typeof(ApplicationContext) || GetType() == Application.s_typeOfModalApplicationContext)
+                GC.SuppressFinalize(this);
+
             MainForm = mainForm;
         }
 
+        // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
+        // All classes that are not need to be finalized must be checked in ApplicationContext(Form? mainForm) constructor.
+        // Consider to modify it if needed.
         ~ApplicationContext() => Dispose(false);
 
         /// <summary>
         ///  Determines the mainForm for this context. This may be changed
         ///  at anytime.
-        ///  If OnMainFormClosed is not overriden, the thread's message
+        ///  If OnMainFormClosed is not overridden, the thread's message
         ///  loop will be terminated when mainForm is closed.
         /// </summary>
         public Form? MainForm
@@ -102,6 +110,11 @@ namespace System.Windows.Forms
                     _mainForm = null;
                 }
             }
+
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to:
+            // 1. remove GC.SuppressFinalize from constructor of this class and from all of its subclasses
+            // 2. remove ApplicationContext_Subclasses_SuppressFinalizeCall test
+            // 3. modify ~ApplicationContext() description.
         }
 
         /// <summary>
