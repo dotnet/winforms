@@ -66,11 +66,6 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Retrieves the current unit from the stack.
-        /// </summary>
-        private UndoUnit CurrentUnit => _unitStack.TryPeek(out UndoUnit current) ? current : null;
-
-        /// <summary>
         ///  This property indicates if an undo is in progress.
         /// </summary>
         public bool UndoInProgress
@@ -314,7 +309,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentAdded(e);
             }
 
-            if (CurrentUnit is not null)
+            if (_unitStack.Count > 0)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -352,7 +347,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentChanged(e);
             }
 
-            if (CurrentUnit is not null)
+            if (_unitStack.Count > 0)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -395,7 +390,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentRemoved(e);
             }
 
-            if (CurrentUnit is not null)
+            if (_unitStack.Count > 0)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -502,7 +497,7 @@ namespace System.ComponentModel.Design
 
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {
-            if (_executingUnit is null && CurrentUnit is not null)
+            if (_executingUnit is null && _unitStack.Count > 0)
             {
                 PopUnitReason reason = e.TransactionCommitted ? PopUnitReason.TransactionCommit : PopUnitReason.TransactionCancel;
                 CheckPopUnit(reason);
