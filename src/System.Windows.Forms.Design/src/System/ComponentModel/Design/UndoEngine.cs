@@ -68,18 +68,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Retrieves the current unit from the stack.
         /// </summary>
-        private UndoUnit CurrentUnit
-        {
-            get
-            {
-                if (_unitStack.TryPeek(out UndoUnit current))
-                {
-                    return current;
-                }
-
-                return null;
-            }
-        }
+        private UndoUnit CurrentUnit => _unitStack.TryPeek(out UndoUnit current) ? current : null;
 
         /// <summary>
         ///  This property indicates if an undo is in progress.

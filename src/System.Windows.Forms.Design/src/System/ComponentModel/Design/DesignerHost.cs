@@ -47,7 +47,7 @@ namespace System.ComponentModel.Design
         private BitVector32 _state; // state for this host
         private DesignSurface _surface; // the owning designer surface.
         private string _newComponentName; // transient value indicating the name of a component that is being created
-        private Stack<DesignerTransaction> _transactions; // stack of transactions.  Each entry in the stack is a DesignerTransaction
+        private Stack<DesignerTransaction> _transactions; // stack of transactions
         private IComponent _rootComponent; // the root of our design
         private string _rootComponentClassName; // class name of the root of our design
         private readonly Dictionary<IComponent, IDesigner> _designers;  // designer -> component mapping
@@ -919,18 +919,10 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Gets the description of the current transaction.
         /// </summary>
-        string IDesignerHost.TransactionDescription
-        {
-            get
-            {
-                if (_transactions is not null && _transactions.TryPeek(out DesignerTransaction transaction))
-                {
-                    return transaction.Description;
-                }
-
-                return null;
-            }
-        }
+        string IDesignerHost.TransactionDescription =>
+            _transactions is not null && _transactions.TryPeek(out DesignerTransaction transaction)
+                ? transaction.Description
+                : null;
 
         /// <summary>
         ///  Adds an event handler for the <see cref="IDesignerHost.Activated"/> event.
