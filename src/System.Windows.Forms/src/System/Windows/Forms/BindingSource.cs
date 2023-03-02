@@ -477,7 +477,7 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             for (int i = 0; i < sortsColln.Count; ++i)
             {
