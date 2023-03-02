@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design
         private static readonly TraceSwitch s_traceUndo = new TraceSwitch("UndoEngine", "Trace UndoRedo");
 
         private IServiceProvider _provider;
-        private readonly Stack _unitStack; // the stack of active (non-committed) units.
+        private readonly Stack<UndoUnit> _unitStack; // the stack of active (non-committed) units.
         private UndoUnit _executingUnit; // the unit currently executing an undo.
         private readonly IDesignerHost _host;
         private readonly ComponentSerializationService _serializationService;
@@ -45,7 +45,7 @@ namespace System.ComponentModel.Design
         protected UndoEngine(IServiceProvider provider)
         {
             _provider = provider.OrThrowIfNull();
-            _unitStack = new Stack();
+            _unitStack = new Stack<UndoUnit>();
             _enabled = true;
 
             // Validate that all required services are available.  Because undo is a passive activity we must know up front if it is going to work or not.
@@ -63,22 +63,6 @@ namespace System.ComponentModel.Design
             _componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
             _componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
             _componentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
-        }
-
-        /// <summary>
-        ///  Retrieves the current unit from the stack.
-        /// </summary>
-        private UndoUnit CurrentUnit
-        {
-            get
-            {
-                if (_unitStack.Count > 0)
-                {
-                    return (UndoUnit)_unitStack.Peek();
-                }
-
-                return null;
-            }
         }
 
         /// <summary>
@@ -154,7 +138,7 @@ namespace System.ComponentModel.Design
             if (reason != PopUnitReason.Normal || !_host.InTransaction)
             {
                 Trace("Popping unit {0}.  Reason: {1}", _unitStack.Peek(), reason);
-                UndoUnit unit = (UndoUnit)_unitStack.Pop();
+                UndoUnit unit = _unitStack.Pop();
 
                 if (!unit.IsEmpty)
                 {
@@ -325,7 +309,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentAdded(e);
             }
 
-            if (CurrentUnit is not null)
+            if (_unitStack.Count > 0)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -363,7 +347,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentChanged(e);
             }
 
-            if (CurrentUnit is not null)
+            if (_unitStack.Count > 0)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -406,7 +390,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentRemoved(e);
             }
 
-            if (CurrentUnit is not null)
+            if (_unitStack.Count > 0)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -513,7 +497,7 @@ namespace System.ComponentModel.Design
 
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {
-            if (_executingUnit is null && CurrentUnit is not null)
+            if (_executingUnit is null && _unitStack.Count > 0)
             {
                 PopUnitReason reason = e.TransactionCommitted ? PopUnitReason.TransactionCommit : PopUnitReason.TransactionCancel;
                 CheckPopUnit(reason);
