@@ -23,8 +23,6 @@ namespace System.Drawing.Design
 
         protected static string? CreateExtensionsString(string?[]? extensions, string sep)
         {
-            const string StarDot = "*.";
-
             if (extensions is null || extensions.Length == 0)
             {
                 return null;
@@ -38,7 +36,7 @@ namespace System.Drawing.Design
                     continue;
                 }
 
-                text = text + StarDot + extensions[i];
+                text = $"{text}*.{extensions[i]}";
                 if (i < extensions.Length - 1)
                 {
                     text += sep;

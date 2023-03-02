@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Globalization;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -23,7 +22,8 @@ namespace System.Windows.Forms
     [ToolboxItemFilter("System.Windows.Forms")]
     [DefaultProperty(nameof(Images))]
     [TypeConverter(typeof(ImageListConverter))]
-    [DesignerSerializer($"System.Windows.Forms.Design.ImageListCodeDomSerializer, {AssemblyRef.SystemDesign}", "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [DesignerSerializer($"System.Windows.Forms.Design.ImageListCodeDomSerializer, {AssemblyRef.SystemDesign}",
+        $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionImageList))]
     public sealed partial class ImageList : Component, IHandle, IHandle<HIMAGELIST>
     {
@@ -787,7 +787,7 @@ namespace System.Windows.Forms
         public override string ToString()
             => Images is null
                ? base.ToString()
-               : $"{base.ToString()} Images.Count: {Images.Count.ToString(CultureInfo.CurrentCulture)}, ImageSize: {ImageSize}";
+               : $"{base.ToString()} Images.Count: {Images.Count}, ImageSize: {ImageSize}";
 
         HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
 

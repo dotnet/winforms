@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Layout
                 StringBuilder columnStyles = new StringBuilder();
                 foreach (ColumnStyle colStyle in tableLayoutSettings.ColumnStyles)
                 {
-                    columnStyles.AppendFormat("{0},{1},", colStyle.SizeType, colStyle.Width);
+                    columnStyles.Append($"{colStyle.SizeType},{colStyle.Width},");
                 }
 
                 if (columnStyles.Length > 0)
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Layout
                 StringBuilder rowStyles = new StringBuilder();
                 foreach (RowStyle rowStyle in tableLayoutSettings.RowStyles)
                 {
-                    rowStyles.AppendFormat("{0},{1},", rowStyle.SizeType, rowStyle.Height);
+                    rowStyles.Append($"{rowStyle.SizeType},{rowStyle.Height},");
                 }
 
                 if (rowStyles.Length > 0)

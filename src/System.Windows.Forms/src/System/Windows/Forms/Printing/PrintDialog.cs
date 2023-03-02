@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintDialog))]
-    [Designer("System.Windows.Forms.Design.PrintDialogDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.PrintDialogDesigner, {AssemblyRef.SystemDesign}")]
     // The only event this dialog has is HelpRequested, which isn't very useful
     public sealed class PrintDialog : CommonDialog
     {

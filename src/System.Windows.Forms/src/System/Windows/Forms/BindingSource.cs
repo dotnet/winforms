@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(DataSource))]
     [DefaultEvent(nameof(CurrentChanged))]
     [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
-    [Designer("System.Windows.Forms.Design.BindingSourceDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.BindingSourceDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionBindingSource))]
     public class BindingSource : Component,
                                  IBindingListView,
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
         [RefreshProperties(RefreshProperties.Repaint)]
-        [Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.BindingSourceDataMemberDescr))]
         public string DataMember
         {
@@ -477,13 +477,15 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            StringBuilder sb = new StringBuilder(sortsColln.Count);
+            StringBuilder sb = new();
 
             for (int i = 0; i < sortsColln.Count; ++i)
             {
-                sb.Append(sortsColln[i].PropertyDescriptor.Name +
-                          ((sortsColln[i].SortDirection == ListSortDirection.Ascending) ? " ASC" : " DESC") +
-                          ((i < sortsColln.Count - 1) ? "," : string.Empty));
+                sb.Append(sortsColln[i].PropertyDescriptor.Name);
+                sb.Append(sortsColln[i].SortDirection == ListSortDirection.Ascending ? " ASC" : " DESC");
+
+                if (i < sortsColln.Count - 1)
+                    sb.Append(',');
             }
 
             return sb.ToString();

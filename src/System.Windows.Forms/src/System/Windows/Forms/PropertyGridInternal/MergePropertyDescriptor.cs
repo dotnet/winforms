@@ -192,7 +192,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return propertyOwner;
         }
 
-        [RequiresUnreferencedCode(EditorRequiresUnreferencedCode + " " + PropertyDescriptorPropertyTypeMessage)]
+        [RequiresUnreferencedCode($"{EditorRequiresUnreferencedCode} {PropertyDescriptorPropertyTypeMessage}")]
         public override object GetEditor(Type editorBaseType) => _descriptors[0].GetEditor(editorBaseType);
 
         public override object GetValue(object component)
