@@ -179,7 +179,9 @@ namespace System.ComponentModel.Design.Serialization
 #if DEBUG
             private static readonly TraceSwitch s_trace = new TraceSwitch("ComponentSerializationService", "Trace component serialization");
 #else
+#pragma warning disable CS0649
             private static readonly TraceSwitch s_trace;
+#pragma warning restore CS0649
 #endif
             private const string StateKey = "State";
             private const string NameKey = "Names";
