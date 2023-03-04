@@ -178,6 +178,8 @@ namespace System.ComponentModel.Design.Serialization
         {
 #if DEBUG
             private static readonly TraceSwitch s_trace = new TraceSwitch("ComponentSerializationService", "Trace component serialization");
+#else
+            private static readonly TraceSwitch s_trace;
 #endif
             private const string StateKey = "State";
             private const string NameKey = "Names";
@@ -277,7 +279,7 @@ namespace System.ComponentModel.Design.Serialization
                     _objectNames.Add(data._name);
                 }
 
-                Trace("Adding object '{0}' ({1}:{2}) {3}", data._name, data._value.GetType().FullName, member.Name, (absolute ? "NORMAL" : "ABSOLUTE"));
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}:{member.Name}) {(absolute ? "NORMAL" : "ABSOLUTE")}");
                 data.Members.Add(new MemberData(member, absolute));
             }
 
@@ -304,7 +306,7 @@ namespace System.ComponentModel.Design.Serialization
                     _objectNames.Add(data._name);
                 }
 
-                Trace("Adding object '{0}' ({1}) {2}", data._name, data._value.GetType().FullName, (absolute ? "NORMAL" : "ABSOLUTE"));
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}) {(absolute ? "NORMAL" : "ABSOLUTE")}");
                 data.EntireObject = true;
                 data.Absolute = absolute;
             }
@@ -326,7 +328,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    Trace("Closing Store: serializing {0} objects", _objects.Count);
+                    Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Closing Store: serializing {_objects.Count} objects");
                     using (manager.CreateSession())
                     {
                         // Walk through our objects and name them so the serialization manager knows what names we gave them.
@@ -433,7 +435,7 @@ namespace System.ComponentModel.Design.Serialization
                     objects = new ArrayList(_objectNames.Count);
                 }
 
-                Trace("Deserializing {0} objects, recycling instances: {1}", _objectState.Count, recycleInstances);
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Deserializing {_objectState.Count} objects, recycling instances: {recycleInstances}");
                 using (delegator.Manager.CreateSession())
                 {
                     // before we deserialize, setup any references to components we faked during serialization
@@ -530,15 +532,6 @@ namespace System.ComponentModel.Design.Serialization
                 throw new PlatformNotSupportedException();
             }
 
-            [Conditional("DEBUG")]
-            internal static void Trace(string message, params object[] args)
-            {
-#if DEBUG
-                string msg = string.Format(CultureInfo.CurrentCulture, "ComponentSerialization: " + message, args);
-                Debug.WriteLineIf(s_trace.TraceVerbose, msg);
-#endif
-            }
-
 #if DEBUG
             internal static void TraceCode(string name, object code)
             {
@@ -558,7 +551,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
                 using var sw = new StringWriter(CultureInfo.InvariantCulture);
-                Trace("Stored CodeDom for {0}: ", name);
+                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {name}: ");
                 Debug.Indent();
 
                 if (code is CodeTypeDeclaration codeTypeDeclaration)
