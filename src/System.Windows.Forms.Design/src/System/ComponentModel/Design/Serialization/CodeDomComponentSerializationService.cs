@@ -281,7 +281,7 @@ namespace System.ComponentModel.Design.Serialization
                     _objectNames.Add(data._name);
                 }
 
-                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}:{member.Name}) {(absolute ? "NORMAL" : "ABSOLUTE")}");
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}:{member.Name}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
                 data.Members.Add(new MemberData(member, absolute));
             }
 
@@ -308,7 +308,7 @@ namespace System.ComponentModel.Design.Serialization
                     _objectNames.Add(data._name);
                 }
 
-                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}) {(absolute ? "NORMAL" : "ABSOLUTE")}");
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
                 data.EntireObject = true;
                 data.Absolute = absolute;
             }
