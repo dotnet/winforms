@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using static Interop;
@@ -61,8 +59,8 @@ namespace System.Windows.Forms
 
                         if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
                         {
-                            _owner._listItemsTable.TryGetValue(DisplayIndexToID(displayIndex), out ListViewItem item);
-                            return item;
+                            _owner._listItemsTable.TryGetValue(DisplayIndexToID(displayIndex), out ListViewItem? item);
+                            return item!;
                         }
                         else
                         {
@@ -134,12 +132,12 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantAddItemsToAVirtualListView);
                 }
 
-                IComparer comparer = _owner._listItemSorter;
+                IComparer? comparer = _owner._listItemSorter;
                 _owner._listItemSorter = null;
 
                 Debug.Assert(!_owner.FlipViewToLargeIconAndSmallIcon || Count == 0, "the FlipView... bit is turned off after adding 1 item.");
 
-                bool[] checkedValues = null;
+                bool[]? checkedValues = null;
 
                 if (_owner.IsHandleCreated && !_owner.CheckBoxes)
                 {
@@ -307,7 +305,7 @@ namespace System.Windows.Forms
                 _owner.ApplyUpdateCachedItems();
                 if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
                 {
-                    return _owner._listItemsTable.TryGetValue(item.ID, out ListViewItem itemOut)
+                    return _owner._listItemsTable.TryGetValue(item.ID, out ListViewItem? itemOut)
                         && itemOut == item;
                 }
                 else
