@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -21,7 +19,7 @@ namespace System.Windows.Forms
         private Rectangle _bounds = Rectangle.Empty;
         private BitVector32 _state;
         private int _suspendCount;
-        private ToolStripPanelRowManager _rowManager;
+        private ToolStripPanelRowManager? _rowManager;
 
         private const int MinAllowedWidth = 50;
         private readonly int _minAllowedWidth = MinAllowedWidth;
@@ -38,7 +36,7 @@ namespace System.Windows.Forms
 #if DEBUG
         internal static TraceSwitch s_toolStripPanelRowCreationDebug = new TraceSwitch("ToolStripPanelRowCreationDebug", "Debug code for rafting row creation");
 #else
-        internal static TraceSwitch s_toolStripPanelRowCreationDebug;
+        internal static TraceSwitch? s_toolStripPanelRowCreationDebug;
 #endif
 
 #if DEBUG
@@ -46,7 +44,8 @@ namespace System.Windows.Forms
         private readonly int _thisRowID;
 #endif
 
-        public ToolStripPanelRow(ToolStripPanel parent) : this(parent, true)
+        public ToolStripPanelRow(ToolStripPanel parent)
+            : this(parent, true)
         {
         }
 
@@ -60,7 +59,7 @@ namespace System.Windows.Forms
                 _minAllowedWidth = DpiHelper.LogicalToDeviceUnitsX(MinAllowedWidth);
             }
 
-            this.ToolStripPanel = parent;
+            ToolStripPanel = parent;
             _state[s_stateVisible] = visible;
             _state[s_stateDisposing | s_stateLocked | s_stateInitialized] = false;
 
@@ -104,7 +103,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStripPanelRowControlCollection controlsCollection = (ToolStripPanelRowControlCollection)Properties.GetObject(s_propControlsCollection);
+                ToolStripPanelRowControlCollection? controlsCollection = (ToolStripPanelRowControlCollection?)Properties.GetObject(s_propControlsCollection);
 
                 if (controlsCollection is null)
                 {
@@ -142,8 +141,9 @@ namespace System.Windows.Forms
             {
                 if (_rowManager is null)
                 {
-                    _rowManager = (Orientation == Orientation.Horizontal) ? new HorizontalRowManager(this) as ToolStripPanelRowManager
-                                                                         : new VerticalRowManager(this) as ToolStripPanelRowManager;
+                    _rowManager = Orientation == Orientation.Horizontal
+                        ? new HorizontalRowManager(this)
+                        : new VerticalRowManager(this);
                     Initialized = true;
                 }
 
@@ -155,13 +155,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStripPanelCell cell = RowManager.GetNextVisibleCell(0, /*forward*/true);
+                ToolStripPanelCell? cell = RowManager.GetNextVisibleCell(0, forward: true);
                 if (cell is not null && cell.DraggedControl is not null)
                 {
                     if (cell.DraggedControl.Stretch)
                     {
                         Padding padding = ToolStripPanel.RowMargin;
-                        // clear out the padding.
+
+                        // Clear out the padding.
                         if (Orientation == Orientation.Horizontal)
                         {
                             padding.Left = 0;
@@ -384,7 +385,7 @@ namespace System.Windows.Forms
                 IArrangedElement element = Cells[i] as IArrangedElement;
                 if (element.ParticipatesInLayout)
                 {
-                    ToolStripPanelCell cell = element as ToolStripPanelCell;
+                    ToolStripPanelCell cell = (ToolStripPanelCell)element;
                     element.SetBounds(cell.CachedBounds, BoundsSpecified.None);
                     //                    Debug.Assert( cell.Control is null || cell.CachedBounds.Location == cell.Control.Bounds.Location, "CachedBounds out of sync with bounds!");
                 }
@@ -410,7 +411,7 @@ namespace System.Windows.Forms
                         CachedBoundsMode = false;
                     }
 
-                    ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
+                    ToolStripPanelCell? cell = RowManager.GetNextVisibleCell(Cells.Count - 1, forward: false);
                     if (cell is null)
                     {
                         ApplyCachedBounds();
@@ -433,7 +434,7 @@ namespace System.Windows.Forms
 
         private void OnLayoutHorizontalPostFix()
         {
-            ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
+            ToolStripPanelCell? cell = RowManager.GetNextVisibleCell(Cells.Count - 1, forward: false);
             if (cell is null)
             {
                 ApplyCachedBounds();
@@ -457,7 +458,7 @@ namespace System.Windows.Forms
             int[] margins = new int[Cells.Count];
             for (int i = 0; i < Cells.Count; i++)
             {
-                ToolStripPanelCell c = Cells[i] as ToolStripPanelCell;
+                ToolStripPanelCell c = (ToolStripPanelCell)Cells[i];
                 margins[i] = c.Margin.Left;
             }
 
@@ -466,7 +467,7 @@ namespace System.Windows.Forms
             // now apply those changes to the cached bounds.
             for (int i = 0; i < Cells.Count; i++)
             {
-                ToolStripPanelCell c = Cells[i] as ToolStripPanelCell;
+                ToolStripPanelCell c = (ToolStripPanelCell)Cells[i];
                 Rectangle cachedBounds = c.CachedBounds;
                 cachedBounds.X -= Math.Max(0, margins[i] - c.Margin.Left);
                 c.CachedBounds = cachedBounds;
@@ -479,13 +480,13 @@ namespace System.Windows.Forms
             }
 
             // STEP 2 change the size of the remaining ToolStrips from Right to Left.
-            int[] cellOffsets = null;
+            int[]? cellOffsets = null;
             for (int i = Cells.Count - 1; i >= 0; i--)
             {
-                ToolStripPanelCell currentCell = Cells[i] as ToolStripPanelCell;
+                ToolStripPanelCell currentCell = (ToolStripPanelCell)Cells[i];
                 if (currentCell.Visible)
                 {
-                    Size minSize = GetMinimumSize(currentCell.Control as ToolStrip);
+                    Size minSize = GetMinimumSize((ToolStrip)currentCell.Control);
                     Rectangle cachedBounds = currentCell.CachedBounds;
 
                     // found some space to free.
@@ -518,7 +519,7 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
-                    ToolStripPanelCell c = Cells[i] as ToolStripPanelCell;
+                    ToolStripPanelCell c = (ToolStripPanelCell)Cells[i];
                     Rectangle cachedBounds = c.CachedBounds;
                     cachedBounds.X -= cellOffsets[i];
                     c.CachedBounds = cachedBounds;
@@ -530,9 +531,10 @@ namespace System.Windows.Forms
 
         private void OnLayoutVerticalPostFix()
         {
-            ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
+            ToolStripPanelCell? cell = RowManager.GetNextVisibleCell(Cells.Count - 1, forward: false);
+
             // figure out how much space we actually need to free.
-            int spaceToFree = cell.CachedBounds.Bottom - RowManager.DisplayRectangle.Bottom;
+            int spaceToFree = cell!.CachedBounds.Bottom - RowManager.DisplayRectangle.Bottom;
 
             if (spaceToFree <= 0)
             {
@@ -548,7 +550,7 @@ namespace System.Windows.Forms
             int[] margins = new int[Cells.Count];
             for (int i = 0; i < Cells.Count; i++)
             {
-                ToolStripPanelCell c = Cells[i] as ToolStripPanelCell;
+                ToolStripPanelCell c = (ToolStripPanelCell)Cells[i];
                 margins[i] = c.Margin.Top;
             }
 
@@ -557,7 +559,7 @@ namespace System.Windows.Forms
             // now apply those changes to the cached bounds.
             for (int i = 0; i < Cells.Count; i++)
             {
-                ToolStripPanelCell c = Cells[i] as ToolStripPanelCell;
+                ToolStripPanelCell c = (ToolStripPanelCell)Cells[i];
                 Rectangle cachedBounds = c.CachedBounds;
                 cachedBounds.X = Math.Max(0, cachedBounds.X - margins[i] - c.Margin.Top);
                 c.CachedBounds = cachedBounds;
@@ -570,13 +572,13 @@ namespace System.Windows.Forms
             }
 
             // STEP 2 change the size of the remaining ToolStrips from Bottom to Top.
-            int[] cellOffsets = null;
+            int[]? cellOffsets = null;
             for (int i = Cells.Count - 1; i >= 0; i--)
             {
-                ToolStripPanelCell currentCell = Cells[i] as ToolStripPanelCell;
+                ToolStripPanelCell currentCell = (ToolStripPanelCell)Cells[i];
                 if (currentCell.Visible)
                 {
-                    Size minSize = GetMinimumSize(currentCell.Control as ToolStrip);
+                    Size minSize = GetMinimumSize((ToolStrip)currentCell.Control);
                     Rectangle cachedBounds = currentCell.CachedBounds;
 
                     // found some space to free.
@@ -609,7 +611,7 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
-                    ToolStripPanelCell c = Cells[i] as ToolStripPanelCell;
+                    ToolStripPanelCell c = (ToolStripPanelCell)Cells[i];
                     Rectangle cachedBounds = c.CachedBounds;
                     cachedBounds.Y -= cellOffsets[i];
                     c.CachedBounds = cachedBounds;
@@ -713,7 +715,7 @@ namespace System.Windows.Forms
             SetBounds(bounds);
         }
 
-        void IArrangedElement.PerformLayout(IArrangedElement container, string propertyName)
+        void IArrangedElement.PerformLayout(IArrangedElement container, string? propertyName)
         {
             if (_suspendCount <= 0)
             {
@@ -726,7 +728,7 @@ namespace System.Windows.Forms
 #if DEBUG
         internal static readonly TraceSwitch ToolStripPanelMouseDebug = new TraceSwitch("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
 #else
-        internal static readonly TraceSwitch ToolStripPanelMouseDebug;
+        internal static readonly TraceSwitch? ToolStripPanelMouseDebug;
 #endif
 
         internal Rectangle DragBounds

@@ -92,7 +92,7 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < Row.ControlsInternal.Count; i++)
                     {
-                        totalSize += Row.GetMinimumSize(Row.ControlsInternal[i] as ToolStrip);
+                        totalSize += Row.GetMinimumSize((ToolStrip)Row.ControlsInternal[i]);
                     }
 
                     totalSize += Row.GetMinimumSize(toolStripToDrag);
