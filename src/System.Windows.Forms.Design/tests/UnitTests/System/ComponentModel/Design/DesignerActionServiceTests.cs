@@ -57,7 +57,6 @@ namespace System.ComponentModel.Design.Tests
         {
             var service = new SubDesignerActionService(null);
             var component = new Component();
-            var component2 = new Component();
             service.Add(component, actionList);
             Assert.True(service.Contains(component));
             Assert.Equal(expected, service.GetComponentActions(component));
@@ -79,7 +78,6 @@ namespace System.ComponentModel.Design.Tests
         {
             var service = new SubDesignerActionService(null);
             var component = new Component();
-            var component2 = new Component();
             var actionList1 = new CustomDesignerActionList(null);
             var actionList2 = new CustomDesignerActionList(null);
             service.Add(component, actionList1);
@@ -115,7 +113,6 @@ namespace System.ComponentModel.Design.Tests
         {
             var service = new SubDesignerActionService(null);
             var component = new Component();
-            var component2 = new Component();
             service.Add(component, new DesignerActionListCollection { actionList });
             Assert.True(service.Contains(component));
             Assert.Equal(expected, service.GetComponentActions(component));
@@ -137,7 +134,6 @@ namespace System.ComponentModel.Design.Tests
         {
             var service = new SubDesignerActionService(null);
             var component = new Component();
-            var component2 = new Component();
             var actionList1 = new CustomDesignerActionList(null);
             var actionList2 = new CustomDesignerActionList(null);
             service.Add(component, new DesignerActionListCollection { actionList1 });

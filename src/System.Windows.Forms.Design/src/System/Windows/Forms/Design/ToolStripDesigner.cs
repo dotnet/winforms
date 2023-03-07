@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Design
                 ArrayList items = new ArrayList();
                 foreach (ToolStripItem item in ToolStrip.Items)
                 {
-                    if (!(item is DesignerToolStripControlHost addNewItem))
+                    if (item is not DesignerToolStripControlHost)
                     {
                         items.Add(item);
                     }

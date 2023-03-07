@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (ToolStripItem item in MenuItem.DropDownItems)
                     {
-                        if (!(item is DesignerToolStripControlHost addNewItem))
+                        if (item is not DesignerToolStripControlHost)
                         {
                             items.Add(item);
                         }
