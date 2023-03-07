@@ -93,59 +93,7 @@ namespace System.ComponentModel.Design.Serialization
             ///  Writes the specified value to the handler.
             /// </summary>
             /// <param name="value">The value to write.</param>
-            /// <param name="alignment">Minimum number of characters that should be written for this value. If the value
-            /// is negative, it indicates left-aligned and the required minimum is the absolute value.</param>
-            /// <typeparam name="T">The type of the value to write.</typeparam>
-            public void AppendFormatted<T>(T value, int alignment) => _stringBuilderHandler.AppendFormatted(value, alignment);
-
-            /// <summary>
-            ///  Writes the specified value to the handler.
-            /// </summary>
-            /// <param name="value">The value to write.</param>
-            /// <param name="format">The format string.</param>
-            /// <param name="alignment">Minimum number of characters that should be written for this value. If the value
-            /// is negative, it indicates left-aligned and the required minimum is the absolute value.</param>
-            /// <typeparam name="T">The type of the value to write.</typeparam>
-            public void AppendFormatted<T>(T value, int alignment, string? format) => _stringBuilderHandler.AppendFormatted(value, alignment, format);
-
-            /// <summary>
-            ///  Writes the specified character span to the handler.
-            /// </summary>
-            /// <param name="value">The span to write.</param>
-            public void AppendFormatted(ReadOnlySpan<char> value) => _stringBuilderHandler.AppendFormatted(value);
-
-            /// <summary>
-            ///  Writes the specified string of chars to the handler.
-            /// </summary>
-            /// <param name="value">The span to write.</param>
-            /// <param name="alignment">Minimum number of characters that should be written for this value. If the value
-            /// is negative, it indicates left-aligned and the required minimum is the absolute value.</param>
-            /// <param name="format">The format string.</param>
-            public void AppendFormatted(ReadOnlySpan<char> value, int alignment = 0, string? format = null) => _stringBuilderHandler.AppendFormatted(value, alignment, format);
-
-            /// <summary>
-            ///  Writes the specified value to the handler.
-            /// </summary>
-            /// <param name="value">The value to write.</param>
             public void AppendFormatted(string? value) => _stringBuilderHandler.AppendFormatted(value);
-
-            /// <summary>
-            ///  Writes the specified value to the handler.
-            /// </summary>
-            /// <param name="value">The value to write.</param>
-            /// <param name="alignment">Minimum number of characters that should be written for this value. If the value
-            /// is negative, it indicates left-aligned and the required minimum is the absolute value.</param>
-            /// <param name="format">The format string.</param>
-            public void AppendFormatted(string? value, int alignment = 0, string? format = null) => _stringBuilderHandler.AppendFormatted(value, alignment, format);
-
-            /// <summary>
-            ///  Writes the specified value to the handler.
-            /// </summary>
-            /// <param name="value">The value to write.</param>
-            /// <param name="alignment">Minimum number of characters that should be written for this value. If the value
-            /// is negative, it indicates left-aligned and the required minimum is the absolute value.</param>
-            /// <param name="format">The format string.</param>
-            public void AppendFormatted(object? value, int alignment = 0, string? format = null) => _stringBuilderHandler.AppendFormatted(value, alignment, format);
         }
     }
 }
