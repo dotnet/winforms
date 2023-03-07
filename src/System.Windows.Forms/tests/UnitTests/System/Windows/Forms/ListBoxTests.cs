@@ -14,6 +14,8 @@ namespace System.Windows.Forms.Tests;
 
 public class ListBoxTests
 {
+        private static int s_defaultListBoxItemHeight = Control.DefaultFont.Height - 1;
+
     [WinFormsFact]
     public void ListBox_Ctor_Default()
     {
@@ -85,7 +87,7 @@ public class ListBoxTests
         Assert.True(control.IntegralHeight);
         Assert.False(control.IsAccessible);
         Assert.False(control.IsMirrored);
-        Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
+        Assert.Equal(s_defaultListBoxItemHeight, control.ItemHeight);
         Assert.Empty(control.Items);
         Assert.Same(control.Items, control.Items);
         Assert.NotNull(control.LayoutEngine);
@@ -99,7 +101,7 @@ public class ListBoxTests
         Assert.Equal(Padding.Empty, control.Padding);
         Assert.Null(control.Parent);
         Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
-        Assert.Equal(Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3, control.PreferredHeight);
+        Assert.Equal(s_defaultListBoxItemHeight + SystemInformation.BorderSize.Height * 4 + 3, control.PreferredHeight);
         Assert.Equal(new Size(120, 96), control.PreferredSize);
         Assert.False(control.RecreatingHandle);
         Assert.Null(control.Region);
@@ -1741,13 +1743,13 @@ public class ListBoxTests
         foreach (bool integralHeight in new bool[] { true, false })
         {
             yield return new object[] { DrawMode.Normal, integralHeight, 1, 0 };
-            yield return new object[] { DrawMode.Normal, integralHeight, Control.DefaultFont.Height, 0 };
+            yield return new object[] { DrawMode.Normal, integralHeight, s_defaultListBoxItemHeight, 0 };
             yield return new object[] { DrawMode.Normal, integralHeight, 255, 0 };
             yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, 1, 1 };
-            yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, Control.DefaultFont.Height, 0 };
+            yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, s_defaultListBoxItemHeight, 0 };
             yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, 255, 1 };
             yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, 1, 0 };
-            yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, Control.DefaultFont.Height, 0 };
+            yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, s_defaultListBoxItemHeight, 0 };
             yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, 255, 0 };
         }
     }
@@ -1812,35 +1814,94 @@ public class ListBoxTests
         Assert.Throws<ArgumentOutOfRangeException>("value", () => control.ItemHeight = value);
     }
 
-    [WinFormsFact]
-    public void ListBox_ItemHeight_ResetValue_Success()
+        [WinFormsTheory]
+        [InlineData(DrawMode.Normal)]
+        [InlineData(DrawMode.OwnerDrawFixed)]
+        [InlineData(DrawMode.OwnerDrawVariable)]
+        public void ListBox_ItemHeight_ResetValue_Success_If_DefaultListBoxItemHeight_IsChanged(DrawMode drawMode)
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
+            using var listBox = new ListBox();
+            listBox.DrawMode = drawMode;
+            Assert.False(property.CanResetValue(listBox));
+
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            var listBoxTestAccessor = typeof(ListBox).TestAccessor().Dynamic;
+
+            using Font font = new("Times New Roman", 12);
+
+            try
+            {
+                // Application.DefaultFont is being changed.
+                // ListBox.DefaultListBoxItemHeight and Control.DefaultFont are being cleared to pick up Application.DefaultFont value.
+                // ListBox.ItemHeight is being reset to a new default value.
+                applicationTestAccessor.s_defaultFont = font;
+                listBoxTestAccessor.s_defaultListBoxItemHeight = -1;
+                listBoxTestAccessor.s_defaultFont = null;
+                property.ResetValue(listBox);
+
+                // ListBox.ItemHeight equals the new default value now.
+                Assert.Equal(font.Height - 1, listBox.ItemHeight);
+                Assert.Equal(Control.DefaultFont.Height - 1, listBoxTestAccessor.DefaultListBoxItemHeight);
+                Assert.Equal(Control.DefaultFont.Height - 1, listBox.ItemHeight);
+                Assert.False(property.CanResetValue(listBox));
+
+                // ListBox.ItemHeight is being changed.
+                listBox.ItemHeight = font.Height + 5;
+                Assert.Equal(font.Height + 5, listBox.ItemHeight);
+                Assert.True(property.CanResetValue(listBox));
+
+                // ListBox.ItemHeight is being reset.
+                property.ResetValue(listBox);
+                Assert.Equal(listBoxTestAccessor.s_defaultListBoxItemHeight, listBox.ItemHeight);
+                Assert.False(property.CanResetValue(listBox));
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled = null;
+                listBoxTestAccessor.s_defaultListBoxItemHeight = -1;
+                listBoxTestAccessor.s_defaultFont = null;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(DrawMode.Normal)]
+        [InlineData(DrawMode.OwnerDrawFixed)]
+        [InlineData(DrawMode.OwnerDrawVariable)]
+        public void ListBox_ItemHeight_ResetValue_Success(DrawMode drawMode)
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
         using var control = new ListBox();
+            control.DrawMode = drawMode;
         Assert.False(property.CanResetValue(control));
 
-        control.ItemHeight = 15;
-        Assert.Equal(15, control.ItemHeight);
+        control.ItemHeight = 17;
+        Assert.Equal(17, control.ItemHeight);
         Assert.True(property.CanResetValue(control));
 
         property.ResetValue(control);
-        Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
+        Assert.Equal(s_defaultListBoxItemHeight, control.ItemHeight);
         Assert.False(property.CanResetValue(control));
     }
 
-    [WinFormsFact]
-    public void ListBox_ItemHeight_ShouldSerializeValue_Success()
+        [WinFormsTheory]
+        [InlineData(DrawMode.Normal)]
+        [InlineData(DrawMode.OwnerDrawFixed)]
+        [InlineData(DrawMode.OwnerDrawVariable)]
+        public void ListBox_ItemHeight_ShouldSerializeValue_Success(DrawMode drawMode)
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
         using var control = new ListBox();
+            control.DrawMode = drawMode;
         Assert.False(property.ShouldSerializeValue(control));
 
-        control.ItemHeight = 15;
-        Assert.Equal(15, control.ItemHeight);
+        control.ItemHeight = 17;
+        Assert.Equal(17, control.ItemHeight);
         Assert.True(property.ShouldSerializeValue(control));
 
         property.ResetValue(control);
-        Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
+        Assert.Equal(s_defaultListBoxItemHeight, control.ItemHeight);
         Assert.False(property.ShouldSerializeValue(control));
     }
 
@@ -2049,13 +2110,13 @@ public class ListBoxTests
     public static IEnumerable<object[]> PreferredHeight_GetEmpty_TestData()
     {
         int extra = SystemInformation.BorderSize.Height * 4 + 3;
-        yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, Control.DefaultFont.Height + extra };
-        yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, Control.DefaultFont.Height + extra };
-        yield return new object[] { DrawMode.Normal, BorderStyle.None, Control.DefaultFont.Height };
+        yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, s_defaultListBoxItemHeight + extra };
+        yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, s_defaultListBoxItemHeight + extra };
+        yield return new object[] { DrawMode.Normal, BorderStyle.None, s_defaultListBoxItemHeight};
 
-        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, Control.DefaultFont.Height + extra };
-        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, Control.DefaultFont.Height + extra };
-        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, Control.DefaultFont.Height };
+        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, s_defaultListBoxItemHeight + extra };
+        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, s_defaultListBoxItemHeight + extra };
+        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, s_defaultListBoxItemHeight};
 
         yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.Fixed3D, extra };
         yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.FixedSingle, extra };
@@ -2078,17 +2139,17 @@ public class ListBoxTests
     public static IEnumerable<object[]> PreferredHeight_GetNotEmpty_TestData()
     {
         int extra = SystemInformation.BorderSize.Height * 4 + 3;
-        yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, (Control.DefaultFont.Height * 2) + extra };
-        yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, (Control.DefaultFont.Height * 2) + extra };
-        yield return new object[] { DrawMode.Normal, BorderStyle.None, (Control.DefaultFont.Height * 2) };
+        yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, (s_defaultListBoxItemHeight * 2) + extra };
+        yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, (s_defaultListBoxItemHeight * 2) + extra };
+        yield return new object[] { DrawMode.Normal, BorderStyle.None, (s_defaultListBoxItemHeight * 2) };
 
-        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, (Control.DefaultFont.Height * 2) + extra };
-        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, (Control.DefaultFont.Height * 2) + extra };
-        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, (Control.DefaultFont.Height * 2) };
+        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, (s_defaultListBoxItemHeight * 2) + extra };
+        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, (s_defaultListBoxItemHeight * 2) + extra };
+        yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, (s_defaultListBoxItemHeight * 2) };
 
-        yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.Fixed3D, (Control.DefaultFont.Height * 2) + extra };
-        yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.FixedSingle, (Control.DefaultFont.Height * 2) + extra };
-        yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.None, (Control.DefaultFont.Height * 2) };
+        yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.Fixed3D, (s_defaultListBoxItemHeight * 2) + extra };
+        yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.FixedSingle, (s_defaultListBoxItemHeight * 2) + extra };
+        yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.None, (s_defaultListBoxItemHeight * 2) };
     }
 
     [WinFormsTheory]
@@ -5147,7 +5208,7 @@ public class ListBoxTests
         {
             DrawMode = drawMode
         };
-        Assert.Equal(Control.DefaultFont.Height, control.GetItemHeight(0));
+        Assert.Equal(s_defaultListBoxItemHeight, control.GetItemHeight(0));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -5170,7 +5231,7 @@ public class ListBoxTests
         };
         control.Items.Add("Item1");
         control.Items.Add("Item2");
-        Assert.Equal(Control.DefaultFont.Height, control.GetItemHeight(index));
+        Assert.Equal(s_defaultListBoxItemHeight, control.GetItemHeight(index));
         Assert.False(control.IsHandleCreated);
     }
 

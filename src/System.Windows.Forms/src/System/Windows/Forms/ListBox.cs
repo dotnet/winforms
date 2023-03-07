@@ -394,7 +394,7 @@ public partial class ListBox : ListControl
         {
             if (s_defaultListBoxItemHeight == -1)
             {
-                s_defaultListBoxItemHeight = DefaultFont.Height;
+                s_defaultListBoxItemHeight = DefaultFont.Height - 1;
             }
 
             return s_defaultListBoxItemHeight;
@@ -2113,7 +2113,7 @@ public partial class ListBox : ListControl
     // ShouldSerialize and Reset Methods are being used by Designer via reflection.
     private void ResetItemHeight()
     {
-        _itemHeight = DefaultListBoxItemHeight;
+        ItemHeight = DefaultListBoxItemHeight;
     }
 
     protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
