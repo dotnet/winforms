@@ -491,7 +491,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeStatementCollection statements = new CodeStatementCollection();
             using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAdd)}"))
             {
-                Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture)}");
+                Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
                 // Here we need to invoke Add once for each and every item in the collection. We can re-use the property reference and method reference, but we will need to recreate the invoke statement each time.
                 CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(targetExpression, "Add");
 
@@ -584,7 +584,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeStatementCollection statements = new CodeStatementCollection();
             using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAddRange)}"))
             {
-                Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture)}");
+                Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
 
                 if (valuesToSerialize.Count > 0)
                 {
