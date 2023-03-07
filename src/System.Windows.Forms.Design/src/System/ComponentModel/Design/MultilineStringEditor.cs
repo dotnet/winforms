@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
@@ -14,12 +12,12 @@ namespace System.ComponentModel.Design
     /// </summary>
     public sealed partial class MultilineStringEditor : UITypeEditor
     {
-        private MultilineStringEditorUI _editorUI;
+        private MultilineStringEditorUI? _editorUI;
 
         /// <inheritdoc />
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+            if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
             {
                 return value;
             }
@@ -36,11 +34,11 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  The MultilineStringEditor is a drop down editor, so this returns UITypeEditorEditStyle.DropDown.
         /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;
 
         /// <summary>
         ///  Returns false; no extra painting is performed.
         /// </summary>
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => false;
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => false;
     }
 }
