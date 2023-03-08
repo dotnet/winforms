@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design
@@ -39,10 +38,11 @@ namespace System.Windows.Forms.Design
             private CheckBox _ctrlCheckBox;
             private CheckBox _shiftCheckBox;
             private ComboBox _keyComboBox;
-            private TypeConverter _keysConverter;
+            private TypeConverter? _keysConverter;
             private Label _keyLabel;
             private Label _modifiersLabel;
-            private object _originalValue, _currentValue;
+            private object? _originalValue;
+            private object? _currentValue;
             private TableLayoutPanel _innerPanel;
             private TableLayoutPanel _outerPanel;
             private Keys _unknownKeyCode;
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  Returns the selected keys. If only modifiers were selected, we return Keys.None.
             /// </summary>
-            public object Value
+            public object? Value
             {
                 get
                 {
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  Triggered when the user clicks the Reset button. The value is set to Keys.None
             /// </summary>
-            private void OnResetButtonClick(object sender, EventArgs e)
+            private void OnResetButtonClick(object? sender, EventArgs e)
             {
                 _ctrlCheckBox.Checked = false;
                 _altCheckBox.Checked = false;
@@ -91,9 +91,9 @@ namespace System.Windows.Forms.Design
                 _keyComboBox.SelectedIndex = -1;
             }
 
-            private void OnCheckedChanged(object sender, EventArgs e) => UpdateCurrentValue();
+            private void OnCheckedChanged(object? sender, EventArgs e) => UpdateCurrentValue();
 
-            private void OnSelectedIndexChanged(object sender, EventArgs e) => UpdateCurrentValue();
+            private void OnSelectedIndexChanged(object? sender, EventArgs e) => UpdateCurrentValue();
 
             public void End()
             {
@@ -107,6 +107,15 @@ namespace System.Windows.Forms.Design
                 }
             }
 
+            [MemberNotNull(nameof(_outerPanel))]
+            [MemberNotNull(nameof(_modifiersLabel))]
+            [MemberNotNull(nameof(_ctrlCheckBox))]
+            [MemberNotNull(nameof(_altCheckBox))]
+            [MemberNotNull(nameof(_shiftCheckBox))]
+            [MemberNotNull(nameof(_innerPanel))]
+            [MemberNotNull(nameof(_keyLabel))]
+            [MemberNotNull(nameof(_keyComboBox))]
+            [MemberNotNull(nameof(_resetButton))]
             private void InitializeComponent()
             {
                 ComponentResourceManager resources = new ComponentResourceManager(typeof(ShortcutKeysEditor));
@@ -195,7 +204,7 @@ namespace System.Windows.Forms.Design
 
                 foreach (Keys keyCode in s_validKeys)
                 {
-                    _keyComboBox.Items.Add(KeysConverter.ConvertToString(keyCode));
+                    _keyComboBox.Items.Add(KeysConverter.ConvertToString(keyCode)!);
                 }
 
                 _keyComboBox.SelectedIndexChanged += OnSelectedIndexChanged;
@@ -222,7 +231,7 @@ namespace System.Windows.Forms.Design
             private void AdjustSize()
             {
                 ComponentResourceManager resources = new ComponentResourceManager(typeof(ShortcutKeysEditor));
-                Size resetButtonSize = (Size)resources.GetObject("btnReset.Size");
+                Size resetButtonSize = (Size)resources.GetObject("btnReset.Size")!;
                 Size = new Size(Size.Width + _resetButton.Size.Width - resetButtonSize.Width, Size.Height);
             }
 
