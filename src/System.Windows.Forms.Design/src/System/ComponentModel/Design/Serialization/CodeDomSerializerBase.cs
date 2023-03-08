@@ -1885,7 +1885,7 @@ namespace System.ComponentModel.Design.Serialization
                         $"""
                             ***************************************************
                             *** WARNING :{message}
-                            *** SCOPE :{TraceScopeAsString()}
+                            *** SCOPE :{GetTraceScopeAsString()}
                             ***************************************************
                             """);
                     break;
@@ -1895,17 +1895,17 @@ namespace System.ComponentModel.Design.Serialization
                         $"""
                             ***************************************************
                             *** ERROR :{message}
-                            *** SCOPE :{TraceScopeAsString()}
+                            *** SCOPE :{GetTraceScopeAsString()}
                             ***************************************************
                             """);
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
+                    throw new InvalidEnumArgumentException(nameof(level), (int)level, typeof(TraceLevel));
             }
         }
 
-        private static string TraceScopeAsString() =>
+        private static string GetTraceScopeAsString() =>
             traceScope is not null ? string.Join('/', traceScope.Reverse()) : string.Empty;
 
         private bool DeserializePropertyAssignStatement(IDesignerSerializationManager manager, CodeAssignStatement statement,

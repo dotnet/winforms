@@ -13,7 +13,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Provides an interpolated string handler for <see
         ///  cref="CodeDomSerializerBase.Trace(TraceLevel, ref CodeDomSerializerBase.TraceInterpolatedStringHandler)"/>
-        ///  that only performs formatting if trecing is set to verbose.
+        ///  that only performs formatting if tracing is set to a level higher or equal to the level of the message.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [InterpolatedStringHandler]
@@ -30,7 +30,7 @@ namespace System.ComponentModel.Design.Serialization
             private StringBuilder? _builder;
 
             /// <summary>
-            ///  Creates an instance of the handler..
+            ///  Creates an instance of the handler.
             /// </summary>
             /// <param name="literalLength">The number of constant characters outside of interpolation expressions in the
             /// interpolated string.</param>

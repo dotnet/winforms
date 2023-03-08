@@ -13,7 +13,9 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Provides an interpolated string handler for <see
         ///  cref="CodeDomSerializerBase.TraceIf(System.Diagnostics.TraceLevel,bool,ref System.ComponentModel.Design.Serialization.CodeDomSerializerBase.TraceIfInterpolatedStringHandler)"
-        ///  /> that only performs formatting if the condition applies and tracing is set to verbose.</summary>
+        ///  /> that only performs formatting if the condition applies and tracing is set to a level higher or equal to
+        ///  the level of the message.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [InterpolatedStringHandler]
         internal struct TraceIfInterpolatedStringHandler
@@ -29,7 +31,7 @@ namespace System.ComponentModel.Design.Serialization
             private StringBuilder? _builder;
 
             /// <summary>
-            ///  Creates an instance of the handler..
+            ///  Creates an instance of the handler.
             /// </summary>
             /// <param name="literalLength">The number of constant characters outside of interpolation expressions in
             /// the interpolated string.</param>
