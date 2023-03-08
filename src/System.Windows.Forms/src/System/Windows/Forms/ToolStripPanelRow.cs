@@ -532,9 +532,14 @@ namespace System.Windows.Forms
         private void OnLayoutVerticalPostFix()
         {
             ToolStripPanelCell? cell = RowManager.GetNextVisibleCell(Cells.Count - 1, forward: false);
+            if (cell is null)
+            {
+                ApplyCachedBounds();
+                return;
+            }
 
             // figure out how much space we actually need to free.
-            int spaceToFree = cell!.CachedBounds.Bottom - RowManager.DisplayRectangle.Bottom;
+            int spaceToFree = cell.CachedBounds.Bottom - RowManager.DisplayRectangle.Bottom;
 
             if (spaceToFree <= 0)
             {
