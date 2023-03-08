@@ -137,8 +137,8 @@ namespace System.ComponentModel.Design
             // 4.  When a unit is undone it stores itself in a member variable called _executingUnit.  All change events examine this variable and if it is set they do not create a new unit in response to a change.  Instead, they just run through all the existing units.  This builds the undo history for a transaction that is being rolled back.
             if (reason != PopUnitReason.Normal || !_host.InTransaction)
             {
-                Trace("Popping unit {0}.  Reason: {1}", _unitStack.Peek(), reason);
                 UndoUnit unit = _unitStack.Pop();
+                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Popping unit {unit}.  Reason: {reason}");
 
                 if (!unit.IsEmpty)
                 {
@@ -206,7 +206,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                Trace("Disposing undo engine");
+                Debug.WriteLineIf(s_traceUndo.TraceVerbose, "UndoEngine: Disposing undo engine");
 
                 if (_host is not null)
                 {
@@ -529,12 +529,6 @@ namespace System.ComponentModel.Design
             _undoneEvent?.Invoke(this, e);
         }
 
-        [Conditional("DEBUG")]
-        private static void Trace(string text, params object[] values)
-        {
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, "UndoEngine: " + string.Format(CultureInfo.CurrentCulture, text, values));
-        }
-
         private enum PopUnitReason
         {
             Normal, TransactionCommit, TransactionCancel,
@@ -569,7 +563,7 @@ namespace System.ComponentModel.Design
             {
                 name ??= string.Empty;
 
-                UndoEngine.Trace("Creating undo unit '{0}'", name);
+                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Creating undo unit '{name}'");
 
                 Name = name;
                 UndoEngine = engine.OrThrowIfNull();
@@ -914,7 +908,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public void Undo()
             {
-                UndoEngine.Trace("Performing undo '{0}'", Name);
+                Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Performing undo '{Name}'");
                 UndoUnit savedUnit = UndoEngine._executingUnit;
                 UndoEngine._executingUnit = this;
                 DesignerTransaction transaction = null;
@@ -1066,7 +1060,7 @@ namespace System.ComponentModel.Design
                     _nextUndoAdds = !add;
                     _openComponent = component;
 
-                    UndoEngine.Trace("---> Creating {0} undo event for '{1}'", (add ? "Add" : "Remove"), _componentName);
+                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Creating {(add ? "Add" : "Remove")} undo event for '{_componentName}'");
                     using (_serializedData = engine._serializationService.CreateStore())
                     {
                         engine._serializationService.Serialize(_serializedData, component);
@@ -1107,7 +1101,7 @@ namespace System.ComponentModel.Design
                 {
                     if (!Committed)
                     {
-                        UndoEngine.Trace("---> Committing remove of '{0}'", _componentName);
+                        Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Committing remove of '{_componentName}'");
                         _committed = true;
                     }
                 }
@@ -1119,7 +1113,7 @@ namespace System.ComponentModel.Design
                 {
                     if (_nextUndoAdds)
                     {
-                        UndoEngine.Trace("---> Adding '{0}'", _componentName);
+                        Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Adding '{_componentName}'");
                         // We need to add this component.  To add it, we deserialize it and then we add it to the designer host's container.
                         if (engine.GetRequiredService(typeof(IDesignerHost)) is IDesignerHost host)
                         {
@@ -1128,7 +1122,7 @@ namespace System.ComponentModel.Design
                     }
                     else
                     {
-                        UndoEngine.Trace("---> Removing '{0}'", _componentName);
+                        Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Removing '{_componentName}'");
                         // We need to remove this component.  Take the name and match it to an object, and then ask that object to delete itself.
                         IDesignerHost host = engine.GetRequiredService(typeof(IDesignerHost)) as IDesignerHost;
 
@@ -1166,8 +1160,8 @@ namespace System.ComponentModel.Design
                     _openComponent = e.Component;
                     _member = e.Member;
 
-                    UndoEngine.Trace("---> Creating change undo event for '{0}'", _componentName);
-                    UndoEngine.Trace("---> Saving before snapshot for change to '{0}'", _componentName);
+                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Creating change undo event for '{_componentName}'");
+                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Saving before snapshot for change to '{_componentName}'");
                     if (serializeBeforeState)
                     {
                         _before = Serialize(engine, _openComponent, _member);
@@ -1245,7 +1239,7 @@ namespace System.ComponentModel.Design
                 {
                     if (!Committed)
                     {
-                        UndoEngine.Trace("---> Committing change to '{0}'", _componentName);
+                        Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Committing change to '{_componentName}'");
                         _openComponent = null;
                     }
                 }
@@ -1253,7 +1247,7 @@ namespace System.ComponentModel.Design
                 private void SaveAfterState(UndoEngine engine)
                 {
                     Debug.Assert(_after is null, "Change undo saving state twice.");
-                    UndoEngine.Trace("---> Saving after snapshot for change to '{0}'", _componentName);
+                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Saving after snapshot for change to '{_componentName}'");
                     object component = null;
 
                     if (engine.GetService(typeof(IReferenceService)) is IReferenceService rs)
@@ -1298,7 +1292,7 @@ namespace System.ComponentModel.Design
                 /// </summary>
                 public override void Undo(UndoEngine engine)
                 {
-                    UndoEngine.Trace("---> Applying changes to '{0}'", _componentName);
+                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Applying changes to '{_componentName}'");
                     Debug.Assert(_savedAfterState, "After state not saved.  BeforeUndo was not called?");
 
                     if (_before is not null)
@@ -1327,7 +1321,7 @@ namespace System.ComponentModel.Design
                 {
                     _before = before;
                     _after = after;
-                    UndoEngine.Trace("---> Creating rename undo event for '{0}'->'{1}'", _before, _after);
+                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Creating rename undo event for '{_before}'->'{_after}'");
                 }
 
                 /// <summary>
@@ -1335,7 +1329,7 @@ namespace System.ComponentModel.Design
                 /// </summary>
                 public override void Undo(UndoEngine engine)
                 {
-                    UndoEngine.Trace("---> Renaming '{0}'->'{1}'", _after, _before);
+                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Renaming '{_after}'->'{_before}'");
                     IComponent comp = engine._host.Container.Components[_after];
                     if (comp is not null)
                     {
