@@ -84,15 +84,15 @@
 ~override System.Windows.Forms.Design.ComponentTray.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentTray.OnPaint(System.Windows.Forms.PaintEventArgs pe) -> void
 ~override System.Windows.Forms.Design.ControlDesigner.AssociatedComponents.get -> System.Collections.ICollection
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Description.get -> string
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Name.get -> string
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Value.get -> string
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Description.get -> string?
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Name.get -> string!
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Value.get -> string?
 ~override System.Windows.Forms.Design.ControlDesigner.InheritanceAttribute.get -> System.ComponentModel.InheritanceAttribute
 ~override System.Windows.Forms.Design.ControlDesigner.Initialize(System.ComponentModel.IComponent component) -> void
 ~override System.Windows.Forms.Design.ControlDesigner.InitializeExistingComponent(System.Collections.IDictionary defaultValues) -> void
@@ -455,7 +455,7 @@
 ~System.Windows.Forms.Design.ComponentTray.SetTrayLocation(System.ComponentModel.IComponent receiver, System.Drawing.Point location) -> void
 ~System.Windows.Forms.Design.ControlDesigner.accessibilityObj -> System.Windows.Forms.AccessibleObject
 ~System.Windows.Forms.Design.ControlDesigner.BehaviorService.get -> System.Windows.Forms.Design.Behavior.BehaviorService
-~System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.ControlDesignerAccessibleObject(System.Windows.Forms.Design.ControlDesigner designer, System.Windows.Forms.Control control) -> void
+System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.ControlDesignerAccessibleObject(System.Windows.Forms.Design.ControlDesigner! designer, System.Windows.Forms.Control! control) -> void
 ~System.Windows.Forms.Design.ControlDesigner.DisplayError(System.Exception e) -> void
 ~System.Windows.Forms.Design.ControlDesigner.EnableDesignMode(System.Windows.Forms.Control child, string name) -> bool
 ~System.Windows.Forms.Design.ControlDesigner.HookChildControls(System.Windows.Forms.Control firstChild) -> void

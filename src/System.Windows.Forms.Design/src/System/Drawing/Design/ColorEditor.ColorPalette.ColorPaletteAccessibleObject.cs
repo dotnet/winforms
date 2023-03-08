@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Windows.Forms;
 
 namespace System.Drawing.Design
@@ -25,7 +23,7 @@ namespace System.Drawing.Design
 
                 public override int GetChildCount() => CellsAcross * CellsDown;
 
-                public override AccessibleObject GetChild(int id)
+                public override AccessibleObject? GetChild(int id)
                 {
                     if (id < 0 || id >= CellsAcross * CellsDown)
                     {
@@ -35,7 +33,7 @@ namespace System.Drawing.Design
                     return _cells[id] ??= new ColorCellAccessibleObject(this, ColorPalette.GetColorFromCell(id), id);
                 }
 
-                public override AccessibleObject HitTest(int x, int y)
+                public override AccessibleObject? HitTest(int x, int y)
                 {
                     if (!ColorPalette.IsHandleCreated)
                     {
