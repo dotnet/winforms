@@ -81,7 +81,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal static TextFormatFlags ContentAlignToTextFormat(ContentAlignment alignment, bool rightToLeft)
+            internal static TextFormatFlags ContentAlignmentToTextFormat(ContentAlignment alignment, bool rightToLeft)
             {
                 TextFormatFlags textFormat = TextFormatFlags.Default;
                 if (rightToLeft)
@@ -91,8 +91,7 @@ namespace System.Windows.Forms
                 }
 
                 // Calculate Text Positioning
-                textFormat |= ControlPaint.TranslateAlignmentForGDI(alignment);
-                textFormat |= ControlPaint.TranslateLineAlignmentForGDI(alignment);
+                textFormat |= ControlPaint.ConvertAlignmentToTextFormat(alignment);
                 return textFormat;
             }
 
@@ -126,7 +125,7 @@ namespace System.Windows.Forms
                 layoutOptions.DotNetOneButtonCompat = false;
 
                 // Support RTL
-                layoutOptions.GdiTextFormatFlags = ContentAlignToTextFormat(Owner.TextAlign, Owner.RightToLeft == RightToLeft.Yes);
+                layoutOptions.GdiTextFormatFlags = ContentAlignmentToTextFormat(Owner.TextAlign, Owner.RightToLeft == RightToLeft.Yes);
 
                 // Hide underlined &File unless ALT is pressed
                 layoutOptions.GdiTextFormatFlags = Owner.ShowKeyboardCues ? layoutOptions.GdiTextFormatFlags : layoutOptions.GdiTextFormatFlags | TextFormatFlags.HidePrefix;

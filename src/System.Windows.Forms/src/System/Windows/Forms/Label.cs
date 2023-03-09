@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Label() : base()
         {
-            // this class overrides GetPreferredSizeCore, let Control automatically cache the result
+            // This class overrides GetPreferredSizeCore, let Control automatically cache the result.
             SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             SetStyle(ControlStyles.UserPaint |
@@ -134,25 +134,27 @@ namespace System.Windows.Forms
             get => _labelState[s_stateAutoEllipsis] != 0;
             set
             {
-                if (AutoEllipsis != value)
+                if (AutoEllipsis == value)
                 {
-                    _labelState[s_stateAutoEllipsis] = value ? 1 : 0;
-                    MeasureTextCache.InvalidateCache();
-
-                    OnAutoEllipsisChanged(/*EventArgs.Empty*/);
-
-                    if (value)
-                    {
-                        _textToolTip ??= new ToolTip();
-                    }
-
-                    if (ParentInternal is not null)
-                    {
-                        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.AutoEllipsis);
-                    }
-
-                    Invalidate();
+                    return;
                 }
+
+                _labelState[s_stateAutoEllipsis] = value ? 1 : 0;
+                MeasureTextCache.InvalidateCache();
+
+                OnAutoEllipsisChanged();
+
+                if (value)
+                {
+                    _textToolTip ??= new ToolTip();
+                }
+
+                if (ParentInternal is not null)
+                {
+                    LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.AutoEllipsis);
+                }
+
+                Invalidate();
             }
         }
 
@@ -323,31 +325,33 @@ namespace System.Windows.Forms
                 //valid values are 0x0 to 0x3
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (_labelState[s_stateFlatStyle] != (int)value)
+                if (_labelState[s_stateFlatStyle] == (int)value)
                 {
-                    bool needRecreate = (_labelState[s_stateFlatStyle] == (int)FlatStyle.System) || (value == FlatStyle.System);
+                    return;
+                }
 
-                    _labelState[s_stateFlatStyle] = (int)value;
+                bool needRecreate = (_labelState[s_stateFlatStyle] == (int)FlatStyle.System) || (value == FlatStyle.System);
 
-                    SetStyle(ControlStyles.UserPaint
-                             | ControlStyles.SupportsTransparentBackColor
-                             | ControlStyles.OptimizedDoubleBuffer, OwnerDraw);
+                _labelState[s_stateFlatStyle] = (int)value;
 
-                    if (needRecreate)
+                SetStyle(ControlStyles.UserPaint
+                    | ControlStyles.SupportsTransparentBackColor
+                    | ControlStyles.OptimizedDoubleBuffer, OwnerDraw);
+
+                if (needRecreate)
+                {
+                    // This will clear the preferred size cache - it's OK if the parent is null - it would be a NOP.
+                    LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle);
+                    if (AutoSize)
                     {
-                        // this will clear the preferred size cache - it's OK if the parent is null - it would be a NOP.
-                        LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle);
-                        if (AutoSize)
-                        {
-                            AdjustSize();
-                        }
+                        AdjustSize();
+                    }
 
-                        RecreateHandle();
-                    }
-                    else
-                    {
-                        Refresh();
-                    }
+                    RecreateHandle();
+                }
+                else
+                {
+                    Refresh();
                 }
             }
         }
@@ -447,9 +451,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the key accessor for the image list.  This specifies the image
-        ///   from the image list to display on
-        ///  <see cref="Label"/>.
+        ///  Gets or sets the key accessor for the image list. This specifies the image
+        ///  from the image list to display on the <see cref="Label"/>.
         /// </summary>
         [TypeConverter(typeof(ImageKeyConverter))]
         [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
@@ -552,12 +555,7 @@ namespace System.Windows.Forms
             get
             {
                 int imageAlign = Properties.GetInteger(s_propImageAlign, out bool found);
-                if (found)
-                {
-                    return (ContentAlignment)imageAlign;
-                }
-
-                return ContentAlignment.MiddleCenter;
+                return found ? (ContentAlignment)imageAlign : ContentAlignment.MiddleCenter;
             }
             set
             {
@@ -651,8 +649,7 @@ namespace System.Windows.Forms
         public virtual int PreferredHeight => PreferredSize.Height;
 
         /// <summary>
-        ///  Gets the width of the control (in pixels), assuming a single line
-        ///  of text is displayed.
+        ///  Gets the width of the control (in pixels), assuming a single line of text is displayed.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Browsable(false)]
@@ -675,8 +672,7 @@ namespace System.Windows.Forms
         private bool SelfSizing => CommonProperties.ShouldSelfSize(this);
 
         /// <summary>
-        ///  Gets or sets a value indicating whether the user can tab to the
-        ///  <see cref="Label"/>.
+        ///  Gets or sets a value indicating whether the user can tab to the <see cref="Label"/>.
         /// </summary>
         [DefaultValue(false)]
         [Browsable(false)]
@@ -696,8 +692,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the
-        ///  horizontal alignment of the text in the control.
+        ///  Gets or sets the horizontal alignment of the text in the control.
         /// </summary>
         [SRDescription(nameof(SR.LabelTextAlignDescr))]
         [Localizable(true)]
@@ -708,12 +703,7 @@ namespace System.Windows.Forms
             get
             {
                 int textAlign = Properties.GetInteger(s_propTextAlign, out bool found);
-                if (found)
-                {
-                    return (ContentAlignment)textAlign;
-                }
-
-                return ContentAlignment.TopLeft;
+                return found ? (ContentAlignment)textAlign : ContentAlignment.TopLeft;
             }
             set
             {
@@ -739,8 +729,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the text in the Label. Since we can have multiline support
         ///  this property just overrides the base to pluck in the Multiline editor.
         /// </summary>
-        [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor)),
-        SettingsBindable(true)]
+        [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor)), SettingsBindable(true)]
         [AllowNull]
         public override string Text
         {
@@ -753,7 +742,6 @@ namespace System.Windows.Forms
         public event EventHandler? TextAlignChanged
         {
             add => Events.AddHandler(s_eventTextAlignChanged, value);
-
             remove => Events.RemoveHandler(s_eventTextAlignChanged, value);
         }
 
@@ -785,11 +773,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Determines whether the control supports rendering text using GDI+ and GDI. This is provided for container
-        ///  controls to iterate through its children to set <see cref="UseCompatibleTextRendering"/> to the same value
-        ///  if the child control supports it.
-        /// </summary>
         internal override bool SupportsUseCompatibleTextRendering => true;
 
         /// <summary>
@@ -949,12 +932,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
         /// </summary>
-        internal virtual TextFormatFlags CreateTextFormatFlags(Size constrainingSize)
+        private protected TextFormatFlags CreateTextFormatFlags(Size constrainingSize)
         {
             // PREFERRED SIZE CACHING:
             //
-            // Please read if you're adding a new TextFormatFlag.
-            // whenever something can change the TextFormatFlags used
+            // Please read if you're adding a new TextFormatFlag. Whenever something can change the TextFormatFlags used
             // MeasureTextCache.InvalidateCache() should be called so we can appropriately clear.
 
             TextFormatFlags flags = ControlPaint.CreateTextFormatFlags(this, TextAlign, AutoEllipsis, UseMnemonic);
@@ -1176,9 +1158,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).
-        /// </summary>
         internal override bool IsMnemonicsListenerAxSourced => true;
 
         /// <summary>
@@ -1189,9 +1168,6 @@ namespace System.Windows.Forms
         /// </summary>
         private bool IsOwnerDraw() => FlatStyle != FlatStyle.System;
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnMouseEnter"/> event.
-        /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
             if (!_controlToolTip && !DesignMode && AutoEllipsis && _showToolTip && _textToolTip is not null)
@@ -1210,9 +1186,6 @@ namespace System.Windows.Forms
             base.OnMouseEnter(e);
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnMouseLeave"/> event.
-        /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
             if (!_controlToolTip && _textToolTip is not null && _textToolTip.GetHandleCreated())
@@ -1349,7 +1322,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    //Theme specs -- if the backcolor is darker than Control, we use
+                    // Theme specs -- if the backcolor is darker than Control, we use
                     // ControlPaint.Dark(backcolor).  Otherwise we use ControlDark.
 
                     Color disabledTextForeColor = TextRenderer.DisabledTextColor(BackColor);
@@ -1378,8 +1351,7 @@ namespace System.Windows.Forms
             base.OnParentChanged(e);
             if (SelfSizing)
             {
-                // In the case of SelfSizing
-                // we don't know what size to be until we're parented
+                // In the case of SelfSizing we don't know what size to be until we're parented.
                 AdjustSize();
             }
 
@@ -1407,10 +1379,6 @@ namespace System.Windows.Forms
             ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
         }
 
-        /// <summary>
-        ///  Overrides Control. This is called when the user has pressed an Alt-CHAR key combination and determines if
-        ///  that combination is an interesting mnemonic for this control.
-        /// </summary>
         protected internal override bool ProcessMnemonic(char charCode)
         {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic())
@@ -1430,9 +1398,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <summary>
-        ///  Overrides Control.setBoundsCore to enforce autoSize.
-        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
@@ -1462,9 +1427,6 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImage() => Properties.ContainsObjectThatIsNotNull(s_propImage);
 
-        /// <summary>
-        ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
-        /// </summary>
         internal override void SetToolTip(ToolTip toolTip)
         {
             if (toolTip is null || _controlToolTip)
@@ -1472,10 +1434,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Label now has its own Tooltip for AutoEllipsis.
-            // So this control too falls in special casing.
-            // We need to disable the LABEL AutoEllipsis tooltip and show
-            // this tooltip always.
+            // Label now has its own Tooltip for AutoEllipsis. So this control too falls in special casing.
+            // We need to disable the LABEL AutoEllipsis tooltip and show this tooltip always.
             _controlToolTip = true;
         }
 
@@ -1484,15 +1444,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a string representation for this control.
         /// </summary>
-        public override string ToString()
-        {
-            string s = base.ToString();
-            return $"{s}, Text: {Text}";
-        }
+        public override string ToString() => $"{base.ToString()}, Text: {Text}";
 
-        /// <summary>
-        ///  Overrides Control. This processes certain messages that the Win32 STATIC class would normally override.
-        /// </summary>
         protected override void WndProc(ref Message m)
         {
             switch ((User32.WM)m.Msg)
