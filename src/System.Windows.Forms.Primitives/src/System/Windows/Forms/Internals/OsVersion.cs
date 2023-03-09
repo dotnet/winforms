@@ -31,6 +31,13 @@ namespace System.Windows.Forms
         public static bool IsWindows10_1703OrGreater() => OperatingSystem.IsWindowsVersionAtLeast(major: 10, build: 15063);
 
         /// <summary>
+        ///  Is Windows 10 Creators Update or later. (Redstone 4, build 17134, version 1803)
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [SupportedOSPlatformGuard("windows10.0.17134")]
+        public static bool IsWindows10_18030rGreater() => OperatingSystem.IsWindowsVersionAtLeast(major: 10, build: 17134);
+
+        /// <summary>
         ///  Is this Windows 11 public preview or later?
         ///  The underlying API does not read supportedOs from the manifest, it returns the actual version.
         /// </summary>

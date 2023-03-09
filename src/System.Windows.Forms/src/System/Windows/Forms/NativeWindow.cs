@@ -445,10 +445,9 @@ namespace System.Windows.Forms
 
                         // Parking window dpi awareness context need to match with dpi awareness context of control being
                         // parented to this parking window. Otherwise, reparenting of control will fail.
-                        using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
+                        using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext, DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED))
                         {
                             HINSTANCE modHandle = PInvoke.GetModuleHandle((PCWSTR)null);
-
                             // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
                             // Catch this and then we re-throw an out of memory error.
                             try
@@ -497,6 +496,17 @@ namespace System.Windows.Forms
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }
 
+#if DEBUG
+                    if (OsVersion.IsWindows10_18030rGreater())
+                    {
+                        // In a mixed DPI hosting environment, the DPI settings for child windows can be determined by either the parent window or the thread hosting it,
+                        // based on the window properties and the behavior of the thread. For additional information, please refer to
+                        // https://microsoft.visualstudio.com/OS/_git/os.2020?path=/clientcore/windows/Core/ntuser/kernel/windows/createw.cxx&version=GBofficial/main&line=881&lineEnd=882&lineStartColumn=1&lineEndColumn=1&lineStyle=plain&_a=contents
+                        DPI_AWARENESS_CONTEXT controlHandleDpiContext = PInvoke.GetWindowDpiAwarenessContext(HWND);
+                        Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, controlHandleDpiContext),
+                            $"Control's expected DpiAwarenessContext - {DpiAwarenessContext} is different from the DpiAwarenessContext on the Handle created for the control - {controlHandleDpiContext}");
+                    }
+#endif
                     _ownHandle = true;
                 }
             }
