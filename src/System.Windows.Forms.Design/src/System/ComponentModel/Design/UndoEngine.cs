@@ -1160,9 +1160,9 @@ namespace System.ComponentModel.Design
                     _member = e.Member;
 
                     Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Creating change undo event for '{_componentName}'");
-                    Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Saving before snapshot for change to '{_componentName}'");
                     if (serializeBeforeState)
                     {
+                        Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Saving before snapshot for change to '{_componentName}'");
                         _before = Serialize(engine, _openComponent, _member);
                     }
                 }
