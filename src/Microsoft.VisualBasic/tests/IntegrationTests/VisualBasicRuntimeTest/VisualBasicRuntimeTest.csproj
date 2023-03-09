@@ -8,4 +8,9 @@
     <ProjectReference Include="..\..\..\src\Microsoft.VisualBasic.Facade.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
