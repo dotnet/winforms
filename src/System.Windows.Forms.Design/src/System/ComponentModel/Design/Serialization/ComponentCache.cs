@@ -14,7 +14,6 @@ namespace System.ComponentModel.Design.Serialization
     {
         private Dictionary<object, Entry>? _cache;
         private readonly IDesignerSerializationManager _serManager;
-        private readonly bool _enabled = true;
 
         internal ComponentCache(IDesignerSerializationManager manager)
         {
@@ -28,26 +27,19 @@ namespace System.ComponentModel.Design.Serialization
                 cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            object? optionValue = null;
-            if (manager.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
+            if (manager.TryGetService(out DesignerOptionService? options))
             {
                 PropertyDescriptor? componentCacheProp = options.Options.Properties["UseOptimizedCodeGeneration"];
-                if (componentCacheProp is not null)
-                {
-                    optionValue = componentCacheProp.GetValue(null);
-                }
+                object? optionValue = componentCacheProp?.GetValue(null);
 
-                if (optionValue is not null && optionValue is bool)
+                if (optionValue is bool)
                 {
-                    _enabled = (bool)optionValue;
+                    Enabled = (bool)optionValue;
                 }
             }
         }
 
-        internal bool Enabled
-        {
-            get => _enabled;
-        }
+        internal bool Enabled { get; } = true;
 
         /// <summary>
         ///  Access serialized Properties and events for the given component
@@ -59,15 +51,9 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ArgumentNullException.ThrowIfNull(component);
 
-                if (_cache is not null && _cache.TryGetValue(component, out Entry? result))
-                {
-                    if (result is not null && result.Valid && Enabled)
-                    {
-                        return result;
-                    }
-                }
-
-                return null;
+                return Enabled && _cache is not null && _cache.TryGetValue(component, out Entry? result) && result.Valid
+                    ? result
+                    : null;
             }
             set
             {
@@ -80,11 +66,8 @@ namespace System.ComponentModel.Design.Serialization
                 if (_cache is not null && component is IComponent)
                 {
                     ArgumentNullException.ThrowIfNull(value);
-                    if (value.Component is null)
-                    {
-                        value.Component = component;
-                    }
 
+                    value.Component ??= component;
                     _cache[component] = value;
                 }
             }
@@ -121,17 +104,13 @@ namespace System.ComponentModel.Design.Serialization
 
         public void Dispose()
         {
-            if (_serManager is not null)
+            if (_serManager.TryGetService(out IComponentChangeService? cs))
             {
-                IComponentChangeService? cs = (IComponentChangeService?)_serManager.GetService(typeof(IComponentChangeService));
-                if (cs is not null)
-                {
-                    cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                    cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemove);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
-                    cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
-                }
+                cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
+                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemove);
+                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
+                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
         }
 
@@ -149,9 +128,9 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     RemoveEntry(ce.Component);
 
-                    if (!(ce.Component is IComponent) && _serManager is not null)
+                    if (ce.Component is not IComponent)
                     {
-                        if (_serManager.GetService(typeof(IReferenceService)) is IReferenceService rs)
+                        if (_serManager.TryGetService(out IReferenceService? rs))
                         {
                             IComponent? owningComp = rs.GetComponent(ce.Component);
                             if (owningComp is not null)
@@ -180,9 +159,9 @@ namespace System.ComponentModel.Design.Serialization
                 if (ce.Component is not null)
                 {
                     RemoveEntry(ce.Component);
-                    if (!(ce.Component is IComponent) && _serManager is not null)
+                    if (ce.Component is not IComponent)
                     {
-                        if (_serManager.GetService(typeof(IReferenceService)) is IReferenceService rs)
+                        if (_serManager.TryGetService(out IReferenceService? rs))
                         {
                             IComponent? owningComp = rs.GetComponent(ce.Component);
                             if (owningComp is not null)
@@ -208,7 +187,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (_cache is not null)
             {
-                if (ce.Component is not null && !(ce.Component is IExtenderProvider))
+                if (ce.Component is not null and not IExtenderProvider)
                 {
                     RemoveEntry(ce.Component);
                 }
@@ -259,68 +238,44 @@ namespace System.ComponentModel.Design.Serialization
         internal sealed class Entry
         {
             private readonly ComponentCache _cache;
-            private List<object>? _dependencies;
-            private List<string>? _localNames;
             private List<ResourceEntry>? _resources;
             private List<ResourceEntry>? _metadata;
-            private bool _valid;
-            private bool _tracking;
 
             internal Entry(ComponentCache cache)
             {
                 _cache = cache;
-                _valid = true;
+                Valid = true;
             }
 
             public object? Component; // pointer back to the component that generated this entry
             public CodeStatementCollection? Statements;
 
-            public ICollection<ResourceEntry>? Metadata
-            {
-                get => _metadata;
-            }
+            public ICollection<ResourceEntry>? Metadata => _metadata;
 
-            public ICollection<ResourceEntry>? Resources
-            {
-                get => _resources;
-            }
+            public ICollection<ResourceEntry>? Resources => _resources;
 
-            public List<object>? Dependencies
-            {
-                get => _dependencies;
-            }
+            public List<object>? Dependencies { get; private set; }
 
-            internal List<string>? LocalNames
-            {
-                get => _localNames;
-            }
+            internal List<string>? LocalNames { get; private set; }
 
-            internal bool Valid
-            {
-                get => _valid;
-                set => _valid = value;
-            }
+            internal bool Valid { get; set; }
 
-            internal bool Tracking
-            {
-                get => _tracking;
-                set => _tracking = value;
-            }
+            internal bool Tracking { get; set; }
 
             internal void AddLocalName(string name)
             {
-                _localNames ??= new List<string>();
+                LocalNames ??= new List<string>();
 
-                _localNames.Add(name);
+                LocalNames.Add(name);
             }
 
             public void AddDependency(object dep)
             {
-                _dependencies ??= new List<object>();
+                Dependencies ??= new List<object>();
 
-                if (!_dependencies.Contains(dep))
+                if (!Dependencies.Contains(dep))
                 {
-                    _dependencies.Add(dep);
+                    Dependencies.Add(dep);
                 }
             }
 
