@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
 
 namespace System.ComponentModel.Design.Serialization
@@ -13,7 +11,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal sealed class ExpressionTable
     {
-        private Dictionary<object, ExpressionInfo> _expressions;
+        private Dictionary<object, ExpressionInfo>? _expressions;
 
         private Dictionary<object, ExpressionInfo> Expressions => _expressions ??= new(new ReferenceComparer());
 
@@ -22,11 +20,11 @@ namespace System.ComponentModel.Design.Serialization
             Expressions[value] = new ExpressionInfo(expression, isPreset);
         }
 
-        internal CodeExpression GetExpression(object value)
-            => Expressions.TryGetValue(value, out ExpressionInfo info) ? info.Expression : null;
+        internal CodeExpression? GetExpression(object value)
+            => Expressions.TryGetValue(value, out ExpressionInfo? info) ? info.Expression : null;
 
         internal bool ContainsPresetExpression(object value)
-            => Expressions.TryGetValue(value, out ExpressionInfo info) && info.IsPreset;
+            => Expressions.TryGetValue(value, out ExpressionInfo? info) && info.IsPreset;
 
         private class ExpressionInfo
         {
@@ -43,10 +41,10 @@ namespace System.ComponentModel.Design.Serialization
 
         private class ReferenceComparer : IEqualityComparer<object>
         {
-            bool IEqualityComparer<object>.Equals(object x, object y)
+            bool IEqualityComparer<object>.Equals(object? x, object? y)
                 => ReferenceEquals(x, y);
 
-            int IEqualityComparer<object>.GetHashCode(object x)
+            int IEqualityComparer<object>.GetHashCode(object? x)
                 => x is not null ? x.GetHashCode() : 0;
         }
     }
