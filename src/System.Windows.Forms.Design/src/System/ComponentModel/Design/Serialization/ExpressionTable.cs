@@ -13,18 +13,19 @@ namespace System.ComponentModel.Design.Serialization
     {
         private Dictionary<object, ExpressionInfo>? _expressions;
 
-        private Dictionary<object, ExpressionInfo> Expressions => _expressions ??= new(new ReferenceComparer());
-
         internal void SetExpression(object value, CodeExpression expression, bool isPreset)
         {
-            Expressions[value] = new ExpressionInfo(expression, isPreset);
+            _expressions ??= new(new ReferenceComparer());
+            _expressions[value] = new ExpressionInfo(expression, isPreset);
         }
 
         internal CodeExpression? GetExpression(object value)
-            => Expressions.TryGetValue(value, out ExpressionInfo? info) ? info.Expression : null;
+            => _expressions is not null && _expressions.TryGetValue(value, out ExpressionInfo? info)
+                ? info.Expression
+                : null;
 
         internal bool ContainsPresetExpression(object value)
-            => Expressions.TryGetValue(value, out ExpressionInfo? info) && info.IsPreset;
+            => _expressions is not null && _expressions.TryGetValue(value, out ExpressionInfo? info) && info.IsPreset;
 
         private class ExpressionInfo
         {
