@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
 
 namespace System.ComponentModel.Design.Serialization
@@ -13,124 +11,57 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal class CodeMethodMap
     {
-        private CodeStatementCollection _container;
-        private CodeStatementCollection _begin;
-        private CodeStatementCollection _end;
-        private CodeStatementCollection _statements;
-        private CodeStatementCollection _locals;
-        private CodeStatementCollection _fields;
-        private CodeStatementCollection _variables;
+        private CodeStatementCollection? _container;
+        private CodeStatementCollection? _begin;
+        private CodeStatementCollection? _end;
+        private CodeStatementCollection? _statements;
+        private CodeStatementCollection? _locals;
+        private CodeStatementCollection? _fields;
+        private CodeStatementCollection? _variables;
         private readonly CodeStatementCollection _targetStatements;
-        private readonly CodeMemberMethod _method;
 
         internal CodeMethodMap(CodeMemberMethod method) : this(null, method)
         {
         }
 
-        internal CodeMethodMap(CodeStatementCollection targetStatements, CodeMemberMethod method)
+        internal CodeMethodMap(CodeStatementCollection? targetStatements, CodeMemberMethod method)
         {
-            _method = method;
-            if (targetStatements is not null)
-            {
-                _targetStatements = targetStatements;
-            }
-            else
-            {
-                _targetStatements = _method.Statements;
-            }
+            Method = method;
+            _targetStatements = targetStatements ?? Method.Statements;
         }
 
-        internal CodeStatementCollection BeginStatements
-        {
-            get
-            {
-                _begin ??= new CodeStatementCollection();
+        internal CodeStatementCollection BeginStatements => _begin ??= new CodeStatementCollection();
 
-                return _begin;
-            }
-        }
+        internal CodeStatementCollection EndStatements => _end ??= new CodeStatementCollection();
 
-        internal CodeStatementCollection EndStatements
-        {
-            get
-            {
-                _end ??= new CodeStatementCollection();
+        internal CodeStatementCollection ContainerStatements => _container ??= new CodeStatementCollection();
 
-                return _end;
-            }
-        }
+        internal CodeMemberMethod Method { get; }
 
-        internal CodeStatementCollection ContainerStatements
-        {
-            get
-            {
-                _container ??= new CodeStatementCollection();
+        internal CodeStatementCollection Statements => _statements ??= new CodeStatementCollection();
 
-                return _container;
-            }
-        }
+        internal CodeStatementCollection LocalVariables => _locals ??= new CodeStatementCollection();
 
-        internal CodeMemberMethod Method
-        {
-            get => _method;
-        }
-
-        internal CodeStatementCollection Statements
-        {
-            get
-            {
-                _statements ??= new CodeStatementCollection();
-
-                return _statements;
-            }
-        }
-
-        internal CodeStatementCollection LocalVariables
-        {
-            get
-            {
-                _locals ??= new CodeStatementCollection();
-
-                return _locals;
-            }
-        }
-
-        internal CodeStatementCollection FieldAssignments
-        {
-            get
-            {
-                _fields ??= new CodeStatementCollection();
-
-                return _fields;
-            }
-        }
+        internal CodeStatementCollection FieldAssignments => _fields ??= new CodeStatementCollection();
 
         //TODO: Should we update RootCodeDomSerializer as well?
-        internal CodeStatementCollection VariableAssignments
-        {
-            get
-            {
-                _variables ??= new CodeStatementCollection();
-
-                return _variables;
-            }
-        }
+        internal CodeStatementCollection VariableAssignments => _variables ??= new CodeStatementCollection();
 
         internal void Add(CodeStatementCollection statements)
         {
             foreach (CodeStatement statement in statements)
             {
-                if (statement.UserData["IContainer"] is string isContainer && isContainer == "IContainer")
+                if (statement.UserData["IContainer"] is "IContainer")
                 {
                     ContainerStatements.Add(statement);
                 }
-                else if (statement is CodeAssignStatement && ((CodeAssignStatement)statement).Left is CodeFieldReferenceExpression)
+                else if (statement is CodeAssignStatement { Left: CodeFieldReferenceExpression } fieldAssignment)
                 {
-                    FieldAssignments.Add(statement);
+                    FieldAssignments.Add(fieldAssignment);
                 }
-                else if (statement is CodeAssignStatement && ((CodeAssignStatement)statement).Left is CodeVariableReferenceExpression)
+                else if (statement is CodeAssignStatement { Left: CodeVariableReferenceExpression } variableAssignment)
                 {
-                    VariableAssignments.Add(statement);
+                    VariableAssignments.Add(variableAssignment);
                 }
                 else if (statement is CodeVariableDeclarationStatement)
                 {
@@ -138,27 +69,19 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    if (statement.UserData["statement-ordering"] is string order)
+                    switch (statement.UserData["statement-ordering"])
                     {
-                        switch (order)
-                        {
-                            case "begin":
-                                BeginStatements.Add(statement);
-                                break;
+                        case "begin":
+                            BeginStatements.Add(statement);
+                            break;
 
-                            case "end":
-                                EndStatements.Add(statement);
-                                break;
+                        case "end":
+                            EndStatements.Add(statement);
+                            break;
 
-                            case "default":
-                            default:
-                                Statements.Add(statement);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        Statements.Add(statement);
+                        default:
+                            Statements.Add(statement);
+                            break;
                     }
                 }
             }
