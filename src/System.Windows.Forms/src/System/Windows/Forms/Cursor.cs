@@ -222,13 +222,9 @@ namespace System.Windows.Forms
 
         private void Dispose(bool disposing)
         {
-            if (!_handle.IsNull)
+            if (!_handle.IsNull && _ownHandle)
             {
-                if (_ownHandle)
-                {
-                    PInvoke.DestroyCursor(_handle);
-                }
-
+                PInvoke.DestroyCursor(_handle);
                 _handle = HCURSOR.Null;
             }
         }

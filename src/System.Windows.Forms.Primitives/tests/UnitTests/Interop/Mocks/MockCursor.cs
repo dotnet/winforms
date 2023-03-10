@@ -22,13 +22,9 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 
         public void Dispose()
         {
-            if (!_handle.IsNull)
+            if (!_handle.IsNull && _ownHandle)
             {
-                if (_ownHandle)
-                {
-                    PInvoke.DestroyCursor(_handle);
-                }
-
+                PInvoke.DestroyCursor(_handle);
                 _handle = HCURSOR.Null;
             }
         }

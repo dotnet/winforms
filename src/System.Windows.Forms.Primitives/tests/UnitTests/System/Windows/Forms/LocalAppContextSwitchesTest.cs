@@ -7,7 +7,6 @@ using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Tests
 {
-    [Collection(nameof(SynchronousCollection))]
     public class LocalAppContextSwitchesTest
     {
         private void ResetLocalSwitches(dynamic testAccessor)
