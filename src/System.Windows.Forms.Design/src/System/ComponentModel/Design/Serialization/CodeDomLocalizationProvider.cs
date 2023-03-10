@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.Globalization;
 using System.Resources;
 
@@ -19,8 +18,8 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     private IExtenderProviderService _providerService;
     private readonly CodeDomLocalizationModel _model;
     private LanguageExtenders _extender;
-    private Hashtable? _memberSerializers;
-    private Hashtable? _nopMemberSerializers;
+    private Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer>? _memberSerializers;
+    private Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer>? _nopMemberSerializers;
 
     /// <summary>
     ///  Creates a new adapter and attaches it to the serialization manager.  This
@@ -138,7 +137,7 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     /// <summary>
     ///  Returns a code dom serializer for members.
     /// </summary>
-    private object? GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object? currentSerializer, Type? objectType, Type serializerType)
+    private ResourcePropertyMemberCodeDomSerializer? GetMemberCodeDomSerializer(IDesignerSerializationManager manager, MemberCodeDomSerializer? currentSerializer, Type? objectType, Type serializerType)
     {
         CodeDomLocalizationModel model = _model;
 
@@ -178,32 +177,14 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
             model = CodeDomLocalizationModel.None;
         }
 
-        _memberSerializers ??= new Hashtable();
+        Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer> map = model is CodeDomLocalizationModel.None
+            ? _nopMemberSerializers ??= new Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer>()
+            : _memberSerializers ??= new Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer>();
 
-        _nopMemberSerializers ??= new Hashtable();
-
-        object? newSerializer;
-        if (model == CodeDomLocalizationModel.None)
+        if (!map.TryGetValue(currentSerializer, out ResourcePropertyMemberCodeDomSerializer? newSerializer))
         {
-            newSerializer = _nopMemberSerializers[currentSerializer];
-        }
-        else
-        {
-            newSerializer = _memberSerializers[currentSerializer];
-        }
-
-        if (newSerializer is null)
-        {
-            newSerializer = new ResourcePropertyMemberCodeDomSerializer((MemberCodeDomSerializer)currentSerializer, model);
-
-            if (model == CodeDomLocalizationModel.None)
-            {
-                _nopMemberSerializers[currentSerializer] = newSerializer;
-            }
-            else
-            {
-                _memberSerializers[currentSerializer] = newSerializer;
-            }
+            newSerializer = new ResourcePropertyMemberCodeDomSerializer(currentSerializer, model);
+            map[currentSerializer] = newSerializer;
         }
 
         return newSerializer;
@@ -220,7 +201,7 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
         }
         else if (serializerType == typeof(MemberCodeDomSerializer))
         {
-            return GetMemberCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
+            return GetMemberCodeDomSerializer(manager, (MemberCodeDomSerializer?)currentSerializer, objectType, serializerType);
         }
 
         return null; // don't understand this type of serializer.
