@@ -19,7 +19,6 @@ namespace System.ComponentModel.Design.Serialization
         private CodeStatementCollection? _fields;
         private CodeStatementCollection? _variables;
         private readonly CodeStatementCollection _targetStatements;
-        private readonly CodeMemberMethod _method;
 
         internal CodeMethodMap(CodeMemberMethod method) : this(null, method)
         {
@@ -27,15 +26,8 @@ namespace System.ComponentModel.Design.Serialization
 
         internal CodeMethodMap(CodeStatementCollection? targetStatements, CodeMemberMethod method)
         {
-            _method = method;
-            if (targetStatements is not null)
-            {
-                _targetStatements = targetStatements;
-            }
-            else
-            {
-                _targetStatements = _method.Statements;
-            }
+            Method = method;
+            _targetStatements = targetStatements ?? Method.Statements;
         }
 
         internal CodeStatementCollection BeginStatements
@@ -68,10 +60,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        internal CodeMemberMethod Method
-        {
-            get => _method;
-        }
+        internal CodeMemberMethod Method { get; }
 
         internal CodeStatementCollection Statements
         {
@@ -118,17 +107,17 @@ namespace System.ComponentModel.Design.Serialization
         {
             foreach (CodeStatement statement in statements)
             {
-                if (statement.UserData["IContainer"] is string isContainer && isContainer == "IContainer")
+                if (statement.UserData["IContainer"] is "IContainer")
                 {
                     ContainerStatements.Add(statement);
                 }
-                else if (statement is CodeAssignStatement && ((CodeAssignStatement)statement).Left is CodeFieldReferenceExpression)
+                else if (statement is CodeAssignStatement { Left: CodeFieldReferenceExpression } fieldAssignment)
                 {
-                    FieldAssignments.Add(statement);
+                    FieldAssignments.Add(fieldAssignment);
                 }
-                else if (statement is CodeAssignStatement && ((CodeAssignStatement)statement).Left is CodeVariableReferenceExpression)
+                else if (statement is CodeAssignStatement { Left: CodeVariableReferenceExpression } variableAssignment)
                 {
-                    VariableAssignments.Add(statement);
+                    VariableAssignments.Add(variableAssignment);
                 }
                 else if (statement is CodeVariableDeclarationStatement)
                 {
@@ -136,27 +125,19 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    if (statement.UserData["statement-ordering"] is string order)
+                    switch (statement.UserData["statement-ordering"])
                     {
-                        switch (order)
-                        {
-                            case "begin":
-                                BeginStatements.Add(statement);
-                                break;
+                        case "begin":
+                            BeginStatements.Add(statement);
+                            break;
 
-                            case "end":
-                                EndStatements.Add(statement);
-                                break;
+                        case "end":
+                            EndStatements.Add(statement);
+                            break;
 
-                            case "default":
-                            default:
-                                Statements.Add(statement);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        Statements.Add(statement);
+                        default:
+                            Statements.Add(statement);
+                            break;
                     }
                 }
             }
