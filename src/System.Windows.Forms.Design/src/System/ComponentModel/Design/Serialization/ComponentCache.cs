@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -13,7 +12,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal class ComponentCache : IDisposable
     {
-        private Dictionary<object, Entry> _cache;
+        private Dictionary<object, Entry>? _cache;
         private readonly IDesignerSerializationManager _serManager;
         private readonly bool _enabled = true;
 
@@ -29,10 +28,10 @@ namespace System.ComponentModel.Design.Serialization
                 cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            object optionValue = null;
+            object? optionValue = null;
             if (manager.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
             {
-                PropertyDescriptor componentCacheProp = options.Options.Properties["UseOptimizedCodeGeneration"];
+                PropertyDescriptor? componentCacheProp = options.Options.Properties["UseOptimizedCodeGeneration"];
                 if (componentCacheProp is not null)
                 {
                     optionValue = componentCacheProp.GetValue(null);
@@ -53,13 +52,14 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Access serialized Properties and events for the given component
         /// </summary>
-        internal Entry this[object component]
+        [DisallowNull]
+        internal Entry? this[object component]
         {
             get
             {
                 ArgumentNullException.ThrowIfNull(component);
 
-                if (_cache is not null && _cache.TryGetValue(component, out Entry result))
+                if (_cache is not null && _cache.TryGetValue(component, out Entry? result))
                 {
                     if (result is not null && result.Valid && Enabled)
                     {
@@ -79,7 +79,8 @@ namespace System.ComponentModel.Design.Serialization
                 // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
                 if (_cache is not null && component is IComponent)
                 {
-                    if (value is not null && value.Component is null)
+                    ArgumentNullException.ThrowIfNull(value);
+                    if (value.Component is null)
                     {
                         value.Component = component;
                     }
@@ -89,9 +90,9 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        internal Entry GetEntryAll(object component)
+        internal Entry? GetEntryAll(object component)
         {
-            if (_cache is not null && _cache.TryGetValue(component, out Entry result))
+            if (_cache is not null && _cache.TryGetValue(component, out Entry? result))
             {
                 return result;
             }
@@ -108,7 +109,7 @@ namespace System.ComponentModel.Design.Serialization
 
             foreach (KeyValuePair<object, Entry> kvp in _cache)
             {
-                List<string> localNames = kvp.Value.LocalNames;
+                List<string>? localNames = kvp.Value.LocalNames;
                 if (localNames is not null && localNames.Contains(name))
                 {
                     return true;
@@ -122,7 +123,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (_serManager is not null)
             {
-                IComponentChangeService cs = (IComponentChangeService)_serManager.GetService(typeof(IComponentChangeService));
+                IComponentChangeService? cs = (IComponentChangeService?)_serManager.GetService(typeof(IComponentChangeService));
                 if (cs is not null)
                 {
                     cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
@@ -134,13 +135,13 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private void OnComponentRename(object source, ComponentRenameEventArgs args)
+        private void OnComponentRename(object? source, ComponentRenameEventArgs? args)
         {
             // we might have a symbolic rename that has side effects beyond our control, so we don't have a choice but to clear the whole cache when a component gets renamed...
             _cache?.Clear();
         }
 
-        private void OnComponentChanging(object source, ComponentChangingEventArgs ce)
+        private void OnComponentChanging(object? source, ComponentChangingEventArgs ce)
         {
             if (_cache is not null)
             {
@@ -152,7 +153,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         if (_serManager.GetService(typeof(IReferenceService)) is IReferenceService rs)
                         {
-                            IComponent owningComp = rs.GetComponent(ce.Component);
+                            IComponent? owningComp = rs.GetComponent(ce.Component);
                             if (owningComp is not null)
                             {
                                 RemoveEntry(owningComp);
@@ -172,7 +173,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private void OnComponentChanged(object source, ComponentChangedEventArgs ce)
+        private void OnComponentChanged(object? source, ComponentChangedEventArgs ce)
         {
             if (_cache is not null)
             {
@@ -183,7 +184,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         if (_serManager.GetService(typeof(IReferenceService)) is IReferenceService rs)
                         {
-                            IComponent owningComp = rs.GetComponent(ce.Component);
+                            IComponent? owningComp = rs.GetComponent(ce.Component);
                             if (owningComp is not null)
                             {
                                 RemoveEntry(owningComp);
@@ -203,7 +204,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private void OnComponentRemove(object source, ComponentEventArgs ce)
+        private void OnComponentRemove(object? source, ComponentEventArgs ce)
         {
             if (_cache is not null)
             {
@@ -223,7 +224,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         internal void RemoveEntry(object component)
         {
-            if (_cache is not null && _cache.TryGetValue(component, out Entry entry))
+            if (_cache is not null && _cache.TryGetValue(component, out Entry? entry))
             {
                 if (entry.Tracking)
                 {
@@ -235,7 +236,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Clear its dependencies, if any
                 if (entry.Dependencies is not null)
                 {
-                    foreach (object parent in entry.Dependencies)
+                    foreach (object? parent in entry.Dependencies)
                     {
                         RemoveEntry(parent);
                     }
@@ -258,10 +259,10 @@ namespace System.ComponentModel.Design.Serialization
         internal sealed class Entry
         {
             private readonly ComponentCache _cache;
-            private List<object> _dependencies;
-            private List<string> _localNames;
-            private List<ResourceEntry> _resources;
-            private List<ResourceEntry> _metadata;
+            private List<object>? _dependencies;
+            private List<string>? _localNames;
+            private List<ResourceEntry>? _resources;
+            private List<ResourceEntry>? _metadata;
             private bool _valid;
             private bool _tracking;
 
@@ -271,25 +272,25 @@ namespace System.ComponentModel.Design.Serialization
                 _valid = true;
             }
 
-            public object Component; // pointer back to the component that generated this entry
-            public CodeStatementCollection Statements;
+            public object? Component; // pointer back to the component that generated this entry
+            public CodeStatementCollection? Statements;
 
-            public ICollection<ResourceEntry> Metadata
+            public ICollection<ResourceEntry>? Metadata
             {
                 get => _metadata;
             }
 
-            public ICollection<ResourceEntry> Resources
+            public ICollection<ResourceEntry>? Resources
             {
                 get => _resources;
             }
 
-            public List<object> Dependencies
+            public List<object>? Dependencies
             {
                 get => _dependencies;
             }
 
-            internal List<string> LocalNames
+            internal List<string>? LocalNames
             {
                 get => _localNames;
             }
