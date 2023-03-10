@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
 
 namespace System.ComponentModel.Design.Serialization
@@ -13,13 +11,13 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal class CodeMethodMap
     {
-        private CodeStatementCollection _container;
-        private CodeStatementCollection _begin;
-        private CodeStatementCollection _end;
-        private CodeStatementCollection _statements;
-        private CodeStatementCollection _locals;
-        private CodeStatementCollection _fields;
-        private CodeStatementCollection _variables;
+        private CodeStatementCollection? _container;
+        private CodeStatementCollection? _begin;
+        private CodeStatementCollection? _end;
+        private CodeStatementCollection? _statements;
+        private CodeStatementCollection? _locals;
+        private CodeStatementCollection? _fields;
+        private CodeStatementCollection? _variables;
         private readonly CodeStatementCollection _targetStatements;
         private readonly CodeMemberMethod _method;
 
@@ -27,7 +25,7 @@ namespace System.ComponentModel.Design.Serialization
         {
         }
 
-        internal CodeMethodMap(CodeStatementCollection targetStatements, CodeMemberMethod method)
+        internal CodeMethodMap(CodeStatementCollection? targetStatements, CodeMemberMethod method)
         {
             _method = method;
             if (targetStatements is not null)
