@@ -859,7 +859,11 @@ namespace System.Windows.Forms
 
                 if (fixedInd > 0)
                 {
-                    currentInd = fixedInd;
+                    TreeView tv = TreeView;
+                    if (tv is null || !tv.Sorted)
+                    {
+                        currentInd = fixedInd;
+                    }
                 }
 
                 if (currentInd > 0 && currentInd <= parent.Nodes.Count)
