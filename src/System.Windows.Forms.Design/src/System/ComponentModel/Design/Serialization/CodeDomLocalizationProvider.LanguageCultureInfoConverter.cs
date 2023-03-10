@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.ComponentModel.Design.Serialization;
@@ -30,17 +28,17 @@ public sealed partial class CodeDomLocalizationProvider
         ///  Gets a collection of standard values collection for a System.Globalization.CultureInfo
         ///  object using the specified context.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
-            StandardValuesCollection values = null;
+            StandardValuesCollection? values = null;
 
-            if (context.PropertyDescriptor is not null)
+            if (context?.PropertyDescriptor is not null)
             {
-                ExtenderProvidedPropertyAttribute attr = context.PropertyDescriptor.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
+                ExtenderProvidedPropertyAttribute? attr = context.PropertyDescriptor.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
 
                 if (attr is not null)
                 {
-                    LanguageExtenders provider = attr.Provider as LanguageExtenders;
+                    LanguageExtenders? provider = attr.Provider as LanguageExtenders;
 
                     if (provider is not null)
                     {

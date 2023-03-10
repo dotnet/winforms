@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -20,15 +18,15 @@ public sealed partial class CodeDomLocalizationProvider
     internal class LanguageExtenders : IExtenderProvider
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IDesignerHost _host;
-        private IComponent _lastRoot;
-        private readonly TypeConverter.StandardValuesCollection _supportedCultures;
+        private readonly IDesignerHost? _host;
+        private IComponent? _lastRoot;
+        private readonly TypeConverter.StandardValuesCollection? _supportedCultures;
         private bool _localizable;
         private CultureInfo _language;
-        private CultureInfo _loadLanguage;
-        private CultureInfo _defaultLanguage;
+        private CultureInfo? _loadLanguage;
+        private CultureInfo? _defaultLanguage;
 
-        public LanguageExtenders(IServiceProvider serviceProvider, CultureInfo[] supportedCultures)
+        public LanguageExtenders(IServiceProvider serviceProvider, CultureInfo?[]? supportedCultures)
         {
             _serviceProvider = serviceProvider;
             _host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
@@ -44,7 +42,7 @@ public sealed partial class CodeDomLocalizationProvider
         ///  A collection of custom supported cultures.  This can be null, indicating that the
         ///  type converter should use the default set of supported cultures.
         /// </summary>
-        internal TypeConverter.StandardValuesCollection SupportedCultures
+        internal TypeConverter.StandardValuesCollection? SupportedCultures
         {
             get
             {
@@ -70,10 +68,10 @@ public sealed partial class CodeDomLocalizationProvider
         /// </summary>
         private static void BroadcastGlobalChange(IComponent component)
         {
-            ISite site = component.Site;
+            ISite? site = component.Site;
 
-            if (site.TryGetService(out IComponentChangeService changeService)
-                && site.TryGetService(out IContainer container))
+            if (site.TryGetService(out IComponentChangeService? changeService)
+                && site.TryGetService(out IContainer? container))
             {
                 foreach (IComponent c in container.Components)
                 {
@@ -139,7 +137,7 @@ public sealed partial class CodeDomLocalizationProvider
         [DesignOnly(true)]
         [Category("Design")]
         [SRDescription("LocalizationProviderLocalizableDescr")]
-        public bool GetLocalizable(IComponent o)
+        public bool GetLocalizable(IComponent? o)
         {
             CheckRoot();
 
@@ -150,7 +148,7 @@ public sealed partial class CodeDomLocalizationProvider
         ///  Sets the language to use.  When the language is set the designer will be
         ///  reloaded.
         /// </summary>
-        public void SetLanguage(IComponent o, CultureInfo language)
+        public void SetLanguage(IComponent o, CultureInfo? language)
         {
             CheckRoot();
 
@@ -172,7 +170,7 @@ public sealed partial class CodeDomLocalizationProvider
 
             if (_serviceProvider is not null && _host is not null)
             {
-                IDesignerLoaderService ls = _serviceProvider.GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
+                IDesignerLoaderService? ls = _serviceProvider.GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
 
                 // Only reload if we're not in the process of loading!
                 if (_host.Loading)
@@ -190,7 +188,7 @@ public sealed partial class CodeDomLocalizationProvider
 
                     if (!reloadSuccessful)
                     {
-                        IUIService uis = (IUIService)_serviceProvider.GetService(typeof(IUIService));
+                        IUIService? uis = (IUIService?)_serviceProvider.GetService(typeof(IUIService));
 
                         uis?.ShowMessage(SR.LocalizationProviderManualReload);
                     }
