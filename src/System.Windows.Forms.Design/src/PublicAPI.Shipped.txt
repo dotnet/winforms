@@ -304,18 +304,18 @@
 ~System.ComponentModel.Design.Serialization.ExpressionContext.ExpressionType.get -> System.Type
 ~System.ComponentModel.Design.Serialization.ExpressionContext.Owner.get -> object
 ~System.ComponentModel.Design.Serialization.ExpressionContext.PresetValue.get -> object
-~System.ComponentModel.Design.Serialization.ObjectStatementCollection.ContainsKey(object statementOwner) -> bool
-~System.ComponentModel.Design.Serialization.ObjectStatementCollection.GetEnumerator() -> System.Collections.IDictionaryEnumerator
-~System.ComponentModel.Design.Serialization.ObjectStatementCollection.Populate(object owner) -> void
-~System.ComponentModel.Design.Serialization.ObjectStatementCollection.Populate(System.Collections.ICollection statementOwners) -> void
-~System.ComponentModel.Design.Serialization.ObjectStatementCollection.this[object statementOwner].get -> System.CodeDom.CodeStatementCollection
-~System.ComponentModel.Design.Serialization.RootContext.Expression.get -> System.CodeDom.CodeExpression
-~System.ComponentModel.Design.Serialization.RootContext.RootContext(System.CodeDom.CodeExpression expression, object value) -> void
-~System.ComponentModel.Design.Serialization.RootContext.Value.get -> object
-~System.ComponentModel.Design.Serialization.SerializeAbsoluteContext.Member.get -> System.ComponentModel.MemberDescriptor
-~System.ComponentModel.Design.Serialization.SerializeAbsoluteContext.SerializeAbsoluteContext(System.ComponentModel.MemberDescriptor member) -> void
-~System.ComponentModel.Design.Serialization.SerializeAbsoluteContext.ShouldSerialize(System.ComponentModel.MemberDescriptor member) -> bool
-~System.ComponentModel.Design.Serialization.StatementContext.StatementCollection.get -> System.ComponentModel.Design.Serialization.ObjectStatementCollection
+System.ComponentModel.Design.Serialization.ObjectStatementCollection.ContainsKey(object! statementOwner) -> bool
+System.ComponentModel.Design.Serialization.ObjectStatementCollection.GetEnumerator() -> System.Collections.IDictionaryEnumerator!
+System.ComponentModel.Design.Serialization.ObjectStatementCollection.Populate(object! owner) -> void
+System.ComponentModel.Design.Serialization.ObjectStatementCollection.Populate(System.Collections.ICollection! statementOwners) -> void
+System.ComponentModel.Design.Serialization.ObjectStatementCollection.this[object! statementOwner].get -> System.CodeDom.CodeStatementCollection?
+System.ComponentModel.Design.Serialization.RootContext.Expression.get -> System.CodeDom.CodeExpression!
+System.ComponentModel.Design.Serialization.RootContext.RootContext(System.CodeDom.CodeExpression! expression, object! value) -> void
+System.ComponentModel.Design.Serialization.RootContext.Value.get -> object!
+System.ComponentModel.Design.Serialization.SerializeAbsoluteContext.Member.get -> System.ComponentModel.MemberDescriptor?
+System.ComponentModel.Design.Serialization.SerializeAbsoluteContext.SerializeAbsoluteContext(System.ComponentModel.MemberDescriptor? member) -> void
+System.ComponentModel.Design.Serialization.SerializeAbsoluteContext.ShouldSerialize(System.ComponentModel.MemberDescriptor? member) -> bool
+System.ComponentModel.Design.Serialization.StatementContext.StatementCollection.get -> System.ComponentModel.Design.Serialization.ObjectStatementCollection!
 ~System.ComponentModel.Design.UndoEngine.GetRequiredService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.UndoEngine.GetService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.UndoEngine.UndoEngine(System.IServiceProvider provider) -> void
