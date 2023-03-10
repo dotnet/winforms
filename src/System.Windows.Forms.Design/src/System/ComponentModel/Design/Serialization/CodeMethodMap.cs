@@ -30,78 +30,22 @@ namespace System.ComponentModel.Design.Serialization
             _targetStatements = targetStatements ?? Method.Statements;
         }
 
-        internal CodeStatementCollection BeginStatements
-        {
-            get
-            {
-                _begin ??= new CodeStatementCollection();
+        internal CodeStatementCollection BeginStatements => _begin ??= new CodeStatementCollection();
 
-                return _begin;
-            }
-        }
+        internal CodeStatementCollection EndStatements => _end ??= new CodeStatementCollection();
 
-        internal CodeStatementCollection EndStatements
-        {
-            get
-            {
-                _end ??= new CodeStatementCollection();
-
-                return _end;
-            }
-        }
-
-        internal CodeStatementCollection ContainerStatements
-        {
-            get
-            {
-                _container ??= new CodeStatementCollection();
-
-                return _container;
-            }
-        }
+        internal CodeStatementCollection ContainerStatements => _container ??= new CodeStatementCollection();
 
         internal CodeMemberMethod Method { get; }
 
-        internal CodeStatementCollection Statements
-        {
-            get
-            {
-                _statements ??= new CodeStatementCollection();
+        internal CodeStatementCollection Statements => _statements ??= new CodeStatementCollection();
 
-                return _statements;
-            }
-        }
+        internal CodeStatementCollection LocalVariables => _locals ??= new CodeStatementCollection();
 
-        internal CodeStatementCollection LocalVariables
-        {
-            get
-            {
-                _locals ??= new CodeStatementCollection();
-
-                return _locals;
-            }
-        }
-
-        internal CodeStatementCollection FieldAssignments
-        {
-            get
-            {
-                _fields ??= new CodeStatementCollection();
-
-                return _fields;
-            }
-        }
+        internal CodeStatementCollection FieldAssignments => _fields ??= new CodeStatementCollection();
 
         //TODO: Should we update RootCodeDomSerializer as well?
-        internal CodeStatementCollection VariableAssignments
-        {
-            get
-            {
-                _variables ??= new CodeStatementCollection();
-
-                return _variables;
-            }
-        }
+        internal CodeStatementCollection VariableAssignments => _variables ??= new CodeStatementCollection();
 
         internal void Add(CodeStatementCollection statements)
         {
