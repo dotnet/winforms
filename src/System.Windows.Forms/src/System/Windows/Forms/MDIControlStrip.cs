@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -20,7 +18,7 @@ namespace System.Windows.Forms
         private readonly ToolStripMenuItem _close;
         private readonly ToolStripMenuItem _minimize;
         private readonly ToolStripMenuItem _restore;
-        private MenuStrip _mergedMenu;
+        private MenuStrip? _mergedMenu;
 
         private IWin32Window _target;
 
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
             get { return _close; }
         }
 
-        internal MenuStrip MergedMenu
+        internal MenuStrip? MergedMenu
         {
             get
             {
@@ -121,13 +119,13 @@ namespace System.Windows.Forms
             Debug.Assert(Items.Count <= 4, "Too many items in the MDIControlStrip.  How did we get into this situation?");
         }
 
-        private void OnTargetWindowDisposed(object sender, EventArgs e)
+        private void OnTargetWindowDisposed(object? sender, EventArgs e)
         {
             UnhookTarget();
-            _target = null;
+            _target = null!;
         }
 
-        private void OnTargetWindowHandleRecreated(object sender, EventArgs e)
+        private void OnTargetWindowHandleRecreated(object? sender, EventArgs e)
         {
             // in the case that the handle for the form is recreated we need to set
             // up the handles to point to the new window handle for the form.
@@ -155,7 +153,7 @@ namespace System.Windows.Forms
             _system.Visible = GetTargetWindowIconVisibility();
         }
 
-        private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
+        private void OnSystemMenuDropDownOpening(object? sender, EventArgs e)
         {
             if (!_system.HasDropDownItems && (_target is not null))
             {
@@ -167,7 +165,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnSystemMenuDoubleClick(object sender, EventArgs e)
+        private void OnSystemMenuDoubleClick(object? sender, EventArgs e)
         {
             Close.PerformClick();
         }
@@ -177,7 +175,7 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 UnhookTarget();
-                _target = null;
+                _target = null!;
             }
 
             base.Dispose(disposing);
@@ -193,7 +191,7 @@ namespace System.Windows.Forms
                     controlTarget.Disposed -= new EventHandler(OnTargetWindowDisposed);
                 }
 
-                _target = null;
+                _target = null!;
             }
         }
     }
