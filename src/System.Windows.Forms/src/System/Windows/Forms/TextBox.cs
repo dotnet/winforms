@@ -879,8 +879,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawPlaceholderText(HDC hdc)
         {
-            TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
-                                    TextFormatFlags.EndEllipsis;
+            TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top | TextFormatFlags.EndEllipsis;
             Rectangle rectangle = ClientRectangle;
 
             if (RightToLeft == RightToLeft.Yes)
@@ -925,11 +924,6 @@ namespace System.Windows.Forms
             TextRenderer.DrawTextInternal(hdc, PlaceholderText, Font, rectangle, SystemColors.GrayText, TextRenderer.DefaultQuality, flags);
         }
 
-        /// <summary>
-        ///  The edits window procedure.  Inheriting classes can override this
-        ///  to add extra functionality, but should not forget to call
-        ///  base.wndProc(m); to ensure the combo continues to function properly.
-        /// </summary>
         protected override unsafe void WndProc(ref Message m)
         {
             switch ((User32.WM)m.Msg)

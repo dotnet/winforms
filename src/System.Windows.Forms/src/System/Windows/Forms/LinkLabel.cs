@@ -56,11 +56,12 @@ namespace System.Windows.Forms
         public LinkLabel() : base()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint
-                     | ControlStyles.OptimizedDoubleBuffer
-                     | ControlStyles.Opaque
-                     | ControlStyles.UserPaint
-                     | ControlStyles.StandardClick
-                     | ControlStyles.ResizeRedraw, true);
+                | ControlStyles.OptimizedDoubleBuffer
+                | ControlStyles.Opaque
+                | ControlStyles.UserPaint
+                | ControlStyles.StandardClick
+                | ControlStyles.ResizeRedraw,
+                value: true);
             ResetLinkArea();
         }
 
@@ -71,17 +72,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))]
         public Color ActiveLinkColor
         {
-            get
-            {
-                if (_activeLinkColor.IsEmpty)
-                {
-                    return IEActiveLinkColor;
-                }
-                else
-                {
-                    return _activeLinkColor;
-                }
-            }
+            get => _activeLinkColor.IsEmpty ? IEActiveLinkColor : _activeLinkColor;
             set
             {
                 if (_activeLinkColor != value)
@@ -99,17 +90,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LinkLabelDisabledLinkColorDescr))]
         public Color DisabledLinkColor
         {
-            get
-            {
-                if (_disabledLinkColor.IsEmpty)
-                {
-                    return IEDisabledLinkColor;
-                }
-                else
-                {
-                    return _disabledLinkColor;
-                }
-            }
+            get => _disabledLinkColor.IsEmpty ? IEDisabledLinkColor : _disabledLinkColor;
             set
             {
                 if (_disabledLinkColor != value)
@@ -122,10 +103,7 @@ namespace System.Windows.Forms
 
         private Link? FocusLink
         {
-            get
-            {
-                return _focusLink;
-            }
+            get => _focusLink;
             set
             {
                 if (_focusLink != value)
@@ -147,29 +125,11 @@ namespace System.Windows.Forms
             }
         }
 
-        private static Color IELinkColor
-        {
-            get
-            {
-                return LinkUtilities.IELinkColor;
-            }
-        }
+        private static Color IELinkColor => LinkUtilities.IELinkColor;
 
-        private static Color IEActiveLinkColor
-        {
-            get
-            {
-                return LinkUtilities.IEActiveLinkColor;
-            }
-        }
+        private static Color IEActiveLinkColor => LinkUtilities.IEActiveLinkColor;
 
-        private static Color IEVisitedLinkColor
-        {
-            get
-            {
-                return LinkUtilities.IEVisitedLinkColor;
-            }
-        }
+        private static Color IEVisitedLinkColor => LinkUtilities.IEVisitedLinkColor;
 
         private Color IEDisabledLinkColor
         {
@@ -184,13 +144,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Rectangle ClientRectWithPadding
-        {
-            get
-            {
-                return LayoutUtils.DeflateRect(ClientRectangle, Padding);
-            }
-        }
+        private Rectangle ClientRectWithPadding => LayoutUtils.DeflateRect(ClientRectangle, Padding);
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -203,22 +157,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the range in the text that is treated as a link.
         /// </summary>
-        [Editor("System.Windows.Forms.Design.LinkAreaEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.LinkAreaEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [RefreshProperties(RefreshProperties.Repaint)]
         [Localizable(true)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.LinkLabelLinkAreaDescr))]
         public LinkArea LinkArea
         {
-            get
-            {
-                if (_links.Count == 0)
-                {
-                    return new LinkArea(0, 0);
-                }
-
-                return new LinkArea(_links[0].Start, _links[0].Length);
-            }
+            get => _links.Count == 0
+                ? new LinkArea(0, 0)
+                : new LinkArea(_links[0].Start, _links[0].Length);
             set
             {
                 LinkArea pt = LinkArea;
@@ -253,7 +201,7 @@ namespace System.Windows.Forms
                 {
                     InvalidateTextLayout();
                     LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.LinkArea);
-                    base.AdjustSize();
+                    AdjustSize();
                     Invalidate();
                 }
             }
@@ -267,13 +215,10 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LinkLabelLinkBehaviorDescr))]
         public LinkBehavior LinkBehavior
         {
-            get
-            {
-                return _linkBehavior;
-            }
+            get => _linkBehavior;
             set
             {
-                //valid values are 0x0 to 0x3
+                // Valid values are 0x0 to 0x3
                 SourceGenerated.EnumValidator.Validate(value);
                 if (value != _linkBehavior)
                 {
@@ -291,22 +236,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LinkLabelLinkColorDescr))]
         public Color LinkColor
         {
-            get
-            {
-                if (_linkColor.IsEmpty)
-                {
-                    if (SystemInformation.HighContrast)
-                    {
-                        return SystemColors.HotTrack;
-                    }
-
-                    return IELinkColor;
-                }
-                else
-                {
-                    return _linkColor;
-                }
-            }
+            get => _linkColor.IsEmpty
+                ? SystemInformation.HighContrast ? SystemColors.HotTrack : IELinkColor
+                : _linkColor;
             set
             {
                 if (_linkColor != value)
@@ -322,15 +254,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public LinkCollection Links
-        {
-            get
-            {
-                _linkCollection ??= new LinkCollection(this);
-
-                return _linkCollection;
-            }
-        }
+        public LinkCollection Links => _linkCollection ??= new LinkCollection(this);
 
         /// <summary>
         ///  Gets or sets a value indicating whether the link should be displayed as if it was visited.
@@ -340,17 +264,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LinkLabelLinkVisitedDescr))]
         public bool LinkVisited
         {
-            get
-            {
-                if (_links.Count == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return _links[0].Visited;
-                }
-            }
+            get => _links.Count == 0 ? false : _links[0].Visited;
             set
             {
                 if (value != LinkVisited)
@@ -365,15 +279,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // link labels must always ownerdraw
-        //
-        internal override bool OwnerDraw
-        {
-            get
-            {
-                return true;
-            }
-        }
+        internal override bool OwnerDraw => true;
 
         protected Cursor? OverrideCursor
         {
@@ -401,7 +307,6 @@ namespace System.Windows.Forms
             }
         }
 
-        // Make this event visible through the property browser.
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler? TabStopChanged
@@ -440,22 +345,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))]
         public Color VisitedLinkColor
         {
-            get
-            {
-                if (_visitedLinkColor.IsEmpty)
-                {
-                    if (SystemInformation.HighContrast)
-                    {
-                        return LinkUtilities.GetVisitedLinkColor();
-                    }
-
-                    return IEVisitedLinkColor;
-                }
-                else
-                {
-                    return _visitedLinkColor;
-                }
-            }
+            get => _visitedLinkColor.IsEmpty
+                ? SystemInformation.HighContrast ? LinkUtilities.GetVisitedLinkColor() : IEVisitedLinkColor
+                : _visitedLinkColor;
             set
             {
                 if (_visitedLinkColor != value)
@@ -531,61 +423,41 @@ namespace System.Windows.Forms
             return new Rectangle(xLoc, yLoc, width, height);
         }
 
-        /// <summary>
-        ///  Constructs the new instance of the accessibility object for this control. Subclasses
-        ///  should not call base.CreateAccessibilityObject.
-        /// </summary>
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new LinkLabelAccessibleObject(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() => new LinkLabelAccessibleObject(this);
 
-        /// <summary>
-        ///  Creates a handle for this control. This method is called by the framework,
-        ///  this should not be called directly. Inheriting classes should always call
-        ///  <c>base.CreateHandle</c> when overriding this method.
-        /// </summary>
         protected override void CreateHandle()
         {
             base.CreateHandle();
             InvalidateTextLayout();
         }
 
-        /// <summary>
-        ///  Determines whether the current state of the control allows for rendering text using
-        ///  TextRenderer (GDI).
-        ///  The Gdi library doesn't currently have a way to calculate character ranges so we cannot
-        ///  use it for painting link(s) within the text, but if the link are is null or covers the
-        ///  entire text we are ok since it is just one area with the same size of the text binding
-        ///  area.
-        /// </summary>
         internal override bool CanUseTextRenderer
         {
             get
             {
-                // If no link or the LinkArea is one and covers the entire text, we can support UseCompatibleTextRendering = false.
-                // Observe that LinkArea refers to the first link always.
-                StringInfo stringInfo = new StringInfo(Text);
-                return LinkArea.Start == 0 && (LinkArea.IsEmpty || LinkArea.Length == stringInfo.LengthInTextElements);
+                // The Gdi library doesn't currently have a way to calculate character ranges so we cannot use it for
+                // painting link(s) within the text, but if the link are is null or covers the entire text we are ok
+                // since it is just one area with the same size of the text binding area.
+
+                return LinkArea.Start == 0 && (LinkArea.IsEmpty || LinkArea.Length == new StringInfo(Text).LengthInTextElements);
             }
         }
 
-        internal override bool UseGDIMeasuring()
-        {
-            return !UseCompatibleTextRendering;
-        }
+        internal override bool UseGDIMeasuring() => !UseCompatibleTextRendering;
 
         /// <summary>
-        ///  Converts the character index into char index of the string
-        ///  This method is copied in LinkCollectionEditor.cs. Update the other
-        ///  one as well if you change this method.
-        ///  This method mainly deal with surrogate. Suppose we
-        ///  have a string consisting of 3 surrogates, and we want the
-        ///  second character, then the index we need should be 2 instead of
-        ///  1, and this method returns the correct index.
+        ///  Converts the character index into char index of the string.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   This method mainly deal with surrogate. Suppose we have a string consisting of 3 surrogates, and we want the
+        ///   second character, then the index we need should be 2 instead of 1, and this method returns the correct index.
+        ///  </para>
+        /// </remarks>
         private static int ConvertToCharIndex(int index, string text)
         {
+            // This method is copied in LinkCollectionEditor. Update the other one as well if you change this method.
+
             if (index <= 0)
             {
                 return 0;
@@ -594,47 +466,45 @@ namespace System.Windows.Forms
             if (string.IsNullOrEmpty(text))
             {
                 Debug.Assert(text is not null, "string should not be null");
-                //do no conversion, just return the original value passed in
+
+                // Do no conversion, just return the original value passed in.
                 return index;
             }
 
-            //Dealing with surrogate characters
-            //in some languages, characters can expand over multiple
-            //chars, using StringInfo lets us properly deal with it.
-            StringInfo stringInfo = new StringInfo(text);
+            // Dealing with surrogate characters in some languages, characters can expand over multiple
+            // chars, using StringInfo lets us properly deal with it.
+            StringInfo stringInfo = new(text);
             int numTextElements = stringInfo.LengthInTextElements;
 
-            //index is greater than the length of the string
             if (index > numTextElements)
             {
-                return index - numTextElements + text.Length;  //pretend all the characters after are ASCII characters
+                // Pretend all the characters after are ASCII characters
+                return index - numTextElements + text.Length;
             }
 
-            //return the length of the substring which has specified number of characters
+            // Return the length of the substring which has specified number of characters.
             string sub = stringInfo.SubstringByTextElements(0, index);
             return sub.Length;
         }
 
         /// <summary>
-        ///  Ensures that we have analyzed the text run so that we can render each segment
-        ///  and link.
+        ///  Ensures that we have analyzed the text run so that we can render each segment and link.
         /// </summary>
         private void EnsureRun(Graphics g)
         {
-            // bail early if everything is valid!
+            Debug.Assert(g is not null);
+
             if (_textLayoutValid)
             {
                 return;
             }
 
-            if (_textRegion is not null)
-            {
-                _textRegion.Dispose();
-                _textRegion = null;
-            }
+            _textRegion?.Dispose();
+            _textRegion = null;
 
-            // bail early for no text
-            if (Text.Length == 0)
+            string text = Text;
+
+            if (text.Length == 0)
             {
                 Links.Clear();
                 Links.Add(new Link(0, -1));   // default 'magic' link.
@@ -642,93 +512,76 @@ namespace System.Windows.Forms
                 return;
             }
 
-            StringFormat textFormat = CreateStringFormat();
-            string text = Text;
-            try
+            using StringFormat textFormat = CreateStringFormat();
+
+            using Font alwaysUnderlined = new Font(Font, Font.Style | FontStyle.Underline);
+
+            if (UseCompatibleTextRendering)
             {
-                Font alwaysUnderlined = new Font(Font, Font.Style | FontStyle.Underline);
-                Graphics? created = null;
+                Region[] textRegions = g.MeasureCharacterRanges(text, alwaysUnderlined, ClientRectWithPadding, textFormat);
 
-                try
+                int regionIndex = 0;
+
+                for (int i = 0; i < Links.Count; i++)
                 {
-                    g ??= created = CreateGraphicsInternal();
-
-                    if (UseCompatibleTextRendering)
+                    Link link = Links[i];
+                    int charStart = ConvertToCharIndex(link.Start, text);
+                    int charEnd = ConvertToCharIndex(link.Start + link.Length, text);
+                    if (LinkInText(charStart, charEnd - charStart))
                     {
-                        Region[] textRegions = g.MeasureCharacterRanges(text, alwaysUnderlined, ClientRectWithPadding, textFormat);
-
-                        int regionIndex = 0;
-
-                        for (int i = 0; i < Links.Count; i++)
-                        {
-                            Link link = Links[i];
-                            int charStart = ConvertToCharIndex(link.Start, text);
-                            int charEnd = ConvertToCharIndex(link.Start + link.Length, text);
-                            if (LinkInText(charStart, charEnd - charStart))
-                            {
-                                Links[i].VisualRegion = textRegions[regionIndex];
-                                regionIndex++;
-                            }
-                        }
-
-                        Debug.Assert(regionIndex == (textRegions.Length - 1), "Failed to consume all link label visual regions");
-                        _textRegion = textRegions[textRegions.Length - 1];
-                    }
-                    else
-                    {
-                        // use TextRenderer.MeasureText to see the size of the text
-                        Rectangle clientRectWithPadding = ClientRectWithPadding;
-                        Size clientSize = new Size(clientRectWithPadding.Width, clientRectWithPadding.Height);
-                        TextFormatFlags flags = CreateTextFormatFlags(clientSize);
-                        Size textSize = TextRenderer.MeasureText(text, alwaysUnderlined, clientSize, flags);
-
-                        // We need to take into account the padding that GDI adds around the text.
-                        int iLeftMargin, iRightMargin;
-
-                        TextPaddingOptions padding = default;
-                        if ((flags & TextFormatFlags.NoPadding) == TextFormatFlags.NoPadding)
-                        {
-                            padding = TextPaddingOptions.NoPadding;
-                        }
-                        else if ((flags & TextFormatFlags.LeftAndRightPadding) == TextFormatFlags.LeftAndRightPadding)
-                        {
-                            padding = TextPaddingOptions.LeftAndRightPadding;
-                        }
-
-                        using var hfont = GdiCache.GetHFONT(Font);
-                        User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
-
-                        iLeftMargin = dtParams.iLeftMargin;
-                        iRightMargin = dtParams.iRightMargin;
-
-                        Rectangle visualRectangle = new Rectangle(clientRectWithPadding.X + iLeftMargin,
-                                                                  clientRectWithPadding.Y,
-                                                                  textSize.Width - iRightMargin - iLeftMargin,
-                                                                  textSize.Height);
-                        visualRectangle = CalcTextRenderBounds(visualRectangle /*textRect*/, clientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
-
-                        Region visualRegion = new Region(visualRectangle);
-                        if (_links is not null && _links.Count == 1)
-                        {
-                            Links[0].VisualRegion = visualRegion;
-                        }
-
-                        _textRegion = visualRegion;
+                        Links[i].VisualRegion = textRegions[regionIndex];
+                        regionIndex++;
                     }
                 }
-                finally
-                {
-                    alwaysUnderlined.Dispose();
 
-                    created?.Dispose();
+                Debug.Assert(regionIndex == (textRegions.Length - 1), "Failed to consume all link label visual regions");
+                _textRegion = textRegions[^1];
+            }
+            else
+            {
+                // Use TextRenderer.MeasureText to see the size of the text
+                Rectangle clientRectWithPadding = ClientRectWithPadding;
+                Size clientSize = new Size(clientRectWithPadding.Width, clientRectWithPadding.Height);
+                TextFormatFlags flags = CreateTextFormatFlags(clientSize);
+                Size textSize = TextRenderer.MeasureText(text, alwaysUnderlined, clientSize, flags);
+
+                // We need to take into account the padding that GDI adds around the text.
+                int iLeftMargin, iRightMargin;
+
+                TextPaddingOptions padding = default;
+                if ((flags & TextFormatFlags.NoPadding) == TextFormatFlags.NoPadding)
+                {
+                    padding = TextPaddingOptions.NoPadding;
+                }
+                else if ((flags & TextFormatFlags.LeftAndRightPadding) == TextFormatFlags.LeftAndRightPadding)
+                {
+                    padding = TextPaddingOptions.LeftAndRightPadding;
                 }
 
-                _textLayoutValid = true;
+                using var hfont = GdiCache.GetHFONT(Font);
+                User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
+
+                iLeftMargin = dtParams.iLeftMargin;
+                iRightMargin = dtParams.iRightMargin;
+
+                Rectangle visualRectangle = new(
+                    clientRectWithPadding.X + iLeftMargin,
+                    clientRectWithPadding.Y,
+                    textSize.Width - iRightMargin - iLeftMargin,
+                    textSize.Height);
+
+                visualRectangle = CalcTextRenderBounds(visualRectangle, clientRectWithPadding, RtlTranslateContent(TextAlign));
+
+                Region visualRegion = new Region(visualRectangle);
+                if (_links is not null && _links.Count == 1)
+                {
+                    Links[0].VisualRegion = visualRegion;
+                }
+
+                _textRegion = visualRegion;
             }
-            finally
-            {
-                textFormat.Dispose();
-            }
+
+            _textLayoutValid = true;
         }
 
         internal override StringFormat CreateStringFormat()
@@ -767,7 +620,7 @@ namespace System.Windows.Forms
                 int charEnd = ConvertToCharIndex(link.Start + link.Length, text);
                 if (LinkInText(charStart, charEnd - charStart))
                 {
-                    int length = (int)Math.Min(link.Length, textLen - link.Start);
+                    int length = Math.Min(link.Length, textLen - link.Start);
                     ranges.Add(new CharacterRange(charStart, ConvertToCharIndex(link.Start + length, text) - charStart));
                 }
             }
@@ -779,7 +632,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Determines whether the whole link label contains only one link,
-        ///  and the link runs from the beginning of the label to the end of it
+        ///  and the link runs from the beginning of the label to the end of it.
         /// </summary>
         private bool IsOneLink()
         {
@@ -798,37 +651,29 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the given client coordinates is contained within a portion
-        ///  of a link area.
+        ///  Determines if the given client coordinates is contained within a portion of a link area.
         /// </summary>
         protected Link? PointInLink(int x, int y)
         {
-            Graphics g = CreateGraphicsInternal();
+            using Graphics g = CreateGraphicsInternal();
             Link? hit = null;
-            try
+
+            EnsureRun(g);
+            foreach (Link link in _links)
             {
-                EnsureRun(g);
-                foreach (Link link in _links)
+                if (link.VisualRegion is not null && link.VisualRegion.IsVisible(x, y, g))
                 {
-                    if (link.VisualRegion is not null && link.VisualRegion.IsVisible(x, y, g))
-                    {
-                        hit = link;
-                        break;
-                    }
+                    hit = link;
+                    break;
                 }
-            }
-            finally
-            {
-                g.Dispose();
             }
 
             return hit;
         }
 
         /// <summary>
-        ///  Invalidates only the portions of the text that is linked to
-        ///  the specified link. If link is null, then all linked text
-        ///  is invalidated.
+        ///  Invalidates only the portions of the text that is linked to the specified link. If link is null, then
+        ///  all linked text is invalidated.
         /// </summary>
         private void InvalidateLink(Link? link)
         {
@@ -846,8 +691,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Invalidates the current set of fonts we use when painting
-        ///  links.  The fonts will be recreated when needed.
+        ///  Invalidates the current set of fonts we use when painting links. The fonts will be recreated when needed.
         /// </summary>
         private void InvalidateLinkFonts()
         {
@@ -862,31 +706,19 @@ namespace System.Windows.Forms
             _hoverLinkFont = null;
         }
 
-        private void InvalidateTextLayout()
-        {
-            _textLayoutValid = false;
-        }
+        private void InvalidateTextLayout() => _textLayoutValid = false;
 
-        private bool LinkInText(int start, int length)
-        {
-            return (start >= 0 && start < Text.Length && length > 0);
-        }
+        private bool LinkInText(int start, int length) => start >= 0 && start < Text.Length && length > 0;
 
         /// <summary>
-        ///  Gets or sets a value that is returned to the
-        ///  parent form when the link label.
-        ///  is clicked.
+        ///  Gets or sets a value that is returned to the parent form when the link label is clicked.
         /// </summary>
         DialogResult IButtonControl.DialogResult
         {
-            get
-            {
-                return _dialogResult;
-            }
-
+            get => _dialogResult;
             set
             {
-                //valid values are 0x0 to 0x7
+                // Valid values are 0x0 to 0x7
                 SourceGenerated.EnumValidator.Validate(value);
 
                 _dialogResult = value;
@@ -897,9 +729,6 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.GotFocus"/> event.
-        /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
             if (!_processingOnGotFocus)
@@ -915,7 +744,7 @@ namespace System.Windows.Forms
                 {
                     // Set focus on first link.
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
-                    Select(true /*directed*/, true /*forward*/);
+                    Select(directed: true, forward: true);
                 }
                 else
                 {
@@ -932,10 +761,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.LostFocus"/>
-        ///  event.
-        /// </summary>
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
@@ -946,10 +771,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnKeyDown"/>
-        ///  event.
-        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -963,10 +784,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnMouseLeave"/>
-        ///  event.
-        /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
@@ -993,10 +810,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnMouseDown"/>
-        ///  event.
-        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -1026,10 +839,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnMouseUp"/>
-        ///  event.
-        /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
@@ -1063,10 +872,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnMouseMove"/>
-        ///  event.
-        /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -1137,13 +942,10 @@ namespace System.Windows.Forms
             InvalidateTextLayout();
         }
 
-        /// <summary>
-        ///  Raises the <see cref="Control.OnPaint"/>
-        ///  event.
-        /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            RectangleF finalrect = RectangleF.Empty;   //the focus rectangle if there is only one link
+            // The focus rectangle if there is only one link
+            RectangleF finalrect = RectangleF.Empty;
             Animate();
 
             ImageAnimator.UpdateFrames(Image);
@@ -1154,7 +956,6 @@ namespace System.Windows.Forms
 
             if (Text.Length == 0)
             {
-                // bail early for no text
                 PaintLinkBackground(g);
             }
             else
@@ -1164,7 +965,7 @@ namespace System.Windows.Forms
                 {
                     Rectangle clientRect = ClientRectWithPadding;
                     Size preferredSize = GetPreferredSize(new Size(clientRect.Width, clientRect.Height));
-                    _showToolTip = (clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height);
+                    _showToolTip = clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height;
                 }
                 else
                 {
@@ -1175,119 +976,110 @@ namespace System.Windows.Forms
                 {
                     // Control.Enabled not to be confused with Link.Enabled
                     bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
-                    var foreBrush = ForeColor.GetCachedSolidBrushScope();
-                    var linkBrush = LinkColor.GetCachedSolidBrushScope();
+                    using var foreBrush = ForeColor.GetCachedSolidBrushScope();
+                    using var linkBrush = LinkColor.GetCachedSolidBrushScope();
+
+                    if (!optimizeBackgroundRendering)
+                    {
+                        PaintLinkBackground(g);
+                    }
+
+                    LinkUtilities.EnsureLinkFonts(Font, LinkBehavior, ref _linkFont, ref _hoverLinkFont);
+
+                    Region originalClip = g.Clip;
 
                     try
                     {
-                        if (!optimizeBackgroundRendering)
+                        if (IsOneLink())
                         {
-                            PaintLinkBackground(g);
+                            // Exclude the area to draw the focus rectangle.
+                            g.Clip = originalClip;
+                            RectangleF[]? rects = _links[0].VisualRegion?.GetRegionScans(e.GraphicsInternal.Transform);
+                            if (rects is not null && rects.Length > 0)
+                            {
+                                if (UseCompatibleTextRendering)
+                                {
+                                    finalrect = new RectangleF(rects[0].Location, SizeF.Empty);
+                                    foreach (RectangleF rect in rects)
+                                    {
+                                        finalrect = RectangleF.Union(finalrect, rect);
+                                    }
+                                }
+                                else
+                                {
+                                    finalrect = ClientRectWithPadding;
+                                    Size finalRectSize = finalrect.Size.ToSize();
+
+                                    Size requiredSize = MeasureTextCache.GetTextSize(Text, Font, finalRectSize, CreateTextFormatFlags(finalRectSize));
+
+                                    finalrect.Width = requiredSize.Width;
+
+                                    if (requiredSize.Height < finalrect.Height)
+                                    {
+                                        finalrect.Height = requiredSize.Height;
+                                    }
+
+                                    finalrect = CalcTextRenderBounds(Rectangle.Round(finalrect), ClientRectWithPadding, RtlTranslateContent(TextAlign));
+                                }
+
+                                using (Region region = new Region(finalrect))
+                                {
+                                    g.ExcludeClip(region);
+                                }
+                            }
                         }
-
-                        LinkUtilities.EnsureLinkFonts(Font, LinkBehavior, ref _linkFont, ref _hoverLinkFont);
-
-                        Region originalClip = g.Clip;
-
-                        try
+                        else
                         {
-                            if (IsOneLink())
-                            {
-                                //exclude the area to draw the focus rectangle
-                                g.Clip = originalClip;
-                                RectangleF[]? rects = _links[0].VisualRegion?.GetRegionScans(e.GraphicsInternal.Transform);
-                                if (rects is not null && rects.Length > 0)
-                                {
-                                    if (UseCompatibleTextRendering)
-                                    {
-                                        finalrect = new RectangleF(rects[0].Location, SizeF.Empty);
-                                        foreach (RectangleF rect in rects)
-                                        {
-                                            finalrect = RectangleF.Union(finalrect, rect);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        finalrect = ClientRectWithPadding;
-                                        Size finalRectSize = finalrect.Size.ToSize();
-
-                                        Size requiredSize = MeasureTextCache.GetTextSize(Text, Font, finalRectSize, CreateTextFormatFlags(finalRectSize));
-
-                                        finalrect.Width = requiredSize.Width;
-
-                                        if (requiredSize.Height < finalrect.Height)
-                                        {
-                                            finalrect.Height = requiredSize.Height;
-                                        }
-
-                                        finalrect = CalcTextRenderBounds(Rectangle.Round(finalrect) /*textRect*/, ClientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
-                                    }
-
-                                    using (Region region = new Region(finalrect))
-                                    {
-                                        g.ExcludeClip(region);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                foreach (Link link in _links)
-                                {
-                                    if (link.VisualRegion is not null)
-                                    {
-                                        g.ExcludeClip(link.VisualRegion);
-                                    }
-                                }
-                            }
-
-                            // When there is only one link in link label,
-                            // it's not necessary to paint with foreBrush first
-                            // as it will be overlapped by linkBrush in the following steps
-
-                            if (!IsOneLink())
-                            {
-                                PaintLink(
-                                    e,
-                                    link: null,
-                                    foreBrush,
-                                    linkBrush,
-                                    _linkFont,
-                                    _hoverLinkFont,
-                                    optimizeBackgroundRendering,
-                                    finalrect);
-                            }
-
                             foreach (Link link in _links)
                             {
-                                PaintLink(
-                                    e,
-                                    link,
-                                    foreBrush,
-                                    linkBrush,
-                                    _linkFont,
-                                    _hoverLinkFont,
-                                    optimizeBackgroundRendering,
-                                    finalrect);
-                            }
-
-                            if (optimizeBackgroundRendering)
-                            {
-                                g.Clip = originalClip;
-
-                                // Because the code has been like that since long time, we assume that _textRegion is not null.
-                                g.ExcludeClip(_textRegion!);
-                                PaintLinkBackground(g);
+                                if (link.VisualRegion is not null)
+                                {
+                                    g.ExcludeClip(link.VisualRegion);
+                                }
                             }
                         }
-                        finally
+
+                        // When there is only one link in link label, it's not necessary to paint with foreBrush
+                        // first as it will be overlapped by linkBrush in the following steps.
+
+                        if (!IsOneLink())
+                        {
+                            PaintLink(
+                                e,
+                                link: null,
+                                foreBrush,
+                                linkBrush,
+                                _linkFont,
+                                _hoverLinkFont,
+                                optimizeBackgroundRendering,
+                                finalrect);
+                        }
+
+                        foreach (Link link in _links)
+                        {
+                            PaintLink(
+                                e,
+                                link,
+                                foreBrush,
+                                linkBrush,
+                                _linkFont,
+                                _hoverLinkFont,
+                                optimizeBackgroundRendering,
+                                finalrect);
+                        }
+
+                        if (optimizeBackgroundRendering)
                         {
                             g.Clip = originalClip;
+
+                            // This shouldn't be null, but it would require significant refactoring to encapsulate.
+                            g.ExcludeClip(_textRegion!);
+                            PaintLinkBackground(g);
                         }
                     }
                     finally
                     {
-                        foreBrush.Dispose();
-                        linkBrush.Dispose();
+                        g.Clip = originalClip;
                     }
                 }
                 else
@@ -1302,13 +1094,12 @@ namespace System.Windows.Forms
 
                         PaintLinkBackground(g);
 
-                        // Because the code has been like that since long time, we assume that _textRegion is not null.
-                        g.IntersectClip(_textRegion!);
-
                         if (UseCompatibleTextRendering)
                         {
-                            // APPCOMPAT: Use DisabledColor because Everett used DisabledColor.
-                            // (ie, don't use Graphics.GetNearestColor(DisabledColor.)
+                            // The clipping only applies when rendering through GDI+. The region shouldn't be null, but
+                            // it would require significant refactoring to encapsulate.
+                            g.IntersectClip(_textRegion!);
+
                             StringFormat stringFormat = CreateStringFormat();
                             ControlPaint.DrawStringDisabled(g, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
                         }
@@ -1393,12 +1184,9 @@ namespace System.Windows.Forms
             InvalidateTextLayout();
         }
 
-        /// <summary>
-        ///  Overriden by LinkLabel.
-        /// </summary>
         internal override void OnAutoEllipsisChanged()
         {
-            base.OnAutoEllipsisChanged(/*e*/);
+            base.OnAutoEllipsisChanged();
             InvalidateTextLayout();
         }
 
@@ -1444,7 +1232,6 @@ namespace System.Windows.Forms
             bool optimizeBackgroundRendering,
             RectangleF finalrect)
         {
-            // link = null means paint the whole text
             Graphics g = e.GraphicsInternal;
 
             Debug.Assert(g is not null, "Must pass valid graphics");
@@ -1455,133 +1242,134 @@ namespace System.Windows.Forms
 
             if (link is not null)
             {
-                if (link.VisualRegion is not null)
+                if (link.VisualRegion is null)
                 {
-                    Color brushColor = Color.Empty;
-                    LinkState linkState = link.State;
-
-                    font = (linkState & LinkState.Hover) == LinkState.Hover ? hoverLinkFont : linkFont;
-
-                    if (link.Enabled)
-                    {
-                        // Not to be confused with Control.Enabled.
-                        if ((linkState & LinkState.Active) == LinkState.Active)
-                        {
-                            brushColor = ActiveLinkColor;
-                        }
-                        else if ((linkState & LinkState.Visited) == LinkState.Visited)
-                        {
-                            brushColor = VisitedLinkColor;
-                        }
-                    }
-                    else
-                    {
-                        brushColor = DisabledLinkColor;
-                    }
-
-                    g.Clip = IsOneLink() ? new Region(finalrect) : link.VisualRegion;
-
-                    if (optimizeBackgroundRendering)
-                    {
-                        PaintLinkBackground(g);
-                    }
-
-                    if (brushColor == Color.Empty)
-                    {
-                        brushColor = linkBrush.Color;
-                    }
-
-                    if (UseCompatibleTextRendering)
-                    {
-                        using var useBrush = brushColor.GetCachedSolidBrushScope();
-                        StringFormat stringFormat = CreateStringFormat();
-                        g.DrawString(Text, font, useBrush, ClientRectWithPadding, stringFormat);
-                    }
-                    else
-                    {
-                        brushColor = g.FindNearestColor(brushColor);
-
-                        Rectangle clientRectWithPadding = ClientRectWithPadding;
-
-#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
-                        TextRenderer.DrawText(
-                            g,
-                            Text,
-                            font,
-                            clientRectWithPadding,
-                            brushColor,
-                            CreateTextFormatFlags(clientRectWithPadding.Size)
-#if DEBUG
-                            // Skip the asserts in TextRenderer because the DC has been modified
-                            | TextRenderer.SkipAssertFlag
-#endif
-                            );
-#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
-                    }
-
-                    if (Focused && ShowFocusCues && FocusLink == link)
-                    {
-                        // Get the rectangles making up the visual region, and draw each one.
-                        RectangleF[] rects = link.VisualRegion.GetRegionScans(g.Transform);
-                        if (rects is not null && rects.Length > 0)
-                        {
-                            Rectangle focusRect;
-
-                            if (IsOneLink())
-                            {
-                                // Draw one merged focus rectangle
-                                focusRect = Rectangle.Ceiling(finalrect);
-                                Debug.Assert(finalrect != RectangleF.Empty, "finalrect should be initialized");
-
-                                ControlPaint.DrawFocusRectangle(g, focusRect, ForeColor, BackColor);
-                            }
-                            else
-                            {
-                                foreach (RectangleF rect in rects)
-                                {
-                                    ControlPaint.DrawFocusRectangle(g, Rectangle.Ceiling(rect), ForeColor, BackColor);
-                                }
-                            }
-                        }
-                    }
+                    // Don't paint anything if we are given a link with no visual region.
+                    return;
                 }
 
-                // no else clause... we don't paint anything if we are given a link with no visual region.
-            }
-            else
-            {
-                // Painting with no link.
-                // Because the code has been like that since long time, we assume that _textRegion is not null.
-                g.IntersectClip(_textRegion!);
+                Color brushColor = Color.Empty;
+                LinkState linkState = link.State;
+
+                font = (linkState & LinkState.Hover) == LinkState.Hover ? hoverLinkFont : linkFont;
+
+                if (link.Enabled)
+                {
+                    // Not to be confused with Control.Enabled.
+                    if ((linkState & LinkState.Active) == LinkState.Active)
+                    {
+                        brushColor = ActiveLinkColor;
+                    }
+                    else if ((linkState & LinkState.Visited) == LinkState.Visited)
+                    {
+                        brushColor = VisitedLinkColor;
+                    }
+                }
+                else
+                {
+                    brushColor = DisabledLinkColor;
+                }
+
+                g.Clip = IsOneLink() ? new Region(finalrect) : link.VisualRegion;
 
                 if (optimizeBackgroundRendering)
                 {
                     PaintLinkBackground(g);
                 }
 
+                if (brushColor == Color.Empty)
+                {
+                    brushColor = linkBrush.Color;
+                }
+
                 if (UseCompatibleTextRendering)
                 {
+                    using var useBrush = brushColor.GetCachedSolidBrushScope();
                     StringFormat stringFormat = CreateStringFormat();
-                    g.DrawString(Text, font, foreBrush, ClientRectWithPadding, stringFormat);
+                    g.DrawString(Text, font, useBrush, ClientRectWithPadding, stringFormat);
                 }
                 else
                 {
-                    Color color;
-                    using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
-                    {
-                        color = ColorTranslator.FromWin32(
-                            (int)PInvoke.GetNearestColor(hdc, (COLORREF)(uint)ColorTranslator.ToWin32(foreBrush.Color)).Value);
-                    }
+                    brushColor = g.FindNearestColor(brushColor);
 
                     Rectangle clientRectWithPadding = ClientRectWithPadding;
+
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
                     TextRenderer.DrawText(
                         g,
                         Text,
                         font,
                         clientRectWithPadding,
-                        color,
-                        CreateTextFormatFlags(clientRectWithPadding.Size));
+                        brushColor,
+                        CreateTextFormatFlags(clientRectWithPadding.Size)
+#if DEBUG
+                        // Skip the asserts in TextRenderer because the DC has been modified
+                        | TextRenderer.SkipAssertFlag
+#endif
+                        );
+#pragma warning restore SA1009
                 }
+
+                if (Focused && ShowFocusCues && FocusLink == link)
+                {
+                    // Get the rectangles making up the visual region, and draw each one.
+                    RectangleF[] rects = link.VisualRegion.GetRegionScans(g.Transform);
+                    if (rects is not null && rects.Length > 0)
+                    {
+                        Rectangle focusRect;
+
+                        if (IsOneLink())
+                        {
+                            // Draw one merged focus rectangle
+                            focusRect = Rectangle.Ceiling(finalrect);
+                            Debug.Assert(finalrect != RectangleF.Empty, "finalrect should be initialized");
+
+                            ControlPaint.DrawFocusRectangle(g, focusRect, ForeColor, BackColor);
+                        }
+                        else
+                        {
+                            foreach (RectangleF rect in rects)
+                            {
+                                ControlPaint.DrawFocusRectangle(g, Rectangle.Ceiling(rect), ForeColor, BackColor);
+                            }
+                        }
+                    }
+                }
+
+                return;
+            }
+
+            // Painting with no link.
+            // Because the code has been like that since long time, we assume that _textRegion is not null.
+            g.IntersectClip(_textRegion!);
+
+            if (optimizeBackgroundRendering)
+            {
+                PaintLinkBackground(g);
+            }
+
+            if (UseCompatibleTextRendering)
+            {
+                StringFormat stringFormat = CreateStringFormat();
+                g.DrawString(Text, font, foreBrush, ClientRectWithPadding, stringFormat);
+            }
+            else
+            {
+                Color color;
+                using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
+                {
+                    color = ColorTranslator.FromWin32(
+                        (int)PInvoke.GetNearestColor(hdc, (COLORREF)(uint)ColorTranslator.ToWin32(foreBrush.Color)).Value);
+                }
+
+                Rectangle clientRectWithPadding = ClientRectWithPadding;
+                TextRenderer.DrawText(
+                    g,
+                    Text,
+                    font,
+                    clientRectWithPadding,
+                    color,
+                    CreateTextFormatFlags(clientRectWithPadding.Size));
             }
         }
 
@@ -1595,7 +1383,7 @@ namespace System.Windows.Forms
 
         void IButtonControl.PerformClick()
         {
-            // If a link is not currently focused, focus on the first link
+            // If a link is not currently focused, focus on the first link.
             if (FocusLink is null && Links.Count > 0)
             {
                 string text = Text;
@@ -1611,25 +1399,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Act as if the focused link was clicked
+            // Act as if the focused link was clicked.
             if (FocusLink is not null)
             {
                 OnLinkClicked(new LinkLabelLinkClickedEventArgs(FocusLink));
             }
         }
 
-        /// <summary>
-        ///  Processes a dialog key. This method is called during message pre-processing
-        ///  to handle dialog characters, such as TAB, RETURN, ESCAPE, and arrow keys. This
-        ///  method is called only if the isInputKey() method indicates that the control
-        ///  isn't interested in the key. processDialogKey() simply sends the character to
-        ///  the parent's processDialogKey() method, or returns false if the control has no
-        ///  parent. The Form class overrides this method to perform actual processing
-        ///  of dialog keys. When overriding processDialogKey(), a control should return true
-        ///  to indicate that it has processed the key. For keys that aren't processed by the
-        ///  control, the result of "base.processDialogChar()" should be returned. Controls
-        ///  will seldom, if ever, need to override this method.
-        /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if ((keyData & (Keys.Alt | Keys.Control)) != Keys.Alt)
@@ -1723,8 +1499,8 @@ namespace System.Windows.Forms
                     }
                 }
                 while (test is not null
-                         && !test.Enabled
-                         && LinkInText(charStart, charEnd - charStart));
+                    && !test.Enabled
+                    && LinkInText(charStart, charEnd - charStart));
             }
             else
             {
@@ -1743,34 +1519,18 @@ namespace System.Windows.Forms
                     }
                 }
                 while (test is not null
-                         && !test.Enabled
-                         && LinkInText(charStart, charEnd - charStart));
+                    && !test.Enabled
+                    && LinkInText(charStart, charEnd - charStart));
             }
 
-            if (focusIndex < 0 || focusIndex >= _links.Count)
-            {
-                return -1;
-            }
-            else
-            {
-                return focusIndex;
-            }
+            return focusIndex < 0 || focusIndex >= _links.Count ? -1 : focusIndex;
         }
 
-        private void ResetLinkArea()
-        {
-            LinkArea = new LinkArea(0, -1);
-        }
+        private void ResetLinkArea() => LinkArea = new LinkArea(0, -1);
 
-        internal void ResetActiveLinkColor()
-        {
-            _activeLinkColor = Color.Empty;
-        }
+        internal void ResetActiveLinkColor() => _activeLinkColor = Color.Empty;
 
-        internal void ResetDisabledLinkColor()
-        {
-            _disabledLinkColor = Color.Empty;
-        }
+        internal void ResetDisabledLinkColor() => _disabledLinkColor = Color.Empty;
 
         internal void ResetLinkColor()
         {
@@ -1778,22 +1538,13 @@ namespace System.Windows.Forms
             InvalidateLink(null);
         }
 
-        private void ResetVisitedLinkColor()
-        {
-            _visitedLinkColor = Color.Empty;
-        }
+        private void ResetVisitedLinkColor() => _visitedLinkColor = Color.Empty;
 
-        /// <summary>
-        ///  Performs the work of setting the bounds of this control. Inheriting classes
-        ///  can override this function to add size restrictions. Inheriting classes must call
-        ///  base.setBoundsCore to actually cause the bounds of the control to change.
-        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            // we cache too much state to try and optimize this (regions, etc)... it is best
-            // to always relayout here... If we want to resurrect this code in the future,
-            // remember that we need to handle a word wrapped top aligned text that
-            // will become newly exposed (and therefore layed out) when we resize...
+            // We cache too much state to try and optimize this (regions, etc). It is best to always relayout here.
+            // If we want to resurrect this code in the future, remember that we need to handle a word wrapped top
+            // aligned text that will become newly exposed (and therefore layed out) when we resize.
             InvalidateTextLayout();
             Invalidate();
 
@@ -1802,42 +1553,38 @@ namespace System.Windows.Forms
 
         protected override void Select(bool directed, bool forward)
         {
-            if (directed)
+            // In a multi-link label, if the tab came from another control, we want to keep the currently
+            // focused link, otherwise, we set the focus to the next link.
+            if (directed && _links.Count > 0)
             {
-                // In a multi-link label, if the tab came from another control, we want to keep the currently
-                // focused link, otherwise, we set the focus to the next link.
-                if (_links.Count > 0)
+                // Find which link is currently focused
+                int focusIndex = -1;
+                if (FocusLink is not null)
                 {
-                    // Find which link is currently focused
-                    //
-                    int focusIndex = -1;
-                    if (FocusLink is not null)
-                    {
-                        focusIndex = _links.IndexOf(FocusLink);
-                    }
+                    focusIndex = _links.IndexOf(FocusLink);
+                }
 
-                    // We could be getting focus from ourself, so we must
-                    // invalidate each time.
-                    //
-                    FocusLink = null;
+                // We could be getting focus from ourself, so we must invalidate each time.
+                FocusLink = null;
 
-                    int newFocus = GetNextLinkIndex(focusIndex, forward);
-                    if (newFocus == -1)
+                int newFocus = GetNextLinkIndex(focusIndex, forward);
+                if (newFocus == -1)
+                {
+                    if (forward)
                     {
-                        if (forward)
-                        {
-                            newFocus = GetNextLinkIndex(-1, forward); // -1, so "next" will be 0
-                        }
-                        else
-                        {
-                            newFocus = GetNextLinkIndex(_links.Count, forward); // Count, so "next" will be Count-1
-                        }
+                        // -1, so "next" will be 0
+                        newFocus = GetNextLinkIndex(-1, forward);
                     }
+                    else
+                    {
+                        // Count, so "next" will be Count-1
+                        newFocus = GetNextLinkIndex(_links.Count, forward);
+                    }
+                }
 
-                    if (newFocus != -1)
-                    {
-                        FocusLink = _links[newFocus];
-                    }
+                if (newFocus != -1)
+                {
+                    FocusLink = _links[newFocus];
                 }
             }
 
@@ -1847,18 +1594,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if the color for active links should remain the same.
         /// </summary>
-        internal bool ShouldSerializeActiveLinkColor()
-        {
-            return !_activeLinkColor.IsEmpty;
-        }
+        internal bool ShouldSerializeActiveLinkColor() => !_activeLinkColor.IsEmpty;
 
         /// <summary>
         ///  Determines if the color for disabled links should remain the same.
         /// </summary>
-        internal bool ShouldSerializeDisabledLinkColor()
-        {
-            return !_disabledLinkColor.IsEmpty;
-        }
+        internal bool ShouldSerializeDisabledLinkColor() => !_disabledLinkColor.IsEmpty;
 
         /// <summary>
         ///  Determines if the range in text that is treated as a link should remain the same.
@@ -1877,10 +1618,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if the color of links in normal cases should remain the same.
         /// </summary>
-        internal bool ShouldSerializeLinkColor()
-        {
-            return !_linkColor.IsEmpty;
-        }
+        internal bool ShouldSerializeLinkColor() => !_linkColor.IsEmpty;
 
         /// <summary>
         ///  Determines whether designer should generate code for setting the UseCompatibleTextRendering or not.
@@ -1895,10 +1633,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if the color of links that have been visited should remain the same.
         /// </summary>
-        private bool ShouldSerializeVisitedLinkColor()
-        {
-            return !_visitedLinkColor.IsEmpty;
-        }
+        private bool ShouldSerializeVisitedLinkColor() => !_visitedLinkColor.IsEmpty;
 
         /// <summary>
         ///  Update accessibility with the currently focused link.
@@ -1975,7 +1710,6 @@ namespace System.Windows.Forms
             else
             {
                 // If a link is currently focused, de-select it
-                //
                 if (FocusLink is not null)
                 {
                     FocusLink = null;
@@ -1987,9 +1721,6 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.Selectable, selectable);
         }
 
-        /// <summary>
-        ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-        /// </summary>
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
