@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private HCURSOR _handle;
         private bool _ownHandle = true;
         private readonly PCWSTR _resourceId;
-        private readonly string? _resourceName;
+        internal readonly string? _resourceName;
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the
@@ -78,6 +78,7 @@ namespace System.Windows.Forms
         public Cursor(Type type, string resource)
             : this((type.OrThrowIfNull()).Module.Assembly.GetManifestResourceStream(type, resource)!)
         {
+            _resourceName = resource;
         }
 
         /// <summary>
