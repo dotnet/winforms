@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.ComponentModel.Design
@@ -14,20 +12,20 @@ namespace System.ComponentModel.Design
         {
         }
 
-        public DesignerActionListCollection(DesignerActionList[] value)
+        public DesignerActionListCollection(DesignerActionList?[] value)
         {
             AddRange(value);
         }
 
-        public DesignerActionList this[int index]
+        public DesignerActionList? this[int index]
         {
-            get => (DesignerActionList)(List[index]);
+            get => (DesignerActionList?)List[index];
             set => List[index] = value;
         }
 
-        public int Add(DesignerActionList value) => List.Add(value);
+        public int Add(DesignerActionList? value) => List.Add(value);
 
-        public void AddRange(DesignerActionList[] value)
+        public void AddRange(DesignerActionList?[] value)
         {
             ArgumentNullException.ThrowIfNull(value);
 
@@ -48,15 +46,15 @@ namespace System.ComponentModel.Design
             }
         }
 
-        public void Insert(int index, DesignerActionList value) => List.Insert(index, value);
+        public void Insert(int index, DesignerActionList? value) => List.Insert(index, value);
 
-        public int IndexOf(DesignerActionList value) => List.IndexOf(value);
+        public int IndexOf(DesignerActionList? value) => List.IndexOf(value);
 
-        public bool Contains(DesignerActionList value) => List.Contains(value);
+        public bool Contains(DesignerActionList? value) => List.Contains(value);
 
-        public void Remove(DesignerActionList value) => List.Remove(value);
+        public void Remove(DesignerActionList? value) => List.Remove(value);
 
-        public void CopyTo(DesignerActionList[] array, int index) => List.CopyTo(array, index);
+        public void CopyTo(DesignerActionList?[] array, int index) => List.CopyTo(array, index);
 
         protected override void OnValidate(object value)
         {

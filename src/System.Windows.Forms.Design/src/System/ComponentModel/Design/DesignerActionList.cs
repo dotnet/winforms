@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Reflection;
 
 namespace System.ComponentModel.Design
@@ -15,21 +13,21 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DesignerActionList
     {
-        public DesignerActionList(IComponent component)
+        public DesignerActionList(IComponent? component)
         {
             Component = component;
         }
 
         public virtual bool AutoShow { get; set; }
 
-        public IComponent Component { get; }
+        public IComponent? Component { get; }
 
-        public object GetService(Type serviceType)
+        public object? GetService(Type serviceType)
         {
             return Component?.Site?.GetService(serviceType);
         }
 
-        public virtual DesignerActionItemCollection GetSortedActionItems()
+        public virtual DesignerActionItemCollection? GetSortedActionItems()
         {
             var items = new SortedList<string, DesignerActionItem>();
 
@@ -76,7 +74,7 @@ namespace System.ComponentModel.Design
             return returnValue;
         }
 
-        private static object GetCustomAttribute(MemberInfo info, Type attributeType)
+        private static object? GetCustomAttribute(MemberInfo info, Type attributeType)
         {
             object[] attributes = info.GetCustomAttributes(attributeType, true);
             return attributes.Length > 0 ? attributes[0] : null;
@@ -93,14 +91,12 @@ namespace System.ComponentModel.Design
                 description = descAttr.Description;
             }
 
-            DisplayNameAttribute dispNameAttr = GetCustomAttribute(info, typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-            if (dispNameAttr is not null)
+            if (GetCustomAttribute(info, typeof(DisplayNameAttribute)) is DisplayNameAttribute dispNameAttr)
             {
                 displayName = dispNameAttr.DisplayName;
             }
 
-            CategoryAttribute catAttr = GetCustomAttribute(info, typeof(CategoryAttribute)) as CategoryAttribute;
-            if (dispNameAttr is not null)
+            if (GetCustomAttribute(info, typeof(CategoryAttribute)) is CategoryAttribute catAttr)
             {
                 category = catAttr.Category;
             }
