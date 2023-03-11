@@ -1827,7 +1827,7 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
 
             using var control = new SubGroupBox
             {
@@ -1865,7 +1865,7 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+            using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
 
             using var control = new SubGroupBox
             {

@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            var e = new SubPaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+            using var e = new SubPaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
             e.DisposeEntry(disposing);
             e.DisposeEntry(disposing);
         }
