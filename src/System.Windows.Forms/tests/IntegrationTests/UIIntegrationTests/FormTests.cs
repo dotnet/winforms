@@ -40,7 +40,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_Z));
+                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_Z).Sleep(INPUTSIMULATOR_DELAY));
 
                 // inputSimulator.Sleep appears wildly inconsistent with snap panel timing. Task.Delay does not
                 await Task.Delay(SnapLayoutDelayMS);
@@ -49,7 +49,9 @@ namespace System.Windows.Forms.UITests
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT)
-                                                             .KeyPress(VirtualKeyCode.RETURN));
+                                                             .Sleep(INPUTSIMULATOR_DELAY)
+                                                             .KeyPress(VirtualKeyCode.RETURN)
+                                                             .Sleep(INPUTSIMULATOR_DELAY));
 
                 await Task.Delay(SnapLayoutDelayMS);
 
@@ -59,7 +61,7 @@ namespace System.Windows.Forms.UITests
                 // given to any newly launched window until this panel is dismissed.
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY));
 
                 await Task.Delay(SnapLayoutDelayMS);
 
@@ -99,7 +101,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_Z));
+                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_Z).Sleep(INPUTSIMULATOR_DELAY));
 
                 // inputSimulator.Sleep appears wildly inconsistent with snap panel timing. Task.Delay does not
                 await Task.Delay(SnapLayoutDelayMS);
@@ -108,8 +110,11 @@ namespace System.Windows.Forms.UITests
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT)
+                                                             .Sleep(INPUTSIMULATOR_DELAY)
                                                              .KeyPress(VirtualKeyCode.RIGHT)
-                                                             .KeyPress(VirtualKeyCode.RETURN));
+                                                             .Sleep(INPUTSIMULATOR_DELAY)
+                                                             .KeyPress(VirtualKeyCode.RETURN)
+                                                             .Sleep(INPUTSIMULATOR_DELAY));
 
                 await Task.Delay(SnapLayoutDelayMS);
 
@@ -119,7 +124,7 @@ namespace System.Windows.Forms.UITests
                 // given to any newly launched window until this panel is dismissed.
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY));
 
                 await Task.Delay(SnapLayoutDelayMS);
 

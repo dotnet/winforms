@@ -43,7 +43,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+                    inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(CloseReason.None, form.CloseReason);
                 Assert.Equal(dialogResult, form.DialogResult);
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SPACE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SPACE).Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(DialogResult.OK, form.DialogResult);
                 Assert.False(form.Visible);
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(DialogResult.None, form.DialogResult);
                 Assert.True(form.Visible);
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(DialogResult.Cancel, form.DialogResult);
                 Assert.False(form.Visible);
@@ -228,13 +228,13 @@ namespace System.Windows.Forms.UITests
                 control2.Click += (sender, e) => control2ClickCount++;
 
                 await MoveMouseToControlAsync(control1);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().LeftButtonUp());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
 
                 await MoveMouseToControlAsync(control2);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().LeftButtonUp());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(1, control2ClickCount);
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.UITests
                 // Send the Enter press
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN).Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.True(wasClicked);
             });
@@ -360,7 +360,7 @@ namespace System.Windows.Forms.UITests
                 // Send the shortcut ALT+C (the same as SendKeys.SendWait("%C"))
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_C));
+                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_C).Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.True(wasClicked);
             });
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.UITests
                 // Send a random ALT+L (the same as SendKeys.SendWait("%l"))
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_L));
+                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_L).Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.False(wasClicked);
             });

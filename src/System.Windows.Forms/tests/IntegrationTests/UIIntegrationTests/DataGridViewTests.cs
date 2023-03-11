@@ -33,7 +33,7 @@ namespace System.Windows.Forms.UITests
                 // Move mouse cursor over any cell of the first row to trigger a tooltip.
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y));
+                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y).Sleep(INPUTSIMULATOR_DELAY));
 
                 // Close the form to verify no exceptions thrown while showing the tooltip.
                 // Regression test for https://github.com/dotnet/winforms/issues/5496
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.UITests
                 // Wait 1 second to make sure that the toolTip appeared, it has some delay (500 ms by default).
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y).Sleep(1000));
+                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y).Sleep(2* INPUTSIMULATOR_DELAY));
 
                 // DataGridViewToolTip is private so use the reflection
                 object toolTip = dataGridView.TestAccessor().Dynamic._toolTipControl;

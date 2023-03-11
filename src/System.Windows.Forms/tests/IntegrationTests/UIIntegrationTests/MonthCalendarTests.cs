@@ -31,7 +31,7 @@ namespace System.Windows.Forms.UITests
                 await MoveMouseToControlAsync(calendar);
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+                    inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
             });
         }
 
@@ -44,7 +44,9 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Keyboard
                                                     .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT));
+                                                    .Sleep(INPUTSIMULATOR_DELAY)
+                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
+                                                    .Sleep(INPUTSIMULATOR_DELAY));
             });
         }
 
@@ -57,7 +59,9 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Keyboard
                                                     .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT));
+                                                    .Sleep(INPUTSIMULATOR_DELAY)
+                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
+                                                    .Sleep(INPUTSIMULATOR_DELAY));
 
                 DateTime selectedDate = new DateTime(2020, 4, 10);
                 SYSTEMTIME date = new()
@@ -153,7 +157,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+                    inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
 
                 await dateChanged.Task;
 
@@ -187,7 +191,7 @@ namespace System.Windows.Forms.UITests
             await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
             await InputSimulator.SendAsync(
                 form,
-                inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+                inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
         }
 
         private async Task ClickOnDateTwiceAsync(Form form, MonthCalendar calendar, DateTime date)
@@ -197,8 +201,9 @@ namespace System.Windows.Forms.UITests
                 form,
                 inputSimulator => inputSimulator.Mouse
                                                 .LeftButtonClick()
-                                                .Sleep(500)
-                                                .LeftButtonClick());
+                                                .Sleep(INPUTSIMULATOR_DELAY)
+                                                .LeftButtonClick()
+                                                .Sleep(INPUTSIMULATOR_DELAY));
         }
 
         private async Task RunClickTestAsync(Func<Form, MonthCalendar, Task> runTest)

@@ -19,7 +19,6 @@ namespace System.Windows.Forms.UITests;
 public class DragDropTests : ControlTestBase
 {
     private const int DesktopNormalizedMax = 65536;
-    public const int DragDropDelayMS = 100;
     public const string DragAcceptRtf = "DragAccept.rtf";
     public const string DragDrop = "DragDrop";
     public const string Explorer = "explorer";
@@ -40,24 +39,24 @@ public class DragDropTests : ControlTestBase
 
             await InputSimulator.SendAsync(
                 form,
-                inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY));
 
             var targetMousePosition = ToVirtualPoint(form.ListDragTarget.PointToScreen(new Point(20, 20)));
             await InputSimulator.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
-                    .Sleep(DragDropDelayMS)
+                    .Sleep(INPUTSIMULATOR_DELAY)
                     .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
-                    .Sleep(DragDropDelayMS)
+                    .Sleep(INPUTSIMULATOR_DELAY)
                     .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
-                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .Sleep(INPUTSIMULATOR_DELAY) // slight delay so drag&drop triggered
                     .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
-                    .Sleep(DragDropDelayMS) // slight delay so drag&drop triggered
+                    .Sleep(INPUTSIMULATOR_DELAY) // slight delay so drag&drop triggered
                     .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
-                    .Sleep(DragDropDelayMS)
+                    .Sleep(INPUTSIMULATOR_DELAY)
                     .LeftButtonUp()
-                    .Sleep(DragDropDelayMS));
+                    .Sleep(INPUTSIMULATOR_DELAY));
 
             Assert.Equal(1, form.ListDragTarget.Items.Count);
         });
@@ -118,17 +117,17 @@ public class DragDropTests : ControlTestBase
                     => inputSimulator
                         .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
                         .LeftButtonDown()
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonClick()
-                        .Sleep(DragDropDelayMS));
+                        .Sleep(INPUTSIMULATOR_DELAY));
         });
 
         Assert.NotNull(data);
@@ -229,27 +228,27 @@ public class DragDropTests : ControlTestBase
                         inputSimulator
                             => inputSimulator.Mouse
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointStart.X, virtualPointStart.Y)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .LeftButtonDown()
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
-                                .Sleep(DragDropDelayMS)
+                                .Sleep(INPUTSIMULATOR_DELAY)
                                 .LeftButtonClick()
-                                .Sleep(DragDropDelayMS));
+                                .Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.NotNull(dragDropForm);
                 Assert.NotNull(dragDropForm.RichTextBoxDropTarget);
@@ -350,17 +349,17 @@ public class DragDropTests : ControlTestBase
                     => inputSimulator
                         .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
                         .LeftButtonDown()
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonClick()
-                        .Sleep(DragDropDelayMS));
+                        .Sleep(INPUTSIMULATOR_DELAY));
         });
 
         Assert.NotNull(data);
@@ -419,62 +418,64 @@ public class DragDropTests : ControlTestBase
                 inputSimulator
                     => inputSimulator
                         .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonDown()
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
                         // The drag and drop is very finicky, and if we just call LeftButtonUp()
                         // it won't work... It'd for some reason think we'd left the control instead.
                         //
                         // To work around it - give it a full second to react and then
                         // simulate a mouse click.
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonClick()
-                        .Sleep(DragDropDelayMS));
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
             await InputSimulator.SendAsync(
                 form,
                 inputSimulator
                     => inputSimulator
                         .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonDown()
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
                         // The drag and drop is very finicky, and if we just call LeftButtonUp()
                         // it won't work... It'd for some reason think we'd left the control instead.
                         //
                         // To work around it - give it a full second to react and then
                         // simulate a mouse click.
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                        .Sleep(DragDropDelayMS)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonClick()
-                        .Sleep(DragDropDelayMS));
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
             Assert.Equal(2, form.ListDragTarget.Items.Count);
         });
@@ -498,11 +499,11 @@ public class DragDropTests : ControlTestBase
                         form,
                         inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
                                                                 .LeftButtonDown()
-                                                                .Sleep(DragDropDelayMS)
+                                                                .Sleep(INPUTSIMULATOR_DELAY)
                                                                 .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                                                                .Sleep(DragDropDelayMS)
+                                                                .Sleep(INPUTSIMULATOR_DELAY)
                                                                 .LeftButtonUp()
-                                                                .Sleep(DragDropDelayMS));
+                                                                .Sleep(INPUTSIMULATOR_DELAY));
 
             Assert.NotNull(form);
             Assert.NotNull(form.RichTextBoxDropTarget);
@@ -528,7 +529,7 @@ public class DragDropTests : ControlTestBase
             await InputSimulator.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.LeftButtonClick()
-                                                      .Sleep(DragDropDelayMS));
+                                                      .Sleep(INPUTSIMULATOR_DELAY));
 
             Point toolStripItemCoordinates = form.ToolStrip.PointToScreen(new Point(5, 5));
             toolStripItemCoordinates.Offset(0, 40);
@@ -536,7 +537,7 @@ public class DragDropTests : ControlTestBase
 
             await InputSimulator.SendAsync(
                         form,
-                        inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualToolStripItemCoordinates.X, virtualToolStripItemCoordinates.Y));
+                        inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualToolStripItemCoordinates.X, virtualToolStripItemCoordinates.Y).Sleep(INPUTSIMULATOR_DELAY));
 
             Point virtualPointStart = virtualToolStripItemCoordinates;
             toolStripItemCoordinates.Offset(50, 50);
@@ -545,11 +546,11 @@ public class DragDropTests : ControlTestBase
                         form,
                         inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
                                                                 .LeftButtonDown()
-                                                                .Sleep(DragDropDelayMS)
+                                                                .Sleep(INPUTSIMULATOR_DELAY)
                                                                 .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                                                                .Sleep(DragDropDelayMS)
+                                                                .Sleep(INPUTSIMULATOR_DELAY)
                                                                 .LeftButtonUp()
-                                                                .Sleep(DragDropDelayMS));
+                                                                .Sleep(INPUTSIMULATOR_DELAY));
 
             Assert.NotNull(form);
             Assert.NotNull(form.RichTextBoxDropTarget);
@@ -636,7 +637,7 @@ public class DragDropTests : ControlTestBase
         while (!IsExplorerOpen(directory) && wait++ < maxWait)
         {
             TestOutputHelper.WriteLine($"Waiting for Explorer to open, wait {wait}");
-            Thread.Sleep(DragDropDelayMS);
+            Thread.Sleep(INPUTSIMULATOR_DELAY);
         }
 
         foreach (Process process in Process.GetProcesses())
