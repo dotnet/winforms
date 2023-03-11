@@ -438,6 +438,11 @@ namespace System.Windows.Forms
                         picSize.Height,
                         IMAGE_FLAGS.LR_DEFAULTCOLOR).Value;
 
+                    if (_handle.IsNull)
+                    {
+                        throw new Win32Exception(string.Format(SR.FailedToLoadCursor, paramName, Marshal.GetLastWin32Error()));
+                    }
+
                     _ownHandle = true;
                 }
                 else
