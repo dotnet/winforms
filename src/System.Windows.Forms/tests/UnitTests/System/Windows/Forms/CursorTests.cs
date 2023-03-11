@@ -357,12 +357,9 @@ public class CursorTests
     {
         var cursor = new Cursor(2);
         cursor.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
-        Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);
 
-        cursor.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
-        Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);
+        // Cursors not owned should not be disposed.
+        Assert.NotEqual(IntPtr.Zero, cursor.Handle);
     }
 
     public static IEnumerable<object[]> Draw_TestData()
