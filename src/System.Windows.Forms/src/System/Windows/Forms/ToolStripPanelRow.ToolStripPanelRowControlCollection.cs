@@ -281,7 +281,6 @@ namespace System.Windows.Forms
                 if (index >= 0 && index < Count)
                 {
                     Control control = GetControl(index);
-                    ToolStripPanelCell cell = InnerList[index] as ToolStripPanelCell;
                     InnerList.RemoveAt(index);
                     OnAfterRemove(control, index);
                 }

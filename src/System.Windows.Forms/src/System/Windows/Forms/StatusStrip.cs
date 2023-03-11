@@ -368,8 +368,6 @@ namespace System.Windows.Forms
         {
             if (state[stateCalledSpringTableLayout])
             {
-                bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));
-
                 // shove all items that don't fit one pixel outside the displayed region
                 Rectangle displayRect = DisplayRectangle;
                 Point noMansLand = displayRect.Location;

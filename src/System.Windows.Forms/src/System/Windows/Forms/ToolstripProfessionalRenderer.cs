@@ -697,7 +697,6 @@ namespace System.Windows.Forms
 
             ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
-            Graphics g = e.Graphics;
             Rectangle bounds = e.AffectedBounds;
             bounds.Y += 2;
             bounds.Height -= 4; /*shrink to accomodate 1PX line*/

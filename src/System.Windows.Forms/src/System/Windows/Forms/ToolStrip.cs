@@ -2264,7 +2264,6 @@ namespace System.Windows.Forms
 
             double minHypotenuse = double.MaxValue;
             double minTan = double.MaxValue;
-            double hypotenuseOfTanWinner = double.MaxValue;
             double tanOfHypotenuseWinner = double.MaxValue;
 
             if (selectedItem is null)
@@ -2326,7 +2325,6 @@ namespace System.Windows.Forms
                     if (minTan == tan && !double.IsNaN(minTan))
                     {
                         tanWinner = otherItem;
-                        hypotenuseOfTanWinner = hypotenuse;
                     }
 
                     if (minHypotenuse == hypotenuse)

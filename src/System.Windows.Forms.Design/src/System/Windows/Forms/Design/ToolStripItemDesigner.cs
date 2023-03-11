@@ -1108,7 +1108,7 @@ namespace System.Windows.Forms.Design
         // internal method called to select the next item from the current item.
         internal void SelectNextItem(ISelectionService service, bool enterKeyPressed, ToolStripDesigner designer)
         {
-            if (ToolStripItem is ToolStripDropDownItem dropDownItem)
+            if (ToolStripItem is ToolStripDropDownItem)
             {
                 SetSelection(enterKeyPressed);
             }
