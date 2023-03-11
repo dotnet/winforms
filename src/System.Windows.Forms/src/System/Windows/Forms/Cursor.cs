@@ -39,7 +39,7 @@ namespace System.Windows.Forms
             _ownHandle = false;
             _resourceId = nResourceId;
             _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
-            if (_handle == IntPtr.Zero)
+            if (_handle.IsNull)
             {
                 throw new Win32Exception(string.Format(SR.FailedToLoadCursor, nResourceId, Marshal.GetLastWin32Error()));
             }
@@ -148,7 +148,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                ObjectDisposedException.ThrowIf(_handle.IsNull, this);
+               // ObjectDisposedException.ThrowIf(_handle.IsNull, this);
+               if (_handle.IsNull)
+                {
+                    throw new Exception($"Handle disposed:  {_resourceId}");
+                }
+
                 return (nint)_handle;
             }
         }
