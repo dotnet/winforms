@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -17,8 +15,8 @@ namespace System.Windows.Forms.Design
         {
             private readonly ControlDesigner _designer;
             private readonly Control _control;
-            private IDesignerHost _host;
-            private ISelectionService _selectionService;
+            private IDesignerHost? _host;
+            private ISelectionService? _selectionService;
 
             public ControlDesignerAccessibleObject(ControlDesigner designer, Control control)
             {
@@ -28,7 +26,7 @@ namespace System.Windows.Forms.Design
 
             public override Rectangle Bounds => _control.AccessibilityObject.Bounds;
 
-            public override string Description => _control.AccessibilityObject.Description;
+            public override string? Description => _control.AccessibilityObject.Description;
 
             private IDesignerHost DesignerHost
                 => _host ??= (IDesignerHost)_designer.GetService(typeof(IDesignerHost));
@@ -37,7 +35,7 @@ namespace System.Windows.Forms.Design
 
             public override string Name => _control.Name;
 
-            public override AccessibleObject Parent => _control.AccessibilityObject.Parent;
+            public override AccessibleObject? Parent => _control.AccessibilityObject.Parent;
 
             public override AccessibleRole Role => _control.AccessibilityObject.Role;
 
@@ -67,9 +65,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            public override string Value => _control.AccessibilityObject.Value;
+            public override string? Value => _control.AccessibilityObject.Value;
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 Debug.WriteLineIf(
                     CompModSwitches.MSAA.TraceInfo,
@@ -77,7 +75,7 @@ namespace System.Windows.Forms.Design
 
                 if (_control.AccessibilityObject.GetChild(index) is Control.ControlAccessibleObject childAccObj)
                 {
-                    AccessibleObject cao = GetDesignerAccessibleObject(childAccObj);
+                    AccessibleObject? cao = GetDesignerAccessibleObject(childAccObj);
                     if (cao is not null)
                     {
                         return cao;
@@ -89,7 +87,7 @@ namespace System.Windows.Forms.Design
 
             public override int GetChildCount() => _control.AccessibilityObject.GetChildCount();
 
-            private AccessibleObject GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
+            private AccessibleObject? GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
             {
                 if (cao is null)
                 {
@@ -104,13 +102,13 @@ namespace System.Windows.Forms.Design
                 return null;
             }
 
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
                 => (State & AccessibleStates.Focused) != 0 ? this : base.GetFocused();
 
-            public override AccessibleObject GetSelected()
+            public override AccessibleObject? GetSelected()
                 => (State & AccessibleStates.Selected) != 0 ? this : base.GetFocused();
 
-            public override AccessibleObject HitTest(int x, int y) => _control.AccessibilityObject.HitTest(x, y);
+            public override AccessibleObject? HitTest(int x, int y) => _control.AccessibilityObject.HitTest(x, y);
         }
     }
 }
