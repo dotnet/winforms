@@ -5022,8 +5022,8 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
         <note />
       </trans-unit>
       <trans-unit id="FailedToLoadCursor">
-        <source>Failed to load cursor for '{0}'.  Error '{1}'.</source>
-        <target state="new">Failed to load cursor for '{0}'.  Error '{1}'.</target>
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="new">Failed to load cursor. Error '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">

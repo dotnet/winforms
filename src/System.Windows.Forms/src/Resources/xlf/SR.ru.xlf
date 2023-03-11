@@ -5023,8 +5023,8 @@ If you click Continue, the application will ignore this error and attempt to con
         <note />
       </trans-unit>
       <trans-unit id="FailedToLoadCursor">
-        <source>Failed to load cursor for '{0}'.  Error '{1}'.</source>
-        <target state="new">Failed to load cursor for '{0}'.  Error '{1}'.</target>
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="new">Failed to load cursor. Error '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
