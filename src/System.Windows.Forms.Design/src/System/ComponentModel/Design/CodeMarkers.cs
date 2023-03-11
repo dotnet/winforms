@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
@@ -18,13 +16,13 @@ namespace System.ComponentModel.Design
         private static class NativeMethods
         {
             [DllImport(TestDllName, EntryPoint = "PerfCodeMarker")]
-            public static extern void TestDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] aUserParams, int cbParams);
+            public static extern void TestDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[]? aUserParams, int cbParams);
 
             [DllImport(TestDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void TestDllPerfCodeMarkerString(int nTimerID, [MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] string aUserParams, int cbParams);
 
             [DllImport(ProductDllName, EntryPoint = "PerfCodeMarker")]
-            public static extern void ProductDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] aUserParams, int cbParams);
+            public static extern void ProductDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[]? aUserParams, int cbParams);
 
             [DllImport(ProductDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void ProductDllPerfCodeMarkerString(int nTimerID, [MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] string aUserParams, int cbParams);
@@ -77,7 +75,7 @@ namespace System.ComponentModel.Design
         // should CodeMarker events be fired to the test or product CodeMarker DLL
         private readonly RegistryView _registryView = RegistryView.Default;
 #pragma warning disable CS0649
-        private readonly string _regroot;
+        private readonly string? _regroot;
 #pragma warning restore CS0649
 
         private bool? _shouldUseTestDll;
@@ -268,7 +266,7 @@ namespace System.ComponentModel.Design
             return data;
         }
 
-        public static byte[] AttachCorrelationId(byte[] buffer, Guid correlationId)
+        public static byte[]? AttachCorrelationId(byte[]? buffer, Guid correlationId)
         {
             if (correlationId == Guid.Empty)
             {
@@ -318,13 +316,13 @@ namespace System.ComponentModel.Design
 
             // Reads the Performance subkey from the given registry key
             using (RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, registryView))
-            using (RegistryKey key = baseKey.OpenSubKey(regRoot + "\\Performance"))
+            using (RegistryKey? key = baseKey.OpenSubKey(regRoot + "\\Performance"))
             {
                 if (key is not null)
                 {
                     // Read the default value
                     // It doesn't matter what the value is, if it's present and not empty, code markers are enabled
-                    string defaultValue = key.GetValue(string.Empty).ToString();
+                    string? defaultValue = key.GetValue(string.Empty)?.ToString();
                     return !string.IsNullOrEmpty(defaultValue);
                 }
             }
@@ -339,7 +337,7 @@ namespace System.ComponentModel.Design
     internal struct CodeMarkerStartEnd : IDisposable
     {
         private int _end;
-        private byte[] _buffer;
+        private byte[]? _buffer;
 
         internal CodeMarkerStartEnd(int begin, int end, bool correlated = false)
         {
