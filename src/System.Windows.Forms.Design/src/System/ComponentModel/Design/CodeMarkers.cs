@@ -64,13 +64,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Are CodeMarkers enabled? Note that even if IsEnabled returns false, CodeMarkers may still be enabled later in another component.
         /// </summary>
-        public bool IsEnabled
-        {
-            get
-            {
-                return _state == State.Enabled;
-            }
-        }
+        public bool IsEnabled => _state == State.Enabled;
 
         // should CodeMarker events be fired to the test or product CodeMarker DLL
         private readonly RegistryView _registryView = RegistryView.Default;
@@ -273,11 +267,10 @@ namespace System.ComponentModel.Design
                 return buffer;
             }
 
-            byte[] correlationIdBytes = correlationId.ToByteArray();
-            byte[] bufferWithCorrelation = new byte[s_correlationMarkBytes.Length + correlationIdBytes.Length + (buffer is not null ? buffer.Length : 0)];
+            byte[] bufferWithCorrelation = new byte[s_correlationMarkBytes.Length + 16 + (buffer?.Length ?? 0)];
             s_correlationMarkBytes.CopyTo(bufferWithCorrelation, 0);
-            correlationIdBytes.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length);
-            buffer?.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + correlationIdBytes.Length);
+            correlationId.TryWriteBytes(bufferWithCorrelation.AsSpan(s_correlationMarkBytes.Length));
+            buffer?.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + 16);
 
             return bufferWithCorrelation;
         }
