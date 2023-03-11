@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design
 {
     /// <summary>
@@ -13,7 +11,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     internal sealed class ExtenderProviderService : IExtenderProviderService, IExtenderListService
     {
-        private List<IExtenderProvider> _providers;
+        private List<IExtenderProvider>? _providers;
 
         internal ExtenderProviderService()
         {
@@ -26,9 +24,7 @@ namespace System.ComponentModel.Design
         {
             if (_providers is not null)
             {
-                IExtenderProvider[] providers = new IExtenderProvider[_providers.Count];
-                _providers.CopyTo(providers, 0);
-                return providers;
+                return _providers.ToArray();
             }
 
             return Array.Empty<IExtenderProvider>();

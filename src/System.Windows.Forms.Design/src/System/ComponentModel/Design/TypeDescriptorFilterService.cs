@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.ComponentModel.Design
@@ -23,15 +21,12 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Helper method to return the designer for a given component.
         /// </summary>
-        private static IDesigner GetDesigner(IComponent component)
+        private static IDesigner? GetDesigner(IComponent component)
         {
-            ISite site = component.Site;
-            if (site is not null)
+            ISite? site = component.Site;
+            if (site.TryGetService(out IDesignerHost? host))
             {
-                if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host)
-                {
-                    return host.GetDesigner(component);
-                }
+                return host.GetDesigner(component);
             }
 
             return null;
@@ -45,12 +40,12 @@ namespace System.ComponentModel.Design
             ArgumentNullException.ThrowIfNull(component);
             ArgumentNullException.ThrowIfNull(attributes);
 
-            IDesigner designer = GetDesigner(component);
+            IDesigner? designer = GetDesigner(component);
 
-            if (designer is IDesignerFilter)
+            if (designer is IDesignerFilter designerFilter)
             {
-                ((IDesignerFilter)designer).PreFilterAttributes(attributes);
-                ((IDesignerFilter)designer).PostFilterAttributes(attributes);
+                designerFilter.PreFilterAttributes(attributes);
+                designerFilter.PostFilterAttributes(attributes);
             }
 
             return designer is not null;
@@ -64,12 +59,12 @@ namespace System.ComponentModel.Design
             ArgumentNullException.ThrowIfNull(component);
             ArgumentNullException.ThrowIfNull(events);
 
-            IDesigner designer = GetDesigner(component);
+            IDesigner? designer = GetDesigner(component);
 
-            if (designer is IDesignerFilter)
+            if (designer is IDesignerFilter designerFilter)
             {
-                ((IDesignerFilter)designer).PreFilterEvents(events);
-                ((IDesignerFilter)designer).PostFilterEvents(events);
+                designerFilter.PreFilterEvents(events);
+                designerFilter.PostFilterEvents(events);
             }
 
             return designer is not null;
@@ -83,12 +78,12 @@ namespace System.ComponentModel.Design
             ArgumentNullException.ThrowIfNull(component);
             ArgumentNullException.ThrowIfNull(properties);
 
-            IDesigner designer = GetDesigner(component);
+            IDesigner? designer = GetDesigner(component);
 
-            if (designer is IDesignerFilter)
+            if (designer is IDesignerFilter designerFilter)
             {
-                ((IDesignerFilter)designer).PreFilterProperties(properties);
-                ((IDesignerFilter)designer).PostFilterProperties(properties);
+                designerFilter.PreFilterProperties(properties);
+                designerFilter.PostFilterProperties(properties);
             }
 
             return designer is not null;
