@@ -165,7 +165,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_NullType_ThrowsArgumentNullException()
     {
-        // Assert.Throws<ArgumentNullException>("type", () => new Cursor(null, "resource"));
+         Assert.Throws<ArgumentNullException>("type", () => new Cursor(null, "resource"));
     }
 
     [Theory]

@@ -27,13 +27,12 @@ namespace System.Windows.Forms
         private HCURSOR _handle;
         private bool _ownHandle = true;
         private readonly PCWSTR _resourceId;
-        internal readonly string? _resourceName;
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the
         ///  definitions in the Cursors class.
         /// </summary>
-        internal unsafe Cursor(PCWSTR nResourceId, string? name = null)
+        internal unsafe Cursor(PCWSTR nResourceId)
         {
             // We don't delete stock cursors.
             _ownHandle = false;
@@ -41,10 +40,8 @@ namespace System.Windows.Forms
             _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
             if (_handle.IsNull)
             {
-                throw new Win32Exception(string.Format(SR.FailedToLoadCursor, nResourceId, Marshal.GetLastWin32Error()));
+                throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));
             }
-
-            _resourceName = name;
         }
 
         /// <summary>
@@ -78,7 +75,6 @@ namespace System.Windows.Forms
         public Cursor(Type type, string resource)
             : this((type.OrThrowIfNull()).Module.Assembly.GetManifestResourceStream(type, resource)!)
         {
-            _resourceName = resource;
         }
 
         /// <summary>
@@ -436,7 +432,7 @@ namespace System.Windows.Forms
 
                     if (_handle.IsNull)
                     {
-                        throw new Win32Exception(string.Format(SR.FailedToLoadCursor, paramName, Marshal.GetLastWin32Error()));
+                        throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));
                     }
 
                     _ownHandle = true;
