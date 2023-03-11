@@ -39,6 +39,10 @@ namespace System.Windows.Forms
             _ownHandle = false;
             _resourceId = nResourceId;
             _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
+            if (_handle == IntPtr.Zero)
+            {
+                throw new Win32Exception(string.Format(SR.FailedToLoadCursor, nResourceId, Marshal.GetLastWin32Error()));
+            }
         }
 
         /// <summary>

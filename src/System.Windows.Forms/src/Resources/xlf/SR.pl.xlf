@@ -5021,6 +5021,11 @@ Jeśli klikniesz pozycję Kontynuuj, aplikacja zignoruje ten błąd i będzie pr
         <target state="translated">Kontroluje, czy w oknie dialogowym nazwy plików nie zawierają nieprawidłowych znaków ani sekwencji.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor for '{0}'.  Error '{1}'.</source>
+        <target state="new">Failed to load cursor for '{0}'.  Error '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">Określa, czy dodać otwierany lub zapisywany plik do listy ostatnio używanych.</target>

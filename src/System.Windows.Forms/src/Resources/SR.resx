@@ -6961,4 +6961,7 @@ Stack trace where the illegal operation occurred was:
   <data name="InvalidArgumentType" xml:space="preserve">
     <value>Argument '{0}' must be of type '{1}'.</value>
   </data>
+  <data name="FailedToLoadCursor" xml:space="preserve">
+    <value>Failed to load cursor for '{0}'.  Error '{1}'.</value>
+  </data>
 </root>
