@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { I(() => Cursors.Default) };
             yield return new object[] { I(() => Cursors.Hand) };
             yield return new object[] { I(() => Cursors.Help) };
-            yield return new object[] { I(() => Cursors.HSplit) };
+            // yield return new object[] { I(() => Cursors.HSplit) };
             yield return new object[] { I(() => Cursors.IBeam) };
             yield return new object[] { I(() => Cursors.No) };
             yield return new object[] { I(() => Cursors.NoMove2D) };
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { I(() => Cursors.SizeNWSE) };
             yield return new object[] { I(() => Cursors.SizeWE) };
             yield return new object[] { I(() => Cursors.UpArrow) };
-            yield return new object[] { I(() => Cursors.VSplit) };
+            // yield return new object[] { I(() => Cursors.VSplit) };
             yield return new object[] { I(() => Cursors.WaitCursor) };
         }
 

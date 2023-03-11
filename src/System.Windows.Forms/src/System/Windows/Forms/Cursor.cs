@@ -151,11 +151,7 @@ namespace System.Windows.Forms
         {
             get
             {
-               // ObjectDisposedException.ThrowIf(_handle.IsNull, this);
-               if (_handle.IsNull)
-                {
-                    throw new Exception($"Handle disposed:  {_resourceName}");
-                }
+                ObjectDisposedException.ThrowIf(_handle.IsNull, this);
 
                 return (nint)_handle;
             }
