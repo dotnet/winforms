@@ -652,7 +652,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void TextBoxBase_BorderStyle_SetWithHandler_CallsBorderStyleChanged()
         {
-            var control = new TextBox();
+            using var control = new TextBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -6142,7 +6142,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void TextBoxBase_ProcessCmdKey_CtrlBackspaceTextEmpty_RemainsEmpty()
         {
-            var control = new SubTextBox();
+            using var control = new SubTextBox();
 
             var message = new Message();
             Assert.True(control.ProcessCmdKey(ref message, Keys.Control | Keys.Back));
@@ -6152,7 +6152,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void TextBoxBase_ProcessCmdKey_CtrlBackspaceReadOnly_Nop()
         {
-            var control = new SubTextBox
+            using var control = new SubTextBox
             {
                 Text = "text",
                 ReadOnly = true
