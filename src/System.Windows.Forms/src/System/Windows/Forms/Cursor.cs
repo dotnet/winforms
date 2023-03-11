@@ -23,17 +23,17 @@ namespace System.Windows.Forms
     public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle<HANDLE>
     {
         private static Size s_cursorSize = Size.Empty;
-
         private readonly byte[]? _cursorData;
         private HCURSOR _handle;
         private bool _ownHandle = true;
         private readonly PCWSTR _resourceId;
+        private readonly string? _resourceName;
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the
         ///  definitions in the Cursors class.
         /// </summary>
-        internal unsafe Cursor(PCWSTR nResourceId)
+        internal unsafe Cursor(PCWSTR nResourceId, string? name = null)
         {
             // We don't delete stock cursors.
             _ownHandle = false;
@@ -43,6 +43,8 @@ namespace System.Windows.Forms
             {
                 throw new Win32Exception(string.Format(SR.FailedToLoadCursor, nResourceId, Marshal.GetLastWin32Error()));
             }
+
+            _resourceName = name;
         }
 
         /// <summary>
@@ -151,7 +153,7 @@ namespace System.Windows.Forms
                // ObjectDisposedException.ThrowIf(_handle.IsNull, this);
                if (_handle.IsNull)
                 {
-                    throw new Exception($"Handle disposed:  {_resourceId}");
+                    throw new Exception($"Handle disposed:  {_resourceName}");
                 }
 
                 return (nint)_handle;
