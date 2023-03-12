@@ -1551,7 +1551,7 @@ namespace System.ComponentModel.Design.Tests
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
             NestedContainer container = Assert.IsAssignableFrom<NestedContainer>(component.Site.GetService(typeof(INestedContainer)));
-            var nestedComponent = new Component();
+            using var nestedComponent = new Component();
             container.Add(nestedComponent);
             Assert.Same(service, nestedComponent.Site.GetService(typeof(int)));
         }
@@ -2539,7 +2539,7 @@ namespace System.ComponentModel.Design.Tests
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
 
-            var rootComponent = new RootDesignerComponent();
+            using var rootComponent = new RootDesignerComponent();
             using var component = new DesignerComponent();
             host.Container.Add(rootComponent);
             host.Container.Add(component);
@@ -2780,7 +2780,7 @@ namespace System.ComponentModel.Design.Tests
             IDesignerLoaderHost2 host1 = surface1.Host;
             IDesignerLoaderHost2 host2 = surface2.Host;
 
-            var otherComponent = new RootDesignerComponent();
+            using var otherComponent = new RootDesignerComponent();
             host1.Container.Add(otherComponent);
             host2.Container.Remove(otherComponent);
             host2.Container.Remove(new Component());
