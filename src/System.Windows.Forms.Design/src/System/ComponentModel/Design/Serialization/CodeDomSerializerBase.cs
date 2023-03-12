@@ -5,6 +5,7 @@
 using System.CodeDom;
 using System.Collections;
 using System.Globalization;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -54,10 +55,12 @@ public abstract partial class CodeDomSerializerBase
             return typeref.BaseType;
         }
 
-        return GetTypeNameFromCodeTypeReferenceHelper(manager, typeref);
+        StringBuilder typeName = new StringBuilder();
+        GetTypeNameFromCodeTypeReferenceHelper(manager, typeref, typeName);
+        return typeName.ToString();
     }
 
-    private static string GetTypeNameFromCodeTypeReferenceHelper(IDesignerSerializationManager manager, CodeTypeReference typeref)
+    private static void GetTypeNameFromCodeTypeReferenceHelper(IDesignerSerializationManager manager, CodeTypeReference typeref, StringBuilder typeName)
     {
         if (typeref.TypeArguments is null || typeref.TypeArguments.Count == 0)
         {
@@ -66,42 +69,35 @@ public abstract partial class CodeDomSerializerBase
             if (t is not null)
             {
                 // get type which exists in the target framework if any
-                return GetReflectionTypeFromTypeHelper(manager, t).AssemblyQualifiedName!;
+                typeName.Append(GetReflectionTypeFromTypeHelper(manager, t).AssemblyQualifiedName);
             }
-
-            return typeref.BaseType;
-        }
-
-        //create the MyGeneric`2[ part
-        StringBuilder typename = new StringBuilder(typeref.BaseType);
-        if (!typeref.BaseType.Contains('`'))
-        {
-            typename.Append('`');
-            typename.Append(typeref.TypeArguments.Count);
-        }
-
-        typename.Append('[');
-
-        bool first = true;
-
-        //now create each sub-argument part.
-        foreach (CodeTypeReference childref in typeref.TypeArguments)
-        {
-            if (!first)
+            else
             {
-                typename.Append(',');
+                typeName.Append(typeref.BaseType);
+            }
+        }
+        else
+        {
+            //create the MyGeneric`2[ part
+            if (!typeref.BaseType.Contains('`'))
+            {
+                typeName.Append('`');
+                typeName.Append(typeref.TypeArguments.Count);
             }
 
-            typename.Append('[');
-            typename.Append(GetTypeNameFromCodeTypeReferenceHelper(manager, childref));
-            typename.Append(']');
-            first = false;
+            typeName.Append('[');
+
+            //now create each sub-argument part.
+            foreach (CodeTypeReference childref in typeref.TypeArguments)
+            {
+                typeName.Append('[');
+                GetTypeNameFromCodeTypeReferenceHelper(manager, childref, typeName);
+                typeName.Append(']');
+                typeName.Append(',');
+            }
+
+            typeName[^1] = ']';
         }
-
-        typename.Append(']');
-
-        //otherwise, we have a generic and we need to format it.
-        return typename.ToString();
     }
 
     /// <summary>
@@ -413,37 +409,7 @@ public abstract partial class CodeDomSerializerBase
                     }
 
                     // This property must have matching attributes.
-                    bool passFilter = true;
-                    if (filter is not null)
-                    {
-                        AttributeCollection propAttributes = property.Attributes;
-                        foreach (Attribute? a in filter)
-                        {
-                            if (!propAttributes.Contains(a))
-                            {
-                                passFilter = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    // If this property passes inspection, then set it.
-                    if (passFilter)
-                    {
-                        object? resourceObject = de.Value;
-                        Trace(TraceLevel.Verbose, $"Resource: {resourceName}, value: {(resourceObject ?? "(null)")}");
-                        try
-                        {
-                            property.SetValue(value, resourceObject);
-                        }
-                        catch (Exception e)
-                        {
-                            manager.ReportError(e);
-                        }
-                    }
-
-                    // If this property passes inspection, then set it.
-                    if (passFilter)
+                    if (property.Attributes.Contains(filter))
                     {
                         object? resourceObject = de.Value;
                         Trace(TraceLevel.Verbose, $"Resource: {resourceName}, value: {(resourceObject ?? "(null)")}");
@@ -516,8 +482,7 @@ public abstract partial class CodeDomSerializerBase
             manager.Context.Push(statement);
             try
             {
-                // Perf: is -> as changes, change ordering based on possibility of occurrence
-                // Please excuse the bad formatting, but I think it is more readable this way than nested indenting.
+                // Perf: change ordering based on possibility of occurrence
                 if (statement is CodeAssignStatement cas)
                 {
                     DeserializeAssignStatement(manager, cas);
@@ -567,7 +532,7 @@ public abstract partial class CodeDomSerializerBase
                     e = e.InnerException!;
                 }
 
-                if (!(e is CodeDomSerializerException) && statement.LinePragma is not null)
+                if (e is not CodeDomSerializerException && statement.LinePragma is not null)
                 {
                     e = new CodeDomSerializerException(e, statement.LinePragma);
                 }
@@ -612,7 +577,7 @@ public abstract partial class CodeDomSerializerBase
                     // Now deserialize the LHS of the event attach to discover the guy whose event we are attaching.
                     object targetObject = DeserializeExpression(manager, null, statement.Event.TargetObject)!;
                     TraceIf(TraceLevel.Error, targetObject is CodeExpression, "Unable to simplify event attach LHS to an object reference.");
-                    if (!(targetObject is CodeExpression))
+                    if (targetObject is not CodeExpression)
                     {
                         EventDescriptor? evt = GetEventsHelper(manager, targetObject, null)[statement.Event.EventName];
                         if (evt is not null)
@@ -641,7 +606,7 @@ public abstract partial class CodeDomSerializerBase
         {
             // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.
             //Perf: is -> as changes, change ordering based on possibility of occurrence
-            CodeExpression expression = statement.Left;
+            CodeExpression? expression = statement.Left;
 
             Trace(TraceLevel.Verbose, "Processing LHS");
             if (expression is CodePropertyReferenceExpression propertyReferenceEx)
@@ -758,7 +723,6 @@ public abstract partial class CodeDomSerializerBase
                 int[] indexes = new int[arrayIndexerEx.Indices.Count];
                 Trace(TraceLevel.Verbose, $"LHS is Array Indexer with dims {indexes.Length}");
                 object? array = DeserializeExpression(manager, null, arrayIndexerEx.TargetObject);
-                bool indexesOK = true;
 
                 // The indexes have to be of type int32. If they're not, then we cannot assign to this array.
                 for (int i = 0; i < indexes.Length; i++)
@@ -772,12 +736,12 @@ public abstract partial class CodeDomSerializerBase
                     else
                     {
                         Trace(TraceLevel.Warning, $"Index {i} could not be converted to int.  Type: {(index is null ? "(null)" : index.GetType().Name)}");
-                        indexesOK = false;
-                        break;
+                        Trace(TraceLevel.Error, "Indexes to array could not be converted to int32.");
+                        return;
                     }
                 }
 
-                if (array is Array arr && indexesOK)
+                if (array is Array arr)
                 {
                     Trace(TraceLevel.Verbose, "Processing RHS");
                     object? rhs = DeserializeExpression(manager, null, statement.Right);
@@ -791,8 +755,7 @@ public abstract partial class CodeDomSerializerBase
                 }
                 else
                 {
-                    TraceIf(TraceLevel.Error, array is not Array, $"Array resolved to something other than an array: {(array is null ? "(null)" : array.GetType().Name)}");
-                    TraceIf(TraceLevel.Error, !indexesOK, "Indexes to array could not be converted to int32.");
+                    Trace(TraceLevel.Error, $"Array resolved to something other than an array: {(array is null ? "(null)" : array.GetType().Name)}");
                 }
             }
         }
@@ -870,10 +833,10 @@ public abstract partial class CodeDomSerializerBase
                             if (parameters[i] is CodeExpression)
                             {
                                 // Before we bail on this parameter, see if the type is a delegate.  If we are creating a delegate we may be able to bind to the method after all.
-                                if (typeof(Delegate).IsAssignableFrom(type) && parameters.Length == 1 && parameters[i] is CodeMethodReferenceExpression methodRef)
+                                if (typeof(Delegate).IsAssignableFrom(type) && parameters is [CodeMethodReferenceExpression methodRef])
                                 {
                                     // Only do this if our target is not the root context.
-                                    if (!(methodRef.TargetObject is CodeThisReferenceExpression))
+                                    if (methodRef.TargetObject is not CodeThisReferenceExpression)
                                     {
                                         object target = DeserializeExpression(manager, null, methodRef.TargetObject)!;
                                         if (target is not CodeExpression)
@@ -937,7 +900,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     Trace(TraceLevel.Verbose, $"Field reference : {fieldReferenceEx.FieldName}");
                     object? target = DeserializeExpression(manager, null, fieldReferenceEx.TargetObject);
-                    if (target is not null && !(target is CodeExpression))
+                    if (target is not null and not CodeExpression)
                     {
                         // If the target is the root object, then this won't be found through reflection.  Instead, ask the manager for the field by name.
                         RootContext? rootExp = (RootContext?)manager.Context[typeof(RootContext)];
@@ -1063,7 +1026,7 @@ public abstract partial class CodeDomSerializerBase
                                 changeService?.OnComponentChanged(targetObject);
                             }
                         }
-                        else if (parameters.Length == 1 && parameters[0] is CodeDelegateCreateExpression codeDelegateCreateExpression)
+                        else if (parameters is [CodeDelegateCreateExpression codeDelegateCreateExpression])
                         {
                             string methodName = methodInvokeEx.Method.MethodName;
 
@@ -1132,7 +1095,7 @@ public abstract partial class CodeDomSerializerBase
                                 {
                                     object? o = DeserializeExpression(manager, null, initializer);
 
-                                    if (!(o is CodeExpression))
+                                    if (o is not CodeExpression)
                                     {
                                         if (!arrayType.IsInstanceOfType(o))
                                         {
@@ -1424,7 +1387,7 @@ public abstract partial class CodeDomSerializerBase
                     // event we are attaching.
                     //
                     TraceIf(TraceLevel.Error, targetObject is CodeExpression, "Unable to simplify event attach LHS to an object reference.");
-                    if (!(targetObject is CodeExpression))
+                    if (targetObject is not CodeExpression)
                     {
                         EventDescriptor? evt = GetEventsHelper(manager, targetObject, null)[eventName];
 
@@ -1451,65 +1414,40 @@ public abstract partial class CodeDomSerializerBase
         }
     }
 
-    private static object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
-    {
-        // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
-        CodeBinaryOperatorType[] booleanOperators = new CodeBinaryOperatorType[]
+        private static object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
         {
-            CodeBinaryOperatorType.IdentityInequality,
-            CodeBinaryOperatorType.IdentityEquality,
-            CodeBinaryOperatorType.ValueEquality,
-            CodeBinaryOperatorType.BooleanOr,
-            CodeBinaryOperatorType.BooleanAnd,
-            CodeBinaryOperatorType.LessThan,
-            CodeBinaryOperatorType.LessThanOrEqual,
-            CodeBinaryOperatorType.GreaterThan,
-            CodeBinaryOperatorType.GreaterThanOrEqual
-        };
+            // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
 
-        CodeBinaryOperatorType[] mathOperators = new CodeBinaryOperatorType[]
-        {
-            CodeBinaryOperatorType.Add,
-            CodeBinaryOperatorType.Subtract,
-            CodeBinaryOperatorType.Multiply,
-            CodeBinaryOperatorType.Divide,
-            CodeBinaryOperatorType.Modulus
-        };
-
-        CodeBinaryOperatorType[] binaryOperators = new CodeBinaryOperatorType[]
-        {
-            CodeBinaryOperatorType.BitwiseOr,
-            CodeBinaryOperatorType.BitwiseAnd
-        };
-
-        // Figure out what kind of expression we have.
-        for (int i = 0; i < binaryOperators.Length; i++)
-        {
-            if (op == binaryOperators[i])
+            // Figure out what kind of expression we have.
+            switch (op)
             {
-                return ExecuteBinaryOperator(left, right, op);
+                case CodeBinaryOperatorType.BitwiseOr:
+                case CodeBinaryOperatorType.BitwiseAnd:
+                    return ExecuteBinaryOperator(left, right, op);
+
+                case CodeBinaryOperatorType.Add:
+                case CodeBinaryOperatorType.Subtract:
+                case CodeBinaryOperatorType.Multiply:
+                case CodeBinaryOperatorType.Divide:
+                case CodeBinaryOperatorType.Modulus:
+                    return ExecuteMathOperator(left, right, op);
+
+                case CodeBinaryOperatorType.IdentityInequality:
+                case CodeBinaryOperatorType.IdentityEquality:
+                case CodeBinaryOperatorType.ValueEquality:
+                case CodeBinaryOperatorType.BooleanOr:
+                case CodeBinaryOperatorType.BooleanAnd:
+                case CodeBinaryOperatorType.LessThan:
+                case CodeBinaryOperatorType.LessThanOrEqual:
+                case CodeBinaryOperatorType.GreaterThan:
+                case CodeBinaryOperatorType.GreaterThanOrEqual:
+                    return ExecuteBooleanOperator(left, right, op);
+
+                default:
+                    Debug.Fail($"Unsupported binary operator type: {op}");
+                    return left;
             }
         }
-
-        for (int i = 0; i < mathOperators.Length; i++)
-        {
-            if (op == mathOperators[i])
-            {
-                return ExecuteMathOperator(left, right, op);
-            }
-        }
-
-        for (int i = 0; i < booleanOperators.Length; i++)
-        {
-            if (op == booleanOperators[i])
-            {
-                return ExecuteBooleanOperator(left, right, op);
-            }
-        }
-
-        Debug.Fail($"Unsupported binary operator type: {op}");
-        return left;
-    }
 
     private static object ExecuteBinaryOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
     {
@@ -1517,7 +1455,7 @@ public abstract partial class CodeDomSerializerBase
         TypeCode rightType = right.GetTypeCode();
 
         // The compatible types are listed in order from lowest bitness to highest.  We must operate on the highest bitness to keep fidelity.
-        TypeCode[] compatibleTypes = new TypeCode[]
+        ReadOnlySpan<TypeCode> compatibleTypes = new TypeCode[]
         {
             TypeCode.Byte,
             TypeCode.Char,
@@ -1564,15 +1502,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     byte leftValue = left.ToByte(null);
                     byte rightValue = right.ToByte(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
-                    {
-                        result = leftValue | rightValue;
-                    }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-
+                    result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
 
@@ -1580,15 +1510,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     char leftValue = left.ToChar(null);
                     char rightValue = right.ToChar(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
-                    {
-                        result = leftValue | rightValue;
-                    }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-
+                    result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
 
@@ -1612,15 +1534,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     ushort leftValue = left.ToUInt16(null);
                     ushort rightValue = right.ToUInt16(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
-                    {
-                        result = leftValue | rightValue;
-                    }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-
+                    result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
 
@@ -1628,15 +1542,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     int leftValue = left.ToInt32(null);
                     int rightValue = right.ToInt32(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
-                    {
-                        result = leftValue | rightValue;
-                    }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-
+                    result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
 
@@ -1644,15 +1550,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     uint leftValue = left.ToUInt32(null);
                     uint rightValue = right.ToUInt32(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
-                    {
-                        result = leftValue | rightValue;
-                    }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-
+                    result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
 
@@ -1660,15 +1558,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     long leftValue = left.ToInt64(null);
                     long rightValue = right.ToInt64(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
-                    {
-                        result = leftValue | rightValue;
-                    }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-
+                    result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
 
@@ -1676,18 +1566,10 @@ public abstract partial class CodeDomSerializerBase
                 {
                     ulong leftValue = left.ToUInt64(null);
                     ulong rightValue = right.ToUInt64(null);
-                    if (op == CodeBinaryOperatorType.BitwiseOr)
-                    {
-                        result = leftValue | rightValue;
-                    }
-                    else
-                    {
-                        result = leftValue & rightValue;
-                    }
-
+                    result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
-        }
+            }
 
         if (result != left && left is Enum)
         {
@@ -1696,6 +1578,18 @@ public abstract partial class CodeDomSerializerBase
         }
 
         return result;
+
+        static object ExecuteBinaryOperator<T>(T leftValue, T rightValue, CodeBinaryOperatorType op) where T : IBinaryInteger<T>
+        {
+            if (op == CodeBinaryOperatorType.BitwiseOr)
+            {
+                return leftValue | rightValue;
+            }
+            else
+            {
+                return leftValue & rightValue;
+            }
+        }
     }
 
     private static object ExecuteBooleanOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
@@ -1764,10 +1658,11 @@ public abstract partial class CodeDomSerializerBase
         object? result = propertyReferenceEx;
         Trace(TraceLevel.Verbose, $"Property reference : {propertyReferenceEx.PropertyName}");
         object? target = DeserializeExpression(manager, null, propertyReferenceEx.TargetObject);
-        if (target is not null && !(target is CodeExpression))
+        if (target is not null and not CodeExpression)
         {
+            Type? targetAsType = target as Type;
             // if it's a type, then we've got ourselves a static field...
-            if (!(target is Type))
+            if (targetAsType is null)
             {
                 PropertyDescriptor? prop = GetPropertiesHelper(manager, target, null)[propertyReferenceEx.PropertyName];
                 if (prop is not null)
@@ -1789,7 +1684,7 @@ public abstract partial class CodeDomSerializerBase
             }
             else
             {
-                PropertyInfo? prop = GetReflectionTypeFromTypeHelper(manager, (Type)target).GetProperty(propertyReferenceEx.PropertyName, BindingFlags.GetProperty | BindingFlags.Static | BindingFlags.Public);
+                PropertyInfo? prop = GetReflectionTypeFromTypeHelper(manager, targetAsType).GetProperty(propertyReferenceEx.PropertyName, BindingFlags.GetProperty | BindingFlags.Static | BindingFlags.Public);
                 if (prop is not null)
                 {
                     result = prop.GetValue(null, null);
@@ -1798,7 +1693,7 @@ public abstract partial class CodeDomSerializerBase
 
             if (result == propertyReferenceEx && reportError)
             {
-                string? typeName = target is Type type ? type.FullName : GetReflectionTypeHelper(manager, target).FullName;
+                string? typeName = targetAsType is not null ? targetAsType.FullName : GetReflectionTypeHelper(manager, target).FullName;
                 Error(manager, string.Format(SR.SerializerNoSuchProperty, typeName, propertyReferenceEx.PropertyName), SR.SerializerNoSuchProperty);
             }
         }
@@ -1863,7 +1758,7 @@ public abstract partial class CodeDomSerializerBase
         Trace(TraceLevel.Verbose, $"LHS is property : {propertyReferenceEx.PropertyName}");
         object? lhs = DeserializeExpression(manager, null, propertyReferenceEx.TargetObject);
 
-        if (lhs is not null && !(lhs is CodeExpression))
+        if (lhs is not null and not CodeExpression)
         {
             // Property assignments must go through our type descriptor system. However, we do not support parameterized properties.  If there are any parameters on the property, we do not perform the assignment.
             PropertyDescriptorCollection properties = GetPropertiesHelper(manager, lhs, runTimeProperties);
@@ -2016,12 +1911,12 @@ public abstract partial class CodeDomSerializerBase
             // this is done to avoid unnecessary ensuring\creating references
 
             string? objectName = manager.GetName(value);
-            if (objectName is null || objectName.IndexOf('.') != -1)
+            if (objectName is null || objectName.Contains('.'))
             {
                 if (manager.GetService(typeof(IReferenceService)) is IReferenceService refSvc)
                 {
                     objectName = refSvc.GetName(value);
-                    if (objectName is not null && objectName.IndexOf('.') != -1)
+                    if (objectName is not null && objectName.Contains('.'))
                     {
                         Trace(TraceLevel.Verbose, $"Resolving through IReferenceService : {objectName}");
 
@@ -2070,13 +1965,11 @@ public abstract partial class CodeDomSerializerBase
             ComponentCache.Entry? parentEntry = (ComponentCache.Entry?)manager.Context[typeof(ComponentCache.Entry)];
             ComponentCache? cache = (ComponentCache?)manager.Context[typeof(ComponentCache)];
 
-            if (parentEntry is not null && parentEntry.Component != value /* don't make ourselves dependent with ourselves */ && cache is not null)
+            object? parentEntryComponent = parentEntry?.Component;
+            if (parentEntryComponent is not null && parentEntryComponent != value /* don't make ourselves dependent with ourselves */)
             {
-                ComponentCache.Entry? entry = cache.GetEntryAll(value);
-                if (entry is not null && parentEntry.Component is not null)
-                {
-                    entry.AddDependency(parentEntry.Component);
-                }
+                ComponentCache.Entry? entry = cache?.GetEntryAll(value);
+                entry?.AddDependency(parentEntryComponent);
             }
         }
 
@@ -2108,15 +2001,9 @@ public abstract partial class CodeDomSerializerBase
                 {
                     if (a is DesignerSerializerAttribute da)
                     {
-                        Type? realSerializerType;
-                        if (vsManager is not null)
-                        {
-                            realSerializerType = vsManager.GetRuntimeType(da.SerializerBaseTypeName);
-                        }
-                        else
-                        {
-                            realSerializerType = manager.GetType(da.SerializerBaseTypeName!);
-                        }
+                        Type? realSerializerType = vsManager is not null
+                            ? vsManager.GetRuntimeType(da.SerializerBaseTypeName)
+                            : manager.GetType(da.SerializerBaseTypeName!);
 
                         if (realSerializerType == desiredSerializerType)
                         {
@@ -2126,22 +2013,16 @@ public abstract partial class CodeDomSerializerBase
                     }
                 }
 
-                // If we got a value serializer, we've got to do the same thing here for the type serializer.  We only care if the two are different
+                    // If we got a value serializer, we've got to do the same thing here for the type serializer.  We only care if the two are different
                 if (valueSerializerTypeName is not null)
                 {
                     foreach (Attribute a in typeAttributes)
                     {
                         if (a is DesignerSerializerAttribute da)
                         {
-                            Type? realSerializerType;
-                            if (vsManager is not null)
-                            {
-                                realSerializerType = vsManager.GetRuntimeType(da.SerializerBaseTypeName);
-                            }
-                            else
-                            {
-                                realSerializerType = manager.GetType(da.SerializerBaseTypeName!);
-                            }
+                            Type? realSerializerType = vsManager is not null
+                                ? vsManager.GetRuntimeType(da.SerializerBaseTypeName)
+                                : manager.GetType(da.SerializerBaseTypeName!);
 
                             if (realSerializerType == desiredSerializerType)
                             {
@@ -2160,8 +2041,10 @@ public abstract partial class CodeDomSerializerBase
                 // Finally, if we got a value serializer, we need to create it and use it.
                 if (valueSerializerTypeName is not null)
                 {
-                    Type? serializerType = vsManager is not null ? vsManager.GetRuntimeType(valueSerializerTypeName) :
-                                                                manager.GetType(valueSerializerTypeName);
+                    Type? serializerType = vsManager is not null
+                        ? vsManager.GetRuntimeType(valueSerializerTypeName)
+                        : manager.GetType(valueSerializerTypeName);
+
                     if (serializerType is not null && desiredSerializerType.IsAssignableFrom(serializerType))
                     {
                         return (CodeDomSerializer?)Activator.CreateInstance(serializerType);
@@ -2182,7 +2065,7 @@ public abstract partial class CodeDomSerializerBase
     ///  on the instance if it is present.  If not, it will delegate to the serialization
     ///  manager.
     /// </summary>
-    protected CodeDomSerializer? GetSerializer(IDesignerSerializationManager manager, Type? valueType)
+    protected CodeDomSerializer? GetSerializer(IDesignerSerializationManager manager, Type valueType)
     {
         return manager.GetSerializer(valueType, typeof(CodeDomSerializer)) as CodeDomSerializer;
     }
@@ -2204,9 +2087,9 @@ public abstract partial class CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(value);
 
         // Is the expression part of a prior SetExpression call?
-        if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table && table.GetExpression(value) is not null && (!honorPreset || !table.ContainsPresetExpression(value)))
+        if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table)
         {
-            hasExpression = true;
+            hasExpression = honorPreset ? table.ContainsPresetExpression(value) : table.GetExpression(value) is not null;
         }
 
         Trace(TraceLevel.Verbose, $"IsSerialized called for object {value} : {hasExpression}");
@@ -2253,7 +2136,7 @@ public abstract partial class CodeDomSerializerBase
 
         // see if this thing is serializable
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-        if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site is not null))
+        if (GetReflectionTypeHelper(manager, value).IsSerializable && (value as IComponent)?.Site is null)
         {
             CodeExpression? expression = SerializeToResourceExpression(manager, value);
             TraceIf(TraceLevel.Verbose, expression is not null, "Serialized value as a resource.");
@@ -2279,7 +2162,7 @@ public abstract partial class CodeDomSerializerBase
 
     private CodeExpression? SerializeInstanceDescriptor(IDesignerSerializationManager manager, object value, InstanceDescriptor descriptor)
     {
-        CodeExpression? expression = null;
+        CodeExpression expression;
         using (TraceScope("CodeDomSerializerBase::SerializeInstanceDescriptor"))
         {
             Trace(TraceLevel.Verbose, $"Member : {descriptor.MemberInfo!.Name}, args : {descriptor.Arguments.Count}");
@@ -2297,7 +2180,6 @@ public abstract partial class CodeDomSerializerBase
                 }
             }
 
-            bool paramsOk = true;
             for (int i = 0; i < arguments.Length; i++)
             {
                 Debug.Assert(argumentValues is not null && parameters is not null, "These should have been allocated when the argument array was created.");
@@ -2338,13 +2220,10 @@ public abstract partial class CodeDomSerializerBase
                 else
                 {
                     Trace(TraceLevel.Warning, $"Parameter {i} in instance descriptor call {descriptor.GetType().Name} could not be serialized.");
-                    paramsOk = false;
-                    break;
+                    return null;
                 }
             }
 
-            if (paramsOk)
-            {
                 Type expressionType = descriptor.MemberInfo!.DeclaringType!;
                 CodeTypeReference typeRef = new CodeTypeReference(expressionType);
 
@@ -2377,6 +2256,7 @@ public abstract partial class CodeDomSerializerBase
                 else
                 {
                     Debug.Fail($"Unrecognized reflection type in instance descriptor: {descriptor.MemberInfo.GetType().Name}");
+                    return null;
                 }
 
                 // Finally, check to see if our value is assignable from the expression type.  If not,  then supply a cast.  The value may be an internal or protected type; if it is, then walk up its hierarchy until we find one that is public.
@@ -2392,7 +2272,6 @@ public abstract partial class CodeDomSerializerBase
                     expression = new CodeCastExpression(targetType, expression);
                 }
             }
-        }
 
         return expression;
     }
@@ -2429,21 +2308,16 @@ public abstract partial class CodeDomSerializerBase
             int suffixIndex = 1;
             ComponentCache? cache = manager.Context[typeof(ComponentCache)] as ComponentCache;
             // Declare this name to the serializer.  If there is already a name defined, keep trying.
-            while (true)
+            do
             {
-                name = $"{baseName}{suffixIndex}";
-                if (manager.GetInstance(name) is null && (cache is null || !cache.ContainsLocalName(name)))
-                {
-                    manager.SetName(value, name);
-                    if (manager.Context[typeof(ComponentCache.Entry)] is ComponentCache.Entry entry)
-                    {
-                        entry.AddLocalName(name);
-                    }
+                name = $"{baseName}{suffixIndex++}";
+            }
+            while (manager.GetInstance(name) is not null || (cache is not null && cache.ContainsLocalName(name)));
 
-                    break;
-                }
-
-                suffixIndex++;
+            manager.SetName(value, name);
+            if (manager.Context[typeof(ComponentCache.Entry)] is ComponentCache.Entry entry)
+            {
+                entry.AddLocalName(name);
             }
         }
 
@@ -2827,25 +2701,29 @@ public abstract partial class CodeDomSerializerBase
                         {
                             expression = root.Expression;
                         }
-                        else if (referenceName && name.IndexOf('.') != -1)
-                        {
-                            // if it's a reference name with a dot, we've actually got a property here...
-                            int dotIndex = name.IndexOf('.');
-
-                            expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(root.Expression, name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
-                        }
                         else
                         {
-                            expression = new CodeFieldReferenceExpression(root.Expression, name);
+                            int dotIndex = name.IndexOf('.');
+
+                            if (referenceName && dotIndex >= 0)
+                            {
+                                // if it's a reference name with a dot, we've actually got a property here...
+                                expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(root.Expression, name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
+                            }
+                            else
+                            {
+                                expression = new CodeFieldReferenceExpression(root.Expression, name);
+                            }
                         }
                     }
                     else
                     {
+                        int dotIndex = name.IndexOf('.');
+
                         // A variable reference
-                        if (referenceName && name.IndexOf('.') != -1)
+                        if (referenceName && dotIndex >= 0)
                         {
                             // if it's a reference name with a dot, we've actually got a property here...
-                            int dotIndex = name.IndexOf('.');
                             expression = new CodePropertyReferenceExpression(new CodeVariableReferenceExpression(name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
                         }
                         else
@@ -2985,7 +2863,7 @@ public abstract partial class CodeDomSerializerBase
         if (existingExpression is not null && !isPreset)
         {
             Debug.Fail($"There shouldn't be an expression already associated with this object : {manager.GetName(value)}");
-            if (!(existingExpression.UserData["StackTrace"] is string stack))
+            if (existingExpression.UserData["StackTrace"] is not string stack)
             {
                 stack = "unknown";
             }
