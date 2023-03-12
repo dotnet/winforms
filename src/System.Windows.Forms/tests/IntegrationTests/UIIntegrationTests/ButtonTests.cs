@@ -105,7 +105,7 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/8635")]
+        [WinFormsFact/*(Skip = "https://github.com/dotnet/winforms/issues/8635")*/]
         public async Task Button_AchorNone_NoResizeOnWindowSizeWiderAsync()
         {
             await RunTestAsync(async (form, button) =>
@@ -129,8 +129,8 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6714")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6714")]
+        // [ActiveIssue("https://github.com/dotnet/winforms/issues/6714")]
+        [WinFormsFact/*(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6714")*/]
         public async Task Button_AchorNone_NoResizeOnWindowSizeTallerAsync()
         {
             await RunTestAsync(async (form, button) =>
@@ -154,8 +154,8 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/7297")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/7297")]
+        // [ActiveIssue("https://github.com/dotnet/winforms/issues/7297")]
+        [WinFormsFact/*(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/7297")*/]
         public async Task Button_Anchor_ResizeOnWindowSizeWiderAsync()
         {
             await RunTestAsync(async (form, button) =>
@@ -185,8 +185,8 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/7407")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/7407")]
+        // [ActiveIssue("https://github.com/dotnet/winforms/issues/7407")]
+        [WinFormsFact/*(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/7407")*/]
         public async Task Button_Anchor_ResizeOnWindowSizeTallerAsync()
         {
             await RunTestAsync(async (form, button) =>

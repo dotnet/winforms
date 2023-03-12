@@ -73,8 +73,8 @@ namespace System.Windows.Forms.Tests
                     State.PenColor(SystemColors.ControlDark)));
         }
 
-        [WinFormsFact(Skip = "TODO, refer to https://github.com/dotnet/winforms/issues/4212")]
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/4212")]
+        [WinFormsFact/*(Skip = "TODO, refer to https://github.com/dotnet/winforms/issues/4212")*/]
+        //[ActiveIssue("https://github.com/dotnet/winforms/issues/4212")]
         public unsafe void Button_VisualStyles_on_Default_LineDrawing()
         {
             if (!Application.RenderWithVisualStyles)
