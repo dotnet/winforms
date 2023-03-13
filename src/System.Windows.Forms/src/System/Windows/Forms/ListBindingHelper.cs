@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
 {
     public static class ListBindingHelper
     {
-        private static Attribute[] browsableAttribute;
+        private static Attribute[]? browsableAttribute;
 
         private static Attribute[] BrowsableAttributeList
         {
@@ -26,11 +24,11 @@ namespace System.Windows.Forms
             }
         }
 
-        public static object GetList(object list)
+        public static object? GetList(object? list)
         {
-            if (list is IListSource)
+            if (list is IListSource listSource)
             {
-                return (list as IListSource).GetList();
+                return listSource.GetList();
             }
             else
             {
@@ -38,7 +36,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static object GetList(object dataSource, string dataMember)
+        public static object? GetList(object? dataSource, string? dataMember)
         {
             //
             // The purpose of this method is to find a list, given a 'data source' object and a
@@ -58,25 +56,25 @@ namespace System.Windows.Forms
             }
 
             PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
-            PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
+            PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
             if (dmProp is null)
             {
                 throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
             }
 
-            object currentItem;
+            object? currentItem;
 
-            if (dataSource is ICurrencyManagerProvider)
+            if (dataSource is ICurrencyManagerProvider currencyManagerProvider)
             {
                 // Data source is another BindingSource so ask for its current item
-                CurrencyManager cm = (dataSource as ICurrencyManagerProvider).CurrencyManager;
+                CurrencyManager? cm = currencyManagerProvider.CurrencyManager;
                 bool currentKnown = (cm is not null && cm.Position >= 0 && cm.Position <= cm.Count - 1);
-                currentItem = currentKnown ? cm.Current : null;
+                currentItem = currentKnown ? cm!.Current : null;
             }
-            else if (dataSource is IEnumerable)
+            else if (dataSource is IEnumerable enumerable)
             {
                 // Data source is an enumerable list, so walk to the first item
-                currentItem = GetFirstItemByEnumerable(dataSource as IEnumerable);
+                currentItem = GetFirstItemByEnumerable(enumerable);
             }
             else
             {
@@ -88,14 +86,14 @@ namespace System.Windows.Forms
             return (currentItem is null) ? null : dmProp.GetValue(currentItem);
         }
 
-        public static string GetListName(object list, PropertyDescriptor[] listAccessors)
+        public static string GetListName(object? list, PropertyDescriptor[]? listAccessors)
         {
-            string name;
-
             if (list is null)
             {
                 return string.Empty;
             }
+
+            string name;
 
             if (list is ITypedList typedList)
             {
@@ -129,7 +127,7 @@ namespace System.Windows.Forms
             return name;
         }
 
-        public static PropertyDescriptorCollection GetListItemProperties(object list)
+        public static PropertyDescriptorCollection GetListItemProperties(object? list)
         {
             PropertyDescriptorCollection pdc;
 
@@ -137,32 +135,32 @@ namespace System.Windows.Forms
             {
                 return new PropertyDescriptorCollection(null);
             }
-            else if (list is Type)
+            else if (list is Type type)
             {
-                pdc = GetListItemPropertiesByType(list as Type);
+                pdc = GetListItemPropertiesByType(type);
             }
             else
             {
-                object target = GetList(list);
+                object? target = GetList(list);
 
-                if (target is ITypedList)
+                if (target is ITypedList typedList)
                 {
-                    pdc = (target as ITypedList).GetItemProperties(null);
+                    pdc = typedList.GetItemProperties(null);
                 }
-                else if (target is IEnumerable)
+                else if (target is IEnumerable enumerable)
                 {
-                    pdc = GetListItemPropertiesByEnumerable(target as IEnumerable);
+                    pdc = GetListItemPropertiesByEnumerable(enumerable);
                 }
                 else
                 {
-                    pdc = TypeDescriptor.GetProperties(target);
+                    pdc = TypeDescriptor.GetProperties(target!);
                 }
             }
 
             return pdc;
         }
 
-        public static PropertyDescriptorCollection GetListItemProperties(object list, PropertyDescriptor[] listAccessors)
+        public static PropertyDescriptorCollection GetListItemProperties(object? list, PropertyDescriptor[]? listAccessors)
         {
             if (listAccessors is null || listAccessors.Length == 0)
             {
@@ -173,7 +171,7 @@ namespace System.Windows.Forms
                 return GetListItemPropertiesByType(type, listAccessors, 0);
             }
 
-            object target = GetList(list);
+            object? target = GetList(list);
 
             if (target is ITypedList typedList)
             {
@@ -187,7 +185,7 @@ namespace System.Windows.Forms
             return GetListItemPropertiesByInstance(target, listAccessors, 0);
         }
 
-        public static PropertyDescriptorCollection GetListItemProperties(object dataSource, string dataMember, PropertyDescriptor[] listAccessors)
+        public static PropertyDescriptorCollection GetListItemProperties(object? dataSource, string? dataMember, PropertyDescriptor[]? listAccessors)
         {
             dataSource = GetList(dataSource);
 
@@ -195,7 +193,7 @@ namespace System.Windows.Forms
             {
                 // Find the property on the data source specified by the data member
                 PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
-                PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
+                PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
 
                 // Add the data member property to the list accessors
                 int len = (listAccessors is null) ? 1 : (listAccessors.Length + 1);
@@ -203,7 +201,7 @@ namespace System.Windows.Forms
                 listAccessors2[0] = dmProp ?? throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
                 for (int i = 1; i < len; ++i)
                 {
-                    listAccessors2[i] = listAccessors[i - 1];
+                    listAccessors2[i] = listAccessors![i - 1];
                 }
 
                 // Replace old accessors with new accessors
@@ -213,7 +211,7 @@ namespace System.Windows.Forms
             return GetListItemProperties(dataSource, listAccessors);
         }
 
-        public static Type GetListItemType(object list)
+        public static Type? GetListItemType(object? list)
         {
             if (list is null)
             {
@@ -232,15 +230,15 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Type listType = (list is Type) ? (list as Type) : list.GetType();
-            object listInstance = (list is Type) ? null : list;
+            Type listType = (list is Type type) ? type : list.GetType();
+            object? listInstance = (list is Type) ? null : list;
 
             if (typeof(Array).IsAssignableFrom(listType))
             {
                 return listType.GetElementType();
             }
 
-            PropertyInfo indexer = GetTypedIndexer(listType);
+            PropertyInfo? indexer = GetTypedIndexer(listType);
             if (indexer is not null)
             {
                 return indexer.PropertyType;
@@ -255,10 +253,10 @@ namespace System.Windows.Forms
 
         // Create an object of the given type. Throw an exception if this fails.
         [ExcludeFromCodeCoverage]
-        private static object CreateInstanceOfType(Type type)
+        private static object? CreateInstanceOfType(Type type)
         {
-            object instancedObject = null;
-            Exception instanceException = null;
+            object? instancedObject = null;
+            Exception? instanceException = null;
 
             try
             {
@@ -285,7 +283,7 @@ namespace System.Windows.Forms
             return instancedObject;
         }
 
-        public static Type GetListItemType(object dataSource, string dataMember)
+        public static Type? GetListItemType(object? dataSource, string? dataMember)
         {
             // No data source
             if (dataSource is null)
@@ -307,7 +305,7 @@ namespace System.Windows.Forms
             }
 
             // Find the property specified by the data member
-            PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
+            PropertyDescriptor? dmProp = dsProps.Find(dataMember, true);
             if (dmProp is null || dmProp.PropertyType is ICustomTypeDescriptor)
             {
                 return typeof(object);
@@ -324,7 +322,7 @@ namespace System.Windows.Forms
             if (typeof(Array).IsAssignableFrom(type))
             {
                 // If the type is Customers[], this will return "Customers"
-                Type elementType = type.GetElementType();
+                Type? elementType = type.GetElementType();
                 if (elementType is not null)
                 {
                     name = elementType.Name;
@@ -338,7 +336,7 @@ namespace System.Windows.Forms
             else if (typeof(IList).IsAssignableFrom(type))
             {
                 // If the type is BindingList<T>, TCollection, TList (or equiv), this will return "T"
-                PropertyInfo indexer = GetTypedIndexer(type);
+                PropertyInfo? indexer = GetTypedIndexer(type);
                 if (indexer is not null)
                 {
                     name = indexer.PropertyType.Name;
@@ -359,7 +357,7 @@ namespace System.Windows.Forms
 
         private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type, PropertyDescriptor[] listAccessors, int startIndex)
         {
-            PropertyDescriptorCollection pdc = null;
+            PropertyDescriptorCollection? pdc = null;
             if (listAccessors[startIndex] is null)
             {
                 return new PropertyDescriptorCollection(null);
@@ -394,8 +392,8 @@ namespace System.Windows.Forms
 
         private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable iEnumerable, PropertyDescriptor[] listAccessors, int startIndex)
         {
-            PropertyDescriptorCollection pdc = null;
-            object subList = null;
+            PropertyDescriptorCollection? pdc = null;
+            object? subList = null;
             // Walk down the tree - first try and get the value
             // This is tricky, because we can't do a standard GetValue - we need an instance of one of the
             // items in the list.
@@ -408,7 +406,7 @@ namespace System.Windows.Forms
             //        Customers does not have the property "Orders" - Customer has that property
             //        So we need to get the value of Customers[0]
             //
-            object instance = GetFirstItemByEnumerable(iEnumerable);
+            object? instance = GetFirstItemByEnumerable(iEnumerable);
 
             if (instance is not null)
             {
@@ -452,11 +450,11 @@ namespace System.Windows.Forms
 
         private static Type GetListItemTypeByEnumerable(IEnumerable iEnumerable)
         {
-            object instance = GetFirstItemByEnumerable(iEnumerable);
+            object? instance = GetFirstItemByEnumerable(iEnumerable);
             return (instance is not null) ? instance.GetType() : typeof(object);
         }
 
-        private static PropertyDescriptorCollection GetListItemPropertiesByInstance(object target, PropertyDescriptor[] listAccessors, int startIndex)
+        private static PropertyDescriptorCollection GetListItemPropertiesByInstance(object? target, PropertyDescriptor[] listAccessors, int startIndex)
         {
             Debug.Assert(listAccessors is not null);
 
@@ -471,7 +469,7 @@ namespace System.Windows.Forms
                 }
 
                 // Get the value (e.g. given Foo with property Bar, this gets Foo.Bar)
-                object value = listAccessors[startIndex].GetValue(target);
+                object? value = listAccessors[startIndex].GetValue(target);
 
                 if (value is null)
                 {
@@ -480,7 +478,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    PropertyDescriptor[] accessors = null;
+                    PropertyDescriptor[]? accessors = null;
 
                     if (listAccessors.Length > startIndex + 1)
                     {
@@ -497,7 +495,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return TypeDescriptor.GetProperties(target, BrowsableAttributeList);
+            return TypeDescriptor.GetProperties(target!, BrowsableAttributeList);
         }
 
         // returns true if 'type' can be treated as a list
@@ -549,9 +547,9 @@ namespace System.Windows.Forms
         ///  NOTE: A special rule is also enforced here - we only want to consider using the typed indexer on list
         ///  based types, ie. types we already know are supposed to be treated as lists (rather than list items).
         /// </summary>
-        private static PropertyInfo GetTypedIndexer(Type type)
+        private static PropertyInfo? GetTypedIndexer(Type type)
         {
-            PropertyInfo indexer = null;
+            PropertyInfo? indexer = null;
 
             if (!IsListBasedType(type))
             {
@@ -578,17 +576,17 @@ namespace System.Windows.Forms
 
         private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type)
         {
-            return TypeDescriptor.GetProperties(GetListItemType(type), BrowsableAttributeList);
+            return TypeDescriptor.GetProperties(GetListItemType(type)!, BrowsableAttributeList);
         }
 
         private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable enumerable)
         {
-            PropertyDescriptorCollection pdc = null;
+            PropertyDescriptorCollection? pdc = null;
             Type targetType = enumerable.GetType();
 
             if (typeof(Array).IsAssignableFrom(targetType))
             {
-                pdc = TypeDescriptor.GetProperties(targetType.GetElementType(), BrowsableAttributeList);
+                pdc = TypeDescriptor.GetProperties(targetType.GetElementType()!, BrowsableAttributeList);
             }
             else
             {
@@ -598,7 +596,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    PropertyInfo indexer = GetTypedIndexer(targetType);
+                    PropertyInfo? indexer = GetTypedIndexer(targetType);
 
                     if (indexer is not null && !typeof(ICustomTypeDescriptor).IsAssignableFrom(indexer.PropertyType))
                     {
@@ -638,7 +636,7 @@ namespace System.Windows.Forms
             // item in the list
             if (pdc is null)
             {
-                object instance = GetFirstItemByEnumerable(enumerable);
+                object? instance = GetFirstItemByEnumerable(enumerable);
                 if (enumerable is string)
                 {
                     pdc = TypeDescriptor.GetProperties(enumerable, BrowsableAttributeList);
@@ -662,15 +660,14 @@ namespace System.Windows.Forms
             return pdc;
         }
 
-        private static object GetFirstItemByEnumerable(IEnumerable enumerable)
+        private static object? GetFirstItemByEnumerable(IEnumerable enumerable)
         {
-            object instance = null;
+            object? instance = null;
 
-            if (enumerable is IList)
+            if (enumerable is IList list)
             {
                 // If the list supports IList (which is a superset of IEnumerable), then try to use its IList indexer
                 // to get the first item, since some ILists don't support use of their plain IEnumerable interface.
-                IList list = enumerable as IList;
                 instance = (list.Count > 0) ? list[0] : null;
             }
             else
