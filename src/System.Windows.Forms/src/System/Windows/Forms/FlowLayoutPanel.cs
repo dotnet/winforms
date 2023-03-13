@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 {
     [ProvideProperty("FlowBreak", typeof(Control))]
     [DefaultProperty(nameof(FlowDirection))]
-    [Designer("System.Windows.Forms.Design.FlowLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.FlowLayoutPanelDesigner, {AssemblyRef.SystemDesign}")]
     [Docking(DockingBehavior.Ask)]
     [SRDescription(nameof(SR.DescriptionFlowLayoutPanel))]
     public class FlowLayoutPanel : Panel, IExtenderProvider

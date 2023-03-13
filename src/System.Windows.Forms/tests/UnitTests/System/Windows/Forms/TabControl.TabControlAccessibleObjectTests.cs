@@ -10,7 +10,7 @@ using static System.Windows.Forms.TabControl;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabControl_TabControlAccessibilityObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TabControl_TabControlAccessibilityObjectTests
     {
         [WinFormsFact]
         public void TabControlAccessibilityObject_Ctor_Default()

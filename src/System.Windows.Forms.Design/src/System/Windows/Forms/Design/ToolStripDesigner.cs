@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Design
                 ArrayList items = new ArrayList();
                 foreach (ToolStripItem item in ToolStrip.Items)
                 {
-                    if (!(item is DesignerToolStripControlHost addNewItem))
+                    if (item is not DesignerToolStripControlHost)
                     {
                         items.Add(item);
                     }
@@ -1746,7 +1746,7 @@ namespace System.Windows.Forms.Design
                 string newName = baseName;
                 for (int indexer = 1; !nameCreate.IsValidName(newName) || container.Components[newName] is not null; indexer++)
                 {
-                    newName = baseName + indexer.ToString(CultureInfo.InvariantCulture);
+                    newName = $"{baseName}{indexer}";
                 }
 
                 return newName;

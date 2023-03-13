@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewComboBoxCellAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewComboBoxCellAccessibleObjectTests
     {
         public static IEnumerable<object[]> DataGridViewComboBoxCellAccessibleObject_SupportExpandCollapsePattern_TestData()
         {

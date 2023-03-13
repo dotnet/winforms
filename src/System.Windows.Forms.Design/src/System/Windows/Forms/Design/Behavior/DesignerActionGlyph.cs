@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Design.Behavior
             else
             {
                 // update alternative bounds if possible...
-                if (_alternativeParent is ComponentTray compTray)
+                if (_alternativeParent is ComponentTray)
                 {
                     ComponentTray.TrayControl trayControl = ComponentTray.GetTrayControlFromComponent(relatedComponent);
                     if (trayControl is not null)

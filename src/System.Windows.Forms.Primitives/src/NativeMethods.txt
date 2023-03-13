@@ -98,6 +98,7 @@ DISPID_*
 DISPPARAMS
 DoDragDrop
 DPI_AWARENESS_CONTEXT_*
+DPI_HOSTING_BEHAVIOR
 DragAcceptFiles
 DRAGDROP_E_ALREADYREGISTERED
 DRAGDROP_E_NOTREGISTERED
@@ -256,6 +257,7 @@ GetThemeSysInt
 GetThemeTextExtent
 GetThemeTextMetrics
 GetThreadDpiAwarenessContext
+GetThreadDpiHostingBehavior
 GetThreadLocale
 GetTickCount
 GetUpdateRect
@@ -549,6 +551,7 @@ SetTextAlign
 SetTextColor
 SetThemeAppProperties
 SetThreadDpiAwarenessContext
+SetThreadDpiHostingBehavior
 SetTimer
 SetViewportExtEx
 SetViewportOrgEx

@@ -7,7 +7,7 @@ using static System.Windows.Forms.ImageList;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ImageListStreamerTests : IClassFixture<ThreadExceptionFixture>
+    public class ImageListStreamerTests
     {
         [WinFormsFact]
         public void ImageListStreamer_BinaryFormatter_Stream_BinaryFormatter_round_trip_equality()

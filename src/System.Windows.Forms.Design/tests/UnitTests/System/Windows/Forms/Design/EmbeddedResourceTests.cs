@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class EmbeddedResourceTests : IClassFixture<ThreadExceptionFixture>
+    public class EmbeddedResourceTests
     {
         // Get System.Windows.Forms.Design assembly to verify that it contains all the icons that the code uses.
         private readonly Assembly assembly = Assembly.GetAssembly(typeof(AnchorEditor));

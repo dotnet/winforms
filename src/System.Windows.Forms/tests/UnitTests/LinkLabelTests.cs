@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class LinkLabelTests : IClassFixture<ThreadExceptionFixture>
+    public class LinkLabelTests
     {
         [WinFormsFact]
         public void LinkLabel_Constructor()

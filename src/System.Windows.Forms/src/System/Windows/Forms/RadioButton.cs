@@ -18,8 +18,8 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Checked))]
     [DefaultEvent(nameof(CheckedChanged))]
     [DefaultBindingProperty(nameof(Checked))]
-    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
-    [Designer("System.Windows.Forms.Design.RadioButtonDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
+    [Designer($"System.Windows.Forms.Design.RadioButtonDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionRadioButton))]
     public partial class RadioButton : ButtonBase
     {
@@ -597,7 +597,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", Checked: " + Checked.ToString();
+            return $"{s}, Checked: {Checked}";
         }
     }
 }

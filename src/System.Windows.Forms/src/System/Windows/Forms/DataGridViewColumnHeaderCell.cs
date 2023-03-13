@@ -1226,7 +1226,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            return "DataGridViewColumnHeaderCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + " }";
+            return $"DataGridViewColumnHeaderCell {{ ColumnIndex={ColumnIndex} }}";
         }
     }
 }

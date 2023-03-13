@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
-    public class ExpressionContextTests : IClassFixture<ThreadExceptionFixture>
+    public class ExpressionContextTests
     {
         public static IEnumerable<object[]> Ctor_CodeExpression_Type_Object_Object_TestData()
         {

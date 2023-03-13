@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public sealed partial class MdiClient
     {
         /// <summary>
-        ///  Collection of controls...
+        ///  Collection of controls.
         /// </summary>
         public new class ControlCollection : Control.ControlCollection
         {
@@ -24,10 +22,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
+            ///  <para>
             ///  Adds a control to the MDI Container. This child must be
             ///  a Form that is marked as an MDI Child to be added to the
             ///  container. You should not call this directly, but rather
             ///  set the child form's (ctl) MDIParent property:
+            ///  </para>
             /// <code>
             ///  //     wrong
             ///  Form child = new ChildForm();
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
             ///  child.setMdiParent(this);
             /// </code>
             /// </summary>
-            public override void Add(Control value)
+            public override void Add(Control? value)
             {
                 if (value is null)
                 {
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Removes a child control.
             /// </summary>
-            public override void Remove(Control value)
+            public override void Remove(Control? value)
             {
                 if (value is Form form)
                 {

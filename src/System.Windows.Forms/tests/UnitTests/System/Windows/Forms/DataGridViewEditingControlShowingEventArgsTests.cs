@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewEditingControlShowingEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewEditingControlShowingEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Control_DataGridViewCellStyle_TestData()
         {

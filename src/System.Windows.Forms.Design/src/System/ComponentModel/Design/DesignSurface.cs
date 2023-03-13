@@ -435,7 +435,7 @@ namespace System.ComponentModel.Design
                 return new TypeDescriptorFilterService();
             }
 
-            Debug.Assert(serviceType == typeof(IReferenceService), "Demand created service not supported: " + serviceType.Name);
+            Debug.Assert(serviceType == typeof(IReferenceService), $"Demand created service not supported: {serviceType.Name}");
             return new ReferenceService(container);
         }
 

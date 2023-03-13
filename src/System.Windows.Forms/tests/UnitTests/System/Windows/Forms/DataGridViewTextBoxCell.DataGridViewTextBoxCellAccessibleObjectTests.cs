@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewTextBoxCell_DataGridViewTextBoxCellAccessibleObject : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewTextBoxCell_DataGridViewTextBoxCellAccessibleObject
     {
         [WinFormsFact]
         public void DataGridViewTextBoxCellAccessibleObject_ControlType_IsDataItem()

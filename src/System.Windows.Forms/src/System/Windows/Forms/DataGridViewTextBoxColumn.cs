@@ -2,12 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
-using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -28,7 +24,7 @@ namespace System.Windows.Forms
             get => base.CellTemplate;
             set
             {
-                if (value is not null && !(value is DataGridViewTextBoxCell))
+                if (value is not null and not DataGridViewTextBoxCell)
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewTextBoxCell"));
                 }
@@ -80,23 +76,11 @@ namespace System.Windows.Forms
             set => base.SortMode = value;
         }
 
-        private DataGridViewTextBoxCell TextBoxCellTemplate
-        {
-            get
-            {
-                return (DataGridViewTextBoxCell)CellTemplate;
-            }
-        }
+        private DataGridViewTextBoxCell TextBoxCellTemplate => (DataGridViewTextBoxCell)CellTemplate;
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(64);
-            sb.Append("DataGridViewTextBoxColumn { Name=");
-            sb.Append(Name);
-            sb.Append(", Index=");
-            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
-            sb.Append(" }");
-            return sb.ToString();
+            return $"DataGridViewTextBoxColumn {{ Name={Name}, Index={Index} }}";
         }
     }
 }

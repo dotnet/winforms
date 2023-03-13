@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
 
             public sealed override string FocusId
             {
-                get => "METHOD:" + _actionList.GetType().FullName + "." + _methodItem.MemberName;
+                get => $"METHOD:{_actionList.GetType().FullName}.{_methodItem.MemberName}";
             }
 
             protected override void AddControls(List<Control> controls)

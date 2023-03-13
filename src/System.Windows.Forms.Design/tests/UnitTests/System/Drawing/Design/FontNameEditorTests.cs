@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class FontNameEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class FontNameEditorTests
     {
         private readonly ITypeDescriptorContext _typeDescriptorContext;
 

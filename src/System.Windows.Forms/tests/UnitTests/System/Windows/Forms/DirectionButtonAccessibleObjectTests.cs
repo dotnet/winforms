@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DirectionButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DirectionButtonAccessibleObjectTests
     {
         [WinFormsTheory]
         [InlineData(0)]

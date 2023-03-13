@@ -17,7 +17,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    uri = new Uri("http://" + uri.OriginalString.Trim());
+                    uri = new Uri($"http://{uri.OriginalString.AsSpan().Trim()}");
                 }
                 catch (UriFormatException)
                 {

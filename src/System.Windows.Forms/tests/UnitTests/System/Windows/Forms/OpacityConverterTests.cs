@@ -9,7 +9,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class OpacityConverterTests : IClassFixture<ThreadExceptionFixture>
+    public class OpacityConverterTests
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
             CommonTestHelper.GetConvertFromTheoryData();

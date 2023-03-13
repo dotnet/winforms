@@ -108,10 +108,7 @@ namespace System.Windows.Forms
             };
 
             Font font = SystemFonts.StatusFont ?? SystemFonts.DefaultFont;
-            string captionFont = $"{font.Name}, {font.SizeInPoints}, , " +
-                $"{(font.Bold ? "BOLD" : "")}" +
-                $"{(font.Italic ? "ITALIC" : "")}" +
-                $"{(font.Underline ? "UNDERLINE" : "")}";
+            string captionFont = $"{font.Name}, {font.SizeInPoints}, , {(font.Bold ? "BOLD" : "")}{(font.Italic ? "ITALIC" : "")}{(font.Underline ? "UNDERLINE" : "")}";
 
             fixed (char* pszText = caption, pszFont = captionFont)
             {

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewColumnCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewColumnCollectionTests
     {
         [WinFormsFact]
         public void DataGridViewColumnCollection_Ctor_DataGridView()

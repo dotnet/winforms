@@ -132,7 +132,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(codeObject is CodeStatement statement))
                         {
                             Debug.Fail("ResourceCodeDomSerializer::Deserialize requires a CodeExpression, CodeStatement or CodeStatementCollection to parse");
-                            string supportedTypes = string.Format(CultureInfo.CurrentCulture, "{0}, {1}, {2}", nameof(CodeExpression), nameof(CodeStatement), nameof(CodeStatementCollection));
+                            string supportedTypes = $"{nameof(CodeExpression)}, {nameof(CodeStatement)}, {nameof(CodeStatementCollection)}";
                             throw new ArgumentException(string.Format(SR.SerializerBadElementTypes, codeObject.GetType().Name, supportedTypes));
                         }
                     }
@@ -389,7 +389,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void SerializeMetadata(IDesignerSerializationManager manager, string name, object value, bool shouldSerializeValue)
         {
-            using (TraceScope("ResourceCodeDomSerializer::" + nameof(SerializeMetadata)))
+            using (TraceScope($"ResourceCodeDomSerializer::{nameof(SerializeMetadata)}"))
             {
                 Trace("Name: {0}", name);
                 Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
@@ -417,7 +417,7 @@ namespace System.ComponentModel.Design.Serialization
         private static void SetValueUsingCommonTraceScope(IDesignerSerializationManager manager, string name, object value, string calleeName,
             bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
         {
-            using (TraceScope("ResourceCodeDomSerializer::" + calleeName))
+            using (TraceScope($"ResourceCodeDomSerializer::{calleeName}"))
             {
                 Trace("Name: {0}", name);
                 Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));

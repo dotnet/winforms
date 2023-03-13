@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
@@ -32,7 +30,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  Creates a new SerializeAbsoluteContext. Member can be null or
         ///  omitted to indicate this context should be used for all members.
         /// </summary>
-        public SerializeAbsoluteContext(MemberDescriptor member)
+        public SerializeAbsoluteContext(MemberDescriptor? member)
         {
             Member = member;
         }
@@ -40,12 +38,12 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  This property returns the member this context is bound to. It may be null to indicate the context is bound to all members of an object.
         /// </summary>
-        public MemberDescriptor Member { get; }
+        public MemberDescriptor? Member { get; }
 
         /// <summary>
         ///  Returns true if the given member should be serialized in this context.
         /// </summary>
-        public bool ShouldSerialize(MemberDescriptor member)
+        public bool ShouldSerialize(MemberDescriptor? member)
         {
             return Member is null || Member == member;
         }

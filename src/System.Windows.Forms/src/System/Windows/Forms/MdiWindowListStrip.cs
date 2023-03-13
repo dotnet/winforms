@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Globalization;
-
 namespace System.Windows.Forms
 {
     /// <summary> this is the menu that merges into the MdiWindowListItem
@@ -115,7 +113,7 @@ namespace System.Windows.Forms
                                 text ??= string.Empty;
                                 ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i])
                                 {
-                                    Text = string.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text),
+                                    Text = $"&{accel} {text}",
                                     MergeAction = MergeAction.Append,
                                     MergeIndex = accel
                                 };

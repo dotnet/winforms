@@ -11,7 +11,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class BindingContextTests : IClassFixture<ThreadExceptionFixture>
+    public class BindingContextTests
     {
         [Fact]
         public void BindingContext_Ctor_Default()

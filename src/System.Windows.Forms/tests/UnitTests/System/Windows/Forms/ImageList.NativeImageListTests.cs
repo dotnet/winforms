@@ -7,7 +7,7 @@ using static System.Windows.Forms.ImageList;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListView_NativeImageListTests : IClassFixture<ThreadExceptionFixture>
+    public class ListView_NativeImageListTests
     {
         [WinFormsFact]
         public void NativeImageList_Dispose_releases_native_handle()

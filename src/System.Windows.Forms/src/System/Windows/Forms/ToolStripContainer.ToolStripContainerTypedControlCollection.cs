@@ -20,9 +20,12 @@ namespace System.Windows.Forms
                 _owner = c;
             }
 
-            public override void Add(Control value)
+            public override void Add(Control? value)
             {
-                ArgumentNullException.ThrowIfNull(value);
+                if (value is null)
+                {
+                    return;
+                }
 
                 if (IsReadOnly)
                 {

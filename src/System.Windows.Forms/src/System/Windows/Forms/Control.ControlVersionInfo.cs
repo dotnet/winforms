@@ -159,7 +159,7 @@ namespace System.Windows.Forms
             ///  Retrieves the FileVersionInfo associated with the main module for
             ///  the component.
             /// </summary>
-            [RequiresAssemblyFiles("Throws if " + nameof(_owner) + " is an in-memory assembly. Check " + nameof(OwnerIsInMemoryAssembly) + " first")]
+            [RequiresAssemblyFiles($"Throws if {nameof(_owner)} is an in-memory assembly. Check {nameof(OwnerIsInMemoryAssembly)} first")]
             private FileVersionInfo GetFileVersionInfo()
             {
                 if (_versionInfo is null)

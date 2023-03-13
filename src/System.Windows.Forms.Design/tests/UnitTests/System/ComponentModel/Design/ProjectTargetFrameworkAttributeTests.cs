@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ProjectTargetFrameworkAttributeTests : IClassFixture<ThreadExceptionFixture>
+    public class ProjectTargetFrameworkAttributeTests
     {
         [Theory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]

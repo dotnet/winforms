@@ -536,7 +536,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (value is not null && (!value.GetType().IsSerializable))
                 {
-                    Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value is null ? "(null)" : value.GetType().Name));
+                    Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                     return;
                 }
 
@@ -617,7 +617,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Values we are going to serialize must be serializable or else the resource writer will fail when we close it.
                 if (value is not null && (!value.GetType().IsSerializable))
                 {
-                    Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value is null ? "(null)" : value.GetType().Name));
+                    Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                     return;
                 }
 

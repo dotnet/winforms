@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests;
 
-public unsafe class AxHost_PropertyBagStreamTests : IClassFixture<ThreadExceptionFixture>
+public unsafe class AxHost_PropertyBagStreamTests
 {
     [WinFormsFact]
     public void PropertyBagStream_WriteReadRoundTrip()

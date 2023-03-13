@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     ///  views. Each item displays a caption and optionally an image.
     /// </summary>
     [Docking(DockingBehavior.Ask)]
-    [Designer("System.Windows.Forms.Design.ListViewDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ListViewDesigner, {AssemblyRef.SystemDesign}")]
     [DefaultProperty(nameof(Items))]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [SRDescription(nameof(SR.DescriptionListView))]
@@ -622,7 +622,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [Editor("System.Windows.Forms.Design.ColumnHeaderCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ColumnHeaderCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.ListViewColumnsDescr))]
         [Localizable(true)]
         [MergableProperty(false)]
@@ -995,7 +995,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
-        [Editor("System.Windows.Forms.Design.ListViewGroupCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListViewGroupCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.ListViewGroupsDescr))]
         [MergableProperty(false)]
         public ListViewGroupCollection Groups
@@ -1164,7 +1164,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
-        [Editor("System.Windows.Forms.Design.ListViewItemCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListViewItemCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.ListViewItemsDescr))]
         [MergableProperty(false)]
         public ListViewItemCollection Items
@@ -2256,16 +2256,13 @@ namespace System.Windows.Forms
         private void ApplyUpdateCachedItems()
         {
             // first check if there is a delayed update array
-            ArrayList? newItems = (ArrayList?)Properties.GetObject(PropDelayedUpdateItems);
-            if (newItems is not null)
+            if (Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? newItems) && newItems is not null)
             {
                 // if there is, clear it and push the items in.
-                //
                 Properties.SetObject(PropDelayedUpdateItems, null);
-                ListViewItem[] items = (ListViewItem[])newItems.ToArray(typeof(ListViewItem));
-                if (items.Length > 0)
+                if (newItems.Count > 0)
                 {
-                    InsertItems(_itemCount, items, false /*checkHosting*/);
+                    InsertItems(_itemCount, newItems.ToArray(), checkHosting: false);
                 }
             }
         }
@@ -2393,9 +2390,9 @@ namespace System.Windows.Forms
 
             // if this is the first BeginUpdate call, push an ArrayList into the PropertyStore so
             // we can cache up any items that have been added while this is active.
-            if (_updateCounter++ == 0 && Properties.GetObject(PropDelayedUpdateItems) is null)
+            if (_updateCounter++ == 0 && !Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
             {
-                Properties.SetObject(PropDelayedUpdateItems, new ArrayList());
+                Properties.SetObject(PropDelayedUpdateItems, new List<ListViewItem>());
             }
         }
 
@@ -3222,7 +3219,7 @@ namespace System.Windows.Forms
         {
             // On the final EndUpdate, check to see if we've got any cached items.
             // If we do, insert them as normal, then turn off the painting freeze.
-            if (--_updateCounter == 0 && Properties.GetObject(PropDelayedUpdateItems) is not null)
+            if (--_updateCounter == 0 && Properties.ContainsObjectThatIsNotNull(PropDelayedUpdateItems))
             {
                 ApplyUpdateCachedItems();
             }
@@ -4097,7 +4094,7 @@ namespace System.Windows.Forms
 
             // if we're in the middle of a Begin/EndUpdate, just push the items into our array list
             // as they'll get processed on EndUpdate.
-            if (_updateCounter > 0 && Properties.GetObject(PropDelayedUpdateItems) is not null)
+            if (_updateCounter > 0 && Properties.TryGetObject(PropDelayedUpdateItems, out List<ListViewItem>? itemList) && itemList is not null)
             {
                 // CheckHosting.
                 if (checkHosting)
@@ -4111,7 +4108,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-                ArrayList? itemList = (ArrayList?)Properties.GetObject(PropDelayedUpdateItems);
                 Debug.Assert(itemList is not null, "In Begin/EndUpdate with no delayed array!");
                 itemList?.AddRange(items);
 
@@ -5663,22 +5659,22 @@ namespace System.Windows.Forms
 
             if (_listViewItems is not null)
             {
-                s += ", Items.Count: " + _listViewItems.Count.ToString(CultureInfo.CurrentCulture);
+                s += $", Items.Count: {_listViewItems.Count}";
                 if (_listViewItems.Count > 0)
                 {
                     string z = _listViewItems[0].ToString();
-                    string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
-                    s += ", Items[0]: " + txt;
+                    ReadOnlySpan<char> txt = (z.Length > 40) ? z.AsSpan(0, 40) : z;
+                    s += $", Items[0]: {txt}";
                 }
             }
             else if (Items is not null)
             {
-                s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
+                s += $", Items.Count: {Items.Count}";
                 if (Items.Count > 0 && !VirtualMode)
                 {
                     string z = (Items[0] is null) ? "null" : Items[0].ToString();
-                    string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
-                    s += ", Items[0]: " + txt;
+                    ReadOnlySpan<char> txt = (z.Length > 40) ? z.AsSpan(0, 40) : z;
+                    s += $", Items[0]: {txt}";
                 }
             }
 

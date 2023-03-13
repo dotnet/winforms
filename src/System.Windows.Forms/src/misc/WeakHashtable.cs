@@ -91,13 +91,12 @@ namespace System.ComponentModel
                 // Perform a scavenge through our keys, looking
                 // for dead references.
                 //
-                ArrayList? cleanupList = null;
+                List<WeakReference>? cleanupList = null;
                 foreach (object o in Keys)
                 {
                     if (o is WeakReference wr && !wr.IsAlive)
                     {
-                        cleanupList ??= new ArrayList();
-
+                        cleanupList ??= new();
                         cleanupList.Add(wr);
                     }
                 }

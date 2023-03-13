@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -30,15 +28,13 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                ArrayList snapLines = base.SnapLines as ArrayList;
-
                 int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
 
                 BorderStyle borderStyle = BorderStyle.Fixed3D;
-                PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
+                PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
                 if (prop is not null)
                 {
-                    borderStyle = (BorderStyle)prop.GetValue(Component);
+                    borderStyle = (BorderStyle)prop.GetValue(Component)!;
                 }
 
                 if (borderStyle == BorderStyle.None)
@@ -59,6 +55,8 @@ namespace System.Windows.Forms.Design
                     baseline += 0;
                 }
 
+                IList snapLines = base.SnapLines;
+
                 snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
                 return snapLines;
@@ -78,19 +76,18 @@ namespace System.Windows.Forms.Design
                 // This fixes bug #48462. If the text box is not wide enough to display all of the text,
                 // then we want to display the first portion at design-time. We can ensure this by
                 // setting the selection to (0, 0).
-                //
                 ((TextBoxBase)Control).Select(0, 0);
             }
         }
 
         private bool ShouldSerializeText()
         {
-            return TypeDescriptor.GetProperties(typeof(TextBoxBase))["Text"].ShouldSerializeValue(Component);
+            return TypeDescriptor.GetProperties(typeof(TextBoxBase))["Text"]!.ShouldSerializeValue(Component);
         }
 
         private void ResetText()
         {
-            Control.Text = "";
+            Control.Text = string.Empty;
         }
 
         /// <summary>
@@ -101,10 +98,10 @@ namespace System.Windows.Forms.Design
         {
             base.InitializeNewComponent(defaultValues);
 
-            PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
+            PropertyDescriptor? textProp = TypeDescriptor.GetProperties(Component)["Text"];
             if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
             {
-                textProp.SetValue(Component, "");
+                textProp.SetValue(Component, string.Empty);
             }
         }
 
@@ -112,10 +109,7 @@ namespace System.Windows.Forms.Design
         {
             base.PreFilterProperties(properties);
 
-            PropertyDescriptor prop;
-
             // Handle shadowed properties
-            //
             string[] shadowProps = new string[]
             {
                 "Text",
@@ -125,7 +119,7 @@ namespace System.Windows.Forms.Design
 
             for (int i = 0; i < shadowProps.Length; i++)
             {
-                prop = (PropertyDescriptor)properties[shadowProps[i]];
+                PropertyDescriptor? prop = (PropertyDescriptor?)properties[shadowProps[i]];
                 if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxBaseDesigner), prop, empty);
@@ -147,21 +141,16 @@ namespace System.Windows.Forms.Design
 
                 rules |= SelectionRules.AllSizeable;
 
-                PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["Multiline"];
-                if (prop is not null)
+                PropertyDescriptor? prop = TypeDescriptor.GetProperties(component)["Multiline"];
+
+                object? value = prop?.GetValue(component);
+                if (value is bool valueAsBool && !valueAsBool)
                 {
-                    object value = prop.GetValue(component);
-                    if (value is bool && (bool)value == false)
+                    PropertyDescriptor? propAuto = TypeDescriptor.GetProperties(component)["AutoSize"];
+                    object? auto = propAuto?.GetValue(component);
+                    if (auto is bool autoAsBool && autoAsBool)
                     {
-                        PropertyDescriptor propAuto = TypeDescriptor.GetProperties(component)["AutoSize"];
-                        if (propAuto is not null)
-                        {
-                            object auto = propAuto.GetValue(component);
-                            if (auto is bool && (bool)auto)
-                            {
-                                rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
-                            }
-                        }
+                        rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
                     }
                 }
 

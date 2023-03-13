@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeViewHitTestInfoTests : IClassFixture<ThreadExceptionFixture>
+    public class TreeViewHitTestInfoTests
     {
         public static IEnumerable<object[]> Ctor_TreeNode_TreeViewHitTestLocations_TestData()
         {

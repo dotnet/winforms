@@ -10,7 +10,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class PropertyManagerTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyManagerTests
     {
         [Fact]
         public void PropertyManager_Ctor_Default()

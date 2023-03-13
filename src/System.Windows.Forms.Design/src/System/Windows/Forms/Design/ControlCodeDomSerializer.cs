@@ -271,8 +271,8 @@ namespace System.Windows.Forms.Design
 
                         if (componentName is not null)
                         {
-                            SerializeResourceInvariant(manager, ">>" + componentName + ".Name", componentName);
-                            SerializeResourceInvariant(manager, ">>" + componentName + ".Type", componentTypeName);
+                            SerializeResourceInvariant(manager, $">>{componentName}.Name", componentName);
+                            SerializeResourceInvariant(manager, $">>{componentName}.Type", componentTypeName);
                         }
                     }
                 }
@@ -288,10 +288,10 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                SerializeResourceInvariant(manager, ">>" + name + ".Name", manager.GetName(value));
+                SerializeResourceInvariant(manager, $">>{name}.Name", manager.GetName(value));
 
                 // Object type
-                SerializeResourceInvariant(manager, ">>" + name + ".Type", mthelperSvc is null ? control.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(control.GetType()));
+                SerializeResourceInvariant(manager, $">>{name}.Type", mthelperSvc is null ? control.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(control.GetType()));
 
                 // Parent
                 Control parent = control.Parent;
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Design
 
                     if (parentName is not null)
                     {
-                        SerializeResourceInvariant(manager, ">>" + name + ".Parent", parentName);
+                        SerializeResourceInvariant(manager, $">>{name}.Parent", parentName);
                     }
 
                     // Z-Order
@@ -319,7 +319,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (parent.Controls[i] == control)
                         {
-                            SerializeResourceInvariant(manager, ">>" + name + ".ZOrder", i.ToString(CultureInfo.InvariantCulture));
+                            SerializeResourceInvariant(manager, $">>{name}.ZOrder", i.ToString(CultureInfo.InvariantCulture));
                             break;
                         }
                     }
@@ -355,10 +355,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void SerializeMethodInvocation(IDesignerSerializationManager manager, CodeStatementCollection statements, object control, string methodName, CodeExpressionCollection parameters, Type[] paramTypes, StatementOrdering ordering)
         {
-            using (TraceScope("ControlCodeDomSerializer::SerializeMethodInvocation(" + methodName + ")"))
+            using (TraceScope($"ControlCodeDomSerializer::SerializeMethodInvocation({methodName})"))
             {
                 string name = manager.GetName(control);
-                Trace(name + "." + methodName);
+                Trace("{0}.{1}", name, methodName);
 
                 // Use IReflect to see if this method name exists on the control.
                 paramTypes = ToTargetTypes(control, paramTypes);
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Design
                             statement.UserData["statement-ordering"] = "end";
                             break;
                         default:
-                            Debug.Fail("Unsupported statement ordering: " + ordering);
+                            Debug.Fail($"Unsupported statement ordering: {ordering}");
                             break;
                     }
 

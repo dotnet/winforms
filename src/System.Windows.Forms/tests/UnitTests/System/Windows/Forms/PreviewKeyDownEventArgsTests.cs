@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class PreviewKeyDownEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class PreviewKeyDownEventArgsTests
     {
         [Theory]
         [InlineData(Keys.A)]

@@ -178,6 +178,10 @@ namespace System.ComponentModel.Design.Serialization
         {
 #if DEBUG
             private static readonly TraceSwitch s_trace = new TraceSwitch("ComponentSerializationService", "Trace component serialization");
+#else
+#pragma warning disable CS0649
+            private static readonly TraceSwitch s_trace;
+#pragma warning restore CS0649
 #endif
             private const string StateKey = "State";
             private const string NameKey = "Names";
@@ -277,7 +281,7 @@ namespace System.ComponentModel.Design.Serialization
                     _objectNames.Add(data._name);
                 }
 
-                Trace("Adding object '{0}' ({1}:{2}) {3}", data._name, data._value.GetType().FullName, member.Name, (absolute ? "NORMAL" : "ABSOLUTE"));
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}:{member.Name}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
                 data.Members.Add(new MemberData(member, absolute));
             }
 
@@ -304,7 +308,7 @@ namespace System.ComponentModel.Design.Serialization
                     _objectNames.Add(data._name);
                 }
 
-                Trace("Adding object '{0}' ({1}) {2}", data._name, data._value.GetType().FullName, (absolute ? "NORMAL" : "ABSOLUTE"));
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
                 data.EntireObject = true;
                 data.Absolute = absolute;
             }
@@ -326,7 +330,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    Trace("Closing Store: serializing {0} objects", _objects.Count);
+                    Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Closing Store: serializing {_objects.Count} objects");
                     using (manager.CreateSession())
                     {
                         // Walk through our objects and name them so the serialization manager knows what names we gave them.
@@ -433,7 +437,7 @@ namespace System.ComponentModel.Design.Serialization
                     objects = new ArrayList(_objectNames.Count);
                 }
 
-                Trace("Deserializing {0} objects, recycling instances: {1}", _objectState.Count, recycleInstances);
+                Debug.WriteLineIf(s_trace.TraceVerbose, $"ComponentSerialization: Deserializing {_objectState.Count} objects, recycling instances: {recycleInstances}");
                 using (delegator.Manager.CreateSession())
                 {
                     // before we deserialize, setup any references to components we faked during serialization
@@ -459,7 +463,7 @@ namespace System.ComponentModel.Design.Serialization
                         foreach (string name in _objectNames)
                         {
                             object instance = ((IDesignerSerializationManager)delegator.Manager).GetInstance(name);
-                            Debug.Assert(instance is not null, "Failed to deserialize object " + name);
+                            Debug.Assert(instance is not null, $"Failed to deserialize object {name}");
                             if (instance is not null)
                             {
                                 objects.Add(instance);
@@ -503,9 +507,12 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 Guid guid = Guid.NewGuid();
-                string guidStr = guid.ToString();
-                guidStr = guidStr.Replace("-", "_");
-                return string.Format(CultureInfo.CurrentCulture, "object_{0}", guidStr);
+                string prefix = "object_";
+                Span<char> chars = stackalloc char[prefix.Length + 36];
+                prefix.CopyTo(chars);
+                guid.TryFormat(chars[prefix.Length..], out _);
+                chars[prefix.Length..].Replace('-', '_');
+                return chars.ToString();
             }
 
             /// <summary>
@@ -527,15 +534,6 @@ namespace System.ComponentModel.Design.Serialization
                 throw new PlatformNotSupportedException();
             }
 
-            [Conditional("DEBUG")]
-            internal static void Trace(string message, params object[] args)
-            {
-#if DEBUG
-                string msg = string.Format(CultureInfo.CurrentCulture, "ComponentSerialization: " + message, args);
-                Debug.WriteLineIf(s_trace.TraceVerbose, msg);
-#endif
-            }
-
 #if DEBUG
             internal static void TraceCode(string name, object code)
             {
@@ -555,7 +553,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
                 using var sw = new StringWriter(CultureInfo.InvariantCulture);
-                Trace("Stored CodeDom for {0}: ", name);
+                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {name}: ");
                 Debug.Indent();
 
                 if (code is CodeTypeDeclaration codeTypeDeclaration)
@@ -579,8 +577,8 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    sw.Write("Unknown code type: " + code.GetType().Name);
-                    sw.Write("\r\n");
+                    sw.Write("Unknown code type: ");
+                    sw.WriteLine(code.GetType().Name);
                 }
 
                 // spit this line by line so it respects the indent.
@@ -648,7 +646,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        Debug.Fail("No case for " + data.GetType().Name);
+                        Debug.Fail($"No case for {data.GetType().Name}");
                     }
                 }
 
@@ -856,7 +854,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-                            Debug.Fail("Unable to resolve nested component: " + name);
+                            Debug.Fail($"Unable to resolve nested component: {name}");
                         }
                     }
 
@@ -1017,7 +1015,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(resolved || (!resolved && !canInvokeManager)))
                         {
                             manager.ReportError(new CodeDomSerializerException(string.Format(SR.CodeDomComponentSerializationServiceDeserializationError, name), manager));
-                            Debug.Fail("No statements or instance for name and no lone expressions: " + name);
+                            Debug.Fail($"No statements or instance for name and no lone expressions: {name}");
                         }
                     }
 

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -19,14 +17,14 @@ namespace System.Windows.Forms
                 _owner = owner;
             }
 
-            public override void Add(Control value)
+            public override void Add(Control? value)
             {
-                if (!(value is TabPage))
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
+
+                if (value is not TabPage tabPage)
                 {
                     throw new ArgumentException(string.Format(SR.TabControlInvalidTabPageType, value.GetType().Name));
                 }
-
-                TabPage tabPage = (TabPage)value;
 
                 // See InsertingItem property
                 if (!_owner.InsertingItem)
@@ -52,10 +50,10 @@ namespace System.Windows.Forms
                 }
 
                 // Site the tabPage if necessary.
-                ISite site = _owner.Site;
+                ISite? site = _owner.Site;
                 if (site is not null)
                 {
-                    ISite siteTab = tabPage.Site;
+                    ISite? siteTab = tabPage.Site;
                     if (siteTab is null)
                     {
                         site.Container?.Add(tabPage);
@@ -66,15 +64,15 @@ namespace System.Windows.Forms
                 _owner.UpdateTabSelection(false);
             }
 
-            public override void Remove(Control value)
+            public override void Remove(Control? value)
             {
                 base.Remove(value);
-                if (!(value is TabPage))
+                if (value is not TabPage tabPage)
                 {
                     return;
                 }
 
-                int index = _owner.FindTabPage((TabPage)value);
+                int index = _owner.FindTabPage(tabPage);
                 int curSelectedIndex = _owner.SelectedIndex;
                 if (index != -1)
                 {

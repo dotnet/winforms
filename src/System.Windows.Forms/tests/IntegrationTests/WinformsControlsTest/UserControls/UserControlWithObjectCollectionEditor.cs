@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Text;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest.UserControls
@@ -34,20 +33,9 @@ namespace WinformsControlsTest.UserControls
     {
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType is not null && destinationType.IsAssignableFrom(typeof(string)) && value is not null && value is IList<int> list)
+            if (destinationType is not null && destinationType.IsAssignableFrom(typeof(string)) && value is IList<int> list)
             {
-                var result = new StringBuilder("");
-                for (int i = 0; i < list.Count; i++)
-                {
-                    if (i != 0)
-                    {
-                        result.Append(", ");
-                    }
-
-                    result.Append(list[i]);
-                }
-
-                return result.ToString();
+                return string.Join(", ", list);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

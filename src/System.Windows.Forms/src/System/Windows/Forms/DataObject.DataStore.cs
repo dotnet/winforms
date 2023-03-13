@@ -100,7 +100,7 @@ namespace System.Windows.Forms
 
             public virtual void SetData(string format, bool autoConvert, object? data)
             {
-                CompModSwitches.DataObject.TraceVerbose("DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
+                CompModSwitches.DataObject.TraceVerbose($"DataStore: SetData: {format}, {autoConvert}, {data?.ToString() ?? "(null)"}");
                 if (string.IsNullOrWhiteSpace(format))
                 {
                     ArgumentNullException.ThrowIfNull(format);
@@ -128,13 +128,13 @@ namespace System.Windows.Forms
 
             public virtual void SetData(string format, object? data)
             {
-                CompModSwitches.DataObject.TraceVerbose("DataStore: SetData: " + format + ", " + data?.ToString() ?? "(null)");
+                CompModSwitches.DataObject.TraceVerbose($"DataStore: SetData: {format}, {data?.ToString() ?? "(null)"}");
                 SetData(format, true, data);
             }
 
             public virtual void SetData(Type format, object? data)
             {
-                CompModSwitches.DataObject.TraceVerbose("DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
+                CompModSwitches.DataObject.TraceVerbose($"DataStore: SetData: {format?.FullName ?? "(null)"}, {data?.ToString() ?? "(null)"}");
                 ArgumentNullException.ThrowIfNull(format);
 
                 SetData(format.FullName!, data);
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                     Debug.Assert(formats is not null, "Null returned from GetFormats");
                     for (int i = 0; i < formats.Length; i++)
                     {
-                        Debug.Assert(formats[i] is not null, "Null format inside of formats at index " + i.ToString(CultureInfo.InvariantCulture));
+                        Debug.Assert(formats[i] is not null, $"Null format inside of formats at index {i}");
                         if (format.Equals(formats[i]))
                         {
                             CompModSwitches.DataObject.TraceVerbose("DataStore: GetDataPresent: returning true");
@@ -217,11 +217,11 @@ namespace System.Windows.Forms
                     HashSet<string> distinctFormats = new HashSet<string>(baseVarLength);
                     for (int i = 0; i < baseVarLength; i++)
                     {
-                        Debug.Assert(_data[baseVar[i]] is not null, "Null item in data collection with key '" + baseVar[i] + "'");
+                        Debug.Assert(_data[baseVar[i]] is not null, $"Null item in data collection with key '{baseVar[i]}'");
                         if (_data[baseVar[i]]!.AutoConvert)
                         {
                             string[] cur = GetMappedFormats(baseVar[i])!;
-                            Debug.Assert(cur is not null, "GetMappedFormats returned null for '" + baseVar[i] + "'");
+                            Debug.Assert(cur is not null, $"GetMappedFormats returned null for '{baseVar[i]}'");
                             for (int j = 0; j < cur.Length; j++)
                             {
                                 distinctFormats.Add(cur[j]);

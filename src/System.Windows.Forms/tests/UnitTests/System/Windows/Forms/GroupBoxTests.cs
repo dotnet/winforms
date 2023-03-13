@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class GroupBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class GroupBoxTests
     {
         [WinFormsFact]
         public void GroupBox_Ctor_Default()

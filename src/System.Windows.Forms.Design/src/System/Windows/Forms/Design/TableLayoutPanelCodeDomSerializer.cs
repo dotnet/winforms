@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Design
 
                         if (val is not null)
                         {
-                            string key = manager.GetName(tlp) + "." + LayoutSettingsPropName;
+                            string key = $"{manager.GetName(tlp)}.{LayoutSettingsPropName}";
                             SerializeResourceInvariant(manager, key, val);
                         }
                     }

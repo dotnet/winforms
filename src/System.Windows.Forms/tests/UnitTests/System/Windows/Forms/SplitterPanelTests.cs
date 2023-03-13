@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SplitterPanelTests : IClassFixture<ThreadExceptionFixture>
+    public class SplitterPanelTests
     {
         public static IEnumerable<object[]> Ctor_SplitContainer_TestData()
         {

@@ -8,7 +8,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripRendererTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripRendererTests
     {
         [WinFormsFact]
         public void ToolStripRenderer_CreateDisabledImage_Invoke_Success()

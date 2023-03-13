@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class LayoutEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class LayoutEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_IComponent_String_TestData()
         {

@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class GiveFeedbackEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class GiveFeedbackEventArgsTests
     {
         [Theory]
         [InlineData(DragDropEffects.None, true)]

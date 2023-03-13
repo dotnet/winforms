@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                     }
                     catch (Exception e)
                     {
-                        Debug.Fail("ImageList serialization failure: " + e.ToString());
+                        Debug.Fail($"ImageList serialization failure: {e}");
                         throw;
                     }
 #endif
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
             {
                 if (debugCompare[debugIdx] != input[debugIdx])
                 {
-                    Debug.Fail("RLE Compression failure in ImageListStreamer at byte offset " + debugIdx);
+                    Debug.Fail($"RLE Compression failure in ImageListStreamer at byte offset {debugIdx}");
                     break;
                 }
             }

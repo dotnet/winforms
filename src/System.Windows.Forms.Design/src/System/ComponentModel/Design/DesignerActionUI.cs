@@ -596,13 +596,13 @@ namespace System.ComponentModel.Design
             if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
             {
                 e.Cancel = true;
-                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] ItemClicked: e.Cancel set to: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, $"[DesignerActionUI.toolStripDropDown_Closing] ItemClicked: e.Cancel set to: {e.Cancel}");
             }
 
             if (e.CloseReason == ToolStripDropDownCloseReason.Keyboard)
             {
                 e.Cancel = false;
-                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Keyboard: e.Cancel set to: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, $"[DesignerActionUI.toolStripDropDown_Closing] Keyboard: e.Cancel set to: {e.Cancel}");
             }
 
             if (e.Cancel == false)

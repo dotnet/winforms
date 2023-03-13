@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeNodeCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class TreeNodeCollectionTests
     {
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]

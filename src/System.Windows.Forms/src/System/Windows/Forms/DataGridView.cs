@@ -12,11 +12,11 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    [Designer("System.Windows.Forms.Design.DataGridViewDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.DataGridViewDesigner, {AssemblyRef.SystemDesign}")]
     [DefaultEvent(nameof(CellContentClick))]
     [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
     [Docking(DockingBehavior.Ask)]
-    [Editor("System.Windows.Forms.Design.DataGridViewComponentEditor, " + AssemblyRef.SystemDesign, typeof(ComponentEditor))]
+    [Editor($"System.Windows.Forms.Design.DataGridViewComponentEditor, {AssemblyRef.SystemDesign}", typeof(ComponentEditor))]
     [SRDescription(nameof(SR.DescriptionDataGridView))]
     public partial class DataGridView : Control, ISupportInitialize
     {
@@ -236,10 +236,6 @@ namespace System.Windows.Forms
         private const byte RowSizingHotZone = 5;
         private const byte InsertionBarWidth = 3;
         private const byte BulkPaintThreshold = 8;
-
-        private const string HtmlPrefix = "Version:1.0\r\nStartHTML:00000097\r\nEndHTML:{0}\r\nStartFragment:00000133\r\nEndFragment:{1}\r\n";
-        private const string HtmlStartFragment = "<HTML>\r\n<BODY>\r\n<!--StartFragment-->";
-        private const string HtmlEndFragment = "\r\n<!--EndFragment-->\r\n</BODY>\r\n</HTML>";
 
         private const int FocusRectOffset = 2;
 
@@ -1198,7 +1194,7 @@ namespace System.Windows.Forms
             {
                 bool canEnable = false;
 
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), this = " + this);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_CanEnableIme(), this = {this}");
                 Debug.Indent();
 
                 if (_ptCurrentCell.X != -1 && ColumnEditable(_ptCurrentCell.X))
@@ -1212,7 +1208,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value = " + canEnable);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value = {canEnable}");
                 Debug.Unindent();
 
                 return canEnable;
@@ -1792,7 +1788,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [Editor("System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [MergableProperty(false)]
         public DataGridViewColumnCollection Columns
@@ -1982,7 +1978,7 @@ namespace System.Windows.Forms
 
         [DefaultValue("")]
         [SRCategory(nameof(SR.CatData))]
-        [Editor("System.Windows.Forms.Design.DataMemberListEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
         [SRDescription(nameof(SR.DataGridViewDataMemberDescr))]
         public string DataMember
         {

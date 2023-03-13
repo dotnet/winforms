@@ -8,7 +8,7 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DragDropHelperTests : IClassFixture<ThreadExceptionFixture>
+    public class DragDropHelperTests
     {
         public static IEnumerable<object[]> DragImage_DataObject_Bitmap_Point_bool_TestData()
         {

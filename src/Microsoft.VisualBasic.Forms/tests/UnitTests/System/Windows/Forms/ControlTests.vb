@@ -6,7 +6,7 @@ Imports System.Windows.Forms
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
-    Partial Public Class ControlTests : Implements IClassFixture(Of ThreadExceptionFixture)
+    Partial Public Class ControlTests
 
         <WinFormsFact>
         Public Sub Control_Invoke_Action_calls_correct_method()

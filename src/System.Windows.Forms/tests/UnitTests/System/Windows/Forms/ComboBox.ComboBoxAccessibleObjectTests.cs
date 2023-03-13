@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ComboBox_ComboBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ComboBoxAccessibleObjectTests
     {
         [WinFormsTheory]
         [InlineData(true, AccessibleRole.ComboBox)]

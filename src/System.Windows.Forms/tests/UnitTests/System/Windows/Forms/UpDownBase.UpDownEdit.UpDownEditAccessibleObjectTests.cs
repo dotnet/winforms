@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UpDownEditAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class UpDownEditAccessibleObjectTests
     {
         [WinFormsFact]
         public void UpDownEditAccessibleObject_ctor_default()

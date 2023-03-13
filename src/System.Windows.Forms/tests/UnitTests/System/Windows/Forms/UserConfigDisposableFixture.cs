@@ -6,17 +6,16 @@ using System.Configuration;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UserConfigDisposableFixture : ThreadExceptionFixture, IDisposable
+    public class UserConfigDisposableFixture : IDisposable
     {
         public UserConfigDisposableFixture()
         {
             DeleteUserConfig();
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
             DeleteUserConfig();
-            base.Dispose();
         }
 
         private static void DeleteUserConfig()

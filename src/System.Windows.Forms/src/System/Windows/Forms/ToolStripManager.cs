@@ -248,7 +248,7 @@ namespace System.Windows.Forms
             // Copy over the hwnd that we want to restore focus to on ESC
             start.SnapFocusChange(toolStrip);
 
-            toolStrip.SelectNextToolStripItem(null, toolStrip.RightToLeft != RightToLeft.Yes);
+            toolStrip.SelectNextToolStripItem(start: null, toolStrip.RightToLeft != RightToLeft.Yes);
             return true;
         }
 

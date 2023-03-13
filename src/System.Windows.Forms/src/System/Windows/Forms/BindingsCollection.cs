@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -15,25 +13,25 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(CollectionChanged))]
     public class BindingsCollection : BaseCollection
     {
-        private ArrayList _list;
-        private CollectionChangeEventHandler _onCollectionChanging;
-        private CollectionChangeEventHandler _onCollectionChanged;
+        private List<Binding> _list = new();
+        private CollectionChangeEventHandler? _onCollectionChanging;
+        private CollectionChangeEventHandler? _onCollectionChanged;
 
         internal BindingsCollection()
         {
         }
 
-        public override int Count => _list is null ? 0 : base.Count;
+        public override int Count => _list.Count;
 
         /// <summary>
         ///  Gets the bindings in the collection as an object.
         /// </summary>
-        protected override ArrayList List => _list ??= new ArrayList();
+        protected override ArrayList List => ArrayList.Adapter(_list);
 
         /// <summary>
         ///  Gets the <see cref="Binding"/> at the specified index.
         /// </summary>
-        public Binding this[int index] => (Binding)List[index];
+        public Binding this[int index] => _list[index]!;
 
         protected internal void Add(Binding binding)
         {
@@ -49,15 +47,14 @@ namespace System.Windows.Forms
         protected virtual void AddCore(Binding dataBinding)
         {
             ArgumentNullException.ThrowIfNull(dataBinding);
-
-            List.Add(dataBinding);
+            _list.Add(dataBinding);
         }
 
         /// <summary>
         ///  Occurs when the collection is about to change.
         /// </summary>
         [SRDescription(nameof(SR.collectionChangingEventDescr))]
-        public event CollectionChangeEventHandler CollectionChanging
+        public event CollectionChangeEventHandler? CollectionChanging
         {
             add => _onCollectionChanging += value;
             remove => _onCollectionChanging -= value;
@@ -67,7 +64,7 @@ namespace System.Windows.Forms
         ///  Occurs when the collection is changed.
         /// </summary>
         [SRDescription(nameof(SR.collectionChangedEventDescr))]
-        public event CollectionChangeEventHandler CollectionChanged
+        public event CollectionChangeEventHandler? CollectionChanged
         {
             add => _onCollectionChanged += value;
             remove => _onCollectionChanged -= value;
@@ -84,7 +81,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Clears the collection of any members.
         /// </summary>
-        protected virtual void ClearCore() => List.Clear();
+        protected virtual void ClearCore() => _list.Clear();
 
         /// <summary>
         ///  Raises the <see cref="CollectionChanging"/> event.
@@ -115,7 +112,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Removes the specified <see cref="Binding"/> from the collection.
         /// </summary>
-        protected virtual void RemoveCore(Binding dataBinding) => List.Remove(dataBinding);
+        protected virtual void RemoveCore(Binding dataBinding) => _list.Remove(dataBinding);
 
         protected internal bool ShouldSerializeMyAll() => Count > 0;
     }

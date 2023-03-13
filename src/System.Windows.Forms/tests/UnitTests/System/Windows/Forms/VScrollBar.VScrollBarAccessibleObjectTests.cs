@@ -10,7 +10,7 @@ using static System.Windows.Forms.ScrollBar;
 
 namespace System.Windows.Forms.Tests
 {
-    public class VScrollBar_VScrollBarAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class VScrollBar_VScrollBarAccessibleObjectTests
     {
         [WinFormsFact]
         public void VScrollBarAccessibleObject_ctor_ThrowsException_IfVScrollBarAccessibleObjectIsNull()

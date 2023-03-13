@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ScrollPropertiesTests : IClassFixture<ThreadExceptionFixture>
+    public class ScrollPropertiesTests
     {
         public static IEnumerable<object[]> Ctor_ScrollableControl_TestData()
         {

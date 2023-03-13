@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [SRDescription(nameof(SR.DomainUpDownItemsDescr))]
         [Localizable(true)]
-        [Editor("System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.StringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public DomainUpDownItemCollection Items
         {
             get
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
                 UserEdit = true;
             }
 
-            Debug.Assert(_domainIndex >= 0 || UserEdit, "UserEdit should be true when domainIndex < 0 " + UserEdit);
+            Debug.Assert(_domainIndex >= 0 || UserEdit, $"UserEdit should be true when domainIndex < 0 {UserEdit}");
         }
 
         /// <summary>
@@ -466,8 +466,7 @@ namespace System.Windows.Forms
 
             if (Items is not null)
             {
-                s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
-                s += ", SelectedIndex: " + SelectedIndex.ToString(CultureInfo.CurrentCulture);
+                s = $"{s}, Items.Count: {Items.Count}, SelectedIndex: {SelectedIndex}";
             }
 
             return s;

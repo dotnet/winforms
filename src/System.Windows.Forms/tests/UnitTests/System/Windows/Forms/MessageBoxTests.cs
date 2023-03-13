@@ -10,7 +10,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MessageBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class MessageBoxTests
     {
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MessageBoxButtons))]

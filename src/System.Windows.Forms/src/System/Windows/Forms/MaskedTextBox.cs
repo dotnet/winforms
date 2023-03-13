@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(MaskInputRejected))]
     [DefaultBindingProperty(nameof(Text))]
     [DefaultProperty(nameof(Mask))]
-    [Designer("System.Windows.Forms.Design.MaskedTextBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.MaskedTextBoxDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionMaskedTextBox))]
     public partial class MaskedTextBox : TextBoxBase
     {
@@ -634,7 +634,7 @@ namespace System.Windows.Forms
         [MergableProperty(false)]
         [Localizable(true)]
         [AllowNull]
-        [Editor("System.Windows.Forms.Design.MaskPropertyEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.MaskPropertyEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public string Mask
         {
             get
@@ -1142,7 +1142,7 @@ namespace System.Windows.Forms
         ///  The Text setter validates the input char by char, raising the MaskInputRejected event for invalid chars.
         ///  The Text getter returns the formatted text according to the IncludeLiterals and IncludePrompt properties.
         /// </summary>
-        [Editor("System.Windows.Forms.Design.MaskedTextBoxTextEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.MaskedTextBoxTextEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRCategory(nameof(SR.CatAppearance))]
         [RefreshProperties(RefreshProperties.Repaint)]
         [Bindable(true)]
@@ -1510,7 +1510,7 @@ namespace System.Windows.Forms
         private void Delete(Keys keyCode, int startPosition, int selectionLen)
         {
             Debug.Assert(!_flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
-            Debug.Assert(keyCode == Keys.Delete || keyCode == Keys.Back, "Delete called with keyCode == " + keyCode.ToString());
+            Debug.Assert(keyCode is Keys.Delete or Keys.Back, $"Delete called with keyCode == {keyCode}");
             Debug.Assert(startPosition >= 0 && ((startPosition + selectionLen) <= _maskedTextProvider.Length), "Invalid position range.");
 
             // On backspace, moving the start postion back by one has the same effect as delete.  If text is selected, there is no
@@ -2370,7 +2370,7 @@ namespace System.Windows.Forms
                             exception = exception.InnerException;
                         }
 
-                        message = exception.GetType().ToString() + ": " + exception.Message;
+                        message = $"{exception.GetType()}: {exception.Message}";
                     }
                 }
 

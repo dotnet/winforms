@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TrackBar_TrackBarLastButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class TrackBar_TrackBarLastButtonAccessibleObjectTests
     {
         [WinFormsTheory]
         [CommonMemberData(typeof(TrackBarTestHelper), nameof(TrackBarTestHelper.TrackBarAccessibleObject_LastButtonIsDisplayed_TestData))]

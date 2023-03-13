@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class SplitterEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class SplitterEventArgsTests
     {
         [Theory]
         [InlineData(-1, -1, -1, -1)]

@@ -10,7 +10,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class ListViewSubItemTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewSubItemTests
     {
         [Fact]
         public void ListViewSubItem_Ctor_Default()

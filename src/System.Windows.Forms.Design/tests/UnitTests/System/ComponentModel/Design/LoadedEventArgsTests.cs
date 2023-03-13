@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class LoadedEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class LoadedEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Bool_ICollection_TestData()
         {

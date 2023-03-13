@@ -50,17 +50,17 @@ namespace DesignSurfaceExt
 
             if (count == 0)
             {
-                return type.Name + "1";
+                return $"{type.Name}1";
             }
             else if (min > 1)
             {
                 int j = min - 1;
-                return type.Name + j.ToString();
+                return $"{type.Name}{j}";
             }
             else
             {
                 int j = max + 1;
-                return type.Name + j.ToString();
+                return $"{type.Name}{j}";
             }
         }
 
@@ -86,7 +86,7 @@ namespace DesignSurfaceExt
         {
             //-  Use our existing method to check, if it's invalid throw an exception
             if (!(IsValidName(name)))
-                throw new ArgumentException("Invalid name: " + name);
+                throw new ArgumentException($"Invalid name: {name}");
         }
     }//end_class
 }//end_namespace

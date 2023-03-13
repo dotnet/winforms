@@ -14,7 +14,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UserControlTests : IClassFixture<ThreadExceptionFixture>
+    public class UserControlTests
     {
         [WinFormsFact]
         public void UserControl_Ctor_Default()

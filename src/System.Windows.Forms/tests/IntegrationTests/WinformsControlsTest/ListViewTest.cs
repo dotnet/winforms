@@ -189,7 +189,7 @@ namespace WinformsControlsTest
 
         private void listView1_GroupTaskLinkClick(object sender, ListViewGroupEventArgs e)
         {
-            MessageBox.Show(this, "Task at group index " + e.GroupIndex + " was clicked", "GroupClick Event");
+            MessageBox.Show(this, $"Task at group index {e.GroupIndex} was clicked", "GroupClick Event");
         }
 
         private void listView2_Click(object sender, System.EventArgs e)

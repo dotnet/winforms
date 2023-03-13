@@ -13,7 +13,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListBoxTests : IClassFixture<ThreadExceptionFixture>
+    public class ListBoxTests
     {
         [WinFormsFact]
         public void ListBox_Ctor_Default()
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IntegralHeight);
             Assert.False(control.IsAccessible);
             Assert.False(control.IsMirrored);
-            Assert.Equal(13, control.ItemHeight);
+            Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
             Assert.Empty(control.Items);
             Assert.Same(control.Items, control.Items);
             Assert.NotNull(control.LayoutEngine);
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
-            Assert.Equal(13 + SystemInformation.BorderSize.Height * 4 + 3, control.PreferredHeight);
+            Assert.Equal(Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3, control.PreferredHeight);
             Assert.Equal(new Size(120, 96), control.PreferredSize);
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
@@ -1742,13 +1742,13 @@ namespace System.Windows.Forms.Tests
             foreach (bool integralHeight in new bool[] { true, false })
             {
                 yield return new object[] { DrawMode.Normal, integralHeight, 1, 0 };
-                yield return new object[] { DrawMode.Normal, integralHeight, 13, 0 };
+                yield return new object[] { DrawMode.Normal, integralHeight, Control.DefaultFont.Height, 0 };
                 yield return new object[] { DrawMode.Normal, integralHeight, 255, 0 };
                 yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, 1, 1 };
-                yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, 13, 0 };
+                yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, Control.DefaultFont.Height, 0 };
                 yield return new object[] { DrawMode.OwnerDrawFixed, integralHeight, 255, 1 };
                 yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, 1, 0 };
-                yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, 13, 0 };
+                yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, Control.DefaultFont.Height, 0 };
                 yield return new object[] { DrawMode.OwnerDrawVariable, integralHeight, 255, 0 };
             }
         }
@@ -1825,7 +1825,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(property.CanResetValue(control));
 
             property.ResetValue(control);
-            Assert.Equal(13, control.ItemHeight);
+            Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
             Assert.False(property.CanResetValue(control));
         }
 
@@ -1841,7 +1841,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(property.ShouldSerializeValue(control));
 
             property.ResetValue(control);
-            Assert.Equal(13, control.ItemHeight);
+            Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
             Assert.False(property.ShouldSerializeValue(control));
         }
 
@@ -2050,13 +2050,13 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> PreferredHeight_GetEmpty_TestData()
         {
             int extra = SystemInformation.BorderSize.Height * 4 + 3;
-            yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, 13 + extra };
-            yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, 13 + extra };
-            yield return new object[] { DrawMode.Normal, BorderStyle.None, 13 };
+            yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, Control.DefaultFont.Height + extra };
+            yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, Control.DefaultFont.Height + extra };
+            yield return new object[] { DrawMode.Normal, BorderStyle.None, Control.DefaultFont.Height };
 
-            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, 13 + extra };
-            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, 13 + extra };
-            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, 13 };
+            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, Control.DefaultFont.Height + extra };
+            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, Control.DefaultFont.Height + extra };
+            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, Control.DefaultFont.Height };
 
             yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.Fixed3D, extra };
             yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.FixedSingle, extra };
@@ -2079,17 +2079,17 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> PreferredHeight_GetNotEmpty_TestData()
         {
             int extra = SystemInformation.BorderSize.Height * 4 + 3;
-            yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, 26 + extra };
-            yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, 26 + extra };
-            yield return new object[] { DrawMode.Normal, BorderStyle.None, 26 };
+            yield return new object[] { DrawMode.Normal, BorderStyle.Fixed3D, (Control.DefaultFont.Height * 2) + extra };
+            yield return new object[] { DrawMode.Normal, BorderStyle.FixedSingle, (Control.DefaultFont.Height * 2) + extra };
+            yield return new object[] { DrawMode.Normal, BorderStyle.None, (Control.DefaultFont.Height * 2) };
 
-            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, 26 + extra };
-            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, 26 + extra };
-            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, 26 };
+            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.Fixed3D, (Control.DefaultFont.Height * 2) + extra };
+            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.FixedSingle, (Control.DefaultFont.Height * 2) + extra };
+            yield return new object[] { DrawMode.OwnerDrawFixed, BorderStyle.None, (Control.DefaultFont.Height * 2) };
 
-            yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.Fixed3D, 26 + extra };
-            yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.FixedSingle, 26 + extra };
-            yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.None, 26 };
+            yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.Fixed3D, (Control.DefaultFont.Height * 2) + extra };
+            yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.FixedSingle, (Control.DefaultFont.Height * 2) + extra };
+            yield return new object[] { DrawMode.OwnerDrawVariable, BorderStyle.None, (Control.DefaultFont.Height * 2) };
         }
 
         [WinFormsTheory]
@@ -5148,7 +5148,7 @@ namespace System.Windows.Forms.Tests
             {
                 DrawMode = drawMode
             };
-            Assert.Equal(13, control.GetItemHeight(0));
+            Assert.Equal(Control.DefaultFont.Height, control.GetItemHeight(0));
             Assert.False(control.IsHandleCreated);
         }
 
@@ -5171,7 +5171,7 @@ namespace System.Windows.Forms.Tests
             };
             control.Items.Add("Item1");
             control.Items.Add("Item2");
-            Assert.Equal(13, control.GetItemHeight(index));
+            Assert.Equal(Control.DefaultFont.Height, control.GetItemHeight(index));
             Assert.False(control.IsHandleCreated);
         }
 

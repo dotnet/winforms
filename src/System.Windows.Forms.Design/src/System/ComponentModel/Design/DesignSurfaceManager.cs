@@ -361,7 +361,7 @@ namespace System.ComponentModel.Design
                 return new DesignerEventService();
             }
 
-            Debug.Fail("Demand created service not supported: " + serviceType.Name);
+            Debug.Fail($"Demand created service not supported: {serviceType.Name}");
             return null;
         }
 

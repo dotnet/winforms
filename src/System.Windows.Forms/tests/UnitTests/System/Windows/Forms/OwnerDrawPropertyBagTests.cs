@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class OwnerDrawPropertyBagTests : IClassFixture<ThreadExceptionFixture>
+    public class OwnerDrawPropertyBagTests
     {
         [WinFormsFact]
         public void OwnerDrawPropertyBag_Ctor_Default()

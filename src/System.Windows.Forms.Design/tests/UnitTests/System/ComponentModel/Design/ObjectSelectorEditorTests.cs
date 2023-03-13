@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class ObjectSelectorEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class ObjectSelectorEditorTests
     {
         [Fact]
         public void ObjectSelectorEditor_Ctor_Default()

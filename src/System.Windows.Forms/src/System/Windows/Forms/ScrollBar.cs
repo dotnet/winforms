@@ -589,7 +589,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", Minimum: " + Minimum + ", Maximum: " + Maximum + ", Value: " + Value;
+            return $"{s}, Minimum: {Minimum}, Maximum: {Maximum}, Value: {Value}";
         }
 
         protected unsafe void UpdateScrollInfo()

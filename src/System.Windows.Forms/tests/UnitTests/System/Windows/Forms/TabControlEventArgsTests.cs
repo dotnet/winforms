@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabControlEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class TabControlEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_TabPage_Int_TabControlAction_TestData()
         {

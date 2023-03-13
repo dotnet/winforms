@@ -22,6 +22,21 @@
         <target state="translated">"{1}" biçiminde olması beklenen Metin Ayrıştırma ("{0}") başarısız oldu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32GetThreadsDpiContextFailed">
+        <source>Failed to get thread's DpiAwareness context.</source>
+        <target state="new">Failed to get thread's DpiAwareness context.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiContextFailed">
+        <source>Failed to set thread's DpiAwareness context {0}.</source>
+        <target state="new">Failed to set thread's DpiAwareness context {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiHostingBehaviorFailed">
+        <source>Failed to set thread's DPI hosting behavior {0}.</source>
+        <target state="new">Failed to set thread's DPI hosting behavior {0}.</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -9,7 +9,7 @@ using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class CheckedListBoxItemAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class CheckedListBoxItemAccessibleObjectTests
     {
         [WinFormsFact]
         public void CheckedListBoxItemAccessibleObject_Ctor_OwningCheckedListBoxIsNull_RaiseException()

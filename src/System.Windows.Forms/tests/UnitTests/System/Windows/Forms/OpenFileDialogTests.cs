@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class OpenFileDialogTests : IClassFixture<ThreadExceptionFixture>
+    public class OpenFileDialogTests
     {
         [WinFormsFact]
         public void OpenFileDialog_Ctor_Default()

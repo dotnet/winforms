@@ -8,640 +8,632 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  This class provides API for drawing GDI text.
+/// </summary>
+public static class TextRenderer
 {
+#if DEBUG
+    // In various cases the DC may have already been modified, and we don't pass TextFormatFlags.PreserveGraphicsClipping
+    // or TextFormatFlags.PreserveGraphicsTranslateTransform flags, that set off the asserts in GetApplyStateFlags
+    // method. This flags allows us to skip those assert for the cases we know we don't need these flags.
+    internal static TextFormatFlags SkipAssertFlag = (TextFormatFlags)0x4000_0000;
+#endif
+
+    internal static FONT_QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
+
+    internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
+
+    public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
+        => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
+
     /// <summary>
-    ///  This class provides API for drawing GDI text.
+    ///  Draws the specified text at the specified location using the specified device context, font, and color.
     /// </summary>
-    public static class TextRenderer
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    public static void DrawText(IDeviceContext dc, ReadOnlySpan<char> text, Font font, Point pt, Color foreColor)
+        => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
+
+    public static void DrawText(
+        IDeviceContext dc,
+        string? text,
+        Font? font,
+        Point pt,
+        Color foreColor,
+        Color backColor)
+        => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
+
+    /// <summary>
+    ///  Draws the specified text at the specified location, using the specified device context, font, color, and back color.
+    /// </summary>
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    public static void DrawText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font font,
+        Point pt,
+        Color foreColor,
+        Color backColor)
+        => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
+
+    public static void DrawText(
+        IDeviceContext dc,
+        string? text,
+        Font? font,
+        Point pt,
+        Color foreColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty, flags);
+
+    /// <summary>
+    ///  Draws the specified text at the specified location using the specified device context, font, color, and
+    ///  formatting instructions.
+    /// </summary>
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+    /// </exception>
+    public static void DrawText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Point pt,
+        Color foreColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(
+            dc,
+            text,
+            font,
+            pt,
+            foreColor,
+            Color.Empty,
+            BlockModifyString(flags));
+
+    public static void DrawText(
+        IDeviceContext dc,
+        string? text,
+        Font? font,
+        Point pt,
+        Color foreColor,
+        Color backColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(dc, text, font, pt, foreColor, backColor, flags);
+
+    /// <summary>
+    ///  Draws the specified text at the specified location using the specified device context, font, color, back
+    ///  color, and formatting instructions.
+    /// </summary>
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+    /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+    /// </exception>
+    public static void DrawText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Point pt,
+        Color foreColor,
+        Color backColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(
+            dc,
+            text,
+            font,
+            pt,
+            foreColor,
+            backColor,
+            BlockModifyString(flags));
+
+    public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor)
+        => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
+
+    /// <summary>
+    ///  Draws the specified text within the specified bounds, using the specified device context, font, and color.
+    /// </summary>
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    public static void DrawText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor)
+        => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
+
+    public static void DrawText(
+        IDeviceContext dc,
+        string? text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor)
+        => DrawTextInternal(dc, text, font, bounds, foreColor, backColor);
+
+    /// <summary>
+    ///  Draws the specified text within the specified bounds using the specified device context, font, color, and
+    ///  back color.
+    /// </summary>
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    public static void DrawText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor)
+        => DrawTextInternal(dc, text, font, bounds, foreColor, backColor);
+
+    public static void DrawText(
+        IDeviceContext dc,
+        string? text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty, flags);
+
+    /// <summary>
+    ///  Draws the specified text within the specified bounds using the specified device context, font, color, and
+    ///  formatting instructions.
+    /// </summary>
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+    /// </exception>
+    public static void DrawText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(
+            dc,
+            text,
+            font,
+            bounds,
+            foreColor,
+            Color.Empty,
+            BlockModifyString(flags));
+
+    public static void DrawText(
+        IDeviceContext dc,
+        string? text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(dc, text, font, bounds, foreColor, backColor, flags);
+
+    /// <summary>
+    ///  Draws the specified text within the specified bounds using the specified device context, font, color,
+    ///  back color, and formatting instructions.
+    /// </summary>
+    /// <param name="dc">The device context in which to draw the text.</param>
+    /// <param name="text">The text to draw.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+    /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+    /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+    /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+    /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+    /// </exception>
+    public static void DrawText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(
+            dc,
+            text,
+            font,
+            bounds,
+            foreColor,
+            backColor,
+            BlockModifyString(flags));
+
+    private static void DrawTextInternal(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Point pt,
+        Color foreColor,
+        Color backColor,
+        TextFormatFlags flags = TextFormatFlags.Default)
+        => DrawTextInternal(dc, text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
+
+    internal static void DrawTextInternal(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor,
+        TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter)
     {
-#if DEBUG
-        // In various cases the DC may have already been modified, and we don't pass TextFormatFlags.PreserveGraphicsClipping
-        // or TextFormatFlags.PreserveGraphicsTranslateTransform flags, that set off the asserts in GetApplyStateFlags
-        // method. This flags allows us to skip those assert for the cases we know we don't need these flags.
-        internal static TextFormatFlags SkipAssertFlag = (TextFormatFlags)0x4000_0000;
-#endif
+        ArgumentNullException.ThrowIfNull(dc);
 
-        internal static FONT_QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
+        // Avoid creating the HDC, etc if we're not going to do any drawing
+        if (text.IsEmpty || foreColor == Color.Transparent)
+            return;
 
-        internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
+        // This MUST come before retrieving the HDC, which locks the Graphics object
+        FONT_QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
-        public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
-            => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
+        using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
 
-        /// <summary>
-        ///  Draws the specified text at the specified location using the specified device context, font, and color.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        public static void DrawText(IDeviceContext dc, ReadOnlySpan<char> text, Font font, Point pt, Color foreColor)
-            => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
+        DrawTextInternal(hdc, text, font, bounds, foreColor, quality, backColor, flags);
+    }
 
-        public static void DrawText(
-            IDeviceContext dc,
-            string? text,
-            Font? font,
-            Point pt,
-            Color foreColor,
-            Color backColor)
-            => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
+    internal static void DrawTextInternal(
+        PaintEventArgs e,
+        string? text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        TextFormatFlags flags)
+        => DrawTextInternal(e, text, font, bounds, foreColor, Color.Empty, flags);
 
-        /// <summary>
-        ///  Draws the specified text at the specified location, using the specified device context, font, color, and back color.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        public static void DrawText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font font,
-            Point pt,
-            Color foreColor,
-            Color backColor)
-            => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
-
-        public static void DrawText(
-            IDeviceContext dc,
-            string? text,
-            Font? font,
-            Point pt,
-            Color foreColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty, flags);
-
-        /// <summary>
-        ///  Draws the specified text at the specified location using the specified device context, font, color, and
-        ///  formatting instructions.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
-        /// </exception>
-        public static void DrawText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Point pt,
-            Color foreColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(
-                dc,
-                text,
-                font,
-                pt,
-                foreColor,
-                Color.Empty,
-                BlockModifyString(flags));
-
-        public static void DrawText(
-            IDeviceContext dc,
-            string? text,
-            Font? font,
-            Point pt,
-            Color foreColor,
-            Color backColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(dc, text, font, pt, foreColor, backColor, flags);
-
-        /// <summary>
-        ///  Draws the specified text at the specified location using the specified device context, font, color, back
-        ///  color, and formatting instructions.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
-        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
-        /// </exception>
-        public static void DrawText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Point pt,
-            Color foreColor,
-            Color backColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(
-                dc,
-                text,
-                font,
-                pt,
-                foreColor,
-                backColor,
-                BlockModifyString(flags));
-
-        public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor)
-            => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
-
-        /// <summary>
-        ///  Draws the specified text within the specified bounds, using the specified device context, font, and color.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        public static void DrawText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor)
-            => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
-
-        public static void DrawText(
-            IDeviceContext dc,
-            string? text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            Color backColor)
-            => DrawTextInternal(dc, text, font, bounds, foreColor, backColor);
-
-        /// <summary>
-        ///  Draws the specified text within the specified bounds using the specified device context, font, color, and
-        ///  back color.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        public static void DrawText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            Color backColor)
-            => DrawTextInternal(dc, text, font, bounds, foreColor, backColor);
-
-        public static void DrawText(
-            IDeviceContext dc,
-            string? text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty, flags);
-
-        /// <summary>
-        ///  Draws the specified text within the specified bounds using the specified device context, font, color, and
-        ///  formatting instructions.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
-        /// </exception>
-        public static void DrawText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(
-                dc,
-                text,
-                font,
-                bounds,
-                foreColor,
-                Color.Empty,
-                BlockModifyString(flags));
-
-        public static void DrawText(
-            IDeviceContext dc,
-            string? text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            Color backColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(dc, text, font, bounds, foreColor, backColor, flags);
-
-        /// <summary>
-        ///  Draws the specified text within the specified bounds using the specified device context, font, color,
-        ///  back color, and formatting instructions.
-        /// </summary>
-        /// <param name="dc">The device context in which to draw the text.</param>
-        /// <param name="text">The text to draw.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
-        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
-        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
-        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
-        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
-        /// </exception>
-        public static void DrawText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            Color backColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(
-                dc,
-                text,
-                font,
-                bounds,
-                foreColor,
-                backColor,
-                BlockModifyString(flags));
-
-        private static void DrawTextInternal(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Point pt,
-            Color foreColor,
-            Color backColor,
-            TextFormatFlags flags = TextFormatFlags.Default)
-            => DrawTextInternal(dc, text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
-
-        internal static void DrawTextInternal(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            Color backColor,
-            TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter)
+    internal static void DrawTextInternal(
+        PaintEventArgs e,
+        string? text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor,
+        TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter)
+    {
+        HDC hdc = e.HDC;
+        if (hdc.IsNull)
         {
-            ArgumentNullException.ThrowIfNull(dc);
-
-            // Avoid creating the HDC, etc if we're not going to do any drawing
-            if (text.IsEmpty || foreColor == Color.Transparent)
-                return;
-
             // This MUST come before retrieving the HDC, which locks the Graphics object
-            FONT_QUALITY quality = FontQualityFromTextRenderingHint(dc);
+            FONT_QUALITY quality = FontQualityFromTextRenderingHint(e.GraphicsInternal);
 
-            using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
+            using var graphicsHdc = new DeviceContextHdcScope(e.GraphicsInternal, applyGraphicsState: false);
+            DrawTextInternal(graphicsHdc, text, font, bounds, foreColor, quality, backColor, flags);
+        }
+        else
+        {
+            DrawTextInternal(hdc, text, font, bounds, foreColor, DefaultQuality, backColor, flags);
+        }
+    }
 
-            DrawTextInternal(hdc, text, font, bounds, foreColor, quality, backColor, flags);
+    internal static void DrawTextInternal(
+        HDC hdc,
+        string? text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        FONT_QUALITY fontQuality,
+        TextFormatFlags flags)
+        => DrawTextInternal(hdc, text, font, bounds, foreColor, fontQuality, Color.Empty, flags);
+
+    private static void DrawTextInternal(
+        HDC hdc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Rectangle bounds,
+        Color foreColor,
+        FONT_QUALITY fontQuality,
+        Color backColor,
+        TextFormatFlags flags)
+    {
+        using var hfont = GdiCache.GetHFONT(font, fontQuality, hdc);
+        hdc.DrawText(text, hfont, bounds, foreColor, flags, backColor);
+    }
+
+    private static TextFormatFlags BlockModifyString(TextFormatFlags flags)
+    {
+        if (flags.HasFlag(TextFormatFlags.ModifyString))
+        {
+            throw new ArgumentOutOfRangeException(nameof(flags), SR.TextFormatFlagsModifyStringNotAllowed);
         }
 
-        internal static void DrawTextInternal(
-            PaintEventArgs e,
-            string? text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            TextFormatFlags flags)
-            => DrawTextInternal(e, text, font, bounds, foreColor, Color.Empty, flags);
+        return flags;
+    }
 
-        internal static void DrawTextInternal(
-            PaintEventArgs e,
-            string? text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            Color backColor,
-            TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter)
+    public static Size MeasureText(string? text, Font? font)
+        => MeasureTextInternal(text, font, MaxSize);
+
+    /// <summary>
+    ///  Provides the size, in pixels, of the specified text when drawn with the specified font.
+    /// </summary>
+    /// <param name="text">The text to measure.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+    /// <returns>
+    ///  The <see cref="Size"/>, in pixels, of text drawn on a single line with the specified font. You can
+    ///  manipulate how the text is drawn by using one of the
+    ///  <see cref="DrawText(IDeviceContext, ReadOnlySpan{char}, Font?, Rectangle, Color, TextFormatFlags)"/>
+    ///  overloads that takes a <see cref="TextFormatFlags"/> parameter. For example, the default behavior of the
+    ///  <see cref="TextRenderer"/> is to add padding to the bounding rectangle of the drawn text to accommodate
+    ///  overhanging glyphs. If you need to draw a line of text without these extra spaces you should use the
+    ///  versions of <see cref="DrawText(IDeviceContext, ReadOnlySpan{char}, Font, Point, Color)"/> and
+    ///  <see cref="MeasureText(IDeviceContext, ReadOnlySpan{char}, Font?)"/> that take a Size and
+    ///  <see cref="TextFormatFlags"/> parameter. For an example, see
+    ///  <see cref="MeasureText(IDeviceContext, string?, Font?, Size, TextFormatFlags)"/>.
+    /// </returns>
+    public static Size MeasureText(ReadOnlySpan<char> text, Font? font)
+        => MeasureTextInternal(text, font, MaxSize);
+
+    public static Size MeasureText(string? text, Font? font, Size proposedSize)
+        => MeasureTextInternal(text, font, proposedSize);
+
+    /// <summary>
+    ///  Provides the size, in pixels, of the specified text when drawn with the specified font, using the
+    ///  specified size to create an initial bounding rectangle.
+    /// </summary>
+    /// <param name="text">The text to measure.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+    /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+    /// <returns>
+    ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+    ///  <paramref name="font"/>.
+    /// </returns>
+    public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize)
+        => MeasureTextInternal(text, font, proposedSize);
+
+    public static Size MeasureText(string? text, Font? font, Size proposedSize, TextFormatFlags flags)
+        => MeasureTextInternal(text, font, proposedSize, flags);
+
+    /// <summary>
+    ///  Provides the size, in pixels, of the specified text when drawn with the specified font and formatting
+    ///  instructions, using the specified size to create the initial bounding rectangle for the text.
+    /// </summary>
+    /// <param name="text">The text to measure.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+    /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+    /// <param name="flags">The formatting instructions to apply to the measured text.</param>
+    /// <returns>
+    ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+    ///  <paramref name="font"/> and format.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+    /// </exception>
+    public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize, TextFormatFlags flags)
+        => MeasureTextInternal(text, font, proposedSize, BlockModifyString(flags));
+
+    public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
+        => MeasureTextInternal(dc, text, font, MaxSize);
+
+    /// <summary>
+    ///  Provides the size, in pixels, of the specified text drawn with the specified font in the specified device
+    ///  context.
+    /// </summary>
+    /// <param name="dc">The device context in which to measure the text.</param>
+    /// <param name="text">The text to measure.</param>
+    /// <returns>
+    ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+    ///  <paramref name="font"/> in the specified device context.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font)
+        => MeasureTextInternal(dc, text, font, MaxSize);
+
+    public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
+        => MeasureTextInternal(dc, text, font, proposedSize);
+
+    /// <summary>
+    ///  Provides the size, in pixels, of the specified text when drawn with the specified font in the specified
+    ///  device context, using the specified size to create an initial bounding rectangle for the text.
+    /// </summary>
+    /// <param name="dc">The device context in which to measure the text.</param>
+    /// <param name="text">The text to measure.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+    /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+    /// <returns>
+    ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+    ///  <paramref name="font"/>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font, Size proposedSize)
+        => MeasureTextInternal(dc, text, font, proposedSize);
+
+    public static Size MeasureText(
+        IDeviceContext dc,
+        string? text,
+        Font? font,
+        Size proposedSize,
+        TextFormatFlags flags)
+        => MeasureTextInternal(dc, text, font, proposedSize, flags);
+
+    /// <summary>
+    ///  Provides the size, in pixels, of the specified text when drawn with the specified device context, font,
+    ///  and formatting instructions, using the specified size to create the initial bounding rectangle for the text.
+    /// </summary>
+    /// <param name="dc">The device context in which to measure the text.</param>
+    /// <param name="text">The text to measure.</param>
+    /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+    /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+    /// <param name="flags">The formatting instructions to apply to the measured text.</param>
+    /// <returns>
+    ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+    ///  <paramref name="font"/> and format.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+    /// </exception>
+    public static Size MeasureText(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Size proposedSize,
+        TextFormatFlags flags)
+        => MeasureTextInternal(dc, text, font, proposedSize, BlockModifyString(flags));
+
+    private static Size MeasureTextInternal(
+        ReadOnlySpan<char> text,
+        Font? font,
+        Size proposedSize,
+        TextFormatFlags flags = TextFormatFlags.Bottom)
+    {
+        if (text.IsEmpty)
+            return Size.Empty;
+
+        using var screen = GdiCache.GetScreenHdc();
+        using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.DEFAULT_QUALITY, screen);
+
+        return screen.HDC.MeasureText(text, hfont, proposedSize, flags);
+    }
+
+    private static Size MeasureTextInternal(
+        IDeviceContext dc,
+        ReadOnlySpan<char> text,
+        Font? font,
+        Size proposedSize,
+        TextFormatFlags flags = TextFormatFlags.Bottom)
+    {
+        ArgumentNullException.ThrowIfNull(dc);
+
+        if (text.IsEmpty)
+            return Size.Empty;
+
+        // This MUST come before retrieving the HDC, which locks the Graphics object
+        FONT_QUALITY quality = FontQualityFromTextRenderingHint(dc);
+
+        // Applying state may not impact text size measurements. Rather than risk missing some
+        // case we'll apply as we have historically to avoid surprise regressions.
+        using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
+        using var hfont = GdiCache.GetHFONT(font, quality, hdc);
+        return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
+    }
+
+    internal static Color DisabledTextColor(Color backColor)
+    {
+        if (SystemInformation.HighContrast)
         {
-            HDC hdc = e.HDC;
-            if (hdc.IsNull)
-            {
-                // This MUST come before retrieving the HDC, which locks the Graphics object
-                FONT_QUALITY quality = FontQualityFromTextRenderingHint(e.GraphicsInternal);
-
-                using var graphicsHdc = new DeviceContextHdcScope(e.GraphicsInternal, applyGraphicsState: false);
-                DrawTextInternal(graphicsHdc, text, font, bounds, foreColor, quality, backColor, flags);
-            }
-            else
-            {
-                DrawTextInternal(hdc, text, font, bounds, foreColor, DefaultQuality, backColor, flags);
-            }
+            return SystemColors.GrayText;
         }
 
-        internal static void DrawTextInternal(
-            HDC hdc,
-            string? text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            FONT_QUALITY fontQuality,
-            TextFormatFlags flags)
-            => DrawTextInternal(hdc, text, font, bounds, foreColor, fontQuality, Color.Empty, flags);
+        // If the color is darker than SystemColors.Control make it slightly darker,
+        // otherwise use the standard control dark color.
 
-        private static void DrawTextInternal(
-            HDC hdc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Rectangle bounds,
-            Color foreColor,
-            FONT_QUALITY fontQuality,
-            Color backColor,
-            TextFormatFlags flags)
+        return ControlPaint.IsDarker(backColor, SystemColors.Control)
+            ? ControlPaint.Dark(backColor)
+            : SystemColors.ControlDark;
+    }
+
+    /// <summary>
+    ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
+    /// </summary>
+    internal static FONT_QUALITY FontQualityFromTextRenderingHint(IDeviceContext? deviceContext)
+    {
+        if (deviceContext is not Graphics g)
         {
-            using var hfont = GdiCache.GetHFONT(font, fontQuality, hdc);
-            hdc.DrawText(text, hfont, bounds, foreColor, flags, backColor);
+            return FONT_QUALITY.DEFAULT_QUALITY;
         }
 
-        private static TextFormatFlags BlockModifyString(TextFormatFlags flags)
+        return g.TextRenderingHint switch
         {
-            if (flags.HasFlag(TextFormatFlags.ModifyString))
-            {
-                throw new ArgumentOutOfRangeException(nameof(flags), SR.TextFormatFlagsModifyStringNotAllowed);
-            }
+            TextRenderingHint.ClearTypeGridFit => FONT_QUALITY.CLEARTYPE_QUALITY,
+            TextRenderingHint.AntiAliasGridFit or TextRenderingHint.AntiAlias => FONT_QUALITY.ANTIALIASED_QUALITY,
+            TextRenderingHint.SingleBitPerPixelGridFit => FONT_QUALITY.PROOF_QUALITY,
+            TextRenderingHint.SingleBitPerPixel => FONT_QUALITY.DRAFT_QUALITY,
+            _ => FONT_QUALITY.DEFAULT_QUALITY,
+        };
+    }
 
-            return flags;
+    /// <summary>
+    ///  Returns what <see cref="FontQualityFromTextRenderingHint(IDeviceContext?)"/> would return in an
+    ///  unmodified <see cref="Graphics"/> object (i.e. the default).
+    /// </summary>
+    private static FONT_QUALITY GetDefaultFontQuality()
+    {
+        if (!SystemInformation.IsFontSmoothingEnabled)
+        {
+            return FONT_QUALITY.PROOF_QUALITY;
         }
 
-        public static Size MeasureText(string? text, Font? font)
-            => MeasureTextInternal(text, font, MaxSize);
+        // FE_FONTSMOOTHINGCLEARTYPE = 0x0002
+        return SystemInformation.FontSmoothingType == 0x0002
+            ? FONT_QUALITY.CLEARTYPE_QUALITY : FONT_QUALITY.ANTIALIASED_QUALITY;
+    }
 
-        /// <summary>
-        ///  Provides the size, in pixels, of the specified text when drawn with the specified font.
-        /// </summary>
-        /// <param name="text">The text to measure.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
-        /// <returns>
-        ///  The <see cref="Size"/>, in pixels, of text drawn on a single line with the specified font. You can
-        ///  manipulate how the text is drawn by using one of the
-        ///  <see cref="DrawText(IDeviceContext, ReadOnlySpan{char}, Font?, Rectangle, Color, TextFormatFlags)"/>
-        ///  overloads that takes a <see cref="TextFormatFlags"/> parameter. For example, the default behavior of the
-        ///  <see cref="TextRenderer"/> is to add padding to the bounding rectangle of the drawn text to accommodate
-        ///  overhanging glyphs. If you need to draw a line of text without these extra spaces you should use the
-        ///  versions of <see cref="DrawText(IDeviceContext, ReadOnlySpan{char}, Font, Point, Color)"/> and
-        ///  <see cref="MeasureText(IDeviceContext, ReadOnlySpan{char}, Font?)"/> that take a Size and
-        ///  <see cref="TextFormatFlags"/> parameter. For an example, see
-        ///  <see cref="MeasureText(IDeviceContext, string?, Font?, Size, TextFormatFlags)"/>.
-        /// </returns>
-        public static Size MeasureText(ReadOnlySpan<char> text, Font? font)
-            => MeasureTextInternal(text, font, MaxSize);
-
-        public static Size MeasureText(string? text, Font? font, Size proposedSize)
-            => MeasureTextInternal(text, font, proposedSize);
-
-        /// <summary>
-        ///  Provides the size, in pixels, of the specified text when drawn with the specified font, using the
-        ///  specified size to create an initial bounding rectangle.
-        /// </summary>
-        /// <param name="text">The text to measure.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
-        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
-        /// <returns>
-        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
-        ///  <paramref name="font"/>.
-        /// </returns>
-        public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize)
-            => MeasureTextInternal(text, font, proposedSize);
-
-        public static Size MeasureText(string? text, Font? font, Size proposedSize, TextFormatFlags flags)
-            => MeasureTextInternal(text, font, proposedSize, flags);
-
-        /// <summary>
-        ///  Provides the size, in pixels, of the specified text when drawn with the specified font and formatting
-        ///  instructions, using the specified size to create the initial bounding rectangle for the text.
-        /// </summary>
-        /// <param name="text">The text to measure.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
-        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
-        /// <param name="flags">The formatting instructions to apply to the measured text.</param>
-        /// <returns>
-        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
-        ///  <paramref name="font"/> and format.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
-        /// </exception>
-        public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize, TextFormatFlags flags)
-            => MeasureTextInternal(text, font, proposedSize, BlockModifyString(flags));
-
-        public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
-            => MeasureTextInternal(dc, text, font, MaxSize);
-
-        /// <summary>
-        ///  Provides the size, in pixels, of the specified text drawn with the specified font in the specified device
-        ///  context.
-        /// </summary>
-        /// <param name="dc">The device context in which to measure the text.</param>
-        /// <param name="text">The text to measure.</param>
-        /// <returns>
-        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
-        ///  <paramref name="font"/> in the specified device context.
-        /// </returns>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font)
-            => MeasureTextInternal(dc, text, font, MaxSize);
-
-        public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
-            => MeasureTextInternal(dc, text, font, proposedSize);
-
-        /// <summary>
-        ///  Provides the size, in pixels, of the specified text when drawn with the specified font in the specified
-        ///  device context, using the specified size to create an initial bounding rectangle for the text.
-        /// </summary>
-        /// <param name="dc">The device context in which to measure the text.</param>
-        /// <param name="text">The text to measure.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
-        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
-        /// <returns>
-        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
-        ///  <paramref name="font"/>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font, Size proposedSize)
-            => MeasureTextInternal(dc, text, font, proposedSize);
-
-        public static Size MeasureText(
-            IDeviceContext dc,
-            string? text,
-            Font? font,
-            Size proposedSize,
-            TextFormatFlags flags)
-            => MeasureTextInternal(dc, text, font, proposedSize, flags);
-
-        /// <summary>
-        ///  Provides the size, in pixels, of the specified text when drawn with the specified device context, font,
-        ///  and formatting instructions, using the specified size to create the initial bounding rectangle for the text.
-        /// </summary>
-        /// <param name="dc">The device context in which to measure the text.</param>
-        /// <param name="text">The text to measure.</param>
-        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
-        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
-        /// <param name="flags">The formatting instructions to apply to the measured text.</param>
-        /// <returns>
-        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
-        ///  <paramref name="font"/> and format.
-        /// </returns>
-        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
-        /// </exception>
-        public static Size MeasureText(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Size proposedSize,
-            TextFormatFlags flags)
-            => MeasureTextInternal(dc, text, font, proposedSize, BlockModifyString(flags));
-
-        private static Size MeasureTextInternal(
-            ReadOnlySpan<char> text,
-            Font? font,
-            Size proposedSize,
-            TextFormatFlags flags = TextFormatFlags.Bottom)
+    /// <summary>
+    ///  Gets the proper <see cref="ApplyGraphicsProperties"/> flags for the given <paramref name="textFormatFlags"/>.
+    /// </summary>
+    internal static ApplyGraphicsProperties GetApplyStateFlags(IDeviceContext deviceContext, TextFormatFlags textFormatFlags)
+    {
+        if (deviceContext is not Graphics graphics)
         {
-            if (text.IsEmpty)
-                return Size.Empty;
-
-            using var screen = GdiCache.GetScreenHdc();
-            using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.DEFAULT_QUALITY, screen);
-
-            return screen.HDC.MeasureText(text, hfont, proposedSize, flags);
+            return ApplyGraphicsProperties.None;
         }
 
-        private static Size MeasureTextInternal(
-            IDeviceContext dc,
-            ReadOnlySpan<char> text,
-            Font? font,
-            Size proposedSize,
-            TextFormatFlags flags = TextFormatFlags.Bottom)
+        var apply = ApplyGraphicsProperties.None;
+        if (textFormatFlags.HasFlag(TextFormatFlags.PreserveGraphicsClipping))
         {
-            ArgumentNullException.ThrowIfNull(dc);
-
-            if (text.IsEmpty)
-                return Size.Empty;
-
-            // This MUST come before retrieving the HDC, which locks the Graphics object
-            FONT_QUALITY quality = FontQualityFromTextRenderingHint(dc);
-
-            // Applying state may not impact text size measurements. Rather than risk missing some
-            // case we'll apply as we have historically to avoid surprise regressions.
-            using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
-            using var hfont = GdiCache.GetHFONT(font, quality, hdc);
-            return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
+            apply |= ApplyGraphicsProperties.Clipping;
         }
 
-        internal static Color DisabledTextColor(Color backColor)
+        if (textFormatFlags.HasFlag(TextFormatFlags.PreserveGraphicsTranslateTransform))
         {
-            if (SystemInformation.HighContrast)
-            {
-                return SystemColors.GrayText;
-            }
-
-            // If the color is darker than SystemColors.Control make it slightly darker,
-            // otherwise use the standard control dark color.
-
-            return ControlPaint.IsDarker(backColor, SystemColors.Control)
-                ? ControlPaint.Dark(backColor)
-                : SystemColors.ControlDark;
+            apply |= ApplyGraphicsProperties.TranslateTransform;
         }
-
-        /// <summary>
-        ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
-        /// </summary>
-        internal static FONT_QUALITY FontQualityFromTextRenderingHint(IDeviceContext? deviceContext)
-        {
-            if (deviceContext is not Graphics g)
-            {
-                return FONT_QUALITY.DEFAULT_QUALITY;
-            }
-
-            switch (g.TextRenderingHint)
-            {
-                case TextRenderingHint.ClearTypeGridFit:
-                    return FONT_QUALITY.CLEARTYPE_QUALITY;
-                case TextRenderingHint.AntiAliasGridFit:
-                case TextRenderingHint.AntiAlias:
-                    return FONT_QUALITY.ANTIALIASED_QUALITY;
-                case TextRenderingHint.SingleBitPerPixelGridFit:
-                    return FONT_QUALITY.PROOF_QUALITY;
-                case TextRenderingHint.SingleBitPerPixel:
-                    return FONT_QUALITY.DRAFT_QUALITY;
-                default:
-                case TextRenderingHint.SystemDefault:
-                    return FONT_QUALITY.DEFAULT_QUALITY;
-            }
-        }
-
-        /// <summary>
-        ///  Returns what <see cref="FontQualityFromTextRenderingHint(IDeviceContext?)"/> would return in an
-        ///  unmodified <see cref="Graphics"/> object (i.e. the default).
-        /// </summary>
-        private static FONT_QUALITY GetDefaultFontQuality()
-        {
-            if (!SystemInformation.IsFontSmoothingEnabled)
-            {
-                return FONT_QUALITY.PROOF_QUALITY;
-            }
-
-            // FE_FONTSMOOTHINGCLEARTYPE = 0x0002
-            return SystemInformation.FontSmoothingType == 0x0002
-                ? FONT_QUALITY.CLEARTYPE_QUALITY : FONT_QUALITY.ANTIALIASED_QUALITY;
-        }
-
-        /// <summary>
-        ///  Gets the proper <see cref="ApplyGraphicsProperties"/> flags for the given <paramref name="textFormatFlags"/>.
-        /// </summary>
-        private static ApplyGraphicsProperties GetApplyStateFlags(IDeviceContext deviceContext, TextFormatFlags textFormatFlags)
-        {
-            if (deviceContext is not Graphics graphics)
-            {
-                return ApplyGraphicsProperties.None;
-            }
-
-            var apply = ApplyGraphicsProperties.None;
-            if (textFormatFlags.HasFlag(TextFormatFlags.PreserveGraphicsClipping))
-            {
-                apply |= ApplyGraphicsProperties.Clipping;
-            }
-
-            if (textFormatFlags.HasFlag(TextFormatFlags.PreserveGraphicsTranslateTransform))
-            {
-                apply |= ApplyGraphicsProperties.TranslateTransform;
-            }
 
 #if DEBUG
-            if ((textFormatFlags & SkipAssertFlag) == 0)
-            {
-                Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
-                    || graphics.Clip is null
-                    || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
-                    "Must preserve Graphics clipping region!");
+        if ((textFormatFlags & SkipAssertFlag) == 0)
+        {
+            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
+                || graphics.Clip is null
+                || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
+                "Must preserve Graphics clipping region!");
 
-                Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
-                    || graphics.Transform is null
-                    || graphics.Transform.IsIdentity,
-                    "Must preserve Graphics transformation!");
-            }
+            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
+                || graphics.Transform is null
+                || graphics.Transform.IsIdentity,
+                "Must preserve Graphics transformation!");
+        }
 #endif
 
-            return apply;
-        }
+        return apply;
     }
 }

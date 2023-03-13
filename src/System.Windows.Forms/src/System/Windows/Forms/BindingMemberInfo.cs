@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
         public string BindingMember
             => BindingPath.Length > 0
-                ? BindingPath + "." + BindingField
+                ? $"{BindingPath}.{BindingField}"
                 : BindingField;
 
         public override bool Equals(object? otherObject)

@@ -882,7 +882,7 @@ namespace System.Windows.Forms
         {
             base.OnCreateControl();
 
-            if (Properties.GetObject(s_propAxContainer) is not null)
+            if (Properties.ContainsObjectThatIsNotNull(s_propAxContainer))
             {
                 AxContainerFormCreated();
             }

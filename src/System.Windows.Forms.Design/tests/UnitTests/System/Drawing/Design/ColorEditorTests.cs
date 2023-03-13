@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public partial class ColorEditorTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ColorEditorTests
     {
         [Fact]
         public void ColorEditor_Ctor_Default()

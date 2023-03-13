@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingNavigatorTests : IClassFixture<ThreadExceptionFixture>
+    public class BindingNavigatorTests
     {
         [WinFormsFact]
         public void BindingNavigator_Constructor()

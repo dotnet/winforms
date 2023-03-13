@@ -14,7 +14,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop;
 
-public unsafe class COM2FontConverterTests : IClassFixture<ThreadExceptionFixture>
+public unsafe class COM2FontConverterTests
 {
     private static readonly Com2PropertyDescriptor s_stubDescriptor = new Com2PropertyDescriptor(
         default,

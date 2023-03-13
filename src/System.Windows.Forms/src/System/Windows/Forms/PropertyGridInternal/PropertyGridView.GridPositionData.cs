@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyGridView
@@ -21,7 +19,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _itemRow = gridView._selectedRow;
             }
 
-            public GridEntry Restore(PropertyGridView gridView)
+            public GridEntry? Restore(PropertyGridView gridView)
             {
                 gridView.RestoreHierarchyState(_expandedState);
                 GridEntry entry = gridView.FindEquivalentGridEntry(_selectedItemTree);

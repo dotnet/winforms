@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.VisualStyles;
 
@@ -1044,7 +1043,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            return "DataGridViewButtonCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
+            return $"DataGridViewButtonCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
         }
 
         private void UpdateButtonState(ButtonState newButtonState, int rowIndex)

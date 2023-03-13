@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design
     /// <summary>
     ///  This is the main hosting object.  DesignerHost implements services and interfaces specific to the design time IContainer object.  The services this class implements are generally non-removable (they work as a unit so removing them would break things).
     /// </summary>
-    internal sealed class DesignerHost : Container, IDesignerLoaderHost2, IDesignerHostTransactionState, IComponentChangeService, IReflect
+    internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, IDesignerHostTransactionState, IComponentChangeService, IReflect
     {
         // State flags for the state of the designer host
         private static readonly int s_stateLoading = BitVector32.CreateMask(); // Designer is currently loading from the loader host.
@@ -47,13 +47,13 @@ namespace System.ComponentModel.Design
         private BitVector32 _state; // state for this host
         private DesignSurface _surface; // the owning designer surface.
         private string _newComponentName; // transient value indicating the name of a component that is being created
-        private Stack _transactions; // stack of transactions.  Each entry in the stack is a DesignerTransaction
+        private Stack<DesignerTransaction> _transactions; // stack of transactions
         private IComponent _rootComponent; // the root of our design
         private string _rootComponentClassName; // class name of the root of our design
         private readonly Dictionary<IComponent, IDesigner> _designers;  // designer -> component mapping
         private readonly EventHandlerList _events; // event list
         private DesignerLoader _loader; // the loader that loads our designers
-        private ICollection _savedSelection; // set of selected components saved across reloads
+        private List<string> _savedSelection; // set of selected components names saved across reloads
         private HostDesigntimeLicenseContext _licenseCtx;
         private IDesignerEventService _designerEventService;
         private static readonly object s_selfLock = new object();
@@ -777,10 +777,9 @@ namespace System.ComponentModel.Design
             if (_transactions is not null && _transactions.Count > 0)
             {
                 Debug.Fail("There are open transactions at unload");
-                while (_transactions.Count > 0)
+                while (_transactions.TryPeek(out DesignerTransaction transaction))  // it'll get popped in the OnCommit for DesignerHostTransaction
                 {
-                    DesignerTransaction trans = (DesignerTransaction)_transactions.Peek(); // it'll get popped in the OnCommit for DesignerHostTransaction
-                    trans.Commit();
+                    transaction.Commit();
                 }
             }
 
@@ -920,18 +919,10 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Gets the description of the current transaction.
         /// </summary>
-        string IDesignerHost.TransactionDescription
-        {
-            get
-            {
-                if (_transactions is not null && _transactions.Count > 0)
-                {
-                    return ((DesignerTransaction)_transactions.Peek()).Description;
-                }
-
-                return null;
-            }
-        }
+        string IDesignerHost.TransactionDescription =>
+            _transactions is not null && _transactions.TryPeek(out DesignerTransaction transaction)
+                ? transaction.Description
+                : null;
 
         /// <summary>
         ///  Adds an event handler for the <see cref="IDesignerHost.Activated"/> event.
@@ -1162,7 +1153,10 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This is called by the designer loader to indicate that the load has  terminated.  If there were errors, they should be passed in the errorCollection as a collection of exceptions (if they are not exceptions the designer loader host may just call ToString on them).  If the load was successful then errorCollection should either be null or contain an empty collection.
+        ///  This is called by the designer loader to indicate that the load has terminated.
+        ///  If there were errors, they should be passed in the errorCollection as a collection of exceptions
+        ///  (if they are not exceptions the designer loader host may just call ToString on them).
+        ///  If the load was successful then errorCollection should either be null or contain an empty collection.
         /// </summary>
         void IDesignerLoaderHost.EndLoad(string rootClassName, bool successful, ICollection errorCollection)
         {
@@ -1181,13 +1175,13 @@ namespace System.ComponentModel.Design
             // If the loader indicated success, but it never created a component, that is an error.
             if (successful && _rootComponent is null)
             {
-                ArrayList errorList = new ArrayList();
-                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                errorCollection = new List<object>()
                 {
-                    HelpLink = SR.DesignerHostNoBaseClass
+                    new InvalidOperationException(SR.DesignerHostNoBaseClass)
+                    {
+                        HelpLink = SR.DesignerHostNoBaseClass
+                    }
                 };
-                errorList.Add(ex);
-                errorCollection = errorList;
                 successful = false;
             }
 
@@ -1226,16 +1220,12 @@ namespace System.ComponentModel.Design
                         _state[s_stateLoading] = true;
                         Unload();
 
-                        ArrayList errorList = new ArrayList
+                        errorCollection = errorCollection is null ? new List<object>() : errorCollection.Cast<object>().ToList();
+                        if (errorCollection is List<object> errorList)
                         {
-                            ex
-                        };
-                        if (errorCollection is not null)
-                        {
-                            errorList.AddRange(errorCollection);
+                            errorList.Insert(0, ex);
                         }
 
-                        errorCollection = errorList;
                         successful = false;
 
                         _surface?.OnLoaded(successful, errorCollection);
@@ -1249,7 +1239,7 @@ namespace System.ComponentModel.Design
                     {
                         if (GetService(typeof(ISelectionService)) is ISelectionService ss)
                         {
-                            ArrayList selectedComponents = new ArrayList(_savedSelection.Count);
+                            List<IComponent> selectedComponents = new(_savedSelection.Count);
                             foreach (string name in _savedSelection)
                             {
                                 IComponent comp = Components[name];
@@ -1268,7 +1258,9 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This is called by the designer loader when it wishes to reload the design document.  The reload will happen immediately so the caller should ensure that it is in a state where BeginLoad may be called again.
+        ///  This is called by the designer loader when it wishes to reload the design document.
+        ///  The reload will happen immediately so the caller should ensure that it is in a state
+        ///  where BeginLoad may be called again.
         /// </summary>
         void IDesignerLoaderHost.Reload()
         {
@@ -1279,12 +1271,12 @@ namespace System.ComponentModel.Design
                 // Next, stash off the set of selected objects by name.  After the reload we will attempt to re-select them.
                 if (GetService(typeof(ISelectionService)) is ISelectionService ss)
                 {
-                    ArrayList list = new ArrayList(ss.SelectionCount);
-                    foreach (object o in ss.GetSelectedComponents())
+                    List<string> list = new(ss.SelectionCount);
+                    foreach (object item in ss.GetSelectedComponents())
                     {
-                        if (o is IComponent comp && comp.Site is not null && comp.Site.Name is not null)
+                        if (item is IComponent component && component.Site is not null && component.Site.Name is not null)
                         {
-                            list.Add(comp.Site.Name);
+                            list.Add(component.Site.Name);
                         }
                     }
 
@@ -1483,340 +1475,6 @@ namespace System.ComponentModel.Design
         object IServiceProvider.GetService(Type serviceType)
         {
             return GetService(serviceType);
-        }
-
-        /// <summary>
-        ///  DesignerHostTransaction is our implementation of the  DesignerTransaction abstract class.
-        /// </summary>
-        private sealed class DesignerHostTransaction : DesignerTransaction
-        {
-            private DesignerHost _host;
-
-            public DesignerHostTransaction(DesignerHost host, string description) : base(description)
-            {
-                _host = host;
-                _host._transactions ??= new Stack();
-
-                _host._transactions.Push(this);
-                _host.OnTransactionOpening(EventArgs.Empty);
-                _host.OnTransactionOpened(EventArgs.Empty);
-            }
-
-            /// <summary>
-            ///  User code should implement this method to perform the actual work of committing a transaction.
-            /// </summary>
-            protected override void OnCancel()
-            {
-                if (_host is not null)
-                {
-                    if (_host._transactions.Peek() != this)
-                    {
-                        string nestedDescription = ((DesignerTransaction)_host._transactions.Peek()).Description;
-                        throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
-                    }
-
-                    _host.IsClosingTransaction = true;
-                    try
-                    {
-                        _host._transactions.Pop();
-                        DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(false, _host._transactions.Count == 0);
-                        _host.OnTransactionClosing(e);
-                        _host.OnTransactionClosed(e);
-                    }
-                    finally
-                    {
-                        _host.IsClosingTransaction = false;
-                        _host = null;
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  User code should implement this method to perform the actual work of committing a transaction.
-            /// </summary>
-            protected override void OnCommit()
-            {
-                if (_host is not null)
-                {
-                    if (_host._transactions.Peek() != this)
-                    {
-                        string nestedDescription = ((DesignerTransaction)_host._transactions.Peek()).Description;
-                        throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
-                    }
-
-                    _host.IsClosingTransaction = true;
-                    try
-                    {
-                        _host._transactions.Pop();
-                        DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(true, _host._transactions.Count == 0);
-                        _host.OnTransactionClosing(e);
-                        _host.OnTransactionClosed(e);
-                    }
-                    finally
-                    {
-                        _host.IsClosingTransaction = false;
-                        _host = null;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Site is the site we use at design time when we host components.
-        /// </summary>
-        internal class Site : ISite, IServiceContainer, IDictionaryService
-        {
-            private readonly IComponent _component;
-            private Hashtable _dictionary;
-            private readonly DesignerHost _host;
-            private string _name;
-            private bool _disposed;
-            private SiteNestedContainer _nestedContainer;
-            private readonly Container _container;
-
-            internal Site(IComponent component, DesignerHost host, string name, Container container)
-            {
-                _component = component;
-                _host = host;
-                _name = name;
-                _container = container;
-            }
-
-            /// <summary>
-            ///  Used by the IServiceContainer implementation to return a container-specific service container.
-            /// </summary>
-            private IServiceContainer SiteServiceContainer
-            {
-                get
-                {
-                    SiteNestedContainer nc = ((IServiceProvider)this).GetService(typeof(INestedContainer)) as SiteNestedContainer;
-                    Debug.Assert(nc is not null, "We failed to resolve a nested container.");
-                    IServiceContainer sc = nc.GetServiceInternal(typeof(IServiceContainer)) as IServiceContainer;
-                    Debug.Assert(sc is not null, "We failed to resolve a service container from the nested container.");
-                    return sc;
-                }
-            }
-
-            /// <summary>
-            ///  Retrieves the key corresponding to the given value.
-            /// </summary>
-            object IDictionaryService.GetKey(object value)
-            {
-                if (_dictionary is not null)
-                {
-                    foreach (DictionaryEntry de in _dictionary)
-                    {
-                        object o = de.Value;
-                        if (value is not null && value.Equals(o))
-                        {
-                            return de.Key;
-                        }
-                    }
-                }
-
-                return null;
-            }
-
-            /// <summary>
-            ///  Retrieves the value corresponding to the given key.
-            /// </summary>
-            object IDictionaryService.GetValue(object key)
-            {
-                if (_dictionary is not null)
-                {
-                    return _dictionary[key];
-                }
-
-                return null;
-            }
-
-            /// <summary>
-            ///  Stores the given key-value pair in an object's site.  This key-value pair is stored on a per-object basis, and is a handy place to save additional information about a component.
-            /// </summary>
-            void IDictionaryService.SetValue(object key, object value)
-            {
-                _dictionary ??= new Hashtable();
-
-                if (value is null)
-                {
-                    _dictionary.Remove(key);
-                }
-                else
-                {
-                    _dictionary[key] = value;
-                }
-            }
-
-            /// <summary>
-            ///  Adds the given service to the service container.
-            /// </summary>
-            void IServiceContainer.AddService(Type serviceType, object serviceInstance)
-            {
-                SiteServiceContainer.AddService(serviceType, serviceInstance);
-            }
-
-            /// <summary>
-            ///  Adds the given service to the service container.
-            /// </summary>
-            void IServiceContainer.AddService(Type serviceType, object serviceInstance, bool promote)
-            {
-                SiteServiceContainer.AddService(serviceType, serviceInstance, promote);
-            }
-
-            /// <summary>
-            ///  Adds the given service to the service container.
-            /// </summary>
-            void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback)
-            {
-                SiteServiceContainer.AddService(serviceType, callback);
-            }
-
-            /// <summary>
-            ///  Adds the given service to the service container.
-            /// </summary>
-            void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback, bool promote)
-            {
-                SiteServiceContainer.AddService(serviceType, callback, promote);
-            }
-
-            /// <summary>
-            ///  Removes the given service type from the service container.
-            /// </summary>
-            void IServiceContainer.RemoveService(Type serviceType)
-            {
-                SiteServiceContainer.RemoveService(serviceType);
-            }
-
-            /// <summary>
-            ///  Removes the given service type from the service container.
-            /// </summary>
-            void IServiceContainer.RemoveService(Type serviceType, bool promote)
-            {
-                SiteServiceContainer.RemoveService(serviceType, promote);
-            }
-
-            /// <summary>
-            ///  Returns the requested service.
-            /// </summary>
-            object IServiceProvider.GetService(Type service)
-            {
-                ArgumentNullException.ThrowIfNull(service);
-
-                // We always resolve IDictionaryService to ourselves.
-                if (service == typeof(IDictionaryService))
-                {
-                    return this;
-                }
-
-                // NestedContainer is demand created
-                if (service == typeof(INestedContainer))
-                {
-                    if (_nestedContainer is null)
-                    {
-                        _nestedContainer = new SiteNestedContainer(_component, null, _host);
-
-                        // Initialize IServiceContainer in the nested container as soon as INestedContainer is created,
-                        // otherwise site has no access to the DesignerHost's services.
-                        _ = _nestedContainer.GetServiceInternal(typeof(IServiceContainer));
-                    }
-
-                    return _nestedContainer;
-                }
-
-                // SiteNestedContainer does offer IServiceContainer and IContainer as services, but we always want a default site query for these services to delegate to the host.
-                // Because it is more common to add  services to the host than it is to add them to the site itself, and also because we need this for backward compatibility.
-                if (service != typeof(IServiceContainer) && service != typeof(IContainer) && _nestedContainer is not null)
-                {
-                    return _nestedContainer.GetServiceInternal(service);
-                }
-
-                return _host.GetService(service);
-            }
-
-            /// <summary>
-            ///  The component sited by this component site.
-            /// </summary>
-            IComponent ISite.Component
-            {
-                get => _component;
-            }
-
-            /// <summary>
-            ///  The container in which the component is sited.
-            /// </summary>
-            IContainer ISite.Container
-            {
-                get => _container;
-            }
-
-            /// <summary>
-            ///  Indicates whether the component is in design mode.
-            /// </summary>
-            bool ISite.DesignMode
-            {
-                get => true;
-            }
-
-            /// <summary>
-            ///  Indicates whether this Site has been disposed.
-            /// </summary>
-            internal bool Disposed
-            {
-                get => _disposed;
-                set
-                {
-                    _disposed = value;
-                    //We need to do the cleanup when the site is set as disposed by its user
-                    if (_disposed)
-                    {
-                        _dictionary = null;
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  The name of the component.
-            /// </summary>
-            string ISite.Name
-            {
-                get => _name;
-                set
-                {
-                    value ??= string.Empty;
-
-                    if (_name != value)
-                    {
-                        bool validateName = true;
-                        if (value.Length > 0)
-                        {
-                            IComponent namedComponent = _container.Components[value];
-                            validateName = (_component != namedComponent);
-                            // allow renames that are just case changes of the current name.
-                            if (namedComponent is not null && validateName)
-                            {
-                                Exception ex = new Exception(string.Format(SR.DesignerHostDuplicateName, value))
-                                {
-                                    HelpLink = SR.DesignerHostDuplicateName
-                                };
-                                throw ex;
-                            }
-                        }
-
-                        if (validateName)
-                        {
-                            if (((IServiceProvider)this).GetService(typeof(INameCreationService)) is INameCreationService nameService)
-                            {
-                                nameService.ValidateName(value);
-                            }
-                        }
-
-                        // It is OK to change the name to this value.  Announce the change and do it.
-                        string oldName = _name;
-                        _name = value;
-                        _host.OnComponentRename(_component, oldName, _name);
-                    }
-                }
-            }
         }
     }
 }

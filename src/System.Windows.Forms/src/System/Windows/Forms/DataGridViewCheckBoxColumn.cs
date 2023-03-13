@@ -7,8 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -319,13 +317,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(64);
-            sb.Append("DataGridViewCheckBoxColumn { Name=");
-            sb.Append(Name);
-            sb.Append(", Index=");
-            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
-            sb.Append(" }");
-            return sb.ToString();
+            return $"DataGridViewCheckBoxColumn {{ Name={Name}, Index={Index} }}";
         }
     }
 }

@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class PropertyGridView_GridViewListBoxAccessibleObjectTest : IClassFixture<ThreadExceptionFixture>
+    public class PropertyGridView_GridViewListBoxAccessibleObjectTest
     {
         [WinFormsFact]
         public void GridViewListBoxAccessibleObject_Ctor_Default()

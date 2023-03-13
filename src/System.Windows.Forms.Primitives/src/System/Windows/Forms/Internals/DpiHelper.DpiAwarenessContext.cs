@@ -16,9 +16,9 @@ namespace System.Windows.Forms
         /// <param name="awareness">The new DPI awareness for the current thread</param>
         /// <returns>An object that, when disposed, will reset the current thread's
         ///  DPI awareness to the value it had when the object was created.</returns>
-        public static IDisposable EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT awareness)
+        public static IDisposable EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT awareness, DPI_HOSTING_BEHAVIOR dpiHosting = DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED)
         {
-            return new DpiAwarenessScope(awareness);
+            return new DpiAwarenessScope(awareness, dpiHosting);
         }
 
         /// <summary>
@@ -33,65 +33,6 @@ namespace System.Windows.Forms
             using (EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 return createInstance();
-            }
-        }
-
-        /// <summary>
-        ///  Class that help setting Dpi awareness context scope
-        /// </summary>
-        private class DpiAwarenessScope : IDisposable
-        {
-            private bool dpiAwarenessScopeIsSet;
-            private readonly DPI_AWARENESS_CONTEXT originalAwareness = DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
-
-            /// <summary>
-            ///  Enters given Dpi awareness scope
-            /// </summary>
-            public DpiAwarenessScope(DPI_AWARENESS_CONTEXT awareness)
-            {
-                try
-                {
-                    if (!PInvoke.AreDpiAwarenessContextsEqualInternal(awareness, DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
-                    {
-                        originalAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
-
-                        // If current process dpiawareness is SYSTEM_UNAWARE or SYSTEM_AWARE (must be equal to awareness), calling this method will be a no-op.
-                        if (!PInvoke.AreDpiAwarenessContextsEqualInternal(originalAwareness, awareness) &&
-                            !PInvoke.AreDpiAwarenessContextsEqualInternal(originalAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
-                        {
-                            originalAwareness = PInvoke.SetThreadDpiAwarenessContextInternal(awareness);
-
-                            // As reported in https://github.com/dotnet/winforms/issues/2969
-                            // under unknown conditions originalAwareness may remain 0 (which means the call failed)
-                            // causing us to set dpiAwarenessScopeIsSet=true, which would lead to a crash when we attempt to dispose the scope.
-                            dpiAwarenessScopeIsSet = originalAwareness != IntPtr.Zero;
-                        }
-                    }
-                }
-                catch (EntryPointNotFoundException)
-                {
-                    dpiAwarenessScopeIsSet = false;
-                }
-            }
-
-            /// <summary>
-            ///  Dispose object and resources
-            /// </summary>
-            public void Dispose()
-            {
-                ResetDpiAwarenessContextChanges();
-            }
-
-            /// <summary>
-            ///  resetting dpiawareness of the thread.
-            /// </summary>
-            private void ResetDpiAwarenessContextChanges()
-            {
-                if (dpiAwarenessScopeIsSet)
-                {
-                    PInvoke.SetThreadDpiAwarenessContextInternal(originalAwareness);
-                    dpiAwarenessScopeIsSet = false;
-                }
             }
         }
     }

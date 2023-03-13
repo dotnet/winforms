@@ -14,7 +14,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListControlTests : IClassFixture<ThreadExceptionFixture>
+    public class ListControlTests
     {
         [WinFormsFact]
         public void ListControl_Ctor_Default()

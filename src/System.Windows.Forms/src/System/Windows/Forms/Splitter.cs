@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -20,7 +19,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(SplitterMoved))]
     [DefaultProperty(nameof(Dock))]
     [SRDescription(nameof(SR.DescriptionSplitter))]
-    [Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.SplitterDesigner, {AssemblyRef.SystemDesign}")]
     public partial class Splitter : Control
     {
         private const int DRAW_START = 1;
@@ -986,7 +985,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", MinExtra: " + MinExtra.ToString(CultureInfo.CurrentCulture) + ", MinSize: " + MinSize.ToString(CultureInfo.CurrentCulture);
+            return $"{s}, MinExtra: {MinExtra}, MinSize: {MinSize}";
         }
     }
 }

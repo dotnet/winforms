@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellPaintingEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewCellPaintingEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Rectangle_Rectangle_Int_Int_DataGridViewElementStates_Object_Object_String_DataGridViewCellStyle_DataGridViewAdvancedBorderStyle_DataGridViewPaintParts_TestData()
         {

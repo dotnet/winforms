@@ -104,7 +104,7 @@ namespace System.Windows.Forms
                     fileId = new IntPtr(rnd.Next());
                 }
 
-                fullFileName = filePath + "\\Maui" + fileId + ".log";
+                fullFileName = $"{filePath}\\Maui{fileId}.log";
             }
 
             return fullFileName;

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DomainUpDownTests : IClassFixture<ThreadExceptionFixture>
+    public class DomainUpDownTests
     {
         [WinFormsFact]
         public void DomainUpDown_Ctor_Default()

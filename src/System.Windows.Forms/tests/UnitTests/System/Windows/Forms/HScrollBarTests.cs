@@ -10,7 +10,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class HScrollBarTests : IClassFixture<ThreadExceptionFixture>
+    public class HScrollBarTests
     {
         [WinFormsFact]
         public void HScrollBar_Ctor_Default()

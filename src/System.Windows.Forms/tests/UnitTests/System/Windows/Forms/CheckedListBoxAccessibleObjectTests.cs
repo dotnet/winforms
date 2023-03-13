@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CheckedListBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class CheckedListBoxAccessibleObjectTests
     {
         [WinFormsFact]
         public void CheckedListBoxAccessibleObject_CheckBounds()

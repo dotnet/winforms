@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design.Behavior
     {
         private struct DragComponent
         {
-            public object dragComponent; //the dragComponent
+            public IComponent dragComponent; //the dragComponent
             public int zorderIndex; //the dragComponent's z-order index
             public Point originalControlLocation; //the original control of the control in AdornerWindow coordinates
             public Point draggedLocation; //the location of the component after each drag - in AdornerWindow coordinates
@@ -72,9 +72,9 @@ namespace System.Windows.Forms.Design.Behavior
         private int primaryComponentIndex = -1; // Index of the primary component (control) in dragComponents
 
         /// <summary>
-        ///  Constuctor that caches all needed vars for perf reasons.
+        ///  Constructor that caches all needed variables for perf reasons.
         /// </summary>
-        internal DropSourceBehavior(ICollection dragComponents, Control source, Point initialMouseLocation)
+        internal DropSourceBehavior(List<IComponent> dragComponents, Control source, Point initialMouseLocation)
         {
             serviceProviderSource = source.Site;
             if (serviceProviderSource is null)
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done. See Copy code below.
-            ArrayList originalControls = null;
+            List<IComponent> originalControls = null;
             bool performCopy = (lastEffect == DragDropEffects.Copy);
 
             Control dragSource = data.Source;
@@ -385,21 +385,21 @@ namespace System.Windows.Forms.Design.Behavior
                             numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
                             // Get the objects to copy
-                            ArrayList temp = new ArrayList();
+                            List<IComponent> temp = new();
                             for (int i = 0; i < dragComponents.Length; i++)
                             {
                                 temp.Add(dragComponents[i].dragComponent);
                             }
 
                             // Create a copy of them
-                            temp = DesignerUtils.CopyDragObjects(temp, serviceProviderTarget) as ArrayList;
+                            temp = DesignerUtils.CopyDragObjects(temp, serviceProviderTarget).Cast<IComponent>().ToList();
                             if (temp is null)
                             {
                                 Debug.Fail("Couldn't create copies of the controls we are dragging.");
                                 return;
                             }
 
-                            originalControls = new ArrayList();
+                            originalControls = new();
                             // And stick the copied controls back into the dragComponents array
                             for (int j = 0; j < temp.Count; j++)
                             {
@@ -885,9 +885,9 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  Called when the ControlDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
         /// </summary>
-        private void InitiateDrag(Point initialMouseLocation, ICollection dragComps)
+        private void InitiateDrag(Point initialMouseLocation, ICollection<IComponent> dragComps)
         {
-            dragObjects = dragComps.Cast<IComponent>().ToList();
+            dragObjects = dragComps.ToList();
             DisableAdorners(serviceProviderSource, behaviorServiceSource, false);
             Control primaryControl = dragObjects[0] as Control;
             Control primaryParent = primaryControl?.Parent;
@@ -1005,10 +1005,10 @@ namespace System.Windows.Forms.Design.Behavior
             cleanedUpDrag = false;
         }
 
-        internal ArrayList GetSortedDragControls(ref int primaryControlIndex)
+        internal List<IComponent> GetSortedDragControls(ref int primaryControlIndex)
         {
             //create our list of controls-to-drag
-            ArrayList dragControls = new ArrayList();
+            List<IComponent> dragControls = new();
             primaryControlIndex = -1;
             if ((dragComponents is not null) && (dragComponents.Length > 0))
             {

@@ -11,7 +11,7 @@ using static Interop;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell, IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     {
         [WinFormsFact]
         public void DataGridViewCellAccessibleObject_Ctor_Default()
@@ -1003,11 +1003,7 @@ namespace System.Windows.Forms.Tests
             dataGridView.Rows.Add(new DataGridViewRow());
 
             DataGridViewCellAccessibleObject dataGridViewCellAccessibleObject = new(dataGridView.Rows[0].Cells[0]);
-            string expected = string.Empty;
-            foreach (int runtimeIdPart in dataGridViewCellAccessibleObject.RuntimeId)
-            {
-                expected += runtimeIdPart.ToString();
-            }
+            string expected = string.Concat(dataGridViewCellAccessibleObject.RuntimeId);
 
             Assert.Equal(expected, dataGridViewCellAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
             Assert.False(dataGridView.IsHandleCreated);

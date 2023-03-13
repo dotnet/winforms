@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {
-    public class DesignerSerializationManagerTests : IClassFixture<ThreadExceptionFixture>
+    public class DesignerSerializationManagerTests
     {
         [Fact]
         public void DesignerSerializationManager_Ctor_Default()

@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabControlTests : IClassFixture<ThreadExceptionFixture>
+    public class TabControlTests
     {
         [WinFormsFact]
         public void TabControl_Ctor_Default()
@@ -2048,7 +2048,6 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
-        [InlineData(2)]
         public void TabControl_SelectedIndex_SetWithPages_GetReturnsExpected(int value)
         {
             using var control = new TabControl();
@@ -2064,7 +2063,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(page2.Visible);
             Assert.False(control.IsHandleCreated);
             Assert.False(page1.IsHandleCreated);
-            Assert.False(page1.IsHandleCreated);
+            Assert.False(page2.IsHandleCreated);
 
             // Set same.
             control.SelectedIndex = value;
@@ -2074,7 +2073,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(page2.Visible);
             Assert.False(control.IsHandleCreated);
             Assert.False(page1.IsHandleCreated);
-            Assert.False(page1.IsHandleCreated);
+            Assert.False(page2.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -3836,7 +3835,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubTabControl();
             object[] result = Assert.IsType<TabPage[]>(control.GetItems());
             Assert.Empty(result);
-            Assert.NotSame(result, control.GetItems());
+            Assert.Same(result, control.GetItems());
         }
 
         [WinFormsFact]
@@ -3907,17 +3906,26 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidCastException>(() => control.GetItems(baseType));
         }
 
-        [WinFormsTheory]
-        [InlineData(typeof(SubTabPage))]
-        [InlineData(typeof(int))]
-        public void TabControl_GetItems_InvokeInvalidTypeWithPages_ThrowsInvalidCastException(Type baseType)
+        [WinFormsFact]
+        public void TabControl_GetItems_InvokeInvalidTypeWithPages_ThrowsInvalidCastException()
         {
             using var control = new SubTabControl();
             using var page1 = new TabPage();
             using var page2 = new SubTabPage();
             control.TabPages.Add(page1);
             control.TabPages.Add(page2);
-            Assert.Throws<InvalidCastException>(() => control.GetItems(baseType));
+            Assert.Throws<InvalidCastException>(() => control.GetItems(typeof(int)));
+        }
+
+        [WinFormsFact]
+        public void TabControl_GetItems_InvokeInvalidInheritedTypeWithPages_ThrowsArrayTypeMismatchException()
+        {
+            using var control = new SubTabControl();
+            using var page1 = new TabPage();
+            using var page2 = new SubTabPage();
+            control.TabPages.Add(page1);
+            control.TabPages.Add(page2);
+            Assert.Throws<ArrayTypeMismatchException>(() => control.GetItems(typeof(SubTabPage)));
         }
 
         [WinFormsTheory]

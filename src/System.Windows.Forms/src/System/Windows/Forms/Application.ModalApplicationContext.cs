@@ -6,6 +6,8 @@ namespace System.Windows.Forms
 {
     public sealed partial class Application
     {
+        internal static readonly Type s_typeOfModalApplicationContext = typeof(ModalApplicationContext);
+
         private class ModalApplicationContext : ApplicationContext
         {
             private ThreadContext? _parentWindowContext;

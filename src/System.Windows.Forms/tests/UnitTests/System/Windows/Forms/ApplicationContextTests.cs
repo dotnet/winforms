@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ApplicationContextTests : IClassFixture<ThreadExceptionFixture>
+    public class ApplicationContextTests
     {
         [WinFormsFact]
         public void Ctor_Default()
@@ -374,6 +374,18 @@ namespace System.Windows.Forms.Tests
             context.ThreadExit -= handler;
             context.OnMainFormClosed(sender, e);
             Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        public void ApplicationContext_Subclasses_SuppressFinalizeCall()
+        {
+            foreach (var type in typeof(ApplicationContext).Assembly.GetTypes().
+                Where(type => type == typeof(ApplicationContext) || type.IsSubclassOf(typeof(ApplicationContext))))
+            {
+                Assert.True(type == typeof(ApplicationContext) || type == Application.s_typeOfModalApplicationContext,
+                    $"Type {type} is not one of [{typeof(ApplicationContext)}, {Application.s_typeOfModalApplicationContext}]. " +
+                    $"Consider adding it here and to the ApplicationContext(Form? mainForm) constructor. Or add exclusion to this test (if a new class really needs a finalizer).");
+            }
         }
 
         private class SubApplicationContext : ApplicationContext

@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -21,7 +20,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Adorner _bodyAdorner;                       //used to track all body glyphs for each control
         private BehaviorService _behaviorService;           //ptr back to our BehaviorService
         private IServiceProvider _serviceProvider;          //standard service provider
-        private readonly Hashtable _componentToDesigner;    //used for quick look up of designers related to comps
+        private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    //used for quick look up of designers related to components
         private readonly Control _rootComponent;            //root component being designed
         private ISelectionService _selSvc;                  //we cache the selection service for perf.
         private IDesignerHost _designerHost;                //we cache the designerhost for perf.
@@ -65,10 +64,10 @@ namespace System.Windows.Forms.Design.Behavior
             _selectionAdorner = new Adorner();
             _bodyAdorner = new Adorner();
             behaviorService.Adorners.Add(_bodyAdorner);
-            behaviorService.Adorners.Add(_selectionAdorner); //adding this will cause the adorner to get setup with a ptr
-                                                            //to the beh.svc.
+            behaviorService.Adorners.Add(_selectionAdorner); // adding this will cause the adorner to get setup with a ptr
+                                                             // to the beh.svc.
 
-            _componentToDesigner = new Hashtable();
+            _componentToDesigner = new();
 
             IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
             if (cs is not null)
@@ -126,7 +125,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  This method fist calls the recursive AddControlGlyphs() method. When finished, we add the final glyph(s)
         ///  to the root comp.
         /// </summary>
-        private void AddAllControlGlyphs(Control parent, ArrayList selComps, object primarySelection)
+        private void AddAllControlGlyphs(Control parent, List<IComponent> selComps, object primarySelection)
         {
             foreach (Control control in parent.Controls)
             {
@@ -152,12 +151,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  Recursive method that goes through and adds all the glyphs of every child to our global Adorner.
         /// </summary>
-        private void AddControlGlyphs(Control c, GlyphSelectionType selType)
+        private void AddControlGlyphs(Control control, GlyphSelectionType selType)
         {
-            ControlDesigner cd = (ControlDesigner)_componentToDesigner[c];
-            if (cd is not null)
+            if (_componentToDesigner.TryGetValue(control, out ControlDesigner controlDesigner) && controlDesigner is not null)
             {
-                ControlBodyGlyph bodyGlyph = cd.GetControlGlyphInternal(selType);
+                ControlBodyGlyph bodyGlyph = controlDesigner.GetControlGlyphInternal(selType);
                 if (bodyGlyph is not null)
                 {
                     _bodyAdorner.Glyphs.Add(bodyGlyph);
@@ -175,7 +173,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                GlyphCollection glyphs = cd.GetGlyphs(selType);
+                GlyphCollection glyphs = controlDesigner.GetGlyphs(selType);
                 if (glyphs is not null)
                 {
                     _selectionAdorner.Glyphs.AddRange(glyphs);
@@ -271,9 +269,9 @@ namespace System.Windows.Forms.Design.Behavior
         {
             IComponent component = ce.Component;
             IDesigner designer = _designerHost.GetDesigner(component);
-            if (designer is ControlDesigner)
+            if (designer is ControlDesigner controlDesigner)
             {
-                _componentToDesigner.Add(component, designer);
+                _componentToDesigner.Add(component, controlDesigner);
             }
         }
 
@@ -282,17 +280,13 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnBeginDrag(object source, BehaviorDragDropEventArgs e)
         {
-            ArrayList dragComps = new ArrayList(e.DragComponents);
-            ArrayList glyphsToRemove = new ArrayList();
+            List<IComponent> dragComps = e.DragComponents.Cast<IComponent>().ToList();
+            List<Glyph> glyphsToRemove = new();
             foreach (ControlBodyGlyph g in _bodyAdorner.Glyphs)
             {
-                if (g.RelatedComponent is Control)
+                if (g.RelatedComponent is Control control && (dragComps.Contains(g.RelatedComponent) || !control.AllowDrop))
                 {
-                    if (dragComps.Contains(g.RelatedComponent) ||
-                        !((Control)g.RelatedComponent).AllowDrop)
-                    {
-                        glyphsToRemove.Add(g);
-                    }
+                    glyphsToRemove.Add(g);
                 }
             }
 
@@ -331,10 +325,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            if (_componentToDesigner.Contains(ce.Component))
-            {
                 _componentToDesigner.Remove(ce.Component);
-            }
 
             //remove the associated designeractionpanel
             _designerActionUI?.RemoveActionGlyph(ce.Component);
@@ -444,7 +435,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _selectionAdorner.Glyphs.Clear();
                 _bodyAdorner.Glyphs.Clear();
 
-                ArrayList selComps = new ArrayList(_selSvc.GetSelectedComponents());
+                List<IComponent> selComps = _selSvc.GetSelectedComponents().Cast<IComponent>().ToList();
                 object primarySelection = _selSvc.PrimarySelection;
 
                 //add all control glyphs to all controls on rootComp

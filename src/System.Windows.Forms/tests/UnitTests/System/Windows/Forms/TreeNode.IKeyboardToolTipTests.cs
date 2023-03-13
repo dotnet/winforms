@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeNode_TreeNodeIKeyboardToolTipTests : IClassFixture<ThreadExceptionFixture>
+    public class TreeNode_TreeNodeIKeyboardToolTipTests
     {
         [WinFormsTheory]
         [InlineData(true, true)]

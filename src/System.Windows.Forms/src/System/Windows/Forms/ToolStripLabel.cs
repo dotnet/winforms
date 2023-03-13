@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                 if (!CanSelect)
                 {
                     ParentInternal.SetFocusUnsafe();
-                    ParentInternal.SelectNextToolStripItem(this, /*forward=*/true);
+                    ParentInternal.SelectNextToolStripItem(this, forward: true);
                 }
                 else
                 {

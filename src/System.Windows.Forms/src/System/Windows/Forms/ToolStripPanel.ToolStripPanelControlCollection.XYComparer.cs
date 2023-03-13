@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -16,10 +14,15 @@ namespace System.Windows.Forms
             public class XYComparer : IComparer<IArrangedElement>
             {
                 public XYComparer() { }
-                public int Compare(IArrangedElement first, IArrangedElement second)
+                public int Compare(IArrangedElement? first, IArrangedElement? second)
                 {
-                    Control one = first as Control;
-                    Control two = second as Control;
+                    Control? one = first as Control;
+                    Control? two = second as Control;
+
+                    if (IComparerHelpers.CompareReturnIfNull(one, two, out int? returnValue))
+                    {
+                        return (int)returnValue;
+                    }
 
                     if (one.Bounds.X < two.Bounds.X)
                     {

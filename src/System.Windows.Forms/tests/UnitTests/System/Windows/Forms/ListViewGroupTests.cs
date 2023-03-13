@@ -14,7 +14,7 @@ using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewGroupTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewGroupTests
     {
         [WinFormsFact]
         public void ListViewGroup_Ctor_Default()

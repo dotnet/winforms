@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewRowTests
     {
         [WinFormsFact]
         public void DataGridViewRow_Ctor_Default()
@@ -2017,6 +2017,30 @@ namespace System.Windows.Forms.Tests
         {
             using var row = new DataGridViewRow();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => row.Height = value);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRow_Height_IsEqualDefaultHeight_IfDefaultFontIsChanged()
+        {
+            var oldApplicationDefaultFont = Application.DefaultFont;
+            using var font = new Font("Times New Roman", 12);
+            using var row = new TestDataGridViewRow();
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+
+            try
+            {
+                applicationTestAccessor.s_defaultFont = font;
+                Assert.NotEqual(oldApplicationDefaultFont, Application.DefaultFont);
+
+                var rowDefaultHeight = row.GetDefaultHeight();
+                Assert.Equal(Control.DefaultFont.Height + 9, rowDefaultHeight);
+                Assert.Equal(Control.DefaultFont.Height + 9, row.Height);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled = null;
+            }
         }
 
         [WinFormsFact]
@@ -5791,6 +5815,14 @@ namespace System.Windows.Forms.Tests
                 DataGridViewRowAccessibleObject accessibilityObject = Assert.IsType<DataGridViewRowAccessibleObject>(CreateAccessibilityInstance());
                 Assert.Equal(this, accessibilityObject.Owner);
             }
+        }
+    }
+
+    internal class TestDataGridViewRow : DataGridViewRow
+    {
+        internal int GetDefaultHeight()
+        {
+            return this.TestAccessor().Dynamic.DefaultHeight;
         }
     }
 }

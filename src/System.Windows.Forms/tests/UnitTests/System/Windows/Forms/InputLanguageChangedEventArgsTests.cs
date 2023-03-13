@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class InputLanguageChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class InputLanguageChangedEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_CultureInfo_Byte_TestData()
         {

@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class DockEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class DockEditorTests
     {
         [Fact]
         public void DockEditor_Ctor_Default()

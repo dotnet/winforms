@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class NativeWindowTests : IClassFixture<ThreadExceptionFixture>
+    public class NativeWindowTests
     {
         [WinFormsFact]
         public void NativeWindow_Ctor_Default()

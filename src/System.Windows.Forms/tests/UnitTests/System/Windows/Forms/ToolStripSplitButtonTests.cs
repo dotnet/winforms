@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripSplitButtonTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripSplitButtonTests
     {
         public static IEnumerable<object[]> ToolStripItem_Set_TestData()
         {

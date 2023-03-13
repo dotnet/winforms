@@ -99,7 +99,7 @@ namespace System
         public static string LibcRelease => "glibc_not_found";
         public static string LibcVersion => "glibc_not_found";
 
-        public static string GetDistroVersionString() { return "WindowsProductType=" + GetWindowsProductType() + " WindowsInstallationType=" + GetInstallationType(); }
+        public static string GetDistroVersionString() => $"WindowsProductType={GetWindowsProductType()} WindowsInstallationType={GetInstallationType()}";
 
         private static int s_isInAppContainer = -1;
 

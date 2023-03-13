@@ -12,10 +12,10 @@ using Xunit.Abstractions;
 namespace System.Windows.Forms.Design.Tests
 {
     // NB: doesn't require thread affinity
-    public class DesignerAttributeTests : IClassFixture<ThreadExceptionFixture>
+    public class DesignerAttributeTests
     {
-        private const string AssemblyRef_SystemWinforms = "System.Windows.Forms, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + AssemblyRef.MicrosoftPublicKey;
-        private const string AssemblyRef_SystemWinformsDesign = "System.Windows.Forms.Design, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + AssemblyRef.MicrosoftPublicKey;
+        private const string AssemblyRef_SystemWinforms = $"System.Windows.Forms, Version={FXAssembly.Version}, Culture=neutral, PublicKeyToken={AssemblyRef.MicrosoftPublicKey}";
+        private const string AssemblyRef_SystemWinformsDesign = $"System.Windows.Forms.Design, Version={FXAssembly.Version}, Culture=neutral, PublicKeyToken={AssemblyRef.MicrosoftPublicKey}";
         private readonly ITestOutputHelper _output;
 
         private static readonly ImmutableHashSet<string> SkipList = ImmutableHashSet.Create(new string[]

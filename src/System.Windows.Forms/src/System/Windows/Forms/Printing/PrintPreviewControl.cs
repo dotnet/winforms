@@ -534,10 +534,10 @@ namespace System.Windows.Forms
                 if (pageInfo is not null || exceptionPrinting)
                 {
                     // Calculate formats
-                    using StringFormat format = new StringFormat
+                    using StringFormat format = new()
                     {
-                        Alignment = ControlPaint.TranslateAlignment(ContentAlignment.MiddleCenter),
-                        LineAlignment = ControlPaint.TranslateLineAlignment(ContentAlignment.MiddleCenter)
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
                     };
 
                     // Do actual drawing

@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Runtime.Serialization;
 using static Interop;
 using static Interop.ComCtl32;
@@ -444,7 +443,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(ImageList.Indexer.DefaultIndex)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -482,7 +481,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(ImageList.Indexer.DefaultKey)]
         [TypeConverter(typeof(ImageKeyConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -699,7 +698,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListViewItemStateImageIndexDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
         [RefreshProperties(RefreshProperties.Repaint)]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [RelatedImageList("ListView.StateImageList")]
         public int StateImageIndex
         {
@@ -754,7 +753,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ListViewItemSubItemsDescr))]
-        [Editor("System.Windows.Forms.Design.ListViewSubItemCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListViewSubItemCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public ListViewSubItemCollection SubItems
         {
             get
@@ -1232,7 +1231,7 @@ namespace System.Windows.Forms
                 ListViewSubItem[] newItems = new ListViewSubItem[SubItemCount];
                 for (int i = 1; i < SubItemCount; i++)
                 {
-                    ListViewSubItem newItem = (ListViewSubItem)info.GetValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), typeof(ListViewSubItem));
+                    ListViewSubItem newItem = (ListViewSubItem)info.GetValue($"SubItem{i}", typeof(ListViewSubItem));
                     newItem._owner = this;
                     newItems[i] = newItem;
                 }
@@ -1259,7 +1258,7 @@ namespace System.Windows.Forms
                 info.AddValue(nameof(SubItemCount), SubItemCount);
                 for (int i = 1; i < SubItemCount; i++)
                 {
-                    info.AddValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), subItems[i], typeof(ListViewSubItem));
+                    info.AddValue($"SubItem{i}", subItems[i], typeof(ListViewSubItem));
                 }
             }
 
@@ -1288,7 +1287,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializePosition() => !position.Equals(new Point(-1, -1));
 
-        public override string ToString() => "ListViewItem: {" + Text + "}";
+        public override string ToString() => $"ListViewItem: {{{Text}}}";
 
         internal void InvalidateListView()
         {

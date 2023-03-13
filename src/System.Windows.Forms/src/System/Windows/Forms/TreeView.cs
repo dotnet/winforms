@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
@@ -26,7 +25,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Nodes))]
     [DefaultEvent(nameof(AfterSelect))]
     [Docking(DockingBehavior.Ask)]
-    [Designer("System.Windows.Forms.Design.TreeViewDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.TreeViewDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionTreeView))]
     public partial class TreeView : Control
     {
@@ -569,7 +568,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.TreeViewImageIndexDescr))]
         [RelatedImageList("ImageList")]
         public int ImageIndex
@@ -622,7 +621,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
         [TypeConverter(typeof(ImageKeyConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [DefaultValue(ImageList.Indexer.DefaultKey)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.TreeViewImageKeyDescr))]
@@ -1088,7 +1087,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
         [Localizable(true)]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.TreeViewSelectedImageIndexDescr))]
         [RelatedImageList("ImageList")]
         public int SelectedImageIndex
@@ -1140,7 +1139,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
         [TypeConverter(typeof(ImageKeyConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [DefaultValue(ImageList.Indexer.DefaultKey)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.TreeViewSelectedImageKeyDescr))]
@@ -2534,10 +2533,10 @@ namespace System.Windows.Forms
             string s = base.ToString();
             if (Nodes is not null)
             {
-                s += ", Nodes.Count: " + Nodes.Count.ToString(CultureInfo.CurrentCulture);
+                s += $", Nodes.Count: {Nodes.Count}";
                 if (Nodes.Count > 0)
                 {
-                    s += ", Nodes[0]: " + Nodes[0].ToString();
+                    s += $", Nodes[0]: {Nodes[0]}";
                 }
             }
 

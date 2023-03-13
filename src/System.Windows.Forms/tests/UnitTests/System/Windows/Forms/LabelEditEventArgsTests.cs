@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class LabelEditEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class LabelEditEventArgsTests
     {
         [Theory]
         [InlineData(-1)]

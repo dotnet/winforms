@@ -54,7 +54,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            return "{HelpFilePath=" + HelpFilePath + ", keyword =" + Keyword + ", navigator=" + Navigator.ToString() + "}";
+            return $"{{HelpFilePath={HelpFilePath}, keyword ={Keyword}, navigator={Navigator}}}";
         }
     }
 }

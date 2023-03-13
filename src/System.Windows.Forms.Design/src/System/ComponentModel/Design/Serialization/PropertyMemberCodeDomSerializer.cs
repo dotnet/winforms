@@ -198,7 +198,7 @@ namespace System.ComponentModel.Design.Serialization
                             CodeDomSerializer.TraceWarningIf(extended is null, "Extended object {0} could not be serialized.", manager.GetName(value));
                             if (extender is not null && extended is not null)
                             {
-                                CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, "Get" + property.Name);
+                                CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, $"Get{property.Name}");
                                 CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression
                                 {
                                     Method = methodRef
@@ -271,7 +271,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             AttributeCollection attributes = property.Attributes;
 
-            using (CodeDomSerializer.TraceScope("PropertyMemberCodeDomSerializer::" + nameof(SerializeExtenderProperty)))
+            using (CodeDomSerializer.TraceScope($"PropertyMemberCodeDomSerializer::{nameof(SerializeExtenderProperty)}"))
             {
                 ExtenderProvidedPropertyAttribute exAttr = (ExtenderProvidedPropertyAttribute)attributes[typeof(ExtenderProvidedPropertyAttribute)];
 
@@ -284,7 +284,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeDomSerializer.TraceWarningIf(extended is null, "Extended object {0} could not be serialized.", manager.GetName(value));
                 if (extender is not null && extended is not null)
                 {
-                    CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, "Set" + property.Name);
+                    CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(extender, $"Set{property.Name}");
                     object propValue = GetPropertyValue(manager, property, value, out bool validValue);
                     CodeExpression serializedPropertyValue = null;
 
@@ -335,7 +335,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void SerializeNormalProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements)
         {
-            using (CodeDomSerializer.TraceScope("CodeDomSerializer::" + nameof(SerializeProperty)))
+            using (CodeDomSerializer.TraceScope($"CodeDomSerializer::{nameof(SerializeProperty)}"))
             {
                 CodeExpression target = SerializeToExpression(manager, value);
 

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyGridToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyGridToolStripButtonTests
     {
         [WinFormsFact]
         public void PropertyGridToolStripButton_AccessibilityObject_ReturnsPropertyGridToolStripButtonAccessibleObject()

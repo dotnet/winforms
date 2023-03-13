@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewBindingCompleteEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewBindingCompleteEventArgsTests
     {
         [Theory]
         [InlineData(ListChangedType.ItemAdded)]

@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design.Serialization
             }
             catch (Exception ex)
             {
-                sw.WriteLine("Error during declaration dump: " + ex.Message);
+                sw.WriteLine($"Error during declaration dump: {ex.Message}");
             }
 
             // spit this line by line so it respects the indent.
@@ -817,7 +817,7 @@ namespace System.ComponentModel.Design.Serialization
 
             // Ask the serializer for the root component to serialize.  This should return
             // a CodeTypeDeclaration, which we will plug into our existing code DOM tree.
-            Debug.Assert(_rootSerializer is not null || _typeSerializer is not null, "What are we saving right now?  Base component has no serializer: " + LoaderHost.RootComponent.GetType().FullName);
+            Debug.Assert(_rootSerializer is not null || _typeSerializer is not null, $"What are we saving right now?  Base component has no serializer: {LoaderHost.RootComponent.GetType().FullName}");
 
             if (_rootSerializer is not null)
             {
@@ -895,8 +895,7 @@ namespace System.ComponentModel.Design.Serialization
             s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXDeserializeEnd);
 
             // EndTimingMark("Deserialize document");
-            string baseComp = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", _documentNamespace.Name, _documentType.Name);
-            SetBaseComponentClassName(baseComp);
+            SetBaseComponentClassName($"{_documentNamespace.Name}.{_documentType.Name}");
         }
 
         /// <summary>
@@ -1140,9 +1139,9 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     idx++;
                     conflict = false;
-                    finalName = string.Format(CultureInfo.CurrentCulture, "{0}{1}", baseName, idx.ToString(CultureInfo.InvariantCulture));
+                    finalName = $"{baseName}{idx}";
 
-                    if (container is not null && container.Components[finalName] is not null)
+                    if (container.Components[finalName] is not null)
                     {
                         conflict = true;
                     }

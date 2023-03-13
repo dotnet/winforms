@@ -11,7 +11,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class MultilineStringEditorTests : IClassFixture<ThreadExceptionFixture>
+    public class MultilineStringEditorTests
     {
         [Fact]
         public void MultilineStringEditor_Ctor_Default()

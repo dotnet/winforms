@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                 string str;
                 try
                 {
-                    str = string.Format(CultureInfo.CurrentCulture, "{0}<{1}>", GetType().Name, Text);
+                    str = $"{GetType().Name}<{Text}>";
                     int maxFrameCount = new StackTrace().FrameCount;
                     if (maxFrameCount > 5)
                     {
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
 #if DEBUG
             if (s_assertOnControlCreateSwitch.Enabled)
             {
-                Debug.Assert(GetType().BaseType != typeof(Control), "Direct derivative of Control Created: " + GetType().FullName);
+                Debug.Assert(GetType().BaseType != typeof(Control), $"Direct derivative of Control Created: {GetType().FullName}");
                 Debug.Assert(GetType() != typeof(Control), "Control Created!");
             }
 #endif
@@ -4556,7 +4556,7 @@ namespace System.Windows.Forms
                     OnRightToLeftChanged(EventArgs.Empty);
                 }
 
-                if (Properties.GetObject(s_bindingManagerProperty) is null && Created)
+                if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty) && Created)
                 {
                     // We do not want to call our parent's BindingContext property here.
                     // We have no idea if us or any of our children are using data binding,
@@ -4905,7 +4905,7 @@ namespace System.Windows.Forms
             bool controlIsAlreadyCreated = Created;
             CreateControl(false);
 
-            if (Properties.GetObject(s_bindingManagerProperty) is null && ParentInternal is not null && !controlIsAlreadyCreated)
+            if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty) && ParentInternal is not null && !controlIsAlreadyCreated)
             {
                 // We do not want to call our parent's BindingContext property here.
                 // We have no idea if us or any of our children are using data binding,
@@ -4927,7 +4927,7 @@ namespace System.Windows.Forms
         {
             // Unless specified otherwise, only "create" the control if it is visible for performance. This has the
             // effect of delayed handle creation of hidden controls.
-            if (!ignoreVisible && !GetState(States.Created) && !Visible)
+            if (!ignoreVisible && (GetState(States.Created) || !Visible))
             {
                 return;
             }
@@ -6608,7 +6608,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsFontSet()
         {
-            if (Properties.GetObject(s_fontProperty) is not null)
+            if (Properties.ContainsObjectThatIsNotNull(s_fontProperty))
             {
                 return true;
             }
@@ -6742,23 +6742,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool IsMnemonic(char charCode, string? text)
         {
-#if DEBUG
-            if (s_controlKeyboardRouting.TraceVerbose)
-            {
-                Debug.Write($"Control.IsMnemonic({charCode}, ");
-
-                if (text is not null)
-                {
-                    Debug.Write(text);
-                }
-                else
-                {
-                    Debug.Write("null");
-                }
-
-                Debug.WriteLine(")");
-            }
-#endif
+            s_controlKeyboardRouting.TraceVerbose($"Control.IsMnemonic({charCode}, {(text is not null ? text : "null")})");
 
             // Special case handling:
             if (charCode == '&')
@@ -7139,7 +7123,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_bindingsProperty) is not null)
+            if (Properties.ContainsObjectThatIsNotNull(s_bindingsProperty))
             {
                 UpdateBindings();
             }
@@ -7427,7 +7411,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_bindingManagerProperty) is null)
+            if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty))
             {
                 OnBindingContextChanged(e);
             }
@@ -7436,7 +7420,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentCursorChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_cursorProperty) is null)
+            if (!Properties.ContainsObjectThatIsNotNull(s_cursorProperty))
             {
                 OnCursorChanged(e);
             }
@@ -8820,7 +8804,7 @@ namespace System.Windows.Forms
 
                                 break;
                             default:
-                                Debug.Fail("Unknown PaintLayer " + layer);
+                                Debug.Fail($"Unknown PaintLayer {layer}");
                                 break;
                         }
 
@@ -9758,17 +9742,8 @@ namespace System.Windows.Forms
 
                 bool focused = ContainsFocus;
 
-#if DEBUG
-                if (CoreSwitches.PerfTrack.Enabled)
-                {
-                    Debug.Write("RecreateHandle: ");
-                    Debug.Write(GetType().FullName);
-                    Debug.Write(" [Text=");
-                    Debug.Write(Text);
-                    Debug.Write("]");
-                    Debug.WriteLine("");
-                }
-#endif
+                Debug.WriteLineIf(CoreSwitches.PerfTrack.Enabled, $"RecreateHandle: {GetType().FullName} [Text={Text}]");
+
                 bool created = GetState(States.Created);
                 if (GetState(States.TrackingMouseEvent))
                 {
@@ -10017,12 +9992,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void ResumeLayout(bool performLayout)
         {
-#if DEBUG
-            if (CompModSwitches.LayoutSuspendResume.TraceInfo)
-            {
-                Debug.WriteLine($"{GetType().Name}::ResumeLayout( preformLayout = {performLayout}, newCount = {Math.Max(0, LayoutSuspendCount - 1)})");
-            }
-#endif
+            Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
+                $"{GetType().Name}::ResumeLayout( preformLayout = {performLayout}, newCount = {Math.Max(0, LayoutSuspendCount - 1)})");
 
             bool performedLayout = false;
             if (LayoutSuspendCount > 0)
@@ -10328,13 +10299,8 @@ namespace System.Windows.Forms
                 {
                     excludedSpecified |= (~RequiredScaling & BoundsSpecified.All);
                 }
-#if DEBUG
-                if (CompModSwitches.RichLayout.TraceInfo)
-                {
-                    Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "Scaling {0} Included: {1}, Excluded: {2}",
-                                      this, includedFactor, excludedFactor));
-                }
-#endif
+
+                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"Scaling {this} Included: {includedFactor}, Excluded: {excludedFactor}");
 
                 if (includedSpecified != BoundsSpecified.None)
                 {
@@ -10473,7 +10439,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected virtual void ScaleCore(float dx, float dy)
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + dx + ", " + dy + ")");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({dx}, {dy})");
 #if DEBUG
             int dbgLayoutCheck = LayoutSuspendCount;
 #endif
@@ -10743,12 +10709,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-#if DEBUG
-            if (CompModSwitches.SetBounds.TraceInfo)
-            {
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0}::SetBoundsCore(x={1} y={2} width={3} height={4} specified={5}", Name, x, y, width, height, specified));
-            }
-#endif
+            Debug.WriteLineIf(CompModSwitches.SetBounds.TraceInfo,
+                $"{Name}::SetBoundsCore(x={x} y={y} width={width} height={height} specified={specified})");
             // SetWindowPos below sends a WmWindowPositionChanged (not posts) so we immediately
             // end up in WmWindowPositionChanged which may cause the parent to layout.  We need to
             // suspend/resume to defer the parent from laying out until after InitLayout has been called
@@ -11162,8 +11124,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeCursor()
         {
-            object? cursor = Properties.GetObject(s_cursorProperty, out bool found);
-            return (found && cursor is not null);
+            return Properties.ContainsObjectThatIsNotNull(s_cursorProperty);
         }
 
         /// <summary>
@@ -11191,8 +11152,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeFont()
         {
-            object? font = Properties.GetObject(s_fontProperty, out bool found);
-            return (found && font is not null);
+            return Properties.ContainsObjectThatIsNotNull(s_fontProperty);
         }
 
         /// <summary>
@@ -11384,13 +11344,9 @@ namespace System.Windows.Forms
                 OnLayoutSuspended();
             }
 
-#if DEBUG
             Debug.Assert(LayoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
-            if (CompModSwitches.LayoutSuspendResume.TraceInfo)
-            {
-                Debug.WriteLine($"{GetType().Name} ::SuspendLayout( newCount = {LayoutSuspendCount}");
-            }
-#endif
+            Debug.WriteLineIf(CompModSwitches.LayoutSuspendResume.TraceInfo,
+                $"{GetType().Name}::SuspendLayout(newCount = {LayoutSuspendCount})");
         }
 
         /// <summary>
@@ -11510,11 +11466,9 @@ namespace System.Windows.Forms
 #if DEBUG
             if (CompModSwitches.SetBounds.TraceVerbose)
             {
-                Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0}::UpdateBounds(", Name));
+                Debug.WriteLine($"{Name}::UpdateBounds(");
                 Debug.Indent();
-                Debug.WriteLine(string.Format(
-                     CultureInfo.CurrentCulture, "oldBounds={{x={0} y={1} width={2} height={3} clientWidth={4} clientHeight={5}}}",
-                     _x, _y, _width, _height, _clientWidth, _clientHeight));
+                Debug.WriteLine($"oldBounds={{x={_x} y={_y} width={_width} height={_height} clientWidth={_clientWidth} clientHeight={_clientHeight}}}");
             }
 #endif // DEBUG
 
@@ -11538,7 +11492,10 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
                 {
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: Bounds changed during OnLocationChanged()\r\nbefore={0} after={1}", originalBounds, Bounds));
+                    Debug.WriteLine($"""
+                        WARNING: Bounds changed during OnLocationChanged()
+                        before={originalBounds} after={Bounds}
+                        """);
                 }
 #endif
             }
@@ -11558,7 +11515,10 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (Bounds != originalBounds && CompModSwitches.SetBounds.TraceWarning)
                 {
-                    Debug.WriteLine($"WARNING: Bounds changed during OnSizeChanged()\r\nbefore={originalBounds} after={Bounds}");
+                    Debug.WriteLine($"""
+                        WARNING: Bounds changed during OnSizeChanged()
+                        before={originalBounds} after={Bounds}
+                        """);
                 }
 #endif
             }

@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            using (TraceScope("PrimitiveCodeDomSerializer::" + nameof(Serialize)))
+            using (TraceScope($"PrimitiveCodeDomSerializer::{nameof(Serialize)}"))
             {
                 Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
             }

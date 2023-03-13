@@ -595,7 +595,7 @@ namespace System.Windows.Forms.Design
                             }
                             else
                             {
-                                Debug.Fail("Unknown command mapped to OnKeySize: " + cmd.ToString());
+                                Debug.Fail($"Unknown command mapped to OnKeySize: {cmd}");
                             }
 
                             DesignerTransaction trans;

@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultEvent(nameof(TextChanged))]
     [DefaultBindingProperty(nameof(Text))]
-    [Designer("System.Windows.Forms.Design.TextBoxBaseDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.TextBoxBaseDesigner, {AssemblyRef.SystemDesign}")]
     public abstract partial class TextBoxBase : Control
     {
         // The boolean properties for this control are contained in the textBoxFlags bit
@@ -392,12 +392,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), this = " + this);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_CanEnableIme(), this = {this}");
                 Debug.Indent();
 
                 bool canEnable = !(ReadOnly || PasswordProtect) && base.CanEnableIme;
 
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value = " + canEnable);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value = {canEnable}");
                 Debug.Unindent();
 
                 return canEnable;
@@ -579,12 +579,12 @@ namespace System.Windows.Forms
                     return base.ImeModeBase;
                 }
 
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_ImeModeInternal(), this = " + this);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Inside get_ImeModeInternal(), this = {this}");
                 Debug.Indent();
 
                 ImeMode imeMode = CanEnableIme ? base.ImeModeBase : ImeMode.Disable;
 
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value = " + imeMode);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, $"Value = {imeMode}");
                 Debug.Unindent();
 
                 return imeMode;
@@ -602,7 +602,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [AllowNull]
         [SRDescription(nameof(SR.TextBoxLinesDescr))]
-        [Editor("System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.StringArrayEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public string[] Lines
         {
             get
@@ -653,16 +653,7 @@ namespace System.Windows.Forms
                 //unparse this string list...
                 if (value is not null && value.Length > 0)
                 {
-                    // Using a StringBuilder instead of a String
-                    // speeds things up approx 150 times
-                    StringBuilder text = new StringBuilder(value[0]);
-                    for (int i = 1; i < value.Length; ++i)
-                    {
-                        text.Append("\r\n");
-                        text.Append(value[i]);
-                    }
-
-                    Text = text.ToString();
+                    Text = string.Join(Environment.NewLine, value);
                 }
                 else
                 {
@@ -957,8 +948,8 @@ namespace System.Windows.Forms
                     len = t.Length;
                 }
 
-                Debug.Assert(end <= len, "SelectionEnd is outside the set of valid caret positions for the current WindowText (end ="
-                                + end + ", WindowText.Length =" + len + ")");
+                Debug.Assert(end <= len,
+                    $"SelectionEnd is outside the set of valid caret positions for the current WindowText (end ={end}, WindowText.Length ={len})");
             }
 #endif
         }
@@ -1123,7 +1114,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Localizable(true)]
         [AllowNull]
-        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public override string Text
         {
             get => base.Text;
@@ -2065,10 +2056,10 @@ namespace System.Windows.Forms
             string txt = Text;
             if (txt.Length > 40)
             {
-                txt = string.Concat(txt.AsSpan(0, 40), "...");
+                txt = $"{txt.AsSpan(0, 40)}...";
             }
 
-            return s + ", Text: " + txt.ToString();
+            return $"{s}, Text: {txt}";
         }
 
         /// <summary>

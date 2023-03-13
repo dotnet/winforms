@@ -152,7 +152,11 @@ namespace System.Windows.Forms
 
         private SmState HideAndStartWaitingForRefocus(IKeyboardToolTip tool, ToolTip toolTip)
         {
-            toolTip.HideToolTip(_currentTool);
+            if (_currentTool is not null)
+            {
+                toolTip.HideToolTip(_currentTool);
+            }
+
             return StartWaitingForRefocus(tool);
         }
 

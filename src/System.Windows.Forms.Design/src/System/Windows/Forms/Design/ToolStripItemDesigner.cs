@@ -244,13 +244,13 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This method adds the Parent Hierarchy to arraylist and returns that arraylist to the
+        ///  This method adds the Parent Hierarchy to a list and returns that list to the
         ///  Base ContextMenu provider. This way the ToolStripItem can show the right parents in
         ///  the contextMenu.
         /// </summary>
-        internal ArrayList AddParentTree()
+        internal List<Component> AddParentTree()
         {
-            ArrayList parentControls = new ArrayList();
+            List<Component> parentControls = new();
             if (!TryGetService(out IDesignerHost designerHost))
             {
                 return parentControls;
@@ -707,7 +707,7 @@ namespace System.Windows.Forms.Design
                 PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
                 if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
                 {
-                    textProp.SetValue(Component, "");
+                    textProp.SetValue(Component, string.Empty);
                 }
             }
         }
@@ -966,7 +966,7 @@ namespace System.Windows.Forms.Design
                     acc.AddState(AccessibleStates.Selected);
                     if (tool is not null)
                     {
-                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, tool = " + tool.ToString());
+                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, tool = {tool}");
                         User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
                     }
 

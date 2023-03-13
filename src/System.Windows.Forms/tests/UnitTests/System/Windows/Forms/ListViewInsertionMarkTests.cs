@@ -11,7 +11,7 @@ using Point = System.Drawing.Point;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewInsertionMarkTests : IClassFixture<ThreadExceptionFixture>
+    public class ListViewInsertionMarkTests
     {
         [WinFormsFact]
         public void ListViewInsertionMark_AppearsAfterItem_Get_ReturnsExpected()

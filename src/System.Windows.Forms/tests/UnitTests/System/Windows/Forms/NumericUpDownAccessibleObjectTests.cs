@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class NumericUpDownAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class NumericUpDownAccessibleObjectTests
     {
         [WinFormsFact]
         public void NumericUpDownAccessibleObject_Ctor_Default()

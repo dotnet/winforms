@@ -1465,10 +1465,7 @@ namespace System.Windows.Forms.Layout
             foreach (LayoutInfo layoutInfo in childrenInfo)
             {
                 Debug.Assert(layoutInfo.Equals(oldLayoutInfo[layoutInfo.Element]),
-                    "Cached assignment info is invalid: LayoutInfo has changed."
-                    + " old layoutinfo: " + oldLayoutInfo[layoutInfo.Element].RowStart + " " + oldLayoutInfo[layoutInfo.Element].ColumnStart
-                    + " new layoutinfo: " + layoutInfo.RowStart + " " + layoutInfo.ColumnStart
-                    + " and the element is " + layoutInfo.Element.ToString());
+                    $"Cached assignment info is invalid: LayoutInfo has changed. old layoutinfo: {oldLayoutInfo[layoutInfo.Element].RowStart} {oldLayoutInfo[layoutInfo.Element].ColumnStart} new layoutinfo: {layoutInfo.RowStart} {layoutInfo.ColumnStart} and the element is {layoutInfo.Element}");
                 SetLayoutInfo(layoutInfo.Element, oldLayoutInfo[layoutInfo.Element]);
             }
 
@@ -1524,12 +1521,12 @@ namespace System.Windows.Forms.Layout
                         Debug.Assert(containerInfo.ColumnStyles.Count >= layoutInfo1.ColumnStart + layoutInfo2.ColumnSpan, "length of column style too short");
                         for (k = layoutInfo1.ColumnStart; k < layoutInfo1.ColumnStart + layoutInfo1.ColumnSpan; k++)
                         {
-                            Debug.Assert(containerInfo.ColumnStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");
+                            Debug.Assert(containerInfo.ColumnStyles[k].SizeType == SizeType.Absolute, $"column {k} is not absolutely sized");
                         }
 
                         for (k = layoutInfo2.ColumnStart; k < layoutInfo2.ColumnStart + layoutInfo2.ColumnSpan; k++)
                         {
-                            Debug.Assert(containerInfo.ColumnStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");
+                            Debug.Assert(containerInfo.ColumnStyles[k].SizeType == SizeType.Absolute, $"column {k} is not absolutely sized");
                         }
                     }
 
@@ -1541,12 +1538,12 @@ namespace System.Windows.Forms.Layout
                         Debug.Assert(containerInfo.RowStyles.Count >= layoutInfo2.RowStart + layoutInfo2.RowSpan, "length of row style too short");
                         for (k = layoutInfo1.RowStart; k < layoutInfo1.RowStart + layoutInfo1.RowSpan; k++)
                         {
-                            Debug.Assert(containerInfo.RowStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");
+                            Debug.Assert(containerInfo.RowStyles[k].SizeType == SizeType.Absolute, $"column {k} is not absolutely sized");
                         }
 
                         for (k = layoutInfo2.RowStart; k < layoutInfo2.RowStart + layoutInfo2.RowSpan; k++)
                         {
-                            Debug.Assert(containerInfo.RowStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");
+                            Debug.Assert(containerInfo.RowStyles[k].SizeType == SizeType.Absolute, $"column {k} is not absolutely sized");
                         }
                     }
                 }

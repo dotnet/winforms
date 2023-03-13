@@ -10,7 +10,7 @@ using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {
-    public class CollectionFormTests : CollectionEditor, IClassFixture<ThreadExceptionFixture>
+    public class CollectionFormTests : CollectionEditor
     {
         public CollectionFormTests() : base(typeof(List<int>))
         {

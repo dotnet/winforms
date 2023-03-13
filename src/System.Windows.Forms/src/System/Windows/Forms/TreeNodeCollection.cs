@@ -12,7 +12,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms
 {
     [
-    Editor("System.Windows.Forms.Design.TreeNodeCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
+    Editor($"System.Windows.Forms.Design.TreeNodeCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))
     ]
     public class TreeNodeCollection : IList
     {

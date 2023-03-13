@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ContainerControlTests : IClassFixture<ThreadExceptionFixture>
+    public class ContainerControlTests
     {
         [WinFormsFact]
         public void ContainerControl_Ctor_Default()

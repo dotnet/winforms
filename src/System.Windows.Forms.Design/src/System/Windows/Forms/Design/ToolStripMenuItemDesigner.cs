@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (ToolStripItem item in MenuItem.DropDownItems)
                     {
-                        if (!(item is DesignerToolStripControlHost addNewItem))
+                        if (item is not DesignerToolStripControlHost)
                         {
                             items.Add(item);
                         }
@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Design
                 //Add Text for Debugging Non Sited DropDown..
                 if (MenuItem.DropDown.Site is null)
                 {
-                    MenuItem.DropDown.Text = MenuItem.Name + ".DropDown";
+                    MenuItem.DropDown.Text = $"{MenuItem.Name}.DropDown";
                 }
             }
             else if (typeHereNode is not null && MenuItem.DropDownItems.IndexOf(typeHereNode) == -1)

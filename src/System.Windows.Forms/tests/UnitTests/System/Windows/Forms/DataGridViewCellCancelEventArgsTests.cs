@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataGridViewCellCancelEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataGridViewCellCancelEventArgsTests
     {
         [Theory]
         [InlineData(-1, -1)]

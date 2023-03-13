@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -912,7 +911,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDefaultHeaderCellType()
         {
-            return Properties.GetObject(s_propDefaultHeaderCellType) is not null;
+            return Properties.ContainsObjectThatIsNotNull(s_propDefaultHeaderCellType);
         }
 
         // internal because DataGridViewColumn needs to access it
@@ -923,11 +922,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            var builder = new StringBuilder(36);
-            builder.Append("DataGridViewBand { Index=");
-            builder.Append(Index);
-            builder.Append(" }");
-            return builder.ToString();
+            return $"DataGridViewBand {{ Index={Index} }}";
         }
     }
 }

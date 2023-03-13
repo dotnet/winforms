@@ -11,6 +11,8 @@ using ComIMessageFilter = Windows.Win32.Media.Audio.IMessageFilter;
 using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
 using static Interop;
 using static Interop.Mso;
+using System.Windows.Forms.Primitives;
+using System.Runtime.ExceptionServices;
 
 namespace System.Windows.Forms;
 
@@ -843,11 +845,10 @@ public sealed partial class Application
             => Dispose(postQuit: true);
 
         /// <summary>
-        ///  Called when an untrapped exception occurs in a thread.  This allows the
-        ///  programmer to trap these, and, if left untrapped, throws a standard error
-        ///  dialog.
+        ///  Called when an untrapped exception occurs in a thread. This allows the programmer to trap these, and, if
+        ///  left untrapped, throws a standard error dialog.
         /// </summary>
-        internal void OnThreadException(Exception t)
+        internal void OnThreadException(Exception ex)
         {
             if (GetState(STATE_INTHREADEXCEPTION))
             {
@@ -859,22 +860,27 @@ public sealed partial class Application
             {
                 if (_threadExceptionHandler is not null)
                 {
-                    _threadExceptionHandler(Thread.CurrentThread, new ThreadExceptionEventArgs(t));
+                    _threadExceptionHandler(Thread.CurrentThread, new ThreadExceptionEventArgs(ex));
                 }
                 else
                 {
+                    if (LocalAppContextSwitches.DoNotCatchUnhandledExceptions)
+                    {
+                        ExceptionDispatchInfo.Capture(ex).Throw();
+                    }
+
                     if (SystemInformation.UserInteractive)
                     {
-                        ThreadExceptionDialog td = new ThreadExceptionDialog(t);
+                        ThreadExceptionDialog dialog = new(ex);
                         DialogResult result = DialogResult.OK;
 
                         try
                         {
-                            result = td.ShowDialog();
+                            result = dialog.ShowDialog();
                         }
                         finally
                         {
-                            td.Dispose();
+                            dialog.Dispose();
                         }
 
                         switch (result)
@@ -884,9 +890,9 @@ public sealed partial class Application
                                 Environment.Exit(0);
                                 break;
                             case DialogResult.Yes:
-                                if (t is WarningException w)
+                                if (ex is WarningException warning)
                                 {
-                                    Help.ShowHelp(null, w.HelpUrl, w.HelpTopic);
+                                    Help.ShowHelp(null, warning.HelpUrl, warning.HelpTopic);
                                 }
 
                                 break;
@@ -1134,10 +1140,9 @@ public sealed partial class Application
 
                 if (_messageLoopCount == 0)
                 {
-                    // If last message loop shutting down, install the
-                    // previous op sync context in place before we started the first
-                    // message loop.
-                    WindowsFormsSynchronizationContext.Uninstall(false);
+                    // Last message loop shutting down, restore the sync context that was in place before we started
+                    // the first message loop.
+                    WindowsFormsSynchronizationContext.Uninstall(turnOffAutoInstall: false);
                 }
 
                 if (reason == msoloop.Main)

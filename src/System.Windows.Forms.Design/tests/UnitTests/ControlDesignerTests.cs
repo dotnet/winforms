@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    public class ControlDesignerTests : IClassFixture<ThreadExceptionFixture>
+    public class ControlDesignerTests
     {
         [Fact]
         public void AccessibleObjectField()

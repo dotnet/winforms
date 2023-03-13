@@ -11,7 +11,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
-    public class AxHostPropertyDescriptorTests : IClassFixture<ThreadExceptionFixture>
+    public class AxHostPropertyDescriptorTests
     {
         private const string EmptyClsidString = "00000000-0000-0000-0000-000000000000";
         private const string WebBrowserClsidString = "8856f961-340a-11d0-a96b-00c04fd705a2";

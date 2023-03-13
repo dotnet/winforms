@@ -1781,14 +1781,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void OnDragOver(DragEventArgs de)
         {
-            DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
-            if (data is not null)
+            if (de.Data is DropSourceBehavior.BehaviorDataObject data)
             {
                 data.Target = Component;
                 de.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
             }
 
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\tParentControlDesigner.OnDragOver: " + de.ToString());
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
 
             // If tab order UI is being shown, then don't allow anything to be
             // dropped here.
@@ -1806,16 +1805,12 @@ namespace System.Windows.Forms.Design
             }
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host is not null)
+            if (host?.GetDesigner(host.RootComponent) is DocumentDesigner parentDesigner)
             {
-                DocumentDesigner parentDesigner = host.GetDesigner(host.RootComponent) as DocumentDesigner;
-                if (parentDesigner is not null)
+                if (!parentDesigner.CanDropComponents(de))
                 {
-                    if (!parentDesigner.CanDropComponents(de))
-                    {
-                        de.Effect = DragDropEffects.None;
-                        return;
-                    }
+                    de.Effect = DragDropEffects.None;
+                    return;
                 }
             }
 
@@ -1826,7 +1821,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\tParentControlDesigner.OnDragOver: " + de.ToString());
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
         }
 
         /// <summary>

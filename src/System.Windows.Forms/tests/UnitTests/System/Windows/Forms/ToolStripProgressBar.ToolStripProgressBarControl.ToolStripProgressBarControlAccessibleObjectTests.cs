@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressBarControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressBarControlAccessibleObjectTests
     {
         [WinFormsFact]
         public void ToolStripProgressBarControlAccessibleObject_ctor_default()

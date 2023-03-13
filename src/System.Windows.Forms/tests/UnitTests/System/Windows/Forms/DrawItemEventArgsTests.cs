@@ -8,7 +8,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DrawItemEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class DrawItemEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Graphics_Font_Rectangle_Int_DrawItemState_TestData()
         {

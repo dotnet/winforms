@@ -51,16 +51,7 @@ namespace System
         {
             if (TryGetSystemColor(colorRef, out List<User32.COLOR> colors))
             {
-                string colorString = string.Empty;
-                for (int i = 0; i < colors.Count; i++)
-                {
-                    colorString += s_names[colors[i]];
-                    if (i < colors.Count - 1)
-                    {
-                        colorString += ", ";
-                    }
-                }
-
+                string colorString = string.Join(", ", colors.Select(c => s_names[c]));
                 return $"{colorRef} ({colorString})";
             }
             else

@@ -44,8 +44,7 @@ namespace System.Windows.Forms.Design
                     name = "(List)";
                 }
 
-                name += " - " + binding.BindingMemberInfo.BindingMember;
-                return name;
+                return $"{name} - {binding.BindingMemberInfo.BindingMember}";
             }
         }
     }

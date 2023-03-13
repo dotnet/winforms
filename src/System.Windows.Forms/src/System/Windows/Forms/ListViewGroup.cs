@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Runtime.Serialization;
 using static Interop;
 
@@ -257,7 +256,7 @@ namespace System.Windows.Forms
         /// </exception>
         [DefaultValue(-1)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [RelatedImageList("ListView.GroupImageList")]
@@ -298,7 +297,7 @@ namespace System.Windows.Forms
         /// </value>
         [DefaultValue("")]
         [TypeConverter(typeof(ImageKeyConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [RelatedImageList("ListView.GroupImageList")]
@@ -388,7 +387,7 @@ namespace System.Windows.Forms
                 ListViewItem[] items = new ListViewItem[count];
                 for (int i = 0; i < count; i++)
                 {
-                    items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem))!;
+                    items[i] = (ListViewItem)info.GetValue($"Item{i}", typeof(ListViewItem))!;
                 }
 
                 Items.AddRange(items);
@@ -474,7 +473,7 @@ namespace System.Windows.Forms
                 info.AddValue("ItemsCount", Items.Count);
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    info.AddValue("Item" + i.ToString(CultureInfo.InvariantCulture), Items[i], typeof(ListViewItem));
+                    info.AddValue($"Item{i}", Items[i], typeof(ListViewItem));
                 }
             }
         }

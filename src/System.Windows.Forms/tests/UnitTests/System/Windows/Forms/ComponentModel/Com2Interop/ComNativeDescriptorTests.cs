@@ -14,7 +14,7 @@ using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
 {
-    public class ComNativeDescriptorTests : IClassFixture<ThreadExceptionFixture>
+    public class ComNativeDescriptorTests
     {
         [StaFact]
         public void ComNativeDescriptor_GetProperties_FromIPictureDisp()

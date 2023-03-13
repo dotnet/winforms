@@ -251,7 +251,7 @@ namespace System.Windows.Forms.Design
                     Control c = TrayControl.FromComponent(component);
                     if (c is not null)
                     {
-                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, traycontrol = " + c.ToString());
+                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, traycontrol = {c}");
                         User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
                     }
                 }
@@ -1743,7 +1743,7 @@ namespace System.Windows.Forms.Design
 
         private void PositionControl(TrayControl c)
         {
-            Debug.Assert(c.Visible, "TrayControl for " + c.Component + " should not be positioned");
+            Debug.Assert(c.Visible, $"TrayControl for {c.Component} should not be positioned");
             if (!autoArrange)
             {
                 if (mouseDropLocation != InvalidPoint)
@@ -1797,7 +1797,7 @@ namespace System.Windows.Forms.Design
         internal void RearrangeInAutoSlots(Control c, Point pos)
         {
             Debug.Assert(controls.IndexOf(c) != -1, "Add control to the list of controls before autoarranging.!!!");
-            Debug.Assert(Visible == c.Visible, "TrayControl for " + ((TrayControl)c).Component + " should not be positioned");
+            Debug.Assert(Visible == c.Visible, $"TrayControl for {((TrayControl)c).Component} should not be positioned");
 
             TrayControl tc = (TrayControl)c;
             tc.Positioned = true;
@@ -1806,7 +1806,7 @@ namespace System.Windows.Forms.Design
 
         private bool PositionInNextAutoSlot(TrayControl c, Control prevCtl, bool dirtyDesigner)
         {
-            Debug.Assert(c.Visible, "TrayControl for " + c.Component + " should not be positioned");
+            Debug.Assert(c.Visible, $"TrayControl for {c.Component} should not be positioned");
             if (whiteSpace.IsEmpty)
             {
                 Debug.Assert(selectionUISvc is not null, "No SelectionUIService available for tray.");
@@ -2417,7 +2417,7 @@ namespace System.Windows.Forms.Design
                 base.SetVisibleCore(value);
             }
 
-            public override string ToString() => "ComponentTray: " + _component.ToString();
+            public override string ToString() => $"ComponentTray: {_component}";
 
             internal void UpdateIconInfo()
             {

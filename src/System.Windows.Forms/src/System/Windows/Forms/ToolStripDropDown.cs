@@ -1047,13 +1047,13 @@ namespace System.Windows.Forms
             return new ToolStripDropDownAccessibleObject(this);
         }
 
-        protected override LayoutSettings CreateLayoutSettings(ToolStripLayoutStyle style)
+        protected override LayoutSettings? CreateLayoutSettings(ToolStripLayoutStyle style)
         {
-            LayoutSettings layoutSettings = base.CreateLayoutSettings(style);
+            LayoutSettings? layoutSettings = base.CreateLayoutSettings(style);
 
             if (style == ToolStripLayoutStyle.Flow)
             {
-                FlowLayoutSettings flowLayoutSettings = (FlowLayoutSettings)layoutSettings;
+                FlowLayoutSettings flowLayoutSettings = (FlowLayoutSettings)layoutSettings!;
                 flowLayoutSettings.FlowDirection = FlowDirection.TopDown;
                 flowLayoutSettings.WrapContents = false;
                 return flowLayoutSettings;
@@ -1418,7 +1418,7 @@ namespace System.Windows.Forms
 
             if (itemOnPreviousMenuToSelect is not null)
             {
-                itemOnPreviousMenuToSelect.Select();
+                itemOnPreviousMenuToSelect.Select(forceRaiseAccessibilityFocusChanged: true);
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(itemOnPreviousMenuToSelect);
 

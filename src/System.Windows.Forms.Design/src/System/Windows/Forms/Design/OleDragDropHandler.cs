@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design
         private object[] dragComps;
         private Point dragBase = Point.Empty;
         private static bool freezePainting;
-        private static Hashtable currentDrags;
+        private static Dictionary<IDataObject, IComponent> currentDrags;
 
         private static readonly CodeMarkers codemarkers = CodeMarkers.Instance;
 
@@ -80,18 +80,12 @@ namespace System.Windows.Forms.Design
 
         private static IComponent GetDragOwnerComponent(IDataObject data)
         {
-            if (currentDrags is null || !currentDrags.Contains(data))
-            {
-                return null;
-            }
-
-            return currentDrags[data] as IComponent;
+            return currentDrags is null || !currentDrags.TryGetValue(data, out IComponent value) ? null : value;
         }
 
         private static void AddCurrentDrag(IDataObject data, IComponent component)
         {
-            currentDrags ??= new Hashtable();
-
+            currentDrags ??= new();
             currentDrags[data] = component;
         }
 
@@ -1073,7 +1067,7 @@ namespace System.Windows.Forms.Design
 
         public void DoOleDragOver(DragEventArgs de)
         {
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\tOleDragDropHandler.OnDragOver: " + de.ToString());
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tOleDragDropHandler.OnDragOver: {de}");
             if (!localDrag && !dragOk)
             {
                 de.Effect = DragDropEffects.None;
@@ -1115,7 +1109,7 @@ namespace System.Windows.Forms.Design
 
                 if (newOffset != localDragOffset)
                 {
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\tParentControlDesigner.OnDragOver: " + de.ToString());
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
                     DrawDragFrames(dragComps, localDragOffset, localDragEffect,
                                    newOffset, de.Effect, forceDrawFrames);
                     localDragOffset = newOffset;

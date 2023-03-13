@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
-public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+public class ListViewLabelEditAccessibleObjectTests
 {
     [WinFormsFact]
     public void ListViewLabelEditAccessibleObject_GetPropertyValue_ReturnsExpected()

@@ -1194,7 +1194,7 @@ namespace System.Windows.Forms
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 
-                DropDown.SelectNextToolStripItem(null, /*forward=*/true);
+                DropDown.SelectNextToolStripItem(start: null, forward: true);
                 return true;
             }
 

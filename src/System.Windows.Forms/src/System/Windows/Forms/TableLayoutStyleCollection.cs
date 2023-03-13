@@ -9,18 +9,18 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    [Editor("System.Windows.Forms.Design.StyleCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.StyleCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     public abstract class TableLayoutStyleCollection : IList
     {
-        private IArrangedElement _owner;
+        private IArrangedElement? _owner;
         private readonly List<TableLayoutStyle> _innerList = new();
 
-        internal TableLayoutStyleCollection(IArrangedElement owner)
+        internal TableLayoutStyleCollection(IArrangedElement? owner)
         {
             _owner = owner;
         }
 
-        internal IArrangedElement Owner => _owner;
+        internal IArrangedElement? Owner => _owner;
 
         internal virtual string? PropertyName => null;
 

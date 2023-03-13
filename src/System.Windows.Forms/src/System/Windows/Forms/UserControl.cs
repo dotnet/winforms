@@ -16,8 +16,8 @@ namespace System.Windows.Forms
     ///  the standard positioning and mnemonic handling code that is necessary
     ///  in a user control.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.UserControlDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner))]
-    [Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.UserControlDocumentDesigner, {AssemblyRef.SystemDesign}", typeof(IRootDesigner))]
+    [Designer($"System.Windows.Forms.Design.ControlDesigner, {AssemblyRef.SystemDesign}")]
     [DesignerCategory("UserControl")]
     [DefaultEvent(nameof(Load))]
     public class UserControl : ContainerControl

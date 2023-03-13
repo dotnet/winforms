@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ColumnHeaderTests : IClassFixture<ThreadExceptionFixture>
+    public class ColumnHeaderTests
     {
         [WinFormsFact]
         public void ColumnHeader_Ctor_Default()

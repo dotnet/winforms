@@ -2040,7 +2040,7 @@ namespace System.Windows.Forms
             // This must come before creating the scope.
             FONT_QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
 
-            using var hdc = new DeviceContextHdcScope(dc);
+            using var hdc = new DeviceContextHdcScope(dc, TextRenderer.GetApplyStateFlags(dc, format));
             DrawStringDisabled(hdc, s, font, color, layoutRectangle, format, quality);
         }
 
@@ -2312,7 +2312,7 @@ namespace System.Windows.Forms
         ///  Converts an infinite value to "1".
         /// </summary>
         private static float InfinityToOne(float value)
-            => value == float.NegativeInfinity || value == float.PositiveInfinity ? 1.0f : value;
+            => value is float.NegativeInfinity or float.PositiveInfinity ? 1.0f : value;
 
         /// <summary>
         ///  Creates a new color that is a object of the given color.
@@ -2555,98 +2555,30 @@ namespace System.Windows.Forms
             return matrix;
         }
 
-        internal static TextFormatFlags TextFormatFlagsForAlignmentGDI(ContentAlignment align)
+        internal static TextFormatFlags ConvertAlignmentToTextFormat(ContentAlignment alignment)
         {
-            TextFormatFlags output = default(TextFormatFlags);
-            output |= TranslateAlignmentForGDI(align);
-            output |= TranslateLineAlignmentForGDI(align);
-            return output;
-        }
+            // These are both defaults and have values of 0 to match the underlying GDI settings.
+            TextFormatFlags flags = TextFormatFlags.Top | TextFormatFlags.Left;
 
-        internal static StringAlignment TranslateAlignment(ContentAlignment align)
-        {
-            StringAlignment result;
-            if ((align & AnyRight) != 0)
+            if ((alignment & AnyBottom) != 0)
             {
-                result = StringAlignment.Far;
+                flags |= TextFormatFlags.Bottom;
             }
-            else if ((align & AnyCenter) != 0)
+            else if ((alignment & AnyMiddle) != 0)
             {
-                result = StringAlignment.Center;
-            }
-            else
-            {
-                result = StringAlignment.Near;
+                flags |= TextFormatFlags.VerticalCenter;
             }
 
-            return result;
-        }
-
-        internal static TextFormatFlags TranslateAlignmentForGDI(ContentAlignment align)
-        {
-            TextFormatFlags result;
-            if ((align & AnyBottom) != 0)
+            if ((alignment & AnyRight) != 0)
             {
-                result = TextFormatFlags.Bottom;
+                flags |= TextFormatFlags.Right;
             }
-            else if ((align & AnyMiddle) != 0)
+            else if ((alignment & AnyCenter) != 0)
             {
-                result = TextFormatFlags.VerticalCenter;
-            }
-            else
-            {
-                result = TextFormatFlags.Top;
+                flags |= TextFormatFlags.HorizontalCenter;
             }
 
-            return result;
-        }
-
-        internal static StringAlignment TranslateLineAlignment(ContentAlignment align)
-        {
-            StringAlignment result;
-            if ((align & AnyBottom) != 0)
-            {
-                result = StringAlignment.Far;
-            }
-            else if ((align & AnyMiddle) != 0)
-            {
-                result = StringAlignment.Center;
-            }
-            else
-            {
-                result = StringAlignment.Near;
-            }
-
-            return result;
-        }
-
-        internal static TextFormatFlags TranslateLineAlignmentForGDI(ContentAlignment align)
-        {
-            TextFormatFlags result;
-            if ((align & AnyRight) != 0)
-            {
-                result = TextFormatFlags.Right;
-            }
-            else if ((align & AnyCenter) != 0)
-            {
-                result = TextFormatFlags.HorizontalCenter;
-            }
-            else
-            {
-                result = TextFormatFlags.Left;
-            }
-
-            return result;
-        }
-
-        internal static StringFormat StringFormatForAlignment(ContentAlignment align)
-        {
-            StringFormat output = new StringFormat
-            {
-                Alignment = TranslateAlignment(align),
-                LineAlignment = TranslateLineAlignment(align)
-            };
-            return output;
+            return flags;
         }
 
         /// <summary>
@@ -2658,9 +2590,17 @@ namespace System.Windows.Forms
             bool showEllipsis,
             bool useMnemonic)
         {
-            StringFormat stringFormat = StringFormatForAlignment(textAlign);
+            StringFormat stringFormat = new()
+            {
+                Alignment = (textAlign & AnyRight) != 0
+                    ? StringAlignment.Far
+                    : (textAlign & AnyCenter) != 0 ? StringAlignment.Center : StringAlignment.Near,
+                LineAlignment = (textAlign & AnyBottom) != 0
+                    ? StringAlignment.Far
+                    : (textAlign & AnyMiddle) != 0 ? StringAlignment.Center : StringAlignment.Near
+            };
 
-            // make sure that the text is contained within the label
+            // Make sure that the text is contained within the label.
 
             // Adjust string format for Rtl controls
             if (control.RightToLeft == RightToLeft.Yes)
@@ -2700,12 +2640,12 @@ namespace System.Windows.Forms
         /// </summary>
         internal static TextFormatFlags CreateTextFormatFlags(
             Control control,
-            ContentAlignment textAlign,
+            ContentAlignment alignment,
             bool showEllipsis,
             bool useMnemonic)
         {
-            textAlign = control.RtlTranslateContent(textAlign);
-            TextFormatFlags flags = TextFormatFlagsForAlignmentGDI(textAlign);
+            alignment = control.RtlTranslateContent(alignment);
+            TextFormatFlags flags = ConvertAlignmentToTextFormat(alignment);
 
             // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens
             // when AutoSize is false and a one-word line still doesn't fit the binding box (width). The other effect

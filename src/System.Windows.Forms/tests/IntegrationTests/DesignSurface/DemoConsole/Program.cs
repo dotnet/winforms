@@ -31,7 +31,7 @@ namespace TestConsole
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception (strike a key to quit!): " + ex.Message);
+                Console.WriteLine($"Exception (strike a key to quit!): {ex.Message}");
                 Console.ReadLine();
             }
         }

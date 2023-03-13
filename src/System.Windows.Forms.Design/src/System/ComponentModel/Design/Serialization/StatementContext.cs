@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
 using System.Collections;
 
@@ -23,15 +21,12 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     public sealed class StatementContext
     {
-        private ObjectStatementCollection _statements;
+        private ObjectStatementCollection? _statements;
 
         /// <summary>
         ///  This is a table of statements that is offered by the statement context.
         /// </summary>
-        public ObjectStatementCollection StatementCollection
-        {
-            get => _statements ??= new ObjectStatementCollection();
-        }
+        public ObjectStatementCollection StatementCollection => _statements ??= new ObjectStatementCollection();
     }
 
     /// <summary>
@@ -39,7 +34,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     public sealed class ObjectStatementCollection : IEnumerable
     {
-        private List<TableEntry> _table;
+        private List<TableEntry>? _table;
         private int _version;
 
         /// <summary>
@@ -52,7 +47,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Adds an owner to the table. Statements can be null, in which case it will be demand created when fished out of the table.  This will throw if there is already a valid collection for the owner.
         /// </summary>
-        private void AddOwner(object statementOwner, CodeStatementCollection statements)
+        private void AddOwner(object statementOwner, CodeStatementCollection? statements)
         {
             if (_table is null)
             {
@@ -89,7 +84,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  Indexer.  This will return the statement collection for the given owner.
         ///  It will return null only if the owner is not in the table.
         /// </summary>
-        public CodeStatementCollection this[object statementOwner]
+        public CodeStatementCollection? this[object statementOwner]
         {
             get
             {
@@ -180,8 +175,8 @@ namespace System.ComponentModel.Design.Serialization
         private struct TableEntry
         {
             public object Owner;
-            public CodeStatementCollection Statements;
-            public TableEntry(object owner, CodeStatementCollection statements)
+            public CodeStatementCollection? Statements;
+            public TableEntry(object owner, CodeStatementCollection? statements)
             {
                 Owner = owner;
                 Statements = statements;
@@ -201,10 +196,7 @@ namespace System.ComponentModel.Design.Serialization
                 _position = -1;
             }
 
-            public object Current
-            {
-                get => Entry;
-            }
+            public object Current => Entry;
 
             public DictionaryEntry Entry
             {
@@ -230,15 +222,9 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            public object Key
-            {
-                get => Entry.Key;
-            }
+            public object Key => Entry.Key;
 
-            public object Value
-            {
-                get => Entry.Value;
-            }
+            public object? Value => Entry.Value;
 
             public bool MoveNext()
             {

@@ -7,7 +7,7 @@ using Xunit;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class QueryContinueDragEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class QueryContinueDragEventArgsTests
     {
         [Theory]
         [InlineData(-1, false, (DragAction)(DragAction.Continue - 1))]

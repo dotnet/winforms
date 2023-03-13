@@ -8,7 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTests
     {
         [WinFormsFact]
         public void ToolStripOverflowButtonAccessibleObject_Ctor_Default()

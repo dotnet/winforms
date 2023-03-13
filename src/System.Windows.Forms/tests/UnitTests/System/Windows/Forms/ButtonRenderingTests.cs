@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ButtonRenderingTests : IClassFixture<ThreadExceptionFixture>
+    public class ButtonRenderingTests
     {
         [WinFormsFact]
         public unsafe void CaptureButton()

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public class ControlEventArgsTests
     {
         public static IEnumerable<object[]> Ctor_Control_TestData()
         {

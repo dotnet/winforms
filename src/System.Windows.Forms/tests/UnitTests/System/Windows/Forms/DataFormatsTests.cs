@@ -9,7 +9,7 @@ using static Interop;
 namespace System.Windows.Forms.Tests
 {
     // NB: doesn't require thread affinity
-    public class DataFormatsTests : IClassFixture<ThreadExceptionFixture>
+    public class DataFormatsTests
     {
         public static IEnumerable<object[]> KnownFormats_TestData()
         {

@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject_DirectionButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject_DirectionButtonAccessibleObjectTests
     {
         [WinFormsTheory]
         [InlineData(((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]

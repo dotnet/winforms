@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
 using System.Windows.Forms;
 
@@ -18,7 +16,7 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     public sealed class ExpressionContext
     {
-        public ExpressionContext(CodeExpression expression, Type expressionType, object owner, object presetValue)
+        public ExpressionContext(CodeExpression expression, Type expressionType, object owner, object? presetValue)
         {
             Expression = expression.OrThrowIfNull();
             ExpressionType = expressionType.OrThrowIfNull();
@@ -69,6 +67,6 @@ namespace System.ComponentModel.Design.Serialization
         ///  PresetValue equal to the value of the Padding object currently
         ///  being serialized.
         /// </summary>
-        public object PresetValue { get; }
+        public object? PresetValue { get; }
     }
 }

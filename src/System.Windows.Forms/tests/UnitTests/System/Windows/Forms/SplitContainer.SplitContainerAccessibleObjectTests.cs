@@ -7,7 +7,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SplitContainer_SplitContainerAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class SplitContainer_SplitContainerAccessibleObjectTests
     {
         [WinFormsFact]
         public void SplitContainerAccessibleObject_Ctor_Default()

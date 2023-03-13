@@ -489,7 +489,7 @@ namespace System.Windows.Forms
             PaddingToTrim = trimPadding;
         }
 
-        internal override void ChangeSelection(ToolStripItem nextItem)
+        internal override void ChangeSelection(ToolStripItem? nextItem)
         {
             if (nextItem is not null)
             {
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware)
+        internal override ToolStripItem? GetNextItem(ToolStripItem? start, ArrowDirection direction, bool rtlAware)
         {
             // for up/down we don't care about flipping left/right tab should still take you down.
             return GetNextItem(start, direction);

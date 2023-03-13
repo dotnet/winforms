@@ -13,7 +13,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripContentPanelTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripContentPanelTests
     {
         [WinFormsFact]
         public void ToolStripContentPanel_Ctor_SplitContainer()

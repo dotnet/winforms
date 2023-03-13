@@ -6,7 +6,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TabPageTabPageControlCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class TabPageTabPageControlCollectionTests
     {
         [WinFormsFact]
         public void TabPageControlCollection_Ctor_TabPage()

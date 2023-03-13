@@ -1115,10 +1115,7 @@ namespace System.Windows.Forms
         [MemberNotNullWhen(true, nameof(MdiParentInternal))]
         public bool IsMdiChild
         {
-            get
-            {
-                return Properties.GetObject(PropFormMdiParent) is not null;
-            }
+            get => Properties.ContainsObjectThatIsNotNull(PropFormMdiParent);
         }
 
         // Deactivates active MDI child and temporarily marks it as unfocusable,
@@ -2845,11 +2842,11 @@ namespace System.Windows.Forms
             if (!_autoScaleBaseSize.IsEmpty)
             {
                 Size baseVar = AutoScaleBaseSize;
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "base  =" + baseVar);
+                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"base  ={baseVar}");
                 SizeF newVarF = GetAutoScaleSize(Font);
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "new(f)=" + newVarF);
+                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(f)={newVarF}");
                 Size newVar = new Size((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "new(i)=" + newVar);
+                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"new(i)={newVar}");
 
                 // We save a significant amount of time by bailing early if there's no work to be done
                 if (baseVar.Equals(newVar))
@@ -2859,7 +2856,7 @@ namespace System.Windows.Forms
 
                 float percY = AdjustScale(((float)newVar.Height) / ((float)baseVar.Height));
                 float percX = AdjustScale(((float)newVar.Width) / ((float)baseVar.Width));
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "scale=" + percX + ", " + percY);
+                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"scale={percX}, {percY}");
                 Scale(percX, percY);
                 // This would ensure that we use the new
                 // font information to calculate the AutoScaleBaseSize. According to Triage
@@ -4931,7 +4928,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float x, float y)
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + x + ", " + y + ")");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({x}, {y})");
             SuspendLayout();
             try
             {
@@ -6406,7 +6403,7 @@ namespace System.Windows.Forms
         private void WmMdiActivate(ref Message m)
         {
             base.WndProc(ref m);
-            Debug.Assert(Properties.GetObject(PropFormMdiParent) is not null, "how is formMdiParent null?");
+            Debug.Assert(Properties.ContainsObjectThatIsNotNull(PropFormMdiParent), "how is formMdiParent null?");
             Debug.Assert(IsHandleCreated, "how is handle 0?");
 
             Form? formMdiParent = (Form?)Properties.GetObject(PropFormMdiParent);

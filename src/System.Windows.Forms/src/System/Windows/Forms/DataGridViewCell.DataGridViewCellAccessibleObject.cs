@@ -611,16 +611,7 @@ namespace System.Windows.Forms
 
             private protected override string AutomationId
             {
-                get
-                {
-                    string automationId = string.Empty;
-                    foreach (int runtimeIdPart in RuntimeId)
-                    {
-                        automationId += runtimeIdPart.ToString();
-                    }
-
-                    return automationId;
-                }
+                get => string.Concat(RuntimeId);
             }
 
             internal override bool IsIAccessibleExSupported() => true;

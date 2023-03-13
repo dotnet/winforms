@@ -300,19 +300,9 @@ namespace System.Windows.Forms
 
         int IComparer<Entry>.Compare(Entry? entry1, Entry? entry2)
         {
-            if (entry1 is null)
+            if (IComparerHelpers.CompareReturnIfNull(entry1, entry2, out int? returnValue))
             {
-                if (entry2 is null)
-                {
-                    return 0; //both null, then they are equal
-                }
-
-                return -1; //item1 is null, but item2 is valid (greater)
-            }
-
-            if (entry2 is null)
-            {
-                return 1; //item2 is null, so item 1 is greater
+                return (int)returnValue;
             }
 
             string? itemName1 = _listControl.GetItemText(entry1.Item);

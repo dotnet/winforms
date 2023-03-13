@@ -1825,7 +1825,6 @@ namespace System.Windows.Forms.Design
                     if (item is DesignerToolStripControlHost designerItem)
                     {
                         ToolStripItem parentItem = ((ToolStripDropDown)designerItem.Owner).OwnerItem;
-                        ToolStripMenuItemDesigner designer = host.GetDesigner(parentItem) as ToolStripMenuItemDesigner;
                         ToolStripDropDown dropDown = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)parentItem);
                         item = dropDown is not null ? dropDown.OwnerItem : parentItem;
                     }
