@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
@@ -16,7 +16,7 @@ internal static partial class Interop
         internal static unsafe partial IntPtr CreateIconFromResourceEx(
 #else
         [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        internal static unsafe extern IntPtr CreateIconFromResourceEx(
+        internal static extern unsafe IntPtr CreateIconFromResourceEx(
 #endif
             byte* pbIconBits,
             uint cbIconBits,

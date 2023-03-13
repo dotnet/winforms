@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
@@ -20,7 +20,7 @@ internal static partial class Interop
         public static unsafe partial bool SystemParametersInfoW(
 #else
         [DllImport(Libraries.User32, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static unsafe extern bool SystemParametersInfoW(
+        public static extern unsafe bool SystemParametersInfoW(
 #endif
             SystemParametersAction uiAction,
             uint uiParam,

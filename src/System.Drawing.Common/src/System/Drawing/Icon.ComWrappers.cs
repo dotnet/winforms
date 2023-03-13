@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics;
@@ -66,7 +66,7 @@ namespace System.Drawing
         private static unsafe partial int OleCreatePictureIndirect(
 #else
         [DllImport(Interop.Libraries.Oleaut32)]
-        private static unsafe extern int OleCreatePictureIndirect(
+        private static extern unsafe int OleCreatePictureIndirect(
 #endif
             PICTDESC* pictdesc,
             Guid* refiid,
