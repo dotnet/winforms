@@ -411,7 +411,7 @@ namespace System.ComponentModel.Design.Serialization
                                 // which will add data to the ResourceBlob property on the entry.
                                 if (entry is null)
                                 {
-                                    entry = new ComponentCache.Entry(cache);
+                                    entry = new ComponentCache.Entry();
 
                                     // We cache components even if they're not valid so dependencies are
                                     // still tracked correctly (see comment below).  The problem is, we will create a

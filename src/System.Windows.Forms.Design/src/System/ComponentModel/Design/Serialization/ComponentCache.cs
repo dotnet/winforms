@@ -2,20 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
     ///  This class is used to cache serialized properties and events of components to speed-up Design to Code view switches
     /// </summary>
-    internal class ComponentCache : IDisposable
+    internal sealed class ComponentCache : IDisposable
     {
-        private Dictionary<object, Entry> _cache;
+        private Dictionary<object, Entry>? _cache;
         private readonly IDesignerSerializationManager _serManager;
-        private readonly bool _enabled = true;
 
         internal ComponentCache(IDesignerSerializationManager manager)
         {
@@ -29,45 +27,33 @@ namespace System.ComponentModel.Design.Serialization
                 cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            object optionValue = null;
-            if (manager.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
+            if (manager.TryGetService(out DesignerOptionService? options))
             {
-                PropertyDescriptor componentCacheProp = options.Options.Properties["UseOptimizedCodeGeneration"];
-                if (componentCacheProp is not null)
-                {
-                    optionValue = componentCacheProp.GetValue(null);
-                }
+                PropertyDescriptor? componentCacheProp = options.Options.Properties["UseOptimizedCodeGeneration"];
+                object? optionValue = componentCacheProp?.GetValue(null);
 
-                if (optionValue is not null && optionValue is bool)
+                if (optionValue is bool)
                 {
-                    _enabled = (bool)optionValue;
+                    Enabled = (bool)optionValue;
                 }
             }
         }
 
-        internal bool Enabled
-        {
-            get => _enabled;
-        }
+        internal bool Enabled { get; } = true;
 
         /// <summary>
         ///  Access serialized Properties and events for the given component
         /// </summary>
-        internal Entry this[object component]
+        [DisallowNull]
+        internal Entry? this[object component]
         {
             get
             {
                 ArgumentNullException.ThrowIfNull(component);
 
-                if (_cache is not null && _cache.TryGetValue(component, out Entry result))
-                {
-                    if (result is not null && result.Valid && Enabled)
-                    {
-                        return result;
-                    }
-                }
-
-                return null;
+                return Enabled && _cache is not null && _cache.TryGetValue(component, out Entry? result) && result.Valid
+                    ? result
+                    : null;
             }
             set
             {
@@ -79,19 +65,15 @@ namespace System.ComponentModel.Design.Serialization
                 // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
                 if (_cache is not null && component is IComponent)
                 {
-                    if (value is not null && value.Component is null)
-                    {
-                        value.Component = component;
-                    }
-
+                    value.Component ??= component;
                     _cache[component] = value;
                 }
             }
         }
 
-        internal Entry GetEntryAll(object component)
+        internal Entry? GetEntryAll(object component)
         {
-            if (_cache is not null && _cache.TryGetValue(component, out Entry result))
+            if (_cache is not null && _cache.TryGetValue(component, out Entry? result))
             {
                 return result;
             }
@@ -108,7 +90,7 @@ namespace System.ComponentModel.Design.Serialization
 
             foreach (KeyValuePair<object, Entry> kvp in _cache)
             {
-                List<string> localNames = kvp.Value.LocalNames;
+                List<string>? localNames = kvp.Value.LocalNames;
                 if (localNames is not null && localNames.Contains(name))
                 {
                     return true;
@@ -120,27 +102,23 @@ namespace System.ComponentModel.Design.Serialization
 
         public void Dispose()
         {
-            if (_serManager is not null)
+            if (_serManager.TryGetService(out IComponentChangeService? cs))
             {
-                IComponentChangeService cs = (IComponentChangeService)_serManager.GetService(typeof(IComponentChangeService));
-                if (cs is not null)
-                {
-                    cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                    cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemove);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
-                    cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
-                }
+                cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
+                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemove);
+                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
+                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
         }
 
-        private void OnComponentRename(object source, ComponentRenameEventArgs args)
+        private void OnComponentRename(object? source, ComponentRenameEventArgs? args)
         {
             // we might have a symbolic rename that has side effects beyond our control, so we don't have a choice but to clear the whole cache when a component gets renamed...
             _cache?.Clear();
         }
 
-        private void OnComponentChanging(object source, ComponentChangingEventArgs ce)
+        private void OnComponentChanging(object? source, ComponentChangingEventArgs ce)
         {
             if (_cache is not null)
             {
@@ -148,11 +126,11 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     RemoveEntry(ce.Component);
 
-                    if (!(ce.Component is IComponent) && _serManager is not null)
+                    if (ce.Component is not IComponent)
                     {
-                        if (_serManager.GetService(typeof(IReferenceService)) is IReferenceService rs)
+                        if (_serManager.TryGetService(out IReferenceService? rs))
                         {
-                            IComponent owningComp = rs.GetComponent(ce.Component);
+                            IComponent? owningComp = rs.GetComponent(ce.Component);
                             if (owningComp is not null)
                             {
                                 RemoveEntry(owningComp);
@@ -172,18 +150,18 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private void OnComponentChanged(object source, ComponentChangedEventArgs ce)
+        private void OnComponentChanged(object? source, ComponentChangedEventArgs ce)
         {
             if (_cache is not null)
             {
                 if (ce.Component is not null)
                 {
                     RemoveEntry(ce.Component);
-                    if (!(ce.Component is IComponent) && _serManager is not null)
+                    if (ce.Component is not IComponent)
                     {
-                        if (_serManager.GetService(typeof(IReferenceService)) is IReferenceService rs)
+                        if (_serManager.TryGetService(out IReferenceService? rs))
                         {
-                            IComponent owningComp = rs.GetComponent(ce.Component);
+                            IComponent? owningComp = rs.GetComponent(ce.Component);
                             if (owningComp is not null)
                             {
                                 RemoveEntry(owningComp);
@@ -203,11 +181,11 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        private void OnComponentRemove(object source, ComponentEventArgs ce)
+        private void OnComponentRemove(object? source, ComponentEventArgs ce)
         {
             if (_cache is not null)
             {
-                if (ce.Component is not null && !(ce.Component is IExtenderProvider))
+                if (ce.Component is not null and not IExtenderProvider)
                 {
                     RemoveEntry(ce.Component);
                 }
@@ -223,7 +201,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         internal void RemoveEntry(object component)
         {
-            if (_cache is not null && _cache.TryGetValue(component, out Entry entry))
+            if (_cache is not null && _cache.TryGetValue(component, out Entry? entry))
             {
                 if (entry.Tracking)
                 {
@@ -235,7 +213,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Clear its dependencies, if any
                 if (entry.Dependencies is not null)
                 {
-                    foreach (object parent in entry.Dependencies)
+                    foreach (object? parent in entry.Dependencies)
                     {
                         RemoveEntry(parent);
                     }
@@ -257,69 +235,43 @@ namespace System.ComponentModel.Design.Serialization
         // A single cache entry
         internal sealed class Entry
         {
-            private readonly ComponentCache _cache;
-            private List<object> _dependencies;
-            private List<string> _localNames;
-            private List<ResourceEntry> _resources;
-            private List<ResourceEntry> _metadata;
-            private bool _valid;
-            private bool _tracking;
+            private List<ResourceEntry>? _resources;
+            private List<ResourceEntry>? _metadata;
 
-            internal Entry(ComponentCache cache)
+            internal Entry()
             {
-                _cache = cache;
-                _valid = true;
+                Valid = true;
             }
 
-            public object Component; // pointer back to the component that generated this entry
-            public CodeStatementCollection Statements;
+            public object? Component; // pointer back to the component that generated this entry
+            public CodeStatementCollection? Statements;
 
-            public ICollection<ResourceEntry> Metadata
-            {
-                get => _metadata;
-            }
+            public ICollection<ResourceEntry>? Metadata => _metadata;
 
-            public ICollection<ResourceEntry> Resources
-            {
-                get => _resources;
-            }
+            public ICollection<ResourceEntry>? Resources => _resources;
 
-            public List<object> Dependencies
-            {
-                get => _dependencies;
-            }
+            public List<object>? Dependencies { get; private set; }
 
-            internal List<string> LocalNames
-            {
-                get => _localNames;
-            }
+            internal List<string>? LocalNames { get; private set; }
 
-            internal bool Valid
-            {
-                get => _valid;
-                set => _valid = value;
-            }
+            internal bool Valid { get; set; }
 
-            internal bool Tracking
-            {
-                get => _tracking;
-                set => _tracking = value;
-            }
+            internal bool Tracking { get; set; }
 
             internal void AddLocalName(string name)
             {
-                _localNames ??= new List<string>();
+                LocalNames ??= new List<string>();
 
-                _localNames.Add(name);
+                LocalNames.Add(name);
             }
 
             public void AddDependency(object dep)
             {
-                _dependencies ??= new List<object>();
+                Dependencies ??= new List<object>();
 
-                if (!_dependencies.Contains(dep))
+                if (!Dependencies.Contains(dep))
                 {
-                    _dependencies.Add(dep);
+                    Dependencies.Add(dep);
                 }
             }
 
