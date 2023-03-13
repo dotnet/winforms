@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design.Serialization
     /// <summary>
     ///  This class is used to cache serialized properties and events of components to speed-up Design to Code view switches
     /// </summary>
-    internal class ComponentCache : IDisposable
+    internal sealed class ComponentCache : IDisposable
     {
         private Dictionary<object, Entry>? _cache;
         private readonly IDesignerSerializationManager _serManager;
