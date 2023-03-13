@@ -120,8 +120,11 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseBy(form.DisplayRectangle.Width, 0)
-                        .LeftButtonUp());
+                        .Sleep(INPUTSIMULATOR_DELAY)
+                        .LeftButtonUp()
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -145,8 +148,11 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseBy(0, form.DisplayRectangle.Height)
-                        .LeftButtonUp());
+                        .Sleep(INPUTSIMULATOR_DELAY)
+                        .LeftButtonUp()
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
                 Assert.Equal(originalFormSize.Width, form.DisplayRectangle.Width);
@@ -172,8 +178,11 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseBy(form.DisplayRectangle.Width, 0)
-                        .LeftButtonUp());
+                        .Sleep(INPUTSIMULATOR_DELAY)
+                        .LeftButtonUp()
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -203,8 +212,11 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseBy(0, form.DisplayRectangle.Height)
-                        .LeftButtonUp());
+                        .Sleep(INPUTSIMULATOR_DELAY)
+                        .LeftButtonUp()
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
                 Assert.Equal(originalFormSize.Width, form.DisplayRectangle.Width);
@@ -266,8 +278,11 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
-                        .LeftButtonUp());
+                        .Sleep(INPUTSIMULATOR_DELAY)
+                        .LeftButtonUp()
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(0, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
@@ -301,9 +316,13 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
+                        .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPoint1.X, virtualPoint1.Y)
-                        .LeftButtonUp());
+                        .Sleep(INPUTSIMULATOR_DELAY)
+                        .LeftButtonUp()
+                        .Sleep(INPUTSIMULATOR_DELAY));
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);

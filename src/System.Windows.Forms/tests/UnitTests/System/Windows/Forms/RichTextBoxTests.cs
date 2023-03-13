@@ -6856,10 +6856,10 @@ namespace System.Windows.Forms.Tests
 
         // NOTE: do not convert this into a theory as it will run hundreds of tests
         // and with that will cycle through hundreds of UI controls.
-        //[ActiveIssue("https://github.com/dotnet/winforms/issues/6609")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/6609")]
         [WinFormsFact]
-        /*[SkipOnArchitecture(TestArchitectures.X86,
-            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6609")]*/
+        [SkipOnArchitecture(TestArchitectures.X86,
+            "Flaky tests, see: https://github.com/dotnet/winforms/issues/6609")]
         public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
         {
             using (var control = new RichTextBox())
