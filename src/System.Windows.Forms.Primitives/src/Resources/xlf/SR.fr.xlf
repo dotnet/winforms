@@ -24,17 +24,17 @@
       </trans-unit>
       <trans-unit id="Win32GetThreadsDpiContextFailed">
         <source>Failed to get thread's DpiAwareness context.</source>
-        <target state="new">Failed to get thread's DpiAwareness context.</target>
+        <target state="translated">Échec de l’obtention du contexte DpiAwareness du thread.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32SetThreadsDpiContextFailed">
         <source>Failed to set thread's DpiAwareness context {0}.</source>
-        <target state="new">Failed to set thread's DpiAwareness context {0}.</target>
+        <target state="translated">Échec de la définition du contexte DpiAwareness du thread {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32SetThreadsDpiHostingBehaviorFailed">
         <source>Failed to set thread's DPI hosting behavior {0}.</source>
-        <target state="new">Failed to set thread's DPI hosting behavior {0}.</target>
+        <target state="translated">Échec de la définition du comportement d’hébergement DPI du thread {0}.</target>
         <note />
       </trans-unit>
     </body>
