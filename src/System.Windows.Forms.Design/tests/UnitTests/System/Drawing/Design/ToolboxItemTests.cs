@@ -479,7 +479,7 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void ToolboxItem_CreateComponents_InvokeWithHostWithIComponentInitializerDesigner_ReturnsExpected()
         {
-            var component = new Component();
+            using var component = new Component();
             var item = new ToolboxItem
             {
                 TypeName = "typeName"
@@ -545,7 +545,7 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void ToolboxItem_CreateComponents_InvokeWithHostWithThrowingIComponentInitializerDesigner_ReturnsExpected()
         {
-            var component = new Component();
+            using var component = new Component();
             var item = new ToolboxItem
             {
                 TypeName = "typeName"
@@ -798,7 +798,7 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void ToolboxItem_CreateComponentsCore_InvokeWithHostWithIComponentInitializerDesigner_ReturnsExpected()
         {
-            var component = new Component();
+            using var component = new Component();
             var item = new SubToolboxItem
             {
                 TypeName = "typeName"
@@ -864,7 +864,7 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void ToolboxItem_CreateComponentsCore_InvokeWithHostWithThrowingIComponentInitializerDesigner_ReturnsExpected()
         {
-            var component = new Component();
+            using var component = new Component();
             var item = new SubToolboxItem
             {
                 TypeName = "typeName"

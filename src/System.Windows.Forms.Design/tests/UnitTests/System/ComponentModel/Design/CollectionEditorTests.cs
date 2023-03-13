@@ -88,7 +88,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(CanRemoveInstance_InheritanceAttribute_TestData))]
         public void CollectionEditor_CanRemoveInstance_InheritanceAttribute_ReturnsExpected(InheritanceAttribute attribute, bool expected)
         {
-            var component = new Component();
+            using var component = new Component();
             TypeDescriptor.AddAttributes(component, attribute);
             var editor = new SubCollectionEditor(null);
             Assert.Equal(expected, editor.CanRemoveInstance(component));
@@ -204,7 +204,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
                 .Returns(mockEditorService.Object);
 
-            var result = new Component();
+            using var result = new Component();
             var mockHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockHost
                 .Setup(h => h.CreateTransaction("Add or remove Int32 objects"))
@@ -302,7 +302,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
                 .Returns(mockEditorService.Object);
 
-            var result = new Component();
+            using var result = new Component();
             var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
             Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
             mockComponentInitializer
