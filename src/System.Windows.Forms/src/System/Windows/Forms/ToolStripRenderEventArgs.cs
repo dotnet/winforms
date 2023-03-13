@@ -108,7 +108,6 @@ namespace System.Windows.Forms
                     {
                         // translate the item into our coordinate system.
                         Rectangle itemBounds = new Rectangle(ToolStrip.PointToClient(ownerItem.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords)), ownerItem.Size);
-                        Rectangle bounds = ToolStrip.Bounds;
 
                         Rectangle overlap = ToolStrip.ClientRectangle;
                         overlap.Inflate(1, 1);

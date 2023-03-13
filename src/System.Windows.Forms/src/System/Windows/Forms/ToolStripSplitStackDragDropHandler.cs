@@ -76,8 +76,6 @@ namespace System.Windows.Forms
 
         private void OnDropItem(ToolStripItem droppedItem, Point ownerClientAreaRelativeDropPoint)
         {
-            Point start = Point.Empty;
-
             int toolStripItemIndex = GetItemInsertionIndex(ownerClientAreaRelativeDropPoint);
             if (toolStripItemIndex >= 0)
             {

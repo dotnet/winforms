@@ -1486,8 +1486,6 @@ namespace System.Windows.Forms.Layout
 
             List<LayoutInfo> layoutInfos = new(container.Children.Count);
             ContainerInfo containerInfo = GetContainerInfo(container);
-            Strip[] rows = containerInfo.Rows;
-            Strip[] columns = containerInfo.Columns;
 
             foreach (IArrangedElement element in container.Children)
             {
