@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Tests.Text
             Assert.Equal(height, extent.Height);
         }
 
-        [Theory(Skip = "Flaky in debug builds. See: https://github.com/dotnet/winforms/issues/8612")]
+        [Theory/*(Skip = "Flaky in debug builds. See: https://github.com/dotnet/winforms/issues/8612")*/]
         [MemberData(nameof(MeasureTextData))]
         public void Font_MeasureText(string family, float size, Size proposedSize, uint dt, Size expected)
         {

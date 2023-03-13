@@ -25,7 +25,7 @@ public unsafe class COM2FontConverterTests
         default,
         default);
 
-    [Fact(Skip = "https://github.com/dotnet/winforms/issues/8632")]
+    [Fact/*(Skip = "https://github.com/dotnet/winforms/issues/8632")*/]
     public void COM2FontConverter_ConvertNativeToManaged()
     {
         fixed (char* n = "Arial")
@@ -44,6 +44,9 @@ public unsafe class COM2FontConverterTests
             Com2FontConverter converter = new();
             using Font font = (Font)converter.ConvertNativeToManaged(wrapper, s_stubDescriptor);
 
+            // Converter might have failed and returned DefaultFont.
+            Assert.NotEqual(font, Control.DefaultFont);
+
             Assert.Equal("Arial", font.Name);
             Assert.Equal(12, font.Size);
 
@@ -54,7 +57,7 @@ public unsafe class COM2FontConverterTests
         }
     }
 
-    [Fact (Skip = "Flaky test being investigated. See:https://github.com/dotnet/winforms/issues/8602")]
+    [Fact/* (Skip = "Flaky test being investigated. See:https://github.com/dotnet/winforms/issues/8602")*/]
     public void COM2FontConverter_ConvertManagedToNative()
     {
         fixed (char* n = "Arial")
@@ -72,6 +75,10 @@ public unsafe class COM2FontConverterTests
 
             Com2FontConverter converter = new();
             using Font font = (Font)converter.ConvertNativeToManaged(wrapper, s_stubDescriptor);
+
+            // Converter might have failed and returned DefaultFont.
+            Assert.NotEqual(font, Control.DefaultFont);
+
             using Font newFont = new(font.Name, 20.0f);
 
             bool cancelSet = false;
