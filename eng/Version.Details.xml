@@ -31,10 +31,6 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>541347cbb4270f3861a8bb5eada9f1547d309b3a</Sha>
     </Dependency>
-    <Dependency Name="System.Drawing.Common" Version="8.0.0-preview.3.23162.2">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>541347cbb4270f3861a8bb5eada9f1547d309b3a</Sha>
-    </Dependency>
     <Dependency Name="System.Resources.Extensions" Version="8.0.0-preview.3.23162.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>541347cbb4270f3861a8bb5eada9f1547d309b3a</Sha>

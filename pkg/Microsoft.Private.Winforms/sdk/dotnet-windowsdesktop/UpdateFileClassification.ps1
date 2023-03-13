@@ -28,10 +28,6 @@ $assemblies = $xmlDoc.package.files.file | `
     Select-Object -Unique @{Name="Path";Expression={Split-Path $_.target -Leaf}} | `
     Select-Object -ExpandProperty Path;
 
-# this isn't explicitly present in the list
-$assemblies += 'System.Drawing.Common.dll';
-
-
 $needGenerate = $null;
 [bool]::TryParse($GenerateManifest, [ref]$needGenerate) | Out-Null;
 $servicingRelease = $null;

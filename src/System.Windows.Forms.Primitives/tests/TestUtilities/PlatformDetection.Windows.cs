@@ -11,6 +11,7 @@ namespace System
 {
     public static partial class PlatformDetection
     {
+        public static bool IsNetFramework => RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework", StringComparison.OrdinalIgnoreCase);
         public static Version OSXVersion => throw new PlatformNotSupportedException();
         public static Version OpenSslVersion => throw new PlatformNotSupportedException();
         public static bool IsSuperUser => throw new PlatformNotSupportedException();
@@ -92,6 +93,7 @@ namespace System
 
         public static bool IsWindows => true;
         public static bool IsWindows7 => GetWindowsVersion() == 6 && GetWindowsMinorVersion() == 1;
+        public static bool IsNotWindows7 => !IsWindows7;
         public static bool IsWindows8x => GetWindowsVersion() == 6 && (GetWindowsMinorVersion() == 2 || GetWindowsMinorVersion() == 3);
 
         public static string LibcRelease => "glibc_not_found";

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Microsoft.VisualBasic.Logging.Tests
 {
-    public class LogTests : Microsoft.VisualBasic.Tests.FileCleanupTestBase
+    public class LogTests : FileCleanupTestBase
     {
         [Fact]
         public void Properties()
