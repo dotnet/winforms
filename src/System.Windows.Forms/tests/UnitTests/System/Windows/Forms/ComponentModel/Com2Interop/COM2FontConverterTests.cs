@@ -25,7 +25,7 @@ public unsafe class COM2FontConverterTests
         default,
         default);
 
-    [Fact/*(Skip = "https://github.com/dotnet/winforms/issues/8632")*/]
+    [Fact]
     public void COM2FontConverter_ConvertNativeToManaged()
     {
         fixed (char* n = "Arial")
@@ -57,7 +57,7 @@ public unsafe class COM2FontConverterTests
         }
     }
 
-    [Fact/* (Skip = "Flaky test being investigated. See:https://github.com/dotnet/winforms/issues/8602")*/]
+    [Fact]
     public void COM2FontConverter_ConvertManagedToNative()
     {
         fixed (char* n = "Arial")

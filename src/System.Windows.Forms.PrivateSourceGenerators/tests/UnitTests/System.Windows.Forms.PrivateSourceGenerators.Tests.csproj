@@ -15,10 +15,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.PrivateSourceGenerators.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="xunit.runner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>
