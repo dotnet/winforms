@@ -4298,7 +4298,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+            using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
             Assert.Throws<NullReferenceException>(() => control.InvokePaint(null, eventArgs));
         }
 
@@ -4307,7 +4307,7 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+            using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
 
             using var otherControlParent = new Control();
             using var otherControl = new SubControl
@@ -4354,7 +4354,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+            using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
             Assert.Throws<NullReferenceException>(() => control.InvokePaintBackground(null, eventArgs));
         }
 

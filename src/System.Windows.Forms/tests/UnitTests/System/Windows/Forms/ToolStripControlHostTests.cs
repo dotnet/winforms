@@ -4109,7 +4109,8 @@ namespace System.Windows.Forms.Tests
 
             using var image = new Bitmap(10, 10);
             var graphics = Graphics.FromImage(image);
-            c.OnPaint(new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4)));
+            using var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+            c.OnPaint(eventArgs);
             Assert.Equal(0, paintCallCount);
 
             c.OnResize(EventArgs.Empty);
