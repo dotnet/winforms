@@ -50,7 +50,7 @@ namespace System.Windows.Forms.UITests.Dpi
                 form.Show();
 
                 DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED_BEFOREPARENT, toolStrip, newDpi);
-                var factor = newDpi / DpiHelper.LogicalDpi;
+                var factor = (float)newDpi / form.DeviceDpi;
 
                 Assert.Equal((float)initialFont.Size * factor, toolStrip.Font.Size, precision: 1);
                 form.Close();
