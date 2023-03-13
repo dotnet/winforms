@@ -19,7 +19,7 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
-        internal const int INPUTSIMULATOR_DELAY = 500;
+        internal const int INPUTSIMULATOR_DELAY = 0;//500;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
