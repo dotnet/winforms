@@ -7,7 +7,12 @@ internal static partial class Interop
 {
     internal static partial class Kernel32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Kernel32, SetLastError = true)]
         public static partial int GetSystemDefaultLCID();
+#else
+        [DllImport(Libraries.Kernel32, SetLastError = true)]
+        public static extern int GetSystemDefaultLCID();
+#endif
     }
 }

@@ -11,10 +11,13 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.User32, EntryPoint = "LoadIconW", SetLastError = true)]
         internal static partial IntPtr LoadIcon(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.User32, SetLastError = true, CharSet = CharSet.Unicode)]
+        internal static extern IntPtr LoadIcon(
 #endif
             HandleRef hInst, IntPtr iconId);
     }

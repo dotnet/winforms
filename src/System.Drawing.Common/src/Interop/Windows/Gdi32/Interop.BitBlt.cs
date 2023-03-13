@@ -8,9 +8,22 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, SetLastError = true)]
-        public static partial int BitBlt(IntPtr hdc, int x, int y, int cx, int cy,
-                                        IntPtr hdcSrc, int x1, int y1, RasterOp rop);
+        public static partial int BitBlt(
+#else
+        [DllImport(Libraries.Gdi32, ExactSpelling = true, SetLastError = true)]
+        public static extern int BitBlt(
+#endif
+            IntPtr hdc,
+            int x,
+            int y,
+            int cx,
+            int cy,
+            IntPtr hdcSrc,
+            int x1,
+            int y1,
+            RasterOp rop);
 
         public static int BitBlt(HandleRef hdc, int x, int y, int cx, int cy,
                                  HandleRef hdcSrc, int x1, int y1, RasterOp rop)

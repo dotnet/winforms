@@ -8,7 +8,13 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32)]
-        public static partial IntPtr CreateCompatibleDC(IntPtr hdc);
+        public static partial IntPtr CreateCompatibleDC(
+#else
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern IntPtr CreateCompatibleDC(
+#endif
+            IntPtr hdc);
     }
 }

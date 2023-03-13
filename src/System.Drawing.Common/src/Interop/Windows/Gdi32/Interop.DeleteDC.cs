@@ -8,9 +8,15 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static partial bool DeleteDC(IntPtr hdc);
+#if NET7_0_OR_GREATER
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial bool DeleteDC(
+#else
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern bool DeleteDC(
+#endif
+            IntPtr hdc);
 
         public static bool DeleteDC(HandleRef hdc)
         {

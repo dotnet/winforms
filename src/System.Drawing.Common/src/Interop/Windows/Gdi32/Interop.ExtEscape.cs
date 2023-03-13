@@ -14,18 +14,34 @@ internal static partial class Interop
         internal const int CHECKJPEGFORMAT = 4119;
         internal const int CHECKPNGFORMAT = 4120;
 
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, SetLastError = true)]
         internal static partial int ExtEscape(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern int ExtEscape(
 #endif
-            HandleRef hDC, int nEscape, int cbInput, ref int inData, int cbOutput, out int outData);
+            HandleRef hDC,
+            int nEscape,
+            int cbInput,
+            ref int inData,
+            int cbOutput,
+            out int outData);
 
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, SetLastError = true)]
         internal static partial int ExtEscape(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern int ExtEscape(
 #endif
-            HandleRef hDC, int nEscape, int cbInput, byte[] inData, int cbOutput, out int outData);
+            HandleRef hDC,
+            int nEscape,
+            int cbInput,
+            byte[] inData,
+            int cbOutput,
+            out int outData);
     }
 }

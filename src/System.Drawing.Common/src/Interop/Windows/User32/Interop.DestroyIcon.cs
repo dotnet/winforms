@@ -11,11 +11,14 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool DestroyIcon(
 #if NET7_0_OR_GREATER
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        internal static partial bool DestroyIcon(
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
+        internal static extern bool DestroyIcon(
 #endif
             HandleRef hIcon);
     }

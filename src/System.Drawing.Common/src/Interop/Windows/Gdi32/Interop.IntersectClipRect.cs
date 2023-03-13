@@ -11,11 +11,18 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, SetLastError = true)]
         internal static partial int IntersectClipRect(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern int IntersectClipRect(
 #endif
-            HandleRef hDC, int x1, int y1, int x2, int y2);
+            HandleRef hDC,
+            int x1,
+            int y1,
+            int x2,
+            int y2);
     }
 }

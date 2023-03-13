@@ -8,8 +8,14 @@ internal static partial class Interop
 {
     internal static partial class Kernel32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Kernel32, SetLastError = true)]
-        public static partial IntPtr GlobalFree(IntPtr handle);
+        public static partial IntPtr GlobalFree(
+#else
+        [DllImport(Libraries.Kernel32, ExactSpelling = true, SetLastError = true)]
+        public static extern IntPtr GlobalFree(
+#endif
+            IntPtr handle);
 
         public static IntPtr GlobalFree(HandleRef handle)
         {

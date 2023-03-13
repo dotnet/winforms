@@ -11,7 +11,13 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.User32, SetLastError = true)]
-        public static partial int GetSystemMetrics(int nIndex);
+        public static partial int GetSystemMetrics(
+#else
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
+        public static extern int GetSystemMetrics(
+#endif
+            int nIndex);
     }
 }

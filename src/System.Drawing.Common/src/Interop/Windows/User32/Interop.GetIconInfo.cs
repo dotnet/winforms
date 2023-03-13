@@ -11,13 +11,17 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool GetIconInfo(
 #if NET7_0_OR_GREATER
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        internal static partial bool GetIconInfo(
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
+        internal static extern bool GetIconInfo(
 #endif
-            HandleRef hIcon, ref ICONINFO info);
+            HandleRef hIcon,
+            ref ICONINFO info);
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct ICONINFO

@@ -8,8 +8,15 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32)]
-        public static partial RegionType GetRgnBox(IntPtr hrgn, ref RECT lprc);
+        public static partial RegionType GetRgnBox(
+#else
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern RegionType GetRgnBox(
+#endif
+            IntPtr hrgn,
+            ref RECT lprc);
 
         public static RegionType GetRgnBox(HandleRef hrgn, ref RECT lprc)
         {

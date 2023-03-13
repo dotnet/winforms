@@ -11,10 +11,13 @@ internal static partial class Interop
 {
     internal static partial class Kernel32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, SetLastError = true)]
         internal static partial IntPtr SelectObject(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern IntPtr SelectObject(
 #endif
             HandleRef hdc,
 #if NET7_0_OR_GREATER

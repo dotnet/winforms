@@ -13,7 +13,13 @@ internal static partial class Interop
             DEFAULT_GUI_FONT = 17
         }
 
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32)]
-        public static partial IntPtr GetStockObject(StockObject i);
+        public static partial IntPtr GetStockObject(
+#else
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern IntPtr GetStockObject(
+#endif
+            StockObject i);
     }
 }

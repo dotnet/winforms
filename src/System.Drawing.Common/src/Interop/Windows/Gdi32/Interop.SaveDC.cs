@@ -8,8 +8,14 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32)]
-        public static partial int SaveDC(IntPtr hdc);
+        public static partial int SaveDC(
+#else
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern int SaveDC(
+#endif
+            IntPtr hdc);
 
         public static int SaveDC(HandleRef hdc)
         {

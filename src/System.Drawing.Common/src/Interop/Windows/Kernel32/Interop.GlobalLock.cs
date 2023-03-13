@@ -8,8 +8,14 @@ internal static partial class Interop
 {
     internal static partial class Kernel32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Kernel32, SetLastError = true)]
-        public static partial IntPtr GlobalLock(IntPtr hMem);
+        public static partial IntPtr GlobalLock(
+#else
+        [DllImport(Libraries.Kernel32, ExactSpelling = true, SetLastError = true)]
+        public static extern IntPtr GlobalLock(
+#endif
+            IntPtr hMem);
 
         public static IntPtr GlobalLock(HandleRef hMem)
         {
@@ -18,8 +24,14 @@ internal static partial class Interop
             return result;
         }
 
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Kernel32)]
-        public static partial IntPtr GlobalUnlock(IntPtr hMem);
+        public static partial IntPtr GlobalUnlock(
+#else
+        [DllImport(Libraries.Kernel32, ExactSpelling = true)]
+        public static extern IntPtr GlobalUnlock(
+#endif
+            IntPtr hMem);
 
         public static IntPtr GlobalUnlock(HandleRef hMem)
         {

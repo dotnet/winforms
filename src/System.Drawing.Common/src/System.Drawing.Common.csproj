@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- net6.0 TFM isn't buildable as it depends on LibraryImportAttribute which isn't availble. -->
-    <TargetFrameworks>net8.0;net7.0;netstandard2.0;net462</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.0;net462</TargetFrameworks>
     <TargetFramework />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
@@ -9,6 +9,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <CLSCompliant>true</CLSCompliant>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <IsPackable>true</IsPackable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageValidationBaselineVersion>7.0.0</PackageValidationBaselineVersion>
@@ -44,7 +45,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\CharacterRange.cs" />
     <Compile Include="System\Drawing\ContentAlignment.cs" />
     <Compile Include="System\Drawing\IDeviceContext.cs" />
-    <Compile Include="System\Drawing\GdiplusNative.cs" />
+    <Compile Include="System\Drawing\GdiplusNative.Common.cs" />
     <Compile Include="System\Drawing\Graphics.cs" />
     <Compile Include="System\Drawing\GraphicsUnit.cs" />
     <Compile Include="System\Drawing\IconConverter.cs" />
@@ -310,6 +311,11 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
              Link="Common\DisableRuntimeMarshalling.cs" />
     <Compile Include="..\..\Common\src\HandleRefMarshaller.cs"
              Link="Common\HandleRefMarshaller.cs" />
+    <Compile Include="System\Drawing\GdiplusNative.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <Compile Include="System\Drawing\GdiplusNative.DllImport.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETStandard'">

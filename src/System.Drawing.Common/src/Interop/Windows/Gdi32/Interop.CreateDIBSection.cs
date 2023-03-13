@@ -11,11 +11,19 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, SetLastError = true)]
         internal static partial IntPtr CreateDIBSection(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
+        internal static extern IntPtr CreateDIBSection(
 #endif
-            HandleRef hdc, ref BITMAPINFO_FLAT bmi, int iUsage, ref IntPtr ppvBits, IntPtr hSection, int dwOffset);
+            HandleRef hdc,
+            ref BITMAPINFO_FLAT bmi,
+            int iUsage,
+            ref IntPtr ppvBits,
+            IntPtr hSection,
+            int dwOffset);
     }
 }

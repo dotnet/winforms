@@ -11,12 +11,16 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, EntryPoint = "StartDocW", SetLastError = true)]
         internal static partial int StartDoc(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, CharSet = CharSet.Auto)]
+        internal static extern int StartDoc(
 #endif
-            HandleRef hDC, in DOCINFO lpDocInfo);
+            HandleRef hDC,
+            in DOCINFO lpDocInfo);
 
 #if NET7_0_OR_GREATER
         [NativeMarshalling(typeof(Marshaller))]

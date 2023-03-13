@@ -10,11 +10,17 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32)]
         internal static partial uint GetPaletteEntries(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32)]
+        internal static extern uint GetPaletteEntries(
 #endif
-            HandleRef hpal, int iStartIndex, int nEntries, byte[] lppe);
+            HandleRef hpal,
+            int iStartIndex,
+            int nEntries,
+            byte[] lppe);
     }
 }

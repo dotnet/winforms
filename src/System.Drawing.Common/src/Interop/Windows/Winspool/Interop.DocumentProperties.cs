@@ -11,30 +11,43 @@ internal static partial class Interop
 {
     internal static partial class Winspool
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Winspool, EntryPoint = "DocumentPropertiesW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
         internal static partial int DocumentProperties(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Winspool, SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false)]
+        internal static extern int DocumentProperties(
 #endif
             HandleRef hwnd,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef hPrinter, string pDeviceName, IntPtr /*DEVMODE*/ pDevModeOutput,
+            HandleRef hPrinter,
+            string pDeviceName,
+            IntPtr /*DEVMODE*/ pDevModeOutput,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef /*DEVMODE*/ pDevModeInput, int fMode);
+            HandleRef /*DEVMODE*/ pDevModeInput,
+            int fMode);
 
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Winspool, EntryPoint = "DocumentPropertiesW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
         internal static partial int DocumentProperties(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Winspool, SetLastError = true, CharSet = CharSet.Auto, BestFitMapping = false)]
+        internal static extern int DocumentProperties(
 #endif
             HandleRef hwnd,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef hPrinter, string pDeviceName, IntPtr /*DEVMODE*/ pDevModeOutput, IntPtr /*DEVMODE*/ pDevModeInput, int fMode);
+            HandleRef hPrinter,
+            string pDeviceName,
+            IntPtr /*DEVMODE*/ pDevModeOutput,
+            IntPtr /*DEVMODE*/ pDevModeInput,
+            int fMode);
     }
 }

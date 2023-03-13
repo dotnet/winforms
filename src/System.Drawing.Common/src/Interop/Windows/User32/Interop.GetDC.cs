@@ -8,8 +8,14 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.User32)]
-        public static partial IntPtr GetDC(IntPtr hWnd);
+        public static partial IntPtr GetDC(
+#else
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public static extern IntPtr GetDC(
+#endif
+            IntPtr hWnd);
 
         public static IntPtr GetDC(HandleRef hWnd)
         {

@@ -11,11 +11,16 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, SetLastError = true)]
         internal static partial IntPtr CreateCompatibleBitmap(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
+        internal static extern IntPtr CreateCompatibleBitmap(
 #endif
-            HandleRef hDC, int width, int height);
+            HandleRef hDC,
+            int width,
+            int height);
     }
 }

@@ -14,8 +14,17 @@ internal static partial class Interop
             SPI_GETNONCLIENTMETRICS = 0x29
         }
 
-        [LibraryImport(Libraries.User32)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static unsafe partial bool SystemParametersInfoW(SystemParametersAction uiAction, uint uiParam, void* pvParam, uint fWinIni);
+#if NET7_0_OR_GREATER
+        [LibraryImport(Libraries.User32)]
+        public static unsafe partial bool SystemParametersInfoW(
+#else
+        [DllImport(Libraries.User32, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static unsafe extern bool SystemParametersInfoW(
+#endif
+            SystemParametersAction uiAction,
+            uint uiParam,
+            void* pvParam,
+            uint fWinIni);
     }
 }

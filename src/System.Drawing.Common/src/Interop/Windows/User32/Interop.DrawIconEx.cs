@@ -11,20 +11,29 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
+#if NET7_0_OR_GREATER
+        [LibraryImport(Libraries.User32, SetLastError = true)]
         internal static partial bool DrawIconEx(
+            [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern bool DrawIconEx(
+#endif
+            HandleRef hDC,
+            int x,
+            int y,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef hDC, int x, int y,
+            HandleRef hIcon,
+            int width,
+            int height,
+            int iStepIfAniCursor,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef hIcon, int width, int height, int iStepIfAniCursor,
-#if NET7_0_OR_GREATER
-            [MarshalUsing(typeof(HandleRefMarshaller))]
-#endif
-            HandleRef hBrushFlickerFree, int diFlags);
+            HandleRef hBrushFlickerFree,
+            int diFlags);
     }
 }

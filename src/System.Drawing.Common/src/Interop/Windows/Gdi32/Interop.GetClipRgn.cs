@@ -9,8 +9,15 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32)]
-        public static partial int GetClipRgn(IntPtr hdc, IntPtr hrgn);
+        public static partial int GetClipRgn(
+#else
+        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
+        public static extern int GetClipRgn(
+#endif
+            IntPtr hdc,
+            IntPtr hrgn);
 
         public static int GetClipRgn(HandleRef hdc, IntPtr hrgn)
         {

@@ -11,10 +11,13 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, EntryPoint = "ResetDCW", SetLastError = true)]
         internal static partial IntPtr /*HDC*/ ResetDC(
-#if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, CharSet = CharSet.Auto)]
+        internal static extern IntPtr /*HDC*/ ResetDC(
 #endif
             HandleRef hDC,
 #if NET7_0_OR_GREATER

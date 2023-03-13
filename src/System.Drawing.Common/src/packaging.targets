@@ -9,10 +9,20 @@
                                                  '$(SuppressFinalPackageVersion)' == 'true' or
                                                  '$(DotNetBuildFromSource)' == 'true'">true</DisablePackageBaselineValidation>
     <BeforePack>$(BeforePack);AddNETStandardCompatErrorFileForPackaging</BeforePack>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <LicenseFile>$(RepoRoot)LICENSE.TXT</LicenseFile>
+    <PackageThirdPartyNoticesFile>$(RepoRoot)THIRD-PARTY-NOTICES.TXT</PackageThirdPartyNoticesFile>
     <PackageDesignerMarkerFile>$(MSBuildThisFileDirectory)useSharedDesignerContext.txt</PackageDesignerMarkerFile>
+    <PlaceholderFile>$(MSBuildThisFileDirectory)_._</PlaceholderFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="$(LicenseFile)"
+          PackagePath="$([System.IO.Path]::GetFileName('$(LicenseFile)'))"
+          Pack="true" />
+    <None Include="$(PackageThirdPartyNoticesFile)"
+          PackagePath="$([System.IO.Path]::GetFileName('$(PackageThirdPartyNoticesFile)'))"
+          Pack="true" />
     <!-- Add a marker to help the designer optimize & share .NET Core packages -->
     <None Include="$(PackageDesignerMarkerFile)"
           PackagePath="$([System.IO.Path]::GetFileName('$(PackageDesignerMarkerFile)'))"
@@ -29,12 +39,12 @@
       <ItemGroup>
         <None Include="$(PlaceholderFile)"
               Pack="true"
-              PackagePath="$(BuildOutputTargetFolder)\MonoAndroid10\;
-                           $(BuildOutputTargetFolder)\MonoTouch10\;
-                           $(BuildOutputTargetFolder)\xamarinios10\;
-                           $(BuildOutputTargetFolder)\xamarinmac20\;
-                           $(BuildOutputTargetFolder)\xamarintvos10\;
-                           $(BuildOutputTargetFolder)\xamarinwatchos10\" />
+              PackagePath="$(BuildOutputTargetFolder)\MonoAndroid10;
+                           $(BuildOutputTargetFolder)\MonoTouch10;
+                           $(BuildOutputTargetFolder)\xamarinios10;
+                           $(BuildOutputTargetFolder)\xamarinmac20;
+                           $(BuildOutputTargetFolder)\xamarintvos10;
+                           $(BuildOutputTargetFolder)\xamarinwatchos10" />
       </ItemGroup>
     </When>
   </Choose>
@@ -44,7 +54,7 @@
        than the minimum supported one. -->
   <ItemGroup>
     <NETStandardCompatError Include="netcoreapp2.0"
-                            Supported="net7.0"
+                            Supported="net6.0"
                             Condition="$(TargetFrameworks.Contains('netstandard2.')) and
                                        ($(TargetFrameworks.Contains('net6.0')) or $(TargetFrameworks.Contains('net7.0')) or $(TargetFrameworks.Contains('net8.0')))" />
     <NETStandardCompatError Include="net461"
@@ -91,6 +101,14 @@
             Pack="true"
             Condition="'@(_PackageBuildFile)' == '' or
                        !@(_PackageBuildFile->AnyHaveMetadataValue('PackagePathWithoutFilename', '$(_NETStandardCompatErrorPlaceholderFilePackagePath)'))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ChangeDocumentationFileForPackaging"
+          AfterTargets="DocumentationProjectOutputGroup">
+    <ItemGroup>
+      <DocumentationProjectOutputGroupOutput Remove="@(DocumentationProjectOutputGroupOutput)" />
+      <DocumentationProjectOutputGroupOutput Include="$(_DotnetApiDocsFilesRoot)$(AssemblyName).xml" />
     </ItemGroup>
   </Target>
 

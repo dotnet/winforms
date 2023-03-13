@@ -8,8 +8,16 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#if NET7_0_OR_GREATER
         [LibraryImport(Libraries.Gdi32, EntryPoint = "AddFontResourceExW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial int AddFontResourceEx(string lpszFilename, int fl, IntPtr pdv);
+        internal static partial int AddFontResourceEx(
+#else
+        [DllImport(Libraries.Gdi32, SetLastError = true, CharSet = CharSet.Auto)]
+        internal static extern int AddFontResourceEx(
+#endif
+            string lpszFilename,
+            int fl,
+            IntPtr pdv);
 
         internal static int AddFontFile(string fileName)
         {
