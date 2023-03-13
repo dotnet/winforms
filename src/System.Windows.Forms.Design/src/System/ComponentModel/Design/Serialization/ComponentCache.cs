@@ -65,8 +65,6 @@ namespace System.ComponentModel.Design.Serialization
                 // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
                 if (_cache is not null && component is IComponent)
                 {
-                    ArgumentNullException.ThrowIfNull(value);
-
                     value.Component ??= component;
                     _cache[component] = value;
                 }
@@ -237,13 +235,11 @@ namespace System.ComponentModel.Design.Serialization
         // A single cache entry
         internal sealed class Entry
         {
-            private readonly ComponentCache _cache;
             private List<ResourceEntry>? _resources;
             private List<ResourceEntry>? _metadata;
 
-            internal Entry(ComponentCache cache)
+            internal Entry()
             {
-                _cache = cache;
                 Valid = true;
             }
 
