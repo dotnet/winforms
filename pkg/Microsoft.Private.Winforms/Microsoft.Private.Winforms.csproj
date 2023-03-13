@@ -76,6 +76,9 @@
     <!-- Facade for System.Drawing.Design -->
     <ProjectReference Include="..\..\src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
 
+    <!-- Reference and Source System.Drawing.Common -->
+    <ProjectReference Include="..\..\src\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+
     <!-- Reference and Source System.Windows.Forms -->
     <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
 
