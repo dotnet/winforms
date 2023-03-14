@@ -28,7 +28,7 @@
     <EnableTrimAnalyzer Condition="$(IsTestProject) or $(IsAnalyzerProject) or $(MSBuildProjectDirectory.Contains('\tests\'))">false</EnableTrimAnalyzer>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true' or '$(IsIntegrationTestProject)' == 'true'">
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <XUnitCoreSettingsFile>$(RepositoryEngineeringDir)xunit.runner.json</XUnitCoreSettingsFile>
   </PropertyGroup>
 
