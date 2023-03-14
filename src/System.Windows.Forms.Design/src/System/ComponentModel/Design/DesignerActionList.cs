@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design
             return Component?.Site?.GetService(serviceType);
         }
 
-        public virtual DesignerActionItemCollection? GetSortedActionItems()
+        public virtual DesignerActionItemCollection GetSortedActionItems()
         {
             var items = new SortedList<string, DesignerActionItem>();
 
