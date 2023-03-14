@@ -62,7 +62,8 @@ public class DragDropTests : ControlTestBase
         });
     }
 
-    [WinFormsFact]
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/8744")]
+    [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/8744")]
     public async Task DragDrop_NonSerializedObject_ReturnsExpected_Async()
     {
         // Regression test for https://github.com/dotnet/winforms/issues/7864, and it verifies that we can successfully drag and drop a
@@ -296,7 +297,8 @@ public class DragDropTests : ControlTestBase
         });
     }
 
-    [WinFormsFact]
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/8745")]
+    [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/8745")]
     public async Task DragDrop_SerializedObject_ReturnsExpected_Async()
     {
         // Verifies that we can successfully drag and drop a serialized object.
