@@ -43,7 +43,11 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator =>
+                    {
+                        inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.Equal(CloseReason.None, form.CloseReason);
                 Assert.Equal(dialogResult, form.DialogResult);
@@ -64,7 +68,11 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SPACE).Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator =>
+                    {
+                        inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SPACE).Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.Equal(DialogResult.OK, form.DialogResult);
                 Assert.False(form.Visible);
@@ -82,7 +90,11 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator =>
+                    {
+                        inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.Equal(DialogResult.None, form.DialogResult);
                 Assert.True(form.Visible);
@@ -98,7 +110,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator => { inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY); Application.DoEvents(); });
 
                 Assert.Equal(DialogResult.Cancel, form.DialogResult);
                 Assert.False(form.Visible);
@@ -118,13 +130,17 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse
+                    inputSimulator =>
+                    {
+                        inputSimulator.Mouse
                         .LeftButtonDown()
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseBy(form.DisplayRectangle.Width, 0)
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                        .Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -145,13 +161,17 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseBy(0, form.DisplayRectangle.Height)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator =>
+                    {
+                        inputSimulator.Mouse
+                            .LeftButtonDown()
+                            .Sleep(INPUTSIMULATOR_DELAY)
+                            .MoveMouseBy(0, form.DisplayRectangle.Height)
+                            .Sleep(INPUTSIMULATOR_DELAY)
+                            .LeftButtonUp()
+                            .Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
                 Assert.Equal(originalFormSize.Width, form.DisplayRectangle.Width);
@@ -174,13 +194,17 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse
+                    inputSimulator =>
+                    {
+                        inputSimulator.Mouse
                         .LeftButtonDown()
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseBy(form.DisplayRectangle.Width, 0)
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                        .Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -207,13 +231,17 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse
+                    inputSimulator =>
+                    {
+                        inputSimulator.Mouse
                         .LeftButtonDown()
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseBy(0, form.DisplayRectangle.Height)
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                        .Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
                 Assert.Equal(originalFormSize.Width, form.DisplayRectangle.Width);
@@ -237,13 +265,21 @@ namespace System.Windows.Forms.UITests
                 control2.Click += (sender, e) => control2ClickCount++;
 
                 await MoveMouseToControlAsync(control1);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator =>
+                {
+                    inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY);
+                    Application.DoEvents();
+                });
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
 
                 await MoveMouseToControlAsync(control2);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator =>
+                {
+                    inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY);
+                    Application.DoEvents();
+                });
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(1, control2ClickCount);
@@ -273,13 +309,17 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse
+                    inputSimulator =>
+                    {
+                        inputSimulator.Mouse
                         .LeftButtonDown()
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                        .Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.Equal(0, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
@@ -311,7 +351,9 @@ namespace System.Windows.Forms.UITests
                 Point virtualPoint1 = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen1.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen1.Y));
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse
+                    inputSimulator =>
+                    {
+                        inputSimulator.Mouse
                         .LeftButtonDown()
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
@@ -319,7 +361,9 @@ namespace System.Windows.Forms.UITests
                         .MoveMouseTo(virtualPoint1.X, virtualPoint1.Y)
                         .Sleep(INPUTSIMULATOR_DELAY)
                         .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                        .Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
@@ -356,7 +400,11 @@ namespace System.Windows.Forms.UITests
                 // Send the Enter press
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN).Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator =>
+                    {
+                        inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN).Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.True(wasClicked);
             });
@@ -376,7 +424,11 @@ namespace System.Windows.Forms.UITests
                 // Send the shortcut ALT+C (the same as SendKeys.SendWait("%C"))
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_C).Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator =>
+                    {
+                        inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_C).Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.True(wasClicked);
             });
@@ -395,7 +447,11 @@ namespace System.Windows.Forms.UITests
                 // Send a random ALT+L (the same as SendKeys.SendWait("%l"))
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_L).Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator =>
+                    {
+                        inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_L).Sleep(INPUTSIMULATOR_DELAY);
+                        Application.DoEvents();
+                    });
 
                 Assert.False(wasClicked);
             });
