@@ -80,7 +80,6 @@ namespace System.Windows.Forms.UITests
             await Task.Run(() => actions(new InputSimulator()));
             Application.DoEvents();
             await _waitForIdleAsync();
-            Thread.Sleep(500);
         }
 
         private static HWND GetForegroundWindow()
