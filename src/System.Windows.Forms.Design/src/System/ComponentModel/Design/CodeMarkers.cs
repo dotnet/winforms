@@ -267,10 +267,11 @@ namespace System.ComponentModel.Design
                 return buffer;
             }
 
-            byte[] bufferWithCorrelation = new byte[s_correlationMarkBytes.Length + 16 + (buffer?.Length ?? 0)];
+            int correlationBytesLength = s_correlationMarkBytes.Length; // it's a Guid, so 16 bytes
+            byte[] bufferWithCorrelation = new byte[correlationBytesLength * 2 + (buffer?.Length ?? 0)];
             s_correlationMarkBytes.CopyTo(bufferWithCorrelation, 0);
-            correlationId.TryWriteBytes(bufferWithCorrelation.AsSpan(s_correlationMarkBytes.Length));
-            buffer?.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + 16);
+            correlationId.TryWriteBytes(bufferWithCorrelation.AsSpan(correlationBytesLength));
+            buffer?.CopyTo(bufferWithCorrelation, correlationBytesLength * 2);
 
             return bufferWithCorrelation;
         }
