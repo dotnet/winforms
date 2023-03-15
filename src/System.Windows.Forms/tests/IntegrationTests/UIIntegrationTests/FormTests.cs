@@ -46,12 +46,8 @@ namespace System.Windows.Forms.UITests
                 await Task.Delay(SnapLayoutDelayMS);
 
                 // Snap left
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT)
-                                                             .Sleep(INPUTSIMULATOR_DELAY)
-                                                             .KeyPress(VirtualKeyCode.RETURN)
-                                                             .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN));
 
                 await Task.Delay(SnapLayoutDelayMS);
 
@@ -61,7 +57,7 @@ namespace System.Windows.Forms.UITests
                 // given to any newly launched window until this panel is dismissed.
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE).Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
 
                 await Task.Delay(SnapLayoutDelayMS);
 
@@ -106,15 +102,11 @@ namespace System.Windows.Forms.UITests
                 // inputSimulator.Sleep appears wildly inconsistent with snap panel timing. Task.Delay does not
                 await Task.Delay(SnapLayoutDelayMS);
 
+
                 // Snap right
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT)
-                                                             .Sleep(INPUTSIMULATOR_DELAY)
-                                                             .KeyPress(VirtualKeyCode.RIGHT)
-                                                             .Sleep(INPUTSIMULATOR_DELAY)
-                                                             .KeyPress(VirtualKeyCode.RETURN)
-                                                             .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN));
 
                 await Task.Delay(SnapLayoutDelayMS);
 

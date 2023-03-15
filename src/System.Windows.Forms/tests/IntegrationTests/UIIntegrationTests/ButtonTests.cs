@@ -116,15 +116,9 @@ namespace System.Windows.Forms.UITests
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2);
                 await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseBy(form.DisplayRectangle.Width, 0)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(form.DisplayRectangle.Width, 0));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -143,15 +137,9 @@ namespace System.Windows.Forms.UITests
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
                 await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseBy(0, form.DisplayRectangle.Height)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(0, form.DisplayRectangle.Height));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
                 Assert.Equal(originalFormSize.Width, form.DisplayRectangle.Width);
@@ -172,15 +160,9 @@ namespace System.Windows.Forms.UITests
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2);
                 await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseBy(form.DisplayRectangle.Width, 0)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(form.DisplayRectangle.Width, 0));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -205,15 +187,9 @@ namespace System.Windows.Forms.UITests
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
                 await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseBy(0, form.DisplayRectangle.Height)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(0, form.DisplayRectangle.Height));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
                 Assert.Equal(originalFormSize.Width, form.DisplayRectangle.Width);
@@ -237,13 +213,15 @@ namespace System.Windows.Forms.UITests
                 control2.Click += (sender, e) => control2ClickCount++;
 
                 await MoveMouseToControlAsync(control1);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
 
                 await MoveMouseToControlAsync(control2);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(INPUTSIMULATOR_DELAY).LeftButtonUp().Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(1, control2ClickCount);
@@ -271,15 +249,9 @@ namespace System.Windows.Forms.UITests
                 Point virtualPoint = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X),
                     (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
 
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X, virtualPoint.Y));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.Equal(0, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
@@ -309,17 +281,11 @@ namespace System.Windows.Forms.UITests
                 int verticalResolution = primaryMonitor.Height;
                 Point virtualPoint = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
                 Point virtualPoint1 = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen1.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen1.Y));
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Mouse
-                        .LeftButtonDown()
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .MoveMouseTo(virtualPoint1.X, virtualPoint1.Y)
-                        .Sleep(INPUTSIMULATOR_DELAY)
-                        .LeftButtonUp()
-                        .Sleep(INPUTSIMULATOR_DELAY));
+
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X, virtualPoint.Y));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint1.X, virtualPoint1.Y));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);

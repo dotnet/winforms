@@ -35,7 +35,7 @@ namespace System.Windows.Forms.UITests
                 await MoveMouseAsync(form, itemCenter);
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.LeftButtonDoubleClick().Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator => inputSimulator.Mouse.LeftButtonDoubleClick());
 
                 Assert.Equal(listView.Items[0].Checked, expected);
             });
@@ -78,10 +78,9 @@ namespace System.Windows.Forms.UITests
                 Assert.True(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT)
-                                                                                              .Sleep(INPUTSIMULATOR_DELAY)
-                                                                                              .KeyPress(VirtualKeyCode.LEFT)
-                                                                                              .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
+
                 Assert.True(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.False(item3.Selected);
@@ -101,21 +100,18 @@ namespace System.Windows.Forms.UITests
                 Assert.False(collapsedStateChangedFired);
 
                 // Collapse group
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT)
-                                                                                              .Sleep(INPUTSIMULATOR_DELAY)
-                                                                                              .KeyPress(VirtualKeyCode.UP)
-                                                                                              .Sleep(INPUTSIMULATOR_DELAY)
-                                                                                              .KeyPress(VirtualKeyCode.LEFT)
-                                                                                              .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
+
                 Assert.Equal(ListViewGroupCollapsedState.Collapsed, group.CollapsedState);
                 Assert.True(collapsedStateChangedFired);
 
                 // Expand group
                 collapsedStateChangedFired = false;
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP)
-                                                                                              .Sleep(INPUTSIMULATOR_DELAY)
-                                                                                              .KeyPress(VirtualKeyCode.RIGHT)
-                                                                                              .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+
                 Assert.True(collapsedStateChangedFired);
                 Assert.Equal(ListViewGroupCollapsedState.Expanded, group.CollapsedState);
             });
@@ -503,20 +499,13 @@ namespace System.Windows.Forms.UITests
 
                 Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
                 await MoveMouseAsync(form, listViewCenter);
-                await InputSimulator.SendAsync(
-                   form,
-                   inputSimulator => inputSimulator.Keyboard.KeyDown(VirtualKeyCode.SHIFT)
-                                                    .Sleep(INPUTSIMULATOR_DELAY)
-                                                    .Mouse.LeftButtonClick()
-                                                    .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SHIFT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+
                 listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[2].SubItems[1].Bounds));
                 await MoveMouseAsync(form, listViewCenter);
-                await InputSimulator.SendAsync(
-                   form,
-                   inputSimulator => inputSimulator.Mouse.LeftButtonClick()
-                                                   .Sleep(INPUTSIMULATOR_DELAY)
-                                                   .Keyboard.KeyUp(VirtualKeyCode.SHIFT)
-                                                   .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SHIFT));
 
                 foreach (ListViewItem item in listView.Items)
                 {
