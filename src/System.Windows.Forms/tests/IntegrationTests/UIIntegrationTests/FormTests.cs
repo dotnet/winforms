@@ -102,7 +102,6 @@ namespace System.Windows.Forms.UITests
                 // inputSimulator.Sleep appears wildly inconsistent with snap panel timing. Task.Delay does not
                 await Task.Delay(SnapLayoutDelayMS);
 
-
                 // Snap right
                 await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
                 await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
