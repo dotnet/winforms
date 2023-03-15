@@ -60,19 +60,19 @@ namespace System.Windows.Forms.UITests
 
                 item1.Selected = true;
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT).Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
                 Assert.False(item1.Selected);
                 Assert.True(item2.Selected);
                 Assert.False(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT).Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
                 Assert.False(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.True(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT).Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
                 Assert.False(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.True(item3.Selected);
@@ -87,14 +87,14 @@ namespace System.Windows.Forms.UITests
                 Assert.False(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT).Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
                 Assert.True(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.False(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
                 // Selects header, which selects all items in group
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP).Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP));
                 Assert.True(item2.Selected);
                 Assert.True(item2.Selected);
                 Assert.True(item2.Selected);

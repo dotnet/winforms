@@ -19,7 +19,7 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
-        internal const int INPUTSIMULATOR_DELAY = 0;//500;
+        internal const int INPUTSIMULATOR_DELAY = 500;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.UITests
             var virtualPoint = new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
             TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
 
-            await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1).Sleep(INPUTSIMULATOR_DELAY));
+            await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1));
 
             // ⚠ The call to GetCursorPos is required for correct behavior.
             if (!PInvoke.GetCursorPos(out Point actualPoint))

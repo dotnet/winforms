@@ -31,7 +31,7 @@ namespace System.Windows.Forms.UITests
                 await MoveMouseToControlAsync(calendar);
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator => inputSimulator.Mouse.LeftButtonClick());
             });
         }
 
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
+                    inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
                 await dateChanged.Task;
 
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.UITests
             await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
             await InputSimulator.SendAsync(
                 form,
-                inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
+                inputSimulator => inputSimulator.Mouse.LeftButtonClick());
         }
 
         private async Task ClickOnDateTwiceAsync(Form form, MonthCalendar calendar, DateTime date)

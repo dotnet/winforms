@@ -50,7 +50,7 @@ namespace System.Windows.Forms.UITests
                     await MoveMouseAsync(form, pt);
                     await InputSimulator.SendAsync(
                         form,
-                        inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
+                        inputSimulator => inputSimulator.Mouse.LeftButtonClick());
                     if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.UITests
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y).Sleep(INPUTSIMULATOR_DELAY));
+                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
                         Application.DoEvents();
                     }
                 }
@@ -125,7 +125,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await MoveMouseAsync(form, pt);
                     await InputSimulator.SendAsync(
                         form,
-                        inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
+                        inputSimulator => inputSimulator.Mouse.LeftButtonClick());
                     if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
@@ -143,7 +143,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y).Sleep(INPUTSIMULATOR_DELAY));
+                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
                         Application.DoEvents();
                     }
                 }
@@ -200,7 +200,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await MoveMouseAsync(form, pt);
                     await InputSimulator.SendAsync(
                         form,
-                        inputSimulator => inputSimulator.Mouse.LeftButtonClick().Sleep(INPUTSIMULATOR_DELAY));
+                        inputSimulator => inputSimulator.Mouse.LeftButtonClick());
                     if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
@@ -218,7 +218,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y).Sleep(INPUTSIMULATOR_DELAY));
+                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
                         Application.DoEvents();
                     }
                 }
