@@ -82,7 +82,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE);
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
 
                 Assert.Equal(DialogResult.None, form.DialogResult);
                 Assert.True(form.Visible);
