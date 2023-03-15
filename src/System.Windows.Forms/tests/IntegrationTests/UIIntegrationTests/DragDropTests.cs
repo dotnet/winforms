@@ -31,9 +31,23 @@ public class DragDropTests : ControlTestBase
     {
     }
 
-    [WinFormsFact]
-    public async Task DragDrop_QueryDefaultCursors_Async()
+    public static IEnumerable<object[]> Iterations
     {
+        get
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                yield return new object[] { i };
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(Iterations))]
+    public async Task DragDrop_QueryDefaultCursors_Async(int iteration)
+    {
+        _ = iteration;
+
         await RunFormWithoutControlAsync(() => new DragDropForm(TestOutputHelper), async (form) =>
         {
             await MoveMouseToControlAsync(form.ListDragSource);
@@ -60,9 +74,11 @@ public class DragDropTests : ControlTestBase
         });
     }
 
-    [WinFormsFact]
-    public async Task DragDrop_NonSerializedObject_ReturnsExpected_Async()
+    [WinFormsTheory]
+    [MemberData(nameof(Iterations))]
+    public async Task DragDrop_NonSerializedObject_ReturnsExpected_Async(int iteration)
     {
+        _ = iteration;
         // Regression test for https://github.com/dotnet/winforms/issues/7864, and it verifies that we can successfully drag and drop a
         // non-serialized object.
 
@@ -277,9 +293,11 @@ public class DragDropTests : ControlTestBase
         });
     }
 
-    [WinFormsFact]
-    public async Task DragDrop_SerializedObject_ReturnsExpected_Async()
+    [WinFormsTheory]
+    [MemberData(nameof(Iterations))]
+    public async Task DragDrop_SerializedObject_ReturnsExpected_Async(int iteration)
     {
+        _ = iteration;
         // Verifies that we can successfully drag and drop a serialized object.
 
         ListViewItem? listViewItem = null;
@@ -343,9 +361,11 @@ public class DragDropTests : ControlTestBase
         Assert.Equal(listViewItem?.Text, ((ListViewItem)data).Text);
     }
 
-    [WinFormsFact]
-    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected_Async()
+    [WinFormsTheory]
+    [MemberData(nameof(Iterations))]
+    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected_Async(int iteration)
     {
+        _ = iteration;
         await RunFormWithoutControlAsync(() => new DragDropForm(TestOutputHelper), async (form) =>
         {
             DropImageType dropImageType = DropImageType.Move;
@@ -434,9 +454,11 @@ public class DragDropTests : ControlTestBase
         });
     }
 
-    [WinFormsFact]
-    public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async()
+    [WinFormsTheory]
+    [MemberData(nameof(Iterations))]
+    public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async(int iteration)
     {
+        _ = iteration;
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
         {
             string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
@@ -464,9 +486,11 @@ public class DragDropTests : ControlTestBase
         });
     }
 
-    [WinFormsFact]
-    public async Task ToolStripItem_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async()
+    [WinFormsTheory]
+    [MemberData(nameof(Iterations))]
+    public async Task ToolStripItem_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async(int iteration)
     {
+        _ = iteration;
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
         {
             string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
