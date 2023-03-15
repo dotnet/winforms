@@ -19,7 +19,7 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
-        internal const int INPUTSIMULATOR_DELAY = 500;
+        internal const int INPUTSIMULATOR_DELAY = 0;//500;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.UITests
             {
                 // Queue an event to make sure we don't stall if the application was already idle
                 await JoinableTaskFactory.SwitchToMainThreadAsync();
-                await Task.Yield();
+                await Task.Delay(500);
 
                 if (Application.OpenForms.Count > 0)
                 {
