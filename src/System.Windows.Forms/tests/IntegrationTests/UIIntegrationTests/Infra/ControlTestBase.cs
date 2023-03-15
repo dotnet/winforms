@@ -85,7 +85,7 @@ namespace System.Windows.Forms.UITests
             {
                 // Queue an event to make sure we don't stall if the application was already idle
                 await JoinableTaskFactory.SwitchToMainThreadAsync();
-                await Task.Delay(500);
+                await Task.Yield();
 
                 if (Application.OpenForms.Count > 0)
                 {
