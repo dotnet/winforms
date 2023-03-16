@@ -237,6 +237,7 @@ namespace System.Windows.Forms.UITests
                 await WaitForIdleAsync();
                 try
                 {
+                    TrySetForegroundWindow((HWND)dialog!.Handle);
                     await testDriverAsync(dialog!, control!);
                 }
                 finally
@@ -272,6 +273,7 @@ namespace System.Windows.Forms.UITests
                 await WaitForIdleAsync();
                 try
                 {
+                    TrySetForegroundWindow((HWND)dialog!.Handle);
                     await testDriverAsync(dialog!);
                 }
                 finally
@@ -302,6 +304,49 @@ namespace System.Windows.Forms.UITests
             return new Point(GetMiddle(cell.Right, cell.Left), GetMiddle(cell.Top, cell.Bottom));
 
             static int GetMiddle(int a, int b) => a + ((b - a) / 2);
+        }
+
+        private static bool TrySetForegroundWindow(HWND window)
+        {
+            var activeWindow = PInvoke.GetLastActivePopup(window);
+            activeWindow = PInvoke.IsWindowVisible(activeWindow) ? activeWindow : window;
+            PInvoke.SwitchToThisWindow(activeWindow, true);
+
+            if (!PInvoke.SetForegroundWindow(activeWindow))
+            {
+                if (!PInvoke.AllocConsole())
+                {
+                    Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                }
+
+                try
+                {
+                    var consoleWindow = PInvoke.GetConsoleWindow();
+                    if (consoleWindow == IntPtr.Zero)
+                    {
+                        throw new InvalidOperationException("Failed to obtain the console window.");
+                    }
+
+                    if (!PInvoke.SetWindowPos(consoleWindow, hWndInsertAfter: (HWND)0, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOZORDER))
+                    {
+                        Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                    }
+                }
+                finally
+                {
+                    if (!PInvoke.FreeConsole())
+                    {
+                        Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                    }
+                }
+
+                if (!PInvoke.SetForegroundWindow(activeWindow))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

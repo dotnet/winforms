@@ -3,6 +3,7 @@ ActivateActCtx
 ActivateKeyboardLayout
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
+AllocConsole
 AreDpiAwarenessContextsEqual
 AUTOCOMPLETEOPTIONS
 BeginPaint
@@ -150,6 +151,7 @@ FILETIME
 FillRect
 FONTDESC
 FormatMessage
+FreeConsole
 FUNCDESC
 FUNCFLAGS
 FUNCKIND
@@ -173,6 +175,7 @@ GetClientRect
 GetClipBox
 GetClipCursor
 GetClipRgn
+GetConsoleWindow
 GetCurrentActCtx
 GetCurrentObject
 GetCurrentProcess
@@ -200,6 +203,7 @@ GetKeyState
 GetKeyboardState
 GetKeyboardLayout
 GetKeyboardLayoutList
+GetLastActivePopup
 GetLocaleInfoEx
 GetMapMode
 GetMenu
@@ -591,6 +595,7 @@ StgCreateDocfileOnILockBytes
 StgOpenStorageOnILockBytes
 STGTY
 StretchDIBits
+SwitchToThisWindow
 SystemParametersInfo
 SystemParametersInfoForDpi
 SYSTEMTIME
