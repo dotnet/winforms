@@ -43,12 +43,12 @@ public class DragDropTests : ControlTestBase
 
             var targetMousePosition = ToVirtualPoint(form.ListDragTarget.PointToScreen(new Point(20, 20)));
 
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetMousePosition.X, targetMousePosition.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+            .MoveMouseTo(targetMousePosition.X - 40, targetMousePosition.Y)
+            .MoveMouseTo(targetMousePosition.X, targetMousePosition.Y)
+            .MoveMouseTo(targetMousePosition.X + 2, targetMousePosition.Y + 2)
+            .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
+            .LeftButtonClick());
 
             Assert.Equal(1, form.ListDragTarget.Items.Count);
         });
@@ -103,12 +103,14 @@ public class DragDropTests : ControlTestBase
             var virtualPointStart = ToVirtualPoint(startCoordinates);
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse
+            .MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+            .LeftButtonDown()
+            .MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+            .MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .LeftButtonClick());
         });
 
         Assert.NotNull(data);
@@ -325,11 +327,11 @@ public class DragDropTests : ControlTestBase
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
             await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+            .MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .LeftButtonClick());
         });
 
         Assert.NotNull(data);
@@ -384,26 +386,26 @@ public class DragDropTests : ControlTestBase
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
             await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+            .MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .LeftButtonClick());
 
             await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+            .MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .MoveMouseTo(virtualPointStart.X + 2, virtualPointStart.Y + 2)
+            .MoveMouseTo(virtualPointStart.X + 4, virtualPointStart.Y + 4)
+            .LeftButtonClick());
 
             Assert.Equal(2, form.ListDragTarget.Items.Count);
         });
@@ -425,9 +427,9 @@ public class DragDropTests : ControlTestBase
             Point virtualPointEnd = ToVirtualPoint(startCoordinates);
 
             await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+            .MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+            .LeftButtonClick());
 
             Assert.NotNull(form);
             Assert.NotNull(form.RichTextBoxDropTarget);
@@ -467,9 +469,9 @@ public class DragDropTests : ControlTestBase
             Point virtualPointEnd = ToVirtualPoint(toolStripItemCoordinates);
 
             await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y));
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+            .MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
+            .LeftButtonClick());
 
             Assert.NotNull(form);
             Assert.NotNull(form.RichTextBoxDropTarget);
@@ -876,6 +878,9 @@ public class DragDropTests : ControlTestBase
 
             // Reset the label text.
             DropLocationLabel.Text = "None";
+
+            // Also treat this as a DragOver to start the drag/drop operation.
+            ListDragTarget_DragOver(sender, e);
         }
 
         private void ListDragTarget_DragLeave(object? sender, EventArgs e)

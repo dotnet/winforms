@@ -68,6 +68,9 @@ namespace System.Windows.Forms.UITests
 
                 Assert.Equal(DialogResult.OK, form.DialogResult);
                 Assert.False(form.Visible);
+                await InputSimulator.SendAsync(
+                    form,
+                    inputSimulator => inputSimulator.Keyboard.KeyUp(VirtualKeyCode.ESCAPE));
             });
         }
 
@@ -86,6 +89,9 @@ namespace System.Windows.Forms.UITests
 
                 Assert.Equal(DialogResult.None, form.DialogResult);
                 Assert.True(form.Visible);
+                await InputSimulator.SendAsync(
+                    form,
+                    inputSimulator => inputSimulator.Keyboard.KeyUp(VirtualKeyCode.ESCAPE));
             });
         }
 
@@ -102,6 +108,9 @@ namespace System.Windows.Forms.UITests
 
                 Assert.Equal(DialogResult.Cancel, form.DialogResult);
                 Assert.False(form.Visible);
+                await InputSimulator.SendAsync(
+                    form,
+                    inputSimulator => inputSimulator.Keyboard.KeyUp(VirtualKeyCode.ESCAPE));
             });
         }
 
@@ -114,11 +123,11 @@ namespace System.Windows.Forms.UITests
                 var originalButtonPosition = button.DisplayRectangle;
 
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2);
-                await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
+                var screenCoordinates = form.PointToScreen(mouseDragHandleOnForm);
+                await MoveMouseAsync(form, screenCoordinates);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(form.DisplayRectangle.Width, 0));
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+                var virtualCoordinates = ToVirtualPoint(form.PointToScreen(new Point(mouseDragHandleOnForm.X + form.DisplayRectangle.Width, mouseDragHandleOnForm.Y)));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().MoveMouseTo(virtualCoordinates.X, virtualCoordinates.Y).LeftButtonClick());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -135,10 +144,13 @@ namespace System.Windows.Forms.UITests
                 var originalButtonPosition = button.DisplayRectangle;
 
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
-                await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
+                var screenCoordinates = form.PointToScreen(mouseDragHandleOnForm);
+                await MoveMouseAsync(form, screenCoordinates);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(0, form.DisplayRectangle.Height));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().Sleep(100));
+                var virtualCoordinates = ToVirtualPoint(form.PointToScreen(new Point(mouseDragHandleOnForm.X, mouseDragHandleOnForm.Y + form.DisplayRectangle.Height)));
+                Assert.True(virtualCoordinates.X < 65535.0 && virtualCoordinates.Y < 65535.0);
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualCoordinates.X, virtualCoordinates.Y));
                 await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
@@ -158,11 +170,13 @@ namespace System.Windows.Forms.UITests
                 var originalButtonPosition = button.DisplayRectangle;
 
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2);
-                await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
+                var screenCoordinates = form.PointToScreen(mouseDragHandleOnForm);
+                await MoveMouseAsync(form, screenCoordinates);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(form.DisplayRectangle.Width, 0));
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+                var virtualCoordinates = ToVirtualPoint(form.PointToScreen(new Point(mouseDragHandleOnForm.X + form.DisplayRectangle.Width, mouseDragHandleOnForm.Y)));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+                .MoveMouseTo(virtualCoordinates.X, virtualCoordinates.Y)
+                .LeftButtonClick());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
                 Assert.Equal(originalFormSize.Height, form.DisplayRectangle.Height);
@@ -185,11 +199,13 @@ namespace System.Windows.Forms.UITests
                 var originalButtonPosition = button.DisplayRectangle;
 
                 var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
-                await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
+                var screenCoordinates = form.PointToScreen(mouseDragHandleOnForm);
+                await MoveMouseAsync(form, screenCoordinates);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown());
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.MoveMouseBy(0, form.DisplayRectangle.Height));
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonUp());
+                var virtualCoordinates = ToVirtualPoint(form.PointToScreen(new Point(mouseDragHandleOnForm.X, mouseDragHandleOnForm.Y + form.DisplayRectangle.Height)));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown()
+                .MoveMouseTo(virtualCoordinates.X, virtualCoordinates.Y)
+                .LeftButtonClick());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
                 Assert.Equal(originalFormSize.Width, form.DisplayRectangle.Width);

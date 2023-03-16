@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
@@ -40,13 +41,8 @@ namespace System.Windows.Forms.UITests
         {
             await RunTestAsync(async (form, calendar) =>
             {
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Keyboard
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .Sleep(INPUTSIMULATOR_DELAY)
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
             });
         }
 
@@ -55,13 +51,8 @@ namespace System.Windows.Forms.UITests
         {
             await RunTestAsync(async (form, calendar) =>
             {
-                await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator => inputSimulator.Keyboard
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .Sleep(INPUTSIMULATOR_DELAY)
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .Sleep(INPUTSIMULATOR_DELAY));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
 
                 DateTime selectedDate = new DateTime(2020, 4, 10);
                 SYSTEMTIME date = new()
@@ -197,13 +188,9 @@ namespace System.Windows.Forms.UITests
         private async Task ClickOnDateTwiceAsync(Form form, MonthCalendar calendar, DateTime date)
         {
             await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
-            await InputSimulator.SendAsync(
-                form,
-                inputSimulator => inputSimulator.Mouse
-                                                .LeftButtonClick()
-                                                .Sleep(INPUTSIMULATOR_DELAY)
-                                                .LeftButtonClick()
-                                                .Sleep(INPUTSIMULATOR_DELAY));
+
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
         }
 
         private async Task RunClickTestAsync(Func<Form, MonthCalendar, Task> runTest)

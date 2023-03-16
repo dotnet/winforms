@@ -499,13 +499,13 @@ namespace System.Windows.Forms.UITests
 
                 Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
                 await MoveMouseAsync(form, listViewCenter);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SHIFT));
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SHIFT)
+                .Mouse.LeftButtonClick());
 
                 listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[2].SubItems[1].Bounds));
                 await MoveMouseAsync(form, listViewCenter);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SHIFT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick()
+                .Keyboard.KeyUp(VirtualKeyCode.SHIFT));
 
                 foreach (ListViewItem item in listView.Items)
                 {

@@ -12,7 +12,7 @@ namespace System.Windows.Forms.UITests
     public class SendInput
     {
         private readonly Func<Task> _waitForIdleAsync;
-
+        private static InputSimulator _inputSimulator = new();
         public SendInput(Func<Task> waitForIdleAsync)
         {
             _waitForIdleAsync = waitForIdleAsync;
@@ -76,8 +76,12 @@ namespace System.Windows.Forms.UITests
                 throw new ArgumentNullException(nameof(actions));
             }
 
-            SetForegroundWindow(window);
-            await Task.Run(() => actions(new InputSimulator()));
+            if (window.HWND != PInvoke.GetForegroundWindow())
+            {
+                SetForegroundWindow(window);
+            }
+
+            await Task.Run(() => actions(_inputSimulator));
             await _waitForIdleAsync();
         }
 
