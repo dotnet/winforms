@@ -105,7 +105,7 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/8635")]
+        [WinFormsFact]
         public async Task Button_AchorNone_NoResizeOnWindowSizeWiderAsync()
         {
             await RunTestAsync(async (form, button) =>
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseBy(form.DisplayRectangle.Width, 0)
+                        .DragMouseBy(form.DisplayRectangle.Width, 0)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
@@ -129,8 +129,7 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6714")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6714")]
+        [WinFormsFact]
         public async Task Button_AchorNone_NoResizeOnWindowSizeTallerAsync()
         {
             await RunTestAsync(async (form, button) =>
@@ -145,7 +144,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseBy(0, form.DisplayRectangle.Height)
+                        .DragMouseBy(0, form.DisplayRectangle.Height)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
@@ -154,8 +153,7 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/7297")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/7297")]
+        [WinFormsFact]
         public async Task Button_Anchor_ResizeOnWindowSizeWiderAsync()
         {
             await RunTestAsync(async (form, button) =>
@@ -172,7 +170,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseBy(form.DisplayRectangle.Width, 0)
+                        .DragMouseBy(form.DisplayRectangle.Width, 0)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
@@ -185,8 +183,7 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/7407")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/7407")]
+        [WinFormsFact]
         public async Task Button_Anchor_ResizeOnWindowSizeTallerAsync()
         {
             await RunTestAsync(async (form, button) =>
@@ -203,7 +200,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseBy(0, form.DisplayRectangle.Height)
+                        .DragMouseBy(0, form.DisplayRectangle.Height)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
@@ -228,13 +225,13 @@ namespace System.Windows.Forms.UITests
                 control2.Click += (sender, e) => control2ClickCount++;
 
                 await MoveMouseToControlAsync(control1);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().LeftButtonUp());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
 
                 await MoveMouseToControlAsync(control2);
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().LeftButtonUp());
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(1, control2ClickCount);
@@ -266,7 +263,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
+                        .DragMouseTo(virtualPoint.X, virtualPoint.Y)
                         .LeftButtonUp());
 
                 Assert.Equal(0, control1ClickCount);
@@ -301,8 +298,8 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
-                        .MoveMouseTo(virtualPoint1.X, virtualPoint1.Y)
+                        .DragMouseTo(virtualPoint.X, virtualPoint.Y)
+                        .DragMouseTo(virtualPoint1.X, virtualPoint1.Y)
                         .LeftButtonUp());
 
                 Assert.Equal(1, control1ClickCount);
