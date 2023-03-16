@@ -466,6 +466,8 @@ namespace System.Windows.Forms
             return (byte[])_cursorData.Clone();
         }
 
+        internal bool IsValid() => _handle != IntPtr.Zero;
+
         /// <summary>
         ///  Displays the cursor. For every call to Cursor.show() there must have been
         ///  a previous call to Cursor.hide().

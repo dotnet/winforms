@@ -95,7 +95,7 @@ namespace System.Windows.Forms
 
         private static Cursor GetCursor(ref Cursor? cursor, string resource)
         {
-            return cursor is not null && cursor.Handle != IntPtr.Zero
+            return cursor is not null && cursor.IsValid()
                 ? cursor
                 : (cursor = new Cursor(typeof(Cursor), resource));
         }
