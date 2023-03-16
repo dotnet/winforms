@@ -237,8 +237,7 @@ namespace System.Windows.Forms.UITests
                 await WaitForIdleAsync();
                 try
                 {
-                    TrySetForegroundWindow((HWND)dialog!.Handle);
-                    await MoveMouseToControlAsync(dialog!);
+                    await TrySetForegroundWindowAsync(dialog!);
                     await testDriverAsync(dialog!, control!);
                 }
                 finally
@@ -274,8 +273,7 @@ namespace System.Windows.Forms.UITests
                 await WaitForIdleAsync();
                 try
                 {
-                    TrySetForegroundWindow((HWND)dialog!.Handle);
-                    await MoveMouseToControlAsync(dialog!);
+                    await TrySetForegroundWindowAsync(dialog!);
                     await testDriverAsync(dialog!);
                 }
                 finally
@@ -308,38 +306,48 @@ namespace System.Windows.Forms.UITests
             static int GetMiddle(int a, int b) => a + ((b - a) / 2);
         }
 
-        private static bool TrySetForegroundWindow(HWND window)
+        private async Task<bool> TrySetForegroundWindowAsync(Form form)
         {
+            var window = (HWND)form.Handle;
             var activeWindow = PInvoke.GetLastActivePopup(window);
             activeWindow = PInvoke.IsWindowVisible(activeWindow) ? activeWindow : window;
             PInvoke.SwitchToThisWindow(activeWindow, true);
 
             if (!PInvoke.SetForegroundWindow(activeWindow))
             {
-                if (!PInvoke.AllocConsole())
+                // Try setting focus by creating a console over it (to steal focus) and then closing the console
+                if (PInvoke.AllocConsole())
                 {
-                    Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
-                }
+                    try
+                    {
+                        var consoleWindow = PInvoke.GetConsoleWindow();
+                        if (consoleWindow == IntPtr.Zero)
+                        {
+                            throw new InvalidOperationException("Failed to obtain the console window.");
+                        }
 
-                try
-                {
-                    var consoleWindow = PInvoke.GetConsoleWindow();
-                    if (consoleWindow == IntPtr.Zero)
-                    {
-                        throw new InvalidOperationException("Failed to obtain the console window.");
+                        if (!PInvoke.SetWindowPos(consoleWindow, hWndInsertAfter: (HWND)0, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOZORDER))
+                        {
+                            Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                        }
                     }
-
-                    if (!PInvoke.SetWindowPos(consoleWindow, hWndInsertAfter: (HWND)0, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOZORDER))
+                    finally
                     {
-                        Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                        if (!PInvoke.FreeConsole())
+                        {
+                            Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                        }
                     }
                 }
-                finally
+                else
                 {
-                    if (!PInvoke.FreeConsole())
-                    {
-                        Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
-                    }
+                    // If that fails, try setting focus by clicking the title bar of the form
+                    var rect = form.DisplayRectangle;
+                    var positionOnTitleBar = new Point(GetMiddle(rect.Right, rect.Left), rect.Top + 5);
+                    var positionOnScreen = form.PointToScreen(positionOnTitleBar);
+                    await MoveMouseAsync(form, positionOnScreen);
+
+                    static int GetMiddle(int a, int b) => a + ((b - a) / 2);
                 }
 
                 if (!PInvoke.SetForegroundWindow(activeWindow))
