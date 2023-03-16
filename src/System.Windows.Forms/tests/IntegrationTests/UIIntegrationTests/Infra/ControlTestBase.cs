@@ -238,6 +238,7 @@ namespace System.Windows.Forms.UITests
                 try
                 {
                     TrySetForegroundWindow((HWND)dialog!.Handle);
+                    await MoveMouseToControlAsync(dialog!);
                     await testDriverAsync(dialog!, control!);
                 }
                 finally
@@ -274,6 +275,7 @@ namespace System.Windows.Forms.UITests
                 try
                 {
                     TrySetForegroundWindow((HWND)dialog!.Handle);
+                    await MoveMouseToControlAsync(dialog!);
                     await testDriverAsync(dialog!);
                 }
                 finally
