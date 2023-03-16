@@ -5021,11 +5021,6 @@ Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye
         <target state="translated">İletişim kutusunun dosya adlarında geçersiz karakterler ve sıralar içermediğinden emin olup olmayacağını denetler.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FailedToLoadCursor">
-        <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">Açılmakta olan veya kaydedilen dosyanın son listeye eklenip eklenmeyeceğini kontrol eder.</target>

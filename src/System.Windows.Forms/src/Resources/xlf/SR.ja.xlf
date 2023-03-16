@@ -5021,11 +5021,6 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">無効な文字やシーケンスがファイル名に含まれていないことをダイアログ ボックスが確認するかどうかを設定します。</target>
         <note />
       </trans-unit>
-      <trans-unit id="FailedToLoadCursor">
-        <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">開いているファイルを追加するか、最近使用したリストに保存するかを制御します。</target>

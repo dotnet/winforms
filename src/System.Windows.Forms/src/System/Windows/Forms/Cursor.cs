@@ -39,10 +39,6 @@ namespace System.Windows.Forms
             _ownHandle = false;
             _resourceId = nResourceId;
             _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
-            if (_handle.IsNull)
-            {
-                throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));
-            }
         }
 
         /// <summary>
@@ -226,9 +222,13 @@ namespace System.Windows.Forms
 
         private void Dispose(bool disposing)
         {
-            if (!_handle.IsNull && _ownHandle)
+            if (!_handle.IsNull)
             {
-                PInvoke.DestroyCursor(_handle);
+                if (_ownHandle)
+                {
+                    PInvoke.DestroyCursor(_handle);
+                }
+
                 _handle = HCURSOR.Null;
             }
         }
@@ -429,11 +429,6 @@ namespace System.Windows.Forms
                         picSize.Width,
                         picSize.Height,
                         IMAGE_FLAGS.LR_DEFAULTCOLOR).Value;
-
-                    if (_handle.IsNull)
-                    {
-                        throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));
-                    }
 
                     _ownHandle = true;
                 }

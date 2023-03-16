@@ -5021,11 +5021,6 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">控制对话框是否确保文件名中不包含无效的字符或序列。</target>
         <note />
       </trans-unit>
-      <trans-unit id="FailedToLoadCursor">
-        <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">控制是否将打开或保存的文件添加到最近使用项列表中。</target>

@@ -5021,11 +5021,6 @@ Se si sceglie Continua, l'errore verrà ignorato e l'applicazione proverà a con
         <target state="translated">Determina se la finestra di dialogo ha il compito di verificare che i nomi di file non contengano caratteri o sequenze non valide.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FailedToLoadCursor">
-        <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">Controlla se aggiungere il file aperto o salvato nell'elenco degli elementi recenti.</target>

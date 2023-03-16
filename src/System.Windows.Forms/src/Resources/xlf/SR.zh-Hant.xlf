@@ -5021,11 +5021,6 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">控制對話方塊是否要確認檔名並未包含無效的字元或逸出字元。</target>
         <note />
       </trans-unit>
-      <trans-unit id="FailedToLoadCursor">
-        <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">控制是否新增開啟或儲存至最近使用之清單的檔案。</target>
