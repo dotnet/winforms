@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- net6.0 TFM isn't buildable as it depends on LibraryImportAttribute which isn't availble. -->
-    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.0;net462</TargetFrameworks>
+    <TargetFrameworks>$(NetCurrent);$(NetPrevious);$(NetMinimum);netstandard2.0;$(NetFrameworkMinimum)</TargetFrameworks>
     <TargetFramework />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
@@ -12,6 +11,7 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <IsPackable>true</IsPackable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- This should point to the last stable released version of this package. -->
     <PackageValidationBaselineVersion>7.0.0</PackageValidationBaselineVersion>
     <AddXamarinPlaceholderFilesToPackage>true</AddXamarinPlaceholderFilesToPackage>
     <PackageDescription>Provides access to GDI+ graphics functionality.
