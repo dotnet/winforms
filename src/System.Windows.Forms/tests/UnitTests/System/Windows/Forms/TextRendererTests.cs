@@ -456,8 +456,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(100, 200), (TextFormatFlags)int.MaxValue };
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory]
         [MemberData(nameof(MeasureText_String_Font_Size_TextFormatFlags_TestData))]
         public void TextRenderer_MeasureText_InvokeStringFontSizeTextFormatFlags_ReturnsExpected(string text, Font font, Size proposedSize, TextFormatFlags flags)
         {
@@ -484,8 +483,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(result, TextRenderer.MeasureText(graphics, text, font));
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory]
         [MemberData(nameof(MeasureText_String_Font_Size_TestData))]
         public void TextRenderer_MeasureText_InvokeIDeviceContextStringFontSize_ReturnsExpected(string text, Font font, Size proposedSize)
         {
@@ -500,8 +498,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(result, TextRenderer.MeasureText(graphics, text, font, proposedSize));
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory]
         [MemberData(nameof(MeasureText_String_Font_Size_TextFormatFlags_TestData))]
         public void TextRenderer_MeasureText_InvokeIDeviceContextStringFontSizeTextFormatFlags_ReturnsExpected(string text, Font font, Size proposedSize, TextFormatFlags flags)
         {
