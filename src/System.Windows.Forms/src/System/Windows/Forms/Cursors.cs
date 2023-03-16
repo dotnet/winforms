@@ -65,33 +65,39 @@ namespace System.Windows.Forms
         public static Cursor WaitCursor => s_wait ??= new Cursor(PInvoke.IDC_WAIT);
 
         public static Cursor Help => s_help ??= new Cursor(PInvoke.IDC_HELP);
-
-        public static Cursor HSplit => s_hSplit ??= new Cursor(typeof(Cursor), "hsplit.cur");
-
-        public static Cursor VSplit => s_vSplit ??= new Cursor(typeof(Cursor), "vsplit.cur");
-
-        public static Cursor NoMove2D => s_noMove2D ??= new Cursor(typeof(Cursor), "nomove2d.cur");
-
-        public static Cursor NoMoveHoriz => s_noMoveHoriz ??= new Cursor(typeof(Cursor), "nomoveh.cur");
-
-        public static Cursor NoMoveVert => s_noMoveVert ??= new Cursor(typeof(Cursor), "nomovev.cur");
-
-        public static Cursor PanEast => s_panEast ??= new Cursor(typeof(Cursor), "east.cur");
-
-        public static Cursor PanNE => s_panNE ??= new Cursor(typeof(Cursor), "ne.cur");
-
-        public static Cursor PanNorth => s_panNorth ??= new Cursor(typeof(Cursor), "north.cur");
-
-        public static Cursor PanNW => s_panNW ??= new Cursor(typeof(Cursor), "nw.cur");
-
-        public static Cursor PanSE => s_panSE ??= new Cursor(typeof(Cursor), "se.cur");
-
-        public static Cursor PanSouth => s_panSouth ??= new Cursor(typeof(Cursor), "south.cur");
-
-        public static Cursor PanSW => s_panSW ??= new Cursor(typeof(Cursor), "sw.cur");
-
-        public static Cursor PanWest => s_panWest ??= new Cursor(typeof(Cursor), "west.cur");
-
         public static Cursor Hand => s_hand ??= new Cursor(PInvoke.IDC_HAND);
+
+        public static Cursor HSplit => GetCursor(ref s_hSplit, "hsplit.cur");
+
+        public static Cursor VSplit => GetCursor(ref s_vSplit, "vsplit.cur");
+
+        public static Cursor NoMove2D => GetCursor(ref s_noMove2D, "nomove2d.cur");
+
+        public static Cursor NoMoveHoriz => GetCursor(ref s_noMoveHoriz, "nomoveh.cur");
+
+        public static Cursor NoMoveVert => GetCursor(ref s_noMoveVert, "nomovev.cur");
+
+        public static Cursor PanEast => GetCursor(ref s_panEast, "east.cur");
+
+        public static Cursor PanNE => GetCursor(ref s_panNE, "ne.cur");
+
+        public static Cursor PanNorth => GetCursor(ref s_panNorth, "north.cur");
+
+        public static Cursor PanNW => GetCursor(ref s_panNW, "nw.cur");
+
+        public static Cursor PanSE => GetCursor(ref s_panSE, "se.cur");
+
+        public static Cursor PanSouth => GetCursor(ref s_panSouth, "south.cur");
+
+        public static Cursor PanSW => GetCursor(ref s_panSW, "sw.cur");
+
+        public static Cursor PanWest => GetCursor(ref s_panWest, "west.cur");
+
+        private static Cursor GetCursor(ref Cursor? cursor, string resource)
+        {
+            return cursor is not null && cursor.Handle != IntPtr.Zero
+                ? cursor
+                : (cursor = new Cursor(typeof(Cursor), resource));
+        }
     }
 }
