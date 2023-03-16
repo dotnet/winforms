@@ -8,6 +8,10 @@
     <DisablePackageBaselineValidation Condition="'$(IsShipping)' == 'false' or
                                                  '$(SuppressFinalPackageVersion)' == 'true' or
                                                  '$(DotNetBuildFromSource)' == 'true'">true</DisablePackageBaselineValidation>
+    <!-- Optional rules -->
+    <ApiCompatEnableRuleCannotChangeParameterName>true</ApiCompatEnableRuleCannotChangeParameterName>
+    <ApiCompatEnableRuleAttributesMustMatch>true</ApiCompatEnableRuleAttributesMustMatch>
+
     <BeforePack>$(BeforePack);AddNETStandardCompatErrorFileForPackaging</BeforePack>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <LicenseFile>$(RepoRoot)LICENSE.TXT</LicenseFile>
@@ -54,13 +58,13 @@
        than the minimum supported one. -->
   <ItemGroup>
     <NETStandardCompatError Include="netcoreapp2.0"
-                            Supported="net6.0"
+                            Supported="$(NetMinimum)"
                             Condition="$(TargetFrameworks.Contains('netstandard2.')) and
-                                       ($(TargetFrameworks.Contains('net6.0')) or $(TargetFrameworks.Contains('net7.0')) or $(TargetFrameworks.Contains('net8.0')))" />
+                                       ($(TargetFrameworks.Contains('$(NetMinimum)')) or $(TargetFrameworks.Contains('$(NetPrevious)')) or $(TargetFrameworks.Contains('$(NetCurrent)')))" />
     <NETStandardCompatError Include="net461"
-                            Supported="net462"
+                            Supported="$(NetFrameworkMinimum)"
                             Condition="$(TargetFrameworks.Contains('netstandard2.0')) and
-                                       ($(TargetFrameworks.Contains('net462')) or $(TargetFrameworks.Contains('net47')) or $(TargetFrameworks.Contains('net48')))" />
+                                       ($(TargetFrameworks.Contains('$(NetFrameworkMinimum)')) or $(TargetFrameworks.Contains('net47')) or $(TargetFrameworks.Contains('net48')))" />
   </ItemGroup>
 
   <!-- Add targets file that marks a .NETStandard applicable tfm as unsupported. -->
