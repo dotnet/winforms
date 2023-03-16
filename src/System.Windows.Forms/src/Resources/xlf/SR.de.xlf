@@ -5021,6 +5021,11 @@ Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den 
         <target state="translated">Steuert, ob das Dialogfeld sicherstellt, dass Dateinamen keine ungültigen Zeichen oder Sequenzen enthalten.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">Steuert, ob die Datei, die geöffnet oder gespeichert wird, zur Liste zuletzt verwendeten Elemente hinzugefügt wird.</target>

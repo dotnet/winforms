@@ -5021,6 +5021,11 @@ Se você clicar em Continuar, o aplicativo ignorará esse erro e tentará contin
         <target state="translated">Controla se a caixa de diálogo assegura que os nomes de arquivos não contém cadeias ou caracteres inválidos.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">Controla se o arquivo que está sendo aberto ou salvo na lista recente deve ser adicionado.</target>
