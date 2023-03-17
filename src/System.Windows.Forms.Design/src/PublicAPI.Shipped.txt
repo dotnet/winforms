@@ -30,7 +30,7 @@
 ~override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.ComponentModel.Design.DesignerActionListCollection.OnValidate(object value) -> void
+override System.ComponentModel.Design.DesignerActionListCollection.OnValidate(object! value) -> void
 override System.ComponentModel.Design.MultilineStringEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.ComponentModel.Design.MultilineStringEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.ComponentModel.Design.MultilineStringEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
@@ -201,23 +201,23 @@ override System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleOb
 ~System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.Contains(string propertyName) -> bool
 ~System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.this[string propertyName].get -> object
 ~System.ComponentModel.Design.ComponentDesigner.ShadowPropertyCollection.this[string propertyName].set -> void
-~System.ComponentModel.Design.DesignerActionList.Component.get -> System.ComponentModel.IComponent
-~System.ComponentModel.Design.DesignerActionList.DesignerActionList(System.ComponentModel.IComponent component) -> void
-~System.ComponentModel.Design.DesignerActionList.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.DesignerActionListCollection.Add(System.ComponentModel.Design.DesignerActionList value) -> int
-~System.ComponentModel.Design.DesignerActionListCollection.AddRange(System.ComponentModel.Design.DesignerActionList[] value) -> void
-~System.ComponentModel.Design.DesignerActionListCollection.AddRange(System.ComponentModel.Design.DesignerActionListCollection value) -> void
-~System.ComponentModel.Design.DesignerActionListCollection.Contains(System.ComponentModel.Design.DesignerActionList value) -> bool
-~System.ComponentModel.Design.DesignerActionListCollection.CopyTo(System.ComponentModel.Design.DesignerActionList[] array, int index) -> void
-~System.ComponentModel.Design.DesignerActionListCollection.DesignerActionListCollection(System.ComponentModel.Design.DesignerActionList[] value) -> void
-~System.ComponentModel.Design.DesignerActionListCollection.IndexOf(System.ComponentModel.Design.DesignerActionList value) -> int
-~System.ComponentModel.Design.DesignerActionListCollection.Insert(int index, System.ComponentModel.Design.DesignerActionList value) -> void
-~System.ComponentModel.Design.DesignerActionListCollection.Remove(System.ComponentModel.Design.DesignerActionList value) -> void
-~System.ComponentModel.Design.DesignerActionListCollection.this[int index].get -> System.ComponentModel.Design.DesignerActionList
-~System.ComponentModel.Design.DesignerActionListCollection.this[int index].set -> void
-~System.ComponentModel.Design.DesignerActionListsChangedEventArgs.ActionLists.get -> System.ComponentModel.Design.DesignerActionListCollection
-~System.ComponentModel.Design.DesignerActionListsChangedEventArgs.DesignerActionListsChangedEventArgs(object relatedObject, System.ComponentModel.Design.DesignerActionListsChangedType changeType, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
-~System.ComponentModel.Design.DesignerActionListsChangedEventArgs.RelatedObject.get -> object
+System.ComponentModel.Design.DesignerActionList.Component.get -> System.ComponentModel.IComponent?
+System.ComponentModel.Design.DesignerActionList.DesignerActionList(System.ComponentModel.IComponent? component) -> void
+System.ComponentModel.Design.DesignerActionList.GetService(System.Type! serviceType) -> object?
+System.ComponentModel.Design.DesignerActionListCollection.Add(System.ComponentModel.Design.DesignerActionList? value) -> int
+System.ComponentModel.Design.DesignerActionListCollection.AddRange(System.ComponentModel.Design.DesignerActionList?[]! value) -> void
+System.ComponentModel.Design.DesignerActionListCollection.AddRange(System.ComponentModel.Design.DesignerActionListCollection! value) -> void
+System.ComponentModel.Design.DesignerActionListCollection.Contains(System.ComponentModel.Design.DesignerActionList? value) -> bool
+System.ComponentModel.Design.DesignerActionListCollection.CopyTo(System.ComponentModel.Design.DesignerActionList?[]! array, int index) -> void
+System.ComponentModel.Design.DesignerActionListCollection.DesignerActionListCollection(System.ComponentModel.Design.DesignerActionList?[]! value) -> void
+System.ComponentModel.Design.DesignerActionListCollection.IndexOf(System.ComponentModel.Design.DesignerActionList? value) -> int
+System.ComponentModel.Design.DesignerActionListCollection.Insert(int index, System.ComponentModel.Design.DesignerActionList? value) -> void
+System.ComponentModel.Design.DesignerActionListCollection.Remove(System.ComponentModel.Design.DesignerActionList? value) -> void
+System.ComponentModel.Design.DesignerActionListCollection.this[int index].get -> System.ComponentModel.Design.DesignerActionList?
+System.ComponentModel.Design.DesignerActionListCollection.this[int index].set -> void
+System.ComponentModel.Design.DesignerActionListsChangedEventArgs.ActionLists.get -> System.ComponentModel.Design.DesignerActionListCollection?
+System.ComponentModel.Design.DesignerActionListsChangedEventArgs.DesignerActionListsChangedEventArgs(object? relatedObject, System.ComponentModel.Design.DesignerActionListsChangedType changeType, System.ComponentModel.Design.DesignerActionListCollection? actionLists) -> void
+System.ComponentModel.Design.DesignerActionListsChangedEventArgs.RelatedObject.get -> object?
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category) -> void
@@ -508,7 +508,7 @@ System.Windows.Forms.Design.ControlDesigner.ControlDesignerAccessibleObject.Cont
 ~virtual System.ComponentModel.Design.ComponentDesigner.PreFilterEvents(System.Collections.IDictionary events) -> void
 ~virtual System.ComponentModel.Design.ComponentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 ~virtual System.ComponentModel.Design.ComponentDesigner.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection
-~virtual System.ComponentModel.Design.DesignerActionList.GetSortedActionItems() -> System.ComponentModel.Design.DesignerActionItemCollection
+virtual System.ComponentModel.Design.DesignerActionList.GetSortedActionItems() -> System.ComponentModel.Design.DesignerActionItemCollection!
 ~virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> string
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
