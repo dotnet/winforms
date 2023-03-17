@@ -304,7 +304,7 @@ namespace System.Windows.Forms.Tests
             finally
             {
                 applicationTestAccessor.s_defaultFont = null;
-                applicationTestAccessor.s_defaultFontScaled.Dispose();
+                applicationTestAccessor.s_defaultFontScaled?.Dispose();
                 applicationTestAccessor.s_defaultFontScaled = null;
                 font.Dispose();
             }
