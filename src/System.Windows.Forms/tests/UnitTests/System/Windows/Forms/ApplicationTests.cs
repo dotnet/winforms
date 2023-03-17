@@ -284,9 +284,12 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsFact]
-        public void Application_ScaleDefaultFont_Should_Cap_Rescale_ToTextScaleFactor225()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public void Application_ScaleDefaultFont_Should_Cap_Rescale_ToTextScaleFactor225([CombinatorialRange(0, 100)] int iteration)
         {
+            _ = iteration;
+
             var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
             Assert.Null(applicationTestAccessor.s_defaultFont);
             Assert.Null(applicationTestAccessor.s_defaultFontScaled);

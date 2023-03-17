@@ -7,6 +7,8 @@ using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
 
+#pragma warning disable xUnit1026 // Theory methods should use all of their parameters
+
 namespace System.Windows.Forms.UITests
 {
     public class ButtonTests : ControlTestBase
@@ -53,8 +55,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_DialogResult_SpaceToClickFocusedButtonAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_DialogResult_SpaceToClickFocusedButtonAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -71,8 +74,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_DialogResult_EscapeDoesNotClickFocusedButtonAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_DialogResult_EscapeDoesNotClickFocusedButtonAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -89,8 +93,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_CancelButton_EscapeClicksCancelButtonAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_CancelButton_EscapeClicksCancelButtonAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -105,8 +110,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_AchorNone_NoResizeOnWindowSizeWiderAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_AchorNone_NoResizeOnWindowSizeWiderAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -129,8 +135,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_AchorNone_NoResizeOnWindowSizeTallerAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_AchorNone_NoResizeOnWindowSizeTallerAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -153,8 +160,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Anchor_ResizeOnWindowSizeWiderAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Anchor_ResizeOnWindowSizeWiderAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -183,8 +191,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Anchor_ResizeOnWindowSizeTallerAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Anchor_ResizeOnWindowSizeTallerAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -213,8 +222,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Mouse_Press_Without_Moving_Causes_Button_ClickAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Mouse_Press_Without_Moving_Causes_Button_ClickAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
             {
@@ -238,8 +248,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Mouse_Press_With_Drag_Off_Button_Does_Not_Cause_Button_ClickAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Mouse_Press_With_Drag_Off_Button_Does_Not_Cause_Button_ClickAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
             {
@@ -271,8 +282,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Mouse_Press_With_Drag_Off_Button_And_Back_Does_Cause_Button_ClickAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Mouse_Press_With_Drag_Off_Button_And_Back_Does_Cause_Button_ClickAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
             {
@@ -307,8 +319,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_PerformClick_Fires_OnClickAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_PerformClick_Fires_OnClickAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync((form, button) =>
             {
@@ -323,8 +336,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Press_Enter_Fires_OnClickAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Press_Enter_Fires_OnClickAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -343,8 +357,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Hotkey_Fires_OnClickAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Hotkey_Fires_OnClickAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
@@ -363,8 +378,9 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        [WinFormsFact]
-        public async Task Button_Hotkey_DoesNotFire_OnClickAsync()
+        [WinFormsTheory]
+        [CombinatorialData]
+        public async Task Button_Hotkey_DoesNotFire_OnClickAsync([CombinatorialRange(0, 100)] int iteration)
         {
             await RunTestAsync(async (form, button) =>
             {
