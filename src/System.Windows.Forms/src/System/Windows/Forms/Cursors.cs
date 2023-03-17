@@ -94,10 +94,8 @@ namespace System.Windows.Forms
         public static Cursor PanWest => GetCursor(ref s_panWest, "west.cur");
 
         private static Cursor GetCursor(ref Cursor? cursor, string resource)
-        {
-            return cursor is not null && cursor.IsValid()
+            => cursor is not null && cursor.IsValid()
                 ? cursor
-                : (cursor = new Cursor(typeof(Cursor), resource));
-        }
+                : cursor = new Cursor(typeof(Cursor), resource);
     }
 }
