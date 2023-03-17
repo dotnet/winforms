@@ -63,6 +63,7 @@
   <PropertyGroup>
     <XUnitVersion>2.4.2</XUnitVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
+    <XUnitCombinatorialVersion>1.5.25</XUnitCombinatorialVersion>
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
     <XUnitRunnerVisualStudioVersion>2.4.3</XUnitRunnerVisualStudioVersion>
     <XUnitExtensibilityExecutionVersion>$(XUnitVersion)</XUnitExtensibilityExecutionVersion>

@@ -31,20 +31,9 @@ public class DragDropTests : ControlTestBase
     {
     }
 
-    public static IEnumerable<object[]> Iterations
-    {
-        get
-        {
-            for (int i = 0; i < 100; i++)
-            {
-                yield return new object[] { i };
-            }
-        }
-    }
-
     [WinFormsTheory]
-    [MemberData(nameof(Iterations))]
-    public async Task DragDrop_QueryDefaultCursors_Async(int iteration)
+    [CombinatorialData]
+    public async Task DragDrop_QueryDefaultCursors_Async([CombinatorialRange(0, 100)] int iteration)
     {
         _ = iteration;
 
@@ -74,8 +63,8 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Iterations))]
-    public async Task DragDrop_NonSerializedObject_ReturnsExpected_Async(int iteration)
+    [CombinatorialData]
+    public async Task DragDrop_NonSerializedObject_ReturnsExpected_Async([CombinatorialRange(0, 100)] int iteration)
     {
         _ = iteration;
         // Regression test for https://github.com/dotnet/winforms/issues/7864, and it verifies that we can successfully drag and drop a
@@ -293,8 +282,8 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Iterations))]
-    public async Task DragDrop_SerializedObject_ReturnsExpected_Async(int iteration)
+    [CombinatorialData]
+    public async Task DragDrop_SerializedObject_ReturnsExpected_Async([CombinatorialRange(0, 100)] int iteration)
     {
         _ = iteration;
         // Verifies that we can successfully drag and drop a serialized object.
@@ -361,8 +350,8 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Iterations))]
-    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected_Async(int iteration)
+    [CombinatorialData]
+    public async Task DragEnter_Set_DropImageType_Message_MessageReplacementToken_ReturnsExptected_Async([CombinatorialRange(0, 100)] int iteration)
     {
         _ = iteration;
         await RunFormWithoutControlAsync(() => new DragDropForm(TestOutputHelper), async (form) =>
@@ -444,8 +433,8 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Iterations))]
-    public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async(int iteration)
+    [CombinatorialData]
+    public async Task PictureBox_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async([CombinatorialRange(0, 100)] int iteration)
     {
         _ = iteration;
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
@@ -476,8 +465,8 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Iterations))]
-    public async Task ToolStripItem_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async(int iteration)
+    [CombinatorialData]
+    public async Task ToolStripItem_SetData_DoDragDrop_RichTextBox_ReturnsExptected_Async([CombinatorialRange(0, 100)] int iteration)
     {
         _ = iteration;
         await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
