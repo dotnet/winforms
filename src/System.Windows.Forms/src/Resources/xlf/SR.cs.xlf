@@ -5021,6 +5021,11 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
         <target state="translated">Určuje, zda dialogové okno zajišťuje, že názvy souborů neobsahují neplatné znaky nebo posloupnosti.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">Určuje, jestli se má soubor, který se otevírá nebo ukládá, přidat do seznamu posledních souborů.</target>
