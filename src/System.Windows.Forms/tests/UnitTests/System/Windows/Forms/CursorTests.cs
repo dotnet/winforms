@@ -33,7 +33,7 @@ public class CursorTests
     public void Cursor_Ctor_IntPtr()
     {
         Cursor sourceCursor = Cursors.AppStarting;
-        var cursor = new Cursor(sourceCursor.Handle);
+        using var cursor = new Cursor(sourceCursor.Handle);
         Assert.Equal(sourceCursor.Handle, cursor.Handle);
         Assert.Equal(sourceCursor.HotSpot, cursor.HotSpot);
         Assert.Equal(sourceCursor.Size, cursor.Size);
@@ -43,7 +43,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_IntPtr_Invalid()
     {
-        var cursor = new Cursor(-1000);
+        using var cursor = new Cursor(-1000);
         Assert.Equal(-1000, cursor.Handle);
         Assert.Equal(new Point(0, 0), cursor.HotSpot);
         Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
@@ -155,7 +155,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_Type_String()
     {
-        var cursor = new Cursor(typeof(PropertyTabTests), "CustomPropertyTab");
+        using var cursor = new Cursor(typeof(PropertyTabTests), "CustomPropertyTab");
         Assert.NotEqual(IntPtr.Zero, cursor.Handle);
         Assert.Equal(new Point(5, 8), cursor.HotSpot);
         Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
@@ -313,7 +313,7 @@ public class CursorTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
     public void Cursor_Tag_Set_GetReturnsExpected(object value)
     {
-        var cursor = new Cursor(2)
+        using var cursor = new Cursor(2)
         {
             Tag = value
         };
@@ -332,7 +332,7 @@ public class CursorTests
         Assert.NotEqual(IntPtr.Zero, handle);
         Assert.NotEqual(sourceCursor.Handle, handle);
 
-        var cursor = new Cursor(sourceCursor.Handle);
+        using var cursor = new Cursor(sourceCursor.Handle);
         Assert.Equal(sourceCursor.Handle, cursor.Handle);
         Assert.Equal(sourceCursor.HotSpot, cursor.HotSpot);
         Assert.Equal(sourceCursor.Size, cursor.Size);
@@ -388,7 +388,7 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_Draw_InvokeInvalidCursor_Success(Rectangle rectangle)
     {
-        var cursor = new Cursor(-1000);
+        using var cursor = new Cursor(-1000);
         using var image = new Bitmap(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.Draw(graphics, rectangle);
@@ -425,7 +425,7 @@ public class CursorTests
     [MemberData(nameof(Draw_TestData))]
     public void Cursor_DrawStretched_InvokeInvalidCursor_Success(Rectangle rectangle)
     {
-        var cursor = new Cursor(-1000);
+        using var cursor = new Cursor(-1000);
         using var image = new Bitmap(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         cursor.DrawStretched(graphics, rectangle);
@@ -507,7 +507,7 @@ public class CursorTests
     [Fact]
     public void Cursor_ToString_InvalidCursor_ThrowsFormatException()
     {
-        var cursor = new Cursor(2);
+        using var cursor = new Cursor(2);
         Assert.Throws<FormatException>(() => cursor.ToString());
     }
 }
