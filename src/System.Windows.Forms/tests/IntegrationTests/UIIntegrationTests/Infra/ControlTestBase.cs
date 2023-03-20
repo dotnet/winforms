@@ -49,7 +49,8 @@ namespace System.Windows.Forms.UITests
                 var type = testOutputHelper.GetType()!;
                 var testMember = type.GetField("test", BindingFlags.Instance | BindingFlags.NonPublic)!;
                 test = (ITest)testMember.GetValue(testOutputHelper)!;
-                return test.DisplayName;
+                int index = test.DisplayName.IndexOf("("); // Trim arguments form test name.
+                return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
             }
 
             string? GetLogDir(ITest test)
@@ -61,8 +62,7 @@ namespace System.Windows.Forms.UITests
 
                     int index = assemblyPath.IndexOf("bin\\");
                     string config = Debugger.IsAttached ? "Debug" : "Release";
-                    string path = $"{assemblyPath[..index]}log\\{config}";
-
+                    string path = Path.Join(assemblyPath[..index], "log", config, "screenshots");
                     Directory.CreateDirectory(path);
                     return path;
                 }
@@ -76,13 +76,13 @@ namespace System.Windows.Forms.UITests
 
             void CloseServerManagerWindow()
             {
+                if (s_disableServerManager)
+                {
+                    return;
+                }
+
                 try
                 {
-                    if (s_disableServerManager)
-                    {
-                        return;
-                    }
-
                     s_disableServerManager = true;
                     foreach (Process process in Process.GetProcesses())
                     {
@@ -93,14 +93,19 @@ namespace System.Windows.Forms.UITests
 
                         if (process.MainWindowHandle != IntPtr.Zero)
                         {
-                            PInvoke.SwitchToThisWindow((HWND)process.MainWindowHandle, true);
                             process.CloseMainWindow();
                         }
 
+                        TestOutputHelper.WriteLine($"ServerManager window is not found on the build agent.");
                         return;
                     }
+
+                    TestOutputHelper.WriteLine($"ServerManager process is not running on the build agent.");
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    TestOutputHelper.WriteLine($"Failed to close ServerManagerWindow - {ex}.");
+                }
             }
         }
 
@@ -191,7 +196,7 @@ namespace System.Windows.Forms.UITests
 
         protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)
         {
-            TestOutputHelper!.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
+            TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
             Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
             var virtualPoint = new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
             TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
@@ -313,7 +318,7 @@ namespace System.Windows.Forms.UITests
                 }
                 catch
                 {
-                    TryLog();
+                    TrySaveScreenshot();
                     throw;
                 }
                 finally
@@ -353,7 +358,7 @@ namespace System.Windows.Forms.UITests
                 }
                 catch
                 {
-                    TryLog();
+                    TrySaveScreenshot();
                     throw;
                 }
                 finally
@@ -375,7 +380,7 @@ namespace System.Windows.Forms.UITests
             await test.JoinAsync();
         }
 
-        private void TryLog()
+        private void TrySaveScreenshot()
         {
             if (_logPath is null)
             {
