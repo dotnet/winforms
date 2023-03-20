@@ -591,6 +591,7 @@ StgCreateDocfileOnILockBytes
 StgOpenStorageOnILockBytes
 STGTY
 StretchDIBits
+SwitchToThisWindow
 SystemParametersInfo
 SystemParametersInfoForDpi
 SYSTEMTIME

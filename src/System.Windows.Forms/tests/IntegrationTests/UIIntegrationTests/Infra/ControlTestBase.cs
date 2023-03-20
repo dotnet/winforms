@@ -2,7 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
@@ -15,6 +18,9 @@ namespace System.Windows.Forms.UITests
     public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         private const int SPIF_SENDCHANGE = 0x0002;
+        private static string? _logPath;
+        private readonly string _testName;
+        private static bool s_disableServerManager;
 
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
@@ -24,12 +30,78 @@ namespace System.Windows.Forms.UITests
         {
             TestOutputHelper = testOutputHelper;
 
+            _testName = GetTestName(out ITest test);
+            _logPath ??= GetLogDir(test);
+
+            // Build agents might be running on server OS and ServerManager window is opened on logon.
+            // Closing this window to avoid any interference with Winforms UI tests.
+            CloseServerManagerWindow();
+
             Application.EnableVisualStyles();
 
             // Disable animations for maximum test performance
             bool disabled = false;
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
+
+            string GetTestName(out ITest test)
+            {
+                var type = testOutputHelper.GetType()!;
+                var testMember = type.GetField("test", BindingFlags.Instance | BindingFlags.NonPublic)!;
+                test = (ITest)testMember.GetValue(testOutputHelper)!;
+                return test.DisplayName;
+            }
+
+            string? GetLogDir(ITest test)
+            {
+                try
+                {
+                    IAssemblyInfo assembly = test.TestCase.TestMethod.TestClass.TestCollection.TestAssembly.Assembly!;
+                    string assemblyPath = ((Xunit.Sdk.ReflectionAssemblyInfo)assembly).Assembly.Location!;
+
+                    int index = assemblyPath.IndexOf("bin\\");
+                    string config = Debugger.IsAttached ? "Debug" : "Release";
+                    string path = $"{assemblyPath[..index]}log\\{config}";
+
+                    Directory.CreateDirectory(path);
+                    return path;
+                }
+                catch
+                {
+                    testOutputHelper.WriteLine("Failed to get or create log directory.");
+                }
+
+                return null;
+            }
+
+            void CloseServerManagerWindow()
+            {
+                try
+                {
+                    if (s_disableServerManager)
+                    {
+                        return;
+                    }
+
+                    s_disableServerManager = true;
+                    foreach (Process process in Process.GetProcesses())
+                    {
+                        if (!process.ProcessName.Equals("ServerManager", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        if (process.MainWindowHandle != IntPtr.Zero)
+                        {
+                            PInvoke.SwitchToThisWindow((HWND)process.MainWindowHandle, true);
+                            process.CloseMainWindow();
+                        }
+
+                        return;
+                    }
+                }
+                catch { }
+            }
         }
 
         protected ITestOutputHelper TestOutputHelper { get; }
@@ -119,7 +191,7 @@ namespace System.Windows.Forms.UITests
 
         protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)
         {
-            TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
+            TestOutputHelper!.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
             Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
             var virtualPoint = new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
             TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
@@ -239,6 +311,11 @@ namespace System.Windows.Forms.UITests
                 {
                     await testDriverAsync(dialog!, control!);
                 }
+                catch
+                {
+                    TryLog();
+                    throw;
+                }
                 finally
                 {
                     dialog!.Close();
@@ -274,6 +351,11 @@ namespace System.Windows.Forms.UITests
                 {
                     await testDriverAsync(dialog!);
                 }
+                catch
+                {
+                    TryLog();
+                    throw;
+                }
                 finally
                 {
                     dialog!.Close();
@@ -291,6 +373,48 @@ namespace System.Windows.Forms.UITests
             dialog.ShowDialog();
 
             await test.JoinAsync();
+        }
+
+        private void TryLog()
+        {
+            if (_logPath is null)
+            {
+                TestOutputHelper.WriteLine($"Log path couldn't be determined.");
+                return;
+            }
+
+            try
+            {
+                var bounds = Screen.PrimaryScreen!.Bounds;
+
+                if (bounds.Width <= 0 || bounds.Height <= 0)
+                {
+                    // Don't try to take a screenshot if there is no screen.
+                    // This may not be an interactive session.
+                    return;
+                }
+
+                using var bitmap = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
+                using (var graphics = Graphics.FromImage(bitmap))
+                {
+                    graphics.CopyFromScreen(
+                        sourceX: bounds.X,
+                        sourceY: bounds.Y,
+                        destinationX: 0,
+                        destinationY: 0,
+                        blockRegionSize: bitmap.Size,
+                        copyPixelOperation: CopyPixelOperation.SourceCopy);
+                }
+
+                int index = _testName.LastIndexOf('.');
+                string screenshot = $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
+                bitmap.Save(screenshot);
+                TestOutputHelper.WriteLine($"Screenshot saved at {screenshot}");
+            }
+            catch (Exception exception)
+            {
+                TestOutputHelper.WriteLine($"Failed to save screenshot: {exception.Message}.");
+            }
         }
 
         internal struct VoidResult
