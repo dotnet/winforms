@@ -11,7 +11,7 @@ function _kill($processName) {
         # when there are no instances of the process
         & cmd /c "taskkill /T /F /IM ${processName} 2>&1"
     } catch {
-        Write-Host "Failed to kill ${processName}: $_"
+        Write-Host "Either failed to kill ${processName} or process was not running."
     }
 }
 

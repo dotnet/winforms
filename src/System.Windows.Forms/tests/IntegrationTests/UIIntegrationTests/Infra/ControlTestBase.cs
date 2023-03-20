@@ -21,6 +21,7 @@ namespace System.Windows.Forms.UITests
         private static string? _logPath;
         private readonly string _testName;
         private static bool s_disableServerManager;
+        private static int k;
 
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
@@ -35,7 +36,7 @@ namespace System.Windows.Forms.UITests
 
             // Build agents might be running on server OS and ServerManager window is opened on logon.
             // Closing this window to avoid any interference with Winforms UI tests.
-            // CloseServerManagerWindow();
+            CloseServerManagerWindow();
 
             Application.EnableVisualStyles();
 
@@ -93,6 +94,7 @@ namespace System.Windows.Forms.UITests
 
                         if (process.MainWindowHandle != IntPtr.Zero)
                         {
+                            TestOutputHelper.WriteLine($"ServerManager window found. Closing.");
                             process.CloseMainWindow();
                         }
 
@@ -315,6 +317,11 @@ namespace System.Windows.Forms.UITests
                 try
                 {
                     await testDriverAsync(dialog!, control!);
+                    if(k == 0)
+                    {
+                        TrySaveScreenshot();
+                        k++;
+                    }
                 }
                 catch
                 {
@@ -326,6 +333,11 @@ namespace System.Windows.Forms.UITests
                     dialog!.Close();
                     dialog.Dispose();
                     dialog = null;
+
+                    if(s_disableServerManager)
+                    {
+                        TestOutputHelper.WriteLine("ServerManagerWindow closed.");
+                    }
                 }
             });
 
@@ -355,6 +367,11 @@ namespace System.Windows.Forms.UITests
                 try
                 {
                     await testDriverAsync(dialog!);
+                    if (k == 0)
+                    {
+                        k++;
+                        TrySaveScreenshot();
+                    }
                 }
                 catch
                 {
@@ -366,6 +383,11 @@ namespace System.Windows.Forms.UITests
                     dialog!.Close();
                     dialog.Dispose();
                     dialog = null;
+
+                    if (s_disableServerManager)
+                    {
+                        TestOutputHelper.WriteLine("ServerManagerWindow closed.");
+                    }
                 }
             });
 
