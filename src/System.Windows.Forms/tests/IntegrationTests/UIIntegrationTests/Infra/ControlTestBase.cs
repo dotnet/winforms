@@ -20,8 +20,6 @@ namespace System.Windows.Forms.UITests
         private const int SPIF_SENDCHANGE = 0x0002;
         private static string? _logPath;
         private readonly string _testName;
-        private static bool s_disableServerManager;
-        private static int k;
 
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
@@ -33,10 +31,6 @@ namespace System.Windows.Forms.UITests
 
             _testName = GetTestName(out ITest test);
             _logPath ??= GetLogDir(test);
-
-            // Build agents might be running on server OS and ServerManager window is opened on logon.
-            // Closing this window to avoid any interference with Winforms UI tests.
-            CloseServerManagerWindow();
 
             Application.EnableVisualStyles();
 
@@ -50,7 +44,7 @@ namespace System.Windows.Forms.UITests
                 var type = testOutputHelper.GetType()!;
                 var testMember = type.GetField("test", BindingFlags.Instance | BindingFlags.NonPublic)!;
                 test = (ITest)testMember.GetValue(testOutputHelper)!;
-                int index = test.DisplayName.IndexOf("("); // Trim arguments form test name.
+                int index = test.DisplayName.IndexOf("("); // Trim arguments from test name.
                 return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
             }
 
@@ -67,47 +61,12 @@ namespace System.Windows.Forms.UITests
                     Directory.CreateDirectory(path);
                     return path;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    testOutputHelper.WriteLine("Failed to get or create log directory.");
+                    testOutputHelper.WriteLine($"Failed to get or create log directory. {ex}");
                 }
 
                 return null;
-            }
-
-            void CloseServerManagerWindow()
-            {
-                if (s_disableServerManager)
-                {
-                    return;
-                }
-
-                try
-                {
-                    s_disableServerManager = true;
-                    foreach (Process process in Process.GetProcesses())
-                    {
-                        if (!process.ProcessName.Equals("ServerManager", StringComparison.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }
-
-                        if (process.MainWindowHandle != IntPtr.Zero)
-                        {
-                            TestOutputHelper.WriteLine($"ServerManager window found. Closing.");
-                            process.CloseMainWindow();
-                        }
-
-                        TestOutputHelper.WriteLine($"ServerManager window is not found on the build agent.");
-                        return;
-                    }
-
-                    TestOutputHelper.WriteLine($"ServerManager process is not running on the build agent.");
-                }
-                catch (Exception ex)
-                {
-                    TestOutputHelper.WriteLine($"Failed to close ServerManagerWindow - {ex}.");
-                }
             }
         }
 
@@ -317,11 +276,6 @@ namespace System.Windows.Forms.UITests
                 try
                 {
                     await testDriverAsync(dialog!, control!);
-                    if(k == 0)
-                    {
-                        TrySaveScreenshot();
-                        k++;
-                    }
                 }
                 catch
                 {
@@ -333,11 +287,6 @@ namespace System.Windows.Forms.UITests
                     dialog!.Close();
                     dialog.Dispose();
                     dialog = null;
-
-                    if(s_disableServerManager)
-                    {
-                        TestOutputHelper.WriteLine("ServerManagerWindow closed.");
-                    }
                 }
             });
 
@@ -367,11 +316,6 @@ namespace System.Windows.Forms.UITests
                 try
                 {
                     await testDriverAsync(dialog!);
-                    if (k == 0)
-                    {
-                        k++;
-                        TrySaveScreenshot();
-                    }
                 }
                 catch
                 {
@@ -383,11 +327,6 @@ namespace System.Windows.Forms.UITests
                     dialog!.Close();
                     dialog.Dispose();
                     dialog = null;
-
-                    if (s_disableServerManager)
-                    {
-                        TestOutputHelper.WriteLine("ServerManagerWindow closed.");
-                    }
                 }
             });
 
@@ -406,7 +345,6 @@ namespace System.Windows.Forms.UITests
         {
             if (_logPath is null)
             {
-                TestOutputHelper.WriteLine($"Log path couldn't be determined.");
                 return;
             }
 
@@ -436,11 +374,12 @@ namespace System.Windows.Forms.UITests
                 int index = _testName.LastIndexOf('.');
                 string screenshot = $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
                 bitmap.Save(screenshot);
+
                 TestOutputHelper.WriteLine($"Screenshot saved at {screenshot}");
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                TestOutputHelper.WriteLine($"Failed to save screenshot: {exception.Message}.");
+                TestOutputHelper.WriteLine($"Failed to save screenshot: {ex}.");
             }
         }
 
