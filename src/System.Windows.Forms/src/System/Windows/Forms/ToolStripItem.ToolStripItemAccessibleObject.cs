@@ -280,7 +280,7 @@ namespace System.Windows.Forms
             {
                 if (Owner is not null)
                 {
-                    return "ToolStripItemAccessibleObject: Owner = " + Owner.ToString();
+                    return $"ToolStripItemAccessibleObject: Owner = {Owner}";
                 }
 
                 return "ToolStripItemAccessibleObject: Owner = null";

@@ -145,24 +145,21 @@ namespace System.Windows.Forms
                 // Handle the ToolStripPanels inside a ToolStripContainer
                 if (string.IsNullOrEmpty(toolStripPanelName) && toolStripPanel.Parent is ToolStripContainer && !string.IsNullOrEmpty(toolStripPanel.Parent.Name))
                 {
-                    toolStripPanelName = toolStripPanel.Parent.Name + "." + toolStripPanel.Dock.ToString();
+                    toolStripPanelName = $"{toolStripPanel.Parent.Name}.{toolStripPanel.Dock}";
                 }
 
                 toolStripPanel.BeginInit();
                 // get the associated toolstrips for this panel
                 if (toolStripPanelDestinationHash.TryGetValue(toolStripPanelName, out List<SettingsStub>? stubSettings))
                 {
-                    if (stubSettings is not null)
+                    foreach (SettingsStub settings in stubSettings)
                     {
-                        foreach (SettingsStub settings in stubSettings)
+                        if (!string.IsNullOrEmpty(settings.Name))
                         {
-                            if (!string.IsNullOrEmpty(settings.Name))
-                            {
-                                // apply the toolstrip settings.
-                                ToolStrip toolStrip = ToolStripManager.FindToolStrip(form, settings.Name);
-                                ApplyToolStripSettings(toolStrip, settings, itemLocationHash);
-                                toolStripPanel.Join(toolStrip, settings.Location);
-                            }
+                            // apply the toolstrip settings.
+                            ToolStrip toolStrip = ToolStripManager.FindToolStrip(form, settings.Name);
+                            ApplyToolStripSettings(toolStrip, settings, itemLocationHash);
+                            toolStripPanel.Join(toolStrip, settings.Location);
                         }
                     }
                 }
@@ -276,7 +273,7 @@ namespace System.Windows.Forms
         {
             if (toolStrip is not null)
             {
-                return formKey + "." + toolStrip.Name;
+                return $"{formKey}.{toolStrip.Name}";
             }
 
             return string.Empty;

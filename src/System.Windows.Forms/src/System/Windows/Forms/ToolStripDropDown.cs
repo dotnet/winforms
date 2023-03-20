@@ -13,7 +13,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ToolStripDropDownDesigner, {AssemblyRef.SystemDesign}")]
     public partial class ToolStripDropDown : ToolStrip
     {
         private ToolStripItem? ownerItem;

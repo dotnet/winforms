@@ -42,7 +42,7 @@ namespace System.Windows.Forms
 #if DEBUG
 
             // Ensure 1:1 Cell/ToolStripPanel mapping
-            _cellID = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", control.Name, ++t_cellCount);
+            _cellID = $"{control.Name}.{++t_cellCount}";
             Debug.Assert(t_cellCount <= ToolStripManager.ToolStrips.Count, "who is allocating an extra toolstrippanel cell?");
 #endif
 

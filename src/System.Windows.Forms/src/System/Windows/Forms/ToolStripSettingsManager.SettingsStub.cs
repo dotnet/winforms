@@ -34,7 +34,7 @@ namespace System.Windows.Forms
                     else if (parentPanel.Parent is ToolStripContainer && !string.IsNullOrEmpty(parentPanel.Parent.Name))
                     {
                         // Handle the case when the ToolStripPanel belongs to a ToolStripContainer.
-                        ToolStripPanelName = parentPanel.Parent.Name + "." + parentPanel.Dock.ToString();
+                        ToolStripPanelName = $"{parentPanel.Parent.Name}.{parentPanel.Dock}";
                     }
 
                     Debug.Assert(!string.IsNullOrEmpty(ToolStripPanelName), "ToolStrip was parented to a panel, but we couldn't figure out its name.");

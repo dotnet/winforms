@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    [Designer("System.Windows.Forms.Design.ToolStripContainerDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ToolStripContainerDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.ToolStripContainerDesc))]
     public partial class ToolStripContainer : ContainerControl
     {
