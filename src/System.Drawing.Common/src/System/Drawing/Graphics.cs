@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -1645,33 +1645,175 @@ namespace System.Drawing
         }
 
         /// <summary>
-        /// Draws a string with the specified font.
+        ///  Draws the specified text at the specified location with the specified <see cref="Brush"/> and
+        ///  <see cref="Font"/> objects.
         /// </summary>
+        /// <param name="s">The text to draw.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
+        /// <param name="x">The x-coordinate of the upper-left corner of the drawn text.</param>
+        /// <param name="y">The y-coordinate of the upper-left corner of the drawn text.</param>
+        /// <exception cref="ArgumentNullException">
+        ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
+        /// </exception>
         public void DrawString(string? s, Font font, Brush brush, float x, float y)
         {
             DrawString(s, font, brush, new RectangleF(x, y, 0, 0), null);
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="DrawString(string?, Font, Brush, float, float)"/>
+        public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, float x, float y)
+        {
+            DrawString(s, font, brush, new RectangleF(x, y, 0, 0), null);
+        }
+#endif
+
+        /// <summary>
+        ///  Draws the specified text at the specified location with the specified <see cref="Brush"/> and
+        ///  <see cref="Font"/> objects.
+        /// </summary>
+        /// <param name="s">The text to draw.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
+        /// <param name="point"><see cref="PointF"/>structure that specifies the upper-left corner of the drawn text.</param>
+        /// <exception cref="ArgumentNullException">
+        ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
+        /// </exception>
         public void DrawString(string? s, Font font, Brush brush, PointF point)
         {
             DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), null);
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="DrawString(string?, Font, Brush, PointF)"/>
+        public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, PointF point)
+        {
+            DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), null);
+        }
+#endif
+
+        /// <summary>
+        ///  Draws the specified text at the specified location with the specified <see cref="Brush"/> and
+        ///  <see cref="Font"/> objects using the formatting attributes of the specified <see cref="StringFormat"/>.
+        /// </summary>
+        /// <param name="s">The text to draw.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
+        /// <param name="x">The x-coordinate of the upper-left corner of the drawn text.</param>
+        /// <param name="y">The y-coordinate of the upper-left corner of the drawn text.</param>
+        /// <param name="format">
+        ///  <see cref="StringFormat"/> that specifies formatting attributes, such as line spacing and alignment,
+        ///  that are applied to the drawn text.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
+        /// </exception>
         public void DrawString(string? s, Font font, Brush brush, float x, float y, StringFormat? format)
         {
             DrawString(s, font, brush, new RectangleF(x, y, 0, 0), format);
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="DrawString(string?, Font, Brush, float, float, StringFormat?)"/>
+        public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, float x, float y, StringFormat? format)
+        {
+            DrawString(s, font, brush, new RectangleF(x, y, 0, 0), format);
+        }
+#endif
+
+        /// <summary>
+        ///  Draws the specified text at the specified location with the specified <see cref="Brush"/> and
+        ///  <see cref="Font"/> objects using the formatting attributes of the specified <see cref="StringFormat"/>.
+        /// </summary>
+        /// <param name="s">The text to draw.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
+        /// <param name="point"><see cref="PointF"/>structure that specifies the upper-left corner of the drawn text.</param>
+        /// <param name="format">
+        ///  <see cref="StringFormat"/> that specifies formatting attributes, such as line spacing and alignment,
+        ///  that are applied to the drawn text.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
+        /// </exception>
         public void DrawString(string? s, Font font, Brush brush, PointF point, StringFormat? format)
         {
             DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), format);
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="DrawString(string?, Font, Brush, PointF, StringFormat?)"/>
+        public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, PointF point, StringFormat? format)
+        {
+            DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), format);
+        }
+#endif
+
+        /// <summary>
+        ///  Draws the specified text in the specified rectangle with the specified <see cref="Brush"/> and
+        ///  <see cref="Font"/> objects.
+        /// </summary>
+        /// <param name="s">The text to draw.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
+        /// <param name="layoutRectangle"><see cref="RectangleF"/>structure that specifies the location of the drawn text.</param>
+        /// <exception cref="ArgumentNullException">
+        ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
+        /// </exception>
+        /// <remarks>
+        ///  <para>
+        ///   The text represented by the <paramref name="s"/> parameter is drawn inside the rectangle represented by
+        ///   the <paramref name="layoutRectangle"/> parameter. If the text does not fit inside the rectangle, it is
+        ///   truncated at the nearest word. To further manipulate how the string is drawn inside the rectangle use the
+        ///   <see cref="DrawString(string?, Font, Brush, RectangleF, StringFormat?)"/> overload that takes
+        ///   a <see cref="StringFormat"/>.
+        ///  </para>
+        /// </remarks>
         public void DrawString(string? s, Font font, Brush brush, RectangleF layoutRectangle)
         {
             DrawString(s, font, brush, layoutRectangle, null);
         }
 
+#if NET8_0_OR_GREATER
+        /// <remarks>
+        ///  <para>
+        ///   The text represented by the <paramref name="s"/> parameter is drawn inside the rectangle represented by
+        ///   the <paramref name="layoutRectangle"/> parameter. If the text does not fit inside the rectangle, it is
+        ///   truncated at the nearest word. To further manipulate how the string is drawn inside the rectangle use the
+        ///   <see cref="DrawString(ReadOnlySpan{char}, Font, Brush, RectangleF, StringFormat?)"/> overload that takes
+        ///   a <see cref="StringFormat"/>.
+        ///  </para>
+        /// </remarks>
+        /// <inheritdoc cref="DrawString(string?, Font, Brush, RectangleF)"/>
+        public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle)
+        {
+            DrawString(s, font, brush, layoutRectangle, null);
+        }
+#endif
+
+        /// <summary>
+        ///  Draws the specified text in the specified rectangle with the specified <see cref="Brush"/> and
+        ///  <see cref="Font"/> objects using the formatting attributes of the specified <see cref="StringFormat"/>.
+        /// </summary>
+        /// <param name="s">The text to draw.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
+        /// <param name="layoutRectangle"><see cref="RectangleF"/>structure that specifies the location of the drawn text.</param>
+        /// <param name="format">
+        ///  <see cref="StringFormat"/> that specifies formatting attributes, such as line spacing and alignment,
+        ///  that are applied to the drawn text.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
+        /// </exception>
+        /// <remarks>
+        ///  <para>
+        ///   The text represented by the <paramref name="s"/> parameter is drawn inside the rectangle represented by
+        ///   the <paramref name="layoutRectangle"/> parameter. If the text does not fit inside the rectangle, it is
+        ///   truncated at the nearest word, unless otherwise specified with the <paramref name="format"/> parameter.
+        ///  </para>
+        /// </remarks>
         public void DrawString(string? s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format)
         {
             ArgumentNullException.ThrowIfNull(brush);
@@ -1689,6 +1831,33 @@ namespace System.Drawing
                 new HandleRef(brush, brush.NativeBrush)));
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="DrawString(string?, Font, Brush, RectangleF, StringFormat?)"/>
+        public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format)
+        {
+            ArgumentNullException.ThrowIfNull(brush);
+
+            if (s.IsEmpty)
+            {
+                return;
+            }
+
+            ArgumentNullException.ThrowIfNull(font);
+
+            CheckErrorStatus(Gdip.GdipDrawString(
+                new HandleRef(this, NativeGraphics),
+                s,
+                s.Length,
+                new HandleRef(font, font.NativeFont),
+                ref layoutRectangle,
+                new HandleRef(format, format?.nativeFormat ?? IntPtr.Zero),
+                new HandleRef(brush, brush.NativeBrush)));
+        }
+#endif
+
+        /// <param name="charactersFitted">Number of characters in the text.</param>
+        /// <param name="linesFilled">Number of lines in the text.</param>
+        /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?)"/>
         public SizeF MeasureString(
             string? text,
             Font font,
@@ -1704,7 +1873,7 @@ namespace System.Drawing
                 return SizeF.Empty;
             }
 
-            if (font == null)
+            if (font is null)
                 throw new ArgumentNullException(nameof(font));
 
             RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
@@ -1724,11 +1893,51 @@ namespace System.Drawing
             return boundingBox.Size;
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?, out int, out int)"/>
+        public SizeF MeasureString(
+            ReadOnlySpan<char> text,
+            Font font,
+            SizeF layoutArea,
+            StringFormat? stringFormat,
+            out int charactersFitted,
+            out int linesFilled)
+        {
+            if (text.IsEmpty)
+            {
+                charactersFitted = 0;
+                linesFilled = 0;
+                return SizeF.Empty;
+            }
+
+            if (font is null)
+                throw new ArgumentNullException(nameof(font));
+
+            RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
+            RectangleF boundingBox = default;
+
+            Gdip.CheckStatus(Gdip.GdipMeasureString(
+                new HandleRef(this, NativeGraphics),
+                text,
+                text.Length,
+                new HandleRef(font, font.NativeFont),
+                ref layout,
+                new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
+                ref boundingBox,
+                out charactersFitted,
+                out linesFilled));
+
+            return boundingBox.Size;
+        }
+#endif
+
+        /// <param name="origin"><see cref="PointF"/> structure that represents the upper-left corner of the text.</param>
+        /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?)"/>
         public SizeF MeasureString(string? text, Font font, PointF origin, StringFormat? stringFormat)
         {
             if (string.IsNullOrEmpty(text))
                 return SizeF.Empty;
-            if (font == null)
+            if (font is null)
                 throw new ArgumentNullException(nameof(font));
 
             RectangleF layout = new RectangleF(origin.X, origin.Y, 0, 0);
@@ -1748,11 +1957,73 @@ namespace System.Drawing
             return boundingBox.Size;
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureString(string?, Font, PointF, StringFormat?)"/>
+        public SizeF MeasureString(ReadOnlySpan<char> text, Font font, PointF origin, StringFormat? stringFormat)
+        {
+            if (text.IsEmpty)
+                return SizeF.Empty;
+            if (font is null)
+                throw new ArgumentNullException(nameof(font));
+
+            RectangleF layout = new RectangleF(origin.X, origin.Y, 0, 0);
+            RectangleF boundingBox = default;
+
+            Gdip.CheckStatus(Gdip.GdipMeasureString(
+                new HandleRef(this, NativeGraphics),
+                text,
+                text.Length,
+                new HandleRef(font, font.NativeFont),
+                ref layout,
+                new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
+                ref boundingBox,
+                out _,
+                out _));
+
+            return boundingBox.Size;
+        }
+#endif
+
+        /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?)"/>
         public SizeF MeasureString(string? text, Font font, SizeF layoutArea) => MeasureString(text, font, layoutArea, null);
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureString(string?, Font, SizeF)"/>
+        public SizeF MeasureString(ReadOnlySpan<char> text, Font font, SizeF layoutArea) => MeasureString(text, font, layoutArea, null);
+#endif
+
+        /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+        /// <param name="layoutArea"><see cref="SizeF"/> structure that specifies the maximum layout area for the text.</param>
+        /// <inheritdoc cref="MeasureString(string?, Font, int, StringFormat?)"/>
         public SizeF MeasureString(string? text, Font font, SizeF layoutArea, StringFormat? stringFormat)
         {
             if (string.IsNullOrEmpty(text))
+                return SizeF.Empty;
+            if (font is null)
+                throw new ArgumentNullException(nameof(font));
+
+            RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
+            RectangleF boundingBox = default;
+
+            Gdip.CheckStatus(Gdip.GdipMeasureString(
+                new HandleRef(this, NativeGraphics),
+                text,
+                text.Length,
+                new HandleRef(font, font.NativeFont),
+                ref layout,
+                new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
+                ref boundingBox,
+                out _,
+                out _));
+
+            return boundingBox.Size;
+        }
+
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureString(string?, Font, SizeF, StringFormat?)"/>
+        public SizeF MeasureString(ReadOnlySpan<char> text, Font font, SizeF layoutArea, StringFormat? stringFormat)
+        {
+            if (text.IsEmpty)
                 return SizeF.Empty;
             if (font == null)
                 throw new ArgumentNullException(nameof(font));
@@ -1773,27 +2044,99 @@ namespace System.Drawing
 
             return boundingBox.Size;
         }
+#endif
 
+        /// <summary>
+        ///  Measures the specified text when drawn with the specified <see cref="Font"/>.
+        /// </summary>
+        /// <param name="text">Text to measure.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <returns>
+        ///  This method returns a <see cref="SizeF"/> structure that represents the size, in the units specified by the
+        ///  <see cref="PageUnit"/> property, of the text specified by the <paramref name="text"/> parameter as drawn
+        ///  with the <paramref name="font"/> parameter.
+        /// </returns>
+        /// <remarks>
+        ///  <para>
+        ///   The <see cref="MeasureString(string?, Font)"/> method is designed for use with individual strings and
+        ///   includes a small amount of extra space before and after the string to allow for overhanging glyphs. Also,
+        ///   the <see cref="DrawString(string?, Font, Brush, PointF)"/> method adjusts glyph points to optimize display
+        ///   quality and might display a string narrower than reported by <see cref="MeasureString(string?, Font)"/>.
+        ///   To obtain metrics suitable for adjacent strings in layout (for example, when implementing formatted text),
+        ///   use the <see cref="MeasureCharacterRanges(string?, Font, RectangleF, StringFormat?)"/> method or one of
+        ///   the <see cref="MeasureString(string?, Font, int, StringFormat?)"/> methods that takes a StringFormat, and
+        ///   pass <see cref="StringFormat.GenericTypographic"/>. Also, ensure the <see cref="TextRenderingHint"/> for
+        ///   the <see cref="Graphics"/> is <see cref="TextRenderingHint.AntiAlias"/>.
+        ///  </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="font"/> is null.</exception>
         public SizeF MeasureString(string? text, Font font)
         {
             return MeasureString(text, font, new SizeF(0, 0));
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureString(string?, Font)"/>
+        public SizeF MeasureString(ReadOnlySpan<char> text, Font font)
+        {
+            return MeasureString(text, font, new SizeF(0, 0));
+        }
+#endif
+
+        /// <param name="width">Maximum width of the string in pixels.</param>
+        /// <inheritdoc cref="MeasureString(string?, Font)"/>
         public SizeF MeasureString(string? text, Font font, int width)
         {
             return MeasureString(text, font, new SizeF(width, 999999));
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureString(string?, Font, int)"/>
+        public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int width)
+        {
+            return MeasureString(text, font, new SizeF(width, 999999));
+        }
+#endif
+
+        /// <param name="format"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+        /// <inheritdoc cref="MeasureString(string?, Font, int)"/>
         public SizeF MeasureString(string? text, Font font, int width, StringFormat? format)
         {
             return MeasureString(text, font, new SizeF(width, 999999), format);
         }
 
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureString(string?, Font, int, StringFormat?)"/>
+        public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int width, StringFormat? format)
+        {
+            return MeasureString(text, font, new SizeF(width, 999999), format);
+        }
+#endif
+
+        /// <summary>
+        ///  Gets an array of <see cref="Region"/> objects, each of which bounds a range of character positions within
+        ///  the specified text.
+        /// </summary>
+        /// <param name="text">Text to measure.</param>
+        /// <param name="font"><see cref="Font"/> that defines the text format.</param>
+        /// <param name="layoutRect"><see cref="RectangleF"/> structure that specifies the layout rectangle for the text.</param>
+        /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+        /// <returns>
+        ///  This method returns an array of <see cref="Region"/> objects, each of which bounds a range of character
+        ///  positions within the specified text.
+        /// </returns>
+        /// <remarks>
+        ///  <para>
+        ///   The regions returned by this method are resolution-dependent, so there might be a slight loss of accuracy
+        ///   if text is recorded in a metafile at one resolution and later played back at a different resolution.
+        ///  </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="font"/> is <see langword="null"/>.</exception>
         public Region[] MeasureCharacterRanges(string? text, Font font, RectangleF layoutRect, StringFormat? stringFormat)
         {
             if (string.IsNullOrEmpty(text))
                 return Array.Empty<Region>();
-            if (font == null)
+            if (font is null)
                 throw new ArgumentNullException(nameof(font));
 
             Gdip.CheckStatus(Gdip.GdipGetStringFormatMeasurableCharacterRangeCount(
@@ -1821,6 +2164,43 @@ namespace System.Drawing
 
             return regions;
         }
+
+#if NET8_0_OR_GREATER
+        /// <inheritdoc cref="MeasureCharacterRanges(string?, Font, RectangleF, StringFormat?)"/>
+        public Region[] MeasureCharacterRanges(ReadOnlySpan<char> text, Font font, RectangleF layoutRect, StringFormat? stringFormat)
+        {
+            if (text.IsEmpty)
+                return Array.Empty<Region>();
+            if (font is null)
+                throw new ArgumentNullException(nameof(font));
+
+            Gdip.CheckStatus(Gdip.GdipGetStringFormatMeasurableCharacterRangeCount(
+                new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
+                out int count));
+
+            IntPtr[] gpRegions = new IntPtr[count];
+            Region[] regions = new Region[count];
+
+            for (int f = 0; f < count; f++)
+            {
+                regions[f] = new Region();
+                gpRegions[f] = regions[f].NativeRegion;
+            }
+
+            Gdip.CheckStatus(Gdip.GdipMeasureCharacterRanges(
+                new HandleRef(this, NativeGraphics),
+                text,
+                text.Length,
+                new HandleRef(font, font.NativeFont),
+                ref layoutRect,
+                new HandleRef(stringFormat, stringFormat?.nativeFormat ?? IntPtr.Zero),
+                count,
+                gpRegions));
+
+            return regions;
+        }
+#endif
+
 
         /// <summary>
         /// Draws the specified image at the specified location.

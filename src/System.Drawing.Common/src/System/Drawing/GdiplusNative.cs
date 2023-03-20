@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Drawing2D;
@@ -2981,12 +2981,12 @@ namespace System.Drawing
 #endif
             HandleRef brush, Rectangle* rects, int count);
 
-            [LibraryImport(LibraryName,  SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+            [LibraryImport(LibraryName, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
             internal static partial int GdipDrawString(
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef graphics, string textString, int length,
+            HandleRef graphics, ReadOnlySpan<char> textString, int length,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
@@ -3199,7 +3199,7 @@ namespace System.Drawing
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef graphics, string textString, int length,
+            HandleRef graphics, ReadOnlySpan<char> textString, int length,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
@@ -3214,7 +3214,7 @@ namespace System.Drawing
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef graphics, string textString, int length,
+            HandleRef graphics, ReadOnlySpan<char> textString, int length,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif

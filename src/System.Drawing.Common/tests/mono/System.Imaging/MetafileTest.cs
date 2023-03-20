@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Metafile class unit tests
@@ -406,6 +406,9 @@ namespace MonoTests.System.Drawing.Imaging
 
                 RectangleF rect = new RectangleF(0, 0, size.Width, size.Height);
                 Region[] region = g.MeasureCharacterRanges(text, test_font, rect, sf);
+                Assert.Equal(2, region.Length);
+
+                region = g.MeasureCharacterRanges(text.AsSpan(), test_font, rect, sf);
                 Assert.Equal(2, region.Length);
                 mf.Dispose();
             }
