@@ -4,6 +4,20 @@ Param(
     [Parameter(ValueFromRemainingArguments=$true)][String[]]$properties
 )
 
+function _kill($processName) {
+    Write-Host "killing process ${processName}."
+    try {
+        # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging
+        # when there are no instances of the process
+        & cmd /c "taskkill /T /F /IM ${processName} 2>&1"
+    } catch {
+        Write-Host "Failed to kill ${processName}: $_"
+    }
+}
+
+# kill server manager process if running on build agents.
+_kill severmanager.exe
+
 # How long to wait before we consider a build/test run to be unresponsive
 $WaitSeconds = 900 # 15 min
 

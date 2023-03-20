@@ -35,7 +35,7 @@ namespace System.Windows.Forms.UITests
 
             // Build agents might be running on server OS and ServerManager window is opened on logon.
             // Closing this window to avoid any interference with Winforms UI tests.
-            CloseServerManagerWindow();
+            // CloseServerManagerWindow();
 
             Application.EnableVisualStyles();
 
