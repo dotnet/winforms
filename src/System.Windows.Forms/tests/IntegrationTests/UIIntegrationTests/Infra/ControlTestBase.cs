@@ -16,7 +16,6 @@ namespace System.Windows.Forms.UITests
     public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         private const int SPIF_SENDCHANGE = 0x0002;
-        private readonly string _testName;
 
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
@@ -30,8 +29,7 @@ namespace System.Windows.Forms.UITests
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
-
-            _testName = GetTestName(out ITest test);
+            DataCollectionService.CurrentTest = GetTest();
 
             Application.EnableVisualStyles();
 
@@ -40,13 +38,11 @@ namespace System.Windows.Forms.UITests
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
 
-            string GetTestName(out ITest test)
+            ITest GetTest()
             {
-                var type = testOutputHelper.GetType()!;
+                var type = testOutputHelper.GetType();
                 var testMember = type.GetField("test", BindingFlags.Instance | BindingFlags.NonPublic)!;
-                test = (ITest)testMember.GetValue(testOutputHelper)!;
-                int index = test.DisplayName.IndexOf("("); // Trim arguments from test name.
-                return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
+                return (ITest)testMember.GetValue(testOutputHelper)!;
             }
         }
 
