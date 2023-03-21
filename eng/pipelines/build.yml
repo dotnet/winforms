@@ -108,6 +108,8 @@ jobs:
         /p:TestRunnerAdditionalArguments='-notrait Category=IgnoreForCI -notrait Category=failing'
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
         /m:1
+      env:
+        XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
       displayName: Run Integration Tests
 
     # Create Nuget package, sign, and publish
