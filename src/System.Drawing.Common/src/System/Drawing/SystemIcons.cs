@@ -1,7 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing
 {
@@ -52,7 +54,40 @@ namespace System.Drawing
 
         private static Icon GetIcon(ref Icon? icon, int iconId)
         {
-            return icon ??= new Icon(Interop.User32.LoadIcon(NativeMethods.NullHandleRef, (IntPtr)iconId));
+            return icon ??= new Icon(User32.LoadIcon(NativeMethods.NullHandleRef, (nint)iconId));
         }
+
+#if NET8_0_OR_GREATER
+        /// <summary>
+        ///  Gets the specified Windows shell stock icon.
+        /// </summary>
+        /// <param name="stockIcon">The stock icon to retrieve.</param>
+        /// <param name="options">Options for retrieving the icon.</param>
+        /// <returns>The requested <see cref="Icon"/>.</returns>
+        /// <remarks>
+        ///  <para>
+        ///   Unlike the static icon properties in <see cref="SystemIcons"/>, this API returns icons that are themed
+        ///   for the running version of Windows. Additionally, the returned <see cref="Icon"/> is not cached and
+        ///   should be disposed when no longer needed.
+        ///  </para>
+        /// </remarks>
+        public static unsafe Icon GetStockIcon(StockIconId stockIcon, StockIconOptions options = StockIconOptions.Default)
+        {
+            Shell32.SHSTOCKICONINFO info = new()
+            {
+                cbSize = (uint)sizeof(Shell32.SHSTOCKICONINFO),
+            };
+
+            HRESULT result = Shell32.SHGetStockIconInfo(
+                (uint)stockIcon,
+                (uint)options | Shell32.SHGSI_ICON,
+                ref info);
+
+            // This only throws if there is an error.
+            Marshal.ThrowExceptionForHR((int)result);
+
+            return new Icon(info.hIcon, takeOwnership: true);
+        }
+#endif
     }
 }
