@@ -358,7 +358,7 @@ namespace System.Windows.Forms.Design
             using (TraceScope($"ControlCodeDomSerializer::SerializeMethodInvocation({methodName})"))
             {
                 string name = manager.GetName(control);
-                Trace("{0}.{1}", name, methodName);
+                Trace(TraceLevel.Verbose, $"{name}.{methodName}");
 
                 // Use IReflect to see if this method name exists on the control.
                 paramTypes = ToTargetTypes(control, paramTypes);

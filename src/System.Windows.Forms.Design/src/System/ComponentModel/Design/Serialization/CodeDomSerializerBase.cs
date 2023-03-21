@@ -9,6 +9,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace System.ComponentModel.Design.Serialization
@@ -18,7 +19,7 @@ namespace System.ComponentModel.Design.Serialization
     ///  It is not meant to be publicly derived from.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class CodeDomSerializerBase
+    public abstract partial class CodeDomSerializerBase
     {
         private static readonly Attribute[] runTimeProperties = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly TraceSwitch traceSerialization = new TraceSwitch("DesignerSerialization", "Trace design time serialization");
@@ -437,7 +438,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (passFilter)
                         {
                             object resourceObject = de.Value;
-                            Trace("Resource: {0}, value: {1}", resourceName, (resourceObject ?? "(null)"));
+                            Trace(TraceLevel.Verbose, $"Resource: {resourceName}, value: {(resourceObject ?? "(null)")}");
                             try
                             {
                                 property.SetValue(value, resourceObject);
@@ -455,46 +456,34 @@ namespace System.ComponentModel.Design.Serialization
         internal static IDisposable TraceScope(string name)
         {
 #if DEBUG
-            traceScope ??= new ();
+            traceScope ??= new Stack<string>();
 
-            Trace(name);
+            Trace(TraceLevel.Verbose, name);
             traceScope.Push(name);
 #endif
             return default(TracingScope);
         }
 
         [Conditional("DEBUG")]
-        internal static void TraceIf(bool condition, string message, params object[] values)
+        internal static void TraceIf(TraceLevel level, bool condition, string message)
         {
             if (condition)
             {
-                Trace(message, values);
+                Trace(level, message);
             }
         }
 
         [Conditional("DEBUG")]
-        internal static void Trace(string message, params object[] values)
+        internal static void TraceIf(TraceLevel level, bool condition, [InterpolatedStringHandlerArgument(nameof(condition), nameof(level))]
+            ref TraceIfInterpolatedStringHandler message)
         {
-            if (traceSerialization.TraceVerbose)
-            {
-                int indent = 0;
-                int oldIndent = Debug.IndentLevel;
+            TraceIf(level, condition, message.ToStringAndClear());
+        }
 
-                if (traceScope is not null)
-                {
-                    indent = traceScope.Count;
-                }
-
-                try
-                {
-                    Debug.IndentLevel = indent;
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, message, values));
-                }
-                finally
-                {
-                    Debug.IndentLevel = oldIndent;
-                }
-            }
+        [Conditional("DEBUG")]
+        internal static void Trace(TraceLevel level, [InterpolatedStringHandlerArgument(nameof(level))] ref TraceInterpolatedStringHandler message)
+        {
+            Trace(level, message.ToStringAndClear());
         }
 
         private struct TracingScope : IDisposable
@@ -513,7 +502,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeStatement)}"))
             {
-                Trace("Statement : {0}", statement.GetType().Name);
+                Trace(TraceLevel.Verbose, $"Statement : {statement.GetType().Name}");
 
                 // Push this statement onto the context stack.  This allows any serializers handling an expression to know what it was connected to.
                 manager.Context.Push(statement);
@@ -568,7 +557,7 @@ namespace System.ComponentModel.Design.Serialization
                                             }
                                             else
                                             {
-                                                TraceWarning("Unrecognized statement type: {0}", statement.GetType().Name);
+                                                Trace(TraceLevel.Warning, $"Unrecognized statement type: {statement.GetType().Name}");
                                             }
                                         }
                                     }
@@ -610,7 +599,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (statement.InitExpression is not null)
                 {
-                    Trace("Processing init expression");
+                    Trace(TraceLevel.Verbose, "Processing init expression");
                     DeserializeExpression(manager, statement.Name, statement.InitExpression);
                 }
             }
@@ -621,19 +610,19 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeDetachEventStatement)}"))
             {
                 object eventListener = DeserializeExpression(manager, null, statement.Listener);
-                TraceErrorIf(!(eventListener is CodeDelegateCreateExpression), "Unable to simplify event attach RHS to a delegate create.");
+                TraceIf(TraceLevel.Error, eventListener is not CodeDelegateCreateExpression, "Unable to simplify event attach RHS to a delegate create.");
                 if (eventListener is CodeDelegateCreateExpression delegateCreate)
                 {
                     // We only support binding methods to the root object.
                     object eventAttachObject = DeserializeExpression(manager, null, delegateCreate.TargetObject);
                     RootContext rootExp = (RootContext)manager.Context[typeof(RootContext)];
                     bool isRoot = rootExp is null || (rootExp is not null && rootExp.Value == eventAttachObject);
-                    TraceWarningIf(!isRoot, "Event is bound to an object other than the root.  We do not support this.");
+                    TraceIf(TraceLevel.Warning, !isRoot, "Event is bound to an object other than the root.  We do not support this.");
                     if (isRoot)
                     {
                         // Now deserialize the LHS of the event attach to discover the guy whose event we are attaching.
                         object targetObject = DeserializeExpression(manager, null, statement.Event.TargetObject);
-                        TraceErrorIf(targetObject is CodeExpression, "Unable to simplify event attach LHS to an object reference.");
+                        TraceIf(TraceLevel.Error, targetObject is CodeExpression, "Unable to simplify event attach LHS to an object reference.");
                         if (!(targetObject is CodeExpression))
                         {
                             EventDescriptor evt = GetEventsHelper(manager, targetObject, null)[statement.Event.EventName];
@@ -648,7 +637,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                TraceError("Object {0} does not have a event {1}", targetObject.GetType().Name, statement.Event.EventName);
+                                Trace(TraceLevel.Error, $"Object {targetObject.GetType().Name} does not have a event {statement.Event.EventName}");
                                 Error(manager, string.Format(SR.SerializerNoSuchEvent, targetObject.GetType().FullName, statement.Event.EventName), SR.SerializerNoSuchEvent);
                             }
                         }
@@ -665,14 +654,14 @@ namespace System.ComponentModel.Design.Serialization
                 //Perf: is -> as changes, change ordering based on possibility of occurrence
                 CodeExpression expression = statement.Left;
 
-                Trace("Processing LHS");
+                Trace(TraceLevel.Verbose, "Processing LHS");
                 if (expression is CodePropertyReferenceExpression propertyReferenceEx)
                 {
                     DeserializePropertyAssignStatement(manager, statement, propertyReferenceEx, true);
                 }
                 else if (expression is CodeFieldReferenceExpression fieldReferenceEx)
                 {
-                    Trace("LHS is field : {0}", fieldReferenceEx.FieldName);
+                    Trace(TraceLevel.Verbose, $"LHS is field : {fieldReferenceEx.FieldName}");
                     object lhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, fieldReferenceEx.TargetObject);
                     if (lhs is not null)
                     {
@@ -680,11 +669,11 @@ namespace System.ComponentModel.Design.Serialization
 
                         if (root is not null && root.Value == lhs)
                         {
-                            Trace("Processing RHS");
+                            Trace(TraceLevel.Verbose, "Processing RHS");
                             object rhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, statement.Right);
                             if (rhs is CodeExpression)
                             {
-                                TraceError("Unable to simplify statement to anything better than: {0}", rhs.GetType().Name);
+                                Trace(TraceLevel.Error, $"Unable to simplify statement to anything better than: {rhs.GetType().Name}");
                                 return;
                             }
                         }
@@ -707,11 +696,11 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (f is not null)
                             {
-                                Trace("Processing RHS");
+                                Trace(TraceLevel.Verbose, "Processing RHS");
                                 object rhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, statement.Right);
                                 if (rhs is CodeExpression)
                                 {
-                                    TraceError("Unable to simplify statement to anything better than: {0}", rhs.GetType().Name);
+                                    Trace(TraceLevel.Error, $"Unable to simplify statement to anything better than: {rhs.GetType().Name}");
                                     return;
                                 }
 
@@ -752,7 +741,7 @@ namespace System.ComponentModel.Design.Serialization
                                 };
                                 if (!DeserializePropertyAssignStatement(manager, statement, propRef, false))
                                 {
-                                    TraceError("Object {0} does not have a field {1}", lhs.GetType().Name, fieldReferenceEx.FieldName);
+                                    Trace(TraceLevel.Error, $"Object {lhs.GetType().Name} does not have a field {fieldReferenceEx.FieldName}");
                                     Error(manager, string.Format(SR.SerializerNoSuchField, lhs.GetType().FullName, fieldReferenceEx.FieldName), SR.SerializerNoSuchField);
                                 }
                             }
@@ -760,17 +749,17 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        TraceWarning("Could not find target object for field {0}", fieldReferenceEx.FieldName);
+                        Trace(TraceLevel.Warning, $"Could not find target object for field {fieldReferenceEx.FieldName}");
                     }
                 }
                 else if (expression is CodeVariableReferenceExpression variableReferenceEx)
                 {
                     // This is the easiest.  Just relate the RHS object to the name of the variable.
-                    Trace("Processing RHS");
+                    Trace(TraceLevel.Verbose, "Processing RHS");
                     object rhs = DeserializeExpression(manager, variableReferenceEx.VariableName, statement.Right);
                     if (rhs is CodeExpression)
                     {
-                        TraceError("Unable to simplify statement to anything better than: {0}", rhs.GetType().Name);
+                        Trace(TraceLevel.Error, $"Unable to simplify statement to anything better than: {rhs.GetType().Name}");
                         return;
                     }
 
@@ -779,7 +768,7 @@ namespace System.ComponentModel.Design.Serialization
                 else if (expression is CodeArrayIndexerExpression arrayIndexerEx)
                 {
                     int[] indexes = new int[arrayIndexerEx.Indices.Count];
-                    Trace("LHS is Array Indexer with dims {0}", indexes.Length);
+                    Trace(TraceLevel.Verbose, $"LHS is Array Indexer with dims {indexes.Length}");
                     object array = DeserializeExpression(manager, null, arrayIndexerEx.TargetObject);
                     bool indexesOK = true;
 
@@ -790,11 +779,11 @@ namespace System.ComponentModel.Design.Serialization
                         if (index is IConvertible ic)
                         {
                             indexes[i] = ic.ToInt32(null);
-                            Trace("[{0}] == {1}", i, indexes[i]);
+                            Trace(TraceLevel.Verbose, $"[{i}] == {indexes[i]}");
                         }
                         else
                         {
-                            TraceWarning("Index {0} could not be converted to int.  Type: {1}", i, (index is null ? "(null)" : index.GetType().Name));
+                            Trace(TraceLevel.Warning, $"Index {i} could not be converted to int.  Type: {(index is null ? "(null)" : index.GetType().Name)}");
                             indexesOK = false;
                             break;
                         }
@@ -802,11 +791,11 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (array is Array arr && indexesOK)
                     {
-                        Trace("Processing RHS");
+                        Trace(TraceLevel.Verbose, "Processing RHS");
                         object rhs = DeserializeExpression(manager, null, statement.Right);
                         if (rhs is CodeExpression)
                         {
-                            TraceError("Unable to simplify statement to anything better than: {0}", rhs.GetType().Name);
+                            Trace(TraceLevel.Error, $"Unable to simplify statement to anything better than: {rhs.GetType().Name}");
                             return;
                         }
 
@@ -814,24 +803,10 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        TraceErrorIf(!(array is Array), "Array resolved to something other than an array: {0}", (array is null ? "(null)" : array.GetType().Name));
-                        TraceErrorIf(!indexesOK, "Indexes to array could not be converted to int32.");
+                        TraceIf(TraceLevel.Error, array is not Array, $"Array resolved to something other than an array: {(array is null ? "(null)" : array.GetType().Name)}");
+                        TraceIf(TraceLevel.Error, !indexesOK, "Indexes to array could not be converted to int32.");
                     }
                 }
-            }
-        }
-
-        [Conditional("DEBUG")]
-        internal static void TraceError(string message, params object[] values)
-        {
-            if (traceSerialization.TraceError)
-            {
-                string scope = traceScope is not null ? string.Join('/', traceScope.Reverse()) : string.Empty;
-
-                Debug.WriteLine("***************************************************");
-                Debug.WriteLine($"*** ERROR :{string.Format(CultureInfo.CurrentCulture, message, values)}");
-                Debug.WriteLine($"*** SCOPE :{scope}");
-                Debug.WriteLine("***************************************************");
             }
         }
 
@@ -868,7 +843,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (result is CodePrimitiveExpression primitiveEx)
                     {
-                        Trace("Primitive.  Value: {0}", (primitiveEx.Value ?? "(null)"));
+                        Trace(TraceLevel.Verbose, $"Primitive.  Value: {(primitiveEx.Value ?? "(null)")}");
                         result = primitiveEx.Value;
                         break;
                     }
@@ -879,7 +854,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if (result is CodeThisReferenceExpression)
                     { //(is -> as doesn't help here, since the cast is different)
-                        Trace("'this' reference");
+                        Trace(TraceLevel.Verbose, "'this' reference");
                         RootContext rootExp = (RootContext)manager.Context[typeof(RootContext)];
                         if (rootExp is not null)
                         {
@@ -896,7 +871,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         if (result is null)
                         {
-                            TraceError("CodeThisReferenceExpression not handled because there is no root context or the root context did not contain an instance.");
+                            Trace(TraceLevel.Error, "CodeThisReferenceExpression not handled because there is no root context or the root context did not contain an instance.");
                             Error(manager, SR.SerializerNoRootExpression, SR.SerializerNoRootExpression);
                         }
 
@@ -904,13 +879,13 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((typeReferenceEx = result as CodeTypeReferenceExpression) is not null)
                     {
-                        Trace("TypeReference : {0}", typeReferenceEx.Type.BaseType);
+                        Trace(TraceLevel.Verbose, $"TypeReference : {typeReferenceEx.Type.BaseType}");
                         result = manager.GetType(GetTypeNameFromCodeTypeReference(manager, typeReferenceEx.Type));
                         break;
                     }
                     else if ((objectCreateEx = result as CodeObjectCreateExpression) is not null)
                     {
-                        Trace("Object create");
+                        Trace(TraceLevel.Verbose, "Object create");
                         result = null;
                         Type type = manager.GetType(GetTypeNameFromCodeTypeReference(manager, objectCreateEx.CreateType));
                         if (type is not null)
@@ -970,7 +945,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-                            TraceError("Type {0} could not be loaded", objectCreateEx.CreateType.BaseType);
+                            Trace(TraceLevel.Error, $"Type {objectCreateEx.CreateType.BaseType} could not be loaded");
                             Error(manager, string.Format(SR.SerializerTypeNotFound, objectCreateEx.CreateType.BaseType), SR.SerializerTypeNotFound);
                         }
 
@@ -978,11 +953,11 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((argumentReferenceEx = result as CodeArgumentReferenceExpression) is not null)
                     {
-                        Trace("Named argument reference : {0}", argumentReferenceEx.ParameterName);
+                        Trace(TraceLevel.Verbose, $"Named argument reference : {argumentReferenceEx.ParameterName}");
                         result = manager.GetInstance(argumentReferenceEx.ParameterName);
                         if (result is null)
                         {
-                            TraceError("Parameter {0} does not exist", argumentReferenceEx.ParameterName);
+                            Trace(TraceLevel.Error, "Parameter {argumentReferenceEx.ParameterName} does not exist");
                             Error(manager, string.Format(SR.SerializerUndeclaredName, argumentReferenceEx.ParameterName), SR.SerializerUndeclaredName);
                         }
 
@@ -990,7 +965,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((fieldReferenceEx = result as CodeFieldReferenceExpression) is not null)
                     {
-                        Trace("Field reference : {0}", fieldReferenceEx.FieldName);
+                        Trace(TraceLevel.Verbose, $"Field reference : {fieldReferenceEx.FieldName}");
                         object target = DeserializeExpression(manager, null, fieldReferenceEx.TargetObject);
                         if (target is not null && !(target is CodeExpression))
                         {
@@ -1005,7 +980,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                                 else
                                 {
-                                    TraceError("Field {0} could not be resolved", fieldReferenceEx.FieldName);
+                                    Trace(TraceLevel.Error, "Field {fieldReferenceEx.FieldName} could not be resolved");
                                     Error(manager, string.Format(SR.SerializerUndeclaredName, fieldReferenceEx.FieldName), SR.SerializerUndeclaredName);
                                 }
                             }
@@ -1013,8 +988,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 FieldInfo field;
                                 object instance;
-                                Type t = target as Type;
-                                if (t is not null)
+                                if (target is Type t)
                                 {
                                     instance = null;
                                     field = GetReflectionTypeFromTypeHelper(manager, t).GetField(fieldReferenceEx.FieldName, BindingFlags.GetField | BindingFlags.Static | BindingFlags.Public);
@@ -1051,12 +1025,12 @@ namespace System.ComponentModel.Design.Serialization
                             Error(manager, string.Format(SR.SerializerFieldTargetEvalFailed, fieldReferenceEx.FieldName), SR.SerializerFieldTargetEvalFailed);
                         }
 
-                        TraceWarningIf(result == fieldReferenceEx, "Could not resolve field {0} to an object instance.", fieldReferenceEx.FieldName);
+                        TraceIf(TraceLevel.Warning, result == fieldReferenceEx, $"Could not resolve field {fieldReferenceEx.FieldName} to an object instance.");
                         break;
                     }
                     else if ((methodInvokeEx = result as CodeMethodInvokeExpression) is not null)
                     {
-                        Trace("Method invoke : {0}", methodInvokeEx.Method.MethodName);
+                        Trace(TraceLevel.Verbose, $"Method invoke : {methodInvokeEx.Method.MethodName}");
 
                         object targetObject = DeserializeExpression(manager, null, methodInvokeEx.Method.TargetObject);
 
@@ -1137,11 +1111,11 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((variableReferenceEx = result as CodeVariableReferenceExpression) is not null)
                     {
-                        Trace("Variable reference : {0}", variableReferenceEx.VariableName);
+                        Trace(TraceLevel.Verbose, $"Variable reference : {variableReferenceEx.VariableName}");
                         result = manager.GetInstance(variableReferenceEx.VariableName);
                         if (result is null)
                         {
-                            TraceError("Variable {0} does not exist", variableReferenceEx.VariableName);
+                            Trace(TraceLevel.Error, $"Variable {variableReferenceEx.VariableName} does not exist");
                             Error(manager, string.Format(SR.SerializerUndeclaredName, variableReferenceEx.VariableName), SR.SerializerUndeclaredName);
                         }
 
@@ -1149,7 +1123,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((castEx = result as CodeCastExpression) is not null)
                     {
-                        Trace("Cast : {0}", castEx.TargetType.BaseType);
+                        Trace(TraceLevel.Verbose, $"Cast : {castEx.TargetType.BaseType}");
                         result = DeserializeExpression(manager, name, castEx.Expression);
                         if (result is IConvertible ic)
                         {
@@ -1178,7 +1152,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((arrayCreateEx = result as CodeArrayCreateExpression) is not null)
                     {
-                        Trace("Array create : {0}", arrayCreateEx.CreateType.BaseType);
+                        Trace(TraceLevel.Verbose, $"Array create : {arrayCreateEx.CreateType.BaseType}");
                         Type arrayType = manager.GetType(GetTypeNameFromCodeTypeReference(manager, arrayCreateEx.CreateType));
                         Array array = null;
 
@@ -1186,7 +1160,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             if (arrayCreateEx.Initializers.Count > 0)
                             {
-                                Trace("{0} initializers", arrayCreateEx.Initializers.Count);
+                                Trace(TraceLevel.Verbose, $"{arrayCreateEx.Initializers.Count} initializers");
                                 // Passed an array of initializers.  Use this to create the array.  Note that we use an  ArrayList here and add elements as we create them. It is possible that an element cannot be resolved. This is an error, but we do not want to tank the entire array.  If we kicked out the entire statement, a missing control would cause all controls on a form to vanish.
                                 ArrayList arrayList = new ArrayList(arrayCreateEx.Initializers.Count);
 
@@ -1223,19 +1197,19 @@ namespace System.ComponentModel.Design.Serialization
                                 if (o is IConvertible ic)
                                 {
                                     int size = ic.ToInt32(null);
-                                    Trace("Initialized with expression that simplified to {0}", size);
+                                    Trace(TraceLevel.Verbose, $"Initialized with expression that simplified to {size}");
                                     array = Array.CreateInstance(arrayType, size);
                                 }
                             }
                             else
                             {
-                                Trace("Initialized with size {0}", arrayCreateEx.Size);
+                                Trace(TraceLevel.Verbose, $"Initialized with size {arrayCreateEx.Size}");
                                 array = Array.CreateInstance(arrayType, arrayCreateEx.Size);
                             }
                         }
                         else
                         {
-                            TraceError("Type could not be resolved: {0}", arrayCreateEx.CreateType.BaseType);
+                            Trace(TraceLevel.Error, $"Type could not be resolved: {arrayCreateEx.CreateType.BaseType}");
                             Error(manager, string.Format(SR.SerializerTypeNotFound, arrayCreateEx.CreateType.BaseType), SR.SerializerTypeNotFound);
                         }
 
@@ -1249,7 +1223,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((arrayIndexerEx = result as CodeArrayIndexerExpression) is not null)
                     {
-                        Trace("Array indexer");
+                        Trace(TraceLevel.Verbose, "Array indexer");
 
                         // For this, assume in any error we return a null.  The only errors
                         // here should come from a mal-formed expression.
@@ -1260,7 +1234,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             int[] indexes = new int[arrayIndexerEx.Indices.Count];
 
-                            Trace("Dims: {0}", indexes.Length);
+                            Trace(TraceLevel.Verbose, $"Dims: {indexes.Length}");
 
                             bool indexesOK = true;
 
@@ -1274,11 +1248,11 @@ namespace System.ComponentModel.Design.Serialization
                                 if (index is not null)
                                 {
                                     indexes[i] = index.ToInt32(null);
-                                    Trace("[{0}] == {1}", i, indexes[i]);
+                                    Trace(TraceLevel.Verbose, $"[{i}] == {indexes[i]}");
                                 }
                                 else
                                 {
-                                    TraceWarning("Index {0} could not be converted to int.  Type: {1}", i, (index is null ? "(null)" : index.GetType().Name));
+                                    Trace(TraceLevel.Warning, $"Index {i} could not be converted to int.  Type: {(index is null ? "(null)" : index.GetType().Name)}");
                                     indexesOK = false;
                                     break;
                                 }
@@ -1294,7 +1268,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((binaryOperatorEx = result as CodeBinaryOperatorExpression) is not null)
                     {
-                        Trace("Binary operator : {0}", binaryOperatorEx.Operator);
+                        Trace(TraceLevel.Verbose, $"Binary operator : {binaryOperatorEx.Operator}");
 
                         object left = DeserializeExpression(manager, null, binaryOperatorEx.Left);
                         object right = DeserializeExpression(manager, null, binaryOperatorEx.Right);
@@ -1310,14 +1284,14 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-                            TraceWarning("Could not simplify left and right binary operators to IConvertible.");
+                            Trace(TraceLevel.Warning, "Could not simplify left and right binary operators to IConvertible.");
                         }
 
                         break;
                     }
                     else if ((delegateInvokeEx = result as CodeDelegateInvokeExpression) is not null)
                     {
-                        Trace("Delegate invoke");
+                        Trace(TraceLevel.Verbose, "Delegate invoke");
                         object targetObject = DeserializeExpression(manager, null, delegateInvokeEx.TargetObject);
                         if (targetObject is Delegate del)
                         {
@@ -1335,7 +1309,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (paramsOk)
                             {
-                                Trace("Invoking {0} with {1} parameters", targetObject.GetType().Name, parameters.Length);
+                                Trace(TraceLevel.Verbose, $"Invoking {targetObject.GetType().Name} with {parameters.Length} parameters");
                                 del.DynamicInvoke(parameters);
                             }
                         }
@@ -1344,27 +1318,27 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if ((directionEx = result as CodeDirectionExpression) is not null)
                     {
-                        Trace("Direction operator");
+                        Trace(TraceLevel.Verbose, "Direction operator");
                         result = DeserializeExpression(manager, name, directionEx.Expression);
                         break;
                     }
                     else if ((indexerEx = result as CodeIndexerExpression) is not null)
                     {
-                        Trace("Indexer");
+                        Trace(TraceLevel.Verbose, "Indexer");
                         // For this, assume in any error we return a null.  The only errors here should come from a mal-formed expression.
                         result = null;
                         object targetObject = DeserializeExpression(manager, null, indexerEx.TargetObject);
                         if (targetObject is not null)
                         {
                             object[] indexes = new object[indexerEx.Indices.Count];
-                            Trace("Indexes: {0}", indexes.Length);
+                            Trace(TraceLevel.Verbose, $"Indexes: {indexes.Length}");
                             bool indexesOK = true;
                             for (int i = 0; i < indexes.Length; i++)
                             {
                                 indexes[i] = DeserializeExpression(manager, null, indexerEx.Indices[i]);
                                 if (indexes[i] is CodeExpression)
                                 {
-                                    TraceWarning("Index {0} could not be simplified to an object.", i);
+                                    Trace(TraceLevel.Warning, $"Index {i} could not be simplified to an object.");
                                     indexesOK = false;
                                     break;
                                 }
@@ -1380,19 +1354,19 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else if (result is CodeSnippetExpression)
                     {
-                        Trace("Snippet");
+                        Trace(TraceLevel.Verbose, "Snippet");
                         result = null;
                         break;
                     }
                     else if ((parameterDeclaration = result as CodeParameterDeclarationExpression) is not null)
                     {
-                        Trace("Parameter declaration");
+                        Trace(TraceLevel.Verbose, "Parameter declaration");
                         result = manager.GetType(GetTypeNameFromCodeTypeReference(manager, parameterDeclaration.Type));
                         break;
                     }
                     else if ((typeOfExpression = result as CodeTypeOfExpression) is not null)
                     {
-                        Trace("Typeof({0})", typeOfExpression.Type.BaseType);
+                        Trace(TraceLevel.Verbose, $"Typeof({typeOfExpression.Type.BaseType})");
                         string type = GetTypeNameFromCodeTypeReference(manager, typeOfExpression.Type);
                         // add the array ranks so we get the right type of this thing.
                         for (int i = 0; i < typeOfExpression.Type.ArrayRank; i++)
@@ -1403,7 +1377,7 @@ namespace System.ComponentModel.Design.Serialization
                         result = manager.GetType(type);
                         if (result is null)
                         {
-                            TraceError("Type could not be resolved: {0}", type);
+                            Trace(TraceLevel.Error, $"Type could not be resolved: {type}");
                             Error(manager, string.Format(SR.SerializerTypeNotFound, type), SR.SerializerTypeNotFound);
                         }
 
@@ -1475,19 +1449,19 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (handlerMethodName is null)
                 {
-                    TraceError("Unable to retrieve handler method and object for delegate create.");
+                    Trace(TraceLevel.Error, "Unable to retrieve handler method and object for delegate create.");
                 }
                 else
                 {
                     // We only support binding methods to the root object.
                     //
-                    TraceWarningIf(!isRoot, "Event is bound to an object other than the root.  We do not support this.");
+                    TraceIf(TraceLevel.Warning, !isRoot, "Event is bound to an object other than the root.  We do not support this.");
                     if (isRoot)
                     {
                         // Now deserialize the LHS of the event attach to discover the guy whose
                         // event we are attaching.
                         //
-                        TraceErrorIf(targetObject is CodeExpression, "Unable to simplify event attach LHS to an object reference.");
+                        TraceIf(TraceLevel.Error, targetObject is CodeExpression, "Unable to simplify event attach LHS to an object reference.");
                         if (!(targetObject is CodeExpression))
                         {
                             EventDescriptor evt = GetEventsHelper(manager, targetObject, null)[eventName];
@@ -1501,12 +1475,12 @@ namespace System.ComponentModel.Design.Serialization
                                     PropertyDescriptor prop = evtSvc.GetEventProperty(evt);
 
                                     prop.SetValue(targetObject, handlerMethodName);
-                                    Trace("Attached event {0}.{1} to {2}", targetObject.GetType().Name, eventName, handlerMethodName);
+                                    Trace(TraceLevel.Verbose, $"Attached event {targetObject.GetType().Name}.{eventName} to {handlerMethodName}");
                                 }
                             }
                             else
                             {
-                                TraceError("Object {0} does not have a event {1}", targetObject.GetType().Name, eventName);
+                                Trace(TraceLevel.Error, $"Object {targetObject.GetType().Name} does not have a event {eventName}");
                                 Error(manager, string.Format(SR.SerializerNoSuchEvent, targetObject.GetType().FullName, eventName), SR.SerializerNoSuchEvent);
                             }
                         }
@@ -1839,7 +1813,7 @@ namespace System.ComponentModel.Design.Serialization
         private object DeserializePropertyReferenceExpression(IDesignerSerializationManager manager, CodePropertyReferenceExpression propertyReferenceEx, bool reportError)
         {
             object result = propertyReferenceEx;
-            Trace("Property reference : {0}", propertyReferenceEx.PropertyName);
+            Trace(TraceLevel.Verbose, $"Property reference : {propertyReferenceEx.PropertyName}");
             object target = DeserializeExpression(manager, null, propertyReferenceEx.TargetObject);
             if (target is not null && !(target is CodeExpression))
             {
@@ -1880,58 +1854,64 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            TraceWarningIf(result == propertyReferenceEx, "Could not resolve property {0} to an object instance.", propertyReferenceEx.PropertyName);
+            TraceIf(TraceLevel.Warning, result == propertyReferenceEx, $"Could not resolve property {propertyReferenceEx.PropertyName} to an object instance.");
             return result;
         }
 
         [Conditional("DEBUG")]
-        internal static void TraceErrorIf(bool condition, string message, params object[] values)
+        internal static void Trace(TraceLevel level, string message)
         {
-            if (condition)
-            {
-                TraceError(message, values);
-            }
-        }
+            if (traceSerialization.Level < level)
+                return;
 
-        [Conditional("DEBUG")]
-        internal static void TraceWarningIf(bool condition, string message, params object[] values)
-        {
-            if (condition)
+            switch (level)
             {
-                TraceWarning(message, values);
-            }
-        }
+                case TraceLevel.Verbose:
+                    int oldIndent = Debug.IndentLevel;
 
-        [Conditional("DEBUG")]
-        internal static void TraceWarning(string message, params object[] values)
-        {
-            if (traceSerialization.TraceWarning)
-            {
-                string scope = string.Empty;
-                if (traceScope is not null)
-                {
-                    foreach (string scopeName in traceScope)
+                    try
                     {
-                        if (scope.Length > 0)
-                        {
-                            scope = "/" + scope;
-                        }
-
-                        scope = scopeName + scope;
+                        Debug.IndentLevel = traceScope?.Count ?? 0;
+                        Debug.WriteLine(message);
                     }
-                }
+                    finally
+                    {
+                        Debug.IndentLevel = oldIndent;
+                    }
 
-                Debug.WriteLine("***************************************************");
-                Debug.WriteLine($"*** WARNING :{string.Format(CultureInfo.CurrentCulture, message, values)}");
-                Debug.WriteLine($"*** SCOPE :{scope}");
-                Debug.WriteLine("***************************************************");
+                    break;
+                case TraceLevel.Warning:
+                    Debug.WriteLine(
+                        $"""
+                            ***************************************************
+                            *** WARNING :{message}
+                            *** SCOPE :{GetTraceScopeAsString()}
+                            ***************************************************
+                            """);
+                    break;
+
+                case TraceLevel.Error:
+                    Debug.WriteLine(
+                        $"""
+                            ***************************************************
+                            *** ERROR :{message}
+                            *** SCOPE :{GetTraceScopeAsString()}
+                            ***************************************************
+                            """);
+                    break;
+
+                default:
+                    throw new InvalidEnumArgumentException(nameof(level), (int)level, typeof(TraceLevel));
             }
         }
+
+        private static string GetTraceScopeAsString() =>
+            traceScope is not null ? string.Join('/', traceScope.Reverse()) : string.Empty;
 
         private bool DeserializePropertyAssignStatement(IDesignerSerializationManager manager, CodeAssignStatement statement,
             CodePropertyReferenceExpression propertyReferenceEx, bool reportError)
         {
-            Trace("LHS is property : {0}", propertyReferenceEx.PropertyName);
+            Trace(TraceLevel.Verbose, $"LHS is property : {propertyReferenceEx.PropertyName}");
             object lhs = DeserializeExpression(manager, null, propertyReferenceEx.TargetObject);
 
             if (lhs is not null && !(lhs is CodeExpression))
@@ -1941,11 +1921,11 @@ namespace System.ComponentModel.Design.Serialization
                 PropertyDescriptor p = properties[propertyReferenceEx.PropertyName];
                 if (p is not null)
                 {
-                    Trace("Processing RHS");
+                    Trace(TraceLevel.Verbose, "Processing RHS");
                     object rhs = DeserializeExpression(manager, null, statement.Right);
                     if (rhs is CodeExpression)
                     {
-                        TraceError("Unable to simplify statement to anything better than: {0}", rhs.GetType().Name);
+                        Trace(TraceLevel.Error, $"Unable to simplify statement to anything better than: {rhs.GetType().Name}");
                         return false;
                     }
 
@@ -2033,14 +2013,14 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (reportError)
                     {
-                        TraceError("Object {0} does not have a property {1}", lhs.GetType().Name, propertyReferenceEx.PropertyName);
+                        Trace(TraceLevel.Error, $"Object {lhs.GetType().Name} does not have a property {propertyReferenceEx.PropertyName}");
                         Error(manager, string.Format(SR.SerializerNoSuchProperty, lhs.GetType().FullName, propertyReferenceEx.PropertyName), SR.SerializerNoSuchProperty);
                     }
                 }
             }
             else
             {
-                TraceWarning("Could not find target object for property {0}", propertyReferenceEx.PropertyName);
+                Trace(TraceLevel.Warning, $"Could not find target object for property {propertyReferenceEx.PropertyName}");
             }
 
             return false;
@@ -2069,14 +2049,14 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(manager);
             ArgumentNullException.ThrowIfNull(value);
 
-            Trace("GetExpression called for object {0}", value.ToString());
+            Trace(TraceLevel.Verbose, $"GetExpression called for object {value}");
 
             // Is the expression part of a prior SetExpression call?
 
             if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table)
             {
                 expression = table.GetExpression(value);
-                TraceIf(expression is not null, "Resolved through expression table : {0}", expression);
+                TraceIf(TraceLevel.Verbose, expression is not null, $"Resolved through expression table : {expression}");
             }
 
             // Check to see if this object represents the root context.
@@ -2085,7 +2065,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (manager.Context[typeof(RootContext)] is RootContext rootEx && ReferenceEquals(rootEx.Value, value))
                 {
                     expression = rootEx.Expression;
-                    TraceIf(expression is not null, "Resolved through root expression context : {0}", expression);
+                    TraceIf(TraceLevel.Verbose, expression is not null, $"Resolved through root expression context : {expression}");
                 }
             }
 
@@ -2104,7 +2084,7 @@ namespace System.ComponentModel.Design.Serialization
                         objectName = refSvc.GetName(value);
                         if (objectName is not null && objectName.IndexOf('.') != -1)
                         {
-                            Trace("Resolving through IReferenceService : {0}", objectName);
+                            Trace(TraceLevel.Verbose, $"Resolving through IReferenceService : {objectName}");
 
                             // This object name is built from sub objects.  Assemble the graph of sub objects.
                             string[] nameParts = objectName.Split('.');
@@ -2113,12 +2093,12 @@ namespace System.ComponentModel.Design.Serialization
 
                             object baseInstance = manager.GetInstance(nameParts[0]);
 
-                            TraceWarningIf(baseInstance is null, "Manager can't return an instance for object {0}", nameParts[0]);
+                            TraceIf(TraceLevel.Warning, baseInstance is null, $"Manager can't return an instance for object {nameParts[0]}");
                             if (baseInstance is not null)
                             {
                                 CodeExpression baseExpression = SerializeToExpression(manager, baseInstance);
 
-                                TraceWarningIf(baseExpression is null, "Unable to serialize object {0} to an expression.", baseInstance);
+                                TraceIf(TraceLevel.Warning, baseExpression is null, $"Unable to serialize object {baseInstance} to an expression.");
                                 if (baseExpression is not null)
                                 {
                                     for (int idx = 1; idx < nameParts.Length; idx++)
@@ -2294,7 +2274,7 @@ namespace System.ComponentModel.Design.Serialization
                 hasExpression = true;
             }
 
-            Trace("IsSerialized called for object {0} : {1}", value, hasExpression);
+            Trace(TraceLevel.Verbose, $"IsSerialized called for object {value} : {hasExpression}");
             return hasExpression;
         }
 
@@ -2340,7 +2320,7 @@ namespace System.ComponentModel.Design.Serialization
             if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site is not null))
             {
                 CodeExpression expression = SerializeToResourceExpression(manager, value);
-                TraceIf(expression is not null, "Serialized value as a resource.");
+                TraceIf(TraceLevel.Verbose, expression is not null, "Serialized value as a resource.");
                 if (expression is not null)
                 {
                     isComplete = true;
@@ -2365,7 +2345,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeExpression expression = null;
             using (TraceScope("CodeDomSerializerBase::SerializeInstanceDescriptor"))
             {
-                Trace("Member : {0}, args : {1}", descriptor.MemberInfo.Name, descriptor.Arguments.Count);
+                Trace(TraceLevel.Verbose, $"Member : {descriptor.MemberInfo.Name}, args : {descriptor.Arguments.Count}");
                 // Serialize all of the arguments.
                 CodeExpression[] arguments = new CodeExpression[descriptor.Arguments.Count];
                 object[] argumentValues = new object[arguments.Length];
@@ -2374,8 +2354,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (arguments.Length > 0)
                 {
                     descriptor.Arguments.CopyTo(argumentValues, 0);
-                    MethodBase mi = descriptor.MemberInfo as MethodBase;
-                    if (mi is not null)
+                    if (descriptor.MemberInfo is MethodBase mi)
                     {
                         parameters = mi.GetParameters();
                     }
@@ -2421,7 +2400,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        TraceWarning("Parameter {0} in instance descriptor call {1} could not be serialized.", i, descriptor.GetType().Name);
+                        Trace(TraceLevel.Warning, $"Parameter {i} in instance descriptor call {descriptor.GetType().Name} could not be serialized.");
                         paramsOk = false;
                         break;
                     }
@@ -2472,7 +2451,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (!targetType.IsAssignableFrom(expressionType))
                     {
-                        Trace("Supplying cast from {0} to {1}.", expressionType.Name, targetType.Name);
+                        Trace(TraceLevel.Verbose, $"Supplying cast from {expressionType.Name} to {targetType.Name}.");
                         expression = new CodeCastExpression(targetType, expression);
                     }
                 }
@@ -2500,7 +2479,7 @@ namespace System.ComponentModel.Design.Serialization
                 string baseName;
                 Type targetType = GetReflectionTypeHelper(manager, value);
                 INameCreationService ns = manager.GetService(typeof(INameCreationService)) as INameCreationService;
-                TraceWarningIf(ns is null, "Need to generate a unique name but we have no name creation service.");
+                TraceIf(TraceLevel.Warning, ns is null, "Need to generate a unique name but we have no name creation service.");
                 if (ns is not null)
                 {
                     baseName = ns.CreateName(null, targetType);
@@ -2546,7 +2525,7 @@ namespace System.ComponentModel.Design.Serialization
 
             using (TraceScope($"CodeDomSerializerBase::{nameof(SerializeEvent)}"))
             {
-                Trace("Name: {0}", descriptor.Name);
+                Trace(TraceLevel.Verbose, $"Name: {descriptor.Name}");
                 // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
                 manager.Context.Push(statements);
                 manager.Context.Push(descriptor);
@@ -2554,7 +2533,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     MemberCodeDomSerializer memberSerializer = (MemberCodeDomSerializer)manager.GetSerializer(descriptor.GetType(), typeof(MemberCodeDomSerializer));
 
-                    TraceErrorIf(memberSerializer is null, "Event {0} cannot be serialized because it has no serializer.", descriptor.Name);
+                    TraceIf(TraceLevel.Error, memberSerializer is null, $"Event {descriptor.Name} cannot be serialized because it has no serializer.");
                     if (memberSerializer is not null && memberSerializer.ShouldSerialize(manager, value, descriptor))
                     {
                         memberSerializer.Serialize(manager, value, descriptor, statements);
@@ -2574,7 +2553,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeEvents(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, params Attribute[] filter)
         {
-            Trace("CodeDomSerializerBase::{0}", nameof(SerializeEvents));
+            Trace(TraceLevel.Verbose, $"CodeDomSerializerBase::{nameof(SerializeEvents)}");
             EventDescriptorCollection events = GetEventsHelper(manager, value, filter).Sort();
             foreach (EventDescriptor evt in events)
             {
@@ -2657,7 +2636,7 @@ namespace System.ComponentModel.Design.Serialization
                         CodePropertyReferenceExpression propertyRef = new CodePropertyReferenceExpression(target, string.Empty);
                         foreach (PropertyDescriptor property in props)
                         {
-                            TraceWarningIf(property.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content), "PersistContents property {0} cannot be serialized to resources.", property.Name);
+                            TraceIf(TraceLevel.Warning, property.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content), $"PersistContents property {property.Name} cannot be serialized to resources.");
                             ExpressionContext tree = new ExpressionContext(propertyRef, property.PropertyType, value);
                             manager.Context.Push(tree);
                             try
@@ -2665,7 +2644,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if (property.Attributes.Contains(DesignerSerializationVisibilityAttribute.Visible))
                                 {
                                     propertyRef.PropertyName = property.Name;
-                                    Trace("Property : {0}", property.Name);
+                                    Trace(TraceLevel.Verbose, $"Property : {property.Name}");
 
                                     string name;
                                     if (target is CodeThisReferenceExpression)
@@ -2707,14 +2686,14 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(propertyToSerialize);
             ArgumentNullException.ThrowIfNull(statements);
 
-            Trace("CodeDomSerializerBase::{0} {1}", nameof(SerializeProperty), propertyToSerialize.Name);
+            Trace(TraceLevel.Verbose, $"CodeDomSerializerBase::{nameof(SerializeProperty)} {propertyToSerialize.Name}");
             // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
             manager.Context.Push(statements);
             manager.Context.Push(propertyToSerialize);
             try
             {
                 MemberCodeDomSerializer memberSerializer = (MemberCodeDomSerializer)manager.GetSerializer(propertyToSerialize.GetType(), typeof(MemberCodeDomSerializer));
-                TraceErrorIf(memberSerializer is null, "Property {0} cannot be serialized because it has no serializer.", propertyToSerialize.Name);
+                TraceIf(TraceLevel.Error, memberSerializer is null, $"Property {propertyToSerialize.Name} cannot be serialized because it has no serializer.");
                 if (memberSerializer is not null && memberSerializer.ShouldSerialize(manager, value, propertyToSerialize))
                 {
                     memberSerializer.Serialize(manager, value, propertyToSerialize, statements);
@@ -2778,14 +2757,14 @@ namespace System.ComponentModel.Design.Serialization
                     if (IsSerialized(manager, value))
                     {
                         expression = GetExpression(manager, value);
-                        TraceIf(expression is not null, "Existing expression found : {0}", expression);
+                        TraceIf(TraceLevel.Verbose, expression is not null, $"Existing expression found : {expression}");
                     }
                     else
                     {
                         expression = GetLegacyExpression(manager, value);
                         if (expression is not null)
                         {
-                            TraceWarning("Using legacy expression guard to prevent recursion.  Serializer for {0} should be rewritten to handle GetExpression / SetExpression.", value);
+                            Trace(TraceLevel.Warning, $"Using legacy expression guard to prevent recursion.  Serializer for {value} should be rewritten to handle GetExpression / SetExpression.");
                             SetExpression(manager, value, expression);
                         }
                     }
@@ -2796,7 +2775,7 @@ namespace System.ComponentModel.Design.Serialization
                     CodeDomSerializer serializer = GetSerializer(manager, value);
                     if (serializer is not null)
                     {
-                        Trace("Invoking serializer {0}", serializer.GetType().Name);
+                        Trace(TraceLevel.Verbose, $"Invoking serializer {serializer.GetType().Name}");
                         CodeStatementCollection saveStatements = null;
                         if (value is not null)
                         {
@@ -2848,13 +2827,13 @@ namespace System.ComponentModel.Design.Serialization
 
                         if (statements is not null)
                         {
-                            Trace("Serialization produced additional statements");
+                            Trace(TraceLevel.Verbose, "Serialization produced additional statements");
                             // See if we have a place for these statements to be stored.  If not, then check the context.
                             saveStatements ??= manager.Context[typeof(CodeStatementCollection)] as CodeStatementCollection;
 
                             if (saveStatements is not null)
                             {
-                                Trace("Saving in context stack statement collection");
+                                Trace(TraceLevel.Verbose, "Saving in context stack statement collection");
                                 Debug.Assert(saveStatements != statements, "The serializer returned the same collection that exists on the context stack.");
                                 saveStatements.AddRange(statements);
                             }
@@ -2868,14 +2847,14 @@ namespace System.ComponentModel.Design.Serialization
                                     valueName ??= value.GetType().Name;
                                 }
 
-                                TraceError("Serialization produced a set of statements but there is no statement collection on the stack to receive them.");
+                                Trace(TraceLevel.Error, "Serialization produced a set of statements but there is no statement collection on the stack to receive them.");
                                 manager.ReportError(string.Format(SR.SerializerLostStatements, valueName));
                             }
                         }
                     }
                     else
                     {
-                        TraceError("No serializer for data type: {0}", (value is null ? "(null)" : value.GetType().Name));
+                        Trace(TraceLevel.Error, $"No serializer for data type: {(value is null ? "(null)" : value.GetType().Name)}");
                         manager.ReportError(string.Format(SR.SerializerNoSerializerForComponent, value.GetType().FullName));
                     }
                 }
@@ -2907,7 +2886,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (name is not null)
                     {
-                        Trace("Object is reference ({0}) Creating reference expression", name);
+                        Trace(TraceLevel.Verbose, $"Object is reference ({name}) Creating reference expression");
                         // Check to see if this is a reference to the root component.  If it is, then use "this".
                         RootContext root = (RootContext)manager.Context[typeof(RootContext)];
                         if (root is not null)
@@ -3055,7 +3034,7 @@ namespace System.ComponentModel.Design.Serialization
                 manager.Context.Append(table);
             }
 
-            Trace("Set expression {0} for object {1}", expression, value);
+            Trace(TraceLevel.Verbose, $"Set expression {expression} for object {value}");
             // in debug builds, save off who performed this set expression.  It's very valuable to know.
 #if DEBUG
             if (traceSerialization.TraceVerbose)
@@ -3077,7 +3056,7 @@ namespace System.ComponentModel.Design.Serialization
                     stack = "unknown";
                 }
 
-                TraceWarning("Duplicate expression on context stack for value {0}.  Original expression callstack: {1}", value, stack);
+                Trace(TraceLevel.Warning, $"Duplicate expression on context stack for value {value}.  Original expression callstack: {stack}");
             }
 #endif
             table.SetExpression(value, expression, isPreset);
@@ -3098,27 +3077,27 @@ namespace System.ComponentModel.Design.Serialization
                     CodeExpression expression = null;
                     if (statement is CodeAssignStatement assign)
                     {
-                        Trace("Processing CodeAssignStatement");
+                        Trace(TraceLevel.Verbose, "Processing CodeAssignStatement");
                         expression = assign.Left;
                     }
                     else if (statement is CodeAttachEventStatement attachEvent)
                     {
-                        Trace("Processing CodeAttachEventStatement");
+                        Trace(TraceLevel.Verbose, "Processing CodeAttachEventStatement");
                         expression = attachEvent.Event;
                     }
                     else if (statement is CodeRemoveEventStatement removeEvent)
                     {
-                        Trace("Processing CodeRemoveEventStatement");
+                        Trace(TraceLevel.Verbose, "Processing CodeRemoveEventStatement");
                         expression = removeEvent.Event;
                     }
                     else if (statement is CodeExpressionStatement expressionStmt)
                     {
-                        Trace("Processing CodeExpressionStatement");
+                        Trace(TraceLevel.Verbose, "Processing CodeExpressionStatement");
                         expression = expressionStmt.Expression;
                     }
                     else if (statement is CodeVariableDeclarationStatement variableDecl)
                     {
-                        Trace("Processing CodeVariableDeclarationStatement");
+                        Trace(TraceLevel.Verbose, "Processing CodeVariableDeclarationStatement");
                         AddStatement(table, variableDecl.Name, variableDecl);
                         if (names is not null && variableDecl.Type is not null && !string.IsNullOrEmpty(variableDecl.Type.BaseType))
                         {
@@ -3147,42 +3126,42 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             if (expression is CodeCastExpression castEx)
                             {
-                                Trace("Simplifying CodeCastExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeCastExpression");
                                 expression = castEx.Expression;
                             }
                             else if ((delegateCreateEx = expression as CodeDelegateCreateExpression) is not null)
                             {
-                                Trace("Simplifying CodeDelegateCreateExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeDelegateCreateExpression");
                                 expression = delegateCreateEx.TargetObject;
                             }
                             else if ((delegateInvokeEx = expression as CodeDelegateInvokeExpression) is not null)
                             {
-                                Trace("Simplifying CodeDelegateInvokeExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeDelegateInvokeExpression");
                                 expression = delegateInvokeEx.TargetObject;
                             }
                             else if ((directionEx = expression as CodeDirectionExpression) is not null)
                             {
-                                Trace("Simplifying CodeDirectionExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeDirectionExpression");
                                 expression = directionEx.Expression;
                             }
                             else if ((eventReferenceEx = expression as CodeEventReferenceExpression) is not null)
                             {
-                                Trace("Simplifying CodeEventReferenceExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeEventReferenceExpression");
                                 expression = eventReferenceEx.TargetObject;
                             }
                             else if ((methodInvokeEx = expression as CodeMethodInvokeExpression) is not null)
                             {
-                                Trace("Simplifying CodeMethodInvokeExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeMethodInvokeExpression");
                                 expression = methodInvokeEx.Method;
                             }
                             else if ((methodReferenceEx = expression as CodeMethodReferenceExpression) is not null)
                             {
-                                Trace("Simplifying CodeMethodReferenceExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeMethodReferenceExpression");
                                 expression = methodReferenceEx.TargetObject;
                             }
                             else if ((arrayIndexerEx = expression as CodeArrayIndexerExpression) is not null)
                             {
-                                Trace("Simplifying CodeArrayIndexerExpression");
+                                Trace(TraceLevel.Verbose, "Simplifying CodeArrayIndexerExpression");
                                 expression = arrayIndexerEx.TargetObject;
                             }
                             else if ((fieldReferenceEx = expression as CodeFieldReferenceExpression) is not null)
@@ -3216,7 +3195,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                                 else
                                 {
-                                    Trace("Simplifying CodeFieldReferenceExpression");
+                                    Trace(TraceLevel.Verbose, "Simplifying CodeFieldReferenceExpression");
                                     expression = fieldReferenceEx.TargetObject;
                                 }
                             }
@@ -3230,7 +3209,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                                 else
                                 {
-                                    Trace("Simplifying CodePropertyReferenceExpression");
+                                    Trace(TraceLevel.Verbose, "Simplifying CodePropertyReferenceExpression");
                                     expression = propertyReferenceEx.TargetObject;
                                 }
                             }
@@ -3262,7 +3241,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                 if (!statementAdded)
                                 {
-                                    TraceError("Variable {0} used before it was declared.", variableReferenceEx.VariableName);
+                                    Trace(TraceLevel.Error, $"Variable {variableReferenceEx.VariableName} used before it was declared.");
                                     manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerUndeclaredName, variableReferenceEx.VariableName), manager));
                                 }
 

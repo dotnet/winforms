@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.CodeDom;
+using System.Diagnostics;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -41,13 +42,13 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (obj is not null)
                 {
-                    Trace("Returning IContainer service as container");
+                    Trace(TraceLevel.Verbose, "Returning IContainer service as container");
                     manager.SetName(obj, name);
                     return obj;
                 }
             }
 
-            Trace("No IContainer service, creating default container.");
+            Trace(TraceLevel.Verbose, "No IContainer service, creating default container.");
             return base.DeserializeInstance(manager, type, parameters, name, addToContainer);
         }
 

@@ -755,7 +755,7 @@ namespace System.ComponentModel.Design.Serialization
                                 PropertyDescriptor prop = props[propName];
                                 if (prop is not null && prop.CanResetValue(comp))
                                 {
-                                    Trace("Resetting default for {0}.{1}", name, propName);
+                                    Trace(TraceLevel.Verbose, $"Resetting default for {name}.{propName}");
                                     // If there is a member relationship setup for this property, we should disconnect it first. This makes sense, since if there was a previous relationship, we would have serialized it and not come here at all.
                                     if (manager.GetService(typeof(MemberRelationshipService)) is MemberRelationshipService relationships && relationships[comp, prop] != MemberRelationship.Empty)
                                     {
@@ -883,7 +883,7 @@ namespace System.ComponentModel.Design.Serialization
                             Type type = manager.GetType(typeName);
                             if (type is null)
                             {
-                                TraceError("Type does not exist: {0}", typeName);
+                                Trace(TraceLevel.Error, $"Type does not exist: {typeName}");
                                 manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerTypeNotFound, typeName), manager));
                             }
                             else
@@ -894,14 +894,17 @@ namespace System.ComponentModel.Design.Serialization
                                     if (serializer is null)
                                     {
                                         // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
-                                        TraceError("Type referenced in init method has no serializer: {0}", type.Name);
+                                        Trace(TraceLevel.Error, $"Type referenced in init method has no serializer: {type.Name}");
                                         manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
                                     }
                                     else
                                     {
-                                        Trace("--------------------------------------------------------------------");
-                                        Trace("     Beginning deserialization of {0}", name);
-                                        Trace("--------------------------------------------------------------------");
+                                        Trace(TraceLevel.Verbose,
+                                            $"""
+                                                --------------------------------------------------------------------
+                                                     Beginning deserialization of {name}
+                                                --------------------------------------------------------------------
+                                                """);
                                         try
                                         {
                                             object instance = serializer.Deserialize(manager, statements);
@@ -1224,7 +1227,7 @@ namespace System.ComponentModel.Design.Serialization
                                         {
                                             defaultPropList ??= new ArrayList(data.Members.Count);
 
-                                            Trace("Adding default for {0}.{1}", data._name, prop.Name);
+                                            Trace(TraceLevel.Verbose, $"Adding default for {data._name}.{prop.Name}");
                                             defaultPropList.Add(prop.Name);
                                         }
                                     }
@@ -1266,7 +1269,7 @@ namespace System.ComponentModel.Design.Serialization
                                         {
                                             defaultPropList ??= new ArrayList(data.Members.Count);
 
-                                            Trace("Adding default for {0}.{1}", data._name, prop.Name);
+                                            Trace(TraceLevel.Verbose, $"Adding default for {data._name}.{prop.Name}");
                                             defaultPropList.Add(prop.Name);
                                         }
                                     }

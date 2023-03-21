@@ -52,7 +52,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Determine case-sensitivity
                 bool caseInsensitive = false;
                 CodeDomProvider provider = manager.GetService(typeof(CodeDomProvider)) as CodeDomProvider;
-                TraceWarningIf(provider is null, "Unable to determine case sensitivity. Make sure CodeDomProvider is a service of the manager.");
+                TraceIf(TraceLevel.Warning, provider is null, "Unable to determine case sensitivity. Make sure CodeDomProvider is a service of the manager.");
                 if (provider is not null)
                 {
                     caseInsensitive = ((provider.LanguageOptions & LanguageOptions.CaseInsensitive) != 0);
@@ -75,13 +75,13 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (baseType is null)
                 {
-                    TraceError("Base type for type declaration {0} could not be loaded.  Closest base type name: {1}", declaration.Name, baseTypeName);
+                    Trace(TraceLevel.Error, $"Base type for type declaration {declaration.Name} could not be loaded.  Closest base type name: {baseTypeName}");
                     Error(manager, string.Format(SR.SerializerTypeNotFound, baseTypeName), SR.SerializerTypeNotFound);
                 }
 
                 if (GetReflectionTypeFromTypeHelper(manager, baseType).IsAbstract)
                 {
-                    TraceError("Base type {0} is abstract, which isn't allowed", baseType.FullName);
+                    Trace(TraceLevel.Error, $"Base type {baseType.FullName} is abstract, which isn't allowed");
                     Error(manager, string.Format(SR.SerializerTypeAbstract, baseType.FullName), SR.SerializerTypeAbstract);
                 }
 
@@ -122,9 +122,9 @@ namespace System.ComponentModel.Design.Serialization
                         throw new InvalidOperationException();
                     }
 
-                    Trace("Members to deserialize: {0}", _nameTable.Keys.Count);
-                    Trace("Methods to deserialize: {0}", methods.Length);
-                    TraceWarningIf(methods.Length == 0, "Serializer did not find any methods to deserialize.");
+                    Trace(TraceLevel.Verbose, $"Members to deserialize: {_nameTable.Keys.Count}");
+                    Trace(TraceLevel.Verbose, $"Methods to deserialize: {methods.Length}");
+                    TraceIf(TraceLevel.Warning, methods.Length == 0, "Serializer did not find any methods to deserialize.");
                     // Walk through all of our methods and search for local variables.  These guys get added to our nametable too.
                     foreach (CodeMemberMethod method in methods)
                     {
@@ -175,9 +175,12 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // Design time properties must be resolved before runtime properties to make sure that properties like "language" get established before we need to read values out the resource bundle
-                    Trace("--------------------------------------------------------------------");
-                    Trace("     Beginning deserialization of {0} (design time)", declaration.Name);
-                    Trace("--------------------------------------------------------------------");
+                    Trace(TraceLevel.Verbose,
+                        $"""
+                            --------------------------------------------------------------------
+                                 Beginning deserialization of {declaration.Name} (design time)
+                            --------------------------------------------------------------------
+                            """);
                     // Deserialize design time properties for the root component.
                     DeserializePropertiesFromResources(manager, rootObject, s_designTimeFilter);
                     // sort by the order so we deserialize in the same order the objects were declared in.
@@ -229,14 +232,14 @@ namespace System.ComponentModel.Design.Serialization
                 CodeObject codeObject = value as CodeObject;
                 string typeName = null;
                 CodeMemberField field = null;
-                TraceIf(codeObject is null, "Name already deserialized.  Type: {0}", (value is null ? "(null)" : value.GetType().Name));
+                TraceIf(TraceLevel.Verbose, codeObject is null, $"Name already deserialized.  Type: {(value is null ? "(null)" : value.GetType().Name)}");
                 if (codeObject is not null)
                 {
                     // If we fail, don't return a CodeDom element to the caller! Also clear out our nametable entry here -- A badly written serializer may cause a recursion here, and we want to stop it.
                     value = null;
                     _nameTable[name] = null;
                     // What kind of code object is this?
-                    Trace("CodeDom type: {0}", codeObject.GetType().Name);
+                    Trace(TraceLevel.Verbose, $"CodeDom type: {codeObject.GetType().Name}");
                     if (codeObject is CodeVariableDeclarationStatement declaration)
                     {
                         typeName = GetTypeNameFromCodeTypeReference(manager, declaration.Type);
@@ -268,7 +271,7 @@ namespace System.ComponentModel.Design.Serialization
                     IContainer container = (IContainer)manager.GetService(typeof(IContainer));
                     if (container is not null)
                     {
-                        Trace("Try to get the type name from the container: {0}", name);
+                        Trace(TraceLevel.Verbose, $"Try to get the type name from the container: {name}");
                         IComponent comp = container.Components[name];
                         if (comp is not null)
                         {
@@ -285,7 +288,7 @@ namespace System.ComponentModel.Design.Serialization
                     Type type = manager.GetType(typeName);
                     if (type is null)
                     {
-                        TraceError("Type does not exist: {0}", typeName);
+                        Trace(TraceLevel.Error, $"Type does not exist: {typeName}");
                         manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerTypeNotFound, typeName), manager));
                     }
                     else
@@ -301,14 +304,18 @@ namespace System.ComponentModel.Design.Serialization
                             if (serializer is null)
                             {
                                 // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
-                                TraceError("Type referenced in init method has no serializer: {0}", type.Name);
+                                Trace(TraceLevel.Error, $"Type referenced in init method has no serializer: {type.Name}");
                                 manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
                             }
                             else
                             {
-                                Trace("--------------------------------------------------------------------");
-                                Trace("     Beginning deserialization of {0}", name);
-                                Trace("--------------------------------------------------------------------");
+                                Trace(TraceLevel.Verbose,
+                                    $"""
+                                        --------------------------------------------------------------------
+                                             Beginning deserialization of {name}
+                                        --------------------------------------------------------------------
+                                        """);
+
                                 try
                                 {
                                     value = serializer.Deserialize(manager, statements);
@@ -385,11 +392,11 @@ namespace System.ComponentModel.Design.Serialization
             Debug.Assert(_nameTable is not null, "OnResolveName called and we are not deserializing!");
             using (TraceScope("RootCodeDomSerializer::OnResolveName"))
             {
-                Trace("Name: {0}", e.Name);
+                Trace(TraceLevel.Verbose, $"Name: {e.Name}");
                 // If someone else already found a value, who are we to complain?
                 if (e.Value is not null)
                 {
-                    TraceWarning("Another name resolver has already found the value for {0}.", e.Name);
+                    Trace(TraceLevel.Warning, $"Another name resolver has already found the value for {e.Name}.");
                 }
                 else
                 {
@@ -412,7 +419,7 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(manager);
             ArgumentNullException.ThrowIfNull(root);
 
-            Trace("TypeCodeDomSerializer::Serialize");
+            Trace(TraceLevel.Verbose, "TypeCodeDomSerializer::Serialize");
 
             // As a type serializer we are responsible for creating the type declaration. Other serializers may access this type declaration and add members to it, so we need to place it on the context stack. The serialization process also looks at the root context to see if there is a root component. The root context is also used by the serializers to add statement collections for serialized components.
             CodeTypeDeclaration docType = new CodeTypeDeclaration(manager.GetName(root));
@@ -443,9 +450,12 @@ namespace System.ComponentModel.Design.Serialization
                             string memberName = manager.GetName(member);
                             memberName ??= member.ToString();
 
-                            Trace("--------------------------------------------------------------------");
-                            Trace("     Beginning serialization of {0}", memberName);
-                            Trace("--------------------------------------------------------------------");
+                            Trace(TraceLevel.Verbose,
+                                $"""
+                                    --------------------------------------------------------------------
+                                         Beginning serialization of {memberName}
+                                    --------------------------------------------------------------------
+                                    """);
 #endif
                             // This returns an expression for the object, if possible. We ignore that. Besides returning an expression, it fills the statement table in the statement context and we're very interested in that.  After serializing everything we will walk over the statement context's statement table. We will validate that each and every member we've serialized has a presence in the statement table. If it doesn't, that's an error in the member's serializer.
                             SerializeToExpression(manager, member);
@@ -458,9 +468,13 @@ namespace System.ComponentModel.Design.Serialization
                 string rootName = manager.GetName(root);
                 rootName ??= root.ToString();
 
-                Trace("--------------------------------------------------------------------");
-                Trace("     Beginning serialization of root object {0}", rootName);
-                Trace("--------------------------------------------------------------------");
+                Trace(TraceLevel.Verbose,
+                    $"""
+                        --------------------------------------------------------------------
+                             Beginning serialization of root object {rootName}
+                        --------------------------------------------------------------------
+                        """);
+
 #endif
                 // Now, do the root object last.
                 SerializeToExpression(manager, root);
@@ -475,10 +489,13 @@ namespace System.ComponentModel.Design.Serialization
                 manager.Context.Pop();
             }
 
-            Trace("--------------------------------------------------------------------");
-            Trace("     Generated code for ", manager.GetName(root));
-            Trace("--------------------------------------------------------------------");
-            Trace(docType.Name);
+            Trace(TraceLevel.Verbose,
+                $"""
+                    --------------------------------------------------------------------
+                         Generated code for {manager.GetName(root)}
+                    --------------------------------------------------------------------
+                    {docType.Name}
+                    """);
             return docType;
         }
 
@@ -559,7 +576,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 map.Combine();
                 typeDecl.Members.Add(map.Method);
-                Trace("...generated {0} statements into method {1}", map.Method.Statements.Count, map.Method.Name);
+                Trace(TraceLevel.Verbose, $"...generated {map.Method.Statements.Count} statements into method {map.Method.Name}");
             }
         }
 
