@@ -11,9 +11,11 @@ $Value = "1"
 
 # Check if the registry exists, create it if not
 if (!(Test-Path $registryPath)) {
+    Write-Host "Addign registry key: $registryPath."
     New-Item -Path $registryPath -Force | Out-Null
 }
 
+Write-Host "Setting registry key: $registryPath\$key with value $Value."
 Set-ItemProperty -Path $registryPath -Name $key -Value $Value
 
 # Kill Server Manager window if it was already opened.
