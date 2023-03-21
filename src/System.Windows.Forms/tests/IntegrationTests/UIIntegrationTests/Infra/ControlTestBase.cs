@@ -24,6 +24,7 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
+        private static bool started;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -38,6 +39,13 @@ namespace System.Windows.Forms.UITests
             bool disabled = false;
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
+
+            // Test to capture screenshot at the start
+            if (!started)
+            {
+                started = true;
+                TrySaveScreenshot();
+            }
 
             string GetTestName(out ITest test)
             {
