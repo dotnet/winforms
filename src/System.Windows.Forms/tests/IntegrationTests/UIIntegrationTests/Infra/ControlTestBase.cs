@@ -24,7 +24,7 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
-        private static bool started;
+        //private static bool started;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.UITests
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
                 var original = _testName;
                 _testName += "_Initial";
-                started = true;
+               // started = true;
                 TrySaveScreenshot();
                 _testName = original;
             }
