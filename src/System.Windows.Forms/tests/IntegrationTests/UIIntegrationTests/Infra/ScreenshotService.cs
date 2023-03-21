@@ -2,14 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-extern alias WPF;
-
 using System.Drawing;
 using System.Drawing.Imaging;
-using BitmapFrame = WPF::System.Windows.Media.Imaging.BitmapFrame;
-using BitmapSource = WPF::System.Windows.Media.Imaging.BitmapSource;
-using PixelFormats = WPF::System.Windows.Media.PixelFormats;
-using PngBitmapEncoder = WPF::System.Windows.Media.Imaging.PngBitmapEncoder;
 
 namespace System.Windows.Forms.UITests
 {
@@ -40,12 +34,7 @@ namespace System.Windows.Forms.UITests
                 var directory = Path.GetDirectoryName(fullPath)!;
                 Directory.CreateDirectory(directory);
 
-                using (var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
-                {
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(bitmap));
-                    encoder.Save(fileStream);
-                }
+                bitmap.Save(fullPath, ImageFormat.Png);
             }
         }
 
@@ -56,7 +45,7 @@ namespace System.Windows.Forms.UITests
         /// A <see cref="Bitmap"/> containing the screen capture of the desktop, or <see langword="null"/> if a screen
         /// capture can't be created.
         /// </returns>
-        private static BitmapSource? TryCaptureFullScreen()
+        private static Bitmap? TryCaptureFullScreen()
         {
             if (Screen.PrimaryScreen is not { } primaryScreen)
                 return null;
@@ -71,7 +60,8 @@ namespace System.Windows.Forms.UITests
                 return null;
             }
 
-            using (var bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb))
+            var bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
             using (var graphics = Graphics.FromImage(bitmap))
             {
                 graphics.CopyFromScreen(
@@ -82,27 +72,7 @@ namespace System.Windows.Forms.UITests
                     blockRegionSize: bitmap.Size,
                     copyPixelOperation: CopyPixelOperation.SourceCopy);
 
-                var bitmapData = bitmap.LockBits(
-                    new Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                    ImageLockMode.ReadOnly,
-                    PixelFormat.Format32bppArgb);
-                try
-                {
-                    return BitmapSource.Create(
-                        bitmapData.Width,
-                        bitmapData.Height,
-                        bitmap.HorizontalResolution,
-                        bitmap.VerticalResolution,
-                        PixelFormats.Bgra32,
-                        null,
-                        bitmapData.Scan0,
-                        bitmapData.Stride * bitmapData.Height,
-                        bitmapData.Stride);
-                }
-                finally
-                {
-                    bitmap.UnlockBits(bitmapData);
-                }
+                return bitmap;
             }
         }
     }
