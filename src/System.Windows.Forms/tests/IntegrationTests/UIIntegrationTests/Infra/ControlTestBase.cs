@@ -24,14 +24,16 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
+        private static bool s_disableServerManager;
+
         //private static bool started;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
 
-            _testName = GetTestName(out ITest test);
-            _logPath ??= GetLogDir(test);
+            _testName = GetTestName();
+            _logPath ??= Path.GetFullPath(Path.Combine(Environment.GetEnvironmentVariable("XUNIT_LOGS")!, "Screenshots"));
 
             Application.EnableVisualStyles();
 
@@ -41,44 +43,55 @@ namespace System.Windows.Forms.UITests
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
 
             // Test to capture screenshot at the start
-           // if (!started)
+            // if (!started)
             {
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
                 var original = _testName;
-                _testName += "_Initial";
-               // started = true;
+                _testName = $"{DateTimeOffset.Now:mmddyyyyhhmmss}_{_testName}";
+                // started = true;
                 TrySaveScreenshot();
                 _testName = original;
+                CloseServerManagerWindow();
             }
 
-            string GetTestName(out ITest test)
+            string GetTestName()
             {
                 var type = testOutputHelper.GetType()!;
                 var testMember = type.GetField("test", BindingFlags.Instance | BindingFlags.NonPublic)!;
-                test = (ITest)testMember.GetValue(testOutputHelper)!;
+                var test = (ITest)testMember.GetValue(testOutputHelper)!;
                 int index = test.DisplayName.IndexOf("("); // Trim arguments from test name.
                 return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
             }
 
-            string? GetLogDir(ITest test)
+            void CloseServerManagerWindow()
             {
                 try
                 {
-                    IAssemblyInfo assembly = test.TestCase.TestMethod.TestClass.TestCollection.TestAssembly.Assembly!;
-                    string assemblyPath = ((Xunit.Sdk.ReflectionAssemblyInfo)assembly).Assembly.Location!;
+                    if (s_disableServerManager)
+                    {
+                        return;
+                    }
 
-                    int index = assemblyPath.IndexOf("bin\\");
-                    string config = Debugger.IsAttached ? "Debug" : "Release";
-                    string path = Path.Join(assemblyPath[..index], "log", config, "screenshots");
-                    Directory.CreateDirectory(path);
-                    return path;
-                }
-                catch (Exception ex)
-                {
-                    testOutputHelper.WriteLine($"Failed to get or create log directory. {ex}");
-                }
+                    foreach (Process process in Process.GetProcesses())
+                    {
+                        if (!process.ProcessName.Equals("ServerManager", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
 
-                return null;
+                        if (process.MainWindowHandle != IntPtr.Zero)
+                        {
+                            process.CloseMainWindow();
+                            s_disableServerManager = true;
+                            TestOutputHelper.WriteLine($"Server Manager Window should be closed");
+                        }
+
+                        return;
+                    }
+                }
+                catch { }
+
+                TestOutputHelper.WriteLine($"Server Manager Window not found");
             }
         }
 
