@@ -86,6 +86,7 @@ namespace System.Windows.Forms.UITests
         public virtual void Dispose()
         {
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
+            DataCollectionService.CurrentTest = null;
         }
 
         protected async Task WaitForIdleAsync()

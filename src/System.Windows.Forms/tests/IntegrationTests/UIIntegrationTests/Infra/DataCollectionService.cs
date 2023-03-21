@@ -94,7 +94,7 @@ namespace System.Windows.Forms.UITests
         internal static string GetTestName(ITestCase testCase)
         {
             var testMethod = testCase.TestMethod.Method;
-            var testClass = testMethod.Type.Name;
+            var testClass = testCase.TestMethod.TestClass.Class.Name;
             var lastDot = testClass.LastIndexOf('.');
             testClass = testClass.Substring(lastDot + 1);
             return $"{testClass}.{testMethod.Name}";
