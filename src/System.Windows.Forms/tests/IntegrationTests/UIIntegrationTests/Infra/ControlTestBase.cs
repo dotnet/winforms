@@ -41,11 +41,11 @@ namespace System.Windows.Forms.UITests
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
 
             // Test to capture screenshot at the start
-            if (!started)
+           // if (!started)
             {
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
                 var original = _testName;
-                _testName += "Initial";
+                _testName += "_Initial";
                 started = true;
                 TrySaveScreenshot();
                 _testName = original;
