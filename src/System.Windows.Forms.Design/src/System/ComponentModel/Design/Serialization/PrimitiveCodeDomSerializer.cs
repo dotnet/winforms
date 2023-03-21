@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.CodeDom;
+using System.Diagnostics;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -35,7 +36,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope($"PrimitiveCodeDomSerializer::{nameof(Serialize)}"))
             {
-                Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
+                Trace(TraceLevel.Verbose, $"Value: {(value is null ? "(null)" : value.ToString())}");
             }
 
             CodeExpression expression = new CodePrimitiveExpression(value);

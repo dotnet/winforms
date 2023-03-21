@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Base class for ToolStripItems that display DropDown windows.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.ToolStripMenuItemDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ToolStripMenuItemDesigner, {AssemblyRef.SystemDesign}")]
     [DefaultProperty(nameof(DropDownItems))]
     public abstract class ToolStripDropDownItem : ToolStripItem
     {

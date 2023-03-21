@@ -5021,6 +5021,11 @@ Si vous cliquez sur Continuer, l'application va ignorer cette erreur et tenter d
         <target state="translated">Contrôle si la boîte de dialogue s'assure que les noms de fichiers ne contiennent pas de caractères ou de séquences non valides.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">Contrôle s'il faut ajouter le fichier en cours d'ouverture ou d'enregistrement à la liste récente.</target>

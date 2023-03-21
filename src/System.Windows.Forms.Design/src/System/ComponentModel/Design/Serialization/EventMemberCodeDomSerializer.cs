@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.CodeDom;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization
@@ -53,9 +54,9 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (methodName is not null)
                     {
-                        Trace("Event {0} bound to {1}", eventToSerialize.Name, methodName);
+                        Trace(TraceLevel.Verbose, $"Event {eventToSerialize.Name} bound to {methodName}");
                         CodeExpression eventTarget = SerializeToExpression(manager, value);
-                        TraceWarningIf(eventTarget is null, "Object has no name and no property ref in context so we cannot serialize events: {0}", value);
+                        TraceIf(TraceLevel.Warning, eventTarget is null, $"Object has no name and no property ref in context so we cannot serialize events: {value}");
                         if (eventTarget is not null)
                         {
                             CodeTypeReference delegateTypeRef = new CodeTypeReference(eventToSerialize.EventType);

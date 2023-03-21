@@ -7,7 +7,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms
 {
-    [Editor("System.Windows.Forms.Design.BorderSidesEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.BorderSidesEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [Flags]
     public enum ToolStripStatusLabelBorderSides
     {

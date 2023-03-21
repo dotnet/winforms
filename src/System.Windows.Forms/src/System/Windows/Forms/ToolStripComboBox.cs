@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms
@@ -66,7 +65,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr))]
-        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         public AutoCompleteStringCollection AutoCompleteCustomSource
@@ -247,7 +246,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
         [SRDescription(nameof(SR.ComboBoxItemsDescr))]
-        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public ComboBox.ObjectCollection Items
         {
             get
@@ -489,7 +488,7 @@ namespace System.Windows.Forms
 
         public override string ToString()
         {
-            return base.ToString() + ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
+            return $"{base.ToString()}, Items.Count: {Items.Count}";
         }
     }
 }

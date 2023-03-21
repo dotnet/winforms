@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public unsafe void AxHost_GetIPictureFromCursor_Invoke_Roundtrips()
         {
-            var original = new Cursor("bitmaps/cursor.cur");
+            using var original = new Cursor("bitmaps/cursor.cur");
             IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
             Assert.NotNull(iPicture);
 

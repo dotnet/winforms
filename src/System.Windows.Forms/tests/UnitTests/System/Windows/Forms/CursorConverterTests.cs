@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Tests
             var converter = new CursorConverter();
             byte[] data = File.ReadAllBytes(Path.Combine("bitmaps", "10x16_one_entry_32bit.ico"));
             using var stream = new MemoryStream(data);
-            var sourceCursor = new Cursor(stream);
+            using var sourceCursor = new Cursor(stream);
             Assert.Equal(data, converter.ConvertTo(sourceCursor, typeof(byte[])));
         }
 
@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Tests
             var converter = new CursorConverter();
             string fileName = Path.Combine("bitmaps", "10x16_one_entry_32bit.ico");
             byte[] data = File.ReadAllBytes(fileName);
-            var sourceCursor = new Cursor(fileName);
+            using var sourceCursor = new Cursor(fileName);
             Assert.Equal(data, converter.ConvertTo(sourceCursor, typeof(byte[])));
         }
 

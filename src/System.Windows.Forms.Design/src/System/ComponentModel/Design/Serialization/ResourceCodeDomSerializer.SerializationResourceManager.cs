@@ -397,7 +397,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (objRs is null)
                 {
                     IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
-                    TraceErrorIf(resSvc is null, "IResourceService is not available.  We will not be able to load resources.");
+                    TraceIf(TraceLevel.Error, resSvc is null, "IResourceService is not available.  We will not be able to load resources.");
                     if (resSvc is not null)
                     {
                         IResourceReader reader = resSvc.GetResourceReader(culture);

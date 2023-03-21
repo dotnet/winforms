@@ -28,7 +28,7 @@ namespace System.Windows.Forms
                     get
                     {
                         ToolStripPanelCell? cell = _arrayListEnumerator.Current as ToolStripPanelCell;
-                        Debug.Assert(cell is not null, "Expected ToolStripPanel cells only!!!" + _arrayListEnumerator.Current.GetType().ToString());
+                        Debug.Assert(cell is not null, $"Expected ToolStripPanel cells only!!!{_arrayListEnumerator.Current.GetType()}");
                         return cell?.Control;
                     }
                 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design
 {
     /// <summary>
@@ -22,7 +20,7 @@ namespace System.ComponentModel.Design
         /// <param name="relatedObject">The related object.</param>
         /// <param name="changeType">One of the enumeration values that specifies the type of change.</param>
         /// <param name="actionLists">A collection that represents the remaining action lists for the related object.</param>
-        public DesignerActionListsChangedEventArgs(object relatedObject, DesignerActionListsChangedType changeType, DesignerActionListCollection actionLists)
+        public DesignerActionListsChangedEventArgs(object? relatedObject, DesignerActionListsChangedType changeType, DesignerActionListCollection? actionLists)
         {
             RelatedObject = relatedObject;
             ChangeType = changeType;
@@ -33,7 +31,7 @@ namespace System.ComponentModel.Design
         ///  Gets the object that is associated with the event.
         /// </summary>
         /// <value>The object that is associated with the event.</value>
-        public object RelatedObject { get; }
+        public object? RelatedObject { get; }
 
         /// <summary>
         ///  Gets the type of change that caused the event to be raised.
@@ -45,6 +43,6 @@ namespace System.ComponentModel.Design
         ///  Gets the collection that contains the remaining action lists for the related object.
         /// </summary>
         /// <value>The collection that contains the remaining action lists for the related object.</value>
-        public DesignerActionListCollection ActionLists { get; }
+        public DesignerActionListCollection? ActionLists { get; }
     }
 }

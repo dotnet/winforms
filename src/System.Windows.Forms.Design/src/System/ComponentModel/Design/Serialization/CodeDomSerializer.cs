@@ -128,14 +128,14 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (assign.Left is CodeFieldReferenceExpression fieldRef)
                 {
-                    Trace("Assigning instance to field {0}", fieldRef.FieldName);
+                    Trace(TraceLevel.Verbose, $"Assigning instance to field {fieldRef.FieldName}");
                     instance = DeserializeExpression(manager, fieldRef.FieldName, assign.Right);
                 }
                 else
                 {
                     if (assign.Left is CodeVariableReferenceExpression varRef)
                     {
-                        Trace("Assigning instance to variable {0}", varRef.VariableName);
+                        Trace(TraceLevel.Verbose, $"Assigning instance to variable {varRef.VariableName}");
                         instance = DeserializeExpression(manager, varRef.VariableName, assign.Right);
                     }
                     else
@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design.Serialization
             }
             else if (statement is CodeVariableDeclarationStatement varDecl && varDecl.InitExpression is not null)
             {
-                Trace("Initializing variable declaration for variable {0}", varDecl.Name);
+                Trace(TraceLevel.Verbose, $"Initializing variable declaration for variable {varDecl.Name}");
                 instance = DeserializeExpression(manager, varDecl.Name, varDecl.InitExpression);
             }
             else
@@ -169,7 +169,7 @@ namespace System.ComponentModel.Design.Serialization
 
             using (TraceScope($"CodeDomSerializer::{nameof(Serialize)}"))
             {
-                Trace("Type: {0}", value.GetType().Name);
+                Trace(TraceLevel.Verbose, $"Type: {value.GetType().Name}");
 
                 if (value is Type)
                 {
@@ -196,13 +196,13 @@ namespace System.ComponentModel.Design.Serialization
                         isPreset = false;
                     }
 
-                    TraceIf(expression is null, "Unable to create object; aborting.");
+                    TraceIf(TraceLevel.Verbose, expression is null, "Unable to create object; aborting.");
                     // Short circuit common cases
                     if (expression is not null)
                     {
                         if (isComplete)
                         {
-                            Trace("Single expression : {0}", expression);
+                            Trace(TraceLevel.Verbose, $"Single expression : {expression}");
                             result = expression;
                         }
                         else
@@ -221,7 +221,7 @@ namespace System.ComponentModel.Design.Serialization
                                 string varTypeName = TypeDescriptor.GetClassName(value);
 
                                 CodeVariableDeclarationStatement varDecl = new CodeVariableDeclarationStatement(varTypeName, varName);
-                                Trace("Generating local : {0}", varName);
+                                Trace(TraceLevel.Verbose, $"Generating local : {varName}");
                                 varDecl.InitExpression = expression;
                                 statements.Add(varDecl);
                                 variableReference = new CodeVariableReferenceExpression(varName);
@@ -358,7 +358,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (name is not null)
                     {
-                        Trace("Object is reference ({0}) Creating reference expression", name);
+                        Trace(TraceLevel.Verbose, $"Object is reference ({name}) Creating reference expression");
                         // Check to see if this is a reference to the root component.  If it is, then use "this".
                         RootContext root = (RootContext)manager.Context[typeof(RootContext)];
                         if (root is not null && root.Value == value)

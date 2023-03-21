@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 {
@@ -18,37 +20,23 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
             _ownHandle = false;
             _resourceId = nResourceId;
             _handle = PInvoke.LoadCursor(HINSTANCE.Null, nResourceId);
+            if (_handle.IsNull)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
         }
 
         public void Dispose()
         {
-            if (!_handle.IsNull)
+            if (!_handle.IsNull && _ownHandle)
             {
-                if (_ownHandle)
-                {
-                    PInvoke.DestroyCursor(_handle);
-                }
-
+                PInvoke.DestroyCursor(_handle);
                 _handle = HCURSOR.Null;
             }
         }
 
-        internal HCURSOR Handle
-        {
-            get
-            {
-                if (_handle.IsNull)
-                {
-                    throw new ObjectDisposedException(nameof(MockCursor));
-                }
+        internal HCURSOR Handle => _handle.IsNull ? throw new ObjectDisposedException(nameof(MockCursor)) : _handle;
 
-                return _handle;
-            }
-        }
-
-        public Size Size
-        {
-            get => SystemInformation.CursorSize;
-        }
+        public Size Size => SystemInformation.CursorSize;
     }
 }

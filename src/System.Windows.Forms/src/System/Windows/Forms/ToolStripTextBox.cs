@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Localizable(true)]
         [SRDescription(nameof(SR.TextBoxAutoCompleteCustomSourceDescr))]
-        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         [AllowNull]
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Localizable(true)]
         [SRDescription(nameof(SR.TextBoxLinesDescr))]
-        [Editor("System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.StringArrayEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [AllowNull]
         public string[] Lines
         {

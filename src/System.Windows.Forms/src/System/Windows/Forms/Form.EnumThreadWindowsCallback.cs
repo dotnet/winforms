@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
     public partial class Form
@@ -29,7 +31,7 @@ namespace System.Windows.Forms
                     // Enumerated window is owned by this Form.
                     // Store it in a list for further treatment.
                     _ownedWindows ??= new();
-                    _ownedWindows.Add(parent);
+                    _ownedWindows.Add(hwnd);
                 }
 
                 return true;
@@ -42,13 +44,14 @@ namespace System.Windows.Forms
                 {
                     foreach (HWND hwnd in _ownedWindows)
                     {
-                        PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
+                        nint oldValue = PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
+                        Debug.Assert(oldValue == _formHandle.Value);
                     }
                 }
             }
 
             // Sets the owner of the windows back to this Form after its handle recreation.
-            internal void SetOwners(IntPtr ownerHwnd)
+            internal void SetOwners(nint ownerHwnd)
             {
                 if (_ownedWindows is not null)
                 {

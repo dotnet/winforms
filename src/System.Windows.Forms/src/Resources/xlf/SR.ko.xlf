@@ -5021,6 +5021,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">대화 상자에서 파일 이름에 잘못된 문자나 시퀀스가 없는지 확인할지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
         <target state="translated">연 파일 또는 저장한 파일을 최근 목록에 추가할지를 제어합니다.</target>

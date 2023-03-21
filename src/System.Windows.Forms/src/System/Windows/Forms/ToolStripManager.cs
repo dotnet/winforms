@@ -387,7 +387,7 @@ namespace System.Windows.Forms
                 }
 
                 int nextControlTabIndex = toolStrip.TabIndex;
-                ToolStrip.s_controlTabDebug.TraceVerbose($"SELECTNEXTTOOLSTRIP: start: {startTabIndex.ToString(CultureInfo.CurrentCulture)} {start.Name}");
+                ToolStrip.s_controlTabDebug.TraceVerbose($"SELECTNEXTTOOLSTRIP: start: {startTabIndex} {start.Name}");
                 // since CanChangeSelection can iterate through all the items in a toolstrip,
                 // defer the checking until we think we've got a viable TabIndex candidate.
                 // this brings it to O(n+m) instead of O(n*m) where n is # toolstrips & m is avg number
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
                 {
                     if (nextControlTabIndex >= startTabIndex && CanChangeSelection(start, toolStrip))
                     {
-                        ToolStrip.s_controlTabDebug.TraceVerbose($"FORWARD considering selection {toolStrip.Name} {toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture)}");
+                        ToolStrip.s_controlTabDebug.TraceVerbose($"FORWARD considering selection {toolStrip.Name} {toolStrip.TabIndex}");
                         if (nextControl is null)
                         {
                             nextControl = toolStrip;
@@ -1002,7 +1002,7 @@ namespace System.Windows.Forms
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);
                     }
 
-                    ToolStrip.s_snapFocusDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
+                    ToolStrip.s_snapFocusDebug.TraceVerbose($"[ProcessMenuKey] MenuStripToActivate is: {menuStripToActivate}");
                 }
             }
 

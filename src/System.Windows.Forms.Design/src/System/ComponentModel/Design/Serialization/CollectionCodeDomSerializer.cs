@@ -128,7 +128,7 @@ namespace System.ComponentModel.Design.Serialization
                 DesignerSerializationVisibilityAttribute vis = (DesignerSerializationVisibilityAttribute)attrs[0];
                 if (vis is not null && vis.Visibility == DesignerSerializationVisibility.Hidden)
                 {
-                    Trace("Member {0} does not support serialization.", method.Name);
+                    Trace(TraceLevel.Verbose, $"Member {method.Name} does not support serialization.");
                     return false;
                 }
             }
@@ -159,7 +159,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     // We only want to give out an expression target if  this is our context (we find this out by comparing types above) and if the context type is not an array.  If it is an array, we will  just return the array create expression.
                     target = ctx.Expression;
-                    Trace("Valid context and property descriptor found on context stack.");
+                    Trace(TraceLevel.Verbose, "Valid context and property descriptor found on context stack.");
                 }
                 else
                 {
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design.Serialization
                     target = null;
                     ctx = null;
                     prop = null;
-                    Trace("No valid context.  We can only serialize if this is an array.");
+                    Trace(TraceLevel.Verbose, "No valid context.  We can only serialize if this is an array.");
                 }
 
                 // If we have a target expression see if we can create a delta for the collection. We want to do this only if the property the collection is associated with is inherited, and if the collection is not an array.
@@ -228,7 +228,7 @@ namespace System.ComponentModel.Design.Serialization
                 else
                 {
                     Debug.Fail($"Collection serializer invoked for non-collection: {(value is null ? "(null)" : value.GetType().Name)}");
-                    TraceError("Collection serializer invoked for non collection: {0}", (value is null ? "(null)" : value.GetType().Name));
+                    Trace(TraceLevel.Error, $"Collection serializer invoked for non collection: {(value is null ? "(null)" : value.GetType().Name)}");
                 }
             }
 
@@ -312,7 +312,7 @@ namespace System.ComponentModel.Design.Serialization
             bool serialized = false;
             if (typeof(Array).IsAssignableFrom(targetType))
             {
-                Trace("Collection is array");
+                Trace(TraceLevel.Verbose, "Collection is array");
                 CodeArrayCreateExpression arrayCreate = SerializeArray(manager, targetType, originalCollection, valuesToSerialize);
                 if (arrayCreate is not null)
                 {
@@ -328,7 +328,7 @@ namespace System.ComponentModel.Design.Serialization
             }
             else if (valuesToSerialize.Count > 0)
             {
-                Trace("Searching for AddRange or Add");
+                Trace(TraceLevel.Verbose, "Searching for AddRange or Add");
                 // Use the TargetFrameworkProviderService to create a provider, or use the default for the collection if the service is not available.  Since TargetFrameworkProvider reflection types are not compatible with RuntimeTypes, they can only be used with other reflection types from the same provider.
                 TypeDescriptionProvider provider = GetTargetFrameworkProvider(manager, originalCollection);
                 provider ??= TypeDescriptor.GetProvider(originalCollection);
@@ -389,7 +389,7 @@ namespace System.ComponentModel.Design.Serialization
             }
             else
             {
-                Trace("Collection has no values to serialize.");
+                Trace(TraceLevel.Verbose, "Collection has no values to serialize.");
             }
 
             return result;
@@ -405,7 +405,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (((Array)array).Rank != 1)
                 {
-                    TraceError("Cannot serialize arrays with rank > 1.");
+                    Trace(TraceLevel.Error, "Cannot serialize arrays with rank > 1.");
                     manager.ReportError(string.Format(SR.SerializerInvalidArrayRank, ((Array)array).Rank.ToString(CultureInfo.InvariantCulture)));
                 }
                 else
@@ -413,8 +413,8 @@ namespace System.ComponentModel.Design.Serialization
                     // For an array, we need an array create expression.  First, get the array type
                     Type elementType = targetType.GetElementType();
                     CodeTypeReference elementTypeRef = new CodeTypeReference(elementType);
-                    Trace("Array type: {0}", elementType.Name);
-                    Trace("Count: {0}", valuesToSerialize.Count);
+                    Trace(TraceLevel.Verbose, $"Array type: {elementType.Name}");
+                    Trace(TraceLevel.Verbose, $"Count: {valuesToSerialize.Count}");
                     // Now create an ArrayCreateExpression, and fill its initializers.
                     CodeArrayCreateExpression arrayCreate = new CodeArrayCreateExpression
                     {
@@ -491,7 +491,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeStatementCollection statements = new CodeStatementCollection();
             using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAdd)}"))
             {
-                Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
+                Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
                 // Here we need to invoke Add once for each and every item in the collection. We can re-use the property reference and method reference, but we will need to recreate the invoke statement each time.
                 CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(targetExpression, "Add");
 
@@ -584,7 +584,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeStatementCollection statements = new CodeStatementCollection();
             using (TraceScope($"CollectionCodeDomSerializer::{nameof(SerializeViaAddRange)}"))
             {
-                Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
+                Trace(TraceLevel.Verbose, $"Elements: {valuesToSerialize.Count}");
 
                 if (valuesToSerialize.Count > 0)
                 {
