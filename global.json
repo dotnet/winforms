@@ -7,6 +7,12 @@
       ],
       "dotnet/x86": [
         "$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)"
+      ],
+      "windowsdesktop/x64": [
+        "$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)"
+      ],
+      "windowsdesktop/x86": [
+        "$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)"
       ]
     }
   },

@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
@@ -18,19 +16,22 @@ namespace System.Windows.Forms.UITests
     public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         private const int SPIF_SENDCHANGE = 0x0002;
-        private static string? _logPath;
         private readonly string _testName;
 
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
 
+        static ControlTestBase()
+        {
+            DataCollectionService.InstallFirstChanceExceptionHandler();
+        }
+
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
 
             _testName = GetTestName(out ITest test);
-            _logPath ??= GetLogDir(test);
 
             Application.EnableVisualStyles();
 
@@ -46,27 +47,6 @@ namespace System.Windows.Forms.UITests
                 test = (ITest)testMember.GetValue(testOutputHelper)!;
                 int index = test.DisplayName.IndexOf("("); // Trim arguments from test name.
                 return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
-            }
-
-            string? GetLogDir(ITest test)
-            {
-                try
-                {
-                    IAssemblyInfo assembly = test.TestCase.TestMethod.TestClass.TestCollection.TestAssembly.Assembly!;
-                    string assemblyPath = ((Xunit.Sdk.ReflectionAssemblyInfo)assembly).Assembly.Location!;
-
-                    int index = assemblyPath.IndexOf("bin\\");
-                    string config = Debugger.IsAttached ? "Debug" : "Release";
-                    string path = Path.Join(assemblyPath[..index], "log", config, "screenshots");
-                    Directory.CreateDirectory(path);
-                    return path;
-                }
-                catch (Exception ex)
-                {
-                    testOutputHelper.WriteLine($"Failed to get or create log directory. {ex}");
-                }
-
-                return null;
             }
         }
 
@@ -278,9 +258,9 @@ namespace System.Windows.Forms.UITests
                     await TrySetForegroundWindowAsync(dialog!);
                     await testDriverAsync(dialog!, control!);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    TrySaveScreenshot();
+                    DataCollectionService.TryLog(ex);
                     throw;
                 }
                 finally
@@ -319,9 +299,9 @@ namespace System.Windows.Forms.UITests
                     await TrySetForegroundWindowAsync(dialog!);
                     await testDriverAsync(dialog!);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    TrySaveScreenshot();
+                    DataCollectionService.TryLog(ex);
                     throw;
                 }
                 finally
@@ -341,48 +321,6 @@ namespace System.Windows.Forms.UITests
             dialog.ShowDialog();
 
             await test.JoinAsync();
-        }
-
-        private void TrySaveScreenshot()
-        {
-            if (_logPath is null)
-            {
-                return;
-            }
-
-            try
-            {
-                var bounds = Screen.PrimaryScreen!.Bounds;
-
-                if (bounds.Width <= 0 || bounds.Height <= 0)
-                {
-                    // Don't try to take a screenshot if there is no screen.
-                    // This may not be an interactive session.
-                    return;
-                }
-
-                using var bitmap = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
-                using (var graphics = Graphics.FromImage(bitmap))
-                {
-                    graphics.CopyFromScreen(
-                        sourceX: bounds.X,
-                        sourceY: bounds.Y,
-                        destinationX: 0,
-                        destinationY: 0,
-                        blockRegionSize: bitmap.Size,
-                        copyPixelOperation: CopyPixelOperation.SourceCopy);
-                }
-
-                int index = _testName.LastIndexOf('.');
-                string screenshot = $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
-                bitmap.Save(screenshot);
-
-                TestOutputHelper.WriteLine($"Screenshot saved at {screenshot}");
-            }
-            catch (Exception ex)
-            {
-                TestOutputHelper.WriteLine($"Failed to save screenshot: {ex}.");
-            }
         }
 
         internal struct VoidResult

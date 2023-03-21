@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" IsImplicitlyDefined="true" TargetingPackVersion="$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\tests\TestUtilities\System.Windows.Forms.Common.TestUtilities.csproj" />
     <ProjectReference Include="..\..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
@@ -48,5 +52,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="AddAliasesToWpfReferences"
+          AfterTargets="ResolveTargetingPackAssets">
+    <ItemGroup>
+      <!-- We only want to resolve WindowsBase from Microsoft.WindowsDesktop.App.WPF. -->
+      <Reference Remove="@(Reference)" Condition="'%(Reference.FrameworkReferenceName)'!='Microsoft.WindowsDesktop.App.WPF' AND '%(FileName)'=='WindowsBase'" />
+
+      <!-- We exclude most WPF assemblies from the build. Only keep PresentationCore and WindowsBase. -->
+      <Reference Remove="@(Reference)" Condition="'%(Reference.FrameworkReferenceName)'=='Microsoft.WindowsDesktop.App.WPF' AND '%(FileName)'!='PresentationCore' AND '%(FileName)'!='WindowsBase'" />
+
+      <!-- Update WPF assemblies to be in the WPF alias instead of global. This avoids conflicts between types in System.Windows and System.Drawing. -->
+      <Reference Update="@(Reference)" Condition="'%(Reference.FrameworkReferenceName)'=='Microsoft.WindowsDesktop.App.WPF'" Aliases="WPF" />
+    </ItemGroup>
+  </Target>
 
 </Project>
