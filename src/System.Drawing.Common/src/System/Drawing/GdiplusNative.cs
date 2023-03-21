@@ -2981,12 +2981,12 @@ namespace System.Drawing
 #endif
             HandleRef brush, Rectangle* rects, int count);
 
-            [LibraryImport(LibraryName,  SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+            [LibraryImport(LibraryName, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
             internal static partial int GdipDrawString(
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef graphics, string textString, int length,
+            HandleRef graphics, ReadOnlySpan<char> textString, int length,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
@@ -3199,7 +3199,7 @@ namespace System.Drawing
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef graphics, string textString, int length,
+            HandleRef graphics, ReadOnlySpan<char> textString, int length,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
@@ -3214,7 +3214,7 @@ namespace System.Drawing
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef graphics, string textString, int length,
+            HandleRef graphics, ReadOnlySpan<char> textString, int length,
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
