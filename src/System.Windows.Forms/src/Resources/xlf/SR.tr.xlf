@@ -5023,7 +5023,7 @@ Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye
       </trans-unit>
       <trans-unit id="FailedToLoadCursor">
         <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <target state="translated">İmleç yüklenemedi. Hata '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
