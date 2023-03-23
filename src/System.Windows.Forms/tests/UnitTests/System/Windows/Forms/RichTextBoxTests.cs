@@ -1903,7 +1903,6 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [EnumData<RichTextBoxLanguageOptions>]
-        [InvalidEnumData<RichTextBoxLanguageOptions>]
         public unsafe void RichTextBox_LanguageOption_GetCharFormat_Success(RichTextBoxLanguageOptions value)
         {
             using var control = new RichTextBox();

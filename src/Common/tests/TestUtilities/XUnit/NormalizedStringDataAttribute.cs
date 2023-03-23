@@ -13,7 +13,7 @@ public class NormalizedStringDataAttribute : CommonMemberDataAttribute
     private static readonly TheoryData<string?, string> _data = new();
 
     public NormalizedStringDataAttribute()
-        : base(typeof(StringDataAttribute), nameof(GetTheoryData))
+        : base(typeof(NormalizedStringDataAttribute), nameof(GetTheoryData))
     {
         _data.Add(null, string.Empty);
         _data.Add(string.Empty, string.Empty);
