@@ -5023,7 +5023,7 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
       </trans-unit>
       <trans-unit id="FailedToLoadCursor">
         <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <target state="translated">Nepodařilo se načíst kurzor. Chyba {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
