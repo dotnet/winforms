@@ -25,15 +25,6 @@ function _kill($processName) {
         # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging
         # when there are no instances of the process
         & cmd /c "taskkill /T /F /IM ${processName} 2>&1"
-		## Remove binary in case process has not started yet.
-		if (Test-Path "C:\Windows\System32\ServerManager.exe") {
-			if (Remove-Item "C:\Windows\System32\ServerManager.exe")
-			{
-				Write-Host "ServerManager.exe file is deleted."
-			} else {
-				Write-Host "Failed to delete ServerManager.exe file."
-				}
-		}
     } catch {
         Write-Host "Failed to kill ${processName} or delete ServerManager.exe file."
     }
@@ -41,6 +32,18 @@ function _kill($processName) {
 
 # kill server manager process if running on build agents.
 _kill severmanager.exe
+
+Start-Process powershell.exe -Verb RunAs -ArgumentList '-command "Remove-Item C:\Windows\System32\ServerManager.exe -Force"'
+
+# Wait for the process to finish deleting file.
+Start-Sleep -Seconds 2
+
+# Check the return code.
+if ($?) {
+    Write-Host "ServerManager.exe file is deleted."
+} else {
+    Write-Host "Failed to delete ServerManager.exe file."
+}
 
 # How long to wait before we consider a build/test run to be unresponsive
 $WaitSeconds = 900 # 15 min
