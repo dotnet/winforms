@@ -24,7 +24,7 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
-        private static bool s_disableServerManager;
+        // private static bool s_disableServerManager;
 
         //private static bool started;
 
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.UITests
             TestOutputHelper = testOutputHelper;
 
             _testName = GetTestName();
-            _logPath ??= Path.GetFullPath(Path.Combine(Environment.GetEnvironmentVariable("XUNIT_LOGS")!, "Screenshots"));
+            _logPath ??= Path.GetFullPath(Environment.GetEnvironmentVariable("XUNIT_LOGS")!, "Screenshots");
 
             Application.EnableVisualStyles();
 
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.UITests
                 // started = true;
                 TrySaveScreenshot();
                 _testName = original;
-                CloseServerManagerWindow();
+                // CloseServerManagerWindow();
             }
 
             string GetTestName()
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.UITests
                 return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
             }
 
-            void CloseServerManagerWindow()
+            /*void CloseServerManagerWindow()
             {
                 try
                 {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.UITests
                 catch { }
 
                 TestOutputHelper.WriteLine($"Server Manager Window not found");
-            }
+            }*/
         }
 
         protected ITestOutputHelper TestOutputHelper { get; }
