@@ -4,7 +4,6 @@
 
 using System.ComponentModel.Design.Serialization;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -33,7 +32,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void UndoUnit_Ctor_UndoEngine_String(string name, string expectedName)
         {
             var unit = new SubUndoUnit(this, name);

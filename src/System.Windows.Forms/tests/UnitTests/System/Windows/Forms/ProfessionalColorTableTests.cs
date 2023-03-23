@@ -5,7 +5,6 @@
 using System.Drawing;
 using Microsoft.DotNet.RemoteExecutor;
 using Microsoft.Win32;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -122,7 +121,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ProfessionalColorTable_ImageMarginGradientEnd_Get_ReturnsExpected(bool useSystemColors)
         {
             var table = new ProfessionalColorTable
@@ -133,7 +132,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ProfessionalColorTable_UseSystemColors_Set_GetReturnsExpected(bool value)
         {
             var table = new ProfessionalColorTable
@@ -152,7 +151,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ProfessionalColorTable_UseSystemColors_SetWithKnownColor_GetReturnsExpected(bool value)
         {
             var table = new ProfessionalColorTable

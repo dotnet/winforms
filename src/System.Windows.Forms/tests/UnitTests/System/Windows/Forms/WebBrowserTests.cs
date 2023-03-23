@@ -132,7 +132,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_AllowNavigation_Set_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_AllowNavigation_SetWithInstance_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_AllowNavigation_SetWithSink_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -263,7 +263,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_AllowWebBrowserDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_AllowWebBrowserDrop_SetWithInstance_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -319,7 +319,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_AllowWebBrowserDrop_SetDisposed_ThrowsObjectDisposedException(bool value)
         {
             using var parent = new Control();
@@ -332,7 +332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_AllowWebBrowserDrop_SetDetached_ThrowsInvalidOperationException(bool value)
         {
             using var parent = new Control();
@@ -679,7 +679,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void WebBrowser_DocumentText_Set_GetReturnsExpected(string value)
         {
             using var control = new WebBrowser
@@ -700,7 +700,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void WebBrowser_DocumentText_SetWithInstance_GetReturnsExpected(string value)
         {
             using var parent = new Control();
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_IsWebBrowserContextMenuEnabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser
@@ -1230,7 +1230,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_IsWebBrowserContextMenuEnabled_SetWithInstance_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -1692,7 +1692,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_ScriptErrorsSuppressed_Set_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser
@@ -1717,7 +1717,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_ScriptErrorsSuppressed_SetWithInstance_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -1747,7 +1747,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_ScriptErrorsSuppressed_SetDisposed_ThrowsObjectDisposedException(bool value)
         {
             using var parent = new Control();
@@ -1760,7 +1760,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_ScriptErrorsSuppressed_SetDetached_ThrowsInvalidOperationException(bool value)
         {
             using var parent = new Control();
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_ScrollBarsEnabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser
@@ -1798,7 +1798,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_ScrollBarsEnabled_SetWithInstance_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -2123,7 +2123,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_Visible_Set_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser
@@ -2165,7 +2165,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_Visible_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser();
@@ -2240,7 +2240,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_WebBrowserShortcutsEnabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new WebBrowser
@@ -2265,7 +2265,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_WebBrowserShortcutsEnabled_SetWithInstance_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -2372,7 +2372,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_CreateSink_InvokeWithInstance_Success(bool allowNavigation)
         {
             using var parent = new Control();
@@ -2391,7 +2391,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_CreateSink_InvokeWithoutInstance_Nop(bool allowNavigation)
         {
             using var control = new SubWebBrowser
@@ -2450,7 +2450,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_DetachSink_InvokeWithCreatedSink_Success(bool allowNavigation)
         {
             using var parent = new Control();
@@ -2474,7 +2474,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_DetachSink_InvokeWithInstance_Success(bool allowNavigation)
         {
             using var parent = new Control();
@@ -2495,7 +2495,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_DetachSink_InvokeWithoutInstance_Nop(bool allowNavigation)
         {
             using var control = new SubWebBrowser
@@ -2561,7 +2561,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowser_Dispose_InvokeWithInstance_Success(bool allowNavigation)
         {
             using var parent = new Control();
@@ -2664,7 +2664,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowserDispose_InvokeNotDisposing_Success(bool allowNavigation)
         {
             using var parent = new Control();
@@ -2708,7 +2708,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void WebBrowserDispose_InvokeDisposingWithInstance_Success(bool allowNavigation)
         {
             using var parent = new Control();
@@ -3268,7 +3268,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [NullAndEmptyStringData]
         public async Task WebBrowser_Navigate_NullOrEmptyString_GoesToBlank(string nullOrEmptyString)
         {
             using var parent = new Control();
@@ -3490,7 +3490,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void WebBrowser_OnCanGoBackChanged_Invoke_CallsCanGoBackChanged(EventArgs eventArgs)
         {
             using var control = new SubWebBrowser();
@@ -3518,7 +3518,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void WebBrowser_OnCanGoForwardChanged_Invoke_CallsCanGoForwardChanged(EventArgs eventArgs)
         {
             using var control = new SubWebBrowser();
@@ -3652,7 +3652,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void WebBrowser_OnDocumentTitleChanged_Invoke_CallsDocumentTitleChanged(EventArgs eventArgs)
         {
             using var control = new SubWebBrowser();
@@ -3680,7 +3680,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void WebBrowser_OnEncryptionLevelChanged_Invoke_CallsEncryptionLevelChanged(EventArgs eventArgs)
         {
             using var control = new SubWebBrowser();
@@ -3708,7 +3708,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void WebBrowser_OnFileDownload_Invoke_CallsFileDownload(EventArgs eventArgs)
         {
             using var control = new SubWebBrowser();
@@ -3877,7 +3877,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void WebBrowser_OnStatusTextChanged_Invoke_CallsStatusTextChanged(EventArgs eventArgs)
         {
             using var control = new SubWebBrowser();
@@ -4058,8 +4058,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(WebBrowserRefreshOption))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(WebBrowserRefreshOption))]
+        [EnumData<WebBrowserRefreshOption>]
+        [InvalidEnumData<WebBrowserRefreshOption>]
         public void WebBrowser_Refresh_InvokeWebBrowserRefreshOptionCantRefresh_Nop(WebBrowserRefreshOption opt)
         {
             using var control = new WebBrowser();
@@ -4070,8 +4070,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(WebBrowserRefreshOption))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(WebBrowserRefreshOption))]
+        [EnumData<WebBrowserRefreshOption>]
+        [InvalidEnumData<WebBrowserRefreshOption>]
         public void WebBrowser_Refresh_InvokeWebBrowserRefreshOptionCantRefreshWithInstance_Nop(WebBrowserRefreshOption opt)
         {
             using var parent = new Control();
@@ -4087,8 +4087,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(WebBrowserRefreshOption))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(WebBrowserRefreshOption))]
+        [EnumData<WebBrowserRefreshOption>]
+        [InvalidEnumData<WebBrowserRefreshOption>]
         public async Task WebBrowser_Refresh_InvokeWebBrowserRefreshOptionWithDocument_Success(WebBrowserRefreshOption opt)
         {
             using var parent = new Control();
@@ -4147,8 +4147,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(WebBrowserRefreshOption))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(WebBrowserRefreshOption))]
+        [EnumData<WebBrowserRefreshOption>]
+        [InvalidEnumData<WebBrowserRefreshOption>]
         public async Task WebBrowser_Refresh_InvokeWebBrowserRefreshOptionWithDocumentText_Success(WebBrowserRefreshOption opt)
         {
             using var parent = new Control();

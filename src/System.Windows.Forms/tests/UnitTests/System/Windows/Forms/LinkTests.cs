@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -63,7 +62,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Link_Description_SetWithoutOwner_GetReturnsExpected(string value)
         {
             var link = new LinkLabel.Link
@@ -78,7 +77,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Link_Enabled_SetWithoutOwner_GetReturnsExpected(bool value)
         {
             var link = new LinkLabel.Link
@@ -115,7 +114,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Link_LinkData_SetWithoutOwner_GetReturnsExpected(string value)
         {
             var link = new LinkLabel.Link
@@ -130,7 +129,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Link_Name_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var link = new LinkLabel.Link
@@ -145,7 +144,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void Link_Start_SetWithoutOwner_GetReturnsExpected(int value)
         {
             var link = new LinkLabel.Link
@@ -160,7 +159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Link_Tag_SetWithoutOwner_GetReturnsExpected(string value)
         {
             var link = new LinkLabel.Link
@@ -175,7 +174,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Link_Visited_SetWithoutOwner_GetReturnsExpected(bool value)
         {
             var link = new LinkLabel.Link

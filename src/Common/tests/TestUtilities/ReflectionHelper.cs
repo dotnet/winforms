@@ -5,49 +5,48 @@
 using System.Reflection;
 using Xunit;
 
-namespace System
+namespace System;
+
+public static class ReflectionHelper
 {
-    public static class ReflectionHelper
+    public static IEnumerable<Type> GetPublicNotAbstractClasses<T>()
     {
-        public static IEnumerable<Type> GetPublicNotAbstractClasses<T>()
+        var types = typeof(T).Assembly.GetTypes().Where(type => IsPublicNonAbstract<T>(type));
+        foreach (var type in types)
         {
-            var types = typeof(T).Assembly.GetTypes().Where(type => IsPublicNonAbstract<T>(type));
-            foreach (var type in types)
-            {
-                if (type.GetConstructor(
-                    bindingAttr: BindingFlags.Public | BindingFlags.Instance,
-                    binder: null,
-                    types: Array.Empty<Type>(),
-                    modifiers: null) is null)
-                {
-                    continue;
-                }
-
-                yield return type;
-            }
-        }
-
-        public static T? InvokePublicConstructor<T>(Type type)
-        {
-            var ctor = type.GetConstructor(
+            if (type.GetConstructor(
                 bindingAttr: BindingFlags.Public | BindingFlags.Instance,
                 binder: null,
                 types: Array.Empty<Type>(),
-                modifiers: null);
-
-            if (ctor is null)
+                modifiers: null) is null)
             {
-                return default;
+                continue;
             }
 
-            T obj = (T)ctor.Invoke(Array.Empty<object>());
-            Assert.NotNull(obj);
-            return obj;
+            yield return type;
+        }
+    }
+
+    public static T? InvokePublicConstructor<T>(Type type)
+    {
+        var ctor = type.GetConstructor(
+            bindingAttr: BindingFlags.Public | BindingFlags.Instance,
+            binder: null,
+            types: Array.Empty<Type>(),
+            modifiers: null);
+
+        if (ctor is null)
+        {
+            return default;
         }
 
-        private static bool IsPublicNonAbstract<T>(Type type)
-        {
-            return !type.IsAbstract && type.IsPublic && typeof(T).IsAssignableFrom(type);
-        }
+        T obj = (T)ctor.Invoke(Array.Empty<object>());
+        Assert.NotNull(obj);
+        return obj;
+    }
+
+    private static bool IsPublicNonAbstract<T>(Type type)
+    {
+        return !type.IsAbstract && type.IsPublic && typeof(T).IsAssignableFrom(type);
     }
 }

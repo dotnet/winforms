@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripSeparator_AutoToolTip_Set_GetReturnsExpected(bool value)
         {
             using var item = new ToolStripSeparator
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void ToolStripSeparator_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var item = new ToolStripSeparator
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDisplayStyle))]
+        [EnumData<ToolStripItemDisplayStyle>]
         public void ToolStripSeparator_DisplayStyle_Set_GetReturnsExpected(ToolStripItemDisplayStyle value)
         {
             using var item = new ToolStripSeparator
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemDisplayStyle))]
+        [InvalidEnumData<ToolStripItemDisplayStyle>]
         public void ToolStripSeparator_DisplayStyle_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripItemDisplayStyle value)
         {
             using var item = new ToolStripSeparator();
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripSeparator_DoubleClickEnabled_Set_GetReturnsExpected(bool value)
         {
             using var item = new ToolStripSeparator
@@ -445,7 +445,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        [EnumData<ContentAlignment>]
         public void ToolStripSeparator_ImageAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
             using var item = new ToolStripSeparator
@@ -460,7 +460,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [InvalidEnumData<ContentAlignment>]
         [InlineData((ContentAlignment)int.MaxValue)]
         [InlineData((ContentAlignment)int.MinValue)]
         public void ToolStripSeparator_ImageAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
@@ -491,7 +491,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ToolStripSeparator_ImageKey_Set_GetReturnsExpected(string value, string expected)
         {
             using var item = new ToolStripSeparator
@@ -510,7 +510,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemImageScaling))]
+        [EnumData<ToolStripItemImageScaling>]
         public void ToolStripSeparator_ImageScaling_Set_GetReturnsExpected(ToolStripItemImageScaling value)
         {
             using var item = new ToolStripSeparator
@@ -553,7 +553,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripSeparator_RightToLeftAutoMirrorImage_Set_GetReturnsExpected(bool value)
         {
             using var item = new ToolStripSeparator
@@ -572,7 +572,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ToolStripSeparator_Text_Set_GetReturnsExpected(string value)
         {
             using var item = new ToolStripSeparator
@@ -622,7 +622,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        [EnumData<ContentAlignment>]
         public void ToolStripSeparator_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
             using var item = new ToolStripSeparator
@@ -637,7 +637,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [InvalidEnumData<ContentAlignment>]
         [InlineData((ContentAlignment)int.MaxValue)]
         [InlineData((ContentAlignment)int.MinValue)]
         public void ToolStripSeparator_TextAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
@@ -670,7 +670,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripTextDirection))]
+        [InvalidEnumData<ToolStripTextDirection>]
         public void ToolStripSeparator_TextDirection_SetInvalid_ThrowsInvalidEnumArgumentException(ToolStripTextDirection value)
         {
             using var item = new ToolStripSeparator();
@@ -678,7 +678,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextImageRelation))]
+        [EnumData<TextImageRelation>]
         public void ToolStripSeparator_TextImageRelation_Set_GetReturnsExpected(TextImageRelation value)
         {
             using var item = new ToolStripSeparator
@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
+        [InvalidEnumData<TextImageRelation>]
         [InlineData((TextImageRelation)3)]
         [InlineData((TextImageRelation)5)]
         [InlineData((TextImageRelation)6)]
@@ -705,7 +705,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void ToolStripSeparator_ToolTipText_Set_GetReturnsExpected(string value)
         {
             using var item = new ToolStripSeparator

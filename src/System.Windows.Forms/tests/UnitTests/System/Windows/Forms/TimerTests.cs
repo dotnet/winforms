@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -43,7 +42,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Timer_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var timer = new Timer
@@ -58,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Timer_Enabled_SetDesignMode_GetReturnsExpected(bool value)
         {
             using var timer = new SubTimer();
@@ -82,7 +81,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Timer_Enabled_SetDesignModeAfterEnabling_GetReturnsExpected(bool value)
         {
             using var timer = new SubTimer();
@@ -226,7 +225,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Timer_Tag_Set_GetReturnsExpected(object value)
         {
             using var timer = new Timer
@@ -241,7 +240,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Timer_Tag_SetDesignMode_GetReturnsExpected(object value)
         {
             using var timer = new SubTimer();
@@ -265,7 +264,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Timer_Start_Stop_Success(bool designMode)
         {
             using var timer = new SubTimer();
@@ -290,7 +289,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Timer_Start_MultipleTimes_Success(bool designMode)
         {
             using var timer = new SubTimer();
@@ -315,7 +314,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Timer_Stop_Restart_Success(bool designMode)
         {
             using var timer = new SubTimer();
@@ -348,7 +347,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Timer_Stop_MultipleTimes_Success(bool designMode)
         {
             using var timer = new SubTimer();

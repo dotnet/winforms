@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -6,7 +6,6 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Windows.Forms.Analyzers;
 using System.Windows.Forms.Analyzers.Tests;
-using System.Windows.Forms.TestUtilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
@@ -166,7 +165,6 @@ namespace System.Windows.Forms.Generators.Tests
         [InlineData("System")]
         [InlineData("10")]
         [InlineData("-1")]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HighDpiMode))]
         public void ProjectFileReader_TryReadHighDpiMode_value_invalid(string value)
         {
             Dictionary<string, string> properties = new()
@@ -186,14 +184,12 @@ namespace System.Windows.Forms.Generators.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataWitIdentity), typeof(HighDpiMode))]
-#pragma warning disable xUnit1026 // Theory methods should use all of their parameters
-        public void ProjectFileReader_TryReadHighDpiMode_value_valid(string value, int counter)
-#pragma warning restore xUnit1026 // Theory methods should use all of their parameters
+        [EnumData<HighDpiMode>]
+        public void ProjectFileReader_TryReadHighDpiMode_value_valid(HighDpiMode value)
         {
             Dictionary<string, string> properties = new()
             {
-                { $"build_property.{PropertyNameCSharp.HighDpiMode}", value }
+                { $"build_property.{PropertyNameCSharp.HighDpiMode}", value.ToString() }
             };
             CompilerAnalyzerConfigOptions configOptions = new(properties.ToImmutableDictionary());
             CompilerAnalyzerConfigOptionsProvider provider = new(ImmutableDictionary<object, AnalyzerConfigOptions>.Empty, configOptions);
@@ -201,7 +197,25 @@ namespace System.Windows.Forms.Generators.Tests
             bool result = TryReadHighDpiMode(provider, out HighDpiMode returnedValue, out Diagnostic? diagnostic);
 
             Assert.True(result);
-            Assert.Equal(Enum.Parse<HighDpiMode>(value, true), returnedValue);
+            Assert.Equal(value, returnedValue);
+            Assert.Null(diagnostic);
+        }
+
+        [Theory]
+        [EnumData<HighDpiMode>]
+        public void ProjectFileReader_TryReadHighDpiMode_value_asint_valid(HighDpiMode value)
+        {
+            Dictionary<string, string> properties = new()
+            {
+                { $"build_property.{PropertyNameCSharp.HighDpiMode}", ((int)value).ToString() }
+            };
+            CompilerAnalyzerConfigOptions configOptions = new(properties.ToImmutableDictionary());
+            CompilerAnalyzerConfigOptionsProvider provider = new(ImmutableDictionary<object, AnalyzerConfigOptions>.Empty, configOptions);
+
+            bool result = TryReadHighDpiMode(provider, out HighDpiMode returnedValue, out Diagnostic? diagnostic);
+
+            Assert.True(result);
+            Assert.Equal(value, returnedValue);
             Assert.Null(diagnostic);
         }
     }

@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -150,7 +149,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentEditorPage_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage();
@@ -214,7 +213,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentEditorPage_CommitOnDeactivate_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage
@@ -264,7 +263,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentEditorPage_FirstActivate_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage
@@ -333,7 +332,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentEditorPage_LoadRequired_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage
@@ -379,7 +378,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ComponentEditorPage_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubComponentEditorPage
@@ -398,7 +397,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ComponentEditorPage_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubComponentEditorPage();
@@ -493,7 +492,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentEditorPage_ApplyChanges_Invoke_CallsSaveComponent(bool loadRequired)
         {
             using var control = new SubComponentEditorPage
@@ -547,7 +546,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentEditorPage_Deactivate_InvokeNotActivated_SetsInvisible(bool loadRequired)
         {
             using var control = new SubComponentEditorPage

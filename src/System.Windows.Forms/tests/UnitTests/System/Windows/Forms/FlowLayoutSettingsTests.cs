@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -44,7 +43,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FlowDirection))]
+        [InvalidEnumData<FlowDirection>]
         public void FlowLayoutSettings_FlowDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(FlowDirection value)
         {
             using var control = new ToolStrip
@@ -126,7 +125,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FlowLayoutSettings_SetFlowBreak_Invoke_GetFlowBreakReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -229,7 +228,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FlowLayoutSettings_SetFlowBreak_NullChild_ThrowsArgumentNullException(bool value)
         {
             using var control = new ToolStrip
@@ -241,7 +240,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FlowLayoutSettings_SetFlowBreak_InvalidChild_ThrowsNotSupportedException(bool value)
         {
             using var control = new ToolStrip

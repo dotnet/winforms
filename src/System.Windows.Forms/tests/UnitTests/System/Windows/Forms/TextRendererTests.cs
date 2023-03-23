@@ -7,7 +7,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms.Metafiles;
-using System.Windows.Forms.TestUtilities;
 using Moq;
 using Xunit;
 
@@ -514,7 +513,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [NullAndEmptyStringData]
         public void TextRenderer_MeasureText_NullOrEmptyString_ReturnsEmpty(string text)
         {
             using var image = new Bitmap(10, 10);

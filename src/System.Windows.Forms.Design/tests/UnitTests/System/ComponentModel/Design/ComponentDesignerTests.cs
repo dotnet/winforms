@@ -601,7 +601,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentDesigner_Dispose_InvokeBoolWithComponent_Success(bool disposing)
         {
             using var designer = new SubComponentDesigner();
@@ -656,7 +656,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ComponentDesigner_Dispose_InvokeBoolWithoutComponent_Success(bool disposing)
         {
             using var designer = new SubComponentDesigner();

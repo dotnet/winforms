@@ -4,7 +4,6 @@
 
 using System.Globalization;
 using System.Security;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -209,8 +208,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ControlUpdateMode))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ControlUpdateMode))]
+        [EnumData<ControlUpdateMode>]
+        [InvalidEnumData<ControlUpdateMode>]
         public void Binding_ControlUpdateMode_Set_GetReturnsExpected(ControlUpdateMode value)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
@@ -225,8 +224,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataSourceUpdateMode))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataSourceUpdateMode))]
+        [EnumData<DataSourceUpdateMode>]
+        [InvalidEnumData<DataSourceUpdateMode>]
         public void Binding_DataSourceUpdateMode_Set_GetReturnsExpected(DataSourceUpdateMode value)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
@@ -262,7 +261,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Binding_FormatString_Set_GetReturnsExpected(string value, string expected)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
@@ -277,7 +276,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Binding_FormattingEnabled_Set_GetReturnsExpected(bool value)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")

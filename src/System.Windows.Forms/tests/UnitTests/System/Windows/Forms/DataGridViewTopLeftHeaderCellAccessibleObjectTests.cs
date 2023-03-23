@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -99,7 +98,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewTopLeftHeaderCellAccessibleObject_IsEnabled_ReturnsExpected(bool isEnabled)
         {
             using DataGridView control = new();

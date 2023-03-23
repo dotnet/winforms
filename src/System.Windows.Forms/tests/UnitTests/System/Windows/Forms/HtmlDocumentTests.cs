@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop.Mshtml;
 
@@ -485,7 +484,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public async Task HtmlDocument_Domain_Set_ThrowsCOMException(string value)
         {
             using var parent = new Control();
@@ -1087,7 +1086,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public async Task HtmlDocument_Title_GetCustomValueSet_ReturnsExpected(string title, string expected)
         {
             using var parent = new Control();
@@ -1104,7 +1103,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public async Task HtmlDocument_Title_Set_GetReturnsExpected(string value, string expected)
         {
             using var parent = new Control();
@@ -1778,7 +1777,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public async Task HtmlDocument_OpenNew_Invoke_Success(bool replaceInHistory)
         {
             using var parent = new Control();

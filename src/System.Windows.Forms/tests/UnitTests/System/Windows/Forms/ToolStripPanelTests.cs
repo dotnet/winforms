@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripPanel_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var panel = new ToolStripPanel
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void AutoScroll_Set_GetReturnsExpected(bool value)
         {
             using var panel = new ToolStripPanel
@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripPanel_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripPanel();

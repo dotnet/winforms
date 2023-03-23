@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -22,7 +21,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void OpenFileDialog_CheckFileExists_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new OpenFileDialog
@@ -41,7 +40,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void OpenFileDialog_Multiselect_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new OpenFileDialog
@@ -60,7 +59,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void OpenFileDialog_ReadOnlyChecked_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new OpenFileDialog
@@ -79,7 +78,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void OpenFileDialog_SelectReadOnly_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new OpenFileDialog
@@ -98,7 +97,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void OpenFileDialog_ShowPreview_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new OpenFileDialog
@@ -117,7 +116,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void OpenFileDialog_ShowReadOnly_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new OpenFileDialog

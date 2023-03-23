@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -23,7 +22,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void PropertyManager_Position_Set_Nop(int value)
         {
             var context = new BindingContext();
@@ -400,7 +399,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void PropertyManager_RemoveAt_Invoke_ThrowsNotSupportedException(int index)
         {
             var context = new BindingContext();

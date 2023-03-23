@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -19,7 +18,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DesignerCommandSet_GetCommands_Invoke_ReturnsNull(string name)
         {
             var set = new DesignerCommandSet();

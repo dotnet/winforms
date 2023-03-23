@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests
@@ -219,7 +218,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(Edges))]
+        [InvalidEnumData<Edges>]
         public void VisualStyleRenderer_DrawEdge_InvalidEdges_ThrowsInvalidEnumArgumentException(Edges edges)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -229,7 +228,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeStyle))]
+        [InvalidEnumData<EdgeStyle>]
         public void VisualStyleRenderer_DrawEdge_InvalidStyle_ThrowsInvalidEnumArgumentException(EdgeStyle style)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -239,7 +238,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeEffects))]
+        [InvalidEnumData<EdgeEffects>]
         public void VisualStyleRenderer_DrawEdge_InvalidEffects_ThrowsInvalidEnumArgumentException(EdgeEffects effects)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -579,7 +578,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FontProperty))]
+        [InvalidEnumData<FontProperty>]
         public void VisualStyleRenderer_GetFont_for_InvalidFontProperty(FontProperty value)
         {
             var renderer = new VisualStyleRenderer("TEXTSTYLE", 1, 0);

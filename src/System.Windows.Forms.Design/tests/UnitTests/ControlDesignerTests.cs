@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -93,10 +92,8 @@ namespace System.Windows.Forms.Design.Tests
             Assert.True(controlDesigner.CanBeParentedTo(new ParentControlDesigner()));
         }
 
-        public static TheoryData BoolData => CommonTestHelper.GetBoolTheoryData();
-
         [Theory]
-        [MemberData(nameof(BoolData))]
+        [BoolData]
         public void EnableDragDropTest(bool val)
         {
             using TestControlDesigner controlDesigner = new TestControlDesigner();

@@ -19,14 +19,8 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(box);
         }
 
-        /// <summary>
-        ///  Data for the CheckOnClick test
-        /// </summary>
-        public static TheoryData<bool> CheckOnClickData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(CheckOnClickData))]
+        [BoolData]
         public void CheckedListBox_CheckOnClick(bool expected)
         {
             using var box = new CheckedListBox
@@ -57,14 +51,8 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(collection);
         }
 
-        /// <summary>
-        ///  Data for the DisplayMember test
-        /// </summary>
-        public static TheoryData<string> DisplayMemberData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(DisplayMemberData))]
+        [StringData]
         public void CheckedListBox_DisplayMember(string expected)
         {
             using var box = new CheckedListBox
@@ -109,21 +97,15 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
+        [InvalidEnumData<SelectionMode>]
         public void CheckedListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
         {
             using var control = new CheckedListBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.SelectionMode = value);
         }
 
-        /// <summary>
-        ///  Data for the ThreeDCheckBoxes test
-        /// </summary>
-        public static TheoryData<bool> ThreeDCheckBoxesData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(ThreeDCheckBoxesData))]
+        [BoolData]
         public void CheckedListBox_ThreeDCheckBoxes(bool expected)
         {
             using var box = new CheckedListBox
@@ -134,14 +116,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.ThreeDCheckBoxes);
         }
 
-        /// <summary>
-        ///  Data for the ValueMember test
-        /// </summary>
-        public static TheoryData<string> ValueMemberData =>
-            CommonTestHelper.GetStringTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(ValueMemberData))]
+        [StringData]
         public void CheckedListBox_ValueMember(string expected)
         {
             using var box = new CheckedListBox
@@ -357,7 +333,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        [EnumData<CheckState>]
         public void CheckedListBox_SetItemCheckState_Invoke_GetReturnsExpected(CheckState value)
         {
             using var control = new CheckedListBox();
@@ -374,7 +350,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
+        [InvalidEnumData<CheckState>]
         public void CheckedListBox_SetItemCheckState_InvokeInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
         {
             using var control = new CheckedListBox();

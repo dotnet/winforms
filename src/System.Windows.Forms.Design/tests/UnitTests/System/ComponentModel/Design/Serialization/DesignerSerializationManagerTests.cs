@@ -168,7 +168,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerSerializationManager_PreserveNames_Set_GetReturnsExpected(bool value)
         {
             var manager = new DesignerSerializationManager
@@ -187,7 +187,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerSerializationManager_PreserveNames_SetWithSession_ThrowsInvalidOperationException(bool value)
         {
             var manager = new DesignerSerializationManager();
@@ -266,7 +266,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DesignerSerializationManager_PropertyProvider_Set_GetReturnsExpected(string value)
         {
             var manager = new DesignerSerializationManager
@@ -281,7 +281,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DesignerSerializationManager_PropertyProvider_SetWithSession_GetReturnsExpected(string value)
         {
             var manager = new DesignerSerializationManager();
@@ -323,7 +323,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerSerializationManager_RecycleInstances_Set_GetReturnsExpected(bool value)
         {
             var manager = new DesignerSerializationManager
@@ -342,7 +342,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerSerializationManager_RecycleInstances_SetWithSession_ThrowsInvalidOperationException(bool value)
         {
             var manager = new DesignerSerializationManager();
@@ -352,7 +352,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerSerializationManager_ValidateRecycledTypes_Set_GetReturnsExpected(bool value)
         {
             var manager = new DesignerSerializationManager
@@ -371,7 +371,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerSerializationManager_ValidateRecycledTypes_SetWithSession_ThrowsInvalidOperationException(bool value)
         {
             var manager = new DesignerSerializationManager();
@@ -619,7 +619,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignerSerializationManager_CreateSession_Dispose_ClearsSerializationCompleteEventHandler(EventArgs eventArgs)
         {
             var manager = new SubDesignerSerializationManager();
@@ -761,7 +761,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerSerializationManager_GetInstance_HasNameInstancesNameExists_ReturnsExpected(string name)
         {
             var manager = new DesignerSerializationManager();
@@ -863,7 +863,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerSerializationManager_GetInstance_NoSession_ThrowsInvalidOperationException(string name)
         {
             var manager = new DesignerSerializationManager();
@@ -924,7 +924,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerSerializationManager_GetName_HasNamedInstance_ReturnsExpected(string name)
         {
             var manager = new DesignerSerializationManager();
@@ -937,7 +937,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerSerializationManager_GetName_HasNamedComponent_ReturnsExpected(string name)
         {
             var manager = new DesignerSerializationManager();
@@ -1628,7 +1628,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DesignerSerializationManager_IDesignerSerializationManagerGetType_NoSession_ThrowsInvalidOperationException(string typeName)
         {
             IDesignerSerializationManager iManager = new DesignerSerializationManager();
@@ -1689,7 +1689,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignerSerializationManager_OnSessionCreated_InvokeWithSessionCreated_CallsHandler(EventArgs eventArgs)
         {
             var manager = new SubDesignerSerializationManager();
@@ -1777,7 +1777,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignerSerializationManager_OnSessionDisposed_InvokeWithSessionDisposed_CallsHandler(EventArgs eventArgs)
         {
             var manager = new SubDesignerSerializationManager();
@@ -1805,7 +1805,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignerSerializationManager_OnSessionDisposed_InvokeWithSerializationComplete_CallsHandler(EventArgs eventArgs)
         {
             var manager = new SubDesignerSerializationManager();
@@ -1918,7 +1918,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerSerializationManager_SetName_Invoke_GetNameReturnsExpected(string name)
         {
             var manager = new DesignerSerializationManager();
@@ -1955,7 +1955,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerSerializationManager_SetName_OtherInstanceHasName_ThrowsArgumentException(string name)
         {
             var manager = new DesignerSerializationManager();
@@ -1968,7 +1968,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerSerializationManager_SetName_SameInstanceHasName_ThrowsArgumentException(string name)
         {
             var manager = new DesignerSerializationManager();

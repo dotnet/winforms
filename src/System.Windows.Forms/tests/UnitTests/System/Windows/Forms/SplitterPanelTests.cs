@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -125,7 +124,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void SplitterPanel_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SplitterPanel(null);
@@ -189,8 +188,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [EnumData<AutoSizeMode>]
+        [InvalidEnumData<AutoSizeMode>]
         public void SplitterPanel_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SplitterPanel(null);
@@ -210,8 +209,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [EnumData<AutoSizeMode>]
+        [InvalidEnumData<AutoSizeMode>]
         public void SplitterPanel_AutoSizeMode_SetWithParent_GetReturnsExpected(AutoSizeMode value)
         {
             using var parent = new Control();
@@ -241,8 +240,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [EnumData<AutoSizeMode>]
+        [InvalidEnumData<AutoSizeMode>]
         public void SplitterPanel_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SplitterPanel(null);
@@ -271,8 +270,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [EnumData<AutoSizeMode>]
+        [InvalidEnumData<AutoSizeMode>]
         public void SplitterPanel_AutoSizeMode_SetWithHandleWithParent_GetReturnsExpected(AutoSizeMode value)
         {
             using var parent = new Control();
@@ -327,7 +326,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
+        [EnumData<BorderStyle>]
         public void SplitterPanel_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             using var control = new SplitterPanel(null)
@@ -375,7 +374,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [InvalidEnumData<BorderStyle>]
         public void SplitterPanel_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var control = new SplitterPanel(null);
@@ -383,7 +382,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        [EnumData<DockStyle>]
         public void SplitterPanel_Dock_Set_GetReturnsExpected(DockStyle value)
         {
             using var control = new SplitterPanel(null)
@@ -438,7 +437,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
+        [InvalidEnumData<DockStyle>]
         public void SplitterPanel_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
         {
             using var control = new SplitterPanel(null);
@@ -694,7 +693,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void SplitterPanel_Name_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SplitterPanel(null)
@@ -930,7 +929,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void SplitterPanel_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new SplitterPanel(null)
@@ -952,7 +951,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void SplitterPanel_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SplitterPanel(null);
@@ -1027,7 +1026,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void SplitterPanel_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SplitterPanel(null)
@@ -1044,7 +1043,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void SplitterPanel_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new SplitterPanel(null);
@@ -1108,7 +1107,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void SplitterPanel_Visible_Set_GetReturnsExpected(bool value)
         {
             using var control = new SplitterPanel(null)

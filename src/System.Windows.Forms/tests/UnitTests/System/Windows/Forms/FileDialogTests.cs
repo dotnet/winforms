@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Windows.Forms.TestUtilities;
 using Windows.Win32.UI.Controls.Dialogs;
 using Xunit;
 
@@ -95,7 +94,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FileDialog_AddExtension_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new SubFileDialog
@@ -140,7 +139,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FileDialog_AutoUpgradeEnabled_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new SubFileDialog
@@ -162,7 +161,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FileDialog_CheckFileExists_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new SubFileDialog
@@ -336,7 +335,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void FileDialog_FilterIndex_Set_GetReturnsExpected(int value)
         {
             using var dialog = new SubFileDialog
@@ -353,7 +352,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void FileDialog_InitialDirectory_Set_GetReturnsExpected(string value)
         {
             using var dialog = new SubFileDialog
@@ -485,7 +484,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FileDialog_SupportMultiDottedExtensions_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new SubFileDialog
@@ -507,7 +506,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void FileDialog_Title_Set_GetReturnsExpected(string value)
         {
             using var dialog = new SubFileDialog
@@ -644,7 +643,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public unsafe void FileDialog_RunDialog_NonVista_Success(bool result)
         {
             using var dialog = new SubFileDialog
@@ -683,7 +682,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public unsafe void FileDialog_RunDialog_NonVistaAdvanced_Success(bool result)
         {
             using var dialog = new SubFileDialog
@@ -740,7 +739,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public unsafe void FileDialog_RunDialog_ShowHelp_Success(bool result)
         {
             using var dialog = new SubFileDialog
