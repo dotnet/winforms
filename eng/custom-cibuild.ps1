@@ -25,8 +25,17 @@ function _kill($processName) {
         # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging
         # when there are no instances of the process
         & cmd /c "taskkill /T /F /IM ${processName} 2>&1"
+		## Remove binary in case process has not started yet.
+		if (Test-Path "C:\Windows\System32\ServerManager.exe") {
+			if (Remove-Item "C:\Windows\System32\ServerManager.exe")
+			{
+				Write-Host "ServerManager.exe file is deleted."
+			} else {
+				Write-Host "Failed to delete ServerManager.exe file."
+				}
+		}
     } catch {
-        Write-Host "Failed to kill ${processName}."
+        Write-Host "Failed to kill ${processName} or delete ServerManager.exe file."
     }
 }
 
