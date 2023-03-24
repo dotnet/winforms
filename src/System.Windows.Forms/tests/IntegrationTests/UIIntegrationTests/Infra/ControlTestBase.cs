@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
@@ -23,9 +24,9 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
-        // private static bool s_disableServerManager;
+        private static string? s_serverManagerPath;
 
-        //private static bool started;
+        private static bool s_started;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -42,12 +43,13 @@ namespace System.Windows.Forms.UITests
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
 
             // Test to capture screenshot at the start
-            // if (!started)
+              if (!s_started)
             {
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
+                CloseServerManagerWindow();
                 var original = _testName;
-                _testName = $"{DateTimeOffset.Now:mmddyyyyhhmmss}_{_testName}";
-                // started = true;
+                _testName = $"{_testName}_{s_serverManagerPath}";
+                s_started = true;
                 TrySaveScreenshot();
                 _testName = original;
                 // CloseServerManagerWindow();
@@ -62,11 +64,11 @@ namespace System.Windows.Forms.UITests
                 return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
             }
 
-            /*void CloseServerManagerWindow()
+            void CloseServerManagerWindow()
             {
                 try
                 {
-                    if (s_disableServerManager)
+                    if (s_serverManagerPath is not null)
                     {
                         return;
                     }
@@ -80,9 +82,9 @@ namespace System.Windows.Forms.UITests
 
                         if (process.MainWindowHandle != IntPtr.Zero)
                         {
-                            process.CloseMainWindow();
-                            s_disableServerManager = true;
-                            TestOutputHelper.WriteLine($"Server Manager Window should be closed");
+                            // process.CloseMainWindow();
+                            s_serverManagerPath = process.MainModule!.FileName;
+                            // TestOutputHelper.WriteLine($"Server Manager Window should be closed");
                         }
 
                         return;
@@ -91,7 +93,7 @@ namespace System.Windows.Forms.UITests
                 catch { }
 
                 TestOutputHelper.WriteLine($"Server Manager Window not found");
-            }*/
+            }
         }
 
         protected ITestOutputHelper TestOutputHelper { get; }
