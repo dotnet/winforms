@@ -81,7 +81,7 @@ namespace System.Windows.Forms.UITests
                     {
                         // process.CloseMainWindow();
                         s_serverManagerPath = process.MainModule!.FileName;
-                        // TestOutputHelper.WriteLine($"Server Manager Window should be closed");
+                         TestOutputHelper.WriteLine($"Server Manager path = {s_serverManagerPath}");
                     }
 
                     return;
@@ -96,6 +96,11 @@ namespace System.Windows.Forms.UITests
                 string processName = "ServerManager";
 
                 Process[] processes = Process.GetProcessesByName(processName);
+
+                if (processes.Length == 0)
+                {
+                    throw;
+                }
 
                 foreach (Process process in processes)
                 {
@@ -416,6 +421,7 @@ namespace System.Windows.Forms.UITests
                 if (s_serverManagerPath is not null)
                 {
                     _testName = $"{_testName[(index + 1)..]}_{s_serverManagerPath[..(s_serverManagerPath.Length - 4)]}";
+                    TestOutputHelper.WriteLine($"ServerManager path = {s_serverManagerPath} and test name = {_testName}");
                 }
                 else
                 {
