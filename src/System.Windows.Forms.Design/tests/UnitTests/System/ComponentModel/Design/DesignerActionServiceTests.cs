@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Windows.Forms.Design;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -350,8 +349,8 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ComponentActionsType))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
+        [EnumData<ComponentActionsType>]
+        [InvalidEnumData<ComponentActionsType>]
         public void GetComponentActions_NoSuchComponentNotEmpty_ReturnsEmpty(ComponentActionsType type)
         {
             var service = new SubDesignerActionService(null);
@@ -363,8 +362,8 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ComponentActionsType))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
+        [EnumData<ComponentActionsType>]
+        [InvalidEnumData<ComponentActionsType>]
         public void GetComponentActions_NoSuchComponentEmpty_ReturnsEmpty(ComponentActionsType type)
         {
             var service = new SubDesignerActionService(null);
@@ -372,7 +371,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
+        [InvalidEnumData<ComponentActionsType>]
         public void GetComponentActions_NoSuchAction_ReturnsEmpty(ComponentActionsType type)
         {
             var service = new SubDesignerActionService(null);

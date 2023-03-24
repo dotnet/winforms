@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ObjectSelectorEditor_Ctor_Bool(bool subObjectSelector)
         {
             var editor = new SubObjectSelectorEditor(subObjectSelector);

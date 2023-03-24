@@ -897,7 +897,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DomainUpDown_Wrap_Set_GetReturnsExpected(bool value)
         {
             using var control = new DomainUpDown
@@ -919,7 +919,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DomainUpDown_Wrap_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new DomainUpDown();

@@ -21,14 +21,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the IsTopMdiWindowClosingGetSet test
-        /// </summary>
-        public static TheoryData<bool> IsTopMdiWindowClosingGetSetData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(IsTopMdiWindowClosingGetSetData))]
+        [BoolData]
         public void Control_IsTopMdiWindowClosingGetSet(bool expected)
         {
             using var control = new Control
@@ -40,7 +34,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
+        [EnumData<BoundsSpecified>]
         public void Control_RequiredScaling_Set_GetReturnsExpected(BoundsSpecified value)
         {
             using var control = new Control
@@ -55,7 +49,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_RequiredScalingEnabled_Get_ReturnsExpected(bool value)
         {
             using var control = new Control
@@ -74,7 +68,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_TabStopInternal_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -93,7 +87,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_TabStopInternal_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -163,14 +157,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.UseCompatibleTextRenderingInt);
         }
 
-        /// <summary>
-        ///  Data for the ValidationCancelledGetSet test
-        /// </summary>
-        public static TheoryData<bool> ValidationCancelledGetSetData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(ValidationCancelledGetSetData))]
+        [BoolData]
         public void Control_ValidationCancelledGetSet(bool expected)
         {
             using var control = new Control
@@ -181,14 +169,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.ValidationCancelled);
         }
 
-        /// <summary>
-        ///  Data for the ApplyBoundsConstraints test
-        /// </summary>
-        public static TheoryData<int> ApplyBoundsConstraintsData =>
-            CommonTestHelper.GetIntTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(ApplySizeConstraintsData))]
+        [NumberData<int>]
         public void Control_ApplyBoundsConstraints(int expected)
         {
             using var control = new Control();
@@ -199,14 +181,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedBounds, actualBounds);
         }
 
-        /// <summary>
-        ///  Data for the ApplySizeConstraints test
-        /// </summary>
-        public static TheoryData<int> ApplySizeConstraintsData =>
-            CommonTestHelper.GetIntTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(ApplySizeConstraintsData))]
+        [NumberData<int>]
         public void Control_ApplySizeConstraints(int expected)
         {
             using var control = new Control();
@@ -294,14 +270,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.CanProcessMnemonic());
         }
 
-        /// <summary>
-        ///  Data for the CreateControlInternal test
-        /// </summary>
-        public static TheoryData<bool> CreateControlInternalData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [WinFormsTheory]
-        [MemberData(nameof(CreateControlInternalData))]
+        [BoolData]
         public void Control_CreateControlInternal(bool fIgnoreVisible)
         {
             using var control = new Control();

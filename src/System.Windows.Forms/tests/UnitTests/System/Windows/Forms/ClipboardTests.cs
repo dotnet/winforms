@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Clipboard_ContainsData_InvokeMultipleTimes_Success(string format)
         {
             bool result = Clipboard.ContainsData(format);
@@ -75,7 +74,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [EnumData<TextDataFormat>]
         public void Clipboard_ContainsText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
         {
             bool result = Clipboard.ContainsText(format);
@@ -83,7 +82,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [InvalidEnumData<TextDataFormat>]
         public void Clipboard_ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.ContainsText(format));
@@ -136,7 +135,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [EnumData<TextDataFormat>]
         public void Clipboard_GetText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
         {
             string result = Clipboard.GetText(format);
@@ -144,7 +143,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [InvalidEnumData<TextDataFormat>]
         public void Clipboard_GetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.GetText(format));
@@ -444,7 +443,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [EnumData<TextDataFormat>]
         public void Clipboard_SetText_InvokeStringTextDataFormat_GetReturnsExpected(TextDataFormat format)
         {
             Clipboard.SetText("text", format);
@@ -453,7 +452,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [NullAndEmptyStringData]
         public void Clipboard_SetText_NullOrEmptyText_ThrowsArgumentNullException(string text)
         {
             Assert.Throws<ArgumentNullException>("text", () => Clipboard.SetText(text));
@@ -461,7 +460,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [InvalidEnumData<TextDataFormat>]
         public void Clipboard_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.SetText("text", format));

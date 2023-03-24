@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Size = System.Drawing.Size;
 
@@ -43,7 +42,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColorDepth))]
+        [EnumData<ColorDepth>]
         public void ImageCollection_Item_GetInt_InvokeWithoutHandle_ReturnsExpected(ColorDepth depth)
         {
             using var list = new ImageList
@@ -91,7 +90,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColorDepth))]
+        [EnumData<ColorDepth>]
         public void ImageCollection_Item_GetInt_InvokeWithHandle_ReturnsExpected(ColorDepth depth)
         {
             using var list = new ImageList
@@ -394,7 +393,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ImageCollection_Item_GetStringEmpty_ReturnsNull(string key)
         {
             using var list = new ImageList();
@@ -1097,7 +1096,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ImageCollection_ContainsKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var list = new ImageList();
@@ -1253,7 +1252,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ImageCollection_IndexOfKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var list = new ImageList();

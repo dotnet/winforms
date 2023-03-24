@@ -37,7 +37,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void CollectionForm_EditValue_Set_GetReturnsExpected(object value)
         {
             var editor = new CollectionEditor(typeof(int[]));

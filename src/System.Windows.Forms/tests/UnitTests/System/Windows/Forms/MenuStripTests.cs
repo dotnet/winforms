@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using Point = System.Drawing.Point;
@@ -154,7 +153,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void MenuStrip_CanOverflow_Set_GetReturnsExpected(bool value)
         {
             using var control = new MenuStrip();
@@ -329,7 +328,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void MenuStrip_ShowItemToolTips_Set_GetReturnsExpected(bool value)
         {
             using var control = new MenuStrip
@@ -352,7 +351,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void MenuStrip_Stretch_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStrip
@@ -374,7 +373,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void MenuStrip_Stretch_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new MenuStrip();
@@ -549,7 +548,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void MenuStrip_OnMenuActivate_Invoke_CallsMenuActivate(EventArgs eventArgs)
         {
             using var control = new SubMenuStrip();
@@ -575,7 +574,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void MenuStrip_OnMenuActivate_InvokeWithHandle_CallsMenuActivate(EventArgs eventArgs)
         {
             using var control = new SubMenuStrip();
@@ -615,7 +614,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void MenuStrip_OnMenuDeactivate_Invoke_CallsMenuDeactivate(EventArgs eventArgs)
         {
             using var control = new SubMenuStrip();
@@ -641,7 +640,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void MenuStrip_OnMenuDeactivate_InvokeWithHandle_CallsMenuDeactivate(EventArgs eventArgs)
         {
             using var control = new SubMenuStrip();

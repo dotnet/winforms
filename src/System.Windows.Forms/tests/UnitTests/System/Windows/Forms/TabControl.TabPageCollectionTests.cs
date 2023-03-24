@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using Size = System.Drawing.Size;
@@ -878,7 +877,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void TabPageCollection_Add_InvokeString_Success(string text, string expectedText)
         {
             using var owner = new TabControl();
@@ -1618,7 +1617,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void TabPageCollection_ContainsKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var owner = new TabControl();
@@ -1913,7 +1912,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void TabPageCollection_IndexOfKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var owner = new TabControl();
@@ -2665,7 +2664,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void TabPageCollection_Insert_InvokeIntString_Success(string text, string expectedText)
         {
             using var owner = new TabControl();
@@ -3255,7 +3254,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void TabPageCollection_Item_GetStringEmpty_ReturnsNull(string key)
         {
             using var owner = new TabControl();

@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void Message_Msg_Set_GetReturnsExpected(int value)
         {
             var message = new Message

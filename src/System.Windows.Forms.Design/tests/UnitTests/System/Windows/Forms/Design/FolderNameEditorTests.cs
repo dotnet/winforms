@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             [Theory]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+            [NormalizedStringData]
             public void FolderBrowser_Description_Set_GetReturnsExpected(string value, string expected)
             {
                 var browser = new FolderBrowser
@@ -69,8 +69,8 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             [Theory]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserFolder))]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserFolder))]
+            [EnumData<FolderBrowserFolder>]
+            [InvalidEnumData<FolderBrowserFolder>]
             protected void FolderBrowser_StartLocation_Set_GetReturnsExpected(FolderBrowserFolder value)
             {
                 var browser = new FolderBrowser
@@ -85,8 +85,8 @@ namespace System.Windows.Forms.Design.Tests
             }
 
             [Theory]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserStyles))]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserStyles))]
+            [EnumData<FolderBrowserStyles>]
+            [InvalidEnumData<FolderBrowserStyles>]
             protected void FolderBrowser_Style_Set_GetReturnsExpected(FolderBrowserStyles value)
             {
                 var browser = new FolderBrowser

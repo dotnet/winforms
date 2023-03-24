@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -26,7 +25,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void HelpProvider_HelpNamespace_Set_GetReturnsExpected(string value)
         {
             using var provider = new HelpProvider
@@ -41,7 +40,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void HelpProvider_HelpNamespace_SetWithBoundControls_GetReturnsExpected(string value)
         {
             using var provider = new HelpProvider
@@ -57,7 +56,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void HelpProvider_Tag_Set_GetReturnsExpected(string value)
         {
             using var provider = new HelpProvider
@@ -143,7 +142,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void HelpProvider_ResetShowHelp_WithShowHelp_Success(bool showHelp)
         {
             using var provider = new HelpProvider();
@@ -284,7 +283,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HelpNavigator))]
+        [EnumData<HelpNavigator>]
         public void HelpProvider_SetHelpNavigator_GetHelpNavigator_ReturnsExpected(HelpNavigator navigator)
         {
             using var provider = new HelpProvider();
@@ -301,7 +300,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HelpNavigator))]
+        [EnumData<HelpNavigator>]
         public void HelpProvider_SetHelpNavigator_WithShowHelpTrue_ReturnsExpected(HelpNavigator navigator)
         {
             using var provider = new HelpProvider();
@@ -319,7 +318,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HelpNavigator))]
+        [EnumData<HelpNavigator>]
         public void HelpProvider_SetHelpNavigator_WithShowHelpFalse_ReturnsExpected(HelpNavigator navigator)
         {
             using var provider = new HelpProvider();
@@ -337,8 +336,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HelpNavigator))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HelpNavigator))]
+        [EnumData<HelpNavigator>]
+        [InvalidEnumData<HelpNavigator>]
         public void HelpProvider_SetHelpNavigator_NullCtl_ThrowsArgumentNullException(HelpNavigator navigator)
         {
             using var provider = new HelpProvider();
@@ -346,7 +345,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HelpNavigator))]
+        [InvalidEnumData<HelpNavigator>]
         public void HelpProvider_SetHelpNavigator_InvalidNavigator_ThrowsInvalidEnumArgumentException(HelpNavigator navigator)
         {
             using var provider = new HelpProvider();
@@ -354,7 +353,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void HelpProvider_SetHelpString_GetHelpString_ReturnsExpected(string helpString)
         {
             using var provider = new HelpProvider();
@@ -373,7 +372,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void HelpProvider_SetHelpString_WithShowHelpTrue_ReturnsExpected(string helpString)
         {
             using var provider = new HelpProvider();
@@ -393,7 +392,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void HelpProvider_SetHelpString_WithShowHelpFalse_ReturnsExpected(string helpString)
         {
             using var provider = new HelpProvider();
@@ -420,7 +419,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void HelpProvider_SetShowHelp_GetShowHelp_ReturnsExpected(bool value)
         {
             using var provider = new HelpProvider();

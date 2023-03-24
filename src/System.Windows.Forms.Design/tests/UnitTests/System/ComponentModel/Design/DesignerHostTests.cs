@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -14,7 +13,7 @@ namespace System.ComponentModel.Design.Tests
     public class DesignerHostTests
     {
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerHost_CanReloadWithErrors_Set_GetReturnsExpected(bool value)
         {
             var surface = new SubDesignSurface();
@@ -40,7 +39,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerHost_IgnoreErrorsDuringReload_Set_GetReturnsExpected(bool value)
         {
             var surface = new SubDesignSurface();
@@ -58,7 +57,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerHost_IgnoreErrorsDuringReload_SetWithCanReloadWithErrors_GetReturnsExpected(bool value)
         {
             var surface = new SubDesignSurface();
@@ -102,7 +101,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerHost_Loading_GetWithLoader_ReturnsExpected(bool loading)
         {
             var surface = new SubDesignSurface();
@@ -702,7 +701,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignerHost_Add_ComponentWithNameCreationServiceWithName_CallsValidateName(string name)
         {
             var mockNameCreationService = new Mock<INameCreationService>(MockBehavior.Strict);
@@ -1294,7 +1293,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DesignerHost_AddComponentISiteName_SetWithMultipleComponents_GetReturnsExpected(string value)
         {
             var surface = new SubDesignSurface();
@@ -1367,7 +1366,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DesignerHost_AddComponentISiteName_SetNameWithComponentRename_CallsHandler(string value)
         {
             var surface = new SubDesignSurface();
@@ -1746,7 +1745,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerHost_AddService_InvokeObjectBool_GetServiceReturnsExpected(bool promote)
         {
             var surface = new SubDesignSurface();
@@ -1774,7 +1773,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerHost_AddService_InvokeObjectCallback_GetServiceReturnsExpected(bool promote)
         {
             var surface = new SubDesignSurface();
@@ -2914,7 +2913,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerHost_RemoveService_InvokeBool_GetServiceReturnsExpected(bool promote)
         {
             var surface = new SubDesignSurface();

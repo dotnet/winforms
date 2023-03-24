@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewContentAlignment))]
+        [EnumData<DataGridViewContentAlignment>]
         public void DataGridViewCellStyle_Alignment_Set_GetReturnsExpected(DataGridViewContentAlignment value)
         {
             var style = new DataGridViewCellStyle
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewContentAlignment))]
+        [InvalidEnumData<DataGridViewContentAlignment>]
         public void DataGridViewCellStyle_Alignment_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewContentAlignment value)
         {
             var style = new DataGridViewCellStyle();
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void DataGridViewCellStyle_Format_Set_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
@@ -332,7 +332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void DataGridViewCellStyle_Format_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
@@ -561,7 +561,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewCellStyle_Tag_Set_GetReturnsExpected(object value)
         {
             var style = new DataGridViewCellStyle
@@ -576,7 +576,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewCellStyle_Tag_SetWithNonNullOldValue_GetReturnsExpected(object value)
         {
             var style = new DataGridViewCellStyle
@@ -592,7 +592,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
+        [EnumData<DataGridViewTriState>]
         public void DataGridViewCellStyle_WrapMode_Set_GetReturnsExpected(DataGridViewTriState value)
         {
             var style = new DataGridViewCellStyle
@@ -607,7 +607,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewTriState))]
+        [InvalidEnumData<DataGridViewTriState>]
         public void DataGridViewCellStyle_WrapMode_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewTriState value)
         {
             var style = new DataGridViewCellStyle();

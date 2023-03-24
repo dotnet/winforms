@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -981,7 +980,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(string value, string expected)
         {
             using var row = new DataGridViewRow
@@ -996,7 +995,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var row = new DataGridViewRow
@@ -1013,7 +1012,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void DataGridViewRow_ErrorText_SetWithDataGridView_GetReturnsExpected(string value, string expected)
         {
             using var control = new DataGridView
@@ -1034,7 +1033,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void DataGridViewRow_ErrorText_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var control = new DataGridView
@@ -1188,7 +1187,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_Frozen_SetWithDataGridView_GetReturnsExpected(bool value)
         {
             using var control = new DataGridView
@@ -1263,7 +1262,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_Frozen_SetWithPreviousRows_SetsToFrozen(bool previousVisible)
         {
             using var control = new DataGridView
@@ -1358,7 +1357,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_Frozen_SetShared_ThrowsInvalidOperationException(bool value)
         {
             using var control = new DataGridView();
@@ -1781,7 +1780,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeRowsMode))]
+        [EnumData<DataGridViewAutoSizeRowsMode>]
         public void DataGridViewRow_Height_GetWithDataGridView_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
         {
             using var control = new DataGridView
@@ -1798,7 +1797,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeRowsMode))]
+        [EnumData<DataGridViewAutoSizeRowsMode>]
         public void DataGridViewRow_Height_GetShared_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
         {
             using var control = new DataGridView
@@ -2250,7 +2249,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeRowsMode))]
+        [EnumData<DataGridViewAutoSizeRowsMode>]
         public void DataGridViewRow_MinimumHeight_GetWithDataGridView_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
         {
             using var control = new DataGridView
@@ -2267,7 +2266,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeRowsMode))]
+        [EnumData<DataGridViewAutoSizeRowsMode>]
         public void DataGridViewRow_MinimumHeight_GetShared_ReturnsExpected(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
         {
             using var control = new DataGridView
@@ -2518,7 +2517,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_ReadOnly_GetWithDataGridView_ReturnsExpected(bool dataGridViewReadOnly)
         {
             using var control = new DataGridView
@@ -2532,7 +2531,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_ReadOnly_GetShared_ThrowsInvalidOperationException(bool dataGridViewReadOnly)
         {
             using var control = new DataGridView
@@ -2546,7 +2545,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_ReadOnly_Set_GetReturnsExpected(bool value)
         {
             using var row = new DataGridViewRow
@@ -2743,7 +2742,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_Resizable_GetShared_ReturnsExpected(bool allowUserToResizeRows)
         {
             using var control = new DataGridView
@@ -2769,7 +2768,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
+        [EnumData<DataGridViewTriState>]
         public void DataGridViewRow_Resizable_Set_GetReturnsExpected(DataGridViewTriState value)
         {
             using var row = new DataGridViewRow
@@ -2784,7 +2783,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
+        [EnumData<DataGridViewTriState>]
         public void DataGridViewRow_Resizable_SetWithCustomOldValue_GetReturnsExpected(DataGridViewTriState value)
         {
             using var row = new DataGridViewRow
@@ -2897,7 +2896,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewTriState))]
+        [InvalidEnumData<DataGridViewTriState>]
         public void DataGridViewRow_Resizable_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewTriState value)
         {
             using var row = new DataGridViewRow();
@@ -3041,7 +3040,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DataGridViewRow_Selected_SetShared_ThrowsInvalidOperationException(bool value)
         {
             using var control = new DataGridView
@@ -3102,7 +3101,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewRow_Tag_Set_GetReturnsExpected(string value)
         {
             using var row = new DataGridViewRow
@@ -3117,7 +3116,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewRow_Tag_SetWithNonNullOldValue_GetReturnsExpected(string value)
         {
             using var row = new DataGridViewRow
@@ -3134,7 +3133,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewRow_Tag_SetWithDataGridView_GetReturnsExpected(string value)
         {
             using var control = new DataGridView
@@ -3155,7 +3154,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewRow_Tag_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(string value)
         {
             using var control = new DataGridView
@@ -3177,7 +3176,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewRow_Tag_SetShared_GetReturnsExpected(string value)
         {
             using var control = new DataGridView
@@ -3198,7 +3197,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void DataGridViewRow_Tag_SetSharedWithNonNullOldValue_GetReturnsExpected(string value)
         {
             using var control = new DataGridView

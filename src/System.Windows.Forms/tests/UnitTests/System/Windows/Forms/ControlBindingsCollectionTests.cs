@@ -4,7 +4,6 @@
 
 using System.Globalization;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -34,8 +33,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataSourceUpdateMode), MemberType = typeof(CommonTestHelper))]
-        [MemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataSourceUpdateMode), MemberType = typeof(CommonTestHelper))]
+        [EnumData<DataSourceUpdateMode>]
+        [InvalidEnumData<DataSourceUpdateMode>]
         public void DefaultDataSourceUpdateMode_Set_GetReturnsExpected(DataSourceUpdateMode value)
         {
             using var control = new Control();

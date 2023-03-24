@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Design.Tests;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests;
@@ -310,7 +309,7 @@ public class CursorTests
     }
 
     [Theory]
-    [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+    [StringWithNullData]
     public void Cursor_Tag_Set_GetReturnsExpected(object value)
     {
         using var cursor = new Cursor(2)

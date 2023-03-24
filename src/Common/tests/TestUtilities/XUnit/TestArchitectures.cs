@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System
+namespace Xunit;
+
+[Flags]
+public enum TestArchitectures
 {
-    [Flags]
-    public enum TestArchitectures
-    {
-        X86 = 1,
-        X64 = 2,
-        Any = ~0
-    }
+    X86 = 1,
+    X64 = 2,
+    Any = ~0
 }
