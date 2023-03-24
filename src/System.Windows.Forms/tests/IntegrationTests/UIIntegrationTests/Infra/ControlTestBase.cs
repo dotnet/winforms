@@ -48,7 +48,7 @@ namespace System.Windows.Forms.UITests
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
                 CloseServerManagerWindow();
                 var original = _testName;
-                _testName = $"{_testName}_{s_serverManagerPath}";
+                _testName = $"{_testName}_{s_serverManagerPath![..(s_serverManagerPath!.Length-4)]}";
                 s_started = true;
                 TrySaveScreenshot();
                 _testName = original;
