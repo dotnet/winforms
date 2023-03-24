@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
@@ -19,7 +20,7 @@ namespace System.Windows.Forms.UITests
     {
         private const int SPIF_SENDCHANGE = 0x0002;
         private static string? _logPath;
-        private readonly string _testName;
+        private string _testName;
 
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
@@ -46,17 +47,8 @@ namespace System.Windows.Forms.UITests
             // if (!s_started)
             {
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
-                CloseServerManagerWindow();
-                var original = _testName;
-                if (s_serverManagerPath is not null)
-                {
-                    _testName = $"{_testName}_{s_serverManagerPath[..(s_serverManagerPath.Length - 4)]}";
-                }
-
                 // s_started = true;
                 TrySaveScreenshot();
-                _testName = original;
-                // CloseServerManagerWindow();
             }
 
             string GetTestName()
@@ -67,37 +59,55 @@ namespace System.Windows.Forms.UITests
                 int index = test.DisplayName.IndexOf("("); // Trim arguments from test name.
                 return index == -1 ? test.DisplayName : test.DisplayName[..(index - 1)];
             }
+        }
 
-            void CloseServerManagerWindow()
+        private void CloseServerManagerWindow()
+        {
+            try
             {
-                try
+                if (s_serverManagerPath is not null)
                 {
-                    if (s_serverManagerPath is not null)
-                    {
-                        return;
-                    }
-
-                    foreach (Process process in Process.GetProcesses())
-                    {
-                        if (!process.ProcessName.Equals("ServerManager", StringComparison.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }
-
-                        if (process.MainWindowHandle != IntPtr.Zero)
-                        {
-                            // process.CloseMainWindow();
-                            s_serverManagerPath = process.MainModule!.FileName;
-                            // TestOutputHelper.WriteLine($"Server Manager Window should be closed");
-                        }
-
-                        return;
-                    }
+                    return;
                 }
-                catch { }
 
-                TestOutputHelper.WriteLine($"Server Manager Window not found");
+                foreach (Process process in Process.GetProcesses())
+                {
+                    if (!process.ProcessName.Equals("ServerManager", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    if (process.MainWindowHandle != IntPtr.Zero)
+                    {
+                        // process.CloseMainWindow();
+                        s_serverManagerPath = process.MainModule!.FileName;
+                        // TestOutputHelper.WriteLine($"Server Manager Window should be closed");
+                    }
+
+                    return;
+                }
             }
+            catch (Exception ex)
+            {
+                TestOutputHelper.WriteLine($"Server Manager Window issue {ex}");
+                [DllImport("kernel32.dll")]
+                static extern bool QueryFullProcessImageName(IntPtr hProcess, int dwFlags, [Out] StringBuilder lpExeName, ref int lpdwSize);
+
+                string processName = "ServerManager";
+
+                Process[] processes = Process.GetProcessesByName(processName);
+
+                foreach (Process process in processes)
+                {
+                    StringBuilder sb = new StringBuilder(1024);
+                    int size = sb.Capacity;
+                    QueryFullProcessImageName(process.Handle, 0, sb, ref size);
+                    s_serverManagerPath = sb.ToString();
+                    TestOutputHelper.WriteLine($"Admin process found: {processName}, Path: {s_serverManagerPath}");
+                }
+            }
+
+            TestOutputHelper.WriteLine($"Server Manager Window not found");
         }
 
         protected ITestOutputHelper TestOutputHelper { get; }
@@ -402,6 +412,16 @@ namespace System.Windows.Forms.UITests
                 }
 
                 int index = _testName.LastIndexOf('.');
+                CloseServerManagerWindow();
+                if (s_serverManagerPath is not null)
+                {
+                    _testName = $"{_testName[(index + 1)..]}_{s_serverManagerPath[..(s_serverManagerPath.Length - 4)]}";
+                }
+                else
+                {
+                    TestOutputHelper.WriteLine($"ServerManager path is null");
+                }
+
                 string screenshot = $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
                 bitmap.Save(screenshot);
 
