@@ -26,7 +26,7 @@ namespace System.Windows.Forms.UITests
         private JoinableTaskCollection _joinableTaskCollection = null!;
         private static string? s_serverManagerPath;
 
-        private static bool s_started;
+        // private static bool s_started;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -43,13 +43,17 @@ namespace System.Windows.Forms.UITests
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
 
             // Test to capture screenshot at the start
-              if (!s_started)
+            // if (!s_started)
             {
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
                 CloseServerManagerWindow();
                 var original = _testName;
-                _testName = $"{_testName}_{s_serverManagerPath![..(s_serverManagerPath!.Length-4)]}";
-                s_started = true;
+                if (s_serverManagerPath is not null)
+                {
+                    _testName = $"{_testName}_{s_serverManagerPath[..(s_serverManagerPath.Length - 4)]}";
+                }
+
+                // s_started = true;
                 TrySaveScreenshot();
                 _testName = original;
                 // CloseServerManagerWindow();
