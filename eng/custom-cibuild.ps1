@@ -19,17 +19,19 @@ function _kill($processName) {
 # kill server manager process if running on build agents.
 _kill severmanager.exe
 
-Start-Process powershell.exe -Verb RunAs -ArgumentList '-command "Remove-Item C:\Windows\system32\ServerManager.exe -Force"'
+$filePath = "C:\Windows\system32\ServerManager.exe"
+if (Test-Path $filePath)
+{
+    Start-Process powershell.exe -Verb RunAs -ArgumentList "-command `"Remove-Item $filePath -Force`""
+    Write-Host "ServerManager.exe file is deleted."
+}
+else
+{
+    Write-Host "ServerManager.exe file doe snot exist."
+}
 
 # Wait for the process to finish deleting file.
 Start-Sleep -Seconds 2
-
-# Check the return code.
-if ($?) {
-    Write-Host "ServerManager.exe file is deleted."
-} else {
-    Write-Host "Failed to delete ServerManager.exe file."
-}
 
 # How long to wait before we consider a build/test run to be unresponsive
 $WaitSeconds = 900 # 15 min
