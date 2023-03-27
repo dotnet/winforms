@@ -23,15 +23,22 @@ $filePath = "C:\Windows\system32\ServerManager.exe"
 if (Test-Path $filePath)
 {
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-command `"Remove-Item $filePath -Force`""
-    Write-Host "ServerManager.exe file is deleted."
+    # Wait for the process to finish deleting file.
+    Start-Sleep -Seconds 5
+
+    if (Test-Path $filePath)
+    {
+        Write-Host "ServerManager.exe file is deleted."
+    }
+    else
+    {
+        Write-Host "ServerManager.exe file was not deleted."
+    }
 }
 else
 {
     Write-Host "ServerManager.exe file doe snot exist."
 }
-
-# Wait for the process to finish deleting file.
-Start-Sleep -Seconds 2
 
 # How long to wait before we consider a build/test run to be unresponsive
 $WaitSeconds = 900 # 15 min
