@@ -27,7 +27,7 @@ namespace System.Windows.Forms.UITests
         private JoinableTaskCollection _joinableTaskCollection = null!;
         private static string? s_serverManagerPath;
 
-        // private static bool s_started;
+        private static bool s_started;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -44,10 +44,10 @@ namespace System.Windows.Forms.UITests
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
 
             // Test to capture screenshot at the start
-            // if (!s_started)
+            if (!s_started)
             {
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
-                // s_started = true;
+                s_started = true;
                 TrySaveScreenshot();
             }
 
@@ -79,9 +79,9 @@ namespace System.Windows.Forms.UITests
 
                     if (process.MainWindowHandle != IntPtr.Zero)
                     {
-                        // process.CloseMainWindow();
                         s_serverManagerPath = process.MainModule!.FileName;
-                         TestOutputHelper.WriteLine($"Server Manager path = {s_serverManagerPath}");
+                        TestOutputHelper.WriteLine($"Server Manager path = {s_serverManagerPath}");
+                        process.CloseMainWindow();
                     }
 
                     return;
@@ -417,21 +417,11 @@ namespace System.Windows.Forms.UITests
                 }
 
                 int index = _testName.LastIndexOf('.');
-                CloseServerManagerWindow();
-                if (s_serverManagerPath is not null)
-                {
-                    _testName = $"{_testName[(index + 1)..]}_{s_serverManagerPath[..(s_serverManagerPath.Length - 4)]}";
-                    TestOutputHelper.WriteLine($"ServerManager path = {s_serverManagerPath} and test name = {_testName}");
-                }
-                else
-                {
-                    TestOutputHelper.WriteLine($"ServerManager path is null");
-                }
-
                 string screenshot = $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
                 bitmap.Save(screenshot);
-
                 TestOutputHelper.WriteLine($"Screenshot saved at {screenshot}");
+
+                CloseServerManagerWindow();
             }
             catch (Exception ex)
             {

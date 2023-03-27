@@ -19,7 +19,7 @@ function _kill($processName) {
 # kill server manager process if running on build agents.
 _kill severmanager.exe
 
-Start-Process powershell.exe -Verb RunAs -ArgumentList '-command "Remove-Item C:\Windows\System32\ServerManager.exe -Force"'
+Start-Process powershell.exe -Verb RunAs -ArgumentList '-command "Remove-Item C:\Windows\system32\ServerManager.exe -Force"'
 
 # Wait for the process to finish deleting file.
 Start-Sleep -Seconds 2
