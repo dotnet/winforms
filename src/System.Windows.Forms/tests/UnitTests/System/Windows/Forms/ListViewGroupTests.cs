@@ -1335,21 +1335,20 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Serialize_Deserialize_TestData))]
         public void ListViewGroup_Serialize_Deserialize_Success(ListViewGroup group)
         {
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
+            using var formatterScope = new BinaryFormatterScope(enable: true);
+            using var stream = new MemoryStream();
+            var formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                formatter.Serialize(stream, group);
-                stream.Seek(0, SeekOrigin.Begin);
+            formatter.Serialize(stream, group);
+            stream.Seek(0, SeekOrigin.Begin);
 
-                ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
+            ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                Assert.Equal(group.Header, result.Header);
-                Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);
-                Assert.Equal(group.Items.Cast<ListViewItem>().Select(i => i.Text), result.Items.Cast<ListViewItem>().Select(i => i.Text));
-                Assert.Equal(group.Name, result.Name);
-                Assert.Equal(group.Tag, result.Tag);
-            }
+            Assert.Equal(group.Header, result.Header);
+            Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);
+            Assert.Equal(group.Items.Cast<ListViewItem>().Select(i => i.Text), result.Items.Cast<ListViewItem>().Select(i => i.Text));
+            Assert.Equal(group.Name, result.Name);
+            Assert.Equal(group.Tag, result.Tag);
         }
 
         [WinFormsTheory]

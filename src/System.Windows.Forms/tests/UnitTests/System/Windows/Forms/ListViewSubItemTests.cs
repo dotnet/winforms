@@ -579,22 +579,21 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Serialize_Deserialize_TestData))]
         public void ListViewSubItem_Serialize_Deserialize_Success(ListViewItem.ListViewSubItem subItem)
         {
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
+            using var formatterScope = new BinaryFormatterScope(enable: true);
+            using var stream = new MemoryStream();
+            var formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                formatter.Serialize(stream, subItem);
-                stream.Seek(0, SeekOrigin.Begin);
+            formatter.Serialize(stream, subItem);
+            stream.Seek(0, SeekOrigin.Begin);
 
-                ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
+            ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                Assert.Equal(subItem.BackColor, result.BackColor);
-                Assert.Equal(subItem.Font, result.Font);
-                Assert.Equal(subItem.ForeColor, result.ForeColor);
-                Assert.Empty(result.Name);
-                Assert.Null(result.Tag);
-                Assert.Equal(subItem.Text, result.Text);
-            }
+            Assert.Equal(subItem.BackColor, result.BackColor);
+            Assert.Equal(subItem.Font, result.Font);
+            Assert.Equal(subItem.ForeColor, result.ForeColor);
+            Assert.Empty(result.Name);
+            Assert.Null(result.Tag);
+            Assert.Equal(subItem.Text, result.Text);
         }
 
         [WinFormsTheory]
