@@ -400,6 +400,11 @@ namespace System.Windows.Forms.UITests
                 }
 
                 int index = _testName.LastIndexOf('.');
+                if (name is not null)
+                {
+                    name = $@"{_logPath}\{name}";
+                }
+
                 string screenshot = name ?? $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
                 bitmap.Save(screenshot);
                 TestOutputHelper.WriteLine($"Screenshot saved at {screenshot}");
