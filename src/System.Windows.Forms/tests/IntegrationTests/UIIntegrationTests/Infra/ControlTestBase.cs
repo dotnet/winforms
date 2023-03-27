@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
@@ -48,7 +47,10 @@ namespace System.Windows.Forms.UITests
             {
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
                 s_started = true;
-                TrySaveScreenshot();
+                TrySaveScreenshot("InitialScreenShot.png");
+
+                CloseServerManagerWindow();
+                TrySaveScreenshot("AfterServerManagerClosedScreenShot.png");
             }
 
             string GetTestName()
@@ -90,26 +92,7 @@ namespace System.Windows.Forms.UITests
             catch (Exception ex)
             {
                 TestOutputHelper.WriteLine($"Server Manager Window issue {ex}");
-                [DllImport("kernel32.dll")]
-                static extern bool QueryFullProcessImageName(IntPtr hProcess, int dwFlags, [Out] StringBuilder lpExeName, ref int lpdwSize);
-
-                string processName = "ServerManager";
-
-                Process[] processes = Process.GetProcessesByName(processName);
-
-                if (processes.Length == 0)
-                {
-                    throw;
-                }
-
-                foreach (Process process in processes)
-                {
-                    StringBuilder sb = new StringBuilder(1024);
-                    int size = sb.Capacity;
-                    QueryFullProcessImageName(process.Handle, 0, sb, ref size);
-                    s_serverManagerPath = sb.ToString();
-                    TestOutputHelper.WriteLine($"Admin process found: {processName}, Path: {s_serverManagerPath}");
-                }
+                return;
             }
 
             TestOutputHelper.WriteLine($"Server Manager Window not found");
@@ -386,7 +369,7 @@ namespace System.Windows.Forms.UITests
             await test.JoinAsync();
         }
 
-        private void TrySaveScreenshot()
+        private void TrySaveScreenshot(string? name = null)
         {
             if (_logPath is null)
             {
@@ -417,11 +400,9 @@ namespace System.Windows.Forms.UITests
                 }
 
                 int index = _testName.LastIndexOf('.');
-                string screenshot = $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
+                string screenshot = name ?? $@"{_logPath}\{_testName[(index + 1)..]}_{DateTimeOffset.Now:MMddyyyyhhmmsstt}.png";
                 bitmap.Save(screenshot);
                 TestOutputHelper.WriteLine($"Screenshot saved at {screenshot}");
-
-                CloseServerManagerWindow();
             }
             catch (Exception ex)
             {

@@ -6,38 +6,48 @@ Param(
 
 # Kill Server Manager window if it was already opened.
 function _kill($processName) {
-    Write-Host "killing process ${processName}."
     try {
-        # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging
-        # when there are no instances of the process
-        & cmd /c "taskkill /T /F /IM ${processName} 2>&1"
+        if (Get-Process -Name "ServerManager" -ErrorAction SilentlyContinue) {
+            Write-Host "killing process ${processName}."
+            # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging
+            # when there are no instances of the process
+            & cmd /c "taskkill /T /F /IM ${processName} 2>&1"
+        }
+        else {
+            Write-Host "ServerManager process is not running"
+        }
     } catch {
         Write-Host "Failed to kill ${processName} or delete ServerManager.exe file."
     }
 }
 
 # kill server manager process if running on build agents.
-_kill severmanager.exe
+_kill ServerManager.exe
 
 $filePath = "C:\Windows\system32\ServerManager.exe"
-if (Test-Path $filePath)
-{
-    Start-Process powershell.exe -Verb RunAs -ArgumentList "-command `"Remove-Item $filePath -Force`""
-    # Wait for the process to finish deleting file.
-    Start-Sleep -Seconds 5
-
-    if (Test-Path $filePath)
+if (Test-Path $filePath) {
+    ## Remove binary in case process has not started yet.
+    if (Remove-Item "C:\Windows\System32\ServerManager.exe")
     {
         Write-Host "ServerManager.exe file is deleted."
-    }
+    } 
     else
     {
-        Write-Host "ServerManager.exe file was not deleted."
+        Write-Host "Failed to delete ServerManager.exe file."
     }
 }
-else
-{
-    Write-Host "ServerManager.exe file doe snot exist."
+else{
+    Write-Host "ServerManager.exe file does not exist."
+}
+
+# Wait for the process to finish deleting file.
+Start-Sleep -Seconds 3
+
+if (Test-Path $filePath) {
+    Write-Host "ServerManager.exe file is not deleted."
+}
+else {
+    Write-Host "ServerManager.exe file was deleted."
 }
 
 # How long to wait before we consider a build/test run to be unresponsive
