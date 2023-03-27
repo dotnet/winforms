@@ -5023,7 +5023,7 @@ If you click Continue, the application will ignore this error and attempt to con
       </trans-unit>
       <trans-unit id="FailedToLoadCursor">
         <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <target state="translated">カーソルの読み込みに失敗しました。エラー '{1}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
