@@ -440,6 +440,7 @@ namespace System.Windows.Forms.Tests
 
         private static T RoundtripSerialize<T>(T source)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete

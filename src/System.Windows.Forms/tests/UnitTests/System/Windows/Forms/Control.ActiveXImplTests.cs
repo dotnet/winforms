@@ -13,8 +13,9 @@ namespace System.Windows.Forms.Tests;
 public unsafe class Control_ActiveXImplTests
 {
     [WinFormsFact]
-    public void ActiveXImpl_SaveLoad_RoundTrip()
+    public void ActiveXImpl_SaveLoad_RoundTrip_FormatterEnabled()
     {
+        using var formatterScope = new BinaryFormatterScope(enable: true);
         using Control control = new();
         control.BackColor = Color.Bisque;
         IPersistStreamInit.Interface persistStream = control;
@@ -32,8 +33,29 @@ public unsafe class Control_ActiveXImplTests
     }
 
     [WinFormsFact]
-    public void ActiveXImpl_SaveLoad_BinaryFormatterProperty()
+    public void ActiveXImpl_SaveLoad_RoundTrip_FormatterDisabled()
     {
+        using var formatterScope = new BinaryFormatterScope(enable: false);
+        using Control control = new();
+        control.BackColor = Color.Bisque;
+        IPersistStreamInit.Interface persistStream = control;
+
+        using MemoryStream memoryStream = new();
+        using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
+        var istreamPointer = istream.Value;
+
+        // Even though there are no properties that need BinaryFormatter in this case, it is ultimately saving
+        // AxHost.PropertyBagStream, which itself uses BinaryFormatter to save its Hashtable. There is never
+        // anything put in this Hashtable other than string/string pairs, so we *could* convert it to NOT use the
+        // BinaryFormatter for the bag itself. There would have to be a config switch most likely and a compat
+        // piece to look at the incoming stream to see if it is a BinaryFormatted stream.
+        Assert.Throws<NotSupportedException>(() => persistStream.Save(istreamPointer, fClearDirty: BOOL.FALSE));
+    }
+
+    [WinFormsFact]
+    public void ActiveXImpl_SaveLoad_BinaryFormatterProperty_FormatterEnabled()
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: true);
         using MyControl control = new();
 
         // We need to have a type that doesn't have a TypeConverter that implements ISerializable to hit the
@@ -52,6 +74,24 @@ public unsafe class Control_ActiveXImplTests
         hr = persistStream.Load(istream.Value);
         Assert.True(hr.Succeeded);
         Assert.Equal(myValue, control.SerializableValue);
+    }
+
+    [WinFormsFact]
+    public void ActiveXImpl_SaveLoad_BinaryFormatterProperty_FormatterDisabled()
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: false);
+        using MyControl control = new();
+
+        // We need to have a type that doesn't have a TypeConverter that implements ISerializable to hit the
+        // BinaryFormatter code path.
+        SerializableStruct myValue = new() { Value = "HelloThere" };
+        control.SerializableValue = myValue;
+        IPersistStreamInit.Interface persistStream = control;
+
+        using MemoryStream memoryStream = new();
+        using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
+        var istreamPointer = istream.Value;
+        Assert.Throws<NotSupportedException>(() => persistStream.Save(istreamPointer, fClearDirty: BOOL.FALSE));
     }
 
     private class MyControl : Control

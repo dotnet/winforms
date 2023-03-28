@@ -106,6 +106,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void OwnerDrawPropertyBag_Serialize_Deserialize_Success()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             using var treeView = new SubTreeView();
             OwnerDrawPropertyBag original = treeView.GetItemRenderStyles(null, 0);
             original.BackColor = Color.Blue;

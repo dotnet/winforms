@@ -5,33 +5,48 @@
 using System.Windows.Forms;
 using Xunit;
 
-namespace System.Resources.Tests
+namespace System.Resources.Tests;
+
+public class ResXResourceReaderTests
 {
-    public class ResXResourceReaderTests
+    [Fact]
+    public void ResXResourceReader_Deserialize_AxHost_FormatterEnabled_Throws()
     {
-        [Fact]
-        public void ResXResourceReader_Deserialize_AxHost_Success_ResourceWriter_Throws()
+        using var formatterScope = new BinaryFormatterScope(enable: true);
+
+        string resxPath = Path.GetFullPath(@".\Resources\AxHosts.resx");
+        using MemoryStream resourceStream = new();
+
+        // ResourceWriter Dispose calls Generate method which will throw.
+        Assert.Throws<PlatformNotSupportedException>(() =>
         {
-            string resxPath = Path.GetFullPath(@".\Resources\AxHosts.resx");
-            using MemoryStream resourceStream = new();
-            // ResourceWriter Dispose calls Generate method which will throw.
-            Assert.Throws<PlatformNotSupportedException>(() =>
-            {
-                using ResourceWriter resourceWriter = new(resourceStream);
-                using ResXResourceReader resxReader = new(resxPath);
-                var enumerator = resxReader.GetEnumerator();
+            using ResourceWriter resourceWriter = new(resourceStream);
+            using ResXResourceReader resxReader = new(resxPath);
+            var enumerator = resxReader.GetEnumerator();
 
-                Assert.True(enumerator.MoveNext());
-                string key = enumerator.Key.ToString();
-                object value = enumerator.Value;
-                Assert.Equal("axWindowsMediaPlayer1.OcxState", key);
-                Assert.Equal(typeof(AxHost.State), value.GetType());
-                Assert.False(enumerator.MoveNext());
+            Assert.True(enumerator.MoveNext());
+            string key = enumerator.Key.ToString();
+            object value = enumerator.Value;
+            Assert.Equal("axWindowsMediaPlayer1.OcxState", key);
+            Assert.Equal(typeof(AxHost.State), value.GetType());
+            Assert.False(enumerator.MoveNext());
 
-                resourceWriter.AddResource(key, value);
-                // ResourceWriter no longer supports BinaryFormatter in core.
-                Assert.Throws<PlatformNotSupportedException>(resourceWriter.Generate);
-            });
-        }
+            resourceWriter.AddResource(key, value);
+
+            // ResourceWriter no longer supports BinaryFormatter in core.
+            Assert.Throws<PlatformNotSupportedException>(resourceWriter.Generate);
+        });
+    }
+
+    [Fact]
+    public void ResXResourceReader_Deserialize_AxHost_FormatterDisabled_Throws()
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: false);
+
+        string resxPath = Path.GetFullPath(@".\Resources\AxHosts.resx");
+        using MemoryStream resourceStream = new();
+
+        using ResXResourceReader resxReader = new(resxPath);
+        Assert.Throws<ArgumentException>(() => resxReader.GetEnumerator());
     }
 }

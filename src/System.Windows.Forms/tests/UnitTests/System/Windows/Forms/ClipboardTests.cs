@@ -220,6 +220,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("format", 1)]
         public void Clipboard_SetData_Invoke_GetReturnsExpected(string format, object data)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetData(format, data);
             Assert.Equal(data, Clipboard.GetData(format));
             Assert.True(Clipboard.ContainsData(format));
@@ -251,6 +252,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data")]
         public void Clipboard_SetDataObject_InvokeObjectNotIComDataObject_GetReturnsExpected(object data)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetDataObject(data);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
             Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -261,6 +263,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data")]
         public void Clipboard_SetDataObject_InvokeObjectIComDataObject_GetReturnsExpected(object data)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             var dataObject = new DataObject(data);
             Clipboard.SetDataObject(dataObject);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
@@ -274,6 +277,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data", false)]
         public void Clipboard_SetDataObject_InvokeObjectBoolNotIComDataObject_GetReturnsExpected(object data, bool copy)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetDataObject(data, copy);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
             Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -286,6 +290,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data", false, 1, 2)]
         public void Clipboard_SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             var dataObject = new DataObject(data);
             Clipboard.SetDataObject(dataObject, copy, retryTimes, retryDelay);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
@@ -299,6 +304,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data", false, 1, 2)]
         public void Clipboard_SetDataObject_InvokeObjectBoolIntIntNotIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
             Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -446,6 +452,7 @@ namespace System.Windows.Forms.Tests
         [EnumData<TextDataFormat>]
         public void Clipboard_SetText_InvokeStringTextDataFormat_GetReturnsExpected(TextDataFormat format)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: format == TextDataFormat.CommaSeparatedValue);
             Clipboard.SetText("text", format);
             Assert.Equal("text", Clipboard.GetText(format));
             Assert.True(Clipboard.ContainsText(format));
