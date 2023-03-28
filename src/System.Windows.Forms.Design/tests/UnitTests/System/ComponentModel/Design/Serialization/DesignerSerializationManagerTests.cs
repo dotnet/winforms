@@ -1529,7 +1529,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             yield return new object[] { "system.int32", null };
             yield return new object[] { "NoSuchType", null };
             yield return new object[] { string.Empty, null };
-            yield return new object[] { ".System.Int32", typeof(int) };
+            yield return new object[] { ".System.Int32", null };
             yield return new object[] { "System.Int32.", null };
             yield return new object[] { "Name.System.Int32", null };
             yield return new object[] { "System.Int32.Name", null };
