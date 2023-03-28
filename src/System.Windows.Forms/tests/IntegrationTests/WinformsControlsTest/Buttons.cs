@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -26,11 +27,15 @@ namespace WinformsControlsTest
             var table = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                ColumnCount = 3
+                ColumnCount = 3,
+                RowCount = 2
             };
+
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            table.RowStyles.Add(new RowStyle(SizeType.Percent, 70.0f));
+            table.RowStyles.Add(new RowStyle(SizeType.Percent, 30.0f));
             Controls.Add(table);
 
             var panel = new FlowLayoutPanel
@@ -96,6 +101,15 @@ namespace WinformsControlsTest
 
                 panel.Controls.Add(button);
             }
+
+            table.Controls.Add(
+                new Button
+                {
+                    AutoSize = true,
+                    Image = SystemIcons.GetStockIcon(StockIconId.DesktopPC).ToBitmap()
+                },
+                column: 0,
+                row: 1);
 
             base.OnLoad(e);
         }
