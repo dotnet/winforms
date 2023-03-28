@@ -5023,7 +5023,7 @@ Jeśli klikniesz pozycję Kontynuuj, aplikacja zignoruje ten błąd i będzie pr
       </trans-unit>
       <trans-unit id="FailedToLoadCursor">
         <source>Failed to load cursor. Error '{1}'.</source>
-        <target state="new">Failed to load cursor. Error '{1}'.</target>
+        <target state="translated">Nie można załadować kursora. Błąd „{1}”.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
