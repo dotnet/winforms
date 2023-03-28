@@ -71,6 +71,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>beb708f6fe999cbbe5542846c9985ce596569097</Sha>
     </Dependency>
+
     <!-- These dependencies are required by windowsdesktop for coherency. -->
     <Dependency Name="Microsoft.Win32.Registry.AccessControl" Version="8.0.0-preview.4.23177.1">
       <Uri>https://github.com/dotnet/runtime</Uri>
