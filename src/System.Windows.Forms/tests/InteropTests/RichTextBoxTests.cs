@@ -9,7 +9,7 @@ using static Interop.Richedit;
 
 namespace System.Windows.Forms.Interop.Tests;
 
-// Magic numbrs in this file are coming from unmanaged part of the test
+// Magic numbers in this file are coming from unmanaged part of the test
 // at src/System.Windows.Forms/tests/InteropTests/NativeTests/RichTextBoxTests.cpp
 public class RichTextBoxTests
 {
