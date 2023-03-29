@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
-using Microsoft.Win32;
 
 namespace System.Windows.Forms.Design;
 
@@ -40,7 +39,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         Text = "DesignerFrame";
         _designerSite = site;
         _designerRegion = new OverlayControl(site);
-        _uiService = _designerSite.GetService(typeof(IUIService)) as IUIService;
+        _uiService = _designerSite.GetService<IUIService>();
         if (_uiService?.Styles["ArtboardBackground"] is Color color)
         {
             BackColor = color;
@@ -56,23 +55,12 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     ///  Returns the scroll offset for the scrollable control that manages all overlays.  This is needed by the
     ///  BehaviorService so we can correctly invalidate our AdornerWindow based on scrollposition.
     /// </summary>
-    internal Point AutoScrollPosition
-    {
-        get => _designerRegion.AutoScrollPosition;
-    }
+    internal Point AutoScrollPosition => _designerRegion.AutoScrollPosition;
 
     /// <summary>
     ///  Demand creates a ptr to the BehaviorService - we do this so we can route keyboard message to it.
     /// </summary>
-    private BehaviorService? BehaviorService
-    {
-        get
-        {
-            _behaviorService ??= _designerSite.GetService(typeof(BehaviorService)) as BehaviorService;
-
-            return _behaviorService;
-        }
-    }
+    private BehaviorService? BehaviorService => _behaviorService ??= _designerSite.GetService<BehaviorService>();
 
     protected override void Dispose(bool disposing)
     {
@@ -128,16 +116,13 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     {
         ForceDesignerRedraw(true);
         ISelectionService? selSvc = _designerSite.GetService<ISelectionService>();
-        if (selSvc is not null)
+        if (selSvc?.PrimarySelection is Control { IsDisposed: false } ctrl)
         {
-            if (selSvc.PrimarySelection is Control ctrl && !ctrl.IsDisposed)
-            {
-                PInvoke.NotifyWinEvent(
-                    (uint)AccessibleEvents.Focus,
-                    ctrl,
-                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
-                    (int)PInvoke.CHILDID_SELF);
-            }
+            PInvoke.NotifyWinEvent(
+                (uint)AccessibleEvents.Focus,
+                ctrl,
+                (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                (int)PInvoke.CHILDID_SELF);
         }
     }
 
@@ -162,14 +147,6 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
             catch (Exception ex) when (!ex.IsCriticalException())
             {
             }
-        }
-    }
-
-    private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
-    {
-        if (e.Category == UserPreferenceCategory.Window)
-        {
-            SyncDesignerUI();
         }
     }
 
@@ -210,46 +187,21 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 break;
             // Provide keyboard access for scrolling
             case PInvoke.WM_KEYDOWN:
-                SCROLLBAR_COMMAND wScrollNotify = 0;
-                MessageId msg = PInvoke.WM_NULL;
                 Keys keycode = (Keys)(m.WParamInternal & 0xFFFF);
-                switch (keycode)
+                (SCROLLBAR_COMMAND wScrollNotify, MessageId msg) = keycode switch
                 {
-                    case Keys.Up:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEUP;
-                        msg = PInvoke.WM_VSCROLL;
-                        break;
-                    case Keys.Down:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEDOWN;
-                        msg = PInvoke.WM_VSCROLL;
-                        break;
-                    case Keys.PageUp:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_PAGEUP;
-                        msg = PInvoke.WM_VSCROLL;
-                        break;
-                    case Keys.PageDown:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_PAGEDOWN;
-                        msg = PInvoke.WM_VSCROLL;
-                        break;
-                    case Keys.Home:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_TOP;
-                        msg = PInvoke.WM_VSCROLL;
-                        break;
-                    case Keys.End:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_BOTTOM;
-                        msg = PInvoke.WM_VSCROLL;
-                        break;
-                    case Keys.Left:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEUP;
-                        msg = PInvoke.WM_HSCROLL;
-                        break;
-                    case Keys.Right:
-                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEDOWN;
-                        msg = PInvoke.WM_HSCROLL;
-                        break;
-                }
+                    Keys.Up => (SCROLLBAR_COMMAND.SB_LINEUP, (MessageId)PInvoke.WM_VSCROLL),
+                    Keys.Down => (SCROLLBAR_COMMAND.SB_LINEDOWN, (MessageId)PInvoke.WM_VSCROLL),
+                    Keys.PageUp => (SCROLLBAR_COMMAND.SB_PAGEUP, (MessageId)PInvoke.WM_VSCROLL),
+                    Keys.PageDown => (SCROLLBAR_COMMAND.SB_PAGEDOWN, (MessageId)PInvoke.WM_VSCROLL),
+                    Keys.Home => (SCROLLBAR_COMMAND.SB_TOP, (MessageId)PInvoke.WM_VSCROLL),
+                    Keys.End => (SCROLLBAR_COMMAND.SB_BOTTOM, (MessageId)PInvoke.WM_VSCROLL),
+                    Keys.Left => (SCROLLBAR_COMMAND.SB_LINEUP, (MessageId)PInvoke.WM_HSCROLL),
+                    Keys.Right => (SCROLLBAR_COMMAND.SB_LINEDOWN, (MessageId)PInvoke.WM_HSCROLL),
+                    _ => ((SCROLLBAR_COMMAND)0, (MessageId)PInvoke.WM_NULL)
+                };
 
-                if ((msg == PInvoke.WM_VSCROLL) || (msg == PInvoke.WM_HSCROLL))
+                if (msg == PInvoke.WM_VSCROLL || msg == PInvoke.WM_HSCROLL)
                 {
                     // Send a message to ourselves to scroll
                     PInvoke.SendMessage(_designerRegion, msg, (WPARAM)(int)wScrollNotify);
@@ -409,15 +361,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         /// <summary>
         ///  Demand creates a ptr to the BehaviorService
         /// </summary>
-        private BehaviorService? BehaviorService
-        {
-            get
-            {
-                _behaviorService ??= _provider.GetService(typeof(BehaviorService)) as BehaviorService;
-
-                return _behaviorService;
-            }
-        }
+        private BehaviorService? BehaviorService => _behaviorService ??= _provider.GetService<BehaviorService>();
 
         /// <summary>
         ///  At handle creation time we request the designer's handle and parent it.
@@ -426,12 +370,9 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         {
             base.OnCreateControl();
             // Loop through all of the overlays, create them, and hook them up
-            if (_overlayList is not null)
+            foreach (Control c in _overlayList)
             {
-                foreach (Control c in _overlayList)
-                {
-                    ParentOverlay(c);
-                }
+                ParentOverlay(c);
             }
 
             // We've reparented everything, which means that our selection UI is probably out of sync.  Ask it to sync.
@@ -448,12 +389,9 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
 
             // Loop through all of the overlays and size them.  Also make sure that they are still on top of the
             // zorder, because a handle recreate could have changed this.
-            if (_overlayList is not null)
+            foreach (Control c in _overlayList)
             {
-                foreach (Control c in _overlayList)
-                {
-                    c.Bounds = client;
-                }
+                c.Bounds = client;
             }
         }
 
@@ -522,13 +460,11 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
             // paint in inverse order so that things at the front paint last.
             for (int i = _overlayList.Count - 1; i >= 0; i--)
             {
-                if (_overlayList[i] is Control overlayControl)
+                Control overlayControl = _overlayList[i];
+                Rectangle invalidateRect = new Rectangle(overlayControl.PointToClient(screenRectangle.Location), screenRectangle.Size);
+                if (overlayControl.ClientRectangle.IntersectsWith(invalidateRect))
                 {
-                    Rectangle invalidateRect = new Rectangle(overlayControl.PointToClient(screenRectangle.Location), screenRectangle.Size);
-                    if (overlayControl.ClientRectangle.IntersectsWith(invalidateRect))
-                    {
-                        overlayControl.Invalidate(invalidateRect);
-                    }
+                    overlayControl.Invalidate(invalidateRect);
                 }
             }
         }
@@ -541,17 +477,15 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
             // paint in inverse order so that things at the front paint last.
             for (int i = _overlayList.Count - 1; i >= 0; i--)
             {
-                if (_overlayList[i] is Control overlayControl)
-                {
-                    Rectangle overlayControlScreenBounds = overlayControl.Bounds;
-                    overlayControlScreenBounds.Location = overlayControl.PointToScreen(overlayControl.Location);
-                    using Region intersectionRegion = screenRegion.Clone();
-                    // get the intersection of everything on the screen that's invalidating and the overlaycontrol
-                    intersectionRegion.Intersect(overlayControlScreenBounds);
-                    // translate this down to overlay control coordinates.
-                    intersectionRegion.Translate(-overlayControlScreenBounds.X, -overlayControlScreenBounds.Y);
-                    overlayControl.Invalidate(intersectionRegion);
-                }
+                Control overlayControl = _overlayList[i];
+                Rectangle overlayControlScreenBounds = overlayControl.Bounds;
+                overlayControlScreenBounds.Location = overlayControl.PointToScreen(overlayControl.Location);
+                using Region intersectionRegion = screenRegion.Clone();
+                // get the intersection of everything on the screen that's invalidating and the overlaycontrol
+                intersectionRegion.Intersect(overlayControlScreenBounds);
+                // translate this down to overlay control coordinates.
+                intersectionRegion.Translate(-overlayControlScreenBounds.X, -overlayControlScreenBounds.Y);
+                overlayControl.Invalidate(intersectionRegion);
             }
         }
 
@@ -563,32 +497,29 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
             base.WndProc(ref m);
             if (m.MsgInternal == PInvoke.WM_PARENTNOTIFY && m.WParamInternal.LOWORD == PInvoke.WM_CREATE)
             {
-                if (_overlayList is not null)
+                bool ourWindow = false;
+                foreach (Control c in _overlayList)
                 {
-                    bool ourWindow = false;
+                    if (c.IsHandleCreated && m.LParamInternal == c.Handle)
+                    {
+                        ourWindow = true;
+                        break;
+                    }
+                }
+
+                if (!ourWindow)
+                {
                     foreach (Control c in _overlayList)
                     {
-                        if (c.IsHandleCreated && m.LParamInternal == c.Handle)
-                        {
-                            ourWindow = true;
-                            break;
-                        }
-                    }
-
-                    if (!ourWindow)
-                    {
-                        foreach (Control c in _overlayList)
-                        {
-                            PInvoke.SetWindowPos(
-                                c,
-                                HWND.HWND_TOP,
-                                0, 0, 0, 0,
-                                SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
-                        }
+                        PInvoke.SetWindowPos(
+                            c,
+                            HWND.HWND_TOP,
+                            0, 0, 0, 0,
+                            SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
                     }
                 }
             }
-            else if ((m.Msg == (int)PInvoke.WM_VSCROLL || m.Msg == (int)PInvoke.WM_HSCROLL) && BehaviorService is not null)
+            else if (m.Msg is (int)PInvoke.WM_VSCROLL or (int)PInvoke.WM_HSCROLL && BehaviorService is not null)
             {
                 BehaviorService.SyncSelection();
             }
@@ -611,7 +542,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 // returned from accHitTest. But we'd rather expose the form that is being
                 // designed.
                 //
-                foreach (Control c in Owner.Controls)
+                foreach (Control c in Owner!.Controls)
                 {
                     AccessibleObject cao = c.AccessibilityObject;
                     if (cao.Bounds.Contains(x, y))
