@@ -390,7 +390,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     /// </summary>
     private class OverlayControl : ScrollableControl
     {
-        private readonly ArrayList _overlayList;
+        private readonly List<Control> _overlayList;
         private readonly IServiceProvider _provider;
         internal bool _messageMouseWheelProcessed;
         private BehaviorService _behaviorService;
@@ -401,7 +401,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         public OverlayControl(IServiceProvider provider)
         {
             _provider = provider;
-            _overlayList = new ArrayList();
+            _overlayList = new List<Control>();
             AutoScroll = true;
             Text = "OverlayControl";
         }
@@ -512,7 +512,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         public void InsertOverlay(Control control, int index)
         {
             Debug.Assert(_overlayList.IndexOf(control) == -1, $"Duplicate overlay in overlay service: {control.GetType().FullName}");
-            Control c = (Control)_overlayList[index];
+            Control c = _overlayList[index];
             RemoveOverlay(c);
             PushOverlay(control);
             PushOverlay(c);
