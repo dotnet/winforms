@@ -9,6 +9,31 @@ namespace System.Windows.Forms.Tests
     public class MixedDpiHostingTests
     {
         [WinFormsFact]
+        public void MixedDpiHosting_CacheDpiAwarenessTest()
+        {
+            // Run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
+            // Set thread awareness context to PerMonitorV2(PMv2). If process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
+            // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE/SYSTEMAWARE
+            PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            using Control control = new();
+            Control button;
+            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            {
+                button = new();
+            }
+
+            // Verify cached DpiAwarenessContext on controls before handle creation.
+            Assert.True(PInvoke.AreDpiAwarenessContextsEqual(button.DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE));
+            Assert.True(PInvoke.AreDpiAwarenessContextsEqual(control.DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
+            button.Dispose();
+        }
+
+        [WinFormsFact]
         public void MixedHosting_Default()
         {
             // Run tests only on Windows 10 versions that support thread dpi awareness.
