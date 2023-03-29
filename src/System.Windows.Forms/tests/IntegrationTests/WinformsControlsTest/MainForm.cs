@@ -204,6 +204,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.FormOwnerTestButton,
                 new InitInfo("FormOwnerTest", (obj, e) => new FormOwnerTestForm().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.ListBoxTestButton,
+                new InitInfo("ListBoxes", (obj, e) => new ListBoxes().Show(this))
             }
         };
 
