@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -29,10 +27,10 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
 {
     private readonly ISite _designerSite;
     private readonly OverlayControl _designerRegion;
-    private Splitter _splitter;
-    private Control _designer;
-    private BehaviorService _behaviorService;
-    private readonly IUIService _uiService;
+    private Splitter? _splitter;
+    private Control? _designer;
+    private BehaviorService? _behaviorService;
+    private readonly IUIService? _uiService;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DesignerFrame"/> class.
@@ -43,12 +41,9 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         _designerSite = site;
         _designerRegion = new OverlayControl(site);
         _uiService = _designerSite.GetService(typeof(IUIService)) as IUIService;
-        if (_uiService is not null)
+        if (_uiService?.Styles["ArtboardBackground"] is Color color)
         {
-            if (_uiService.Styles["ArtboardBackground"] is Color)
-            {
-                BackColor = (Color)_uiService.Styles["ArtboardBackground"];
-            }
+            BackColor = color;
         }
 
         Controls.Add(_designerRegion);
@@ -69,7 +64,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     /// <summary>
     ///  Demand creates a ptr to the BehaviorService - we do this so we can route keyboard message to it.
     /// </summary>
-    private BehaviorService BehaviorService
+    private BehaviorService? BehaviorService
     {
         get
         {
@@ -132,7 +127,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     protected override void OnGotFocus(EventArgs e)
     {
         ForceDesignerRedraw(true);
-        ISelectionService selSvc = (ISelectionService)_designerSite.GetService(typeof(ISelectionService));
+        ISelectionService? selSvc = _designerSite.GetService<ISelectionService>();
         if (selSvc is not null)
         {
             if (selSvc.PrimarySelection is Control ctrl && !ctrl.IsDisposed)
@@ -154,10 +149,10 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         ForceDesignerRedraw(false);
     }
 
-    private void OnSplitterMoved(object sender, SplitterEventArgs e)
+    private void OnSplitterMoved(object? sender, SplitterEventArgs e)
     {
         // Dirty the designer.
-        if (_designerSite.TryGetService(out IComponentChangeService changeService))
+        if (_designerSite.TryGetService(out IComponentChangeService? changeService))
         {
             try
             {
@@ -172,7 +167,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
 
     private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
     {
-        if (e.Category == UserPreferenceCategory.Window && _designer is not null)
+        if (e.Category == UserPreferenceCategory.Window)
         {
             SyncDesignerUI();
         }
@@ -190,7 +185,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     {
         Size selectionSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.Maximum);
         _designerRegion.AutoScrollMargin = selectionSize;
-        _designer.Location = new Point(selectionSize.Width, selectionSize.Height);
+        _designer!.Location = new Point(selectionSize.Width, selectionSize.Height);
         BehaviorService?.SyncSelection();
     }
 
@@ -263,7 +258,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
 
                 break;
             case PInvoke.WM_CONTEXTMENU:
-                PInvoke.SendMessage(_designer, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                PInvoke.SendMessage(_designer!, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 return;
         }
 
@@ -317,9 +312,9 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         if (_splitter is null)
         {
             _splitter = new Splitter();
-            if (_uiService is not null && _uiService.Styles["HorizontalResizeGrip"] is Color)
+            if (_uiService?.Styles["HorizontalResizeGrip"] is Color color)
             {
-                _splitter.BackColor = (Color)_uiService.Styles["HorizontalResizeGrip"];
+                _splitter.BackColor = color;
             }
             else
             {
@@ -393,7 +388,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         private readonly List<Control> _overlayList;
         private readonly IServiceProvider _provider;
         internal bool _messageMouseWheelProcessed;
-        private BehaviorService _behaviorService;
+        private BehaviorService? _behaviorService;
 
         /// <summary>
         ///  Creates a new overlay control.
@@ -414,7 +409,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         /// <summary>
         ///  Demand creates a ptr to the BehaviorService
         /// </summary>
-        private BehaviorService BehaviorService
+        private BehaviorService? BehaviorService
         {
             get
             {
@@ -610,7 +605,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
             {
             }
 
-            public override AccessibleObject HitTest(int x, int y)
+            public override AccessibleObject? HitTest(int x, int y)
             {
                 // Since the SelectionUIOverlay in first in the z-order, it normally gets
                 // returned from accHitTest. But we'd rather expose the form that is being
