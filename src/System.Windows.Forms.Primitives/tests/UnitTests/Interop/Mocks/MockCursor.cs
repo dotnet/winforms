@@ -19,7 +19,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
             // We don't delete stock cursors.
             _ownHandle = false;
             _resourceId = nResourceId;
-            _handle = PInvoke.LoadCursor(HINSTANCE.Null, nResourceId);
+            _handle = (HCURSOR)PInvoke.LoadImage(
+                HINSTANCE.Null,
+                nResourceId,
+                GDI_IMAGE_TYPE.IMAGE_CURSOR,
+                0,
+                0,
+                IMAGE_FLAGS.LR_DEFAULTSIZE | IMAGE_FLAGS.LR_SHARED).Value;
             if (_handle.IsNull)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());

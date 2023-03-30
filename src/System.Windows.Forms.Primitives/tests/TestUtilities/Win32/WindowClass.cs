@@ -62,7 +62,13 @@ namespace System
 
             if (icon.IsNull)
             {
-                icon = PInvoke.LoadIcon((HINSTANCE)0, (PCWSTR)(char*)PInvoke.IDI_APPLICATION);
+                icon = (HICON)PInvoke.LoadImage(
+                    HINSTANCE.Null,
+                    PInvoke.IDI_APPLICATION,
+                    GDI_IMAGE_TYPE.IMAGE_ICON,
+                    0,
+                    0,
+                    IMAGE_FLAGS.LR_DEFAULTSIZE | IMAGE_FLAGS.LR_SHARED).Value;
             }
             else if (icon == (-1))
             {
@@ -71,7 +77,13 @@ namespace System
 
             if (cursor == default)
             {
-                cursor = PInvoke.LoadCursor((HINSTANCE)0, (PCWSTR)(char*)PInvoke.IDC_ARROW);
+                cursor = (HCURSOR)PInvoke.LoadImage(
+                    HINSTANCE.Null,
+                    PInvoke.IDC_ARROW,
+                    GDI_IMAGE_TYPE.IMAGE_CURSOR,
+                    0,
+                    0,
+                    IMAGE_FLAGS.LR_DEFAULTSIZE | IMAGE_FLAGS.LR_SHARED).Value;
             }
             else if (cursor == (-1))
             {

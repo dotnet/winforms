@@ -38,7 +38,13 @@ namespace System.Windows.Forms
             // We don't delete stock cursors.
             _ownHandle = false;
             _resourceId = nResourceId;
-            _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
+            _handle = (HCURSOR)PInvoke.LoadImage(
+                HINSTANCE.Null,
+                nResourceId,
+                GDI_IMAGE_TYPE.IMAGE_CURSOR,
+                0,
+                0,
+                IMAGE_FLAGS.LR_DEFAULTSIZE | IMAGE_FLAGS.LR_SHARED).Value;
             if (_handle.IsNull)
             {
                 throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));
@@ -86,7 +92,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(stream);
             MemoryStream memoryStream = new();
-            // reset stream position to start, there are no gaurantees it is at the start.
+            // reset stream position to start, there are no guarantees it is at the start.
             if (stream.CanSeek)
             {
                 stream.Position = 0;
