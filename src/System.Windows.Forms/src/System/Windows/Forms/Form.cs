@@ -897,7 +897,9 @@ namespace System.Windows.Forms
                     {
                         // Once we grab the lock, we re-check the value to avoid a
                         // race condition.
-                        defaultIcon ??= new Icon(typeof(Form), "wfc");
+                        defaultIcon ??=
+                            PInvoke.ExtractIconEx(Process.GetCurrentProcess().MainModule?.FileName)
+                            ?? new Icon(typeof(Form), "wfc");
                     }
                 }
 
