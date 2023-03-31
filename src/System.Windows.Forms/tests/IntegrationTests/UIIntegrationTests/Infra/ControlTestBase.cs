@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
-using WindowsInput;
 using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
