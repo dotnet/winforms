@@ -22,7 +22,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(paramName, message);
             }
 
-            return argument!;
+            return argument;
         }
 
         internal static IntPtr OrThrowIfZero(this IntPtr argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         internal static string OrThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
         {
             ThrowIfNullOrEmpty(argument, paramName);
-            return argument!;
+            return argument;
         }
 
         internal static void ThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
