@@ -16,12 +16,6 @@ namespace System.Windows.Forms.Tests
             // handling of a Windows message.
             AppContext.SetSwitch("System.Windows.Forms.DoNotCatchUnhandledExceptions", isEnabled: true);
 
-            // Some controls have behavior that changes when the mouse is over them. Make sure we start with the cursor
-            // at a known position.
-            //
-            // See https://github.com/dotnet/winforms/pull/7031#issuecomment-1101339968 for an example of this.
-            Cursor.Position = default;
-
             Application.EnableVisualStyles();
         }
     }
