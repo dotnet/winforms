@@ -38,7 +38,7 @@ namespace System.Windows.Forms.UITests
             TestOutputHelper = testOutputHelper;
 
             _testName = GetTestName();
-            _logPath ??= Path.GetFullPath(Path.Combine(/*Environment.GetEnvironmentVariable("XUNIT_LOGS")!*/ @"c:\temp", "Screenshots"));
+            _logPath ??= Path.GetFullPath(Path.Combine(Environment.GetEnvironmentVariable("XUNIT_LOGS")!, "Screenshots"));
 
             Application.EnableVisualStyles();
 
