@@ -1394,6 +1394,9 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             // Call again.
             Assert.Null(iManager.GetSerializer(objectType, typeof(int)));
+
+            // Call unrelated object type
+            Assert.Null(iManager.GetSerializer(typeof(object), typeof(int)));
         }
 
         [Fact]
