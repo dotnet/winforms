@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -333,7 +332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewColumnHeadersHeightSizeMode))]
+        [EnumData<DataGridViewColumnHeadersHeightSizeMode>]
         public void DataGridView_ColumnHeadersHeight_SetWithHandlerDisposed_DoesNotCallColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode)
         {
             using var control = new DataGridView
@@ -421,7 +420,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewColumnHeadersHeightSizeMode))]
+        [EnumData<DataGridViewColumnHeadersHeightSizeMode>]
         public void DataGridView_ColumnHeadersHeight_SetWithHandlerInColumnDisposing_DoesNotCallColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode)
         {
             using var control = new DataGridView
@@ -762,7 +761,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewColumnHeadersHeightSizeMode))]
+        [InvalidEnumData<DataGridViewColumnHeadersHeightSizeMode>]
         public void DataGridView_ColumnHeadersHeightSizeMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(DataGridViewColumnHeadersHeightSizeMode value)
         {
             using var control = new DataGridView();
@@ -1256,7 +1255,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewRowHeadersWidthSizeMode))]
+        [EnumData<DataGridViewRowHeadersWidthSizeMode>]
         public void DataGridView_RowHeadersWidth_SetWithHandlerDisposed_DoesNotCallRowHeadersWidthChanged(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode)
         {
             using var control = new DataGridView
@@ -1346,7 +1345,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewRowHeadersWidthSizeMode))]
+        [EnumData<DataGridViewRowHeadersWidthSizeMode>]
         public void DataGridView_RowHeadersWidth_SetWithHandlerInColumnDisposing_DoesNotCallRowHeadersWidthChanged(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode)
         {
             using var control = new DataGridView
@@ -1703,7 +1702,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewRowHeadersWidthSizeMode))]
+        [InvalidEnumData<DataGridViewRowHeadersWidthSizeMode>]
         public void DataGridView_RowHeadersWidthSizeMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(DataGridViewRowHeadersWidthSizeMode value)
         {
             using var control = new DataGridView();

@@ -10,8 +10,9 @@ namespace System.Windows.Forms.Tests;
 public unsafe class AxHost_PropertyBagStreamTests
 {
     [WinFormsFact]
-    public void PropertyBagStream_WriteReadRoundTrip()
+    public void PropertyBagStream_WriteReadRoundTrip_FormatterEnabled()
     {
+        using var formatterScope = new BinaryFormatterScope(enable: true);
         AxHost.PropertyBagStream bag = new();
         HRESULT hr = bag.Write("Integer", (VARIANT)42);
         Assert.True(hr.Succeeded);
@@ -36,6 +37,23 @@ public unsafe class AxHost_PropertyBagStreamTests
         hr = newBag.Read("Object", ref dispatch, null);
         Assert.True(hr.Succeeded);
         Assert.Equal(obj.Name, ((NameClass)dispatch.ToObject()).Name);
+    }
+
+    [WinFormsFact]
+    public void PropertyBagStream_WriteReadRoundTrip_FormatterDisabled()
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: false);
+        AxHost.PropertyBagStream bag = new();
+        HRESULT hr = bag.Write("Integer", (VARIANT)42);
+        Assert.True(hr.Succeeded);
+        NameClass obj = new() { Name = "Hamlet" };
+        hr = bag.Write("Object", VARIANT.FromObject(obj));
+        Assert.True(hr.Succeeded);
+
+        using MemoryStream stream = new();
+        Assert.Throws<NotSupportedException>(() => bag.Write(stream));
+        Assert.Equal(0, stream.Length);
+        stream.Position = 0;
     }
 
     [Serializable]

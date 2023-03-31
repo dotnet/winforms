@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
@@ -27,6 +26,11 @@ namespace System.Windows.Forms.UITests
        // private static string? s_serverManagerPath;
 
         private static bool s_started;
+
+        static ControlTestBase()
+        {
+            DataCollectionService.InstallFirstChanceExceptionHandler();
+        }
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -60,7 +64,7 @@ namespace System.Windows.Forms.UITests
 
             string GetTestName()
             {
-                var type = testOutputHelper.GetType()!;
+                var type = testOutputHelper.GetType();
                 var testMember = type.GetField("test", BindingFlags.Instance | BindingFlags.NonPublic)!;
                 var test = (ITest)testMember.GetValue(testOutputHelper)!;
                 int index = test.DisplayName.IndexOf("("); // Trim arguments from test name.
@@ -144,6 +148,7 @@ namespace System.Windows.Forms.UITests
         public virtual void Dispose()
         {
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
+            DataCollectionService.CurrentTest = null;
         }
 
         protected async Task WaitForIdleAsync()
@@ -311,10 +316,9 @@ namespace System.Windows.Forms.UITests
                 {
                     await testDriverAsync(dialog!, control!);
                 }
-                catch
+                catch (Exception ex) when (DataCollectionService.LogAndPropagate(ex))
                 {
-                    TrySaveScreenshot();
-                    throw;
+                    throw new InvalidOperationException("Not reachable");
                 }
                 finally
                 {
@@ -351,10 +355,9 @@ namespace System.Windows.Forms.UITests
                 {
                     await testDriverAsync(dialog!);
                 }
-                catch
+                catch (Exception ex) when (DataCollectionService.LogAndPropagate(ex))
                 {
-                    TrySaveScreenshot();
-                    throw;
+                    throw new InvalidOperationException("Not reachable");
                 }
                 finally
                 {

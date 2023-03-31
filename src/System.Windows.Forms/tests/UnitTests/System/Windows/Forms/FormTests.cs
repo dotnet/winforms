@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -221,7 +220,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Form_Active_Set_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -308,7 +307,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Form_AllowTransparency_Set_GetReturnsExpected(bool value)
         {
             using var control = new Form
@@ -372,7 +371,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Form_AllowTransparency_SetNotTopLevel_GetReturnsExpected(bool value)
         {
             using var control = new Form
@@ -547,7 +546,7 @@ namespace System.Windows.Forms.Tests
 #pragma warning disable 0618
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Form_AutoScale_Set_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -564,7 +563,7 @@ namespace System.Windows.Forms.Tests
 #pragma warning restore 0618
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [EnumData<AutoScaleMode>]
         public void Form_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
             using var form = new Form
@@ -579,7 +578,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Form_AutoScroll_Set_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -594,7 +593,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Form_AutoSizeSet_GetReturnsExpected(bool value)
         {
             using var form = new Form
@@ -1981,7 +1980,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
+        [EnumData<DialogResult>]
         public void Form_Visible_SetTrueMdiChildVisibleWithHandle_GetReturnsExpected(DialogResult dialogResult)
         {
             using var parent = new Form
@@ -2033,7 +2032,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DialogResult))]
+        [EnumData<DialogResult>]
         public void Form_Visible_SetFalseMdiChildVisibleWithHandle_GetReturnsExpected(DialogResult dialogResult)
         {
             using var parent = new Form
@@ -2346,7 +2345,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Form_Visible_SetWithHandlerWithHandle_CallsVisibleChanged(bool initialVisible)
         {
             using var control = new Form
@@ -2467,7 +2466,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void Form_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubForm();
@@ -2493,7 +2492,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void Form_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubForm();
@@ -2520,7 +2519,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void Form_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubForm();
@@ -2546,7 +2545,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void Form_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubForm();

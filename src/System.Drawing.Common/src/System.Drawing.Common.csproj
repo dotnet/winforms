@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>$(NetCurrent);$(NetPrevious);$(NetMinimum);netstandard2.0;$(NetFrameworkMinimum)</TargetFrameworks>
     <TargetFramework />
@@ -210,6 +210,8 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Printing\PrintPreviewGraphics.cs" />
     <Compile Include="System\Drawing\Printing\TriState.cs" />
     <Compile Include="System\Drawing\ScreenDC.cs" />
+    <Compile Include="System\Drawing\StockIconId.cs" />
+    <Compile Include="System\Drawing\StockIconOptions.cs" />
     <Compile Include="System\Drawing\SystemIcons.cs" />
     <Compile Include="System\Drawing\ToolboxBitmapAttribute.cs" />
 
@@ -275,6 +277,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="Interop\Windows\Ole32\Interop.STGM.cs" />
     <Compile Include="Interop\Windows\Shell32\Interop.ExtractAssociatedIcon.cs" />
+    <Compile Include="Interop\Windows\Shell32\Interop.SHGetStockIconInfo.cs" />
     <Compile Include="Interop\Windows\User32\Interop.CopyImage.cs" />
     <Compile Include="Interop\Windows\User32\Interop.CreateIconFromResourceEx.cs" />
     <Compile Include="Interop\Windows\User32\Interop.DestroyIcon.cs" />
@@ -293,24 +296,18 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\Winspool\Interop.EnumPrinters.cs" />
     <Compile Include="Interop\Windows\Interop.HRESULT.cs" />
 
-    <Compile Include="..\..\Common\src\LocalAppContextSwitches.Common.cs"
-              Link="System\LocalAppContextSwitches.Common.cs" />
-    <Compile Include="..\..\Common\src\ValueStringBuilder.cs"
-             Link="System\Text\ValueStringBuilder.cs" />
+    <Compile Include="..\..\Common\src\LocalAppContextSwitches.Common.cs" Link="System\LocalAppContextSwitches.Common.cs" />
+    <Compile Include="..\..\Common\src\ValueStringBuilder.cs" Link="System\Text\ValueStringBuilder.cs" />
 
 
-    <EmbeddedResource Include="Resources\System\Drawing\DefaultComponent.bmp"
-                      LogicalName="System.Drawing.DefaultComponent.bmp" />
+    <EmbeddedResource Include="Resources\System\Drawing\DefaultComponent.bmp" LogicalName="System.Drawing.DefaultComponent.bmp" />
     <EmbeddedResource Include="Resources\System\Drawing\Printing\PrintDocument.bmp" />
-    <EmbeddedResource Include="Resources\System\Drawing\ShieldIcon.ico"
-                      LogicalName="System.Drawing.ShieldIcon.ico" />
+    <EmbeddedResource Include="Resources\System\Drawing\ShieldIcon.ico" LogicalName="System.Drawing.ShieldIcon.ico" />
   </ItemGroup>
 
   <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">
-    <Compile Include="..\..\Common\src\DisableRuntimeMarshalling.cs"
-             Link="Common\DisableRuntimeMarshalling.cs" />
-    <Compile Include="..\..\Common\src\HandleRefMarshaller.cs"
-             Link="Common\HandleRefMarshaller.cs" />
+    <Compile Include="..\..\Common\src\DisableRuntimeMarshalling.cs" Link="Common\DisableRuntimeMarshalling.cs" />
+    <Compile Include="..\..\Common\src\HandleRefMarshaller.cs" Link="Common\HandleRefMarshaller.cs" />
     <Compile Include="System\Drawing\GdiplusNative.cs" />
   </ItemGroup>
 
@@ -328,10 +325,8 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-    <Compile Include="..\..\Common\src\RequiresUnreferencedCodeAttribute.cs"
-             Link="Common\RequiresUnreferencedCodeAttribute.cs" />
-    <Compile Include="..\..\Common\src\UnconditionalSuppressMessageAttribute.cs"
-             Link="Common\UnconditionalSuppressMessageAttribute.cs" />
+    <Compile Include="..\..\Common\src\RequiresUnreferencedCodeAttribute.cs" Link="Common\RequiresUnreferencedCodeAttribute.cs" />
+    <Compile Include="..\..\Common\src\UnconditionalSuppressMessageAttribute.cs" Link="Common\UnconditionalSuppressMessageAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">

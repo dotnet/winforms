@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListViewInsertionMark_AppearsAfterItem_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListView();
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListViewInsertionMark_AppearsAfterItem_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ListView();
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void ListViewInsertionMark_Index_SetWithoutHandle_GetReturnsExpected(int value)
         {
             using var control = new ListView();
@@ -423,7 +423,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void ListViewInsertionMark_Index_SetWithHandle_GetReturnsExpected(int value)
         {
             using var control = new ListView();

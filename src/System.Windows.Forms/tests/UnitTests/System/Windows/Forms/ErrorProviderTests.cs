@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -121,7 +120,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorBlinkStyle))]
+        [EnumData<ErrorBlinkStyle>]
         public void ErrorProvider_BlinkStyle_Set_GetReturnsExpected(ErrorBlinkStyle value)
         {
             using var provider = new ErrorProvider
@@ -138,7 +137,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorBlinkStyle))]
+        [EnumData<ErrorBlinkStyle>]
         public void ErrorProvider_BlinkStyle_SetAlreadyBlink_GetReturnsExpected(ErrorBlinkStyle value)
         {
             using var provider = new ErrorProvider
@@ -157,7 +156,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorBlinkStyle))]
+        [EnumData<ErrorBlinkStyle>]
         public void ErrorProvider_BlinkStyle_SetWithZeroBlinkRate_GetReturnsExpected(ErrorBlinkStyle value)
         {
             using var provider = new ErrorProvider
@@ -175,7 +174,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ErrorBlinkStyle))]
+        [InvalidEnumData<ErrorBlinkStyle>]
         public void ErrorProvider_BlinkStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ErrorBlinkStyle value)
         {
             using var provider = new ErrorProvider();
@@ -222,7 +221,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ErrorProvider_DataMember_Set_GetReturnsExpected(string value, string expected)
         {
             using var provider = new ErrorProvider
@@ -237,7 +236,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ErrorProvider_DataMember_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var provider = new ErrorProvider
@@ -589,7 +588,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ErrorProvider_RightToLeft_Set_GetReturnsExpected(bool value)
         {
             using var provider = new ErrorProvider
@@ -749,7 +748,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ErrorProvider_Tag_Set_GetReturnsExpected(object value)
         {
             using var provider = new ErrorProvider
@@ -935,7 +934,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ErrorProvider_Dispose_InvokeBoolMultipleTimesDefault_Nop(bool disposing)
         {
             using var provider = new SubErrorProvider();
@@ -1001,7 +1000,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ErrorProvider_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var provider = new SubErrorProvider();
@@ -1057,7 +1056,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ErrorProvider_SetError_NullControl_ThrowsArgumentNullException(string value)
         {
             using var provider = new ErrorProvider();
@@ -1065,7 +1064,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorIconAlignment))]
+        [EnumData<ErrorIconAlignment>]
         public void ErrorProvider_SetIconAlignment_Invoke_GetIconAlignmentReturnsExpected(ErrorIconAlignment value)
         {
             using var provider = new ErrorProvider();
@@ -1080,8 +1079,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorIconAlignment))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ErrorIconAlignment))]
+        [EnumData<ErrorIconAlignment>]
+        [InvalidEnumData<ErrorIconAlignment>]
         public void ErrorProvider_SetIconAlignment_NullControl_ThrowsArgumentNullException(ErrorIconAlignment value)
         {
             using var provider = new ErrorProvider();
@@ -1089,7 +1088,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ErrorIconAlignment))]
+        [InvalidEnumData<ErrorIconAlignment>]
         public void ErrorProvider_SetIconAlignment_InvalidValue_ThrowsInvalidEnumArgumentException(ErrorIconAlignment value)
         {
             using var provider = new ErrorProvider();
@@ -1098,7 +1097,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void ErrorProvider_SetIconPadding_Invoke_GetIconPaddingReturnsExpected(int value)
         {
             using var provider = new ErrorProvider();

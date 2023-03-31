@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -31,7 +30,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollProperties_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var container = new ScrollableControl();
@@ -51,7 +50,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollProperties_Enabled_SetAutoScrollContainer_Nop(bool value)
         {
             using var container = new ScrollableControl()
@@ -74,7 +73,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollProperties_Enabled_SetNullContainer_GetReturnsExpected(bool value)
         {
             var properties = new SubScrollProperties(null)
@@ -519,7 +518,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollProperties_Visible_Set_GetReturnsExpected(bool value)
         {
             using var container = new ScrollableControl();
@@ -539,7 +538,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollProperties_Visible_SetAutoScrollContainer_Nop(bool value)
         {
             using var container = new ScrollableControl()
@@ -562,7 +561,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollProperties_Visible_SetNullContainer_GetReturnsExpected(bool value)
         {
             var properties = new SubScrollProperties(null)

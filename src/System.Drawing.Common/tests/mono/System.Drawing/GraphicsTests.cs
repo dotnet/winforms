@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Graphics class testing unit
@@ -1719,10 +1719,15 @@ namespace MonoTests.System.Drawing
                     Assert.True(size.IsEmpty);
                     size = g.MeasureString(string.Empty, font);
                     Assert.True(size.IsEmpty);
+                    g.MeasureString(string.Empty.AsSpan(), font);
+                    Assert.True(size.IsEmpty);
+
                     // null font
                     size = g.MeasureString(null, null);
                     Assert.True(size.IsEmpty);
                     size = g.MeasureString(string.Empty, null);
+                    Assert.True(size.IsEmpty);
+                    g.MeasureString(string.Empty.AsSpan(), null);
                     Assert.True(size.IsEmpty);
                 }
             }
@@ -1735,6 +1740,7 @@ namespace MonoTests.System.Drawing
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 Assert.Throws<ArgumentNullException>(() => g.MeasureString("a", null));
+                Assert.Throws<ArgumentNullException>(() => g.MeasureString("a".AsSpan(), null));
             }
         }
 
@@ -1747,38 +1753,50 @@ namespace MonoTests.System.Drawing
                 SizeF size = g.MeasureString("a", font, SizeF.Empty);
                 Assert.False(size.IsEmpty);
 
+                size = g.MeasureString("a".AsSpan(), font, SizeF.Empty);
+                Assert.False(size.IsEmpty);
+
                 size = g.MeasureString(string.Empty, font, SizeF.Empty);
+                Assert.True(size.IsEmpty);
+
+                size = g.MeasureString(string.Empty.AsSpan(), font, SizeF.Empty);
                 Assert.True(size.IsEmpty);
             }
         }
 
-        private void MeasureString_StringFontInt(string s)
+        private void MeasureString_StringFontInt(string s, bool useSpan)
         {
             using (Bitmap bitmap = new Bitmap(20, 20))
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                SizeF size0 = g.MeasureString(s, font, 0);
-                SizeF sizeN = g.MeasureString(s, font, int.MinValue);
-                SizeF sizeP = g.MeasureString(s, font, int.MaxValue);
+                SizeF size0 = useSpan ? g.MeasureString(s.AsSpan(), font, 0) : g.MeasureString(s, font, 0);
+                SizeF sizeN = useSpan ? g.MeasureString(s.AsSpan(), font, int.MinValue) : g.MeasureString(s, font, int.MinValue);
+                SizeF sizeP = useSpan ? g.MeasureString(s.AsSpan(), font, int.MaxValue) : g.MeasureString(s, font, int.MaxValue);
                 Assert.Equal(size0, sizeN);
                 Assert.Equal(size0, sizeP);
             }
         }
 
-        [Fact]
-        public void MeasureString_StringFontInt_ShortString()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_StringFontInt_ShortString(bool useSpan)
         {
-            MeasureString_StringFontInt("a");
+            MeasureString_StringFontInt("a", useSpan);
         }
 
-        [Fact]
-        public void MeasureString_StringFontInt_LongString()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_StringFontInt_LongString(bool useSpan)
         {
-            MeasureString_StringFontInt("A very long string...");
+            MeasureString_StringFontInt("A very long string...", useSpan);
         }
 
-        [Fact]
-        public void MeasureString_StringFormat_Alignment()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_StringFormat_Alignment(bool useSpan)
         {
             string text = "Hello Mono::";
 
@@ -1787,13 +1805,19 @@ namespace MonoTests.System.Drawing
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 string_format.Alignment = StringAlignment.Near;
-                SizeF near = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF near = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.Alignment = StringAlignment.Center;
-                SizeF center = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF center = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.Alignment = StringAlignment.Far;
-                SizeF far = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF far = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 Assert.Equal((double)near.Width, center.Width, 1);
                 Assert.Equal((double)near.Height, center.Height, 1);
@@ -1803,8 +1827,10 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [Fact]
-        public void MeasureString_StringFormat_Alignment_DirectionVertical()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_StringFormat_Alignment_DirectionVertical(bool useSpan)
         {
             string text = "Hello Mono::";
             using (StringFormat string_format = new StringFormat())
@@ -1814,13 +1840,19 @@ namespace MonoTests.System.Drawing
                 string_format.FormatFlags = StringFormatFlags.DirectionVertical;
 
                 string_format.Alignment = StringAlignment.Near;
-                SizeF near = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF near = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.Alignment = StringAlignment.Center;
-                SizeF center = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF center = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.Alignment = StringAlignment.Far;
-                SizeF far = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF far = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 Assert.Equal((double)near.Width, center.Width, 0);
                 Assert.Equal((double)near.Height, center.Height, 0);
@@ -1830,8 +1862,10 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [Fact]
-        public void MeasureString_StringFormat_LineAlignment()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_StringFormat_LineAlignment(bool useSpan)
         {
             string text = "Hello Mono::";
             using (StringFormat string_format = new StringFormat())
@@ -1839,13 +1873,19 @@ namespace MonoTests.System.Drawing
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 string_format.LineAlignment = StringAlignment.Near;
-                SizeF near = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF near = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.LineAlignment = StringAlignment.Center;
-                SizeF center = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF center = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.LineAlignment = StringAlignment.Far;
-                SizeF far = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF far = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 Assert.Equal((double)near.Width, center.Width, 1);
                 Assert.Equal((double)near.Height, center.Height, 1);
@@ -1855,8 +1895,10 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [Fact]
-        public void MeasureString_StringFormat_LineAlignment_DirectionVertical()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_StringFormat_LineAlignment_DirectionVertical(bool useSpan)
         {
             string text = "Hello Mono::";
             using (StringFormat string_format = new StringFormat())
@@ -1866,13 +1908,19 @@ namespace MonoTests.System.Drawing
                 string_format.FormatFlags = StringFormatFlags.DirectionVertical;
 
                 string_format.LineAlignment = StringAlignment.Near;
-                SizeF near = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF near = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.LineAlignment = StringAlignment.Center;
-                SizeF center = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF center = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 string_format.LineAlignment = StringAlignment.Far;
-                SizeF far = g.MeasureString(text, font, int.MaxValue, string_format);
+                SizeF far = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, int.MaxValue, string_format)
+                    : g.MeasureString(text, font, int.MaxValue, string_format);
 
                 Assert.Equal((double)near.Width, center.Width, 1);
                 Assert.Equal((double)near.Height, center.Height, 1);
@@ -1882,17 +1930,21 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [Fact]
-        public void MeasureString_CharactersFitted()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_CharactersFitted(bool useSpan)
         {
             using (Bitmap bitmap = new Bitmap(20, 20))
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 string s = "aaa aa aaaa a aaa";
-                SizeF size = g.MeasureString(s, font);
+                SizeF size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
 
                 int chars, lines;
-                SizeF size2 = g.MeasureString(s, font, new SizeF(80, size.Height), null, out chars, out lines);
+                SizeF size2 = useSpan
+                    ? g.MeasureString(s.AsSpan(), font, new SizeF(80, size.Height), null, out chars, out lines)
+                    : g.MeasureString(s, font, new SizeF(80, size.Height), null, out chars, out lines);
 
                 // in pixels
                 Assert.True(size2.Width < size.Width);
@@ -1904,46 +1956,48 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [Fact]
-        public void MeasureString_Whitespace()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureString_Whitespace(bool useSpan)
         {
             using (Bitmap bitmap = new Bitmap(20, 20))
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 string s = string.Empty;
-                SizeF size = g.MeasureString(s, font);
+                SizeF size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                 Assert.Equal(0, size.Height);
                 Assert.Equal(0, size.Width);
 
                 s += " ";
-                SizeF expected = g.MeasureString(s, font);
+                SizeF expected = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                 for (int i = 1; i < 10; i++)
                 {
                     s += " ";
-                    size = g.MeasureString(s, font);
+                    size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                     Assert.Equal((double)expected.Height, size.Height, 1);
                     Assert.Equal((double)expected.Width, size.Width, 1);
                 }
 
                 s = "a";
-                expected = g.MeasureString(s, font);
+                expected = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                 s = " " + s;
-                size = g.MeasureString(s, font);
+                size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                 float space_width = size.Width - expected.Width;
                 for (int i = 1; i < 10; i++)
                 {
-                    size = g.MeasureString(s, font);
+                    size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                     Assert.Equal((double)expected.Height, size.Height, 1);
                     Assert.Equal((double)expected.Width + i * space_width, size.Width, 1);
                     s = " " + s;
                 }
 
                 s = "a";
-                expected = g.MeasureString(s, font);
+                expected = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                 for (int i = 1; i < 10; i++)
                 {
                     s = s + " ";
-                    size = g.MeasureString(s, font);
+                    size = useSpan ? g.MeasureString(s.AsSpan(), font) : g.MeasureString(s, font);
                     Assert.Equal((double)expected.Height, size.Height, 1);
                     Assert.Equal((double)expected.Width, size.Width, 1);
                 }
@@ -1958,12 +2012,19 @@ namespace MonoTests.System.Drawing
             {
                 Region[] regions = g.MeasureCharacterRanges(null, font, new RectangleF(), null);
                 Assert.Equal(0, regions.Length);
+
                 regions = g.MeasureCharacterRanges(string.Empty, font, new RectangleF(), null);
                 Assert.Equal(0, regions.Length);
+                regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), font, new RectangleF(), null);
+                Assert.Equal(0, regions.Length);
+
                 // null font is ok with null or empty string
                 regions = g.MeasureCharacterRanges(null, null, new RectangleF(), null);
                 Assert.Equal(0, regions.Length);
+
                 regions = g.MeasureCharacterRanges(string.Empty, null, new RectangleF(), null);
+                Assert.Equal(0, regions.Length);
+                regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), null, new RectangleF(), null);
                 Assert.Equal(0, regions.Length);
             }
         }
@@ -1977,6 +2038,9 @@ namespace MonoTests.System.Drawing
                 // string format without character ranges
                 Region[] regions = g.MeasureCharacterRanges("Mono", font, new RectangleF(), new StringFormat());
                 Assert.Equal(0, regions.Length);
+
+                g.MeasureCharacterRanges("Mono".AsSpan(), font, new RectangleF(), new StringFormat());
+                Assert.Equal(0, regions.Length);
             }
         }
 
@@ -1987,6 +2051,7 @@ namespace MonoTests.System.Drawing
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 Assert.Throws<ArgumentNullException>(() => g.MeasureCharacterRanges("a", null, new RectangleF(), null));
+                Assert.Throws<ArgumentNullException>(() => g.MeasureCharacterRanges("a".AsSpan(), null, new RectangleF(), null));
             }
         }
 
@@ -2011,10 +2076,15 @@ namespace MonoTests.System.Drawing
 
                 Assert.Equal(2, regions.Length);
                 Assert.Equal(regions[0].GetBounds(g).Height, regions[1].GetBounds(g).Height);
+
+                regions = g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+
+                Assert.Equal(2, regions.Length);
+                Assert.Equal(regions[0].GetBounds(g).Height, regions[1].GetBounds(g).Height);
             }
         }
 
-        private void MeasureCharacterRanges(string text, int first, int length)
+        private void MeasureCharacterRanges(string text, int first, int length, bool useSpan)
         {
             CharacterRange[] ranges = new CharacterRange[1];
             ranges[0] = new CharacterRange(first, length);
@@ -2026,24 +2096,37 @@ namespace MonoTests.System.Drawing
                 string_format.FormatFlags = StringFormatFlags.NoClip;
                 string_format.SetMeasurableCharacterRanges(ranges);
 
-                SizeF size = g.MeasureString(text, font, new Point(0, 0), string_format);
+                SizeF size = useSpan
+                    ? g.MeasureString(text.AsSpan(), font, new Point(0, 0), string_format)
+                    : g.MeasureString(text, font, new Point(0, 0), string_format);
                 RectangleF layout_rect = new RectangleF(0.0f, 0.0f, size.Width, size.Height);
-                g.MeasureCharacterRanges(text, font, layout_rect, string_format);
+                if (useSpan)
+                {
+                    g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+                }
+                else
+                {
+                    g.MeasureCharacterRanges(text, font, layout_rect, string_format);
+                }
             }
         }
 
-        [Fact]
-        public void MeasureCharacterRanges_FirstTooFar()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureCharacterRanges_FirstTooFar(bool useSpan)
         {
             string text = "this\nis a test";
-            Assert.Throws<ArgumentException>(() => MeasureCharacterRanges(text, text.Length, 1));
+            Assert.Throws<ArgumentException>(() => MeasureCharacterRanges(text, text.Length, 1, useSpan));
         }
 
-        [Fact]
-        public void MeasureCharacterRanges_LengthTooLong()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureCharacterRanges_LengthTooLong(bool useSpan)
         {
             string text = "this\nis a test";
-            Assert.Throws<ArgumentException>(() => MeasureCharacterRanges(text, 0, text.Length + 1));
+            Assert.Throws<ArgumentException>(() => MeasureCharacterRanges(text, 0, text.Length + 1, useSpan));
         }
 
         [Fact]
@@ -2073,10 +2156,18 @@ namespace MonoTests.System.Drawing
                 RectangleF bounds_show = regions[0].GetBounds(g);
                 Assert.True(bounds_show.Width < bounds_none.Width);
 
+                regions = g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+                bounds_show = regions[0].GetBounds(g);
+                Assert.True(bounds_show.Width < bounds_none.Width);
+
                 // here & is part of the measure (range) but invisible
                 string_format.HotkeyPrefix = HotkeyPrefix.Hide;
                 regions = g.MeasureCharacterRanges(text, font, layout_rect, string_format);
                 RectangleF bounds_hide = regions[0].GetBounds(g);
+                Assert.Equal((double)bounds_hide.Width, bounds_show.Width);
+
+                g.MeasureCharacterRanges(text.AsSpan(), font, layout_rect, string_format);
+                bounds_hide = regions[0].GetBounds(g);
                 Assert.Equal((double)bounds_hide.Width, bounds_show.Width);
             }
         }
@@ -2088,6 +2179,7 @@ namespace MonoTests.System.Drawing
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono", font, new RectangleF(), null));
+                Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono".AsSpan(), font, new RectangleF(), null));
             }
         }
 
@@ -2097,7 +2189,7 @@ namespace MonoTests.System.Drawing
                     new CharacterRange (2, 1)
                 };
 
-        Region[] Measure_Helper(Graphics gfx, RectangleF rect)
+        Region[] Measure_Helper(Graphics gfx, RectangleF rect, bool useSpan)
         {
             using (StringFormat format = StringFormat.GenericTypographic)
             {
@@ -2105,20 +2197,24 @@ namespace MonoTests.System.Drawing
 
                 using (Font font = new Font(FontFamily.GenericSerif, 11.0f))
                 {
-                    return gfx.MeasureCharacterRanges("abc", font, rect, format);
+                    return useSpan
+                        ? gfx.MeasureCharacterRanges("abc".AsSpan(), font, rect, format)
+                        : gfx.MeasureCharacterRanges("abc", font, rect, format);
                 }
             }
         }
 
-        [Fact]
-        public void Measure()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Measure(bool useSpan)
         {
             using (Graphics gfx = Graphics.FromImage(new Bitmap(1, 1)))
             {
-                Region[] zero = Measure_Helper(gfx, new RectangleF(0, 0, 0, 0));
+                Region[] zero = Measure_Helper(gfx, new RectangleF(0, 0, 0, 0), useSpan);
                 Assert.Equal(3, zero.Length);
 
-                Region[] small = Measure_Helper(gfx, new RectangleF(0, 0, 100, 100));
+                Region[] small = Measure_Helper(gfx, new RectangleF(0, 0, 100, 100), useSpan);
                 Assert.Equal(3, small.Length);
                 for (int i = 0; i < 3; i++)
                 {
@@ -2130,7 +2226,7 @@ namespace MonoTests.System.Drawing
                     Assert.Equal((double)sb.Height, zb.Height);
                 }
 
-                Region[] max = Measure_Helper(gfx, new RectangleF(0, 0, float.MaxValue, float.MaxValue));
+                Region[] max = Measure_Helper(gfx, new RectangleF(0, 0, float.MaxValue, float.MaxValue), useSpan);
                 Assert.Equal(3, max.Length);
                 for (int i = 0; i < 3; i++)
                 {
@@ -2144,12 +2240,14 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [Fact]
-        public void MeasureLimits()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MeasureLimits(bool useSpan)
         {
             using (Graphics gfx = Graphics.FromImage(new Bitmap(1, 1)))
             {
-                Region[] min = Measure_Helper(gfx, new RectangleF(0, 0, float.MinValue, float.MinValue));
+                Region[] min = Measure_Helper(gfx, new RectangleF(0, 0, float.MinValue, float.MinValue), useSpan);
                 Assert.Equal(3, min.Length);
                 for (int i = 0; i < 3; i++)
                 {
@@ -2160,7 +2258,7 @@ namespace MonoTests.System.Drawing
                     Assert.Equal(8388608.0f, mb.Height);
                 }
 
-                Region[] neg = Measure_Helper(gfx, new RectangleF(0, 0, -20, -20));
+                Region[] neg = Measure_Helper(gfx, new RectangleF(0, 0, -20, -20), useSpan);
                 Assert.Equal(3, neg.Length);
                 for (int i = 0; i < 3; i++)
                 {
@@ -2188,6 +2286,7 @@ namespace MonoTests.System.Drawing
                 fmt.FormatFlags = StringFormatFlags.NoWrap;
                 fmt.Trimming = StringTrimming.EllipsisWord;
                 g.DrawString("Test String", font, Brushes.Black, rect, fmt);
+                g.DrawString("Test String".AsSpan(), font, Brushes.Black, rect, fmt);
             }
         }
 
@@ -2205,6 +2304,7 @@ namespace MonoTests.System.Drawing
                 fmt.LineAlignment = StringAlignment.Center;
                 fmt.Trimming = StringTrimming.EllipsisWord;
                 g.DrawString("Test String", font, Brushes.Black, rect, fmt);
+                g.DrawString("Test String".AsSpan(), font, Brushes.Black, rect, fmt);
             }
         }
 
@@ -2218,6 +2318,10 @@ namespace MonoTests.System.Drawing
             {
                 format.Alignment = StringAlignment.Center;
                 SizeF sz = g.MeasureString(text, font, 80, format);
+                Assert.True(sz.Width <= 80);
+                Assert.True(sz.Height > font.Height * 2);
+
+                sz = g.MeasureString(text.AsSpan(), font, 80, format);
                 Assert.True(sz.Width <= 80);
                 Assert.True(sz.Height > font.Height * 2);
             }

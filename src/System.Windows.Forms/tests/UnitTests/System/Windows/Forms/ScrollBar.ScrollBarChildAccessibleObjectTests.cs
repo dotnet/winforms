@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static System.Windows.Forms.ScrollBar;
 using static Interop;
@@ -73,7 +72,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollBarChildAccessibleObject_IsDisplayed_ReturnsExpected(bool isVisible)
         {
             using SubScrollBar control = new();
@@ -92,7 +91,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ScrollBarChildAccessibleObject_GetPropertyValue_IsEnabled_ReturnsExpected(bool isEnabled)
         {
             using SubScrollBar control = new();

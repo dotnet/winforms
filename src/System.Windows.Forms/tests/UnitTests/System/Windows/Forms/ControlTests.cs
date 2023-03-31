@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -102,7 +101,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Control_Ctor_String(string text, string expectedText)
         {
             using var control = new SubControl(text);

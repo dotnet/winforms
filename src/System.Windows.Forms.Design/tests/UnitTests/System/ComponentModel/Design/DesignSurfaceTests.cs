@@ -6,7 +6,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Reflection;
 using System.Windows.Forms.Design;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -182,7 +181,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignSurface_DtelLoading_Set_GetReturnsExpected(bool value)
         {
             using var surface = new DesignSurface()
@@ -449,7 +448,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [NullAndEmptyStringData]
         public void DesignSurface_BeginLoad_ThrowsExceptionWithoutMessage_SetsLoadErrors(string message)
         {
             var mockException = new Mock<Exception>(MockBehavior.Strict);
@@ -1139,7 +1138,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void DesignSurface_CreateNestedContainer_InvokeObjectString_ReturnsExpected(string containerName)
         {
             using var surface = new DesignSurface();
@@ -1256,7 +1255,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignSurface_Dispose_InvokeDisposingMultipleTimes_Success(bool disposing)
         {
             using var surface = new SubDesignSurface();
@@ -1568,7 +1567,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignSurface_OnLoading_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();
@@ -1630,7 +1629,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignSurface_OnUnloaded_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();
@@ -1658,7 +1657,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignSurface_OnUnloading_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();
@@ -1686,7 +1685,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void DesignSurface_OnViewActivate_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();

@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -254,7 +253,7 @@ namespace System.Windows.Forms.Design.Tests
 
         /*
                 [WinFormsTheory]
-                [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+                [NewAndDefaultData<EventArgs>]
                 public void ComponentEditorForm_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
                 {
                     using var component = new Component();
@@ -282,7 +281,7 @@ namespace System.Windows.Forms.Design.Tests
         */
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ComponentEditorForm_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var component = new Component();
@@ -310,7 +309,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ComponentEditorForm_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var component = new Component();
@@ -337,7 +336,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ComponentEditorForm_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var component = new Component();

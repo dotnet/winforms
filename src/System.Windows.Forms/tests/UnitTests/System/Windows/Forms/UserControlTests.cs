@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UserControl_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new UserControl();
@@ -483,7 +483,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
+        [EnumData<AutoSizeMode>]
         public void UserControl_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SubUserControl();
@@ -660,7 +660,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [InvalidEnumData<AutoSizeMode>]
         public void UserControl_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
         {
             using var control = new UserControl();
@@ -728,7 +728,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
+        [InvalidEnumData<AutoValidate>]
         public void UserControl_AutoValidate_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoValidate value)
         {
             using var control = new UserControl();
@@ -736,7 +736,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
+        [EnumData<BorderStyle>]
         public void UserControl_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             using var control = new UserControl
@@ -784,7 +784,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [InvalidEnumData<BorderStyle>]
         public void UserControl_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var control = new UserControl();
@@ -792,7 +792,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void UserControl_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new UserControl
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void UserControl_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new UserControl();
@@ -966,7 +966,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UserControl_OnLoad_Invoke_CallsLoad(EventArgs eventArgs)
         {
             using var control = new SubUserControl();
@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UserControl_OnResize_Invoke_CallsResize(EventArgs eventArgs)
         {
             using var control = new SubUserControl();
@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UserControl_OnResize_InvokeWithBackgroundImage_CallsResize(EventArgs eventArgs)
         {
             using var backgroundImage = new Bitmap(10, 10);
@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ValidationConstraints))]
+        [EnumData<ValidationConstraints>]
         public void UserControl_ValidateChildren_InvokeValidationConstraintsWithoutChildren_ReturnsTrue(ValidationConstraints validationConstraints)
         {
             using var control = new UserControl();

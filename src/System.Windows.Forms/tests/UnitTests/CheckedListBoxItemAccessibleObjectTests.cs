@@ -5,7 +5,6 @@
 using Xunit;
 using static System.Windows.Forms.CheckedListBox;
 using static Interop;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -313,7 +312,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void CheckedListBoxItemAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected(bool isChecked)
         {
             using CheckedListBox checkedListBox = new();

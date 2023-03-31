@@ -36,7 +36,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_Ascent_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_AverageCharWidth_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -81,8 +81,8 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextMetricsCharacterSet))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextMetricsCharacterSet))]
+        [EnumData<TextMetricsCharacterSet>]
+        [InvalidEnumData<TextMetricsCharacterSet>]
         public void TextMetrics_CharSet_Set_GetReturnsExpected(TextMetricsCharacterSet value)
         {
             var metric = new TextMetrics
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_Descent_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_DigitizedAspectX_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_DigitizedAspectY_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_ExternalLeading_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_Height_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_InternalLeading_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TextMetrics_Italic_Set_GetReturnsExpected(bool value)
         {
             var metric = new TextMetrics
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_MaxCharWidth_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_Overhang_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
@@ -277,8 +277,8 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextMetricsPitchAndFamilyValues))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextMetricsPitchAndFamilyValues))]
+        [EnumData<TextMetricsPitchAndFamilyValues>]
+        [InvalidEnumData<TextMetricsPitchAndFamilyValues>]
         public void TextMetrics_PitchAndFamily_GetReturnsExpected(TextMetricsPitchAndFamilyValues value)
         {
             var metric = new TextMetrics
@@ -293,7 +293,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TextMetrics_StruckOut_Set_GetReturnsExpected(bool value)
         {
             var metric = new TextMetrics
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TextMetrics_Underlined_Set_GetReturnsExpected(bool value)
         {
             var metric = new TextMetrics
@@ -323,7 +323,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
+        [NumberData<int>]
         public void TextMetrics_Weight_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics

@@ -18,6 +18,7 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void AxHostState_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             string payload = "abc";
             string licenseKey = "licenseKey";
             string netBlob;
@@ -70,13 +71,14 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void ImageListStreamer_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             string netBlob;
 
             using (var imageList = new ImageList()
-            {
-                ImageSize = new Size(16, 16),
-                TransparentColor = Color.White
-            })
+                {
+                    ImageSize = new Size(16, 16),
+                    TransparentColor = Color.White
+                })
             {
                 imageList.Images.Add(new Bitmap(16, 16));
                 netBlob = BinarySerialization.ToBase64String(imageList.ImageStream);
@@ -104,6 +106,7 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void LinkArea_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             var linkArea = new LinkArea(5, 7);
             var netBlob = BinarySerialization.ToBase64String(linkArea);
 
@@ -123,11 +126,13 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void ListViewGroup_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             var listViewGroup = new ListViewGroup("Header", HorizontalAlignment.Center)
             {
                 Tag = "Tag",
                 Name = "GroupName",
             };
+
             listViewGroup.Items.Add(new ListViewItem("Item"));
 
             var netBlob = BinarySerialization.ToBase64String(listViewGroup);
@@ -154,6 +159,7 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void ListViewItem_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             string netBlob;
 
             using (var font = new Font(FontFamily.GenericSansSerif, 9f))
@@ -200,6 +206,7 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void ListViewSubItemAndSubItemStyle_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             string netBlob;
 
             using (var font = new Font(FontFamily.GenericSansSerif, 9f))
@@ -241,6 +248,7 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void Padding_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             var padding = new Padding(1, 2, 3, 4);
             var netBlob = BinarySerialization.ToBase64String(padding);
 
@@ -260,6 +268,8 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void TableLayoutSettings_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
+
             string netBlob;
 
             using (var tableLayoutPanel = new TableLayoutPanel
@@ -335,6 +345,7 @@ namespace System.Windows.Forms.Tests.Serialization
         [Fact]
         public void TreeNodeAndPropertyBag_RoundTripAndExchangeWithNet()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             var children = new TreeNode[] { new TreeNode("node2"), new TreeNode("node3") };
             TreeNode treeNodeIn = new TreeNode("node1", 1, 2, children)
             {

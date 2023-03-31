@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -174,7 +173,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void StatusStrip_CanOverflow_Set_GetReturnsExpected(bool value)
         {
             using var control = new StatusStrip();
@@ -601,7 +600,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripRenderMode))]
+        [InvalidEnumData<ToolStripRenderMode>]
         public void StatusStrip_RenderMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripRenderMode value)
         {
             using var control = new StatusStrip();
@@ -696,7 +695,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void StatusStrip_SizingGrip_Set_GetReturnsExpected(bool value)
         {
             using var control = new StatusStrip
@@ -834,7 +833,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void StatusStrip_ShowItemToolTips_Set_GetReturnsExpected(bool value)
         {
             using var control = new StatusStrip

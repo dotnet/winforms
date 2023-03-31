@@ -1567,7 +1567,7 @@ public partial class Control
 
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Saving property {currentProperty.Name}");
 
-                object? value = null;
+                string? value = null;
 
                 if (IsResourceProperty(currentProperty))
                 {
@@ -1606,11 +1606,13 @@ public partial class Control
                     value = Convert.ToBase64String(data);
                 }
 
-                VARIANT variant = default;
-                Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
-                fixed (char* pszPropName = props[i].Name)
+                if (value is not null)
                 {
-                    propertyBag->Write(pszPropName, &variant);
+                    using VARIANT variant = (VARIANT)(new BSTR(value));
+                    fixed (char* pszPropName = props[i].Name)
+                    {
+                        propertyBag->Write(pszPropName, &variant);
+                    }
                 }
             }
 

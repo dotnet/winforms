@@ -42,6 +42,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         DragAndDrop,
         TextBoxesButton,
         MediaPlayerButton,
-        FormOwnerTestButton
+        FormOwnerTestButton,
+        ListBoxTestButton
     }
 }

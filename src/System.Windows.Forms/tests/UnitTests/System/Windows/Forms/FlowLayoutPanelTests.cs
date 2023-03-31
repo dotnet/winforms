@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -171,7 +170,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FlowDirection))]
+        [InvalidEnumData<FlowDirection>]
         public void FlowLayoutPanel_FlowDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(FlowDirection value)
         {
             using var control = new FlowLayoutPanel();
@@ -315,7 +314,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FlowLayoutPanel_SetFlowBreak_Invoke_GetFlowBreakReturnsExpected(bool value)
         {
             using var child = new Control();
@@ -413,7 +412,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FlowLayoutPanel_SetFlowBreak_NullControl_ThrowsArgumentNullException(bool value)
         {
             using var control = new FlowLayoutPanel();

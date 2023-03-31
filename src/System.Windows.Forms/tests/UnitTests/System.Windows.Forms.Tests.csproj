@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <PropertyGroup>

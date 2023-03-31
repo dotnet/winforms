@@ -155,7 +155,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ProgressBar_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void GroupBox_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox();
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
+        [EnumData<AutoSizeMode>]
         public void GroupBox_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SubGroupBox();
@@ -380,7 +380,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoSizeMode))]
+        [EnumData<AutoSizeMode>]
         public void GroupBox_AutoSizeMode_SetWithHandle_GetReturnsExpected(AutoSizeMode value)
         {
             using var control = new SubGroupBox();
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
+        [InvalidEnumData<AutoSizeMode>]
         public void GroupBox_AutoSizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoSizeMode value)
         {
             using var control = new GroupBox();
@@ -934,7 +934,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void GroupBox_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox
@@ -956,7 +956,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void GroupBox_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new GroupBox();
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void GroupBox_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox
@@ -1048,7 +1048,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void GroupBox_Text_SetInvisible_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox
@@ -1066,7 +1066,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void GroupBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox();
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void GroupBox_Text_SetInvisibleWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new GroupBox
@@ -1426,7 +1426,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void GroupBox_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void GroupBox_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void GroupBox_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1702,7 +1702,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void GroupBox_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -1726,7 +1726,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void GroupBox_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
         {
             using var control = new SubGroupBox();
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [EnumData<FlatStyle>]
         public void GroupBox_WndProc_InvokeMouseHoverWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubGroupBox

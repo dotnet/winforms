@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -160,7 +159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ColumnHeaderCollection_Add_String_Success(string text, string expectedText)
         {
             using var listView = new ListView();
@@ -322,7 +321,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
+        [InvalidEnumData<HorizontalAlignment>]
         public void ColumnHeaderCollection_Add_InvalidTextAlign_ThrowsInvalidEnumArgumentException(HorizontalAlignment textAlign)
         {
             using var listView = new ListView();
@@ -715,7 +714,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ColumnHeaderCollection_Insert_String_Success(string text, string expectedText)
         {
             using var listView = new ListView();

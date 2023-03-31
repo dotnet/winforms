@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_AutoScroll_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase();
@@ -229,7 +229,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_AutoScroll_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase();
@@ -444,7 +444,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase();
@@ -661,7 +661,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void UpDownBase_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubUpDownBase
@@ -802,7 +802,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [InvalidEnumData<BorderStyle>]
         public void UpDownBase_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var control = new SubUpDownBase();
@@ -810,7 +810,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_ChangingText_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase
@@ -832,7 +832,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_ChangingText_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase();
@@ -1024,7 +1024,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_InterceptArrowKeys_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_InterceptArrowKeys_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase();
@@ -1171,7 +1171,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_ReadOnly_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase
@@ -1193,7 +1193,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_ReadOnly_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase();
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
+        [EnumData<HorizontalAlignment>]
         public void UpDownBase_TextAlign_Set_GetReturnsExpected(HorizontalAlignment value)
         {
             using var control = new SubUpDownBase
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
+        [EnumData<HorizontalAlignment>]
         public void UpDownBase_TextAlign_SetWithHandle_GetReturnsExpected(HorizontalAlignment value)
         {
             using var control = new SubUpDownBase();
@@ -1420,7 +1420,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
+        [InvalidEnumData<HorizontalAlignment>]
         public void UpDownBase_TextAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
         {
             var control = new SubUpDownBase();
@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(LeftRightAlignment))]
+        [InvalidEnumData<LeftRightAlignment>]
         public void UpDownBase_UpDownAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(LeftRightAlignment value)
         {
             var control = new SubUpDownBase();
@@ -1512,7 +1512,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_UserEdit_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase
@@ -1534,7 +1534,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_UserEdit_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubUpDownBase();
@@ -1897,7 +1897,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UpDownBase_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubUpDownBase();
@@ -1925,7 +1925,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UpDownBase_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubUpDownBase();
@@ -2045,7 +2045,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UpDownBase_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
         {
             using var control = new SubUpDownBase();
@@ -2069,7 +2069,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UpDownSubUpDownBase_OnMouseHover_Invoke_CallsMouseHover(EventArgs eventArgs)
         {
             using var control = new SubUpDownBase();
@@ -2093,7 +2093,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void UpDownBase_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
         {
             using var control = new SubUpDownBase();
@@ -2196,7 +2196,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void UpDownBase_OnMouseWheel_InvokeHandledMouseEventArgs_SetsHandled(bool handled)
         {
             using var control = new SubUpDownBase();

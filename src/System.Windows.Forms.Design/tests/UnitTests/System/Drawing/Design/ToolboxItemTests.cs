@@ -8,7 +8,6 @@ using System.ComponentModel.Design;
 using System.Reflection;
 using System.Runtime.Loader;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Drawing.Design.Tests
@@ -129,7 +128,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ToolboxItem_Company_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
@@ -205,7 +204,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ToolboxItem_Description_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
@@ -229,7 +228,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ToolboxItem_DisplayName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
@@ -285,7 +284,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolboxItem_IsTransient_Set_GetReturnsExpected(bool value)
         {
             var item = new ToolboxItem
@@ -340,7 +339,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ToolboxItem_TypeName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem

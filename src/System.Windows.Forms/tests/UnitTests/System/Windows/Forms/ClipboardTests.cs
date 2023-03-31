@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Clipboard_ContainsData_InvokeMultipleTimes_Success(string format)
         {
             bool result = Clipboard.ContainsData(format);
@@ -75,7 +74,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [EnumData<TextDataFormat>]
         public void Clipboard_ContainsText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
         {
             bool result = Clipboard.ContainsText(format);
@@ -83,7 +82,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [InvalidEnumData<TextDataFormat>]
         public void Clipboard_ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.ContainsText(format));
@@ -136,7 +135,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [EnumData<TextDataFormat>]
         public void Clipboard_GetText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
         {
             string result = Clipboard.GetText(format);
@@ -144,7 +143,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [InvalidEnumData<TextDataFormat>]
         public void Clipboard_GetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.GetText(format));
@@ -221,6 +220,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("format", 1)]
         public void Clipboard_SetData_Invoke_GetReturnsExpected(string format, object data)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetData(format, data);
             Assert.Equal(data, Clipboard.GetData(format));
             Assert.True(Clipboard.ContainsData(format));
@@ -252,6 +252,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data")]
         public void Clipboard_SetDataObject_InvokeObjectNotIComDataObject_GetReturnsExpected(object data)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetDataObject(data);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
             Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -262,6 +263,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data")]
         public void Clipboard_SetDataObject_InvokeObjectIComDataObject_GetReturnsExpected(object data)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             var dataObject = new DataObject(data);
             Clipboard.SetDataObject(dataObject);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
@@ -275,6 +277,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data", false)]
         public void Clipboard_SetDataObject_InvokeObjectBoolNotIComDataObject_GetReturnsExpected(object data, bool copy)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetDataObject(data, copy);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
             Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -287,6 +290,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data", false, 1, 2)]
         public void Clipboard_SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             var dataObject = new DataObject(data);
             Clipboard.SetDataObject(dataObject, copy, retryTimes, retryDelay);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
@@ -300,6 +304,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("data", false, 1, 2)]
         public void Clipboard_SetDataObject_InvokeObjectBoolIntIntNotIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: data is int);
             Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
             Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
             Assert.True(Clipboard.ContainsData(data.GetType().FullName));
@@ -444,16 +449,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [EnumData<TextDataFormat>]
         public void Clipboard_SetText_InvokeStringTextDataFormat_GetReturnsExpected(TextDataFormat format)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: format == TextDataFormat.CommaSeparatedValue);
             Clipboard.SetText("text", format);
             Assert.Equal("text", Clipboard.GetText(format));
             Assert.True(Clipboard.ContainsText(format));
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [NullAndEmptyStringData]
         public void Clipboard_SetText_NullOrEmptyText_ThrowsArgumentNullException(string text)
         {
             Assert.Throws<ArgumentNullException>("text", () => Clipboard.SetText(text));
@@ -461,7 +467,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [InvalidEnumData<TextDataFormat>]
         public void Clipboard_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.SetText("text", format));

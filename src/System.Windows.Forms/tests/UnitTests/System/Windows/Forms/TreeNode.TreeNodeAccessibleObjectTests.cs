@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static System.Windows.Forms.TreeNode;
 using static Interop;
@@ -49,7 +48,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_DefaultAction_ReturnsExpected_IfNodeIsParent(bool isExpanded)
         {
             using TreeView control = new() { CheckBoxes = false };
@@ -67,7 +66,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_DefaultAction_ReturnsExpected_IfNodesAreCheckBoxes(bool isChecked)
         {
             using TreeView control = new() { CheckBoxes = true };
@@ -80,7 +79,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_DoDefaultAction_ToggleNodeCheckBox_IfNodesAreCheckBoxes(bool isChecked)
         {
             using TreeView control = new() { CheckBoxes = true };
@@ -95,7 +94,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_DoDefaultAction_ExpandOrCollapse_IfNodeIsNotLeaf(bool isExpanded)
         {
             using TreeView control = new();
@@ -150,7 +149,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected(bool isExpanded)
         {
             using TreeView control = new();
@@ -169,7 +168,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected(bool isExpanded)
         {
             using TreeView control = new();
@@ -407,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_ExpandCollapseState_ReturnsExpected(bool isExpanded)
         {
             using TreeView control = new();
@@ -439,7 +438,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_Toggle_WorksExpected(bool isChecked)
         {
             using TreeView control = new() { CheckBoxes = true };
@@ -454,7 +453,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void TreeNodeAccessibleObject_ToggleState_WorksExpected(bool isChecked)
         {
             using TreeView control = new() { CheckBoxes = true };

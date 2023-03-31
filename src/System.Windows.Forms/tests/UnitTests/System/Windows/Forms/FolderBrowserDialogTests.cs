@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -32,7 +31,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FolderBrowserDialog_AddToRecent_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog
@@ -51,7 +50,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FolderBrowserDialog_AutoUpgradeEnabled_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog
@@ -70,7 +69,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void FolderBrowserDialog_Description_Set_GetReturnsExpected(string value)
         {
             using var dialog = new FolderBrowserDialog
@@ -85,7 +84,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FolderBrowserDialog_OkRequiresInteraction_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog
@@ -120,7 +119,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Environment.SpecialFolder))]
+        [InvalidEnumData<Environment.SpecialFolder>]
         public void FolderBrowserDialog_RootFolder_SetInvalid_ThrowsInvalidEnumArgumentException(Environment.SpecialFolder value)
         {
             using var dialog = new FolderBrowserDialog();
@@ -128,7 +127,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void FolderBrowserDialog_InitialDirectory_Set_GetReturnsExpected(string value)
         {
             using var dialog = new FolderBrowserDialog
@@ -143,7 +142,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void FolderBrowserDialog_SelectedPath_Set_GetReturnsExpected(string value)
         {
             using var dialog = new FolderBrowserDialog
@@ -158,7 +157,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FolderBrowserDialog_ShowHiddenFiles_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog
@@ -177,7 +176,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FileDialog_ShowPinnedPlaces_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog
@@ -196,7 +195,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FolderBrowserDialog_ShowNewFolderButton_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog
@@ -215,7 +214,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FolderBrowserDialog_UseDescriptionForTitle_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog

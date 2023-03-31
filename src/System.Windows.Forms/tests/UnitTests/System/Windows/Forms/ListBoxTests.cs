@@ -532,7 +532,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void ListBox_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new ListBox
@@ -584,7 +584,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [InvalidEnumData<ImageLayout>]
         public void ListBox_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new ListBox();
@@ -592,7 +592,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
+        [EnumData<BorderStyle>]
         public void ListBox_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             using var control = new ListBox()
@@ -644,7 +644,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [InvalidEnumData<BorderStyle>]
         public void ListBox_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var control = new ListBox();
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DrawMode))]
+        [InvalidEnumData<DrawMode>]
         public void ListBox_DrawMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(DrawMode value)
         {
             using var control = new ListBox();
@@ -1638,7 +1638,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_IntegralHeight_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [InvalidEnumData<RightToLeft>]
         public void ListBox_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new ListBox();
@@ -2233,7 +2233,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_ScrollAlwaysVisible_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -2293,7 +2293,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [EnumData<SelectionMode>]
         public void ListBox_SelectedIndex_GetEmptyWithHandle_ReturnsMinusOne(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -2306,7 +2306,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [EnumData<SelectionMode>]
         public void ListBox_SelectedIndex_GetNotEmptyWithHandle_ReturnsMinusOne(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -2756,7 +2756,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [EnumData<SelectionMode>]
         public void ListBox_SelectedItem_GetEmptyWithHandle_ReturnsNull(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -2769,7 +2769,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [EnumData<SelectionMode>]
         public void ListBox_SelectedItem_GetNotEmptyWithHandle_ReturnsNull(SelectionMode selectionMode)
         {
             using var control = new ListBox
@@ -3355,7 +3355,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SelectionMode))]
+        [EnumData<SelectionMode>]
         public void ListBox_SelectionMode_SetEmpty_GetReturnsExpected(SelectionMode value)
         {
             using var control = new ListBox
@@ -3900,7 +3900,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
+        [InvalidEnumData<SelectionMode>]
         public void ListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
         {
             using var control = new ListBox();
@@ -3908,7 +3908,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_Sorted_SetWithoutItems_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -3933,7 +3933,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_Sorted_SetWithEmptyItems_GetReturnsExpected(bool value)
         {
             using var control = new ListBox();
@@ -3990,7 +3990,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_Sorted_SetWithoutItemsWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ListBox();
@@ -4030,7 +4030,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_Sorted_SetWithEmptyItemsWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ListBox();
@@ -4113,7 +4113,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListBox_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new ListBox
@@ -4232,7 +4232,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListBox_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new ListBox();
@@ -4434,7 +4434,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_UseCustomTabOffsets_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -4494,7 +4494,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListBox_UseTabStops_Set_GetReturnsExpected(bool value)
         {
             using var control = new ListBox
@@ -5141,7 +5141,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DrawMode))]
+        [EnumData<DrawMode>]
         public void ListBox_GetItemHeight_InvokeEmptyWithoutHandle_ReturnsExpected(DrawMode drawMode)
         {
             using var control = new ListBox
@@ -5490,7 +5490,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListBox_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5547,7 +5547,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListBox_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5573,7 +5573,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListBox_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5599,7 +5599,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListBox_OnGotFocus_InvokeWithHandle_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5717,7 +5717,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListBox_OnSelectedIndexChanged_Invoke_CallsSelectedIndexChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5753,7 +5753,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListBox_OnSelectedIndexChanged_InvokeWithHandle_CallsSelectedIndexChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();
@@ -5858,7 +5858,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListBox_OnSelectedValueChanged_Invoke_CallsSelectedValueChanged(EventArgs eventArgs)
         {
             using var control = new SubListBox();

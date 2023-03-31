@@ -797,7 +797,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListViewItem_Ctor_String(string text, string expectedText)
         {
             var item = new ListViewItem(text);

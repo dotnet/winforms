@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using System.Reflection;
@@ -32,7 +31,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void AccessibleObject_Name_Set_GetReturnsNull(string value)
         {
             var accessibleObject = new AccessibleObject
@@ -47,7 +46,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void AccessibleObject_Value_Set_GetReturnsEmpty(string value)
         {
             var accessibleObject = new AccessibleObject
@@ -408,8 +407,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleNavigation))]
+        [EnumData<AccessibleNavigation>]
+        [InvalidEnumData<AccessibleNavigation>]
         public void AccessibleObject_Navigate_InvokeDefault_ReturnsNull(AccessibleNavigation navdir)
         {
             var accessibleObject = new AccessibleObject();
@@ -530,8 +529,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleSelection))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleSelection))]
+        [EnumData<AccessibleSelection>]
+        [InvalidEnumData<AccessibleSelection>]
         public void AccessibleObject_Navigate_InvokeDefault_Nop(AccessibleSelection flags)
         {
             var accessibleObject = new AccessibleObject();

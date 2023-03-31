@@ -454,7 +454,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListViewSubItem_Name_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
@@ -470,7 +470,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListViewSubItem_Name_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -485,7 +485,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ListViewSubItem_Tag_Set_GetReturnsExpected(string value)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -500,7 +500,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListViewSubItem_Text_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
@@ -516,7 +516,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListViewSubItem_Text_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -579,26 +579,25 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Serialize_Deserialize_TestData))]
         public void ListViewSubItem_Serialize_Deserialize_Success(ListViewItem.ListViewSubItem subItem)
         {
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
+            using var formatterScope = new BinaryFormatterScope(enable: true);
+            using var stream = new MemoryStream();
+            var formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                formatter.Serialize(stream, subItem);
-                stream.Seek(0, SeekOrigin.Begin);
+            formatter.Serialize(stream, subItem);
+            stream.Seek(0, SeekOrigin.Begin);
 
-                ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
+            ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                Assert.Equal(subItem.BackColor, result.BackColor);
-                Assert.Equal(subItem.Font, result.Font);
-                Assert.Equal(subItem.ForeColor, result.ForeColor);
-                Assert.Empty(result.Name);
-                Assert.Null(result.Tag);
-                Assert.Equal(subItem.Text, result.Text);
-            }
+            Assert.Equal(subItem.BackColor, result.BackColor);
+            Assert.Equal(subItem.Font, result.Font);
+            Assert.Equal(subItem.ForeColor, result.ForeColor);
+            Assert.Empty(result.Name);
+            Assert.Null(result.Tag);
+            Assert.Equal(subItem.Text, result.Text);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void ListViewSubItem_ToString_Invoke_ReturnsExpected(string text)
         {
             var subItem = new ListViewItem.ListViewSubItem(null, text);

@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -517,7 +516,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FontDialog_ShowColor_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FontDialog
@@ -710,7 +709,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void FontDialog_HookProc_Invoke_InvalidCommandHWnd(bool showColor)
         {
             using var dialog = new SubFontDialog
@@ -723,7 +722,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void FontDialog_OnApply_Invoke_CallsApply(EventArgs eventArgs)
         {
             using var dialog = new SubFontDialog();

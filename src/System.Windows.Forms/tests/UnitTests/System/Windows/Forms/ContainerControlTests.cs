@@ -221,7 +221,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [EnumData<AutoScaleMode>]
         public void ContainerControl_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
             using var control = new ContainerControl
@@ -269,7 +269,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoScaleMode))]
+        [InvalidEnumData<AutoScaleMode>]
         public void ContainerControl_AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
         {
             using var control = new ContainerControl();
@@ -337,7 +337,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
+        [InvalidEnumData<AutoValidate>]
         public void ContainerControl_AutoValidate_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoValidate value)
         {
             using var control = new ContainerControl();
@@ -548,7 +548,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [EnumData<AutoScaleMode>]
         public void PerformAutoScale_InvokeWithoutChildren_Success(AutoScaleMode autoScaleMode)
         {
             using var control = new SubContainerControl
@@ -559,7 +559,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [EnumData<AutoScaleMode>]
         public void PerformAutoScale_InvokeWithChildren_Success(AutoScaleMode autoScaleMode)
         {
             using var child = new Control();
@@ -622,7 +622,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ContainerControl_OnAutoValidateChanged_Invoke_CallsAutoValidateChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -668,7 +668,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ContainerControl_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -692,7 +692,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ContainerControl_OnFontChanged_InvokeWithAutoScaleModeFont_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl
@@ -745,7 +745,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ContainerControl_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -984,7 +984,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ValidationConstraints))]
+        [EnumData<ValidationConstraints>]
         public void ContainerControl_ValidateChildren_InvokeValidationConstraintsWithoutChildren_ReturnsTrue(ValidationConstraints validationConstraints)
         {
             using var control = new ContainerControl();

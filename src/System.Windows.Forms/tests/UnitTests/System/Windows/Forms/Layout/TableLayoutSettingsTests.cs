@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
@@ -112,7 +111,7 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
+        [InvalidEnumData<TableLayoutPanelGrowStyle>]
         public void TableLayoutSettings_GrowStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             using var control = new TableLayoutPanel();
@@ -1771,6 +1770,7 @@ namespace System.Windows.Forms.Layout.Tests
         [WinFormsFact]
         public void TableLayoutSettings_Serialize_Deserialize_Success()
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             using var control = new TableLayoutPanel();
             TableLayoutSettings settings = control.LayoutSettings;
             var columnStyle = new ColumnStyle(SizeType.Percent, 1);
@@ -1810,6 +1810,7 @@ namespace System.Windows.Forms.Layout.Tests
         [InlineData(typeof(EmptyStringConverter))]
         public void TableLayoutSettings_Serialize_InvalidStringConverter_DeserializeThrowsSerializationException(Type type)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             using var control = new TableLayoutPanel();
             TableLayoutSettings settings = control.LayoutSettings;
             TypeDescriptor.AddAttributes(settings, new Attribute[] { new TypeConverterAttribute(type) });
@@ -1830,6 +1831,7 @@ namespace System.Windows.Forms.Layout.Tests
         [InlineData(typeof(NonTableLayoutSettingsConverter))]
         public void TableLayoutSettings_Deserialize_InvalidConverterResult_Success(Type type)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: true);
             using var control = new TableLayoutPanel();
             TableLayoutSettings settings = control.LayoutSettings;
             TypeDescriptor.AddAttributes(settings, new Attribute[] { new TypeConverterAttribute(type) });

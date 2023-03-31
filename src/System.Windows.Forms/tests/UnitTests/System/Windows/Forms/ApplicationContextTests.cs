@@ -4,7 +4,6 @@
 
 using Moq;
 using Moq.Protected;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -157,7 +156,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Tag_Set_GetReturnsExpected(string value)
         {
             using var context = new ApplicationContext
@@ -258,7 +257,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Dispose_InvokeDisposingNoForm_Nop(bool disposing)
         {
             using var context = new SubApplicationContext();

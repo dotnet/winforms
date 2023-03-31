@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Specialized;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -29,7 +28,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerActionItem_AllowAssociate_Set_GetReturnsExpected(bool value)
         {
             var item = new SubDesignerActionItem("displayName", "category", "description")
@@ -44,7 +43,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerActionItem_ShowInSourceView_Set_GetReturnsExpected(bool value)
         {
             var item = new SubDesignerActionItem("displayName", "category", "description")

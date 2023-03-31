@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void MdiClient_BackgroundImageLayout_GetWithParent_GetReturnsExpected(ImageLayout parentBackgroundImageLayout)
         {
             using var image = new Bitmap(10, 10);
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void MdiClient_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new MdiClient
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RightToLeft))]
+        [EnumData<RightToLeft>]
         public void MdiClient_Handle_Get_Success(RightToLeft rightToLeft)
         {
             using var control = new MdiClient
@@ -1193,8 +1193,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MdiLayout))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MdiLayout))]
+        [EnumData<MdiLayout>]
+        [InvalidEnumData<MdiLayout>]
         public void MdiClient_LayoutMdi_InvokeWithoutHandle_Nop(MdiLayout value)
         {
             using var control = new MdiClient();
@@ -1203,8 +1203,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(MdiLayout))]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MdiLayout))]
+        [EnumData<MdiLayout>]
+        [InvalidEnumData<MdiLayout>]
         public void MdiClient_LayoutMdi_InvokeWithHandle_Success(MdiLayout value)
         {
             using var control = new MdiClient();

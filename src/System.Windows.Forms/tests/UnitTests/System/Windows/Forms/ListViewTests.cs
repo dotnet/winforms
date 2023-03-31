@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
@@ -177,7 +176,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ItemActivation))]
+        [EnumData<ItemActivation>]
         public void ListView_Activation_Set_GetReturnsExpected(ItemActivation value)
         {
             using var listView = new ListView
@@ -242,7 +241,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ItemActivation))]
+        [InvalidEnumData<ItemActivation>]
         public void ListView_Activation_SetInvalidValue_ThrowsInvalidEnumArgumentException(ItemActivation value)
         {
             using var listView = new ListView();
@@ -250,7 +249,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ItemActivation))]
+        [InvalidEnumData<ItemActivation>]
         public void ListView_Activation_SetHotTrackingInvalidValue_ThrowsInvalidEnumArgumentException(ItemActivation value)
         {
             using var listView = new ListView
@@ -274,7 +273,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ListViewAlignment))]
+        [EnumData<ListViewAlignment>]
         public void ListView_Alignment_Set_GetReturnsExpected(ListViewAlignment value)
         {
             using var listView = new ListView
@@ -323,7 +322,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ListViewAlignment))]
+        [InvalidEnumData<ListViewAlignment>]
         public void ListView_Alignment_SetInvalidValue_ThrowsInvalidEnumArgumentException(ListViewAlignment value)
         {
             using var listView = new ListView();
@@ -331,7 +330,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_AllowColumnReorder_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -391,7 +390,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_AutoArrange_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -554,7 +553,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void ListView_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubListView
@@ -608,7 +607,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [InvalidEnumData<ImageLayout>]
         public void ListView_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new ListView();
@@ -616,7 +615,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_BackgroundImageTiled_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -638,7 +637,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_BackgroundImageTiled_SetWithBackgroundImage_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -661,7 +660,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_BackgroundImageTiled_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var listView = new ListView();
@@ -698,7 +697,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_BackgroundImageTiled_SetWithBackgroundImageWithHandle_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -738,7 +737,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
+        [EnumData<BorderStyle>]
         public void ListView_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             using var listView = new ListView
@@ -786,7 +785,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [InvalidEnumData<BorderStyle>]
         public void ListView_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var listView = new ListView();
@@ -867,7 +866,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_CheckBoxes_SetWithCheckedItems_Success(bool value)
         {
             var item1 = new ListViewItem
@@ -1040,7 +1039,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_CheckBoxes_SetWithCheckedItemsWithHandle_Success(bool value)
         {
             var item1 = new ListViewItem
@@ -1076,7 +1075,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_CheckBoxes_SetTile_ThrowsNotSupportedException(bool useCompatibleStateImageBehavior)
         {
             using var listView = new ListView
@@ -1142,7 +1141,7 @@ namespace System.Windows.Forms.Tests
 #endif
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_DoubleBuffered_Get_ReturnsExpected(bool value)
         {
             using var control = new SubListView();
@@ -1151,7 +1150,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubListView
@@ -1416,7 +1415,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_FullRowSelect_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -1476,7 +1475,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_GridLines_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -1772,7 +1771,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_GroupImageList_Dispose_DetachesFromListView(bool autoArrange)
         {
             using var imageList1 = new ImageList();
@@ -1862,7 +1861,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_Handle_GetWithoutGroups_Success(bool showGroups)
         {
             using var listView = new ListView
@@ -2036,7 +2035,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColumnHeaderStyle))]
+        [EnumData<ColumnHeaderStyle>]
         public void ListView_HeaderStyle_Set_GetReturnsExpected(ColumnHeaderStyle value)
         {
             using var listView = new ListView
@@ -2118,7 +2117,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ColumnHeaderStyle))]
+        [InvalidEnumData<ColumnHeaderStyle>]
         public void ListView_HeaderStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ColumnHeaderStyle value)
         {
             using var listView = new ListView();
@@ -2126,7 +2125,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_HideSelection_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2186,7 +2185,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_HotTracking_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2273,7 +2272,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_HoverSelection_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2361,7 +2360,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_LabelEdit_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2421,7 +2420,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_LabelWrap_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2716,7 +2715,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_LargeImageList_Dispose_DetachesFromListView(bool autoArrange)
         {
             using var imageList1 = new ImageList();
@@ -2782,7 +2781,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_MultiSelect_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2842,7 +2841,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_OwnerDraw_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2902,7 +2901,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_Scrollable_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2962,7 +2961,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_ShowGroups_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -2984,7 +2983,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_ShowGroups_VirtualMode_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -3007,7 +3006,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_ShowGroups_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var listView = new ListView();
@@ -3044,7 +3043,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_ShowGroups_VirtualMode_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -3085,7 +3084,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_ShowItemToolTips_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -3432,7 +3431,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_SmallImageList_Dispose_DetachesFromListView(bool autoArrange)
         {
             using var imageList1 = new ImageList();
@@ -4023,7 +4022,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_UseCompatibleStateImageBehavior_Set_GetReturnsExpected(bool value)
         {
             using var listView = new ListView
@@ -4045,7 +4044,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListView_UseCompatibleStateImageBehavior_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var listView = new ListView();

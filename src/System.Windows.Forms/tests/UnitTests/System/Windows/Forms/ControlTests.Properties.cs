@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Control_AccessibleDefaultActionDescription_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Control_AccessibleDescription_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Control_AccessibleName_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleRole))]
+        [EnumData<AccessibleRole>]
         public void Control_AccessibleRole_Set_GetReturnsExpected(AccessibleRole value)
         {
             using var control = new Control
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleRole))]
+        [InvalidEnumData<AccessibleRole>]
         public void Control_AccessibleRole_SetInvalidValue_ThrowsInvalidEnumArgumentException(AccessibleRole value)
         {
             using var control = new Control();
@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_AllowDrop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_AllowDrop_SetWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -902,7 +902,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_AutoSize_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -1970,7 +1970,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void Control_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubControl
@@ -2117,7 +2117,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [InvalidEnumData<ImageLayout>]
         public void Control_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new Control();
@@ -3113,7 +3113,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_Capture_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -3135,7 +3135,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_Capture_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -3172,7 +3172,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_CausesValidation_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -3194,7 +3194,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_CausesValidation_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -4109,7 +4109,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        [EnumData<DockStyle>]
         public void Control_Dock_Set_GetReturnsExpected(DockStyle value)
         {
             using var control = new Control();
@@ -4131,7 +4131,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        [EnumData<DockStyle>]
         public void Control_Dock_SetWithOldValue_GetReturnsExpected(DockStyle value)
         {
             using var control = new Control
@@ -4332,7 +4332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        [EnumData<DockStyle>]
         public void Control_Dock_SetWithHandle_GetReturnsExpected(DockStyle value)
         {
             using var control = new Control();
@@ -4405,7 +4405,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
+        [InvalidEnumData<DockStyle>]
         public void Control_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
         {
             using var control = new Control();
@@ -4413,7 +4413,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_DoubleBuffered_Get_ReturnsExpected(bool value)
         {
             using var control = new SubControl();
@@ -4422,7 +4422,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubControl
@@ -4447,7 +4447,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubControl();
@@ -4487,7 +4487,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -6427,7 +6427,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [InvalidEnumData<ImeMode>]
         public void Control_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new Control();
@@ -6534,7 +6534,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [InvalidEnumData<ImeMode>]
         public void Control_ImeModeBase_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new SubControl();
@@ -6568,7 +6568,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_IsAccessible_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -9273,7 +9273,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Control_Name_GetWithSite_ReturnsExpected(string siteName, string expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -9299,7 +9299,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Control_Name_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control
@@ -9316,7 +9316,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Control_Name_SetWithCustomOldValue_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control
@@ -10009,7 +10009,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_ResizeRedraw_Get_ReturnsExpected(bool value)
         {
             var control = new SubControl();
@@ -10018,7 +10018,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_ResizeRedraw_Set_GetReturnsExpected(bool value)
         {
             var control = new SubControl
@@ -10418,7 +10418,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [InvalidEnumData<RightToLeft>]
         public void Control_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new Control();
@@ -10519,7 +10519,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_ShowFocusCues_GetWithSiteWithHandle_ReturnsExpected(bool designMode)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -10578,7 +10578,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_ShowKeyboardCues_GetWithSiteWithHandle_ReturnsExpected(bool designMode)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -11849,7 +11849,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -11871,7 +11871,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -11946,7 +11946,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Control_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control
@@ -11963,7 +11963,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void Control_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control();
@@ -12586,7 +12586,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_UseWaitCursor_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -12608,7 +12608,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_UseWaitCursor_SetWithChildren_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -12639,7 +12639,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_UseWaitCursor_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -12698,7 +12698,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_Visible_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -12720,7 +12720,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_Visible_SetWithParent_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -12794,7 +12794,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void Control_Visible_SetWithParentWithHandle_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -13758,7 +13758,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Control_WindowText_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -13773,7 +13773,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [StringWithNullData]
         public void Control_WindowText_SetWithHandle_GetReturnsExpected(string value)
         {
             using var control = new Control();

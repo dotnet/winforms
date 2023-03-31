@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using Moq;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -831,7 +830,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListControl_DataSource_SetOverridenSupportInitializeNotification_InitializeValue_Success(bool isInitialized)
         {
             var originalValue = new SupportInitializeNotificationList();
@@ -1069,7 +1068,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_DisplayMember_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubListControl
@@ -1090,7 +1089,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_DataMember_SetWithDisplayMember_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubListControl
@@ -1113,7 +1112,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void ListControl_DisplayMember_SetWithDataSource_GetReturnsExpected(string value)
         {
             var dataSource = new List<int>();
@@ -1137,7 +1136,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_DisplayMember_SetWithBindingContext_GetReturnsExpected(string value, string expected)
         {
             var context = new BindingContext();
@@ -1161,7 +1160,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         public void ListControl_DisplayMember_SetWithBindingContextWithDataSource_GetReturnsExpected(string value)
         {
             var context = new BindingContext();
@@ -1216,7 +1215,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
+        [StringData]
         [InlineData("ListValue")]
         public void ListControl_DisplayMember_SetWithBindingContextWithDataSourceCantCreate_GetReturnsExpected(string value)
         {
@@ -1463,7 +1462,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_FormatString_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubListControl
@@ -1480,7 +1479,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_FormatString_SetWithCustomOldValue_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubListControl
@@ -1577,7 +1576,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListControl_FormattingEnabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubListControl
@@ -1599,7 +1598,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ListControl_FormattingEnabled_SetWithFormattingEnabled_GetReturnsExpected(bool value)
         {
             using var control = new SubListControl
@@ -1681,7 +1680,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_ValueMember_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubListControl
@@ -1704,7 +1703,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_ValueMember_SetWithDisplayMember_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubListControl
@@ -1729,7 +1728,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ListControl_ValueMember_SetWithBindingContext_GetReturnsExpected(string value, string expected)
         {
             var context = new BindingContext();
@@ -2599,7 +2598,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnBindingContextChanged_Invoke_CallsBindingContextChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2623,7 +2622,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnDataSourceChanged_Invoke_CallsDataSourceChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2647,7 +2646,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnDisplayMemberChanged_Invoke_CallsDisplayMemberChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2702,7 +2701,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnFormatInfoChanged_Invoke_CallsFormatInfoChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2726,7 +2725,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnFormatStringChanged_Invoke_CallsFormatStringChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2750,7 +2749,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnFormattingEnabledChanged_Invoke_CallsFormattingEnabledChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2774,7 +2773,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnSelectedIndexChanged_Invoke_CallsSelectedValueChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2798,7 +2797,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnSelectedValueChanged_Invoke_CallsSelectedValueChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();
@@ -2822,7 +2821,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ListControl_OnValueMemberChanged_Invoke_CallsValueMemberChanged(EventArgs eventArgs)
         {
             using var control = new SubListControl();

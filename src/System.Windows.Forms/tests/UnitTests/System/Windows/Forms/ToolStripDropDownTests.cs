@@ -248,7 +248,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_AllowItemReorder_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown
@@ -298,7 +298,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_AllowItemReorder_SetWithHandleSTA_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown();
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_AllowTransparency_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_AllowTransparency_SetNotTopLevel_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown
@@ -620,7 +620,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_AutoClose_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown
@@ -642,7 +642,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_AutoClose_SetNotTopMost_GetReturnsExpected(bool value)
         {
             using var control = new NotTopMostToolStripDropDown
@@ -852,7 +852,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [EnumData<ImageLayout>]
         public void ToolStripDropDown_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubToolStripDropDown
@@ -971,7 +971,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_CanOverflow_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown();
@@ -1465,7 +1465,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripDropDownDirection))]
+        [InvalidEnumData<ToolStripDropDownDirection>]
         public void ToolStripDropDown_DefaultDropDownDirection_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripDropDownDirection value)
         {
             using var control = new ToolStripDropDown();
@@ -1802,7 +1802,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripGripStyle))]
+        [InvalidEnumData<ToolStripGripStyle>]
         public void ToolStripDropDown_GripStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripGripStyle value)
         {
             using var control = new ToolStripDropDown();
@@ -1909,7 +1909,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [InvalidEnumData<ImeMode>]
         public void ToolStripDropDown_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new ToolStripDropDown();
@@ -2439,7 +2439,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [InvalidEnumData<RightToLeft>]
         public void ToolStripDropDown_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new ToolStripDropDown();
@@ -2447,7 +2447,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_Stretch_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown
@@ -2469,7 +2469,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_Stretch_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown();
@@ -2570,7 +2570,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown
@@ -2592,7 +2592,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripDropDown();
@@ -2667,7 +2667,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ToolStripDropDown_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new ToolStripDropDown
@@ -2684,7 +2684,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [NormalizedStringData]
         public void ToolStripDropDown_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new ToolStripDropDown();
@@ -3026,7 +3026,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripLayoutStyle))]
+        [InvalidEnumData<ToolStripLayoutStyle>]
         [InlineData(ToolStripLayoutStyle.StackWithOverflow)]
         [InlineData(ToolStripLayoutStyle.HorizontalStackWithOverflow)]
         [InlineData(ToolStripLayoutStyle.VerticalStackWithOverflow)]
@@ -3834,7 +3834,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ToolStripDropDown_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -3978,7 +3978,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ToolStripDropDown_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -4004,7 +4004,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ToolStripDropDown_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -4572,7 +4572,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ToolStripDropDown_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -4769,7 +4769,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ToolStripDropDown_OnStyleChanged_Invoke_CallsStyleChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -4793,7 +4793,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [NewAndDefaultData<EventArgs>]
         public void ToolStripDropDown_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -4925,7 +4925,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void ToolStripDropDown_WorkingAreaConstrained_AssignmentTest(bool value)
         {
             using var control = new ToolStripDropDown();

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -25,7 +24,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerOptions_EnableInSituEditing_Set_GetReturnsExpected(bool value)
         {
             var options = new DesignerOptions
@@ -70,7 +69,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerOptions_ObjectBoundSmartTagAutoShow_Set_GetReturnsExpected(bool value)
         {
             var options = new DesignerOptions
@@ -89,7 +88,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerOptions_ShowGrid_Set_GetReturnsExpected(bool value)
         {
             var options = new DesignerOptions
@@ -108,7 +107,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerOptions_SnapToGrid_Set_GetReturnsExpected(bool value)
         {
             var options = new DesignerOptions
@@ -127,7 +126,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerOptions_UseOptimizedCodeGeneration_Set_GetReturnsExpected(bool value)
         {
             var options = new DesignerOptions
@@ -146,7 +145,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerOptions_UseSmartTags_Set_GetReturnsExpected(bool value)
         {
             var options = new DesignerOptions
@@ -165,7 +164,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        [BoolData]
         public void DesignerOptions_UseSnapLines_Set_GetReturnsExpected(bool value)
         {
             var options = new DesignerOptions
