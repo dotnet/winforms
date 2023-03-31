@@ -2,13 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
+using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.UITests
         private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
-        private static string? s_serverManagerPath;
+       // private static string? s_serverManagerPath;
 
         private static bool s_started;
 
@@ -48,8 +48,13 @@ namespace System.Windows.Forms.UITests
                 TestOutputHelper.WriteLine("Taking screenshot at the start");
                 s_started = true;
                 TrySaveScreenshot("InitialScreenShot.png");
+                // CloseServerManagerWindow();
 
-                CloseServerManagerWindow();
+                //Minimize all windows.
+                JoinableTaskFactory.Run(async () =>
+                {
+                    await InputSimulator.SendAsyncToDesktop(inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_M));
+                });
                 TrySaveScreenshot("AfterServerManagerClosedScreenShot.png");
             }
 
@@ -63,6 +68,7 @@ namespace System.Windows.Forms.UITests
             }
         }
 
+/*
         private void CloseServerManagerWindow()
         {
             try
@@ -97,7 +103,7 @@ namespace System.Windows.Forms.UITests
 
             TestOutputHelper.WriteLine($"Server Manager Window not found");
         }
-
+*/
         protected ITestOutputHelper TestOutputHelper { get; }
 
         protected JoinableTaskContext JoinableTaskContext { get; private set; } = null!;

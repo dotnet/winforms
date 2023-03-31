@@ -82,6 +82,17 @@ namespace System.Windows.Forms.UITests
             await _waitForIdleAsync();
         }
 
+        internal async Task SendAsyncToDesktop(Action<InputSimulator> actions)
+        {
+        if (actions is null)
+            {
+                throw new ArgumentNullException(nameof(actions));
+            }
+
+            await Task.Run(() => actions(new InputSimulator()));
+            await _waitForIdleAsync();
+        }
+
         private static HWND GetForegroundWindow()
         {
             var startTime = DateTime.Now;
