@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
+using WindowsInput;
 using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
@@ -38,7 +39,7 @@ namespace System.Windows.Forms.UITests
             TestOutputHelper = testOutputHelper;
 
             _testName = GetTestName();
-            _logPath ??= Path.GetFullPath(Path.Combine(Environment.GetEnvironmentVariable("XUNIT_LOGS")!, "Screenshots"));
+            _logPath ??= Path.GetFullPath(Path.Combine(/*Environment.GetEnvironmentVariable("XUNIT_LOGS")!*/ @"c:\temp", "Screenshots"));
 
             Application.EnableVisualStyles();
 
@@ -46,22 +47,6 @@ namespace System.Windows.Forms.UITests
             bool disabled = false;
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
-
-            // Test to capture screenshot at the start
-            if (!s_started)
-            {
-                TestOutputHelper.WriteLine("Taking screenshot at the start");
-                s_started = true;
-                TrySaveScreenshot("InitialScreenShot.png");
-                // CloseServerManagerWindow();
-
-                //Minimize all windows.
-                JoinableTaskFactory.Run(async () =>
-                {
-                    await InputSimulator.SendAsyncToDesktop(inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_M));
-                });
-                TrySaveScreenshot("AfterServerManagerClosedScreenShot.png");
-            }
 
             string GetTestName()
             {
@@ -117,7 +102,7 @@ namespace System.Windows.Forms.UITests
 
         protected SendInput InputSimulator => new(WaitForIdleAsync);
 
-        public virtual Task InitializeAsync()
+        public virtual async Task InitializeAsync()
         {
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
@@ -131,7 +116,21 @@ namespace System.Windows.Forms.UITests
 
             _joinableTaskCollection = JoinableTaskContext.CreateCollection();
             JoinableTaskFactory = JoinableTaskContext.CreateFactory(_joinableTaskCollection);
-            return Task.CompletedTask;
+
+            // Test to capture screenshot at the start
+            if (!s_started)
+            {
+                TestOutputHelper.WriteLine("Taking screenshot at the start");
+                s_started = true;
+                TrySaveScreenshot("InitialScreenShot.png");
+                // CloseServerManagerWindow();
+                //Minimize all windows.
+                await JoinableTaskFactory.RunAsync(async () =>
+                 {
+                     await InputSimulator.SendAsyncToDesktop(inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_M));
+                 });
+                TrySaveScreenshot("AfterServerManagerClosedScreenShot.png");
+            }
         }
 
         public virtual async Task DisposeAsync()
