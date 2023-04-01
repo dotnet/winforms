@@ -32,6 +32,16 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridViewCellEventArgs(1, 2) };
         }
 
+        public static IEnumerable<object[]> DataGridViewElement_Subclasses_SuppressFinalizeCall_TestData()
+        {
+            foreach (var type in typeof(DataGridViewElement).Assembly.GetTypes().Where(type =>
+                type == typeof(DataGridViewBand) || type == typeof(DataGridViewCell) ||
+                type.IsSubclassOf(typeof(DataGridViewBand)) || type.IsSubclassOf(typeof(DataGridViewCell))))
+            {
+                yield return new object[] { type };
+            }
+        }
+
         [WinFormsTheory]
         [MemberData(nameof(DataGridViewCellEventArgs_TestData))]
         public void DataGridViewElement_RaiseCellClick_Invoke_Nop(DataGridViewCellEventArgs eventArgs)
@@ -351,18 +361,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [WinFormsFact]
-        public void DataGridViewElement_Subclasses_SuppressFinalizeCall()
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewElement_Subclasses_SuppressFinalizeCall_TestData))]
+        public void DataGridViewElement_Subclasses_SuppressFinalizeCall(Type type)
         {
-            TestAccessor<DataGridViewElement> testAccessor = new(null);
-            var typesWithEmptyFinalizer = testAccessor.Dynamic.s_typesWithEmptyFinalizer as HashSet<Type>;
-
-            foreach (var type in typeof(DataGridViewElement).Assembly.GetTypes().Where(type => type == typeof(DataGridViewBand) || type == typeof(DataGridViewCell) ||
-                type.IsSubclassOf(typeof(DataGridViewBand)) || type.IsSubclassOf(typeof(DataGridViewCell))))
-            {
-                Assert.True(typesWithEmptyFinalizer.Contains(type), $"Type {type} is not present in the DataGridViewElement.s_typesWithEmptyFinalizer collection. " +
-                    $"Consider adding it or add exclusion to this test (if a new class really needs a finalizer).");
-            }
+            Assert.True(type == typeof(DataGridViewBand) || type == typeof(DataGridViewColumn) ||
+                type == typeof(DataGridViewButtonColumn) || type == typeof(DataGridViewCheckBoxColumn) ||
+                type == typeof(DataGridViewComboBoxColumn) || type == typeof(DataGridViewImageColumn) ||
+                type == typeof(DataGridViewLinkColumn) || type == typeof(DataGridViewTextBoxColumn) ||
+                type == typeof(DataGridViewRow) || type == typeof(DataGridViewCell) || type == typeof(DataGridViewButtonCell) ||
+                type == typeof(DataGridViewCheckBoxCell) || type == typeof(DataGridViewComboBoxCell) ||
+                type == typeof(DataGridViewHeaderCell) || type == typeof(DataGridViewColumnHeaderCell) ||
+                type == typeof(DataGridViewTopLeftHeaderCell) || type == typeof(DataGridViewRowHeaderCell) ||
+                type == typeof(DataGridViewImageCell) || type == typeof(DataGridViewLinkCell) || type == typeof(DataGridViewTextBoxCell),
+                $"Type {type} is not one of known {nameof(DataGridViewElement)} subclauses with empty finalizers. " +
+                $"Consider adding it here and to the {nameof(DataGridViewElement)}() constructor. " +
+                $"Or add exclusion to this test (if a new class really needs a finalizer).");
         }
 
         private class SubDataGridViewCell : DataGridViewCell
