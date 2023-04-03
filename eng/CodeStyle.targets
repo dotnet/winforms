@@ -6,7 +6,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsShipping)' == 'false'">
-    <EditorConfigFiles Remove="$(MSBuildThisFileDirectory)CodeAnalysis.src.globalconfig" />
+    <!-- Include CodeAnalysis.test.globalconfig to override (relax) some rules from the primary configuration. -->
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.test.globalconfig" />
   </ItemGroup>
 
