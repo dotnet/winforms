@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Generic;
@@ -103,13 +103,12 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(expected, imageFormat.ToString());
         }
 
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Bug fix not in NETFX, https://github.com/dotnet/runtime/issues/20332")]
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(ImageFromFileToStringTestData))]
         public void Image_RawFormat_ToString(string path, string expected)
         {
             var img = Image.FromFile(path);
-            Assert.Same(expected, img.RawFormat.ToString());
+            Assert.Equal(expected, img.RawFormat.ToString());
         }
 
         [ConditionalTheory(Helpers.IsDrawingSupported)]

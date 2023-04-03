@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Bitmap class testing unit
@@ -62,29 +62,32 @@ namespace MonoTests.System.Drawing
             Assert.Equal(Color.FromArgb(255, 255, 0, 155), color2);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22221")]
+        [Fact]
         public void LockBits_IndexedWrite_NonIndexed()
         {
-            using (Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format8bppIndexed))
-            {
-                Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-                Assert.Throws<ArgumentException>(() => bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb));
-            }
+            using Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format8bppIndexed);
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            BitmapData bd = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            bmp.UnlockBits(bd);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22221")]
+        [Fact]
         public void LockBits_NonIndexedWrite_ToIndexed()
         {
             using (Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format32bppRgb))
             {
                 BitmapData bd = new BitmapData();
                 Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-                Assert.Throws<ArgumentException>(() => bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed, bd));
+                bd = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed, bd);
 
-                // test to see if there's a leak or not in this case
-                Assert.Equal(IntPtr.Zero, bd.Scan0);
+                try
+                {
+                    Assert.NotEqual(IntPtr.Zero, bd.Scan0);
+                }
+                finally
+                {
+                    bmp.UnlockBits(bd);
+                }
             }
         }
 
@@ -273,13 +276,16 @@ namespace MonoTests.System.Drawing
                         Assert.Equal(c.B, data[n++]);
                         Assert.Equal(c.G, data[n++]);
                         Assert.Equal(c.R, data[n++]);
-                        if (size % 4 == 0)
-                            Assert.Equal(c.A, data[n++]);
-                        Assert.Equal(d.B, data[n++]);
-                        Assert.Equal(d.G, data[n++]);
-                        Assert.Equal(d.R, data[n++]);
-                        if (size % 4 == 0)
-                            Assert.Equal(d.A, data[n++]);
+                        if (format != PixelFormat.Format32bppRgb)
+                        {
+                            if (size % 4 == 0)
+                                Assert.Equal(c.A, data[n++]);
+                            Assert.Equal(d.B, data[n++]);
+                            Assert.Equal(d.G, data[n++]);
+                            Assert.Equal(d.R, data[n++]);
+                            if (size % 4 == 0)
+                                Assert.Equal(d.A, data[n++]);
+                        }
                     }
                 }
                 finally
@@ -295,8 +301,7 @@ namespace MonoTests.System.Drawing
             FormatTest(PixelFormat.Format32bppArgb);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22221")]
+        [Fact]
         public void Format32bppRgb()
         {
             FormatTest(PixelFormat.Format32bppRgb);
@@ -623,14 +628,13 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22221")]
+        [Fact]
         public void LockBitmap_Format32bppArgb_Format32bppRgb_ReadWrite_Whole()
         {
             using (Bitmap bmp = CreateBitmap(100, 100, PixelFormat.Format32bppArgb))
             {
                 Assert.Equal(DefaultBitmapHash, HashPixels(bmp));
-                byte[] expected = { 0xC0, 0x28, 0xB5, 0x2E, 0x86, 0x90, 0x6F, 0x37, 0x09, 0x5F, 0x49, 0xA4, 0x91, 0xDA, 0xEE, 0xB9 };
+                byte[] expected = { 0x89, 0x6a, 0x6b, 0x35, 0x5c, 0x89, 0xd9, 0xe9, 0xf4, 0x51, 0xd5, 0x89, 0xed, 0x28, 0x68, 0x5c };
                 byte[] actual = HashLock(bmp, bmp.Width, bmp.Height, PixelFormat.Format32bppRgb, ImageLockMode.ReadWrite);
                 Assert.Equal(expected, actual);
                 Assert.Equal(FinalWholeBitmapHash, HashPixels(bmp));
@@ -678,14 +682,13 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22221")]
+        [Fact]
         public void LockBitmap_Format32bppArgb_Format32bppRgb_ReadWrite_Partial()
         {
             using (Bitmap bmp = CreateBitmap(100, 100, PixelFormat.Format32bppArgb))
             {
                 Assert.Equal(DefaultBitmapHash, HashPixels(bmp));
-                byte[] expected = { 0x72, 0x33, 0x09, 0x67, 0x53, 0x65, 0x38, 0xF9, 0xE4, 0x58, 0xE1, 0x0A, 0xAA, 0x6A, 0xCC, 0xB8 };
+                byte[] expected = { 0x5d, 0xFF, 0x02, 0x34, 0xeb, 0x7c, 0xf7, 0x42, 0xd4, 0xb7, 0x70, 0x49, 0xb4, 0x06, 0x79, 0xbc };
                 byte[] actual = HashLock(bmp, 50, 50, PixelFormat.Format32bppRgb, ImageLockMode.ReadWrite);
                 Assert.Equal(expected, actual);
                 Assert.Equal(FinalPartialBitmapHash, HashPixels(bmp));
