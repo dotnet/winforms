@@ -6,6 +6,7 @@
     <NoWarn>$(NoWarn);NU1701</NoWarn>
     <RootNamespace>System.Windows.Forms.UITests</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>

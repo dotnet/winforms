@@ -43,17 +43,24 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
         }
 
-        [Fact]
-        public void ExceptionCollection_Serialize_ThrowsSerializationException()
+        [Theory]
+        [BoolData]
+        public void ExceptionCollection_Serialize_ThrowsSerializationException(bool formatterEnabled)
         {
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                var collection = new ExceptionCollection(new ArrayList());
+            using var formatterScope = new BinaryFormatterScope(enable: formatterEnabled);
+            using var stream = new MemoryStream();
+            var formatter = new BinaryFormatter();
+            var collection = new ExceptionCollection(new ArrayList());
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+            if (formatterEnabled)
+            {
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
+            else
+            {
+                Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, collection));
+            }
+#pragma warning restore SYSLIB0011
         }
 
         [Fact]
