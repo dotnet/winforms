@@ -23,7 +23,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { 1f, -1f };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Float_Float_TestData))]
         public void Ctor_Float_Float(float width, float height)
         {
@@ -44,7 +44,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Float_Float_Bool_TestData))]
         public void Ctor_Float_Float_Bool(float width, float height, bool filled)
         {
@@ -68,7 +68,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { float.NaN };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Properties_TestData))]
         public void Width_Set_GetReturnsExpected(float width)
         {
@@ -79,7 +79,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Properties_TestData))]
         public void Height_Set_GetReturnsExpected(float height)
         {
@@ -90,7 +90,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Properties_TestData))]
         public void MiddleInset_Set_GetReturnsExpected(float middleInset)
         {
@@ -101,7 +101,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public void Filled_Set_GetReturnsExpected(bool filled)
@@ -113,7 +113,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_Success()
         {
             using (AdjustableArrowCap arrowCap = new AdjustableArrowCap(1, 1))
@@ -127,7 +127,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void BaseCap_ReturnsTriangle()
         {
             using (AdjustableArrowCap arrowCap = new AdjustableArrowCap(1, 1))

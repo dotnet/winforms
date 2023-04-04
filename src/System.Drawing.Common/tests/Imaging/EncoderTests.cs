@@ -8,7 +8,7 @@ namespace System.Drawing.Imaging.Tests
 {
     public class EncoderTests
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Guid()
         {
             Guid guid = Guid.NewGuid();
@@ -33,7 +33,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EncoderTestData))]
         public void DefinedEncoders_ReturnsExpected(Guid defined, Guid expected)
         {

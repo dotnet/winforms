@@ -160,7 +160,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(GIF_CSID)]
         [InlineData(EMF_CSID)]
         [InlineData(BMP_DIB_RLE_CSID)]
@@ -174,7 +174,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.NotNull(GetDecoder(csid));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(GIF_CSID)]
         [InlineData(BMP_DIB_RLE_CSID)]
         [InlineData(JPG_JPEG_JPE_JFIF_CSID)]
@@ -185,19 +185,19 @@ namespace System.Drawing.Imaging.Tests
             Assert.NotNull(GetEncoder(csid));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void CountEncoders_ReturnsExcpected()
         {
             Assert.Equal(5, encoders.Count);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void CountDecoders_ReturnsExcpected()
         {
             Assert.Equal(8, decoders.Count);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(CodecInfoTestData))]
         public void CheckDecoderAndEncoder_ReturnsExpecetd(string clsid, ImageFormat format, string codecName, string dllName,
             string fileNameExtension, ImageCodecFlags flags, string formatDescription,
@@ -206,7 +206,7 @@ namespace System.Drawing.Imaging.Tests
             CheckDecoderAndEncoder(clsid, format, codecName, dllName, fileNameExtension, flags, formatDescription, mimeType, version, signatureLength, mask, pattern, pattern2);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(WMF_CSID)]
         [InlineData(EMF_CSID)]
         [InlineData(ICO_CSID)]

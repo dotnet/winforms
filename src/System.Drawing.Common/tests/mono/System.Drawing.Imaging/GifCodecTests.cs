@@ -61,13 +61,13 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap8bitsFeatures_Gif89()
         {
             Bitmap8bitsFeatures(Helpers.GetTestBitmapPath("nature24bits.gif"));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap8bitsFeatures_Gif87()
         {
             Bitmap8bitsFeatures(Helpers.GetTestBitmapPath("nature24bits87.gif"));
@@ -97,13 +97,13 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap8bitsPixels_Gif89()
         {
             Bitmap8bitsPixels(Helpers.GetTestBitmapPath("nature24bits.gif"));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap8bitsPixels_Gif87()
         {
             Bitmap8bitsPixels(Helpers.GetTestBitmapPath("nature24bits87.gif"));
@@ -170,7 +170,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Interlaced()
         {
             string sInFile = Helpers.GetTestBitmapPath("81773-interlaced.gif");
@@ -240,25 +240,25 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_24bppRgb()
         {
             Save(PixelFormat.Format24bppRgb, PixelFormat.Format8bppIndexed, false);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppRgb()
         {
             Save(PixelFormat.Format32bppRgb, PixelFormat.Format8bppIndexed, false);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppArgb()
         {
             Save(PixelFormat.Format32bppArgb, PixelFormat.Format8bppIndexed, false);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppPArgb()
         {
             Save(PixelFormat.Format32bppPArgb, PixelFormat.Format8bppIndexed, false);

@@ -19,7 +19,7 @@ namespace System.Drawing.Tests
             yield return new object[] { (Func<Font>)(() => SystemFonts.StatusFont) };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(SystemFonts_TestData))]
         public void SystemFont_Get_ReturnsExpected(Func<Font> getFont)
         {
@@ -103,7 +103,7 @@ namespace System.Drawing.Tests
             return fonts.ToTestData();
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(SystemFonts_WindowsNames_TestData))]
         public void SystemFont_Get_ReturnsExpected_WindowsNames(Func<Font> getFont, string systemFontName, string windowsFontName)
         {

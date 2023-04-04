@@ -7,7 +7,7 @@ namespace System.Drawing.Tests
 {
     public class Graphics_DrawBezierTests : DrawingTest
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void DrawBezier_Point()
         {
@@ -24,7 +24,7 @@ namespace System.Drawing.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBezier_Points()
         {
             using (Bitmap image = new Bitmap(100, 100))
@@ -46,7 +46,7 @@ namespace System.Drawing.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBezier_PointFs()
         {
             using (Bitmap image = new Bitmap(100, 100))
@@ -67,7 +67,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBezier_NullPen_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -79,7 +79,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBezier_DisposedPen_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -94,7 +94,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void DrawBezier_Busy_ThrowsInvalidOperationException()
         {
             using (var image = new Bitmap(10, 10))
@@ -115,7 +115,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void DrawBezier_Disposed_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -131,7 +131,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBeziers_NullPen_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -142,7 +142,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBeziers_DisposedPen_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -156,7 +156,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBeziers_NullPoints_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -168,7 +168,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBeziers_EmptyPoints_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -180,7 +180,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBeziers_Busy_ThrowsInvalidOperationException()
         {
             using (var image = new Bitmap(10, 10))
@@ -200,7 +200,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawBeziers_Disposed_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))

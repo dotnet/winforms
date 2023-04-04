@@ -9,7 +9,7 @@ namespace System.Drawing.Tests
 {
     public partial class Graphics_GetContextTests
     {
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_New_DefaultGraphics()
         {
             using (var image = new Bitmap(10, 10))
@@ -24,7 +24,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_New_Clipping()
         {
             using (var image = new Bitmap(10, 10))
@@ -44,7 +44,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_New_Transform()
         {
             using (var image = new Bitmap(10, 10))
@@ -61,7 +61,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_New_ClipAndTransform()
         {
             using (var image = new Bitmap(10, 10))
@@ -82,7 +82,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_New_TransformAndClip()
         {
             using (var image = new Bitmap(10, 10))
@@ -103,7 +103,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_New_ClipAndTransformSaveState()
         {
             using (var image = new Bitmap(10, 10))
@@ -126,7 +126,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_New_ClipAndTransformSaveAndRestoreState()
         {
             using (var image = new Bitmap(10, 10))

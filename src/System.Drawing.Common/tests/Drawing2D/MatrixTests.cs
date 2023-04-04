@@ -39,7 +39,7 @@ namespace System.Drawing.Drawing2D.Tests
             return matrix;
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Default()
         {
             using (var matrix = new Matrix())
@@ -52,7 +52,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(float.NaN)]
         [InlineData(float.NegativeInfinity)]
         [InlineData(float.PositiveInfinity)]
@@ -66,7 +66,7 @@ namespace System.Drawing.Drawing2D.Tests
             Ctor_Elements(1, 0, 0, 1, 0, f, false, false);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MatrixElements_TestData))]
         public void Ctor_Elements(float m11, float m12, float m21, float m22, float dx, float dy, bool isIdentity, bool isInvertible)
         {
@@ -107,7 +107,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Rectangle(0, 0, 1, 1), new Point[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new float[] { 1, 0, 0, 1, 0, 0 }, true, true };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Rectangle_Points_TestData))]
         public void Ctor_Rectangle_Points(Rectangle rect, Point[] plgpnts, float[] expectedElements, bool isIdentity, bool isInvertible)
         {
@@ -121,7 +121,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Rectangle_Points_TestData))]
         public void Ctor_RectangleF_Points(Rectangle rect, Point[] plgpnts, float[] expectedElements, bool isIdentity, bool isInvertible)
         {
@@ -135,14 +135,14 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullPoints_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("plgpts", () => new Matrix(new RectangleF(), null));
             AssertExtensions.Throws<ArgumentNullException>("plgpts", () => new Matrix(new Rectangle(), null));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0)]
         [InlineData(2)]
         [InlineData(4)]
@@ -152,21 +152,21 @@ namespace System.Drawing.Drawing2D.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => new Matrix(new Rectangle(), new Point[length]));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_WidthZero_ThrowsOutOfMemoryException()
         {
             Assert.Throws<OutOfMemoryException>(() => new Matrix(new Rectangle(1, 1, 0, 1), new Point[3]));
             Assert.Throws<OutOfMemoryException>(() => new Matrix(new RectangleF(1, 1, 0, 1), new PointF[3]));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_HeightZero_ThrowsOutOfMemoryException()
         {
             Assert.Throws<OutOfMemoryException>(() => new Matrix(new Rectangle(1, 1, 1, 0), new Point[3]));
             Assert.Throws<OutOfMemoryException>(() => new Matrix(new RectangleF(1, 1, 1, 0), new PointF[3]));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_Matrix_ReturnsExpected()
         {
             using (var matrix = new Matrix(1, 2, 3, 4, 5, 6))
@@ -177,7 +177,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().Clone());
@@ -208,7 +208,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(), new object(), false };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Equals_TestData))]
         public void Equals_Other_ReturnsExpected(Matrix matrix, object other, bool expected)
         {
@@ -223,19 +223,19 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Equals_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().Equals(new Matrix()));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Equals_DisposedOther_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Matrix().Equals(CreateDisposedMatrix()));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Elements_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().Elements);
@@ -248,7 +248,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(), new float[] { 1, 0, 0, 1, 0, 0 } };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Invert_TestData))]
         public void Invert_Matrix_Success(Matrix matrix, float[] expectedElements)
         {
@@ -259,7 +259,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(float.NaN)]
         [InlineData(float.PositiveInfinity)]
         [InlineData(float.NegativeInfinity)]
@@ -281,19 +281,19 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Invert_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().Invert());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void IsIdentity_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().IsIdentity);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void IsInvertible_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().IsInvertible);
@@ -326,7 +326,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), new Matrix(float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue), MatrixOrder.Append, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue } };
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [MemberData(nameof(Multiply_TestData))]
         public void Multiply_Matrix_Success(Matrix matrix, Matrix multiple, MatrixOrder order, float[] expected)
         {
@@ -352,7 +352,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Multiply_NullMatrix_ThrowsArgumentNullException()
         {
             using (var matrix = new Matrix())
@@ -362,7 +362,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(MatrixOrder.Prepend - 1)]
         [InlineData(MatrixOrder.Append + 1)]
         public void Multiply_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
@@ -374,7 +374,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Multiply_Disposed_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();
@@ -386,7 +386,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Multiply_DisposedMatrix_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();
@@ -398,7 +398,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Multiply_SameMatrix_ThrowsInvalidOperationException()
         {
             using (var matrix = new Matrix())
@@ -408,7 +408,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Reset_Matrix_ReturnsExpected()
         {
             using (var matrix = new Matrix(1, 2, 3, 4, 5, 6))
@@ -421,7 +421,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Reset_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().Reset());
@@ -468,7 +468,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.NegativeInfinity, PointF.Empty, MatrixOrder.Append, new float[] { float.NaN, float.NaN, float.NaN, float.NaN, float.NaN, float.NaN }, null, false };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Rotate_TestData))]
         public void Rotate_Matrix_Success(Matrix matrix, float angle, PointF point, MatrixOrder order, float[] expectedElements, float[] expectedElementsRotateAt, bool isIdentity)
         {
@@ -513,13 +513,13 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Rotate_Disposed_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => CreateDisposedMatrix().Rotate(1, MatrixOrder.Append));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(MatrixOrder.Prepend - 1)]
         [InlineData(MatrixOrder.Append + 1)]
         public void Rotate_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
@@ -530,7 +530,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void RotateAt_Disposed_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();
@@ -539,7 +539,7 @@ namespace System.Drawing.Drawing2D.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => disposedMatrix.RotateAt(1, PointF.Empty, MatrixOrder.Append));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(MatrixOrder.Prepend - 1)]
         [InlineData(MatrixOrder.Append + 1)]
         public void RotateAt_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
@@ -580,7 +580,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue } };
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [MemberData(nameof(Scale_TestData))]
         public void Scale_Matrix_Succss(Matrix matrix, float scaleX, float scaleY, MatrixOrder order, float[] expectedElements)
         {
@@ -606,7 +606,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(MatrixOrder.Prepend - 1)]
         [InlineData(MatrixOrder.Append + 1)]
         public void Scale_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
@@ -617,7 +617,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Scale_Disposed_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();
@@ -656,7 +656,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(10, 20, 30, 40, 50, 60), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue, float.MaxValue } };
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [MemberData(nameof(Shear_TestData))]
         public void Shear_Matrix_Succss(Matrix matrix, float shearX, float shearY, MatrixOrder order, float[] expectedElements)
         {
@@ -683,7 +683,7 @@ namespace System.Drawing.Drawing2D.Tests
         }
 
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(MatrixOrder.Prepend - 1)]
         [InlineData(MatrixOrder.Append + 1)]
         public void Shear_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
@@ -694,7 +694,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Shear_Disposed_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();
@@ -724,7 +724,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(1, 2, 3, 4, 5, 6), float.MaxValue, float.MaxValue, MatrixOrder.Append, new float[] { 1, 2, 3, 4, float.MaxValue, float.MaxValue } };
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [MemberData(nameof(Translate_TestData))]
         public void Translate_Matrix_Success(Matrix matrix, float offsetX, float offsetY, MatrixOrder order, float[] expectedElements)
         {
@@ -750,7 +750,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(MatrixOrder.Prepend - 1)]
         [InlineData(MatrixOrder.Append + 1)]
         public void Translate_InvalidMatrixOrder_ThrowsArgumentException(MatrixOrder order)
@@ -761,7 +761,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Translate_Disposed_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();
@@ -777,7 +777,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[1], new Point[] { new Point(10, 12) } };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(TransformPoints_TestData))]
         public void TransformPoints_Point_Success(Matrix matrix, Point[] points, Point[] expectedPoints)
         {
@@ -788,7 +788,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(TransformPoints_TestData))]
         public void TransformPoints_PointF_Success(Matrix matrix, Point[] points, Point[] expectedPoints)
         {
@@ -800,7 +800,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TransformPoints_NullPoints_ThrowsArgumentNullException()
         {
             using (var matrix = new Matrix())
@@ -810,7 +810,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TransformPoints_EmptyPoints_ThrowsArgumentException()
         {
             using (var matrix = new Matrix())
@@ -820,7 +820,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TransformPoints_Disposed_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();
@@ -836,7 +836,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[1], new Point[1] };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(TransformVectors_TestData))]
         public void TransformVectors_Point_Success(Matrix matrix, Point[] points, Point[] expectedPoints)
         {
@@ -847,7 +847,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(TransformVectors_TestData))]
         public void TransformVectors_PointF_Success(Matrix matrix, Point[] points, Point[] expectedPoints)
         {
@@ -859,7 +859,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(TransformVectors_TestData))]
         public void VectorTransformPoints_Points_Success(Matrix matrix, Point[] points, Point[] expectedPoints)
         {
@@ -870,7 +870,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TransformVectors_NullPoints_ThrowsArgumentNullException()
         {
             using (var matrix = new Matrix())
@@ -881,7 +881,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TransformVectors_EmptyPoints_ThrowsArgumentException()
         {
             using (var matrix = new Matrix())
@@ -892,7 +892,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TransformVectors_Disposed_ThrowsArgumentException()
         {
             Matrix disposedMatrix = CreateDisposedMatrix();

@@ -45,7 +45,7 @@ namespace System.Drawing.Tests
             yield return new object[] { "16x16_nonindexed_24bit.png", 16, 16, PixelFormat.Format24bppRgb, ImageFormat.Png };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_FilePath_TestData))]
         public void Ctor_FilePath(string filename, int width, int height, PixelFormat pixelFormat, ImageFormat rawFormat)
         {
@@ -58,7 +58,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_FilePath_TestData))]
         public void Ctor_FilePath_UseIcm(string filename, int width, int height, PixelFormat pixelFormat, ImageFormat rawFormat)
         {
@@ -74,14 +74,14 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void Ctor_NullFilePath_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("path", () => new Bitmap((string)null));
             AssertExtensions.Throws<ArgumentNullException>("path", () => new Bitmap((string)null, false));
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData("", "path")]
         [InlineData("\0", "path")]
         [InlineData("NoSuchPath", null)]
@@ -92,7 +92,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(paramName, null, () => new Bitmap(filename, true));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Type_ResourceName()
         {
             using (var bitmap = new Bitmap(typeof(BitmapTests), "bitmap_173x183_indexed_8bit.bmp"))
@@ -104,13 +104,13 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullType_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException, NullReferenceException>("type", () => new Bitmap(null, "name"));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(typeof(Bitmap), "")]
         [InlineData(typeof(Bitmap), "bitmap_173x183_indexed_8bit.bmp")]
         [InlineData(typeof(BitmapTests), "bitmap_173x183_INDEXED_8bit.bmp")]
@@ -120,13 +120,13 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(type, resource));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_InvalidResource_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException, ArgumentException>("resource", null, () => new Bitmap(typeof(Bitmap), null));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_FilePath_TestData))]
         public void Ctor_Stream(string filename, int width, int height, PixelFormat pixelFormat, ImageFormat rawFormat)
         {
@@ -140,7 +140,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_FilePath_TestData))]
         public void Ctor_Stream_UseIcm(string filename, int width, int height, PixelFormat pixelFormat, ImageFormat rawFormat)
         {
@@ -157,14 +157,14 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullStream_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException, ArgumentException>("stream", null, () => new Bitmap((Stream)null));
             AssertExtensions.Throws<ArgumentNullException, ArgumentException>("stream", null, () => new Bitmap((Stream)null, false));
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void Ctor_InvalidBytesInStream_ThrowsArgumentException()
         {
             using (var stream = new MemoryStream(new byte[0]))
@@ -175,7 +175,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(10, 10)]
         [InlineData(5, 15)]
         public void Ctor_Width_Height(int width, int height)
@@ -189,7 +189,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(10, 10, PixelFormat.Format1bppIndexed)]
         [InlineData(10, 10, PixelFormat.Format8bppIndexed)]
         [InlineData(1, 1, PixelFormat.Format16bppArgb1555)]
@@ -223,7 +223,7 @@ namespace System.Drawing.Tests
             yield return new object[] { 1, 1, 1, PixelFormat.Format1bppIndexed, IntPtr.Zero };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Width_Height_Stride_PixelFormat_Scan0_TestData))]
         public void Ctor_Width_Height_Stride_PixelFormat_Scan0(int width, int height, int stride, PixelFormat pixelFormat, IntPtr scan0)
         {
@@ -236,7 +236,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(ushort.MaxValue * 513)]
@@ -251,7 +251,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(width, 1, 0, PixelFormat.Format16bppArgb1555, IntPtr.Zero));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(ushort.MaxValue * 513)]
@@ -266,7 +266,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(1, height, 0, PixelFormat.Format16bppArgb1555, IntPtr.Zero));
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(PixelFormat.Undefined - 1)]
         [InlineData(PixelFormat.Undefined)]
         [InlineData(PixelFormat.Gdi - 1)]
@@ -283,7 +283,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(1, 1, 0, format, IntPtr.Zero));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_InvalidScan0_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Bitmap(1, 1, 0, PixelFormat.Format16bppArgb1555, (IntPtr)10));
@@ -304,7 +304,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(Helpers.GetTestBitmapPath("16x16_nonindexed_24bit.png")), 32, 48 };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Image_TestData))]
         public void Ctor_Width_Height_Graphics(Bitmap image, int width, int height)
         {
@@ -318,13 +318,13 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullGraphics_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("g", null, () => new Bitmap(1, 1, null));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Image()
         {
             using (var image = new Bitmap(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
@@ -337,13 +337,13 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullImageWithoutSize_ThrowsNullReferenceException()
         {
             Assert.Throws<NullReferenceException>(() => new Bitmap((Image)null));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Image_TestData))]
         public void Ctor_Image_Width_Height(Image image, int width, int height)
         {
@@ -356,7 +356,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Image_TestData))]
         public void Ctor_Size(Image image, int width, int height)
         {
@@ -369,14 +369,14 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullImageWithSize_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("original", "image", () => new Bitmap(null, new Size(1, 2)));
             AssertExtensions.Throws<ArgumentNullException>("original", "image", () => new Bitmap(null, 1, 2));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_DisposedImage_ThrowsArgumentException()
         {
             var image = new Bitmap(1, 1);
@@ -395,7 +395,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(3, 3, PixelFormat.Format64bppPArgb), new Rectangle(1, 1, 1, 1), PixelFormat.Format16bppRgb565 };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Clone_TestData))]
         public void Clone_Rectangle_ReturnsExpected(Bitmap bitmap, Rectangle rectangle, PixelFormat targetFormat)
         {
@@ -433,7 +433,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Clone_TestData))]
         public void Clone_RectangleF_ReturnsExpected(Bitmap bitmap, Rectangle rectangle, PixelFormat format)
         {
@@ -454,7 +454,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0, 1)]
         [InlineData(1, 0)]
         public void Clone_ZeroWidthOrHeightRect_ThrowsArgumentException(int width, int height)
@@ -466,7 +466,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0, 0, 4, 1)]
         [InlineData(0, 0, 1, 4)]
         [InlineData(1, 0, 3, 1)]
@@ -482,7 +482,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(PixelFormat.Max)]
         [InlineData(PixelFormat.Indexed)]
         [InlineData(PixelFormat.Gdi)]
@@ -500,7 +500,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_GrayscaleFormat_ThrowsOutOfMemoryException()
         {
             using (var bitmap = new Bitmap(1, 1, PixelFormat.Format16bppGrayScale))
@@ -510,7 +510,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_ValidBitmap_Success()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -522,7 +522,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -533,7 +533,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Clone(new RectangleF(0, 0, 1, 1), PixelFormat.Format32bppArgb));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetFrameCount_NewBitmap_ReturnsZero()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -545,7 +545,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetFrameCount_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -554,7 +554,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetFrameCount(FrameDimension.Page));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
@@ -569,7 +569,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SelectActiveFrame_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -587,7 +587,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(100, 100, PixelFormat.Format32bppRgb), 99, 99, Color.FromArgb(0, 0, 0) };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(GetPixel_TestData))]
         public void GetPixel_ValidPixelFormat_Success(Bitmap bitmap, int x, int y, Color color)
         {
@@ -601,7 +601,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(1)]
         public void GetPixel_InvalidX_ThrowsArgumentOutOfRangeException(int x)
@@ -612,7 +612,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(1)]
         public void GetPixel_InvalidY_ThrowsArgumentOutOfRangeException(int y)
@@ -623,7 +623,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetPixel_GrayScalePixelFormat_ThrowsArgumentException()
         {
             using (var bitmap = new Bitmap(1, 1, PixelFormat.Format16bppGrayScale))
@@ -632,7 +632,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetPixel_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -648,7 +648,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(512, 512, PixelFormat.Format16bppRgb555), 512, 512 };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(GetHbitmap_TestData))]
         public void GetHbitmap_FromHbitmap_ReturnsExpected(Bitmap bitmap, int width, int height)
         {
@@ -689,7 +689,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(1, 1)]
         [InlineData(short.MaxValue, 1)]
         [InlineData(1, short.MaxValue)]
@@ -701,7 +701,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHbitmap_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -710,7 +710,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetHbitmap());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromHbitmap_InvalidHandle_ThrowsExternalException()
         {
             Assert.Throws<ExternalException>(() => Image.FromHbitmap(IntPtr.Zero));
@@ -725,7 +725,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Icon(Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico")), 96, 96 };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(FromHicon_Icon_TestData))]
         public void FromHicon_IconHandle_ReturnsExpected(Icon icon, int width, int height)
         {
@@ -753,7 +753,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(512, 512, PixelFormat.Format16bppRgb555).GetHicon(), 512, 512 };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(FromHicon_TestData))]
         public Bitmap GetHicon_FromHicon_ReturnsExpected(IntPtr handle, int width, int height)
         {
@@ -770,7 +770,7 @@ namespace System.Drawing.Tests
             return result;
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHicon_Grayscale_ThrowsArgumentException()
         {
             using (var bitmap = new Bitmap(1, 1, PixelFormat.Format16bppGrayScale))
@@ -779,7 +779,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHicon_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -788,7 +788,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetHicon());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "In .NET Framework we use GDI 1.0")]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/69471")]
         public void SaveWmfAsPngDoesntChangeImageBoundaries()
@@ -823,14 +823,14 @@ namespace System.Drawing.Tests
         }
 
         // This test causes an AV on Linux
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromHicon_InvalidHandle_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromHicon(IntPtr.Zero));
             AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromHicon((IntPtr)10));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromHicon_1bppIcon_ThrowsArgumentException()
         {
             using (var icon = new Icon(Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico")))
@@ -839,21 +839,21 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromResource_InvalidHandle_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource(IntPtr.Zero, "Name"));
             AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource((IntPtr)10, "Name"));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromResource_InvalidBitmapName_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource(IntPtr.Zero, "Name"));
             AssertExtensions.Throws<ArgumentException>(null, () => Bitmap.FromResource((IntPtr)10, "Name"));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void MakeTransparent_NoColorWithMatches_SetsMatchingPixelsToTransparent()
         {
             using (var bitmap = new Bitmap(10, 10))
@@ -891,7 +891,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void MakeTransparent_CustomColorExists_SetsMatchingPixelsToTransparent()
         {
             using (var bitmap = new Bitmap(10, 10))
@@ -929,7 +929,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void MakeTransparent_CustomColorDoesntExist_DoesNothing()
         {
             using (var bitmap = new Bitmap(10, 10))
@@ -953,7 +953,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void MakeTransparent_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -979,7 +979,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void MakeTransparent_Icon_ThrowsInvalidOperationException()
         {
             using (var bitmap = new Bitmap(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
@@ -994,7 +994,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(100, 100, PixelFormat.Format32bppRgb), 99, 99, Color.FromArgb(255, 128, 128, 128) };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(SetPixel_TestData))]
         public void SetPixel_ValidPixelFormat_Success(Bitmap bitmap, int x, int y, Color color)
         {
@@ -1002,7 +1002,7 @@ namespace System.Drawing.Tests
             Assert.Equal(color, bitmap.GetPixel(x, y));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(PixelFormat.Format1bppIndexed)]
         [InlineData(PixelFormat.Format4bppIndexed)]
         [InlineData(PixelFormat.Format8bppIndexed)]
@@ -1014,7 +1014,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(1)]
         public void SetPixel_InvalidX_ThrowsArgumentOutOfRangeException(int x)
@@ -1025,7 +1025,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(1)]
         public void SetPixel_InvalidY_ThrowsArgumentOutOfRangeException(int y)
@@ -1036,7 +1036,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetPixel_GrayScalePixelFormat_ThrowsArgumentException()
         {
             using (var bitmap = new Bitmap(1, 1, PixelFormat.Format16bppGrayScale))
@@ -1045,7 +1045,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetPixel_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -1054,7 +1054,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.SetPixel(0, 0, Color.Red));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(1, 1)]
         [InlineData(float.PositiveInfinity, float.PositiveInfinity)]
         [InlineData(float.MaxValue, float.MaxValue)]
@@ -1066,7 +1066,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(float.NaN)]
@@ -1079,7 +1079,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(float.NaN)]
@@ -1092,7 +1092,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -1151,7 +1151,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(100, 100, PixelFormat.Format8bppIndexed), new Rectangle(0, 0, 100, 100), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb, 300, 65538 };
         }
 
-        [ConditionalTheory(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
+        [ConditionalTheory(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/30565", TestPlatforms.Windows)]
         [MemberData(nameof(LockBits_TestData))]
         public void LockBits_Invoke_Success(Bitmap bitmap, Rectangle rectangle, ImageLockMode lockMode, PixelFormat pixelFormat, int expectedStride, int expectedReserved)
@@ -1186,7 +1186,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void LockBits_NullBitmapData_ThrowsArgumentException()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1195,7 +1195,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(-1, 0, 1, 1)]
         [InlineData(2, 0, 1, 1)]
         [InlineData(0, -1, 1, 1)]
@@ -1219,7 +1219,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(PixelFormat.DontCare)]
         [InlineData(PixelFormat.Max)]
         [InlineData(PixelFormat.Indexed)]
@@ -1243,7 +1243,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void LockBits_ReadOnlyGrayscale_ThrowsArgumentException()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1259,7 +1259,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData((ImageLockMode)(-1))]
         [InlineData(ImageLockMode.UserInputBuffer + 1)]
         [InlineData(ImageLockMode.UserInputBuffer)]
@@ -1275,7 +1275,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void LockBits_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -1287,7 +1287,7 @@ namespace System.Drawing.Tests
             Assert.Equal(IntPtr.Zero, bitmapData.Scan0);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void LockBits_AlreadyLocked_ThrowsInvalidOperationException()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1302,7 +1302,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0, -1)]
         [InlineData(0, 2)]
         [InlineData(1, 2)]
@@ -1318,7 +1318,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void UnlockBits_Scan0Zero_Nop()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1330,7 +1330,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(PixelFormat.Indexed)]
         [InlineData(PixelFormat.Gdi)]
         public void UnlockBits_InvalidPixelFormat_Nop(PixelFormat format)
@@ -1344,7 +1344,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void UnlockBits_NullBitmapData_ThrowsArgumentException()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1353,7 +1353,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void UnlockBits_NotLocked_ThrowsExternalException()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1362,7 +1362,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void UnlockBits_AlreadyUnlocked_ThrowsExternalException()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1374,7 +1374,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void UnlockBits_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -1383,7 +1383,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.UnlockBits(new BitmapData()));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Size_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -1394,7 +1394,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Size);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(PixelFormat.Format16bppArgb1555)]
         [InlineData(PixelFormat.Format16bppRgb555)]
         [InlineData(PixelFormat.Format16bppRgb565)]
@@ -1552,7 +1552,7 @@ namespace System.Drawing.Tests
             yield return new object[] { PixelFormat.Format8bppIndexed, new int[] { -16777216, -8388608, -16744448, -8355840, -16777088, -8388480, -16744320, -8355712, -4144960, -65536, -16711936, -256, -16776961, -65281, -16711681, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -16777216, -16777165, -16777114, -16777063, -16777012, -16776961, -16764160, -16764109, -16764058, -16764007, -16763956, -16763905, -16751104, -16751053, -16751002, -16750951, -16750900, -16750849, -16738048, -16737997, -16737946, -16737895, -16737844, -16737793, -16724992, -16724941, -16724890, -16724839, -16724788, -16724737, -16711936, -16711885, -16711834, -16711783, -16711732, -16711681, -13434880, -13434829, -13434778, -13434727, -13434676, -13434625, -13421824, -13421773, -13421722, -13421671, -13421620, -13421569, -13408768, -13408717, -13408666, -13408615, -13408564, -13408513, -13395712, -13395661, -13395610, -13395559, -13395508, -13395457, -13382656, -13382605, -13382554, -13382503, -13382452, -13382401, -13369600, -13369549, -13369498, -13369447, -13369396, -13369345, -10092544, -10092493, -10092442, -10092391, -10092340, -10092289, -10079488, -10079437, -10079386, -10079335, -10079284, -10079233, -10066432, -10066381, -10066330, -10066279, -10066228, -10066177, -10053376, -10053325, -10053274, -10053223, -10053172, -10053121, -10040320, -10040269, -10040218, -10040167, -10040116, -10040065, -10027264, -10027213, -10027162, -10027111, -10027060, -10027009, -6750208, -6750157, -6750106, -6750055, -6750004, -6749953, -6737152, -6737101, -6737050, -6736999, -6736948, -6736897, -6724096, -6724045, -6723994, -6723943, -6723892, -6723841, -6711040, -6710989, -6710938, -6710887, -6710836, -6710785, -6697984, -6697933, -6697882, -6697831, -6697780, -6697729, -6684928, -6684877, -6684826, -6684775, -6684724, -6684673, -3407872, -3407821, -3407770, -3407719, -3407668, -3407617, -3394816, -3394765, -3394714, -3394663, -3394612, -3394561, -3381760, -3381709, -3381658, -3381607, -3381556, -3381505, -3368704, -3368653, -3368602, -3368551, -3368500, -3368449, -3355648, -3355597, -3355546, -3355495, -3355444, -3355393, -3342592, -3342541, -3342490, -3342439, -3342388, -3342337, -65536, -65485, -65434, -65383, -65332, -65281, -52480, -52429, -52378, -52327, -52276, -52225, -39424, -39373, -39322, -39271, -39220, -39169, -26368, -26317, -26266, -26215, -26164, -26113, -13312, -13261, -13210, -13159, -13108, -13057, -256, -205, -154, -103, -52, -1 } };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Palette_TestData))]
         public void Palette_Get_ReturnsExpected(PixelFormat pixelFormat, int[] expectedEntries)
         {
@@ -1562,7 +1562,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Palette_SetNull_ThrowsNullReferenceException()
         {
             using (var bitmap = new Bitmap(1, 1))
@@ -1571,7 +1571,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Palette_Disposed_ThrowsArgumentException()
         {
             var bitmap = new Bitmap(1, 1);
@@ -1583,7 +1583,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Size);
         }
 
-        [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
+        [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
         public void LockBits_Marshalling_Success()
         {
             Color red = Color.FromArgb(Color.Red.ToArgb());
@@ -1684,7 +1684,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromNonSeekableStream()
         {
             string path = GetTestFilePath();
@@ -1704,7 +1704,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(true, false)]
         [InlineData(false, false)]
         [InlineData(false, true)]

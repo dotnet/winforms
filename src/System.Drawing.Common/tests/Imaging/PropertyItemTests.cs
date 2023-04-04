@@ -10,7 +10,7 @@ namespace System.Drawing.Imaging.Tests
     {
         private const int PropertyTagLuminanceTable = 0x5090;
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(1)]
         [InlineData(0)]
         [InlineData(-1)]
@@ -22,7 +22,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(value, item.Id);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(1)]
         [InlineData(0)]
         [InlineData(-1)]
@@ -34,7 +34,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(value, item.Len);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(1)]
         [InlineData(0)]
         [InlineData(-1)]
@@ -53,7 +53,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { new byte[] { 1, 2, 3 } };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Value_Set_TestData))]
         public void Value_Set_GetReturnsExpected(byte[] value)
         {
@@ -70,7 +70,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { 0, 0, 0, new byte[0] };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Properties_TestData))]
         public void Properties_SetValues_ReturnsExpected(int id, int len, short type, byte[] value)
         {

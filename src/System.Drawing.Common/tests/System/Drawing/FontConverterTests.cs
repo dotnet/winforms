@@ -12,7 +12,7 @@ namespace System.ComponentModel.TypeConverterTests
 {
     public class FontNameConverterTest
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TestConvertFrom()
         {
             FontConverter.FontNameConverter converter = new FontConverter.FontNameConverter();
@@ -29,7 +29,7 @@ namespace System.ComponentModel.TypeConverterTests
             Assert.False(converter.GetStandardValuesExclusive(), "standard values exclusive");
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void ExTestConvertFrom_ThrowsNotSupportedException()
         {
             FontConverter.FontNameConverter converter = new FontConverter.FontNameConverter();
@@ -42,7 +42,7 @@ namespace System.ComponentModel.TypeConverterTests
     {
         public static char s_Separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(TestConvertFormData))]
         [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Full Framework doesn't support inputs without units")]
         public void TestConvertFrom(string input, string expectedName, float expectedSize, GraphicsUnit expectedUnits, FontStyle expectedFontStyle)
@@ -57,7 +57,7 @@ namespace System.ComponentModel.TypeConverterTests
             Assert.Equal(expectedFontStyle, font.Style);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(ArgumentExceptionFontConverterData))]
         public void InvalidInputThrowsArgumentException(string input, string paramName, string netfxParamName)
         {
@@ -65,7 +65,7 @@ namespace System.ComponentModel.TypeConverterTests
             AssertExtensions.Throws<ArgumentException>(paramName, netfxParamName, () => converter.ConvertFrom(input));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(InvalidEnumArgumentExceptionFontConverterData))]
         public void InvalidInputThrowsInvalidEnumArgumentException(string input, string paramName)
         {
@@ -73,7 +73,7 @@ namespace System.ComponentModel.TypeConverterTests
             Assert.Throws<InvalidEnumArgumentException>(paramName, () => converter.ConvertFrom(input));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void EmptyStringInput()
         {
             FontConverter converter = new FontConverter();
@@ -186,7 +186,7 @@ namespace System.ComponentModel.TypeConverterTests
 
     public class FontUnitConverterTest
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetStandardValuesTest()
         {
             FontUnitConverter converter = new FontUnitConverter();
@@ -199,7 +199,7 @@ namespace System.ComponentModel.TypeConverterTests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData("Display", GraphicsUnit.Display)]
         [InlineData("Document", GraphicsUnit.Document)]
         [InlineData("Inch", GraphicsUnit.Inch)]

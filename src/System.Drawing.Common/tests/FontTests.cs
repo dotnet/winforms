@@ -30,7 +30,7 @@ namespace System.Drawing.Tests
             yield return new object[] { FontFamily.GenericSansSerif, FontFamily.GenericMonospace };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(FontFamily_Equals_SameFamily_TestData))]
         public void Font_Equals_SameFontFamily(FontFamily fontFamily, float size)
         {
@@ -41,7 +41,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(FontFamily_Equals_DifferentFamily_TestData))]
         public void Font_Equals_DifferentFontFamily(FontFamily fontFamily1, FontFamily fontFamily2)
         {
@@ -54,14 +54,14 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FontFamily_Equals_NullObject()
         {
             FontFamily nullFamily = null;
             Assert.False(FontFamily.GenericMonospace.Equals(nullFamily));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_TestData))]
         public void Ctor_Family_Size(FontFamily fontFamily, float emSize)
         {
@@ -78,7 +78,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_TestData))]
         public void Ctor_FamilyName_Size(FontFamily fontFamily, float emSize)
         {
@@ -107,7 +107,7 @@ namespace System.Drawing.Tests
             yield return new object[] { FontFamily.GenericSerif, 16, (FontStyle)int.MaxValue };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_TestData))]
         public void Ctor_Family_Size_Style(FontFamily fontFamily, float emSize, FontStyle style)
         {
@@ -124,7 +124,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_TestData))]
         public void Ctor_FamilyName_Size_Style(FontFamily fontFamily, float emSize, FontStyle style)
         {
@@ -151,7 +151,7 @@ namespace System.Drawing.Tests
             yield return new object[] { FontFamily.GenericSerif, 16, GraphicsUnit.World };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Unit_TestData))]
         public void Ctor_Family_Size_Unit(FontFamily fontFamily, float emSize, GraphicsUnit unit)
         {
@@ -168,7 +168,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Unit_TestData))]
         public void Ctor_FamilyName_Size_Unit(FontFamily fontFamily, float emSize, GraphicsUnit unit)
         {
@@ -197,7 +197,7 @@ namespace System.Drawing.Tests
             yield return new object[] { FontFamily.GenericSerif, 16, (FontStyle)int.MaxValue, GraphicsUnit.Millimeter };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_Unit_TestData))]
         public void Ctor_Family_Size_Style_Unit(FontFamily fontFamily, float emSize, FontStyle style, GraphicsUnit unit)
         {
@@ -214,7 +214,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_Unit_TestData))]
         public void Ctor_FamilyName_Size_Style_Unit(FontFamily fontFamily, float emSize, FontStyle style, GraphicsUnit unit)
         {
@@ -243,7 +243,7 @@ namespace System.Drawing.Tests
             yield return new object[] { FontFamily.GenericSerif, 16, (FontStyle)int.MaxValue, GraphicsUnit.Millimeter, 200 };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_Unit_GdiCharSet_TestData))]
         public void Ctor_Family_Size_Style_Unit_GdiCharSet(FontFamily fontFamily, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet)
         {
@@ -260,7 +260,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_Unit_GdiCharSet_TestData))]
         public void Ctor_FamilyName_Size_Style_Unit_GdiCharSet(FontFamily fontFamily, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet)
         {
@@ -289,7 +289,7 @@ namespace System.Drawing.Tests
             yield return new object[] { FontFamily.GenericSerif, 16, (FontStyle)int.MaxValue, GraphicsUnit.Millimeter, 200, false };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_Unit_GdiCharSet_GdiVerticalFont_TestData))]
         public void Ctor_Family_Size_Style_Unit_GdiCharSet_GdiVerticalFont(FontFamily fontFamily, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
         {
@@ -306,7 +306,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_Family_Size_Style_Unit_GdiCharSet_GdiVerticalFont_TestData))]
         public void Ctor_FamilyName_Size_Style_Unit_GdiCharSet_GdiVerticalFont(FontFamily fontFamily, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
         {
@@ -323,7 +323,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_FamilyNamePrefixedWithAtSign_StripsSign()
         {
             using (FontFamily family = FontFamily.GenericMonospace)
@@ -334,13 +334,13 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullFont_ThrowsNullReferenceException()
         {
             Assert.Throws<NullReferenceException>(() => new Font(null, FontStyle.Regular));
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void Ctor_DisposedFont_Success()
         {
             using (FontFamily family = FontFamily.GenericSerif)
@@ -356,7 +356,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullFamily_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("family", () => new Font((FontFamily)null, 10));
@@ -367,7 +367,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentNullException>("family", () => new Font((FontFamily)null, 10, FontStyle.Italic, GraphicsUnit.Display, 10, gdiVerticalFont: true));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_DisposedFamily_ThrowsArgumentException()
         {
             FontFamily family = FontFamily.GenericSansSerif;
@@ -381,7 +381,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => new Font(family, 10, FontStyle.Italic, GraphicsUnit.Display, 10, gdiVerticalFont: true));
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(float.NaN)]
@@ -406,7 +406,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(GraphicsUnit.Display)]
         [InlineData(GraphicsUnit.World - 1)]
         [InlineData(GraphicsUnit.Millimeter + 1)]
@@ -425,7 +425,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void Clone_Invoke_ReturnsExpected()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -443,7 +443,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_DisposedFont_ThrowsArgumentException()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -471,7 +471,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Font(family, 10), null, false };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Equals_TestData))]
         public void Equals_Other_ReturnsExpected(Font font, object other, bool expected)
         {
@@ -496,13 +496,13 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromHdc_ZeroHdc_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Font.FromHdc(IntPtr.Zero));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromHdc_GraphicsHdc_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -520,13 +520,13 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromHfont_Zero_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Font.FromHfont(IntPtr.Zero));
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void GetHeight_Parameterless_ReturnsExpected()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -539,7 +539,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void GetHeight_Graphics_ReturnsExpected()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -551,7 +551,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0, 0)]
         [InlineData(-1, -0.1571995)]
         [InlineData(1, 0.1571995)]
@@ -567,7 +567,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHeight_NullGraphics_ThrowsArgumentNullException()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -591,7 +591,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHeight_Disposed_ThrowsArgumentException()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -607,7 +607,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(FontStyle.Bold, int.MinValue, 0)]
         [InlineData(FontStyle.Bold, -2147483099, 0)]
         [InlineData(FontStyle.Regular, -2147483098, 0)]
@@ -644,7 +644,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromLogFont_NullLogFont_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -671,7 +671,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromLogFont_InvalidLogFont_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -691,7 +691,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FromLogFont_UnblittableStruct()
         {
             const byte OUT_TT_ONLY_PRECIS = 7;
@@ -740,7 +740,7 @@ namespace System.Drawing.Tests
             public string lfFaceName;
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(GraphicsUnit.Document)]
         [InlineData(GraphicsUnit.Inch)]
         [InlineData(GraphicsUnit.Millimeter)]
@@ -764,7 +764,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(FontStyle.Strikeout | FontStyle.Bold | FontStyle.Italic, 255, true, "@", 700)]
         [InlineData(FontStyle.Regular, 0, false, "", 400)]
         [InlineData(FontStyle.Regular, 10, false, "", 400)]
@@ -793,7 +793,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(TextRenderingHint.SystemDefault)]
         [InlineData(TextRenderingHint.AntiAlias)]
         [InlineData(TextRenderingHint.AntiAliasGridFit)]
@@ -829,7 +829,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "AV Exception is wrapped in a TargetInvocationException in the .NET Framework.")]
         public void ToLogFont_NullLogFont_ThrowsArgumentNullException()
         {
@@ -843,7 +843,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void ToLogFont_NullGraphics_ThrowsArgumentNullException()
         {
             using (FontFamily family = FontFamily.GenericMonospace)
@@ -853,7 +853,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void ToLogFont_DisposedGraphics_ThrowsArgumentException()
         {
             using (FontFamily family = FontFamily.GenericMonospace)
@@ -887,7 +887,7 @@ namespace System.Drawing.Tests
             public string lfFaceName;
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void ToHfont_SimpleFont_Roundtrips()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -902,7 +902,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void ToHfont_ComplicatedFont_DoesNotRoundtrip()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -917,7 +917,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void ToHfont_Disposed_ThrowsArgumentException()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -931,7 +931,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Fact]
         public void ToString_Invoke_ReturnsExpected()
         {
             using (FontFamily family = FontFamily.GenericSansSerif)
@@ -960,7 +960,7 @@ namespace System.Drawing.Tests
             Assert.Empty(font.SystemFontName);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "GetHashCode doesn't include font name in .NET Framework")]
         public void GetHashCode_DifferentNameSameSizeStyleUnit_HashCodeIsNotSame()
         {

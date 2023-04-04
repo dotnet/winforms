@@ -15,7 +15,7 @@ namespace System.Drawing.Printing.Tests
             Assert.False(controller.IsPreview);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void OnStartPage_InvokeWithPrint_ReturnsNull()
         {
             using (var document = new PrintDocument())
@@ -62,7 +62,7 @@ namespace System.Drawing.Printing.Tests
             yield return new object[] { new PrintEventArgs() };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(PrintEventArgs_TestData))]
         public void OnStartPrint_InvokeWithDocument_Success(PrintEventArgs e)
         {
@@ -76,7 +76,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(PrintEventArgs_TestData))]
         public void OnStartPrint_InvokeWithDocumentSeveralTimes_Success(PrintEventArgs e)
         {

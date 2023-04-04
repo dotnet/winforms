@@ -89,14 +89,14 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(ImageFormatGuidTestData))]
         public void Guid_ReturnsExpected(Guid expectedGuid, ImageFormat imageFormat)
         {
             Assert.Equal(expectedGuid, imageFormat.Guid);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(ImageFormatToStringTestData))]
         public void ToString_ReturnsExpected(string expected, ImageFormat imageFormat)
         {
@@ -111,14 +111,14 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(expected, img.RawFormat.ToString());
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(ImageFormatEqualsTestData))]
         public void Equals_Object_ReturnsExpected(ImageFormat imageFormat, object obj, bool result)
         {
             Assert.Equal(result, imageFormat.Equals(obj));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHashCode_Success()
         {
             Guid guid = Guid.NewGuid();

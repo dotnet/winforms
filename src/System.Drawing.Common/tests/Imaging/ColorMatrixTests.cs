@@ -34,7 +34,7 @@ namespace System.Drawing.Imaging.Tests
 {
     public class ColorMatrixTests
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Default()
         {
             ColorMatrix cm = new ColorMatrix();
@@ -98,14 +98,14 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(BadCtorParams))]
         public void Ctor_BadValues_ThrowsExpectedException(float[][] newColorMatrix, Type expectedException)
         {
             Assert.Throws(expectedException, () => new ColorMatrix(newColorMatrix));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_TooBigArraySize_MapOnly4and4Elements()
         {
             ColorMatrix cm = new ColorMatrix(new float[][] {
@@ -144,7 +144,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(4.4f, cm.Matrix44);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void AccessToNotExistingElement_ThrowsIndexOutOfRangeException()
         {
             ColorMatrix cm = new ColorMatrix(new float[][] {
@@ -158,7 +158,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Throws<IndexOutOfRangeException>(() => _ = cm[5, 5]);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_SetValue_ReturnsExpected()
         {
             ColorMatrix cm = new ColorMatrix(IndexedColorMatrix);
@@ -202,7 +202,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void MatrixElement_SetValues_ReturnsExpected()
         {
             ColorMatrix cm = new ColorMatrix();
@@ -260,7 +260,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(25, cm.Matrix44);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void MatrixElementByIndexer_SetValue_ReturnsExpetecd()
         {
             ColorMatrix cm = new ColorMatrix(IndexedColorMatrix);

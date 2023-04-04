@@ -47,7 +47,7 @@ namespace MonoTests.System.Drawing
 {
     public class TestBitmap
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void TestPixels()
         {
             // Tests GetSetPixel/SetPixel
@@ -113,7 +113,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void LockBits_Double()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format24bppRgb))
@@ -131,7 +131,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format1bppIndexed()
         {
             using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format1bppIndexed))
@@ -142,7 +142,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format4bppIndexed()
         {
             using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format4bppIndexed))
@@ -153,7 +153,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format8bppIndexed()
         {
             using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
@@ -295,7 +295,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format32bppArgb()
         {
             FormatTest(PixelFormat.Format32bppArgb);
@@ -307,7 +307,7 @@ namespace MonoTests.System.Drawing
             FormatTest(PixelFormat.Format32bppRgb);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format24bppRgb()
         {
             FormatTest(PixelFormat.Format24bppRgb);
@@ -341,7 +341,7 @@ namespace MonoTests.System.Drawing
             return sRslt;
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone()
         {
             string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
@@ -359,7 +359,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void CloneImage()
         {
             string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
@@ -372,7 +372,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Frames()
         {
             string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
@@ -386,7 +386,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void FileDoesNotExists()
         {
             Assert.Throws<ArgumentException>(() => new Bitmap("FileDoesNotExists.jpg"));
@@ -492,7 +492,7 @@ namespace MonoTests.System.Drawing
 
         // Rotate bitmap in diffent ways, and check the result
         // pixels using MD5
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Rotate()
         {
             string sInFile = Helpers.GetTestBitmapPath("almogaver24bits.bmp");
@@ -815,7 +815,7 @@ namespace MonoTests.System.Drawing
                 }
             }
         }
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DefaultFormat1()
         {
             using (Bitmap bmp = new Bitmap(20, 20))
@@ -824,7 +824,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DefaultFormat2()
         {
             string filename = Path.GetTempFileName();
@@ -840,7 +840,7 @@ namespace MonoTests.System.Drawing
             File.Delete(filename);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void BmpDataStride1()
         {
             Bitmap bmp = new Bitmap(184, 184, PixelFormat.Format1bppIndexed);
@@ -861,7 +861,7 @@ namespace MonoTests.System.Drawing
             -1,
         };
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format1bppIndexed_Palette()
         {
             using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format1bppIndexed))
@@ -895,7 +895,7 @@ namespace MonoTests.System.Drawing
             -1,
         };
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format4bppIndexed_Palette()
         {
             using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format4bppIndexed))
@@ -1169,7 +1169,7 @@ namespace MonoTests.System.Drawing
             -1,
         };
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Format8bppIndexed_Palette()
         {
             using (Bitmap bmp = new Bitmap(1, 1, PixelFormat.Format8bppIndexed))
@@ -1184,7 +1184,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void XmlSerialization()
         {
             new XmlSerializer(typeof(Bitmap));
@@ -1198,43 +1198,43 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_Zero()
         {
             Assert.Throws<ArgumentException>(() => SetResolution(0.0f, 0.0f));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_Negative_X()
         {
             Assert.Throws<ArgumentException>(() => SetResolution(-1.0f, 1.0f));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_Negative_Y()
         {
             Assert.Throws<ArgumentException>(() => SetResolution(1.0f, -1.0f));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_MaxValue()
         {
             SetResolution(float.MaxValue, float.MaxValue);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_PositiveInfinity()
         {
             SetResolution(float.PositiveInfinity, float.PositiveInfinity);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_NaN()
         {
             Assert.Throws<ArgumentException>(() => SetResolution(float.NaN, float.NaN));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetResolution_NegativeInfinity()
         {
             Assert.Throws<ArgumentException>(() => SetResolution(float.NegativeInfinity, float.NegativeInfinity));
@@ -1243,7 +1243,7 @@ namespace MonoTests.System.Drawing
 
     public class BitmapFullTrustTest
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void BitmapIntIntIntPixelFormatIntPtrCtor()
         {
             new Bitmap(1, 1, 1, PixelFormat.Format1bppIndexed, IntPtr.Zero);
@@ -1263,7 +1263,7 @@ namespace MonoTests.System.Drawing
             Assert.Equal(335888, b.Flags);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Hicon16()
         {
             IntPtr hicon;
@@ -1284,7 +1284,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Hicon32()
         {
             IntPtr hicon;
@@ -1305,7 +1305,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Hicon64()
         {
             IntPtr hicon;
@@ -1326,7 +1326,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Hicon96()
         {
             IntPtr hicon;
@@ -1347,7 +1347,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void HBitmap()
         {
             IntPtr hbitmap;
@@ -1375,7 +1375,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void CreateMultipleBitmapFromSameHBITMAP()
         {
             IntPtr hbitmap;

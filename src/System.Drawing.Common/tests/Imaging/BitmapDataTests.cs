@@ -8,7 +8,7 @@ namespace System.Drawing.Imaging.Tests
 {
     public class BitmapDataTests
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Default()
         {
             BitmapData bd = new BitmapData();
@@ -20,7 +20,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal((PixelFormat)0, bd.PixelFormat);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(int.MaxValue)]
         [InlineData(0)]
         [InlineData(int.MinValue)]
@@ -31,7 +31,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(value, bd.Height);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(int.MaxValue)]
         [InlineData(0)]
         [InlineData(int.MinValue)]
@@ -42,7 +42,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(value, bd.Width);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(int.MaxValue)]
         [InlineData(0)]
         [InlineData(int.MinValue)]
@@ -53,7 +53,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(value, bd.Reserved);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(int.MaxValue)]
         [InlineData(0)]
         [InlineData(int.MinValue)]
@@ -64,7 +64,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(new IntPtr(value), bd.Scan0);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(int.MaxValue)]
         [InlineData(0)]
         [InlineData(int.MinValue)]
@@ -75,7 +75,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(value, bd.Stride);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(PixelFormat.DontCare)]
         [InlineData(PixelFormat.Max)]
         [InlineData(PixelFormat.Indexed)]
@@ -105,7 +105,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(pixelFormat, bd.PixelFormat);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void PixelFormat_SetInvalid_ThrowsInvalidEnumException()
         {
             BitmapData bd = new BitmapData();

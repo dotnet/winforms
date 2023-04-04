@@ -11,7 +11,7 @@ namespace System.Drawing.Tests
 {
     public static class GdiPlusHandlesTests
     {
-        public static bool IsDrawingAndRemoteExecutorSupported => Helpers.GetIsDrawingSupported() && RemoteExecutor.IsSupported;
+        public static bool IsDrawingAndRemoteExecutorSupported => RemoteExecutor.IsSupported;
 
         [ConditionalFact(nameof(IsDrawingAndRemoteExecutorSupported))]
         public static void GraphicsDrawIconDoesNotLeakHandles()

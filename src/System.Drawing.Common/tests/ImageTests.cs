@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
@@ -14,7 +14,6 @@ using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace System.Drawing.Tests
 {
-    [ConditionalClass(typeof(PlatformDetection),nameof(PlatformDetection.IsDrawingSupported))]
     public class ImageTests
     {
         private const int PropertyTagLuminanceTable = 0x5090;
@@ -650,7 +649,7 @@ namespace System.Drawing.Tests
 #endif
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(GetEncoderParameterList_ReturnsExpected_TestData))]
         public void GetEncoderParameterList_ReturnsExpected(ImageFormat format, Guid[] expectedParameters)
         {
