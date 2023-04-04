@@ -12,14 +12,9 @@ namespace System.Drawing.Tests
 {
     public class ImageAnimatorManualTests
     {
-        public static bool ManualTestsEnabled => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MANUAL_TESTS"));
         public static string OutputFolder = Path.Combine(Environment.CurrentDirectory, "ImageAnimatorManualTests", DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
 
-        // To run these tests, change the working directory to src/libraries/System.Drawing.Common,
-        // set the `MANUAL_TESTS` environment variable to any non-empty value, and run
-        // `dotnet test --filter "ImageAnimatorManualTests"
-
-        [ConditionalFact(Helpers.IsDrawingSupported, nameof(ManualTestsEnabled), Timeout = 75_000)]
+        [Fact(Skip = "Manual Test")]
         public void AnimateAndCaptureFrames()
         {
             // This test animates the test gifs that we have and waits 60 seconds

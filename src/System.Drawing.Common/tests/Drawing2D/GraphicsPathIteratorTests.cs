@@ -32,7 +32,7 @@ namespace System.Drawing.Drawing2D.Tests
     {
         private readonly PointF[] _twoPoints = new PointF[2] { new PointF(1, 2), new PointF(20, 30) };
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Path_Success()
         {
             byte[] types = new byte[] { 0, 1 };
@@ -44,7 +44,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_EmptyPath_Success()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -54,7 +54,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullPath_Success()
         {
             using (GraphicsPathIterator gpi = new GraphicsPathIterator(null))
@@ -63,7 +63,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextSubpath_PathFigureNotClosed_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -75,7 +75,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextSubpath_PathFigureClosed_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 129 }))
@@ -86,7 +86,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextSubpath_NullPath_ReturnsExpected()
         {
             using (GraphicsPathIterator gpi = new GraphicsPathIterator(null))
@@ -96,7 +96,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextSubpath_FigureNotClosed_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -110,7 +110,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextSubpath_FigureClosed_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 129 }))
@@ -123,7 +123,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextMarker_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 1 }))
@@ -135,7 +135,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextMarker_Empty_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -148,7 +148,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextMarker_NullPath_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -159,7 +159,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextMarker_EmptyPath_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -170,7 +170,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NextMarker_Path_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 1 }))
@@ -180,7 +180,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Count_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath(_twoPoints, new byte[] { 0, 1 }))
@@ -195,7 +195,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SubpathCount_ReturnsExpected()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -218,7 +218,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void HasCurve_ReturnsExpected()
         {
             Point[] points = new Point[] { new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(4, 4) };
@@ -236,7 +236,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Rewind_Success()
         {
             using (GraphicsPath gp = new GraphicsPath())
@@ -261,7 +261,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Enumerate_ZeroPoints_ReturnsExpected()
         {
             PointF[] points = new PointF[0];
@@ -276,7 +276,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Enumerate_ReturnsExpected()
         {
             PointF[] points = new PointF[] { new PointF(1f, 1f), new PointF(2f, 2f), new PointF(3f, 3f), new PointF(4f, 4f) };
@@ -300,7 +300,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new PointF[2], new byte[1] };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(PointsTypesLengthMismatch_TestData))]
         public void Enumerate_PointsTypesMismatch_ThrowsArgumentException(PointF[] points, byte[] types)
         {
@@ -318,7 +318,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { null, null };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(NullPointsTypes_TestData))]
         public void Enumerate_NullPointsTypes_ThrowsNullReferenceException(PointF[] points, byte[] types)
         {
@@ -329,7 +329,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(PointsTypesLengthMismatch_TestData))]
         public void CopyData_PointsTypesMismatch_ThrowsArgumentException(PointF[] points, byte[] types)
         {
@@ -340,7 +340,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(NullPointsTypes_TestData))]
         public void CopyData_NullPointsTypes_ThrowsNullReferenceException(PointF[] points, byte[] types)
         {
@@ -351,7 +351,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1, 2)]
         [InlineData(0, 3)]
         public void CopyData_StartEndIndexesOutOfRange_ThrowsArgumentException(int startIndex, int endIndex)
@@ -373,7 +373,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { new PointF[3], new byte[3], 2, 0 };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(CopyData_StartEndIndexesOutOfRange_TestData))]
         public void CopyData_StartEndIndexesOutOfRange_ReturnsExpected(PointF[] points, byte[] types, int startIndex, int endIndex)
         {
@@ -387,7 +387,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void CopyData_EqualStartEndIndexes_ReturnsExpected()
         {
             PointF[] points = new PointF[] { new PointF(1f, 1f), new PointF(2f, 2f), new PointF(3f, 3f), new PointF(4f, 4f) };
@@ -405,7 +405,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void CopyData_ReturnsExpected()
         {
             PointF[] points = new PointF[] { new PointF(1f, 1f), new PointF(2f, 2f), new PointF(3f, 3f), new PointF(4f, 4f) };

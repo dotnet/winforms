@@ -45,7 +45,7 @@ namespace MonoTests.System.Drawing.Imaging
         public const string WmfPlaceable = "telescope_01.wmf";
         public const string Emf = "milkmateya01.emf";
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Metafile_String()
         {
             string filename = Helpers.GetTestBitmapPath(WmfPlaceable);
@@ -96,7 +96,7 @@ namespace MonoTests.System.Drawing.Imaging
             Assert.True(header.IsWmfPlaceable());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_FromFile_WmfPlaceable()
         {
             using (Metafile mf = new Metafile(Helpers.GetTestBitmapPath(WmfPlaceable)))
@@ -112,7 +112,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_FromFileStream_WmfPlaceable()
         {
             using (FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(WmfPlaceable)))
@@ -129,7 +129,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_FromMemoryStream_WmfPlaceable()
         {
             string filename = Helpers.GetTestBitmapPath(WmfPlaceable);
@@ -169,7 +169,7 @@ namespace MonoTests.System.Drawing.Imaging
             Assert.False(header.IsWmfPlaceable());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_FromFile_Emf()
         {
             using (Metafile mf = new Metafile(Helpers.GetTestBitmapPath(Emf)))
@@ -179,7 +179,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_FromFileStream_Emf()
         {
             using (FileStream fs = File.OpenRead(Helpers.GetTestBitmapPath(Emf)))
@@ -190,7 +190,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_FromMemoryStream_Emf()
         {
             string filename = Helpers.GetTestBitmapPath(Emf);
@@ -251,7 +251,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Metafile_IntPtrRectangle_Empty()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
@@ -270,7 +270,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Metafile_IntPtrRectangleF_Empty()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
@@ -307,13 +307,13 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Metafile_StreamIntPtrEmfType_Null()
         {
             Assert.Throws<NullReferenceException>(() => Metafile_StreamEmfType(null, EmfType.EmfOnly));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Metafile_StreamIntPtrEmfType_EmfOnly()
         {
             using (MemoryStream ms = new MemoryStream())
@@ -322,7 +322,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Metafile_StreamIntPtrEmfType_Invalid()
         {
             using (MemoryStream ms = new MemoryStream())
@@ -371,7 +371,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Measure()
         {
             Font test_font = new Font(FontFamily.GenericMonospace, 12);
@@ -414,7 +414,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void WorldTransforms()
         {
             Metafile mf;

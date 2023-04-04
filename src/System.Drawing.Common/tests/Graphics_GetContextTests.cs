@@ -9,7 +9,7 @@ namespace System.Drawing.Tests
 #pragma warning disable SYSLIB0016 // Type or member is obsolete
     public partial class Graphics_GetContextTests : DrawingTest
     {
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_DefaultGraphics()
         {
             using (var image = new Bitmap(10, 10))
@@ -30,7 +30,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_Clipping()
         {
             using (var image = new Bitmap(10, 10))
@@ -49,7 +49,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_Transform()
         {
             using (var image = new Bitmap(10, 10))
@@ -69,7 +69,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_ClipAndTransform()
         {
             using (var image = new Bitmap(10, 10))
@@ -91,7 +91,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_TransformAndClip()
         {
             using (var image = new Bitmap(10, 10))
@@ -113,7 +113,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_ClipAndTransformSaveState()
         {
             using (var image = new Bitmap(10, 10))
@@ -138,7 +138,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsWindows)]
+        [Fact]
         public void GetContextInfo_ClipAndTransformSaveAndRestoreState()
         {
             using (var image = new Bitmap(10, 10))

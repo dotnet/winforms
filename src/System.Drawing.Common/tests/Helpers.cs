@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Printing;
@@ -12,61 +12,10 @@ namespace System.Drawing
 {
     public static class Helpers
     {
-        public const string IsDrawingSupported = nameof(Helpers) + "." + nameof(GetIsDrawingSupported);
-        public const string IsWindowsOrAtLeastLibgdiplus6 = nameof(Helpers) + "." + nameof(GetIsWindowsOrAtLeastLibgdiplus6);
-        public const string RecentGdiplusIsAvailable = IsWindowsOrAtLeastLibgdiplus6;
-        public const string GdiPlusIsAvailableNotWindows7 = nameof(Helpers) + "." + nameof(GetGdiPlusIsAvailableNotWindows7);
-        public const string AnyInstalledPrinters = nameof(Helpers) + "." + nameof(IsAnyInstalledPrinters);
-        public const string WindowsRS3OrEarlier = nameof(Helpers) + "." + nameof(IsWindowsRS3OrEarlier);
-        public const string IsWindows = nameof(Helpers) + "." + nameof(GetIsWindows);
-
-        public static bool GetIsDrawingSupported() => PlatformDetection.IsDrawingSupported;
-
-        public static bool GetIsWindowsOrAtLeastLibgdiplus6()
-        {
-            if (!PlatformDetection.IsDrawingSupported)
-            {
-                return false;
-            }
-
-            if (PlatformDetection.IsWindows)
-            {
-                return true;
-            }
-
-            Version installedVersion;
-
-            try
-            {
-                installedVersion = new Version(GetLibgdiplusVersion());
-            }
-            catch (DllNotFoundException)
-            {
-                return false;
-            }
-            catch (EntryPointNotFoundException)
-            {
-                return false;
-            }
-
-            return installedVersion.Major >= 6;
-        }
-
-        public static bool GetIsWindows() => PlatformDetection.IsDrawingSupported && PlatformDetection.IsWindows;
-
-        public static bool IsNotUnix => PlatformDetection.IsWindows;
+        public const string AnyInstalledPrinters = $"{nameof(Helpers)}.{nameof(IsAnyInstalledPrinters)}";
+        public const string WindowsRS3OrEarlier = $"{nameof(Helpers)}.{nameof(IsWindowsRS3OrEarlier)}";
 
         public static bool IsWindowsRS3OrEarlier => !PlatformDetection.IsWindows10Version1803OrGreater;
-
-        public static bool GetGdiPlusIsAvailableNotWindows7()
-        {
-            if (PlatformDetection.IsWindows7)
-            {
-                return false;
-            }
-
-            return GetIsDrawingSupported();
-        }
 
         public static bool IsAnyInstalledPrinters()
         {

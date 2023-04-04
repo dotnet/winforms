@@ -14,7 +14,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { HatchStyle.SolidDiamond, Color.PapayaWhip };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_HatchStyle_ForeColor_TestData))]
         public void Ctor_HatchStyle_ForeColor(HatchStyle hatchStyle, Color foreColor)
         {
@@ -35,7 +35,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { HatchStyle.SolidDiamond, Color.PapayaWhip, Color.Plum };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Ctor_HatchStyle_ForeColor_BackColor_TestData))]
         public void Ctor_HatchStyle_ForeColor_BackColor(HatchStyle hatchStyle, Color foreColor, Color backColor)
         {
@@ -51,7 +51,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(HatchStyle.Horizontal -1 )]
         [InlineData(HatchStyle.SolidDiamond + 1)]
         public void Ctor_InvalidHatchStyle_ThrowsArgumentException(HatchStyle hatchStyle)
@@ -60,7 +60,7 @@ namespace System.Drawing.Drawing2D.Tests
             AssertExtensions.Throws<ArgumentException>("hatchstyle", null, () => new HatchBrush(hatchStyle, Color.Empty, Color.Empty));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_Brush_ReturnsClone()
         {
             using (var brush = new HatchBrush(HatchStyle.DarkDownwardDiagonal, Color.Magenta, Color.Peru))
@@ -74,7 +74,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_ImmutableColor_ReturnsMutableClone()
         {
             SolidBrush brush = Assert.IsType<SolidBrush>(Brushes.Bisque);
@@ -85,7 +85,7 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(Color.Bisque, brush.Color);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Clone_Disposed_ThrowsArgumentException()
         {
             var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
@@ -94,7 +94,7 @@ namespace System.Drawing.Drawing2D.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void HatchStyle_EmptyAndGetDisposed_ThrowsArgumentException()
         {
             var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
@@ -103,7 +103,7 @@ namespace System.Drawing.Drawing2D.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => brush.HatchStyle);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void ForegroundColor_EmptyAndGetDisposed_ThrowsArgumentException()
         {
             var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
@@ -112,7 +112,7 @@ namespace System.Drawing.Drawing2D.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => brush.ForegroundColor);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void BackgroundColor_EmptyAndGetDisposed_ThrowsArgumentException()
         {
             var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
@@ -121,7 +121,7 @@ namespace System.Drawing.Drawing2D.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => brush.BackgroundColor);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Dispose_MultipleTimes_Success()
         {
             var brush = new HatchBrush(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);

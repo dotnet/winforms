@@ -7,7 +7,7 @@ namespace System.Drawing.Imaging.Tests
 {
     public class ColorMapTests
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Default()
         {
             ColorMap cm = new ColorMap();
@@ -15,7 +15,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(new Color(), cm.NewColor);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void NewColor_SetValid_ReturnsExpected()
         {
             ColorMap cm = new ColorMap();
@@ -23,7 +23,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(Color.AliceBlue, cm.NewColor);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void OldColor_SetValid_ReturnsExpected()
         {
             ColorMap cm = new ColorMap();

@@ -49,7 +49,7 @@ namespace System.Drawing.Tests
 
         public static object[] Pen(Func<Pen> getPen, Color expectedColor) => new object[] { getPen, expectedColor };
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(SystemPens_TestData))]
         public void SystemPens_Get_ReturnsExpected(Func<Pen> getPen, Color expectedColor)
         {

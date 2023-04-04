@@ -218,7 +218,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData("#G12", typeof(FormatException))]
         [InlineData("#G12345", typeof(FormatException))]
         [InlineData("1,2", typeof(ArgumentException))]

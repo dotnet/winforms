@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace System.Drawing.Drawing2D.Tests
             yield return new object[] { fillPath, null, LineCap.Flat, 0f, LineCap.Flat };
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [MemberData(nameof(Ctor_Path_Path_LineCap_Float_TestData))]
         public void Ctor_Path_Path_LineCap_Float(GraphicsPath fillPath, GraphicsPath strokePath, LineCap baseCap, float baseInset, LineCap expectedCap)
         {
@@ -55,7 +55,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         // These values are outside the valid range of the LineCap enum.
         [InlineData(LineCap.Flat - 1)]
         [InlineData(LineCap.Custom + 1)]
@@ -69,7 +69,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_FillPath_Incomplete_ThrowsArgumentException()
         {
             using (GraphicsPath fillPath = new GraphicsPath())
@@ -79,7 +79,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_FillPath_DoesNotCrossYAxis_ThrowsNotImplementedException()
         {
             // Closed fillPath, but does not cross the Y-axis.
@@ -92,7 +92,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(LineCap.Square, LineCap.Square)]
         [InlineData(LineCap.Round, LineCap.Round)]
         [InlineData(LineCap.Triangle, LineCap.Triangle)]
@@ -109,7 +109,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(LineCap.SquareAnchor, LineCap.SquareAnchor)]
         [InlineData(LineCap.Custom, LineCap.Custom)]
         [InlineData(LineCap.Square, LineCap.Custom)]
@@ -130,7 +130,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(LineJoin.Miter)] // Default value
         [InlineData(LineJoin.Bevel)]
         [InlineData(LineJoin.Round)]
@@ -148,7 +148,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(LineCap.Flat)] // Default value
         [InlineData(LineCap.Square)]
         [InlineData(LineCap.Round)]
@@ -163,7 +163,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsWindowsOrAtLeastLibgdiplus6)]
+        [Theory]
         [InlineData(LineCap.NoAnchor)]
         [InlineData(LineCap.SquareAnchor)]
         [InlineData(LineCap.RoundAnchor)]
@@ -181,7 +181,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0f)]
         [InlineData(1f)]
         [InlineData(10f)]
@@ -204,7 +204,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0f)]
         [InlineData(1f)]
         [InlineData(10f)]
@@ -227,7 +227,7 @@ namespace System.Drawing.Drawing2D.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Disposed_MembersThrow()
         {
             using (GraphicsPath strokePath = new GraphicsPath())

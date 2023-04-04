@@ -37,13 +37,13 @@ namespace System.Drawing.Imaging.Tests
         private readonly Rectangle _rectangle = new Rectangle(0, 0, 64, 64);
         private readonly RectangleF _rectangleF = new RectangleF(0, 0, 64, 64);
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrZero_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile(IntPtr.Zero, false));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrToWmf_ThrowsExternalException()
         {
             using (var metafile = new Metafile(GetPath(WmfFile)))
@@ -52,7 +52,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_String_Success()
         {
             using (var metafile = new Metafile(GetPath(WmfFile)))
@@ -61,19 +61,19 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Bitmap_ThrowsExternalException()
         {
             Assert.Throws<ExternalException>(() => new Metafile(GetPath(BmpFile)));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullString_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("path", () => new Metafile((string)null));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_InvalidPath_ThrowsExternalException()
         {
             Assert.Throws<ExternalException>(() => new Metafile("fileNotExist"));
@@ -86,7 +86,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { string.Empty };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData("bad\0name")]
         [InlineData("")]
         public void Ctor_InvalidPath_ThrowsArgumentException(string path)
@@ -94,7 +94,7 @@ namespace System.Drawing.Imaging.Tests
             AssertExtensions.Throws<ArgumentException>("path", null, () => new Metafile(path));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void Ctor_Stream_Success()
         {
@@ -105,13 +105,13 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullStream_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentNullException, ArgumentException>("stream", null, () => new Metafile((Stream)null));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void Ctor_EmptyStream_ThrowsExternalException()
         {
@@ -128,7 +128,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { EmfType.EmfPlusOnly };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_TestData))]
         public void Ctor_IntPtrEmfType_Success(EmfType emfType)
         {
@@ -149,7 +149,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { (EmfType)int.MinValue };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_Invalid_TestData))]
         public void Ctor_IntPtrInvalidEmfType_ThrowsArgumentException(EmfType emfType)
         {
@@ -160,13 +160,13 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullEmfType_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile((IntPtr)null, EmfType.EmfOnly));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_ZeroPointerEmfType_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile(IntPtr.Zero, EmfType.EmfOnly));
@@ -178,7 +178,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { "description" };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_IntPtrEmfTypeString_Success(string description)
         {
@@ -190,14 +190,14 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(InvalidPath_TestData))]
         public void Ctor_ZeroPointerEmfTypeInvalidString_ThrowsArgumentException(string description)
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile(IntPtr.Zero, EmfType.EmfOnly, description));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrRectangleF_Success()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
@@ -218,7 +218,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { MetafileFrameUnit.GdiCompatible };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MetafileFrameUnit_TestData))]
         public void Ctor_IntPtrRectangleFMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
         {
@@ -230,7 +230,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_TestData))]
         public void Ctor_IntPtrRectangleFMetafileFrameUnitEmfType_Success(EmfType emfType)
         {
@@ -243,7 +243,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_IntPtrRectangleFMetafileFrameUnitEmfTypeString_Success(string description)
         {
@@ -255,7 +255,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrRectangle_Success()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
@@ -266,7 +266,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MetafileFrameUnit_TestData))]
         public void Ctor_IntPtrRectangleMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
         {
@@ -278,7 +278,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_TestData))]
         public void Ctor_IntPtrRectangleMetafileFrameUnitEmfType_Success(EmfType emfType)
         {
@@ -291,7 +291,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_IntPtrRectangleMetafileFrameUnitEmfTypeString_Success(string description)
         {
@@ -303,7 +303,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrZeroI_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => new Metafile(IntPtr.Zero, _rectangleF));
@@ -329,7 +329,7 @@ namespace System.Drawing.Imaging.Tests
             yield return new object[] { (MetafileFrameUnit)int.MinValue };
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MetafileFrameUnit_Invalid_TestData))]
         public void Ctor_InvalidMetafileFrameUnit_ThrowsArgumentException(MetafileFrameUnit farameUnit)
         {
@@ -349,7 +349,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_Invalid_TestData))]
         public void Ctor_InvalidEmfType_ThrowsArgumentException(EmfType emfType)
         {
@@ -369,7 +369,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_StringIntPtr_Success()
         {
             string fileName = GetPath("newTestImage.wmf");
@@ -384,7 +384,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_TestData))]
         public void Ctor_StringIntPtrEmfType_Success(EmfType emfType)
         {
@@ -401,7 +401,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_StringIntPtrEmfTypeDescription_Success(string description)
         {
@@ -418,7 +418,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrZeroII_ThrowsArgumentException()
         {
             string fileName = GetPath("newTestImage.wmf");
@@ -428,7 +428,7 @@ namespace System.Drawing.Imaging.Tests
             DeleteFile(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_Invalid_TestData))]
         public void Ctor_InvalidEmfTypeI_ThrowsArgumentException(EmfType emfType)
         {
@@ -443,7 +443,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullPath_ThrowsArgumentNullException()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
@@ -456,7 +456,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData("bad\0path")]
         [InlineData("")]
         public void Ctor_InvalidPathI_ThrowsArgumentException(string fileName)
@@ -471,7 +471,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_PathTooLong_ThrowsPathTooLongException()
         {
             string fileName = GetPath(new string('a', short.MaxValue));
@@ -486,7 +486,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_StringIntPtrRectangleF_Success()
         {
             string fileName = GetPath("newTestImage.wmf");
@@ -501,7 +501,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MetafileFrameUnit_TestData))]
         public void Ctor_StringIntPtrRectangleFMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
         {
@@ -517,7 +517,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_TestData))]
         public void Ctor_StringIntPtrRectangleFMetafileFrameUnitEmfType_Success(EmfType emfType)
         {
@@ -534,7 +534,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_StringIntPtrRectangleFMetafileFrameUnitEmfTypeString_Success(string description)
         {
@@ -552,7 +552,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_RectangleFEmpty_Success(string description)
         {
@@ -570,7 +570,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_StringIntPtrRectangle_Success()
         {
             string fileName = GetPath("newTestImage.wmf");
@@ -585,7 +585,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MetafileFrameUnit_TestData))]
         public void Ctor_StringIntPtrRectangleMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
         {
@@ -601,7 +601,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_TestData))]
         public void Ctor_StringIntPtrRectangleMetafileFrameUnitEmfType_Success(EmfType emfType)
         {
@@ -618,7 +618,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_StringIntPtrRectangleMetafileFrameUnitEmfTypeString_Success(string description)
         {
@@ -636,7 +636,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_RectangleEmpty_Success(string description)
         {
@@ -654,7 +654,7 @@ namespace System.Drawing.Imaging.Tests
             File.Delete(fileName);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrZeroIII_ThrowsArgumentException()
         {
             string fileName = GetPath("newTestImage.wmf");
@@ -674,7 +674,7 @@ namespace System.Drawing.Imaging.Tests
             DeleteFile(fileName);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MetafileFrameUnit_Invalid_TestData))]
         public void Ctor_InvalidFrameUnit_ThrowsArgumentException(MetafileFrameUnit frameUnit)
         {
@@ -698,7 +698,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_Invalid_TestData))]
         public void Ctor_InvalidEmfTypeII_ThrowsArgumentException(EmfType emfType)
         {
@@ -720,7 +720,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullPathI_ThrowsArgumentNullException()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
@@ -737,7 +737,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData("bad\0path")]
         [InlineData("")]
         public void Ctor_InvalidPathII_ThrowsArgumentException(string fileName)
@@ -756,7 +756,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_PathTooLongI_ThrowsPathTooLongException()
         {
             string fileName = GetPath(new string('a', 261));
@@ -775,7 +775,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void Ctor_StreamIntPtrRectangle_Success()
         {
@@ -788,7 +788,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [MemberData(nameof(MetafileFrameUnit_TestData))]
         public void Ctor_StreamIntPtrRectangleMetafileFrameUnit_Success(MetafileFrameUnit frameUnit)
@@ -802,7 +802,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [MemberData(nameof(EmfType_TestData))]
         public void Ctor_StreamIntPtrRectangleMetafileFrameUnitEmfType_Success(EmfType emfType)
@@ -817,7 +817,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_StreamIntPtrRectangleMetafileFrameUnitEmfTypeString_Success(string description)
@@ -833,7 +833,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [MemberData(nameof(Description_TestData))]
         public void Ctor_RectangleEmptyI_Success(string description)
@@ -850,7 +850,7 @@ namespace System.Drawing.Imaging.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/55655", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_IntPtrZeroIV_ThrowsArgumentException()
         {
             using (var stream = new MemoryStream())
@@ -865,7 +865,7 @@ namespace System.Drawing.Imaging.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/55655", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(MetafileFrameUnit_Invalid_TestData))]
         public void Ctor_InvalidFrameUnitIII_ThrowsArgumentException(MetafileFrameUnit frameUnit)
         {
@@ -883,7 +883,7 @@ namespace System.Drawing.Imaging.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/55655", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(EmfType_Invalid_TestData))]
         public void Ctor_InvalidEmfTypeIII_ThrowsArgumentException(EmfType emfType)
         {
@@ -899,7 +899,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_NullStream_ThrowsNullReferenceException()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format32bppArgb))
@@ -915,14 +915,14 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Static_GetMetafileHeader_String_ReturnsExpected()
         {
             MetafileHeader header = Metafile.GetMetafileHeader(GetPath(WmfFile));
             AssertMetafileHeader(header);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Static_GetMetafileHeader_IntPtr_ThrowsArgumentException()
         {
             AssertExtensions.Throws<ArgumentException>(null, () => Metafile.GetMetafileHeader(IntPtr.Zero));
@@ -932,7 +932,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData("bad\0path")]
         [InlineData("")]
         public void Static_GetMetafileHeader_InvalidPath_ThrowsArgumentException(string fileName)
@@ -940,13 +940,13 @@ namespace System.Drawing.Imaging.Tests
             AssertExtensions.Throws<ArgumentException>("path", null, () => Metafile.GetMetafileHeader(fileName));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Static_GetMetafileHeader_NullString_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("path", () => Metafile.GetMetafileHeader((string)null));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void Static_GetMetafileHeader_Stream_ReturnsExpected()
         {
@@ -957,13 +957,13 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Static_GetMetafileHeader_NullStream_ThrowsNullReferenceException()
         {
             Assert.Throws<NullReferenceException>(() => Metafile.GetMetafileHeader((Stream)null));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void Static_GetMetafileHeader_EmptyStream_ArgumentException()
         {
@@ -973,7 +973,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_ReturnsExpected()
         {
             using (var metafile = new Metafile(GetPath(WmfFile)))
@@ -985,7 +985,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetMetafileHeader_Disposed_ThrowsArgumentException()
         {
             var metafile = new Metafile(GetPath(WmfFile));
@@ -994,7 +994,7 @@ namespace System.Drawing.Imaging.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => metafile.GetMetafileHeader());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHenhmetafile_ReturnsExpected()
         {
             using (var metafile = new Metafile(GetPath(WmfFile)))
@@ -1003,7 +1003,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHenhmetafile_Disposed_ThrowsArgumentException()
         {
             var metafile = new Metafile(GetPath(WmfFile));
@@ -1012,7 +1012,7 @@ namespace System.Drawing.Imaging.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => metafile.GetHenhmetafile());
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void PlayRecord_Disposed_ThrowsArgumentException()
         {
             var metafile = new Metafile(GetPath(WmfFile));

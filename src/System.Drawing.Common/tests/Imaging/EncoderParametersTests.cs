@@ -8,7 +8,7 @@ namespace System.Drawing.Imaging.Tests
 {
     public class EncoderParametersTests
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Default()
         {
             using (EncoderParameters ep = new EncoderParameters())
@@ -18,7 +18,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(1)]
         public void Ctor_Count_Default(int count)
         {
@@ -39,7 +39,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Param_TestData))]
         public void Param_Success(EncoderParameter[] param)
         {
@@ -50,7 +50,7 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(Param_TestData))]
         public void Dispose_Success(EncoderParameter[] param)
         {

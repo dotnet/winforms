@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
@@ -38,7 +38,7 @@ namespace System.Drawing.Printing.Tests
             }
         };
 
-        [ConditionalFact(Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void Ctor_Default_Success()
         {
             using (var document = new PrintDocument())
@@ -49,7 +49,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void DefaultPageSettings_SetValue_ReturnsExpected()
         {
             using (var document = new PrintDocument())
@@ -62,7 +62,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [ActiveIssue("https://github.com/dotnet/runtime/issues/30221")]
         public void DefaultPageSettings_Null_ReturnsExpected()
         {
@@ -85,7 +85,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DocumentName_Null_ReturnsExpected()
         {
             using (var document = new PrintDocument())
@@ -107,7 +107,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void PrintController_SetValue_ReturnsExpected()
         {
             using (var document = new PrintDocument())
@@ -121,7 +121,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void PrinterSettings_SetValue_ReturnsExpected()
         {
             using (var document = new PrintDocument())
@@ -144,7 +144,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void BeginPrint_SetValue_ReturnsExpected()
         {
             bool flag = false;
@@ -165,7 +165,7 @@ namespace System.Drawing.Printing.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/26428")]
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void EndPrint_SetValue_ReturnsExpected()
         {
             bool flag = false;
@@ -206,7 +206,7 @@ namespace System.Drawing.Printing.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/26428")]
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void PrintPage_SetValue_ReturnsExpected()
         {
             bool flag = false;
@@ -226,7 +226,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void QueryPageSettings_SetValue_ReturnsExpected()
         {
             bool flag = false;

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Authors:
@@ -36,28 +36,28 @@ namespace System.Drawing.Printing.Tests
 {
     public class PrinterSettingsTests
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Default_Success()
         {
             var printerSettings = new PrinterSettings();
             Assert.NotNull(printerSettings.DefaultPageSettings);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void CanDuplex_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
             bool canDuplex = printerSettings.CanDuplex;
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Copies_Default_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
             int copies = printerSettings.Copies;
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0)]
         [InlineData(short.MaxValue)]
         public void Copies_SetValue_ReturnsExpected(short copies)
@@ -70,7 +70,7 @@ namespace System.Drawing.Printing.Tests
             Assert.Equal(copies, printerSettings.Copies);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(-1)]
         [InlineData(short.MinValue)]
         public void Copies_SetValue_ThrowsArgumentException(short copies)
@@ -79,14 +79,14 @@ namespace System.Drawing.Printing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.Copies = copies);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void Collate_Default_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
             bool collate = printerSettings.Collate;
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Collate_SetValue_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings()
@@ -97,14 +97,14 @@ namespace System.Drawing.Printing.Tests
             Assert.False(printerSettings.Collate);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DefaultPageSettings_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
             Assert.NotNull(printerSettings.DefaultPageSettings);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(Duplex.Simplex)]
         [InlineData(Duplex.Vertical)]
         [InlineData(Duplex.Horizontal)]
@@ -118,7 +118,7 @@ namespace System.Drawing.Printing.Tests
             Assert.Equal(duplex, printerSettings.Duplex);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(Duplex.Default - 1)]
         [InlineData(Duplex.Horizontal + 1)]
         [InlineData((Duplex)int.MaxValue)]
@@ -159,27 +159,27 @@ namespace System.Drawing.Printing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.FromPage = pageNumber);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void Static_InstalledPrinters_ReturnsExpected()
         {
             Assert.NotNull(PrinterSettings.InstalledPrinters);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void IsDefaultPrinter_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
             Assert.True(printerSettings.IsDefaultPrinter);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void IsPlotter_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
             Assert.False(printerSettings.IsPlotter);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void IsValid_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings()
@@ -190,7 +190,7 @@ namespace System.Drawing.Printing.Tests
             Assert.False(printerSettings.IsValid);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void LandscapeAngle_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -198,7 +198,7 @@ namespace System.Drawing.Printing.Tests
             Assert.True(validValues.Contains(printerSettings.LandscapeAngle), $"PrinterSettings.LandscapeAngle ({printerSettings.LandscapeAngle}) must be 0, 90, or 270 degrees.");
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void MaximumCopies_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -290,14 +290,14 @@ namespace System.Drawing.Printing.Tests
             AssertExtensions.Throws<ArgumentNullException>(string.Empty, () => printerSettings.PrintFileName = string.Empty);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void PaperSizes_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
             Assert.NotNull(printerSettings.PaperSizes);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void PaperSources_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -355,7 +355,7 @@ namespace System.Drawing.Printing.Tests
             Assert.Equal(printerName, printerSettings.PrinterName);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void PrinterName_Null_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings()
@@ -366,7 +366,7 @@ namespace System.Drawing.Printing.Tests
             Assert.NotNull(printerSettings.PrinterName);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void PrinterResolutions_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -379,7 +379,7 @@ namespace System.Drawing.Printing.Tests
             yield return new object[] { ImageFormat.Png };
         }
 
-        [ConditionalTheory(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalTheory(Helpers.AnyInstalledPrinters)]
         [MemberData(nameof(IsDirectPrintingSupported_ImageFormatSupported_TestData))]
         public void IsDirectPrintingSupported_ImageFormatSupported_ReturnsExpected(ImageFormat imageFormat)
         {
@@ -407,7 +407,7 @@ namespace System.Drawing.Printing.Tests
             Assert.False(printerSettings.IsDirectPrintingSupported(imageFormat));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void IsDirectPrintingSupported_ImageNotSupported_ReturnsExpected()
         {
             using (var bitmap = new Bitmap(10, 10))
@@ -456,7 +456,7 @@ namespace System.Drawing.Printing.Tests
             Assert.False(ReferenceEquals(clone, printerSettings));
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void CreateMeasurementGraphics_Default_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -470,7 +470,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void CreateMeasurementGraphics_Bool_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -482,7 +482,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void CreateMeasurementGraphics_PageSettings_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -497,7 +497,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void CreateMeasurementGraphics_PageSettingsBool_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -510,7 +510,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
         public void CreateMeasurementGraphics_Null_ThrowsNullReferenceException()
         {
             var printerSettings = new PrinterSettings();
@@ -518,7 +518,7 @@ namespace System.Drawing.Printing.Tests
             Assert.Throws<NullReferenceException>(() => printerSettings.CreateMeasurementGraphics(null, true));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHdevmode_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -528,7 +528,7 @@ namespace System.Drawing.Printing.Tests
             Assert.NotEqual(IntPtr.Zero, handle);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHdevmode_PageSettings_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -539,14 +539,14 @@ namespace System.Drawing.Printing.Tests
             Assert.NotEqual(IntPtr.Zero, handle);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHdevmode_Null_ThrowsNullReferenceException()
         {
             var printerSettings = new PrinterSettings();
             Assert.Throws<NullReferenceException>(() => printerSettings.GetHdevmode(null));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHdevnames_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -570,7 +570,7 @@ namespace System.Drawing.Printing.Tests
             Assert.Equal(printerSettings.Duplex, newPrinterSettings.Duplex);
         }
 
-        public static bool CanTestSetHdevmode_IntPtr_Success => Helpers.GetIsDrawingSupported() && GetNameOfTestPrinterSuitableForDevModeTesting() != null;
+        public static bool CanTestSetHdevmode_IntPtr_Success => GetNameOfTestPrinterSuitableForDevModeTesting() != null;
 
         private static string GetNameOfTestPrinterSuitableForDevModeTesting()
         {
@@ -592,14 +592,14 @@ namespace System.Drawing.Printing.Tests
             "Microsoft XPS Document Writer", // Backup for older Windows
         };
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void GetHdevmode_Zero_ThrowsArgumentException()
         {
             var printerSettings = new PrinterSettings();
             AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.SetHdevmode(IntPtr.Zero));
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetHdevnames_IntPtr_Success()
         {
             var printerSettings = new PrinterSettings();
@@ -609,7 +609,7 @@ namespace System.Drawing.Printing.Tests
             Assert.Equal(newPrinterSettings.PrinterName, printerSettings.PrinterName);
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void ToString_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();

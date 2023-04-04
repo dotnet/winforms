@@ -1394,7 +1394,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void FillDrawRectangle_Width_2()
         {
             // even pen size
@@ -1565,7 +1565,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void DrawFillRectangle_Width_2()
         {
             // even pen size
@@ -2308,7 +2308,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void MeasureString_Wrapping_Dots()
         {
             string text = "this is really long text........................................... with a lot o periods.";

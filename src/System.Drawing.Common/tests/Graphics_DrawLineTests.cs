@@ -8,7 +8,7 @@ namespace System.Drawing.Tests
     public class Graphics_DrawLineTests : DrawingTest
     {
         [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLines_Points()
         {
             using (Bitmap image = new Bitmap(100, 100))
@@ -24,7 +24,7 @@ namespace System.Drawing.Tests
         }
 
         [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLines_PointFs()
         {
             using (Bitmap image = new Bitmap(100, 100))
@@ -39,7 +39,7 @@ namespace System.Drawing.Tests
            }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLine_NullPen_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -52,7 +52,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLine_DisposedPen_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -68,7 +68,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLine_Busy_ThrowsInvalidOperationException()
         {
             using (var image = new Bitmap(10, 10))
@@ -90,7 +90,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLine_Disposed_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -106,7 +106,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLines_NullPen_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -117,7 +117,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLines_DisposedPen_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))
@@ -131,7 +131,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLines_NullPoints_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -143,7 +143,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0)]
         [InlineData(1)]
         public void DrawLines_InvalidPointsLength_ThrowsArgumentException(int length)
@@ -157,7 +157,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLines_Busy_ThrowsInvalidOperationException()
         {
             using (var image = new Bitmap(10, 10))
@@ -177,7 +177,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void DrawLines_Disposed_ThrowsArgumentException()
         {
             using (var image = new Bitmap(10, 10))

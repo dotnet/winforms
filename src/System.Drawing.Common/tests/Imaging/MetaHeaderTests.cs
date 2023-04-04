@@ -7,7 +7,7 @@ namespace System.Drawing.Imaging.Tests
 {
     public class MetaHeaderTests
     {
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Ctor_Default()
         {
             MetaHeader mh = new MetaHeader();
@@ -20,7 +20,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(0, mh.Version);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(short.MaxValue)]
         [InlineData(0)]
         [InlineData(short.MinValue)]
@@ -39,7 +39,7 @@ namespace System.Drawing.Imaging.Tests
             Assert.Equal(value, mh.Version);
         }
 
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(int.MaxValue)]
         [InlineData(0)]
         [InlineData(int.MinValue)]

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace System.Drawing.Printing.Tests
             Assert.True(controller.IsPreview);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void OnStartPage_InvokeWithPrint_ReturnsNull()
         {
             using (var document = new PrintDocument())
@@ -52,7 +52,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void OnStartPage_InvokeNullEventArgsPageSettings_ReturnsNull()
         {
             using (var document = new PrintDocument())
@@ -76,7 +76,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Fixed a NullReferenceException")]
         public void OnEndPage_InvokeWithoutStarting_Nop()
         {
@@ -94,7 +94,7 @@ namespace System.Drawing.Printing.Tests
             yield return new object[] { new PrintEventArgs() };
         }
 
-        [ConditionalTheory(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalTheory(Helpers.AnyInstalledPrinters)]
         [MemberData(nameof(PrintEventArgs_TestData))]
         public void OnStartPrint_InvokeWithDocument_Success(PrintEventArgs e)
         {
@@ -108,7 +108,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.IsDrawingSupported)]
+        [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void OnStartPrint_InvokeMultipleTimes_Success()
         {
             using (var document = new PrintDocument())

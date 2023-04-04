@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // JpegCodec class testing unit
@@ -40,7 +40,7 @@ namespace MonoTests.System.Drawing.Imaging
 {
     public class JpegCodecTest
     {
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap8bbpIndexedGreyscaleFeatures()
         {
             string sInFile = Helpers.GetTestBitmapPath("nature-greyscale.jpg");
@@ -86,7 +86,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.GdiPlusIsAvailableNotWindows7)]
+        [Fact]
         public void Bitmap8bbpIndexedGreyscalePixels()
         {
             string sInFile = Helpers.GetTestBitmapPath("nature-greyscale.jpg");
@@ -112,7 +112,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported), nameof(PlatformDetection.IsNotWindows7), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
+        [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotWindows7), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
         public void Bitmap8bbpIndexedGreyscaleData()
         {
             string sInFile = Helpers.GetTestBitmapPath("nature-greyscale.jpg");
@@ -173,7 +173,7 @@ namespace MonoTests.System.Drawing.Imaging
         }
 
         /* Checks bitmap features on a known 24-bits bitmap */
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap24bitFeatures()
         {
             string sInFile = Helpers.GetTestBitmapPath("nature24bits.jpg");
@@ -207,7 +207,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap24bitPixels()
         {
             string sInFile = Helpers.GetTestBitmapPath("nature24bits.jpg");
@@ -400,25 +400,25 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_24bppRgb()
         {
             Save(PixelFormat.Format24bppRgb, PixelFormat.Format24bppRgb);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppRgb()
         {
             Save(PixelFormat.Format32bppRgb, PixelFormat.Format24bppRgb);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppArgb()
         {
             Save(PixelFormat.Format32bppArgb, PixelFormat.Format24bppRgb);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppPArgb()
         {
             Save(PixelFormat.Format32bppPArgb, PixelFormat.Format24bppRgb);

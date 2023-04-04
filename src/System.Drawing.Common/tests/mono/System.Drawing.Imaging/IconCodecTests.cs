@@ -39,7 +39,7 @@ namespace MonoTests.System.Drawing.Imaging
 {
     public class IconCodecTest
     {
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Image16()
         {
             string sInFile = Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico");
@@ -60,7 +60,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Image16_PaletteEntries()
         {
             string sInFile = Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico");
@@ -71,7 +71,7 @@ namespace MonoTests.System.Drawing.Imaging
         }
 
         // simley.ico has 48x48, 32x32 and 16x16 images (in that order)
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap16Features()
         {
             string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
@@ -104,7 +104,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Flaky - ArgumentException")]
         public void Bitmap16Features_Palette_Entries()
         {
@@ -115,7 +115,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap16Pixels()
         {
             string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
@@ -229,7 +229,7 @@ namespace MonoTests.System.Drawing.Imaging
         }
 
         // VisualPng.ico only has a 32x32 size available
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap32Features()
         {
             string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
@@ -261,7 +261,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap32Features_PaletteEntries()
         {
             string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
@@ -271,7 +271,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap32Pixels()
         {
             string sInFile = Helpers.GetTestBitmapPath("VisualPng.ico");
@@ -442,7 +442,7 @@ namespace MonoTests.System.Drawing.Imaging
         }
 
         // 48x48_one_entry_1bit.ico only has a 48x48 size available
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap48Features()
         {
             string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
@@ -474,7 +474,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap48Features_Palette_Entries()
         {
             string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
@@ -484,7 +484,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap48Pixels()
         {
             string sInFile = Helpers.GetTestBitmapPath("48x48_one_entry_1bit.ico");
@@ -672,7 +672,7 @@ namespace MonoTests.System.Drawing.Imaging
         }
 
         // 64x64x256 only has a 64x64 size available
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap64Features()
         {
             string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
@@ -704,7 +704,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap64Features_Palette_Entries()
         {
             string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
@@ -714,7 +714,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Bitmap64Pixels()
         {
             string sInFile = Helpers.GetTestBitmapPath("64x64_one_entry_8bit.ico");
@@ -938,7 +938,7 @@ namespace MonoTests.System.Drawing.Imaging
         }
 
         // 96x96x256.ico only has a 96x96 size available
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap96Features()
         {
             string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");
@@ -970,7 +970,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap96Features_Palette_Entries()
         {
             string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");
@@ -980,7 +980,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Bitmap96Pixels()
         {
             string sInFile = Helpers.GetTestBitmapPath("96x96_one_entry_8bit.ico");
@@ -1879,7 +1879,7 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void Xp32bppIconFeatures()
         {
             string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_32bit.ico");
@@ -1958,25 +1958,25 @@ namespace MonoTests.System.Drawing.Imaging
             }
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_24bppRgb()
         {
             Save(PixelFormat.Format24bppRgb, PixelFormat.Format24bppRgb, true);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppRgb()
         {
             Save(PixelFormat.Format32bppRgb, PixelFormat.Format32bppArgb, true);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppArgb()
         {
             Save(PixelFormat.Format32bppArgb, PixelFormat.Format32bppArgb, true);
         }
 
-        [ConditionalFact(Helpers.RecentGdiplusIsAvailable)]
+        [Fact]
         public void Save_32bppPArgb()
         {
             Save(PixelFormat.Format32bppPArgb, PixelFormat.Format32bppArgb, true);
