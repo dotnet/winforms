@@ -2615,6 +2615,44 @@ namespace System.Windows.Forms.Tests
             Assert.False(form.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Form_ParentThenSetShowInTaskbarToFalse()
+        {
+            // Regression test for https://github.com/dotnet/winforms/issues/8803
+            using ParentedForm form = new();
+            form.Show();
+        }
+
+        public partial class ParentedForm : Form
+        {
+            private ParentingForm _parentForm;
+
+            protected override void OnHandleCreated(EventArgs e)
+            {
+                base.OnHandleCreated(e);
+                _parentForm = new ParentingForm(this);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+
+                if (disposing)
+                {
+                    _parentForm?.Dispose();
+                }
+            }
+
+            public class ParentingForm : Form
+            {
+                public ParentingForm(Form targetForm)
+                {
+                    targetForm.Owner = this;
+                    RecreateHandle();
+                }
+            }
+        }
+
         public class SubForm : Form
         {
             public new const int ScrollStateAutoScrolling = Form.ScrollStateAutoScrolling;

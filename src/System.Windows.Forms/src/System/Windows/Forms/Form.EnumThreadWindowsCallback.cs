@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -31,7 +32,7 @@ namespace System.Windows.Forms
                     // Enumerated window is owned by this Form.
                     // Store it in a list for further treatment.
                     _ownedWindows ??= new();
-                    _ownedWindows.Add(parent);
+                    _ownedWindows.Add(hwnd);
                 }
 
                 return BOOL.TRUE;
@@ -44,7 +45,8 @@ namespace System.Windows.Forms
                 {
                     foreach (IntPtr hwnd in _ownedWindows)
                     {
-                        User32.SetWindowLong(hwnd, User32.GWL.HWNDPARENT, 0);
+                        nint oldValue = User32.SetWindowLong(hwnd, User32.GWL.HWNDPARENT, 0);
+                        Debug.Assert(oldValue == _formHandle);
                     }
                 }
             }
