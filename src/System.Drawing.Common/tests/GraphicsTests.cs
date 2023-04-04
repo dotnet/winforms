@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace System.Drawing.Tests
     public partial class GraphicsTests
     {
         public static bool IsWindows7OrWindowsArm64 => PlatformDetection.IsWindows7 || (PlatformDetection.IsWindows && PlatformDetection.IsArm64Process);
-        
+
         [ConditionalFact(Helpers.IsDrawingSupported)]
         public void GetHdc_FromHdc_Roundtrips()
         {
@@ -1742,7 +1742,7 @@ namespace System.Drawing.Tests
         public static IEnumerable<object[]> CopyFromScreen_TestData()
         {
             yield return new object[] { 0, 0, 0, 0, new Size(0, 0) };
-            yield return new object[] { -1, -1, 0, 0, new Size(1, 1) };
+            yield return new object[] { int.MinValue, int.MinValue, 0, 0, new Size(1, 1) };
             yield return new object[] { int.MaxValue, int.MaxValue, 0, 0, new Size(1, 1) };
             yield return new object[] { int.MaxValue, int.MaxValue, 0, 0, new Size(1, 1) };
             yield return new object[] { 0, 0, -1, -1, new Size(1, 1) };
@@ -1750,8 +1750,7 @@ namespace System.Drawing.Tests
             yield return new object[] { 0, 0, 0, 0, new Size(-1, -1) };
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/23375")]
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(CopyFromScreen_TestData))]
         public void CopyFromScreen_OutOfRange_DoesNotAffectGraphics(int sourceX, int sourceY, int destinationX, int destinationY, Size size)
         {
@@ -1767,8 +1766,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/23375")]
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [InlineData(0, 0, 0, 0, 10, 10)]
         [InlineData(0, 0, 0, 0, int.MaxValue, int.MaxValue)]
         [InlineData(1, 1, 2, 2, 3, 3)]
@@ -1881,25 +1879,23 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/23375")]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void CopyFromScreen_Busy_ThrowsInvalidOperationException()
         {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
+            using Bitmap image = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+
+            nint hdc = graphics.GetHdc();
+            try
             {
-                graphics.GetHdc();
-                try
-                {
-                    Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(0, 0, 0, 0, Size.Empty));
-                    Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(0, 0, 0, 0, Size.Empty, CopyPixelOperation.DestinationInvert));
-                    Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(Point.Empty, Point.Empty, Size.Empty));
-                    Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(Point.Empty, Point.Empty, Size.Empty, CopyPixelOperation.DestinationInvert));
-                }
-                finally
-                {
-                    graphics.ReleaseHdc();
-                }
+                Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(0, 0, 0, 0, Size.Empty));
+                Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(0, 0, 0, 0, Size.Empty, CopyPixelOperation.DestinationInvert));
+                Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(Point.Empty, Point.Empty, Size.Empty));
+                Assert.Throws<InvalidOperationException>(() => graphics.CopyFromScreen(Point.Empty, Point.Empty, Size.Empty, CopyPixelOperation.DestinationInvert));
+            }
+            finally
+            {
+                graphics.ReleaseHdc();
             }
         }
 

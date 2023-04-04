@@ -6,6 +6,7 @@
     <!-- Code warnings that weren't enabled in dotnet/runtime but are raised in winforms.
          TODO: Clean the code up and remove the NoWarns. -->
     <NoWarn>$(NoWarn);CA1825;CA5351;CA1850</NoWarn>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -121,6 +122,10 @@
     <EmbeddedResource Include="$(PkgSystem_Drawing_Common_TestData)\contentFiles\any\any\bitmaps\256x256_one_entry_32bit.ico">
       <LogicalName>System.Drawing.Tests.Icon_toolboxBitmapAttributeTest</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="runtimeconfig.template.json" />
   </ItemGroup>
 
   <ItemGroup>

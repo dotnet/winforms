@@ -3096,10 +3096,11 @@ namespace System.Drawing
             int destWidth = blockRegionSize.Width;
             int destHeight = blockRegionSize.Height;
 
-            IntPtr screenDC = Interop.User32.GetDC(IntPtr.Zero);
+            nint screenDC = Interop.User32.GetDC(0);
+            nint targetDC = 0;
             try
             {
-                IntPtr targetDC = GetHdc();
+                targetDC = GetHdc();
                 int result = Interop.Gdi32.BitBlt(
                     targetDC,
                     destinationX,
@@ -3111,7 +3112,6 @@ namespace System.Drawing
                     sourceY,
                     (Interop.Gdi32.RasterOp)copyPixelOperation);
 
-                //a zero result indicates a win32 exception has been thrown
                 if (result == 0)
                 {
                     throw new Win32Exception();
@@ -3120,7 +3120,10 @@ namespace System.Drawing
             finally
             {
                 Interop.User32.ReleaseDC(IntPtr.Zero, screenDC);
-                ReleaseHdc();
+                if (targetDC != 0)
+                {
+                    ReleaseHdc();
+                }
             }
         }
 

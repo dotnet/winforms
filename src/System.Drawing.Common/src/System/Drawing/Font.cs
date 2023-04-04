@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -202,9 +202,12 @@ namespace System.Drawing
         public float GetHeight(Graphics graphics)
         {
             ArgumentNullException.ThrowIfNull(graphics);
+            if (graphics.NativeGraphics == IntPtr.Zero)
+            {
+                throw new ArgumentException(nameof(graphics));
+            }
 
-            float height;
-            int status = Gdip.GdipGetFontHeight(new HandleRef(this, NativeFont), new HandleRef(graphics, graphics.NativeGraphics), out height);
+            int status = Gdip.GdipGetFontHeight(new HandleRef(this, NativeFont), new HandleRef(graphics, graphics.NativeGraphics), out float height);
             Gdip.CheckStatus(status);
 
             return height;

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
@@ -863,37 +863,33 @@ namespace System.Drawing.Imaging.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22784")]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void SetColorKey_Success()
         {
-            using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
-            using (var graphics = Graphics.FromImage(bitmap))
-            using (var imageAttr = new ImageAttributes())
-            {
-                imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150));
+            using var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height);
+            using var graphics = Graphics.FromImage(bitmap);
+            using var imageAttr = new ImageAttributes();
 
-                bitmap.SetPixel(0, 0, Color.FromArgb(255, 100, 100, 100));
-                graphics.DrawImage(bitmap, _rectangle, _rectangle.X, _rectangle.Y, _rectangle.Width, _rectangle.Height, GraphicsUnit.Pixel, imageAttr);
-                Assert.Equal(Color.FromArgb(0, 0, 0, 0), bitmap.GetPixel(0, 0));
-            }
+            imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150));
+
+            bitmap.SetPixel(0, 0, Color.FromArgb(255, 100, 100, 100));
+            graphics.DrawImage(bitmap, _rectangle, _rectangle.X, _rectangle.Y, _rectangle.Width, _rectangle.Height, GraphicsUnit.Pixel, imageAttr);
+            Assert.Equal(Color.FromArgb(255, 100, 100, 100), bitmap.GetPixel(0, 0));
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22784")]
-        [ConditionalTheory(Helpers.IsDrawingSupported)]
+        [Theory]
         [MemberData(nameof(ColorAdjustType_TestData))]
         public void SetColorKey_Type_Success(ColorAdjustType type)
         {
-            using (var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height))
-            using (var graphics = Graphics.FromImage(bitmap))
-            using (var imageAttr = new ImageAttributes())
-            {
-                imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150), type);
+            using var bitmap = new Bitmap(_rectangle.Width, _rectangle.Height);
+            using var graphics = Graphics.FromImage(bitmap);
+            using var imageAttr = new ImageAttributes();
 
-                bitmap.SetPixel(0, 0, Color.FromArgb(255, 100, 100, 100));
-                graphics.DrawImage(bitmap, _rectangle, _rectangle.X, _rectangle.Y, _rectangle.Width, _rectangle.Height, GraphicsUnit.Pixel, imageAttr);
-                Assert.Equal(Color.FromArgb(0, 0, 0, 0), bitmap.GetPixel(0, 0));
-            }
+            imageAttr.SetColorKey(Color.FromArgb(50, 50, 50), Color.FromArgb(150, 150, 150), type);
+
+            bitmap.SetPixel(0, 0, Color.FromArgb(255, 100, 100, 100));
+            graphics.DrawImage(bitmap, _rectangle, _rectangle.X, _rectangle.Y, _rectangle.Width, _rectangle.Height, GraphicsUnit.Pixel, imageAttr);
+            Assert.Equal(Color.FromArgb(255, 100, 100, 100), bitmap.GetPixel(0, 0));
         }
 
         [ConditionalTheory(Helpers.IsDrawingSupported)]

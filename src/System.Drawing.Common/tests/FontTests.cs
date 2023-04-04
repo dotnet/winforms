@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Generic;
@@ -577,8 +577,7 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.IsDrawingSupported)]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/2060")] // causes an AccessViolation in GDI+
+        [Fact]
         public void GetHeight_DisposedGraphics_ThrowsArgumentException()
         {
             using (FontFamily family = FontFamily.GenericMonospace)

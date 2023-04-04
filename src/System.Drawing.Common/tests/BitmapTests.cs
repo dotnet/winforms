@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // (C) 2004 Ximian, Inc.  http://www.ximian.com
@@ -963,14 +963,18 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.MakeTransparent(Color.Red));
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/22629", TargetFrameworkMonikers.NetFramework)]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/26247", TestPlatforms.Windows)]
-        [ConditionalFact(Helpers.IsDrawingSupported)]
+        [Fact]
         public void MakeTransparent_GrayscalePixelFormat_ThrowsArgumentException()
         {
-            using (var bitmap = new Bitmap(1, 1, PixelFormat.Format16bppGrayScale))
+            using var bitmap = new Bitmap(1, 1, PixelFormat.Format16bppGrayScale);
+            AssertExtensions.Throws<ArgumentException>(null, () => bitmap.MakeTransparent());
+
+            if (PlatformDetection.IsWindows11OrHigher)
             {
-                AssertExtensions.Throws<ArgumentException>(null, () => bitmap.MakeTransparent());
+                bitmap.MakeTransparent(Color.Red);
+            }
+            else
+            {
                 Assert.Throws<ExternalException>(() => bitmap.MakeTransparent(Color.Red));
             }
         }
