@@ -4,10 +4,10 @@ Param(
     [Parameter(ValueFromRemainingArguments=$true)][String[]]$properties
 )
 
-function _kill($processName) {
+function _endProcess($processName) {
     try {
-       if (Get-Process -Name "ServerManager" -ErrorAction SilentlyContinue) {
-            Write-Host "killing process ${processName}."
+       if (Get-Process -Name ${processName} -ErrorAction SilentlyContinue) {
+            Write-Host "Ending process ${processName}."
             # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging.
             & cmd /c "taskkill /T /F /IM ${processName}.exe 2>&1"
         }
@@ -15,12 +15,9 @@ function _kill($processName) {
             Write-Host "${processName} process is not running"
         }
     } catch {
-        Write-Host "Failed to kill ${processName}"
+        Write-Host "Failed to end process ${processName}"
     }
 }
-
-# kill server manager process if running on build agents.
-_kill ServerManager
 
 # How long to wait before we consider a build/test run to be unresponsive
 $WaitSeconds = 900 # 15 min
@@ -35,8 +32,6 @@ $WaitSeconds = 900 # 15 min
 [bool]$integrationTest = $properties.Contains('-integrationTest')
 [bool]$performanceTest = $properties.Contains('-performanceTest')
 
-$screenshotsModuleLocation = Resolve-Path "$PSScriptRoot\Screenshots.win.psm1"
-$initScreenshotsModule = [scriptblock]::Create("Import-Module $screenshotsModuleLocation")
 $memDumpModuleLocation = Resolve-Path "$PSScriptRoot\MemDump.win.psm1"
 $initMemDumpModule = [scriptblock]::Create("Import-Module $memDumpModuleLocation")
 
@@ -45,19 +40,6 @@ $ImageLogs = '';
 if ($CollectDebugInfo) {
 
     dotnet tool install dotnet-dump --tool-path .\.tools
-
-    # Collect screenshots
-    # -----------------------------------------------------------
-    $ImageLogs = Join-Path $LogDir 'screenshots'
-    Create-Directory $ImageLogs
-
-    [ScriptBlock] $ScreenshotCaptureScript = {
-        param($ImageLogs, $WaitSeconds)
-        Start-CaptureScreenshots -TargetDir $ImageLogs -WaitSeconds $WaitSeconds
-    };
-    $job = Start-Job -InitializationScript $initScreenshotsModule `
-                -ScriptBlock $ScreenshotCaptureScript `
-                -ArgumentList @( $ImageLogs, $WaitSeconds );
 
     # Collect memory dump
     # -----------------------------------------------------------
@@ -71,6 +53,16 @@ if ($CollectDebugInfo) {
 
 }
 
+ if ($ci -and $integrationTest) {
+      # Minimize all windows to avoid interference during integration test runs
+      $shell = New-Object -ComObject "Shell.Application"
+      $shell.MinimizeAll()
+	  Write-Host "Minimized all windows"
+	  
+	  # end server manager process if running on build agents.
+	  _endProcess ServerManager
+}
+
 try {
 
     # Run the build script that does the actual work
@@ -82,17 +74,7 @@ try {
 }
 finally {
     if ($CollectDebugInfo) {
-
-        # Stop collecting screenshots
-        # -----------------------------------------------------------
-        [ScriptBlock] $ScreenshotCaptureScript = {
-            param($ImageLogs)
-            Stop-CaptureScreenshots -TargetDir $ImageLogs
-        };
-        Start-Job -InitializationScript $initScreenshotsModule `
-                  -ScriptBlock $ScreenshotCaptureScript `
-                  -ArgumentList $ImageLogs | Receive-Job -AutoRemoveJob -Wait;
-
+       
         # Stop collect memory dumps
         # -----------------------------------------------------------
         [ScriptBlock] $MemDumpScript = {

@@ -55,7 +55,7 @@ namespace System.Windows.Forms.UITests
 
         protected SendInput InputSimulator => new(WaitForIdleAsync);
 
-        public virtual async Task InitializeAsync()
+        public virtual Task InitializeAsync()
         {
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
@@ -69,14 +69,7 @@ namespace System.Windows.Forms.UITests
 
             _joinableTaskCollection = JoinableTaskContext.CreateCollection();
             JoinableTaskFactory = JoinableTaskContext.CreateFactory(_joinableTaskCollection);
-
-            ScreenshotService.TakeScreenshot(Path.Combine(DataCollectionService.GetLogDirectory(), "InitialScreenShot.png"));
-
-            // Minimize all windows on test machine.
-            await JoinableTaskFactory.RunAsync(async () =>
-            {
-                await InputSimulator.SendAsync(null, inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_M));
-            });
+            return Task.CompletedTask;
         }
 
         public virtual async Task DisposeAsync()
