@@ -8,43 +8,19 @@ function _kill($processName) {
     try {
        if (Get-Process -Name "ServerManager" -ErrorAction SilentlyContinue) {
             Write-Host "killing process ${processName}."
-            # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging
-            # when there are no instances of the process
-            & cmd /c "taskkill /T /F /IM ${processName} 2>&1"
+            # Redirect stderr to stdout to avoid big red blocks of output in Azure Pipeline logging.
+            & cmd /c "taskkill /T /F /IM ${processName}.exe 2>&1"
         }
         else {
-            Write-Host "ServerManager process is not running"
+            Write-Host "${processName} process is not running"
         }
     } catch {
-        Write-Host "Failed to kill ${processName} or delete ServerManager.exe file."
+        Write-Host "Failed to kill ${processName}"
     }
 }
 
 # kill server manager process if running on build agents.
-_kill severmanager.exe
-
-# If running in admin mode, try deleting ServerManager.exe to prevent it from launching later on.
-$isAdmin = ([System.Security.Principal.WindowsIdentity]::GetCurrent().Token).Groups -contains ([System.Security.Principal.SecurityIdentifier]"S-1-5-32-544")
-if ($isAdmin ) {
-	$filePath = "C:\Windows\system32\ServerManager.exe"
-	if (Test-Path $filePath) {
-		## Remove binary in case process has not started yet.
-		if (Remove-Item "C:\Windows\System32\ServerManager.exe")
-		{
-			Write-Host "ServerManager.exe file is deleted."
-		}
-		else
-		{
-			Write-Host "Failed to delete ServerManager.exe file."
-		}
-	}
-	else{
-		Write-Host "ServerManager.exe file does not exist. Skipping deletion."
-	}
-
-	# Wait to delete the file.
-	Start-Sleep -Seconds 3
-}
+_kill ServerManager
 
 # How long to wait before we consider a build/test run to be unresponsive
 $WaitSeconds = 900 # 15 min
