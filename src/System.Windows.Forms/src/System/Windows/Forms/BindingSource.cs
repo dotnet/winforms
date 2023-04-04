@@ -472,7 +472,7 @@ namespace System.Windows.Forms
 
         private static string BuildSortString(ListSortDescriptionCollection sortsColln)
         {
-            if (sortsColln is null)
+            if (sortsColln is null || sortsColln.Count == 0)
             {
                 return string.Empty;
             }
@@ -483,12 +483,10 @@ namespace System.Windows.Forms
             {
                 sb.Append(sortsColln[i].PropertyDescriptor.Name);
                 sb.Append(sortsColln[i].SortDirection == ListSortDirection.Ascending ? " ASC" : " DESC");
-
-                if (i < sortsColln.Count - 1)
-                    sb.Append(',');
+                sb.Append(',');
             }
 
-            return sb.ToString();
+            return sb.ToString(0, sb.Length - 1);
         }
 
         public void CancelEdit() => _currencyManager.CancelCurrentEdit();

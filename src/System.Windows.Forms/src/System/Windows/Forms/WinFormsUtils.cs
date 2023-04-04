@@ -145,10 +145,7 @@ namespace System.Windows.Forms
                     str.Append('&');
                 }
 
-                if (index < text.Length)
-                {
-                    str.Append(text[index]);
-                }
+                str.Append(text[index]);
             }
 
             return str.ToString();

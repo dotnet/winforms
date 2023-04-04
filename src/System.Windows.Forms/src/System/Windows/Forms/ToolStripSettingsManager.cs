@@ -73,18 +73,20 @@ namespace System.Windows.Forms
 
         internal static string GetItemOrder(ToolStrip toolStrip)
         {
+            if (toolStrip.Items.Count == 0)
+            {
+                return string.Empty;
+            }
+
             StringBuilder itemNames = new StringBuilder(toolStrip.Items.Count);
 
             for (int i = 0; i < toolStrip.Items.Count; i++)
             {
                 itemNames.Append(toolStrip.Items[i].Name ?? "null");
-                if (i != toolStrip.Items.Count - 1)
-                {
-                    itemNames.Append(',');
-                }
+                itemNames.Append(',');
             }
 
-            return itemNames.ToString();
+            return itemNames.ToString(0, itemNames.Length - 1);
         }
 
         private void ApplySettings(List<SettingsStub> toolStripSettingsToApply)

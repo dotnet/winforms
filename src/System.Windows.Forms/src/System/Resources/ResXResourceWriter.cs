@@ -558,7 +558,6 @@ namespace System.Resources
         private static string ToBase64WrappedString(byte[] data)
         {
             const int lineWrap = 80;
-            const string crlf = "\r\n";
             const string prefix = "        ";
             string raw = Convert.ToBase64String(data);
             if (raw.Length > lineWrap)
@@ -569,15 +568,15 @@ namespace System.Resources
 
                 for (; current < raw.Length - lineWrap; current += lineWrap)
                 {
-                    output.Append(crlf);
+                    output.AppendLine();
                     output.Append(prefix);
                     output.Append(raw, current, lineWrap);
                 }
 
-                output.Append(crlf);
+                output.AppendLine();
                 output.Append(prefix);
                 output.Append(raw, current, raw.Length - current);
-                output.Append(crlf);
+                output.AppendLine();
                 return output.ToString();
             }
 

@@ -92,7 +92,9 @@ namespace System.Resources
                 }
             }
 
-            return string.Concat(relPath.ToString(), path2.AsSpan(si + 1));
+            relPath.Append(path2.AsSpan(si + 1));
+
+            return relPath.ToString();
         }
 
         internal void MakeFilePathRelative(string basePath)
@@ -107,18 +109,17 @@ namespace System.Resources
 
         public override string ToString()
         {
-            string result = string.Empty;
+            string result;
 
-            if (FileName.IndexOf(';') != -1 || FileName.IndexOf('\"') != -1)
+            if (FileName.Contains(';') || FileName.Contains('\"'))
             {
-                result += $"\"{FileName}\";";
+                result = $"\"{FileName}\";{TypeName}";
             }
             else
             {
-                result += $"{FileName};";
+                result = $"{FileName};{TypeName}";
             }
 
-            result += TypeName;
             if (TextFileEncoding is not null)
             {
                 result += $";{TextFileEncoding.WebName}";
