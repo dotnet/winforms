@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Generic;
@@ -351,17 +351,13 @@ namespace System.Drawing.Imaging.Tests
         [Theory]
         [InlineData(-1)]
         [InlineData(int.MinValue)]
+        [SkipOnArchitecture(TestArchitectures.X86, "backwards compatibility on 32 bit platforms may not throw")]
         // This test may depend on amount of RAM and system configuration and load.
         public void Ctor_Encoder_NegativeNumberOfValues_Type_Value_OutOfMemoryException(int numberOfValues)
         {
-            if (PlatformDetection.Is32BitProcess)
-            {
-                throw new SkipTestException("backwards compatibility on 32 bit platforms may not throw");
-            }
-
             IntPtr anyValue = IntPtr.Zero;
-            EncoderParameterValueType anyTypw = EncoderParameterValueType.ValueTypeAscii;
-            Assert.Throws<OutOfMemoryException>(() => new EncoderParameter(s_anyEncoder, numberOfValues, anyTypw, anyValue));
+            EncoderParameterValueType anyType = EncoderParameterValueType.ValueTypeAscii;
+            Assert.Throws<OutOfMemoryException>(() => new EncoderParameter(s_anyEncoder, numberOfValues, anyType, anyValue));
         }
     }
 }
