@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -175,7 +174,7 @@ namespace System.Windows.Forms
 
             private int MoveLeft(int index, int spaceToFree)
             {
-                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft: {spaceToFree}");
                 int freedSpace = 0;
 
                 Row.SuspendLayout();
@@ -230,7 +229,7 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered (Margin only): {spaceToFree}");
                             return spaceToFree;
                         }
                     }
@@ -240,13 +239,13 @@ namespace System.Windows.Forms
                     Row.ResumeLayout(true);
                 }
 
-                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered Partial (Shrink): {freedSpace.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered Partial (Shrink): {freedSpace}");
                 return freedSpace;
             }
 
             private int MoveRight(int index, int spaceToFree)
             {
-                ToolStripPanelMouseDebug.TraceVerbose($"MoveRight: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveRight: {spaceToFree}");
                 int freedSpace = 0;
                 Row.SuspendLayout();
                 try
@@ -322,7 +321,7 @@ namespace System.Windows.Forms
                             cell.Margin = cellMargin;
                         }
 
-                        ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                        ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered (Margin only): {spaceToFree}");
                         return spaceToFree;
                     }
 
@@ -340,7 +339,7 @@ namespace System.Windows.Forms
 
                         if (spaceToFree >= freedSpace)
                         {
-                            ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered (Shrink): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered (Shrink): {spaceToFree}");
                             Row.ResumeLayout(true);
                             return spaceToFree;
                         }
@@ -362,7 +361,7 @@ namespace System.Windows.Forms
                     Row.ResumeLayout(true);
                 }
 
-                ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered Partial (Shrink): {freedSpace.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered Partial (Shrink): {freedSpace}");
 
                 return freedSpace;
             }

@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                 _propInfo = TypeDescriptor.GetProperties(dataSource).Find(_propName, true);
                 if (_propInfo is null)
                 {
-                    throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource.ToString()));
+                    throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource));
                 }
 
                 _propInfo.AddValueChanged(dataSource, new EventHandler(PropertyChanged));

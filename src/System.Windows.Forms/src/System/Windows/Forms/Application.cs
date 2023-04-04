@@ -1131,16 +1131,12 @@ namespace System.Windows.Forms
                 StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
                 for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
                 {
-                    sb.Append('"');
-                    sb.Append(arguments[argumentIndex]);
-                    sb.Append("\" ");
+                    sb.Append($"\"{arguments[argumentIndex]}\" ");
                 }
 
                 if (arguments.Length > 1)
                 {
-                    sb.Append('"');
-                    sb.Append(arguments[arguments.Length - 1]);
-                    sb.Append('"');
+                    sb.Append($"\"{arguments[arguments.Length - 1]}\"");
                 }
 
                 ProcessStartInfo currentStartInfo = new();

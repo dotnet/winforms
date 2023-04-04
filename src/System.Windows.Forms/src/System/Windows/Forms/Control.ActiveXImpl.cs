@@ -1723,7 +1723,7 @@ public partial class Control
             try
             {
                 Size size = new Size(HiMetricToPixel(pSizel->Width, pSizel->Height));
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"SetExtent : new size:{size.ToString()}");
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"SetExtent : new size:{size}");
 
                 // If we're in place active, let the in place site set our bounds.
                 // Otherwise, just set it on our control directly.

@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (AxToolSwitch.TraceVerbose)
                         Debug.WriteLine($"No registry key found for: {controlKey}");
-                    throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
+                    throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey));
                 }
 
                 // Load the typelib into memory.
@@ -350,7 +350,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (pTLB->GetLibAttr(out TLIBATTR* pTlibAttr).Failed)
                         {
-                            throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
+                            throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey));
                         }
                         else
                         {
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
+                    throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey));
                 }
             }
 

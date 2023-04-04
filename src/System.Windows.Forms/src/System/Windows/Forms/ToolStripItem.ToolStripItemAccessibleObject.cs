@@ -84,7 +84,7 @@ namespace System.Windows.Forms
                         return mnemonic == '\0' ? string.Empty : mnemonic.ToString();
                     }
 
-                    return mnemonic == '\0' ? string.Empty : ("Alt+" + mnemonic);
+                    return mnemonic == '\0' ? string.Empty : $"Alt+{mnemonic}";
                 }
             }
 

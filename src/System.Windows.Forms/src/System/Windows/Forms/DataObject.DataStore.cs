@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms
@@ -176,7 +175,7 @@ namespace System.Windows.Forms
                 else
                 {
                     string[] formats = GetFormats(autoConvert);
-                    CompModSwitches.DataObject.TraceVerbose($"DataStore:  got {formats.Length.ToString(CultureInfo.InvariantCulture)} formats from get formats");
+                    CompModSwitches.DataObject.TraceVerbose($"DataStore:  got {formats.Length} formats from get formats");
                     Debug.Assert(formats is not null, "Null returned from GetFormats");
                     for (int i = 0; i < formats.Length; i++)
                     {
@@ -236,7 +235,7 @@ namespace System.Windows.Forms
                     baseVar = distinctFormats.ToArray();
                 }
 
-                CompModSwitches.DataObject.TraceVerbose($"DataStore: returning {baseVar.Length.ToString(CultureInfo.InvariantCulture)} formats from GetFormats");
+                CompModSwitches.DataObject.TraceVerbose($"DataStore: returning {baseVar.Length} formats from GetFormats");
                 return baseVar;
             }
 

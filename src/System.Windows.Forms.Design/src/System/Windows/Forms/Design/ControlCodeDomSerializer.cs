@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 
 namespace System.Windows.Forms.Design
@@ -319,7 +318,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (parent.Controls[i] == control)
                         {
-                            SerializeResourceInvariant(manager, $">>{name}.ZOrder", i.ToString(CultureInfo.InvariantCulture));
+                            SerializeResourceInvariant(manager, $">>{name}.ZOrder", i);
                             break;
                         }
                     }

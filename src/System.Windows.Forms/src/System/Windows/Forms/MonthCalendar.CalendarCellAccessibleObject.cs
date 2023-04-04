@@ -89,7 +89,7 @@ namespace System.Windows.Forms
                     // Used string.Format here to get the correct value from resources
                     // that should be consistent with the rest resources values
                     return string.Format(SR.MonthCalendarWeekNumberDescription, weekNumber)
-                        + $", {cellDate.ToString("dddd", culture)}";
+                        + $", {cellDate:dddd}";
                 }
             }
 

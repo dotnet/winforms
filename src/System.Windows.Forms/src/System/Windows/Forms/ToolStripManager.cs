@@ -7,7 +7,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using Microsoft.Win32;
 using static Interop;
 
@@ -442,7 +441,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE skipping wrap candidate {toolStrip.Name}{toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture)}");
+                        ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE skipping wrap candidate {toolStrip.Name}{toolStrip.TabIndex}");
                     }
                 }
 

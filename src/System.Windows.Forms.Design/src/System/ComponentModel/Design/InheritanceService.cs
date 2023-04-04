@@ -269,7 +269,7 @@ namespace System.ComponentModel.Design
         {
             if (_addingComponent is not null && _addingComponent != ce.Component)
             {
-                Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding component... {ce.Component.ToString()}");
+                Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding component... {ce.Component}");
                 _inheritedComponents[ce.Component] = InheritanceAttribute.InheritedReadOnly;
                 // If this component is being added to a nested container of addingComponent, it should  get the same inheritance level.
                 if (sender is INestedContainer nested && nested.Owner == _addingComponent)

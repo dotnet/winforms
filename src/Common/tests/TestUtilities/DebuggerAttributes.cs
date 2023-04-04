@@ -172,32 +172,15 @@ namespace System.Diagnostics
 
         private static string GetDebuggerMemberString(object member, bool noQuotes)
         {
-            string memberString = "null";
-            if (member is object)
+            return member switch
             {
-                memberString = member.ToString();
-                if (member is string)
-                {
-                    if (!noQuotes)
-                    {
-                        memberString = '"' + memberString + '"';
-                    }
-                }
-                else if (!IsPrimitiveType(member))
-                {
-                    memberString = '{' + memberString + '}';
-                }
-            }
-
-            return memberString;
+                null => "null",
+                byte or sbyte or short or ushort or int or uint or long or ulong or float or double => member.ToString(),
+                string _ when noQuotes => member.ToString(),
+                string => $"\"{member}\"",
+                _ => $"{{{member}}}"
+            };
         }
-
-        private static bool IsPrimitiveType(object obj) =>
-            obj is byte || obj is sbyte ||
-            obj is short || obj is ushort ||
-            obj is int || obj is uint ||
-            obj is long || obj is ulong ||
-            obj is float || obj is double;
 
         private static bool TryEvaluateReference(object obj, string reference, out object member)
         {

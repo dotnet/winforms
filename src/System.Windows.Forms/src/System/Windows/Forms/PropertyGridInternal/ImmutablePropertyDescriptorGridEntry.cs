@@ -67,7 +67,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         if (string.IsNullOrEmpty(e.Message))
                         {
                             throw new TargetInvocationException(
-                                string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e.ToString()),
+                                string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e),
                                 e);
                         }
                         else

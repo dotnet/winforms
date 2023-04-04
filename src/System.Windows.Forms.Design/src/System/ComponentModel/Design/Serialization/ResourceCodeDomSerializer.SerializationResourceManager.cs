@@ -702,7 +702,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             break;
                         default:
-                            Debug.Fail("Unknown CompareValue " + comparison);
+                            Debug.Fail($"Unknown CompareValue {comparison}");
                             break;
                     }
                 }
@@ -788,7 +788,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (appendCount || _nameTable.TryGetValue(nameBase, out count))
                 {
                     count++;
-                    resourceName = $"{nameBase}{count.ToString(CultureInfo.InvariantCulture)}";
+                    resourceName = $"{nameBase}{count}";
                 }
 
                 // Now that we have a name, write out the resource.

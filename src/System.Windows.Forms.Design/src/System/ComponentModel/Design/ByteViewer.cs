@@ -239,8 +239,7 @@ namespace System.ComponentModel.Design
             StringBuilder result = new StringBuilder(lineBuffer.Length * 3 + 1);
             for (int i = 0; i < lineBuffer.Length; i++)
             {
-                result.Append(lineBuffer[i].ToString("X2", CultureInfo.InvariantCulture));
-                result.Append(' ');
+                result.Append($"{lineBuffer[i]:X2} ");
                 if (i == _columnCount / 2 - 1)
                 {
                     result.Append(' ');  // Add one extra in the middle.

@@ -307,7 +307,7 @@ namespace System.Windows.Forms
                     if (versionInfo is not null && !string.IsNullOrEmpty(versionInfo.ProductVersion))
                     {
                         //Note: this only allows for one digit version
-                        if (int.TryParse(versionInfo.ProductVersion[0].ToString(), out int parsedValue))
+                        if (int.TryParse(versionInfo.ProductVersion.AsSpan(0, 1), out int parsedValue))
                         {
                             richEditMajorVersion = parsedValue;
                         }

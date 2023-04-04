@@ -595,7 +595,7 @@ namespace System.ComponentModel.Design.Serialization
 
         private void DeserializeVariableDeclarationStatement(IDesignerSerializationManager manager, CodeVariableDeclarationStatement statement)
         {
-            using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeVariableDeclarationStatement)))
+            using (TraceScope($"CodeDomSerializerBase::{nameof(DeserializeVariableDeclarationStatement)}"))
             {
                 if (statement.InitExpression is not null)
                 {
@@ -1780,22 +1780,9 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (op == CodeBinaryOperatorType.Add)
             {
-                string leftString = left as string;
-                string rightString = right as string;
-
-                if (leftString is null && left is char)
+                if (left is string or char && right is string or char)
                 {
-                    leftString = left.ToString();
-                }
-
-                if (rightString is null && right is char)
-                {
-                    rightString = right.ToString();
-                }
-
-                if (leftString is not null && rightString is not null)
-                {
-                    return leftString + rightString;
+                    return $"{left}{right}";
                 }
                 else
                 {

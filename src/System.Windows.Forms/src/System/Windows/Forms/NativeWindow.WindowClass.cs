@@ -134,7 +134,7 @@ namespace System.Windows.Forms
                     windowClass.style = (WNDCLASS_STYLES)_classStyle;
 
                     _defaultWindProc = DefaultWindowProc;
-                    localClassName = $"Window.{Convert.ToString((int)_classStyle, 16)}";
+                    localClassName = $"Window.{(int)_classStyle:x}";
                 }
                 else
                 {

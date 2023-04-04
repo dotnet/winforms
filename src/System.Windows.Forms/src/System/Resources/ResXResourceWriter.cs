@@ -313,16 +313,14 @@ namespace System.Resources
             // Clone the node to work on a copy.
             ResXDataNode nodeClone = node.DeepClone();
             ResXFileRef? fileRef = nodeClone.FileRef;
-            string? modifiedBasePath = BasePath;
 
-            if (!string.IsNullOrEmpty(modifiedBasePath))
+            if (fileRef is not null && !string.IsNullOrEmpty(BasePath))
             {
-                if (!Path.EndsInDirectorySeparator(modifiedBasePath))
-                {
-                    modifiedBasePath += Path.DirectorySeparatorChar;
-                }
+                string modifiedBasePath = Path.EndsInDirectorySeparator(BasePath)
+                    ? BasePath
+                    : $"{BasePath}{Path.DirectorySeparatorChar}";
 
-                fileRef?.MakeFilePathRelative(modifiedBasePath);
+                fileRef.MakeFilePathRelative(modifiedBasePath);
             }
 
             DataNodeInfo info = nodeClone.GetDataNodeInfo();

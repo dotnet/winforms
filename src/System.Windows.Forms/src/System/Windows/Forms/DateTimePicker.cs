@@ -1453,7 +1453,7 @@ namespace System.Windows.Forms
             return (Format != DateTimePickerFormat.Long);
         }
 
-        public override string ToString() => $"{base.ToString()}, Value: {FormatDateTime(Value)}";
+        public override string ToString() => $"{base.ToString()}, Value: {Value:G}";
 
         /// <summary>
         ///  Forces a repaint of the updown control if it is displayed.

@@ -136,7 +136,8 @@ namespace System.Windows.Forms
                 return text;
             }
 
-            StringBuilder str = new StringBuilder(text.Substring(0, index));
+            StringBuilder str = new StringBuilder(text.Length);
+            str.Append(text.AsSpan(0, index));
             for (; index < text.Length; ++index)
             {
                 if (text[index] == '&')
@@ -168,18 +169,18 @@ namespace System.Windows.Forms
 #if DEBUG
             string windowText = User32.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
-            string nameOfControl = "Name: ";
+            string nameOfControl = "";
             Control? c = Control.FromHandle(hwnd);
             if (c is not null)
             {
                 typeOfControl = c.GetType().ToString();
                 if (!string.IsNullOrEmpty(c.Name))
                 {
-                    nameOfControl += c.Name;
+                    nameOfControl = c.Name;
                 }
                 else
                 {
-                    nameOfControl += "Unknown";
+                    nameOfControl = "Unknown";
 
                     // Add some extra debug info for ToolStripDropDowns.
                     if (c is ToolStripDropDown dd && dd.OwnerItem is not null)
@@ -189,7 +190,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            return $"{windowText}{Environment.NewLine}\tType: {typeOfControl}{Environment.NewLine}\t{nameOfControl}{Environment.NewLine}";
+            return $"""
+                {windowText}
+                	Type: {typeOfControl}
+                	Name: {nameOfControl}
+
+                """;
 #else
             return string.Empty;
 #endif
@@ -241,6 +247,7 @@ namespace System.Windows.Forms
         ///  something like "Fi&amp;sh &amp;&amp; Chips" into "Fish &amp; Chips" on the first call, and then "Fish Chips"
         ///  on the second call.
         /// </remarks>
+        [return: NotNullIfNotNull(nameof(text))]
         public static string? TextWithoutMnemonics(string? text)
         {
             if (text is null)
@@ -254,7 +261,8 @@ namespace System.Windows.Forms
                 return text;
             }
 
-            StringBuilder str = new StringBuilder(text.Substring(0, index));
+            StringBuilder str = new StringBuilder(text.Length);
+            str.Append(text.AsSpan(0, index));
             for (; index < text.Length; ++index)
             {
                 if (text[index] == '&')
