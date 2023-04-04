@@ -969,7 +969,7 @@ namespace System.Drawing.Tests
             using var bitmap = new Bitmap(1, 1, PixelFormat.Format16bppGrayScale);
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.MakeTransparent());
 
-            if (PlatformDetection.IsWindows10Version1803OrGreater)
+            if (PlatformDetection.IsWindows11OrHigher)
             {
                 bitmap.MakeTransparent(Color.Red);
             }
