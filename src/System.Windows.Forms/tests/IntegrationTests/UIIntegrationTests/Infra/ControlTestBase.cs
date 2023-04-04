@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
+using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -54,7 +55,7 @@ namespace System.Windows.Forms.UITests
 
         protected SendInput InputSimulator => new(WaitForIdleAsync);
 
-        public virtual Task InitializeAsync()
+        public virtual async Task InitializeAsync()
         {
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
@@ -68,7 +69,14 @@ namespace System.Windows.Forms.UITests
 
             _joinableTaskCollection = JoinableTaskContext.CreateCollection();
             JoinableTaskFactory = JoinableTaskContext.CreateFactory(_joinableTaskCollection);
-            return Task.CompletedTask;
+
+            ScreenshotService.TakeScreenshot(Path.Combine(DataCollectionService.GetLogDirectory(), "InitialScreenShot.png"));
+
+            // Minimize all windows on test machine.
+            await JoinableTaskFactory.RunAsync(async () =>
+            {
+                await InputSimulator.SendAsync(null, inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_M));
+            });
         }
 
         public virtual async Task DisposeAsync()
