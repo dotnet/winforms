@@ -69,18 +69,14 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        internal async Task SendAsync(Form? window, Action<InputSimulator> actions)
+        internal async Task SendAsync(Form window, Action<InputSimulator> actions)
         {
             if (actions is null)
             {
                 throw new ArgumentNullException(nameof(actions));
             }
 
-            // Any active window or desktop.
-            if (window is not null)
-            {
-                SetForegroundWindow(window);
-            }
+            SetForegroundWindow(window);
 
             await Task.Run(() => actions(new InputSimulator()));
 
