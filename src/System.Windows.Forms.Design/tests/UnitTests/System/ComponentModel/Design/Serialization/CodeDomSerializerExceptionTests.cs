@@ -86,17 +86,24 @@ namespace System.Windows.Forms.Design.Serialization.Tests
             Assert.Throws<ArgumentNullException>("manager", () => new CodeDomSerializerException(new Exception(), (IDesignerSerializationManager)null));
         }
 
-        [Fact]
-        public void CodeDomSerializerException_Serialize_ThrowsSerializationException()
+        [Theory]
+        [BoolData]
+        public void CodeDomSerializerException_Serialize_ThrowsSerializationException(bool formatterEnabled)
         {
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
+            using var formatterScope = new BinaryFormatterScope(enable: formatterEnabled);
+            using var stream = new MemoryStream();
+            var formatter = new BinaryFormatter();
+            var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+            if (formatterEnabled)
+            {
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, exception));
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
+            else
+            {
+                Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, exception));
+            }
+#pragma warning restore SYSLIB0011
         }
 
         [Fact]

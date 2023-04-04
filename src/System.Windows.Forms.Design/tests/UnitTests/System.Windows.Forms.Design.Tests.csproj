@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Design.Tests</AssemblyName>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>

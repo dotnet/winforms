@@ -706,18 +706,26 @@ namespace System.ComponentModel.Design.Serialization.Tests
             Assert.Throws<ArgumentNullException>("info", () => serializable.GetObjectData(null, new StreamingContext()));
         }
 
-        [Fact]
-        public void LoadStore_SerializedStore_ThrowsSerializationException()
+        [Theory]
+        [BoolData]
+        public void LoadStore_SerializedStore_ThrowsSerializationException(bool formatterEnabled)
         {
+            using var formatterScope = new BinaryFormatterScope(enable: formatterEnabled);
             var service = new CodeDomComponentSerializationService();
             SerializationStore store = service.CreateStore();
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
+            using var stream = new MemoryStream();
+            var formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+            if (formatterEnabled)
+            {
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, store));
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
+            else
+            {
+                Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, store));
+            }
+
+#pragma warning restore SYSLIB0011
         }
 
         [Fact]
