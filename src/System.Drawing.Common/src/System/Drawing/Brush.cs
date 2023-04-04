@@ -34,8 +34,11 @@ namespace System.Drawing
         protected virtual void Dispose(bool disposing)
         {
 #if FINALIZATION_WATCH
-            if (!disposing && nativeBrush != IntPtr.Zero )
-                Debug.WriteLine("**********************\nDisposed through finalization:\n" + allocationSite);
+            Debug.WriteLineIf(!disposing && _nativeBrush != IntPtr.Zero, $"""
+                **********************
+                Disposed through finalization:
+                {allocationSite}
+                """);
 #endif
 
             if (_nativeBrush != IntPtr.Zero)

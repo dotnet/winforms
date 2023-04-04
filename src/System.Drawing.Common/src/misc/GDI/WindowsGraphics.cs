@@ -161,7 +161,10 @@ namespace System.Drawing.Internal
                 }
                 catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
                 {
-                    Debug.Fail("Exception thrown during disposing: \r\n" + ex.ToString());
+                    Debug.Fail($"""
+                        Exception thrown during disposing:
+                        {ex}
+                        """);
                 }
                 finally
                 {

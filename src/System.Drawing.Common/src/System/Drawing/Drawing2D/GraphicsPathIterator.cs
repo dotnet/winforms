@@ -48,7 +48,7 @@ namespace System.Drawing.Drawing2D
                         throw;
                     }
 
-                    Debug.Fail("Exception thrown during Dispose: " + ex.ToString());
+                    Debug.Fail($"Exception thrown during Dispose: {ex}");
                 }
                 finally
                 {

@@ -1228,17 +1228,7 @@ namespace System.Drawing.Printing
         public override string ToString()
         {
             string printerName = PrinterName;
-            return "[PrinterSettings "
-                + printerName
-                + " Copies=" + Copies.ToString(CultureInfo.InvariantCulture)
-                + " Collate=" + Collate.ToString(CultureInfo.InvariantCulture)
-                + " Duplex=" + Duplex.ToString()
-                + " FromPage=" + FromPage.ToString(CultureInfo.InvariantCulture)
-                + " LandscapeAngle=" + LandscapeAngle.ToString(CultureInfo.InvariantCulture)
-                + " MaximumCopies=" + MaximumCopies.ToString(CultureInfo.InvariantCulture)
-                + " OutputPort=" + OutputPort.ToString(CultureInfo.InvariantCulture)
-                + " ToPage=" + ToPage.ToString(CultureInfo.InvariantCulture)
-                + "]";
+            return $"[PrinterSettings {printerName} Copies={Copies} Collate={Collate} Duplex={Duplex} FromPage={FromPage} LandscapeAngle={LandscapeAngle} MaximumCopies={MaximumCopies} OutputPort={OutputPort} ToPage={ToPage}]";
         }
 
         // Write null terminated string, return length of string in characters (including null)

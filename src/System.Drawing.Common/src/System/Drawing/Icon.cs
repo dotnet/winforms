@@ -295,10 +295,11 @@ namespace System.Drawing
             if (_handle != IntPtr.Zero)
             {
 #if FINALIZATION_WATCH
-                if (!disposing)
-                {
-                    Debug.WriteLine("**********************\nDisposed through finalization:\n" + allocationSite);
-                }
+                Debug.WriteLineIf(!disposing, $"""
+                    **********************
+                    Disposed through finalization:
+                    {allocationSite}
+                    """);
 #endif
                 DestroyHandle();
             }

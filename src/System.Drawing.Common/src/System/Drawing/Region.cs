@@ -96,8 +96,11 @@ namespace System.Drawing
         private void Dispose(bool disposing)
         {
 #if FINALIZATION_WATCH
-            if (!disposing && nativeRegion != IntPtr.Zero)
-                Debug.WriteLine("**********************\nDisposed through finalization:\n" + allocationSite);
+            Debug.WriteLineIf(!disposing && NativeRegion != IntPtr.Zero, $"""
+                **********************
+                Disposed through finalization:
+                {allocationSite}
+                """);
 #endif
             if (NativeRegion != IntPtr.Zero)
             {

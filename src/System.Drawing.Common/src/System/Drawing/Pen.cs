@@ -124,10 +124,11 @@ namespace System.Drawing
         private void Dispose(bool disposing)
         {
 #if FINALIZATION_WATCH
-            if (!disposing && nativePen != IntPtr.Zero)
-            {
-                Debug.WriteLine("**********************\nDisposed through finalization:\n" + _allocationSite);
-            }
+            Debug.WriteLineIf(!disposing && _nativePen != IntPtr.Zero, $"""
+                **********************
+                Disposed through finalization:
+                {_allocationSite}
+                """);
 #endif
 
             if (!disposing)

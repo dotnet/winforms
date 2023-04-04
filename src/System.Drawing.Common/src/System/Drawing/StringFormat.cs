@@ -93,7 +93,7 @@ namespace System.Drawing
                         throw;
                     }
 
-                    Debug.Fail("Exception thrown during Dispose: " + ex.ToString());
+                    Debug.Fail($"Exception thrown during Dispose: {ex}");
                 }
                 finally
                 {

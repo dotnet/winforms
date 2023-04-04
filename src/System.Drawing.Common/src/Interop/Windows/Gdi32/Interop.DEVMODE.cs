@@ -54,42 +54,7 @@ internal static partial class Interop
 
             public override string ToString()
             {
-                return "[DEVMODE: "
-                + "dmDeviceName=" + dmDeviceName
-                + ", dmSpecVersion=" + dmSpecVersion
-                + ", dmDriverVersion=" + dmDriverVersion
-                + ", dmSize=" + dmSize
-                + ", dmDriverExtra=" + dmDriverExtra
-                + ", dmFields=" + dmFields
-                + ", dmOrientation=" + dmOrientation
-                + ", dmPaperSize=" + dmPaperSize
-                + ", dmPaperLength=" + dmPaperLength
-                + ", dmPaperWidth=" + dmPaperWidth
-                + ", dmScale=" + dmScale
-                + ", dmCopies=" + dmCopies
-                + ", dmDefaultSource=" + dmDefaultSource
-                + ", dmPrintQuality=" + dmPrintQuality
-                + ", dmColor=" + dmColor
-                + ", dmDuplex=" + dmDuplex
-                + ", dmYResolution=" + dmYResolution
-                + ", dmTTOption=" + dmTTOption
-                + ", dmCollate=" + dmCollate
-                + ", dmFormName=" + dmFormName
-                + ", dmLogPixels=" + dmLogPixels
-                + ", dmBitsPerPel=" + dmBitsPerPel
-                + ", dmPelsWidth=" + dmPelsWidth
-                + ", dmPelsHeight=" + dmPelsHeight
-                + ", dmDisplayFlags=" + dmDisplayFlags
-                + ", dmDisplayFrequency=" + dmDisplayFrequency
-                + ", dmICMMethod=" + dmICMMethod
-                + ", dmICMIntent=" + dmICMIntent
-                + ", dmMediaType=" + dmMediaType
-                + ", dmDitherType=" + dmDitherType
-                + ", dmICCManufacturer=" + dmICCManufacturer
-                + ", dmICCModel=" + dmICCModel
-                + ", dmPanningWidth=" + dmPanningWidth
-                + ", dmPanningHeight=" + dmPanningHeight
-                + "]";
+                return $"[DEVMODE: dmDeviceName={dmDeviceName}, dmSpecVersion={dmSpecVersion}, dmDriverVersion={dmDriverVersion}, dmSize={dmSize}, dmDriverExtra={dmDriverExtra}, dmFields={dmFields}, dmOrientation={dmOrientation}, dmPaperSize={dmPaperSize}, dmPaperLength={dmPaperLength}, dmPaperWidth={dmPaperWidth}, dmScale={dmScale}, dmCopies={dmCopies}, dmDefaultSource={dmDefaultSource}, dmPrintQuality={dmPrintQuality}, dmColor={dmColor}, dmDuplex={dmDuplex}, dmYResolution={dmYResolution}, dmTTOption={dmTTOption}, dmCollate={dmCollate}, dmFormName={dmFormName}, dmLogPixels={dmLogPixels}, dmBitsPerPel={dmBitsPerPel}, dmPelsWidth={dmPelsWidth}, dmPelsHeight={dmPelsHeight}, dmDisplayFlags={dmDisplayFlags}, dmDisplayFrequency={dmDisplayFrequency}, dmICMMethod={dmICMMethod}, dmICMIntent={dmICMIntent}, dmMediaType={dmMediaType}, dmDitherType={dmDitherType}, dmICCManufacturer={dmICCManufacturer}, dmICCModel={dmICCModel}, dmPanningWidth={dmPanningWidth}, dmPanningHeight={dmPanningHeight}]";
             }
         }
     }

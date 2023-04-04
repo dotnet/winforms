@@ -82,8 +82,11 @@ namespace System.Drawing.Imaging
         private void Dispose(bool disposing)
         {
 #if FINALIZATION_WATCH
-            if (!disposing && nativeImageAttributes != IntPtr.Zero)
-                Debug.WriteLine("**********************\nDisposed through finalization:\n" + allocationSite);
+            Debug.WriteLineIf(!disposing && nativeImageAttributes != IntPtr.Zero, $"""
+                **********************
+                Disposed through finalization:
+                {allocationSite}
+                """);
 #endif
             if (nativeImageAttributes != IntPtr.Zero)
             {
@@ -104,7 +107,7 @@ namespace System.Drawing.Imaging
                         throw;
                     }
 
-                    Debug.Fail("Exception thrown during Dispose: " + ex.ToString());
+                    Debug.Fail($"Exception thrown during Dispose: {ex}");
                 }
                 finally
                 {

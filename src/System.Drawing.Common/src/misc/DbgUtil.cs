@@ -34,13 +34,16 @@ namespace System.Drawing.Internal
                 }
 
                 Debug.Fail("Object Disposed through finalization - it should be explicitly disposed.");
-                Debug.WriteLine("Allocation stack:\r\n" + allocationSite);
+                Debug.WriteLine($"""
+                    Allocation stack:
+                    {allocationSite}
+                    """);
             }
             catch (Exception ex)
             {
                 try
                 {
-                    Debug.WriteLine("Exception thrown while trying to get allocation stack: " + ex);
+                    Debug.WriteLine($"Exception thrown while trying to get allocation stack: {ex}");
                 }
                 catch
                 {

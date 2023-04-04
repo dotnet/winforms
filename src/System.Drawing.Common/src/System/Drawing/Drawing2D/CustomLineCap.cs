@@ -82,8 +82,11 @@ namespace System.Drawing.Drawing2D
                 return;
 
 #if FINALIZATION_WATCH
-            if (!disposing && nativeCap != null)
-                Debug.WriteLine("**********************\nDisposed through finalization:\n" + allocationSite);
+            Debug.WriteLineIf(!disposing && nativeCap != null, $"""
+                **********************
+                Disposed through finalization:
+                {allocationSite}
+                """);
 #endif
             // propagate the explicit dispose call to the child
             if (disposing && nativeCap != null)

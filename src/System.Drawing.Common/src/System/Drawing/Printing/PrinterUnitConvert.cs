@@ -101,7 +101,7 @@ namespace System.Drawing.Printing
                     result = 2.54;
                     break;
                 default:
-                    Debug.Fail("Unknown PrinterUnit " + unit);
+                    Debug.Fail($"Unknown PrinterUnit {unit}");
                     result = 1.0;
                     break;
             }

@@ -42,7 +42,7 @@ namespace System.Drawing.Drawing2D
                         throw;
                     }
 
-                    Debug.Fail("Exception thrown during ReleaseHandle: " + ex.ToString());
+                    Debug.Fail($"Exception thrown during ReleaseHandle: {ex}");
                 }
                 finally
                 {
