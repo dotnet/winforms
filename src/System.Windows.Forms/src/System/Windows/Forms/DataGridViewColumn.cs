@@ -932,7 +932,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+                // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type
+                // (and all of its subclasses) from check in DataGridViewElement() constructor and DataGridViewElement_Subclasses_SuppressFinalizeCall test!
                 // Also consider to modify ~DataGridViewBand() description.
             }
             finally

@@ -85,7 +85,7 @@ namespace System.Windows.Forms
         }
 
         // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
-        // All classes that are not need to be finalized contains in DataGridViewElement.s_typesWithEmptyFinalizer collection. Consider to modify it if needed.
+        // All classes that are not need to be finalized must be checked in DataGridViewElement() constructor. Consider to modify it if needed.
         ~DataGridViewCell()
         {
             Dispose(false);
@@ -1297,7 +1297,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type (and all of its subclasses) from DataGridViewElement.s_typesWithEmptyFinalizer!
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type
+            // (and all of its subclasses) from check in DataGridViewElement() constructor and DataGridViewElement_Subclasses_SuppressFinalizeCall test!
             // Also consider to modify ~DataGridViewCell() description.
         }
 
