@@ -255,8 +255,11 @@ namespace System.Drawing
         protected virtual void Dispose(bool disposing)
         {
 #if FINALIZATION_WATCH
-            if (!disposing && nativeImage != IntPtr.Zero)
-                Debug.WriteLine("**********************\nDisposed through finalization:\n" + allocationSite);
+            Debug.WriteLineIf(!disposing && nativeImage != IntPtr.Zero, $"""
+                **********************
+                Disposed through finalization:
+                {allocationSite}
+                """);
 #endif
             if (nativeImage == IntPtr.Zero)
                 return;
@@ -278,7 +281,7 @@ namespace System.Drawing
                     throw;
                 }
 
-                Debug.Fail("Exception thrown during Dispose: " + ex.ToString());
+                Debug.Fail($"Exception thrown during Dispose: {ex}");
             }
             finally
             {

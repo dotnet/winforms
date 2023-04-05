@@ -236,12 +236,12 @@ namespace System.Drawing
 
         private void Dispose(bool disposing)
         {
-#if DEBUG && FINALIZATION_WATCH
-            if (!disposing && _nativeGraphics != IntPtr.Zero)
-            {
-                Debug.WriteLine("System.Drawing.Graphics: ***************************************************");
-                Debug.WriteLine("System.Drawing.Graphics: Object Disposed through finalization:\n" + allocationSite);
-            }
+#if FINALIZATION_WATCH
+            Debug.WriteLineIf(!disposing && NativeGraphics != IntPtr.Zero, $"""
+                System.Drawing.Graphics: ***************************************************
+                System.Drawing.Graphics: Object Disposed through finalization:
+                {allocationSite}
+                """);
 #endif
             while (_previousContext != null)
             {

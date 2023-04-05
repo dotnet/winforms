@@ -446,7 +446,7 @@ namespace MonoTests.System.Drawing
                     break;
 
                 default:
-                    throw new Exception("Cannot pass a bitmap of format " + src.PixelFormat + " to RotateIndexedBmp");
+                    throw new Exception($"Cannot pass a bitmap of format {src.PixelFormat} to RotateIndexedBmp");
             }
 
             using (Bitmap test = src.Clone() as Bitmap)

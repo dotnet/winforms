@@ -31,21 +31,7 @@ internal static partial class Interop
 
             public override string ToString()
             {
-                return
-                    "lfHeight=" + lfHeight + ", " +
-                    "lfWidth=" + lfWidth + ", " +
-                    "lfEscapement=" + lfEscapement + ", " +
-                    "lfOrientation=" + lfOrientation + ", " +
-                    "lfWeight=" + lfWeight + ", " +
-                    "lfItalic=" + lfItalic + ", " +
-                    "lfUnderline=" + lfUnderline + ", " +
-                    "lfStrikeOut=" + lfStrikeOut + ", " +
-                    "lfCharSet=" + lfCharSet + ", " +
-                    "lfOutPrecision=" + lfOutPrecision + ", " +
-                    "lfClipPrecision=" + lfClipPrecision + ", " +
-                    "lfQuality=" + lfQuality + ", " +
-                    "lfPitchAndFamily=" + lfPitchAndFamily + ", " +
-                    "lfFaceName=" + lfFaceName.ToString();
+                return $"lfHeight={lfHeight}, lfWidth={lfWidth}, lfEscapement={lfEscapement}, lfOrientation={lfOrientation}, lfWeight={lfWeight}, lfItalic={lfItalic}, lfUnderline={lfUnderline}, lfStrikeOut={lfStrikeOut}, lfCharSet={lfCharSet}, lfOutPrecision={lfOutPrecision}, lfClipPrecision={lfClipPrecision}, lfQuality={lfQuality}, lfPitchAndFamily={lfPitchAndFamily}, lfFaceName={lfFaceName}";
             }
         }
     }
