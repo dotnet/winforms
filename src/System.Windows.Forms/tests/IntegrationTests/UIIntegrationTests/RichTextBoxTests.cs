@@ -55,9 +55,6 @@ namespace System.Windows.Forms.UITests
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
-
-                    // Let the event queue drain after clicking, before moving the cursor back to the old position.
-                    Application.DoEvents();
                 }
                 finally
                 {
@@ -69,7 +66,6 @@ namespace System.Windows.Forms.UITests
                         await InputSimulator.SendAsync(
                             form,
                             inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
-                        Application.DoEvents();
                     }
                 }
 
@@ -130,9 +126,6 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
-
-                    // Let the event queue drain after clicking, before moving the cursor back to the old position.
-                    Application.DoEvents();
                 }
                 finally
                 {
@@ -144,7 +137,6 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                         await InputSimulator.SendAsync(
                             form,
                             inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
-                        Application.DoEvents();
                     }
                 }
 
@@ -167,8 +159,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             });
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/6609")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6609")]
+        [WinFormsFact]
         public async Task RichTextBox_Click_On_Custom_Link_Followed_By_Hidden_Text_Provides_Displayed_Link_SpanAsync()
         {
             await RunTestAsync(async (form, richTextBox) =>
@@ -206,9 +197,6 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
-
-                    // Let the event queue drain after clicking, before moving the cursor back to the old position.
-                    Application.DoEvents();
                 }
                 finally
                 {
@@ -220,7 +208,6 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                         await InputSimulator.SendAsync(
                             form,
                             inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
-                        Application.DoEvents();
                     }
                 }
 
