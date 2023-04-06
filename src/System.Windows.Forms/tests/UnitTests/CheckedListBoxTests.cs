@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [BoolData]
+        [CombinatorialData]
         public void CheckedListBox_CheckOnClick(bool expected)
         {
             using var box = new CheckedListBox
@@ -105,7 +105,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [BoolData]
+        [CombinatorialData]
         public void CheckedListBox_ThreeDCheckBoxes(bool expected)
         {
             using var box = new CheckedListBox
@@ -333,7 +333,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [EnumData<CheckState>]
+        [CombinatorialData]
         public void CheckedListBox_SetItemCheckState_Invoke_GetReturnsExpected(CheckState value)
         {
             using var control = new CheckedListBox();
