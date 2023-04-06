@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
+using WindowsInput;
+using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -56,6 +58,9 @@ namespace System.Windows.Forms.UITests
 
         public virtual Task InitializeAsync()
         {
+            // Verify keyboard and mouse state at the start of the test
+            VerifyKeyStates(isStartOfTest: true, TestOutputHelper);
+
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
                 JoinableTaskContext = new JoinableTaskContext();
@@ -74,6 +79,10 @@ namespace System.Windows.Forms.UITests
         public virtual async Task DisposeAsync()
         {
             await _joinableTaskCollection.JoinTillEmptyAsync();
+
+            // Verify keyboard and mouse state at the end of the test
+            VerifyKeyStates(isStartOfTest: false, TestOutputHelper);
+
             JoinableTaskContext = null!;
             JoinableTaskFactory = null!;
             if (_denyExecutionSynchronizationContext is not null)
@@ -87,6 +96,36 @@ namespace System.Windows.Forms.UITests
         {
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
             DataCollectionService.CurrentTest = null;
+        }
+
+        private void VerifyKeyStates(bool isStartOfTest, ITestOutputHelper testOutputHelper)
+        {
+            // Verify that no window has currently captured the cursor
+            Assert.Equal(HWND.Null, PInvoke.GetCapture());
+
+            // Verify that no keyboard or mouse keys are in the pressed state at the beginning of the test, since
+            // this could interfere with test behavior. This code uses GetAsyncKeyState since GetKeyboardState was
+            // not working reliably in local testing.
+            foreach (var code in Enum.GetValues<VirtualKeyCode>())
+            {
+                if (code is VirtualKeyCode.SCROLL or VirtualKeyCode.NUMLOCK)
+                    continue;
+
+                if (PInvoke.GetAsyncKeyState((int)code) < 0)
+                {
+                    // 😕 VK_LEFT and VK_RIGHT was observed to be pressed at the start of a test even though no test
+                    // ran before it
+                    if (isStartOfTest && code is VirtualKeyCode.LEFT or VirtualKeyCode.RIGHT)
+                    {
+                        testOutputHelper.WriteLine($"Sending WM_KEYUP for 'VK_{code}' at the start of the test");
+                        new InputSimulator().Keyboard.KeyUp(code);
+                    }
+                    else
+                    {
+                        Assert.Fail($"The key with virtual key code 'VK_{code}' was unexpectedly pressed at the {(isStartOfTest ? "start" : "end")} of the test.");
+                    }
+                }
+            }
         }
 
         protected async Task WaitForIdleAsync()
