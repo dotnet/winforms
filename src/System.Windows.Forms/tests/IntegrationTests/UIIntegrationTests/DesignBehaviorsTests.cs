@@ -128,17 +128,10 @@ namespace System.Windows.Forms.UITests
 
                     await InputSimulator.SendAsync(
                         form,
-                        inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        inputSimulator => inputSimulator.Mouse.DragMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
                                                               .LeftButtonDown()
-                                                              .Sleep(100)
-                                                              .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
-                                                              // The d'n'd is very finicky, and if we just call LeftButtonUp()
-                                                              // it won't work... It'd for some reason think we'd left the control instead.
-                                                              //
-                                                              // To work around it - give it a full second to react and then
-                                                              // simulate a mouse click.
-                                                              .Sleep(100)
-                                                              .LeftButtonClick());
+                                                              .DragMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                                                              .LeftButtonUp());
 
                     dndSignal.Release();
                 }
