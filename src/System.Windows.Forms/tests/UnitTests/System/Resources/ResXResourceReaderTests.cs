@@ -74,20 +74,11 @@ public class ResXResourceReaderTests
     [Fact]
     public void ResXResourceReader_Constructor_FileName()
     {
-        // Create a temp file and write the resx to it.
-        string tempFileName = Path.GetTempFileName();
-        File.WriteAllText(tempFileName, CreateResx());
-
-        try
-        {
-            using ResXResourceReader resXReader = new(tempFileName);
-            IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
-            Assert.NotNull(enumerator);
-        }
-        finally
-        {
-            File.Delete(tempFileName);
-        }
+        // Create a temp file and write the resx to it.        
+        using TempFile tempFile = TempFile.Create(CreateResx());
+        using ResXResourceReader resXReader = new(tempFile.Path);
+        IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
+        Assert.NotNull(enumerator);
     }
 
     [Fact]
@@ -143,7 +134,7 @@ public class ResXResourceReaderTests
 
         while (enumerator.MoveNext())
         {
-            actualData.Add(enumerator.Key, enumerator.Value);          
+            actualData.Add(enumerator.Key, enumerator.Value);
         }
 
         // Assert
