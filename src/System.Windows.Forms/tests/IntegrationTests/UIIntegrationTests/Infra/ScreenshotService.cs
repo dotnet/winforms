@@ -72,6 +72,12 @@ namespace System.Windows.Forms.UITests
                     blockRegionSize: bitmap.Size,
                     copyPixelOperation: CopyPixelOperation.SourceCopy);
 
+                if (Cursor.Current is { } cursor)
+                {
+                    var bounds = new Rectangle(Cursor.Position - (Size)cursor.HotSpot, cursor.Size);
+                    cursor.Draw(graphics, bounds);
+                }
+
                 return bitmap;
             }
         }
