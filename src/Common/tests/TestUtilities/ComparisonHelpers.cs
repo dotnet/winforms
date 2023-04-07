@@ -11,12 +11,22 @@ public static class ComparisonHelpers
     public static bool EqualsInteger<T>(T x, T y, T variance)
         where T : struct, IBinaryInteger<T>
     {
+        if (variance < T.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(variance));
+        }
+
         return T.Abs(x > y ? x - y : y - x) <= variance;
     }
 
     public static bool EqualsFloating<T>(T x, T y, T variance)
         where T : struct, IFloatingPoint<T>
     {
+        if (variance < T.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(variance));
+        }
+
         if (T.IsNaN(x))
         {
             return T.IsNaN(y);
