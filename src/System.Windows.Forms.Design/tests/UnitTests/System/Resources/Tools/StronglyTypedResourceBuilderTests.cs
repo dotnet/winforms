@@ -9,6 +9,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.TestUtilities;
 using AxWMPLib;
 using Microsoft.CSharp;
 
@@ -21,25 +23,6 @@ public partial class StronglyTypedResourceBuilderTests
     private static readonly CodeDomProvider s_cSharpProvider = new CSharpCodeProvider();
     private const string TypeAssembly = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
     private const string TxtFileEncoding = "Windows-1252";
-
-    private static string CreateResx(string data = null) =>
-        $"""
-        <root>
-            <resheader name="resmimetype">
-                <value>text/microsoft-resx</value>
-            </resheader>
-            <resheader name="version">
-                <value>2.0</value>
-            </resheader>
-            <resheader name="reader">
-                <value>System.Resources.ResXResourceReader</value>
-            </resheader>
-            <resheader name="writer">
-                <value>System.Resources.ResXResourceWriter</value>
-            </resheader>
-            {data ?? string.Empty}
-        </root>
-        """;
 
     [Fact]
     public void StronglyTypedResourceBuilder_Create_NullBaseName_ThrowsArgumentNull()
@@ -66,7 +49,7 @@ public partial class StronglyTypedResourceBuilderTests
                 internalClass: false,
                 out _));
 
-        using var temp = TempFile.Create(CreateResx());
+        using var temp = TempFile.Create(ResxHelper.CreateResx());
         Assert.Throws<ArgumentNullException>(
             "baseName",
             () => StronglyTypedResourceBuilder.Create(
@@ -114,7 +97,7 @@ public partial class StronglyTypedResourceBuilderTests
                 internalClass: false,
                 out _));
 
-        using var temp = TempFile.Create(CreateResx());
+        using var temp = TempFile.Create(ResxHelper.CreateResx());
         Assert.Throws<ArgumentNullException>(
             "codeProvider",
             () => StronglyTypedResourceBuilder.Create(
@@ -208,7 +191,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public static void StronglyTypedResourceBuilder_Create_EmptyResx()
     {
-        using var temp = TempFile.Create(CreateResx());
+        using var temp = TempFile.Create(ResxHelper.CreateResx());
         var compileUnit = StronglyTypedResourceBuilder.Create(
             resxFile: temp.Path,
             baseName: "Resources",
@@ -230,7 +213,7 @@ public partial class StronglyTypedResourceBuilderTests
             </data>
             """;
 
-        using var temp = TempFile.Create(CreateResx(data));
+        using var temp = TempFile.Create(ResxHelper.CreateResx(data));
         var compileUnit = StronglyTypedResourceBuilder.Create(
             resxFile: temp.Path,
             baseName: "Resources",
@@ -321,7 +304,7 @@ public partial class StronglyTypedResourceBuilderTests
             </data>
             """;
 
-        using var temp = TempFile.Create(CreateResx(data));
+        using var temp = TempFile.Create(ResxHelper.CreateResx(data));
 
         var compileUnit = StronglyTypedResourceBuilder.Create(
             resxFile: temp.Path,
@@ -402,7 +385,7 @@ public partial class StronglyTypedResourceBuilderTests
             </data>
             """;
 
-        using var temp = TempFile.Create(CreateResx(data));
+        using var temp = TempFile.Create(ResxHelper.CreateResx(data));
 
         var compileUnit = StronglyTypedResourceBuilder.Create(
             resxFile: temp.Path,
@@ -482,7 +465,7 @@ public partial class StronglyTypedResourceBuilderTests
             </data>
             """;
 
-        using var temp = TempFile.Create(CreateResx(data));
+        using var temp = TempFile.Create(ResxHelper.CreateResx(data));
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         var compileUnit = StronglyTypedResourceBuilder.Create(
@@ -536,7 +519,7 @@ public partial class StronglyTypedResourceBuilderTests
             </data>
             """;
 
-        using var temp = TempFile.Create(CreateResx(data));
+        using var temp = TempFile.Create(ResxHelper.CreateResx(data));
 
         var compileUnit = StronglyTypedResourceBuilder.Create(
             resxFile: temp.Path,

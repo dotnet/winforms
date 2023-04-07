@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Resources.Tests;
@@ -52,30 +53,11 @@ public class ResXResourceReaderTests
         Assert.Throws<ArgumentException>(() => resxReader.GetEnumerator());
     }
 
-    private static string CreateResx(string data = null) =>
-    $"""
-        <root>
-            <resheader name="resmimetype">
-                <value>text/microsoft-resx</value>
-            </resheader>
-            <resheader name="version">
-                <value>2.0</value>
-            </resheader>
-            <resheader name="reader">
-                <value>System.Resources.ResXResourceReader</value>
-            </resheader>
-            <resheader name="writer">
-                <value>System.Resources.ResXResourceWriter</value>
-            </resheader>
-            {data ?? string.Empty}
-        </root>
-        """;
-
     [Fact]
     public void ResXResourceReader_Constructor_FileName()
     {
         // Create a temp file and write the resx to it.        
-        using TempFile tempFile = TempFile.Create(CreateResx());
+        using TempFile tempFile = TempFile.Create(ResxHelper.CreateResx());
         using ResXResourceReader resXReader = new(tempFile.Path);
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
         Assert.NotNull(enumerator);
@@ -84,7 +66,7 @@ public class ResXResourceReaderTests
     [Fact]
     public void ResXResourceReader_Constructor_TextReader()
     {
-        using TextReader textReader = new StringReader(CreateResx());
+        using TextReader textReader = new StringReader(ResxHelper.CreateResx());
         using ResXResourceReader resXReader = new(textReader);
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
         Assert.NotNull(enumerator);
@@ -93,7 +75,7 @@ public class ResXResourceReaderTests
     [Fact]
     public void ResXResourceReader_Constructor_Stream()
     {
-        byte[] resxBytes = Encoding.UTF8.GetBytes(CreateResx());
+        byte[] resxBytes = Encoding.UTF8.GetBytes(ResxHelper.CreateResx());
         using Stream resxStream = new MemoryStream(resxBytes);
         using ResXResourceReader resXReader = new ResXResourceReader(resxStream);
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
@@ -103,7 +85,7 @@ public class ResXResourceReaderTests
     [Fact]
     public void ResXResourceReader_FromFileContents()
     {
-        using var resXReader = ResXResourceReader.FromFileContents(CreateResx());
+        using var resXReader = ResXResourceReader.FromFileContents(ResxHelper.CreateResx());
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
         Assert.NotNull(enumerator);
     }
@@ -128,7 +110,7 @@ public class ResXResourceReaderTests
             """;
 
         // Act
-        using var resXReader = ResXResourceReader.FromFileContents(CreateResx(data));
+        using var resXReader = ResXResourceReader.FromFileContents(ResxHelper.CreateResx(data));
         IDictionary actualData = new Hashtable();
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
 
@@ -156,7 +138,7 @@ public class ResXResourceReaderTests
             """;
 
         // Act
-        using var resXReader = ResXResourceReader.FromFileContents(CreateResx(data));
+        using var resXReader = ResXResourceReader.FromFileContents(ResxHelper.CreateResx(data));
         IDictionary actualData = new Hashtable();
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
         while (enumerator.MoveNext())
@@ -183,7 +165,7 @@ public class ResXResourceReaderTests
             """;
 
         // Act
-        using ResXResourceReader resXReader = ResXResourceReader.FromFileContents(CreateResx(metadata));
+        using ResXResourceReader resXReader = ResXResourceReader.FromFileContents(ResxHelper.CreateResx(metadata));
         IDictionary actualMetadata = new Hashtable();
         IDictionaryEnumerator metadataEnumerator = resXReader.GetMetadataEnumerator();
         while (metadataEnumerator.MoveNext())
