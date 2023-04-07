@@ -155,33 +155,33 @@ public partial class ResXResourceReader : IResourceReader
         }
     }
 
-    /// <summary>
-    ///  ResXFileRef's TypeConverter automatically unwraps it, creates the referenced
-    ///  object and returns it. This property gives the user control over whether this unwrapping should
-    ///  happen, or a ResXFileRef object should be returned. Default is true for backward compat and common case
-    ///  scenario.
-    /// </summary>
-    public bool UseResXDataNodes
-    {
-        get => _useResXDataNodes;
-        set
+        /// <summary>
+        ///  ResXFileRef's TypeConverter automatically unwraps it, creates the referenced
+        ///  object and returns it. This property gives the user control over whether this unwrapping should
+        ///  happen, or a ResXFileRef object should be returned. Default is true for backwards compatibility
+        ///  and common case scenarios.
+        /// </summary>
+        public bool UseResXDataNodes
         {
-            if (_isReaderDirty)
+            get => _useResXDataNodes;
+            set
             {
-                throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
-            }
+                if (_isReaderDirty)
+                {
+                    throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
+                }
 
             _useResXDataNodes = value;
         }
     }
 
-    /// <summary>
-    ///  Closes and files or streams being used by the reader.
-    /// </summary>
-    public void Close()
-    {
-        ((IDisposable)this).Dispose();
-    }
+        /// <summary>
+        ///  Closes any files or streams being used by the reader.
+        /// </summary>
+        public void Close()
+        {
+            ((IDisposable)this).Dispose();
+        }
 
     void IDisposable.Dispose()
     {
