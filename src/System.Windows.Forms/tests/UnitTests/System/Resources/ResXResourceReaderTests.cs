@@ -83,7 +83,6 @@ public class ResXResourceReaderTests
             using ResXResourceReader resXReader = new(tempFileName);
             IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
             Assert.NotNull(enumerator);
-
         }
         finally
         {
