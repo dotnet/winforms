@@ -335,7 +335,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void FileDialog_FilterIndex_Set_GetReturnsExpected(int value)
         {
             using var dialog = new SubFileDialog
@@ -352,7 +352,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void FileDialog_InitialDirectory_Set_GetReturnsExpected(string value)
         {
             using var dialog = new SubFileDialog

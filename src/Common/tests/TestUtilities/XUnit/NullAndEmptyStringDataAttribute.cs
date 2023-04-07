@@ -9,14 +9,7 @@ namespace Xunit;
 /// </summary>
 public class NullAndEmptyStringDataAttribute : CommonMemberDataAttribute
 {
-    private static readonly TheoryData<string?> _data = new();
+    public NullAndEmptyStringDataAttribute() : base(typeof(NullAndEmptyStringDataAttribute)) { }
 
-    public NullAndEmptyStringDataAttribute()
-        : base(typeof(NullAndEmptyStringDataAttribute), nameof(GetTheoryData))
-    {
-        _data.Add(null);
-        _data.Add(string.Empty);
-    }
-
-    public static TheoryData<string?> GetTheoryData() => _data;
+    public static ReadOnlyTheoryData TheoryData { get; } = new(null, string.Empty);
 }

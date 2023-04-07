@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Xunit;
@@ -8,63 +8,52 @@ namespace System.Drawing.Tests
     public class Graphics_DrawBezierTests : DrawingTest
     {
         [Fact]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void DrawBezier_Point()
         {
-            using (Bitmap image = new Bitmap(100, 100))
-            using (Pen pen = new Pen(Color.White))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                graphics.DrawBezier(pen, new Point(10, 10), new Point(20, 1), new Point(35, 5), new Point(50, 10));
-                ValidateImageContent(image,
-                    PlatformDetection.IsWindows
-                        ? new byte[] { 0xa4, 0xb9, 0x73, 0xb9, 0x6f, 0x3a, 0x85, 0x21, 0xd3, 0x65, 0x87, 0x24, 0xcf, 0x6d, 0x61, 0x94 }
-                        : new byte[] { 0xcf, 0x92, 0xaa, 0xe2, 0x44, 0xd4, 0xdd, 0xae, 0xdd, 0x4c, 0x8a, 0xf5, 0xc3, 0x65, 0xac, 0xf2 });
-            }
+            using Bitmap bitmap = new(100, 100);
+            using Pen pen = new(Color.White);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+
+            graphics.DrawBezier(pen, new(10, 10), new(20, 1), new(35, 5), new(50, 10));
+            ValidateBitmapContent(
+                bitmap,
+                0x35, 0xa8, 0x3a, 0x03, 0x1e, 0xbd, 0xd4, 0xc0, 0xa4, 0x70, 0x51, 0xba, 0x09, 0xc1, 0xc1, 0xf9);
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
         [Fact]
         public void DrawBezier_Points()
         {
-            using (Bitmap image = new Bitmap(100, 100))
-            using (Pen pen = new Pen(Color.Red))
-            using (Graphics graphics = Graphics.FromImage(image))
+            using Bitmap bitmap = new(100, 100);
+            using Pen pen = new(Color.Red);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            Point[] points =
             {
-                Point[] points =
-                {
-                    new Point(10, 10), new Point(20, 1), new Point(35, 5), new Point(50, 10),
-                    new Point(60, 15), new Point(65, 25), new Point(50, 30)
-                };
+                new(10, 10), new(20, 1), new(35, 5), new(50, 10),
+                new(60, 15), new(65, 25), new(50, 30)
+            };
 
-                graphics.DrawBeziers(pen, points);
-                ValidateImageContent(image,
-                    PlatformDetection.IsWindows
-                        ? new byte[] { 0xd0, 0x00, 0x08, 0x21, 0x06, 0x29, 0xd8, 0xab, 0x19, 0xc5, 0xc9, 0xf6, 0xf2, 0x69, 0x30, 0x1f }
-                        : new byte[] { 0x9d, 0x24, 0x9f, 0x91, 0xa3, 0xa5, 0x60, 0xde, 0x14, 0x69, 0x42, 0xa8, 0xe6, 0xc6, 0xbf, 0xc9 });
-            }
+            graphics.DrawBeziers(pen, points);
+            ValidateBitmapContent(
+                bitmap,
+                0x7a, 0x02, 0x29, 0xa0, 0xc5, 0x21, 0x94, 0x31, 0xc8, 0x96, 0x31, 0x09, 0xcc, 0xd6, 0xec, 0x63);
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
         [Fact]
         public void DrawBezier_PointFs()
         {
-            using (Bitmap image = new Bitmap(100, 100))
-            using (Pen pen = new Pen(Color.Red))
-            using (Graphics graphics = Graphics.FromImage(image))
+            using Bitmap bitmap = new(100, 100);
+            using Pen pen = new(Color.Red);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            PointF[] points =
             {
-                PointF[] points =
-                {
-                    new PointF(10.0F, 10.0F), new PointF(20.0F, 1.0F), new PointF(35.0F, 5.0F), new PointF(50.0F, 10.0F),
-                    new PointF(60.0F, 15.0F), new PointF(65.0F, 25.0F), new PointF(50.0F, 30.0F)
-                };
+                new(10.0f, 10.0f), new(20.0f, 1.0f), new(35.0f, 5.0f), new(50.0f, 10.0f),
+                new(60.0f, 15.0f), new(65.0f, 25.0f), new(50.0f, 30.0f)
+            };
 
-                graphics.DrawBeziers(pen, points);
-                ValidateImageContent(image,
-                    PlatformDetection.IsWindows
-                        ? new byte[] { 0xd0, 0x00, 0x08, 0x21, 0x06, 0x29, 0xd8, 0xab, 0x19, 0xc5, 0xc9, 0xf6, 0xf2, 0x69, 0x30, 0x1f }
-                        : new byte[] { 0x9d, 0x24, 0x9f, 0x91, 0xa3, 0xa5, 0x60, 0xde, 0x14, 0x69, 0x42, 0xa8, 0xe6, 0xc6, 0xbf, 0xc9 });
-            }
+            graphics.DrawBeziers(pen, points);
+            ValidateBitmapContent(
+                bitmap,
+                0x7a, 0x02, 0x29, 0xa0, 0xc5, 0x21, 0x94, 0x31, 0xc8, 0x96, 0x31, 0x09, 0xcc, 0xd6, 0xec, 0x63);
         }
 
         [Fact]

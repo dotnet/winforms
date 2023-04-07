@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -44,7 +44,6 @@ namespace System.ComponentModel.TypeConverterTests
 
         [Theory]
         [MemberData(nameof(TestConvertFormData))]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Full Framework doesn't support inputs without units")]
         public void TestConvertFrom(string input, string expectedName, float expectedSize, GraphicsUnit expectedUnits, FontStyle expectedFontStyle)
         {
             FontConverter converter = new FontConverter();

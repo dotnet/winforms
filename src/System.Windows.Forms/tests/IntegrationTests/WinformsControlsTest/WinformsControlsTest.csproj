@@ -131,9 +131,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="MediaPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="MediaPlayer.cs" />
   </ItemGroup>
 
   <Import Project="..\..\..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" />

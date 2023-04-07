@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void LinkArea_Start_Set_GetReturnsExpected(int value)
         {
             var area = new LinkArea
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void LinkArea_Length_Set_GetReturnsExpected(int value)
         {
             var area = new LinkArea

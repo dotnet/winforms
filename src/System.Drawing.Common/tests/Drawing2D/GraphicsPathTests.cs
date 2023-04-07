@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2006-2007 Novell, Inc (http://www.novell.com)
@@ -377,12 +377,6 @@ namespace System.Drawing.Drawing2D.Tests
         [Fact]
         public void AddArc_Values_Success()
         {
-            if (PlatformDetection.IsArmOrArm64Process)
-            {
-                //ActiveIssue: 35744
-                throw new SkipTestException("Precision on float numbers");
-            }
-
             using (GraphicsPath gpi = new GraphicsPath())
             using (GraphicsPath gpf = new GraphicsPath())
             {
@@ -399,12 +393,6 @@ namespace System.Drawing.Drawing2D.Tests
         [Fact]
         public void AddArc_Rectangle_Success()
         {
-            if (PlatformDetection.IsArmOrArm64Process)
-            {
-                //ActiveIssue: 35744
-                throw new SkipTestException("Precision on float numbers");
-            }
-
             using (GraphicsPath gpi = new GraphicsPath())
             using (GraphicsPath gpf = new GraphicsPath())
             {
@@ -722,12 +710,6 @@ namespace System.Drawing.Drawing2D.Tests
         [Fact]
         public void AddClosedCurve_Points_Success()
         {
-            if (PlatformDetection.IsArmOrArm64Process)
-            {
-                //ActiveIssue: 35744
-                throw new SkipTestException("Precision on float numbers");
-            }
-
             using (GraphicsPath gpi = new GraphicsPath())
             using (GraphicsPath gpf = new GraphicsPath())
             {
@@ -761,12 +743,6 @@ namespace System.Drawing.Drawing2D.Tests
         [Fact]
         public void AddClosedCurve_Tension_Success()
         {
-            if (PlatformDetection.IsArmOrArm64Process)
-            {
-                //ActiveIssue: 35744
-                throw new SkipTestException("Precision on float numbers");
-            }
-
             using (GraphicsPath gpi = new GraphicsPath())
             using (GraphicsPath gpf = new GraphicsPath())
             {
@@ -2419,7 +2395,7 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(2, path.PathPoints.Length);
             Assert.Equal(2, path.PathTypes.Length);
             Assert.Equal(2, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(1f, 1f, 1f, 1f), path.GetBounds());
+            AssertExtensions.Equal(new RectangleF(1f, 1f, 1f, 1f), path.GetBounds(), variance: 0.000001f);
             Assert.Equal(expectedPoints, path.PathPoints);
             Assert.Equal(new byte[] { 0, 1 }, path.PathTypes);
         }
@@ -2435,7 +2411,7 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(4, path.PathPoints.Length);
             Assert.Equal(4, path.PathTypes.Length);
             Assert.Equal(4, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(2.99962401f, 2.01370716f, 0f, 0.0137047768f), path.GetBounds());
+            AssertExtensions.Equal(new RectangleF(2.99962401f, 2.01370716f, 0f, 0.0137047768f), path.GetBounds(), variance: Delta);
             Assert.Equal(expectedPoints, path.PathPoints);
             Assert.Equal(new byte[] { 0, 3, 3, 3 }, path.PathTypes);
         }
@@ -2452,8 +2428,8 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(4, path.PathPoints.Length);
             Assert.Equal(4, path.PathTypes.Length);
             Assert.Equal(4, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(1f, 1f, 3f, 3f), path.GetBounds());
-            Assert.Equal(expectedPoints, path.PathPoints);
+            AssertExtensions.Equal(new RectangleF(1f, 1f, 3f, 3f), path.GetBounds(), Delta);
+            AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
             Assert.Equal(new byte[] { 0, 3, 3, 3 }, path.PathTypes);
         }
 
@@ -2468,7 +2444,7 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(4, path.PathPoints.Length);
             Assert.Equal(4, path.PathTypes.Length);
             Assert.Equal(4, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(1f, 1f, 1f, 1f), path.GetBounds());
+            AssertExtensions.Equal(new RectangleF(1f, 1f, 1f, 1f), path.GetBounds(), Delta);
             AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
             Assert.Equal(new byte[] { 0, 3, 3, 3 }, path.PathTypes);
         }
@@ -2478,7 +2454,7 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(10, path.PathPoints.Length);
             Assert.Equal(10, path.PathTypes.Length);
             Assert.Equal(10, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(0.8333333f, 0.8333333f, 2.33333278f, 2.33333278f), path.GetBounds());
+            AssertExtensions.Equal(new RectangleF(0.8333333f, 0.8333333f, 2.33333278f, 2.33333278f), path.GetBounds(), Delta);
             Assert.Equal(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 131 }, path.PathTypes);
         }
 
@@ -2493,8 +2469,8 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(4, path.PathPoints.Length);
             Assert.Equal(4, path.PathTypes.Length);
             Assert.Equal(4, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds());
-            Assert.Equal(expectedPoints, path.PathPoints);
+            AssertExtensions.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds(), Delta);
+            AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
             Assert.Equal(new byte[] { 0, 1, 1, 129 }, path.PathTypes);
         }
 
@@ -2503,7 +2479,7 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(13, path.PathPoints.Length);
             Assert.Equal(13, path.PathTypes.Length);
             Assert.Equal(13, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds());
+            AssertExtensions.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds(), Delta);
             Assert.Equal(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 131 }, path.PathTypes);
         }
 
@@ -2536,8 +2512,8 @@ namespace System.Drawing.Drawing2D.Tests
             Assert.Equal(3, path.PathPoints.Length);
             Assert.Equal(3, path.PathTypes.Length);
             Assert.Equal(3, path.PathData.Points.Length);
-            Assert.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds());
-            Assert.Equal(expectedPoints, path.PathPoints);
+            AssertExtensions.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds(), Delta);
+            AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
             Assert.Equal(new byte[] { 0, 1, 129 }, path.PathTypes);
         }
 

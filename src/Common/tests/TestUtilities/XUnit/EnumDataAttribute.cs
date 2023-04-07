@@ -9,16 +9,7 @@ namespace Xunit;
 /// </summary>
 public class EnumDataAttribute<TEnum> : CommonMemberDataAttribute where TEnum : struct, Enum
 {
-    private static readonly TheoryData<TEnum> _data = new();
+    public EnumDataAttribute() : base(typeof(EnumDataAttribute<TEnum>)) { }
 
-    public EnumDataAttribute()
-        : base(typeof(EnumDataAttribute<TEnum>), nameof(GetTheoryData))
-    {
-        foreach (TEnum item in Enum.GetValues<TEnum>())
-        {
-            _data.Add(item);
-        }
-    }
-
-    public static TheoryData<TEnum> GetTheoryData() => _data;
+    public static ReadOnlyTheoryData TheoryData { get; } = new(Enum.GetValues<TEnum>());
 }

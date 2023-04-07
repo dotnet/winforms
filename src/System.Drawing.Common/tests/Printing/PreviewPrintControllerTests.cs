@@ -77,7 +77,6 @@ namespace System.Drawing.Printing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Fixed a NullReferenceException")]
         public void OnEndPage_InvokeWithoutStarting_Nop()
         {
             using (var document = new PrintDocument())
@@ -131,7 +130,6 @@ namespace System.Drawing.Printing.Tests
 
         [Theory]
         [MemberData(nameof(PrintEventArgs_TestData))]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Fixed a NullReferenceException")]
         public void OnEndPrint_InvokeWithoutStarting_Nop(PrintEventArgs e)
         {
             using (var document = new PrintDocument())

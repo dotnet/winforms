@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // ICO Codec class testing unit
@@ -105,7 +105,6 @@ namespace MonoTests.System.Drawing.Imaging
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Flaky - ArgumentException")]
         public void Bitmap16Features_Palette_Entries()
         {
             string sInFile = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");

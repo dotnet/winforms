@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     public class DpiHelperTests
     {
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void DpiHelper_LogicalToDeviceUnits(int value)
         {
             var expected = Math.Round(value * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi));

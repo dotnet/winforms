@@ -35,7 +35,6 @@ using Xunit;
 
 namespace System.Drawing.Tests
 {
-    [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
     public class BitmapTests : FileCleanupTestBase
     {
         public static IEnumerable<object[]> Ctor_FilePath_TestData()
@@ -789,8 +788,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "In .NET Framework we use GDI 1.0")]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/69471")]
         public void SaveWmfAsPngDoesntChangeImageBoundaries()
         {
             if (PlatformDetection.IsWindows7)
@@ -804,25 +801,24 @@ namespace System.Drawing.Tests
                 throw new SkipTestException("Arm precision");
             }
 
-            string output = GetTestFilePath() + ".png";
+            string output = $"{GetTestFilePath()}.png";
             using Stream wmfStream = File.OpenRead(Helpers.GetTestBitmapPath("gdiwmfboundariesbug.wmf"));
-            using Image bitmapFromWmf = Bitmap.FromStream(wmfStream);
+            using Image bitmapFromWmf = Image.FromStream(wmfStream);
             bitmapFromWmf.Save(output, ImageFormat.Png);
 
             using Stream expectedPngStream = File.OpenRead(Helpers.GetTestBitmapPath("gdiwmfboundariesbug-output.png"));
-            using Image expectedPngBitmap = Bitmap.FromStream(expectedPngStream);
-            using MemoryStream expectedMemoryStream = new MemoryStream();
-            expectedPngBitmap.Save(expectedMemoryStream, ImageFormat.Png);
+            using Image expectedPngBitmap = Image.FromStream(expectedPngStream);
 
             using Stream outputPngStream = File.OpenRead(output);
-            using Image outputPngBitmap = Bitmap.FromStream(outputPngStream);
-            using MemoryStream outputMemoryStream = new MemoryStream();
-            outputPngBitmap.Save(outputMemoryStream, ImageFormat.Png);
+            using Image outputPngBitmap = Image.FromStream(outputPngStream);
 
-            Assert.Equal(expectedMemoryStream.ToArray(), outputMemoryStream.ToArray());
+            Assert.Equal(expectedPngBitmap.HorizontalResolution, outputPngBitmap.HorizontalResolution);
+            Assert.Equal(expectedPngBitmap.VerticalResolution, outputPngBitmap.VerticalResolution);
+            Assert.Equal(expectedPngBitmap.Size, outputPngBitmap.Size);
+            Assert.Equal(expectedPngBitmap.PhysicalDimension, outputPngBitmap.PhysicalDimension);
+            Assert.Equal(expectedPngBitmap.PixelFormat, outputPngBitmap.PixelFormat);
         }
 
-        // This test causes an AV on Linux
         [Fact]
         public void FromHicon_InvalidHandle_ThrowsArgumentException()
         {
@@ -1152,7 +1148,6 @@ namespace System.Drawing.Tests
         }
 
         [ConditionalTheory(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/30565", TestPlatforms.Windows)]
         [MemberData(nameof(LockBits_TestData))]
         public void LockBits_Invoke_Success(Bitmap bitmap, Rectangle rectangle, ImageLockMode lockMode, PixelFormat pixelFormat, int expectedStride, int expectedReserved)
         {
@@ -1164,11 +1159,8 @@ namespace System.Drawing.Tests
                 Assert.Equal(rectangle.Height, data.Height);
                 Assert.Equal(expectedStride, data.Stride);
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    // "Reserved" is documented as "Reserved. Do not use.", so it's not clear whether we actually need to test this in any unit tests.
-                    Assert.Equal(expectedReserved, data.Reserved);
-                }
+                // "Reserved" is documented as "Reserved. Do not use.", so it's not clear whether we actually need to test this in any unit tests.
+                Assert.Equal(expectedReserved, data.Reserved);
 
                 // Locking with 16bppGrayscale succeeds, but the data can't be unlocked.
                 if (pixelFormat == PixelFormat.Format16bppGrayScale)

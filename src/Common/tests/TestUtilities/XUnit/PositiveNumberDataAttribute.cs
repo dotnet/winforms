@@ -9,18 +9,10 @@ namespace Xunit;
 /// <summary>
 ///  Generates <see cref="TheoryAttribute"/> data for a representative set of positive number values.
 /// </summary>
-public class PositiveNumberDataAttribute<TNumber> : CommonMemberDataAttribute where TNumber : IBinaryNumber<TNumber>, IMinMaxValue<TNumber>
+public class PositiveIntegerDataAttribute<TNumber>
+    : CommonMemberDataAttribute where TNumber : struct, IBinaryInteger<TNumber>, IMinMaxValue<TNumber>
 {
-    private static readonly TheoryData<TNumber> _data = new();
+    public PositiveIntegerDataAttribute() : base(typeof(PositiveIntegerDataAttribute<TNumber>)) { }
 
-    public PositiveNumberDataAttribute()
-        : base(typeof(PositiveNumberDataAttribute<TNumber>), nameof(GetTheoryData))
-    {
-        _data.Add(TNumber.Zero);
-        _data.Add(TNumber.MaxValue);
-        _data.Add(TNumber.One);
-        _data.Add(TNumber.MaxValue / (TNumber.One + TNumber.One));
-    }
-
-    public static TheoryData<TNumber> GetTheoryData() => _data;
+    public static ReadOnlyTheoryData TheoryData { get; } = new(TestData.GetPositiveIntegerData<TNumber>());
 }

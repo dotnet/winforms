@@ -16,12 +16,5 @@ internal static partial class Interop
         public static extern nint GetDC(
 #endif
             nint hWnd);
-
-        public static nint GetDC(HandleRef hWnd)
-        {
-            nint dc = GetDC(hWnd.Handle);
-            GC.KeepAlive(hWnd.Wrapper);
-            return dc;
-        }
     }
 }

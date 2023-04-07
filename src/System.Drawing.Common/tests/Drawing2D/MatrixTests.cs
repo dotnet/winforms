@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
@@ -25,6 +25,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.XUnit;
 using Microsoft.DotNet.XUnitExtensions;
 using Xunit;
 
@@ -333,18 +334,12 @@ namespace System.Drawing.Drawing2D.Tests
             using (matrix)
             using (multiple)
             {
-                if (PlatformDetection.IsArmOrArm64Process)
-                {
-                    //ActiveIssue: 35744
-                    throw new SkipTestException("Precision on float numbers");
-                }
-
                 if (order == MatrixOrder.Prepend)
                 {
                     using (Matrix clone1 = matrix.Clone())
                     {
                         clone1.Multiply(multiple);
-                        Assert.Equal(expected, clone1.Elements);
+                        Assert.Equal(expected, clone1.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
                     }
                 }
                 matrix.Multiply(multiple, order);
@@ -586,18 +581,12 @@ namespace System.Drawing.Drawing2D.Tests
         {
             using (matrix)
             {
-                if (PlatformDetection.IsArmOrArm64Process)
-                {
-                    //ActiveIssue: 35744
-                    throw new SkipTestException("Precision on float numbers");
-                }
-
                 if (order == MatrixOrder.Prepend)
                 {
                     using (Matrix clone = matrix.Clone())
                     {
                         clone.Scale(scaleX, scaleY);
-                        Assert.Equal(expectedElements, clone.Elements);
+                        Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
                     }
                 }
 
@@ -662,18 +651,12 @@ namespace System.Drawing.Drawing2D.Tests
         {
             using (matrix)
             {
-                if (PlatformDetection.IsArmOrArm64Process)
-                {
-                    //ActiveIssue: 35744
-                    throw new SkipTestException("Precision on float numbers");
-                }
-
                 if (order == MatrixOrder.Prepend)
                 {
                     using (Matrix clone = matrix.Clone())
                     {
                         clone.Shear(shearX, shearY);
-                        Assert.Equal(expectedElements, clone.Elements);
+                        Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
                     }
                 }
 
@@ -730,23 +713,17 @@ namespace System.Drawing.Drawing2D.Tests
         {
             using (matrix)
             {
-                if (PlatformDetection.IsArmOrArm64Process)
-                {
-                    //ActiveIssue: 35744
-                    throw new SkipTestException("Precision on float numbers");
-                }
-
                 if (order == MatrixOrder.Prepend)
                 {
                     using (Matrix clone = matrix.Clone())
                     {
                         clone.Translate(offsetX, offsetY);
-                        AssertEqualFloatArray(expectedElements, clone.Elements);
+                        Assert.Equal(expectedElements, clone.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
                     }
                 }
 
                 matrix.Translate(offsetX, offsetY, order);
-                AssertEqualFloatArray(expectedElements, matrix.Elements);
+                Assert.Equal(expectedElements, matrix.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
             }
         }
 
@@ -909,7 +886,7 @@ namespace System.Drawing.Drawing2D.Tests
             {
                 try
                 {
-                    Assert.Equal((double)expected[i], (double)actual[i], 3);
+                    Assert.Equal(expected[i], actual[i], precision: 3);
                 }
                 catch
                 {

@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Ctor_Int(int all)
         {
             var padding = new Padding(all);
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_All_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_All_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(2)
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Left_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Left_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)
@@ -197,7 +197,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Top_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Top_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Right_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -282,7 +282,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Right_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)
@@ -297,7 +297,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Bottom_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -332,7 +332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Padding_Bottom_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)

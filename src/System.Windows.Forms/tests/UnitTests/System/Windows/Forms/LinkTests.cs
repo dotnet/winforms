@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Link_Start_SetWithoutOwner_GetReturnsExpected(int value)
         {
             var link = new LinkLabel.Link

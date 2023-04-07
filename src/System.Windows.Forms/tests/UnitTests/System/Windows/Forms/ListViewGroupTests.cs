@@ -135,7 +135,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [PositiveNumberData<int>]
+        [PositiveIntegerData<int>]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageIndex_SetWithoutListView_GetReturnsExpected(int value)
         {
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [PositiveNumberData<int>]
+        [PositiveIntegerData<int>]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageIndex_SetWithListView_GetReturnsExpected(int value)
         {
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [PositiveNumberData<int>]
+        [PositiveIntegerData<int>]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageIndex_SetWithListViewWithHandle_GetReturnsExpected(int value)
         {
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [PositiveNumberData<int>]
+        [PositiveIntegerData<int>]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageKey_SetTitleImageIndex_GetReturnsExpected(int value)
         {

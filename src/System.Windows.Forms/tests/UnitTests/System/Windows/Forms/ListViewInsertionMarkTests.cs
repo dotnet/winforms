@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ListViewInsertionMark_Index_SetWithoutHandle_GetReturnsExpected(int value)
         {
             using var control = new ListView();
@@ -423,7 +423,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ListViewInsertionMark_Index_SetWithHandle_GetReturnsExpected(int value)
         {
             using var control = new ListView();
