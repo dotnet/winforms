@@ -165,7 +165,7 @@ namespace System.Windows.Forms.UITests
             await MoveMouseAsync(control.FindForm()!, centerOnScreen);
         }
 
-        protected Point ToVirtualPoint(Point point)
+        internal static Point ToVirtualPoint(Point point)
         {
             Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
             return new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
@@ -175,7 +175,7 @@ namespace System.Windows.Forms.UITests
         {
             TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
             Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
-            var virtualPoint = new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
+            var virtualPoint = ToVirtualPoint(point);
             TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
 
             await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1));

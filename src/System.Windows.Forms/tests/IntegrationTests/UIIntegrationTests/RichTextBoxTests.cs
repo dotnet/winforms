@@ -65,7 +65,7 @@ namespace System.Windows.Forms.UITests
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
+                            inputSimulator => inputSimulator.Mouse.DragMouseTo(previousPosition.X, previousPosition.Y));
                     }
                 }
 
@@ -136,7 +136,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
+                            inputSimulator => inputSimulator.Mouse.DragMouseTo(previousPosition.X, previousPosition.Y));
                     }
                 }
 
@@ -207,7 +207,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
+                            inputSimulator => inputSimulator.Mouse.DragMouseTo(previousPosition.X, previousPosition.Y));
                     }
                 }
 

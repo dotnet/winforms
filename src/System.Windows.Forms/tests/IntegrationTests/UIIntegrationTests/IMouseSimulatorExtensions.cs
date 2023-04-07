@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.Drawing;
 using WindowsInput;
+using Xunit;
 
 // Work around for global usings breaking things
 using ThreadState = System.Diagnostics.ThreadState;
@@ -14,19 +16,19 @@ namespace System.Windows.Forms.UITests
     {
         public static IMouseSimulator DragMouseBy(this IMouseSimulator simulator, int pixelDeltaX, int pixelDeltaY)
         {
-            simulator.MoveMouseBy(pixelDeltaX, pixelDeltaY);
-
-            // Wait for the message to be processed. Since this is a drag operation, it is possible for the main thread
-            // to busy-wait for additional mouse messages during the handling of the previous message, so we block for
-            // a short timeout before silently allowing more messages to be sent.
-            simulator.WaitForInputIdle(throwOnTimeOut: false, TimeSpan.FromMilliseconds(200));
-
-            return simulator;
+            // Redirect to DragMouseTo, since the implementation of MoveMouseBy is subject to the OS's settings for
+            // mouse speed and acceleration.
+            Assert.True(PInvoke.GetPhysicalCursorPos(out var point));
+            var virtualPoint = ControlTestBase.ToVirtualPoint(point + new Size(pixelDeltaX, pixelDeltaY));
+            return DragMouseTo(simulator, virtualPoint.X, virtualPoint.Y);
         }
 
         public static IMouseSimulator DragMouseTo(this IMouseSimulator simulator, double absoluteX, double absoluteY)
         {
             simulator.MoveMouseTo(absoluteX, absoluteY);
+
+            // ⚠ The call to GetCursorPos is required for correct behavior.
+            _ = PInvoke.GetCursorPos(out _);
 
             // Wait for the message to be processed. Since this is a drag operation, it is possible for the main thread
             // to busy-wait for additional mouse messages during the handling of the previous message, so we block for
