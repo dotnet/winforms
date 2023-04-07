@@ -83,6 +83,7 @@ public class ResXResourceReaderTests
             using ResXResourceReader resXReader = new(tempFileName);
             IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
             Assert.NotNull(enumerator);
+
         }
         finally
         {
@@ -118,31 +119,89 @@ public class ResXResourceReaderTests
     }
 
     [Fact]
-    public void ResXResourceReader_GetEnumerator()
+    public void ResXResourceReader_GetEnumerator_String()
     {
-        const string data = """
-            <data name="TestName1" xml:space="preserve">
-              <value>TestValue1</value>
+        // Arrange
+        string keyName1 = "TestString";
+        string keyName2 = "TestString2";
+        string testValue1 = "TestValue1";
+        string testValue2 = "TestValue2";
+
+        IDictionary expectedData = new Hashtable { { keyName1, testValue1 }, { keyName2, testValue2 } };
+        string data = $"""
+            <data name="{keyName1}" xml:space="preserve">
+              <value>{testValue1}</value>
             </data>
-            <data name="TestName2" xml:space="preserve">
-              <value>TestValue2</value>
+            <data name="{keyName2}" xml:space="preserve">
+              <value>{testValue2}</value>
             </data>
             """;
 
+        // Act
         using var resXReader = ResXResourceReader.FromFileContents(CreateResx(data));
+        IDictionary actualData = new Hashtable();
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
-
-        int itemCount = 0;
 
         while (enumerator.MoveNext())
         {
-            itemCount++;
-            string key = (string)enumerator.Key;
-            string value = (string)enumerator.Value;
-            Assert.True(!string.IsNullOrEmpty(key));
-            Assert.True(!string.IsNullOrEmpty(value));
+            actualData.Add(enumerator.Key, enumerator.Value);          
         }
 
-        Assert.Equal(2, itemCount);
+        // Assert
+        Assert.Equal(expectedData, actualData);
+    }
+
+    [Fact]
+    public void ResXResourceReader_GetEnumerator_Int()
+    {
+        // Arrange
+        string keyName = "TestNumber";
+        int testValue = 42;
+
+        IDictionary expectedData = new Hashtable { { keyName, testValue } };
+        string data = $"""
+            <data name="{keyName}" type="System.Int32">
+              <value>{testValue}</value>
+            </data>
+            """;
+
+        // Act
+        using var resXReader = ResXResourceReader.FromFileContents(CreateResx(data));
+        IDictionary actualData = new Hashtable();
+        IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            actualData.Add(enumerator.Key, enumerator.Value);
+        }
+
+        // Assert
+        Assert.Equal(expectedData, actualData);
+    }
+
+    [Fact]
+    public void GetMetadataEnumerator_ReturnsMetadataNodes()
+    {
+        // Arrange
+        string metadataName = "TestMetadata";
+        string sampleMetadataValue = "Sample metadata";
+
+        IDictionary expectedMetadata = new Hashtable { { metadataName, sampleMetadataValue } };
+        string metadata = $"""
+            <metadata name="{metadataName}" type="System.String">
+              <value>{sampleMetadataValue}</value>
+            </metadata>
+            """;
+
+        // Act
+        using ResXResourceReader resXReader = ResXResourceReader.FromFileContents(CreateResx(metadata));
+        IDictionary actualMetadata = new Hashtable();
+        IDictionaryEnumerator metadataEnumerator = resXReader.GetMetadataEnumerator();
+        while (metadataEnumerator.MoveNext())
+        {
+            actualMetadata.Add(metadataEnumerator.Key, metadataEnumerator.Value);
+        }
+
+        // Assert
+        Assert.Equal(expectedMetadata, actualMetadata);
     }
 }
