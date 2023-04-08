@@ -35,8 +35,6 @@ namespace System.Windows.Forms.UITests
 \pard\sa200\sl276\slmult1\f0\fs22\lang9  for more information.\par
 }";
 
-                BOOL setOldCursorPos = PInvoke.GetPhysicalCursorPos(out Point previousPosition);
-
                 LinkClickedEventArgs? result = null;
                 LinkClickedEventHandler handler = (sender, e) => result = e;
                 richTextBox.LinkClicked += handler;
@@ -51,22 +49,10 @@ namespace System.Windows.Forms.UITests
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos)
-                    {
-                        await MoveMouseAsync(form, previousPosition);
-                    }
                 }
                 finally
                 {
                     richTextBox.LinkClicked -= handler;
-
-                    if (setOldCursorPos)
-                    {
-                        // Move cursor to the old position.
-                        await InputSimulator.SendAsync(
-                            form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
-                    }
                 }
 
                 Assert.NotNull(result);
@@ -106,8 +92,6 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 MakeLink(richTextBox, "#link2#custom link");
                 MakeLink(richTextBox, "#link3#custom link");
 
-                BOOL setOldCursorPos = PInvoke.GetPhysicalCursorPos(out Point previousPosition);
-
                 LinkClickedEventArgs? result = null;
                 LinkClickedEventHandler handler = (sender, e) => result = e;
                 richTextBox.LinkClicked += handler;
@@ -122,22 +106,10 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos)
-                    {
-                        await MoveMouseAsync(form, previousPosition);
-                    }
                 }
                 finally
                 {
                     richTextBox.LinkClicked -= handler;
-
-                    if (setOldCursorPos)
-                    {
-                        // Move cursor to the old position.
-                        await InputSimulator.SendAsync(
-                            form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
-                    }
                 }
 
                 Assert.NotNull(result);
@@ -177,8 +149,6 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 MakeLink(richTextBox, "custom link#link2#");
                 MakeLink(richTextBox, "custom link#link3#");
 
-                BOOL setOldCursorPos = PInvoke.GetPhysicalCursorPos(out Point previousPosition);
-
                 LinkClickedEventArgs? result = null;
                 LinkClickedEventHandler handler = (sender, e) => result = e;
                 richTextBox.LinkClicked += handler;
@@ -193,22 +163,10 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos)
-                    {
-                        await MoveMouseAsync(form, previousPosition);
-                    }
                 }
                 finally
                 {
                     richTextBox.LinkClicked -= handler;
-
-                    if (setOldCursorPos)
-                    {
-                        // Move cursor to the old position.
-                        await InputSimulator.SendAsync(
-                            form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
-                    }
                 }
 
                 Assert.NotNull(result);

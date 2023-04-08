@@ -23,6 +23,8 @@ namespace System.Windows.Forms.UITests
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
 
+        private Point? _mousePosition;
+
         static ControlTestBase()
         {
             DataCollectionService.InstallFirstChanceExceptionHandler();
@@ -61,6 +63,9 @@ namespace System.Windows.Forms.UITests
             // Verify keyboard and mouse state at the start of the test
             VerifyKeyStates(isStartOfTest: true, TestOutputHelper);
 
+            // Record the mouse position so it can be restored at the end of the test
+            _mousePosition = Cursor.Position;
+
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
                 JoinableTaskContext = new JoinableTaskContext();
@@ -82,6 +87,12 @@ namespace System.Windows.Forms.UITests
 
             // Verify keyboard and mouse state at the end of the test
             VerifyKeyStates(isStartOfTest: false, TestOutputHelper);
+
+            // Restore the mouse position
+            if (_mousePosition is { } mousePosition)
+            {
+                Cursor.Position = mousePosition;
+            }
 
             JoinableTaskContext = null!;
             JoinableTaskFactory = null!;
