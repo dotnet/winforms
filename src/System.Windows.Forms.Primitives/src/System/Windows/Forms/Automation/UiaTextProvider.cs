@@ -109,12 +109,12 @@ namespace System.Windows.Forms.Automation
             return (int)PInvoke.SendInput(currentInput, size);
         }
 
-        public unsafe int SendKeyboardInputVK(short vk, bool press)
+        public unsafe int SendKeyboardInputVK(VIRTUAL_KEY vk, bool press)
         {
             INPUT keyboardInput = default(INPUT);
 
             keyboardInput.type = INPUT_TYPE.INPUT_KEYBOARD;
-            keyboardInput.Anonymous.ki.wVk = (VIRTUAL_KEY)vk;
+            keyboardInput.Anonymous.ki.wVk = vk;
             keyboardInput.Anonymous.ki.wScan = 0;
             keyboardInput.Anonymous.ki.dwFlags = press ? 0 : KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
 
@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Automation
             return SendInput(1, ref keyboardInput, sizeof(INPUT));
         }
 
-        private static bool IsExtendedKey(short vk)
+        private static bool IsExtendedKey(VIRTUAL_KEY vk)
         {
             // From the SDK:
             // The extended-key flag indicates whether the keystroke message originated from one of
@@ -141,22 +141,22 @@ namespace System.Windows.Forms.Automation
             //
             // - docs appear to be incorrect. Use of Spy++ indicates that break is not an extended key.
             // Also, menu key and windows keys also appear to be extended.
-            return vk == unchecked((short)VK.RMENU) ||
-                   vk == unchecked((short)VK.RCONTROL) ||
-                   vk == unchecked((short)VK.NUMLOCK) ||
-                   vk == unchecked((short)VK.INSERT) ||
-                   vk == unchecked((short)VK.DELETE) ||
-                   vk == unchecked((short)VK.HOME) ||
-                   vk == unchecked((short)VK.END) ||
-                   vk == unchecked((short)VK.PRIOR) ||
-                   vk == unchecked((short)VK.NEXT) ||
-                   vk == unchecked((short)VK.UP) ||
-                   vk == unchecked((short)VK.DOWN) ||
-                   vk == unchecked((short)VK.LEFT) ||
-                   vk == unchecked((short)VK.RIGHT) ||
-                   vk == unchecked((short)VK.APPS) ||
-                   vk == unchecked((short)VK.RWIN) ||
-                   vk == unchecked((short)VK.LWIN);
+            return vk is VIRTUAL_KEY.VK_RMENU or
+                   VIRTUAL_KEY.VK_RCONTROL or
+                   VIRTUAL_KEY.VK_NUMLOCK or
+                   VIRTUAL_KEY.VK_INSERT or
+                   VIRTUAL_KEY.VK_DELETE or
+                   VIRTUAL_KEY.VK_HOME or
+                   VIRTUAL_KEY.VK_END or
+                   VIRTUAL_KEY.VK_PRIOR or
+                   VIRTUAL_KEY.VK_NEXT or
+                   VIRTUAL_KEY.VK_UP or
+                   VIRTUAL_KEY.VK_DOWN or
+                   VIRTUAL_KEY.VK_LEFT or
+                   VIRTUAL_KEY.VK_RIGHT or
+                   VIRTUAL_KEY.VK_APPS or
+                   VIRTUAL_KEY.VK_RWIN or
+                   VIRTUAL_KEY.VK_LWIN;
             // Note that there are no distinct values for the following keys:
             // numpad divide
             // numpad enter

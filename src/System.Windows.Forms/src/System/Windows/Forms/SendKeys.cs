@@ -810,16 +810,16 @@ namespace System.Windows.Forms
 
         private static bool IsExtendedKey(SKEvent skEvent)
         {
-            return (skEvent.ParamL == User32.VK.UP)
-                || (skEvent.ParamL == User32.VK.DOWN)
-                || (skEvent.ParamL == User32.VK.LEFT)
-                || (skEvent.ParamL == User32.VK.RIGHT)
-                || (skEvent.ParamL == User32.VK.PRIOR)
-                || (skEvent.ParamL == User32.VK.NEXT)
-                || (skEvent.ParamL == User32.VK.HOME)
-                || (skEvent.ParamL == User32.VK.END)
-                || (skEvent.ParamL == User32.VK.INSERT)
-                || (skEvent.ParamL == User32.VK.DELETE);
+            return (VIRTUAL_KEY)skEvent.ParamL is VIRTUAL_KEY.VK_UP
+                or VIRTUAL_KEY.VK_DOWN
+                or VIRTUAL_KEY.VK_LEFT
+                or VIRTUAL_KEY.VK_RIGHT
+                or VIRTUAL_KEY.VK_PRIOR
+                or VIRTUAL_KEY.VK_NEXT
+                or VIRTUAL_KEY.VK_HOME
+                or VIRTUAL_KEY.VK_END
+                or VIRTUAL_KEY.VK_INSERT
+                or VIRTUAL_KEY.VK_DELETE;
         }
 
         private static void ClearGlobalKeys()

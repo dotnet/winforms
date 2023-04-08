@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 using static Interop.UiaCore;
 using static Interop.User32;
@@ -508,7 +509,7 @@ namespace System.Windows.Forms.Automation
             if (_provider.IsScrollable)
             {
                 _provider.GetVisibleRangePoints(out int visibleStart, out int visibleEnd);
-                short key = (short)(Start > visibleStart ? VK.RIGHT : VK.LEFT);
+                VIRTUAL_KEY key = Start > visibleStart ? VIRTUAL_KEY.VK_RIGHT : VIRTUAL_KEY.VK_LEFT;
 
                 if (_provider.IsReadingRTL)
                 {

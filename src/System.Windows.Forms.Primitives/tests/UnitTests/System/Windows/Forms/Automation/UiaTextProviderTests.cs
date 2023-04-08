@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
         {
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            int actual = providerMock.Object.SendKeyboardInputVK(VK.LEFT, true);
+            int actual = providerMock.Object.SendKeyboardInputVK(VIRTUAL_KEY.VK_LEFT, true);
             Assert.Equal(1, actual);
         }
     }

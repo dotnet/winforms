@@ -16,6 +16,7 @@ using System.Text;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -374,7 +375,7 @@ public partial class Control
                     }
 #endif
 
-                    if (lpmsg->message == (uint)User32.WM.KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)User32.VK.TAB)
+                    if (lpmsg->message == (uint)User32.WM.KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
                     {
                         target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
                     }
@@ -2005,17 +2006,17 @@ public partial class Control
             }
 
             KEYMODIFIERS keyState = 0;
-            if (PInvoke.GetKeyState(User32.VK.SHIFT) < 0)
+            if (PInvoke.GetKeyState((int)VIRTUAL_KEY.VK_SHIFT) < 0)
             {
                 keyState |= KEYMODIFIERS.KEYMOD_SHIFT;
             }
 
-            if (PInvoke.GetKeyState(User32.VK.CONTROL) < 0)
+            if (PInvoke.GetKeyState((int)VIRTUAL_KEY.VK_CONTROL) < 0)
             {
                 keyState |= KEYMODIFIERS.KEYMOD_CONTROL;
             }
 
-            if (PInvoke.GetKeyState(User32.VK.MENU) < 0)
+            if (PInvoke.GetKeyState((int)VIRTUAL_KEY.VK_MENU) < 0)
             {
                 keyState |= KEYMODIFIERS.KEYMOD_ALT;
             }
