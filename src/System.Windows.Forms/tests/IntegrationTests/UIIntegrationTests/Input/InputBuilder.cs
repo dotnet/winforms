@@ -126,7 +126,7 @@ internal static class InputBuilder
                 {
                     dx = x,
                     dy = y,
-                    dwFlags = MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE,
+                    dwFlags = MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE_NOCOALESCE,
                 }
             },
         };
@@ -143,7 +143,7 @@ internal static class InputBuilder
                 {
                     dx = x,
                     dy = y,
-                    dwFlags = MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_ABSOLUTE,
+                    dwFlags = MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE_NOCOALESCE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_ABSOLUTE,
                 }
             },
         };
@@ -160,7 +160,7 @@ internal static class InputBuilder
                 {
                     dx = x,
                     dy = y,
-                    dwFlags = MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_ABSOLUTE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_VIRTUALDESK,
+                    dwFlags = MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE_NOCOALESCE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_ABSOLUTE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_VIRTUALDESK,
                 }
             },
         };

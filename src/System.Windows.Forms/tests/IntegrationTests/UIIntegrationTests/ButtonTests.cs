@@ -120,7 +120,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .DragMouseBy(form.DisplayRectangle.Width, 0)
+                        .MoveMouseBy(form.DisplayRectangle.Width, 0)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .DragMouseBy(0, form.DisplayRectangle.Height)
+                        .MoveMouseBy(0, form.DisplayRectangle.Height)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .DragMouseBy(form.DisplayRectangle.Width, 0)
+                        .MoveMouseBy(form.DisplayRectangle.Width, 0)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Width > originalFormSize.Width);
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .DragMouseBy(0, form.DisplayRectangle.Height)
+                        .MoveMouseBy(0, form.DisplayRectangle.Height)
                         .LeftButtonUp());
 
                 Assert.True(form.DisplayRectangle.Height > originalFormSize.Height);
@@ -263,7 +263,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .DragMouseTo(virtualPoint.X, virtualPoint.Y)
+                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
                         .LeftButtonUp());
 
                 Assert.Equal(0, control1ClickCount);
@@ -298,8 +298,8 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .DragMouseTo(virtualPoint.X, virtualPoint.Y)
-                        .DragMouseTo(virtualPoint1.X, virtualPoint1.Y)
+                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
+                        .MoveMouseTo(virtualPoint1.X, virtualPoint1.Y)
                         .LeftButtonUp());
 
                 Assert.Equal(1, control1ClickCount);
