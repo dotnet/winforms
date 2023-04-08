@@ -18,4 +18,12 @@
 
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(Language)' == 'C#'">
+    <Compile Include="$(MSBuildThisFileDirectory)CodeAnalysisSource.cs" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Language)' == 'VB'">
+    <Compile Include="$(MSBuildThisFileDirectory)CodeAnalysisSource.vb" Visible="false" />
+  </ItemGroup>
+
 </Project>

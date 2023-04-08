@@ -1726,7 +1726,8 @@ dotnet_diagnostic.IDE0230.severity = suggestion
 dotnet_diagnostic.IDE1005.severity = warning
 
 # IDE1006: Naming styles
-dotnet_diagnostic.IDE1006.severity = silent
+# This rule is configured by individual rules in .editorconfig. Do not override the severity here.
+#dotnet_diagnostic.IDE1006.severity = silent
 
 # IDE2000: Allow multiple blank lines
 dotnet_diagnostic.IDE2000.severity = silent

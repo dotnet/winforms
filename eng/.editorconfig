@@ -1,0 +1,12 @@
+# Diagnostics with a default severity of suggestion or lower (including IDE* rules) do not run during command line
+# builds unless they have been elevated to warning or greater using the compiler-designated syntax. Since the compiler
+# syntax prevents the use of fine-grained severity configuration for rules like IDE1006 (Naming styles), we use this
+# configuration file to only force the severity to warning for a single known file in the compilation.
+
+[CodeAnalysisSource.{cs,vb}]
+
+# IDE1006: Naming styles
+dotnet_diagnostic.IDE1006.severity = warning
+
+# SA1518: Code should not contain blank lines at the end of the file
+dotnet_diagnostic.SA1518.severity = none
