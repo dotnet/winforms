@@ -5,10 +5,10 @@
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.UITests.Input;
 using Microsoft.VisualStudio.Threading;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
-using WindowsInput;
-using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -106,23 +106,23 @@ namespace System.Windows.Forms.UITests
             // Verify that no keyboard or mouse keys are in the pressed state at the beginning of the test, since
             // this could interfere with test behavior. This code uses GetAsyncKeyState since GetKeyboardState was
             // not working reliably in local testing.
-            foreach (var code in Enum.GetValues<VirtualKeyCode>())
+            foreach (var code in Enum.GetValues<VIRTUAL_KEY>())
             {
-                if (code is VirtualKeyCode.SCROLL or VirtualKeyCode.NUMLOCK)
+                if (code is VIRTUAL_KEY.VK_SCROLL or VIRTUAL_KEY.VK_NUMLOCK)
                     continue;
 
                 if (PInvoke.GetAsyncKeyState((int)code) < 0)
                 {
                     // 😕 VK_LEFT and VK_RIGHT was observed to be pressed at the start of a test even though no test
                     // ran before it
-                    if (isStartOfTest && code is VirtualKeyCode.LEFT or VirtualKeyCode.RIGHT)
+                    if (isStartOfTest && code is VIRTUAL_KEY.VK_LEFT or VIRTUAL_KEY.VK_RIGHT)
                     {
-                        testOutputHelper.WriteLine($"Sending WM_KEYUP for 'VK_{code}' at the start of the test");
+                        testOutputHelper.WriteLine($"Sending WM_KEYUP for '{code}' at the start of the test");
                         new InputSimulator().Keyboard.KeyUp(code);
                     }
                     else
                     {
-                        Assert.Fail($"The key with virtual key code 'VK_{code}' was unexpectedly pressed at the {(isStartOfTest ? "start" : "end")} of the test.");
+                        Assert.Fail($"The key with virtual key code '{code}' was unexpectedly pressed at the {(isStartOfTest ? "start" : "end")} of the test.");
                     }
                 }
             }

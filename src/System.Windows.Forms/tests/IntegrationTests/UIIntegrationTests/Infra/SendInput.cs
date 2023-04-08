@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Windows.Forms.UITests.Input;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
-using WindowsInput;
-using WindowsInput.Native;
 using static Interop;
 
 namespace System.Windows.Forms.UITests
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.UITests
                             {
                                 if (text[index] == '\r')
                                 {
-                                    inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                                    inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RETURN);
                                     index++;
                                 }
                                 else
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.UITests
                             inputSimulator.Keyboard.TextEntry(c);
                             break;
 
-                        case VirtualKeyCode virtualKeyCode:
+                        case VIRTUAL_KEY virtualKeyCode:
                             inputSimulator.Keyboard.KeyPress(virtualKeyCode);
                             break;
 

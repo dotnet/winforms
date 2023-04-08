@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using WindowsInput;
+using System.Windows.Forms.UITests.Input;
 
 // Work around for global usings breaking things
 using ThreadState = System.Diagnostics.ThreadState;
@@ -12,7 +12,7 @@ namespace System.Windows.Forms.UITests
 {
     internal static class IMouseSimulatorExtensions
     {
-        public static IMouseSimulator DragMouseBy(this IMouseSimulator simulator, int pixelDeltaX, int pixelDeltaY)
+        public static MouseSimulator DragMouseBy(this MouseSimulator simulator, int pixelDeltaX, int pixelDeltaY)
         {
             simulator.MoveMouseBy(pixelDeltaX, pixelDeltaY);
 
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.UITests
             return simulator;
         }
 
-        public static IMouseSimulator DragMouseTo(this IMouseSimulator simulator, double absoluteX, double absoluteY)
+        public static MouseSimulator DragMouseTo(this MouseSimulator simulator, double absoluteX, double absoluteY)
         {
             simulator.MoveMouseTo(absoluteX, absoluteY);
 
@@ -36,13 +36,13 @@ namespace System.Windows.Forms.UITests
             return simulator;
         }
 
-        private static IMouseSimulator WaitForInputIdle(this IMouseSimulator simulator, bool throwOnTimeOut, TimeSpan timeout)
+        private static MouseSimulator WaitForInputIdle(this MouseSimulator simulator, bool throwOnTimeOut, TimeSpan timeout)
         {
             using var process = Process.GetCurrentProcess();
             return WaitForInputIdle(simulator, throwOnTimeOut, (HWND)process.MainWindowHandle, timeout);
         }
 
-        private static IMouseSimulator WaitForInputIdle(this IMouseSimulator simulator, bool throwOnTimeOut, HWND activeWindow, TimeSpan timeout)
+        private static MouseSimulator WaitForInputIdle(this MouseSimulator simulator, bool throwOnTimeOut, HWND activeWindow, TimeSpan timeout)
         {
             var stopwatch = Stopwatch.StartNew();
             var threadId = PInvoke.GetWindowThreadProcessId(activeWindow, out var processId);
