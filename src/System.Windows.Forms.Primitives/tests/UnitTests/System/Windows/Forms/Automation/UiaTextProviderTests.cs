@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation

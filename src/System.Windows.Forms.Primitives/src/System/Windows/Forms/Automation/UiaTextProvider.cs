@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop.UiaCore;
 using static Interop.User32;
 
@@ -105,25 +106,25 @@ namespace System.Windows.Forms.Automation
             Span<INPUT> currentInput = stackalloc INPUT[1];
             currentInput[0] = input;
 
-            return (int)Interop.User32.SendInput((uint)inputs, currentInput, size);
+            return (int)PInvoke.SendInput(currentInput, size);
         }
 
         public unsafe int SendKeyboardInputVK(short vk, bool press)
         {
             INPUT keyboardInput = default(INPUT);
 
-            keyboardInput.type = INPUTENUM.KEYBOARD;
-            keyboardInput.inputUnion.ki.wVk = (ushort)vk;
-            keyboardInput.inputUnion.ki.wScan = 0;
-            keyboardInput.inputUnion.ki.dwFlags = press ? 0 : KEYEVENTF.KEYUP;
+            keyboardInput.type = INPUT_TYPE.INPUT_KEYBOARD;
+            keyboardInput.Anonymous.ki.wVk = (VIRTUAL_KEY)vk;
+            keyboardInput.Anonymous.ki.wScan = 0;
+            keyboardInput.Anonymous.ki.dwFlags = press ? 0 : KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
 
             if (IsExtendedKey(vk))
             {
-                keyboardInput.inputUnion.ki.dwFlags |= KEYEVENTF.EXTENDEDKEY;
+                keyboardInput.Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;
             }
 
-            keyboardInput.inputUnion.ki.time = 0;
-            keyboardInput.inputUnion.ki.dwExtraInfo = IntPtr.Zero;
+            keyboardInput.Anonymous.ki.time = 0;
+            keyboardInput.Anonymous.ki.dwExtraInfo = UIntPtr.Zero;
 
             return SendInput(1, ref keyboardInput, sizeof(INPUT));
         }

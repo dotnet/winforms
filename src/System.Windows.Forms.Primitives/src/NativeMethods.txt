@@ -526,6 +526,7 @@ SelectClipRgn
 SelectObject
 SelectPalette
 SendDlgItemMessage
+SendInput
 SendMessage
 SetActiveWindow
 SetBkColor
