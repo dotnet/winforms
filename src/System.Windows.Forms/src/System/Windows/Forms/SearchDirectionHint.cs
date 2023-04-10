@@ -2,15 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms
 {
     public enum SearchDirectionHint
     {
-        Up = User32.VK.UP,
-        Down = User32.VK.DOWN,
-        Left = User32.VK.LEFT,
-        Right = User32.VK.RIGHT
+        Up = VIRTUAL_KEY.VK_UP,
+        Down = VIRTUAL_KEY.VK_DOWN,
+        Left = VIRTUAL_KEY.VK_LEFT,
+        Right = VIRTUAL_KEY.VK_RIGHT,
     }
 }

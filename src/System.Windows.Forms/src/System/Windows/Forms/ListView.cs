@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 using static Interop.ComCtl32;
@@ -6996,10 +6997,10 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.KEYUP:
-                    int key = (int)m.WParamInternal;
+                    var key = (VIRTUAL_KEY)(uint)m.WParamInternal;
 
                     // User can collapse/expand a group using the keyboard by focusing the group header and using left/right.
-                    if (GroupsDisplayed && (key is User32.VK.LEFT or User32.VK.RIGHT) && SelectedItems.Count > 0)
+                    if (GroupsDisplayed && (key is VIRTUAL_KEY.VK_LEFT or VIRTUAL_KEY.VK_RIGHT) && SelectedItems.Count > 0)
                     {
                         // User can select more than one group.
                         HashSet<int> groups = new();
