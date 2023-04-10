@@ -176,4 +176,48 @@ public class ResXResourceReaderTests
         // Assert
         Assert.Equal(expectedMetadata, actualMetadata);
     }
+
+    [Fact]
+    public void ResXResourceReader_GetEnumerator_UnknownType_ThowsException()
+    {
+        // Arrange
+        string unknownType = "System.XYZ";
+        string data = $"""
+            <data name="UnknownType" type="{unknownType}">
+              <value>UnknownValueType</value>
+            </data>
+            """;
+
+        // Act
+        using var resXReader = ResXResourceReader.FromFileContents(ResxHelper.CreateResx(data));
+
+        // Assert
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => { IDictionaryEnumerator enumerator = resXReader.GetEnumerator(); });
+        Assert.Contains($"ResX file Type {unknownType} in the data", exception.Message);
+    }
+
+    [Fact]
+    public void ResXResourceReader_GetEnumerator_InvalidValue_ThowsException()
+    {
+        // Arrange
+        string keyName = "TestKey";
+        string testValue = "FortyTwo";
+
+        IDictionary expectedData = new Hashtable { { keyName, testValue } };
+        string data = $"""
+            <data name="{keyName}" type="System.Int32">
+              <value>{testValue}</value>
+            </data>
+            """;
+
+        // Act
+        using var resXReader = ResXResourceReader.FromFileContents(ResxHelper.CreateResx(data));
+
+        // Assert
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+        {
+            IDictionaryEnumerator enumerator = resXReader.GetEnumerator();
+        });
+        Assert.Contains($"ResX file {testValue} is not a valid value for Int32", exception.Message);
+    }
 }
