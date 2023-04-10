@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -637,24 +638,24 @@ namespace System.Windows.Forms
             //
             //   currentInput[0] represents the SKEvent
             //   currentInput[1] is a KeyUp to prevent all identical WM_CHARs to be sent as one message
-            Span<User32.INPUT> currentInput = stackalloc User32.INPUT[2];
+            Span<INPUT> currentInput = stackalloc INPUT[2];
 
             // All events are Keyboard events.
-            currentInput[0].type = User32.INPUTENUM.KEYBOARD;
-            currentInput[1].type = User32.INPUTENUM.KEYBOARD;
+            currentInput[0].type = INPUT_TYPE.INPUT_KEYBOARD;
+            currentInput[1].type = INPUT_TYPE.INPUT_KEYBOARD;
 
             // Set KeyUp values for currentInput[1].
-            currentInput[1].inputUnion.ki.wVk = 0;
-            currentInput[1].inputUnion.ki.dwFlags = User32.KEYEVENTF.UNICODE | User32.KEYEVENTF.KEYUP;
+            currentInput[1].Anonymous.ki.wVk = 0;
+            currentInput[1].Anonymous.ki.dwFlags = KEYBD_EVENT_FLAGS.KEYEVENTF_UNICODE | KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
 
             // Initialize unused members.
-            currentInput[0].inputUnion.ki.dwExtraInfo = IntPtr.Zero;
-            currentInput[0].inputUnion.ki.time = 0;
-            currentInput[1].inputUnion.ki.dwExtraInfo = IntPtr.Zero;
-            currentInput[1].inputUnion.ki.time = 0;
+            currentInput[0].Anonymous.ki.dwExtraInfo = UIntPtr.Zero;
+            currentInput[0].Anonymous.ki.time = 0;
+            currentInput[1].Anonymous.ki.dwExtraInfo = UIntPtr.Zero;
+            currentInput[1].Anonymous.ki.time = 0;
 
             // Send each of our SKEvents using SendInput.
-            int INPUTSize = sizeof(User32.INPUT);
+            int INPUTSize = sizeof(INPUT);
 
             // Need these outside the lock below.
             uint eventsSent = 0;
@@ -678,41 +679,41 @@ namespace System.Windows.Forms
                     {
                         SKEvent skEvent = s_events.Dequeue();
 
-                        currentInput[0].inputUnion.ki.dwFlags = 0;
+                        currentInput[0].Anonymous.ki.dwFlags = 0;
 
                         if (skEvent.WM == User32.WM.CHAR)
                         {
                             // For WM_CHAR, send a KEYEVENTF_UNICODE instead of a Keyboard event to support extended
                             // ASCII characters with no keyboard equivalent. Send currentInput[1] in this case.
-                            currentInput[0].inputUnion.ki.wVk = 0;
-                            currentInput[0].inputUnion.ki.wScan = (ushort)skEvent.ParamL;
-                            currentInput[0].inputUnion.ki.dwFlags = User32.KEYEVENTF.UNICODE;
-                            currentInput[1].inputUnion.ki.wScan = (ushort)skEvent.ParamL;
+                            currentInput[0].Anonymous.ki.wVk = 0;
+                            currentInput[0].Anonymous.ki.wScan = (ushort)skEvent.ParamL;
+                            currentInput[0].Anonymous.ki.dwFlags = KEYBD_EVENT_FLAGS.KEYEVENTF_UNICODE;
+                            currentInput[1].Anonymous.ki.wScan = (ushort)skEvent.ParamL;
 
                             // Call SendInput, increment the eventsSent but subtract 1 for the extra one sent.
-                            eventsSent += User32.SendInput(2, currentInput, INPUTSize) - 1;
+                            eventsSent += PInvoke.SendInput(currentInput, INPUTSize) - 1;
                         }
                         else
                         {
                             // Just need to send currentInput[0] for skEvent.
-                            currentInput[0].inputUnion.ki.wScan = 0;
+                            currentInput[0].Anonymous.ki.wScan = 0;
 
                             // Add KeyUp flag if we have a KeyUp.
                             if (skEvent.WM == User32.WM.KEYUP || skEvent.WM == User32.WM.SYSKEYUP)
                             {
-                                currentInput[0].inputUnion.ki.dwFlags |= User32.KEYEVENTF.KEYUP;
+                                currentInput[0].Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
                             }
 
                             // Sets KEYEVENTF_EXTENDEDKEY flag if necessary.
                             if (IsExtendedKey(skEvent))
                             {
-                                currentInput[0].inputUnion.ki.dwFlags |= User32.KEYEVENTF.EXTENDEDKEY;
+                                currentInput[0].Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;
                             }
 
-                            currentInput[0].inputUnion.ki.wVk = (ushort)skEvent.ParamL;
+                            currentInput[0].Anonymous.ki.wVk = (VIRTUAL_KEY)skEvent.ParamL;
 
                             // Send only currentInput[0].
-                            eventsSent += User32.SendInput(1, currentInput, INPUTSize);
+                            eventsSent += PInvoke.SendInput(currentInput[..1], INPUTSize);
 
                             CheckGlobalKeys(skEvent);
                         }
@@ -860,41 +861,41 @@ namespace System.Windows.Forms
             }
 
             // INPUT struct for resetting the keyboard.
-            Span<User32.INPUT> keyboardInput = stackalloc User32.INPUT[2];
+            Span<INPUT> keyboardInput = stackalloc INPUT[2];
 
-            keyboardInput[0].type = User32.INPUTENUM.KEYBOARD;
-            keyboardInput[0].inputUnion.ki.dwFlags = 0;
+            keyboardInput[0].type = INPUT_TYPE.INPUT_KEYBOARD;
+            keyboardInput[0].Anonymous.ki.dwFlags = 0;
 
-            keyboardInput[1].type = User32.INPUTENUM.KEYBOARD;
-            keyboardInput[1].inputUnion.ki.dwFlags = User32.KEYEVENTF.KEYUP;
+            keyboardInput[1].type = INPUT_TYPE.INPUT_KEYBOARD;
+            keyboardInput[1].Anonymous.ki.dwFlags = KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
 
             // SendInputs to turn on or off these keys.  Inputs are pairs because KeyUp is sent for each one.
             if (s_capslockChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = User32.VK.CAPITAL;
-                keyboardInput[1].inputUnion.ki.wVk = User32.VK.CAPITAL;
-                User32.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].Anonymous.ki.wVk = VIRTUAL_KEY.VK_CAPITAL;
+                keyboardInput[1].Anonymous.ki.wVk = VIRTUAL_KEY.VK_CAPITAL;
+                PInvoke.SendInput(keyboardInput, INPUTSize);
             }
 
             if (s_numlockChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = User32.VK.NUMLOCK;
-                keyboardInput[1].inputUnion.ki.wVk = User32.VK.NUMLOCK;
-                User32.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].Anonymous.ki.wVk = VIRTUAL_KEY.VK_NUMLOCK;
+                keyboardInput[1].Anonymous.ki.wVk = VIRTUAL_KEY.VK_NUMLOCK;
+                PInvoke.SendInput(keyboardInput, INPUTSize);
             }
 
             if (s_scrollLockChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = User32.VK.SCROLL;
-                keyboardInput[1].inputUnion.ki.wVk = User32.VK.SCROLL;
-                User32.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].Anonymous.ki.wVk = VIRTUAL_KEY.VK_SCROLL;
+                keyboardInput[1].Anonymous.ki.wVk = VIRTUAL_KEY.VK_SCROLL;
+                PInvoke.SendInput(keyboardInput, INPUTSize);
             }
 
             if (s_kanaChanged)
             {
-                keyboardInput[0].inputUnion.ki.wVk = User32.VK.KANA;
-                keyboardInput[1].inputUnion.ki.wVk = User32.VK.KANA;
-                User32.SendInput(2, keyboardInput, INPUTSize);
+                keyboardInput[0].Anonymous.ki.wVk = VIRTUAL_KEY.VK_KANA;
+                keyboardInput[1].Anonymous.ki.wVk = VIRTUAL_KEY.VK_KANA;
+                PInvoke.SendInput(keyboardInput, INPUTSize);
             }
         }
 

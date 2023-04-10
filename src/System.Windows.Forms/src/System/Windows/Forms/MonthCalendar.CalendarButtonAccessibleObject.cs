@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -67,24 +68,24 @@ namespace System.Windows.Forms
                 BOOL setOldCursorPos = PInvoke.GetPhysicalCursorPos(out Point previousPosition);
                 bool mouseSwapped = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_SWAPBUTTON) != 0;
 
-                SendMouseInput(x, y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
-                SendMouseInput(0, 0, mouseSwapped ? User32.MOUSEEVENTF.RIGHTDOWN : User32.MOUSEEVENTF.LEFTDOWN);
-                SendMouseInput(0, 0, mouseSwapped ? User32.MOUSEEVENTF.RIGHTUP : User32.MOUSEEVENTF.LEFTUP);
+                SendMouseInput(x, y, MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_ABSOLUTE);
+                SendMouseInput(0, 0, mouseSwapped ? MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTDOWN : MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTDOWN);
+                SendMouseInput(0, 0, mouseSwapped ? MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTUP : MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTUP);
 
                 Threading.Thread.Sleep(50);
 
                 // Set back the mouse position where it was.
                 if (setOldCursorPos)
                 {
-                    SendMouseInput(previousPosition.X, previousPosition.Y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
+                    SendMouseInput(previousPosition.X, previousPosition.Y, MOUSE_EVENT_FLAGS.MOUSEEVENTF_MOVE | MOUSE_EVENT_FLAGS.MOUSEEVENTF_ABSOLUTE);
                 }
             }
 
             public override AccessibleRole Role => AccessibleRole.PushButton;
 
-            private static unsafe void SendMouseInput(int x, int y, User32.MOUSEEVENTF flags)
+            private static unsafe void SendMouseInput(int x, int y, MOUSE_EVENT_FLAGS flags)
             {
-                if ((flags & User32.MOUSEEVENTF.ABSOLUTE) != 0)
+                if ((flags & MOUSE_EVENT_FLAGS.MOUSEEVENTF_ABSOLUTE) != 0)
                 {
                     int vscreenWidth = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXVIRTUALSCREEN);
                     int vscreenHeight = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYVIRTUALSCREEN);
@@ -116,19 +117,19 @@ namespace System.Windows.Forms
                     x = ((x - vscreenLeft) * DesktopNormalizedMax) / vscreenWidth + DesktopNormalizedMax / (vscreenWidth * 2);
                     y = ((y - vscreenTop) * DesktopNormalizedMax) / vscreenHeight + DesktopNormalizedMax / (vscreenHeight * 2);
 
-                    flags |= User32.MOUSEEVENTF.VIRTUALDESK;
+                    flags |= MOUSE_EVENT_FLAGS.MOUSEEVENTF_VIRTUALDESK;
                 }
 
-                User32.INPUT mouseInput = default(User32.INPUT);
-                mouseInput.type = User32.INPUTENUM.MOUSE;
-                mouseInput.inputUnion.mi.dx = x;
-                mouseInput.inputUnion.mi.dy = y;
-                mouseInput.inputUnion.mi.mouseData = 0;
-                mouseInput.inputUnion.mi.dwFlags = flags;
-                mouseInput.inputUnion.mi.time = 0;
-                mouseInput.inputUnion.mi.dwExtraInfo = IntPtr.Zero;
+                INPUT mouseInput = default(INPUT);
+                mouseInput.type = INPUT_TYPE.INPUT_MOUSE;
+                mouseInput.Anonymous.mi.dx = x;
+                mouseInput.Anonymous.mi.dy = y;
+                mouseInput.Anonymous.mi.mouseData = 0;
+                mouseInput.Anonymous.mi.dwFlags = flags;
+                mouseInput.Anonymous.mi.time = 0;
+                mouseInput.Anonymous.mi.dwExtraInfo = UIntPtr.Zero;
 
-                User32.SendInput(1, &mouseInput, Marshal.SizeOf(mouseInput));
+                PInvoke.SendInput(1, &mouseInput, Marshal.SizeOf(mouseInput));
             }
         }
     }
