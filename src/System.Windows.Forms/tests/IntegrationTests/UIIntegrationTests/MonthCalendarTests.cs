@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit;
 using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
@@ -43,8 +44,8 @@ namespace System.Windows.Forms.UITests
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Keyboard
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT));
+                                                    .KeyPress(VIRTUAL_KEY.VK_RIGHT)
+                                                    .KeyPress(VIRTUAL_KEY.VK_RIGHT));
             });
         }
 
@@ -56,8 +57,8 @@ namespace System.Windows.Forms.UITests
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Keyboard
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT)
-                                                    .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT));
+                                                    .KeyPress(VIRTUAL_KEY.VK_RIGHT)
+                                                    .KeyPress(VIRTUAL_KEY.VK_RIGHT));
 
                 DateTime selectedDate = new DateTime(2020, 4, 10);
                 SYSTEMTIME date = new()
@@ -197,7 +198,7 @@ namespace System.Windows.Forms.UITests
                 form,
                 inputSimulator => inputSimulator.Mouse
                                                 .LeftButtonClick()
-                                                .Sleep(500)
+                                                .Sleep(TimeSpan.FromMilliseconds(500))
                                                 .LeftButtonClick());
         }
 

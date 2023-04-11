@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using WindowsInput.Native;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit;
 using Xunit.Abstractions;
 using static Interop.UiaCore;
@@ -60,51 +60,51 @@ namespace System.Windows.Forms.UITests
 
                 item1.Selected = true;
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
                 Assert.False(item1.Selected);
                 Assert.True(item2.Selected);
                 Assert.False(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
                 Assert.False(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.True(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
                 Assert.False(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.True(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT).KeyPress(VirtualKeyCode.LEFT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT).KeyPress(VIRTUAL_KEY.VK_LEFT));
                 Assert.True(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.False(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT));
                 Assert.True(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.False(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
                 // Selects header, which selects all items in group
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_UP));
                 Assert.True(item2.Selected);
                 Assert.True(item2.Selected);
                 Assert.True(item2.Selected);
                 Assert.False(collapsedStateChangedFired);
 
                 // Collapse group
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.LEFT).KeyPress(VirtualKeyCode.UP).KeyPress(VirtualKeyCode.LEFT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT).KeyPress(VIRTUAL_KEY.VK_UP).KeyPress(VIRTUAL_KEY.VK_LEFT));
                 Assert.Equal(ListViewGroupCollapsedState.Collapsed, group.CollapsedState);
                 Assert.True(collapsedStateChangedFired);
 
                 // Expand group
                 collapsedStateChangedFired = false;
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.UP).KeyPress(VirtualKeyCode.RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_UP).KeyPress(VIRTUAL_KEY.VK_RIGHT));
                 Assert.True(collapsedStateChangedFired);
                 Assert.Equal(ListViewGroupCollapsedState.Expanded, group.CollapsedState);
             });
@@ -494,14 +494,14 @@ namespace System.Windows.Forms.UITests
                 await MoveMouseAsync(form, listViewCenter);
                 await InputSimulator.SendAsync(
                    form,
-                   inputSimulator => inputSimulator.Keyboard.KeyDown(VirtualKeyCode.SHIFT)
+                   inputSimulator => inputSimulator.Keyboard.KeyDown(VIRTUAL_KEY.VK_SHIFT)
                                                     .Mouse.LeftButtonClick());
                 listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[2].SubItems[1].Bounds));
                 await MoveMouseAsync(form, listViewCenter);
                 await InputSimulator.SendAsync(
                    form,
                    inputSimulator => inputSimulator.Mouse.LeftButtonClick()
-                                                   .Keyboard.KeyUp(VirtualKeyCode.SHIFT));
+                                                   .Keyboard.KeyUp(VIRTUAL_KEY.VK_SHIFT));
 
                 foreach (ListViewItem item in listView.Items)
                 {

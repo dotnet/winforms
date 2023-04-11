@@ -62,7 +62,7 @@ namespace System.Windows.Forms.UITests
                 // Wait 1 second to make sure that the toolTip appeared, it has some delay (500 ms by default).
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.DragMouseTo(targetPoint.X, targetPoint.Y).Sleep(1000));
+                    inputSimulator => inputSimulator.Mouse.DragMouseTo(targetPoint.X, targetPoint.Y).Sleep(TimeSpan.FromMilliseconds(1000)));
 
                 // DataGridViewToolTip is private so use the reflection
                 object toolTip = dataGridView.TestAccessor().Dynamic._toolTipControl;

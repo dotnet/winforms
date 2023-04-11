@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using WindowsInput.Native;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.SPACE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_SPACE));
 
                 Assert.Equal(DialogResult.OK, form.DialogResult);
                 Assert.False(form.Visible);
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
 
                 Assert.Equal(DialogResult.None, form.DialogResult);
                 Assert.True(form.Visible);
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.UITests
 
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.ESCAPE));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
 
                 Assert.Equal(DialogResult.Cancel, form.DialogResult);
                 Assert.False(form.Visible);
@@ -337,7 +337,7 @@ namespace System.Windows.Forms.UITests
                 // Send the Enter press
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN));
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RETURN));
 
                 Assert.True(wasClicked);
             });
@@ -357,7 +357,7 @@ namespace System.Windows.Forms.UITests
                 // Send the shortcut ALT+C (the same as SendKeys.SendWait("%C"))
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_C));
+                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LMENU, VIRTUAL_KEY.VK_C));
 
                 Assert.True(wasClicked);
             });
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.UITests
                 // Send a random ALT+L (the same as SendKeys.SendWait("%l"))
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LMENU, VirtualKeyCode.VK_L));
+                    inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LMENU, VIRTUAL_KEY.VK_L));
 
                 Assert.False(wasClicked);
             });
