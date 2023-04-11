@@ -186,8 +186,8 @@ namespace System.Windows.Forms
                             {
                                 xDest = rect.left;
                                 yDest = rect.top;
-                                cxDest = rect.right - rect.left;
-                                cyDest = rect.bottom - rect.top;
+                                cxDest = rect.Width;
+                                cyDest = rect.Height;
                             }
                             else
                             {

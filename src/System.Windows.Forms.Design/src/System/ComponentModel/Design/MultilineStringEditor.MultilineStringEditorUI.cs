@@ -186,7 +186,7 @@ namespace System.ComponentModel.Design
 
                     RECT rect = default(RECT);
                     User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);
-                    return new Size(rect.right - rect.left + CaretPadding, rect.bottom - rect.top);
+                    return new Size(rect.Width + CaretPadding, rect.Height);
                 }
             }
 

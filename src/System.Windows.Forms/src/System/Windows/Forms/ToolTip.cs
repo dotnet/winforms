@@ -1351,8 +1351,8 @@ namespace System.Windows.Forms
                         bottom = (rect.bottom > screen.WorkingArea.Bottom) ? screen.WorkingArea.Bottom : rect.bottom
                     };
 
-                    p.X = visibleRect.left + (visibleRect.right - visibleRect.left) / 2;
-                    p.Y = visibleRect.top + (visibleRect.bottom - visibleRect.top) / 2;
+                    p.X = visibleRect.left + visibleRect.Width / 2;
+                    p.Y = visibleRect.top + visibleRect.Height / 2;
                     associatedControl.PointToClient(p);
                     SetTrackPosition(p.X, p.Y);
                     SetTool(window, text, TipInfo.Type.SemiAbsolute, p);
