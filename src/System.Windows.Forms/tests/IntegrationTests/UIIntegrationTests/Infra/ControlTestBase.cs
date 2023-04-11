@@ -165,20 +165,22 @@ namespace System.Windows.Forms.UITests
             await MoveMouseAsync(control.FindForm()!, centerOnScreen);
         }
 
-        protected Point ToVirtualPoint(Point point)
+        protected internal static Point ToVirtualPoint(Point point)
         {
             Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
-            return new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
+            return new Point(
+                (int)Math.Ceiling((65535.0 / (primaryMonitor.Width - 1)) * point.X),
+                (int)Math.Ceiling((65535.0 / (primaryMonitor.Height - 1)) * point.Y));
         }
 
         protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)
         {
             TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
             Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
-            var virtualPoint = new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
+            var virtualPoint = ToVirtualPoint(point);
             TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
 
-            await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1));
+            await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X, virtualPoint.Y));
 
             // ⚠ The call to GetCursorPos is required for correct behavior.
             if (!PInvoke.GetCursorPos(out Point actualPoint))
@@ -202,9 +204,7 @@ namespace System.Windows.Forms.UITests
 
             if (assertCorrectLocation)
             {
-                // Allow for rounding errors (observed in certain scenarios)
-                Assert.InRange(point.X, actualPoint.X - 1, actualPoint.X + 1);
-                Assert.InRange(point.Y, actualPoint.Y - 1, actualPoint.Y + 1);
+                Assert.Equal(point, actualPoint);
             }
         }
 

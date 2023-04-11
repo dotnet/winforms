@@ -2,8 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+using Xunit;
 
 namespace System.Windows.Forms.UITests.Input;
 
@@ -126,8 +128,17 @@ internal class MouseSimulator
         return this;
     }
 
-    internal MouseSimulator MoveMouseBy(int x, int y)
+    internal MouseSimulator MoveMouseBy(int x, int y, bool bypassOperatingSystemSettings = true)
     {
+        if (bypassOperatingSystemSettings)
+        {
+            // Redirect to MoveMouseTo, since the implementation of MoveMouseBy is subject to the OS's settings for
+            // mouse speed and acceleration.
+            Assert.True(PInvoke.GetPhysicalCursorPos(out var point));
+            var virtualPoint = ControlTestBase.ToVirtualPoint(point + new Size(x, y));
+            return MoveMouseTo(virtualPoint.X, virtualPoint.Y);
+        }
+
         Span<INPUT> inputs = stackalloc INPUT[]
         {
             InputBuilder.RelativeMouseMovement(x, y),
