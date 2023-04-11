@@ -241,7 +241,7 @@ namespace System.Windows.Forms
                     return Rectangle.Empty;
                 }
 
-                return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
+                return rc;
             }
         }
 
@@ -270,7 +270,7 @@ namespace System.Windows.Forms
                     return Rectangle.Empty;
                 }
 
-                return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
+                return rc;
             }
         }
 

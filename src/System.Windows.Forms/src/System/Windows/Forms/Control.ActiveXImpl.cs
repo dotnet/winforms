@@ -1824,7 +1824,7 @@ public partial class Control
             }
 #endif
 
-            Rectangle posRect = Rectangle.FromLTRB(lprcPosRect->left, lprcPosRect->top, lprcPosRect->right, lprcPosRect->bottom);
+            Rectangle posRect = *lprcPosRect;
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Set control bounds: {posRect}");
 
@@ -1841,10 +1841,7 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Control Bounds: {_control.Bounds}");
             if (_activeXState[s_adjustingRect])
             {
-                _adjustRect->left = posRect.X;
-                _adjustRect->top = posRect.Y;
-                _adjustRect->right = posRect.Right;
-                _adjustRect->bottom = posRect.Bottom;
+                *_adjustRect = posRect;
             }
             else
             {

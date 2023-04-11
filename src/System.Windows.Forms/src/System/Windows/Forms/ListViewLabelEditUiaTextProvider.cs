@@ -264,7 +264,7 @@ namespace System.Windows.Forms
         {
             RECT r = rect;
             PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref r);
-            return Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
+            return r;
         }
 
         public override void SetSelection(int start, int end)

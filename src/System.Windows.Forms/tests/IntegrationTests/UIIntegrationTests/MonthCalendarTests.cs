@@ -172,8 +172,7 @@ namespace System.Windows.Forms.UITests
                 };
 
                 Assert.NotEqual(default, PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, default, ref result));
-                var rect = Rectangle.FromLTRB(result.rc.left, result.rc.top, result.rc.right, result.rc.bottom);
-                return rect;
+                return result.rc;
             }
         }
 
