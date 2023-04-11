@@ -424,8 +424,8 @@ namespace System.Windows.Forms
                 CreateParams cp = CreateParams;
 
                 AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
-                _clientWidth = _width - (rect.right - rect.left);
-                _clientHeight = _height - (rect.bottom - rect.top);
+                _clientWidth = _width - rect.Width;
+                _clientHeight = _height - rect.Height;
             }
 
             // Set up for async operations on this thread.
@@ -11452,8 +11452,8 @@ namespace System.Windows.Forms
             CreateParams cp = CreateParams;
 
             AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
-            int clientWidth = width - (rect.right - rect.left);
-            int clientHeight = height - (rect.bottom - rect.top);
+            int clientWidth = width - rect.Width;
+            int clientHeight = height - rect.Height;
             UpdateBounds(x, y, width, height, clientWidth, clientHeight);
         }
 

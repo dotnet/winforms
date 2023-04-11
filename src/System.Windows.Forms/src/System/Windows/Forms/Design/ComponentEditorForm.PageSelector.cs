@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Design
                     COLORREF oldTextColor = PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     COLORREF oldBackColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control));
 
-                    PInvoke.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, ROP_CODE.PATCOPY);
+                    PInvoke.PatBlt(dc, rc.left, rc.top, rc.Width, rc.Height, ROP_CODE.PATCOPY);
                     PInvoke.SetTextColor(dc, oldTextColor);
                     PInvoke.SetBkColor(dc, oldBackColor);
                 }

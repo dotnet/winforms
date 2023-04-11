@@ -57,8 +57,8 @@ namespace System.Windows.Forms
                 }
 
                 RECT rectangle = Bounds;
-                int x = rectangle.left + ((rectangle.right - rectangle.left) / 2);
-                int y = rectangle.top + ((rectangle.bottom - rectangle.top) / 2);
+                int x = rectangle.left + (rectangle.Width / 2);
+                int y = rectangle.top + (rectangle.Height / 2);
 
                 RaiseMouseClick(x, y);
             }
