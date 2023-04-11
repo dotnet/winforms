@@ -128,9 +128,9 @@ namespace System.Windows.Forms.UITests
 
                     await InputSimulator.SendAsync(
                         form,
-                        inputSimulator => inputSimulator.Mouse.DragMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
                                                               .LeftButtonDown()
-                                                              .DragMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                                                              .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
                                                               .LeftButtonUp());
 
                     dndSignal.Release();
