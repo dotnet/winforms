@@ -11,7 +11,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using static Interop;
 
 namespace System.Drawing;
 
@@ -928,10 +927,10 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         Debug.Assert(size is >= 0 and <= ushort.MaxValue);
 
         nint hicon = 0;
-        HRESULT result;
+        Interop.HRESULT result;
         fixed (char* c = filePath)
         {
-            result = Shell32.SHDefExtractIcon(
+            result = Interop.Shell32.SHDefExtractIcon(
                 c,
                 id,
                 0,
@@ -940,7 +939,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 (uint)(ushort)size << 16 | (ushort)size);
         }
 
-        if (result == HRESULT.S_FALSE)
+        if (result == Interop.HRESULT.S_FALSE)
         {
             // Icon wasn't found
             return null;
