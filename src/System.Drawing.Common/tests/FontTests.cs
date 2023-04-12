@@ -830,7 +830,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "AV Exception is wrapped in a TargetInvocationException in the .NET Framework.")]
         public void ToLogFont_NullLogFont_ThrowsArgumentNullException()
         {
             using (FontFamily family = FontFamily.GenericMonospace)
@@ -961,7 +960,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "GetHashCode doesn't include font name in .NET Framework")]
         public void GetHashCode_DifferentNameSameSizeStyleUnit_HashCodeIsNotSame()
         {
             using FontFamily family1 = FontFamily.GenericSansSerif;

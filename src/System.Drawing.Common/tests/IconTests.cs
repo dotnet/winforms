@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2004,2006-2008 Novell, Inc (http://www.novell.com)
@@ -114,7 +114,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Bug fix in core")]
         public void Ctor_Stream_Trickled()
         {
             var stream = new TrickleStream(File.ReadAllBytes(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")));
@@ -386,10 +385,11 @@ namespace System.Drawing.Tests
             ExtractAssociatedIcon_FilePath_Success_Helper(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico"));
         }
 
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Fix for https://github.com/dotnet/runtime/issues/28220")]
         [Fact]
         public void ExtractAssociatedIcon_UNCFilePath_Success()
         {
+            // https://github.com/dotnet/runtime/issues/28220
+
             string bitmapPath = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
             string bitmapPathRoot = Path.GetPathRoot(bitmapPath);
             string bitmapUncPath = $"\\\\{Environment.MachineName}\\{bitmapPath.Substring(0, bitmapPathRoot.IndexOf(":"))}$\\{bitmapPath.Replace(bitmapPathRoot, "")}";
@@ -499,7 +499,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/47759", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void Save_NullOutputStreamNoIconData_ThrowsArgumentNullException()
         {
             using (var source = new Icon(Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico")))
@@ -523,7 +522,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/47759", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [Fact]
         public void Save_ClosedOutputStreamNoIconData()
         {
@@ -605,7 +603,6 @@ namespace System.Drawing.Tests
 
         private const string DontSupportPngFramesInIcons = "Switch.System.Drawing.DontSupportPngFramesInIcons";
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/55655", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [Fact]
         public void ToBitmap_PngIconSupportedInSwitches_Success()
         {
@@ -642,7 +639,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/55655", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [Fact]
         public void ToBitmap_PngIconNotSupportedInSwitches_ThrowsArgumentOutOfRangeException()
         {
@@ -695,7 +691,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/47759", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void FromHandle_IconHandleOneTime_Success()
         {
             using (var icon1 = new Icon(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
@@ -708,7 +703,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/47759", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void FromHandle_IconHandleMultipleTime_Success()
         {
             using (var icon1 = new Icon(Helpers.GetTestBitmapPath("16x16_one_entry_4bit.ico")))
@@ -729,7 +723,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/47759", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void FromHandle_BitmapHandleOneTime_Success()
         {
             IntPtr handle;
@@ -746,7 +739,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/47759", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         public void FromHandle_BitmapHandleMultipleTime_Success()
         {
             IntPtr handle;

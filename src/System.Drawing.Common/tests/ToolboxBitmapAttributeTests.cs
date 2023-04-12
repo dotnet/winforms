@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ namespace System.Drawing.Tests
 
     public class Icon_toolboxBitmapAttributeTest { }
 
-    [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
     public class ToolboxBitmapAttributeTests
     {
         private static Size DefaultSize = new Size(16, 16);
@@ -48,7 +47,6 @@ namespace System.Drawing.Tests
 
         [Theory]
         [MemberData(nameof(Ctor_FileName_TestData))]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework)]
         public void Ctor_FileName(string fileName, Size size)
         {
             var attribute = new ToolboxBitmapAttribute(fileName);
@@ -174,7 +172,6 @@ namespace System.Drawing.Tests
         }
 
         [Theory]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Logical name with no extension is not supported in .NET Framework")]
         [InlineData(typeof(Icon_toolboxBitmapAttributeTest), 256, 256)]
         public void GetImage_NoExtension(Type type, int width, int height)
         {

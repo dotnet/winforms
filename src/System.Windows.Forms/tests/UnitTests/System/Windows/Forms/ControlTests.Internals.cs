@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Control_ApplyBoundsConstraints(int expected)
         {
             using var control = new Control();
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Control_ApplySizeConstraints(int expected)
         {
             using var control = new Control();

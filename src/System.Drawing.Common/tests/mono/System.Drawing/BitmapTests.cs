@@ -91,7 +91,7 @@ namespace MonoTests.System.Drawing
             }
         }
 
-        [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsDrawingSupported), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
+        [Fact]
         public void LockBits_ImageLockMode_Invalid()
         {
             using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format24bppRgb))

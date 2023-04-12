@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void Message_Msg_Set_GetReturnsExpected(int value)
         {
             var message = new Message

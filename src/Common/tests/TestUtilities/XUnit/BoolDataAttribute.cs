@@ -9,14 +9,7 @@ namespace Xunit;
 /// </summary>
 public class BoolDataAttribute : CommonMemberDataAttribute
 {
-    private static readonly TheoryData<bool> _data = new();
+    public BoolDataAttribute() : base(typeof(BoolDataAttribute), nameof(TheoryData)) { }
 
-    public BoolDataAttribute()
-        : base(typeof(BoolDataAttribute), nameof(GetTheoryData))
-    {
-        _data.Add(true);
-        _data.Add(false);
-    }
-
-    public static TheoryData<bool> GetTheoryData() => _data;
+    public static ReadOnlyTheoryData TheoryData { get; } = new(true, false);
 }

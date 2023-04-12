@@ -10,14 +10,7 @@ namespace Xunit;
 /// </summary>
 public class StringDataAttribute : CommonMemberDataAttribute
 {
-    private static readonly TheoryData<string?> _data = new();
+    public StringDataAttribute() : base(typeof(StringDataAttribute)) { }
 
-    public StringDataAttribute()
-        : base(typeof(StringDataAttribute), nameof(GetTheoryData))
-    {
-        _data.Add(string.Empty);
-        _data.Add("teststring");
-    }
-
-    public static TheoryData<string?> GetTheoryData() => _data;
+    public static ReadOnlyTheoryData TheoryData { get; } = new(string.Empty, "teststring");
 }

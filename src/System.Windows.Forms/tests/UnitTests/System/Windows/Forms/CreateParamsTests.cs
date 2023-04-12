@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void CreateParams_Style_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void CreateParams_ExStyle_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void CreateParams_ClassStyle_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void CreateParams_X_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void CreateParams_Y_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void CreateParams_Width_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void CreateParams_Height_Set_GetReturnsExpected(int value)
         {
             var createParams = new CreateParams

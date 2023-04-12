@@ -3097,6 +3097,13 @@ namespace System.Drawing
             int destHeight = blockRegionSize.Height;
 
             nint screenDC = Interop.User32.GetDC(0);
+            if (screenDC == 0)
+            {
+                // ERROR_INVALID_HANDLE - if you pass an empty handle to BitBlt you'll get this error.
+                // Checking here to better describe test failures (and avoids taking the Graphics HDC lock).
+                throw new Win32Exception(6);
+            }
+
             nint targetDC = 0;
             try
             {

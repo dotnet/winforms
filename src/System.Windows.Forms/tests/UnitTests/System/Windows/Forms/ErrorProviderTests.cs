@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ErrorProvider_SetIconPadding_Invoke_GetIconPaddingReturnsExpected(int value)
         {
             using var provider = new ErrorProvider();

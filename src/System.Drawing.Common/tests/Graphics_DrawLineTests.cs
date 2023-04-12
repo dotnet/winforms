@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Xunit;
@@ -7,36 +7,32 @@ namespace System.Drawing.Tests
 {
     public class Graphics_DrawLineTests : DrawingTest
     {
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
         [Fact]
         public void DrawLines_Points()
         {
-            using (Bitmap image = new Bitmap(100, 100))
-            using (Pen pen = new Pen(Color.White))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                graphics.DrawLines(pen, new Point[] { new Point(1, 1), new Point(1, 10), new Point(20, 5), new Point(25, 30) });
-                ValidateImageContent(image,
-                    PlatformDetection.IsWindows
-                        ? new byte[] { 0x8e, 0xc2, 0xfb, 0xb4, 0xde, 0x5d, 0xdc, 0xd2, 0x31, 0xbd, 0xd3, 0x9a, 0xcf, 0xc1, 0xd4, 0xad }
-                        : new byte[] { 0x55, 0x40, 0xd8, 0xaa, 0xc7, 0x36, 0x06, 0x18, 0x1a, 0x57, 0x2b, 0xa9, 0x5a, 0xff, 0x2b, 0xb2 });
-            }
+            using Bitmap bitmap = new(100, 100);
+            using Pen pen = new(Color.White);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+
+            graphics.DrawLines(pen, new Point[] { new(1, 1), new(1, 10), new(20, 5), new(25, 30) });
+
+            ValidateBitmapContent(
+                bitmap,
+                0xeb, 0xc6, 0x1e, 0xbf, 0xc0, 0x42, 0xa7, 0xfd, 0xcd, 0x24, 0xbc, 0x1c, 0x79, 0x0a, 0x69, 0x07);
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/26624", TargetFrameworkMonikers.Netcoreapp)]
         [Fact]
         public void DrawLines_PointFs()
         {
-            using (Bitmap image = new Bitmap(100, 100))
-            using (Pen pen = new Pen(Color.White))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                graphics.DrawLines(pen, new PointF[] { new PointF(1.0F, 1.0F), new PointF(1.0F, 10.0F), new PointF(20.0F, 5.0F), new PointF(25.0F, 30.0F) });
-                ValidateImageContent(image,
-                    PlatformDetection.IsWindows
-                        ? new byte[] { 0x8e, 0xc2, 0xfb, 0xb4, 0xde, 0x5d, 0xdc, 0xd2, 0x31, 0xbd, 0xd3, 0x9a, 0xcf, 0xc1, 0xd4, 0xad }
-                        : new byte[] { 0x55, 0x40, 0xd8, 0xaa, 0xc7, 0x36, 0x06, 0x18, 0x1a, 0x57, 0x2b, 0xa9, 0x5a, 0xff, 0x2b, 0xb2 });
-           }
+            using Bitmap bitmap = new(100, 100);
+            using Pen pen = new(Color.White);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+
+            graphics.DrawLines(pen, new PointF[] { new(1.0f, 1.0f), new(1.0f, 10.0f), new(20.0f, 5.0f), new(25.0f, 30.0f) });
+
+            ValidateBitmapContent(
+                bitmap,
+                0xeb, 0xc6, 0x1e, 0xbf, 0xc0, 0x42, 0xa7, 0xfd, 0xcd, 0x24, 0xbc, 0x1c, 0x79, 0x0a, 0x69, 0x07);
         }
 
         [Fact]

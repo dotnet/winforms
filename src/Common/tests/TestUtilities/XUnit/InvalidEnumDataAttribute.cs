@@ -10,17 +10,19 @@ namespace Xunit;
 /// <summary>
 ///  Generates <see cref="TheoryAttribute"/> data for an invalid enum value.
 /// </summary>
-/// <typeparam name="TEnum"></typeparam>
 public class InvalidEnumDataAttribute<TEnum> : CommonMemberDataAttribute where TEnum : unmanaged, Enum
 {
-    private static readonly TheoryData<TEnum> _data = new();
+    public InvalidEnumDataAttribute() : base(typeof(InvalidEnumDataAttribute<TEnum>)) { }
 
-    public unsafe InvalidEnumDataAttribute()
-        : base(typeof(InvalidEnumDataAttribute<TEnum>), nameof(GetTheoryData))
+    public static ReadOnlyTheoryData TheoryData { get; } = InitializeData();
+
+    private static unsafe ReadOnlyTheoryData InitializeData()
     {
         ulong maxValue = ulong.MaxValue >>> ((sizeof(ulong) - sizeof(TEnum)) * 8);
         TEnum currentValue = default;
         bool defined;
+
+        List<TEnum> data = new();
 
         if (typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is not null)
         {
@@ -39,8 +41,8 @@ public class InvalidEnumDataAttribute<TEnum> : CommonMemberDataAttribute where T
                 throw new InvalidOperationException("Enum has all flags defined");
             }
 
-            _data.Add(currentValue);
-            return;
+            data.Add(currentValue);
+            return new(data);
         }
 
         // Not a flags enum, add the smallest and largest undefined value.
@@ -54,7 +56,7 @@ public class InvalidEnumDataAttribute<TEnum> : CommonMemberDataAttribute where T
         }
         while (defined);
 
-        _data.Add(currentValue);
+        data.Add(currentValue);
 
         do
         {
@@ -64,8 +66,7 @@ public class InvalidEnumDataAttribute<TEnum> : CommonMemberDataAttribute where T
         }
         while (defined);
 
-        _data.Add(currentValue);
+        data.Add(currentValue);
+        return new(data);
     }
-
-    public unsafe static TheoryData<TEnum> GetTheoryData() => _data;
 }

@@ -31,7 +31,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Returns new int[0] in .NET Framework.")]
         public void PropertyIdList_GetEmptyMemoryBitmap_ReturnsExpected()
         {
             using var bitmap = new Bitmap(1, 1);
@@ -82,7 +81,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Returns new PropertyItem[0] in .NET Framework.")]
         public void PropertyItems_GetEmptyBitmapBmp_Success()
         {
             using var bitmap = new Bitmap(Helpers.GetTestBitmapPath("almogaver1bit.bmp"));
@@ -91,7 +89,6 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, "Returns new PropertyItem[0] in .NET Framework.")]
         public void PropertyItems_GetEmptyMemoryBitmap_ReturnsExpected()
         {
             using var bitmap = new Bitmap(1, 1);
@@ -550,7 +547,6 @@ namespace System.Drawing.Tests
             Assert.Throws<FileNotFoundException>(() => Image.FromFile("NoSuchFile", useEmbeddedColorManagement: true));
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
         [Theory]
         [MemberData(nameof(InvalidBytes_TestData))]
         public void FromStream_InvalidBytes_ThrowsArgumentException(byte[] bytes)
@@ -671,7 +667,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [SkipOnTargetFramework(TargetFrameworkMonikers.NetFramework, ".NET Framework throws ExternalException")]
         [Fact]
         public void Save_InvalidDirectory_ThrowsDirectoryNotFoundException()
         {

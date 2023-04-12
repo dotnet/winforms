@@ -91,11 +91,15 @@ namespace System.Drawing.Tests
             yield return new object[] { Helpers.GetDC(IntPtr.Zero) };
             yield return new object[] { Helpers.GetWindowDC(IntPtr.Zero) };
 
-            IntPtr foregroundWindow = Helpers.GetForegroundWindow();
-            yield return new object[] { Helpers.GetDC(foregroundWindow) };
+            // Likely the source of #51097- grabbing whatever the current foreground window is is not a great idea.
+            // Whatever that window is it could disappear at any time and what it's clipping info would be pretty
+            // random.
+            // https://github.com/dotnet/runtime/issues/51097
+
+            // IntPtr foregroundWindow = Helpers.GetForegroundWindow();
+            // yield return new object[] { Helpers.GetDC(foregroundWindow) };
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/51097", typeof(GraphicsTests), nameof(IsWindows7OrWindowsArm64))]
         [Theory]
         [MemberData(nameof(FromHdc_TestData))]
         public void FromHdc_ValidHdc_ReturnsExpected(IntPtr hdc)
@@ -107,7 +111,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/51097", typeof(GraphicsTests), nameof(IsWindows7OrWindowsArm64))]
         [Theory]
         [MemberData(nameof(FromHdc_TestData))]
         public void FromHdc_ValidHdcWithContext_ReturnsExpected(IntPtr hdc)
@@ -119,7 +122,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/51097", typeof(GraphicsTests), nameof(IsWindows7OrWindowsArm64))]
         [Theory]
         [MemberData(nameof(FromHdc_TestData))]
         public void FromHdcInternal_GetDC_ReturnsExpected(IntPtr hdc)
@@ -247,7 +249,6 @@ namespace System.Drawing.Tests
             yield return new object[] { Helpers.GetForegroundWindow() };
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/51097", typeof(GraphicsTests), nameof(IsWindows7OrWindowsArm64))]
         [Theory]
         [MemberData(nameof(Hwnd_TestData))]
         public void FromHwnd_ValidHwnd_ReturnsExpected(IntPtr hWnd)
@@ -259,7 +260,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/51097", typeof(GraphicsTests), nameof(IsWindows7OrWindowsArm64))]
         [Theory]
         [MemberData(nameof(Hwnd_TestData))]
         public void FromHwndInternal_ValidHwnd_ReturnsExpected(IntPtr hWnd)
@@ -1773,27 +1773,26 @@ namespace System.Drawing.Tests
         public void CopyFromScreen_ValidRange_AffectsGraphics(int sourceX, int sourceY, int destinationX, int destinationY, int width, int height)
         {
             Color color = Color.FromArgb(2, 3, 4);
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            using (SolidBrush brush = new SolidBrush(color))
-            {
-                graphics.FillRectangle(brush, new Rectangle(0, 0, 10, 10));
-                graphics.CopyFromScreen(sourceX, sourceY, destinationX, destinationY, new Size(width, height));
+            using Bitmap image = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            using SolidBrush brush = new(color);
 
-                Rectangle drawnRect = new Rectangle(destinationX, destinationY, width, height);
-                for (int y = 0; y < image.Height; y++)
+            graphics.FillRectangle(brush, new Rectangle(0, 0, 10, 10));
+            graphics.CopyFromScreen(sourceX, sourceY, destinationX, destinationY, new Size(width, height));
+
+            Rectangle drawnRect = new Rectangle(destinationX, destinationY, width, height);
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
                 {
-                    for (int x = 0; x < image.Width; x++)
+                    Color imageColor = image.GetPixel(x, y);
+                    if (!drawnRect.Contains(x, y))
                     {
-                        Color imageColor = image.GetPixel(x, y);
-                        if (!drawnRect.Contains(x, y))
-                        {
-                            Assert.Equal(color, imageColor);
-                        }
-                        else
-                        {
-                            Assert.NotEqual(color, imageColor);
-                        }
+                        Assert.Equal(color, imageColor);
+                    }
+                    else
+                    {
+                        Assert.NotEqual(color, imageColor);
                     }
                 }
             }
@@ -1822,7 +1821,6 @@ namespace System.Drawing.Tests
             yield return new object[] { CopyPixelOperation.CaptureBlt };
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/23375")]
         [Theory]
         [MemberData(nameof(CopyPixelOperation_TestData))]
         public void CopyFromScreen_IntsAndValidCopyPixelOperation_Success(CopyPixelOperation copyPixelOperation)
@@ -1836,7 +1834,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/23375")]
         [Theory]
         [MemberData(nameof(CopyPixelOperation_TestData))]
         public void CopyFromScreen_PointsAndValidCopyPixelOperation_Success(CopyPixelOperation copyPixelOperation)
@@ -1850,7 +1847,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/23375")]
         [Theory]
         [InlineData(CopyPixelOperation.NoMirrorBitmap + 1)]
         [InlineData(CopyPixelOperation.Blackness - 1)]
@@ -1899,7 +1895,6 @@ namespace System.Drawing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/23375")]
         [Fact]
         public void CopyFromScreen_Disposed_ThrowsArgumentException()
         {

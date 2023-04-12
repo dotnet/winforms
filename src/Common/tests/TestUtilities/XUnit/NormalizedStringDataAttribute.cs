@@ -10,16 +10,13 @@ namespace Xunit;
 /// </summary>
 public class NormalizedStringDataAttribute : CommonMemberDataAttribute
 {
-    private static readonly TheoryData<string?, string> _data = new();
+    public NormalizedStringDataAttribute() : base(typeof(NormalizedStringDataAttribute)) { }
 
-    public NormalizedStringDataAttribute()
-        : base(typeof(NormalizedStringDataAttribute), nameof(GetTheoryData))
+    public static ReadOnlyTheoryData TheoryData { get; } = new(new TheoryData<string?, string>()
     {
-        _data.Add(null, string.Empty);
-        _data.Add(string.Empty, string.Empty);
-        _data.Add("teststring", "teststring");
-    }
-
-    public static TheoryData<string?, string> GetTheoryData() => _data;
+        { null, string.Empty },
+        { string.Empty, string.Empty },
+        { "teststring", "teststring" }
+    });
 }
 

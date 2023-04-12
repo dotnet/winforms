@@ -14,7 +14,11 @@ namespace Xunit;
 /// </summary>
 public class CommonMemberDataAttribute : MemberDataAttributeBase
 {
-    public CommonMemberDataAttribute(Type memberType, string memberName, params object[] parameters) : base(memberName, parameters)
+    public CommonMemberDataAttribute(Type memberType, string memberName = "TheoryData")
+        : this(memberType, memberName, null) { }
+
+    public CommonMemberDataAttribute(Type memberType, string memberName, params object[]? parameters)
+        : base(memberName, parameters)
     {
         MemberType = memberType;
     }
@@ -28,7 +32,7 @@ public class CommonMemberDataAttribute : MemberDataAttributeBase
 
         if (item is not object[] array)
         {
-            throw new ArgumentException($"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object[]");
+            throw new ArgumentException($"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object[], but {item.GetType().Name}");
         }
 
         return array;

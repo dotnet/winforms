@@ -3449,7 +3449,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ToolStripItem_Height_Set_GetReturnsExpected(int value)
         {
             using var item = new SubToolStripItem();
@@ -3467,7 +3467,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ToolStripItem_Height_SetWithOwner_GetReturnsExpected(int value)
         {
             using var owner = new ToolStrip();
@@ -3503,7 +3503,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ToolStripItem_Height_SetWithOwnerWithHandle_GetReturnsExpected(int value)
         {
             using var owner = new ToolStrip();
@@ -6140,7 +6140,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ToolStripItem_MergeIndex_Set_GetReturnsExpected(int value)
         {
             using var item = new SubToolStripItem
@@ -9616,7 +9616,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ToolStripItem_Width_Set_GetReturnsExpected(int value)
         {
             using var item = new SubToolStripItem();
@@ -9634,7 +9634,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ToolStripItem_Width_SetWithOwner_GetReturnsExpected(int value)
         {
             using var owner = new ToolStrip();
@@ -9670,7 +9670,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [NumberData<int>]
+        [IntegerData<int>]
         public void ToolStripItem_Width_SetWithOwnerWithHandle_GetReturnsExpected(int value)
         {
             using var owner = new ToolStrip();
