@@ -76,6 +76,7 @@ namespace System.Windows.Forms.Design
             {
                 int XBORDER = SystemInformation.Border3DSize.Width;
                 int YBORDER = SystemInformation.Border3DSize.Height;
+                SuspendLayout();
                 SetBounds(0, 0, 90, 90);
 
                 AccessibleName = SR.AnchorEditorAccName;
@@ -131,6 +132,8 @@ namespace System.Windows.Forms.Design
                     bottom,
                     right
                 });
+
+                ResumeLayout(false);
             }
 
             protected override void OnGotFocus(EventArgs e)

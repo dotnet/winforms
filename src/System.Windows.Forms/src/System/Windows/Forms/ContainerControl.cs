@@ -48,11 +48,6 @@ namespace System.Windows.Forms
         /// </summary>
         private bool _isScaledByDpiChangedEvent;
 
-        /// <summary>
-        ///  Indicates scaling, due to DPI changed event, of the container control is in progress.
-        /// </summary>
-        internal bool _dpiScalingInProgress;
-
         private BitVector32 _state;
 
         /// <summary>
@@ -1442,8 +1437,6 @@ namespace System.Windows.Forms
             SuspendAllLayout(this);
             try
             {
-                _dpiScalingInProgress = true;
-
                 if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
                 {
                     // AutoscaleFactor is not updated until after the OnFontChanged event is raised. Hence, computing
@@ -1497,9 +1490,6 @@ namespace System.Windows.Forms
                 // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
                 ResumeAllLayout(this, true);
                 _isScaledByDpiChangedEvent = false;
-
-                // Scaling and ResumeLayout, due to DPI changed event, should be finished by now for this container.
-                _dpiScalingInProgress = false;
             }
         }
 
