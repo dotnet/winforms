@@ -1,4 +1,4 @@
-<root>
+﻿<root>
   <!-- 
     Microsoft ResX Schema 
     
@@ -427,5 +427,8 @@
   </data>
   <data name="SystemDrawingCommon_PlatformNotSupported" xml:space="preserve">
     <value>System.Drawing.Common is not supported on this platform.</value>
+  </data>
+  <data name="IconCouldNotBeExtracted" xml:space="preserve">
+    <value>The file path could not be opened or did not contain valid data.</value>
   </data>
 </root>

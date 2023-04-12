@@ -32,22 +32,27 @@ namespace System.Drawing.Tests
             Assert.Same(icon, getIcon());
         }
 
-        public static IEnumerable<object[]> StockIcon_TestData
-        {
-            get
-            {
-                foreach (var value in Enum.GetValues<StockIconId>())
-                {
-                    yield return new object[] { value };
-                }
-            }
-        }
-
         [Theory]
-        [MemberData(nameof(StockIcon_TestData))]
+        [EnumData<StockIconId>]
         public void SystemIcons_GetStockIcon(StockIconId stockIcon)
         {
             using Icon icon = SystemIcons.GetStockIcon(stockIcon);
+            Assert.NotNull(icon);
+        }
+
+        [Fact]
+        public void SystemIcons_GetStockIcon_BySize()
+        {
+            using Icon icon = SystemIcons.GetStockIcon(StockIconId.Lock, size: 256);
+            Assert.NotNull(icon);
+            Assert.Equal(256, icon.Width);
+            Assert.Equal(256, icon.Height);
+        }
+
+        [Fact]
+        public void SystemIcons_GetStockIcon_InvalidId_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => SystemIcons.GetStockIcon((StockIconId)(-1)));
         }
 
         public static TheoryData<StockIconOptions> StockIconOptions_TestData => new()
@@ -64,6 +69,7 @@ namespace System.Drawing.Tests
         public void SystemIcons_GetStockIcon_Options(StockIconOptions options)
         {
             using Icon icon = SystemIcons.GetStockIcon(StockIconId.Shield, options);
+            Assert.NotNull(icon);
         }
     }
 }

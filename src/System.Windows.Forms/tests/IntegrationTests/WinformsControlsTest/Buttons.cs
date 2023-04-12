@@ -111,6 +111,15 @@ namespace WinformsControlsTest
                 column: 0,
                 row: 1);
 
+            table.Controls.Add(
+                new Button
+                {
+                    AutoSize = true,
+                    Image = Icon.ExtractIcon("regedit.exe", 0, 256).ToBitmap()
+                },
+                column: 1,
+                row: 1);
+
             base.OnLoad(e);
         }
     }
