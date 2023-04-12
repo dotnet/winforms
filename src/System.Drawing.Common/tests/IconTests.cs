@@ -932,7 +932,7 @@ namespace System.Drawing.Tests
         [Fact]
         public void ExtractIcon_RegeditByResourceId()
         {
-            Icon? icon = Icon.ExtractIcon("regedit.exe", -100, 256);
+            using Icon? icon = Icon.ExtractIcon("regedit.exe", -100, 256);
             Assert.NotNull(icon);
             Assert.Equal(256, icon.Width);
             Assert.Equal(256, icon.Height);

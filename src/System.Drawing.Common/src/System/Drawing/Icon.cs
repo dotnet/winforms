@@ -884,6 +884,19 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     /// <summary>
     ///  Extracts a specified icon from the given <paramref name="filePath"/>.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Unlike the <see cref="Icon(string)">constructors that take a path</see> this method and the
+    ///   <see cref="ExtractAssociatedIcon(string)"/> methods do not retain all of the resource data or modify the
+    ///   original data (outside of resizing if necessary). As such, the <see cref="Icon"/> only uses as much
+    ///   memory as is needed for the requested size (mostly native memory).
+    ///  </para>
+    ///  <para>
+    ///   Without the original source data the <see cref="Icon(Icon, Size)">copy constructors</see> have to resample
+    ///   the current icon's bitmap to change sizes. For best image quality, if different sizes for an <see cref="Icon"/>
+    ///   are desired you should create separate instances with this method and avoid the copy constructors.
+    ///  </para>
+    /// </remarks>
     /// <param name="filePath">Path to an icon or PE (.dll, .exe) file.</param>
     /// <param name="id">
     ///  Positive numbers refer to an icon index in the given file. Negative numbers refer to a specific native resource
@@ -959,6 +972,5 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
         return new Icon(hicon, takeOwnership: true);
     }
-
 #endif
 }
