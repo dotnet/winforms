@@ -47,12 +47,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     private bool _isScaledByDpiChangedEvent;
 
-    /// <summary>
-    ///  Indicates scaling, due to DPI changed event, of the container control is in progress.
-    /// </summary>
-    internal bool _dpiScalingInProgress;
-
-    private BitVector32 _state;
+        private BitVector32 _state;
 
     /// <summary>
     ///  True if we need to perform scaling when layout resumes
@@ -1435,23 +1430,21 @@ public class ContainerControl : ScrollableControl, IContainerControl
         }
     }
 
-    internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
-    {
-        CommonProperties.xClearAllPreferredSizeCaches(this);
-        SuspendAllLayout(this);
-        try
+        internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
         {
-            _dpiScalingInProgress = true;
-
-            if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
+            CommonProperties.xClearAllPreferredSizeCaches(this);
+            SuspendAllLayout(this);
+            try
             {
-                // AutoscaleFactor is not updated until after the OnFontChanged event is raised. Hence, computing
-                // factor based on the change in bounds of the Form, which aligns with AutoscaleFactor for both
-                // AutoscaleMode is Font and/or Dpi. Especially after adding support for non-linear Form size in PMv2.
-                float xScaleFactor = (float)suggestedRectangle.Width / Width;
-                float yScaleFactor = (float)suggestedRectangle.Height / Height;
-                ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);
-            }
+                if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
+                {
+                    // AutoscaleFactor is not updated until after the OnFontChanged event is raised. Hence, computing
+                    // factor based on the change in bounds of the Form, which aligns with AutoscaleFactor for both
+                    // AutoscaleMode is Font and/or Dpi. Especially after adding support for non-linear Form size in PMv2.
+                    float xScaleFactor = (float)suggestedRectangle.Width / Width;
+                    float yScaleFactor = (float)suggestedRectangle.Height / Height;
+                    ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);
+                }
 
             // If this container is a top-level window, we would receive WM_DPICHANGED message that
             // has SuggestedRectangle for the control. We are forced to use this in such cases to
@@ -1477,30 +1470,27 @@ public class ContainerControl : ScrollableControl, IContainerControl
             // this control further by the 'OnFontChanged' event.
             _isScaledByDpiChangedEvent = true;
 
-            Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
-            ScaledControlFont = fontForDpi;
-            if (IsFontSet())
-            {
-                SetScaledFont(fontForDpi);
-            }
-            else
-            {
-                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
+                ScaledControlFont = fontForDpi;
+                if (IsFontSet())
                 {
-                    OnFontChanged(EventArgs.Empty);
+                    SetScaledFont(fontForDpi);
+                }
+                else
+                {
+                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                    {
+                        OnFontChanged(EventArgs.Empty);
+                    }
                 }
             }
+            finally
+            {
+                // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
+                ResumeAllLayout(this, true);
+                _isScaledByDpiChangedEvent = false;
+            }
         }
-        finally
-        {
-            // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
-            ResumeAllLayout(this, true);
-            _isScaledByDpiChangedEvent = false;
-
-            // Scaling and ResumeLayout, due to DPI changed event, should be finished by now for this container.
-            _dpiScalingInProgress = false;
-        }
-    }
 
     protected override void Select(bool directed, bool forward)
     {

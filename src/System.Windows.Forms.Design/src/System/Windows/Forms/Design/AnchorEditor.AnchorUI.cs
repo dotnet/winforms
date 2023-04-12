@@ -72,11 +72,12 @@ public sealed partial class AnchorEditor
             return baseVar;
         }
 
-        internal virtual void InitializeComponent()
-        {
-            int XBORDER = SystemInformation.Border3DSize.Width;
-            int YBORDER = SystemInformation.Border3DSize.Height;
-            SetBounds(0, 0, 90, 90);
+            internal virtual void InitializeComponent()
+            {
+                int XBORDER = SystemInformation.Border3DSize.Width;
+                int YBORDER = SystemInformation.Border3DSize.Height;
+                SuspendLayout();
+                SetBounds(0, 0, 90, 90);
 
             AccessibleName = SR.AnchorEditorAccName;
 
@@ -122,16 +123,18 @@ public sealed partial class AnchorEditor
                 container
             });
 
-            container.Controls.Clear();
-            container.Controls.AddRange(new Control[]
-            {
-                control,
-                top,
-                left,
-                bottom,
-                right
-            });
-        }
+                container.Controls.Clear();
+                container.Controls.AddRange(new Control[]
+                {
+                    control,
+                    top,
+                    left,
+                    bottom,
+                    right
+                });
+
+                ResumeLayout(false);
+            }
 
         protected override void OnGotFocus(EventArgs e)
         {
