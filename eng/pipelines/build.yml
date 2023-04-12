@@ -95,8 +95,11 @@ jobs:
         /m:1
       displayName: Run Unit Tests
 
-    - script: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe executeQueuedItems
-      displayName: Wait for NGEN
+    - script: C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe queue pause
+      displayName: Pause NGEN x86
+
+    - script: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe queue pause
+      displayName: Pause NGEN x64
 
     # Run Integration Tests
     # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
