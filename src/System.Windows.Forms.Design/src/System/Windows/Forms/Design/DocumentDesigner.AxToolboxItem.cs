@@ -37,21 +37,9 @@ public partial class DocumentDesigner
         /// <summary>
         ///  The Component Type is ".Net Component" -- unless otherwise specified by a derived toolboxitem
         /// </summary>
-        public override string ComponentType
-        {
-            get
-            {
-                return SR.Ax_Control;
-            }
-        }
+        public override string ComponentType => SR.Ax_Control;
 
-        public override string Version
-        {
-            get
-            {
-                return version;
-            }
-        }
+        public override string Version => version;
 
         private void LoadVersionInfo()
         {
@@ -59,13 +47,10 @@ public partial class DocumentDesigner
             using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(controlKey);
 
             // Fail later- not for tooltip info.
-            if (key is not null)
+            using RegistryKey? verKey = key?.OpenSubKey("Version");
+            if (verKey is not null)
             {
-                using RegistryKey? verKey = key.OpenSubKey("Version");
-                if (verKey is not null)
-                {
-                    version = (string)verKey.GetValue("")!;
-                }
+                version = (string)verKey.GetValue("")!;
             }
         }
 
@@ -167,10 +152,10 @@ public partial class DocumentDesigner
         /// from the stream.</para>
         /// </summary>
         [MemberNotNull(nameof(clsid))]
-            protected override void Deserialize(SerializationInfo info, StreamingContext context)
-            {
-                base.Deserialize(info, context);
-                clsid = info.GetString("Clsid")!;
+        protected override void Deserialize(SerializationInfo info, StreamingContext context)
+        {
+            base.Deserialize(info, context);
+            clsid = info.GetString("Clsid")!;
         }
 
         /// <summary>
@@ -184,7 +169,7 @@ public partial class DocumentDesigner
 
             // Missing reference will show up as an empty string.
             //
-            if (path is null || path.Length <= 0)
+            if (string.IsNullOrEmpty(path))
             {
                 return null;
             }
@@ -373,8 +358,7 @@ public partial class DocumentDesigner
         /// </summary>
         protected override void Serialize(SerializationInfo info, StreamingContext context)
         {
-            if (AxToolSwitch.TraceVerbose)
-                Debug.WriteLine($"Serializing AxToolboxItem:{clsid}");
+            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Serializing AxToolboxItem:{clsid}");
             base.Serialize(info, context);
             info.AddValue("Clsid", clsid);
         }
