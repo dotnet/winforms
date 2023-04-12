@@ -111,6 +111,7 @@ jobs:
       env:
         XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
       displayName: Run Integration Tests
+      retryCountOnTaskFailure: 1
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd
