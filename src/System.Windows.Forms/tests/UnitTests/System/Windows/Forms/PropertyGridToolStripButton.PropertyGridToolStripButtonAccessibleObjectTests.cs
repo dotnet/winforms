@@ -173,5 +173,20 @@ namespace System.Windows.Forms.Tests
             Assert.False(alphaButton.Checked);
             Assert.Equal(PropertySort.CategorizedAlphabetical, propertyGrid.PropertySort);
         }
+
+        [WinFormsFact]
+        public void PropertyGridToolStripButtonAccessibleObject_IsTogglePatternSupported_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+            ToolStripButton propertyPagesButton = propertyGrid.TestAccessor().Dynamic._viewPropertyPagesButton;
+            AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;
+            AccessibleObject alphaButtonAccessibleObject = toolStripButtons[1].AccessibilityObject;
+            AccessibleObject propertyPagesButtonAccessibleObject = propertyPagesButton.AccessibilityObject;
+
+            Assert.False(categoryButtonAccessibleObject.IsPatternSupported(UIA.TogglePatternId));
+            Assert.False(alphaButtonAccessibleObject.IsPatternSupported(UIA.TogglePatternId));
+            Assert.False(propertyPagesButtonAccessibleObject.IsPatternSupported(UIA.TogglePatternId));
+        }
     }
 }
