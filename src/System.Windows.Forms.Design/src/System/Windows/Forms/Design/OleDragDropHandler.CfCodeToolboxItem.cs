@@ -72,9 +72,9 @@ internal partial class OleDragDropHandler
             }
         }
 
-        protected override IComponent[]? CreateComponentsCore(IDesignerHost host, IDictionary? defaultValues)
+        protected override IComponent[]? CreateComponentsCore(IDesignerHost? host, IDictionary? defaultValues)
         {
-            IDesignerSerializationService? ds = host.GetService<IDesignerSerializationService>();
+            IDesignerSerializationService? ds = host?.GetService<IDesignerSerializationService>();
             if (ds is null || _serializationData is null)
             {
                 return null;
@@ -131,13 +131,13 @@ internal partial class OleDragDropHandler
             // an old location stored in them, so they may show up on top of other items.
             // So we need to call UpdatePastePositions for each one to get the tray to
             // arrange them properly.
-            ComponentTray? tray = host.GetService<ComponentTray>();
+            ComponentTray? tray = host?.GetService<ComponentTray>();
             List<Control>? trayComponents = null;
             if (tray is not null)
             {
                 foreach (IComponent component in components)
                 {
-                    ComponentTray.TrayControl trayControl = ComponentTray.GetTrayControlFromComponent(component);
+                    ComponentTray.TrayControl? trayControl = ComponentTray.GetTrayControlFromComponent(component);
 
                     if (trayControl is not null)
                     {
@@ -155,6 +155,6 @@ internal partial class OleDragDropHandler
             return components.ToArray();
         }
 
-        protected override IComponent[]? CreateComponentsCore(IDesignerHost host) => CreateComponentsCore(host, null);
+        protected override IComponent[]? CreateComponentsCore(IDesignerHost? host) => CreateComponentsCore(host, null);
     }
 }

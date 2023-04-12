@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
@@ -19,7 +17,7 @@ public partial class DocumentDesigner
     private class AxToolboxItem : ToolboxItem
     {
         private string clsid;
-        private Type axctlType;
+        private Type? axctlType;
         private string version = string.Empty;
 
         public AxToolboxItem(string clsid) : base(typeof(AxHost))
@@ -58,15 +56,15 @@ public partial class DocumentDesigner
         private void LoadVersionInfo()
         {
             string controlKey = $"CLSID\\{clsid}";
-            using RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
+            using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(controlKey);
 
             // Fail later- not for tooltip info.
             if (key is not null)
             {
-                using RegistryKey verKey = key.OpenSubKey("Version");
+                using RegistryKey? verKey = key.OpenSubKey("Version");
                 if (verKey is not null)
                 {
-                    version = (string)verKey.GetValue("");
+                    version = (string)verKey.GetValue("")!;
                 }
             }
         }
@@ -75,12 +73,12 @@ public partial class DocumentDesigner
         ///  Creates an instance of the ActiveX control.
         ///  Calls VS7 project system to generate the wrappers if they are needed.
         /// </summary>
-        protected override IComponent[] CreateComponentsCore(IDesignerHost host)
+        protected override IComponent[] CreateComponentsCore(IDesignerHost? host)
         {
             Debug.Assert(host is not null, "Designer host is null");
 
             // Get the DTE References object
-            object references = GetReferences(host);
+            object? references = GetReferences(host);
             if (references is not null)
             {
                 try
@@ -94,7 +92,7 @@ public partial class DocumentDesigner
                     args[3] = tlibAttr.lcid;
 
                     args[4] = "";
-                    object tlbRef = references.GetType().InvokeMember(
+                    object? tlbRef = references.GetType().InvokeMember(
                         "AddActiveX",
                         BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance,
                         null,
@@ -104,7 +102,7 @@ public partial class DocumentDesigner
                     Debug.Assert(tlbRef is not null, $"Null reference returned by AddActiveX (tlbimp) by the project system for: {clsid}");
 
                     args[4] = "aximp";
-                    object axRef = references.GetType().InvokeMember(
+                    object? axRef = references.GetType().InvokeMember(
                         "AddActiveX",
                         BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance,
                         null,
@@ -118,7 +116,7 @@ public partial class DocumentDesigner
                 catch (TargetInvocationException tie)
                 {
                     Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Generating Ax References failed: {tie.InnerException}");
-                    throw tie.InnerException;
+                    throw tie.InnerException!;
                 }
                 catch (Exception e)
                 {
@@ -129,7 +127,7 @@ public partial class DocumentDesigner
 
             if (axctlType is null)
             {
-                IUIService uiSvc = (IUIService)host.GetService(typeof(IUIService));
+                IUIService? uiSvc = host.GetService<IUIService>();
                 if (uiSvc is null)
                 {
                     RTLAwareMessageBox.Show(
@@ -168,10 +166,11 @@ public partial class DocumentDesigner
         /// <para>Loads the state of this 'AxToolboxItem'
         /// from the stream.</para>
         /// </summary>
-        protected override void Deserialize(SerializationInfo info, StreamingContext context)
-        {
-            base.Deserialize(info, context);
-            clsid = info.GetString("Clsid");
+        [MemberNotNull(nameof(clsid))]
+            protected override void Deserialize(SerializationInfo info, StreamingContext context)
+            {
+                base.Deserialize(info, context);
+                clsid = info.GetString("Clsid")!;
         }
 
         /// <summary>
@@ -179,9 +178,9 @@ public partial class DocumentDesigner
         /// ActiveX control we want to create. It then walks through all AxHost derived classes
         /// in that assembly, and returns the type that matches our control's CLSID.</para>
         /// </summary>
-        private Type GetAxTypeFromReference(object reference, IDesignerHost host)
+        private Type? GetAxTypeFromReference(object reference, IDesignerHost host)
         {
-            string path = (string)reference.GetType().InvokeMember("Path", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, reference, null, CultureInfo.InvariantCulture);
+            string? path = (string?)reference.GetType().InvokeMember("Path", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, reference, null, CultureInfo.InvariantCulture);
 
             // Missing reference will show up as an empty string.
             //
@@ -194,10 +193,10 @@ public partial class DocumentDesigner
             string fullPath = file.FullName;
             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Checking: {fullPath}");
 
-            ITypeResolutionService trs = (ITypeResolutionService)host.GetService(typeof(ITypeResolutionService));
+            ITypeResolutionService? trs = host.GetService<ITypeResolutionService>();
             Debug.Assert(trs is not null, "No type resolution service found.");
 
-            Assembly a = trs.GetAssembly(AssemblyName.GetAssemblyName(fullPath));
+            Assembly? a = trs.GetAssembly(AssemblyName.GetAssemblyName(fullPath));
             Debug.Assert(a is not null, $"No assembly found at {fullPath}");
 
             return GetAxTypeFromAssembly(a);
@@ -207,7 +206,7 @@ public partial class DocumentDesigner
         /// <para>Walks through all AxHost derived classes in the given assembly,
         /// and returns the type that matches our control's CLSID.</para>
         /// </summary>
-        private Type GetAxTypeFromAssembly(Assembly a)
+        private Type? GetAxTypeFromAssembly(Assembly a)
         {
             Type[] types = a.GetTypes();
             int len = types.Length;
@@ -239,30 +238,28 @@ public partial class DocumentDesigner
         ///  Get the VSProject of the Containing Project.
         ///  Get the References property of the VSProject.</para>
         /// </summary>
-        private static object GetReferences(IDesignerHost host)
+        private static object? GetReferences(IDesignerHost host)
         {
-            Debug.Assert(host is not null, "Null Designer Host");
-
-            Type type = Type.GetType($"EnvDTE.ProjectItem, {AssemblyRef.EnvDTE}");
+            Type? type = Type.GetType($"EnvDTE.ProjectItem, {AssemblyRef.EnvDTE}");
 
             if (type is null)
             {
                 return null;
             }
 
-            object ext = host.GetService(type);
+            object? ext = host.GetService(type);
             if (ext is null)
                 return null;
 
-            string name = ext.GetType().InvokeMember("Name", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture).ToString();
+            string? name = ext.GetType().InvokeMember("Name", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture)!.ToString();
 
-            object project = ext.GetType().InvokeMember("ContainingProject", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture);
+            object? project = ext.GetType().InvokeMember("ContainingProject", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture);
             Debug.Assert(project is not null, $"No DTE Project for the current project item: {name}");
 
-            object vsproject = project.GetType().InvokeMember("Object", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, project, null, CultureInfo.InvariantCulture);
+            object? vsproject = project.GetType().InvokeMember("Object", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, project, null, CultureInfo.InvariantCulture);
             Debug.Assert(vsproject is not null, $"No VS Project for the current project item: {name}");
 
-            object references = vsproject.GetType().InvokeMember("References", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, vsproject, null, CultureInfo.InvariantCulture);
+            object? references = vsproject.GetType().InvokeMember("References", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, vsproject, null, CultureInfo.InvariantCulture);
             Debug.Assert(references is not null, $"No References for the current project item: {name}");
 
             return references;
@@ -274,7 +271,7 @@ public partial class DocumentDesigner
         private unsafe TLIBATTR GetTypeLibAttr()
         {
             string controlKey = $"CLSID\\{clsid}";
-            using RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
+            using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(controlKey);
             if (key is null)
             {
                 if (AxToolSwitch.TraceVerbose)
@@ -286,15 +283,15 @@ public partial class DocumentDesigner
             ITypeLib* pTLB = null;
 
             // Open the key for the TypeLib
-            using RegistryKey tlbKey = key.OpenSubKey("TypeLib");
+            using RegistryKey? tlbKey = key.OpenSubKey("TypeLib");
 
             if (tlbKey is not null)
             {
                 // Get the major and minor version numbers.
-                using RegistryKey verKey = key.OpenSubKey("Version");
+                using RegistryKey? verKey = key.OpenSubKey("Version");
                 Debug.Assert(verKey is not null, $"No version registry key found for: {controlKey}");
 
-                string ver = (string)verKey.GetValue("");
+                string ver = (string)verKey.GetValue("")!;
                 int dot = ver.IndexOf('.');
 
                 short majorVer;
@@ -314,7 +311,7 @@ public partial class DocumentDesigner
                 Debug.Assert(majorVer > 0 && minorVer >= 0, $"No Major version number found for: {controlKey}");
                 verKey.Close();
 
-                object o = tlbKey.GetValue("");
+                object o = tlbKey.GetValue("")!;
 
                 // Try to get the TypeLib's Guid.
                 var tlbGuid = new Guid((string)o);
@@ -333,10 +330,10 @@ public partial class DocumentDesigner
             // If that fails, try to load the TLB based on the TypeLib guid key.
             if (pTLB is null)
             {
-                using RegistryKey inprocServerKey = key.OpenSubKey("InprocServer32");
+                using RegistryKey? inprocServerKey = key.OpenSubKey("InprocServer32");
                 if (inprocServerKey is not null)
                 {
-                    string inprocServer = (string)inprocServerKey.GetValue(string.Empty);
+                    string? inprocServer = (string?)inprocServerKey.GetValue(string.Empty);
                     Debug.Assert(inprocServer is not null, $"No valid InprocServer32 found for: {controlKey}");
                     HRESULT hr = PInvoke.LoadTypeLib(inprocServer, &pTLB);
                 }
