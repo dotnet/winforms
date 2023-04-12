@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -23,12 +24,22 @@ namespace System.Windows.Forms.UITests
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
 
+        private static readonly HashSet<string> s_processesAtLaunch = new();
+
         private Point? _mousePosition;
 
         static ControlTestBase()
         {
             DataCollectionService.InstallFirstChanceExceptionHandler();
+
+            foreach (var process in Process.GetProcesses())
+            {
+                s_processesAtLaunch.Add(FormatProcessName(process));
+            }
         }
+
+        private static string FormatProcessName(Process process)
+            => $"{process.ProcessName} ({process.Id})";
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
@@ -60,6 +71,42 @@ namespace System.Windows.Forms.UITests
 
         public virtual Task InitializeAsync()
         {
+            var newProcesses = new List<string>();
+            var removedProcesses = new List<string>();
+            var commonProcesses = new List<string>();
+            foreach (var process in Process.GetProcesses())
+            {
+                var formatted = FormatProcessName(process);
+                if (s_processesAtLaunch.Contains(formatted))
+                {
+                    commonProcesses.Add(formatted);
+                }
+                else
+                {
+                    newProcesses.Add(formatted);
+                }
+            }
+
+            removedProcesses.AddRange(s_processesAtLaunch.Except(commonProcesses));
+
+            TestOutputHelper.WriteLine("New processes at start of test:");
+            foreach (var formatted in newProcesses)
+            {
+                TestOutputHelper.WriteLine($"  {formatted}");
+            }
+
+            TestOutputHelper.WriteLine("Removed processes at start of test:");
+            foreach (var formatted in removedProcesses)
+            {
+                TestOutputHelper.WriteLine($"  {formatted}");
+            }
+
+            TestOutputHelper.WriteLine("Common processes at start of test:");
+            foreach (var formatted in commonProcesses)
+            {
+                TestOutputHelper.WriteLine($"  {formatted}");
+            }
+
             // Verify keyboard and mouse state at the start of the test
             VerifyKeyStates(isStartOfTest: true, TestOutputHelper);
 
