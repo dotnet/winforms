@@ -64,6 +64,12 @@ jobs:
     - powershell: Remove-Item -Recurse -ErrorAction Ignore "$env:LocalAppData\NuGet\v3-cache"
       displayName: Clear NuGet http cache (if exists)
 
+    - script: C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe queue pause
+      displayName: Pause NGEN x86
+
+    - script: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe queue pause
+      displayName: Pause NGEN x64
+
     # Build and rename binlog
     # The /p:Coverage argument is passed here since some build properties change to accommodate running with
     # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
