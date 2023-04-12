@@ -59,7 +59,7 @@ namespace System.Windows.Forms
             {
                 var rect = default(RECT);
                 PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref rect);
-                return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+                return rect;
             }
         }
 

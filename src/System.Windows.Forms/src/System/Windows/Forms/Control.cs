@@ -11895,7 +11895,7 @@ namespace System.Windows.Forms
                     }
 
                     PInvoke.GetClientRect(this, out RECT rc);
-                    using PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom));
+                    using PaintEventArgs pevent = new PaintEventArgs(dc, rc);
                     PaintWithErrorHandling(pevent, PaintLayerBackground);
                 }
 

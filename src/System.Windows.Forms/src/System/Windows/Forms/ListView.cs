@@ -3683,7 +3683,7 @@ namespace System.Windows.Forms
                     string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
+            return itemrect;
         }
 
         /// <summary>
@@ -3712,7 +3712,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            return Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
+            return itemrect;
         }
 
         /// <summary>
@@ -3763,9 +3763,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }
 
-            Rectangle result = Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
-
-            return result;
+            return itemrect;
         }
 
         private void GroupImageListChangedHandle(object? sender, EventArgs e)

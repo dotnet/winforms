@@ -1135,7 +1135,7 @@ namespace System.Windows.Forms
             }
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_GETITEMRECT, (WPARAM)index, ref rect);
-            return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+            return rect;
         }
 
         protected string GetToolTipText(object item)

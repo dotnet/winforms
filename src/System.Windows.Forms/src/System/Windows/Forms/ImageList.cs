@@ -655,7 +655,7 @@ namespace System.Windows.Forms
                     {
                         tmpBitmap = Bitmap.FromHbitmap((IntPtr)imageInfo.hbmImage);
 
-                        bmpData = tmpBitmap.LockBits(new Rectangle(imageInfo.rcImage.left, imageInfo.rcImage.top, imageInfo.rcImage.right - imageInfo.rcImage.left, imageInfo.rcImage.bottom - imageInfo.rcImage.top), ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
+                        bmpData = tmpBitmap.LockBits(imageInfo.rcImage, ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
 
                         int offset = bmpData.Stride * _imageSize.Height * index;
                         // we need do the following if the image has alpha because otherwise the image is fully transparent even though it has data

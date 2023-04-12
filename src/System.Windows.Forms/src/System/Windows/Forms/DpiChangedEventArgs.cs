@@ -21,8 +21,7 @@ namespace System.Windows.Forms
             DeviceDpiOld = old;
             DeviceDpiNew = (short)m.WParamInternal.LOWORD;
             Debug.Assert((short)m.WParamInternal.HIWORD == DeviceDpiNew, "Non-square pixels!");
-            RECT suggestedRect = *(RECT*)(nint)m.LParamInternal;
-            SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
+            SuggestedRectangle = *(RECT*)(nint)m.LParamInternal;
         }
 
         public int DeviceDpiOld { get; }

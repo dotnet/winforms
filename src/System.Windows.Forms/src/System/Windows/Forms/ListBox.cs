@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+            return rect;
         }
 
         /// <summary>
