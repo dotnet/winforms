@@ -534,11 +534,13 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public void SetMetadata(IDesignerSerializationManager manager, string resourceName, object value, bool shouldSerializeValue, bool applyingCachedResources)
             {
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
                 if (value is not null && (!value.GetType().IsSerializable))
                 {
                     Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                     return;
                 }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
                 // If we are currently the invariant culture then we may be able to  write directly.
                 if (ReadCulture.Equals(CultureInfo.InvariantCulture))
@@ -615,11 +617,13 @@ namespace System.ComponentModel.Design.Serialization
             public void SetValue(IDesignerSerializationManager manager, string resourceName, object value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
             {
                 // Values we are going to serialize must be serializable or else the resource writer will fail when we close it.
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
                 if (value is not null && (!value.GetType().IsSerializable))
                 {
                     Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                     return;
                 }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
                 if (forceInvariant)
                 {

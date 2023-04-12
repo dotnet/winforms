@@ -88,10 +88,12 @@ namespace System.Resources
 
             Type valueType = (value is null) ? typeof(object) : value.GetType();
 
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is not null && !valueType.IsSerializable)
             {
                 throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
             if (value is not null)
             {
@@ -245,10 +247,12 @@ namespace System.Resources
             }
 
             Type valueType = (value is null) ? typeof(object) : value.GetType();
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is not null && !valueType.IsSerializable)
             {
                 throw new InvalidOperationException(string.Format(SR.NotSerializableType, _name, valueType.FullName));
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
             TypeConverter converter = TypeDescriptor.GetConverter(valueType);
             bool toString = converter.CanConvertTo(typeof(string));
@@ -295,9 +299,7 @@ namespace System.Resources
             SerializeWithBinaryFormatter(_binaryFormatter, nodeInfo, value, _typeNameConverter);
 #pragma warning restore SYSLIB0051 // Type or member is obsolete
 
-#if NET8_0_OR_GREATER
-            [Obsolete(DiagnosticId = "SYSLIB0051")]
-#endif
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             static void SerializeWithBinaryFormatter(IFormatter? binaryFormatter, DataNodeInfo nodeInfo, object value, Func<Type?, string>? typeNameConverter)
             {
                 binaryFormatter ??= new BinaryFormatter
@@ -313,6 +315,7 @@ namespace System.Resources
 
                 nodeInfo.MimeType = ResXResourceWriter.DefaultSerializedObjectMimeType;
             }
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
 
         private object? GenerateObjectFromDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)

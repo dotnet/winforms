@@ -581,9 +581,9 @@ namespace System.Windows.Forms.Tests
         {
             using var formatterScope = new BinaryFormatterScope(enable: true);
             using var stream = new MemoryStream();
-            var formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            formatter.Serialize(stream, subItem);
+            var formatter = new BinaryFormatter();
+            new BinaryFormatter().Serialize(stream, subItem);
             stream.Seek(0, SeekOrigin.Begin);
 
             ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));

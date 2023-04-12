@@ -782,12 +782,14 @@ namespace System.Windows.Forms
                 // an HBITMAP and publish a Dib, we don't need to support this.
                 hr = HRESULT.DV_E_TYMED;
             }
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             else if (format.Equals(DataFormats.Serializable)
                 || data is ISerializable
                 || (data is not null && data.GetType().IsSerializable))
             {
                 hr = SaveObjectToHandle(ref medium.unionmember, data, RestrictDeserializationToSafeTypes(format));
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
             return hr;
         }
@@ -803,13 +805,13 @@ namespace System.Windows.Forms
 
         private static void SaveObjectToHandleSerializer(Stream stream, object data, bool restrictSerialization)
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             BinaryFormatter formatter = new BinaryFormatter();
             if (restrictSerialization)
             {
                 formatter.Binder = new BitmapBinder();
             }
 
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(stream, data);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
         }

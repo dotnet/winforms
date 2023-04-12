@@ -1189,9 +1189,8 @@ public partial class Control
                     // to a binary blob and then de-serialize.
                     byte[] bytes = Convert.FromBase64String(value);
                     using MemoryStream stream = new MemoryStream(bytes);
-                    BinaryFormatter formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    currentProperty.SetValue(_control, formatter.Deserialize(stream));
+                    currentProperty.SetValue(_control, new BinaryFormatter().Deserialize(stream));
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
                     return true;
@@ -1574,9 +1573,8 @@ public partial class Control
                 {
                     // Resource property.  Save this to the bag as a 64bit encoded string.
                     using MemoryStream stream = new MemoryStream();
-                    BinaryFormatter formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    formatter.Serialize(stream, props[i].GetValue(_control)!);
+                    new BinaryFormatter().Serialize(stream, props[i].GetValue(_control)!);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     byte[] bytes = new byte[(int)stream.Length];
                     stream.Position = 0;

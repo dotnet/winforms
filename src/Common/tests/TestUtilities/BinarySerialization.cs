@@ -52,6 +52,7 @@ public static class BinarySerialization
         }
     }
 
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
     public static T EnsureDeserialize<T>(string blob)
     {
         var @object = FromBase64String(blob);
@@ -68,16 +69,16 @@ public static class BinarySerialization
         static object FromByteArray(byte[] raw,
             FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             var binaryFormatter = new BinaryFormatter
             {
                 AssemblyFormat = assemblyStyle
             };
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
 
             using (var serializedStream = new MemoryStream(raw))
             {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 return binaryFormatter.Deserialize(serializedStream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
     }
@@ -91,18 +92,19 @@ public static class BinarySerialization
         static byte[] ToByteArray(object obj,
             FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             var binaryFormatter = new BinaryFormatter
             {
                 AssemblyFormat = assemblyStyle
             };
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
 
             using (MemoryStream ms = new MemoryStream())
             {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 binaryFormatter.Serialize(ms, obj);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 return ms.ToArray();
             }
         }
     }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 }

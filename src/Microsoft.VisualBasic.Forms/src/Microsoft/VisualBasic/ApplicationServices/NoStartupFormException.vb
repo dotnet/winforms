@@ -36,7 +36,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' De-serialization constructor must be defined since we are serializable
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
+#Disable Warning SYSLIB0051 ' Type or member is obsolete
             MyBase.New(info, context)
+#Enable Warning SYSLIB0051 ' Type or member is obsolete
         End Sub
     End Class
 End Namespace

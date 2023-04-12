@@ -2159,10 +2159,12 @@ namespace System.Windows.Forms
                 }
             }
 
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (userData is not null && userData.GetType().IsSerializable)
             {
                 si.AddValue("UserData", userData, userData.GetType());
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
         }
 
         /// <summary>

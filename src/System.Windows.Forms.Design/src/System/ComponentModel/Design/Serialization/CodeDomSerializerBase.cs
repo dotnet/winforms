@@ -2317,6 +2317,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // see if this thing is serializable
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site is not null))
             {
                 CodeExpression expression = SerializeToResourceExpression(manager, value);
@@ -2327,6 +2328,7 @@ namespace System.ComponentModel.Design.Serialization
                     return expression;
                 }
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
             // No instance descriptor. See if we can get to a public constructor that takes no arguments
             ConstructorInfo ctor = GetReflectionTypeHelper(manager, value).GetConstructor(Array.Empty<Type>());
@@ -2977,6 +2979,7 @@ namespace System.ComponentModel.Design.Serialization
         protected CodeExpression SerializeToResourceExpression(IDesignerSerializationManager manager, object value, bool ensureInvariant)
         {
             CodeExpression result = null;
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is null || value.GetType().IsSerializable)
             {
                 CodeStatementCollection saveStatements = null;
@@ -3006,6 +3009,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
             return result;
         }

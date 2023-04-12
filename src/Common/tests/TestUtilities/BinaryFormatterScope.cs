@@ -36,7 +36,10 @@ public readonly ref struct BinaryFormatterScope
     static BinaryFormatterScope()
     {
         // Need to explicitly set the switch to whatever the default is as its default value is in transition.
+
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         try
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete

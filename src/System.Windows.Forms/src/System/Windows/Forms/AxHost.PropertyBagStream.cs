@@ -17,11 +17,10 @@ public abstract unsafe partial class AxHost
 
         internal void Read(Stream stream)
         {
-            BinaryFormatter formatter = new();
             try
             {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                _bag = (Hashtable)formatter.Deserialize(stream);
+                _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
             catch
@@ -77,9 +76,8 @@ public abstract unsafe partial class AxHost
 
         internal void Write(Stream stream)
         {
-            BinaryFormatter formatter = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            formatter.Serialize(stream, _bag);
+            new BinaryFormatter().Serialize(stream, _bag);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
     }
