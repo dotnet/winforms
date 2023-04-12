@@ -57,6 +57,29 @@ public static class BinarySerialization
         var @object = FromBase64String(blob);
         Assert.NotNull(@object);
         return Assert.IsType<T>(@object);
+
+        static object FromBase64String(string base64String,
+            FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
+        {
+            byte[] raw = Convert.FromBase64String(base64String);
+            return FromByteArray(raw, assemblyStyle);
+        }
+
+        static object FromByteArray(byte[] raw,
+            FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
+        {
+            var binaryFormatter = new BinaryFormatter
+            {
+                AssemblyFormat = assemblyStyle
+            };
+
+            using (var serializedStream = new MemoryStream(raw))
+            {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                return binaryFormatter.Deserialize(serializedStream);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+            }
+        }
     }
 
     public static string ToBase64String(object @object,
@@ -64,45 +87,22 @@ public static class BinarySerialization
     {
         byte[] raw = ToByteArray(@object, assemblyStyle);
         return Convert.ToBase64String(raw);
-    }
 
-    private static object FromBase64String(string base64String,
-        FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
-    {
-        byte[] raw = Convert.FromBase64String(base64String);
-        return FromByteArray(raw, assemblyStyle);
-    }
-
-    private static object FromByteArray(byte[] raw,
-        FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
-    {
-        var binaryFormatter = new BinaryFormatter
+        static byte[] ToByteArray(object obj,
+            FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
         {
-            AssemblyFormat = assemblyStyle
-        };
+            var binaryFormatter = new BinaryFormatter
+            {
+                AssemblyFormat = assemblyStyle
+            };
 
-        using (var serializedStream = new MemoryStream(raw))
-        {
+            using (MemoryStream ms = new MemoryStream())
+            {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            return binaryFormatter.Deserialize(serializedStream);
+                binaryFormatter.Serialize(ms, obj);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-        }
-    }
-
-    private static byte[] ToByteArray(object obj,
-        FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
-    {
-        var binaryFormatter = new BinaryFormatter
-        {
-            AssemblyFormat = assemblyStyle
-        };
-
-        using (MemoryStream ms = new MemoryStream())
-        {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-            binaryFormatter.Serialize(ms, obj);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-            return ms.ToArray();
+                return ms.ToArray();
+            }
         }
     }
 }

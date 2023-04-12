@@ -36,7 +36,6 @@ public readonly ref struct BinaryFormatterScope
     static BinaryFormatterScope()
     {
         // Need to explicitly set the switch to whatever the default is as its default value is in transition.
-
         BinaryFormatter formatter = new();
         try
         {
