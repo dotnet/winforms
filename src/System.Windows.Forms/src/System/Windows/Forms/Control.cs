@@ -333,6 +333,9 @@ public unsafe partial class Control :
 
     internal byte LayoutSuspendCount { get; private set; }
 
+    internal bool _childControlsNeedAnchorLayout;
+    internal bool _forceAnchorCalculations;
+
 #if DEBUG
     internal void AssertLayoutSuspendCount(int value)
     {
@@ -4570,7 +4573,19 @@ public unsafe partial class Control :
             OnParentChanged(EventArgs.Empty);
         }
 
-        UpdateAnchorsIfRequired();
+        if (LocalAppContextSwitches.AnchorLayoutV2)
+        {
+            _forceAnchorCalculations = true;
+            try
+            {
+                DefaultLayout.UpdateAnchorInfoV2(this);
+            }
+            finally
+            {
+                _forceAnchorCalculations = false;
+            }
+        }
+
         SetState(States.CheckedHost, false);
         ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
     }
@@ -10643,16 +10658,6 @@ public unsafe partial class Control :
         }
     }
 
-    private void UpdateAnchorsIfRequired()
-    {
-        if (!LocalAppContextSwitches.AnchorLayoutV2)
-        {
-            return;
-        }
-
-        DefaultLayout.UpdateAnchorInfoV2(this, recalculateAnchors: true);
-    }
-
     /// <summary>
     ///  Sets the bounds of the control.
     /// </summary>
@@ -10681,8 +10686,15 @@ public unsafe partial class Control :
         if (_x != x || _y != y || _width != width ||
             _height != height)
         {
-            SetBoundsCore(x, y, width, height, specified);
-            UpdateAnchorsIfRequired();
+            _forceAnchorCalculations = true;
+            try
+            {
+                SetBoundsCore(x, y, width, height, specified);
+            }
+            finally
+            {
+                _forceAnchorCalculations = false;
+            }
 
             // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
             // have refreshed the interior layout or the resized control.  We only need to layout

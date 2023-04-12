@@ -76,6 +76,7 @@ public sealed partial class AnchorEditor
         {
             int XBORDER = SystemInformation.Border3DSize.Width;
             int YBORDER = SystemInformation.Border3DSize.Height;
+            SuspendLayout();
             SetBounds(0, 0, 90, 90);
 
             AccessibleName = SR.AnchorEditorAccName;
@@ -131,6 +132,7 @@ public sealed partial class AnchorEditor
                 bottom,
                 right
             });
+            ResumeLayout();
         }
 
         protected override void OnGotFocus(EventArgs e)
