@@ -249,10 +249,15 @@ namespace System.Drawing
                 return false;
             }
 
-            // Note: If this and/or the passed-in font are disposed, this method can still return true since we check for cached properties
-            // here.
-            // We need to call properties on the passed-in object since it could be a proxy in a remoting scenario and proxies don't
-            // have access to private/internal fields.
+            if (font._nativeFont == 0 || _nativeFont == 0)
+            {
+                // Disposed objects can't be compared outside of reference equality
+                return false;
+            }
+
+            // This historically checked properties as it was trying to compare equality for proxies in remoting
+            // scenarios. Remoting isn't supported on Core, but we're retaining this for compatibility, with the
+            // exception of bailing out on disposed objects above (which was not checked for in the past).
             return font.FontFamily.Equals(FontFamily) &&
                 font.GdiVerticalFont == GdiVerticalFont &&
                 font.GdiCharSet == GdiCharSet &&
@@ -476,10 +481,10 @@ namespace System.Drawing
         /// <summary>
         /// Constructor to initialize fields from an existing native GDI+ object reference. Used by ToLogFont.
         /// </summary>
-        private Font(IntPtr nativeFont, byte gdiCharSet, bool gdiVerticalFont)
+        private Font(nint nativeFont, byte gdiCharSet, bool gdiVerticalFont)
         {
-            Debug.Assert(_nativeFont == IntPtr.Zero, "GDI+ native font already initialized, this will generate a handle leak");
-            Debug.Assert(nativeFont != IntPtr.Zero, "nativeFont is null");
+            Debug.Assert(_nativeFont == 0, "GDI+ native font already initialized, this will generate a handle leak");
+            Debug.Assert(nativeFont != 0, "nativeFont is null");
 
             _nativeFont = nativeFont;
 
