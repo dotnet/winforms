@@ -57,7 +57,7 @@ namespace System.Drawing.Design
         public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             // Even though we don't use the editor service this is historically what we did.
-            if (!provider.TryGetService(out IWindowsFormsEditorService _))
+            if (!provider.TryGetService(out IWindowsFormsEditorService? _))
             {
                 return value;
             }
