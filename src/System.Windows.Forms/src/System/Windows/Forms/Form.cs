@@ -5835,10 +5835,10 @@ namespace System.Windows.Forms
                             if (sourceMenuStrip is not null)
                             {
                                 MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
-                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: built up an MDI control strip for {ActiveMdiChildInternal.Text} with {MdiControlStrip.Items.Count.ToString(CultureInfo.InvariantCulture)} items.");
-                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: {sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture)}");
+                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: built up an MDI control strip for {ActiveMdiChildInternal.Text} with {MdiControlStrip.Items.Count} items.");
+                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: {sourceMenuStrip.Items.Count}");
                                 ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
-                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: {sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture)}");
+                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: {sourceMenuStrip.Items.Count}");
                                 MdiControlStrip.MergedMenu = sourceMenuStrip;
                             }
                         }

@@ -1128,26 +1128,18 @@ namespace System.Windows.Forms
                 // Regular app case
                 string[] arguments = Environment.GetCommandLineArgs();
                 Debug.Assert(arguments is not null && arguments.Length > 0);
-                StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
-                for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
-                {
-                    sb.Append('"');
-                    sb.Append(arguments[argumentIndex]);
-                    sb.Append("\" ");
-                }
-
-                if (arguments.Length > 1)
-                {
-                    sb.Append('"');
-                    sb.Append(arguments[arguments.Length - 1]);
-                    sb.Append('"');
-                }
 
                 ProcessStartInfo currentStartInfo = new();
                 currentStartInfo.FileName = ExecutablePath;
-                if (sb.Length > 0)
+                if (arguments.Length >= 2)
                 {
-                    currentStartInfo.Arguments = sb.ToString();
+                    StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
+                    for (int argumentIndex = 1; argumentIndex < arguments.Length; argumentIndex++)
+                    {
+                        sb.Append($"\"{arguments[argumentIndex]}\" ");
+                    }
+
+                    currentStartInfo.Arguments = sb.ToString(0, sb.Length - 1);
                 }
 
                 Exit();

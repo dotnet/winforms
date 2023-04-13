@@ -355,15 +355,10 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (failures is not null)
                     {
-                        StringBuilder builder = new StringBuilder();
+                        StringBuilder builder = new StringBuilder(Environment.NewLine);
+                        builder.AppendJoin(Environment.NewLine, failures);
 
-                        foreach (string failure in failures)
-                        {
-                            builder.Append("\r\n");
-                            builder.Append(failure);
-                        }
-
-                        ex = new InvalidOperationException(string.Format(SR.CodeDomDesignerLoaderNoRootSerializerWithFailures, builder.ToString()));
+                        ex = new InvalidOperationException(string.Format(SR.CodeDomDesignerLoaderNoRootSerializerWithFailures, builder));
                         ex.HelpLink = SR.CodeDomDesignerLoaderNoRootSerializer;
                     }
                     else
@@ -1091,27 +1086,24 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(dataType);
 
             string finalName;
-            string baseName = dataType.Name;
 
             // Create a base member name that is a camel casing of the
             // data type name.
-            StringBuilder b = new StringBuilder(baseName.Length);
-
-            for (int i = 0; i < baseName.Length; i++)
+            string baseName = string.Create(dataType.Name.Length, dataType.Name, static (span, baseName) =>
             {
-                if (char.IsUpper(baseName[i]) && (i == 0 || i == baseName.Length - 1 || char.IsUpper(baseName[i + 1])))
+                for (int i = 0; i < baseName.Length; i++)
                 {
-                    b.Append(char.ToLower(baseName[i], CultureInfo.CurrentCulture));
+                    if (char.IsUpper(baseName[i]) && (i == 0 || i == baseName.Length - 1 || char.IsUpper(baseName[i + 1])))
+                    {
+                        span[i] = char.ToLower(baseName[i], CultureInfo.CurrentCulture);
+                    }
+                    else
+                    {
+                        baseName.AsSpan(i).Replace(span.Slice(i), '`', '_');
+                        break;
+                    }
                 }
-                else
-                {
-                    b.Append(baseName.AsSpan(i));
-                    break;
-                }
-            }
-
-            b.Replace('`', '_');
-            baseName = b.ToString();
+            });
 
             // Now hash up all of the member variable names using a case insensitive hash.
             CodeTypeDeclaration type = _documentType;

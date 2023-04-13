@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -238,7 +237,7 @@ namespace System.Windows.Forms
                     }
 #endif
                     intWndProcFlags |= InitializedFlags;
-                    WndProcChoice.TraceVerbose($"Final 0x{intWndProcFlags.ToString("X", CultureInfo.InvariantCulture)}");
+                    WndProcChoice.TraceVerbose($"Final 0x{intWndProcFlags:X}");
                     t_wndProcFlags = (byte)intWndProcFlags;
                     Debug.Unindent();
                 }

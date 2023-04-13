@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design
                 catch (TargetInvocationException e)
                 {
                     Debug.Fail(e.ToString());
-                    throw new TargetInvocationException(string.Format(SR.ExceptionCreatingCompEditorControl, e.ToString()), e.InnerException);
+                    throw new TargetInvocationException(string.Format(SR.ExceptionCreatingCompEditorControl, e), e.InnerException);
                 }
 
                 _pageControl.SetSite(this);

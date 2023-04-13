@@ -1234,18 +1234,16 @@ namespace System.Windows.Forms.Design
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionChanged");
                 foreach (object selObj in selComponents)
                 {
-                    Control c = selObj as Control;
-                    if (c is not null)
+                    if (selObj is Control c)
                     {
-                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, control = {c.ToString()}");
+                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, control = {c}");
                         User32.NotifyWinEvent((int)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
                     }
                 }
 
-                Control primary = svc.PrimarySelection as Control;
-                if (primary is not null)
+                if (svc.PrimarySelection is Control primary)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: Focus, control = {primary.ToString()}");
+                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: Focus, control = {primary}");
                     User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(primary, primary.Handle), User32.OBJID.CLIENT, 0);
                 }
 

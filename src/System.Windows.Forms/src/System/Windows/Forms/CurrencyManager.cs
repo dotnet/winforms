@@ -749,7 +749,7 @@ namespace System.Windows.Forms
                         OnItemChanged(resetEvent);
                         break;
                     case System.ComponentModel.ListChangedType.ItemAdded:
-                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemAdded {dbe.NewIndex.ToString(CultureInfo.InvariantCulture)}");
+                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemAdded {dbe.NewIndex}");
                         if (dbe.NewIndex <= listposition && listposition < list.Count - 1)
                         {
                             // this means the current row just moved down by one.
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
                         OnItemChanged(resetEvent);
                         break;
                     case System.ComponentModel.ListChangedType.ItemDeleted:
-                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemDeleted {dbe.NewIndex.ToString(CultureInfo.InvariantCulture)}");
+                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemDeleted {dbe.NewIndex}");
                         if (dbe.NewIndex == listposition)
                         {
                             // this means that the current row got deleted.
@@ -817,7 +817,7 @@ namespace System.Windows.Forms
                         OnItemChanged(resetEvent);
                         break;
                     case System.ComponentModel.ListChangedType.ItemChanged:
-                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemChanged {dbe.NewIndex.ToString(CultureInfo.InvariantCulture)}");
+                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemChanged {dbe.NewIndex}");
                         // the current item changed
                         if (dbe.NewIndex == listposition)
                         {
@@ -827,7 +827,7 @@ namespace System.Windows.Forms
                         OnItemChanged(new ItemChangedEventArgs(dbe.NewIndex));
                         break;
                     case System.ComponentModel.ListChangedType.ItemMoved:
-                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemMoved {dbe.NewIndex.ToString(CultureInfo.InvariantCulture)}");
+                        CompModSwitches.DataCursor.TraceVerbose($"System.ComponentModel.ListChangedType.ItemMoved {dbe.NewIndex}");
                         if (dbe.OldIndex == listposition)
                         { // current got moved.
                             // the position changes, so end the current edit. Make sure there is something that we can end edit...
@@ -949,7 +949,7 @@ namespace System.Windows.Forms
                 positionChanged = CurrencyManager_PushData();
             }
 
-            CompModSwitches.DataView.TraceVerbose($"OnItemChanged({e.Index.ToString(CultureInfo.InvariantCulture)}) {e}");
+            CompModSwitches.DataView.TraceVerbose($"OnItemChanged({e.Index}) {e}");
             try
             {
                 onItemChanged?.Invoke(this, e);
@@ -978,7 +978,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnPositionChanged(EventArgs e)
         {
-            CompModSwitches.DataView.TraceVerbose($"OnPositionChanged({listposition.ToString(CultureInfo.InvariantCulture)}) {e}");
+            CompModSwitches.DataView.TraceVerbose($"OnPositionChanged({listposition}) {e}");
             try
             {
                 onPositionChangedHandler?.Invoke(this, e);

@@ -845,19 +845,19 @@ namespace System.Windows.Forms
             int largestDigit = -1;
             int digitWidth = -1;
 
+            Span<char> charSpan = stackalloc char[1];
             for (int i = start; i < end; i++)
             {
-                char ch;
                 if (i < 10)
                 {
-                    ch = i.ToString(CultureInfo.InvariantCulture)[0];
+                    i.TryFormat(charSpan, out _);
                 }
                 else
                 {
-                    ch = (char)('A' + (i - 10));
+                    charSpan[0] = (char)('A' + (i - 10));
                 }
 
-                Size digitSize = TextRenderer.MeasureText(ch.ToString(), Font);
+                Size digitSize = TextRenderer.MeasureText(charSpan, Font);
 
                 if (digitSize.Width >= digitWidth)
                 {

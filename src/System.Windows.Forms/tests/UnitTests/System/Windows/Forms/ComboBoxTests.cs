@@ -2109,7 +2109,7 @@ namespace System.Windows.Forms.Tests
             {
                 int count = comboBox.Items.Count;
                 int index = random.Next(0, count - 1);
-                string item = "new item" + i;
+                string item = $"new item{i}";
                 comboBox.Items.Insert(index, item);
 
                 Assert.True(item.Equals(comboBox.Items[index]));
@@ -2293,7 +2293,7 @@ namespace System.Windows.Forms.Tests
         {
             for (int i = 0; i < numItems; i++)
             {
-                comboBox.Items.Add("item" + i);
+                comboBox.Items.Add($"item{i}");
             }
 
             Assert.Equal(numItems, comboBox.Items.Count);

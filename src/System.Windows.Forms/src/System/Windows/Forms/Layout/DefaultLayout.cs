@@ -372,7 +372,7 @@ namespace System.Windows.Forms.Layout
         private static void LayoutAnchoredControls(IArrangedElement container, bool updateAnchorInfoIfNeeded = false)
         {
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tAnchor Processing");
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\t\tdisplayRect: {container.DisplayRectangle.ToString()}");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\t\tdisplayRect: {container.DisplayRectangle}");
 
             Rectangle displayRectangle = container.DisplayRectangle;
             if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
@@ -658,8 +658,8 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\tanchor : {anchor.ToString()}");
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\tdock :   {dock.ToString()}");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\tanchor : {anchor}");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"\tdock :   {dock}");
 
             Size preferredSizeForDocking = Size.Empty;
             Size preferredSizeForAnchoring = Size.Empty;

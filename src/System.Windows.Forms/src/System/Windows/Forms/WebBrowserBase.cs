@@ -1260,10 +1260,7 @@ namespace System.Windows.Forms
             {
                 Invalidate();
                 HRESULT result = axOleControl.OnAmbientPropertyChange(dispid);
-                if (result.Failed)
-                {
-                    Debug.Fail(result.ToString());
-                }
+                Debug.Assert(!result.Failed, $"{result}");
             }
         }
 

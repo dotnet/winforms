@@ -353,7 +353,7 @@ public unsafe partial class Control :
             return HRESULT.E_INVALIDARG;
         }
 
-        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:GetExtent.  Aspect: {dwDrawAspect.ToString()}");
+        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:GetExtent.  Aspect: {dwDrawAspect}");
         Debug.Indent();
         ActiveXInstance.GetExtent(dwDrawAspect, (Size*)psizel);
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"value: {psizel->Width}, {psizel->Height}");

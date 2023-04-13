@@ -140,7 +140,7 @@ public class DragDropTests : ControlTestBase
             try
             {
                 string dragAcceptRtfSourcePath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
-                
+
                 if (!Directory.Exists(dragDropDirectory))
                 {
                     Directory.CreateDirectory(dragDropDirectory);
@@ -155,7 +155,7 @@ public class DragDropTests : ControlTestBase
 
                 string dragAcceptRtfContent = string.Empty;
                 string dragAcceptRtfTextContent = string.Empty;
-                
+
                 using (RichTextBox richTextBox = new())
                 {
                     richTextBox.Rtf = File.ReadAllText(dragAcceptRtfDestPath);
@@ -831,7 +831,7 @@ public class DragDropTests : ControlTestBase
             // Updates the label text.
             if (indexOfItemUnderMouseToDrop != ListBox.NoMatches)
             {
-                DropLocationLabel.Text = "Drops before item #" + (indexOfItemUnderMouseToDrop + 1);
+                DropLocationLabel.Text = $"Drops before item #{(indexOfItemUnderMouseToDrop + 1)}";
             }
             else
             {

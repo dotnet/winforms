@@ -1340,10 +1340,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         catch (Exception w)
                         {
-                            if (s_pbrsAssertPropsSwitch.Enabled)
-                            {
-                                Debug.Fail($"Bad property '{PropertyLabel}.{property.Name}': {w}");
-                            }
+                            Debug.Assert(!s_pbrsAssertPropsSwitch.Enabled, $"Bad property '{PropertyLabel}.{property.Name}': {w}");
 
                             hide = true;
                         }

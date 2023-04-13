@@ -841,10 +841,7 @@ namespace System.Windows.Forms
             {
                 Invalidate();
                 HRESULT result = GetOleControl().OnAmbientPropertyChange(dispid);
-                if (result.Failed)
-                {
-                    Debug.Fail(result.ToString());
-                }
+                Debug.Assert(!result.Failed, $"{result}");
             }
         }
 

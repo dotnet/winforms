@@ -4604,7 +4604,7 @@ namespace System.Windows.Forms
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
 
-                    s_layoutDebugSwitch.TraceVerbose(item.ToString() + Items[j].Bounds);
+                    s_layoutDebugSwitch.TraceVerbose($"{item}{item.Bounds}");
                 }
 
                 // For performance we calculate this here, since we're already iterating over the items.

@@ -6,7 +6,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization
@@ -359,28 +358,11 @@ namespace System.ComponentModel.Design.Serialization
 
             SerializationException GetSerializationException()
             {
-                StringBuilder argTypes = new();
-                if (argArray is not null)
-                {
-                    foreach (object? o in argArray)
-                    {
-                        if (argTypes.Length > 0)
-                        {
-                            argTypes.Append(", ");
-                        }
+                string argTypes = argArray is null
+                    ? string.Empty
+                    : string.Join(", ", argArray.Select(o => o?.GetType().Name ?? "null"));
 
-                        if (o is not null)
-                        {
-                            argTypes.Append(o.GetType().Name);
-                        }
-                        else
-                        {
-                            argTypes.Append("null");
-                        }
-                    }
-                }
-
-                SerializationException ex = new(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
+                SerializationException ex = new(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes))
                 {
                     HelpLink = SR.SerializationManagerNoMatchingCtor
                 };

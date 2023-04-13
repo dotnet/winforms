@@ -164,7 +164,7 @@ namespace WinformsControlsTest
 
         private void listView1_GroupCollapsedStateChanged(object sender, ListViewGroupEventArgs e)
         {
-            MessageBox.Show("CollapsedState changed at group with index " + e.GroupIndex);
+            MessageBox.Show($"CollapsedState changed at group with index {e.GroupIndex}");
         }
 
         private void AddGroupTasks()

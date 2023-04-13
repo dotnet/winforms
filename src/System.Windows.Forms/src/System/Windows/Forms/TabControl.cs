@@ -2170,14 +2170,16 @@ namespace System.Windows.Forms
             }
 
             // If there are no ampersands, we don't need to do anything here
-            if (value.IndexOf('&') < 0)
+            int firstAmpersand = value.IndexOf('&');
+            if (firstAmpersand < 0)
             {
                 return;
             }
 
             // Insert extra ampersands
             var newString = new StringBuilder();
-            for (int i = 0; i < value.Length; ++i)
+            newString.Append(value.AsSpan(0, firstAmpersand));
+            for (int i = firstAmpersand; i < value.Length; ++i)
             {
                 if (value[i] == '&')
                 {

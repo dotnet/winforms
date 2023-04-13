@@ -207,25 +207,19 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void DrawDump(Graphics g, byte[] lineBuffer, int line)
         {
-            char c;
-            StringBuilder sb = new StringBuilder(lineBuffer.Length);
-            for (int i = 0; i < lineBuffer.Length; i++)
+            string stringToDraw = string.Create(lineBuffer.Length, lineBuffer, static (span, lineBuffer) =>
             {
-                c = Convert.ToChar(lineBuffer[i]);
-                if (CharIsPrintable(c))
+                for (int i = 0; i < lineBuffer.Length; i++)
                 {
-                    sb.Append(c);
+                    char c = Convert.ToChar(lineBuffer[i]);
+                    span[i] = CharIsPrintable(c) ? c : '.';
                 }
-                else
-                {
-                    sb.Append('.');
-                }
-            }
+            });
 
             Font font = HEXDUMP_FONT;
 
             using Brush foreground = new SolidBrush(ForeColor);
-            g.DrawString(sb.ToString(), font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
+            g.DrawString(stringToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
         }
 
         /// <summary>
@@ -239,8 +233,7 @@ namespace System.ComponentModel.Design
             StringBuilder result = new StringBuilder(lineBuffer.Length * 3 + 1);
             for (int i = 0; i < lineBuffer.Length; i++)
             {
-                result.Append(lineBuffer[i].ToString("X2", CultureInfo.InvariantCulture));
-                result.Append(' ');
+                result.Append($"{lineBuffer[i]:X2} ");
                 if (i == _columnCount / 2 - 1)
                 {
                     result.Append(' ');  // Add one extra in the middle.

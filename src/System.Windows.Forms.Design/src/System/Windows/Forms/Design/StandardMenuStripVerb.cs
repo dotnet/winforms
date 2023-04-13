@@ -477,15 +477,16 @@ namespace System.Windows.Forms.Design
                 }
 
                 name.Append(nameSuffix);
-                baseName = name.ToString();
                 if (adjustCapitalization)
                 {
                     string nameOfRandomItem = ToolStripDesigner.NameFromText(null, typeof(ToolStripMenuItem), _designer.Component.Site);
                     if (!string.IsNullOrEmpty(nameOfRandomItem) && char.IsUpper(nameOfRandomItem[0]))
                     {
-                        baseName = char.ToUpper(baseName[0], CultureInfo.InvariantCulture) + baseName.Substring(1);
+                        name[0] = char.ToUpper(name[0], CultureInfo.InvariantCulture);
                     }
                 }
+
+                baseName = name.ToString();
             }
 
             // see if this name matches another one in the container..

@@ -7,6 +7,7 @@
 using System.Collections.Specialized;
 #if DEBUG
 using System.ComponentModel;
+using System.Text;
 #endif
 using System.Diagnostics;
 using System.Drawing;
@@ -732,13 +733,17 @@ namespace System.Windows.Forms.Layout
             {
                 if (element.Properties.GetObject(_lastKnownStateProperty) is Dictionary<string, string?> propertyHash)
                 {
+                    StringBuilder sb = new StringBuilder();
+
                     foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(element))
                     {
                         if (propertyHash.TryGetValue(pd.Name, out string? value) && (value != pd.Converter.ConvertToString(pd.GetValue(element))))
                         {
-                            diff += $"Prop [{pd.Name}] OLD [{propertyHash[pd.Name]}] NEW [{pd.Converter.ConvertToString(pd.GetValue(element))}]\r\n";
+                            sb.AppendLine($"Prop [{pd.Name}] OLD [{propertyHash[pd.Name]}] NEW [{pd.Converter.ConvertToString(pd.GetValue(element))}]");
                         }
                     }
+
+                    diff = sb.ToString();
                 }
             }
             else

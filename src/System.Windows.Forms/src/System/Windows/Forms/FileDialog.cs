@@ -592,19 +592,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            int length = s.Length;
-            char[] filter = new char[length + 2];
-            s.CopyTo(0, filter, 0, length);
-            for (int i = 0; i < length; i++)
+            return string.Create(s.Length + 2, s, static (span, s) =>
             {
-                if (filter[i] == '|')
-                {
-                    filter[i] = '\0';
-                }
-            }
-
-            filter[length + 1] = '\0';
-            return new string(filter);
+                s.AsSpan().Replace(span, '|', '\0');
+                span[^1] = '\0';
+            });
         }
 
         /// <summary>

@@ -1360,7 +1360,7 @@ namespace System.Windows.Forms.Design
                 ParentControlDesigner parentDesigner = host.GetDesigner(parent) as ParentControlDesigner;
                 if (parentDesigner is null)
                 {
-                    Debug.Fail("Could not get ParentControlDesigner for " + parent);
+                    Debug.Fail($"Could not get ParentControlDesigner for {parent}");
                     return;
                 }
 

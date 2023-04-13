@@ -27,6 +27,7 @@ namespace System.Windows.Forms.Design
         private Dictionary<Control, int>? _tabNext;
         private readonly Font _tabFont;
         private readonly StringBuilder _drawString;
+        private readonly Stack<int> _controlIndices;
         private readonly Brush _highlightTextBrush;
         private readonly Pen _highlightPen;
         private readonly int _selSize;
@@ -54,6 +55,7 @@ namespace System.Windows.Forms.Design
 
             // Colors and brushes...
             _drawString = new StringBuilder(12);
+            _controlIndices = new Stack<int>();
             _highlightTextBrush = new SolidBrush(SystemColors.HighlightText);
             _highlightPen = new Pen(SystemColors.Highlight);
 
@@ -231,21 +233,20 @@ namespace System.Windows.Forms.Design
             {
                 Rectangle convertedRectangle = GetConvertedBounds(control);
 
-                _drawString.Length = 0;
+                _drawString.Clear();
+                _controlIndices.Clear();
 
-                Control? parent = GetSitedParent(control);
+                Control? parent = control;
                 Control baseControl = (Control)_host.RootComponent;
 
-                while (parent != baseControl && parent is not null)
+                do
                 {
-                    _drawString.Insert(0, _decimalSep);
-                    _drawString.Insert(0, parent.TabIndex.ToString(CultureInfo.CurrentCulture));
+                    _controlIndices.Push(parent.TabIndex);
                     parent = GetSitedParent(parent);
                 }
+                while (parent != baseControl && parent is not null);
 
-                _drawString.Insert(0, ' ');
-                _drawString.Append(control.TabIndex.ToString(CultureInfo.CurrentCulture));
-                _drawString.Append(' ');
+                _drawString.Append(' ').AppendJoin(_decimalSep, _controlIndices).Append(' ');
 
                 if (_tabProperties[control].IsReadOnly)
                 {

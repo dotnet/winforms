@@ -961,7 +961,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Create a new row and insert it.
-                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose($"Inserting a new row at {index.ToString(CultureInfo.InvariantCulture)}");
+                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose($"Inserting a new row at {index}");
                         row = new ToolStripPanelRow(this);
                         RowsInternal.Insert(index, row);
                     }

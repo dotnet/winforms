@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     if (host is not null)
-                        trans = host.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool.ToString()));
+                        trans = host.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool));
                 }
                 catch (CheckoutException cxe)
                 {
