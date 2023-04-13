@@ -176,6 +176,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Drawing2D\SafeCustomLineCapHandle.cs" />
     <Compile Include="System\Drawing\Text\FontCollection.cs" />
     <Compile Include="System\Drawing\Text\InstalledFontCollection.cs" />
+    <Compile Include="System\Drawing\Imaging\CachedBitmap.cs" />
     <Compile Include="System\Drawing\Imaging\ColorMatrix.cs" />
     <Compile Include="System\Drawing\Imaging\ColorPalette.cs" />
     <Compile Include="System\Drawing\Imaging\EncoderParameter.cs" />

@@ -3851,5 +3851,36 @@ namespace System.Drawing
             // Legitimate error, throw our status exception.
             throw Gdip.StatusException(status);
         }
+
+#if NET8_0_OR_GREATER
+
+        /// <summary>
+        ///  Draws the given <paramref name="cachedBitmap"/>.
+        /// </summary>
+        /// <param name="cachedBitmap">The <see cref="CachedBitmap"/> that contains the image to be drawn.</param>
+        /// <param name="x">The x-coordinate of the upper-left corner of the drawn image.</param>
+        /// <param name="y">The y-coordinate of the upper-left corner of the drawn image.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="cachedBitmap"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///  <para>
+        ///   The <paramref name="cachedBitmap"/> is not compatible with the <see cref="Graphics"/> device state.
+        ///  </para>
+        ///  <para>
+        ///  - or -
+        ///  </para>
+        ///  <para>
+        ///   The <see cref="Graphics"/> object has a transform applied other than a translation.
+        ///  </para>
+        /// </exception>
+        public void DrawCachedBitmap(CachedBitmap cachedBitmap, int x, int y)
+        {
+            ArgumentNullException.ThrowIfNull(cachedBitmap);
+
+            Gdip.CheckStatus(Gdip.GdipDrawCachedBitmap(
+                new(this, NativeGraphics),
+                new(cachedBitmap, cachedBitmap.Handle),
+                x, y));
+        }
+#endif
     }
 }

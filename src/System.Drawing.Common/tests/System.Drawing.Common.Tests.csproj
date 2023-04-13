@@ -37,6 +37,7 @@
     <Compile Include="Graphics_GetContextTests.cs" />
     <Compile Include="IconTests.cs" />
     <Compile Include="ImageTests.cs" />
+    <Compile Include="Imaging\CachedBitmapTests.cs" />
     <Compile Include="Imaging\ImageAttributesTests.cs" />
     <Compile Include="Imaging\MetafileTests.cs" />
     <Compile Include="Imaging\PropertyItemTests.cs" />
