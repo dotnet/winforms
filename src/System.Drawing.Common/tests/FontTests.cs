@@ -341,18 +341,14 @@ namespace System.Drawing.Tests
         }
 
         [Fact]
-        public void Ctor_DisposedFont_Success()
+        public void Ctor_DisposedFont_ThrowsObjectDisposed()
         {
             using (FontFamily family = FontFamily.GenericSerif)
             {
                 var font = new Font(family, 10);
                 font.Dispose();
 
-                using (var copy = new Font(font, FontStyle.Italic))
-                {
-                    Assert.Equal(FontStyle.Italic, copy.Style);
-                    Assert.Equal(family.Name, copy.Name);
-                }
+                Assert.Throws<ObjectDisposedException>(() => new Font(font, FontStyle.Italic));
             }
         }
 

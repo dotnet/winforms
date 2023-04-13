@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
@@ -18,17 +19,17 @@ namespace System.Drawing
             "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [TypeConverter(typeof(FontConverter))]
     [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
     {
-        private IntPtr _nativeFont;
+        private nint _nativeFont;
         private float _fontSize;
         private FontStyle _fontStyle;
-        private FontFamily _fontFamily = null!;
+        private FontFamily? _fontFamily;
         private GraphicsUnit _fontUnit;
         private byte _gdiCharSet = SafeNativeMethods.DEFAULT_CHARSET;
         private bool _gdiVerticalFont;
-        private string _systemFontName = "";
+        private string _systemFontName = string.Empty;
         private string? _originalFontName;
 
         // Return value is in Unit (the unit the font was created in)
@@ -71,7 +72,8 @@ namespace System.Drawing
         /// Gets the <see cref='Drawing.FontFamily'/> of this <see cref='Font'/>.
         /// </summary>
         [Browsable(false)]
-        public FontFamily FontFamily => _fontFamily;
+        public FontFamily FontFamily
+            => _fontFamily is { } family ? family : throw new ObjectDisposedException(nameof(Font));
 
         /// <summary>
         /// Gets the face name of this <see cref='Font'/> .
@@ -80,7 +82,7 @@ namespace System.Drawing
         [Editor("System.Drawing.Design.FontNameEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
                 "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
         [TypeConverter(typeof(FontConverter.FontNameConverter))]
-        public string Name => FontFamily.Name;
+        public string Name => _fontFamily?.Name ?? string.Empty;
 
         /// <summary>
         /// Gets the unit of measure for this <see cref='Font'/>.
@@ -135,7 +137,7 @@ namespace System.Drawing
         /// <summary>
         /// Get native GDI+ object pointer. This property triggers the creation of the GDI+ native object if not initialized yet.
         /// </summary>
-        internal IntPtr NativeFont => _nativeFont;
+        internal nint NativeFont => _nativeFont;
 
         /// <summary>
         /// Cleans up Windows resources for this <see cref='Font'/>.
@@ -144,10 +146,11 @@ namespace System.Drawing
 
         private Font(SerializationInfo info, StreamingContext context)
         {
-            string name = info.GetString("Name")!; // Do not rename (binary serialization)
-            FontStyle style = (FontStyle)info.GetValue("Style", typeof(FontStyle))!; // Do not rename (binary serialization)
-            GraphicsUnit unit = (GraphicsUnit)info.GetValue("Unit", typeof(GraphicsUnit))!; // Do not rename (binary serialization)
-            float size = info.GetSingle("Size"); // Do not rename (binary serialization)
+            // Do not rename these (binary serialization)
+            string name = info.GetString("Name")!;
+            FontStyle style = (FontStyle)info.GetValue("Style", typeof(FontStyle))!;
+            GraphicsUnit unit = (GraphicsUnit)info.GetValue("Unit", typeof(GraphicsUnit))!;
+            float size = info.GetSingle("Size");
 
             Initialize(name, size, style, unit, SafeNativeMethods.DEFAULT_CHARSET, IsVerticalName(name));
         }
@@ -155,10 +158,10 @@ namespace System.Drawing
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
         {
             string name = string.IsNullOrEmpty(OriginalFontName) ? Name : OriginalFontName;
-            si.AddValue("Name", name); // Do not rename (binary serialization)
-            si.AddValue("Size", Size); // Do not rename (binary serialization)
-            si.AddValue("Style", Style); // Do not rename (binary serialization)
-            si.AddValue("Unit", Unit); // Do not rename (binary serialization)
+            si.AddValue("Name", name);      // Do not rename (binary serialization)
+            si.AddValue("Size", Size);      // Do not rename (binary serialization)
+            si.AddValue("Style", Style);    // Do not rename (binary serialization)
+            si.AddValue("Unit", Unit);      // Do not rename (binary serialization)
         }
 
         private static bool IsVerticalName(string familyName) => familyName?.Length > 0 && familyName[0] == '@';
@@ -174,25 +177,34 @@ namespace System.Drawing
 
         private void Dispose(bool disposing)
         {
-            if (_nativeFont != IntPtr.Zero)
+            // As the font family can be passed in we cannot explicitly dispose it, but we should still null it out
+            // to avoid rooting it.
+            //
+            // https://github.com/dotnet/winforms/issues/8823
+
+            _fontFamily = null;
+
+            if (_nativeFont == 0)
             {
-                try
-                {
+                return;
+            }
+
+            try
+            {
 #if DEBUG
-                    int status = !Gdip.Initialized ? Gdip.Ok :
+                int status = !Gdip.Initialized ? Gdip.Ok :
 #endif
-                    Gdip.GdipDeleteFont(new HandleRef(this, _nativeFont));
+                Gdip.GdipDeleteFont(new HandleRef(this, _nativeFont));
 #if DEBUG
-                    Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
 #endif
-                }
-                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
-                {
-                }
-                finally
-                {
-                    _nativeFont = IntPtr.Zero;
-                }
+            }
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            {
+            }
+            finally
+            {
+                _nativeFont = 0;
             }
         }
 
@@ -232,7 +244,7 @@ namespace System.Drawing
                 return true;
             }
 
-            if (!(obj is Font font))
+            if (obj is not Font font)
             {
                 return false;
             }
@@ -332,11 +344,11 @@ namespace System.Drawing
             // Note: GDI+ creates singleton font family objects (from the corresponding font file) and reference count them so
             // if creating the font object from an external FontFamily, this object's FontFamily will share the same native object.
             int status = Gdip.GdipCreateFont(
-                                    new HandleRef(this, _fontFamily.NativeFamily),
-                                    _fontSize,
-                                    _fontStyle,
-                                    _fontUnit,
-                                    out _nativeFont);
+                new HandleRef(this, _fontFamily.NativeFamily),
+                _fontSize,
+                _fontStyle,
+                _fontUnit,
+                out _nativeFont);
 
             // Special case this common error message to give more information
             if (status == Gdip.FontStyleNotFound)
@@ -494,7 +506,7 @@ namespace System.Drawing
         /// <summary>
         /// Initializes this object's fields.
         /// </summary>
-        private void Initialize(FontFamily family, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
+        private void Initialize(FontFamily? family, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
         {
             ArgumentNullException.ThrowIfNull(family);
 
@@ -511,13 +523,13 @@ namespace System.Drawing
             _gdiCharSet = gdiCharSet;
             _gdiVerticalFont = gdiVerticalFont;
 
-            if (_fontFamily == null)
+            if (_fontFamily is null)
             {
                 // GDI+ FontFamily is a singleton object.
                 SetFontFamily(new FontFamily(family.NativeFamily));
             }
 
-            if (_nativeFont == IntPtr.Zero)
+            if (_nativeFont == 0)
             {
                 CreateNativeFont();
             }
