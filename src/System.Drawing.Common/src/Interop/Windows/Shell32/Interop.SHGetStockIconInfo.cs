@@ -10,6 +10,7 @@ internal static partial class Interop
     {
 #if NET8_0_OR_GREATER
         internal const uint SHGSI_ICON = 0x000000100;
+        internal const uint SHGSI_ICONLOCATION = 0x00000000;
 
         [LibraryImport(Libraries.Shell32)]
         internal static partial HRESULT SHGetStockIconInfo(

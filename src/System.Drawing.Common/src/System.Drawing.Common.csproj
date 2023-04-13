@@ -277,6 +277,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\Ole32\Interop.STATFLAG.cs" />
     <Compile Include="Interop\Windows\Ole32\Interop.STGM.cs" />
     <Compile Include="Interop\Windows\Shell32\Interop.ExtractAssociatedIcon.cs" />
+    <Compile Include="Interop\Windows\Shell32\Interop.SHDefExtractIcon.cs" />
     <Compile Include="Interop\Windows\Shell32\Interop.SHGetStockIconInfo.cs" />
     <Compile Include="Interop\Windows\User32\Interop.CopyImage.cs" />
     <Compile Include="Interop\Windows\User32\Interop.CreateIconFromResourceEx.cs" />

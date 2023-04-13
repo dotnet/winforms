@@ -855,5 +855,80 @@ namespace System.Drawing.Tests
                 }
             }
         }
+
+#if NET8_0_OR_GREATER
+        [Fact]
+        public void ExtractIcon_NullPath_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => { Icon.ExtractIcon(null!, 0, 16); });
+            Assert.Throws<ArgumentNullException>(() => { Icon.ExtractIcon(null!, 0); });
+        }
+
+        [Fact]
+        public void ExtractIcon_EmptyPath_ThrowsIOException()
+        {
+            Assert.Throws<IOException>(() => { Icon.ExtractIcon(string.Empty, 0, 16); });
+            Assert.Throws<IOException>(() => { Icon.ExtractIcon(string.Empty, 0); });
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(int.MinValue)]
+        [InlineData(ushort.MaxValue + 1)]
+        public void ExtractIcon_InvalidSize_ThrowsArgumentOutOfRange(int size)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => { Icon.ExtractIcon("Foo", 0, size); });
+        }
+
+        [Fact]
+        public void ExtractIcon_FileDoesNotExist_ThrowsIOException()
+        {
+            Assert.Throws<IOException>(() =>
+            {
+                Icon.ExtractIcon(Path.GetRandomFileName() + ".ico", 0, 16);
+            });
+
+            Assert.Throws<IOException>(() =>
+            {
+                Icon.ExtractIcon(Path.GetRandomFileName() + ".ico", 0);
+            });
+        }
+
+        [Fact]
+        public void ExtractIcon_InvalidExistingFile_ReturnsNull()
+        {
+            using TempFile file = TempFile.Create("NotAnIcon");
+            Assert.Null(Icon.ExtractIcon(file.Path, 0, 16));
+            Assert.Null(Icon.ExtractIcon(file.Path, 0));
+        }
+
+        [Fact]
+        public void ExtractIcon_IterateRegeditByIndex()
+        {
+            Icon? icon;
+            int count = 0;
+            while ((icon = Icon.ExtractIcon("regedit.exe", count, 16)) is not null)
+            {
+                Assert.NotEqual(0, icon.Handle);
+                Assert.Equal(16, icon.Width);
+                Assert.Equal(16, icon.Height);
+                count++;
+                icon.Dispose();
+            }
+
+            // Recent builds of Windows have added a few more icons to regedit.
+            Assert.True(count == 7 || count == 5, $"count was {count}, expected 5 or 7");
+        }
+
+        [Fact]
+        public void ExtractIcon_RegeditByResourceId()
+        {
+            using Icon? icon = Icon.ExtractIcon("regedit.exe", -100, 256);
+            Assert.NotNull(icon);
+            Assert.Equal(256, icon.Width);
+            Assert.Equal(256, icon.Height);
+        }
+#endif
     }
 }
