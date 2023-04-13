@@ -35,6 +35,7 @@ namespace System.Resources
         private object? _value;
         private ResXFileRef? _fileRef;
 
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
         private IFormatter? _binaryFormatter;
 
         // This is going to be used to check if a ResXDataNode is of type ResXFileRef
@@ -85,10 +86,12 @@ namespace System.Resources
 
             Type valueType = (value is null) ? typeof(object) : value.GetType();
 
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is not null && !valueType.IsSerializable)
             {
                 throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
             if (value is not null)
             {
@@ -241,10 +244,12 @@ namespace System.Resources
             }
 
             Type valueType = (value is null) ? typeof(object) : value.GetType();
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is not null && !valueType.IsSerializable)
             {
                 throw new InvalidOperationException(string.Format(SR.NotSerializableType, _name, valueType.FullName));
             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
 
             TypeConverter converter = TypeDescriptor.GetConverter(valueType);
             bool toString = converter.CanConvertTo(typeof(string));
@@ -287,20 +292,27 @@ namespace System.Resources
                 return;
             }
 
-            _binaryFormatter ??= new BinaryFormatter
-            {
-                Binder = new ResXSerializationBinder(_typeNameConverter)
-            };
+#pragma warning disable SYSLIB0051 // Type or member is obsolete
+            SerializeWithBinaryFormatter(_binaryFormatter, nodeInfo, value, _typeNameConverter);
+#pragma warning restore SYSLIB0051 // Type or member is obsolete
 
-            using (MemoryStream ms = new MemoryStream())
-            {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                _binaryFormatter.Serialize(ms, value);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                nodeInfo.ValueData = ToBase64WrappedString(ms.ToArray());
-            }
+            static void SerializeWithBinaryFormatter(IFormatter? binaryFormatter, DataNodeInfo nodeInfo, object value, Func<Type?, string>? typeNameConverter)
+            {
+                binaryFormatter ??= new BinaryFormatter
+                {
+                    Binder = new ResXSerializationBinder(typeNameConverter)
+                };
 
-            nodeInfo.MimeType = ResXResourceWriter.DefaultSerializedObjectMimeType;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    binaryFormatter.Serialize(ms, value);
+                    nodeInfo.ValueData = ToBase64WrappedString(ms.ToArray());
+                }
+
+                nodeInfo.MimeType = ResXResourceWriter.DefaultSerializedObjectMimeType;
+            }
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
 
         private object? GenerateObjectFromDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)
@@ -362,30 +374,7 @@ namespace System.Resources
                 }
             }
 
-            if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType))
-            {
-                string text = dataNodeInfo.ValueData;
-                byte[] serializedData = FromBase64WrappedString(text);
-
-                if (serializedData is not null && serializedData.Length > 0)
-                {
-                    _binaryFormatter ??= new BinaryFormatter
-                    {
-                        Binder = new ResXSerializationBinder(typeResolver)
-                    };
-
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    object? result = _binaryFormatter.Deserialize(new MemoryStream(serializedData));
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                    if (result is ResXNullRef)
-                    {
-                        result = null;
-                    }
-
-                    return result;
-                }
-            }
-            else if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)
+            if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)
                 && !string.IsNullOrEmpty(typeName))
             {
                 Type? type = ResolveType(typeName, typeResolver);
@@ -407,6 +396,36 @@ namespace System.Resources
             }
 
             return null;
+        }
+
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+        private object? GenerateObjectFromBinaryDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)
+        {
+            string? mimeTypeName = dataNodeInfo.MimeType;
+            if (!string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType))
+            {
+                return null;
+            }
+
+            byte[] serializedData = FromBase64WrappedString(dataNodeInfo.ValueData);
+
+            if (!(serializedData?.Length > 0))
+            {
+                return null;
+            }
+
+            _binaryFormatter ??= new BinaryFormatter
+            {
+                Binder = new ResXSerializationBinder(typeResolver)
+            };
+
+            object? result = _binaryFormatter.Deserialize(new MemoryStream(serializedData));
+            if (result is ResXNullRef)
+            {
+                result = null;
+            }
+
+            return result;
         }
 
         internal DataNodeInfo GetDataNodeInfo()
@@ -504,9 +523,10 @@ namespace System.Resources
                         // Have a mimetype, our only option is to deserialize to know what we're dealing with.
                         try
                         {
-                            typeName = MultitargetUtil.GetAssemblyQualifiedName(
-                                GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver)?.GetType(),
-                                _typeNameConverter);
+#pragma warning disable SYSLIB0051 // Type or member is obsolete
+                            var type = _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver)?.GetType() : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver)?.GetType();
+#pragma warning restore SYSLIB0051 // Type or member is obsolete
+                            typeName = MultitargetUtil.GetAssemblyQualifiedName(type, _typeNameConverter);
                         }
                         catch (Exception ex)
                         {
@@ -567,7 +587,9 @@ namespace System.Resources
             else if (_nodeInfo?.ValueData is not null)
             {
                 // It's embedded, deserialize it.
-                return GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
+#pragma warning disable SYSLIB0051 // Type or member is obsolete
+                return _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver) : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
+#pragma warning restore SYSLIB0051 // Type or member is obsolete
             }
 
             // Schema is wrong and says minOccur for Value is 0, but it's too late to change it.

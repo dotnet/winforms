@@ -115,8 +115,8 @@ namespace System.Windows.Forms.Tests
 
             using (var stream = new MemoryStream())
             {
-                var formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+                var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, original);
 
                 stream.Position = 0;

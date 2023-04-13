@@ -1533,9 +1533,8 @@ namespace System.Windows.Forms.Design
                 {
                     object serializationData = ds.Serialize(selectedComponents);
                     MemoryStream stream = new MemoryStream();
-                    BinaryFormatter formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    formatter.Serialize(stream, serializationData);
+                    new BinaryFormatter().Serialize(stream, serializationData);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     stream.Seek(0, SeekOrigin.Begin);
                     byte[] bytes = stream.GetBuffer();
@@ -1579,9 +1578,8 @@ namespace System.Windows.Forms.Design
                 {
                     object serializationData = ds.Serialize(selectedComponents);
                     MemoryStream stream = new MemoryStream();
-                    BinaryFormatter formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    formatter.Serialize(stream, serializationData);
+                    new BinaryFormatter().Serialize(stream, serializationData);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     stream.Seek(0, SeekOrigin.Begin);
                     byte[] bytes = stream.GetBuffer();
@@ -2028,10 +2026,9 @@ namespace System.Windows.Forms.Design
                                 IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
                                 if (ds is not null)
                                 {
-                                    BinaryFormatter formatter = new BinaryFormatter();
                                     s.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                                    object serializationData = formatter.Deserialize(s);
+                                    object serializationData = new BinaryFormatter().Deserialize(s);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                                     using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                                     {

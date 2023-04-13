@@ -369,14 +369,16 @@ namespace System.Windows.Forms
 
             private static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
             {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 BinaryFormatter formatter = new BinaryFormatter();
                 if (restrictDeserialization)
                 {
                     formatter.Binder = new BitmapBinder();
                 }
 
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
                 formatter.AssemblyFormat = FormatterAssemblyStyle.Simple;
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
                 return formatter.Deserialize(stream);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }

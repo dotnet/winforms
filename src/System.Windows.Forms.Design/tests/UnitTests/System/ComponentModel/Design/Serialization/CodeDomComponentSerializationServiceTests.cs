@@ -715,7 +715,6 @@ namespace System.ComponentModel.Design.Serialization.Tests
             SerializationStore store = service.CreateStore();
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
             if (formatterEnabled)
             {
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, store));
@@ -724,8 +723,6 @@ namespace System.ComponentModel.Design.Serialization.Tests
             {
                 Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, store));
             }
-
-#pragma warning restore SYSLIB0011
         }
 
         [Fact]

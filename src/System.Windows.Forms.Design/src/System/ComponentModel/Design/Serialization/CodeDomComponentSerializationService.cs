@@ -349,11 +349,10 @@ namespace System.ComponentModel.Design.Serialization
                         Debug.Assert(_resourceStream is null, "Attempting to close a serialization store with already serialized resources");
                         if (_resourceStream is null)
                         {
-                            BinaryFormatter formatter = new BinaryFormatter();
                             _resourceStream = new MemoryStream();
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                            formatter.Serialize(_resourceStream, _resources.Data);
+                            new BinaryFormatter().Serialize(_resourceStream, _resources.Data);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                         }
                     }
@@ -424,10 +423,9 @@ namespace System.ComponentModel.Design.Serialization
                 // recreate resources
                 if (_resourceStream is not null)
                 {
-                    BinaryFormatter formatter = new BinaryFormatter();
                     _resourceStream.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    Hashtable resources = formatter.Deserialize(_resourceStream) as Hashtable;
+                    Hashtable resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable;
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     _resources = new LocalResourceManager(resources);
                 }
@@ -520,9 +518,8 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             internal static CodeDomSerializationStore Load(Stream stream)
             {
-                BinaryFormatter f = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                return (CodeDomSerializationStore)f.Deserialize(stream);
+                return (CodeDomSerializationStore)new BinaryFormatter().Deserialize(stream);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
 
@@ -1175,6 +1172,7 @@ namespace System.ComponentModel.Design.Serialization
                                         if (md._member.Attributes.Contains(DesignOnlyAttribute.Yes))
                                         {
                                             // For design time properties, we write their value into a resource blob.
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
                                             if (md._member is PropertyDescriptor prop && prop.PropertyType.IsSerializable)
                                             {
                                                 if (state[StateResources] is null)
@@ -1184,6 +1182,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                                 ((Hashtable)state[StateResources])[prop.Name] = prop.GetValue(data._value);
                                             }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
                                         }
                                         else
                                         {

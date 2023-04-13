@@ -51,7 +51,6 @@ namespace System.ComponentModel.Design.Tests
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
             var collection = new ExceptionCollection(new ArrayList());
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
             if (formatterEnabled)
             {
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
@@ -60,7 +59,6 @@ namespace System.ComponentModel.Design.Tests
             {
                 Assert.Throws<NotSupportedException>(() => formatter.Serialize(stream, collection));
             }
-#pragma warning restore SYSLIB0011
         }
 
         [Fact]

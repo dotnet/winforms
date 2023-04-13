@@ -382,10 +382,12 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
                 if (!serialized && originalCollection.GetType().IsSerializable)
                 {
                     result = SerializeToResourceExpression(manager, originalCollection, false);
                 }
+#pragma warning restore SYSLIB0050 // Type or member is obsolete
             }
             else
             {

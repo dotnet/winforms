@@ -47,11 +47,10 @@ public partial class Control
 
                 MemoryStream stream = new(streamData);
 
-                BinaryFormatter formatter = new();
                 try
                 {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    _bag = (Hashtable)formatter.Deserialize(stream);
+                    _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                 }
                 catch (Exception e)
@@ -100,9 +99,8 @@ public partial class Control
             internal void Write(IStream* istream)
             {
                 using DataStreamFromComStream stream = new(istream);
-                BinaryFormatter formatter = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                formatter.Serialize(stream, _bag);
+                new BinaryFormatter().Serialize(stream, _bag);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }

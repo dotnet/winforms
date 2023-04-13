@@ -39,6 +39,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public CodeLinePragma LinePragma { get; }
 
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             throw new PlatformNotSupportedException();

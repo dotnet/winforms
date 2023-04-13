@@ -94,7 +94,6 @@ namespace System.Windows.Forms.Design.Serialization.Tests
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
             var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
             if (formatterEnabled)
             {
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, exception));
