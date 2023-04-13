@@ -37,9 +37,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         <Obsolete("Type or member obsolete.", DiagnosticId:="SYSLIB0051")>
         Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
-#Disable Warning SYSLIB0051 ' Type or member is obsolete
             MyBase.New(info, context)
-#Enable Warning SYSLIB0051 ' Type or member is obsolete
         End Sub
     End Class
 End Namespace
