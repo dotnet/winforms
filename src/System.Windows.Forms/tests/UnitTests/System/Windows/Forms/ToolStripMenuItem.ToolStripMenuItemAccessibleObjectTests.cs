@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(false, CheckState.Checked, true)]
         [InlineData(false, CheckState.Unchecked, false)]
         [InlineData(false, CheckState.Indeterminate, true)]
-        public void ToolStripMenuItemAccessibleObject_IsTogglePatternSupported_ReturnExpected(bool checkOnClick, CheckState checkState, bool expected)
+        public void ToolStripMenuItemAccessibleObject_IsTogglePatternSupported_ReturnsExpected(bool checkOnClick, CheckState checkState, bool expected)
         {
             using ToolStripMenuItem toolStripMenuItem = new()
             {

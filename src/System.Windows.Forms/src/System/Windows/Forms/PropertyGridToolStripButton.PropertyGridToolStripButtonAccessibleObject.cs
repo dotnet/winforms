@@ -26,6 +26,7 @@ namespace System.Windows.Forms
                 => patternId switch
                 {
                     UiaCore.UIA.SelectionItemPatternId => _owningPropertyGridToolStripButton._selectItemEnabled,
+                    UiaCore.UIA.TogglePatternId => false,
                     _ => base.IsPatternSupported(patternId)
                 };
 

@@ -32,6 +32,13 @@ namespace System.Windows.Forms
                     _ => base.GetPropertyValue(propertyID)
                 };
 
+            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+                patternId switch
+                {
+                    UiaCore.UIA.TogglePatternId => _ownerItem.CheckOnClick || _ownerItem.Checked,
+                    _ => base.IsPatternSupported(patternId)
+                };
+
             public override AccessibleRole Role
             {
                 get
@@ -64,6 +71,26 @@ namespace System.Windows.Forms
                     return base.State;
                 }
             }
+
+            #region Toggle Pattern
+
+            internal override void Toggle()
+            {
+                if (_ownerItem.CheckOnClick)
+                {
+                    _ownerItem.Checked = !_ownerItem.Checked;
+                }
+            }
+
+            internal override UiaCore.ToggleState ToggleState =>
+                _ownerItem.CheckState switch
+                {
+                    CheckState.Checked => UiaCore.ToggleState.On,
+                    CheckState.Unchecked => UiaCore.ToggleState.Off,
+                    _ => UiaCore.ToggleState.Indeterminate
+                };
+
+            #endregion
         }
     }
 }

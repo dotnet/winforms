@@ -70,6 +70,7 @@ namespace WinformsControlsTest
             this.toolStrip1.Size = new System.Drawing.Size(481, 22);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.TabStop = true;
             // 
             // toolStrip2
             // 
@@ -86,6 +87,7 @@ namespace WinformsControlsTest
             this.toolStrip2.Size = new System.Drawing.Size(481, 22);
             this.toolStrip2.TabIndex = 1;
             this.toolStrip2.Text = "toolStrip2";
+            this.toolStrip2.TabStop = true;
             // 
             // toolStrip2_Button1
             //
@@ -183,6 +185,7 @@ namespace WinformsControlsTest
             this.statusStrip1.Size = new System.Drawing.Size(481, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.TabStop = true;
             // 
             // label1
             // 
