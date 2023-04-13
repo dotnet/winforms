@@ -179,7 +179,8 @@ namespace System.Windows.Forms.UITests
         private Point GetCellPositionByDate(MonthCalendar calendar, DateTime dateTime)
         {
             MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)calendar.AccessibilityObject;
-            return accessibleObject.TestAccessor().Dynamic.GetCellByDate(dateTime.Date).Bounds.Location;
+            CalendarCellAccessibleObject cell = accessibleObject.TestAccessor().Dynamic.GetCellByDate(dateTime.Date);
+            return cell.Bounds.Location + (cell.Bounds.Size / 2);
         }
 
         private async Task ClickOnDateAsync(Form form, MonthCalendar calendar, DateTime date)
