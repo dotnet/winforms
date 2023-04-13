@@ -38,9 +38,8 @@ namespace System.ComponentModel.Design.Serialization
         ///  Gets the line pragma object that is related to this error.
         /// </summary>
         public CodeLinePragma LinePragma { get; }
-#if NET8_0_OR_GREATER
-        [Obsolete]
-#endif
+
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             throw new PlatformNotSupportedException();

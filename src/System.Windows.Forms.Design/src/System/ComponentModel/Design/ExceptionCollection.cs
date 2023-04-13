@@ -33,9 +33,7 @@ namespace System.ComponentModel.Design
 
         public ArrayList? Exceptions => _exceptions is null ? null : new ArrayList(_exceptions);
 
-#if NET8_0_OR_GREATER
-        [Obsolete]
-#endif
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             throw new PlatformNotSupportedException();

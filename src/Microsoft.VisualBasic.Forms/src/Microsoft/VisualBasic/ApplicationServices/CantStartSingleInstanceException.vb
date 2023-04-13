@@ -36,10 +36,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Deserialization constructor must be defined since we are serializable
         <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
         Protected Sub New(ByVal info As Runtime.Serialization.SerializationInfo, ByVal context As Runtime.Serialization.StreamingContext)
-#Disable Warning SYSLIB0051 ' Type or member is obsolete
             MyBase.New(info, context)
-#Enable Warning SYSLIB0051 ' Type or member is obsolete
         End Sub
     End Class
 End Namespace

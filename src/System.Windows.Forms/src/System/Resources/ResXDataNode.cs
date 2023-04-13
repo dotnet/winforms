@@ -35,9 +35,7 @@ namespace System.Resources
         private object? _value;
         private ResXFileRef? _fileRef;
 
-#if NET8_0_OR_GREATER
         [Obsolete(DiagnosticId = "SYSLIB0051")]
-#endif
         private IFormatter? _binaryFormatter;
 
         // This is going to be used to check if a ResXDataNode is of type ResXFileRef
@@ -401,9 +399,7 @@ namespace System.Resources
             return null;
         }
 
-#if NET8_0_OR_GREATER
         [Obsolete(DiagnosticId = "SYSLIB0051")]
-#endif
         private object? GenerateObjectFromBinaryDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)
         {
             string? mimeTypeName = dataNodeInfo.MimeType;
