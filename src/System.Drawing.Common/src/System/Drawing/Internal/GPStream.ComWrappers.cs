@@ -1,18 +1,19 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Buffers;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing.Internal
 {
-    internal sealed partial class GPStream : Interop.Ole32.IStream
+    internal sealed partial class GPStream : Ole32.IStream
     {
-        public unsafe Interop.HRESULT Clone(IntPtr* ppstm)
+        public unsafe HRESULT Clone(IntPtr* ppstm)
         {
             if (ppstm == null)
             {
-                return Interop.HRESULT.STG_E_INVALIDPOINTER;
+                return HRESULT.STG_E_INVALIDPOINTER;
             }
 
             // The cloned object should have the same current "position"
@@ -23,10 +24,10 @@ namespace System.Drawing.Internal
 
             *ppstm = DrawingCom.Instance.GetOrCreateComInterfaceForObject(clone, CreateComInterfaceFlags.None);
 
-            return Interop.HRESULT.S_OK;
+            return HRESULT.S_OK;
         }
 
-        public unsafe Interop.HRESULT CopyTo(IntPtr pstm, ulong cb, ulong* pcbRead, ulong* pcbWritten)
+        public unsafe HRESULT CopyTo(IntPtr pstm, ulong cb, ulong* pcbRead, ulong* pcbWritten)
         {
             byte[] buffer = ArrayPool<byte>.Shared.Rent(4096);
 
@@ -49,8 +50,8 @@ namespace System.Drawing.Internal
                     }
 
                     uint written;
-                    Interop.HRESULT hr = (Interop.HRESULT)WriteToStream(pstm, b, read, &written);
-                    if (hr != Interop.HRESULT.S_OK)
+                    HRESULT hr = (HRESULT)WriteToStream(pstm, b, read, &written);
+                    if (hr != HRESULT.S_OK)
                     {
                         return hr;
                     }
@@ -70,7 +71,7 @@ namespace System.Drawing.Internal
                 *pcbWritten = totalWritten;
             }
 
-            return Interop.HRESULT.S_OK;
+            return HRESULT.S_OK;
         }
 
         private static unsafe int WriteToStream(IntPtr pstm, byte* pv, uint cb, uint* pcbWritten)

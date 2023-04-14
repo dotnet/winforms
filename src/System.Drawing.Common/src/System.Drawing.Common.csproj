@@ -200,6 +200,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Internal\GPStream.cs" />
     <Compile Include="System\Drawing\Internal\GPStream.ComWrappers.cs" />
     <Compile Include="System\Drawing\Internal\SystemColorTracker.cs" />
+    <Compile Include="System\Drawing\Interop\LOGFONT.cs" />
     <Compile Include="System\Drawing\LocalAppContextSwitches.cs" />
     <Compile Include="System\Drawing\Printing\DefaultPrintController.cs" />
     <Compile Include="System\Drawing\Printing\ModeField.cs" />
@@ -288,7 +289,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\User32\Interop.GetIconInfo.cs" />
     <Compile Include="Interop\Windows\User32\Interop.GetSystemMetrics.cs" />
     <Compile Include="Interop\Windows\User32\Interop.LoadIcon.cs" />
-    <Compile Include="Interop\Windows\User32\Interop.LOGFONT.cs" />
     <Compile Include="Interop\Windows\User32\Interop.ReleaseDC.cs" />
     <Compile Include="Interop\Windows\User32\Interop.SystemParametersInfo.cs" />
     <Compile Include="Interop\Windows\User32\Interop.NONCLIENTMETRICS.cs" />

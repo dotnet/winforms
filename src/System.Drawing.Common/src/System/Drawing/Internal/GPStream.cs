@@ -1,11 +1,12 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.IO;
+using static Interop;
 
 namespace System.Drawing.Internal
 {
-    internal sealed partial class GPStream : Interop.Ole32.IStream
+    internal sealed partial class GPStream : Ole32.IStream
     {
         private readonly Stream _dataStream;
 
@@ -129,27 +130,27 @@ namespace System.Drawing.Internal
             _dataStream.SetLength(checked((long)value));
         }
 
-        public unsafe void Stat(Interop.Ole32.STATSTG* pstatstg, Interop.Ole32.STATFLAG grfStatFlag)
+        public unsafe void Stat(Ole32.STATSTG* pstatstg, Ole32.STATFLAG grfStatFlag)
         {
             if (pstatstg == null)
             {
                 throw new ArgumentNullException(nameof(pstatstg));
             }
 
-            *pstatstg = new Interop.Ole32.STATSTG
+            *pstatstg = new Ole32.STATSTG
             {
                 cbSize = (ulong)_dataStream.Length,
-                type = Interop.Ole32.STGTY.STGTY_STREAM,
+                type = Ole32.STGTY.STGTY_STREAM,
 
                 // Default read/write access is STGM_READ, which == 0
                 grfMode = _dataStream.CanWrite
                     ? _dataStream.CanRead
-                        ? Interop.Ole32.STGM.STGM_READWRITE
-                        : Interop.Ole32.STGM.STGM_WRITE
-                    : Interop.Ole32.STGM.Default
+                        ? Ole32.STGM.STGM_READWRITE
+                        : Ole32.STGM.STGM_WRITE
+                    : Ole32.STGM.Default
             };
 
-            if (grfStatFlag == Interop.Ole32.STATFLAG.STATFLAG_DEFAULT)
+            if (grfStatFlag == Ole32.STATFLAG.STATFLAG_DEFAULT)
             {
                 // Caller wants a name
                 pstatstg->AllocName(_dataStream is FileStream fs ? fs.Name : _dataStream.ToString());
@@ -167,16 +168,16 @@ namespace System.Drawing.Internal
                 *pcbWritten = cb;
         }
 
-        public Interop.HRESULT LockRegion(ulong libOffset, ulong cb, uint dwLockType)
+        public HRESULT LockRegion(ulong libOffset, ulong cb, uint dwLockType)
         {
             // Documented way to say we don't support locking
-            return Interop.HRESULT.STG_E_INVALIDFUNCTION;
+            return HRESULT.STG_E_INVALIDFUNCTION;
         }
 
-        public Interop.HRESULT UnlockRegion(ulong libOffset, ulong cb, uint dwLockType)
+        public HRESULT UnlockRegion(ulong libOffset, ulong cb, uint dwLockType)
         {
             // Documented way to say we don't support locking
-            return Interop.HRESULT.STG_E_INVALIDFUNCTION;
+            return HRESULT.STG_E_INVALIDFUNCTION;
         }
     }
 }

@@ -1,8 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing.Printing
 {
@@ -41,7 +42,7 @@ namespace System.Drawing.Printing
             {
                 if (!IsInvalid)
                 {
-                    Interop.Kernel32.GlobalFree(new HandleRef(this, handle));
+                    Kernel32.GlobalFree(new HandleRef(this, handle));
                 }
 
                 handle = IntPtr.Zero;

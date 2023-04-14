@@ -6,6 +6,7 @@ using System.Drawing.Internal;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using static Interop;
 
 namespace System.Drawing
 {
@@ -62,10 +63,10 @@ namespace System.Drawing
         }
 
 #if NET7_0_OR_GREATER
-        [LibraryImport(Interop.Libraries.Oleaut32)]
+        [LibraryImport(Libraries.Oleaut32)]
         private static unsafe partial int OleCreatePictureIndirect(
 #else
-        [DllImport(Interop.Libraries.Oleaut32)]
+        [DllImport(Libraries.Oleaut32)]
         private static extern unsafe int OleCreatePictureIndirect(
 #endif
             PICTDESC* pictdesc,

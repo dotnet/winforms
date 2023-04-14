@@ -1,7 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Drawing.Interop;
 using System.Runtime.InteropServices;
 #if NET7_0_OR_GREATER
 using System.Runtime.InteropServices.Marshalling;
@@ -33,15 +34,15 @@ internal static partial class Interop
 #endif
             HandleRef hObject,
             int nSize,
-            ref Interop.User32.LOGFONT lf);
+            ref LOGFONT lf);
 
         internal static unsafe int GetObject(
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
             HandleRef hObject,
-            ref Interop.User32.LOGFONT lp)
-            => GetObject(hObject, sizeof(Interop.User32.LOGFONT), ref lp);
+            ref LOGFONT lp)
+            => GetObject(hObject, sizeof(LOGFONT), ref lp);
 
         [StructLayout(LayoutKind.Sequential)]
         public struct BITMAP

@@ -4,6 +4,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Interop;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Windows.Win32.System.StationsAndDesktops;
@@ -165,7 +167,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    return Font.FromLogFont(data.lfMenuFont);
+                    return Font.FromLogFont(Unsafe.AsRef<LOGFONT>((LOGFONT*)&data.lfMenuFont));
                 }
                 catch (ArgumentException)
                 {

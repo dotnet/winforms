@@ -1,10 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Internal;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing.Printing
 {
@@ -30,7 +31,7 @@ namespace System.Drawing.Printing
 
             Debug.Assert(_modeHandle != null, "_modeHandle should have been set by PrintController.OnStartPrint");
             _dc = document.PrinterSettings.CreateDeviceContext(_modeHandle);
-            Interop.Gdi32.DOCINFO info = new Interop.Gdi32.DOCINFO();
+            Gdi32.DOCINFO info = new Gdi32.DOCINFO();
             info.lpszDocName = document.DocumentName;
             if (document.PrinterSettings.PrintToFile)
                 info.lpszOutput = document.PrinterSettings.OutputPort; //This will be "FILE:"
@@ -39,7 +40,7 @@ namespace System.Drawing.Printing
             info.lpszDatatype = null;
             info.fwType = 0;
 
-            int result = Interop.Gdi32.StartDoc(new HandleRef(_dc, _dc.Hdc), info);
+            int result = Gdi32.StartDoc(new HandleRef(_dc, _dc.Hdc), info);
             if (result <= 0)
             {
                 int error = Marshal.GetLastPInvokeError();
@@ -64,15 +65,15 @@ namespace System.Drawing.Printing
 
             base.OnStartPage(document, e);
             e.PageSettings.CopyToHdevmode(_modeHandle);
-            IntPtr modePointer = Interop.Kernel32.GlobalLock(new HandleRef(this, _modeHandle));
+            IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, _modeHandle));
             try
             {
-                IntPtr result = Interop.Gdi32.ResetDC(new HandleRef(_dc, _dc.Hdc), new HandleRef(null, modePointer));
+                IntPtr result = Gdi32.ResetDC(new HandleRef(_dc, _dc.Hdc), new HandleRef(null, modePointer));
                 Debug.Assert(result == _dc.Hdc, "ResetDC didn't return the same handle I gave it");
             }
             finally
             {
-                Interop.Kernel32.GlobalUnlock(new HandleRef(this, _modeHandle));
+                Kernel32.GlobalUnlock(new HandleRef(this, _modeHandle));
             }
 
             _graphics = Graphics.FromHdcInternal(_dc.Hdc);
@@ -82,10 +83,10 @@ namespace System.Drawing.Printing
                 // Adjust the origin of the graphics object to be at the
                 // user-specified margin location
                 //
-                int dpiX = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSX);
-                int dpiY = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSY);
-                int hardMarginX_DU = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.PHYSICALOFFSETX);
-                int hardMarginY_DU = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.PHYSICALOFFSETY);
+                int dpiX = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
+                int dpiY = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
+                int hardMarginX_DU = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETX);
+                int hardMarginY_DU = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETY);
                 float hardMarginX = hardMarginX_DU * 100 / dpiX;
                 float hardMarginY = hardMarginY_DU * 100 / dpiY;
 
@@ -94,7 +95,7 @@ namespace System.Drawing.Printing
             }
 
 
-            int result2 = Interop.Gdi32.StartPage(new HandleRef(_dc, _dc.Hdc));
+            int result2 = Gdi32.StartPage(new HandleRef(_dc, _dc.Hdc));
             if (result2 <= 0)
                 throw new Win32Exception();
             return _graphics;
@@ -109,7 +110,7 @@ namespace System.Drawing.Printing
 
             try
             {
-                int result = Interop.Gdi32.EndPage(new HandleRef(_dc, _dc.Hdc));
+                int result = Gdi32.EndPage(new HandleRef(_dc, _dc.Hdc));
                 if (result <= 0)
                     throw new Win32Exception();
             }
@@ -132,7 +133,7 @@ namespace System.Drawing.Printing
             {
                 try
                 {
-                    int result = (e.Cancel) ? Interop.Gdi32.AbortDoc(new HandleRef(_dc, _dc.Hdc)) : Interop.Gdi32.EndDoc(new HandleRef(_dc, _dc.Hdc));
+                    int result = (e.Cancel) ? Gdi32.AbortDoc(new HandleRef(_dc, _dc.Hdc)) : Gdi32.EndDoc(new HandleRef(_dc, _dc.Hdc));
                     if (result <= 0)
                         throw new Win32Exception();
                 }

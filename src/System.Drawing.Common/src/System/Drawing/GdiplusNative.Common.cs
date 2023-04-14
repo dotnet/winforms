@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Drawing2D;
@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Internal;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing
 {
@@ -19,10 +20,10 @@ namespace System.Drawing
 
             public IntPtr DebugEventCallback;
 
-            public Interop.BOOL SuppressBackgroundThread;     // FALSE unless you're prepared to call
+            public BOOL SuppressBackgroundThread;     // FALSE unless you're prepared to call
                                                               // the hook/unhook functions properly
 
-            public Interop.BOOL SuppressExternalCodecs;       // FALSE unless you want GDI+ only to use
+            public BOOL SuppressExternalCodecs;       // FALSE unless you want GDI+ only to use
                                                               // its internal image codecs.
             public int StartupParameters;
 
@@ -34,8 +35,8 @@ namespace System.Drawing
                 // In Windows 7 GDI+1.1 story is different as there are different binaries per GDI+ version.
                 bool isWindows7 = os.Platform == PlatformID.Win32NT && os.Version.Major == 6 && os.Version.Minor == 1;
                 result.GdiplusVersion = isWindows7 ? 1 : 2;
-                result.SuppressBackgroundThread = Interop.BOOL.FALSE;
-                result.SuppressExternalCodecs = Interop.BOOL.FALSE;
+                result.SuppressBackgroundThread = BOOL.FALSE;
+                result.SuppressExternalCodecs = BOOL.FALSE;
                 result.StartupParameters = 0;
                 return result;
             }

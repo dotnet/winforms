@@ -4,6 +4,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Drawing.Interop;
+using System.Runtime.CompilerServices;
 
 namespace Windows.Win32.Graphics.Gdi
 {
@@ -20,21 +22,16 @@ namespace Windows.Win32.Graphics.Gdi
             set => SpanHelpers.CopyAndTerminate(value, lfFaceName.AsSpan());
         }
 
-        // Font.ToLogFont will copy LOGFONT into a blittable struct,
-        // but we need to box it upfront so we can unbox.
-
         public static LOGFONTW FromFont(Font font)
         {
-            object logFont = default(LOGFONTW);
-            font.ToLogFont(logFont);
-            return (LOGFONTW)logFont;
+            font.ToLogFont(out LOGFONT logFont);
+            return Unsafe.As<LOGFONT, LOGFONTW>(ref logFont);
         }
 
         public static LOGFONTW FromFont(Font font, global::System.Drawing.Graphics graphics)
         {
-            object logFont = default(LOGFONTW);
-            font.ToLogFont(logFont, graphics);
-            return (LOGFONTW)logFont;
+            font.ToLogFont(out LOGFONT logFont, graphics);
+            return Unsafe.As<LOGFONT, LOGFONTW>(ref logFont);
         }
     }
 }

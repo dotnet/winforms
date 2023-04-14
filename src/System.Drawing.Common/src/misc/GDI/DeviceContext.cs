@@ -1,9 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing.Internal
 {
@@ -92,10 +93,10 @@ namespace System.Drawing.Internal
         private void CacheInitialState()
         {
             Debug.Assert(_hDC != IntPtr.Zero, "Cannot get initial state without a valid HDC");
-            _hCurrentPen = _hInitialPen = Interop.Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Interop.Gdi32.ObjectType.OBJ_PEN);
-            _hCurrentBrush = _hInitialBrush = Interop.Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Interop.Gdi32.ObjectType.OBJ_BRUSH);
-            _hCurrentBmp = _hInitialBmp = Interop.Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Interop.Gdi32.ObjectType.OBJ_BITMAP);
-            _hCurrentFont = _hInitialFont = Interop.Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Interop.Gdi32.ObjectType.OBJ_FONT);
+            _hCurrentPen = _hInitialPen = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_PEN);
+            _hCurrentBrush = _hInitialBrush = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_BRUSH);
+            _hCurrentBmp = _hInitialBmp = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_BITMAP);
+            _hCurrentFont = _hInitialFont = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_FONT);
         }
 
         /// <summary>
@@ -120,7 +121,7 @@ namespace System.Drawing.Internal
         public static DeviceContext CreateDC(string driverName, string deviceName, string? fileName, IntPtr devMode)
         {
             // Note: All input params can be null but not at the same time.  See MSDN for information.
-            IntPtr hdc = Interop.Gdi32.CreateDCW(driverName, deviceName, fileName, devMode);
+            IntPtr hdc = Gdi32.CreateDCW(driverName, deviceName, fileName, devMode);
             return new DeviceContext(hdc, DeviceContextType.NamedDevice);
         }
 
@@ -131,7 +132,7 @@ namespace System.Drawing.Internal
         {
             // Note: All input params can be null but not at the same time.  See MSDN for information.
 
-            IntPtr hdc = Interop.Gdi32.CreateICW(driverName, deviceName, fileName, devMode);
+            IntPtr hdc = Gdi32.CreateICW(driverName, deviceName, fileName, devMode);
             return new DeviceContext(hdc, DeviceContextType.Information);
         }
 
@@ -168,11 +169,11 @@ namespace System.Drawing.Internal
             {
                 case DeviceContextType.Information:
                 case DeviceContextType.NamedDevice:
-                    Interop.Gdi32.DeleteDC(new HandleRef(this, _hDC));
+                    Gdi32.DeleteDC(new HandleRef(this, _hDC));
                     _hDC = IntPtr.Zero;
                     break;
                 case DeviceContextType.Memory:
-                    Interop.Gdi32.DeleteDC(new HandleRef(this, _hDC));
+                    Gdi32.DeleteDC(new HandleRef(this, _hDC));
                     _hDC = IntPtr.Zero;
                     break;
                 // case DeviceContextType.Metafile: - not yet supported.
@@ -203,7 +204,7 @@ namespace System.Drawing.Internal
             bool result =
 #endif
             // Note: Don't use the Hdc property here, it would force handle creation.
-            Interop.Gdi32.RestoreDC(new HandleRef(this, _hDC), -1);
+            Gdi32.RestoreDC(new HandleRef(this, _hDC), -1);
 #if TRACK_HDC
             // Note: Winforms may call this method during app exit at which point the DC may have been finalized already causing this assert to popup.
             Debug.WriteLine( DbgUtil.StackTraceToStr( string.Format("ret[0]=DC.RestoreHdc(hDc=0x{1:x8}, state={2})", result, unchecked((int) _hDC), restoreState) ));
@@ -239,7 +240,7 @@ namespace System.Drawing.Internal
         public int SaveHdc()
         {
             HandleRef hdc = new HandleRef(this, _hDC);
-            int state = Interop.Gdi32.SaveDC(hdc);
+            int state = Gdi32.SaveDC(hdc);
 
             _contextStack ??= new Stack();
 
@@ -270,7 +271,7 @@ namespace System.Drawing.Internal
             HandleRef hdc = new HandleRef(this, _hDC);
             HandleRef hRegion = new HandleRef(region, region.HRegion);
 
-            Interop.Gdi32.SelectClipRgn(hdc, hRegion);
+            Gdi32.SelectClipRgn(hdc, hRegion);
         }
 
         ///<summary>
@@ -287,13 +288,13 @@ namespace System.Drawing.Internal
             WindowsRegion clip = new WindowsRegion(0, 0, 0, 0);
             try
             {
-                int result = Interop.Gdi32.GetClipRgn(new HandleRef(this, _hDC), new HandleRef(clip, clip.HRegion));
+                int result = Gdi32.GetClipRgn(new HandleRef(this, _hDC), new HandleRef(clip, clip.HRegion));
 
                 // If the function succeeds and there is a clipping region for the given device context, the return value is 1.
                 if (result == 1)
                 {
                     Debug.Assert(clip.HRegion != IntPtr.Zero);
-                    wr.CombineRegion(clip, wr, Interop.Gdi32.CombineMode.RGN_AND);
+                    wr.CombineRegion(clip, wr, Gdi32.CombineMode.RGN_AND);
                 }
 
                 SetClip(wr);
@@ -311,7 +312,7 @@ namespace System.Drawing.Internal
         public void TranslateTransform(int dx, int dy)
         {
             Point origin = default;
-            Interop.Gdi32.OffsetViewportOrgEx(new HandleRef(this, _hDC), dx, dy, ref origin);
+            Gdi32.OffsetViewportOrgEx(new HandleRef(this, _hDC), dx, dy, ref origin);
         }
 
         /// <summary>

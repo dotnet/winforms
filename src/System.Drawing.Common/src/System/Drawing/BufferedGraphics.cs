@@ -1,7 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing
 {
@@ -88,7 +89,7 @@ namespace System.Drawing
 
             try
             {
-                Interop.Gdi32.BitBlt(
+                Gdi32.BitBlt(
                     refTargetDC,
                     _targetLoc.X,
                     _targetLoc.Y,
@@ -97,7 +98,7 @@ namespace System.Drawing
                     new HandleRef(Graphics, sourceDC),
                     0,
                     0,
-                    Interop.Gdi32.RasterOp.SRCCOPY);
+                    Gdi32.RasterOp.SRCCOPY);
             }
             finally
             {
