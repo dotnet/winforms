@@ -548,8 +548,8 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { new DataGridViewCellStyle(), null, Color.FromArgb(0xFF, 0x00, 0x00, 0x00), SystemColors.WindowText, false, HorizontalAlignment.Left, false };
 
-            using var font = new Font("Arial", 8.25f);
-            var customStyle = new DataGridViewCellStyle
+            Font font = new("Arial", 8.25f);
+            DataGridViewCellStyle customStyle = new()
             {
                 Font = font,
                 BackColor = Color.Gray,
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.Tests
             };
             yield return new object[] { customStyle, font, Color.Gray, Color.Green, false, HorizontalAlignment.Left, false };
 
-            var transparentStyle = new DataGridViewCellStyle
+            DataGridViewCellStyle transparentStyle = new()
             {
                 Font = font,
                 BackColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78),

@@ -182,7 +182,10 @@ namespace System.Drawing
             //
             // https://github.com/dotnet/winforms/issues/8823
 
-            _fontFamily = null;
+            if (!LocalAppContextSwitches.DoNotNullOutFontFamilyOnDispose)
+            {
+                _fontFamily = null;
+            }
 
             if (_nativeFont == 0)
             {
@@ -249,7 +252,7 @@ namespace System.Drawing
                 return false;
             }
 
-            if (font._nativeFont == 0 || _nativeFont == 0)
+            if (!LocalAppContextSwitches.DoNotConsiderDisposedStateInFontEquals && (font._nativeFont == 0 || _nativeFont == 0))
             {
                 // Disposed objects can't be compared outside of reference equality
                 return false;

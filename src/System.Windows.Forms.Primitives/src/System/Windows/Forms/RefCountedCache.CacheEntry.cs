@@ -39,8 +39,10 @@ namespace System.Windows.Forms
             ///  Removes a reference to this entry.
             /// </summary>
             /// <remarks>
-            ///  This will dispose of the entry when the ref count reaches zero- if the entry isn't actually
-            ///  cached <see cref="_cached"/>.
+            ///  <para>
+            ///   This will dispose of the entry when the ref count reaches zero- if the entry isn't actually
+            ///   cached <see cref="_cached"/>.
+            ///  </para>
             /// </remarks>
             public virtual void RemoveRef()
             {
