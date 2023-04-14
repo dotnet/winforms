@@ -87,7 +87,11 @@ internal class MouseSimulator
             InputBuilder.MouseButtonDown(button),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if(PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) == 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -98,7 +102,11 @@ internal class MouseSimulator
             InputBuilder.MouseButtonUp(button),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) == 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -110,7 +118,11 @@ internal class MouseSimulator
             InputBuilder.MouseButtonUp(button),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) < 2)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -124,7 +136,11 @@ internal class MouseSimulator
             InputBuilder.MouseButtonUp(button),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) < 4)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -144,7 +160,11 @@ internal class MouseSimulator
             InputBuilder.RelativeMouseMovement(x, y),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) == 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -155,7 +175,11 @@ internal class MouseSimulator
             InputBuilder.AbsoluteMouseMovement((int)absoluteX, (int)absoluteY),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) == 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -166,7 +190,11 @@ internal class MouseSimulator
             InputBuilder.AbsoluteMouseMovementOnVirtualDesktop((int)absoluteX, (int)absoluteY),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) == 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 

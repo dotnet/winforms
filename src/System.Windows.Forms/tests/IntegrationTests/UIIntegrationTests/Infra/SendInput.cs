@@ -78,10 +78,7 @@ namespace System.Windows.Forms.UITests
 
             SetForegroundWindow(window);
 
-            await _waitForIdleAsync();
-
             await Task.Run(() => actions(new InputSimulator()));
-
             await _waitForIdleAsync();
         }
 

@@ -654,3 +654,4 @@ WindowFromDC
 WindowFromPoint
 WINDOWPOS
 WSF_VISIBLE
+WM_INPUT
