@@ -32,6 +32,6 @@ internal static partial class LocalAppContextSwitches
     public static bool DoNotConsiderDisposedStateInFontEquals
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(@"Switch.System.Drawing.DoNotNullOutFontFamilyOnDispose", ref s_fontConsiderDisposedState);
+        get => GetCachedSwitchValue(@"Switch.System.Drawing.DoNotConsiderDisposedStateInFontEquals", ref s_fontConsiderDisposedState);
     }
 }
