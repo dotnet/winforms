@@ -388,8 +388,6 @@ namespace System.Drawing.Tests
         [Fact]
         public void ExtractAssociatedIcon_UNCFilePath_Success()
         {
-            // https://github.com/dotnet/runtime/issues/28220
-
             string bitmapPath = Helpers.GetTestBitmapPath("48x48_multiple_entries_4bit.ico");
             string bitmapPathRoot = Path.GetPathRoot(bitmapPath);
             string bitmapUncPath = $"\\\\{Environment.MachineName}\\{bitmapPath.Substring(0, bitmapPathRoot.IndexOf(":"))}$\\{bitmapPath.Replace(bitmapPathRoot, "")}";

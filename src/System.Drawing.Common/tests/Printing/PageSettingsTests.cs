@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
@@ -33,7 +33,7 @@ namespace System.Drawing.Printing.Tests
 {
     public class PageSettingsTests
     {
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void Clone_Success()
         {
             PageSettings ps = new PageSettings();

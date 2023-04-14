@@ -38,7 +38,7 @@ namespace System.Drawing.Printing.Tests
             }
         };
 
-        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void Ctor_Default_Success()
         {
             using (var document = new PrintDocument())
@@ -49,7 +49,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void DefaultPageSettings_SetValue_ReturnsExpected()
         {
             using (var document = new PrintDocument())
@@ -63,7 +63,7 @@ namespace System.Drawing.Printing.Tests
         }
 
         [Fact]
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/30221")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/8812")]
         public void DefaultPageSettings_Null_ReturnsExpected()
         {
             using (var document = new PrintDocument())
@@ -121,7 +121,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void PrinterSettings_SetValue_ReturnsExpected()
         {
             using (var document = new PrintDocument())
@@ -144,7 +144,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void BeginPrint_SetValue_ReturnsExpected()
         {
             bool flag = false;
@@ -164,7 +164,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/26428")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/8815")]
         [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void EndPrint_SetValue_ReturnsExpected()
         {
@@ -205,7 +205,7 @@ namespace System.Drawing.Printing.Tests
             Assert.True(endPrintCalled);
         }
 
-        [ActiveIssue("https://github.com/dotnet/runtime/issues/26428")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/8815")]
         [ConditionalFact(Helpers.AnyInstalledPrinters)]
         public void PrintPage_SetValue_ReturnsExpected()
         {
@@ -226,7 +226,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void QueryPageSettings_SetValue_ReturnsExpected()
         {
             bool flag = false;

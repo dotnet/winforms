@@ -38,7 +38,6 @@ using Xunit;
 
 namespace MonoTests.System.Drawing.Imaging
 {
-    [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
     public class MetafileTest
     {
         public const string Bitmap = "non-inverted.bmp";
@@ -203,7 +202,6 @@ namespace MonoTests.System.Drawing.Imaging
         }
     }
 
-    [ActiveIssue("https://github.com/dotnet/runtime/issues/34591", TestPlatforms.Windows, TargetFrameworkMonikers.Netcoreapp, TestRuntimes.Mono)]
     public class MetafileFulltrustTest
     {
         private void CheckEmptyHeader(Metafile mf, EmfType type)
