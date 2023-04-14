@@ -1,7 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -87,14 +88,62 @@ namespace System.Drawing
 
                 if (destinationType == typeof(InstanceDescriptor))
                 {
-                    ConstructorInfo? met = typeof(Font).GetConstructor(new Type[] { typeof(string), typeof(float), typeof(FontStyle), typeof(GraphicsUnit) });
-                    object[] args = new object[4];
-                    args[0] = font.Name;
-                    args[1] = font.Size;
-                    args[2] = font.Style;
-                    args[3] = font.Unit;
+                    // Generate the smallest constructor possible.
+                    int argCount = 2;
 
-                    return new InstanceDescriptor(met, args);
+                    if (font.GdiVerticalFont)
+                    {
+                        argCount = 6;
+                    }
+                    else if (font.GdiCharSet != SafeNativeMethods.DEFAULT_CHARSET)
+                    {
+                        argCount = 5;
+                    }
+                    else if (font.Unit != GraphicsUnit.Point)
+                    {
+                        argCount = 4;
+                    }
+                    else if (font.Style != FontStyle.Regular)
+                    {
+                        argCount++;
+                    }
+
+                    object[] args = new object[argCount];
+                    Type[] types = new Type[argCount];
+
+                    args[0] = font.Name;
+                    types[0] = typeof(string);
+                    args[1] = font.Size;
+                    types[1] = typeof(float);
+
+                    if (argCount > 2)
+                    {
+                        args[2] = font.Style;
+                        types[2] = typeof(FontStyle);
+                    }
+
+                    if (argCount > 3)
+                    {
+                        args[3] = font.Unit;
+                        types[3] = typeof(GraphicsUnit);
+                    }
+
+                    if (argCount > 4)
+                    {
+                        args[4] = font.GdiCharSet;
+                        types[4] = typeof(byte);
+                    }
+
+                    if (argCount > 5)
+                    {
+                        args[5] = font.GdiVerticalFont;
+                        types[5] = typeof(bool);
+                    }
+
+                    if (typeof(Font).GetConstructor(types) is { } constructor)
+                    {
+                        return new InstanceDescriptor(constructor, args);
+                    }
                 }
             }
 
