@@ -175,7 +175,7 @@ public partial class ComboBox
             return Add(item!);
         }
 
-        public void AddRange(object[] items)
+        public void AddRange(params object[] items)
         {
             _owner.CheckNoDataSource();
             _owner.BeginUpdate();

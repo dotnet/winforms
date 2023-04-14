@@ -169,7 +169,7 @@ public partial class ListBox
             AddRangeInternal(value);
         }
 
-        public void AddRange(object[] items)
+        public void AddRange(params object[] items)
         {
             ArgumentNullException.ThrowIfNull(items);
 

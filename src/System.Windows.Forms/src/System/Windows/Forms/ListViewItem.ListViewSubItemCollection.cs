@@ -134,7 +134,7 @@ public partial class ListViewItem
             return item;
         }
 
-        public void AddRange(ListViewSubItem[] items)
+        public void AddRange(params ListViewSubItem[] items)
         {
             ArgumentNullException.ThrowIfNull(items);
 
@@ -152,7 +152,7 @@ public partial class ListViewItem
             _owner.UpdateSubItems(-1);
         }
 
-        public void AddRange(string[] items)
+        public void AddRange(params string[] items)
         {
             ArgumentNullException.ThrowIfNull(items);
 

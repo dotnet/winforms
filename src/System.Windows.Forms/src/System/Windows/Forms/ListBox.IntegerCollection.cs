@@ -159,7 +159,7 @@ public partial class ListBox
             return Add((int)item);
         }
 
-        public void AddRange(int[] items)
+        public void AddRange(params int[] items)
         {
             AddRangeInternal(items);
         }

@@ -138,7 +138,7 @@ public partial class TabControl
             Add(page);
         }
 
-        public void AddRange(TabPage[] pages)
+        public void AddRange(params TabPage[] pages)
         {
             ArgumentNullException.ThrowIfNull(pages);
 

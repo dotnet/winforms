@@ -1,0 +1,3 @@
+System.ComponentModel.Design.DesignerActionListCollection.AddRange(params System.ComponentModel.Design.DesignerActionList?[]! value) -> void
+~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
+~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(params System.Windows.Forms.Design.Behavior.Glyph[] value) -> void

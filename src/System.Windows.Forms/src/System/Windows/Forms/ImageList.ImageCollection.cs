@@ -374,7 +374,7 @@ public sealed partial class ImageList
             return index;
         }
 
-        public void AddRange(Image[] images)
+        public void AddRange(params Image[] images)
         {
             ArgumentNullException.ThrowIfNull(images);
 
