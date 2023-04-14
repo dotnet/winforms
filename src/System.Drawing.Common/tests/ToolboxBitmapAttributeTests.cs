@@ -20,21 +20,7 @@ namespace System.Drawing.Tests
         private static Size DefaultSize = new Size(16, 16);
         private void AssertDefaultSize(Image image)
         {
-            try
-            {
-                Assert.Equal(DefaultSize, image.Size);
-            }
-            catch (Exception ex)
-            {
-                // On .NET Framework sometimes the size might be default or it might
-                // be disposed in which case Size property throws an ArgumentException
-                // so allow both cases see https://github.com/dotnet/runtime/issues/25144.
-                if (PlatformDetection.IsNetFramework && ex is ArgumentException)
-                {
-                    return;
-                }
-                throw;
-            }
+            Assert.Equal(DefaultSize, image.Size);
         }
 
         public static IEnumerable<object[]> Ctor_FileName_TestData()

@@ -172,7 +172,7 @@ namespace System.Drawing.Printing.Tests
             Assert.True(printerSettings.IsDefaultPrinter);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void IsPlotter_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -448,7 +448,7 @@ namespace System.Drawing.Printing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => printerSettings.ToPage = toPage);
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void Clone_Success()
         {
             var printerSettings = new PrinterSettings();
@@ -456,7 +456,7 @@ namespace System.Drawing.Printing.Tests
             Assert.False(ReferenceEquals(clone, printerSettings));
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void CreateMeasurementGraphics_Default_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -470,7 +470,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void CreateMeasurementGraphics_Bool_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -482,7 +482,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void CreateMeasurementGraphics_PageSettings_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -497,7 +497,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void CreateMeasurementGraphics_PageSettingsBool_ReturnsExpected()
         {
             var printerSettings = new PrinterSettings();
@@ -510,7 +510,7 @@ namespace System.Drawing.Printing.Tests
             }
         }
 
-        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/runtime/issues/26247
+        [ConditionalFact(Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
         public void CreateMeasurementGraphics_Null_ThrowsNullReferenceException()
         {
             var printerSettings = new PrinterSettings();

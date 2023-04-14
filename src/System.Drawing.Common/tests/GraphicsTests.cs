@@ -94,7 +94,7 @@ namespace System.Drawing.Tests
             // Likely the source of #51097- grabbing whatever the current foreground window is is not a great idea.
             // Whatever that window is it could disappear at any time and what it's clipping info would be pretty
             // random.
-            // https://github.com/dotnet/runtime/issues/51097
+            // https://github.com/dotnet/winforms/issues/8829
 
             // IntPtr foregroundWindow = Helpers.GetForegroundWindow();
             // yield return new object[] { Helpers.GetDC(foregroundWindow) };

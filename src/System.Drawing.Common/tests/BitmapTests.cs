@@ -797,7 +797,7 @@ namespace System.Drawing.Tests
 
             if (PlatformDetection.IsArmOrArm64Process)
             {
-                // https://github.com/dotnet/runtime/issues/28859
+                // https://github.com/dotnet/winforms/issues/8817
                 throw new SkipTestException("Arm precision");
             }
 
@@ -1147,7 +1147,7 @@ namespace System.Drawing.Tests
             yield return new object[] { new Bitmap(100, 100, PixelFormat.Format8bppIndexed), new Rectangle(0, 0, 100, 100), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb, 300, 65538 };
         }
 
-        [ConditionalTheory(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
+        [ConditionalTheory(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
         [MemberData(nameof(LockBits_TestData))]
         public void LockBits_Invoke_Success(Bitmap bitmap, Rectangle rectangle, ImageLockMode lockMode, PixelFormat pixelFormat, int expectedStride, int expectedReserved)
         {
@@ -1575,7 +1575,7 @@ namespace System.Drawing.Tests
             AssertExtensions.Throws<ArgumentException>(null, () => bitmap.Size);
         }
 
-        [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/runtime/issues/28859")]
+        [ConditionalFact(typeof(PlatformDetection), nameof(PlatformDetection.IsNotArm64Process))] // [ActiveIssue("https://github.com/dotnet/winforms/issues/8817")]
         public void LockBits_Marshalling_Success()
         {
             Color red = Color.FromArgb(Color.Red.ToArgb());
