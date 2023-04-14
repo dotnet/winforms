@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing
 {
@@ -16,7 +17,7 @@ namespace System.Drawing
     /// </summary>
     internal unsafe partial class DrawingCom : ComWrappers
     {
-        private const int S_OK = (int)Interop.HRESULT.S_OK;
+        private const int S_OK = (int)HRESULT.S_OK;
         private static readonly Guid IID_IStream = new Guid(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
         private static readonly ComInterfaceEntry* s_wrapperEntry = InitializeComInterfaceEntry();
@@ -39,7 +40,7 @@ namespace System.Drawing
 
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
-            Debug.Assert(obj is Interop.Ole32.IStream);
+            Debug.Assert(obj is Ole32.IStream);
             Debug.Assert(s_wrapperEntry != null);
 
             // Always return the same table mappings.
@@ -66,7 +67,7 @@ namespace System.Drawing
             throw new NotImplementedException();
         }
 
-        internal static IStreamWrapper GetComWrapper(Interop.Ole32.IStream stream)
+        internal static IStreamWrapper GetComWrapper(Ole32.IStream stream)
         {
             IntPtr streamWrapperPtr = Instance.GetOrCreateComInterfaceForObject(stream, CreateComInterfaceFlags.None);
 
@@ -104,7 +105,7 @@ namespace System.Drawing
                 vtblRaw[9] = (IntPtr)(delegate* unmanaged<IntPtr, int>)&Revert;
                 vtblRaw[10] = (IntPtr)(delegate* unmanaged<IntPtr, ulong, ulong, uint, int>)&LockRegion;
                 vtblRaw[11] = (IntPtr)(delegate* unmanaged<IntPtr, ulong, ulong, uint, int>)&UnlockRegion;
-                vtblRaw[12] = (IntPtr)(delegate* unmanaged<IntPtr, Interop.Ole32.STATSTG*, Interop.Ole32.STATFLAG, int>)&Stat;
+                vtblRaw[12] = (IntPtr)(delegate* unmanaged<IntPtr, Ole32.STATSTG*, Ole32.STATFLAG, int>)&Stat;
                 vtblRaw[13] = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr*, int>)&Clone;
 
                 return (IntPtr)vtblRaw;
@@ -115,7 +116,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.Read(pv, cb, pcbRead);
                 }
                 catch (Exception e)
@@ -131,7 +132,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.Write(pv, cb, pcbWritten);
                 }
                 catch (Exception e)
@@ -147,7 +148,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.Seek(dlibMove, dwOrigin, plibNewPosition);
                 }
                 catch (Exception e)
@@ -163,7 +164,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.SetSize(libNewSize);
                 }
                 catch (Exception e)
@@ -179,7 +180,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
 
                     return (int)inst.CopyTo(pstm, cb, pcbRead, pcbWritten);
                 }
@@ -194,7 +195,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.Commit(grfCommitFlags);
                 }
                 catch (Exception e)
@@ -210,7 +211,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.Revert();
                 }
                 catch (Exception e)
@@ -226,7 +227,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     return (int)inst.LockRegion(libOffset, cb, dwLockType);
                 }
                 catch (Exception e)
@@ -240,7 +241,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     return (int)inst.UnlockRegion(libOffset, cb, dwLockType);
                 }
                 catch (Exception e)
@@ -250,11 +251,11 @@ namespace System.Drawing
             }
 
             [UnmanagedCallersOnly]
-            private static int Stat(IntPtr thisPtr, Interop.Ole32.STATSTG* pstatstg, Interop.Ole32.STATFLAG grfStatFlag)
+            private static int Stat(IntPtr thisPtr, Ole32.STATSTG* pstatstg, Ole32.STATFLAG grfStatFlag)
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.Stat(pstatstg, grfStatFlag);
                 }
                 catch (Exception e)
@@ -270,7 +271,7 @@ namespace System.Drawing
             {
                 try
                 {
-                    Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
+                    Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
 
                     return (int)inst.Clone(ppstm);
                 }

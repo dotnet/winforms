@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Internal;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing.Printing
 {
@@ -85,10 +86,10 @@ namespace System.Drawing.Printing
             {
                 // Adjust the origin of the graphics object to be at the
                 // user-specified margin location
-                int dpiX = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSX);
-                int dpiY = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.LOGPIXELSY);
-                int hardMarginX_DU = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.PHYSICALOFFSETX);
-                int hardMarginY_DU = Interop.Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Interop.Gdi32.DeviceCapability.PHYSICALOFFSETY);
+                int dpiX = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
+                int dpiY = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
+                int hardMarginX_DU = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETX);
+                int hardMarginY_DU = Gdi32.GetDeviceCaps(new HandleRef(_dc, _dc.Hdc), Gdi32.DeviceCapability.PHYSICALOFFSETY);
                 float hardMarginX = hardMarginX_DU * 100f / dpiX;
                 float hardMarginY = hardMarginY_DU * 100f / dpiY;
 

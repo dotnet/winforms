@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Drawing.Interop;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms.VisualStyles
@@ -534,7 +535,7 @@ namespace System.Windows.Forms.VisualStyles
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using DeviceContextHdcScope hdc = new(dc);
-            _lastHResult = PInvoke.GetThemeFont(this, hdc, Part, State, (int)prop, out LOGFONTW logfont);
+            _lastHResult = PInvoke.GetThemeFont(this, hdc, Part, State, (int)prop, out LOGFONT logfont);
 
             // Check for a failed HR.
             if (!_lastHResult.Succeeded)

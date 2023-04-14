@@ -1,9 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
+using System.Drawing.Interop;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 
@@ -353,7 +354,7 @@ namespace System.Drawing
             internal static extern int GdipComment(HandleRef graphics, int sizeData, byte[] data);
 
             [DllImport(LibraryName, ExactSpelling = true, CharSet = CharSet.Unicode)]
-            internal static extern int GdipCreateFontFromLogfontW(IntPtr hdc, ref Interop.User32.LOGFONT lf, out IntPtr font);
+            internal static extern int GdipCreateFontFromLogfontW(IntPtr hdc, LOGFONT* lf, out IntPtr font);
 
             [DllImport(LibraryName, ExactSpelling = true)]
             internal static extern int GdipCreateBitmapFromStream(IntPtr stream, IntPtr* bitmap);
@@ -871,7 +872,7 @@ namespace System.Drawing
             internal static extern int GdipGetFontUnit(HandleRef font, out GraphicsUnit unit);
 
             [DllImport(LibraryName, ExactSpelling = true)]
-            internal static extern int GdipGetLogFontW(HandleRef font, HandleRef graphics, ref Interop.User32.LOGFONT lf);
+            internal static extern int GdipGetLogFontW(HandleRef font, HandleRef graphics, ref LOGFONT lf);
 
             [DllImport(LibraryName, ExactSpelling = true)]
             internal static extern int GdipCreatePen1(int argb, float width, int unit, out IntPtr pen);

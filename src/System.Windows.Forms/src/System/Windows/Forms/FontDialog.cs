@@ -5,6 +5,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Interop;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -346,7 +348,7 @@ namespace System.Windows.Forms
                 case User32.WM.COMMAND:
                     if (PARAM.ToInt(wparam) == 0x402)
                     {
-                        LOGFONTW logFont = default;
+                        LOGFONT logFont = default;
                         PInvoke.SendMessage((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                         UpdateFont(ref logFont);
                         int index = (int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETCURSEL, 0, 0);
@@ -431,7 +433,7 @@ namespace System.Windows.Forms
 
             var cf = new Comdlg32.CHOOSEFONTW
             {
-                lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSEFONTW>(),
+                lStructSize = (uint)sizeof(Comdlg32.CHOOSEFONTW),
                 hwndOwner = hWndOwner,
                 hDC = IntPtr.Zero,
                 lpLogFont = &logFont,
@@ -469,7 +471,7 @@ namespace System.Windows.Forms
 
             if (!logFont.FaceName.IsEmpty)
             {
-                UpdateFont(ref logFont);
+                UpdateFont(ref Unsafe.As<LOGFONTW, LOGFONT>(ref logFont));
                 UpdateColor(cf.rgbColors);
             }
 
@@ -520,10 +522,10 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateFont(ref LOGFONTW lf)
+        private void UpdateFont(ref LOGFONT lf)
         {
             using var dc = User32.GetDcScope.ScreenDC;
-            using Font fontInWorldUnits = Font.FromLogFont(lf, dc);
+            using Font fontInWorldUnits = Font.FromLogFont(in lf, dc);
 
             // The dialog claims its working in points (a device-independent unit),
             // but actually gives us something in world units (device-dependent).

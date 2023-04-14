@@ -16,6 +16,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices.Marshalling;
 #endif
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
+using static Interop;
+
 
 namespace System.Drawing
 {
@@ -70,16 +72,16 @@ namespace System.Drawing
         {
             internal unsafe struct KeepAliveMarshaller
             {
-                private delegate Interop.BOOL DrawImageAbortNative(IntPtr callbackdata);
+                private delegate BOOL DrawImageAbortNative(IntPtr callbackdata);
                 private DrawImageAbortNative? _managed;
-                private delegate* unmanaged<IntPtr, Interop.BOOL> _nativeFunction;
+                private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
                 public void FromManaged(DrawImageAbort? managed)
                 {
-                    _managed = managed is null ? null : data => managed(data) ? Interop.BOOL.TRUE : Interop.BOOL.FALSE;
-                    _nativeFunction = _managed is null ? null : (delegate* unmanaged<IntPtr, Interop.BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
+                    _managed = managed is null ? null : data => managed(data) ? BOOL.TRUE : BOOL.FALSE;
+                    _nativeFunction = _managed is null ? null : (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
                 }
 
-                public delegate* unmanaged<IntPtr, Interop.BOOL> ToUnmanaged()
+                public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
                 {
                     return _nativeFunction;
                 }
@@ -117,22 +119,22 @@ namespace System.Drawing
         {
             internal unsafe struct KeepAliveMarshaller
             {
-                private delegate Interop.BOOL EnumerateMetafileProcNative(
+                private delegate BOOL EnumerateMetafileProcNative(
                     EmfPlusRecordType recordType,
                     int flags,
                     int dataSize,
                     IntPtr data,
                     IntPtr callbackData);
                 private EnumerateMetafileProcNative? _managed;
-                private delegate* unmanaged<IntPtr, Interop.BOOL> _nativeFunction;
+                private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
                 public void FromManaged(EnumerateMetafileProc? managed)
                 {
                     _managed = managed is null ? null : (recordType, flags, dataSize, data, callbackData) =>
-                        managed(recordType, flags, dataSize, data, callbackData == IntPtr.Zero ? null : Marshal.GetDelegateForFunctionPointer<PlayRecordCallback>(callbackData)) ? Interop.BOOL.TRUE : Interop.BOOL.FALSE;
-                    _nativeFunction = _managed is null ? null : (delegate* unmanaged<IntPtr, Interop.BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
+                        managed(recordType, flags, dataSize, data, callbackData == IntPtr.Zero ? null : Marshal.GetDelegateForFunctionPointer<PlayRecordCallback>(callbackData)) ? BOOL.TRUE : BOOL.FALSE;
+                    _nativeFunction = _managed is null ? null : (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
                 }
 
-                public delegate* unmanaged<IntPtr, Interop.BOOL> ToUnmanaged()
+                public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
                 {
                     return _nativeFunction;
                 }
@@ -3096,7 +3098,7 @@ namespace System.Drawing
             int destWidth = blockRegionSize.Width;
             int destHeight = blockRegionSize.Height;
 
-            nint screenDC = Interop.User32.GetDC(0);
+            nint screenDC = User32.GetDC(0);
             if (screenDC == 0)
             {
                 // ERROR_INVALID_HANDLE - if you pass an empty handle to BitBlt you'll get this error.
@@ -3108,7 +3110,7 @@ namespace System.Drawing
             try
             {
                 targetDC = GetHdc();
-                int result = Interop.Gdi32.BitBlt(
+                int result = Gdi32.BitBlt(
                     targetDC,
                     destinationX,
                     destinationY,
@@ -3117,7 +3119,7 @@ namespace System.Drawing
                     screenDC,
                     sourceX,
                     sourceY,
-                    (Interop.Gdi32.RasterOp)copyPixelOperation);
+                    (Gdi32.RasterOp)copyPixelOperation);
 
                 if (result == 0)
                 {
@@ -3126,7 +3128,7 @@ namespace System.Drawing
             }
             finally
             {
-                Interop.User32.ReleaseDC(IntPtr.Zero, screenDC);
+                User32.ReleaseDC(IntPtr.Zero, screenDC);
                 if (targetDC != 0)
                 {
                     ReleaseHdc();
@@ -3813,7 +3815,7 @@ namespace System.Drawing
         {
             if (s_halftonePalette != IntPtr.Zero)
             {
-                Interop.Gdi32.DeleteObject(s_halftonePalette);
+                Gdi32.DeleteObject(s_halftonePalette);
                 s_halftonePalette = IntPtr.Zero;
             }
         }
@@ -3842,7 +3844,7 @@ namespace System.Drawing
                 int error = Marshal.GetLastWin32Error();
                 if (error == SafeNativeMethods.ERROR_ACCESS_DENIED || error == SafeNativeMethods.ERROR_PROC_NOT_FOUND ||
                         // Here, we'll check to see if we are in a terminal services session...
-                        (((Interop.User32.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0) && (error == 0)))
+                        (((User32.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0) && (error == 0)))
                 {
                     return;
                 }

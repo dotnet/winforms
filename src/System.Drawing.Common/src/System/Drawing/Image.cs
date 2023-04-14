@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Buffers;
@@ -15,6 +15,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices.Marshalling;
 #endif
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
+using static Interop;
 
 namespace System.Drawing
 {
@@ -50,9 +51,9 @@ namespace System.Drawing
         {
             internal unsafe struct KeepAliveMarshaller
             {
-                private delegate Interop.BOOL GetThumbnailImageAbortNative(IntPtr callbackdata);
+                private delegate BOOL GetThumbnailImageAbortNative(IntPtr callbackdata);
                 private GetThumbnailImageAbortNative? _managed;
-                private delegate* unmanaged<IntPtr, Interop.BOOL> _nativeFunction;
+                private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
                 public void FromManaged(GetThumbnailImageAbort managed)
                 {
                     if (managed is null)
@@ -62,12 +63,12 @@ namespace System.Drawing
                     }
                     else
                     {
-                        _managed = data => managed() ? Interop.BOOL.TRUE : Interop.BOOL.FALSE;
-                        _nativeFunction = (delegate* unmanaged<IntPtr, Interop.BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
+                        _managed = data => managed() ? BOOL.TRUE : BOOL.FALSE;
+                        _nativeFunction = (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
                     }
                 }
 
-                public delegate* unmanaged<IntPtr, Interop.BOOL> ToUnmanaged()
+                public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
                 {
                     return _nativeFunction;
                 }

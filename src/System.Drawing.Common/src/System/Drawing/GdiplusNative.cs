@@ -4,6 +4,7 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
+using System.Drawing.Interop;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 #if NET7_0_OR_GREATER
@@ -1180,7 +1181,7 @@ namespace System.Drawing
 #if NET7_0_OR_GREATER
             [MarshalUsing(typeof(HandleRefMarshaller))]
 #endif
-            HandleRef graphics, ref Interop.User32.LOGFONT lf);
+            HandleRef graphics, ref LOGFONT lf);
 
             [LibraryImport(LibraryName)]
             internal static partial int GdipCreatePen1(int argb, float width, int unit, out IntPtr pen);
@@ -4447,8 +4448,8 @@ namespace System.Drawing
 #endif
             HandleRef graphics, int sizeData, byte[] data);
 
-            [LibraryImport(LibraryName, StringMarshalling = StringMarshalling.Utf16)]
-            internal static partial int GdipCreateFontFromLogfontW(IntPtr hdc, ref Interop.User32.LOGFONT lf, out IntPtr font);
+            [LibraryImport(LibraryName)]
+            internal static partial int GdipCreateFontFromLogfontW(IntPtr hdc, LOGFONT* lf, out IntPtr font);
 
             [LibraryImport(LibraryName)]
             internal static partial int GdipCreateBitmapFromStream(IntPtr stream, IntPtr* bitmap);

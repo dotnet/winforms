@@ -1,8 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing.Internal
 {
@@ -89,15 +90,15 @@ namespace System.Drawing.Internal
         /// Combines region1 &amp; region2 into this region. The regions cannot be null. The three regions need not be
         /// distinct. For example, the sourceRgn1 can equal this region.
         /// </summary>
-        public Interop.RegionType CombineRegion(WindowsRegion region1, WindowsRegion region2, Interop.Gdi32.CombineMode mode)
+        public RegionType CombineRegion(WindowsRegion region1, WindowsRegion region2, Gdi32.CombineMode mode)
         {
-            return Interop.Gdi32.CombineRgn(new HandleRef(this, HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
+            return Gdi32.CombineRgn(new HandleRef(this, HRegion), new HandleRef(region1, region1.HRegion), new HandleRef(region2, region2.HRegion), mode);
         }
 
         private void CreateRegion(Rectangle rect)
         {
             Debug.Assert(_nativeHandle == IntPtr.Zero, "nativeHandle should be null, we're leaking handle");
-            _nativeHandle = Interop.Gdi32.CreateRectRgn(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height);
+            _nativeHandle = Gdi32.CreateRectRgn(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height);
             _ownHandle = true;
         }
 
@@ -111,7 +112,7 @@ namespace System.Drawing.Internal
 
                 if (_ownHandle)
                 {
-                    Interop.Gdi32.DeleteObject(new HandleRef(this, _nativeHandle));
+                    Gdi32.DeleteObject(new HandleRef(this, _nativeHandle));
                 }
 
                 _nativeHandle = IntPtr.Zero;
@@ -142,8 +143,8 @@ namespace System.Drawing.Internal
                 return new Rectangle(-int.MaxValue, -int.MaxValue, int.MaxValue, int.MaxValue);
             }
 
-            Interop.Gdi32.RECT rect = default;
-            Interop.Gdi32.GetRgnBox(new HandleRef(this, _nativeHandle), ref rect);
+            Gdi32.RECT rect = default;
+            Gdi32.GetRgnBox(new HandleRef(this, _nativeHandle), ref rect);
             return new Rectangle(new Point(rect.left, rect.top), rect.Size);
         }
     }

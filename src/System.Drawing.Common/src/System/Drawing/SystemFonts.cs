@@ -1,9 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics;
+using System.Drawing.Interop;
 using System.IO;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Drawing
 {
@@ -47,12 +49,12 @@ namespace System.Drawing
             return null;
         }
 
-        private static unsafe bool GetNonClientMetrics(out Interop.User32.NONCLIENTMETRICS metrics)
+        private static unsafe bool GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics)
         {
-            metrics = new Interop.User32.NONCLIENTMETRICS { cbSize = (uint)sizeof(Interop.User32.NONCLIENTMETRICS) };
+            metrics = new User32.NONCLIENTMETRICS { cbSize = (uint)sizeof(User32.NONCLIENTMETRICS) };
             fixed (void* m = &metrics)
             {
-                return Interop.User32.SystemParametersInfoW(Interop.User32.SystemParametersAction.SPI_GETNONCLIENTMETRICS, metrics.cbSize, m, 0);
+                return User32.SystemParametersInfoW(User32.SystemParametersAction.SPI_GETNONCLIENTMETRICS, metrics.cbSize, m, 0);
             }
         }
 
@@ -62,7 +64,7 @@ namespace System.Drawing
             {
                 Font? captionFont = null;
 
-                if (GetNonClientMetrics(out Interop.User32.NONCLIENTMETRICS metrics))
+                if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
                 {
                     captionFont = GetFontFromData(metrics.lfCaptionFont);
                     captionFont.SetSystemFontName(nameof(CaptionFont));
@@ -78,7 +80,7 @@ namespace System.Drawing
             {
                 Font? smcaptionFont = null;
 
-                if (GetNonClientMetrics(out Interop.User32.NONCLIENTMETRICS metrics))
+                if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
                 {
                     smcaptionFont = GetFontFromData(metrics.lfSmCaptionFont);
                     smcaptionFont.SetSystemFontName(nameof(SmallCaptionFont));
@@ -94,7 +96,7 @@ namespace System.Drawing
             {
                 Font? menuFont = null;
 
-                if (GetNonClientMetrics(out Interop.User32.NONCLIENTMETRICS metrics))
+                if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
                 {
                     menuFont = GetFontFromData(metrics.lfMenuFont);
                     menuFont.SetSystemFontName(nameof(MenuFont));
@@ -110,7 +112,7 @@ namespace System.Drawing
             {
                 Font? statusFont = null;
 
-                if (GetNonClientMetrics(out Interop.User32.NONCLIENTMETRICS metrics))
+                if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
                 {
                     statusFont = GetFontFromData(metrics.lfStatusFont);
                     statusFont.SetSystemFontName(nameof(StatusFont));
@@ -126,7 +128,7 @@ namespace System.Drawing
             {
                 Font? messageBoxFont = null;
 
-                if (GetNonClientMetrics(out Interop.User32.NONCLIENTMETRICS metrics))
+                if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
                 {
                     messageBoxFont = GetFontFromData(metrics.lfMessageFont);
                     messageBoxFont.SetSystemFontName(nameof(MessageBoxFont));
@@ -154,8 +156,8 @@ namespace System.Drawing
             {
                 Font? iconTitleFont = null;
 
-                Interop.User32.LOGFONT itfont = default;
-                if (Interop.User32.SystemParametersInfoW(Interop.User32.SystemParametersAction.SPI_GETICONTITLELOGFONT, (uint)sizeof(Interop.User32.LOGFONT), &itfont, 0))
+                LOGFONT itfont = default;
+                if (User32.SystemParametersInfoW(User32.SystemParametersAction.SPI_GETICONTITLELOGFONT, (uint)sizeof(LOGFONT), &itfont, 0))
                 {
                     iconTitleFont = GetFontFromData(itfont);
                     iconTitleFont.SetSystemFontName(nameof(IconTitleFont));
@@ -172,7 +174,7 @@ namespace System.Drawing
                 Font? defaultFont = null;
 
                 // For Arabic systems, always return Tahoma 8.
-                if ((ushort)Interop.Kernel32.GetSystemDefaultLCID() == 0x0001)
+                if ((ushort)Kernel32.GetSystemDefaultLCID() == 0x0001)
                 {
                     try
                     {
@@ -184,7 +186,7 @@ namespace System.Drawing
                 // First try DEFAULT_GUI.
                 if (defaultFont == null)
                 {
-                    IntPtr handle = Interop.Gdi32.GetStockObject(Interop.Gdi32.StockObject.DEFAULT_GUI_FONT);
+                    IntPtr handle = Gdi32.GetStockObject(Gdi32.StockObject.DEFAULT_GUI_FONT);
                     try
                     {
                         using (Font fontInWorldUnits = Font.FromHfont(handle))
@@ -231,7 +233,7 @@ namespace System.Drawing
             {
                 Font? dialogFont = null;
 
-                if ((ushort)Interop.Kernel32.GetSystemDefaultLCID() == 0x0011)
+                if ((ushort)Kernel32.GetSystemDefaultLCID() == 0x0011)
                 {
                     // Always return DefaultFont for Japanese cultures.
                     dialogFont = DefaultFont;
@@ -270,19 +272,18 @@ namespace System.Drawing
             return new Font(font.FontFamily, font.SizeInPoints, font.Style, GraphicsUnit.Point, font.GdiCharSet, font.GdiVerticalFont);
         }
 
-        private static Font GetFontFromData(Interop.User32.LOGFONT logFont)
+        private static Font GetFontFromData(LOGFONT logFont)
         {
             Font? font = null;
             try
             {
-                font = Font.FromLogFont(ref logFont);
+                font = Font.FromLogFont(in logFont);
             }
             catch (Exception ex) when (!IsCriticalFontException(ex)) { }
 
-            return
-                font == null ? DefaultFont :
-                font.Unit != GraphicsUnit.Point ? FontInPoints(font) :
-                font;
+            return font is null
+                ? DefaultFont
+                : font.Unit != GraphicsUnit.Point ? FontInPoints(font) : font;
         }
     }
 }
