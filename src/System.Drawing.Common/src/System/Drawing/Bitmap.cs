@@ -177,7 +177,7 @@ namespace System.Drawing
         public IntPtr GetHbitmap(Color background)
         {
             IntPtr hBitmap;
-            int status = Gdip.GdipCreateHBITMAPFromBitmap(new HandleRef(this, nativeImage), out hBitmap,
+            int status = Gdip.GdipCreateHBITMAPFromBitmap(new HandleRef(this, _nativeImage), out hBitmap,
                                                              ColorTranslator.ToWin32(background));
             if (status == 2 /* invalid parameter*/ && (Width >= short.MaxValue || Height >= short.MaxValue))
             {
@@ -193,7 +193,7 @@ namespace System.Drawing
         public IntPtr GetHicon()
         {
             IntPtr hIcon;
-            int status = Gdip.GdipCreateHICONFromBitmap(new HandleRef(this, nativeImage), out hIcon);
+            int status = Gdip.GdipCreateHICONFromBitmap(new HandleRef(this, _nativeImage), out hIcon);
             Gdip.CheckStatus(status);
 
             return hIcon;
@@ -214,7 +214,7 @@ namespace System.Drawing
                                                     rect.Width,
                                                     rect.Height,
                                                     unchecked((int)format),
-                                                    new HandleRef(this, nativeImage),
+                                                    new HandleRef(this, _nativeImage),
                                                     out dstHandle);
 
             if (status != Gdip.Ok || dstHandle == IntPtr.Zero)
@@ -266,9 +266,9 @@ namespace System.Drawing
                 }
 
                 // Swap nativeImage pointers to make it look like we modified the image in place
-                IntPtr temp = nativeImage;
-                nativeImage = result.nativeImage;
-                result.nativeImage = temp;
+                IntPtr temp = _nativeImage;
+                _nativeImage = result._nativeImage;
+                result._nativeImage = temp;
             }
         }
 
@@ -280,7 +280,7 @@ namespace System.Drawing
         public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format, BitmapData bitmapData)
         {
             int status = Gdip.GdipBitmapLockBits(
-                new HandleRef(this, nativeImage), ref rect, flags, format, bitmapData);
+                new HandleRef(this, _nativeImage), ref rect, flags, format, bitmapData);
 
             // libgdiplus has the wrong error code mapping for this state.
             if (status == 7)
@@ -294,7 +294,7 @@ namespace System.Drawing
 
         public void UnlockBits(BitmapData bitmapdata)
         {
-            int status = Gdip.GdipBitmapUnlockBits(new HandleRef(this, nativeImage), bitmapdata);
+            int status = Gdip.GdipBitmapUnlockBits(new HandleRef(this, _nativeImage), bitmapdata);
             Gdip.CheckStatus(status);
         }
 
@@ -311,7 +311,7 @@ namespace System.Drawing
             }
 
             int color;
-            int status = Gdip.GdipBitmapGetPixel(new HandleRef(this, nativeImage), x, y, out color);
+            int status = Gdip.GdipBitmapGetPixel(new HandleRef(this, _nativeImage), x, y, out color);
             Gdip.CheckStatus(status);
 
             return Color.FromArgb(color);
@@ -334,13 +334,13 @@ namespace System.Drawing
                 throw new ArgumentOutOfRangeException(nameof(y), SR.ValidRangeY);
             }
 
-            int status = Gdip.GdipBitmapSetPixel(new HandleRef(this, nativeImage), x, y, color.ToArgb());
+            int status = Gdip.GdipBitmapSetPixel(new HandleRef(this, _nativeImage), x, y, color.ToArgb());
             Gdip.CheckStatus(status);
         }
 
         public void SetResolution(float xDpi, float yDpi)
         {
-            int status = Gdip.GdipBitmapSetResolution(new HandleRef(this, nativeImage), xDpi, yDpi);
+            int status = Gdip.GdipBitmapSetResolution(new HandleRef(this, _nativeImage), xDpi, yDpi);
             Gdip.CheckStatus(status);
         }
         public Bitmap Clone(Rectangle rect, PixelFormat format)
@@ -357,7 +357,7 @@ namespace System.Drawing
                                                      rect.Width,
                                                      rect.Height,
                                                      unchecked((int)format),
-                                                     new HandleRef(this, nativeImage),
+                                                     new HandleRef(this, _nativeImage),
                                                      out dstHandle);
 
             if (status != Gdip.Ok || dstHandle == IntPtr.Zero)

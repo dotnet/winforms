@@ -523,7 +523,7 @@ namespace System.Drawing.Imaging
             // WORD aligned if it's a WMF.
 
             Gdip.CheckStatus(Gdip.GdipPlayMetafileRecord(
-                new HandleRef(this, nativeImage),
+                new HandleRef(this, _nativeImage),
                 recordType,
                 flags,
                 dataSize,
@@ -657,7 +657,7 @@ namespace System.Drawing.Imaging
 
             try
             {
-                Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromMetafile(new HandleRef(this, nativeImage), memory));
+                Gdip.CheckStatus(Gdip.GdipGetMetafileHeaderFromMetafile(new HandleRef(this, _nativeImage), memory));
 
                 int[] type = new int[] { 0 };
 
@@ -694,7 +694,7 @@ namespace System.Drawing.Imaging
         /// </summary>
         public IntPtr GetHenhmetafile()
         {
-            Gdip.CheckStatus(Gdip.GdipGetHemfFromMetafile(new HandleRef(this, nativeImage), out IntPtr hEmf));
+            Gdip.CheckStatus(Gdip.GdipGetHemfFromMetafile(new HandleRef(this, _nativeImage), out IntPtr hEmf));
             return hEmf;
         }
     }

@@ -182,6 +182,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Imaging\EncoderParameter.cs" />
     <Compile Include="System\Drawing\Imaging\EncoderParameterPrivate.cs" />
     <Compile Include="System\Drawing\Imaging\EncoderParameters.cs" />
+    <Compile Include="System\Drawing\Imaging\EncoderParametersPrivate.cs" />
     <Compile Include="System\Drawing\Imaging\ImageAttributes.cs" />
     <Compile Include="System\Drawing\Imaging\ImageCodecInfo.cs" />
     <Compile Include="System\Drawing\Imaging\ImageCodecInfoPrivate.cs" />

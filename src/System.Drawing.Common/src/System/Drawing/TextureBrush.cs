@@ -32,7 +32,7 @@ namespace System.Drawing
             }
 
             IntPtr brush;
-            int status = Gdip.GdipCreateTexture(new HandleRef(image, image.nativeImage),
+            int status = Gdip.GdipCreateTexture(new HandleRef(image, image._nativeImage),
                                                    (int)wrapMode,
                                                    out brush);
             Gdip.CheckStatus(status);
@@ -50,7 +50,7 @@ namespace System.Drawing
             }
 
             IntPtr brush;
-            int status = Gdip.GdipCreateTexture2(new HandleRef(image, image.nativeImage),
+            int status = Gdip.GdipCreateTexture2(new HandleRef(image, image._nativeImage),
                                                     unchecked((int)wrapMode),
                                                     dstRect.X,
                                                     dstRect.Y,
@@ -72,7 +72,7 @@ namespace System.Drawing
             }
 
             IntPtr brush;
-            int status = Gdip.GdipCreateTexture2I(new HandleRef(image, image.nativeImage),
+            int status = Gdip.GdipCreateTexture2I(new HandleRef(image, image._nativeImage),
                                                      unchecked((int)wrapMode),
                                                      dstRect.X,
                                                      dstRect.Y,
@@ -91,7 +91,7 @@ namespace System.Drawing
             ArgumentNullException.ThrowIfNull(image);
 
             IntPtr brush;
-            int status = Gdip.GdipCreateTextureIA(new HandleRef(image, image.nativeImage),
+            int status = Gdip.GdipCreateTextureIA(new HandleRef(image, image._nativeImage),
                                                      new HandleRef(imageAttr, (imageAttr == null) ?
                                                        IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                      dstRect.X,
@@ -111,7 +111,7 @@ namespace System.Drawing
             ArgumentNullException.ThrowIfNull(image);
 
             IntPtr brush;
-            int status = Gdip.GdipCreateTextureIAI(new HandleRef(image, image.nativeImage),
+            int status = Gdip.GdipCreateTextureIAI(new HandleRef(image, image._nativeImage),
                                                      new HandleRef(imageAttr, (imageAttr == null) ?
                                                        IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                      dstRect.X,
