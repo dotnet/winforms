@@ -4455,6 +4455,25 @@ namespace System.Drawing
 
             [LibraryImport(LibraryName)]
             internal static partial int GdipCreateBitmapFromStreamICM(IntPtr stream, IntPtr* bitmap);
+
+#if NET8_0_OR_GREATER
+            [LibraryImport(LibraryName)]
+            internal static partial int GdipCreateCachedBitmap(
+                [MarshalUsing(typeof(HandleRefMarshaller))] HandleRef bitmap,
+                [MarshalUsing(typeof(HandleRefMarshaller))] HandleRef graphics,
+                out nint cachedBitmap);
+
+            [LibraryImport(LibraryName)]
+            internal static partial int GdipDeleteCachedBitmap(
+                nint cachedBitmap);
+
+            [LibraryImport(LibraryName)]
+            internal static partial int GdipDrawCachedBitmap(
+                [MarshalUsing(typeof(HandleRefMarshaller))] HandleRef graphics,
+                [MarshalUsing(typeof(HandleRefMarshaller))] HandleRef cachedBitmap,
+                int x,
+                int y);
+#endif
         }
     }
 }

@@ -3197,5 +3197,85 @@ namespace System.Drawing.Tests
             Assert.Equal(new Matrix(), graphics.Transform);
             Assert.Equal(expectedVisibleClipBounds, graphics.VisibleClipBounds);
         }
+
+#if NET8_0_OR_GREATER
+        [Fact]
+        public void DrawCachedBitmap_ThrowsArgumentNullException()
+        {
+            using Bitmap bitmap = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+
+            Assert.Throws<ArgumentNullException>(() => graphics.DrawCachedBitmap(null!, 0, 0));
+        }
+
+        [Fact]
+        public void DrawCachedBitmap_DisposedBitmap_ThrowsArgumentException()
+        {
+            using Bitmap bitmap = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            CachedBitmap cachedBitmap = new(bitmap, graphics);
+            cachedBitmap.Dispose();
+
+            Assert.Throws<ArgumentException>(() => graphics.DrawCachedBitmap(cachedBitmap, 0, 0));
+        }
+
+        [Fact]
+        public void DrawCachedBitmap_Simple()
+        {
+            using Bitmap bitmap = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            using CachedBitmap cachedBitmap = new(bitmap, graphics);
+
+            graphics.DrawCachedBitmap(cachedBitmap, 0, 0);
+        }
+
+        [Fact]
+        public void DrawCachedBitmap_Translate()
+        {
+            using Bitmap bitmap = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.TranslateTransform(1.0f, 8.0f);
+            using CachedBitmap cachedBitmap = new(bitmap, graphics);
+
+            graphics.DrawCachedBitmap(cachedBitmap, 0, 0);
+        }
+
+        [Fact]
+        public void DrawCachedBitmap_Rotation_ThrowsInvalidOperation()
+        {
+            using Bitmap bitmap = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.RotateTransform(36.0f);
+            using CachedBitmap cachedBitmap = new(bitmap, graphics);
+
+            Assert.Throws<InvalidOperationException>(() => graphics.DrawCachedBitmap(cachedBitmap, 0, 0));
+        }
+
+        [Theory]
+        [InlineData(PixelFormat.Format16bppRgb555, PixelFormat.Format32bppRgb, false)]
+        [InlineData(PixelFormat.Format32bppRgb, PixelFormat.Format16bppRgb555, true)]
+        [InlineData(PixelFormat.Format32bppArgb, PixelFormat.Format16bppRgb555, false)]
+        public void DrawCachedBitmap_ColorDepthChange_ThrowsInvalidOperation(
+            PixelFormat sourceFormat,
+            PixelFormat destinationFormat,
+            bool shouldSucceed)
+        {
+            using Bitmap bitmap = new(10, 10, sourceFormat);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            using CachedBitmap cachedBitmap = new(bitmap, graphics);
+
+            using Bitmap bitmap2 = new(10, 10, destinationFormat);
+            using Graphics graphics2 = Graphics.FromImage(bitmap2);
+
+            if (shouldSucceed)
+            {
+                graphics2.DrawCachedBitmap(cachedBitmap, 0, 0);
+            }
+            else
+            {
+                Assert.Throws<InvalidOperationException>(() => graphics2.DrawCachedBitmap(cachedBitmap, 0, 0));
+            }
+        }
+#endif
     }
 }
