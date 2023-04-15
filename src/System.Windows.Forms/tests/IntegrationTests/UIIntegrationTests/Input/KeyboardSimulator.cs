@@ -25,7 +25,11 @@ internal class KeyboardSimulator
             InputBuilder.KeyDown(key),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) == 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -36,7 +40,11 @@ internal class KeyboardSimulator
             InputBuilder.KeyUp(key),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) == 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -48,7 +56,11 @@ internal class KeyboardSimulator
             InputBuilder.KeyUp(key),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) < 2)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -60,7 +72,11 @@ internal class KeyboardSimulator
             InputBuilder.CharacterUp(character),
         };
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) < 0)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -78,7 +94,11 @@ internal class KeyboardSimulator
             inputs[i * 2 + 1] = InputBuilder.CharacterUp(text[i]);
         }
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) < inputs.Length)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
@@ -109,7 +129,11 @@ internal class KeyboardSimulator
             inputs[modifierArray.Length + i + 1] = InputBuilder.KeyUp(keyArray[i]);
         }
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        if (PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>()) < inputs.Length)
+        {
+            throw new Exception("Input not added to stream");
+        }
+
         return this;
     }
 
