@@ -160,6 +160,7 @@ namespace System.Windows.Forms.UITests
             {
                 Application.Idle -= HandleApplicationIdle;
                 Application.LeaveThreadModal -= HandleApplicationIdle;
+                Thread.Sleep(10);
             }
 
             void HandleApplicationIdle(object? sender, EventArgs e)
