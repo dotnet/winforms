@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -73,7 +73,7 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
     private IntPtr _hCurrentBmp;
     private IntPtr _hCurrentFont;
 
-    private Stack? _contextStack;
+    private Stack<GraphicsState>? _contextStack;
 
 #if GDI_FINALIZATION_WATCH
     private string AllocationSite = DbgUtil.StackTrace;
@@ -212,7 +212,7 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
 
         if (_contextStack is not null)
         {
-            GraphicsState g = (GraphicsState)_contextStack.Pop()!;
+            GraphicsState g = _contextStack.Pop()!;
 
             _hCurrentBmp = g.hBitmap;
             _hCurrentBrush = g.hBrush;
@@ -241,7 +241,7 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
         HandleRef hdc = new HandleRef(this, _hDC);
         int state = Gdi32.SaveDC(hdc);
 
-        _contextStack ??= new Stack();
+        _contextStack ??= new();
 
         GraphicsState g = new GraphicsState();
         g.hBitmap = _hCurrentBmp;
