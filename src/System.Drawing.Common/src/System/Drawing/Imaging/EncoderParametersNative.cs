@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace System.Drawing.Imaging;
 
 [StructLayout(LayoutKind.Sequential)]
-internal unsafe struct EncoderParametersPrivate
+internal unsafe struct EncoderParametersNative
 {
     public uint Count;
 

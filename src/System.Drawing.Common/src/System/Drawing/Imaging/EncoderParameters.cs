@@ -20,10 +20,10 @@ public sealed class EncoderParameters : IDisposable
         int length = Param.Length;
 
         // The struct has the first EncoderParameter in it.
-        nint native = Marshal.AllocHGlobal(sizeof(EncoderParametersPrivate) + ((length - 1) * sizeof(EncoderParameterNative)));
+        nint native = Marshal.AllocHGlobal(sizeof(EncoderParametersNative) + ((length - 1) * sizeof(EncoderParameterNative)));
 
-        ((EncoderParametersPrivate*)native)->Count = (uint)length;
-        var parameters = ((EncoderParametersPrivate*)native)->Parameters;
+        ((EncoderParametersNative*)native)->Count = (uint)length;
+        var parameters = ((EncoderParametersNative*)native)->Parameters;
 
         for (int i = 0; i < length; i++)
         {
@@ -33,7 +33,7 @@ public sealed class EncoderParameters : IDisposable
         return native;
     }
 
-    internal static unsafe EncoderParameters ConvertFromNative(EncoderParametersPrivate* native)
+    internal static unsafe EncoderParameters ConvertFromNative(EncoderParametersNative* native)
     {
         if (native is null)
         {

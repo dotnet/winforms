@@ -894,7 +894,7 @@ namespace System.Drawing
                     size,
                     buffer));
 
-                parameters = EncoderParameters.ConvertFromNative((EncoderParametersPrivate*)buffer);
+                parameters = EncoderParameters.ConvertFromNative((EncoderParametersNative*)buffer);
             }
             finally
             {
