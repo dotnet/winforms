@@ -20,7 +20,7 @@ public sealed class EncoderParameters : IDisposable
         int length = Param.Length;
 
         // The struct has the first EncoderParameter in it.
-        nint native = Marshal.AllocHGlobal(sizeof(EncoderParametersPrivate) + ((length - 1) * sizeof(EncoderParameterPrivate)));
+        nint native = Marshal.AllocHGlobal(sizeof(EncoderParametersPrivate) + ((length - 1) * sizeof(EncoderParameterNative)));
 
         ((EncoderParametersPrivate*)native)->Count = (uint)length;
         var parameters = ((EncoderParametersPrivate*)native)->Parameters;

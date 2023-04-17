@@ -13,10 +13,10 @@ internal unsafe struct EncoderParametersPrivate
 
     // Native definition
     // EncoderParameter Parameter[1];
-    private EncoderParameterPrivate _parameter;
+    private EncoderParameterNative _parameter;
 
 #if NET7_0_OR_GREATER
     [UnscopedRef]
 #endif
-    public Span<EncoderParameterPrivate> Parameters => MemoryMarshal.CreateSpan(ref _parameter, (int)Count);
+    public Span<EncoderParameterNative> Parameters => MemoryMarshal.CreateSpan(ref _parameter, (int)Count);
 }

@@ -14,7 +14,7 @@ public sealed unsafe class EncoderParameter : IDisposable
     private readonly EncoderParameterValueType _parameterValueType;
     private nint _parameterValue;
 
-    internal EncoderParameterPrivate ToNative() => new()
+    internal EncoderParameterNative ToNative() => new()
     {
         ParameterGuid = _parameterGuid,
         ParameterValueType = _parameterValueType,

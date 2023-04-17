@@ -8,7 +8,8 @@ namespace System.Drawing.Imaging;
 
 
 [StructLayout(LayoutKind.Sequential)]
-internal unsafe struct EncoderParameterPrivate
+internal unsafe struct EncoderParameterNative
+
 {
     /// <summary>
     ///  GUID of the parameter.
