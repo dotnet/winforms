@@ -59,20 +59,20 @@ namespace System.Windows.Forms.UITests
                 listView.GroupCollapsedStateChanged += (sender, e) => collapsedStateChangedFired = true;
 
                 item1.Selected = true;
-
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
+                Thread.Sleep(10000);
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_DOWN));
                 Assert.False(item1.Selected);
                 Assert.True(item2.Selected);
                 Assert.False(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_DOWN));
                 Assert.False(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.True(item3.Selected);
                 Assert.False(collapsedStateChangedFired);
 
-                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
+                await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_DOWN));
                 Assert.False(item1.Selected);
                 Assert.False(item2.Selected);
                 Assert.True(item3.Selected);

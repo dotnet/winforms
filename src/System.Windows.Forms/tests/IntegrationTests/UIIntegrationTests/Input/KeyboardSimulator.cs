@@ -50,7 +50,7 @@ internal class KeyboardSimulator
 
     internal KeyboardSimulator KeyPress(VIRTUAL_KEY key)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
+        Span<INPUT> inputs = new INPUT[]
         {
             InputBuilder.KeyDown(key),
             InputBuilder.KeyUp(key),
