@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -170,8 +169,8 @@ namespace System.Windows.Forms
             HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
             PInvoke.GetObject(palette, out uint entryCount);
 
-            byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
-                .Rent(checked((int)(sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * entryCount))));
+            using BufferScope<byte> bitmapInfoBuffer = new
+                (checked((int)(sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * entryCount))));
 
             // Create a DIB based on the screen DC to write into with a halftone palette
             fixed (byte* bi = bitmapInfoBuffer)
@@ -217,8 +216,6 @@ namespace System.Windows.Forms
                 {
                     throw new Win32Exception();
                 }
-
-                ArrayPool<byte>.Shared.Return(bitmapInfoBuffer);
             }
 
             try
@@ -275,6 +272,7 @@ namespace System.Windows.Forms
                 monochromeStride++;
             }
 
+            // This needs to be zero'ed out so we cannot use the ArrayPool
             byte[] bits = new byte[monochromeStride * height];
             BitmapData data = bitmap.LockBits(
                 new Rectangle(0, 0, width, height),

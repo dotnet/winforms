@@ -4,13 +4,13 @@
 
 #nullable disable
 
-using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
@@ -2350,6 +2350,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Get the text stored by the native control for the specified list item.
         /// </summary>
+        [SkipLocalsInit]
         private unsafe string NativeGetItemText(int index)
         {
             int maxLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXTLEN, (WPARAM)index);
@@ -2358,22 +2359,13 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            char[] text = ArrayPool<char>.Shared.Rent(maxLength + 1);
-            string result;
-            fixed (char* pText = text)
+            using BufferScope<char> buffer = new(stackalloc char[128], minimumLength: maxLength);
+            fixed (char* b = buffer)
             {
-                int actualLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXT, (WPARAM)index, (LPARAM)pText);
+                int actualLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXT, (WPARAM)index, (LPARAM)b);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
-                if (actualLength == LB_ERR)
-                {
-                    return string.Empty;
-                }
-
-                result = new string(pText, 0, Math.Min(maxLength, actualLength));
+                return actualLength == LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
             }
-
-            ArrayPool<char>.Shared.Return(text);
-            return result;
         }
 
         /// <summary>

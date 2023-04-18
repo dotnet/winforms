@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
-
 namespace Windows.Win32.Graphics.Gdi
 {
     internal readonly partial struct HRGN
@@ -16,7 +14,7 @@ namespace Windows.Win32.Graphics.Gdi
                 return Array.Empty<RECT>();
             }
 
-            byte[] buffer = ArrayPool<byte>.Shared.Rent((int)regionDataSize);
+            using BufferScope<byte> buffer = new((int)regionDataSize);
 
             fixed (byte* b = buffer)
             {
@@ -26,7 +24,6 @@ namespace Windows.Win32.Graphics.Gdi
                 }
 
                 RECT[] result = RGNDATAHEADER.GetRegionRects((RGNDATAHEADER*)b);
-                ArrayPool<byte>.Shared.Return(buffer);
                 return result;
             }
         }

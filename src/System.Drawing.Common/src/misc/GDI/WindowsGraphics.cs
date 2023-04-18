@@ -5,7 +5,6 @@
 // GETTING, DISPOSING AND WORKING WITH A DC.
 
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
 
 namespace System.Drawing.Internal
 {

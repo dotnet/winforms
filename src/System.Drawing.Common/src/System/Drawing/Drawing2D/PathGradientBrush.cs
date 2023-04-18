@@ -4,7 +4,6 @@
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.ComponentModel;
-using System.Drawing.Internal;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Drawing2D

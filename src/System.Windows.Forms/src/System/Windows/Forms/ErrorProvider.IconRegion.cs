@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -52,7 +51,7 @@ namespace System.Windows.Forms
 
                     // If width is not multiple of 16, we need to allocate BitmapBitsAllocationSize for remaining bits.
                     int widthInBytes = 2 * ((size.Width + 15) / bitmapBitsAllocationSize); // its in bytes.
-                    byte[] bits = ArrayPool<byte>.Shared.Rent(widthInBytes * size.Height);
+                    using BufferScope<byte> bits = new(widthInBytes * size.Height);
                     fixed (void* pbits = bits)
                     {
                         PInvoke.GetBitmapBits(mask, bits.Length, pbits);
@@ -71,7 +70,6 @@ namespace System.Windows.Forms
                     }
 
                     _region.Intersect(new Rectangle(0, 0, size.Width, size.Height));
-                    ArrayPool<byte>.Shared.Return(bits);
 
                     return _region;
                 }

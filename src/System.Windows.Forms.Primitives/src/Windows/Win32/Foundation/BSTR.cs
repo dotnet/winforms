@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Windows.Win32.Foundation;
@@ -15,10 +16,7 @@ internal readonly unsafe partial struct BSTR : IDisposable
     public void Dispose()
     {
         Marshal.FreeBSTR((nint)Value);
-        fixed (char** c = &Value)
-        {
-            *c = null;
-        }
+        Unsafe.AsRef(this) = default;
     }
 
     /// <summary>

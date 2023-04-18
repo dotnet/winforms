@@ -5,8 +5,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
-using System.Linq;
-using NuGet.Frameworks;
 using Xunit;
 using static System.Drawing.FontConverter;
 

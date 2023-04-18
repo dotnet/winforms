@@ -8,8 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace System.Drawing
 {

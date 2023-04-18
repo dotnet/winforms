@@ -28,12 +28,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Runtime.InteropServices;
 using Xunit;
 
 namespace MonoTests.System.Drawing.Imaging
