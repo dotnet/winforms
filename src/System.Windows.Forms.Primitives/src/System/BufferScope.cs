@@ -11,6 +11,11 @@ namespace System;
 ///  Allows renting a buffer from <see cref="ArrayPool{T}"/> with a using statement. Can be used directly as if it
 ///  were a <see cref="Span{T}"/>.
 /// </summary>
+/// <remarks>
+///  <para>
+///   Buffers are not cleared and as such their inital contents will be random.
+///  </para>
+/// </remarks>
 internal ref struct BufferScope<T>
 {
     private T[]? _array;

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -272,7 +273,8 @@ namespace System.Windows.Forms
                 monochromeStride++;
             }
 
-            using BufferScope<byte> buffer = new(monochromeStride * height);
+            // This needs to be zero'ed out so we cannot use the ArrayPool
+            byte[] bits = new byte[monochromeStride * height];
             BitmapData data = bitmap.LockBits(
                 new Rectangle(0, 0, width, height),
                 ImageLockMode.ReadOnly,
@@ -290,7 +292,7 @@ namespace System.Windows.Forms
                     {
                         // Pixel is transparent; set bit to 1
                         int index = monochromeStride * y + x / 8;
-                        buffer[index] |= (byte)(0x80 >> (x % 8));
+                        bits[index] |= (byte)(0x80 >> (x % 8));
                     }
                 }
             }
@@ -298,9 +300,9 @@ namespace System.Windows.Forms
             bitmap.UnlockBits(data);
 
             // Create 1bpp.
-            fixed (byte* b = buffer)
+            fixed (byte* pBits = bits)
             {
-                return (IntPtr)PInvoke.CreateBitmap(size.Width, size.Height, nPlanes: 1, nBitCount: 1, b);
+                return (IntPtr)PInvoke.CreateBitmap(size.Width, size.Height, nPlanes: 1, nBitCount: 1, pBits);
             }
         }
 
