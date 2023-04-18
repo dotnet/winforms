@@ -10,12 +10,15 @@ namespace System.Windows.Forms
     ///  Thread safe cache of <see cref="HFONT"/> objects created from <see cref="Font"/> objects.
     /// </summary>
     /// <remarks>
-    ///  This adds a slight managed memory overhead to creating the <see cref="HFONT"/>, but saves 56 bytes and
-    ///  98%+ of the time on each cache request that hits (taking less than 1 us as opposed to 50-100+ us).
-    ///
-    ///  This cache is optimized for retrieval speed and limiting the number of unused GDI handles we're caching while
-    ///  hopefully handling the majority of application use cases. There is a limit of 65K GDI handles system wide and
-    ///  10K (default) per process.
+    ///  <para>
+    ///   This adds a slight managed memory overhead to creating the <see cref="HFONT"/>, but saves 56 bytes and
+    ///   98%+ of the time on each cache request that hits (taking less than 1 us as opposed to 50-100+ us).
+    ///  </para>
+    ///  <para>
+    ///   This cache is optimized for retrieval speed and limiting the number of unused GDI handles we're caching while
+    ///   hopefully handling the majority of application use cases. There is a limit of 65K GDI handles system wide and
+    ///   10K (default) per process.
+    ///  </para>
     /// </remarks>
     internal sealed partial class FontCache : RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>
     {

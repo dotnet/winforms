@@ -12,6 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
@@ -73,7 +74,7 @@ namespace System.Windows.Forms
         private static readonly Guid s_maskEdit_Clsid = new("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
         // Static state for perf optimization
-        private static Dictionary<Font, FONTDESC> s_fontTable;
+        private static ConditionalWeakTable<Font, object> s_fontTable;
 
         // BitVector32 masks for various internal state flags.
         private static readonly int s_ocxStateSet = BitVector32.CreateMask();
@@ -3853,11 +3854,11 @@ namespace System.Windows.Forms
         {
             if (s_fontTable is null)
             {
-                s_fontTable = new Dictionary<Font, FONTDESC>();
+                s_fontTable = new();
             }
-            else if (s_fontTable.TryGetValue(font, out FONTDESC cachedFDesc))
+            else if (s_fontTable.TryGetValue(font, out object cachedFDesc))
             {
-                return cachedFDesc;
+                return (FONTDESC)cachedFDesc;
             }
 
             LOGFONTW logfont = LOGFONTW.FromFont(font);
@@ -3872,7 +3873,7 @@ namespace System.Windows.Forms
                 fStrikethrough = font.Strikeout
             };
 
-            s_fontTable[font] = fdesc;
+            s_fontTable.Add(font, fdesc);
             return fdesc;
         }
 
