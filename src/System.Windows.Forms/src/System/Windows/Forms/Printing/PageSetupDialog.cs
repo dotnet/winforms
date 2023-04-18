@@ -293,12 +293,16 @@ namespace System.Windows.Forms
             // EnableMetric allows the users to choose between the AutoConversion or not.
             if (EnableMetric)
             {
-                //take the Units of Measurement while determining the PrinterUnits...
+                // Take the Units of Measurement while determining the Printer Units.
                 Span<char> buffer = stackalloc char[2];
                 int result;
                 fixed (char* pBuffer = buffer)
                 {
-                    result = PInvoke.GetLocaleInfoEx(PInvoke.LOCALE_NAME_SYSTEM_DEFAULT, PInvoke.LOCALE_IMEASURE, pBuffer, 2);
+                    result = PInvoke.GetLocaleInfoEx(
+                        PInvoke.LOCALE_NAME_SYSTEM_DEFAULT,
+                        PInvoke.LOCALE_IMEASURE,
+                        pBuffer,
+                        buffer.Length);
                 }
 
                 if (result > 0 && int.Parse(buffer, NumberStyles.Integer, CultureInfo.InvariantCulture) == 0)

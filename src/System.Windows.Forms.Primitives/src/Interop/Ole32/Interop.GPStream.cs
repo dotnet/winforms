@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 
@@ -66,7 +65,7 @@ internal static partial class Interop
                     return HRESULT.STG_E_INVALIDPOINTER;
                 }
 
-                byte[] buffer = ArrayPool<byte>.Shared.Rent(4096);
+                using BufferScope<byte> buffer = new(4096);
 
                 ulong remaining = cb;
                 ulong totalWritten = 0;
@@ -92,8 +91,6 @@ internal static partial class Interop
                         totalWritten += written;
                     }
                 }
-
-                ArrayPool<byte>.Shared.Return(buffer);
 
                 if (pcbRead is not null)
                     *pcbRead = totalRead;

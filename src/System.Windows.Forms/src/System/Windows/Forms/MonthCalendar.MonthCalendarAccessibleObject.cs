@@ -290,8 +290,7 @@ namespace System.Windows.Forms
                     return string.Empty;
                 }
 
-                const int nameLength = 20;
-                Span<char> name = stackalloc char[nameLength];
+                Span<char> name = stackalloc char[20];
 
                 fixed (char* pName = name)
                 {

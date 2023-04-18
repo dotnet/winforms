@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
@@ -417,7 +416,7 @@ namespace System.Windows.Forms
             }
 
             delegate* unmanaged[Stdcall]<HWND, uint, LPARAM, LPARAM, int> callback = &FolderBrowserDialog_BrowseCallbackProc;
-            char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
+            using BufferScope<char> displayName = new(PInvoke.MAX_PATH + 1);
             var handle = GCHandle.Alloc(this);
             try
             {
@@ -456,7 +455,6 @@ namespace System.Windows.Forms
             finally
             {
                 handle.Free();
-                ArrayPool<char>.Shared.Return(displayName);
             }
         }
 

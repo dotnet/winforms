@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -974,7 +973,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         }
         else if (errorText is null)
         {
-            char[] buffer = ArrayPool<char>.Shared.Rent(256 + 1);
+            using BufferScope<char> buffer = new(256 + 1);
 
             fixed (char* b = buffer)
             {
@@ -984,15 +983,13 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
                     (uint)hr,
                     PInvoke.GetThreadLocale(),
                     b,
-                    255,
+                    (uint)buffer.Length - 2,
                     null);
 
                 errorText = result == 0
                     ? string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr)
-                    : buffer.AsSpan()[..(int)result].TrimEnd(CharacterConstants.NewLine).ToString();
+                    : buffer[..(int)result].TrimEnd(CharacterConstants.NewLine).ToString();
             }
-
-            ArrayPool<char>.Shared.Return(buffer);
         }
 
         throw new ExternalException(errorText, (int)hr);

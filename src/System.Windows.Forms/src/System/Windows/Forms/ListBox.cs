@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
@@ -1602,6 +1602,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Get the text stored by the native control for the specified list item.
         /// </summary>
+        [SkipLocalsInit]
         internal unsafe string NativeGetItemText(int index)
         {
             int maxLength = (int)PInvoke.SendMessage(this, (WM)LB.GETTEXTLEN, (WPARAM)index);
@@ -1610,22 +1611,13 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            char[] text = ArrayPool<char>.Shared.Rent(maxLength + 1);
-            string result;
-            fixed (char* pText = text)
+            using BufferScope<char> buffer = new(stackalloc char[128], minimumLength: maxLength + 1);
+            fixed (char* b = buffer)
             {
-                int actualLength = (int)PInvoke.SendMessage(this, (WM)LB.GETTEXT, (WPARAM)index, (LPARAM)pText);
+                int actualLength = (int)PInvoke.SendMessage(this, (WM)LB.GETTEXT, (WPARAM)index, (LPARAM)b);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
-                if (actualLength == LB_ERR)
-                {
-                    return string.Empty;
-                }
-
-                result = new string(pText, 0, Math.Min(maxLength, actualLength));
+                return actualLength == LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
             }
-
-            ArrayPool<char>.Shared.Return(text);
-            return result;
         }
 
         /// <summary>

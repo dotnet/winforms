@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Buffers;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -3154,12 +3153,11 @@ namespace System.Windows.Forms
                 codepage = UNICODE,
             };
 
-            char[] text = ArrayPool<char>.Shared.Rent(maxLength);
-            string result;
+            BufferScope<char> buffer = new(maxLength);
             GETTEXTEX* pGt = &gt;
-            fixed (char* pText = text)
+            fixed (char* b = buffer)
             {
-                int actualLength = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.GETTEXTEX, (WPARAM)pGt, (LPARAM)pText);
+                int actualLength = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
 
                 // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
                 // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
@@ -3170,20 +3168,17 @@ namespace System.Windows.Forms
                     int index = 0;
                     while (index < actualLength)
                     {
-                        if (pText[index] == '\r')
+                        if (b[index] == '\r')
                         {
-                            pText[index] = '\n';
+                            b[index] = '\n';
                         }
 
                         index++;
                     }
                 }
 
-                result = new string(pText, 0, actualLength);
+                return buffer[..actualLength].ToString();
             }
-
-            ArrayPool<char>.Shared.Return(text);
-            return result;
         }
 
         private void UpdateOleCallback()
@@ -3342,127 +3337,130 @@ namespace System.Windows.Forms
 
         internal unsafe void WmReflectNotify(ref Message m)
         {
-            if (m.HWnd == Handle)
+            if (m.HWnd != Handle)
             {
-                NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                switch ((EN)nmhdr->code)
-                {
-                    case EN.LINK:
-                        EnLinkMsgHandler(ref m);
-                        break;
-                    case EN.DROPFILES:
-                        HDROP endropfiles = (HDROP)((ENDROPFILES*)m.LParamInternal)->hDrop;
+                base.WndProc(ref m);
+                return;
+            }
 
-                        // Only look at the first file.
-                        char[] path = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
-                        fixed (char* p = path)
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+            switch ((EN)nmhdr->code)
+            {
+                case EN.LINK:
+                    EnLinkMsgHandler(ref m);
+                    break;
+                case EN.DROPFILES:
+                    HDROP endropfiles = (HDROP)((ENDROPFILES*)m.LParamInternal)->hDrop;
+
+                    // Only look at the first file.
+                    using (BufferScope<char> buffer = new(PInvoke.MAX_PATH + 1))
+                    {
+                        fixed (char* b = buffer)
                         {
-                            if (PInvoke.DragQueryFile(endropfiles, iFile: 0, p, cch: 0) != 0)
+                            uint length = PInvoke.DragQueryFile(endropfiles, iFile: 0, b, cch: (uint)buffer.Length);
+                            if (length != 0)
                             {
-                                // Try to load the file as an RTF
+                                // Try to load the file as RTF.
+                                string path = buffer[..(int)length].ToString();
+
                                 try
                                 {
-                                    LoadFile(path.ToString(), RichTextBoxStreamType.RichText);
+                                    LoadFile(path, RichTextBoxStreamType.RichText);
                                 }
                                 catch
                                 {
-                                    // we failed to load as rich text so try it as plain text
+                                    // We failed to load as rich text, try again as plain text.
                                     try
                                     {
-                                        LoadFile(path.ToString(), RichTextBoxStreamType.PlainText);
+                                        LoadFile(path, RichTextBoxStreamType.PlainText);
                                     }
                                     catch
                                     {
-                                        // ignore any problems we have
                                     }
                                 }
                             }
                         }
+                    }
 
-                        ArrayPool<char>.Shared.Return(path);
-                        m.ResultInternal = (LRESULT)1;   // tell them we did the drop
-                        break;
+                    // Confirm that we did the drop
+                    m.ResultInternal = (LRESULT)1;
+                    break;
 
-                    case EN.REQUESTRESIZE:
-                        if (!CallOnContentsResized)
+                case EN.REQUESTRESIZE:
+                    if (!CallOnContentsResized)
+                    {
+                        REQRESIZE* reqResize = (REQRESIZE*)(nint)m.LParamInternal;
+                        if (BorderStyle == BorderStyle.Fixed3D)
                         {
-                            REQRESIZE* reqResize = (REQRESIZE*)(nint)m.LParamInternal;
-                            if (BorderStyle == BorderStyle.Fixed3D)
-                            {
-                                reqResize->rc.bottom++;
-                            }
-
-                            OnContentsResized(new ContentsResizedEventArgs(reqResize->rc));
+                            reqResize->rc.bottom++;
                         }
 
-                        break;
+                        OnContentsResized(new ContentsResizedEventArgs(reqResize->rc));
+                    }
 
-                    case EN.SELCHANGE:
-                        SELCHANGE* selChange = (SELCHANGE*)(nint)m.LParamInternal;
-                        WmSelectionChange(*selChange);
-                        break;
+                    break;
 
-                    case EN.PROTECTED:
+                case EN.SELCHANGE:
+                    SELCHANGE* selChange = (SELCHANGE*)(nint)m.LParamInternal;
+                    WmSelectionChange(*selChange);
+                    break;
+
+                case EN.PROTECTED:
+                    {
+                        ENPROTECTED enprotected;
+
+                        enprotected = *(ENPROTECTED*)(nint)m.LParamInternal;
+
+                        switch (enprotected.msg)
                         {
-                            ENPROTECTED enprotected;
-
-                            enprotected = *(ENPROTECTED*)(nint)m.LParamInternal;
-
-                            switch (enprotected.msg)
-                            {
-                                case (int)EM.SETCHARFORMAT:
-                                    // Allow change of protected style
-                                    CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
-                                    if ((charFormat->dwMask & CFM.PROTECTED) != 0)
-                                    {
-                                        m.ResultInternal = (LRESULT)0;
-                                        return;
-                                    }
-
-                                    break;
-
-                                // Throw an exception for the following
-                                //
-                                case (int)EM.SETPARAFORMAT:
-                                case (int)User32.EM.REPLACESEL:
-                                    break;
-
-                                case (int)EM.STREAMIN:
-                                    // Don't allow STREAMIN to replace protected selection
-                                    if ((unchecked((SF)(long)enprotected.wParam) & SF.F_SELECTION) != 0)
-                                    {
-                                        break;
-                                    }
-
+                            case (int)EM.SETCHARFORMAT:
+                                // Allow change of protected style
+                                CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
+                                if ((charFormat->dwMask & CFM.PROTECTED) != 0)
+                                {
                                     m.ResultInternal = (LRESULT)0;
                                     return;
+                                }
 
-                                // Allow the following
-                                case (int)User32.WM.COPY:
-                                case (int)User32.WM.SETTEXT:
-                                case (int)EM.EXLIMITTEXT:
-                                    m.ResultInternal = (LRESULT)0;
-                                    return;
+                                break;
 
-                                // Beep and disallow change for all other messages
-                                default:
-                                    PInvoke.MessageBeep(MESSAGEBOX_STYLE.MB_OK);
+                            // Throw an exception for the following
+                            //
+                            case (int)EM.SETPARAFORMAT:
+                            case (int)User32.EM.REPLACESEL:
+                                break;
+
+                            case (int)EM.STREAMIN:
+                                // Don't allow STREAMIN to replace protected selection
+                                if ((unchecked((SF)(long)enprotected.wParam) & SF.F_SELECTION) != 0)
+                                {
                                     break;
-                            }
+                                }
 
-                            OnProtected(EventArgs.Empty);
-                            m.ResultInternal = (LRESULT)1;
-                            break;
+                                m.ResultInternal = (LRESULT)0;
+                                return;
+
+                            // Allow the following
+                            case (int)User32.WM.COPY:
+                            case (int)User32.WM.SETTEXT:
+                            case (int)EM.EXLIMITTEXT:
+                                m.ResultInternal = (LRESULT)0;
+                                return;
+
+                            // Beep and disallow change for all other messages
+                            default:
+                                PInvoke.MessageBeep(MESSAGEBOX_STYLE.MB_OK);
+                                break;
                         }
 
-                    default:
-                        base.WndProc(ref m);
+                        OnProtected(EventArgs.Empty);
+                        m.ResultInternal = (LRESULT)1;
                         break;
-                }
-            }
-            else
-            {
-                base.WndProc(ref m);
+                    }
+
+                default:
+                    base.WndProc(ref m);
+                    break;
             }
         }
 

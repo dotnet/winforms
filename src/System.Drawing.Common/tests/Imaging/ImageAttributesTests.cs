@@ -23,10 +23,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
 using System.Drawing.Drawing2D;
-using System.Drawing.Tests;
-using System.IO;
 using Xunit;
 
 namespace System.Drawing.Imaging.Tests

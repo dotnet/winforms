@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -22,9 +22,12 @@ internal static partial class Interop
         [DllImport(Libraries.User32)]
         private static extern unsafe int GetWindowTextW(IntPtr hWnd, char* lpString, int nMaxCount);
 
+        [SkipLocalsInit]
         public static unsafe string GetWindowText(IntPtr hWnd)
         {
             int textLength = 0;
+
+            using BufferScope<char> buffer = new(stackalloc char[128]);
 
             while (true)
             {
@@ -35,28 +38,23 @@ internal static partial class Interop
                 // Use a buffer that has room for at least two additional chars
                 // (one for the null terminator, and one to detect if the text length
                 // has increased).
-                char[] windowTitleBuffer = ArrayPool<char>.Shared.Rent(textLength + 2);
-                string windowTitle;
-                fixed (char* pWindowTitle = windowTitleBuffer)
+                buffer.EnsureCapacity(textLength + 2);
+                fixed (char* b = buffer)
                 {
-                    int actualTextLength = GetWindowTextW(hWnd, pWindowTitle, windowTitleBuffer.Length);
+                    int actualTextLength = GetWindowTextW(hWnd, b, buffer.Length);
 
                     // The window text may have changed between calls.
                     // Keep looping until we get a buffer that can fit.
-                    if (actualTextLength > windowTitleBuffer.Length - 2)
+                    if (actualTextLength > buffer.Length - 2)
                     {
                         // We know the text is at least actualTextLength characters
                         // long, so use this as minimum value for the next iteration.
                         textLength = actualTextLength;
-                        ArrayPool<char>.Shared.Return(windowTitleBuffer);
                         continue;
                     }
 
-                    windowTitle = new string(pWindowTitle, 0, actualTextLength);
+                    return buffer[..actualTextLength].ToString();
                 }
-
-                ArrayPool<char>.Shared.Return(windowTitleBuffer);
-                return windowTitle;
             }
         }
 

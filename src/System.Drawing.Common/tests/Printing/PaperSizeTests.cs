@@ -26,7 +26,6 @@
 //  Andy Hume <andyhume32@yahoo.co.uk>
 //
 
-using System.Collections.Generic;
 using Xunit;
 
 namespace System.Drawing.Printing.Tests

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -148,15 +147,13 @@ namespace System.Windows.Forms
                 if (requiredStringSize > 0)
                 {
                     // It's able to make it a short path.
-                    char[] shortName = ArrayPool<char>.Shared.Rent((int)requiredStringSize);
+                    using BufferScope<char> shortName = new((int)requiredStringSize);
                     fixed (char* pShortName = shortName)
                     {
                         requiredStringSize = PInvoke.GetShortPathName(localPath, pShortName, requiredStringSize);
                         // If it can't make it a  short path, just leave the path we had.
-                        pathAndFileName = new string(pShortName, 0, (int)requiredStringSize);
+                        pathAndFileName = shortName[..(int)requiredStringSize].ToString();
                     }
-
-                    ArrayPool<char>.Shared.Return(shortName);
                 }
             }
 

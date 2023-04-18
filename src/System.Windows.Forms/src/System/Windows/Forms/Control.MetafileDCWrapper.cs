@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -119,109 +118,97 @@ namespace System.Windows.Forms
                     long bitsPerScanLine = bmp.bmBitsPixel * (long)bmp.bmWidth;
                     long bytesPerScanLine = (bitsPerScanLine + 7) / 8;
                     long totalBytesReqd = bytesPerScanLine * bmp.bmHeight;
-                    byte[] imageBuffer = ArrayPool<byte>.Shared.Rent((int)totalBytesReqd);
+                    using BufferScope<byte> imageBuffer = new((int)totalBytesReqd);
+                    using BufferScope<byte> bitmapInfoBuffer = new
+                        ((int)checked((sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * colorEntryCount))));
 
-                    byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
-                        .Rent((int)checked((sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * colorEntryCount))));
-                    try
+                    fixed (byte* bi = bitmapInfoBuffer)
+                    fixed (byte* pib = imageBuffer)
                     {
-                        fixed (byte* bi = bitmapInfoBuffer)
-                        fixed (byte* pib = imageBuffer)
+                        *((BITMAPINFOHEADER*)bi) = new BITMAPINFOHEADER
                         {
-                            *((BITMAPINFOHEADER*)bi) = new BITMAPINFOHEADER
-                            {
-                                biSize = (uint)sizeof(BITMAPINFOHEADER),
-                                biWidth = bmp.bmWidth,
-                                biHeight = bmp.bmHeight,
-                                biPlanes = 1,
-                                biBitCount = bmp.bmBitsPixel,
-                                biCompression = BI_COMPRESSION.BI_RGB
-                            };
+                            biSize = (uint)sizeof(BITMAPINFOHEADER),
+                            biWidth = bmp.bmWidth,
+                            biHeight = bmp.bmHeight,
+                            biPlanes = 1,
+                            biBitCount = bmp.bmBitsPixel,
+                            biCompression = BI_COMPRESSION.BI_RGB
+                        };
 
-                            // Include the palette for 256 color bitmaps
-                            if (colorEntryCount <= 256)
+                        // Include the palette for 256 color bitmaps
+                        if (colorEntryCount <= 256)
+                        {
+                            using BufferScope<byte> aj = new((int)(sizeof(PALETTEENTRY) * colorEntryCount));
+
+                            fixed (byte* ppal = aj)
                             {
-                                byte[] aj = ArrayPool<byte>.Shared.Rent((int)(sizeof(PALETTEENTRY) * colorEntryCount));
-                                try
+                                PInvoke.GetSystemPaletteEntries(hdcSrc, 0, (uint)colorEntryCount, (PALETTEENTRY*)ppal);
+                                byte* pcolors = bi + sizeof(BITMAPINFOHEADER);
+                                RGBQUAD* prgb = (RGBQUAD*)pcolors;
+                                PALETTEENTRY* lppe = (PALETTEENTRY*)ppal;
+
+                                // Convert the palette entries to RGB quad entries
+                                for (i = 0; i < (int)colorEntryCount; i++)
                                 {
-                                    fixed (byte* ppal = aj)
-                                    {
-                                        PInvoke.GetSystemPaletteEntries(hdcSrc, 0, (uint)colorEntryCount, (PALETTEENTRY*)ppal);
-                                        byte* pcolors = bi + sizeof(BITMAPINFOHEADER);
-                                        RGBQUAD* prgb = (RGBQUAD*)pcolors;
-                                        PALETTEENTRY* lppe = (PALETTEENTRY*)ppal;
-
-                                        // Convert the palette entries to RGB quad entries
-                                        for (i = 0; i < (int)colorEntryCount; i++)
-                                        {
-                                            prgb[i].rgbRed = lppe[i].peRed;
-                                            prgb[i].rgbBlue = lppe[i].peBlue;
-                                            prgb[i].rgbGreen = lppe[i].peGreen;
-                                        }
-                                    }
+                                    prgb[i].rgbRed = lppe[i].peRed;
+                                    prgb[i].rgbBlue = lppe[i].peBlue;
+                                    prgb[i].rgbGreen = lppe[i].peGreen;
                                 }
-                                finally
-                                {
-                                    ArrayPool<byte>.Shared.Return(aj);
-                                }
-                            }
-
-                            // Get the bitmap bits
-                            int diRet = PInvoke.GetDIBits(
-                                hdcSrc,
-                                hBitmap,
-                                start: 0,
-                                (uint)bmp.bmHeight,
-                                pib,
-                                (BITMAPINFO*)bi,
-                                DIB_USAGE.DIB_RGB_COLORS);
-                            if (diRet == 0)
-                            {
-                                return false;
-                            }
-
-                            // Set the destination coordinates depending on whether stretch-to-fit was chosen
-                            int xDest, yDest, cxDest, cyDest;
-                            if (bStretch)
-                            {
-                                xDest = rect.left;
-                                yDest = rect.top;
-                                cxDest = rect.Width;
-                                cyDest = rect.Height;
-                            }
-                            else
-                            {
-                                xDest = rect.left;
-                                yDest = rect.top;
-                                cxDest = bmp.bmWidth;
-                                cyDest = bmp.bmHeight;
-                            }
-
-                            // Paint the bitmap
-                            int iRet = PInvoke.StretchDIBits(
-                                hdcDest,
-                                xDest,
-                                yDest,
-                                cxDest,
-                                cyDest,
-                                0,
-                                0,
-                                bmp.bmWidth,
-                                bmp.bmHeight,
-                                pib,
-                                (BITMAPINFO*)bi,
-                                DIB_USAGE.DIB_RGB_COLORS,
-                                ROP_CODE.SRCCOPY);
-                            if (iRet == NativeMethods.GDI_ERROR)
-                            {
-                                return false;
                             }
                         }
-                    }
-                    finally
-                    {
-                        ArrayPool<byte>.Shared.Return(bitmapInfoBuffer);
-                        ArrayPool<byte>.Shared.Return(imageBuffer);
+
+                        // Get the bitmap bits
+                        int diRet = PInvoke.GetDIBits(
+                            hdcSrc,
+                            hBitmap,
+                            start: 0,
+                            (uint)bmp.bmHeight,
+                            pib,
+                            (BITMAPINFO*)bi,
+                            DIB_USAGE.DIB_RGB_COLORS);
+
+                        if (diRet == 0)
+                        {
+                            return false;
+                        }
+
+                        // Set the destination coordinates depending on whether stretch-to-fit was chosen
+                        int xDest, yDest, cxDest, cyDest;
+                        if (bStretch)
+                        {
+                            xDest = rect.left;
+                            yDest = rect.top;
+                            cxDest = rect.Width;
+                            cyDest = rect.Height;
+                        }
+                        else
+                        {
+                            xDest = rect.left;
+                            yDest = rect.top;
+                            cxDest = bmp.bmWidth;
+                            cyDest = bmp.bmHeight;
+                        }
+
+                        // Paint the bitmap
+                        int iRet = PInvoke.StretchDIBits(
+                            hdcDest,
+                            xDest,
+                            yDest,
+                            cxDest,
+                            cyDest,
+                            0,
+                            0,
+                            bmp.bmWidth,
+                            bmp.bmHeight,
+                            pib,
+                            (BITMAPINFO*)bi,
+                            DIB_USAGE.DIB_RGB_COLORS,
+                            ROP_CODE.SRCCOPY);
+
+                        if (iRet == NativeMethods.GDI_ERROR)
+                        {
+                            return false;
+                        }
                     }
                 }
                 finally
