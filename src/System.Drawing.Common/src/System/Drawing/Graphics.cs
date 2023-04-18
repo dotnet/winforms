@@ -213,7 +213,7 @@ namespace System.Drawing
                 throw new ArgumentException(SR.GdiplusCannotCreateGraphicsFromIndexedPixelFormat, nameof(image));
 
             Gdip.CheckStatus(Gdip.GdipGetImageGraphicsContext(
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 out IntPtr nativeGraphics));
 
             return new Graphics(nativeGraphics) { _backingImage = image };
@@ -2217,7 +2217,7 @@ namespace System.Drawing
             ArgumentNullException.ThrowIfNull(image);
 
             int status = Gdip.GdipDrawImage(
-                new HandleRef(this, NativeGraphics), new HandleRef(image, image.nativeImage),
+                new HandleRef(this, NativeGraphics), new HandleRef(image, image._nativeImage),
                 x, y);
 
             IgnoreMetafileErrors(image, ref status);
@@ -2235,7 +2235,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImageRect(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 x, y,
                 width, height);
 
@@ -2254,7 +2254,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImageI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 x, y);
 
             IgnoreMetafileErrors(image, ref status);
@@ -2272,7 +2272,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImageRectI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 x, y,
                 width, height);
 
@@ -2335,7 +2335,7 @@ namespace System.Drawing
             {
                 int status = Gdip.GdipDrawImagePoints(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(image, image.nativeImage),
+                    new HandleRef(image, image._nativeImage),
                     p, count);
 
                 IgnoreMetafileErrors(image, ref status);
@@ -2356,7 +2356,7 @@ namespace System.Drawing
             {
                 int status = Gdip.GdipDrawImagePointsI(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(image, image.nativeImage),
+                    new HandleRef(image, image._nativeImage),
                     p, count);
 
                 IgnoreMetafileErrors(image, ref status);
@@ -2370,7 +2370,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImagePointRect(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 x, y,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 (int)srcUnit);
@@ -2385,7 +2385,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImagePointRectI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 x, y,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 (int)srcUnit);
@@ -2400,7 +2400,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImageRectRect(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 destRect.X, destRect.Y, destRect.Width, destRect.Height,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 srcUnit,
@@ -2418,7 +2418,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImageRectRectI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 destRect.X, destRect.Y, destRect.Width, destRect.Height,
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 srcUnit,
@@ -2443,7 +2443,7 @@ namespace System.Drawing
             {
                 int status = Gdip.GdipDrawImagePointsRect(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(image, image.nativeImage),
+                    new HandleRef(image, image._nativeImage),
                     p, destPoints.Length,
                     srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                     srcUnit,
@@ -2492,7 +2492,7 @@ namespace System.Drawing
             {
                 int status = Gdip.GdipDrawImagePointsRect(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(image, image.nativeImage),
+                    new HandleRef(image, image._nativeImage),
                     p, destPoints.Length,
                     srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                     srcUnit,
@@ -2551,7 +2551,7 @@ namespace System.Drawing
             {
                 int status = Gdip.GdipDrawImagePointsRectI(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(image, image.nativeImage),
+                    new HandleRef(image, image._nativeImage),
                     p, destPoints.Length,
                     srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                     srcUnit,
@@ -2619,7 +2619,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImageRectRect(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 destRect.X, destRect.Y, destRect.Width, destRect.Height,
                 srcX, srcY, srcWidth, srcHeight,
                 srcUnit,
@@ -2686,7 +2686,7 @@ namespace System.Drawing
 
             int status = Gdip.GdipDrawImageRectRectI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(image, image.nativeImage),
+                new HandleRef(image, image._nativeImage),
                 destRect.X, destRect.Y, destRect.Width, destRect.Height,
                 srcX, srcY, srcWidth, srcHeight,
                 srcUnit,
@@ -3285,7 +3285,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPoint(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destPoint,
                 callback,
                 callbackData,
@@ -3300,7 +3300,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPointI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destPoint,
                 callback,
                 callbackData,
@@ -3316,7 +3316,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestRect(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destRect,
                 callback,
                 callbackData,
@@ -3332,7 +3332,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestRectI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destRect,
                 callback,
                 callbackData,
@@ -3355,7 +3355,7 @@ namespace System.Drawing
             {
                 Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPoints(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                    new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                     p, destPoints.Length,
                     callback,
                     callbackData,
@@ -3379,7 +3379,7 @@ namespace System.Drawing
             {
                 Gdip.CheckStatus(Gdip.GdipEnumerateMetafileDestPointsI(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                    new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                     p, destPoints.Length,
                     callback,
                     callbackData,
@@ -3398,7 +3398,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPoint(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destPoint,
                 ref srcRect,
                 unit,
@@ -3418,7 +3418,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPointI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destPoint,
                 ref srcRect,
                 unit,
@@ -3438,7 +3438,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestRect(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destRect,
                 ref srcRect,
                 unit,
@@ -3458,7 +3458,7 @@ namespace System.Drawing
         {
             Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestRectI(
                 new HandleRef(this, NativeGraphics),
-                new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                 ref destRect,
                 ref srcRect,
                 unit,
@@ -3485,7 +3485,7 @@ namespace System.Drawing
             {
                 Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPoints(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                    new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                     p, destPoints.Length,
                     ref srcRect,
                     unit,
@@ -3513,7 +3513,7 @@ namespace System.Drawing
             {
                 Gdip.CheckStatus(Gdip.GdipEnumerateMetafileSrcRectDestPointsI(
                     new HandleRef(this, NativeGraphics),
-                    new HandleRef(metafile, metafile?.nativeImage ?? IntPtr.Zero),
+                    new HandleRef(metafile, metafile?._nativeImage ?? IntPtr.Zero),
                     p, destPoints.Length,
                     ref srcRect,
                     unit,
