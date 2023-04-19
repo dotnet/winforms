@@ -10642,7 +10642,7 @@ public unsafe partial class Control :
             if (_x != x || _y != y || _width != width ||
                 _height != height)
             {
-                _forceAnchorCalculations = true;
+                _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
                 try
                 {
                     SetBoundsCore(x, y, width, height, BoundsSpecified.All);
@@ -10688,18 +10688,18 @@ public unsafe partial class Control :
             height = _height;
         }
 
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
-        {
-            _forceAnchorCalculations = true;
-            try
+            if (_x != x || _y != y || _width != width ||
+                _height != height)
             {
-                SetBoundsCore(x, y, width, height, specified);
-            }
-            finally
-            {
-                _forceAnchorCalculations = false;
-            }
+                _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+                try
+                {
+                    SetBoundsCore(x, y, width, height, specified);
+                }
+                finally
+                {
+                    _forceAnchorCalculations = false;
+                }
 
             // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
             // have refreshed the interior layout or the resized control.  We only need to layout
