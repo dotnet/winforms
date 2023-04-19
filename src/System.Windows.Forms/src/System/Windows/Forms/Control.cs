@@ -333,7 +333,10 @@ namespace System.Windows.Forms
         // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
         private Dictionary<int, Font>? _dpiFonts;
 
+        // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo, particularly in cases involving nested containers.
         internal bool _childControlsNeedAnchorLayout;
+
+        // Inform whether the AnchorsInfo needs to be reevaluated, especially when the control's bounds have been altered explicitly.
         internal bool _forceAnchorCalculations;
 
         internal byte LayoutSuspendCount { get; private set; }
@@ -10647,7 +10650,15 @@ namespace System.Windows.Forms
             if (_x != x || _y != y || _width != width ||
                 _height != height)
             {
-                SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+                _forceAnchorCalculations = true;
+                try
+                {
+                    SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+                }
+                finally
+                {
+                    _forceAnchorCalculations = false;
+                }
 
                 // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
                 // have refreshed the interior layout.  We only need to layout the parent.

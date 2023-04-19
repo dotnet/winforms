@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Layout
                     continue;
                 }
 
-                //Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
+                Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
                 SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, measureOnly: false));
             }
         }
@@ -878,6 +878,8 @@ namespace System.Windows.Forms.Layout
             }
 
             AnchorInfo anchorInfo = GetAnchorInfo(control);
+
+            // AnchorsInfo is not computed yet. Check if control is ready for AnchorInfo calculation at this time.
             if (anchorInfo is null)
             {
                 // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
@@ -887,6 +889,7 @@ namespace System.Windows.Forms.Layout
                 if ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
                     || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0))
                 {
+                    // Mark parent to indicate that one of its child control requires AnchorsInfo to be calculated.
                     parent._childControlsNeedAnchorLayout = true;
                     return;
                 }
@@ -905,8 +908,9 @@ namespace System.Windows.Forms.Layout
                 SetAnchorInfo(control, anchorInfo);
             }
 
+            // Reset parent flag as we now ready to iterate over all children requiring AnchorInfo calculation.
             parent._childControlsNeedAnchorLayout = false;
-            control._forceAnchorCalculations = false;
+
             Rectangle displayRectangle = control.Parent.DisplayRectangle;
             Rectangle elementBounds = GetCachedBounds(control);
             int x = elementBounds.X;
@@ -1143,38 +1147,6 @@ namespace System.Windows.Forms.Layout
                 UpdateAnchorInfo(element);
             }
         }
-
-        /*
-        private static void UpdateAnchors(IArrangedElement element)
-        {
-            if (UseAnchorLayoutV2(element))
-            {
-                if (ElementOrItsChildrenNeedAnchorLayout((Control)element, out bool childElementAnchored))
-                {
-                    UpdateAnchorsIteratively((Control)element);
-                }
-            }
-            else if (CommonProperties.GetNeedsAnchorLayout(element))
-            {
-                UpdateAnchorInfo(element);
-            }
-
-            static void UpdateAnchorsIteratively(Control control)
-            {
-                if (CommonProperties.GetNeedsAnchorLayout(control))
-                {
-                    UpdateAnchorInfoV2(control);
-                }
-
-                var childControls = control.Controls;
-                for (int i = 0; i < childControls.Count; i++)
-                {
-                    UpdateAnchorsIteratively(childControls[i]);
-                }
-
-                return;
-            }
-        }*/
 
         internal override Size GetPreferredSize(IArrangedElement container, Size proposedBounds)
         {
