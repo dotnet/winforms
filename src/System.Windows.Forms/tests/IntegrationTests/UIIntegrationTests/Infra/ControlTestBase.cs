@@ -166,6 +166,11 @@ namespace System.Windows.Forms.UITests
                     sleepTime -= 10;
                     Thread.Sleep(10);
                 }
+
+                if (sleepTime >= 1000)
+                {
+                    throw new Exception("Timed out and Cursor is still busy.");
+                }
             }
 
             void HandleApplicationIdle(object? sender, EventArgs e)
