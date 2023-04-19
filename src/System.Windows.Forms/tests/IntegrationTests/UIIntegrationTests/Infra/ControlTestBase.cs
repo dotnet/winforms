@@ -167,7 +167,7 @@ namespace System.Windows.Forms.UITests
                     Thread.Sleep(10);
                 }
 
-                if (sleepTime >= 1000)
+                if (sleepTime <= 0)
                 {
                     throw new Exception("Timed out and Cursor is still busy.");
                 }
