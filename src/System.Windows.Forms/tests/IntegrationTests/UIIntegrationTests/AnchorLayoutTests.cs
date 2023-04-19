@@ -155,16 +155,85 @@ public class AnchorLayoutTests : ControlTestBase
         }
     }
 
-    private static void LaunchFormAndVerify(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
-    {
-        (Form form, Button button) = GetFormWithAnchoredButton(anchors);
-        Rectangle newButtonBounds = button.Bounds;
-        try
+        [WinFormsFact]
+        public void NestedContainer_AnchorsComputed()
         {
-            form.ResumeLayout(true);
-            form.Controls.Add(button);
-            form.Shown += OnFormShown;
-            form.ShowDialog();
+            int previousSwitchValue = SetAncorLayoutV2();
+            (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+            try
+            {
+                using var container = new ContainerControl();
+                container.Dock = DockStyle.Fill;
+                container.SuspendLayout();
+                container.Controls.Add(button);
+
+                DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+                Assert.Null(anchorInfo);
+
+                form.Controls.Add(container);
+                anchorInfo = DefaultLayout.GetAnchorInfo(button);
+                Assert.Null(anchorInfo);
+
+                container.ResumeLayout(false);
+                form.ResumeLayout(false);
+
+                anchorInfo = DefaultLayout.GetAnchorInfo(button);
+                Assert.NotNull(anchorInfo);
+            }
+            finally
+            {
+                // Reset switch.
+                SetAnchorLayoutV2Switch(previousSwitchValue);
+                Dispose(form, button);
+            }
+        }
+
+        [WinFormsFact]
+        public void SetBoundsOnAcnhoredControl_BoundsChanged()
+        {
+            int previousSwitchValue = SetAncorLayoutV2();
+            (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+            try
+            {
+                form.Controls.Add(button);
+
+                DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+                Assert.Null(anchorInfo);
+
+                form.ResumeLayout(false);
+
+                anchorInfo = DefaultLayout.GetAnchorInfo(button);
+                Assert.NotNull(anchorInfo);
+
+                var bounds = button.Bounds;
+                button.SetBounds(bounds.X + 5, bounds.Y + 5, bounds.Width + 10, bounds.Height + 10, BoundsSpecified.None);
+                Assert.Equal(bounds, button.Bounds); // Bounds Specified is None.
+
+                button.SetBounds(bounds.X + 5, bounds.Y + 5, bounds.Width + 10, bounds.Height + 10, BoundsSpecified.All);
+                Assert.NotEqual(bounds, button.Bounds); // Bounds Specified is None.
+
+                bounds = button.Bounds;
+                button.SetBounds(bounds.X + 5, bounds.Y + 5, bounds.Width + 10, bounds.Height + 10);
+                Assert.NotEqual(bounds, button.Bounds);
+            }
+            finally
+            {
+                // Reset switch.
+                SetAnchorLayoutV2Switch(previousSwitchValue);
+                Dispose(form, button);
+            }
+        }
+
+        private static void LaunchFormAndVerify(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
+        {
+            (Form form, Button button) = GetFormWithAnchoredButton(anchors);
+            Rectangle newButtonBounds = button.Bounds;
+            try
+            {
+                form.ResumeLayout(true);
+                form.Controls.Add(button);
+                form.Shown += OnFormShown;
+                form.ShowDialog();
 
             Assert.Equal(expectedX, newButtonBounds.X);
             Assert.Equal(expectedY, newButtonBounds.Y);

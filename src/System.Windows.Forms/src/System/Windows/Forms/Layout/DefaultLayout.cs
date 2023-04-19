@@ -391,10 +391,10 @@ internal partial class DefaultLayout : LayoutEngine
                 continue;
             }
 
-            //Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
-            SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, measureOnly: false));
+                Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
+                SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, measureOnly: false));
+            }
         }
-    }
 
     private static Size LayoutDockedControls(IArrangedElement container, bool measureOnly)
     {
@@ -876,20 +876,23 @@ internal partial class DefaultLayout : LayoutEngine
             return;
         }
 
-        AnchorInfo anchorInfo = GetAnchorInfo(control);
-        if (anchorInfo is null)
-        {
-            // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
-            // outside of serialized source and happen only in design-time scenario. Hence, checking for
-            // LayoutSuspendCount > 1.
-            bool ancestorInDesignMode = control.IsAncestorSiteInDesignMode;
-            if ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
-                || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0))
+            AnchorInfo anchorInfo = GetAnchorInfo(control);
+
+            // AnchorsInfo is not computed yet. Check if control is ready for AnchorInfo calculation at this time.
+            if (anchorInfo is null)
             {
-                parent._childControlsNeedAnchorLayout = true;
-                return;
+                // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
+                // outside of serialized source and happen only in design-time scenario. Hence, checking for
+                // LayoutSuspendCount > 1.
+                bool ancestorInDesignMode = control.IsAncestorSiteInDesignMode;
+                if ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
+                    || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0))
+                {
+                    // Mark parent to indicate that one of its child control requires AnchorsInfo to be calculated.
+                    parent._childControlsNeedAnchorLayout = true;
+                    return;
+                }
             }
-        }
 
         if (anchorInfo is not null && !control._forceAnchorCalculations)
         {
@@ -904,12 +907,13 @@ internal partial class DefaultLayout : LayoutEngine
             SetAnchorInfo(control, anchorInfo);
         }
 
-        parent._childControlsNeedAnchorLayout = false;
-        control._forceAnchorCalculations = false;
-        Rectangle displayRectangle = control.Parent.DisplayRectangle;
-        Rectangle elementBounds = GetCachedBounds(control);
-        int x = elementBounds.X;
-        int y = elementBounds.Y;
+            // Reset parent flag as we now ready to iterate over all children requiring AnchorInfo calculation.
+            parent._childControlsNeedAnchorLayout = false;
+
+            Rectangle displayRectangle = control.Parent.DisplayRectangle;
+            Rectangle elementBounds = GetCachedBounds(control);
+            int x = elementBounds.X;
+            int y = elementBounds.Y;
 
         anchorInfo.DisplayRectangle = displayRectangle;
         anchorInfo.Left = x;
@@ -1136,16 +1140,16 @@ internal partial class DefaultLayout : LayoutEngine
         Debug.Assert(specified == BoundsSpecified.None || GetCachedBounds(element) == element.Bounds,
             "Attempt to InitLayout while element has active cached bounds.");
 
-        if (specified != BoundsSpecified.None &&
-            (CommonProperties.GetNeedsAnchorLayout(element) || (UseAnchorLayoutV2(element) && ((Control)element)._childControlsNeedAnchorLayout)))
-        {
-            UpdateAnchorInfo(element);
+            if (specified != BoundsSpecified.None &&
+                (CommonProperties.GetNeedsAnchorLayout(element) || (UseAnchorLayoutV2(element) && ((Control)element)._childControlsNeedAnchorLayout)))
+            {
+                UpdateAnchorInfo(element);
+            }
         }
-    }
 
-    internal override Size GetPreferredSize(IArrangedElement container, Size proposedBounds)
-    {
-        Debug.Assert(!HasCachedBounds(container), "Do not call this method with an active cached bounds list.");
+        internal override Size GetPreferredSize(IArrangedElement container, Size proposedBounds)
+        {
+            Debug.Assert(!HasCachedBounds(container), "Do not call this method with an active cached bounds list.");
 
         TryCalculatePreferredSize(container, measureOnly: true, preferredSize: out Size prefSize);
         return prefSize;

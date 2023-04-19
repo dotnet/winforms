@@ -331,10 +331,11 @@ public unsafe partial class Control :
     // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
     private Dictionary<int, Font>? _dpiFonts;
 
-    internal byte LayoutSuspendCount { get; private set; }
+        // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo, particularly in cases involving nested containers.
+        internal bool _childControlsNeedAnchorLayout;
 
-    internal bool _childControlsNeedAnchorLayout;
-    internal bool _forceAnchorCalculations;
+        // Inform whether the AnchorsInfo needs to be reevaluated, especially when the control's bounds have been altered explicitly.
+        internal bool _forceAnchorCalculations;
 
 #if DEBUG
     internal void AssertLayoutSuspendCount(int value)
@@ -10637,15 +10638,23 @@ public unsafe partial class Control :
         }
     }
 
-    /// <summary>
-    ///  Sets the bounds of the control.
-    /// </summary>
-    public void SetBounds(int x, int y, int width, int height)
-    {
-        if (_x != x || _y != y || _width != width ||
-            _height != height)
+        /// <summary>
+        ///  Sets the bounds of the control.
+        /// </summary>
+        public void SetBounds(int x, int y, int width, int height)
         {
-            SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+            if (_x != x || _y != y || _width != width ||
+                _height != height)
+            {
+                _forceAnchorCalculations = true;
+                try
+                {
+                    SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+                }
+                finally
+                {
+                    _forceAnchorCalculations = false;
+                }
 
             // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
             // have refreshed the interior layout.  We only need to layout the parent.
