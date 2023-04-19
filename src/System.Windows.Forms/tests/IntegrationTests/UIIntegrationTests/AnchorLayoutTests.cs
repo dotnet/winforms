@@ -172,7 +172,37 @@ namespace System.Windows.Forms.UITests
                 Assert.Null(anchorInfo);
 
                 form.Controls.Add(container);
+                Assert.Null(anchorInfo);
+
+                container.ResumeLayout(false);
+                form.ResumeLayout(false);
                 anchorInfo = DefaultLayout.GetAnchorInfo(button);
+                Assert.NotNull(anchorInfo);
+            }
+            finally
+            {
+                // Reset switch.
+                SetAnchorLayoutV2Switch(previousSwitchValue);
+                Dispose(form, button);
+            }
+        }
+
+        [WinFormsFact]
+        public void ParentChanged_AnchorsUpdated()
+        {
+            int previousSwitchValue = SetAncorLayoutV2();
+            (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+            try
+            {
+                using var container = new ContainerControl();
+                container.Dock = DockStyle.Fill;
+                container.SuspendLayout();
+                container.Controls.Add(button);
+
+                DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+                Assert.Null(anchorInfo);
+
+                form.Controls.Add(container);
                 Assert.Null(anchorInfo);
 
                 container.ResumeLayout(false);
@@ -180,6 +210,13 @@ namespace System.Windows.Forms.UITests
 
                 anchorInfo = DefaultLayout.GetAnchorInfo(button);
                 Assert.NotNull(anchorInfo);
+
+                container.Controls.Remove(button);
+                Assert.NotNull(anchorInfo);
+
+                var previousDisplayRect = anchorInfo.DisplayRectangle;
+                form.Controls.Add(button);
+                Assert.NotEqual(previousDisplayRect, anchorInfo.DisplayRectangle);
             }
             finally
             {
