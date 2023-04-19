@@ -10646,7 +10646,7 @@ namespace System.Windows.Forms
             if (_x != x || _y != y || _width != width ||
                 _height != height)
             {
-                _forceAnchorCalculations = true;
+                _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
                 try
                 {
                     SetBoundsCore(x, y, width, height, BoundsSpecified.All);
@@ -10695,7 +10695,7 @@ namespace System.Windows.Forms
             if (_x != x || _y != y || _width != width ||
                 _height != height)
             {
-                _forceAnchorCalculations = true;
+                _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
                 try
                 {
                     SetBoundsCore(x, y, width, height, specified);
