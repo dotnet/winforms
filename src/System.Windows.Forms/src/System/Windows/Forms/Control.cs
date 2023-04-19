@@ -4576,21 +4576,17 @@ public unsafe partial class Control :
                 OnParentChanged(EventArgs.Empty);
             }
 
-            if (LocalAppContextSwitches.AnchorLayoutV2)
-            {
-                _forceAnchorCalculations = true;
-                try
-                {
-                    DefaultLayout.UpdateAnchorInfoV2(this);
-                }
-                finally
-                {
-                    _forceAnchorCalculations = false;
-                }
-            }
-
             SetState(States.CheckedHost, false);
-            ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
+
+            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
+            try
+            {
+                ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
+            }
+            finally
+            {
+                _forceAnchorCalculations = false;
+            }
         }
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
