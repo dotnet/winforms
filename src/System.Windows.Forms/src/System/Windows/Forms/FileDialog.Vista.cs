@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using Windows.Win32.UI.Controls.Dialogs;
 using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;
 using static Windows.Win32.UI.Shell.FILEOPENDIALOGOPTIONS;
@@ -105,7 +104,7 @@ namespace System.Windows.Forms
                 | OFN_ENABLESIZING  // These shouldn't be set in options (only set in the flags for the legacy dialog)
                 | OFN_EXPLORER;     // These shouldn't be set in options (only set in the flags for the legacy dialog)
 
-            Debug.Assert((UnexpectedOptions & _fileNameFlags) == 0, "Unexpected FileDialog options");
+            System.Diagnostics.Debug.Assert((UnexpectedOptions & _fileNameFlags) == 0, "Unexpected FileDialog options");
 #endif
 
             FILEOPENDIALOGOPTIONS result = (FILEOPENDIALOGOPTIONS)_fileNameFlags & BlittableOptions;
