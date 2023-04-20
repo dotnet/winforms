@@ -20,30 +20,24 @@ public partial class TrackBar
         {
             get
             {
-                if (!OwningTrackBar.IsHandleCreated || !IsDisplayed || ParentInternal.GetSystemIAccessibleInternal() is not Accessibility.IAccessible systemIAccessible)
+                if (!OwningTrackBar.IsHandleCreated || !IsDisplayed)
                 {
                     return Rectangle.Empty;
                 }
 
                 // The "GetChildId" method returns to the id of the trackbar element,
                 // which allows to use the native "accLocation" method to get the "Bounds" property
-                systemIAccessible.accLocation(out int left, out int top, out int width, out int height, GetChildId());
-
-                return new(left, top, width, height);
+                return ParentInternal.SystemIAccessible.TryGetLocation(GetChildId());
             }
         }
 
-        public override string? Help => ParentInternal.GetSystemIAccessibleInternal()?.get_accHelp(GetChildId());
+        public override string? Help => ParentInternal.SystemIAccessible.TryGetHelp(GetChildId());
 
         public override AccessibleRole Role
-            => ParentInternal.GetSystemIAccessibleInternal()?.get_accRole(GetChildId()) is object accRole
-                ? (AccessibleRole)accRole
-                : AccessibleRole.None;
+            => ParentInternal.SystemIAccessible.TryGetRole(GetChildId());
 
         public override AccessibleStates State
-            => ParentInternal.GetSystemIAccessibleInternal()?.get_accState(GetChildId()) is object accState
-                ? (AccessibleStates)accState
-                : AccessibleStates.None;
+            => ParentInternal.SystemIAccessible.TryGetState(GetChildId());
 
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => ParentInternal;
 

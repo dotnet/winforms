@@ -18,6 +18,7 @@ CB_*
 CCM_*
 CDM_GETSPEC
 CDRF_*
+CHILDID_SELF
 ChildWindowFromPointEx
 ClientToScreen
 ClipCursor

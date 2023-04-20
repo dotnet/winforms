@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
-using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
@@ -54,13 +53,6 @@ internal partial class Interop
             {
                 Marshal.Release(externalComObject);
                 return new ErrorInfoWrapper(errorInfoComObject);
-            }
-
-            hr = Marshal.QueryInterface(externalComObject, ref IID.GetRef<IEnumVARIANT>(), out IntPtr enumVariantComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new EnumVariantWrapper(enumVariantComObject);
             }
 
             throw new NotImplementedException();

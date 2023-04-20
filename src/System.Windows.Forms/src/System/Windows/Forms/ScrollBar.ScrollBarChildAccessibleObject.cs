@@ -22,37 +22,32 @@ public partial class ScrollBar
         {
             get
             {
-                if (!OwningScrollBar.IsHandleCreated || !IsDisplayed || ParentInternal.GetSystemIAccessibleInternal() is not Accessibility.IAccessible systemIAccessible)
+                if (!OwningScrollBar.IsHandleCreated || !IsDisplayed)
                 {
                     return Rectangle.Empty;
                 }
 
                 // The "GetChildId" method returns to the id of the ScrollBar element,
                 // which allows to use the native "accLocation" method to get the "Bounds" property
-                systemIAccessible.accLocation(out int left, out int top, out int width, out int height, GetChildId());
 
-                return new(left, top, width, height);
+                return ParentInternal.SystemIAccessible.TryGetLocation(GetChildId());
             }
         }
 
         public override string? DefaultAction
-            => ParentInternal.GetSystemIAccessibleInternal()?.get_accDefaultAction(GetChildId());
+            => ParentInternal.SystemIAccessible.TryGetDefaultAction(GetChildId());
 
         public override string? Description
-            => ParentInternal.GetSystemIAccessibleInternal()?.get_accDescription(GetChildId());
+            => ParentInternal.SystemIAccessible.TryGetDescription(GetChildId());
 
         public override string? Name
-            => ParentInternal.GetSystemIAccessibleInternal()?.get_accName(GetChildId());
+            => ParentInternal.SystemIAccessible.TryGetName(GetChildId());
 
         public override AccessibleRole Role
-            => ParentInternal.GetSystemIAccessibleInternal()?.get_accRole(GetChildId()) is object accRole
-                ? (AccessibleRole)accRole
-                : AccessibleRole.None;
+            => ParentInternal.SystemIAccessible.TryGetRole(GetChildId());
 
         public override AccessibleStates State
-            => ParentInternal.GetSystemIAccessibleInternal()?.get_accState(GetChildId()) is object accState
-                ? (AccessibleStates)accState
-                : AccessibleStates.None;
+            => ParentInternal.SystemIAccessible.TryGetState(GetChildId());
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => ParentInternal;
 
@@ -91,7 +86,7 @@ public partial class ScrollBar
             {
                 // The "GetChildId" method returns to the id of the ScrollBar element,
                 // which allows to use the native "accDoDefaultAction" method when the "Invoke" method is called
-                ParentInternal.GetSystemIAccessibleInternal()?.accDoDefaultAction(GetChildId());
+                ParentInternal.SystemIAccessible.TryDoDefaultAction(GetChildId());
             }
         }
 

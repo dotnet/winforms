@@ -11,7 +11,11 @@ using System.Text;
 
 namespace System.Windows.Forms.Metafiles;
 
-internal class EmfScope : DisposalTracking.Tracker, IDisposable
+internal class EmfScope :
+#if DEBUG
+    DisposalTracking.Tracker,
+#endif
+    IDisposable
 {
     public HDC HDC { get; }
     private HENHMETAFILE _hemf;
@@ -98,8 +102,10 @@ internal class EmfScope : DisposalTracking.Tracker, IDisposable
     ///  initialized to the metafile DC state before any drawing has begun.
     /// </summary>
     /// <remarks>
-    ///  State is whatever is current *before* the current record is "applied" as it is necessary to understand
-    ///  what delta the actual record makes.
+    ///  <para>
+    ///   State is whatever is current *before* the current record is "applied" as it is necessary to understand
+    ///   what delta the actual record makes.
+    ///  </para>
     /// </remarks>
     public unsafe void EnumerateWithState(ProcessRecordWithStateDelegate enumerator, DeviceContextState state)
     {

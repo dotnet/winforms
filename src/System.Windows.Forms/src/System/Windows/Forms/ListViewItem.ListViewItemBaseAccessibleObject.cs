@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -14,20 +13,20 @@ public partial class ListViewItem
     ///  This class contains the base implementation of properties and methods for ListViewItem accessibility objects.
     /// </summary>
     /// <remarks>
-    ///  The implementation of this class fully corresponds to the behavior of the ListViewItem accessibility object
-    ///  when the ListView is in "LargeIcon" or "SmallIcon" view.
+    ///  <para>
+    ///   The implementation of this class fully corresponds to the behavior of the ListViewItem accessibility
+    ///   object when the ListView is in "LargeIcon" or "SmallIcon" view.
+    ///  </para>
     /// </remarks>
     internal abstract class ListViewItemBaseAccessibleObject : AccessibleObject
     {
         private protected readonly ListView _owningListView;
         private protected readonly ListViewItem _owningItem;
-        private protected readonly IAccessible? _systemIAccessible;
 
         public ListViewItemBaseAccessibleObject(ListViewItem owningItem)
         {
             _owningItem = owningItem.OrThrowIfNull();
             _owningListView = owningItem.ListView ?? owningItem.Group?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
-            _systemIAccessible = _owningListView.AccessibilityObject.GetSystemIAccessibleInternal();
         }
 
         private protected ListViewGroup? OwningGroup => _owningListView.GroupsDisplayed
@@ -75,17 +74,11 @@ public partial class ListViewItem
             }
         }
 
-        /// <summary>
-        ///  Gets the accessible role.
-        /// </summary>
         public override AccessibleRole Role
             => _owningListView.CheckBoxes
                 ? AccessibleRole.CheckButton
                 : AccessibleRole.ListItem;
 
-        /// <summary>
-        ///  Gets the accessible state.
-        /// </summary>
         public override AccessibleStates State
         {
             get
@@ -97,20 +90,13 @@ public partial class ListViewItem
                     return state |= AccessibleStates.Selected | AccessibleStates.Focused;
                 }
 
-                object? systemIAccessibleState = _systemIAccessible?.get_accState(GetChildId());
-                if (systemIAccessibleState is not null)
-                {
-                    return state |= (AccessibleStates)systemIAccessibleState;
-                }
-
-                return state;
+                return state |= _owningListView.AccessibilityObject.SystemIAccessible.TryGetState(GetChildId());
             }
         }
 
         protected abstract View View { get; }
 
-        internal override void AddToSelection()
-            => SelectItem();
+        internal override void AddToSelection() => SelectItem();
 
         public override string DefaultAction
         {
@@ -207,16 +193,16 @@ public partial class ListViewItem
 
                 return new int[]
                 {
-                    owningListViewRuntimeId[0],
-                    owningListViewRuntimeId[1],
-                    4, // Win32-control specific RuntimeID constant.
-                    // RuntimeId uses hash code instead of item's index. When items are removed,
-                    // indexes of below items shift. But when UiaDisconnectProvider is called for item
-                    // with updated index, it in fact disconnects the item which had the index initially,
-                    // apparently because of lack of synchronization with RuntimeId updates.
-                    // Similar applies for items within a group, where adding the group's index
-                    // was preventing from correct disconnection of items on removal.
-                    _owningItem.GetHashCode()
+                owningListViewRuntimeId[0],
+                owningListViewRuntimeId[1],
+                4, // Win32-control specific RuntimeID constant.
+                // RuntimeId uses hash code instead of item's index. When items are removed,
+                // indexes of below items shift. But when UiaDisconnectProvider is called for item
+                // with updated index, it in fact disconnects the item which had the index initially,
+                // apparently because of lack of synchronization with RuntimeId updates.
+                // Similar applies for items within a group, where adding the group's index
+                // was preventing from correct disconnection of items on removal.
+                _owningItem.GetHashCode()
                 };
             }
         }
@@ -285,24 +271,16 @@ public partial class ListViewItem
                 return;
             }
 
-            try
-            {
-                _systemIAccessible?.accSelect((int)flags, GetChildId());
-            }
-            catch (ArgumentException)
-            {
-                // In Everett, the ListBox accessible children did not have any selection capability.
-                // In Whidbey, they delegate the selection capability to OLEACC.
-                // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
-                // OLEACC instead throws an ArgumentException.
-                // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
-                // the ArgumentException and fail silently.
-            }
+            _owningListView.AccessibilityObject.SystemIAccessible.TrySelect(flags, GetChildId());
+
+            // In Everett, the ListBox accessible children did not have any selection capability.
+            // In Whidbey, they delegate the selection capability to OLEACC.
+            // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
+            // OLEACC instead throws an ArgumentException.
+            // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
+            // the ArgumentException and fail silently.
         }
 
-        internal override void Toggle()
-        {
-            _owningItem.Checked = !_owningItem.Checked;
-        }
+        internal override void Toggle() => _owningItem.Checked = !_owningItem.Checked;
     }
 }

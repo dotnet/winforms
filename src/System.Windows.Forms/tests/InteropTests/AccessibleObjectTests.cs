@@ -4,7 +4,7 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
-using static Interop;
+using Windows.Win32.System.Ole;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.InteropTests;
@@ -439,13 +439,13 @@ public class AccessibleObjectTests : InteropTestBase
         control.CreateControl();
         ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
 
-        var enumVariant = (Oleaut32.IEnumVariant)accessibleObject;
-        Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
+            var enumVariant = (IEnumVARIANT.Interface)accessibleObject;
+            Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
 
-        VARIANT variantObject;
-        uint retreivedCount;
-        var result = enumVariant.Next(1, (IntPtr)(void*)&variantObject, &retreivedCount);
-        Assert.Equal(HRESULT.S_OK, result);
+            VARIANT variantObject;
+            uint retreivedCount;
+            var result = enumVariant.Next(1, &variantObject, &retreivedCount);
+            Assert.Equal(HRESULT.S_OK, result);
 
         var retreivedItem = variantObject.ToObject();
 

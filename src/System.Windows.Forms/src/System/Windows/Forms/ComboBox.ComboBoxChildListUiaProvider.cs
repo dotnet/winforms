@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
@@ -14,7 +15,7 @@ public partial class ComboBox
     /// <summary>
     ///  Represents the ComboBox's child (inner) list native window control accessible object with UI Automation provider functionality.
     /// </summary>
-    internal class ComboBoxChildListUiaProvider : ChildAccessibleObject
+    internal sealed class ComboBoxChildListUiaProvider : ChildAccessibleObject
     {
         private const string COMBO_BOX_LIST_AUTOMATION_ID = "1000";
 
@@ -38,24 +39,19 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Return the child object at the given screen coordinates.
-        /// </summary>
-        /// <param name="x">X coordinate.</param>
-        /// <param name="y">Y coordinate.</param>
-        /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override unsafe UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
         {
-            var systemIAccessible = GetSystemIAccessibleInternal();
-            if (systemIAccessible is not null)
+            using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
+            if (result.Succeeded)
             {
-                object result = systemIAccessible.accHitTest((int)x, (int)y);
-                if (result is int childId)
+                result = accessible.Value->accHitTest((int)x, (int)y, out VARIANT child);
+                if (result.Succeeded && child.vt == VARENUM.VT_I4)
                 {
-                    return GetChildFragment(childId - 1);
+                    return GetChildFragment((int)child - 1);
                 }
                 else
                 {
+                    child.Dispose();
                     return null;
                 }
             }
@@ -63,11 +59,6 @@ public partial class ComboBox
             return base.ElementProviderFromPoint(x, y);
         }
 
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             if (!_owningComboBox.IsHandleCreated ||
@@ -106,16 +97,7 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Gets the top level element.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-        {
-            get
-            {
-                return _owningComboBox.AccessibilityObject;
-            }
-        }
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningComboBox.AccessibilityObject;
 
         public AccessibleObject? GetChildFragment(int index)
         {
@@ -139,11 +121,6 @@ public partial class ComboBox
             return _owningComboBox.Items.Count;
         }
 
-        /// <summary>
-        ///  Gets the accessible property value.
-        /// </summary>
-        /// <param name="propertyID">The accessible property ID.</param>
-        /// <returns>The accessible property value.</returns>
         internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
             propertyID switch
             {
@@ -159,10 +136,7 @@ public partial class ComboBox
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus()
-        {
-            return GetFocused();
-        }
+        internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
 
         public override AccessibleObject? GetFocused()
         {
@@ -190,43 +164,27 @@ public partial class ComboBox
             {
                 return new UiaCore.IRawElementProviderSimple[]
                 {
-                    itemAccessibleObject
+                itemAccessibleObject
                 };
             }
 
             return Array.Empty<UiaCore.IRawElementProviderSimple>();
         }
 
-        internal override bool CanSelectMultiple
-        {
-            get
-            {
-                return false;
-            }
-        }
+        internal override bool CanSelectMultiple => false;
 
-        internal override bool IsSelectionRequired
-        {
-            get
-            {
-                return true;
-            }
-        }
+        internal override bool IsSelectionRequired => true;
 
-        /// <summary>
-        ///  Indicates whether specified pattern is supported.
-        /// </summary>
-        /// <param name="patternId">The pattern ID.</param>
-        /// <returns>True if specified </returns>
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                patternId == UiaCore.UIA.SelectionPatternId)
+            switch (patternId)
             {
-                return true;
+                case UiaCore.UIA.LegacyIAccessiblePatternId:
+                case UiaCore.UIA.SelectionPatternId:
+                    return true;
+                default:
+                    return base.IsPatternSupported(patternId);
             }
-
-            return base.IsPatternSupported(patternId);
         }
 
         internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
@@ -238,9 +196,6 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Gets the runtime ID.
-        /// </summary>
         internal override int[] RuntimeId
             => new int[]
             {
@@ -249,9 +204,6 @@ public partial class ComboBox
                 _owningComboBox.GetListNativeWindowRuntimeIdPart()
             };
 
-        /// <summary>
-        ///  Gets the accessible state.
-        /// </summary>
         public override AccessibleStates State
         {
             get

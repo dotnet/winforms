@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class TrackBar
 {
-    internal class TrackBarAccessibleObject : ControlAccessibleObject
+    internal sealed class TrackBarAccessibleObject : ControlAccessibleObject
     {
         private readonly TrackBar _owningTrackBar;
         private TrackBarFirstButtonAccessibleObject? _firstButtonAccessibleObject;
@@ -25,16 +25,14 @@ public partial class TrackBar
         {
             get
             {
-                if (!_owningTrackBar.IsHandleCreated || GetSystemIAccessibleInternal() is not Accessibility.IAccessible systemIAccessible)
+                if (!_owningTrackBar.IsHandleCreated)
                 {
                     return Rectangle.Empty;
                 }
 
                 // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
                 // which allows to use the native "accLocation" method to get the "Bounds" property
-                systemIAccessible.accLocation(out int left, out int top, out int width, out int height, NativeMethods.CHILDID_SELF);
-
-                return new(left, top, width, height);
+                return SystemIAccessible.TryGetLocation(CHILDID_SELF);
             }
         }
 
@@ -47,11 +45,9 @@ public partial class TrackBar
 
         public override AccessibleStates State
 
-            // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
-            // which allows to use the native "get_accState" method to get the "State" property
-            => GetSystemIAccessibleInternal()?.get_accState(NativeMethods.CHILDID_SELF) is object accState
-                ? (AccessibleStates)accState
-                : AccessibleStates.None;
+                // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
+                // which allows to use the native "get_accState" method to get the "State" property
+                => SystemIAccessible.TryGetState(CHILDID_SELF);
 
         internal TrackBarFirstButtonAccessibleObject FirstButtonAccessibleObject
             => _firstButtonAccessibleObject ??= new(_owningTrackBar);

@@ -5134,7 +5134,7 @@ public partial class ListView : Control
 
     internal override void ReleaseUiaProvider(HWND handle)
     {
-        if (!OsVersion.IsWindows8OrGreater() || !IsAccessibilityObjectCreated)
+        if (!OsVersion.IsWindows8OrGreater())
         {
             return;
         }

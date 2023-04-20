@@ -24,8 +24,10 @@ internal static class DisposalTracking
         GC.SuppressFinalize(@object);
     }
 
+#if DEBUG
     /// <summary>
-    ///  Helper base class for tracking undisposed objects.
+    ///  Helper base class for tracking undisposed objects. Derive from this (in DEBUG builds only) to track
+    ///  construction and proper destruction.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -39,12 +41,22 @@ internal static class DisposalTracking
     /// </remarks>
     internal abstract class Tracker
     {
-        private readonly string _originatingStack = new StackTrace().ToString();
+        private readonly string _originatingStack;
+        private readonly bool _throwIfFinalized;
+
+        public Tracker(bool throwIfFinalized = true)
+        {
+            _throwIfFinalized = throwIfFinalized;
+            _originatingStack = _throwIfFinalized ? new StackTrace().ToString() : string.Empty;
+        }
 
         ~Tracker()
         {
-            // Not asserting here as assertions take down test runs.
-            throw new InvalidOperationException($"Did not dispose `{GetFriendlyTypeName(GetType())}`. Originating stack:\n{_originatingStack}");
+            if (_throwIfFinalized)
+            {
+                // Not asserting here as assertions take down test runs.
+                throw new InvalidOperationException($"Did not dispose `{GetFriendlyTypeName(GetType())}`. Originating stack:\n{_originatingStack}");
+            }
         }
 
         private static string GetFriendlyTypeName(Type type)
@@ -64,4 +76,5 @@ internal static class DisposalTracking
             return friendlyName;
         }
     }
+#endif
 }

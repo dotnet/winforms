@@ -11,8 +11,6 @@ public partial class ComboBox
 {
     /// <summary>
     ///  ComboBox control accessible object with UI Automation provider functionality.
-    ///  This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
-    ///  to have all base functionality.
     /// </summary>
     internal class ComboBoxAccessibleObject : ControlAccessibleObject
     {
@@ -40,62 +38,36 @@ public partial class ComboBox
         }
 
         internal override bool IsIAccessibleExSupported()
-        {
-            if (_owningComboBox is not null)
-            {
-                return true;
-            }
-
-            return base.IsIAccessibleExSupported();
-        }
+            => _owningComboBox is not null || base.IsIAccessibleExSupported();
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
             if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
             {
-                if (_owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
-                {
-                    return false;
-                }
-
-                return true;
+                return _owningComboBox.DropDownStyle != ComboBoxStyle.Simple;
             }
 
-            if (patternId == UiaCore.UIA.ValuePatternId)
-            {
-                return true;
-            }
-
-            return base.IsPatternSupported(patternId);
+            return patternId == UiaCore.UIA.ValuePatternId ? true : base.IsPatternSupported(patternId);
         }
 
-        // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a (RuntimeIDFirstItem).
-        // Second item can be anything, but it's good to supply HWND.
         internal override int[] RuntimeId
             => new int[]
             {
+                // We need to provide a unique ID. Others are implementing this in the same manner. First item is
+                // static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
                 RuntimeIDFirstItem,
                 PARAM.ToInt(_owningComboBox.InternalHandle),
                 _owningComboBox.GetHashCode()
             };
 
-        internal override void Expand()
-        {
-            ComboBoxDefaultAction(true);
-        }
+        internal override void Expand() => ComboBoxDefaultAction(true);
 
-        internal override void Collapse()
-        {
-            ComboBoxDefaultAction(false);
-        }
+        internal override void Collapse() => ComboBoxDefaultAction(false);
 
         internal override UiaCore.ExpandCollapseState ExpandCollapseState
-        {
-            get
-            {
-                return _owningComboBox.IsHandleCreated && _owningComboBox.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-            }
-        }
+            => _owningComboBox.IsHandleCreated && _owningComboBox.DroppedDown
+                ? UiaCore.ExpandCollapseState.Expanded
+            : UiaCore.ExpandCollapseState.Collapsed;
 
         internal override string? get_accNameInternal(object childID)
         {
@@ -129,20 +101,8 @@ public partial class ComboBox
         ///  Gets the DropDown button accessible object. (UI Automation provider)
         /// </summary>
         public ComboBoxChildDropDownButtonUiaProvider DropDownButtonUiaProvider
-        {
-            get
-            {
-                _dropDownButtonUiaProvider ??= new ComboBoxChildDropDownButtonUiaProvider(_owningComboBox, _owningComboBox.InternalHandle);
+            => _dropDownButtonUiaProvider ??= new ComboBoxChildDropDownButtonUiaProvider(_owningComboBox);
 
-                return _dropDownButtonUiaProvider;
-            }
-        }
-
-        /// <summary>
-        ///  Returns the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             if (!_owningComboBox.IsHandleCreated)
@@ -161,13 +121,7 @@ public partial class ComboBox
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
+        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => this;
 
         public override string DefaultAction
         {
@@ -188,11 +142,6 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Gets the accessible property value.
-        /// </summary>
-        /// <param name="propertyID">The accessible property ID.</param>
-        /// <returns>The accessible property value.</returns>
         internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
             propertyID switch
             {

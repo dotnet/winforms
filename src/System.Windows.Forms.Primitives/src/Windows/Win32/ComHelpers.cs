@@ -23,6 +23,12 @@ internal static unsafe partial class ComHelpers
     /// <summary>
     ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="obj"/>.
     /// </summary>
+    internal static ComScope<T> TryGetComScope<T>(object obj) where T : unmanaged, IComIID
+        => TryGetComScope<T>(obj, out _);
+
+    /// <summary>
+    ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="obj"/>.
+    /// </summary>
     internal static ComScope<T> TryGetComScope<T>(object obj, out HRESULT hr) where T : unmanaged, IComIID
         => new(TryGetComPointer<T>(obj, out hr));
 
@@ -63,6 +69,7 @@ internal static unsafe partial class ComHelpers
         IUnknown* ccw = null;
         if (obj is IManagedWrapper)
         {
+            // One of our classes that we can generate a CCW for.
             ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
 
             if (ccw is not null && obj is IWrapperInitialize initialize)
@@ -70,9 +77,15 @@ internal static unsafe partial class ComHelpers
                 initialize.OnInitialized(ccw);
             }
         }
+        else if (ComWrappers.TryGetComInstance(obj, out nint unknown))
+        {
+            // A ComWrappers generated RCW.
+            ccw = (IUnknown*)unknown;
+        }
         else
         {
-            // Fall back to COM interop if possible.
+            // Fall back to COM interop if possible. Note that this will use the globally registered ComWrappers
+            // if that exists (so it won't always fall into legacy COM interop).
             try
             {
                 ccw = (IUnknown*)Marshal.GetIUnknownForObject(obj);

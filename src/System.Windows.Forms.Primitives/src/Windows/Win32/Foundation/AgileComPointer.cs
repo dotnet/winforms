@@ -16,13 +16,23 @@ namespace Windows.Win32.Foundation;
 ///   resource release (that is, this class should be disposed).
 ///  </para>
 /// </remarks>
-internal unsafe class AgileComPointer<TInterface> : DisposalTracking.Tracker, IDisposable
+internal unsafe class AgileComPointer<TInterface> :
+#if DEBUG
+    DisposalTracking.Tracker,
+#endif
+    IDisposable
     where TInterface : unmanaged, IComIID
 {
     private uint _cookie;
+
     public TInterface* OriginalHandle { get; }
 
+#if DEBUG
+    public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
+        : base(trackDisposal)
+#else
     public AgileComPointer(TInterface* @interface, bool takeOwnership)
+#endif
     {
         _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
         OriginalHandle = @interface;
@@ -55,12 +65,6 @@ internal unsafe class AgileComPointer<TInterface> : DisposalTracking.Tracker, ID
         hr.ThrowOnFailure();
         return scope;
     }
-
-    /// <summary>
-    ///  Tries to get the default interface.
-    /// </summary>
-    public ComScope<TInterface> TryGetInterface()
-        => GlobalInterfaceTable.GetInterface<TInterface>(_cookie, out _);
 
     /// <summary>
     ///  Tries to get the default interface.

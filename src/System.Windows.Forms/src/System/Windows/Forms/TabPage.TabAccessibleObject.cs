@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Accessibility;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -39,26 +39,19 @@ public partial class TabPage
 
                 // The "GetChildId" method returns to the id of the TabControl element,
                 // which allows to use the native "accLocation" method to get the "Bounds" property
-                SystemIAccessibleInternal.accLocation(out int left, out int top, out int width, out int height, GetChildId());
-                return new(left, top, width, height);
+                return SystemIAccessibleInternal.TryGetLocation(GetChildId());
             }
         }
 
-        public override string? DefaultAction => SystemIAccessibleInternal?.get_accDefaultAction(GetChildId());
+        public override string? DefaultAction => SystemIAccessibleInternal.TryGetDefaultAction(GetChildId());
 
         public override string? Name => _owningTabPage.Text;
 
         private TabControl? OwningTabControl => _owningTabPage.ParentInternal as TabControl;
 
-        public override AccessibleRole Role
-            => SystemIAccessibleInternal?.get_accRole(GetChildId()) is object accRole
-                ? (AccessibleRole)accRole
-                : AccessibleRole.None;
+        public override AccessibleRole Role => SystemIAccessibleInternal.TryGetRole(GetChildId());
 
-        public override AccessibleStates State
-            => SystemIAccessibleInternal?.get_accState(GetChildId()) is object accState
-                ? (AccessibleStates)accState
-                : AccessibleStates.None;
+        public override AccessibleStates State => SystemIAccessibleInternal.TryGetState(GetChildId());
 
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => OwningTabControl?.AccessibilityObject;
 
@@ -78,8 +71,8 @@ public partial class TabPage
 
         private int CurrentIndex => OwningTabControl?.TabPages.IndexOf(_owningTabPage) ?? -1;
 
-        private IAccessible? SystemIAccessibleInternal
-            => OwningTabControl?.AccessibilityObject.GetSystemIAccessibleInternal();
+        private AgileComPointer<IAccessible>? SystemIAccessibleInternal
+            => OwningTabControl?.AccessibilityObject.SystemIAccessible;
 
         public override void DoDefaultAction()
         {
@@ -110,9 +103,9 @@ public partial class TabPage
         // +1 is needed because 0 is the Pane id of the selected tab
         internal override int GetChildId() => CurrentIndex + 1;
 
-        public override string? Help => SystemIAccessibleInternal?.get_accHelp(GetChildId());
+        public override string? Help => SystemIAccessibleInternal.TryGetHelp(GetChildId());
 
-        public override string? KeyboardShortcut => SystemIAccessibleInternal?.get_accKeyboardShortcut(GetChildId());
+        public override string? KeyboardShortcut => SystemIAccessibleInternal.TryGetKeyboardShortcut(GetChildId());
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch

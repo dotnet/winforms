@@ -2469,29 +2469,6 @@ public partial class AccessibleObjectTests
         Assert.Empty(childAccessibleObject2.Value);
     }
 
-    [WinFormsFact]
-    public void AccessibleObject_GetSystemIAccessibleInternal_Invoke_DoesntReturnWrapper()
-    {
-        using Button button = new Button();
-        button.CreateControl();
-        var accessibleObject = button.AccessibilityObject;
-        var wrapper = accessibleObject.TestAccessor().Dynamic._systemIAccessible;
-        Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
-    }
-
-    [WinFormsFact]
-    public void AccessibleObject_WrapIAccessible_Invoke_DoesntReturnWrapper()
-    {
-        using Button button = new Button();
-        button.CreateControl();
-        var accessibleObject = button.AccessibilityObject;
-        var wrapper = accessibleObject.TestAccessor().Dynamic._systemIAccessible;
-        var wrapIAccessibleResult = accessibleObject.TestAccessor().Dynamic.WrapIAccessible(accessibleObject.GetSystemIAccessibleInternal());
-
-        Assert.Same(accessibleObject, wrapIAccessibleResult);
-        Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
-    }
-
     [DllImport("Oleacc.dll")]
     internal static extern unsafe HRESULT AccessibleObjectFromPoint(
         Point ptScreen,
@@ -2608,7 +2585,7 @@ public partial class AccessibleObjectTests
     [WinFormsFact]
     public unsafe void AccessibleObject_GetIAccessiblePair_Invoke_ReturnsExpected()
     {
-        const int expectedIdChild = NativeMethods.CHILDID_SELF;
+        const int expectedIdChild = (int)PInvoke.CHILDID_SELF;
 
         AccessibleObject accessibleObject = new();
 
