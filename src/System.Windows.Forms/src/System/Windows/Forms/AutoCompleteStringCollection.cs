@@ -168,7 +168,7 @@ namespace System.Windows.Forms
 
         void IList.Remove(object value) => Remove((string)value);
 
-        void ICollection.CopyTo(Array array, int index) => data.CopyTo((string[])array, index);
+        void ICollection.CopyTo(Array array, int index) => ((ICollection)data).CopyTo(array, index);
 
         public IEnumerator GetEnumerator() => data.GetEnumerator();
     }
