@@ -3873,7 +3873,7 @@ namespace System.Windows.Forms
                 fStrikethrough = font.Strikeout
             };
 
-            s_fontTable.Add(font, fdesc);
+            s_fontTable.AddOrUpdate(font, fdesc);
             return fdesc;
         }
 
