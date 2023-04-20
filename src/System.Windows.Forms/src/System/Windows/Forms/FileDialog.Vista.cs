@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Windows.Win32.UI.Controls.Dialogs;
 using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;
 using static Windows.Win32.UI.Shell.FILEOPENDIALOGOPTIONS;
@@ -21,37 +20,32 @@ namespace System.Windows.Forms
                 && SettingsSupportVistaDialog
                 && SystemInformation.BootMode == BootMode.Normal;
 
-        private protected abstract unsafe IFileDialog* CreateVistaDialog();
+        private protected abstract unsafe ComScope<IFileDialog> CreateVistaDialog();
 
         private unsafe bool TryRunDialogVista(HWND hWndOwner, out bool returnValue)
         {
-            IFileDialog* dialog;
-            try
+            using ComScope<IFileDialog> dialog = CreateVistaDialog();
+
+            if (dialog.IsNull)
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
                 // Server Core App Compatibility FOD is installed.
-                dialog = CreateVistaDialog();
-            }
-            catch (COMException)
-            {
                 returnValue = false;
                 return false;
             }
 
             OnBeforeVistaDialog(dialog);
-            IFileDialogEvents* events = ComHelpers.GetComPointer<IFileDialogEvents>(new VistaDialogEvents(this));
+            using var events = ComHelpers.GetComScope<IFileDialogEvents>(new VistaDialogEvents(this));
 
-            dialog->Advise(events, out uint eventCookie);
+            dialog.Value->Advise(events, out uint eventCookie);
             try
             {
-                returnValue = dialog->Show(hWndOwner) == HRESULT.S_OK;
+                returnValue = dialog.Value->Show(hWndOwner) == HRESULT.S_OK;
                 return true;
             }
             finally
             {
-                dialog->Unadvise(eventCookie);
-                uint count = events->Release();
-                Debug.Assert(count == 0);
+                dialog.Value->Unadvise(eventCookie);
             }
         }
 
