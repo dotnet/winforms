@@ -634,7 +634,7 @@ namespace System.Windows.Forms
                 Point[] arrow = null;
 
                 // We need the Elvis operator here, since at design time at this point Item can be null.
-                if (e.Item?.DeviceDpi != previousDeviceDpi && DpiHelper.IsPerMonitorV2Awareness)
+                if (e.Item is not null && e.Item.DeviceDpi != previousDeviceDpi && DpiHelper.IsPerMonitorV2Awareness)
                 {
                     previousDeviceDpi = e.Item.DeviceDpi;
                     ScaleArrowOffsetsIfNeeded(e.Item.DeviceDpi);
