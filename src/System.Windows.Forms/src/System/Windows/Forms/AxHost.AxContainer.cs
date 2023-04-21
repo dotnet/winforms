@@ -4,8 +4,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 

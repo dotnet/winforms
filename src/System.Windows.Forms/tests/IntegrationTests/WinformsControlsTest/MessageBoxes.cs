@@ -4,8 +4,6 @@
 
 #nullable enable
 
-using System.Windows.Forms;
-
 namespace WinformsControlsTest
 {
     public partial class MessageBoxes : Form

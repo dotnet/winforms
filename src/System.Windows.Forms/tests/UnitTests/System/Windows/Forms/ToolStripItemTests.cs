@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Runtime.InteropServices.ComTypes;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Size = System.Drawing.Size;
 

@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static Interop;
 using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;

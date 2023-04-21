@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design

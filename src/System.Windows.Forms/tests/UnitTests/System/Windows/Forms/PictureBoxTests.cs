@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Windows.Forms.Primitives;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

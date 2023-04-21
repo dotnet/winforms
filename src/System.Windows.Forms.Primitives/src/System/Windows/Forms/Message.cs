@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 #if DEBUG
-using System.Diagnostics;
 #endif
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 

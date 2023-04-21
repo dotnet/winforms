@@ -9,7 +9,6 @@ using System.Windows.Forms.Tests.TestResources;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using WMPLib;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests

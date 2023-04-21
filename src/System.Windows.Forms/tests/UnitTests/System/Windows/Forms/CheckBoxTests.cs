@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Xunit;
 using static Interop.UiaCore;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;

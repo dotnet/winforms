@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop.ComCtl32;

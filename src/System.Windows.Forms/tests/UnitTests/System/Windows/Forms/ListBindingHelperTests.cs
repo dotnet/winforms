@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Moq;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

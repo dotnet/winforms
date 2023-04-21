@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static System.Windows.Forms.ScrollBar;
 using static Interop;
 

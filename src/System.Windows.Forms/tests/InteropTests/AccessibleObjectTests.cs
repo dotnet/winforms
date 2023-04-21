@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
-using Xunit;
 using static Interop;
 using static Interop.UiaCore;
 

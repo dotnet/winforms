@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace System.ComponentModel.Design

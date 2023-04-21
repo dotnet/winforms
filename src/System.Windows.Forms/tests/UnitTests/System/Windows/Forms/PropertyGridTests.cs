@@ -9,7 +9,6 @@ using System.Drawing.Design;
 using System.Windows.Forms.PropertyGridInternal;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using System.Runtime.CompilerServices;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;

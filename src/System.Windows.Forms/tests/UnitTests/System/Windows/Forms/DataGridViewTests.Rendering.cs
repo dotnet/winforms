@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Numerics;
 using System.Windows.Forms.Metafiles;
-using Xunit;
 using static System.Windows.Forms.Metafiles.DataHelpers;
 
 namespace System.Windows.Forms.Tests

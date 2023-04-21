@@ -5,12 +5,10 @@
 using System.Collections;
 using System.Drawing.Design;
 using System.Reflection;
-using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
 using Moq.Protected;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {

@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Drawing;
 using Windows.Win32.System.Com;
 using static Interop.Mshtml;

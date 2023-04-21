@@ -4,7 +4,6 @@
 
 using System.Globalization;
 using Moq;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

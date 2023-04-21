@@ -4,7 +4,6 @@
 // Copied from https://raw.githubusercontent.com/dotnet/runtime/main/src/libraries/Common/src/System/Text/ValueStringBuilder.cs
 
 using System.Buffers;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

@@ -7,7 +7,6 @@
 #if DEBUG
 using System.ComponentModel;
 #endif
-using System.Diagnostics;
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout

@@ -4,7 +4,6 @@
 
 using System.Globalization;
 using System.Reflection;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

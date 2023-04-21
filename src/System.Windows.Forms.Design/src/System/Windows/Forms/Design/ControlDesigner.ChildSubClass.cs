@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using static Interop;
 
 namespace System.Windows.Forms.Design

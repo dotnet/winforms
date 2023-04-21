@@ -8,7 +8,6 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms.Metafiles;
 using Moq;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

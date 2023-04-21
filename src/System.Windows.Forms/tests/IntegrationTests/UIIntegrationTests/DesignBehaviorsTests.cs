@@ -9,7 +9,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests

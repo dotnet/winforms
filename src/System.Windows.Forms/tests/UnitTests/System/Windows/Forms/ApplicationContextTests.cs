@@ -4,7 +4,6 @@
 
 using Moq;
 using Moq.Protected;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

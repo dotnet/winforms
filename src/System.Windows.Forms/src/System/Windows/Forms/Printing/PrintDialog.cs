@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
 using static Interop.Comdlg32;

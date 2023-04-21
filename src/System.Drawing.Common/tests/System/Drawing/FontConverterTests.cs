@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel.Design.Serialization;
-using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
-using Xunit;
 using static System.Drawing.FontConverter;
 
 namespace System.ComponentModel.TypeConverterTests

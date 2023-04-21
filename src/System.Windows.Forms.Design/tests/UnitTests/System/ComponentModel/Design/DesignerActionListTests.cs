@@ -4,7 +4,6 @@
 
 using System.Runtime.CompilerServices;
 using Moq;
-using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {

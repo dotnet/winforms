@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
-using Xunit;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests;

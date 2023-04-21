@@ -9,7 +9,6 @@ using System.Drawing.Imaging;
 using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;

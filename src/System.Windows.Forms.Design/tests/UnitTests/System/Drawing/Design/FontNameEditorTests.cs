@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Windows.Forms.Design;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.Drawing.Design.Tests
 {

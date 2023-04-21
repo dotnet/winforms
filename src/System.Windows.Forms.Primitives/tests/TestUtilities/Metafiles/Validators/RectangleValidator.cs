@@ -5,7 +5,6 @@
 #nullable enable
 
 using System.Drawing;
-using Xunit;
 
 namespace System.Windows.Forms.Metafiles
 {

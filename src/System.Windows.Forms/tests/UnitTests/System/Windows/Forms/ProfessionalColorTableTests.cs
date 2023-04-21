@@ -5,7 +5,6 @@
 using System.Drawing;
 using Microsoft.DotNet.RemoteExecutor;
 using Microsoft.Win32;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

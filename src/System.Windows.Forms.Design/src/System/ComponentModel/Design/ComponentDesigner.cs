@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.Configuration;
-using System.Diagnostics;
 using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design

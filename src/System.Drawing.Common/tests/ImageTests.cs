@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.DotNet.XUnitExtensions;
-using Xunit;
 using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace System.Drawing.Tests

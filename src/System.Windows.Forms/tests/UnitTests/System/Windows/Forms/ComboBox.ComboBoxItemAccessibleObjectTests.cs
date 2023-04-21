@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.IntegrationTests.Common;
-using Xunit;
 using static System.Windows.Forms.ComboBox;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;

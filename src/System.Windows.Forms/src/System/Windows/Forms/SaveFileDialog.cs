@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Controls.Dialogs;
 using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;

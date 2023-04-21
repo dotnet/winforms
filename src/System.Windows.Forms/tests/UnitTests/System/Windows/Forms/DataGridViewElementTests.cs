@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

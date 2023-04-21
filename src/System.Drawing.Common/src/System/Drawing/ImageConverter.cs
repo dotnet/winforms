@@ -3,8 +3,6 @@
 
 using System.Buffers.Binary;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;

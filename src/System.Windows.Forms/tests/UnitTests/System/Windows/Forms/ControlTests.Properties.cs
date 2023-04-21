@@ -8,7 +8,6 @@ using System.Drawing.Imaging;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static Interop;
 using Windows.Win32.System.Ole;
 

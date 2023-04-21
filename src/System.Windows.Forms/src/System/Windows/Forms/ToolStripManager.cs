@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Drawing;
 using Microsoft.Win32;
 using static Interop;

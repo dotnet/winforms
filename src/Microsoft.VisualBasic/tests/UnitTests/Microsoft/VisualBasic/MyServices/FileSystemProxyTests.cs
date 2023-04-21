@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.VisualBasic.FileIO;
-using Xunit;
 using SearchOption = Microsoft.VisualBasic.FileIO.SearchOption;
 
 namespace Microsoft.VisualBasic.MyServices.Tests

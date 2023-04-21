@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Microsoft.DotNet.RemoteExecutor;
-using Xunit;
 using static Interop;
 using Point = System.Drawing.Point;
 

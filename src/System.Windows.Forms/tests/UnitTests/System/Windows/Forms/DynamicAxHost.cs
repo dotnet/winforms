@@ -5,7 +5,6 @@
 #nullable enable
 
 using Windows.Win32.System.Com;
-using System.Diagnostics;
 
 namespace System.Windows.Forms.Tests;
 

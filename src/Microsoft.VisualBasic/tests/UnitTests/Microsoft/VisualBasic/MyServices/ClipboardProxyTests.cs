@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using Microsoft.VisualBasic.Devices;
-using Xunit;
 using DataFormats = System.Windows.Forms.DataFormats;
 using TextDataFormat = System.Windows.Forms.TextDataFormat;
 

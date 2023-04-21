@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing.Internal;
 using System.Globalization;
 using System.Runtime.InteropServices;

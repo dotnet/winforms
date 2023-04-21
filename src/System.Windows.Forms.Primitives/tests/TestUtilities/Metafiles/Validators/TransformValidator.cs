@@ -5,7 +5,6 @@
 #nullable enable
 
 using System.Numerics;
-using Xunit;
 
 namespace System.Windows.Forms.Metafiles
 {

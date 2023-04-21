@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

@@ -5,7 +5,6 @@
 using System.Drawing;
 using Moq;
 using Moq.Protected;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests

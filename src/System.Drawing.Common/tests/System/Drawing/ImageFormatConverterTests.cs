@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
-using Xunit;
 
 namespace System.ComponentModel.TypeConverterTests
 {

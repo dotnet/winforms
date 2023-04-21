@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
 using Moq;
-using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {

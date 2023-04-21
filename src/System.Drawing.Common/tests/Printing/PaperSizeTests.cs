@@ -26,8 +26,6 @@
 //  Andy Hume <andyhume32@yahoo.co.uk>
 //
 
-using Xunit;
-
 namespace System.Drawing.Printing.Tests
 {
     public class PaperSizeTests

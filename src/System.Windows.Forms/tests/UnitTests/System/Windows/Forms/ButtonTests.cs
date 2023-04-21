@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static Interop;
 using static Interop.UiaCore;
 using static Interop.User32;

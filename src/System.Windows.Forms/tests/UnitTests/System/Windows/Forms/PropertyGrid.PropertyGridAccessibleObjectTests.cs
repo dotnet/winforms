@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms.PropertyGridInternal;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests

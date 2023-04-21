@@ -3,7 +3,6 @@
 
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
-using Xunit;
 
 namespace System.Drawing.Tests
 {

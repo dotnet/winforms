@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Text;
-using Xunit;
 
 namespace System.Resources.Tests
 {

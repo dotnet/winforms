@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Moq;
-using Xunit;
 using static Interop.Mso;
 
 namespace System.Windows.Forms.Tests.Interop_Mso

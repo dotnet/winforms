@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using Accessibility;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using Windows.Win32.System.SystemServices;
 using Ole = Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms;
-using Xunit;
 
 namespace Microsoft.VisualBasic.Devices.Tests
 {

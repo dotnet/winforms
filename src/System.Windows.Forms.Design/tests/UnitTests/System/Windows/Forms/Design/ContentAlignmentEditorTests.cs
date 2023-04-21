@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing.Design;
-using Xunit;
 using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests

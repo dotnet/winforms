@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
 using System.Windows.Forms.PropertyGridInternal;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

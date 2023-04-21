@@ -26,7 +26,6 @@ using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
-using Xunit;
 
 namespace System.Drawing.Tests
 {

@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Tests.TestResources;
-using Xunit;
 
 namespace System.Windows.Forms.Tests;
 

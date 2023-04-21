@@ -4,7 +4,6 @@
 
 using System.Windows.Forms.Design;
 using System.Windows.Forms.PropertyGridInternal;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

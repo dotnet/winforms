@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
 using Moq;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests

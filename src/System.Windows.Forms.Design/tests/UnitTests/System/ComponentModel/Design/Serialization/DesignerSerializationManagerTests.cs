@@ -6,7 +6,6 @@ using System.Collections;
 using Moq;
 using Moq.Protected;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {

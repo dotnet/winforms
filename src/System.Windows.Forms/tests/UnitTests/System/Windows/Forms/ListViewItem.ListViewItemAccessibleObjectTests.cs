@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Reflection;
-using Xunit;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.UiaCore;

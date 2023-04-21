@@ -24,7 +24,6 @@
 //
 
 using System.Runtime.InteropServices;
-using Xunit;
 
 namespace System.Drawing.Imaging.Tests
 {

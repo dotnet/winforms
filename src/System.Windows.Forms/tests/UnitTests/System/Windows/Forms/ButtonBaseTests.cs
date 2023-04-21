@@ -9,7 +9,6 @@ using System.Runtime.Versioning;
 using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using Xunit;
 using static Interop;
 using static Interop.User32;
 using Point = System.Drawing.Point;

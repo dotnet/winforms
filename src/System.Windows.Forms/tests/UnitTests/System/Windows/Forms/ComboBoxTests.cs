@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static System.Windows.Forms.ComboBox;
 using static Interop;
 using Point = System.Drawing.Point;

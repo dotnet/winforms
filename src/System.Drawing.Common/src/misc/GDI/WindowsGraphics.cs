@@ -4,8 +4,6 @@
 // THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR CREATING AND DISPOSING A WINDOWSGRAPHICS AS WELL
 // GETTING, DISPOSING AND WORKING WITH A DC.
 
-using System.Diagnostics;
-
 namespace System.Drawing.Internal
 {
     /// <summary>

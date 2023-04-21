@@ -34,6 +34,7 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
+    <Compile Include="GlobalUsings.cs" />
     <Compile Include="SRDescriptionAttribute.cs" />
 
     <Compile Include="System\Drawing\Bitmap.cs" />

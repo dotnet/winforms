@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-using Xunit;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms.Tests

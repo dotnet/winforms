@@ -6,7 +6,6 @@
 
 using System.CodeDom;
 using System.Configuration;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization

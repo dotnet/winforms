@@ -8,7 +8,6 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Diagnostics;
 
 namespace System.ComponentModel.Design.Serialization
 {

@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Diagnostics;
 using static Interop;
 
 namespace System.Windows.Forms.Design

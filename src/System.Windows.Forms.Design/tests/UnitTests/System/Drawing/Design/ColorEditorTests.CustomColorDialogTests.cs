@@ -4,9 +4,6 @@
 
 #nullable enable
 
-using System.Windows.Forms;
-using Xunit;
-
 namespace System.Drawing.Design.Tests
 {
     public partial class ColorEditor_CustomColorDialogTests

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Diagnostics;
 using System.Resources;
 
 namespace System.ComponentModel.Design.Serialization

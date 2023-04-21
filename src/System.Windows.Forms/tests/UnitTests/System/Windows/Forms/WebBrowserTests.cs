@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static Interop;
 using static Interop.Mshtml;
 using Point = System.Drawing.Point;

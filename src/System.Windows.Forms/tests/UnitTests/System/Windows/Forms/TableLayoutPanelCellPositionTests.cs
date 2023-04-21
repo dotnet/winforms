@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

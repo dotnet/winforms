@@ -6,7 +6,6 @@ using System.Collections.Immutable;
 using System.IO.Pipes;
 using System.Runtime.Serialization;
 using System.Text;
-using Xunit;
 
 namespace Microsoft.VisualBasic.ApplicationServices.Tests
 {
