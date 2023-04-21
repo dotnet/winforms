@@ -27,8 +27,8 @@ public partial class TabControl
                     return Rectangle.Empty;
                 }
 
-                // The "NativeMethods.CHILDID_SELF" constant returns to the id of the TabPage,
-                // which allows to use the native "accLocation" method to get the "Bounds" property
+                // The CHILDID_SELF constant returns to the id of the TabPage, which allows to use the native
+                // "accLocation" method to get the "Bounds" property
                 return SystemIAccessible.TryGetLocation(CHILDID_SELF);
             }
         }
@@ -39,8 +39,8 @@ public partial class TabControl
                 : AccessibleRole.PageTabList;
 
         public override AccessibleStates State
-            // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
-            // which allows to use the native "get_accState" method to get the "State" property
+            // The CHILDID_SELF constant returns to the id of the trackbar, which allows to use the native
+            // "get_accState" method to get the "State" property
             => SystemIAccessible.TryGetState(CHILDID_SELF);
 
         internal override IRawElementProviderFragmentRoot FragmentRoot => this;
