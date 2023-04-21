@@ -4,22 +4,21 @@
 
 #nullable disable
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design;
+
+/// <summary>
+///  Provides notifications of toolbox actions to designers which implement this interface.
+/// </summary>
+public interface IToolboxUser
 {
     /// <summary>
-    ///  Provides notifications of toolbox actions to designers which implement this interface.
+    ///  Gets a value indicating whether the specified tool is supported by the current designer
     /// </summary>
-    public interface IToolboxUser
-    {
-        /// <summary>
-        ///  Gets a value indicating whether the specified tool is supported by the current designer
-        /// </summary>
-        bool GetToolSupported(ToolboxItem tool);
+    bool GetToolSupported(ToolboxItem tool);
 
-        /// <summary>
-        ///  Selects the specified tool.
-        /// </summary>
-        /// <param name="tool">toolbox item</param>
-        void ToolPicked(ToolboxItem tool);
-    }
+    /// <summary>
+    ///  Selects the specified tool.
+    /// </summary>
+    /// <param name="tool">toolbox item</param>
+    void ToolPicked(ToolboxItem tool);
 }

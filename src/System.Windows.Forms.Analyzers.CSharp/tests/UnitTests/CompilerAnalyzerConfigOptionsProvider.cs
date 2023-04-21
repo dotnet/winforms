@@ -7,40 +7,39 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace System.Windows.Forms.Analyzers.Tests
+namespace System.Windows.Forms.Analyzers.Tests;
+
+// Borrowed from https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/DiagnosticAnalyzer/CompilerAnalyzerConfigOptionsProvider.cs
+
+[ExcludeFromCodeCoverage]
+internal sealed class CompilerAnalyzerConfigOptionsProvider : AnalyzerConfigOptionsProvider
 {
-    // Borrowed from https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/DiagnosticAnalyzer/CompilerAnalyzerConfigOptionsProvider.cs
+    private readonly ImmutableDictionary<object, AnalyzerConfigOptions> _treeDict;
 
-    [ExcludeFromCodeCoverage]
-    internal sealed class CompilerAnalyzerConfigOptionsProvider : AnalyzerConfigOptionsProvider
+    public static CompilerAnalyzerConfigOptionsProvider Empty { get; }
+        = new CompilerAnalyzerConfigOptionsProvider(
+            ImmutableDictionary<object, AnalyzerConfigOptions>.Empty,
+            CompilerAnalyzerConfigOptions.Empty);
+
+    internal CompilerAnalyzerConfigOptionsProvider(
+        ImmutableDictionary<object, AnalyzerConfigOptions> treeDict,
+        AnalyzerConfigOptions globalOptions)
     {
-        private readonly ImmutableDictionary<object, AnalyzerConfigOptions> _treeDict;
-
-        public static CompilerAnalyzerConfigOptionsProvider Empty { get; }
-            = new CompilerAnalyzerConfigOptionsProvider(
-                ImmutableDictionary<object, AnalyzerConfigOptions>.Empty,
-                CompilerAnalyzerConfigOptions.Empty);
-
-        internal CompilerAnalyzerConfigOptionsProvider(
-            ImmutableDictionary<object, AnalyzerConfigOptions> treeDict,
-            AnalyzerConfigOptions globalOptions)
-        {
-            _treeDict = treeDict;
-            GlobalOptions = globalOptions;
-        }
-
-        public override AnalyzerConfigOptions GlobalOptions { get; }
-
-        public override AnalyzerConfigOptions GetOptions(SyntaxTree tree)
-            => _treeDict.TryGetValue(tree, out var options) ? options : CompilerAnalyzerConfigOptions.Empty;
-
-        public override AnalyzerConfigOptions GetOptions(AdditionalText textFile)
-            => _treeDict.TryGetValue(textFile, out var options) ? options : CompilerAnalyzerConfigOptions.Empty;
-
-        internal CompilerAnalyzerConfigOptionsProvider WithAdditionalTreeOptions(ImmutableDictionary<object, AnalyzerConfigOptions> treeDict)
-            => new(_treeDict.AddRange(treeDict), GlobalOptions);
-
-        internal CompilerAnalyzerConfigOptionsProvider WithGlobalOptions(AnalyzerConfigOptions globalOptions)
-            => new(_treeDict, globalOptions);
+        _treeDict = treeDict;
+        GlobalOptions = globalOptions;
     }
+
+    public override AnalyzerConfigOptions GlobalOptions { get; }
+
+    public override AnalyzerConfigOptions GetOptions(SyntaxTree tree)
+        => _treeDict.TryGetValue(tree, out var options) ? options : CompilerAnalyzerConfigOptions.Empty;
+
+    public override AnalyzerConfigOptions GetOptions(AdditionalText textFile)
+        => _treeDict.TryGetValue(textFile, out var options) ? options : CompilerAnalyzerConfigOptions.Empty;
+
+    internal CompilerAnalyzerConfigOptionsProvider WithAdditionalTreeOptions(ImmutableDictionary<object, AnalyzerConfigOptions> treeDict)
+        => new(_treeDict.AddRange(treeDict), GlobalOptions);
+
+    internal CompilerAnalyzerConfigOptionsProvider WithGlobalOptions(AnalyzerConfigOptions globalOptions)
+        => new(_treeDict, globalOptions);
 }

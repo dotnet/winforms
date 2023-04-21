@@ -5,130 +5,129 @@
 using static System.Windows.Forms.DataGridViewComboBoxEditingControl;
 using static Interop;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class DataGridViewComboBoxEditingControlAccessibleObjectTests
 {
-    public class DataGridViewComboBoxEditingControlAccessibleObjectTests
+    [WinFormsFact]
+    public void DataGridViewComboBoxEditingControlAccessibleObject_Ctor_Default()
     {
-        [WinFormsFact]
-        public void DataGridViewComboBoxEditingControlAccessibleObject_Ctor_Default()
+        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+
+        DataGridViewComboBoxEditingControlAccessibleObject accessibleObject =
+            new DataGridViewComboBoxEditingControlAccessibleObject(control);
+
+        Assert.Equal(control, accessibleObject.Owner);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, AccessibleRole.ComboBox)]
+    [InlineData(false, AccessibleRole.None)]
+    public void DataGridViewComboBoxEditingControlAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+    {
+        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+        // AccessibleRole is not set = Default
+
+        if (createControl)
         {
-            using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
-
-            DataGridViewComboBoxEditingControlAccessibleObject accessibleObject =
-                new DataGridViewComboBoxEditingControlAccessibleObject(control);
-
-            Assert.Equal(control, accessibleObject.Owner);
-            Assert.False(control.IsHandleCreated);
+            control.CreateControl();
         }
 
-        [WinFormsTheory]
-        [InlineData(true, AccessibleRole.ComboBox)]
-        [InlineData(false, AccessibleRole.None)]
-        public void DataGridViewComboBoxEditingControlAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
-        {
-            using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
-            // AccessibleRole is not set = Default
+        object actual = control.AccessibilityObject.Role;
 
-            if (createControl)
+        Assert.Equal(expectedRole, actual);
+        Assert.Equal(createControl, control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewComboBoxEditingControlAccessibleObject_ControlType_IsComboBox_IfAccessibleRoleIsDefault()
+    {
+        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+        // AccessibleRole is not set = Default
+
+        object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+        Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    public static IEnumerable<object[]> DataGridViewComboBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+    {
+        Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+        foreach (AccessibleRole role in roles)
+        {
+            if (role == AccessibleRole.Default)
             {
-                control.CreateControl();
+                continue; // The test checks custom roles
             }
 
-            object actual = control.AccessibilityObject.Role;
-
-            Assert.Equal(expectedRole, actual);
-            Assert.Equal(createControl, control.IsHandleCreated);
+            yield return new object[] { role };
         }
+    }
 
-        [WinFormsFact]
-        public void DataGridViewComboBoxEditingControlAccessibleObject_ControlType_IsComboBox_IfAccessibleRoleIsDefault()
-        {
-            using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
-            // AccessibleRole is not set = Default
+    [WinFormsTheory]
+    [MemberData(nameof(DataGridViewComboBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+    public void DataGridViewComboBoxEditingControlAccessibleObjectTest_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+    {
+        using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
+        control.AccessibleRole = role;
 
-            object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-            Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
-            Assert.False(control.IsHandleCreated);
-        }
+        Assert.Equal(expected, actual);
+        Assert.False(control.IsHandleCreated);
+    }
 
-        public static IEnumerable<object[]> DataGridViewComboBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
-        {
-            Array roles = Enum.GetValues(typeof(AccessibleRole));
+    [WinFormsTheory]
+    [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
+    [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
+    public void DataGridViewComboBoxEditingControlAccessibleObject_FragmentNavigate_SiblingsAreNull(int direction)
+    {
+        using DataGridViewComboBoxEditingControl control = new();
 
-            foreach (AccessibleRole role in roles)
-            {
-                if (role == AccessibleRole.Default)
-                {
-                    continue; // The test checks custom roles
-                }
+        object actual = control.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
 
-                yield return new object[] { role };
-            }
-        }
+        Assert.Null(actual);
+        Assert.False(control.IsHandleCreated);
+    }
 
-        [WinFormsTheory]
-        [MemberData(nameof(DataGridViewComboBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
-        public void DataGridViewComboBoxEditingControlAccessibleObjectTest_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
-        {
-            using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
-            control.AccessibleRole = role;
+    [WinFormsFact]
+    public void DataGridViewComboBoxEditingControlAccessibleObject_FragmentNavigate_ChildrenAreExpected()
+    {
+        using DataGridViewComboBoxEditingControl control = new();
+        control.CreateControl();
 
-            object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object firstChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        object lastChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
 
-            Assert.Equal(expected, actual);
-            Assert.False(control.IsHandleCreated);
-        }
+        Assert.Equal(control.ChildEditAccessibleObject, firstChild);
+        Assert.Equal(((DataGridViewComboBoxEditingControlAccessibleObject)control.AccessibilityObject).DropDownButtonUiaProvider, lastChild);
+        Assert.True(control.IsHandleCreated);
+    }
 
-        [WinFormsTheory]
-        [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
-        [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
-        public void DataGridViewComboBoxEditingControlAccessibleObject_FragmentNavigate_SiblingsAreNull(int direction)
-        {
-            using DataGridViewComboBoxEditingControl control = new();
+    [WinFormsFact]
+    public void DataGridViewComboBoxEditingControlAccessibleObject_FragmentNavigate_ParentIsCell()
+    {
+        using DataGridView control = new();
 
-            object actual = control.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
+        Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
 
-            Assert.Null(actual);
-            Assert.False(control.IsHandleCreated);
-        }
+        control.Columns.Add(new DataGridViewComboBoxColumn());
+        control.Rows.Add();
 
-        [WinFormsFact]
-        public void DataGridViewComboBoxEditingControlAccessibleObject_FragmentNavigate_ChildrenAreExpected()
-        {
-            using DataGridViewComboBoxEditingControl control = new();
-            control.CreateControl();
+        control.CreateControl();
+        control.CurrentCell = control.Rows[0].Cells[0];
+        control.BeginEdit(false);
 
-            object firstChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-            object lastChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        object actual = control.EditingControlAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
 
-            Assert.Equal(control.ChildEditAccessibleObject, firstChild);
-            Assert.Equal(((DataGridViewComboBoxEditingControlAccessibleObject)control.AccessibilityObject).DropDownButtonUiaProvider, lastChild);
-            Assert.True(control.IsHandleCreated);
-        }
+        control.EndEdit();
 
-        [WinFormsFact]
-        public void DataGridViewComboBoxEditingControlAccessibleObject_FragmentNavigate_ParentIsCell()
-        {
-            using DataGridView control = new();
-
-            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
-
-            control.Columns.Add(new DataGridViewComboBoxColumn());
-            control.Rows.Add();
-
-            control.CreateControl();
-            control.CurrentCell = control.Rows[0].Cells[0];
-            control.BeginEdit(false);
-
-            object actual = control.EditingControlAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
-
-            control.EndEdit();
-
-            Assert.Null(control.EditingControl);
-            Assert.Equal(control.CurrentCell.AccessibilityObject, actual);
-            Assert.True(control.IsHandleCreated);
-        }
+        Assert.Null(control.EditingControl);
+        Assert.Equal(control.CurrentCell.AccessibilityObject, actual);
+        Assert.True(control.IsHandleCreated);
     }
 }

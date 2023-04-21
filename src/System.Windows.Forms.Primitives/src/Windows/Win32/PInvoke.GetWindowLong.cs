@@ -5,24 +5,23 @@
 using System.Runtime.InteropServices;
 using static Interop;
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    [DllImport(Libraries.User32, SetLastError = true)]
+    private static extern nint GetWindowLongW(HWND hWnd, WINDOW_LONG_PTR_INDEX nIndex);
+
+    [DllImport(Libraries.User32, SetLastError = true)]
+    private static extern nint GetWindowLongPtrW(HWND hWnd, WINDOW_LONG_PTR_INDEX nIndex);
+
+    public static nint GetWindowLong<T>(T hWnd, WINDOW_LONG_PTR_INDEX nIndex)
+        where T : IHandle<HWND>
     {
-        [DllImport(Libraries.User32, SetLastError = true)]
-        private static extern nint GetWindowLongW(HWND hWnd, WINDOW_LONG_PTR_INDEX nIndex);
-
-        [DllImport(Libraries.User32, SetLastError = true)]
-        private static extern nint GetWindowLongPtrW(HWND hWnd, WINDOW_LONG_PTR_INDEX nIndex);
-
-        public static nint GetWindowLong<T>(T hWnd, WINDOW_LONG_PTR_INDEX nIndex)
-            where T : IHandle<HWND>
-        {
-            nint result = Environment.Is64BitProcess
-                ? GetWindowLongPtrW(hWnd.Handle, nIndex)
-                : GetWindowLongW(hWnd.Handle, nIndex);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
+        nint result = Environment.Is64BitProcess
+            ? GetWindowLongPtrW(hWnd.Handle, nIndex)
+            : GetWindowLongW(hWnd.Handle, nIndex);
+        GC.KeepAlive(hWnd.Wrapper);
+        return result;
     }
 }

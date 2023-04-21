@@ -3,23 +3,22 @@
 
 using System.Runtime.InteropServices;
 
-namespace System.Drawing
+namespace System.Drawing;
+
+internal sealed partial class DrawingCom
 {
-    internal sealed partial class DrawingCom
+    internal readonly struct IStreamWrapper : IDisposable
     {
-        internal readonly struct IStreamWrapper : IDisposable
+        public readonly IntPtr Ptr;
+
+        public IStreamWrapper(IntPtr ptr)
         {
-            public readonly IntPtr Ptr;
+            Ptr = ptr;
+        }
 
-            public IStreamWrapper(IntPtr ptr)
-            {
-                Ptr = ptr;
-            }
-
-            public void Dispose()
-            {
-                Marshal.Release(Ptr);
-            }
+        public void Dispose()
+        {
+            Marshal.Release(Ptr);
         }
     }
 }

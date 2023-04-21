@@ -3,28 +3,27 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System
-{
-    internal static partial class LocalAppContextSwitches
-    {
-        private static int s_dontSupportPngFramesInIcons;
-        public static bool DontSupportPngFramesInIcons
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return GetCachedSwitchValue(@"Switch.System.Drawing.DontSupportPngFramesInIcons", ref s_dontSupportPngFramesInIcons);
-            }
-        }
+namespace System;
 
-        private static int s_optimizePrintPreview;
-        public static bool OptimizePrintPreview
+internal static partial class LocalAppContextSwitches
+{
+    private static int s_dontSupportPngFramesInIcons;
+    public static bool DontSupportPngFramesInIcons
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return GetCachedSwitchValue(@"Switch.System.Drawing.Printing.OptimizePrintPreview", ref s_optimizePrintPreview);
-            }
+            return GetCachedSwitchValue(@"Switch.System.Drawing.DontSupportPngFramesInIcons", ref s_dontSupportPngFramesInIcons);
+        }
+    }
+
+    private static int s_optimizePrintPreview;
+    public static bool OptimizePrintPreview
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
+        {
+            return GetCachedSwitchValue(@"Switch.System.Drawing.Printing.OptimizePrintPreview", ref s_optimizePrintPreview);
         }
     }
 }

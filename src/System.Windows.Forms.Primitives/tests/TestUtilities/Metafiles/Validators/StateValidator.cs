@@ -4,30 +4,29 @@
 
 #nullable enable
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+/// <summary>
+///  Base <see cref="IEmfValidator"/> that handles optional validation of device context state.
+/// </summary>
+internal abstract class StateValidator : IEmfValidator
 {
-    /// <summary>
-    ///  Base <see cref="IEmfValidator"/> that handles optional validation of device context state.
-    /// </summary>
-    internal abstract class StateValidator : IEmfValidator
+    private readonly IStateValidator[] _stateValidators;
+    public StateValidator(IStateValidator[] stateValidators) => _stateValidators = stateValidators;
+    public abstract bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType);
+
+    public virtual void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
     {
-        private readonly IStateValidator[] _stateValidators;
-        public StateValidator(IStateValidator[] stateValidators) => _stateValidators = stateValidators;
-        public abstract bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType);
+        complete = false;
 
-        public virtual void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
+        if (_stateValidators is null)
         {
-            complete = false;
+            return;
+        }
 
-            if (_stateValidators is null)
-            {
-                return;
-            }
-
-            foreach (IStateValidator validator in _stateValidators)
-            {
-                validator.Validate(state);
-            }
+        foreach (IStateValidator validator in _stateValidators)
+        {
+            validator.Validate(state);
         }
     }
 }

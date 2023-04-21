@@ -5,39 +5,38 @@
 using System.ComponentModel;
 using System.Windows.Forms.TestUtilities;
 
-namespace System.Drawing.Design.Tests
+namespace System.Drawing.Design.Tests;
+
+public class FontEditorTests
 {
-    public class FontEditorTests
+    [Fact]
+    public void FontEditor_Ctor_Default()
     {
-        [Fact]
-        public void FontEditor_Ctor_Default()
-        {
-            var editor = new FontEditor();
-            Assert.False(editor.IsDropDownResizable);
-        }
+        var editor = new FontEditor();
+        Assert.False(editor.IsDropDownResizable);
+    }
 
-        [Theory]
-        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
-        public void FontEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
-        {
-            var editor = new FontEditor();
-            Assert.Same(value, editor.EditValue(null, provider, value));
-        }
+    [Theory]
+    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
+    public void FontEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
+    {
+        var editor = new FontEditor();
+        Assert.Same(value, editor.EditValue(null, provider, value));
+    }
 
-        [Theory]
-        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
-        public void FontEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
-        {
-            var editor = new FontEditor();
-            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
-        }
+    [Theory]
+    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
+    public void FontEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
+    {
+        var editor = new FontEditor();
+        Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
+    }
 
-        [Theory]
-        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
-        public void FontEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
-        {
-            var editor = new FontEditor();
-            Assert.False(editor.GetPaintValueSupported(context));
-        }
+    [Theory]
+    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
+    public void FontEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
+    {
+        var editor = new FontEditor();
+        Assert.False(editor.GetPaintValueSupported(context));
     }
 }

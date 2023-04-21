@@ -4,20 +4,19 @@
 
 using System.Drawing;
 
-namespace System
+namespace System;
+
+/// <summary>
+///  Simple immutable, intermediary, struct that allows creating point data via tuple: (12, 6).
+/// </summary>
+internal readonly struct EasyPoint
 {
-    /// <summary>
-    ///  Simple immutable, intermediary, struct that allows creating point data via tuple: (12, 6).
-    /// </summary>
-    internal readonly struct EasyPoint
-    {
-        public int X { get; }
-        public int Y { get; }
-        public EasyPoint(int x, int y) => (X, Y) = (x, y);
-        public EasyPoint((int X, int Y) point) => (X, Y) = point;
-        public void Deconstruct(out int x, out int y) => (x, y) = (X, Y);
-        public static implicit operator Point(in EasyPoint point) => new Point(point.X, point.Y);
-        public static implicit operator EasyPoint(Point point) => new EasyPoint(point.X, point.Y);
-        public static implicit operator EasyPoint(in (int X, int Y) point) => new EasyPoint(point);
-    }
+    public int X { get; }
+    public int Y { get; }
+    public EasyPoint(int x, int y) => (X, Y) = (x, y);
+    public EasyPoint((int X, int Y) point) => (X, Y) = point;
+    public void Deconstruct(out int x, out int y) => (x, y) = (X, Y);
+    public static implicit operator Point(in EasyPoint point) => new Point(point.X, point.Y);
+    public static implicit operator EasyPoint(Point point) => new EasyPoint(point.X, point.Y);
+    public static implicit operator EasyPoint(in (int X, int Y) point) => new EasyPoint(point);
 }

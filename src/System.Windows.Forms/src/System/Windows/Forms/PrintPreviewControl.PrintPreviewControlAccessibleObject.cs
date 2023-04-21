@@ -4,27 +4,26 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class PrintPreviewControl
 {
-    public partial class PrintPreviewControl
+    internal class PrintPreviewControlAccessibleObject : ControlAccessibleObject
     {
-        internal class PrintPreviewControlAccessibleObject : ControlAccessibleObject
+        private readonly PrintPreviewControl _owningPrintPreviewControl;
+
+        public PrintPreviewControlAccessibleObject(PrintPreviewControl owner) : base(owner)
         {
-            private readonly PrintPreviewControl _owningPrintPreviewControl;
-
-            public PrintPreviewControlAccessibleObject(PrintPreviewControl owner) : base(owner)
-            {
-                _owningPrintPreviewControl = owner;
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.AutomationIdPropertyId => Owner.Name,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningPrintPreviewControl.Focused,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    _ => base.GetPropertyValue(propertyID)
-                };
+            _owningPrintPreviewControl = owner;
         }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            => propertyID switch
+            {
+                UiaCore.UIA.AutomationIdPropertyId => Owner.Name,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => _owningPrintPreviewControl.Focused,
+                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                _ => base.GetPropertyValue(propertyID)
+            };
     }
 }

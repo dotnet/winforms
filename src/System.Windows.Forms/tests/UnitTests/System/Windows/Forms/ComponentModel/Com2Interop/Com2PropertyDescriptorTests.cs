@@ -4,19 +4,18 @@
 
 using System.Reflection;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
-{
-    // NB: doesn't require thread affinity
-    public class Com2PropertyDescriptorTests
-    {
-        private static MethodInfo s_miVersionInfo;
-        private static Type s_typeCom2PropertyDescriptor;
+namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests;
 
-        static Com2PropertyDescriptorTests()
-        {
-            s_typeCom2PropertyDescriptor = typeof(Com2PropertyDescriptor);
-            s_miVersionInfo = s_typeCom2PropertyDescriptor.GetMethod("TrimNewline", BindingFlags.Static | BindingFlags.NonPublic);
-            Assert.NotNull(s_miVersionInfo);
-        }
+// NB: doesn't require thread affinity
+public class Com2PropertyDescriptorTests
+{
+    private static MethodInfo s_miVersionInfo;
+    private static Type s_typeCom2PropertyDescriptor;
+
+    static Com2PropertyDescriptorTests()
+    {
+        s_typeCom2PropertyDescriptor = typeof(Com2PropertyDescriptor);
+        s_miVersionInfo = s_typeCom2PropertyDescriptor.GetMethod("TrimNewline", BindingFlags.Static | BindingFlags.NonPublic);
+        Assert.NotNull(s_miVersionInfo);
     }
 }

@@ -3,31 +3,30 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Class |
+                AttributeTargets.Method)]
+internal sealed class SRDisplayNameAttribute : DisplayNameAttribute
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Class |
-                    AttributeTargets.Method)]
-    internal sealed class SRDisplayNameAttribute : DisplayNameAttribute
+    private bool replaced;
+
+    public SRDisplayNameAttribute(string displayName)
+        : base(displayName)
     {
-        private bool replaced;
+    }
 
-        public SRDisplayNameAttribute(string displayName)
-            : base(displayName)
+    public override string DisplayName
+    {
+        get
         {
-        }
-
-        public override string DisplayName
-        {
-            get
+            if (!replaced)
             {
-                if (!replaced)
-                {
-                    replaced = true;
-                    DisplayNameValue = SR.GetResourceString(base.DisplayName);
-                }
-
-                return base.DisplayName;
+                replaced = true;
+                DisplayNameValue = SR.GetResourceString(base.DisplayName);
             }
+
+            return base.DisplayName;
         }
     }
 }

@@ -2,33 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Microsoft.VisualBasic.Logging.Tests
+namespace Microsoft.VisualBasic.Logging.Tests;
+
+public class LogTests : FileCleanupTestBase
 {
-    public class LogTests : FileCleanupTestBase
+    [Fact]
+    public void Properties()
     {
-        [Fact]
-        public void Properties()
-        {
-            var log = new Log();
-            _ = log.TraceSource;
-            _ = log.DefaultFileLogWriter;
-        }
+        var log = new Log();
+        _ = log.TraceSource;
+        _ = log.DefaultFileLogWriter;
+    }
 
-        [Fact]
-        public void Write()
-        {
-            var log = new Log();
-            var listener = log.DefaultFileLogWriter;
-            listener.Location = LogFileLocation.Custom;
-            listener.CustomLocation = GetTestFilePath();
+    [Fact]
+    public void Write()
+    {
+        var log = new Log();
+        var listener = log.DefaultFileLogWriter;
+        listener.Location = LogFileLocation.Custom;
+        listener.CustomLocation = GetTestFilePath();
 
-            log.WriteEntry("WriteEntry");
-            log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Warning);
-            log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Error, id: 3);
+        log.WriteEntry("WriteEntry");
+        log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Warning);
+        log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Error, id: 3);
 
-            log.WriteException(new System.ArgumentException());
-            log.WriteException(new System.ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo");
-            log.WriteException(new System.ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo", id: 6);
-        }
+        log.WriteException(new System.ArgumentException());
+        log.WriteException(new System.ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo");
+        log.WriteException(new System.ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo", id: 6);
     }
 }

@@ -4,121 +4,120 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
 {
-    public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
+    [WinFormsFact]
+    public void DataGridViewEditingPanelAccessibleObject_FirstAndLastChildren_AreNull()
     {
-        [WinFormsFact]
-        public void DataGridViewEditingPanelAccessibleObject_FirstAndLastChildren_AreNull()
+        using DataGridView dataGridView = new DataGridView();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        AccessibleObject accessibleObject = dataGridView.EditingPanelAccessibleObject;
+
+        // Exception does not appear when trying to get first Child
+        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        Assert.Null(firstChild);
+
+        // Exception does not appear when trying to get last Child
+        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        Assert.Null(lastChild);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewEditingPanelAccessibleObject_EditedState_FirstAndLastChildren_AreNotNull()
+    {
+        using DataGridView dataGridView = new DataGridView();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
+        dataGridView.CurrentCell = cell;
+        dataGridView.BeginEdit(false);
+
+        AccessibleObject accessibleObject = dataGridView.EditingPanelAccessibleObject;
+
+        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        Assert.NotNull(firstChild);
+
+        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        Assert.NotNull(lastChild);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewEditingPanelAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
+    {
+        using DataGridView dataGridView = new DataGridView();
+        Panel editingPanel = dataGridView.EditingPanel;
+        // AccessibleRole is not set = Default
+
+        object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+        Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+        Assert.False(dataGridView.IsHandleCreated);
+        Assert.False(editingPanel.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, AccessibleRole.Client)]
+    [InlineData(false, AccessibleRole.None)]
+    public void DataGridViewEditingPanelAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+    {
+        using DataGridView dataGridView = new DataGridView();
+        Panel editingPanel = dataGridView.EditingPanel;
+        // AccessibleRole is not set = Default
+
+        if (createControl)
         {
-            using DataGridView dataGridView = new DataGridView();
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            AccessibleObject accessibleObject = dataGridView.EditingPanelAccessibleObject;
-
-            // Exception does not appear when trying to get first Child
-            UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-            Assert.Null(firstChild);
-
-            // Exception does not appear when trying to get last Child
-            UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
-            Assert.Null(lastChild);
+            editingPanel.CreateControl();
         }
 
-        [WinFormsFact]
-        public void DataGridViewEditingPanelAccessibleObject_EditedState_FirstAndLastChildren_AreNotNull()
+        object actual = editingPanel.AccessibilityObject.Role;
+
+        Assert.Equal(expectedRole, actual);
+        Assert.Equal(createControl, editingPanel.IsHandleCreated);
+    }
+
+    public static IEnumerable<object[]> DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+    {
+        Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+        foreach (AccessibleRole role in roles)
         {
-            using DataGridView dataGridView = new DataGridView();
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
-            dataGridView.CurrentCell = cell;
-            dataGridView.BeginEdit(false);
-
-            AccessibleObject accessibleObject = dataGridView.EditingPanelAccessibleObject;
-
-            UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-            Assert.NotNull(firstChild);
-
-            UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
-            Assert.NotNull(lastChild);
-        }
-
-        [WinFormsFact]
-        public void DataGridViewEditingPanelAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
-        {
-            using DataGridView dataGridView = new DataGridView();
-            Panel editingPanel = dataGridView.EditingPanel;
-            // AccessibleRole is not set = Default
-
-            object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-
-            Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
-            Assert.False(dataGridView.IsHandleCreated);
-            Assert.False(editingPanel.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [InlineData(true, AccessibleRole.Client)]
-        [InlineData(false, AccessibleRole.None)]
-        public void DataGridViewEditingPanelAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
-        {
-            using DataGridView dataGridView = new DataGridView();
-            Panel editingPanel = dataGridView.EditingPanel;
-            // AccessibleRole is not set = Default
-
-            if (createControl)
+            if (role == AccessibleRole.Default)
             {
-                editingPanel.CreateControl();
+                continue; // The test checks custom roles
             }
 
-            object actual = editingPanel.AccessibilityObject.Role;
-
-            Assert.Equal(expectedRole, actual);
-            Assert.Equal(createControl, editingPanel.IsHandleCreated);
+            yield return new object[] { role };
         }
+    }
 
-        public static IEnumerable<object[]> DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
-        {
-            Array roles = Enum.GetValues(typeof(AccessibleRole));
+    [WinFormsTheory]
+    [MemberData(nameof(DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+    public void DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+    {
+        using DataGridView dataGridView = new DataGridView();
+        Panel editingPanel = dataGridView.EditingPanel;
+        editingPanel.AccessibleRole = role;
 
-            foreach (AccessibleRole role in roles)
-            {
-                if (role == AccessibleRole.Default)
-                {
-                    continue; // The test checks custom roles
-                }
+        object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-                yield return new object[] { role };
-            }
-        }
+        Assert.Equal(expected, actual);
+        Assert.False(editingPanel.IsHandleCreated);
+    }
 
-        [WinFormsTheory]
-        [MemberData(nameof(DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
-        public void DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
-        {
-            using DataGridView dataGridView = new DataGridView();
-            Panel editingPanel = dataGridView.EditingPanel;
-            editingPanel.AccessibleRole = role;
+    [WinFormsFact]
+    public void DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ReturnsExpected()
+    {
+        using DataGridView dataGridView = new();
+        Panel editingPanel = dataGridView.EditingPanel;
 
-            object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
-
-            Assert.Equal(expected, actual);
-            Assert.False(editingPanel.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ReturnsExpected()
-        {
-            using DataGridView dataGridView = new();
-            Panel editingPanel = dataGridView.EditingPanel;
-
-            Assert.True((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
-            Assert.Equal(string.Empty, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId));
-            Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-            Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
-            Assert.Null(editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
-            Assert.False((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId));
-            Assert.False(editingPanel.IsHandleCreated);
-        }
+        Assert.True((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.Equal(string.Empty, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId));
+        Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+        Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+        Assert.Null(editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.False((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId));
+        Assert.False(editingPanel.IsHandleCreated);
     }
 }

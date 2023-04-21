@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class SendKeys
 {
-    public partial class SendKeys
+    private enum SendMethodTypes
     {
-        private enum SendMethodTypes
-        {
-            Default = 1,
-            JournalHook = 2,
-            SendInput = 3
-        }
+        Default = 1,
+        JournalHook = 2,
+        SendInput = 3
     }
 }

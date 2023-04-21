@@ -4,32 +4,31 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Specifies the direction the system uses to arrange minimized windows.
+/// </summary>
+[Flags]
+public enum ArrangeDirection
 {
     /// <summary>
-    ///  Specifies the direction the system uses to arrange minimized windows.
+    ///  Arranges vertically, from top to bottom.
     /// </summary>
-    [Flags]
-    public enum ArrangeDirection
-    {
-        /// <summary>
-        ///  Arranges vertically, from top to bottom.
-        /// </summary>
-        Down = User32.ARW.DOWN,
+    Down = User32.ARW.DOWN,
 
-        /// <summary>
-        ///  Arranges horizontally, from left to right.
-        /// </summary>
-        Left = User32.ARW.LEFT,
+    /// <summary>
+    ///  Arranges horizontally, from left to right.
+    /// </summary>
+    Left = User32.ARW.LEFT,
 
-        /// <summary>
-        ///  Arranges horizontally, from right to left.
-        /// </summary>
-        Right = User32.ARW.RIGHT,
+    /// <summary>
+    ///  Arranges horizontally, from right to left.
+    /// </summary>
+    Right = User32.ARW.RIGHT,
 
-        /// <summary>
-        ///  Arranges vertically, from bottom to top.
-        /// </summary>
-        Up = User32.ARW.UP,
-    }
+    /// <summary>
+    ///  Arranges vertically, from bottom to top.
+    /// </summary>
+    Up = User32.ARW.UP,
 }

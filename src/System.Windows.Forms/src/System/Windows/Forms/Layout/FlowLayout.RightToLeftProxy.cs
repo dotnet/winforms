@@ -4,24 +4,23 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Layout
-{
-    internal partial class FlowLayout
-    {
-        private class RightToLeftProxy : ContainerProxy
-        {
-            public RightToLeftProxy(IArrangedElement container) : base(container)
-            {
-            }
+namespace System.Windows.Forms.Layout;
 
-            public override Rectangle Bounds
+internal partial class FlowLayout
+{
+    private class RightToLeftProxy : ContainerProxy
+    {
+        public RightToLeftProxy(IArrangedElement container) : base(container)
+        {
+        }
+
+        public override Rectangle Bounds
+        {
+            set
             {
-                set
-                {
-                    // if the container is RTL, align to the left, otherwise, align to the right.
-                    // Do NOT use LayoutUtils.RTLTranslate as we want to preserve the padding.Right on the right...
-                    base.Bounds = RTLTranslateNoMarginSwap(value);
-                }
+                // if the container is RTL, align to the left, otherwise, align to the right.
+                // Do NOT use LayoutUtils.RTLTranslate as we want to preserve the padding.Right on the right...
+                base.Bounds = RTLTranslateNoMarginSwap(value);
             }
         }
     }

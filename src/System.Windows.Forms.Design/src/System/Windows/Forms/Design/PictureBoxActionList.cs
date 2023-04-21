@@ -7,39 +7,38 @@
 using System.ComponentModel.Design;
 using System.ComponentModel;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class PictureBoxActionList : DesignerActionList
 {
-    internal class PictureBoxActionList : DesignerActionList
+    private readonly PictureBoxDesigner _designer;
+    public PictureBoxActionList(PictureBoxDesigner designer) : base(designer.Component)
     {
-        private readonly PictureBoxDesigner _designer;
-        public PictureBoxActionList(PictureBoxDesigner designer) : base(designer.Component)
-        {
-            _designer = designer;
-        }
+        _designer = designer;
+    }
 
-        public PictureBoxSizeMode SizeMode
+    public PictureBoxSizeMode SizeMode
+    {
+        get
         {
-            get
-            {
-                return ((PictureBox)Component).SizeMode;
-            }
-            set
-            {
-                TypeDescriptor.GetProperties(Component)["SizeMode"].SetValue(Component, value);
-            }
+            return ((PictureBox)Component).SizeMode;
         }
+        set
+        {
+            TypeDescriptor.GetProperties(Component)["SizeMode"].SetValue(Component, value);
+        }
+    }
 
-        public void ChooseImage()
-        {
-            EditorServiceContext.EditValue(_designer, Component, "Image");
-        }
+    public void ChooseImage()
+    {
+        EditorServiceContext.EditValue(_designer, Component, "Image");
+    }
 
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
-            items.Add(new DesignerActionMethodItem(this, "ChooseImage", SR.ChooseImageDisplayName, SR.PropertiesCategoryName, SR.ChooseImageDescription, true));
-            items.Add(new DesignerActionPropertyItem("SizeMode", SR.SizeModeDisplayName, SR.PropertiesCategoryName, SR.SizeModeDescription));
-            return items;
-        }
+    public override DesignerActionItemCollection GetSortedActionItems()
+    {
+        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        items.Add(new DesignerActionMethodItem(this, "ChooseImage", SR.ChooseImageDisplayName, SR.PropertiesCategoryName, SR.ChooseImageDescription, true));
+        items.Add(new DesignerActionPropertyItem("SizeMode", SR.SizeModeDisplayName, SR.PropertiesCategoryName, SR.SizeModeDescription));
+        return items;
     }
 }

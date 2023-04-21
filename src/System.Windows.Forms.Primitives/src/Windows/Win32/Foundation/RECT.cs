@@ -4,16 +4,15 @@
 
 using System.Drawing;
 
-namespace Windows.Win32.Foundation
-{
-    internal partial struct RECT
-    {
-        public RECT(Size size)
-        {
-            right = size.Width;
-            bottom = size.Height;
-        }
+namespace Windows.Win32.Foundation;
 
-        public override string ToString() => ((Rectangle)this).ToString();
+internal partial struct RECT
+{
+    public RECT(Size size)
+    {
+        right = size.Width;
+        bottom = size.Height;
     }
+
+    public override string ToString() => ((Rectangle)this).ToString();
 }

@@ -4,33 +4,32 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.UITests.Dpi
+namespace System.Windows.Forms.UITests.Dpi;
+
+internal static class DpiMessageHelper
 {
-    internal static class DpiMessageHelper
+    public static void TriggerDpiMessage(User32.WM message, Control control, int newDpi)
     {
-        public static void TriggerDpiMessage(User32.WM message, Control control, int newDpi)
+        double factor = newDpi / DpiHelper.LogicalDpi;
+        WPARAM wParam = WPARAM.MAKEWPARAM(newDpi, newDpi);
+
+        _ = message switch
         {
-            double factor = newDpi / DpiHelper.LogicalDpi;
-            WPARAM wParam = WPARAM.MAKEWPARAM(newDpi, newDpi);
+            User32.WM.DPICHANGED => SendWmDpiChangedMessage(message),
+            User32.WM.DPICHANGED_BEFOREPARENT => PInvoke.SendMessage(control, message, wParam),
+            User32.WM.DPICHANGED_AFTERPARENT => PInvoke.SendMessage(control, message),
+            _ => throw new NotImplementedException()
+        };
 
-            _ = message switch
-            {
-                User32.WM.DPICHANGED => SendWmDpiChangedMessage(message),
-                User32.WM.DPICHANGED_BEFOREPARENT => PInvoke.SendMessage(control, message, wParam),
-                User32.WM.DPICHANGED_AFTERPARENT => PInvoke.SendMessage(control, message),
-                _ => throw new NotImplementedException()
-            };
+        nint SendWmDpiChangedMessage(User32.WM message)
+        {
+            RECT suggestedRect = new(0,
+                0,
+                (int)Math.Round(control.Width * factor),
+                (int)Math.Round(control.Height * factor));
 
-            nint SendWmDpiChangedMessage(User32.WM message)
-            {
-                RECT suggestedRect = new(0,
-                    0,
-                    (int)Math.Round(control.Width * factor),
-                    (int)Math.Round(control.Height * factor));
-
-                PInvoke.SendMessage(control, User32.WM.GETDPISCALEDSIZE, wParam, ref suggestedRect);
-                return PInvoke.SendMessage(control, message, wParam, ref suggestedRect);
-            }
+            PInvoke.SendMessage(control, User32.WM.GETDPISCALEDSIZE, wParam, ref suggestedRect);
+            return PInvoke.SendMessage(control, message, wParam, ref suggestedRect);
         }
     }
 }

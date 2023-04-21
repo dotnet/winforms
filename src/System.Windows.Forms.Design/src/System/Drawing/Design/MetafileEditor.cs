@@ -4,18 +4,17 @@
 
 using System.Drawing.Imaging;
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design;
+
+/// <summary>
+///  Extends Image's editor class to provide default file searching for metafile (.emf) files.
+/// </summary>
+[CLSCompliant(false)]
+public class MetafileEditor : ImageEditor
 {
-    /// <summary>
-    ///  Extends Image's editor class to provide default file searching for metafile (.emf) files.
-    /// </summary>
-    [CLSCompliant(false)]
-    public class MetafileEditor : ImageEditor
-    {
-        protected override string GetFileDialogDescription() => SR.metafileFileDescription;
+    protected override string GetFileDialogDescription() => SR.metafileFileDescription;
 
-        protected override string[] GetExtensions() => new string[] { "emf", "wmf" };
+    protected override string[] GetExtensions() => new string[] { "emf", "wmf" };
 
-        protected override Image LoadFromStream(Stream stream) => new Metafile(stream);
-    }
+    protected override Image LoadFromStream(Stream stream) => new Metafile(stream);
 }

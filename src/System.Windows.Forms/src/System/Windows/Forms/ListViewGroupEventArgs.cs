@@ -2,25 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Provides data for the <see cref="ListView.OnGroupCollapsedStateChanged"/> and <see cref="ListView.OnGroupTaskLinkClick"/> event.
+/// </summary>
+public class ListViewGroupEventArgs : EventArgs
 {
     /// <summary>
-    ///  Provides data for the <see cref="ListView.OnGroupCollapsedStateChanged"/> and <see cref="ListView.OnGroupTaskLinkClick"/> event.
+    ///  Initializes a new instances of the <see cref="ListViewGroupEventArgs"/> class.
     /// </summary>
-    public class ListViewGroupEventArgs : EventArgs
+    /// <param name="groupIndex">The index of the <see cref="ListViewGroup"/> associated with the event.</param>
+    public ListViewGroupEventArgs(int groupIndex)
     {
-        /// <summary>
-        ///  Initializes a new instances of the <see cref="ListViewGroupEventArgs"/> class.
-        /// </summary>
-        /// <param name="groupIndex">The index of the <see cref="ListViewGroup"/> associated with the event.</param>
-        public ListViewGroupEventArgs(int groupIndex)
-        {
-            GroupIndex = groupIndex;
-        }
-
-        /// <summary>
-        ///  Gets the index of the <see cref="ListViewGroup"/> associated with the event.
-        /// </summary>
-        public int GroupIndex { get; }
+        GroupIndex = groupIndex;
     }
+
+    /// <summary>
+    ///  Gets the index of the <see cref="ListViewGroup"/> associated with the event.
+    /// </summary>
+    public int GroupIndex { get; }
 }

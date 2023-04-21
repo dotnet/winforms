@@ -4,15 +4,14 @@
 
 using Windows.Win32.Globalization;
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    public static HIMC ImmGetContext<T>(T hWnd) where T : IHandle<HWND>
     {
-        public static HIMC ImmGetContext<T>(T hWnd) where T : IHandle<HWND>
-        {
-            HIMC result = ImmGetContext(hWnd.Handle);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
+        HIMC result = ImmGetContext(hWnd.Handle);
+        GC.KeepAlive(hWnd.Wrapper);
+        return result;
     }
 }

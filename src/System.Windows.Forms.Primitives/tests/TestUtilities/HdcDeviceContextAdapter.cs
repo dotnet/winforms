@@ -4,20 +4,19 @@
 
 using System.Drawing;
 
-namespace System
+namespace System;
+
+/// <summary>
+///  Simple adapter for passing <see cref="HDC"/> as <see cref="IDeviceContext"/>. Does not manage HDC
+///  lifetime.
+/// </summary>
+internal class HdcDeviceContextAdapter : IDeviceContext
 {
-    /// <summary>
-    ///  Simple adapter for passing <see cref="HDC"/> as <see cref="IDeviceContext"/>. Does not manage HDC
-    ///  lifetime.
-    /// </summary>
-    internal class HdcDeviceContextAdapter : IDeviceContext
-    {
-        private readonly HDC _hdc;
+    private readonly HDC _hdc;
 
-        public HdcDeviceContextAdapter(HDC hdc) => _hdc = hdc;
+    public HdcDeviceContextAdapter(HDC hdc) => _hdc = hdc;
 
-        public IntPtr GetHdc() => (IntPtr)_hdc;
-        public void ReleaseHdc() { }
-        public void Dispose() { }
-    }
+    public IntPtr GetHdc() => (IntPtr)_hdc;
+    public void ReleaseHdc() { }
+    public void Dispose() { }
 }

@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Windows.Win32.Graphics.Gdi
+namespace Windows.Win32.Graphics.Gdi;
+
+internal readonly partial struct HBITMAP : IDisposable
 {
-    internal readonly partial struct HBITMAP : IDisposable
+    public void Dispose()
     {
-        public void Dispose()
+        if (!IsNull)
         {
-            if (!IsNull)
-            {
-                PInvoke.DeleteObject(this);
-            }
+            PInvoke.DeleteObject(this);
         }
     }
 }

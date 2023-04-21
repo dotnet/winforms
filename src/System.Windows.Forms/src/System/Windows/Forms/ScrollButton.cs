@@ -4,35 +4,34 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Specifies the type of scroll arrow to create on a scroll bar.
+/// </summary>
+public enum ScrollButton
 {
     /// <summary>
-    ///  Specifies the type of scroll arrow to create on a scroll bar.
+    ///  A down-scroll arrow.
     /// </summary>
-    public enum ScrollButton
-    {
-        /// <summary>
-        ///  A down-scroll arrow.
-        /// </summary>
-        Down = (int)User32.DFCS.SCROLLDOWN,
+    Down = (int)User32.DFCS.SCROLLDOWN,
 
-        /// <summary>
-        ///  A left-scroll arrow.
-        /// </summary>
-        Left = (int)User32.DFCS.SCROLLLEFT,
+    /// <summary>
+    ///  A left-scroll arrow.
+    /// </summary>
+    Left = (int)User32.DFCS.SCROLLLEFT,
 
-        /// <summary>
-        ///  A right-scroll arrow.
-        /// </summary>
-        Right = (int)User32.DFCS.SCROLLRIGHT,
+    /// <summary>
+    ///  A right-scroll arrow.
+    /// </summary>
+    Right = (int)User32.DFCS.SCROLLRIGHT,
 
-        /// <summary>
-        ///  An up-scroll arrow.
-        /// </summary>
-        Up = (int)User32.DFCS.SCROLLUP,
+    /// <summary>
+    ///  An up-scroll arrow.
+    /// </summary>
+    Up = (int)User32.DFCS.SCROLLUP,
 
-        Min = (int)User32.DFCS.SCROLLUP,
+    Min = (int)User32.DFCS.SCROLLUP,
 
-        Max = (int)User32.DFCS.SCROLLRIGHT,
-    }
+    Max = (int)User32.DFCS.SCROLLRIGHT,
 }

@@ -10,397 +10,396 @@ using Windows.Win32.System.Ole;
 using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
 using static Windows.Win32.System.Com.VARENUM;
 
-namespace System.Windows.Forms.Tests.Interop.SafeArrayTests
+namespace System.Windows.Forms.Tests.Interop.SafeArrayTests;
+
+public unsafe class SAFEARRAYTests
 {
-    public unsafe class SAFEARRAYTests
+    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    public void SAFEARRAY_Sizeof_InvokeX86_ReturnsExpected()
     {
-        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
-        public void SAFEARRAY_Sizeof_InvokeX86_ReturnsExpected()
+        if (Environment.Is64BitProcess)
         {
-            if (Environment.Is64BitProcess)
-            {
-                return;
-            }
-
-            Assert.Equal(24, Marshal.SizeOf<SAFEARRAY>());
-            Assert.Equal(24, sizeof(SAFEARRAY));
+            return;
         }
 
-        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
-        public void SAFEARRAY_Sizeof_InvokeX64_ReturnsExpected()
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return;
-            }
+        Assert.Equal(24, Marshal.SizeOf<SAFEARRAY>());
+        Assert.Equal(24, sizeof(SAFEARRAY));
+    }
 
-            Assert.Equal(32, Marshal.SizeOf<SAFEARRAY>());
-            Assert.Equal(32, sizeof(SAFEARRAY));
+    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    public void SAFEARRAY_Sizeof_InvokeX64_ReturnsExpected()
+    {
+        if (!Environment.Is64BitProcess)
+        {
+            return;
         }
 
-        public static IEnumerable<object[]> Create_TestData()
+        Assert.Equal(32, Marshal.SizeOf<SAFEARRAY>());
+        Assert.Equal(32, sizeof(SAFEARRAY));
+    }
+
+    public static IEnumerable<object[]> Create_TestData()
+    {
+        yield return new object[] { VT_I4, FADF_HAVEVARTYPE, 4 };
+        yield return new object[] { VT_I8, FADF_HAVEVARTYPE, 8 };
+        yield return new object[] { VT_BSTR, FADF_HAVEVARTYPE | FADF_BSTR, IntPtr.Size };
+        yield return new object[] { VT_UNKNOWN, FADF_HAVEIID | FADF_UNKNOWN, IntPtr.Size };
+        yield return new object[] { VT_DISPATCH, FADF_HAVEIID | FADF_DISPATCH, IntPtr.Size };
+    }
+
+    [StaTheory]
+    [MemberData(nameof(Create_TestData))]
+    public void SAFEARRAY_CreateSingleDimension_GetProperties_Success(ushort vt, ushort expectedFeatures, uint expectedCbElements)
+    {
+        var saBound = new SAFEARRAYBOUND
         {
-            yield return new object[] { VT_I4, FADF_HAVEVARTYPE, 4 };
-            yield return new object[] { VT_I8, FADF_HAVEVARTYPE, 8 };
-            yield return new object[] { VT_BSTR, FADF_HAVEVARTYPE | FADF_BSTR, IntPtr.Size };
-            yield return new object[] { VT_UNKNOWN, FADF_HAVEIID | FADF_UNKNOWN, IntPtr.Size };
-            yield return new object[] { VT_DISPATCH, FADF_HAVEIID | FADF_DISPATCH, IntPtr.Size };
+            cElements = 10,
+            lLbound = 1
+        };
+        SAFEARRAY* psa = PInvoke.SafeArrayCreate((VARENUM)vt, 1, &saBound);
+        Assert.True(psa != null);
+
+        try
+        {
+            Assert.Equal(1u, psa->cDims);
+            Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
+            Assert.Equal(expectedCbElements, psa->cbElements);
+            Assert.Equal(0u, psa->cLocks);
+            Assert.True(psa->pvData != null);
+            Assert.Equal(10u, psa->rgsabound._0.cElements);
+            Assert.Equal(1, psa->rgsabound._0.lLbound);
+
+            VARENUM arrayVt = VT_EMPTY;
+            HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal((VARENUM)vt, arrayVt);
+        }
+        finally
+        {
+            HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+            Assert.Equal(HRESULT.S_OK, hr);
+        }
+    }
+
+    [StaFact]
+    public void SAFEARRAY_CreateSingleDimensionRECORD_GetProperties_Success()
+    {
+        var saBound = new SAFEARRAYBOUND
+        {
+            cElements = 10,
+            lLbound = 1
+        };
+
+        using ComScope<IRecordInfo> recordInfo = new(new CustomRecordInfo().GetComInterface());
+
+        SAFEARRAY* psa = PInvoke.SafeArrayCreateEx(VT_RECORD, 1, &saBound, recordInfo);
+        Assert.True(psa != null);
+
+        try
+        {
+            Assert.Equal(1u, psa->cDims);
+            Assert.Equal(FADF_RECORD, psa->fFeatures);
+            Assert.Equal((uint)sizeof(int), psa->cbElements);
+            Assert.Equal(0u, psa->cLocks);
+            Assert.True(psa->pvData != null);
+            Assert.Equal(10u, psa->rgsabound._0.cElements);
+            Assert.Equal(1, psa->rgsabound._0.lLbound);
+
+            VARENUM arrayVt = VT_EMPTY;
+            HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal(VT_RECORD, arrayVt);
+        }
+        finally
+        {
+            HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+            Assert.Equal(HRESULT.S_OK, hr);
+        }
+    }
+
+    private class CustomRecordInfo : IRecordInfo.Interface
+    {
+        public IRecordInfo* GetComInterface() => (IRecordInfo*)Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo.Interface>(this);
+
+        public HRESULT RecordInit(void* pvNew) => throw new NotImplementedException();
+
+        public HRESULT RecordClear(void* pvExisting) => throw new NotImplementedException();
+
+        public HRESULT RecordCopy(void* pvExisting, void* pvNew) => throw new NotImplementedException();
+
+        public Func<(Guid, HRESULT)> GetGuidAction { get; set; }
+
+        public HRESULT GetGuid(Guid* pguid)
+        {
+            (Guid guid, HRESULT hr) = GetGuidAction();
+            *pguid = guid;
+            return hr;
         }
 
-        [StaTheory]
-        [MemberData(nameof(Create_TestData))]
-        public void SAFEARRAY_CreateSingleDimension_GetProperties_Success(ushort vt, ushort expectedFeatures, uint expectedCbElements)
+        public HRESULT GetName(BSTR* pbstrName) => throw new NotImplementedException();
+
+        public HRESULT GetSize(uint* pcbSize)
         {
-            var saBound = new SAFEARRAYBOUND
-            {
-                cElements = 10,
-                lLbound = 1
-            };
-            SAFEARRAY* psa = PInvoke.SafeArrayCreate((VARENUM)vt, 1, &saBound);
-            Assert.True(psa != null);
+            *pcbSize = (uint)sizeof(int);
+            return HRESULT.S_OK;
+        }
 
-            try
-            {
-                Assert.Equal(1u, psa->cDims);
-                Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
-                Assert.Equal(expectedCbElements, psa->cbElements);
-                Assert.Equal(0u, psa->cLocks);
-                Assert.True(psa->pvData != null);
-                Assert.Equal(10u, psa->rgsabound._0.cElements);
-                Assert.Equal(1, psa->rgsabound._0.lLbound);
+        public HRESULT GetTypeInfo(ITypeInfo** ppTypeInfo) => throw new NotImplementedException();
 
-                VARENUM arrayVt = VT_EMPTY;
-                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+        public HRESULT GetField(void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+
+        public HRESULT GetFieldNoCopy(void* pvData, PCWSTR szFieldName, VARIANT* pvarField, void** ppvDataCArray) => throw new NotImplementedException();
+
+        public HRESULT PutField(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+
+        public HRESULT PutFieldNoCopy(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+
+        public HRESULT GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => throw new NotImplementedException();
+
+        public BOOL IsMatchingType(IRecordInfo* pRecordInfoInfo) => throw new NotImplementedException();
+
+        public void* RecordCreate() => throw new NotImplementedException();
+
+        public HRESULT RecordCreateCopy(void* pvSource, void** ppvDest) => throw new NotImplementedException();
+
+        public HRESULT RecordDestroy(void* pvRecord) => throw new NotImplementedException();
+    }
+
+    [StaTheory]
+    [MemberData(nameof(Create_TestData))]
+    public void SAFEARRAY_CreateMultipleDimensions_GetProperties_Success(ushort vt, ushort expectedFeatures, uint expectedCbElements)
+    {
+        SAFEARRAYBOUND* saBounds = stackalloc SAFEARRAYBOUND[2];
+        saBounds[0] = new SAFEARRAYBOUND
+        {
+            cElements = 10,
+            lLbound = 1
+        };
+        saBounds[1] = new SAFEARRAYBOUND
+        {
+            cElements = 20,
+            lLbound = 0
+        };
+        SAFEARRAY* psa = PInvoke.SafeArrayCreate((VARENUM)vt, 2, saBounds);
+        Assert.True(psa != null);
+
+        try
+        {
+            Assert.Equal(2u, psa->cDims);
+            Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
+            Assert.Equal(expectedCbElements, psa->cbElements);
+            Assert.Equal(0u, psa->cLocks);
+            Assert.True(psa->pvData != null);
+            Assert.Equal(20u, psa->rgsabound._0.cElements);
+            Assert.Equal(0, psa->rgsabound._0.lLbound);
+            Assert.Equal(10u, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].cElements);
+            Assert.Equal(1, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].lLbound);
+
+            VARENUM arrayVt = VT_EMPTY;
+            HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.Equal((VARENUM)vt, arrayVt);
+        }
+        finally
+        {
+            HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+            Assert.Equal(HRESULT.S_OK, hr);
+        }
+    }
+
+    [StaFact]
+    public void SAFEARRAY_GetValue_InvokeSingleDimensional_ReturnsExpected()
+    {
+        var saBound = new SAFEARRAYBOUND
+        {
+            cElements = 10,
+            lLbound = 0
+        };
+        SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 1, &saBound);
+        Assert.True(psa != null);
+
+        try
+        {
+            Span<int> indices1 = stackalloc int[] { 0 };
+            Span<int> indices2 = stackalloc int[] { 1 };
+
+            fixed (int* pIndices1 = indices1)
+            fixed (int* pIndices2 = indices2)
+            {
+                int value1 = 1;
+                HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal((VARENUM)vt, arrayVt);
-            }
-            finally
-            {
-                HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+
+                int value2 = 2;
+                hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
                 Assert.Equal(HRESULT.S_OK, hr);
-            }
-        }
 
-        [StaFact]
-        public void SAFEARRAY_CreateSingleDimensionRECORD_GetProperties_Success()
-        {
-            var saBound = new SAFEARRAYBOUND
-            {
-                cElements = 10,
-                lLbound = 1
-            };
-
-            using ComScope<IRecordInfo> recordInfo = new(new CustomRecordInfo().GetComInterface());
-
-            SAFEARRAY* psa = PInvoke.SafeArrayCreateEx(VT_RECORD, 1, &saBound, recordInfo);
-            Assert.True(psa != null);
-
-            try
-            {
-                Assert.Equal(1u, psa->cDims);
-                Assert.Equal(FADF_RECORD, psa->fFeatures);
-                Assert.Equal((uint)sizeof(int), psa->cbElements);
-                Assert.Equal(0u, psa->cLocks);
-                Assert.True(psa->pvData != null);
-                Assert.Equal(10u, psa->rgsabound._0.cElements);
-                Assert.Equal(1, psa->rgsabound._0.lLbound);
-
-                VARENUM arrayVt = VT_EMPTY;
-                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+                int result = -1;
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal(VT_RECORD, arrayVt);
-            }
-            finally
-            {
-                HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+                Assert.Equal(1, result);
+
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
                 Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(2, result);
             }
+
+            Assert.Equal(1, psa->GetValue<int>(indices1));
+            Assert.Equal(2, psa->GetValue<int>(indices2));
         }
-
-        private class CustomRecordInfo : IRecordInfo.Interface
+        finally
         {
-            public IRecordInfo* GetComInterface() => (IRecordInfo*)Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo.Interface>(this);
-
-            public HRESULT RecordInit(void* pvNew) => throw new NotImplementedException();
-
-            public HRESULT RecordClear(void* pvExisting) => throw new NotImplementedException();
-
-            public HRESULT RecordCopy(void* pvExisting, void* pvNew) => throw new NotImplementedException();
-
-            public Func<(Guid, HRESULT)> GetGuidAction { get; set; }
-
-            public HRESULT GetGuid(Guid* pguid)
-            {
-                (Guid guid, HRESULT hr) = GetGuidAction();
-                *pguid = guid;
-                return hr;
-            }
-
-            public HRESULT GetName(BSTR* pbstrName) => throw new NotImplementedException();
-
-            public HRESULT GetSize(uint* pcbSize)
-            {
-                *pcbSize = (uint)sizeof(int);
-                return HRESULT.S_OK;
-            }
-
-            public HRESULT GetTypeInfo(ITypeInfo** ppTypeInfo) => throw new NotImplementedException();
-
-            public HRESULT GetField(void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
-
-            public HRESULT GetFieldNoCopy(void* pvData, PCWSTR szFieldName, VARIANT* pvarField, void** ppvDataCArray) => throw new NotImplementedException();
-
-            public HRESULT PutField(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
-
-            public HRESULT PutFieldNoCopy(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
-
-            public HRESULT GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => throw new NotImplementedException();
-
-            public BOOL IsMatchingType(IRecordInfo* pRecordInfoInfo) => throw new NotImplementedException();
-
-            public void* RecordCreate() => throw new NotImplementedException();
-
-            public HRESULT RecordCreateCopy(void* pvSource, void** ppvDest) => throw new NotImplementedException();
-
-            public HRESULT RecordDestroy(void* pvRecord) => throw new NotImplementedException();
+            PInvoke.SafeArrayDestroy(psa);
         }
+    }
 
-        [StaTheory]
-        [MemberData(nameof(Create_TestData))]
-        public void SAFEARRAY_CreateMultipleDimensions_GetProperties_Success(ushort vt, ushort expectedFeatures, uint expectedCbElements)
+    [StaFact]
+    public void SAFEARRAY_GetValue_InvokeSingleDimensionalNonZeroLowerBound_ReturnsExpected()
+    {
+        var saBound = new SAFEARRAYBOUND
         {
-            SAFEARRAYBOUND* saBounds = stackalloc SAFEARRAYBOUND[2];
-            saBounds[0] = new SAFEARRAYBOUND
-            {
-                cElements = 10,
-                lLbound = 1
-            };
-            saBounds[1] = new SAFEARRAYBOUND
-            {
-                cElements = 20,
-                lLbound = 0
-            };
-            SAFEARRAY* psa = PInvoke.SafeArrayCreate((VARENUM)vt, 2, saBounds);
-            Assert.True(psa != null);
+            cElements = 10,
+            lLbound = -5
+        };
+        SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 1, &saBound);
+        Assert.True(psa != null);
 
-            try
-            {
-                Assert.Equal(2u, psa->cDims);
-                Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
-                Assert.Equal(expectedCbElements, psa->cbElements);
-                Assert.Equal(0u, psa->cLocks);
-                Assert.True(psa->pvData != null);
-                Assert.Equal(20u, psa->rgsabound._0.cElements);
-                Assert.Equal(0, psa->rgsabound._0.lLbound);
-                Assert.Equal(10u, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].cElements);
-                Assert.Equal(1, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].lLbound);
+        try
+        {
+            Span<int> indices1 = stackalloc int[] { -5 };
+            Span<int> indices2 = stackalloc int[] { -4 };
 
-                VARENUM arrayVt = VT_EMPTY;
-                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+            fixed (int* pIndices1 = indices1)
+            fixed (int* pIndices2 = indices2)
+            {
+                int value1 = 1;
+                HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal((VARENUM)vt, arrayVt);
-            }
-            finally
-            {
-                HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+
+                int value2 = 2;
+                hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
                 Assert.Equal(HRESULT.S_OK, hr);
+
+                int result = -1;
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
+                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(1, result);
+
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
+                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(2, result);
             }
+
+            Assert.Equal(1, psa->GetValue<int>(indices1));
+            Assert.Equal(2, psa->GetValue<int>(indices2));
         }
-
-        [StaFact]
-        public void SAFEARRAY_GetValue_InvokeSingleDimensional_ReturnsExpected()
+        finally
         {
-            var saBound = new SAFEARRAYBOUND
-            {
-                cElements = 10,
-                lLbound = 0
-            };
-            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 1, &saBound);
-            Assert.True(psa != null);
-
-            try
-            {
-                Span<int> indices1 = stackalloc int[] { 0 };
-                Span<int> indices2 = stackalloc int[] { 1 };
-
-                fixed (int* pIndices1 = indices1)
-                fixed (int* pIndices2 = indices2)
-                {
-                    int value1 = 1;
-                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
-
-                    int value2 = 2;
-                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
-
-                    int result = -1;
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(1, result);
-
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(2, result);
-                }
-
-                Assert.Equal(1, psa->GetValue<int>(indices1));
-                Assert.Equal(2, psa->GetValue<int>(indices2));
-            }
-            finally
-            {
-                PInvoke.SafeArrayDestroy(psa);
-            }
+            PInvoke.SafeArrayDestroy(psa);
         }
+    }
 
-        [StaFact]
-        public void SAFEARRAY_GetValue_InvokeSingleDimensionalNonZeroLowerBound_ReturnsExpected()
+    [StaFact]
+    public void SAFEARRAY_GetValue_InvokeMultiDimensional_ReturnsExpected()
+    {
+        SAFEARRAYBOUND* saBounds = stackalloc SAFEARRAYBOUND[2];
+        saBounds[0] = new SAFEARRAYBOUND
         {
-            var saBound = new SAFEARRAYBOUND
+            cElements = 10,
+            lLbound = 0
+        };
+        saBounds[1] = new SAFEARRAYBOUND
+        {
+            cElements = 20,
+            lLbound = 0
+        };
+        SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 2, saBounds);
+        Assert.True(psa != null);
+
+        try
+        {
+            Span<int> indices1 = stackalloc int[] { 0, 0 };
+            Span<int> indices2 = stackalloc int[] { 1, 2 };
+
+            fixed (int* pIndices1 = indices1)
+            fixed (int* pIndices2 = indices2)
             {
-                cElements = 10,
-                lLbound = -5
-            };
-            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 1, &saBound);
-            Assert.True(psa != null);
+                int value1 = 1;
+                HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
+                Assert.Equal(HRESULT.S_OK, hr);
 
-            try
-            {
-                Span<int> indices1 = stackalloc int[] { -5 };
-                Span<int> indices2 = stackalloc int[] { -4 };
+                int value2 = 2;
+                hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
+                Assert.Equal(HRESULT.S_OK, hr);
 
-                fixed (int* pIndices1 = indices1)
-                fixed (int* pIndices2 = indices2)
-                {
-                    int value1 = 1;
-                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                int result = -1;
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
+                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(1, result);
 
-                    int value2 = 2;
-                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
-
-                    int result = -1;
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(1, result);
-
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(2, result);
-                }
-
-                Assert.Equal(1, psa->GetValue<int>(indices1));
-                Assert.Equal(2, psa->GetValue<int>(indices2));
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
+                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(2, result);
             }
-            finally
-            {
-                PInvoke.SafeArrayDestroy(psa);
-            }
+
+            Assert.Equal(1, psa->GetValue<int>(indices1));
+            Assert.Equal(2, psa->GetValue<int>(indices2));
         }
-
-        [StaFact]
-        public void SAFEARRAY_GetValue_InvokeMultiDimensional_ReturnsExpected()
+        finally
         {
-            SAFEARRAYBOUND* saBounds = stackalloc SAFEARRAYBOUND[2];
-            saBounds[0] = new SAFEARRAYBOUND
-            {
-                cElements = 10,
-                lLbound = 0
-            };
-            saBounds[1] = new SAFEARRAYBOUND
-            {
-                cElements = 20,
-                lLbound = 0
-            };
-            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 2, saBounds);
-            Assert.True(psa != null);
-
-            try
-            {
-                Span<int> indices1 = stackalloc int[] { 0, 0 };
-                Span<int> indices2 = stackalloc int[] { 1, 2 };
-
-                fixed (int* pIndices1 = indices1)
-                fixed (int* pIndices2 = indices2)
-                {
-                    int value1 = 1;
-                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
-
-                    int value2 = 2;
-                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
-
-                    int result = -1;
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(1, result);
-
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(2, result);
-                }
-
-                Assert.Equal(1, psa->GetValue<int>(indices1));
-                Assert.Equal(2, psa->GetValue<int>(indices2));
-            }
-            finally
-            {
-                PInvoke.SafeArrayDestroy(psa);
-            }
+            PInvoke.SafeArrayDestroy(psa);
         }
+    }
 
-        [StaFact]
-        public void SAFEARRAY_GetValue_InvokeMultiDimensionalNonZeroLowerBound_ReturnsExpected()
+    [StaFact]
+    public void SAFEARRAY_GetValue_InvokeMultiDimensionalNonZeroLowerBound_ReturnsExpected()
+    {
+        SAFEARRAYBOUND* saBounds = stackalloc SAFEARRAYBOUND[2];
+        saBounds[0] = new SAFEARRAYBOUND
         {
-            SAFEARRAYBOUND* saBounds = stackalloc SAFEARRAYBOUND[2];
-            saBounds[0] = new SAFEARRAYBOUND
+            cElements = 10,
+            lLbound = -5
+        };
+        saBounds[1] = new SAFEARRAYBOUND
+        {
+            cElements = 20,
+            lLbound = -4
+        };
+        SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 2, saBounds);
+        Assert.True(psa != null);
+
+        try
+        {
+            Span<int> indices1 = stackalloc int[] { -5, -4 };
+            Span<int> indices2 = stackalloc int[] { -4, -3 };
+
+            fixed (int* pIndices1 = indices1)
+            fixed (int* pIndices2 = indices2)
             {
-                cElements = 10,
-                lLbound = -5
-            };
-            saBounds[1] = new SAFEARRAYBOUND
-            {
-                cElements = 20,
-                lLbound = -4
-            };
-            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 2, saBounds);
-            Assert.True(psa != null);
+                int value1 = 1;
+                HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
+                Assert.Equal(HRESULT.S_OK, hr);
 
-            try
-            {
-                Span<int> indices1 = stackalloc int[] { -5, -4 };
-                Span<int> indices2 = stackalloc int[] { -4, -3 };
+                int value2 = 2;
+                hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
+                Assert.Equal(HRESULT.S_OK, hr);
 
-                fixed (int* pIndices1 = indices1)
-                fixed (int* pIndices2 = indices2)
-                {
-                    int value1 = 1;
-                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                int result = -1;
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
+                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(1, result);
 
-                    int value2 = 2;
-                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
-                    Assert.Equal(HRESULT.S_OK, hr);
-
-                    int result = -1;
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(1, result);
-
-                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(2, result);
-                }
-
-                Assert.Equal(1, psa->GetValue<int>(indices1));
-                Assert.Equal(2, psa->GetValue<int>(indices2));
+                hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
+                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(2, result);
             }
-            finally
-            {
-                PInvoke.SafeArrayDestroy(psa);
-            }
+
+            Assert.Equal(1, psa->GetValue<int>(indices1));
+            Assert.Equal(2, psa->GetValue<int>(indices2));
+        }
+        finally
+        {
+            PInvoke.SafeArrayDestroy(psa);
         }
     }
 }

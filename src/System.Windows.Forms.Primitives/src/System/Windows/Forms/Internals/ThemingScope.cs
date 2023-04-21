@@ -4,134 +4,133 @@
 
 using Windows.Win32.System.ApplicationInstallationAndServicing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  This class provides static methods to create, activate and deactivate the theming scope.
+/// </summary>
+internal static class ThemingScope
 {
+    private static ACTCTXW s_enableThemingActivationContext;
+    private static nint s_hActCtx;
+    private static bool s_contextCreationSucceeded;
+
     /// <summary>
-    ///  This class provides static methods to create, activate and deactivate the theming scope.
+    ///  We now use explicitactivate everywhere and use this method to determine if we
+    ///  really need to activate the activationcontext.  This should be pretty fast.
     /// </summary>
-    internal static class ThemingScope
+    private static unsafe bool IsContextActive()
     {
-        private static ACTCTXW s_enableThemingActivationContext;
-        private static nint s_hActCtx;
-        private static bool s_contextCreationSucceeded;
+        HANDLE current;
+        return s_contextCreationSucceeded
+            && PInvoke.GetCurrentActCtx(&current)
+            && (nint)current == s_hActCtx;
+    }
 
-        /// <summary>
-        ///  We now use explicitactivate everywhere and use this method to determine if we
-        ///  really need to activate the activationcontext.  This should be pretty fast.
-        /// </summary>
-        private static unsafe bool IsContextActive()
+    /// <summary>
+    ///  Activate() does nothing if a theming context is already active on the current thread, which is good
+    ///  for perf reasons. However, in some cases, like in the Timer callback, we need to put another context
+    ///  on the stack even if one is already present. In such cases, this method helps - you get to manage
+    ///  the cookie yourself though.
+    /// </summary>
+    public static unsafe nint Activate(bool useVisualStyles)
+    {
+        nuint userCookie;
+        if (IsContextActiveButNotCreated(useVisualStyles) && PInvoke.ActivateActCtx((HANDLE)s_hActCtx, &userCookie))
         {
-            HANDLE current;
-            return s_contextCreationSucceeded
-                && PInvoke.GetCurrentActCtx(&current)
-                && (nint)current == s_hActCtx;
+            return (nint)userCookie;
         }
 
-        /// <summary>
-        ///  Activate() does nothing if a theming context is already active on the current thread, which is good
-        ///  for perf reasons. However, in some cases, like in the Timer callback, we need to put another context
-        ///  on the stack even if one is already present. In such cases, this method helps - you get to manage
-        ///  the cookie yourself though.
-        /// </summary>
-        public static unsafe nint Activate(bool useVisualStyles)
+        return 0;
+    }
+
+    private static bool IsContextActiveButNotCreated(bool useVisualStyles)
+        => useVisualStyles && s_contextCreationSucceeded && !IsContextActive();
+
+    /// <summary>
+    ///  Use this to deactivate a context activated by calling ExplicitActivate.
+    /// </summary>
+    public static IntPtr Deactivate(IntPtr userCookie)
+    {
+        if (userCookie == IntPtr.Zero || PInvoke.DeactivateActCtx(0, (nuint)userCookie))
         {
-            nuint userCookie;
-            if (IsContextActiveButNotCreated(useVisualStyles) && PInvoke.ActivateActCtx((HANDLE)s_hActCtx, &userCookie))
+            return IntPtr.Zero;
+        }
+
+        return userCookie;
+    }
+
+    public static unsafe bool CreateActivationContext(IntPtr module, int nativeResourceManifestID)
+    {
+        lock (typeof(ThemingScope))
+        {
+            if (!s_contextCreationSucceeded)
             {
-                return (nint)userCookie;
+                s_enableThemingActivationContext = new ACTCTXW
+                {
+                    cbSize = (uint)sizeof(ACTCTXW),
+                    lpResourceName = (char*)nativeResourceManifestID,
+                    dwFlags = PInvoke.ACTCTX_FLAG_HMODULE_VALID | PInvoke.ACTCTX_FLAG_RESOURCE_NAME_VALID,
+                    hModule = (HINSTANCE)module
+                };
+
+                fixed (ACTCTXW* act = &s_enableThemingActivationContext)
+                {
+                    s_hActCtx = PInvoke.CreateActCtx(act);
+                }
+
+                s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
             }
 
-            return 0;
+            return s_contextCreationSucceeded;
         }
+    }
 
-        private static bool IsContextActiveButNotCreated(bool useVisualStyles)
-            => useVisualStyles && s_contextCreationSucceeded && !IsContextActive();
-
-        /// <summary>
-        ///  Use this to deactivate a context activated by calling ExplicitActivate.
-        /// </summary>
-        public static IntPtr Deactivate(IntPtr userCookie)
+    public static unsafe bool CreateActivationContext(Stream manifest)
+    {
+        lock (typeof(ThemingScope))
         {
-            if (userCookie == IntPtr.Zero || PInvoke.DeactivateActCtx(0, (nuint)userCookie))
+            if (!s_contextCreationSucceeded)
             {
-                return IntPtr.Zero;
-            }
+                string tempFilePath = Path.Join(Path.GetTempPath(), Path.GetRandomFileName());
+                using FileStream tempFileStream = new FileStream(
+                    tempFilePath,
+                    FileMode.CreateNew,
+                    FileAccess.ReadWrite,
+                    FileShare.Delete | FileShare.ReadWrite);
 
-            return userCookie;
-        }
+                manifest.CopyTo(tempFileStream);
 
-        public static unsafe bool CreateActivationContext(IntPtr module, int nativeResourceManifestID)
-        {
-            lock (typeof(ThemingScope))
-            {
-                if (!s_contextCreationSucceeded)
+                // CreateActCtxW gives a sharing violation if we have the handle open
+                tempFileStream.Close();
+
+                fixed (char* p = tempFilePath)
                 {
                     s_enableThemingActivationContext = new ACTCTXW
                     {
                         cbSize = (uint)sizeof(ACTCTXW),
-                        lpResourceName = (char*)nativeResourceManifestID,
-                        dwFlags = PInvoke.ACTCTX_FLAG_HMODULE_VALID | PInvoke.ACTCTX_FLAG_RESOURCE_NAME_VALID,
-                        hModule = (HINSTANCE)module
+                        lpSource = p
                     };
 
                     fixed (ACTCTXW* act = &s_enableThemingActivationContext)
                     {
                         s_hActCtx = PInvoke.CreateActCtx(act);
                     }
-
-                    s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
                 }
 
-                return s_contextCreationSucceeded;
-            }
-        }
+                s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
 
-        public static unsafe bool CreateActivationContext(Stream manifest)
-        {
-            lock (typeof(ThemingScope))
-            {
-                if (!s_contextCreationSucceeded)
+                try
                 {
-                    string tempFilePath = Path.Join(Path.GetTempPath(), Path.GetRandomFileName());
-                    using FileStream tempFileStream = new FileStream(
-                        tempFilePath,
-                        FileMode.CreateNew,
-                        FileAccess.ReadWrite,
-                        FileShare.Delete | FileShare.ReadWrite);
-
-                    manifest.CopyTo(tempFileStream);
-
-                    // CreateActCtxW gives a sharing violation if we have the handle open
-                    tempFileStream.Close();
-
-                    fixed (char* p = tempFilePath)
-                    {
-                        s_enableThemingActivationContext = new ACTCTXW
-                        {
-                            cbSize = (uint)sizeof(ACTCTXW),
-                            lpSource = p
-                        };
-
-                        fixed (ACTCTXW* act = &s_enableThemingActivationContext)
-                        {
-                            s_hActCtx = PInvoke.CreateActCtx(act);
-                        }
-                    }
-
-                    s_contextCreationSucceeded = (s_hActCtx != new IntPtr(-1));
-
-                    try
-                    {
-                        File.Delete(tempFilePath);
-                    }
-                    catch (Exception e) when (e is UnauthorizedAccessException or IOException)
-                    {
-                        // Don't want to take down WinForms if we can't delete is file
-                    }
+                    File.Delete(tempFilePath);
                 }
-
-                return s_contextCreationSucceeded;
+                catch (Exception e) when (e is UnauthorizedAccessException or IOException)
+                {
+                    // Don't want to take down WinForms if we can't delete is file
+                }
             }
+
+            return s_contextCreationSucceeded;
         }
     }
 }

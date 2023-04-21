@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.ComponentModel.Design
-{
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct)]
-    public sealed class ProjectTargetFrameworkAttribute : Attribute
-    {
-        public ProjectTargetFrameworkAttribute(string targetFrameworkMoniker)
-        {
-            TargetFrameworkMoniker = targetFrameworkMoniker;
-        }
+namespace System.ComponentModel.Design;
 
-        public string TargetFrameworkMoniker { get; }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct)]
+public sealed class ProjectTargetFrameworkAttribute : Attribute
+{
+    public ProjectTargetFrameworkAttribute(string targetFrameworkMoniker)
+    {
+        TargetFrameworkMoniker = targetFrameworkMoniker;
     }
+
+    public string TargetFrameworkMoniker { get; }
 }

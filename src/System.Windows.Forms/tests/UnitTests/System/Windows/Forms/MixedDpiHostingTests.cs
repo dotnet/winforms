@@ -2,48 +2,47 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class MixedDpiHostingTests
 {
-    public class MixedDpiHostingTests
+    [WinFormsFact]
+    public void MixedHosting_Default()
     {
-        [WinFormsFact]
-        public void MixedHosting_Default()
+        // Run tests only on Windows 10 versions that support thread dpi awareness.
+        if (!PlatformDetection.IsWindows10Version1803OrGreater)
         {
-            // Run tests only on Windows 10 versions that support thread dpi awareness.
-            if (!PlatformDetection.IsWindows10Version1803OrGreater)
-            {
-                return;
-            }
+            return;
+        }
 
-            // Set thread awareness context to PermonitorV2(PMv2). If process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
-            // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
-            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        // Set thread awareness context to PermonitorV2(PMv2). If process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
+        // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
+        DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
-            try
+        try
+        {
+            using Form form = new Form();
+            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
-                using Form form = new Form();
-                using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                using Control control = new();
+                form.Controls.Add(control);
+                form.Load += (_, _) =>
                 {
-                    using Control control = new();
-                    form.Controls.Add(control);
-                    form.Load += (_, _) =>
-                    {
-                        form.Close();
-                    };
+                    form.Close();
+                };
 
-                    form.ShowDialog();
+                form.ShowDialog();
 
-                    DPI_AWARENESS_CONTEXT controlDpiContext = PInvoke.GetWindowDpiAwarenessContext(control.HWND);
-                    DPI_AWARENESS_CONTEXT formDpiContext = PInvoke.GetWindowDpiAwarenessContext(form.HWND);
-                    Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, controlDpiContext));
-                    Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, formDpiContext));
-                }
+                DPI_AWARENESS_CONTEXT controlDpiContext = PInvoke.GetWindowDpiAwarenessContext(control.HWND);
+                DPI_AWARENESS_CONTEXT formDpiContext = PInvoke.GetWindowDpiAwarenessContext(form.HWND);
+                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, controlDpiContext));
+                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, formDpiContext));
             }
-            finally
-            {
-                // Reset back to original awareness context.
-                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
-            }
+        }
+        finally
+        {
+            // Reset back to original awareness context.
+            PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
         }
     }
 }

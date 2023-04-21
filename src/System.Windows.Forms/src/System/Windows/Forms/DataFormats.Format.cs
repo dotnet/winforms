@@ -2,40 +2,39 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Translates between WinForms text-based <see cref="Clipboard"/>
+///  formats and Win32 32-bit signed integer-based clipboard
+///  formats. Provides <see langword="static"/> methods to create new
+/// <see cref="Clipboard"/> formats and add them to the Windows Registry.
+/// </summary>
+public static partial class DataFormats
 {
     /// <summary>
-    ///  Translates between WinForms text-based <see cref="Clipboard"/>
-    ///  formats and Win32 32-bit signed integer-based clipboard
-    ///  formats. Provides <see langword="static"/> methods to create new
-    /// <see cref="Clipboard"/> formats and add them to the Windows Registry.
+    ///  Represents a format type.
     /// </summary>
-    public static partial class DataFormats
+    public class Format
     {
         /// <summary>
-        ///  Represents a format type.
+        ///  Initializes a new instance of the <see cref="Format"/> class and
+        ///  specifies whether a Win32 handle is expected with this format.
         /// </summary>
-        public class Format
+        public Format(string name, int id)
         {
-            /// <summary>
-            ///  Initializes a new instance of the <see cref="Format"/> class and
-            ///  specifies whether a Win32 handle is expected with this format.
-            /// </summary>
-            public Format(string name, int id)
-            {
-                Name = name;
-                Id = id;
-            }
-
-            /// <summary>
-            ///  Specifies the name of this format.
-            /// </summary>
-            public string Name { get; }
-
-            /// <summary>
-            ///  Specifies the ID number for this format.
-            /// </summary>
-            public int Id { get; }
+            Name = name;
+            Id = id;
         }
+
+        /// <summary>
+        ///  Specifies the name of this format.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        ///  Specifies the ID number for this format.
+        /// </summary>
+        public int Id { get; }
     }
 }

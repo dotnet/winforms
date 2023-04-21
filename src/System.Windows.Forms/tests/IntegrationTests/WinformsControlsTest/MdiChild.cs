@@ -2,99 +2,98 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace WinformsControlsTest
+namespace WinformsControlsTest;
+
+public partial class MdiChild : Form
 {
-    public partial class MdiChild : Form
+    private readonly MenuStrip _menuStrip;
+
+    public MdiChild()
     {
-        private readonly MenuStrip _menuStrip;
+        InitializeComponent();
 
-        public MdiChild()
+        _menuStrip = new MenuStrip();
+        _menuStrip.Items.Add(new ToolStripMenuItem { Text = "Child1" });
+        _menuStrip.Items.Add(new ToolStripMenuItem
         {
-            InitializeComponent();
+            Alignment = ToolStripItemAlignment.Right,
+            Text = "Child2",
+        });
+    }
 
-            _menuStrip = new MenuStrip();
-            _menuStrip.Items.Add(new ToolStripMenuItem { Text = "Child1" });
-            _menuStrip.Items.Add(new ToolStripMenuItem
-            {
-                Alignment = ToolStripItemAlignment.Right,
-                Text = "Child2",
-            });
+    private MdiParent MyParent => (MdiParent)MdiParent;
+
+    private void btnOpenChild_Click(object sender, EventArgs e)
+    {
+        Form frm = new Form();
+        frm.MdiParent = MdiParent;
+        frm.WindowState = FormWindowState.Maximized;
+        frm.Show();
+    }
+
+    private void chkSetMenustrip_CheckedChanged(object sender, EventArgs e)
+    {
+        if (chkSetMenustrip.Checked)
+        {
+            MainMenuStrip = _menuStrip;
         }
-
-        private MdiParent MyParent => (MdiParent)MdiParent;
-
-        private void btnOpenChild_Click(object sender, EventArgs e)
+        else
         {
-            Form frm = new Form();
-            frm.MdiParent = MdiParent;
-            frm.WindowState = FormWindowState.Maximized;
-            frm.Show();
+            MainMenuStrip = null;
         }
+    }
 
-        private void chkSetMenustrip_CheckedChanged(object sender, EventArgs e)
+    private void chkSetParentMenustrip_CheckedChanged(object sender, EventArgs e)
+    {
+        if (chkSetParentMenustrip.Checked)
         {
-            if (chkSetMenustrip.Checked)
-            {
-                MainMenuStrip = _menuStrip;
-            }
-            else
-            {
-                MainMenuStrip = null;
-            }
+            MyParent.MainMenuStrip = MyParent.MainMenu;
         }
-
-        private void chkSetParentMenustrip_CheckedChanged(object sender, EventArgs e)
+        else
         {
-            if (chkSetParentMenustrip.Checked)
-            {
-                MyParent.MainMenuStrip = MyParent.MainMenu;
-            }
-            else
-            {
-                MyParent.MainMenuStrip = null;
-            }
+            MyParent.MainMenuStrip = null;
         }
+    }
 
-        private void chkAddMenustrip_CheckedChanged(object sender, EventArgs e)
+    private void chkAddMenustrip_CheckedChanged(object sender, EventArgs e)
+    {
+        if (chkAddMenustrip.Checked)
         {
-            if (chkAddMenustrip.Checked)
-            {
-                Controls.Add(_menuStrip);
-            }
-            else
-            {
-                Controls.Remove(_menuStrip);
-            }
+            Controls.Add(_menuStrip);
         }
-
-        private void chkAddParentMenustrip_CheckedChanged(object sender, EventArgs e)
+        else
         {
-            if (chkAddParentMenustrip.Checked)
-            {
-                MyParent.Controls.Add(MyParent.MainMenu);
-            }
-            else
-            {
-                MyParent.Controls.Remove(MyParent.MainMenu);
-            }
+            Controls.Remove(_menuStrip);
         }
+    }
 
-        private void panel1_DoubleClick(object sender, System.EventArgs e)
+    private void chkAddParentMenustrip_CheckedChanged(object sender, EventArgs e)
+    {
+        if (chkAddParentMenustrip.Checked)
         {
-            WindowState = FormWindowState.Normal;
+            MyParent.Controls.Add(MyParent.MainMenu);
         }
-
-        private void chkChildAlign_CheckedChanged(object sender, EventArgs e)
+        else
         {
-            MyParent.MdiChildrenMinimizedAnchorBottom = !chkChildAlign.Checked;
+            MyParent.Controls.Remove(MyParent.MainMenu);
         }
+    }
 
-        private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
+    private void panel1_DoubleClick(object sender, System.EventArgs e)
+    {
+        WindowState = FormWindowState.Normal;
+    }
+
+    private void chkChildAlign_CheckedChanged(object sender, EventArgs e)
+    {
+        MyParent.MdiChildrenMinimizedAnchorBottom = !chkChildAlign.Checked;
+    }
+
+    private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
+    {
+        if (MyParent.MainMenuStrip is not null)
         {
-            if (MyParent.MainMenuStrip is not null)
-            {
-                MyParent.MainMenuStrip.RightToLeft = chkRightToLeft.Checked ? RightToLeft.Yes : RightToLeft.No;
-            }
+            MyParent.MainMenuStrip.RightToLeft = chkRightToLeft.Checked ? RightToLeft.Yes : RightToLeft.No;
         }
     }
 }

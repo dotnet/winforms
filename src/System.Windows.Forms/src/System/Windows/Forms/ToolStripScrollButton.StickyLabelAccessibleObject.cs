@@ -4,55 +4,54 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal partial class ToolStripScrollButton
 {
-    internal partial class ToolStripScrollButton
+    internal class StickyLabelAccessibleObject : Label.LabelAccessibleObject
     {
-        internal class StickyLabelAccessibleObject : Label.LabelAccessibleObject
+        private StickyLabel _owner;
+
+        public StickyLabelAccessibleObject(StickyLabel owner) : base(owner)
         {
-            private StickyLabel _owner;
+            _owner = owner;
+        }
 
-            public StickyLabelAccessibleObject(StickyLabel owner) : base(owner)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        {
+            if (_owner.OwnerScrollButton?.Parent is not ToolStripDropDownMenu toolStripDropDownMenu)
             {
-                _owner = owner;
+                return null;
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            return direction switch
             {
-                if (_owner.OwnerScrollButton?.Parent is not ToolStripDropDownMenu toolStripDropDownMenu)
-                {
-                    return null;
-                }
-
-                return direction switch
-                {
-                    UiaCore.NavigateDirection.Parent => toolStripDropDownMenu.AccessibilityObject,
-                    UiaCore.NavigateDirection.NextSibling
-                        => _owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
-                            ? toolStripDropDownMenu.Items[0].AccessibilityObject
-                            : null,
-                    UiaCore.NavigateDirection.PreviousSibling
-                        => !_owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
-                            ? toolStripDropDownMenu.Items[^1].AccessibilityObject
-                            : null,
-                    _ => null
-                };
-            }
-
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-                => _owner.OwnerScrollButton?.Owner?.AccessibilityObject;
-
-            public override string? Name => _owner.UpDirection
-                ? SR.ToolStripScrollButtonUpAccessibleName
-                : SR.ToolStripScrollButtonDownAccessibleName;
-
-            public override string? DefaultAction => SR.AccessibleActionPress;
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
-            {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                _ => base.GetPropertyValue(propertyID)
+                UiaCore.NavigateDirection.Parent => toolStripDropDownMenu.AccessibilityObject,
+                UiaCore.NavigateDirection.NextSibling
+                    => _owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
+                        ? toolStripDropDownMenu.Items[0].AccessibilityObject
+                        : null,
+                UiaCore.NavigateDirection.PreviousSibling
+                    => !_owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
+                        ? toolStripDropDownMenu.Items[^1].AccessibilityObject
+                        : null,
+                _ => null
             };
         }
+
+        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+            => _owner.OwnerScrollButton?.Owner?.AccessibilityObject;
+
+        public override string? Name => _owner.UpDirection
+            ? SR.ToolStripScrollButtonUpAccessibleName
+            : SR.ToolStripScrollButtonDownAccessibleName;
+
+        public override string? DefaultAction => SR.AccessibleActionPress;
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+        {
+            UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+            _ => base.GetPropertyValue(propertyID)
+        };
     }
 }

@@ -6,102 +6,101 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+/// <summary>
+///  This grid entry is used for immutable objects.
+/// </summary>
+/// <remarks>
+///  <para>
+///   An immutable object is identified through it's <see cref="TypeConverter"/> when it returns true for
+///   <see cref="TypeConverter.GetCreateInstanceSupported()"/>. In this case, we never go through the
+///   <see cref="PropertyDescriptor"/> to change the value, but recreate the property object each time.
+///  </para>
+/// </remarks>
+internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
 {
-    /// <summary>
-    ///  This grid entry is used for immutable objects.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   An immutable object is identified through it's <see cref="TypeConverter"/> when it returns true for
-    ///   <see cref="TypeConverter.GetCreateInstanceSupported()"/>. In this case, we never go through the
-    ///   <see cref="PropertyDescriptor"/> to change the value, but recreate the property object each time.
-    ///  </para>
-    /// </remarks>
-    internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+    internal ImmutablePropertyDescriptorGridEntry(
+        PropertyGrid ownerGrid,
+        GridEntry parent,
+        PropertyDescriptor propertyInfo,
+        bool hide)
+        : base(ownerGrid, parent, propertyInfo, hide)
     {
-        internal ImmutablePropertyDescriptorGridEntry(
-            PropertyGrid ownerGrid,
-            GridEntry parent,
-            PropertyDescriptor propertyInfo,
-            bool hide)
-            : base(ownerGrid, parent, propertyInfo, hide)
-        {
-        }
+    }
 
-        internal override bool IsPropertyReadOnly => ShouldRenderReadOnly;
+    internal override bool IsPropertyReadOnly => ShouldRenderReadOnly;
 
-        public override object PropertyValue
+    public override object PropertyValue
+    {
+        get => base.PropertyValue;
+        set
         {
-            get => base.PropertyValue;
-            set
+            // Create a new instance of the value and set it into the parent grid entry.
+            object owner = GetValueOwner();
+            object? newObject = null;
+            GridEntry parentEntry = InstanceParentGridEntry;
+            TypeConverter parentConverter = parentEntry.TypeConverter;
+
+            PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
+            if (properties is not null)
             {
-                // Create a new instance of the value and set it into the parent grid entry.
-                object owner = GetValueOwner();
-                object? newObject = null;
-                GridEntry parentEntry = InstanceParentGridEntry;
-                TypeConverter parentConverter = parentEntry.TypeConverter;
-
-                PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
-                if (properties is not null)
+                IDictionary values = new Hashtable(properties.Count);
+                for (int i = 0; i < properties.Count; i++)
                 {
-                    IDictionary values = new Hashtable(properties.Count);
-                    for (int i = 0; i < properties.Count; i++)
+                    if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
                     {
-                        if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
-                        {
-                            values[properties[i].Name] = value;
-                        }
-                        else
-                        {
-                            values[properties[i].Name] = properties[i].GetValue(owner);
-                        }
+                        values[properties[i].Name] = value;
                     }
-
-                    try
+                    else
                     {
-                        newObject = parentConverter.CreateInstance(parentEntry, values);
-                    }
-                    catch (Exception e)
-                    {
-                        if (string.IsNullOrEmpty(e.Message))
-                        {
-                            throw new TargetInvocationException(
-                                string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e),
-                                e);
-                        }
-                        else
-                        {
-                            throw; // rethrow the same exception
-                        }
+                        values[properties[i].Name] = properties[i].GetValue(owner);
                     }
                 }
 
-                if (newObject is not null)
+                try
                 {
-                    parentEntry.PropertyValue = newObject;
+                    newObject = parentConverter.CreateInstance(parentEntry, values);
+                }
+                catch (Exception e)
+                {
+                    if (string.IsNullOrEmpty(e.Message))
+                    {
+                        throw new TargetInvocationException(
+                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e),
+                            e);
+                    }
+                    else
+                    {
+                        throw; // rethrow the same exception
+                    }
                 }
             }
-        }
 
-        protected override bool SendNotification(object owner, Notify notification)
-            => ParentGridEntry.SendNotificationToParent(notification);
-
-        public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;
-
-        private GridEntry InstanceParentGridEntry
-        {
-            get
+            if (newObject is not null)
             {
-                GridEntry parent = ParentGridEntry;
-
-                if (parent is CategoryGridEntry)
-                {
-                    parent = parent.ParentGridEntry;
-                }
-
-                return parent;
+                parentEntry.PropertyValue = newObject;
             }
+        }
+    }
+
+    protected override bool SendNotification(object owner, Notify notification)
+        => ParentGridEntry.SendNotificationToParent(notification);
+
+    public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;
+
+    private GridEntry InstanceParentGridEntry
+    {
+        get
+        {
+            GridEntry parent = ParentGridEntry;
+
+            if (parent is CategoryGridEntry)
+            {
+                parent = parent.ParentGridEntry;
+            }
+
+            return parent;
         }
     }
 }

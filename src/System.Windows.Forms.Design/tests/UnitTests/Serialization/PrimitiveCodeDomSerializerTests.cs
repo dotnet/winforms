@@ -5,52 +5,51 @@
 using System.CodeDom;
 using System.ComponentModel.Design.Serialization;
 
-namespace System.Windows.Forms.Design.Serialization.Tests
+namespace System.Windows.Forms.Design.Serialization.Tests;
+
+public class PrimitiveCodeDomSerializerTests
 {
-    public class PrimitiveCodeDomSerializerTests
+    [Fact]
+    public void PrimitiveCodeDomSerializerTests_Constructor()
     {
-        [Fact]
-        public void PrimitiveCodeDomSerializerTests_Constructor()
-        {
-            var underTest = new PrimitiveCodeDomSerializer();
-            Assert.NotNull(underTest);
-        }
+        var underTest = new PrimitiveCodeDomSerializer();
+        Assert.NotNull(underTest);
+    }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData(false)]
-        [InlineData("some string")]
-        [InlineData('c')]
-        [InlineData(42)]
-        [InlineData(42F)]
-        [InlineData(42.123)]
-        public void PrimitiveCodeDomSerializerTests_Serialize(object input)
-        {
-            var manager = new DesignerSerializationManager();
-            PrimitiveCodeDomSerializer underTest = PrimitiveCodeDomSerializer.Default;
-            Assert.NotNull(underTest);
+    [Theory]
+    [InlineData(null)]
+    [InlineData(false)]
+    [InlineData("some string")]
+    [InlineData('c')]
+    [InlineData(42)]
+    [InlineData(42F)]
+    [InlineData(42.123)]
+    public void PrimitiveCodeDomSerializerTests_Serialize(object input)
+    {
+        var manager = new DesignerSerializationManager();
+        PrimitiveCodeDomSerializer underTest = PrimitiveCodeDomSerializer.Default;
+        Assert.NotNull(underTest);
 
-            var result = underTest.Serialize(manager, input) as CodePrimitiveExpression;
-            Assert.NotNull(result);
-            Assert.Equal(input, result.Value);
-            Assert.Empty(result.UserData);
-        }
+        var result = underTest.Serialize(manager, input) as CodePrimitiveExpression;
+        Assert.NotNull(result);
+        Assert.Equal(input, result.Value);
+        Assert.Empty(result.UserData);
+    }
 
-        [Fact]
-        public void PrimitiveCodeDomSerializerTests_Serialize_Cast()
-        {
-            var manager = new DesignerSerializationManager();
-            PrimitiveCodeDomSerializer underTest = PrimitiveCodeDomSerializer.Default;
-            Assert.NotNull(underTest);
+    [Fact]
+    public void PrimitiveCodeDomSerializerTests_Serialize_Cast()
+    {
+        var manager = new DesignerSerializationManager();
+        PrimitiveCodeDomSerializer underTest = PrimitiveCodeDomSerializer.Default;
+        Assert.NotNull(underTest);
 
-            var cast = underTest.Serialize(manager, (byte)42) as CodeCastExpression;
+        var cast = underTest.Serialize(manager, (byte)42) as CodeCastExpression;
 
-            Assert.NotNull(cast);
-            Assert.Equal(typeof(byte).ToString(), cast.TargetType.BaseType);
-            Assert.IsType<CodePrimitiveExpression>(cast.Expression);
-            var primitive = cast.Expression as CodePrimitiveExpression;
-            Assert.Equal((byte)42, primitive.Value);
-            Assert.Empty(cast.UserData);
-        }
+        Assert.NotNull(cast);
+        Assert.Equal(typeof(byte).ToString(), cast.TargetType.BaseType);
+        Assert.IsType<CodePrimitiveExpression>(cast.Expression);
+        var primitive = cast.Expression as CodePrimitiveExpression;
+        Assert.Equal((byte)42, primitive.Value);
+        Assert.Empty(cast.UserData);
     }
 }

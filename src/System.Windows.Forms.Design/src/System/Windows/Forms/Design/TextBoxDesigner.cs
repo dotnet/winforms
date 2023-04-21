@@ -8,93 +8,92 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  <para>
+///  Provides a designer for TextBox.</para>
+/// </summary>
+internal class TextBoxDesigner : TextBoxBaseDesigner
 {
-    /// <summary>
-    ///  <para>
-    ///  Provides a designer for TextBox.</para>
-    /// </summary>
-    internal class TextBoxDesigner : TextBoxBaseDesigner
+    private char passwordChar;
+
+    private DesignerActionListCollection _actionLists;
+    public override DesignerActionListCollection ActionLists
     {
-        private char passwordChar;
-
-        private DesignerActionListCollection _actionLists;
-        public override DesignerActionListCollection ActionLists
+        get
         {
-            get
+            if (_actionLists is null)
             {
-                if (_actionLists is null)
-                {
-                    _actionLists = new DesignerActionListCollection();
-                    _actionLists.Add(new TextBoxActionList(this));
-                }
+                _actionLists = new DesignerActionListCollection();
+                _actionLists.Add(new TextBoxActionList(this));
+            }
 
-                return _actionLists;
+            return _actionLists;
+        }
+    }
+
+    /// <summary>
+    ///  Allows a designer to filter the set of properties
+    ///  the component it is designing will expose through the
+    ///  TypeDescriptor object.  This method is called
+    ///  immediately before its corresponding "Post" method.
+    ///  If you are overriding this method you should call
+    ///  the base implementation before you perform your own
+    ///  filtering.
+    /// </summary>
+    protected override void PreFilterProperties(IDictionary properties)
+    {
+        base.PreFilterProperties(properties);
+
+        PropertyDescriptor prop;
+
+        string[] shadowProps = new string[]
+        {
+            "PasswordChar"
+        };
+
+        Attribute[] empty = Array.Empty<Attribute>();
+
+        for (int i = 0; i < shadowProps.Length; i++)
+        {
+            prop = (PropertyDescriptor)properties[shadowProps[i]];
+            if (prop is not null)
+            {
+                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxDesigner), prop, empty);
             }
         }
+    }
 
-        /// <summary>
-        ///  Allows a designer to filter the set of properties
-        ///  the component it is designing will expose through the
-        ///  TypeDescriptor object.  This method is called
-        ///  immediately before its corresponding "Post" method.
-        ///  If you are overriding this method you should call
-        ///  the base implementation before you perform your own
-        ///  filtering.
-        /// </summary>
-        protected override void PreFilterProperties(IDictionary properties)
+    /// <summary>
+    ///  Shadows the PasswordChar.  UseSystemPasswordChar overrides PasswordChar so independent on the value
+    ///  of PasswordChar it will return the system password char.  However, the value of PasswordChar is
+    ///  cached so if UseSystemPasswordChar is reset at design time the PasswordChar value can be restored.
+    ///  So in the case both properties are set, we need to serialize the real PasswordChar value as well.
+    /// </summary>
+    private char PasswordChar
+    {
+        get
         {
-            base.PreFilterProperties(properties);
+            TextBox tb = Control as TextBox;
+            Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
-            PropertyDescriptor prop;
-
-            string[] shadowProps = new string[]
+            if (tb.UseSystemPasswordChar)
             {
-                "PasswordChar"
-            };
-
-            Attribute[] empty = Array.Empty<Attribute>();
-
-            for (int i = 0; i < shadowProps.Length; i++)
+                return passwordChar;
+            }
+            else
             {
-                prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop is not null)
-                {
-                    properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxDesigner), prop, empty);
-                }
+                return tb.PasswordChar;
             }
         }
-
-        /// <summary>
-        ///  Shadows the PasswordChar.  UseSystemPasswordChar overrides PasswordChar so independent on the value
-        ///  of PasswordChar it will return the system password char.  However, the value of PasswordChar is
-        ///  cached so if UseSystemPasswordChar is reset at design time the PasswordChar value can be restored.
-        ///  So in the case both properties are set, we need to serialize the real PasswordChar value as well.
-        /// </summary>
-        private char PasswordChar
+        set
         {
-            get
-            {
-                TextBox tb = Control as TextBox;
-                Debug.Assert(tb is not null, "Designed control is not a TextBox.");
+            TextBox tb = Control as TextBox;
+            Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
-                if (tb.UseSystemPasswordChar)
-                {
-                    return passwordChar;
-                }
-                else
-                {
-                    return tb.PasswordChar;
-                }
-            }
-            set
-            {
-                TextBox tb = Control as TextBox;
-                Debug.Assert(tb is not null, "Designed control is not a TextBox.");
-
-                passwordChar = value;
-                tb.PasswordChar = value;
-            }
+            passwordChar = value;
+            tb.PasswordChar = value;
         }
     }
 }

@@ -2,31 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ButtonBase
 {
-    public partial class ButtonBase
+    public class ButtonBaseAccessibleObject : ControlAccessibleObject
     {
-        public class ButtonBaseAccessibleObject : ControlAccessibleObject
+        private readonly ButtonBase _owningButtonBase;
+
+        public ButtonBaseAccessibleObject(Control owner)
+            : base((owner is ButtonBase owningButtonBase) ? owner : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(Owner), typeof(ButtonBase))))
         {
-            private readonly ButtonBase _owningButtonBase;
+            _owningButtonBase = owningButtonBase;
+        }
 
-            public ButtonBaseAccessibleObject(Control owner)
-                : base((owner is ButtonBase owningButtonBase) ? owner : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(Owner), typeof(ButtonBase))))
+        public override AccessibleStates State
+            => _owningButtonBase.IsHandleCreated && _owningButtonBase.OwnerDraw && _owningButtonBase.MouseIsDown
+                ? base.State | AccessibleStates.Pressed
+                : base.State;
+
+        public override void DoDefaultAction()
+        {
+            if (_owningButtonBase.IsHandleCreated)
             {
-                _owningButtonBase = owningButtonBase;
-            }
-
-            public override AccessibleStates State
-                => _owningButtonBase.IsHandleCreated && _owningButtonBase.OwnerDraw && _owningButtonBase.MouseIsDown
-                    ? base.State | AccessibleStates.Pressed
-                    : base.State;
-
-            public override void DoDefaultAction()
-            {
-                if (_owningButtonBase.IsHandleCreated)
-                {
-                    _owningButtonBase.OnClick(EventArgs.Empty);
-                }
+                _owningButtonBase.OnClick(EventArgs.Empty);
             }
         }
     }

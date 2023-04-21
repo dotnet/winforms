@@ -2,35 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Resources
+namespace System.Resources;
+
+/// <summary>
+///  ResX resource set.
+/// </summary>
+public class ResXResourceSet : ResourceSet
 {
     /// <summary>
-    ///  ResX resource set.
+    ///  Creates a resource set for the specified file.
     /// </summary>
-    public class ResXResourceSet : ResourceSet
+    public ResXResourceSet(string fileName) : base(new ResXResourceReader(fileName))
     {
-        /// <summary>
-        ///  Creates a resource set for the specified file.
-        /// </summary>
-        public ResXResourceSet(string fileName) : base(new ResXResourceReader(fileName))
-        {
-        }
-
-        /// <summary>
-        ///  Creates a resource set for the specified stream.
-        /// </summary>
-        public ResXResourceSet(Stream stream) : base(new ResXResourceReader(stream))
-        {
-        }
-
-        /// <summary>
-        ///  Gets the default reader type associated with this set.
-        /// </summary>
-        public override Type GetDefaultReader() => typeof(ResXResourceReader);
-
-        /// <summary>
-        ///  Gets the default writer type associated with this set.
-        /// </summary>
-        public override Type GetDefaultWriter() => typeof(ResXResourceWriter);
     }
+
+    /// <summary>
+    ///  Creates a resource set for the specified stream.
+    /// </summary>
+    public ResXResourceSet(Stream stream) : base(new ResXResourceReader(stream))
+    {
+    }
+
+    /// <summary>
+    ///  Gets the default reader type associated with this set.
+    /// </summary>
+    public override Type GetDefaultReader() => typeof(ResXResourceReader);
+
+    /// <summary>
+    ///  Gets the default writer type associated with this set.
+    /// </summary>
+    public override Type GetDefaultWriter() => typeof(ResXResourceWriter);
 }

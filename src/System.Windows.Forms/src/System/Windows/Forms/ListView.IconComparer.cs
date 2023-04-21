@@ -5,45 +5,44 @@
 using System.Collections;
 using System.Globalization;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ListView
 {
-    public partial class ListView
+    ///new class for comparing and sorting Icons ....
+    //subhag
+    internal class IconComparer : IComparer
     {
-        ///new class for comparing and sorting Icons ....
-        //subhag
-        internal class IconComparer : IComparer
+        private SortOrder _sortOrder;
+
+        public IconComparer(SortOrder currentSortOrder)
         {
-            private SortOrder _sortOrder;
+            _sortOrder = currentSortOrder;
+        }
 
-            public IconComparer(SortOrder currentSortOrder)
+        public SortOrder SortOrder
+        {
+            set
             {
-                _sortOrder = currentSortOrder;
-            }
-
-            public SortOrder SortOrder
-            {
-                set
-                {
-                    _sortOrder = value;
-                }
-            }
-
-            public int Compare(object? obj1, object? obj2)
-            {
-                //subhag
-                ListViewItem? currentItem = (ListViewItem?)obj1;
-                ListViewItem? nextItem = (ListViewItem?)obj2;
-                if (_sortOrder == SortOrder.Ascending)
-                {
-                    return string.Compare(currentItem?.Text, nextItem?.Text, false, CultureInfo.CurrentCulture);
-                }
-                else
-                {
-                    return string.Compare(nextItem?.Text, currentItem?.Text, false, CultureInfo.CurrentCulture);
-                }
+                _sortOrder = value;
             }
         }
 
-        //end subhag
+        public int Compare(object? obj1, object? obj2)
+        {
+            //subhag
+            ListViewItem? currentItem = (ListViewItem?)obj1;
+            ListViewItem? nextItem = (ListViewItem?)obj2;
+            if (_sortOrder == SortOrder.Ascending)
+            {
+                return string.Compare(currentItem?.Text, nextItem?.Text, false, CultureInfo.CurrentCulture);
+            }
+            else
+            {
+                return string.Compare(nextItem?.Text, currentItem?.Text, false, CultureInfo.CurrentCulture);
+            }
+        }
     }
+
+    //end subhag
 }

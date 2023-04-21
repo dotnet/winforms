@@ -4,45 +4,44 @@
 
 using System.Runtime.InteropServices;
 
-namespace Windows.Win32.Foundation
+namespace Windows.Win32.Foundation;
+
+internal readonly unsafe partial struct PWSTR
 {
-    internal readonly unsafe partial struct PWSTR
+    public string? ToStringAndCoTaskMemFree()
     {
-        public string? ToStringAndCoTaskMemFree()
+        if (Value is null)
         {
-            if (Value is null)
-            {
-                return null;
-            }
-
-            string value = new(Value);
-            Marshal.FreeCoTaskMem((IntPtr)Value);
-            return value;
+            return null;
         }
 
-        /// <summary>
-        ///  The length of the string when it is a null separated list of values that is terminated by
-        ///  a double null. Does not include the final double null.
-        /// </summary>
-        internal int StringListLength
-        {
-            get
-            {
-                char* p = Value;
-                if (p is null)
-                {
-                    return 0;
-                }
-
-                while (!(*p == '\0' && *(p + 1) == '\0'))
-                {
-                    p++;
-                }
-
-                return checked((int)(p - Value));
-            }
-        }
-
-        public bool IsNull => Value is null;
+        string value = new(Value);
+        Marshal.FreeCoTaskMem((IntPtr)Value);
+        return value;
     }
+
+    /// <summary>
+    ///  The length of the string when it is a null separated list of values that is terminated by
+    ///  a double null. Does not include the final double null.
+    /// </summary>
+    internal int StringListLength
+    {
+        get
+        {
+            char* p = Value;
+            if (p is null)
+            {
+                return 0;
+            }
+
+            while (!(*p == '\0' && *(p + 1) == '\0'))
+            {
+                p++;
+            }
+
+            return checked((int)(p - Value));
+        }
+    }
+
+    public bool IsNull => Value is null;
 }

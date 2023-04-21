@@ -2,22 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
-{
-    public class ToolStripItemEventArgsTests
-    {
-        public static IEnumerable<object[]> Ctor_ToolStripItem_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { new ToolStripButton() };
-        }
+namespace System.Windows.Forms.Tests;
 
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_ToolStripItem_TestData))]
-        public void Ctor_ToolStripItem(ToolStripItem item)
-        {
-            var e = new ToolStripItemEventArgs(item);
-            Assert.Equal(item, e.Item);
-        }
+public class ToolStripItemEventArgsTests
+{
+    public static IEnumerable<object[]> Ctor_ToolStripItem_TestData()
+    {
+        yield return new object[] { null };
+        yield return new object[] { new ToolStripButton() };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(Ctor_ToolStripItem_TestData))]
+    public void Ctor_ToolStripItem(ToolStripItem item)
+    {
+        var e = new ToolStripItemEventArgs(item);
+        Assert.Equal(item, e.Item);
     }
 }

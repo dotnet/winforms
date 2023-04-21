@@ -4,22 +4,21 @@
 
 using System.Collections.ObjectModel;
 
-namespace Microsoft.VisualBasic.ApplicationServices.Tests
-{
-    public class StartupEventArgsTests
-    {
-        [Fact]
-        public void Ctor_ReadOnlyCollection()
-        {
-            var collection = new ReadOnlyCollection<string>(new string[] { "a" });
-            var args = new StartupEventArgs(collection);
-            Assert.Same(collection, args.CommandLine);
-        }
+namespace Microsoft.VisualBasic.ApplicationServices.Tests;
 
-        [Fact]
-        public void Ctor_NullCommandLine_ThrowsArgumentNullException()
-        {
-            AssertExtensions.Throws<ArgumentNullException>("list", () => new StartupEventArgs(null));
-        }
+public class StartupEventArgsTests
+{
+    [Fact]
+    public void Ctor_ReadOnlyCollection()
+    {
+        var collection = new ReadOnlyCollection<string>(new string[] { "a" });
+        var args = new StartupEventArgs(collection);
+        Assert.Same(collection, args.CommandLine);
+    }
+
+    [Fact]
+    public void Ctor_NullCommandLine_ThrowsArgumentNullException()
+    {
+        AssertExtensions.Throws<ArgumentNullException>("list", () => new StartupEventArgs(null));
     }
 }

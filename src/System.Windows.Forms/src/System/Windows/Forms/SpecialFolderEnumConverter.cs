@@ -5,50 +5,49 @@
 using System.Collections;
 using System.ComponentModel;
 
-namespace System.Windows.Forms
-{
-    internal partial class SpecialFolderEnumConverter : EnumConverter
-    {
-        public SpecialFolderEnumConverter(
-            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]
-            Type type) : base(type)
-        {
-        }
+namespace System.Windows.Forms;
 
-        /// <summary>
-        ///  Personal appears twice in type editor because its numeric value matches with MyDocuments.
-        ///  This code filters out the duplicate value.
-        /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+internal partial class SpecialFolderEnumConverter : EnumConverter
+{
+    public SpecialFolderEnumConverter(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]
+        Type type) : base(type)
+    {
+    }
+
+    /// <summary>
+    ///  Personal appears twice in type editor because its numeric value matches with MyDocuments.
+    ///  This code filters out the duplicate value.
+    /// </summary>
+    public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+    {
+        StandardValuesCollection values = base.GetStandardValues(context);
+        List<object> list = new();
+        bool personalSeen = false;
+        for (int i = 0; i < values.Count; i++)
         {
-            StandardValuesCollection values = base.GetStandardValues(context);
-            List<object> list = new();
-            bool personalSeen = false;
-            for (int i = 0; i < values.Count; i++)
+            object? currentItem = values[i];
+            if (currentItem is Environment.SpecialFolder specialFolder &&
+                specialFolder.Equals(Environment.SpecialFolder.Personal))
             {
-                object? currentItem = values[i];
-                if (currentItem is Environment.SpecialFolder specialFolder &&
-                    specialFolder.Equals(Environment.SpecialFolder.Personal))
+                if (!personalSeen)
                 {
-                    if (!personalSeen)
-                    {
-                        personalSeen = true;
-                        list.Add(currentItem);
-                    }
-                }
-                else
-                {
-                    Debug.Assert(currentItem is not null);
-                    if (currentItem is not null)
-                    {
-                        list.Add(currentItem);
-                    }
+                    personalSeen = true;
+                    list.Add(currentItem);
                 }
             }
-
-            return new StandardValuesCollection(list);
+            else
+            {
+                Debug.Assert(currentItem is not null);
+                if (currentItem is not null)
+                {
+                    list.Add(currentItem);
+                }
+            }
         }
 
-        protected override IComparer Comparer => SpecialFolderEnumComparer.Default;
+        return new StandardValuesCollection(list);
     }
+
+    protected override IComparer Comparer => SpecialFolderEnumComparer.Default;
 }

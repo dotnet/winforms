@@ -5,21 +5,20 @@
 using Windows.Win32.System.Com;
 using Accessibility;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal static unsafe class AccessibiltyExtensions
 {
-    internal static unsafe class AccessibiltyExtensions
+    /// <inheritdoc cref="PInvoke.LresultFromObject(Guid*, WPARAM, IUnknown*)"/>
+    internal static LRESULT GetLRESULT(this IAccessible accessible, WPARAM wparam)
     {
-        /// <inheritdoc cref="PInvoke.LresultFromObject(Guid*, WPARAM, IUnknown*)"/>
-        internal static LRESULT GetLRESULT(this IAccessible accessible, WPARAM wparam)
-        {
-            // https://learn.microsoft.com/windows/win32/winauto/how-to-handle-wm-getobject
+        // https://learn.microsoft.com/windows/win32/winauto/how-to-handle-wm-getobject
 
-            using var unknown = ComHelpers.TryGetComScope<IUnknown>(accessible, out HRESULT hr);
+        using var unknown = ComHelpers.TryGetComScope<IUnknown>(accessible, out HRESULT hr);
 
-            return PInvoke.LresultFromObject(
-                IID.Get<global::Windows.Win32.UI.Accessibility.IAccessible>(),
-                wparam,
-                unknown);
-        }
+        return PInvoke.LresultFromObject(
+            IID.Get<global::Windows.Win32.UI.Accessibility.IAccessible>(),
+            wparam,
+            unknown);
     }
 }

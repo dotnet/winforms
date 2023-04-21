@@ -7,17 +7,16 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.VisualBasic.Testing;
 
-namespace System.Windows.Forms.Analyzers.Tests
+namespace System.Windows.Forms.Analyzers.Tests;
+
+public static partial class VisualBasicAnalyzerVerifier<TAnalyzer>
+    where TAnalyzer : DiagnosticAnalyzer, new()
 {
-    public static partial class VisualBasicAnalyzerVerifier<TAnalyzer>
-        where TAnalyzer : DiagnosticAnalyzer, new()
+    public class Test : VisualBasicAnalyzerTest<TAnalyzer, XUnitVerifier>
     {
-        public class Test : VisualBasicAnalyzerTest<TAnalyzer, XUnitVerifier>
+        public Test()
         {
-            public Test()
-            {
-                ReferenceAssemblies = ReferenceAssemblies.NetFramework.Net472.WindowsForms;
-            }
+            ReferenceAssemblies = ReferenceAssemblies.NetFramework.Net472.WindowsForms;
         }
     }
 }

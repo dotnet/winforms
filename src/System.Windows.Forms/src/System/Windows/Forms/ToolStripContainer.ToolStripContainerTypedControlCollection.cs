@@ -4,79 +4,78 @@
 
 using System.Globalization;
 
-namespace System.Windows.Forms
-{
-    public partial class ToolStripContainer
-    {
-        internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
-        {
-            private readonly ToolStripContainer _owner;
-            private readonly Type _contentPanelType = typeof(ToolStripContentPanel);
-            private readonly Type _panelType = typeof(ToolStripPanel);
+namespace System.Windows.Forms;
 
-            public ToolStripContainerTypedControlCollection(ToolStripContainer c, bool isReadOnly)
-                : base(c, isReadOnly)
+public partial class ToolStripContainer
+{
+    internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
+    {
+        private readonly ToolStripContainer _owner;
+        private readonly Type _contentPanelType = typeof(ToolStripContentPanel);
+        private readonly Type _panelType = typeof(ToolStripPanel);
+
+        public ToolStripContainerTypedControlCollection(ToolStripContainer c, bool isReadOnly)
+            : base(c, isReadOnly)
+        {
+            _owner = c;
+        }
+
+        public override void Add(Control? value)
+        {
+            if (value is null)
             {
-                _owner = c;
+                return;
             }
 
-            public override void Add(Control? value)
+            if (IsReadOnly)
             {
-                if (value is null)
+                throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
+            }
+
+            Type controlType = value.GetType();
+            if (!_contentPanelType.IsAssignableFrom(controlType) && !_panelType.IsAssignableFrom(controlType))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, _contentPanelType.Name, _panelType.Name)), value.GetType().Name);
+            }
+
+            base.Add(value);
+        }
+
+        public override void Remove(Control? value)
+        {
+            if (value is ToolStripPanel || value is ToolStripContentPanel)
+            {
+                if (!_owner.DesignMode)
                 {
+                    if (IsReadOnly)
+                    {
+                        throw new NotSupportedException(SR.ReadonlyControlsCollection);
+                    }
+                }
+            }
+
+            base.Remove(value);
+        }
+
+        internal override void SetChildIndexInternal(Control child, int newIndex)
+        {
+            if (child is ToolStripPanel || child is ToolStripContentPanel)
+            {
+                if (!_owner.DesignMode)
+                {
+                    if (IsReadOnly)
+                    {
+                        throw new NotSupportedException(SR.ReadonlyControlsCollection);
+                    }
+                }
+                else
+                {
+                    // just no-op it at DT.
                     return;
                 }
-
-                if (IsReadOnly)
-                {
-                    throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
-                }
-
-                Type controlType = value.GetType();
-                if (!_contentPanelType.IsAssignableFrom(controlType) && !_panelType.IsAssignableFrom(controlType))
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, _contentPanelType.Name, _panelType.Name)), value.GetType().Name);
-                }
-
-                base.Add(value);
             }
 
-            public override void Remove(Control? value)
-            {
-                if (value is ToolStripPanel || value is ToolStripContentPanel)
-                {
-                    if (!_owner.DesignMode)
-                    {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
-                    }
-                }
-
-                base.Remove(value);
-            }
-
-            internal override void SetChildIndexInternal(Control child, int newIndex)
-            {
-                if (child is ToolStripPanel || child is ToolStripContentPanel)
-                {
-                    if (!_owner.DesignMode)
-                    {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
-                    }
-                    else
-                    {
-                        // just no-op it at DT.
-                        return;
-                    }
-                }
-
-                base.SetChildIndexInternal(child, newIndex);
-            }
+            base.SetChildIndexInternal(child, newIndex);
         }
     }
 }

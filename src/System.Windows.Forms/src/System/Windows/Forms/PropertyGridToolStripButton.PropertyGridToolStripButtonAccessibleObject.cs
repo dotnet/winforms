@@ -4,59 +4,58 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal partial class PropertyGridToolStripButton
 {
-    internal partial class PropertyGridToolStripButton
+    internal class PropertyGridToolStripButtonAccessibleObject : ToolStripButtonAccessibleObject
     {
-        internal class PropertyGridToolStripButtonAccessibleObject : ToolStripButtonAccessibleObject
+        private readonly PropertyGrid? _owningPropertyGrid;
+        private readonly PropertyGridToolStripButton _owningPropertyGridToolStripButton;
+
+        public PropertyGridToolStripButtonAccessibleObject(PropertyGridToolStripButton owningToolStripButton) : base(owningToolStripButton)
         {
-            private readonly PropertyGrid? _owningPropertyGrid;
-            private readonly PropertyGridToolStripButton _owningPropertyGridToolStripButton;
+            _owningPropertyGridToolStripButton = owningToolStripButton;
+            _owningPropertyGrid = owningToolStripButton._owningPropertyGrid;
+        }
 
-            public PropertyGridToolStripButtonAccessibleObject(PropertyGridToolStripButton owningToolStripButton) : base(owningToolStripButton)
+        internal override bool IsItemSelected
+            => _owningPropertyGridToolStripButton.Checked;
+
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            => patternId switch
             {
-                _owningPropertyGridToolStripButton = owningToolStripButton;
-                _owningPropertyGrid = owningToolStripButton._owningPropertyGrid;
+                UiaCore.UIA.SelectionItemPatternId => _owningPropertyGridToolStripButton._selectItemEnabled,
+                UiaCore.UIA.TogglePatternId => false,
+                _ => base.IsPatternSupported(patternId)
+            };
+
+        internal override void AddToSelection() => SelectItem();
+
+        internal override void Invoke() => SelectItem();
+
+        internal override void RemoveFromSelection()
+        {
+        }
+
+        internal override unsafe void SelectItem()
+        {
+            if (_owningPropertyGrid is null || !_owningPropertyGrid.IsHandleCreated)
+            {
+                return;
             }
 
-            internal override bool IsItemSelected
-                => _owningPropertyGridToolStripButton.Checked;
+            bool initialState = _owningPropertyGridToolStripButton.Checked;
+            _owningPropertyGridToolStripButton.PerformClick();
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId switch
-                {
-                    UiaCore.UIA.SelectionItemPatternId => _owningPropertyGridToolStripButton._selectItemEnabled,
-                    UiaCore.UIA.TogglePatternId => false,
-                    _ => base.IsPatternSupported(patternId)
-                };
+            // This code is required to simulate the behavior in 4.7.1. When we call "Toggle" method on an already
+            // checked button, the focus switches to the ToolStrip. If the button was not checked before the call,
+            // then the focus is switched to the table with properties.
+            AccessibleObject? focusedAccessibleObject = initialState
+                ? _owningPropertyGridToolStripButton.Parent?.AccessibilityObject
+                : _owningPropertyGridToolStripButton._owningPropertyGrid.GridViewAccessibleObject.GetFocused();
 
-            internal override void AddToSelection() => SelectItem();
-
-            internal override void Invoke() => SelectItem();
-
-            internal override void RemoveFromSelection()
-            {
-            }
-
-            internal override unsafe void SelectItem()
-            {
-                if (_owningPropertyGrid is null || !_owningPropertyGrid.IsHandleCreated)
-                {
-                    return;
-                }
-
-                bool initialState = _owningPropertyGridToolStripButton.Checked;
-                _owningPropertyGridToolStripButton.PerformClick();
-
-                // This code is required to simulate the behavior in 4.7.1. When we call "Toggle" method on an already
-                // checked button, the focus switches to the ToolStrip. If the button was not checked before the call,
-                // then the focus is switched to the table with properties.
-                AccessibleObject? focusedAccessibleObject = initialState
-                    ? _owningPropertyGridToolStripButton.Parent?.AccessibilityObject
-                    : _owningPropertyGridToolStripButton._owningPropertyGrid.GridViewAccessibleObject.GetFocused();
-
-                focusedAccessibleObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
+            focusedAccessibleObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
     }
 }

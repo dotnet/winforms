@@ -5,22 +5,21 @@
 using System.ComponentModel.Design;
 using Moq;
 
-namespace System.Drawing.Design.Tests
-{
-    public class ToolboxComponentsCreatingEventArgsTests
-    {
-        public static IEnumerable<object[]> Ctor_IDesignerHost_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { new Mock<IDesignerHost>(MockBehavior.Strict).Object };
-        }
+namespace System.Drawing.Design.Tests;
 
-        [Theory]
-        [MemberData(nameof(Ctor_IDesignerHost_TestData))]
-        public void Ctor_IDesignerHost(IDesignerHost host)
-        {
-            var e = new ToolboxComponentsCreatingEventArgs(host);
-            Assert.Equal(host, e.DesignerHost);
-        }
+public class ToolboxComponentsCreatingEventArgsTests
+{
+    public static IEnumerable<object[]> Ctor_IDesignerHost_TestData()
+    {
+        yield return new object[] { null };
+        yield return new object[] { new Mock<IDesignerHost>(MockBehavior.Strict).Object };
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_IDesignerHost_TestData))]
+    public void Ctor_IDesignerHost(IDesignerHost host)
+    {
+        var e = new ToolboxComponentsCreatingEventArgs(host);
+        Assert.Equal(host, e.DesignerHost);
     }
 }

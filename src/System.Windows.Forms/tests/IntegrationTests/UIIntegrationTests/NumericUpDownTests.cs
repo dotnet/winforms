@@ -4,28 +4,27 @@
 
 using Xunit.Abstractions;
 
-namespace System.Windows.Forms.UITests
+namespace System.Windows.Forms.UITests;
+
+public class NumericUpDownTests : ControlTestBase
 {
-    public class NumericUpDownTests : ControlTestBase
+    public NumericUpDownTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
     {
-        public NumericUpDownTests(ITestOutputHelper testOutputHelper)
-            : base(testOutputHelper)
-        {
-        }
+    }
 
-        [WinFormsFact]
-        public async Task NumericUpDownAccessibleObject_Focused_ReturnsCorrectValueAsync()
+    [WinFormsFact]
+    public async Task NumericUpDownAccessibleObject_Focused_ReturnsCorrectValueAsync()
+    {
+        await RunSingleControlTestAsync<NumericUpDown>(async (form, control) =>
         {
-            await RunSingleControlTestAsync<NumericUpDown>(async (form, control) =>
-            {
-                var accessibleObject = control.AccessibilityObject;
-                await MoveMouseToControlAsync(control);
-                form.Activate();
-                control.Focus();
+            var accessibleObject = control.AccessibilityObject;
+            await MoveMouseToControlAsync(control);
+            form.Activate();
+            control.Focus();
 
-                var focused = accessibleObject.GetFocused();
-                Assert.NotNull(focused);
-            });
-        }
+            var focused = accessibleObject.GetFocused();
+            Assert.NotNull(focused);
+        });
     }
 }

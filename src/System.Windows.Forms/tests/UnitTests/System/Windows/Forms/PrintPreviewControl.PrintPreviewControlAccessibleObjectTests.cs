@@ -4,64 +4,63 @@
 
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
 {
-    public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
+    [WinFormsFact]
+    public void PrintPreviewControlAccessibleObject_Ctor_Default()
     {
-        [WinFormsFact]
-        public void PrintPreviewControlAccessibleObject_Ctor_Default()
+        using PrintPreviewControl control = new();
+        PrintPreviewControl.PrintPreviewControlAccessibleObject accessibleObject = new(control);
+
+        Assert.Equal(control, accessibleObject.Owner);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData((int)UIA.NamePropertyId, "TestName")]
+    [InlineData((int)UIA.AutomationIdPropertyId, "PrintPreviewControl1")]
+    public void PrintPreviewControlAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    {
+        using PrintPreviewControl control = new()
         {
-            using PrintPreviewControl control = new();
-            PrintPreviewControl.PrintPreviewControlAccessibleObject accessibleObject = new(control);
+            Name = "PrintPreviewControl1",
+            AccessibleName = "TestName"
+        };
 
-            Assert.Equal(control, accessibleObject.Owner);
-            Assert.False(control.IsHandleCreated);
-        }
+        Assert.False(control.IsHandleCreated);
+        var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
+        object value = accessibleObject.GetPropertyValue((UIA)propertyID);
 
-        [WinFormsTheory]
-        [InlineData((int)UIA.NamePropertyId, "TestName")]
-        [InlineData((int)UIA.AutomationIdPropertyId, "PrintPreviewControl1")]
-        public void PrintPreviewControlAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
-        {
-            using PrintPreviewControl control = new()
-            {
-                Name = "PrintPreviewControl1",
-                AccessibleName = "TestName"
-            };
+        Assert.Equal(expected, value);
+        Assert.False(control.IsHandleCreated);
+    }
 
-            Assert.False(control.IsHandleCreated);
-            var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
-            object value = accessibleObject.GetPropertyValue((UIA)propertyID);
+    [WinFormsFact]
+    public void PrintPreviewControlAccessibleObject_GetPropertyValue_Focused_ReturnsExpected()
+    {
+        using PrintPreviewControl control = new();
 
-            Assert.Equal(expected, value);
-            Assert.False(control.IsHandleCreated);
-        }
+        var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
+        control.CreateControl();
+        PInvoke.SetFocus(control);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
 
-        [WinFormsFact]
-        public void PrintPreviewControlAccessibleObject_GetPropertyValue_Focused_ReturnsExpected()
-        {
-            using PrintPreviewControl control = new();
+        Assert.True(value);
+        Assert.True(control.IsHandleCreated);
+    }
 
-            var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
-            control.CreateControl();
-            PInvoke.SetFocus(control);
-            bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+    [WinFormsFact]
+    public void PrintPreviewControlAccessibleObject_GetPropertyValue_Unfocused_ReturnsExpected()
+    {
+        using PrintPreviewControl control = new();
 
-            Assert.True(value);
-            Assert.True(control.IsHandleCreated);
-        }
+        Assert.False(control.IsHandleCreated);
+        var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
 
-        [WinFormsFact]
-        public void PrintPreviewControlAccessibleObject_GetPropertyValue_Unfocused_ReturnsExpected()
-        {
-            using PrintPreviewControl control = new();
-
-            Assert.False(control.IsHandleCreated);
-            var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
-            bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
-
-            Assert.False(value);
-            Assert.False(control.IsHandleCreated);
-        }
+        Assert.False(value);
+        Assert.False(control.IsHandleCreated);
     }
 }

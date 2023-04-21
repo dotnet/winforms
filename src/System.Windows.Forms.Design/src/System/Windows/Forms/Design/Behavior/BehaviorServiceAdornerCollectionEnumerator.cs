@@ -6,53 +6,52 @@
 
 using System.Collections;
 
-namespace System.Windows.Forms.Design.Behavior
+namespace System.Windows.Forms.Design.Behavior;
+
+public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
 {
-    public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
+    private readonly IEnumerator baseEnumerator;
+    private readonly IEnumerable temp;
+
+    public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
     {
-        private readonly IEnumerator baseEnumerator;
-        private readonly IEnumerable temp;
+        temp = mappings;
+        baseEnumerator = temp.GetEnumerator();
+    }
 
-        public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
+    public Adorner Current
+    {
+        get
         {
-            temp = mappings;
-            baseEnumerator = temp.GetEnumerator();
+            return ((Adorner)(baseEnumerator.Current));
         }
+    }
 
-        public Adorner Current
+    object IEnumerator.Current
+    {
+        get
         {
-            get
-            {
-                return ((Adorner)(baseEnumerator.Current));
-            }
+            return baseEnumerator.Current;
         }
+    }
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                return baseEnumerator.Current;
-            }
-        }
+    public bool MoveNext()
+    {
+        return baseEnumerator.MoveNext();
+    }
 
-        public bool MoveNext()
-        {
-            return baseEnumerator.MoveNext();
-        }
+    bool IEnumerator.MoveNext()
+    {
+        return baseEnumerator.MoveNext();
+    }
 
-        bool IEnumerator.MoveNext()
-        {
-            return baseEnumerator.MoveNext();
-        }
+    public void Reset()
+    {
+        baseEnumerator.Reset();
+    }
 
-        public void Reset()
-        {
-            baseEnumerator.Reset();
-        }
-
-        void IEnumerator.Reset()
-        {
-            baseEnumerator.Reset();
-        }
+    void IEnumerator.Reset()
+    {
+        baseEnumerator.Reset();
     }
 }

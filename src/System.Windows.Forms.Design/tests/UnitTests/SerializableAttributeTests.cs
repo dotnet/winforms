@@ -2,20 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design.Tests.Serialization
+namespace System.Windows.Forms.Design.Tests.Serialization;
+
+public class SerializableAttributeTests
 {
-    public class SerializableAttributeTests
+    [Fact]
+    public void EnsureSerializableAttribute()
     {
-        [Fact]
-        public void EnsureSerializableAttribute()
-        {
-            BinarySerialization.EnsureSerializableAttribute(
-                typeof(Behavior.Behavior).Assembly,
-                new HashSet<string>
-                {
-                    typeof(OleDragDropHandler.CfCodeToolboxItem).FullName,
-                    { "System.Windows.Forms.Design.Behavior.DesignerActionKeyboardBehavior+<>c" }
-                });
-        }
+        BinarySerialization.EnsureSerializableAttribute(
+            typeof(Behavior.Behavior).Assembly,
+            new HashSet<string>
+            {
+                typeof(OleDragDropHandler.CfCodeToolboxItem).FullName,
+                { "System.Windows.Forms.Design.Behavior.DesignerActionKeyboardBehavior+<>c" }
+            });
     }
 }

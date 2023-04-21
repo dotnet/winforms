@@ -4,67 +4,66 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
-{
-    public partial class ToolStrip
-    {
-        internal sealed class RestoreFocusMessageFilter : IMessageFilter
-        {
-            private readonly ToolStrip _ownerToolStrip;
+namespace System.Windows.Forms;
 
-            public RestoreFocusMessageFilter(ToolStrip ownerToolStrip)
+public partial class ToolStrip
+{
+    internal sealed class RestoreFocusMessageFilter : IMessageFilter
+    {
+        private readonly ToolStrip _ownerToolStrip;
+
+        public RestoreFocusMessageFilter(ToolStrip ownerToolStrip)
+        {
+            _ownerToolStrip = ownerToolStrip;
+        }
+
+        public bool PreFilterMessage(ref Message m)
+        {
+            if (_ownerToolStrip.Disposing || _ownerToolStrip.IsDisposed || _ownerToolStrip.IsDropDown)
             {
-                _ownerToolStrip = ownerToolStrip;
+                return false;
             }
 
-            public bool PreFilterMessage(ref Message m)
+            // if the app has changed activation, restore focus
+
+            switch ((User32.WM)m.Msg)
             {
-                if (_ownerToolStrip.Disposing || _ownerToolStrip.IsDisposed || _ownerToolStrip.IsDropDown)
-                {
-                    return false;
-                }
-
-                // if the app has changed activation, restore focus
-
-                switch ((User32.WM)m.Msg)
-                {
-                    case User32.WM.LBUTTONDOWN:
-                    case User32.WM.RBUTTONDOWN:
-                    case User32.WM.MBUTTONDOWN:
-                    case User32.WM.NCLBUTTONDOWN:
-                    case User32.WM.NCRBUTTONDOWN:
-                    case User32.WM.NCMBUTTONDOWN:
-                        if (_ownerToolStrip.ContainsFocus)
+                case User32.WM.LBUTTONDOWN:
+                case User32.WM.RBUTTONDOWN:
+                case User32.WM.MBUTTONDOWN:
+                case User32.WM.NCLBUTTONDOWN:
+                case User32.WM.NCRBUTTONDOWN:
+                case User32.WM.NCMBUTTONDOWN:
+                    if (_ownerToolStrip.ContainsFocus)
+                    {
+                        // If we've clicked on something that's not a child of the toolstrip and we currently have focus, restore it.
+                        if (!PInvoke.IsChild(_ownerToolStrip, m.HWND))
                         {
-                            // If we've clicked on something that's not a child of the toolstrip and we currently have focus, restore it.
-                            if (!PInvoke.IsChild(_ownerToolStrip, m.HWND))
+                            HWND rootHwnd = PInvoke.GetAncestor(_ownerToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
+                            if (rootHwnd == m.HWND || PInvoke.IsChild(rootHwnd, m.HWND))
                             {
-                                HWND rootHwnd = PInvoke.GetAncestor(_ownerToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
-                                if (rootHwnd == m.HWND || PInvoke.IsChild(rootHwnd, m.HWND))
-                                {
-                                    // Only RestoreFocus if the hwnd is a child of the root window and isn't on the toolstrip.
-                                    RestoreFocusInternal();
-                                }
+                                // Only RestoreFocus if the hwnd is a child of the root window and isn't on the toolstrip.
+                                RestoreFocusInternal();
                             }
                         }
+                    }
 
-                        return false;
+                    return false;
 
-                    default:
-                        return false;
-                }
+                default:
+                    return false;
             }
+        }
 
-            private void RestoreFocusInternal()
-            {
-                s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");
+        private void RestoreFocusInternal()
+        {
+            s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");
 
-                _ownerToolStrip.BeginInvoke(new BooleanMethodInvoker(_ownerToolStrip.RestoreFocusInternal), new object[] { ToolStripManager.ModalMenuFilter.InMenuMode });
+            _ownerToolStrip.BeginInvoke(new BooleanMethodInvoker(_ownerToolStrip.RestoreFocusInternal), new object[] { ToolStripManager.ModalMenuFilter.InMenuMode });
 
-                // PERF
+            // PERF
 
-                Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
-            }
+            Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
         }
     }
 }

@@ -2,18 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+// NB: doesn't require thread affinity
+public class FormClosedEventArgsTests
 {
-    // NB: doesn't require thread affinity
-    public class FormClosedEventArgsTests
+    [Theory]
+    [InlineData(CloseReason.None)]
+    [InlineData((CloseReason)(CloseReason.None - 1))]
+    public void Ctor_CloseReason(CloseReason closeReason)
     {
-        [Theory]
-        [InlineData(CloseReason.None)]
-        [InlineData((CloseReason)(CloseReason.None - 1))]
-        public void Ctor_CloseReason(CloseReason closeReason)
-        {
-            var e = new FormClosedEventArgs(closeReason);
-            Assert.Equal(closeReason, e.CloseReason);
-        }
+        var e = new FormClosedEventArgs(closeReason);
+        Assert.Equal(closeReason, e.CloseReason);
     }
 }

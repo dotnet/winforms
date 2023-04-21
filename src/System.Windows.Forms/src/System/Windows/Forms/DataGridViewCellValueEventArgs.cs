@@ -2,45 +2,44 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class DataGridViewCellValueEventArgs : EventArgs
 {
-    public class DataGridViewCellValueEventArgs : EventArgs
+    internal DataGridViewCellValueEventArgs()
     {
-        internal DataGridViewCellValueEventArgs()
+        ColumnIndex = -1;
+        RowIndex = -1;
+    }
+
+    public DataGridViewCellValueEventArgs(int columnIndex, int rowIndex)
+    {
+        if (columnIndex < 0)
         {
-            ColumnIndex = -1;
-            RowIndex = -1;
+            throw new ArgumentOutOfRangeException(nameof(columnIndex));
         }
 
-        public DataGridViewCellValueEventArgs(int columnIndex, int rowIndex)
+        if (rowIndex < 0)
         {
-            if (columnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(columnIndex));
-            }
-
-            if (rowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
-
-            ColumnIndex = columnIndex;
-            RowIndex = rowIndex;
+            throw new ArgumentOutOfRangeException(nameof(rowIndex));
         }
 
-        public int ColumnIndex { get; private set; }
+        ColumnIndex = columnIndex;
+        RowIndex = rowIndex;
+    }
 
-        public int RowIndex { get; private set; }
+    public int ColumnIndex { get; private set; }
 
-        public object? Value { get; set; }
+    public int RowIndex { get; private set; }
 
-        internal void SetProperties(int columnIndex, int rowIndex, object? value)
-        {
-            Debug.Assert(columnIndex >= -1);
-            Debug.Assert(rowIndex >= -1);
-            ColumnIndex = columnIndex;
-            RowIndex = rowIndex;
-            Value = value;
-        }
+    public object? Value { get; set; }
+
+    internal void SetProperties(int columnIndex, int rowIndex, object? value)
+    {
+        Debug.Assert(columnIndex >= -1);
+        Debug.Assert(rowIndex >= -1);
+        ColumnIndex = columnIndex;
+        RowIndex = rowIndex;
+        Value = value;
     }
 }

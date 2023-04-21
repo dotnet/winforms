@@ -4,17 +4,16 @@
 
 using System.Drawing;
 
-namespace System.ComponentModel.Design
-{
-    internal sealed partial class DesignerActionPanel
-    {
-        private sealed class HeaderLine : TextLine
-        {
-            public HeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
-            {
-            }
+namespace System.ComponentModel.Design;
 
-            protected override Font GetFont() => new Font(ActionPanel.Font, FontStyle.Bold);
+internal sealed partial class DesignerActionPanel
+{
+    private sealed class HeaderLine : TextLine
+    {
+        public HeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+        {
         }
+
+        protected override Font GetFont() => new Font(ActionPanel.Font, FontStyle.Bold);
     }
 }

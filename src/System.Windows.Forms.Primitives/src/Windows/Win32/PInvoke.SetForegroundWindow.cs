@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    public static BOOL SetForegroundWindow<T>(T hWnd) where T : IHandle<HWND>
     {
-        public static BOOL SetForegroundWindow<T>(T hWnd) where T : IHandle<HWND>
-        {
-            BOOL result = SetForegroundWindow(hWnd.Handle);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
+        BOOL result = SetForegroundWindow(hWnd.Handle);
+        GC.KeepAlive(hWnd.Wrapper);
+        return result;
     }
 }

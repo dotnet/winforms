@@ -6,598 +6,597 @@ using System.Drawing;
 using static Interop;
 using static Interop.ComCtl32;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class MonthCalendar
 {
-    public partial class MonthCalendar
+    /// <summary>
+    ///  Represents the accessible object of a MonthCalendar control.
+    /// </summary>
+    internal class MonthCalendarAccessibleObject : ControlAccessibleObject
     {
-        /// <summary>
-        ///  Represents the accessible object of a MonthCalendar control.
-        /// </summary>
-        internal class MonthCalendarAccessibleObject : ControlAccessibleObject
+        private const int MaxCalendarsCount = 12;
+
+        private readonly MonthCalendar _owningMonthCalendar;
+        private CalendarCellAccessibleObject? _focusedCellAccessibleObject;
+        private CalendarPreviousButtonAccessibleObject? _previousButtonAccessibleObject;
+        private CalendarNextButtonAccessibleObject? _nextButtonAccessibleObject;
+        private LinkedList<CalendarAccessibleObject>? _calendarsAccessibleObjects;
+        private CalendarTodayLinkAccessibleObject? _todayLinkAccessibleObject;
+
+        public MonthCalendarAccessibleObject(MonthCalendar owner) : base(owner)
         {
-            private const int MaxCalendarsCount = 12;
+            _owningMonthCalendar = owner;
 
-            private readonly MonthCalendar _owningMonthCalendar;
-            private CalendarCellAccessibleObject? _focusedCellAccessibleObject;
-            private CalendarPreviousButtonAccessibleObject? _previousButtonAccessibleObject;
-            private CalendarNextButtonAccessibleObject? _nextButtonAccessibleObject;
-            private LinkedList<CalendarAccessibleObject>? _calendarsAccessibleObjects;
-            private CalendarTodayLinkAccessibleObject? _todayLinkAccessibleObject;
+            _owningMonthCalendar.DisplayRangeChanged += OnMonthCalendarStateChanged;
+        }
 
-            public MonthCalendarAccessibleObject(MonthCalendar owner) : base(owner)
+        // Use a LinkedList instead a List for the following reasons:
+        // 1. We don't require an access to items by indices.
+        // 2. We only need the first or the last items, or iterate over all items.
+        // 3. New items are only appended to the end of the collection.
+        // 4. Simple API for getting an item siblings, e.g. Next or Previous values
+        //    returns a real item or null.
+        // 5. We have to be consistent with the rest collections of calendar parts accessible objects.
+        //
+        // If we use a List to store item's siblings we have to have one more variable
+        // that stores a real index of the item in the collection, because _calendarIndex
+        // doesn't reflect that. Or we would have to get the current index of the item
+        // using IndexOf method every time.
+        internal LinkedList<CalendarAccessibleObject>? CalendarsAccessibleObjects
+        {
+            get
             {
-                _owningMonthCalendar = owner;
-
-                _owningMonthCalendar.DisplayRangeChanged += OnMonthCalendarStateChanged;
-            }
-
-            // Use a LinkedList instead a List for the following reasons:
-            // 1. We don't require an access to items by indices.
-            // 2. We only need the first or the last items, or iterate over all items.
-            // 3. New items are only appended to the end of the collection.
-            // 4. Simple API for getting an item siblings, e.g. Next or Previous values
-            //    returns a real item or null.
-            // 5. We have to be consistent with the rest collections of calendar parts accessible objects.
-            //
-            // If we use a List to store item's siblings we have to have one more variable
-            // that stores a real index of the item in the collection, because _calendarIndex
-            // doesn't reflect that. Or we would have to get the current index of the item
-            // using IndexOf method every time.
-            internal LinkedList<CalendarAccessibleObject>? CalendarsAccessibleObjects
-            {
-                get
+                if (!_owningMonthCalendar.IsHandleCreated)
                 {
-                    if (!_owningMonthCalendar.IsHandleCreated)
-                    {
-                        return null;
-                    }
-
-                    if (_calendarsAccessibleObjects is null)
-                    {
-                        _calendarsAccessibleObjects = new();
-                        string previousHeaderName = string.Empty;
-
-                        for (int calendarIndex = 0; calendarIndex < MaxCalendarsCount; calendarIndex++)
-                        {
-                            string currentHeaderName = GetCalendarPartText(MCGRIDINFO_PART.MCGIP_CALENDARHEADER, calendarIndex);
-
-                            if (currentHeaderName == string.Empty || currentHeaderName == previousHeaderName)
-                            {
-                                // This is a peculiarity of Win API.
-                                // It returns the previous calendar name if the current one is invisible.
-                                break;
-                            }
-
-                            CalendarAccessibleObject calendar = new(this, calendarIndex, currentHeaderName);
-                            _calendarsAccessibleObjects.AddLast(calendar);
-                            previousHeaderName = currentHeaderName;
-                        }
-                    }
-
-                    return _calendarsAccessibleObjects;
+                    return null;
                 }
-            }
-
-            // This function should be called from a single place in the root of MonthCalendar object that already tests for availability of this API
-            internal void DisconnectChildren()
-            {
-                Debug.Assert(OsVersion.IsWindows8OrGreater());
-
-                UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
-                _previousButtonAccessibleObject = null;
-
-                UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
-                _nextButtonAccessibleObject = null;
-
-                UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
-                _todayLinkAccessibleObject = null;
-
-                UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
-                _focusedCellAccessibleObject = null;
 
                 if (_calendarsAccessibleObjects is null)
                 {
-                    return;
-                }
+                    _calendarsAccessibleObjects = new();
+                    string previousHeaderName = string.Empty;
 
-                foreach (CalendarAccessibleObject calendarAccessibleObject in _calendarsAccessibleObjects)
-                {
-                    calendarAccessibleObject.DisconnectChildren();
-                    UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
-                }
-
-                _calendarsAccessibleObjects.Clear();
-                _calendarsAccessibleObjects = null;
-            }
-
-            /// <summary>
-            ///  Associates Win API day of week values with DateTime values.
-            /// </summary>
-            private static DayOfWeek CastDayToDayOfWeek(Day day)
-                => day switch
-                {
-                    Day.Monday => DayOfWeek.Monday,
-                    Day.Tuesday => DayOfWeek.Tuesday,
-                    Day.Wednesday => DayOfWeek.Wednesday,
-                    Day.Thursday => DayOfWeek.Thursday,
-                    Day.Friday => DayOfWeek.Friday,
-                    Day.Saturday => DayOfWeek.Saturday,
-                    Day.Sunday => DayOfWeek.Sunday,
-                    Day.Default => DayOfWeek.Sunday,
-                    _ => DayOfWeek.Sunday
-                };
-
-            internal MONTH_CALDENDAR_MESSAGES_VIEW CalendarView => _owningMonthCalendar._mcCurView;
-
-            internal override int ColumnCount
-            {
-                get
-                {
-                    if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
+                    for (int calendarIndex = 0; calendarIndex < MaxCalendarsCount; calendarIndex++)
                     {
-                        return -1;
-                    }
+                        string currentHeaderName = GetCalendarPartText(MCGRIDINFO_PART.MCGIP_CALENDARHEADER, calendarIndex);
 
-                    int currentY = CalendarsAccessibleObjects.First?.Value.Bounds.Y ?? 0;
-                    int columnCount = 0;
-
-                    foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
-                    {
-                        if (calendar.Bounds.Y > currentY)
+                        if (currentHeaderName == string.Empty || currentHeaderName == previousHeaderName)
                         {
+                            // This is a peculiarity of Win API.
+                            // It returns the previous calendar name if the current one is invisible.
                             break;
                         }
 
-                        columnCount++;
+                        CalendarAccessibleObject calendar = new(this, calendarIndex, currentHeaderName);
+                        _calendarsAccessibleObjects.AddLast(calendar);
+                        previousHeaderName = currentHeaderName;
                     }
-
-                    return columnCount;
                 }
-            }
 
-            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+                return _calendarsAccessibleObjects;
+            }
+        }
+
+        // This function should be called from a single place in the root of MonthCalendar object that already tests for availability of this API
+        internal void DisconnectChildren()
+        {
+            Debug.Assert(OsVersion.IsWindows8OrGreater());
+
+            UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
+            _previousButtonAccessibleObject = null;
+
+            UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
+            _nextButtonAccessibleObject = null;
+
+            UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
+            _todayLinkAccessibleObject = null;
+
+            UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
+            _focusedCellAccessibleObject = null;
+
+            if (_calendarsAccessibleObjects is null)
             {
-                int innerX = (int)x;
-                int innerY = (int)y;
-
-                if (!_owningMonthCalendar.IsHandleCreated)
-                {
-                    return base.ElementProviderFromPoint(x, y);
-                }
-
-                MCHITTESTINFO hitTestInfo = GetHitTestInfo(innerX, innerY);
-
-                // See "uHit" kinds in the MS doc:
-                // https://docs.microsoft.com/windows/win32/api/commctrl/ns-commctrl-mchittestinfo
-                return hitTestInfo.uHit switch
-                {
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARCONTROL => this,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNPREV or MCHITTESTINFO_HIT_FLAGS.MCHT_PREV => PreviousButtonAccessibleObject,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNNEXT or MCHITTESTINFO_HIT_FLAGS.MCHT_NEXT => NextButtonAccessibleObject,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEMIN // The given point was over the minimum date in the calendar
-                        => CalendarsAccessibleObjects?.First?.Value is CalendarAccessibleObject firstCalendar
-                        && firstCalendar.Bounds.Contains(innerX, innerY)
-                            ? firstCalendar
-                            : this,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEMAX // The given point was over the maximum date in the calendar
-                        => CalendarsAccessibleObjects?.Last?.Value is CalendarAccessibleObject lastCalendar
-                        && lastCalendar.Bounds.Contains(innerX, innerY)
-                            ? lastCalendar
-                            : this,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDAR
-                        // Cast "this" to AccessibleObject because "??" can't cast these operands implicitly
-                        => GetCalendarFromPoint(innerX, innerY) ?? (AccessibleObject)this,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_TODAYLINK => TodayLinkAccessibleObject,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_TITLE or MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEMONTH or MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEYEAR
-                        // Cast "this" to AccessibleObject because "??" can't cast these operands implicitly
-                        => GetCalendarFromPoint(innerX, innerY)?.CalendarHeaderAccessibleObject ?? (AccessibleObject)this,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARWEEKNUM or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATE
-                    or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEPREV or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATENEXT
-                        // Get a calendar body's child.
-                        // Cast "this" to AccessibleObject because "??" can't cast these operands implicitly
-                        => GetCalendarFromPoint(innerX, innerY)?.GetChildFromPoint(hitTestInfo) ?? (AccessibleObject)this,
-                    MCHITTESTINFO_HIT_FLAGS.MCHT_NOWHERE => this,
-                    _ => base.ElementProviderFromPoint(x, y)
-                };
+                return;
             }
 
-            internal DayOfWeek FirstDayOfWeek => CastDayToDayOfWeek(_owningMonthCalendar.FirstDayOfWeek);
+            foreach (CalendarAccessibleObject calendarAccessibleObject in _calendarsAccessibleObjects)
+            {
+                calendarAccessibleObject.DisconnectChildren();
+                UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
+            }
 
-            internal bool Focused => _owningMonthCalendar.Focused;
+            _calendarsAccessibleObjects.Clear();
+            _calendarsAccessibleObjects = null;
+        }
 
-            internal CalendarCellAccessibleObject? FocusedCell
-                => UiaCore.UiaClientsAreListening()
-                    ? _focusedCellAccessibleObject ??= GetCellByDate(_owningMonthCalendar._focusedDate)
-                    : null;
+        /// <summary>
+        ///  Associates Win API day of week values with DateTime values.
+        /// </summary>
+        private static DayOfWeek CastDayToDayOfWeek(Day day)
+            => day switch
+            {
+                Day.Monday => DayOfWeek.Monday,
+                Day.Tuesday => DayOfWeek.Tuesday,
+                Day.Wednesday => DayOfWeek.Wednesday,
+                Day.Thursday => DayOfWeek.Thursday,
+                Day.Friday => DayOfWeek.Friday,
+                Day.Saturday => DayOfWeek.Saturday,
+                Day.Sunday => DayOfWeek.Sunday,
+                Day.Default => DayOfWeek.Sunday,
+                _ => DayOfWeek.Sunday
+            };
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-                => direction switch
-                {
-                    UiaCore.NavigateDirection.FirstChild => PreviousButtonAccessibleObject,
-                    UiaCore.NavigateDirection.LastChild => ShowToday
-                        ? TodayLinkAccessibleObject
-                        : CalendarsAccessibleObjects?.Last?.Value,
-                    _ => base.FragmentNavigate(direction),
-                };
+        internal MONTH_CALDENDAR_MESSAGES_VIEW CalendarView => _owningMonthCalendar._mcCurView;
 
-            private CalendarAccessibleObject? GetCalendarFromPoint(int x, int y)
+        internal override int ColumnCount
+        {
+            get
             {
                 if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
                 {
-                    return null;
+                    return -1;
                 }
+
+                int currentY = CalendarsAccessibleObjects.First?.Value.Bounds.Y ?? 0;
+                int columnCount = 0;
 
                 foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
                 {
-                    if (calendar.Bounds.Contains(x, y))
+                    if (calendar.Bounds.Y > currentY)
                     {
-                        return calendar;
+                        break;
                     }
+
+                    columnCount++;
                 }
 
+                return columnCount;
+            }
+        }
+
+        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        {
+            int innerX = (int)x;
+            int innerY = (int)y;
+
+            if (!_owningMonthCalendar.IsHandleCreated)
+            {
+                return base.ElementProviderFromPoint(x, y);
+            }
+
+            MCHITTESTINFO hitTestInfo = GetHitTestInfo(innerX, innerY);
+
+            // See "uHit" kinds in the MS doc:
+            // https://docs.microsoft.com/windows/win32/api/commctrl/ns-commctrl-mchittestinfo
+            return hitTestInfo.uHit switch
+            {
+                MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARCONTROL => this,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNPREV or MCHITTESTINFO_HIT_FLAGS.MCHT_PREV => PreviousButtonAccessibleObject,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNNEXT or MCHITTESTINFO_HIT_FLAGS.MCHT_NEXT => NextButtonAccessibleObject,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEMIN // The given point was over the minimum date in the calendar
+                    => CalendarsAccessibleObjects?.First?.Value is CalendarAccessibleObject firstCalendar
+                    && firstCalendar.Bounds.Contains(innerX, innerY)
+                        ? firstCalendar
+                        : this,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEMAX // The given point was over the maximum date in the calendar
+                    => CalendarsAccessibleObjects?.Last?.Value is CalendarAccessibleObject lastCalendar
+                    && lastCalendar.Bounds.Contains(innerX, innerY)
+                        ? lastCalendar
+                        : this,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDAR
+                    // Cast "this" to AccessibleObject because "??" can't cast these operands implicitly
+                    => GetCalendarFromPoint(innerX, innerY) ?? (AccessibleObject)this,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_TODAYLINK => TodayLinkAccessibleObject,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_TITLE or MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEMONTH or MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEYEAR
+                    // Cast "this" to AccessibleObject because "??" can't cast these operands implicitly
+                    => GetCalendarFromPoint(innerX, innerY)?.CalendarHeaderAccessibleObject ?? (AccessibleObject)this,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARWEEKNUM or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATE
+                or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEPREV or MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATENEXT
+                    // Get a calendar body's child.
+                    // Cast "this" to AccessibleObject because "??" can't cast these operands implicitly
+                    => GetCalendarFromPoint(innerX, innerY)?.GetChildFromPoint(hitTestInfo) ?? (AccessibleObject)this,
+                MCHITTESTINFO_HIT_FLAGS.MCHT_NOWHERE => this,
+                _ => base.ElementProviderFromPoint(x, y)
+            };
+        }
+
+        internal DayOfWeek FirstDayOfWeek => CastDayToDayOfWeek(_owningMonthCalendar.FirstDayOfWeek);
+
+        internal bool Focused => _owningMonthCalendar.Focused;
+
+        internal CalendarCellAccessibleObject? FocusedCell
+            => UiaCore.UiaClientsAreListening()
+                ? _focusedCellAccessibleObject ??= GetCellByDate(_owningMonthCalendar._focusedDate)
+                : null;
+
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            => direction switch
+            {
+                UiaCore.NavigateDirection.FirstChild => PreviousButtonAccessibleObject,
+                UiaCore.NavigateDirection.LastChild => ShowToday
+                    ? TodayLinkAccessibleObject
+                    : CalendarsAccessibleObjects?.Last?.Value,
+                _ => base.FragmentNavigate(direction),
+            };
+
+        private CalendarAccessibleObject? GetCalendarFromPoint(int x, int y)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
+            {
                 return null;
             }
 
-            internal unsafe SelectionRange? GetCalendarPartDateRange(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
+            foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
             {
-                if (!_owningMonthCalendar.IsHandleCreated)
+                if (calendar.Bounds.Contains(x, y))
+                {
+                    return calendar;
+                }
+            }
+
+            return null;
+        }
+
+        internal unsafe SelectionRange? GetCalendarPartDateRange(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated)
+            {
+                return null;
+            }
+
+            MCGRIDINFO gridInfo = new()
+            {
+                cbSize = (uint)sizeof(MCGRIDINFO),
+                dwFlags = MCGRIDINFO_FLAGS.MCGIF_DATE,
+                dwPart = dwPart,
+                iCalendar = calendarIndex,
+                iCol = columnIndex,
+                iRow = rowIndex
+            };
+
+            bool success = PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
+
+            return success ? new((DateTime)gridInfo.stStart, (DateTime)gridInfo.stEnd) : null;
+        }
+
+        internal unsafe RECT GetCalendarPartRectangle(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated)
+            {
+                return default;
+            }
+
+            MCGRIDINFO gridInfo = new()
+            {
+                cbSize = (uint)sizeof(MCGRIDINFO),
+                dwFlags = MCGRIDINFO_FLAGS.MCGIF_RECT,
+                dwPart = dwPart,
+                iCalendar = calendarIndex,
+                iCol = columnIndex,
+                iRow = rowIndex
+            };
+
+            bool success = PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
+
+            return success ? _owningMonthCalendar.RectangleToScreen(gridInfo.rc) : default;
+        }
+
+        internal unsafe string GetCalendarPartText(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated)
+            {
+                return string.Empty;
+            }
+
+            Span<char> name = stackalloc char[20];
+
+            fixed (char* pName = name)
+            {
+                MCGRIDINFO gridInfo = new()
+                {
+                    cbSize = (uint)sizeof(MCGRIDINFO),
+                    dwFlags = MCGRIDINFO_FLAGS.MCGIF_NAME,
+                    dwPart = dwPart,
+                    iCalendar = calendarIndex,
+                    iCol = columnIndex,
+                    iRow = rowIndex,
+                    pszName = pName,
+                    cchName = (UIntPtr)name.Length - 1
+                };
+
+                PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, 0, ref gridInfo);
+            }
+
+            string text = string.Empty;
+
+            foreach (char ch in name)
+            {
+                // Remove special invisible symbols
+                if (ch is not '\0' and not (char)8206 /*empty symbol*/)
+                {
+                    text += ch;
+                }
+            }
+
+            return text;
+        }
+
+        private CalendarCellAccessibleObject? GetCellByDate(DateTime date)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
+            {
+                return null;
+            }
+
+            foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
+            {
+                if (calendar.DateRange is null)
+                {
+                    continue;
+                }
+
+                DateTime calendarStart = calendar.DateRange.Start;
+                DateTime calendarEnd = calendar.DateRange.End;
+
+                if (date < calendarStart || date > calendarEnd)
+                {
+                    continue;
+                }
+
+                LinkedList<CalendarRowAccessibleObject>? rows = calendar.CalendarBodyAccessibleObject.RowsAccessibleObjects;
+                if (rows is null)
                 {
                     return null;
                 }
 
-                MCGRIDINFO gridInfo = new()
+                foreach (CalendarRowAccessibleObject row in rows)
                 {
-                    cbSize = (uint)sizeof(MCGRIDINFO),
-                    dwFlags = MCGRIDINFO_FLAGS.MCGIF_DATE,
-                    dwPart = dwPart,
-                    iCalendar = calendarIndex,
-                    iCol = columnIndex,
-                    iRow = rowIndex
-                };
-
-                bool success = PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
-
-                return success ? new((DateTime)gridInfo.stStart, (DateTime)gridInfo.stEnd) : null;
-            }
-
-            internal unsafe RECT GetCalendarPartRectangle(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
-            {
-                if (!_owningMonthCalendar.IsHandleCreated)
-                {
-                    return default;
-                }
-
-                MCGRIDINFO gridInfo = new()
-                {
-                    cbSize = (uint)sizeof(MCGRIDINFO),
-                    dwFlags = MCGRIDINFO_FLAGS.MCGIF_RECT,
-                    dwPart = dwPart,
-                    iCalendar = calendarIndex,
-                    iCol = columnIndex,
-                    iRow = rowIndex
-                };
-
-                bool success = PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
-
-                return success ? _owningMonthCalendar.RectangleToScreen(gridInfo.rc) : default;
-            }
-
-            internal unsafe string GetCalendarPartText(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
-            {
-                if (!_owningMonthCalendar.IsHandleCreated)
-                {
-                    return string.Empty;
-                }
-
-                Span<char> name = stackalloc char[20];
-
-                fixed (char* pName = name)
-                {
-                    MCGRIDINFO gridInfo = new()
-                    {
-                        cbSize = (uint)sizeof(MCGRIDINFO),
-                        dwFlags = MCGRIDINFO_FLAGS.MCGIF_NAME,
-                        dwPart = dwPart,
-                        iCalendar = calendarIndex,
-                        iCol = columnIndex,
-                        iRow = rowIndex,
-                        pszName = pName,
-                        cchName = (UIntPtr)name.Length - 1
-                    };
-
-                    PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, 0, ref gridInfo);
-                }
-
-                string text = string.Empty;
-
-                foreach (char ch in name)
-                {
-                    // Remove special invisible symbols
-                    if (ch is not '\0' and not (char)8206 /*empty symbol*/)
-                    {
-                        text += ch;
-                    }
-                }
-
-                return text;
-            }
-
-            private CalendarCellAccessibleObject? GetCellByDate(DateTime date)
-            {
-                if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
-                {
-                    return null;
-                }
-
-                foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
-                {
-                    if (calendar.DateRange is null)
-                    {
-                        continue;
-                    }
-
-                    DateTime calendarStart = calendar.DateRange.Start;
-                    DateTime calendarEnd = calendar.DateRange.End;
-
-                    if (date < calendarStart || date > calendarEnd)
-                    {
-                        continue;
-                    }
-
-                    LinkedList<CalendarRowAccessibleObject>? rows = calendar.CalendarBodyAccessibleObject.RowsAccessibleObjects;
-                    if (rows is null)
+                    if (row.CellsAccessibleObjects is null)
                     {
                         return null;
                     }
 
-                    foreach (CalendarRowAccessibleObject row in rows)
+                    foreach (CalendarCellAccessibleObject cell in row.CellsAccessibleObjects)
                     {
-                        if (row.CellsAccessibleObjects is null)
+                        // A cell date range may be null for header cells
+                        SelectionRange? cellRange = cell.DateRange;
+                        if (cellRange is null)
                         {
-                            return null;
+                            continue;
                         }
 
-                        foreach (CalendarCellAccessibleObject cell in row.CellsAccessibleObjects)
+                        if (date >= cellRange.Start && date <= cellRange.End)
                         {
-                            // A cell date range may be null for header cells
-                            SelectionRange? cellRange = cell.DateRange;
-                            if (cellRange is null)
-                            {
-                                continue;
-                            }
-
-                            if (date >= cellRange.Start && date <= cellRange.End)
-                            {
-                                return cell;
-                            }
+                            return cell;
                         }
                     }
                 }
+            }
 
+            return null;
+        }
+
+        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
+
+        internal SelectionRange? GetDisplayRange(bool visible)
+            => _owningMonthCalendar.IsHandleCreated
+                ? _owningMonthCalendar.GetDisplayRange(visible)
+                : null;
+
+        internal override UiaCore.IRawElementProviderFragment? GetFocus() => _focusedCellAccessibleObject;
+
+        public override AccessibleObject? GetFocused() => _focusedCellAccessibleObject;
+
+        private unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated)
+            {
+                return default;
+            }
+
+            Point point = _owningMonthCalendar.PointToClient(new Point(xScreen, yScreen));
+            MCHITTESTINFO hitTestInfo = new()
+            {
+                cbSize = (uint)sizeof(MCHITTESTINFO),
+                pt = point
+            };
+
+            PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_HITTEST, 0, ref hitTestInfo);
+
+            return hitTestInfo;
+        }
+
+        internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
+            {
                 return null;
             }
 
-            internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
-
-            internal SelectionRange? GetDisplayRange(bool visible)
-                => _owningMonthCalendar.IsHandleCreated
-                    ? _owningMonthCalendar.GetDisplayRange(visible)
-                    : null;
-
-            internal override UiaCore.IRawElementProviderFragment? GetFocus() => _focusedCellAccessibleObject;
-
-            public override AccessibleObject? GetFocused() => _focusedCellAccessibleObject;
-
-            private unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
+            foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
             {
-                if (!_owningMonthCalendar.IsHandleCreated)
+                if (calendar.Row == row && calendar.Column == column)
                 {
-                    return default;
-                }
-
-                Point point = _owningMonthCalendar.PointToClient(new Point(xScreen, yScreen));
-                MCHITTESTINFO hitTestInfo = new()
-                {
-                    cbSize = (uint)sizeof(MCHITTESTINFO),
-                    pt = point
-                };
-
-                PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)PInvoke.MCM_HITTEST, 0, ref hitTestInfo);
-
-                return hitTestInfo;
-            }
-
-            internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
-            {
-                if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
-                {
-                    return null;
-                }
-
-                foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
-                {
-                    if (calendar.Row == row && calendar.Column == column)
-                    {
-                        return calendar;
-                    }
-                }
-
-                return null;
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.ControlTypePropertyId when
-                        _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
-                        => UiaCore.UIA.CalendarControlTypeId,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
-                    _ => base.GetPropertyValue(propertyID)
-                };
-
-            internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders() => null;
-
-            public override string Help
-            {
-                get
-                {
-                    string? help = base.Help;
-                    if (help is not null)
-                    {
-                        return help;
-                    }
-
-                    if (_owningMonthCalendar.GetType().BaseType is Type baseType)
-                    {
-                        return $"{_owningMonthCalendar.GetType().Name}({baseType.Name})";
-                    }
-
-                    return string.Empty;
+                    return calendar;
                 }
             }
 
-            internal bool IsEnabled => _owningMonthCalendar.Enabled;
+            return null;
+        }
 
-            internal bool IsHandleCreated => _owningMonthCalendar.IsHandleCreated;
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId switch
-                {
-                    UiaCore.UIA.GridPatternId => true,
-                    UiaCore.UIA.TablePatternId => true,
-                    UiaCore.UIA.ValuePatternId => true,
-                    _ => base.IsPatternSupported(patternId)
-                };
-
-            internal DateTime MinDate => _owningMonthCalendar.MinDate;
-            internal DateTime MaxDate => _owningMonthCalendar.MaxDate;
-
-            internal CalendarNextButtonAccessibleObject NextButtonAccessibleObject
-                => _nextButtonAccessibleObject ??= new CalendarNextButtonAccessibleObject(this);
-
-            private void OnMonthCalendarStateChanged(object? sender, EventArgs e)
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            => propertyID switch
             {
-                RebuildAccessibilityTree();
+                UiaCore.UIA.ControlTypePropertyId when
+                    _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
+                    => UiaCore.UIA.CalendarControlTypeId,
+                UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
+                _ => base.GetPropertyValue(propertyID)
+            };
+
+        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders() => null;
+
+        public override string Help
+        {
+            get
+            {
+                string? help = base.Help;
+                if (help is not null)
+                {
+                    return help;
+                }
+
+                if (_owningMonthCalendar.GetType().BaseType is Type baseType)
+                {
+                    return $"{_owningMonthCalendar.GetType().Name}({baseType.Name})";
+                }
+
+                return string.Empty;
+            }
+        }
+
+        internal bool IsEnabled => _owningMonthCalendar.Enabled;
+
+        internal bool IsHandleCreated => _owningMonthCalendar.IsHandleCreated;
+
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            => patternId switch
+            {
+                UiaCore.UIA.GridPatternId => true,
+                UiaCore.UIA.TablePatternId => true,
+                UiaCore.UIA.ValuePatternId => true,
+                _ => base.IsPatternSupported(patternId)
+            };
+
+        internal DateTime MinDate => _owningMonthCalendar.MinDate;
+        internal DateTime MaxDate => _owningMonthCalendar.MaxDate;
+
+        internal CalendarNextButtonAccessibleObject NextButtonAccessibleObject
+            => _nextButtonAccessibleObject ??= new CalendarNextButtonAccessibleObject(this);
+
+        private void OnMonthCalendarStateChanged(object? sender, EventArgs e)
+        {
+            RebuildAccessibilityTree();
+            FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+        }
+
+        internal CalendarPreviousButtonAccessibleObject PreviousButtonAccessibleObject
+            => _previousButtonAccessibleObject ??= new CalendarPreviousButtonAccessibleObject(this);
+
+        internal void RaiseAutomationEventForChild(UiaCore.UIA automationEventId)
+        {
+            if (!_owningMonthCalendar.IsHandleCreated)
+            {
+                return;
+            }
+
+            if (_calendarsAccessibleObjects is null)
+            {
+                // It means that there are no any accessibility listeners
+                // that should build the accessibility tree before.
+                // If we try to get the focused cell accessibility object
+                // the accessibility tree will be built even a user doesn't use any accessibility tool.
+                return;
+            }
+
+            // Update the focused cell and raise the focus event for it
+            _focusedCellAccessibleObject = null;
+            FocusedCell?.RaiseAutomationEvent(automationEventId);
+        }
+
+        private void RebuildAccessibilityTree()
+        {
+            if (!_owningMonthCalendar.IsHandleCreated || _calendarsAccessibleObjects is null)
+            {
+                return;
+            }
+
+            foreach (CalendarAccessibleObject calendar in _calendarsAccessibleObjects)
+            {
+                calendar.DisconnectChildren();
+                UiaCore.UiaDisconnectProvider(calendar);
+            }
+
+            _calendarsAccessibleObjects = null;
+
+            UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
+            _focusedCellAccessibleObject = null;
+
+            // Recreate the calendars child collection and check if it is correct
+            if (CalendarsAccessibleObjects!.Count > 0)
+            {
+                // Get the new focused cell accessible object and try to raise the focus event for it
                 FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
-
-            internal CalendarPreviousButtonAccessibleObject PreviousButtonAccessibleObject
-                => _previousButtonAccessibleObject ??= new CalendarPreviousButtonAccessibleObject(this);
-
-            internal void RaiseAutomationEventForChild(UiaCore.UIA automationEventId)
-            {
-                if (!_owningMonthCalendar.IsHandleCreated)
-                {
-                    return;
-                }
-
-                if (_calendarsAccessibleObjects is null)
-                {
-                    // It means that there are no any accessibility listeners
-                    // that should build the accessibility tree before.
-                    // If we try to get the focused cell accessibility object
-                    // the accessibility tree will be built even a user doesn't use any accessibility tool.
-                    return;
-                }
-
-                // Update the focused cell and raise the focus event for it
-                _focusedCellAccessibleObject = null;
-                FocusedCell?.RaiseAutomationEvent(automationEventId);
-            }
-
-            private void RebuildAccessibilityTree()
-            {
-                if (!_owningMonthCalendar.IsHandleCreated || _calendarsAccessibleObjects is null)
-                {
-                    return;
-                }
-
-                foreach (CalendarAccessibleObject calendar in _calendarsAccessibleObjects)
-                {
-                    calendar.DisconnectChildren();
-                    UiaCore.UiaDisconnectProvider(calendar);
-                }
-
-                _calendarsAccessibleObjects = null;
-
-                UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
-                _focusedCellAccessibleObject = null;
-
-                // Recreate the calendars child collection and check if it is correct
-                if (CalendarsAccessibleObjects!.Count > 0)
-                {
-                    // Get the new focused cell accessible object and try to raise the focus event for it
-                    FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-                }
-            }
-
-            public override AccessibleRole Role
-                => _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
-                    ? AccessibleRole.Table
-                    : _owningMonthCalendar.AccessibleRole;
-
-            internal override int RowCount
-                => ColumnCount > 0 && CalendarsAccessibleObjects is not null
-                    ? (int)Math.Ceiling((double)CalendarsAccessibleObjects.Count / ColumnCount)
-                    : 0;
-
-            internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
-
-            internal SelectionRange SelectionRange => _owningMonthCalendar.SelectionRange;
-
-            internal override void SetFocus()
-                => FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-
-            internal void SetSelectionRange(DateTime d1, DateTime d2)
-            {
-                if (_owningMonthCalendar.IsHandleCreated)
-                {
-                    _owningMonthCalendar.SetSelectionRange(d1, d2);
-                }
-            }
-
-            internal bool ShowToday => _owningMonthCalendar.ShowToday;
-
-            internal bool ShowWeekNumbers => _owningMonthCalendar.ShowWeekNumbers;
-
-            internal DateTime TodayDate => _owningMonthCalendar.TodayDate;
-
-            internal CalendarTodayLinkAccessibleObject TodayLinkAccessibleObject
-                => _todayLinkAccessibleObject ??= new CalendarTodayLinkAccessibleObject(this);
-
-            public override string? Value
-            {
-                get
-                {
-                    SelectionRange? range;
-
-                    switch (CalendarView)
-                    {
-                        case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH:
-                            range = _owningMonthCalendar.SelectionRange;
-
-                            return DateTime.Equals(range.Start.Date, range.End.Date)
-                                ? $"{range.Start:D}"
-                                : $"{range.Start:D} - {range.End:D}";
-                        case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR:
-                            return $"{_owningMonthCalendar.SelectionStart:y}";
-                        case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE:
-                            return $"{_owningMonthCalendar.SelectionStart:yyyy}";
-                        case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY:
-                            range = FocusedCell?.DateRange;
-                            if (range is null)
-                            {
-                                return string.Empty;
-                            }
-
-                            return $"{range.Start:yyyy} - {range.End:yyyy}";
-                        default:
-                            return base.Value;
-                    }
-                }
-            }
-
-            internal void UpdateDisplayRange() => _owningMonthCalendar.UpdateDisplayRange();
         }
+
+        public override AccessibleRole Role
+            => _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
+                ? AccessibleRole.Table
+                : _owningMonthCalendar.AccessibleRole;
+
+        internal override int RowCount
+            => ColumnCount > 0 && CalendarsAccessibleObjects is not null
+                ? (int)Math.Ceiling((double)CalendarsAccessibleObjects.Count / ColumnCount)
+                : 0;
+
+        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+
+        internal SelectionRange SelectionRange => _owningMonthCalendar.SelectionRange;
+
+        internal override void SetFocus()
+            => FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+
+        internal void SetSelectionRange(DateTime d1, DateTime d2)
+        {
+            if (_owningMonthCalendar.IsHandleCreated)
+            {
+                _owningMonthCalendar.SetSelectionRange(d1, d2);
+            }
+        }
+
+        internal bool ShowToday => _owningMonthCalendar.ShowToday;
+
+        internal bool ShowWeekNumbers => _owningMonthCalendar.ShowWeekNumbers;
+
+        internal DateTime TodayDate => _owningMonthCalendar.TodayDate;
+
+        internal CalendarTodayLinkAccessibleObject TodayLinkAccessibleObject
+            => _todayLinkAccessibleObject ??= new CalendarTodayLinkAccessibleObject(this);
+
+        public override string? Value
+        {
+            get
+            {
+                SelectionRange? range;
+
+                switch (CalendarView)
+                {
+                    case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH:
+                        range = _owningMonthCalendar.SelectionRange;
+
+                        return DateTime.Equals(range.Start.Date, range.End.Date)
+                            ? $"{range.Start:D}"
+                            : $"{range.Start:D} - {range.End:D}";
+                    case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR:
+                        return $"{_owningMonthCalendar.SelectionStart:y}";
+                    case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE:
+                        return $"{_owningMonthCalendar.SelectionStart:yyyy}";
+                    case MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY:
+                        range = FocusedCell?.DateRange;
+                        if (range is null)
+                        {
+                            return string.Empty;
+                        }
+
+                        return $"{range.Start:yyyy} - {range.End:yyyy}";
+                    default:
+                        return base.Value;
+                }
+            }
+        }
+
+        internal void UpdateDisplayRange() => _owningMonthCalendar.UpdateDisplayRange();
     }
 }

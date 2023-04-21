@@ -4,17 +4,16 @@
 
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App
-{
-    public partial class ContainerControls2 : Form
-    {
-        public ContainerControls2()
-        {
-            InitializeComponent();
-        }
+namespace Accessibility_Core_App;
 
-        private void ContainerControls2_Load(object sender, EventArgs e)
-        {
-        }
+public partial class ContainerControls2 : Form
+{
+    public ContainerControls2()
+    {
+        InitializeComponent();
+    }
+
+    private void ContainerControls2_Load(object sender, EventArgs e)
+    {
     }
 }

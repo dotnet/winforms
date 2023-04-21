@@ -4,69 +4,68 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripPanel
 {
-    public partial class ToolStripPanel
+    // The FeedbackRectangle happens to encapsulate a toolstripdropdown
+    // with a special region. The feedback rectangle exposes the minimum
+    // API so the underlying implementation can be replaced if necessary.
+    private partial class FeedbackRectangle : IDisposable
     {
-        // The FeedbackRectangle happens to encapsulate a toolstripdropdown
-        // with a special region. The feedback rectangle exposes the minimum
-        // API so the underlying implementation can be replaced if necessary.
-        private partial class FeedbackRectangle : IDisposable
+        private FeedbackDropDown? _dropDown;
+
+        public FeedbackRectangle(Rectangle bounds)
         {
-            private FeedbackDropDown? _dropDown;
+            _dropDown = new FeedbackDropDown(bounds);
+        }
 
-            public FeedbackRectangle(Rectangle bounds)
+        public bool Visible
+        {
+            get
             {
-                _dropDown = new FeedbackDropDown(bounds);
-            }
-
-            public bool Visible
-            {
-                get
+                if (_dropDown is not null && !_dropDown.IsDisposed)
                 {
-                    if (_dropDown is not null && !_dropDown.IsDisposed)
-                    {
-                        return _dropDown.Visible;
-                    }
-
-                    return false;
+                    return _dropDown.Visible;
                 }
-                set
+
+                return false;
+            }
+            set
+            {
+                if (_dropDown is not null && !_dropDown.IsDisposed)
                 {
-                    if (_dropDown is not null && !_dropDown.IsDisposed)
-                    {
-                        _dropDown.Visible = value;
-                    }
+                    _dropDown.Visible = value;
                 }
             }
+        }
 
-            public void Show(Point newLocation)
-            {
-                _dropDown?.Show(newLocation);
-            }
+        public void Show(Point newLocation)
+        {
+            _dropDown?.Show(newLocation);
+        }
 
-            public void Move(Point newLocation)
-            {
-                _dropDown?.MoveTo(newLocation);
-            }
+        public void Move(Point newLocation)
+        {
+            _dropDown?.MoveTo(newLocation);
+        }
 
-            protected void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                if (disposing)
+                if (_dropDown is not null)
                 {
-                    if (_dropDown is not null)
-                    {
-                        Visible = false;
-                        _dropDown.Dispose();
-                        _dropDown = null;
-                    }
+                    Visible = false;
+                    _dropDown.Dispose();
+                    _dropDown = null;
                 }
             }
+        }
 
-            public void Dispose()
-            {
-                Dispose(true);
-            }
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

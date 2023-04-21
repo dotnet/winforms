@@ -7,228 +7,227 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
 using Xunit.Abstractions;
 
-namespace System.Windows.Forms.UITests
+namespace System.Windows.Forms.UITests;
+
+public class AnchorLayoutTests : ControlTestBase
 {
-    public class AnchorLayoutTests : ControlTestBase
+    static AnchorStyles anchorAllDirection = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+
+    public AnchorLayoutTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
     {
-        static AnchorStyles anchorAllDirection = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+    }
 
-        public AnchorLayoutTests(ITestOutputHelper testOutputHelper)
-            : base(testOutputHelper)
-        {
-        }
+    [WinFormsTheory]
+    [InlineData(AnchorStyles.Top, 120, 30, 20, 30)]
+    [InlineData(AnchorStyles.Left, 20, 180, 20, 30)]
+    [InlineData(AnchorStyles.Right, 220, 180, 20, 30)]
+    [InlineData(AnchorStyles.Bottom, 120, 330, 20, 30)]
+    [InlineData(AnchorStyles.Top | AnchorStyles.Left, 20, 30, 20, 30)]
+    [InlineData(AnchorStyles.Top | AnchorStyles.Right, 220, 30, 20, 30)]
+    [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 120, 30, 20, 330)]
+    [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 180, 220, 30)]
+    [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
+    public void Control_ResizeAnchoredControls_ParentHanldeCreated_NewAnchorsApplied(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
+    {
+        LaunchFormAndVerify(anchors, expectedX, expectedY, expectedWidth, expectedHeight);
+    }
 
-        [WinFormsTheory]
-        [InlineData(AnchorStyles.Top, 120, 30, 20, 30)]
-        [InlineData(AnchorStyles.Left, 20, 180, 20, 30)]
-        [InlineData(AnchorStyles.Right, 220, 180, 20, 30)]
-        [InlineData(AnchorStyles.Bottom, 120, 330, 20, 30)]
-        [InlineData(AnchorStyles.Top | AnchorStyles.Left, 20, 30, 20, 30)]
-        [InlineData(AnchorStyles.Top | AnchorStyles.Right, 220, 30, 20, 30)]
-        [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 120, 30, 20, 330)]
-        [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 180, 220, 30)]
-        [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
-        public void Control_ResizeAnchoredControls_ParentHanldeCreated_NewAnchorsApplied(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
+    [WinFormsTheory]
+    [InlineData(AnchorStyles.Top, 120, 30, 20, 30)]
+    [InlineData(AnchorStyles.Left, 20, 180, 20, 30)]
+    [InlineData(AnchorStyles.Right, 220, 180, 20, 30)]
+    [InlineData(AnchorStyles.Bottom, 120, 330, 20, 30)]
+    [InlineData(AnchorStyles.Top | AnchorStyles.Left, 20, 30, 20, 30)]
+    [InlineData(AnchorStyles.Top | AnchorStyles.Right, 220, 30, 20, 30)]
+    [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 120, 30, 20, 330)]
+    [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 180, 220, 30)]
+    [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
+    public void Control_AnchorLayoutV2_ResizeAnchoredControls_ParentHanldeCreated_NewAnchorsApplied(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
+    {
+        int previousLayoutSwtch = SetAncorLayoutV2();
+
+        try
         {
             LaunchFormAndVerify(anchors, expectedX, expectedY, expectedWidth, expectedHeight);
         }
-
-        [WinFormsTheory]
-        [InlineData(AnchorStyles.Top, 120, 30, 20, 30)]
-        [InlineData(AnchorStyles.Left, 20, 180, 20, 30)]
-        [InlineData(AnchorStyles.Right, 220, 180, 20, 30)]
-        [InlineData(AnchorStyles.Bottom, 120, 330, 20, 30)]
-        [InlineData(AnchorStyles.Top | AnchorStyles.Left, 20, 30, 20, 30)]
-        [InlineData(AnchorStyles.Top | AnchorStyles.Right, 220, 30, 20, 30)]
-        [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 120, 30, 20, 330)]
-        [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 180, 220, 30)]
-        [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
-        public void Control_AnchorLayoutV2_ResizeAnchoredControls_ParentHanldeCreated_NewAnchorsApplied(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
+        finally
         {
-            int previousLayoutSwtch = SetAncorLayoutV2();
-
-            try
-            {
-                LaunchFormAndVerify(anchors, expectedX, expectedY, expectedWidth, expectedHeight);
-            }
-            finally
-            {
-                // Reset switch.
-                SetAnchorLayoutV2Switch(previousLayoutSwtch);
-            }
+            // Reset switch.
+            SetAnchorLayoutV2Switch(previousLayoutSwtch);
         }
+    }
 
-        [WinFormsFact]
-        public void Control_NotParented_AnchorsNotComputed()
+    [WinFormsFact]
+    public void Control_NotParented_AnchorsNotComputed()
+    {
+        int previousSwitchValue = SetAncorLayoutV2();
+        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+
+        try
         {
-            int previousSwitchValue = SetAncorLayoutV2();
-            (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
-
-            try
-            {
-                DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.Null(anchorInfo);
-
-                // Unparent button and resume layout.
-                form.Controls.Remove(button);
-                form.ResumeLayout(performLayout: false);
-
-                anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.Null(anchorInfo);
-            }
-            finally
-            {
-                // Reset switch.
-                SetAnchorLayoutV2Switch(previousSwitchValue);
-                Dispose(form, button);
-            }
-        }
-
-        [WinFormsFact]
-        public void Control_SuspendedLayout_AnchorsNotComputed()
-        {
-            int previousSwitchValue = SetAncorLayoutV2();
-            (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
-
-            try
-            {
-                DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.Null(anchorInfo);
-
-                form.Controls.Add(button);
-                anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.Null(anchorInfo);
-            }
-            finally
-            {
-                // Reset switch.
-                SetAnchorLayoutV2Switch(previousSwitchValue);
-                Dispose(form, button);
-            }
-        }
-
-        [WinFormsFact]
-        public void Control_ResumedLayout_AnchorsComputed()
-        {
-            int previousSwitchValue = SetAncorLayoutV2();
-            (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
-
-            try
-            {
-                DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.Null(anchorInfo);
-
-                form.Controls.Add(button);
-                anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.Null(anchorInfo);
-
-                form.ResumeLayout(performLayout: false);
-                anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.NotNull(anchorInfo);
-            }
-            finally
-            {
-                // Reset switch.
-                SetAnchorLayoutV2Switch(previousSwitchValue);
-                Dispose(form, button);
-            }
-        }
-
-        [WinFormsFact]
-        public void ConfigSwitch_Disabled_SuspendedLayout_AnchorsComputed()
-        {
-            int previousSwitchValue = SetAncorLayoutV1();
-            (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
-
-            try
-            {
-                form.Controls.Add(button);
-
-                DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
-                Assert.NotNull(anchorInfo);
-            }
-            finally
-            {
-                // Reset switch.
-                SetAnchorLayoutV2Switch(previousSwitchValue);
-                Dispose(form, button);
-            }
-        }
-
-        private static void LaunchFormAndVerify(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
-        {
-            (Form form, Button button) = GetFormWithAnchoredButton(anchors);
-            Rectangle newButtonBounds = button.Bounds;
-            try
-            {
-                form.ResumeLayout(true);
-                form.Controls.Add(button);
-                form.Shown += OnFormShown;
-                form.ShowDialog();
-
-                Assert.Equal(expectedX, newButtonBounds.X);
-                Assert.Equal(expectedY, newButtonBounds.Y);
-                Assert.Equal(expectedWidth, newButtonBounds.Width);
-                Assert.Equal(expectedHeight, newButtonBounds.Height);
-            }
-            finally
-            {
-                Dispose(form, button);
-            }
-
-            return;
-
-            void OnFormShown(object? sender, EventArgs e)
-            {
-                // Resize the form to compute button anchors.
-                form.Size = new Size(400, 600);
-                newButtonBounds = button.Bounds;
-                form.Close();
-            }
-        }
-
-        private static (Form, Button) GetFormWithAnchoredButton(AnchorStyles buttonAnchors)
-        {
-            Form form = new()
-            {
-                Size = new Size(200, 300)
-            };
-
-            form.SuspendLayout();
-            Button button = new()
-            {
-                Location = new Point(20, 30),
-                Size = new Size(20, 30),
-                Anchor = buttonAnchors
-            };
-
             DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
             Assert.Null(anchorInfo);
 
-            return (form, button);
-        }
+            // Unparent button and resume layout.
+            form.Controls.Remove(button);
+            form.ResumeLayout(performLayout: false);
 
-        private static int SetAnchorLayoutV2Switch(int value)
+            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.Null(anchorInfo);
+        }
+        finally
         {
-            // TargetFramework on the testhost.exe is NetCoreApp2.1. AppContext.TargetFrameworkName return this value
-            // while running unit tests. To avoid using this invalid target framework for unit tests, we are
-            // explicitly setting and unsetting the switch.
-            // Switch value has 3 states: 0 - unknown, 1 - true, -1 - false
-            dynamic localAppContextSwitches = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
-            int previousSwitchValue = localAppContextSwitches.s_anchorLayoutV2;
-            localAppContextSwitches.s_anchorLayoutV2 = value;
-
-            return previousSwitchValue;
+            // Reset switch.
+            SetAnchorLayoutV2Switch(previousSwitchValue);
+            Dispose(form, button);
         }
+    }
 
-        private static int SetAncorLayoutV2() => SetAnchorLayoutV2Switch(value: 1);
+    [WinFormsFact]
+    public void Control_SuspendedLayout_AnchorsNotComputed()
+    {
+        int previousSwitchValue = SetAncorLayoutV2();
+        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
 
-        private static int SetAncorLayoutV1() => SetAnchorLayoutV2Switch(value: -1);
-
-        private static void Dispose(Form form, Button button)
+        try
         {
-            button.Dispose();
-            form.Dispose();
+            DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.Null(anchorInfo);
+
+            form.Controls.Add(button);
+            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.Null(anchorInfo);
         }
+        finally
+        {
+            // Reset switch.
+            SetAnchorLayoutV2Switch(previousSwitchValue);
+            Dispose(form, button);
+        }
+    }
+
+    [WinFormsFact]
+    public void Control_ResumedLayout_AnchorsComputed()
+    {
+        int previousSwitchValue = SetAncorLayoutV2();
+        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+
+        try
+        {
+            DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.Null(anchorInfo);
+
+            form.Controls.Add(button);
+            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.Null(anchorInfo);
+
+            form.ResumeLayout(performLayout: false);
+            anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.NotNull(anchorInfo);
+        }
+        finally
+        {
+            // Reset switch.
+            SetAnchorLayoutV2Switch(previousSwitchValue);
+            Dispose(form, button);
+        }
+    }
+
+    [WinFormsFact]
+    public void ConfigSwitch_Disabled_SuspendedLayout_AnchorsComputed()
+    {
+        int previousSwitchValue = SetAncorLayoutV1();
+        (Form form, Button button) = GetFormWithAnchoredButton(anchorAllDirection);
+
+        try
+        {
+            form.Controls.Add(button);
+
+            DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.NotNull(anchorInfo);
+        }
+        finally
+        {
+            // Reset switch.
+            SetAnchorLayoutV2Switch(previousSwitchValue);
+            Dispose(form, button);
+        }
+    }
+
+    private static void LaunchFormAndVerify(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
+    {
+        (Form form, Button button) = GetFormWithAnchoredButton(anchors);
+        Rectangle newButtonBounds = button.Bounds;
+        try
+        {
+            form.ResumeLayout(true);
+            form.Controls.Add(button);
+            form.Shown += OnFormShown;
+            form.ShowDialog();
+
+            Assert.Equal(expectedX, newButtonBounds.X);
+            Assert.Equal(expectedY, newButtonBounds.Y);
+            Assert.Equal(expectedWidth, newButtonBounds.Width);
+            Assert.Equal(expectedHeight, newButtonBounds.Height);
+        }
+        finally
+        {
+            Dispose(form, button);
+        }
+
+        return;
+
+        void OnFormShown(object? sender, EventArgs e)
+        {
+            // Resize the form to compute button anchors.
+            form.Size = new Size(400, 600);
+            newButtonBounds = button.Bounds;
+            form.Close();
+        }
+    }
+
+    private static (Form, Button) GetFormWithAnchoredButton(AnchorStyles buttonAnchors)
+    {
+        Form form = new()
+        {
+            Size = new Size(200, 300)
+        };
+
+        form.SuspendLayout();
+        Button button = new()
+        {
+            Location = new Point(20, 30),
+            Size = new Size(20, 30),
+            Anchor = buttonAnchors
+        };
+
+        DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+        Assert.Null(anchorInfo);
+
+        return (form, button);
+    }
+
+    private static int SetAnchorLayoutV2Switch(int value)
+    {
+        // TargetFramework on the testhost.exe is NetCoreApp2.1. AppContext.TargetFrameworkName return this value
+        // while running unit tests. To avoid using this invalid target framework for unit tests, we are
+        // explicitly setting and unsetting the switch.
+        // Switch value has 3 states: 0 - unknown, 1 - true, -1 - false
+        dynamic localAppContextSwitches = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
+        int previousSwitchValue = localAppContextSwitches.s_anchorLayoutV2;
+        localAppContextSwitches.s_anchorLayoutV2 = value;
+
+        return previousSwitchValue;
+    }
+
+    private static int SetAncorLayoutV2() => SetAnchorLayoutV2Switch(value: 1);
+
+    private static int SetAncorLayoutV1() => SetAnchorLayoutV2Switch(value: -1);
+
+    private static void Dispose(Form form, Button button)
+    {
+        button.Dispose();
+        form.Dispose();
     }
 }

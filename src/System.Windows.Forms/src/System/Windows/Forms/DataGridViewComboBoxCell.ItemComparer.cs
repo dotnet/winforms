@@ -4,32 +4,31 @@
 
 using System.Globalization;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewComboBoxCell : DataGridViewCell
 {
-    public partial class DataGridViewComboBoxCell : DataGridViewCell
+    private sealed class ItemComparer : IComparer<object?>
     {
-        private sealed class ItemComparer : IComparer<object?>
+        private readonly DataGridViewComboBoxCell dataGridViewComboBoxCell;
+
+        public ItemComparer(DataGridViewComboBoxCell dataGridViewComboBoxCell)
         {
-            private readonly DataGridViewComboBoxCell dataGridViewComboBoxCell;
+            this.dataGridViewComboBoxCell = dataGridViewComboBoxCell;
+        }
 
-            public ItemComparer(DataGridViewComboBoxCell dataGridViewComboBoxCell)
+        public int Compare(object? item1, object? item2)
+        {
+            if (IComparerHelpers.CompareReturnIfNull(item1, item2, out int? returnValue))
             {
-                this.dataGridViewComboBoxCell = dataGridViewComboBoxCell;
+                return (int)returnValue;
             }
 
-            public int Compare(object? item1, object? item2)
-            {
-                if (IComparerHelpers.CompareReturnIfNull(item1, item2, out int? returnValue))
-                {
-                    return (int)returnValue;
-                }
+            string itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
+            string itemName2 = dataGridViewComboBoxCell.GetItemDisplayText(item2);
 
-                string itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
-                string itemName2 = dataGridViewComboBoxCell.GetItemDisplayText(item2);
-
-                CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
-                return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
-            }
+            CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
+            return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
         }
     }
 }

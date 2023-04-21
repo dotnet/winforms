@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ListView_SelectedListViewItemCollectionTests
 {
-    public class ListView_SelectedListViewItemCollectionTests
+    [WinFormsFact]
+    public void SelectedListViewItemCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException()
     {
-        [WinFormsFact]
-        public void SelectedListViewItemCollection_Ctor_OwnerIsNull_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>("owner", () => { new ListView.SelectedListViewItemCollection(null); });
-        }
+        Assert.Throws<ArgumentNullException>("owner", () => { new ListView.SelectedListViewItemCollection(null); });
     }
 }

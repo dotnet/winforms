@@ -2,42 +2,41 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ComboBox_ChildAccessibleObjectTests
 {
-    public class ComboBox_ChildAccessibleObjectTests
+    [WinFormsFact]
+    public void ChildAccessibleObject_Ctor_NullOwner_ThrowsArgumentNullException()
     {
-        [WinFormsFact]
-        public void ChildAccessibleObject_Ctor_NullOwner_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ComboBox.ChildAccessibleObject(null, IntPtr.Zero));
-        }
+        Assert.Throws<ArgumentNullException>(() => new ComboBox.ChildAccessibleObject(null, IntPtr.Zero));
+    }
 
-        [WinFormsFact]
-        public void ChildAccessibleObject_Ctor_Default()
-        {
-            using var control = new ComboBox();
-            control.CreateControl();
+    [WinFormsFact]
+    public void ChildAccessibleObject_Ctor_Default()
+    {
+        using var control = new ComboBox();
+        control.CreateControl();
 
-            var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
+        var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
 
-            Assert.NotNull(accessibleObject.TestAccessor().Dynamic._owner);
-            Assert.True(control.IsHandleCreated);
-        }
+        Assert.NotNull(accessibleObject.TestAccessor().Dynamic._owner);
+        Assert.True(control.IsHandleCreated);
+    }
 
-        [WinFormsTheory]
-        [InlineData("Some string for test")]
-        [InlineData("")]
-        [InlineData(null)]
-        public void ChildAccessibleObject_Name_Default(string testName)
-        {
-            using var control = new ComboBox();
-            control.AccessibilityObject.Name = testName;
-            control.CreateControl();
+    [WinFormsTheory]
+    [InlineData("Some string for test")]
+    [InlineData("")]
+    [InlineData(null)]
+    public void ChildAccessibleObject_Name_Default(string testName)
+    {
+        using var control = new ComboBox();
+        control.AccessibilityObject.Name = testName;
+        control.CreateControl();
 
-            var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
+        var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
 
-            Assert.Equal(testName, accessibleObject.Name);
-            Assert.True(control.IsHandleCreated);
-        }
+        Assert.Equal(testName, accessibleObject.Name);
+        Assert.True(control.IsHandleCreated);
     }
 }

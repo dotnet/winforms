@@ -2,73 +2,72 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Form
 {
-    public partial class Form
+    /// <summary>
+    ///  Represents a collection of controls on the form.
+    /// </summary>
+    public new class ControlCollection : Control.ControlCollection
     {
+        private readonly Form _owner;
+
+        /*C#r:protected*/
+
         /// <summary>
-        ///  Represents a collection of controls on the form.
+        ///  Initializes a new instance of the ControlCollection class.
         /// </summary>
-        public new class ControlCollection : Control.ControlCollection
+        public ControlCollection(Form owner)
+            : base(owner)
         {
-            private readonly Form _owner;
+            _owner = owner;
+        }
 
-            /*C#r:protected*/
-
-            /// <summary>
-            ///  Initializes a new instance of the ControlCollection class.
-            /// </summary>
-            public ControlCollection(Form owner)
-                : base(owner)
+        /// <summary>
+        ///  Adds a control
+        ///  to the form.
+        /// </summary>
+        public override void Add(Control? value)
+        {
+            if (value is MdiClient && _owner._ctlClient is null)
             {
-                _owner = owner;
-            }
-
-            /// <summary>
-            ///  Adds a control
-            ///  to the form.
-            /// </summary>
-            public override void Add(Control? value)
-            {
-                if (value is MdiClient && _owner._ctlClient is null)
+                if (!_owner.TopLevel && !_owner.DesignMode)
                 {
-                    if (!_owner.TopLevel && !_owner.DesignMode)
-                    {
-                        throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
-                    }
-
-                    _owner.AutoScroll = false;
-                    if (_owner.IsMdiChild)
-                    {
-                        throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
-                    }
-
-                    _owner._ctlClient = (MdiClient)value;
+                    throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
                 }
 
-                // make sure we don't add a form that has a valid mdi parent
-                if (value is Form && ((Form)value).MdiParentInternal is not null)
+                _owner.AutoScroll = false;
+                if (_owner.IsMdiChild)
                 {
-                    throw new ArgumentException(SR.FormMDIParentCannotAdd, nameof(value));
+                    throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
                 }
 
-                base.Add(value);
-
-                _owner._ctlClient?.SendToBack();
+                _owner._ctlClient = (MdiClient)value;
             }
 
-            /// <summary>
-            ///  Removes a control from the form.
-            /// </summary>
-            public override void Remove(Control? value)
+            // make sure we don't add a form that has a valid mdi parent
+            if (value is Form && ((Form)value).MdiParentInternal is not null)
             {
-                if (value == _owner._ctlClient)
-                {
-                    _owner._ctlClient = null;
-                }
-
-                base.Remove(value);
+                throw new ArgumentException(SR.FormMDIParentCannotAdd, nameof(value));
             }
+
+            base.Add(value);
+
+            _owner._ctlClient?.SendToBack();
+        }
+
+        /// <summary>
+        ///  Removes a control from the form.
+        /// </summary>
+        public override void Remove(Control? value)
+        {
+            if (value == _owner._ctlClient)
+            {
+                _owner._ctlClient = null;
+            }
+
+            base.Remove(value);
         }
     }
 }

@@ -5,114 +5,113 @@
 using System.Configuration;
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  A settings class used by the ToolStripManager to save toolstrip settings.
+/// </summary>
+internal partial class ToolStripSettings : ApplicationSettingsBase
 {
-    /// <summary>
-    ///  A settings class used by the ToolStripManager to save toolstrip settings.
-    /// </summary>
-    internal partial class ToolStripSettings : ApplicationSettingsBase
+    internal ToolStripSettings(string settingsKey) : base(settingsKey) { }
+
+    [UserScopedSetting]
+    [DefaultSettingValue("true")]
+    public bool IsDefault
     {
-        internal ToolStripSettings(string settingsKey) : base(settingsKey) { }
-
-        [UserScopedSetting]
-        [DefaultSettingValue("true")]
-        public bool IsDefault
+        get
         {
-            get
-            {
-                return (bool)this[nameof(IsDefault)];
-            }
-            set
-            {
-                this[nameof(IsDefault)] = value;
-            }
+            return (bool)this[nameof(IsDefault)];
         }
-
-        [UserScopedSetting]
-        public string? ItemOrder
+        set
         {
-            get
-            {
-                return this[nameof(ItemOrder)] as string;
-            }
-            set
-            {
-                this[nameof(ItemOrder)] = value;
-            }
+            this[nameof(IsDefault)] = value;
         }
+    }
 
-        [UserScopedSetting]
-        public string? Name
+    [UserScopedSetting]
+    public string? ItemOrder
+    {
+        get
         {
-            get
-            {
-                return this[nameof(Name)] as string;
-            }
-            set
-            {
-                this[nameof(Name)] = value;
-            }
+            return this[nameof(ItemOrder)] as string;
         }
+        set
+        {
+            this[nameof(ItemOrder)] = value;
+        }
+    }
 
-        [UserScopedSetting]
-        [DefaultSettingValue("0,0")]
-        public Point Location
+    [UserScopedSetting]
+    public string? Name
+    {
+        get
         {
-            get
-            {
-                return (Point)this[nameof(Location)];
-            }
-            set
-            {
-                this[nameof(Location)] = value;
-            }
+            return this[nameof(Name)] as string;
         }
+        set
+        {
+            this[nameof(Name)] = value;
+        }
+    }
 
-        [UserScopedSetting]
-        [DefaultSettingValue("0,0")]
-        public Size Size
+    [UserScopedSetting]
+    [DefaultSettingValue("0,0")]
+    public Point Location
+    {
+        get
         {
-            get
-            {
-                return (Size)this[nameof(Size)];
-            }
-            set
-            {
-                this[nameof(Size)] = value;
-            }
+            return (Point)this[nameof(Location)];
         }
+        set
+        {
+            this[nameof(Location)] = value;
+        }
+    }
 
-        [UserScopedSetting]
-        public string? ToolStripPanelName
+    [UserScopedSetting]
+    [DefaultSettingValue("0,0")]
+    public Size Size
+    {
+        get
         {
-            get
-            {
-                return this[nameof(ToolStripPanelName)] as string;
-            }
-            set
-            {
-                this[nameof(ToolStripPanelName)] = value;
-            }
+            return (Size)this[nameof(Size)];
         }
+        set
+        {
+            this[nameof(Size)] = value;
+        }
+    }
 
-        [UserScopedSetting]
-        [DefaultSettingValue("true")]
-        public bool Visible
+    [UserScopedSetting]
+    public string? ToolStripPanelName
+    {
+        get
         {
-            get
-            {
-                return (bool)this[nameof(Visible)];
-            }
-            set
-            {
-                this[nameof(Visible)] = value;
-            }
+            return this[nameof(ToolStripPanelName)] as string;
         }
+        set
+        {
+            this[nameof(ToolStripPanelName)] = value;
+        }
+    }
 
-        public override void Save()
+    [UserScopedSetting]
+    [DefaultSettingValue("true")]
+    public bool Visible
+    {
+        get
         {
-            IsDefault = false;
-            base.Save();
+            return (bool)this[nameof(Visible)];
         }
+        set
+        {
+            this[nameof(Visible)] = value;
+        }
+    }
+
+    public override void Save()
+    {
+        IsDefault = false;
+        base.Save();
     }
 }

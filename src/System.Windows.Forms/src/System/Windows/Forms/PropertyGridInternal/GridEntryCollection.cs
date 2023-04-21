@@ -2,35 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+internal sealed class GridEntryCollection : NonNullCollection<GridEntry>, IDisposable
 {
-    internal sealed class GridEntryCollection : NonNullCollection<GridEntry>, IDisposable
+    private readonly bool _disposeItems;
+
+    public GridEntryCollection(IEnumerable<GridEntry>? items = null, bool disposeItems = true)
+        : base(items ?? Enumerable.Empty<GridEntry>())
     {
-        private readonly bool _disposeItems;
+        _disposeItems = disposeItems;
+    }
 
-        public GridEntryCollection(IEnumerable<GridEntry>? items = null, bool disposeItems = true)
-            : base(items ?? Enumerable.Empty<GridEntry>())
-        {
-            _disposeItems = disposeItems;
-        }
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        public void Dispose()
+    private void Dispose(bool disposing)
+    {
+        if (disposing && _disposeItems)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing && _disposeItems)
+            foreach (GridEntry entry in this)
             {
-                foreach (GridEntry entry in this)
-                {
-                    entry.Dispose();
-                }
-
-                Clear();
+                entry.Dispose();
             }
+
+            Clear();
         }
     }
 }

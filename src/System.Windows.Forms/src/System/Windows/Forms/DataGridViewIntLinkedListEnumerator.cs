@@ -4,53 +4,52 @@
 
 using System.Collections;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Represents an enumerator of elements in a <see cref="DataGridViewIntLinkedList"/>  linked list.
+/// </summary>
+internal class DataGridViewIntLinkedListEnumerator : IEnumerator
 {
-    /// <summary>
-    ///  Represents an enumerator of elements in a <see cref="DataGridViewIntLinkedList"/>  linked list.
-    /// </summary>
-    internal class DataGridViewIntLinkedListEnumerator : IEnumerator
+    private readonly DataGridViewIntLinkedListElement _headElement;
+    private DataGridViewIntLinkedListElement? _current;
+    private bool _reset;
+
+    public DataGridViewIntLinkedListEnumerator(DataGridViewIntLinkedListElement headElement)
     {
-        private readonly DataGridViewIntLinkedListElement _headElement;
-        private DataGridViewIntLinkedListElement? _current;
-        private bool _reset;
+        _headElement = headElement;
+        _reset = true;
+    }
 
-        public DataGridViewIntLinkedListEnumerator(DataGridViewIntLinkedListElement headElement)
+    object IEnumerator.Current
+    {
+        get
         {
-            _headElement = headElement;
-            _reset = true;
+            Debug.Assert(_current is not null); // Since this is for internal use only.
+            return _current.Int;
+        }
+    }
+
+    bool IEnumerator.MoveNext()
+    {
+        if (_reset)
+        {
+            Debug.Assert(_current is null);
+            _current = _headElement;
+            _reset = false;
+        }
+        else
+        {
+            Debug.Assert(_current is not null); // Since this is for internal use only.
+            _current = _current.Next;
         }
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                Debug.Assert(_current is not null); // Since this is for internal use only.
-                return _current.Int;
-            }
-        }
+        return (_current is not null);
+    }
 
-        bool IEnumerator.MoveNext()
-        {
-            if (_reset)
-            {
-                Debug.Assert(_current is null);
-                _current = _headElement;
-                _reset = false;
-            }
-            else
-            {
-                Debug.Assert(_current is not null); // Since this is for internal use only.
-                _current = _current.Next;
-            }
-
-            return (_current is not null);
-        }
-
-        void IEnumerator.Reset()
-        {
-            _reset = true;
-            _current = null;
-        }
+    void IEnumerator.Reset()
+    {
+        _reset = true;
+        _current = null;
     }
 }

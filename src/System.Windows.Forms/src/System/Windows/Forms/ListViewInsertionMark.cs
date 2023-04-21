@@ -6,142 +6,141 @@ using System.Drawing;
 using static Interop;
 using static Interop.ComCtl32;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Encapsulates insertion-mark information
+/// </summary>
+public sealed class ListViewInsertionMark
 {
-    /// <summary>
-    ///  Encapsulates insertion-mark information
-    /// </summary>
-    public sealed class ListViewInsertionMark
+    private readonly ListView _listView;
+
+    private int _index;
+    private Color _color = Color.Empty;
+    private bool _appearsAfterItem;
+
+    internal ListViewInsertionMark(ListView listView)
     {
-        private readonly ListView _listView;
+        _listView = listView;
+    }
 
-        private int _index;
-        private Color _color = Color.Empty;
-        private bool _appearsAfterItem;
-
-        internal ListViewInsertionMark(ListView listView)
+    /// <summary>
+    ///  Specifies whether the insertion mark appears
+    ///  after the item - otherwise it appears
+    ///  before the item (the default).
+    /// </summary>
+    public bool AppearsAfterItem
+    {
+        get
         {
-            _listView = listView;
+            return _appearsAfterItem;
         }
-
-        /// <summary>
-        ///  Specifies whether the insertion mark appears
-        ///  after the item - otherwise it appears
-        ///  before the item (the default).
-        /// </summary>
-        public bool AppearsAfterItem
+        set
         {
-            get
+            if (_appearsAfterItem != value)
             {
-                return _appearsAfterItem;
-            }
-            set
-            {
-                if (_appearsAfterItem != value)
-                {
-                    _appearsAfterItem = value;
+                _appearsAfterItem = value;
 
-                    if (_listView.IsHandleCreated)
-                    {
-                        UpdateListView();
-                    }
+                if (_listView.IsHandleCreated)
+                {
+                    UpdateListView();
                 }
             }
         }
+    }
 
-        /// <summary>
-        ///  Returns bounds of the insertion-mark.
-        /// </summary>
-        public Rectangle Bounds
+    /// <summary>
+    ///  Returns bounds of the insertion-mark.
+    /// </summary>
+    public Rectangle Bounds
+    {
+        get
         {
-            get
-            {
-                var rect = default(RECT);
-                PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref rect);
-                return rect;
-            }
+            var rect = default(RECT);
+            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref rect);
+            return rect;
         }
+    }
 
-        /// <summary>
-        ///  The color of the insertion-mark.
-        /// </summary>
-        public Color Color
+    /// <summary>
+    ///  The color of the insertion-mark.
+    /// </summary>
+    public Color Color
+    {
+        get
         {
-            get
+            if (_color.IsEmpty)
             {
-                if (_color.IsEmpty)
-                {
-                    _color = new COLORREF((uint)PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETINSERTMARKCOLOR));
-                }
+                _color = new COLORREF((uint)PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETINSERTMARKCOLOR));
+            }
 
-                return _color;
-            }
-            set
-            {
-                if (_color != value)
-                {
-                    _color = value;
-                    if (_listView.IsHandleCreated)
-                    {
-                        PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
-                    }
-                }
-            }
+            return _color;
         }
-
-        /// <summary>
-        ///  Item next to which the insertion-mark appears.
-        /// </summary>
-        public int Index
+        set
         {
-            get
+            if (_color != value)
             {
-                return _index;
-            }
-            set
-            {
-                if (_index != value)
+                _color = value;
+                if (_listView.IsHandleCreated)
                 {
-                    _index = value;
-                    if (_listView.IsHandleCreated)
-                    {
-                        UpdateListView();
-                    }
+                    PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
                 }
             }
         }
+    }
 
-        /// <summary>
-        ///  Performs a hit-test at the specified insertion point and returns the closest item.
-        /// </summary>
-        public unsafe int NearestIndex(Point pt)
+    /// <summary>
+    ///  Item next to which the insertion-mark appears.
+    /// </summary>
+    public int Index
+    {
+        get
         {
-            var lvInsertMark = new LVINSERTMARK
-            {
-                cbSize = (uint)sizeof(LVINSERTMARK)
-            };
-
-            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_INSERTMARKHITTEST, (WPARAM)(&pt), ref lvInsertMark);
-
-            return lvInsertMark.iItem;
+            return _index;
         }
-
-        internal unsafe void UpdateListView()
+        set
         {
-            Debug.Assert(_listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-            var lvInsertMark = new LVINSERTMARK
+            if (_index != value)
             {
-                cbSize = (uint)sizeof(LVINSERTMARK),
-                dwFlags = _appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
-                iItem = _index
-            };
-
-            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARK, 0, ref lvInsertMark);
-
-            if (!_color.IsEmpty)
-            {
-                PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
+                _index = value;
+                if (_listView.IsHandleCreated)
+                {
+                    UpdateListView();
+                }
             }
+        }
+    }
+
+    /// <summary>
+    ///  Performs a hit-test at the specified insertion point and returns the closest item.
+    /// </summary>
+    public unsafe int NearestIndex(Point pt)
+    {
+        var lvInsertMark = new LVINSERTMARK
+        {
+            cbSize = (uint)sizeof(LVINSERTMARK)
+        };
+
+        PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_INSERTMARKHITTEST, (WPARAM)(&pt), ref lvInsertMark);
+
+        return lvInsertMark.iItem;
+    }
+
+    internal unsafe void UpdateListView()
+    {
+        Debug.Assert(_listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
+        var lvInsertMark = new LVINSERTMARK
+        {
+            cbSize = (uint)sizeof(LVINSERTMARK),
+            dwFlags = _appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
+            iItem = _index
+        };
+
+        PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARK, 0, ref lvInsertMark);
+
+        if (!_color.IsEmpty)
+        {
+            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
         }
     }
 }

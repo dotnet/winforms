@@ -6,138 +6,137 @@
 
 using System.Collections;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewRowCollection
 {
-    public partial class DataGridViewRowCollection
+    private partial class RowComparer
     {
-        private partial class RowComparer
+        private readonly DataGridView dataGridView;
+        private readonly DataGridViewRowCollection dataGridViewRows;
+        private readonly DataGridViewColumn dataGridViewSortedColumn;
+        private readonly int sortedColumnIndex;
+        private readonly IComparer customComparer;
+        private readonly bool ascending;
+        private static readonly ComparedObjectMax max = new ComparedObjectMax();
+
+        public RowComparer(DataGridViewRowCollection dataGridViewRows, IComparer customComparer, bool ascending)
         {
-            private readonly DataGridView dataGridView;
-            private readonly DataGridViewRowCollection dataGridViewRows;
-            private readonly DataGridViewColumn dataGridViewSortedColumn;
-            private readonly int sortedColumnIndex;
-            private readonly IComparer customComparer;
-            private readonly bool ascending;
-            private static readonly ComparedObjectMax max = new ComparedObjectMax();
-
-            public RowComparer(DataGridViewRowCollection dataGridViewRows, IComparer customComparer, bool ascending)
+            dataGridView = dataGridViewRows.DataGridView;
+            this.dataGridViewRows = dataGridViewRows;
+            dataGridViewSortedColumn = dataGridView.SortedColumn;
+            if (dataGridViewSortedColumn is null)
             {
-                dataGridView = dataGridViewRows.DataGridView;
-                this.dataGridViewRows = dataGridViewRows;
-                dataGridViewSortedColumn = dataGridView.SortedColumn;
-                if (dataGridViewSortedColumn is null)
-                {
-                    Debug.Assert(customComparer is not null);
-                    sortedColumnIndex = -1;
-                }
-                else
-                {
-                    sortedColumnIndex = dataGridViewSortedColumn.Index;
-                }
-
-                this.customComparer = customComparer;
-                this.ascending = ascending;
+                Debug.Assert(customComparer is not null);
+                sortedColumnIndex = -1;
+            }
+            else
+            {
+                sortedColumnIndex = dataGridViewSortedColumn.Index;
             }
 
-            internal object GetComparedObject(int rowIndex)
-            {
-                if (dataGridView.NewRowIndex != -1)
-                {
-                    Debug.Assert(dataGridView.AllowUserToAddRowsInternal);
-                    if (rowIndex == dataGridView.NewRowIndex)
-                    {
-                        return max;
-                    }
-                }
+            this.customComparer = customComparer;
+            this.ascending = ascending;
+        }
 
-                if (customComparer is null)
+        internal object GetComparedObject(int rowIndex)
+        {
+            if (dataGridView.NewRowIndex != -1)
+            {
+                Debug.Assert(dataGridView.AllowUserToAddRowsInternal);
+                if (rowIndex == dataGridView.NewRowIndex)
                 {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    Debug.Assert(dataGridViewRow is not null);
-                    Debug.Assert(sortedColumnIndex >= 0);
-                    return dataGridViewRow.Cells[sortedColumnIndex].GetValueInternal(rowIndex);
-                }
-                else
-                {
-                    return dataGridViewRows[rowIndex]; // Unsharing compared rows!
+                    return max;
                 }
             }
 
-            internal int CompareObjects(object value1, object value2, int rowIndex1, int rowIndex2)
+            if (customComparer is null)
             {
-                if (value1 is ComparedObjectMax)
-                {
-                    return 1;
-                }
-                else if (value2 is ComparedObjectMax)
-                {
-                    return -1;
-                }
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                Debug.Assert(dataGridViewRow is not null);
+                Debug.Assert(sortedColumnIndex >= 0);
+                return dataGridViewRow.Cells[sortedColumnIndex].GetValueInternal(rowIndex);
+            }
+            else
+            {
+                return dataGridViewRows[rowIndex]; // Unsharing compared rows!
+            }
+        }
 
-                int result = 0;
-                if (customComparer is null)
+        internal int CompareObjects(object value1, object value2, int rowIndex1, int rowIndex2)
+        {
+            if (value1 is ComparedObjectMax)
+            {
+                return 1;
+            }
+            else if (value2 is ComparedObjectMax)
+            {
+                return -1;
+            }
+
+            int result = 0;
+            if (customComparer is null)
+            {
+                if (!dataGridView.OnSortCompare(dataGridViewSortedColumn, value1, value2, rowIndex1, rowIndex2, out result))
                 {
-                    if (!dataGridView.OnSortCompare(dataGridViewSortedColumn, value1, value2, rowIndex1, rowIndex2, out result))
+                    if (!(value1 is IComparable) && !(value2 is IComparable))
                     {
-                        if (!(value1 is IComparable) && !(value2 is IComparable))
+                        if (value1 is null)
                         {
-                            if (value1 is null)
+                            if (value2 is null)
                             {
-                                if (value2 is null)
-                                {
-                                    result = 0;
-                                }
-                                else
-                                {
-                                    result = 1;
-                                }
-                            }
-                            else if (value2 is null)
-                            {
-                                result = -1;
+                                result = 0;
                             }
                             else
                             {
-                                result = Comparer.Default.Compare(value1.ToString(), value2.ToString());
+                                result = 1;
                             }
+                        }
+                        else if (value2 is null)
+                        {
+                            result = -1;
                         }
                         else
                         {
-                            result = Comparer.Default.Compare(value1, value2);
+                            result = Comparer.Default.Compare(value1.ToString(), value2.ToString());
                         }
+                    }
+                    else
+                    {
+                        result = Comparer.Default.Compare(value1, value2);
+                    }
 
-                        if (result == 0)
+                    if (result == 0)
+                    {
+                        if (ascending)
                         {
-                            if (ascending)
-                            {
-                                result = rowIndex1 - rowIndex2;
-                            }
-                            else
-                            {
-                                result = rowIndex2 - rowIndex1;
-                            }
+                            result = rowIndex1 - rowIndex2;
+                        }
+                        else
+                        {
+                            result = rowIndex2 - rowIndex1;
                         }
                     }
                 }
-                else
-                {
-                    Debug.Assert(value1 is DataGridViewRow);
-                    Debug.Assert(value2 is DataGridViewRow);
-                    Debug.Assert(value1 is not null);
-                    Debug.Assert(value2 is not null);
-                    //
+            }
+            else
+            {
+                Debug.Assert(value1 is DataGridViewRow);
+                Debug.Assert(value2 is DataGridViewRow);
+                Debug.Assert(value1 is not null);
+                Debug.Assert(value2 is not null);
+                //
 
-                    result = customComparer.Compare(value1, value2);
-                }
+                result = customComparer.Compare(value1, value2);
+            }
 
-                if (ascending)
-                {
-                    return result;
-                }
-                else
-                {
-                    return -result;
-                }
+            if (ascending)
+            {
+                return result;
+            }
+            else
+            {
+                return -result;
             }
         }
     }

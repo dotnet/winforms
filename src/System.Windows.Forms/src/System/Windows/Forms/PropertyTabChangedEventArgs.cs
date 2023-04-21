@@ -4,18 +4,17 @@
 
 using System.Windows.Forms.Design;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class PropertyTabChangedEventArgs : EventArgs
 {
-    public class PropertyTabChangedEventArgs : EventArgs
+    public PropertyTabChangedEventArgs(PropertyTab? oldTab, PropertyTab? newTab)
     {
-        public PropertyTabChangedEventArgs(PropertyTab? oldTab, PropertyTab? newTab)
-        {
-            OldTab = oldTab;
-            NewTab = newTab;
-        }
-
-        public PropertyTab? OldTab { get; }
-
-        public PropertyTab? NewTab { get; }
+        OldTab = oldTab;
+        NewTab = newTab;
     }
+
+    public PropertyTab? OldTab { get; }
+
+    public PropertyTab? NewTab { get; }
 }

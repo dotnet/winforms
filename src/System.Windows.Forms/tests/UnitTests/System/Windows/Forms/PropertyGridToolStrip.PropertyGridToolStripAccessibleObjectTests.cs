@@ -4,49 +4,48 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
 {
-    public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
+    [WinFormsFact]
+    public void PropertyGridToolStripAccessibleObject_Ctor_Default()
     {
-        [WinFormsFact]
-        public void PropertyGridToolStripAccessibleObject_Ctor_Default()
-        {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
-            PropertyGridToolStrip.PropertyGridToolStripAccessibleObject accessibleObject =
-                new PropertyGridToolStrip.PropertyGridToolStripAccessibleObject(propertyGridToolStrip, propertyGrid);
+        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
+        PropertyGridToolStrip.PropertyGridToolStripAccessibleObject accessibleObject =
+            new PropertyGridToolStrip.PropertyGridToolStripAccessibleObject(propertyGridToolStrip, propertyGrid);
 
-            Assert.Equal(propertyGridToolStrip, accessibleObject.Owner);
-            Assert.False(propertyGrid.IsHandleCreated);
-            Assert.False(propertyGridToolStrip.IsHandleCreated);
-        }
+        Assert.Equal(propertyGridToolStrip, accessibleObject.Owner);
+        Assert.False(propertyGrid.IsHandleCreated);
+        Assert.False(propertyGridToolStrip.IsHandleCreated);
+    }
 
-        [WinFormsFact]
-        public void PropertyGridToolStripAccessibleObject_ControlType_IsToolBar_IfAccessibleRoleIsDefault()
-        {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
-            // AccessibleRole is not set = Default
+    [WinFormsFact]
+    public void PropertyGridToolStripAccessibleObject_ControlType_IsToolBar_IfAccessibleRoleIsDefault()
+    {
+        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
+        // AccessibleRole is not set = Default
 
-            object actual = propertyGridToolStrip.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = propertyGridToolStrip.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
 
-            Assert.Equal(UiaCore.UIA.ToolBarControlTypeId, actual);
-            Assert.False(propertyGrid.IsHandleCreated);
-            Assert.False(propertyGridToolStrip.IsHandleCreated);
-        }
+        Assert.Equal(UiaCore.UIA.ToolBarControlTypeId, actual);
+        Assert.False(propertyGrid.IsHandleCreated);
+        Assert.False(propertyGridToolStrip.IsHandleCreated);
+    }
 
-        [WinFormsFact]
-        public void PropertyGridToolStripAccessibleObject_Role_IsToolBar_ByDefault()
-        {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
-            // AccessibleRole is not set = Default
+    [WinFormsFact]
+    public void PropertyGridToolStripAccessibleObject_Role_IsToolBar_ByDefault()
+    {
+        using PropertyGrid propertyGrid = new PropertyGrid();
+        using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
+        // AccessibleRole is not set = Default
 
-            AccessibleRole actual = propertyGridToolStrip.AccessibilityObject.Role;
+        AccessibleRole actual = propertyGridToolStrip.AccessibilityObject.Role;
 
-            Assert.Equal(AccessibleRole.ToolBar, actual);
-            Assert.False(propertyGrid.IsHandleCreated);
-            Assert.False(propertyGridToolStrip.IsHandleCreated);
-        }
+        Assert.Equal(AccessibleRole.ToolBar, actual);
+        Assert.False(propertyGrid.IsHandleCreated);
+        Assert.False(propertyGridToolStrip.IsHandleCreated);
     }
 }

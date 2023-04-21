@@ -2,23 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class ContextMenuStripGroup
 {
-    internal class ContextMenuStripGroup
+    private List<ToolStripItem>? _items;
+    private readonly string _name;
+
+    public ContextMenuStripGroup(string name) => _name = name;
+
+    public List<ToolStripItem> Items
     {
-        private List<ToolStripItem>? _items;
-        private readonly string _name;
-
-        public ContextMenuStripGroup(string name) => _name = name;
-
-        public List<ToolStripItem> Items
+        get
         {
-            get
-            {
-                _items ??= new List<ToolStripItem>();
+            _items ??= new List<ToolStripItem>();
 
-                return _items;
-            }
+            return _items;
         }
     }
 }

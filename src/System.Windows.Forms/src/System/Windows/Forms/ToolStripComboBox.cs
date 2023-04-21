@@ -7,488 +7,487 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+[ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
+[DefaultProperty(nameof(Items))]
+public partial class ToolStripComboBox : ToolStripControlHost
 {
-    [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
-    [DefaultProperty(nameof(Items))]
-    public partial class ToolStripComboBox : ToolStripControlHost
+    internal static readonly object s_eventDropDown = new object();
+    internal static readonly object s_eventDropDownClosed = new object();
+    internal static readonly object s_eventDropDownStyleChanged = new object();
+    internal static readonly object s_eventSelectedIndexChanged = new object();
+    internal static readonly object s_eventSelectionChangeCommitted = new object();
+    internal static readonly object s_eventTextUpdate = new object();
+
+    private static readonly Padding s_dropDownPadding = new Padding(2);
+    private static readonly Padding s_padding = new Padding(1, 0, 1, 0);
+
+    private Padding _scaledDropDownPadding = s_dropDownPadding;
+    private Padding _scaledPadding = s_padding;
+
+    public ToolStripComboBox()
+        : base(CreateControlInstance())
     {
-        internal static readonly object s_eventDropDown = new object();
-        internal static readonly object s_eventDropDownClosed = new object();
-        internal static readonly object s_eventDropDownStyleChanged = new object();
-        internal static readonly object s_eventSelectedIndexChanged = new object();
-        internal static readonly object s_eventSelectionChangeCommitted = new object();
-        internal static readonly object s_eventTextUpdate = new object();
+        ToolStripComboBoxControl combo = (ToolStripComboBoxControl)Control;
+        combo.Owner = this;
 
-        private static readonly Padding s_dropDownPadding = new Padding(2);
-        private static readonly Padding s_padding = new Padding(1, 0, 1, 0);
-
-        private Padding _scaledDropDownPadding = s_dropDownPadding;
-        private Padding _scaledPadding = s_padding;
-
-        public ToolStripComboBox()
-            : base(CreateControlInstance())
+        if (DpiHelper.IsScalingRequirementMet)
         {
-            ToolStripComboBoxControl combo = (ToolStripComboBoxControl)Control;
-            combo.Owner = this;
+            _scaledPadding = DpiHelper.LogicalToDeviceUnits(s_padding);
+            _scaledDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_dropDownPadding);
+        }
+    }
 
-            if (DpiHelper.IsScalingRequirementMet)
+    public ToolStripComboBox(string? name)
+        : this()
+    {
+        Name = name;
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public ToolStripComboBox(Control c)
+        : base(c)
+    {
+        throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnComboBox);
+    }
+
+    private static Control CreateControlInstance()
+    {
+        ComboBox comboBox = new ToolStripComboBoxControl
+        {
+            FlatStyle = FlatStyle.Popup,
+            Font = ToolStripManager.DefaultFont
+        };
+        return comboBox;
+    }
+
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [Localizable(true)]
+    [SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    public AutoCompleteStringCollection AutoCompleteCustomSource
+    {
+        get { return ComboBox.AutoCompleteCustomSource; }
+        set { ComboBox.AutoCompleteCustomSource = value; }
+    }
+
+    [DefaultValue(AutoCompleteMode.None)]
+    [SRDescription(nameof(SR.ComboBoxAutoCompleteModeDescr))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    public AutoCompleteMode AutoCompleteMode
+    {
+        get { return ComboBox.AutoCompleteMode; }
+        set { ComboBox.AutoCompleteMode = value; }
+    }
+
+    [DefaultValue(AutoCompleteSource.None)]
+    [SRDescription(nameof(SR.ComboBoxAutoCompleteSourceDescr))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    public AutoCompleteSource AutoCompleteSource
+    {
+        get { return ComboBox.AutoCompleteSource; }
+        set { ComboBox.AutoCompleteSource = value; }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override Image? BackgroundImage
+    {
+        get => base.BackgroundImage;
+        set => base.BackgroundImage = value;
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override ImageLayout BackgroundImageLayout
+    {
+        get => base.BackgroundImageLayout;
+        set => base.BackgroundImageLayout = value;
+    }
+
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public ComboBox ComboBox
+    {
+        get
+        {
+            return (ComboBox)Control;
+        }
+    }
+
+    protected override Size DefaultSize
+    {
+        get
+        {
+            return new Size(100, 22);
+        }
+    }
+
+    /// <summary>
+    ///  Deriving classes can override this to configure a default size for their control.
+    ///  This is more efficient than setting the size in the control's constructor.
+    /// </summary>
+    protected internal override Padding DefaultMargin
+    {
+        get
+        {
+            if (IsOnDropDown)
             {
-                _scaledPadding = DpiHelper.LogicalToDeviceUnits(s_padding);
-                _scaledDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_dropDownPadding);
+                return _scaledDropDownPadding;
+            }
+            else
+            {
+                return _scaledPadding;
             }
         }
+    }
 
-        public ToolStripComboBox(string? name)
-            : this()
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler? DoubleClick
+    {
+        add => base.DoubleClick += value;
+        remove => base.DoubleClick -= value;
+    }
+
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
+    public event EventHandler? DropDown
+    {
+        add => Events.AddHandler(s_eventDropDown, value);
+        remove => Events.RemoveHandler(s_eventDropDown, value);
+    }
+
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
+    public event EventHandler? DropDownClosed
+    {
+        add => Events.AddHandler(s_eventDropDownClosed, value);
+        remove => Events.RemoveHandler(s_eventDropDownClosed, value);
+    }
+
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
+    public event EventHandler? DropDownStyleChanged
+    {
+        add => Events.AddHandler(s_eventDropDownStyleChanged, value);
+        remove => Events.RemoveHandler(s_eventDropDownStyleChanged, value);
+    }
+
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ComboBoxDropDownHeightDescr))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DefaultValue(106)]
+    public int DropDownHeight
+    {
+        get { return ComboBox.DropDownHeight; }
+        set { ComboBox.DropDownHeight = value; }
+    }
+
+    [SRCategory(nameof(SR.CatAppearance))]
+    [DefaultValue(ComboBoxStyle.DropDown)]
+    [SRDescription(nameof(SR.ComboBoxStyleDescr))]
+    [RefreshProperties(RefreshProperties.Repaint)]
+    public ComboBoxStyle DropDownStyle
+    {
+        get { return ComboBox.DropDownStyle; }
+        set { ComboBox.DropDownStyle = value; }
+    }
+
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))]
+    public int DropDownWidth
+    {
+        get { return ComboBox.DropDownWidth; }
+        set { ComboBox.DropDownWidth = value; }
+    }
+
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ComboBoxDroppedDownDescr))]
+    public bool DroppedDown
+    {
+        get { return ComboBox.DroppedDown; }
+        set { ComboBox.DroppedDown = value; }
+    }
+
+    [SRCategory(nameof(SR.CatAppearance))]
+    [DefaultValue(FlatStyle.Popup)]
+    [Localizable(true)]
+    [SRDescription(nameof(SR.ComboBoxFlatStyleDescr))]
+    public FlatStyle FlatStyle
+    {
+        get { return ComboBox.FlatStyle; }
+        set { ComboBox.FlatStyle = value; }
+    }
+
+    [SRCategory(nameof(SR.CatBehavior))]
+    [DefaultValue(true)]
+    [Localizable(true)]
+    [SRDescription(nameof(SR.ComboBoxIntegralHeightDescr))]
+    public bool IntegralHeight
+    {
+        get { return ComboBox.IntegralHeight; }
+        set { ComboBox.IntegralHeight = value; }
+    }
+
+    /// <summary>
+    ///  Collection of the items contained in this ComboBox.
+    /// </summary>
+    [SRCategory(nameof(SR.CatData))]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [Localizable(true)]
+    [SRDescription(nameof(SR.ComboBoxItemsDescr))]
+    [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    public ComboBox.ObjectCollection Items
+    {
+        get
         {
-            Name = name;
+            return ComboBox.Items;
         }
+    }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public ToolStripComboBox(Control c)
-            : base(c)
-        {
-            throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnComboBox);
-        }
+    [SRCategory(nameof(SR.CatBehavior))]
+    [DefaultValue(8)]
+    [Localizable(true)]
+    [SRDescription(nameof(SR.ComboBoxMaxDropDownItemsDescr))]
+    public int MaxDropDownItems
+    {
+        get { return ComboBox.MaxDropDownItems; }
+        set { ComboBox.MaxDropDownItems = value; }
+    }
 
-        private static Control CreateControlInstance()
-        {
-            ComboBox comboBox = new ToolStripComboBoxControl
-            {
-                FlatStyle = FlatStyle.Popup,
-                Font = ToolStripManager.DefaultFont
-            };
-            return comboBox;
-        }
+    [SRCategory(nameof(SR.CatBehavior))]
+    [DefaultValue(0)]
+    [Localizable(true)]
+    [SRDescription(nameof(SR.ComboBoxMaxLengthDescr))]
+    public int MaxLength
+    {
+        get { return ComboBox.MaxLength; }
+        set { ComboBox.MaxLength = value; }
+    }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [Localizable(true)]
-        [SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr))]
-        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
-        [Browsable(true)]
-        [EditorBrowsable(EditorBrowsableState.Always)]
-        public AutoCompleteStringCollection AutoCompleteCustomSource
-        {
-            get { return ComboBox.AutoCompleteCustomSource; }
-            set { ComboBox.AutoCompleteCustomSource = value; }
-        }
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ComboBoxSelectedIndexDescr))]
+    public int SelectedIndex
+    {
+        get { return ComboBox.SelectedIndex; }
+        set { ComboBox.SelectedIndex = value; }
+    }
 
-        [DefaultValue(AutoCompleteMode.None)]
-        [SRDescription(nameof(SR.ComboBoxAutoCompleteModeDescr))]
-        [Browsable(true)]
-        [EditorBrowsable(EditorBrowsableState.Always)]
-        public AutoCompleteMode AutoCompleteMode
-        {
-            get { return ComboBox.AutoCompleteMode; }
-            set { ComboBox.AutoCompleteMode = value; }
-        }
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
+    public event EventHandler? SelectedIndexChanged
+    {
+        add => Events.AddHandler(s_eventSelectedIndexChanged, value);
+        remove => Events.RemoveHandler(s_eventSelectedIndexChanged, value);
+    }
 
-        [DefaultValue(AutoCompleteSource.None)]
-        [SRDescription(nameof(SR.ComboBoxAutoCompleteSourceDescr))]
-        [Browsable(true)]
-        [EditorBrowsable(EditorBrowsableState.Always)]
-        public AutoCompleteSource AutoCompleteSource
-        {
-            get { return ComboBox.AutoCompleteSource; }
-            set { ComboBox.AutoCompleteSource = value; }
-        }
+    [Browsable(false)]
+    [Bindable(true)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ComboBoxSelectedItemDescr))]
+    public object? SelectedItem
+    {
+        get { return ComboBox.SelectedItem; }
+        set { ComboBox.SelectedItem = value; }
+    }
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image? BackgroundImage
-        {
-            get => base.BackgroundImage;
-            set => base.BackgroundImage = value;
-        }
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ComboBoxSelectedTextDescr))]
+    public string SelectedText
+    {
+        get { return ComboBox.SelectedText; }
+        set { ComboBox.SelectedText = value; }
+    }
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override ImageLayout BackgroundImageLayout
-        {
-            get => base.BackgroundImageLayout;
-            set => base.BackgroundImageLayout = value;
-        }
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ComboBoxSelectionLengthDescr))]
+    public int SelectionLength
+    {
+        get { return ComboBox.SelectionLength; }
+        set { ComboBox.SelectionLength = value; }
+    }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ComboBox ComboBox
-        {
-            get
-            {
-                return (ComboBox)Control;
-            }
-        }
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ComboBoxSelectionStartDescr))]
+    public int SelectionStart
+    {
+        get { return ComboBox.SelectionStart; }
+        set { ComboBox.SelectionStart = value; }
+    }
 
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(100, 22);
-            }
-        }
+    [SRCategory(nameof(SR.CatBehavior))]
+    [DefaultValue(false)]
+    [SRDescription(nameof(SR.ComboBoxSortedDescr))]
+    public bool Sorted
+    {
+        get { return ComboBox.Sorted; }
+        set { ComboBox.Sorted = value; }
+    }
 
-        /// <summary>
-        ///  Deriving classes can override this to configure a default size for their control.
-        ///  This is more efficient than setting the size in the control's constructor.
-        /// </summary>
-        protected internal override Padding DefaultMargin
-        {
-            get
-            {
-                if (IsOnDropDown)
-                {
-                    return _scaledDropDownPadding;
-                }
-                else
-                {
-                    return _scaledPadding;
-                }
-            }
-        }
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
+    public event EventHandler? TextUpdate
+    {
+        add => Events.AddHandler(s_eventTextUpdate, value);
+        remove => Events.RemoveHandler(s_eventTextUpdate, value);
+    }
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler? DoubleClick
-        {
-            add => base.DoubleClick += value;
-            remove => base.DoubleClick -= value;
-        }
+    #region WrappedMethods
 
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
-        public event EventHandler? DropDown
-        {
-            add => Events.AddHandler(s_eventDropDown, value);
-            remove => Events.RemoveHandler(s_eventDropDown, value);
-        }
+    public void BeginUpdate() { ComboBox.BeginUpdate(); }
+    public void EndUpdate() { ComboBox.EndUpdate(); }
+    public int FindString(string? s) { return ComboBox.FindString(s); }
+    public int FindString(string? s, int startIndex) { return ComboBox.FindString(s, startIndex); }
+    public int FindStringExact(string? s) { return ComboBox.FindStringExact(s); }
+    public int FindStringExact(string? s, int startIndex) { return ComboBox.FindStringExact(s, startIndex); }
+    public int GetItemHeight(int index) { return ComboBox.GetItemHeight(index); }
+    public void Select(int start, int length) { ComboBox.Select(start, length); }
+    public void SelectAll() { ComboBox.SelectAll(); }
 
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
-        public event EventHandler? DropDownClosed
-        {
-            add => Events.AddHandler(s_eventDropDownClosed, value);
-            remove => Events.RemoveHandler(s_eventDropDownClosed, value);
-        }
+    #endregion WrappedMethods
 
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
-        public event EventHandler? DropDownStyleChanged
-        {
-            add => Events.AddHandler(s_eventDropDownStyleChanged, value);
-            remove => Events.RemoveHandler(s_eventDropDownStyleChanged, value);
-        }
+    public override Size GetPreferredSize(Size constrainingSize)
+    {
+        Size preferredSize = base.GetPreferredSize(constrainingSize);
+        preferredSize.Width = Math.Max(preferredSize.Width, 75);
 
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ComboBoxDropDownHeightDescr))]
-        [Browsable(true)]
-        [EditorBrowsable(EditorBrowsableState.Always)]
-        [DefaultValue(106)]
-        public int DropDownHeight
-        {
-            get { return ComboBox.DropDownHeight; }
-            set { ComboBox.DropDownHeight = value; }
-        }
+        return preferredSize;
+    }
 
-        [SRCategory(nameof(SR.CatAppearance))]
-        [DefaultValue(ComboBoxStyle.DropDown)]
-        [SRDescription(nameof(SR.ComboBoxStyleDescr))]
-        [RefreshProperties(RefreshProperties.Repaint)]
-        public ComboBoxStyle DropDownStyle
-        {
-            get { return ComboBox.DropDownStyle; }
-            set { ComboBox.DropDownStyle = value; }
-        }
+    private void HandleDropDown(object? sender, EventArgs e)
+    {
+        OnDropDown(e);
+    }
 
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))]
-        public int DropDownWidth
-        {
-            get { return ComboBox.DropDownWidth; }
-            set { ComboBox.DropDownWidth = value; }
-        }
+    private void HandleDropDownClosed(object? sender, EventArgs e)
+    {
+        OnDropDownClosed(e);
+    }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ComboBoxDroppedDownDescr))]
-        public bool DroppedDown
-        {
-            get { return ComboBox.DroppedDown; }
-            set { ComboBox.DroppedDown = value; }
-        }
+    private void HandleDropDownStyleChanged(object? sender, EventArgs e)
+    {
+        OnDropDownStyleChanged(e);
+    }
 
-        [SRCategory(nameof(SR.CatAppearance))]
-        [DefaultValue(FlatStyle.Popup)]
-        [Localizable(true)]
-        [SRDescription(nameof(SR.ComboBoxFlatStyleDescr))]
-        public FlatStyle FlatStyle
-        {
-            get { return ComboBox.FlatStyle; }
-            set { ComboBox.FlatStyle = value; }
-        }
+    private void HandleSelectedIndexChanged(object? sender, EventArgs e)
+    {
+        OnSelectedIndexChanged(e);
+    }
 
-        [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(true)]
-        [Localizable(true)]
-        [SRDescription(nameof(SR.ComboBoxIntegralHeightDescr))]
-        public bool IntegralHeight
-        {
-            get { return ComboBox.IntegralHeight; }
-            set { ComboBox.IntegralHeight = value; }
-        }
+    private void HandleSelectionChangeCommitted(object? sender, EventArgs e)
+    {
+        OnSelectionChangeCommitted(e);
+    }
 
-        /// <summary>
-        ///  Collection of the items contained in this ComboBox.
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [Localizable(true)]
-        [SRDescription(nameof(SR.ComboBoxItemsDescr))]
-        [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
-        public ComboBox.ObjectCollection Items
-        {
-            get
-            {
-                return ComboBox.Items;
-            }
-        }
-
-        [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(8)]
-        [Localizable(true)]
-        [SRDescription(nameof(SR.ComboBoxMaxDropDownItemsDescr))]
-        public int MaxDropDownItems
-        {
-            get { return ComboBox.MaxDropDownItems; }
-            set { ComboBox.MaxDropDownItems = value; }
-        }
-
-        [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(0)]
-        [Localizable(true)]
-        [SRDescription(nameof(SR.ComboBoxMaxLengthDescr))]
-        public int MaxLength
-        {
-            get { return ComboBox.MaxLength; }
-            set { ComboBox.MaxLength = value; }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ComboBoxSelectedIndexDescr))]
-        public int SelectedIndex
-        {
-            get { return ComboBox.SelectedIndex; }
-            set { ComboBox.SelectedIndex = value; }
-        }
-
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
-        public event EventHandler? SelectedIndexChanged
-        {
-            add => Events.AddHandler(s_eventSelectedIndexChanged, value);
-            remove => Events.RemoveHandler(s_eventSelectedIndexChanged, value);
-        }
-
-        [Browsable(false)]
-        [Bindable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ComboBoxSelectedItemDescr))]
-        public object? SelectedItem
-        {
-            get { return ComboBox.SelectedItem; }
-            set { ComboBox.SelectedItem = value; }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ComboBoxSelectedTextDescr))]
-        public string SelectedText
-        {
-            get { return ComboBox.SelectedText; }
-            set { ComboBox.SelectedText = value; }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ComboBoxSelectionLengthDescr))]
-        public int SelectionLength
-        {
-            get { return ComboBox.SelectionLength; }
-            set { ComboBox.SelectionLength = value; }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ComboBoxSelectionStartDescr))]
-        public int SelectionStart
-        {
-            get { return ComboBox.SelectionStart; }
-            set { ComboBox.SelectionStart = value; }
-        }
-
-        [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(false)]
-        [SRDescription(nameof(SR.ComboBoxSortedDescr))]
-        public bool Sorted
-        {
-            get { return ComboBox.Sorted; }
-            set { ComboBox.Sorted = value; }
-        }
-
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
-        public event EventHandler? TextUpdate
-        {
-            add => Events.AddHandler(s_eventTextUpdate, value);
-            remove => Events.RemoveHandler(s_eventTextUpdate, value);
-        }
-
-        #region WrappedMethods
-
-        public void BeginUpdate() { ComboBox.BeginUpdate(); }
-        public void EndUpdate() { ComboBox.EndUpdate(); }
-        public int FindString(string? s) { return ComboBox.FindString(s); }
-        public int FindString(string? s, int startIndex) { return ComboBox.FindString(s, startIndex); }
-        public int FindStringExact(string? s) { return ComboBox.FindStringExact(s); }
-        public int FindStringExact(string? s, int startIndex) { return ComboBox.FindStringExact(s, startIndex); }
-        public int GetItemHeight(int index) { return ComboBox.GetItemHeight(index); }
-        public void Select(int start, int length) { ComboBox.Select(start, length); }
-        public void SelectAll() { ComboBox.SelectAll(); }
-
-        #endregion WrappedMethods
-
-        public override Size GetPreferredSize(Size constrainingSize)
-        {
-            Size preferredSize = base.GetPreferredSize(constrainingSize);
-            preferredSize.Width = Math.Max(preferredSize.Width, 75);
-
-            return preferredSize;
-        }
-
-        private void HandleDropDown(object? sender, EventArgs e)
-        {
-            OnDropDown(e);
-        }
-
-        private void HandleDropDownClosed(object? sender, EventArgs e)
-        {
-            OnDropDownClosed(e);
-        }
-
-        private void HandleDropDownStyleChanged(object? sender, EventArgs e)
-        {
-            OnDropDownStyleChanged(e);
-        }
-
-        private void HandleSelectedIndexChanged(object? sender, EventArgs e)
-        {
-            OnSelectedIndexChanged(e);
-        }
-
-        private void HandleSelectionChangeCommitted(object? sender, EventArgs e)
-        {
-            OnSelectionChangeCommitted(e);
-        }
-
-        private void HandleTextUpdate(object? sender, EventArgs e)
-        {
-            OnTextUpdate(e);
-        }
+    private void HandleTextUpdate(object? sender, EventArgs e)
+    {
+        OnTextUpdate(e);
+    }
 
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
-        protected virtual void OnDropDown(EventArgs e)
+    protected virtual void OnDropDown(EventArgs e)
+    {
+        if (ParentInternal is not null)
         {
-            if (ParentInternal is not null)
-            {
-                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
-                ToolStripManager.ModalMenuFilter.SuspendMenuMode();
-            }
-
-            RaiseEvent(s_eventDropDown, e);
+            Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
+            ToolStripManager.ModalMenuFilter.SuspendMenuMode();
         }
 
-        protected virtual void OnDropDownClosed(EventArgs e)
+        RaiseEvent(s_eventDropDown, e);
+    }
+
+    protected virtual void OnDropDownClosed(EventArgs e)
+    {
+        if (ParentInternal is not null)
         {
-            if (ParentInternal is not null)
-            {
-                // PERF,
+            // PERF,
 
-                Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
-                ToolStripManager.ModalMenuFilter.ResumeMenuMode();
-            }
-
-            RaiseEvent(s_eventDropDownClosed, e);
+            Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
+            ToolStripManager.ModalMenuFilter.ResumeMenuMode();
         }
 
-        protected virtual void OnDropDownStyleChanged(EventArgs e)
-        {
-            RaiseEvent(s_eventDropDownStyleChanged, e);
-        }
+        RaiseEvent(s_eventDropDownClosed, e);
+    }
 
-        protected virtual void OnSelectedIndexChanged(EventArgs e)
-        {
-            RaiseEvent(s_eventSelectedIndexChanged, e);
-        }
+    protected virtual void OnDropDownStyleChanged(EventArgs e)
+    {
+        RaiseEvent(s_eventDropDownStyleChanged, e);
+    }
 
-        protected virtual void OnSelectionChangeCommitted(EventArgs e)
-        {
-            RaiseEvent(s_eventSelectionChangeCommitted, e);
-        }
+    protected virtual void OnSelectedIndexChanged(EventArgs e)
+    {
+        RaiseEvent(s_eventSelectedIndexChanged, e);
+    }
 
-        protected virtual void OnTextUpdate(EventArgs e)
-        {
-            RaiseEvent(s_eventTextUpdate, e);
-        }
+    protected virtual void OnSelectionChangeCommitted(EventArgs e)
+    {
+        RaiseEvent(s_eventSelectionChangeCommitted, e);
+    }
+
+    protected virtual void OnTextUpdate(EventArgs e)
+    {
+        RaiseEvent(s_eventTextUpdate, e);
+    }
 #pragma warning restore CA2252
 
-        protected override void OnSubscribeControlEvents(Control? control)
+    protected override void OnSubscribeControlEvents(Control? control)
+    {
+        if (control is ComboBox comboBox)
         {
-            if (control is ComboBox comboBox)
-            {
-                // Please keep this alphabetized and in sync with Unsubscribe.
-                comboBox.DropDown += new EventHandler(HandleDropDown);
-                comboBox.DropDownClosed += new EventHandler(HandleDropDownClosed);
-                comboBox.DropDownStyleChanged += new EventHandler(HandleDropDownStyleChanged);
-                comboBox.SelectedIndexChanged += new EventHandler(HandleSelectedIndexChanged);
-                comboBox.SelectionChangeCommitted += new EventHandler(HandleSelectionChangeCommitted);
-                comboBox.TextUpdate += new EventHandler(HandleTextUpdate);
-            }
-
-            base.OnSubscribeControlEvents(control);
+            // Please keep this alphabetized and in sync with Unsubscribe.
+            comboBox.DropDown += new EventHandler(HandleDropDown);
+            comboBox.DropDownClosed += new EventHandler(HandleDropDownClosed);
+            comboBox.DropDownStyleChanged += new EventHandler(HandleDropDownStyleChanged);
+            comboBox.SelectedIndexChanged += new EventHandler(HandleSelectedIndexChanged);
+            comboBox.SelectionChangeCommitted += new EventHandler(HandleSelectionChangeCommitted);
+            comboBox.TextUpdate += new EventHandler(HandleTextUpdate);
         }
 
-        protected override void OnUnsubscribeControlEvents(Control? control)
-        {
-            if (control is ComboBox comboBox)
-            {
-                // Please keep this alphabetized and in sync with Unsubscribe.
-                comboBox.DropDown -= new EventHandler(HandleDropDown);
-                comboBox.DropDownClosed -= new EventHandler(HandleDropDownClosed);
-                comboBox.DropDownStyleChanged -= new EventHandler(HandleDropDownStyleChanged);
-                comboBox.SelectedIndexChanged -= new EventHandler(HandleSelectedIndexChanged);
-                comboBox.SelectionChangeCommitted -= new EventHandler(HandleSelectionChangeCommitted);
-                comboBox.TextUpdate -= new EventHandler(HandleTextUpdate);
-            }
+        base.OnSubscribeControlEvents(control);
+    }
 
-            base.OnUnsubscribeControlEvents(control);
+    protected override void OnUnsubscribeControlEvents(Control? control)
+    {
+        if (control is ComboBox comboBox)
+        {
+            // Please keep this alphabetized and in sync with Unsubscribe.
+            comboBox.DropDown -= new EventHandler(HandleDropDown);
+            comboBox.DropDownClosed -= new EventHandler(HandleDropDownClosed);
+            comboBox.DropDownStyleChanged -= new EventHandler(HandleDropDownStyleChanged);
+            comboBox.SelectedIndexChanged -= new EventHandler(HandleSelectedIndexChanged);
+            comboBox.SelectionChangeCommitted -= new EventHandler(HandleSelectionChangeCommitted);
+            comboBox.TextUpdate -= new EventHandler(HandleTextUpdate);
         }
 
-        private bool ShouldSerializeDropDownWidth()
-        {
-            return ComboBox.ShouldSerializeDropDownWidth();
-        }
+        base.OnUnsubscribeControlEvents(control);
+    }
 
-        internal override bool ShouldSerializeFont()
-        {
-            return !Equals(Font, ToolStripManager.DefaultFont);
-        }
+    private bool ShouldSerializeDropDownWidth()
+    {
+        return ComboBox.ShouldSerializeDropDownWidth();
+    }
 
-        public override string ToString()
-        {
-            return $"{base.ToString()}, Items.Count: {Items.Count}";
-        }
+    internal override bool ShouldSerializeFont()
+    {
+        return !Equals(Font, ToolStripManager.DefaultFont);
+    }
+
+    public override string ToString()
+    {
+        return $"{base.ToString()}, Items.Count: {Items.Count}";
     }
 }

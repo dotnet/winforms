@@ -4,15 +4,14 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
-{
-    public class ToolStripDropDownClosingEventArgs : CancelEventArgs
-    {
-        public ToolStripDropDownClosingEventArgs(ToolStripDropDownCloseReason reason)
-        {
-            CloseReason = reason;
-        }
+namespace System.Windows.Forms;
 
-        public ToolStripDropDownCloseReason CloseReason { get; }
+public class ToolStripDropDownClosingEventArgs : CancelEventArgs
+{
+    public ToolStripDropDownClosingEventArgs(ToolStripDropDownCloseReason reason)
+    {
+        CloseReason = reason;
     }
+
+    public ToolStripDropDownCloseReason CloseReason { get; }
 }

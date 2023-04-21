@@ -4,14 +4,13 @@
 
 using System.IO;
 
-namespace AxHosts
+namespace AxHosts;
+
+public partial class AxHosts : Form
 {
-    public partial class AxHosts : Form
+    public AxHosts()
     {
-        public AxHosts()
-        {
-            InitializeComponent();
-            axWindowsMediaPlayer1.URL = Path.GetFullPath(@"./Resources/media.mpg");
-        }
+        InitializeComponent();
+        axWindowsMediaPlayer1.URL = Path.GetFullPath(@"./Resources/media.mpg");
     }
 }

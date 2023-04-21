@@ -4,64 +4,63 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal static class ArgumentValidation
 {
-    internal static class ArgumentValidation
+    internal static T OrThrowIfNull<T>([NotNull] this T? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
     {
-        internal static T OrThrowIfNull<T>([NotNull] this T? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+        ArgumentNullException.ThrowIfNull(argument, paramName);
+        return argument;
+    }
+
+    internal static T OrThrowIfNullWithMessage<T>([NotNull] this T? argument, string message, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    {
+        if (argument is null)
         {
-            ArgumentNullException.ThrowIfNull(argument, paramName);
-            return argument;
+            throw new ArgumentNullException(paramName, message);
         }
 
-        internal static T OrThrowIfNullWithMessage<T>([NotNull] this T? argument, string message, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
-        {
-            if (argument is null)
-            {
-                throw new ArgumentNullException(paramName, message);
-            }
+        return argument;
+    }
 
-            return argument;
+    internal static IntPtr OrThrowIfZero(this IntPtr argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    {
+        if (argument == IntPtr.Zero)
+        {
+            throw new ArgumentNullException(paramName);
         }
 
-        internal static IntPtr OrThrowIfZero(this IntPtr argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
-        {
-            if (argument == IntPtr.Zero)
-            {
-                throw new ArgumentNullException(paramName);
-            }
+        return argument;
+    }
 
-            return argument;
+    internal static string OrThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    {
+        ThrowIfNullOrEmpty(argument, paramName);
+        return argument;
+    }
+
+    internal static void ThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    {
+        if (string.IsNullOrEmpty(argument))
+        {
+            throw new ArgumentNullException(paramName);
         }
+    }
 
-        internal static string OrThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    internal static void ThrowIfNullOrEmptyWithMessage([NotNull] this string? argument, string message, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    {
+        if (string.IsNullOrEmpty(argument))
         {
-            ThrowIfNullOrEmpty(argument, paramName);
-            return argument;
+            throw new ArgumentNullException(paramName, message);
         }
+    }
 
-        internal static void ThrowIfNullOrEmpty([NotNull] this string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    internal static void ThrowIfNull(HDC argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+    {
+        if (argument.IsNull)
         {
-            if (string.IsNullOrEmpty(argument))
-            {
-                throw new ArgumentNullException(paramName);
-            }
-        }
-
-        internal static void ThrowIfNullOrEmptyWithMessage([NotNull] this string? argument, string message, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
-        {
-            if (string.IsNullOrEmpty(argument))
-            {
-                throw new ArgumentNullException(paramName, message);
-            }
-        }
-
-        internal static void ThrowIfNull(HDC argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
-        {
-            if (argument.IsNull)
-            {
-                throw new ArgumentNullException(paramName);
-            }
+            throw new ArgumentNullException(paramName);
         }
     }
 }

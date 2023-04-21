@@ -1,15 +1,14 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Drawing.Imaging
-{
-    internal unsafe struct PropertyItemInternal
-    {
-        public int id;
-        public int len;
-        public short type;
-        public byte* value;
+namespace System.Drawing.Imaging;
 
-        public Span<byte> Value => new Span<byte>(value, len);
-    }
+internal unsafe struct PropertyItemInternal
+{
+    public int id;
+    public int len;
+    public short type;
+    public byte* value;
+
+    public Span<byte> Value => new Span<byte>(value, len);
 }

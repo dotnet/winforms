@@ -8,120 +8,119 @@ using System.ComponentModel;
 using System.Drawing;
 using static Interop.Mshtml;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed class HtmlElementEventArgs : EventArgs
 {
-    public sealed class HtmlElementEventArgs : EventArgs
+    private readonly HtmlShimManager _shimManager;
+
+    internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
     {
-        private readonly HtmlShimManager _shimManager;
+        NativeHTMLEventObj = eventObj;
+        Debug.Assert(NativeHTMLEventObj is not null, "The event object should implement IHTMLEventObj");
 
-        internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
+        _shimManager = shimManager;
+    }
+
+    private IHTMLEventObj NativeHTMLEventObj { get; }
+
+    public MouseButtons MouseButtonsPressed
+    {
+        get
         {
-            NativeHTMLEventObj = eventObj;
-            Debug.Assert(NativeHTMLEventObj is not null, "The event object should implement IHTMLEventObj");
-
-            _shimManager = shimManager;
-        }
-
-        private IHTMLEventObj NativeHTMLEventObj { get; }
-
-        public MouseButtons MouseButtonsPressed
-        {
-            get
+            MouseButtons buttons = MouseButtons.None;
+            int nButtons = NativeHTMLEventObj.GetButton();
+            if ((nButtons & 1) != 0)
             {
-                MouseButtons buttons = MouseButtons.None;
-                int nButtons = NativeHTMLEventObj.GetButton();
-                if ((nButtons & 1) != 0)
-                {
-                    buttons |= MouseButtons.Left;
-                }
-
-                if ((nButtons & 2) != 0)
-                {
-                    buttons |= MouseButtons.Right;
-                }
-
-                if ((nButtons & 4) != 0)
-                {
-                    buttons |= MouseButtons.Middle;
-                }
-
-                return buttons;
+                buttons |= MouseButtons.Left;
             }
-        }
 
-        public Point ClientMousePosition
-        {
-            get => new Point(NativeHTMLEventObj.GetClientX(), NativeHTMLEventObj.GetClientY());
-        }
-
-        public Point OffsetMousePosition
-        {
-            get => new Point(NativeHTMLEventObj.GetOffsetX(), NativeHTMLEventObj.GetOffsetY());
-        }
-
-        public Point MousePosition
-        {
-            get => new Point(NativeHTMLEventObj.GetX(), NativeHTMLEventObj.GetY());
-        }
-
-        public bool BubbleEvent
-        {
-            get => !NativeHTMLEventObj.GetCancelBubble();
-            set => NativeHTMLEventObj.SetCancelBubble(!value);
-        }
-
-        public int KeyPressedCode => NativeHTMLEventObj.GetKeyCode();
-
-        /// <summary>
-        ///  Indicates whether the Alt key was pressed, if this information is
-        ///  provided to the IHtmlEventObj
-        /// </summary>
-        public bool AltKeyPressed => NativeHTMLEventObj.GetAltKey();
-
-        /// <summary>
-        ///  Indicates whether the Ctrl key was pressed, if this information is
-        ///  provided to the IHtmlEventObj
-        /// </summary>
-        public bool CtrlKeyPressed => NativeHTMLEventObj.GetCtrlKey();
-
-        /// <summary>
-        ///  Indicates whether the Shift key was pressed, if this information is
-        ///  provided to the IHtmlEventObj
-        /// </summary>
-        public bool ShiftKeyPressed => NativeHTMLEventObj.GetShiftKey();
-
-        public string EventType => NativeHTMLEventObj.GetEventType();
-
-        public bool ReturnValue
-        {
-            get
+            if ((nButtons & 2) != 0)
             {
-                object obj = NativeHTMLEventObj.GetReturnValue();
-                return obj is null ? true : (bool)obj;
+                buttons |= MouseButtons.Right;
             }
-            set => NativeHTMLEventObj.SetReturnValue(value);
-        }
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public HtmlElement FromElement
-        {
-            get
+            if ((nButtons & 4) != 0)
             {
-                IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
-                return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
+                buttons |= MouseButtons.Middle;
             }
-        }
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public HtmlElement ToElement
+            return buttons;
+        }
+    }
+
+    public Point ClientMousePosition
+    {
+        get => new Point(NativeHTMLEventObj.GetClientX(), NativeHTMLEventObj.GetClientY());
+    }
+
+    public Point OffsetMousePosition
+    {
+        get => new Point(NativeHTMLEventObj.GetOffsetX(), NativeHTMLEventObj.GetOffsetY());
+    }
+
+    public Point MousePosition
+    {
+        get => new Point(NativeHTMLEventObj.GetX(), NativeHTMLEventObj.GetY());
+    }
+
+    public bool BubbleEvent
+    {
+        get => !NativeHTMLEventObj.GetCancelBubble();
+        set => NativeHTMLEventObj.SetCancelBubble(!value);
+    }
+
+    public int KeyPressedCode => NativeHTMLEventObj.GetKeyCode();
+
+    /// <summary>
+    ///  Indicates whether the Alt key was pressed, if this information is
+    ///  provided to the IHtmlEventObj
+    /// </summary>
+    public bool AltKeyPressed => NativeHTMLEventObj.GetAltKey();
+
+    /// <summary>
+    ///  Indicates whether the Ctrl key was pressed, if this information is
+    ///  provided to the IHtmlEventObj
+    /// </summary>
+    public bool CtrlKeyPressed => NativeHTMLEventObj.GetCtrlKey();
+
+    /// <summary>
+    ///  Indicates whether the Shift key was pressed, if this information is
+    ///  provided to the IHtmlEventObj
+    /// </summary>
+    public bool ShiftKeyPressed => NativeHTMLEventObj.GetShiftKey();
+
+    public string EventType => NativeHTMLEventObj.GetEventType();
+
+    public bool ReturnValue
+    {
+        get
         {
-            get
-            {
-                IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
-                return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
-            }
+            object obj = NativeHTMLEventObj.GetReturnValue();
+            return obj is null ? true : (bool)obj;
+        }
+        set => NativeHTMLEventObj.SetReturnValue(value);
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public HtmlElement FromElement
+    {
+        get
+        {
+            IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
+            return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
+        }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public HtmlElement ToElement
+    {
+        get
+        {
+            IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
+            return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
         }
     }
 }

@@ -4,35 +4,34 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms.IntegrationTests.Mocks
-{
-    public class MainObject : INotifyPropertyChanged
-    {
-        private string text;
-        private PropertyChangedEventHandler _propertyChanged;
+namespace System.Windows.Forms.IntegrationTests.Mocks;
 
-        public string Text
+public class MainObject : INotifyPropertyChanged
+{
+    private string text;
+    private PropertyChangedEventHandler _propertyChanged;
+
+    public string Text
+    {
+        get { return text; }
+        set
         {
-            get { return text; }
-            set
+            if (text != value)
             {
-                if (text != value)
+                text = value;
+                if (_propertyChanged is not null)
                 {
-                    text = value;
-                    if (_propertyChanged is not null)
-                    {
-                        _propertyChanged(this, new PropertyChangedEventArgs(nameof(Text)));
-                    }
+                    _propertyChanged(this, new PropertyChangedEventArgs(nameof(Text)));
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged
-        {
-            add => _propertyChanged += value;
-            remove => _propertyChanged -= value;
-        }
-
-        public bool IsPropertyChangedAssigned { get { return _propertyChanged is not null; } }
     }
+
+    public event PropertyChangedEventHandler PropertyChanged
+    {
+        add => _propertyChanged += value;
+        remove => _propertyChanged -= value;
+    }
+
+    public bool IsPropertyChangedAssigned { get { return _propertyChanged is not null; } }
 }

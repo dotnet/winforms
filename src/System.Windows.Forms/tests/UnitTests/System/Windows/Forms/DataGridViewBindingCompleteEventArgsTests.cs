@@ -4,18 +4,17 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+// NB: doesn't require thread affinity
+public class DataGridViewBindingCompleteEventArgsTests
 {
-    // NB: doesn't require thread affinity
-    public class DataGridViewBindingCompleteEventArgsTests
+    [Theory]
+    [InlineData(ListChangedType.ItemAdded)]
+    [InlineData(ListChangedType.Reset - 1)]
+    public void Ctor_ListChangedType(ListChangedType listChangedType)
     {
-        [Theory]
-        [InlineData(ListChangedType.ItemAdded)]
-        [InlineData(ListChangedType.Reset - 1)]
-        public void Ctor_ListChangedType(ListChangedType listChangedType)
-        {
-            var e = new DataGridViewBindingCompleteEventArgs(listChangedType);
-            Assert.Equal(listChangedType, e.ListChangedType);
-        }
+        var e = new DataGridViewBindingCompleteEventArgs(listChangedType);
+        Assert.Equal(listChangedType, e.ListChangedType);
     }
 }

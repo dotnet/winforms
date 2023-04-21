@@ -4,23 +4,22 @@
 
 using System.Collections;
 
-namespace System.Windows.Forms.Design.Behavior.Tests
-{
-    public class BehaviorDragDropEventArgsTests
-    {
-        public static IEnumerable<object[]> Ctor_ICollection_TestData()
-        {
-            yield return new object[] { null };
-            yield return new object[] { Array.Empty<object>() };
-            yield return new object[] { new object[] { null } };
-        }
+namespace System.Windows.Forms.Design.Behavior.Tests;
 
-        [Theory]
-        [MemberData(nameof(Ctor_ICollection_TestData))]
-        public void Ctor_ICollection(ICollection components)
-        {
-            var e = new BehaviorDragDropEventArgs(components);
-            Assert.Same(components, e.DragComponents);
-        }
+public class BehaviorDragDropEventArgsTests
+{
+    public static IEnumerable<object[]> Ctor_ICollection_TestData()
+    {
+        yield return new object[] { null };
+        yield return new object[] { Array.Empty<object>() };
+        yield return new object[] { new object[] { null } };
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_ICollection_TestData))]
+    public void Ctor_ICollection(ICollection components)
+    {
+        var e = new BehaviorDragDropEventArgs(components);
+        Assert.Same(components, e.DragComponents);
     }
 }

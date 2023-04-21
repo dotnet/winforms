@@ -5,129 +5,128 @@
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
 {
-    public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
+    [WinFormsTheory]
+    [MemberData(nameof(GetViewTheoryData))]
+    public void ListViewItemListAccessibleObject_FragmentNavigate_Children_ReturnsNull_WithoutImage(View view)
     {
-        [WinFormsTheory]
-        [MemberData(nameof(GetViewTheoryData))]
-        public void ListViewItemListAccessibleObject_FragmentNavigate_Children_ReturnsNull_WithoutImage(View view)
+        using ListView control = new();
+        control.View = view;
+        control.Items.AddRange(new ListViewItem[] { new() });
+
+        AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
+
+        Assert.Null(listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Null(listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetViewTheoryData))]
+    public void ListViewItemListAccessibleObject_FragmentNavigate_Children_IsExpected_WithImage(View view)
+    {
+        using ImageList imageCollection = new();
+        imageCollection.Images.Add(Form.DefaultIcon);
+
+        ListViewItem listViewItem = new("Test", 0);
+        using ListView control = new()
         {
-            using ListView control = new();
-            control.View = view;
-            control.Items.AddRange(new ListViewItem[] { new() });
+            View = view,
+            SmallImageList = imageCollection
+        };
+        control.Items.Add(listViewItem);
 
-            AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
+        AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
+        var firstChild = listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        var lastChild = listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
 
-            Assert.Null(listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-            Assert.Null(listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-            Assert.False(control.IsHandleCreated);
-        }
+        Assert.IsType<ListViewItemImageAccessibleObject>(firstChild);
+        Assert.IsType<ListViewItemImageAccessibleObject>(lastChild);
+        Assert.Same(firstChild, lastChild);
+        Assert.False(control.IsHandleCreated);
+    }
 
-        [WinFormsTheory]
-        [MemberData(nameof(GetViewTheoryData))]
-        public void ListViewItemListAccessibleObject_FragmentNavigate_Children_IsExpected_WithImage(View view)
+    [WinFormsTheory]
+    [MemberData(nameof(GetViewTheoryData))]
+    public void ListViewItemListAccessibleObject_GetChild_ReturnsNull_WithoutImage(View view)
+    {
+        using ListView control = new();
+        control.View = view;
+        control.Items.AddRange(new ListViewItem[] { new() });
+
+        AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
+
+        Assert.Null(listViewItemAccessibleObject.GetChild(0));
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetViewTheoryData))]
+    public void ListViewItemListAccessibleObject_GetChild_IsExpected_WithImage(View view)
+    {
+        using ImageList imageCollection = new();
+        imageCollection.Images.Add(Form.DefaultIcon);
+
+        ListViewItem listViewItem = new("Test", 0);
+        using ListView control = new()
         {
-            using ImageList imageCollection = new();
-            imageCollection.Images.Add(Form.DefaultIcon);
+            View = view,
+            SmallImageList = imageCollection
+        };
+        control.Items.Add(listViewItem);
 
-            ListViewItem listViewItem = new("Test", 0);
-            using ListView control = new()
-            {
-                View = view,
-                SmallImageList = imageCollection
-            };
-            control.Items.Add(listViewItem);
+        AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
 
-            AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
-            var firstChild = listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-            var lastChild = listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        Assert.IsType<ListViewItemImageAccessibleObject>(listViewItemAccessibleObject.GetChild(0));
+        Assert.False(control.IsHandleCreated);
+    }
 
-            Assert.IsType<ListViewItemImageAccessibleObject>(firstChild);
-            Assert.IsType<ListViewItemImageAccessibleObject>(lastChild);
-            Assert.Same(firstChild, lastChild);
-            Assert.False(control.IsHandleCreated);
-        }
+    [WinFormsTheory]
+    [MemberData(nameof(GetViewTheoryData))]
+    public void ListViewItemListAccessibleObject_GetChildCount_WithoutImage(View view)
+    {
+        using ListView control = new();
+        control.View = view;
+        control.Items.AddRange(new ListViewItem[] { new() });
+        control.CreateControl();
 
-        [WinFormsTheory]
-        [MemberData(nameof(GetViewTheoryData))]
-        public void ListViewItemListAccessibleObject_GetChild_ReturnsNull_WithoutImage(View view)
+        AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
+
+        Assert.Equal(AccessibleObject.InvalidIndex, listViewItemAccessibleObject.GetChildCount());
+        Assert.True(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetViewTheoryData))]
+    public void ListViewItemListAccessibleObject_GetChildCount_WithImage(View view)
+    {
+        using ImageList imageCollection = new();
+        imageCollection.Images.Add(Form.DefaultIcon);
+
+        ListViewItem listViewItem = new("Test", 0);
+        using ListView control = new()
         {
-            using ListView control = new();
-            control.View = view;
-            control.Items.AddRange(new ListViewItem[] { new() });
+            View = view,
+            SmallImageList = imageCollection
+        };
+        control.Items.Add(listViewItem);
+        control.CreateControl();
 
-            AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
+        AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
 
-            Assert.Null(listViewItemAccessibleObject.GetChild(0));
-            Assert.False(control.IsHandleCreated);
-        }
+        Assert.Equal(1, listViewItemAccessibleObject.GetChildCount());
+        Assert.True(control.IsHandleCreated);
+    }
 
-        [WinFormsTheory]
-        [MemberData(nameof(GetViewTheoryData))]
-        public void ListViewItemListAccessibleObject_GetChild_IsExpected_WithImage(View view)
+    public static TheoryData<View> GetViewTheoryData()
+    {
+        return new TheoryData<View>
         {
-            using ImageList imageCollection = new();
-            imageCollection.Images.Add(Form.DefaultIcon);
-
-            ListViewItem listViewItem = new("Test", 0);
-            using ListView control = new()
-            {
-                View = view,
-                SmallImageList = imageCollection
-            };
-            control.Items.Add(listViewItem);
-
-            AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
-
-            Assert.IsType<ListViewItemImageAccessibleObject>(listViewItemAccessibleObject.GetChild(0));
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(GetViewTheoryData))]
-        public void ListViewItemListAccessibleObject_GetChildCount_WithoutImage(View view)
-        {
-            using ListView control = new();
-            control.View = view;
-            control.Items.AddRange(new ListViewItem[] { new() });
-            control.CreateControl();
-
-            AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
-
-            Assert.Equal(AccessibleObject.InvalidIndex, listViewItemAccessibleObject.GetChildCount());
-            Assert.True(control.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(GetViewTheoryData))]
-        public void ListViewItemListAccessibleObject_GetChildCount_WithImage(View view)
-        {
-            using ImageList imageCollection = new();
-            imageCollection.Images.Add(Form.DefaultIcon);
-
-            ListViewItem listViewItem = new("Test", 0);
-            using ListView control = new()
-            {
-                View = view,
-                SmallImageList = imageCollection
-            };
-            control.Items.Add(listViewItem);
-            control.CreateControl();
-
-            AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
-
-            Assert.Equal(1, listViewItemAccessibleObject.GetChildCount());
-            Assert.True(control.IsHandleCreated);
-        }
-
-        public static TheoryData<View> GetViewTheoryData()
-        {
-            return new TheoryData<View>
-            {
-                View.LargeIcon,
-                View.SmallIcon
-            };
-        }
+            View.LargeIcon,
+            View.SmallIcon
+        };
     }
 }

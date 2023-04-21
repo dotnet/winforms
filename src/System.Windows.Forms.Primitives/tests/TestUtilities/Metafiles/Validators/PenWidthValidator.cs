@@ -4,12 +4,11 @@
 
 #nullable enable
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+internal class PenWidthValidator : IStateValidator
 {
-    internal class PenWidthValidator : IStateValidator
-    {
-        private readonly int _penWidth;
-        public PenWidthValidator(int penWidth) => _penWidth = penWidth;
-        public void Validate(DeviceContextState state) => Assert.Equal(_penWidth, (int)state.SelectedPen.elpWidth);
-    }
+    private readonly int _penWidth;
+    public PenWidthValidator(int penWidth) => _penWidth = penWidth;
+    public void Validate(DeviceContextState state) => Assert.Equal(_penWidth, (int)state.SelectedPen.elpWidth);
 }

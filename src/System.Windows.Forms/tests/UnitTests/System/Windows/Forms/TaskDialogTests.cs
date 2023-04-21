@@ -4,58 +4,57 @@
 
 using Microsoft.DotNet.RemoteExecutor;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class TaskDialogTests
 {
-    public class TaskDialogTests
+    [WinFormsFact]
+    public void TaskDialog_ShowDialog_SetProperty_SameThread_Success()
     {
-        [WinFormsFact]
-        public void TaskDialog_ShowDialog_SetProperty_SameThread_Success()
+        // Run this from another thread as we call Application.EnableVisualStyles.
+        using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
         {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+            Application.EnableVisualStyles();
+            Control.CheckForIllegalCrossThreadCalls = true;
+
+            TaskDialogPage page = new TaskDialogPage();
+            page.Created += (_, __) =>
             {
-                Application.EnableVisualStyles();
-                Control.CheckForIllegalCrossThreadCalls = true;
+                // Set the property in the same thread.
+                page.Text = "X";
+                page.BoundDialog.Close();
+            };
 
-                TaskDialogPage page = new TaskDialogPage();
-                page.Created += (_, __) =>
-                {
-                    // Set the property in the same thread.
-                    page.Text = "X";
-                    page.BoundDialog.Close();
-                };
+            TaskDialog.ShowDialog(page);
+        });
 
-                TaskDialog.ShowDialog(page);
-            });
+        // verify the remote process succeeded
+        Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
+    }
 
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
-        }
-
-        [WinFormsFact]
-        public void TaskDialog_ShowDialog_SetProperty_DifferentThread_ThrowsInvalidOperationException()
+    [WinFormsFact]
+    public void TaskDialog_ShowDialog_SetProperty_DifferentThread_ThrowsInvalidOperationException()
+    {
+        // Run this from another thread as we call Application.EnableVisualStyles.
+        using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
         {
-            // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+            Application.EnableVisualStyles();
+            Control.CheckForIllegalCrossThreadCalls = true;
+
+            TaskDialogPage page = new TaskDialogPage();
+            page.Created += (_, __) =>
             {
-                Application.EnableVisualStyles();
-                Control.CheckForIllegalCrossThreadCalls = true;
+                // Set the property in a different thread.
+                var separateTask = Task.Run(() => page.Text = "X");
+                Assert.Throws<InvalidOperationException>(separateTask.GetAwaiter().GetResult);
 
-                TaskDialogPage page = new TaskDialogPage();
-                page.Created += (_, __) =>
-                {
-                    // Set the property in a different thread.
-                    var separateTask = Task.Run(() => page.Text = "X");
-                    Assert.Throws<InvalidOperationException>(separateTask.GetAwaiter().GetResult);
+                page.BoundDialog.Close();
+            };
 
-                    page.BoundDialog.Close();
-                };
+            TaskDialog.ShowDialog(page);
+        });
 
-                TaskDialog.ShowDialog(page);
-            });
-
-            // verify the remote process succeeded
-            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
-        }
+        // verify the remote process succeeded
+        Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
     }
 }

@@ -5,82 +5,81 @@
 using System.ComponentModel;
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+[ToolboxBitmap(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn")]
+public class DataGridViewTextBoxColumn : DataGridViewColumn
 {
-    [ToolboxBitmap(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn")]
-    public class DataGridViewTextBoxColumn : DataGridViewColumn
+    private const int ColumnMaxInputLength = 32767;
+
+    public DataGridViewTextBoxColumn() : base(new DataGridViewTextBoxCell())
     {
-        private const int ColumnMaxInputLength = 32767;
+        SortMode = DataGridViewColumnSortMode.Automatic;
+    }
 
-        public DataGridViewTextBoxColumn() : base(new DataGridViewTextBoxCell())
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override DataGridViewCell CellTemplate
+    {
+        get => base.CellTemplate;
+        set
         {
-            SortMode = DataGridViewColumnSortMode.Automatic;
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override DataGridViewCell CellTemplate
-        {
-            get => base.CellTemplate;
-            set
+            if (value is not null and not DataGridViewTextBoxCell)
             {
-                if (value is not null and not DataGridViewTextBoxCell)
-                {
-                    throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewTextBoxCell"));
-                }
-
-                base.CellTemplate = value;
+                throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewTextBoxCell"));
             }
+
+            base.CellTemplate = value;
         }
+    }
 
-        [DefaultValue(ColumnMaxInputLength)]
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))]
-        public int MaxInputLength
+    [DefaultValue(ColumnMaxInputLength)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))]
+    public int MaxInputLength
+    {
+        get
         {
-            get
+            if (TextBoxCellTemplate is null)
             {
-                if (TextBoxCellTemplate is null)
-                {
-                    throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-                }
-
-                return TextBoxCellTemplate.MaxInputLength;
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
-            set
+
+            return TextBoxCellTemplate.MaxInputLength;
+        }
+        set
+        {
+            if (MaxInputLength != value)
             {
-                if (MaxInputLength != value)
+                TextBoxCellTemplate.MaxInputLength = value;
+                if (DataGridView is not null)
                 {
-                    TextBoxCellTemplate.MaxInputLength = value;
-                    if (DataGridView is not null)
+                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                    int rowCount = dataGridViewRows.Count;
+                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
-                        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                        int rowCount = dataGridViewRows.Count;
-                        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                        if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
                         {
-                            DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
-                            {
-                                dataGridViewCell.MaxInputLength = value;
-                            }
+                            dataGridViewCell.MaxInputLength = value;
                         }
                     }
                 }
             }
         }
+    }
 
-        [DefaultValue(DataGridViewColumnSortMode.Automatic)]
-        public new DataGridViewColumnSortMode SortMode
-        {
-            get => base.SortMode;
-            set => base.SortMode = value;
-        }
+    [DefaultValue(DataGridViewColumnSortMode.Automatic)]
+    public new DataGridViewColumnSortMode SortMode
+    {
+        get => base.SortMode;
+        set => base.SortMode = value;
+    }
 
-        private DataGridViewTextBoxCell TextBoxCellTemplate => (DataGridViewTextBoxCell)CellTemplate;
+    private DataGridViewTextBoxCell TextBoxCellTemplate => (DataGridViewTextBoxCell)CellTemplate;
 
-        public override string ToString()
-        {
-            return $"DataGridViewTextBoxColumn {{ Name={Name}, Index={Index} }}";
-        }
+    public override string ToString()
+    {
+        return $"DataGridViewTextBoxColumn {{ Name={Name}, Index={Index} }}";
     }
 }

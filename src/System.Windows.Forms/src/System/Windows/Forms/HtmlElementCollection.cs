@@ -7,184 +7,183 @@
 using System.Collections;
 using static Interop.Mshtml;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed class HtmlElementCollection : ICollection
 {
-    public sealed class HtmlElementCollection : ICollection
+    private readonly IHTMLElementCollection htmlElementCollection;
+    private readonly HtmlElement[] elementsArray;
+    private readonly HtmlShimManager shimManager;
+
+    internal HtmlElementCollection(HtmlShimManager shimManager)
     {
-        private readonly IHTMLElementCollection htmlElementCollection;
-        private readonly HtmlElement[] elementsArray;
-        private readonly HtmlShimManager shimManager;
+        htmlElementCollection = null;
+        elementsArray = null;
 
-        internal HtmlElementCollection(HtmlShimManager shimManager)
+        this.shimManager = shimManager;
+    }
+
+    internal HtmlElementCollection(HtmlShimManager shimManager, IHTMLElementCollection elements)
+    {
+        htmlElementCollection = elements;
+        elementsArray = null;
+        this.shimManager = shimManager;
+        Debug.Assert(NativeHtmlElementCollection is not null, "The element collection object should implement IHTMLElementCollection");
+    }
+
+    internal HtmlElementCollection(HtmlShimManager shimManager, HtmlElement[] array)
+    {
+        htmlElementCollection = null;
+        elementsArray = array;
+        this.shimManager = shimManager;
+    }
+
+    private IHTMLElementCollection NativeHtmlElementCollection
+    {
+        get
         {
-            htmlElementCollection = null;
-            elementsArray = null;
-
-            this.shimManager = shimManager;
+            return htmlElementCollection;
         }
+    }
 
-        internal HtmlElementCollection(HtmlShimManager shimManager, IHTMLElementCollection elements)
+    public HtmlElement this[int index]
+    {
+        get
         {
-            htmlElementCollection = elements;
-            elementsArray = null;
-            this.shimManager = shimManager;
-            Debug.Assert(NativeHtmlElementCollection is not null, "The element collection object should implement IHTMLElementCollection");
-        }
-
-        internal HtmlElementCollection(HtmlShimManager shimManager, HtmlElement[] array)
-        {
-            htmlElementCollection = null;
-            elementsArray = array;
-            this.shimManager = shimManager;
-        }
-
-        private IHTMLElementCollection NativeHtmlElementCollection
-        {
-            get
+            //do some bounds checking here...
+            if (index < 0 || index >= Count)
             {
-                return htmlElementCollection;
-            }
-        }
-
-        public HtmlElement this[int index]
-        {
-            get
-            {
-                //do some bounds checking here...
-                if (index < 0 || index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
-                }
-
-                if (NativeHtmlElementCollection is not null)
-                {
-                    return (NativeHtmlElementCollection.Item((object)index, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
-                }
-                else if (elementsArray is not null)
-                {
-                    return elementsArray[index];
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
-        public HtmlElement this[string elementId]
-        {
-            get
-            {
-                if (NativeHtmlElementCollection is not null)
-                {
-                    return (NativeHtmlElementCollection.Item((object)elementId, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
-                }
-                else if (elementsArray is not null)
-                {
-                    int count = elementsArray.Length;
-                    for (int i = 0; i < count; i++)
-                    {
-                        HtmlElement element = elementsArray[i];
-                        if (element.Id == elementId)
-                        {
-                            return element;
-                        }
-                    }
-
-                    return null;    // not found
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
-        public HtmlElementCollection GetElementsByName(string name)
-        {
-            int count = Count;
-            HtmlElement[] temp = new HtmlElement[count];    // count is the maximum # of matches
-            int tempIndex = 0;
-
-            for (int i = 0; i < count; i++)
-            {
-                HtmlElement element = this[i];
-                if (element.GetAttribute("name") == name)
-                {
-                    temp[tempIndex] = element;
-                    tempIndex++;
-                }
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
             }
 
-            if (tempIndex == 0)
+            if (NativeHtmlElementCollection is not null)
             {
-                return new HtmlElementCollection(shimManager);
+                return (NativeHtmlElementCollection.Item((object)index, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
+            }
+            else if (elementsArray is not null)
+            {
+                return elementsArray[index];
             }
             else
             {
-                HtmlElement[] elements = new HtmlElement[tempIndex];
-                for (int i = 0; i < tempIndex; i++)
+                return null;
+            }
+        }
+    }
+
+    public HtmlElement this[string elementId]
+    {
+        get
+        {
+            if (NativeHtmlElementCollection is not null)
+            {
+                return (NativeHtmlElementCollection.Item((object)elementId, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
+            }
+            else if (elementsArray is not null)
+            {
+                int count = elementsArray.Length;
+                for (int i = 0; i < count; i++)
                 {
-                    elements[i] = temp[i];
+                    HtmlElement element = elementsArray[i];
+                    if (element.Id == elementId)
+                    {
+                        return element;
+                    }
                 }
 
-                return new HtmlElementCollection(shimManager, elements);
+                return null;    // not found
             }
-        }
-
-        /// <summary>
-        ///  Returns the total number of elements in the collection.
-        /// </summary>
-        public int Count
-        {
-            get
+            else
             {
-                if (NativeHtmlElementCollection is not null)
-                {
-                    return NativeHtmlElementCollection.GetLength();
-                }
-                else if (elementsArray is not null)
-                {
-                    return elementsArray.Length;
-                }
-                else
-                {
-                    return 0;
-                }
+                return null;
             }
         }
+    }
 
-        bool ICollection.IsSynchronized
+    public HtmlElementCollection GetElementsByName(string name)
+    {
+        int count = Count;
+        HtmlElement[] temp = new HtmlElement[count];    // count is the maximum # of matches
+        int tempIndex = 0;
+
+        for (int i = 0; i < count; i++)
         {
-            get
+            HtmlElement element = this[i];
+            if (element.GetAttribute("name") == name)
             {
-                return false;
+                temp[tempIndex] = element;
+                tempIndex++;
             }
         }
 
-        object ICollection.SyncRoot
+        if (tempIndex == 0)
         {
-            get
+            return new HtmlElementCollection(shimManager);
+        }
+        else
+        {
+            HtmlElement[] elements = new HtmlElement[tempIndex];
+            for (int i = 0; i < tempIndex; i++)
             {
-                return this;
+                elements[i] = temp[i];
             }
-        }
 
-        void ICollection.CopyTo(Array dest, int index)
+            return new HtmlElementCollection(shimManager, elements);
+        }
+    }
+
+    /// <summary>
+    ///  Returns the total number of elements in the collection.
+    /// </summary>
+    public int Count
+    {
+        get
         {
-            int count = Count;
-            for (int i = 0; i < count; i++)
+            if (NativeHtmlElementCollection is not null)
             {
-                dest.SetValue(this[i], index++);
+                return NativeHtmlElementCollection.GetLength();
+            }
+            else if (elementsArray is not null)
+            {
+                return elementsArray.Length;
+            }
+            else
+            {
+                return 0;
             }
         }
+    }
 
-        public IEnumerator GetEnumerator()
+    bool ICollection.IsSynchronized
+    {
+        get
         {
-            HtmlElement[] htmlElements = new HtmlElement[Count];
-            ((ICollection)this).CopyTo(htmlElements, 0);
-
-            return htmlElements.GetEnumerator();
+            return false;
         }
+    }
+
+    object ICollection.SyncRoot
+    {
+        get
+        {
+            return this;
+        }
+    }
+
+    void ICollection.CopyTo(Array dest, int index)
+    {
+        int count = Count;
+        for (int i = 0; i < count; i++)
+        {
+            dest.SetValue(this[i], index++);
+        }
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        HtmlElement[] htmlElements = new HtmlElement[Count];
+        ((ICollection)this).CopyTo(htmlElements, 0);
+
+        return htmlElements.GetEnumerator();
     }
 }

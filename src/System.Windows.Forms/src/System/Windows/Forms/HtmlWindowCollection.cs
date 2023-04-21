@@ -6,108 +6,107 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using static Interop.Mshtml;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class HtmlWindowCollection : ICollection
 {
-    public class HtmlWindowCollection : ICollection
+    private readonly IHTMLFramesCollection2 htmlFramesCollection2;
+    private readonly HtmlShimManager shimManager;
+
+    internal HtmlWindowCollection(HtmlShimManager shimManager, IHTMLFramesCollection2 collection)
     {
-        private readonly IHTMLFramesCollection2 htmlFramesCollection2;
-        private readonly HtmlShimManager shimManager;
+        htmlFramesCollection2 = collection;
+        this.shimManager = shimManager;
 
-        internal HtmlWindowCollection(HtmlShimManager shimManager, IHTMLFramesCollection2 collection)
+        Debug.Assert(NativeHTMLFramesCollection2 is not null, "The window collection object should implement IHTMLFramesCollection2");
+    }
+
+    private IHTMLFramesCollection2 NativeHTMLFramesCollection2
+    {
+        get
         {
-            htmlFramesCollection2 = collection;
-            this.shimManager = shimManager;
-
-            Debug.Assert(NativeHTMLFramesCollection2 is not null, "The window collection object should implement IHTMLFramesCollection2");
+            return htmlFramesCollection2;
         }
+    }
 
-        private IHTMLFramesCollection2 NativeHTMLFramesCollection2
+    public HtmlWindow? this[int index]
+    {
+        get
         {
-            get
+            if (index < 0 || index >= Count)
             {
-                return htmlFramesCollection2;
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
             }
-        }
 
-        public HtmlWindow? this[int index]
+            object oIndex = (object)index;
+            return (NativeHTMLFramesCollection2.Item(ref oIndex) is IHTMLWindow2 htmlWindow2)
+                ? new HtmlWindow(shimManager, htmlWindow2)
+                : null;
+        }
+    }
+
+    public HtmlWindow? this[string windowId]
+    {
+        get
         {
-            get
+            object oWindowId = (object)windowId;
+            IHTMLWindow2? htmlWindow2 = null;
+            try
             {
-                if (index < 0 || index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
-                }
-
-                object oIndex = (object)index;
-                return (NativeHTMLFramesCollection2.Item(ref oIndex) is IHTMLWindow2 htmlWindow2)
-                    ? new HtmlWindow(shimManager, htmlWindow2)
-                    : null;
+                htmlWindow2 = htmlFramesCollection2.Item(ref oWindowId) as IHTMLWindow2;
             }
-        }
-
-        public HtmlWindow? this[string windowId]
-        {
-            get
+            catch (COMException)
             {
-                object oWindowId = (object)windowId;
-                IHTMLWindow2? htmlWindow2 = null;
-                try
-                {
-                    htmlWindow2 = htmlFramesCollection2.Item(ref oWindowId) as IHTMLWindow2;
-                }
-                catch (COMException)
-                {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(windowId), windowId), nameof(windowId));
-                }
-
-                return (htmlWindow2 is not null)
-                    ? new HtmlWindow(shimManager, htmlWindow2)
-                    : null;
+                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(windowId), windowId), nameof(windowId));
             }
-        }
 
-        /// <summary>
-        ///  Returns the total number of elements in the collection.
-        /// </summary>
-        public int Count
+            return (htmlWindow2 is not null)
+                ? new HtmlWindow(shimManager, htmlWindow2)
+                : null;
+        }
+    }
+
+    /// <summary>
+    ///  Returns the total number of elements in the collection.
+    /// </summary>
+    public int Count
+    {
+        get
         {
-            get
-            {
-                return NativeHTMLFramesCollection2.GetLength();
-            }
+            return NativeHTMLFramesCollection2.GetLength();
         }
+    }
 
-        bool ICollection.IsSynchronized
+    bool ICollection.IsSynchronized
+    {
+        get
         {
-            get
-            {
-                return false;
-            }
+            return false;
         }
+    }
 
-        object ICollection.SyncRoot
+    object ICollection.SyncRoot
+    {
+        get
         {
-            get
-            {
-                return this;
-            }
+            return this;
         }
+    }
 
-        void ICollection.CopyTo(Array dest, int index)
+    void ICollection.CopyTo(Array dest, int index)
+    {
+        int count = Count;
+        for (int i = 0; i < count; i++)
         {
-            int count = Count;
-            for (int i = 0; i < count; i++)
-            {
-                dest.SetValue(this[i], index++);
-            }
+            dest.SetValue(this[i], index++);
         }
+    }
 
-        public IEnumerator GetEnumerator()
-        {
-            HtmlWindow[] htmlWindows = new HtmlWindow[Count];
-            ((ICollection)this).CopyTo(htmlWindows, 0);
+    public IEnumerator GetEnumerator()
+    {
+        HtmlWindow[] htmlWindows = new HtmlWindow[Count];
+        ((ICollection)this).CopyTo(htmlWindows, 0);
 
-            return htmlWindows.GetEnumerator();
-        }
+        return htmlWindows.GetEnumerator();
     }
 }

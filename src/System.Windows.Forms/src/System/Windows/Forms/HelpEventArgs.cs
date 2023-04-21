@@ -4,29 +4,28 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Provides data for the Control.HelpRequest event.
+/// </summary>
+public class HelpEventArgs : EventArgs
 {
     /// <summary>
-    ///  Provides data for the Control.HelpRequest event.
+    ///  Initializes a new instance of the <see cref="HelpEventArgs"/> class.
     /// </summary>
-    public class HelpEventArgs : EventArgs
+    public HelpEventArgs(Point mousePos)
     {
-        /// <summary>
-        ///  Initializes a new instance of the <see cref="HelpEventArgs"/> class.
-        /// </summary>
-        public HelpEventArgs(Point mousePos)
-        {
-            MousePos = mousePos;
-        }
-
-        /// <summary>
-        ///  Gets the screen coordinates of the mouse pointer.
-        /// </summary>
-        public Point MousePos { get; }
-
-        /// <summary>
-        ///  Gets or sets a value indicating whether the Help event was handled.
-        /// </summary>
-        public bool Handled { get; set; }
+        MousePos = mousePos;
     }
+
+    /// <summary>
+    ///  Gets the screen coordinates of the mouse pointer.
+    /// </summary>
+    public Point MousePos { get; }
+
+    /// <summary>
+    ///  Gets or sets a value indicating whether the Help event was handled.
+    /// </summary>
+    public bool Handled { get; set; }
 }

@@ -8,22 +8,21 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace System.Windows.Forms.Analyzers.Tests
+namespace System.Windows.Forms.Analyzers.Tests;
+
+// Borrowed from https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/DiagnosticAnalyzer/AnalyzerConfigOptions.cs
+
+[ExcludeFromCodeCoverage]
+internal sealed class CompilerAnalyzerConfigOptions : AnalyzerConfigOptions
 {
-    // Borrowed from https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/DiagnosticAnalyzer/AnalyzerConfigOptions.cs
+    public static CompilerAnalyzerConfigOptions Empty { get; } = new CompilerAnalyzerConfigOptions(ImmutableDictionary.Create<string, string>());
 
-    [ExcludeFromCodeCoverage]
-    internal sealed class CompilerAnalyzerConfigOptions : AnalyzerConfigOptions
+    private readonly ImmutableDictionary<string, string> _backing;
+
+    public CompilerAnalyzerConfigOptions(ImmutableDictionary<string, string> properties)
     {
-        public static CompilerAnalyzerConfigOptions Empty { get; } = new CompilerAnalyzerConfigOptions(ImmutableDictionary.Create<string, string>());
-
-        private readonly ImmutableDictionary<string, string> _backing;
-
-        public CompilerAnalyzerConfigOptions(ImmutableDictionary<string, string> properties)
-        {
-            _backing = properties;
-        }
-
-        public override bool TryGetValue(string key, [NotNullWhen(true)] out string? value) => _backing.TryGetValue(key, out value);
+        _backing = properties;
     }
+
+    public override bool TryGetValue(string key, [NotNullWhen(true)] out string? value) => _backing.TryGetValue(key, out value);
 }

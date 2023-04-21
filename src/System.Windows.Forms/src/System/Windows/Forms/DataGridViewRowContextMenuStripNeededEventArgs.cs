@@ -2,28 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class DataGridViewRowContextMenuStripNeededEventArgs : EventArgs
 {
-    public class DataGridViewRowContextMenuStripNeededEventArgs : EventArgs
+    public DataGridViewRowContextMenuStripNeededEventArgs(int rowIndex)
     {
-        public DataGridViewRowContextMenuStripNeededEventArgs(int rowIndex)
+        if (rowIndex < -1)
         {
-            if (rowIndex < -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
-
-            RowIndex = rowIndex;
+            throw new ArgumentOutOfRangeException(nameof(rowIndex));
         }
 
-        internal DataGridViewRowContextMenuStripNeededEventArgs(int rowIndex, ContextMenuStrip? contextMenuStrip)
-            : this(rowIndex)
-        {
-            ContextMenuStrip = contextMenuStrip;
-        }
-
-        public int RowIndex { get; }
-
-        public ContextMenuStrip? ContextMenuStrip { get; set; }
+        RowIndex = rowIndex;
     }
+
+    internal DataGridViewRowContextMenuStripNeededEventArgs(int rowIndex, ContextMenuStrip? contextMenuStrip)
+        : this(rowIndex)
+    {
+        ContextMenuStrip = contextMenuStrip;
+    }
+
+    public int RowIndex { get; }
+
+    public ContextMenuStrip? ContextMenuStrip { get; set; }
 }

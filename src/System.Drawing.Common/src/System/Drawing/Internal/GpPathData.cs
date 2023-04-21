@@ -3,13 +3,12 @@
 
 using System.Runtime.InteropServices;
 
-namespace System.Drawing.Internal
+namespace System.Drawing.Internal;
+
+[StructLayout(LayoutKind.Sequential)]
+internal unsafe struct GpPathData
 {
-    [StructLayout(LayoutKind.Sequential)]
-    internal unsafe struct GpPathData
-    {
-        public int Count;
-        public PointF* Points;
-        public byte* Types;
-    }
+    public int Count;
+    public PointF* Points;
+    public byte* Types;
 }

@@ -6,30 +6,29 @@
 
 using System.Collections;
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+/// <summary>
+///  Provides additional information for the Loaded event.
+/// </summary>
+public sealed class LoadedEventArgs : EventArgs
 {
     /// <summary>
-    ///  Provides additional information for the Loaded event.
+    ///  Creates a new LoadedEventArgs object.
     /// </summary>
-    public sealed class LoadedEventArgs : EventArgs
+    public LoadedEventArgs(bool succeeded, ICollection errors)
     {
-        /// <summary>
-        ///  Creates a new LoadedEventArgs object.
-        /// </summary>
-        public LoadedEventArgs(bool succeeded, ICollection errors)
-        {
-            HasSucceeded = succeeded;
-            Errors = errors ?? Array.Empty<object>();
-        }
-
-        /// <summary>
-        ///  True to indicate the designer load was successful. Even successful loads can have errors, if the errors were not too severe to prevent the designer from loading.
-        /// </summary>
-        public bool HasSucceeded { get; }
-
-        /// <summary>
-        ///  A collection of errors that occurred while the designer was loading.
-        /// </summary>
-        public ICollection Errors { get; }
+        HasSucceeded = succeeded;
+        Errors = errors ?? Array.Empty<object>();
     }
+
+    /// <summary>
+    ///  True to indicate the designer load was successful. Even successful loads can have errors, if the errors were not too severe to prevent the designer from loading.
+    /// </summary>
+    public bool HasSucceeded { get; }
+
+    /// <summary>
+    ///  A collection of errors that occurred while the designer was loading.
+    /// </summary>
+    public ICollection Errors { get; }
 }

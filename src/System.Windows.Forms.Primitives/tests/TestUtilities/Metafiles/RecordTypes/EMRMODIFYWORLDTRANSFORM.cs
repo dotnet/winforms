@@ -7,15 +7,14 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms.Metafiles
-{
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRMODIFYWORLDTRANSFORM
-    {
-        public EMR emr;
-        public Matrix3x2 xform;
-        public MODIFY_WORLD_TRANSFORM_MODE iMode;
+namespace System.Windows.Forms.Metafiles;
 
-        public override string ToString() => $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
-    }
+[StructLayout(LayoutKind.Sequential)]
+internal struct EMRMODIFYWORLDTRANSFORM
+{
+    public EMR emr;
+    public Matrix3x2 xform;
+    public MODIFY_WORLD_TRANSFORM_MODE iMode;
+
+    public override string ToString() => $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
 }

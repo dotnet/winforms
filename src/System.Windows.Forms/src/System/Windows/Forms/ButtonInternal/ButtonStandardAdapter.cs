@@ -6,233 +6,232 @@ using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 
-namespace System.Windows.Forms.ButtonInternal
+namespace System.Windows.Forms.ButtonInternal;
+
+internal class ButtonStandardAdapter : ButtonBaseAdapter
 {
-    internal class ButtonStandardAdapter : ButtonBaseAdapter
+    private const int BorderWidth = 2;
+
+    internal ButtonStandardAdapter(ButtonBase control) : base(control) { }
+
+    private PushButtonState DetermineState(bool up)
     {
-        private const int BorderWidth = 2;
+        PushButtonState state = PushButtonState.Normal;
 
-        internal ButtonStandardAdapter(ButtonBase control) : base(control) { }
-
-        private PushButtonState DetermineState(bool up)
+        if (!up)
         {
-            PushButtonState state = PushButtonState.Normal;
-
-            if (!up)
-            {
-                state = PushButtonState.Pressed;
-            }
-            else if (Control.MouseIsOver)
-            {
-                state = PushButtonState.Hot;
-            }
-            else if (!Control.Enabled)
-            {
-                state = PushButtonState.Disabled;
-            }
-            else if (Control.Focused || Control.IsDefault)
-            {
-                state = PushButtonState.Default;
-            }
-
-            return state;
+            state = PushButtonState.Pressed;
+        }
+        else if (Control.MouseIsOver)
+        {
+            state = PushButtonState.Hot;
+        }
+        else if (!Control.Enabled)
+        {
+            state = PushButtonState.Disabled;
+        }
+        else if (Control.Focused || Control.IsDefault)
+        {
+            state = PushButtonState.Default;
         }
 
-        internal override void PaintUp(PaintEventArgs e, CheckState state)
+        return state;
+    }
+
+    internal override void PaintUp(PaintEventArgs e, CheckState state)
+    {
+        PaintWorker(e, true, state);
+    }
+
+    internal override void PaintDown(PaintEventArgs e, CheckState state)
+    {
+        PaintWorker(e, false, state);
+    }
+
+    internal override void PaintOver(PaintEventArgs e, CheckState state)
+    {
+        PaintUp(e, state);
+    }
+
+    private void PaintThemedButtonBackground(PaintEventArgs e, Rectangle bounds, bool up)
+    {
+        PushButtonState pbState = DetermineState(up);
+
+        // First handle transparent case.
+        if (ButtonRenderer.IsBackgroundPartiallyTransparent(pbState))
         {
-            PaintWorker(e, true, state);
+            ButtonRenderer.DrawParentBackground(e, bounds, Control);
         }
 
-        internal override void PaintDown(PaintEventArgs e, CheckState state)
-        {
-            PaintWorker(e, false, state);
-        }
+        ButtonRenderer.DrawButtonForHandle(
+            e,
+            Control.ClientRectangle,
+            false,
+            pbState,
+            DpiHelper.IsScalingRequirementMet ? Control.HWNDInternal : HWND.Null);
 
-        internal override void PaintOver(PaintEventArgs e, CheckState state)
-        {
-            PaintUp(e, state);
-        }
+        // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.
+        // We hardcode this margin for now since GetThemeMargins returns 0 all the time.
+        //
+        // Changing this because GetThemeMargins simply does not work in some cases.
+        bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
 
-        private void PaintThemedButtonBackground(PaintEventArgs e, Rectangle bounds, bool up)
+        // Only paint if the user said not to use the themed backcolor.
+        if (!Control.UseVisualStyleBackColor)
         {
-            PushButtonState pbState = DetermineState(up);
+            bool isHighContrastHighlighted = up && IsHighContrastHighlighted();
+            Color color = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
 
-            // First handle transparent case.
-            if (ButtonRenderer.IsBackgroundPartiallyTransparent(pbState))
+            if (color.HasTransparency())
             {
-                ButtonRenderer.DrawParentBackground(e, bounds, Control);
+                using var brush = color.GetCachedSolidBrushScope();
+                e.GraphicsInternal.FillRectangle(brush, bounds);
             }
-
-            ButtonRenderer.DrawButtonForHandle(
-                e,
-                Control.ClientRectangle,
-                false,
-                pbState,
-                DpiHelper.IsScalingRequirementMet ? Control.HWNDInternal : HWND.Null);
-
-            // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.
-            // We hardcode this margin for now since GetThemeMargins returns 0 all the time.
-            //
-            // Changing this because GetThemeMargins simply does not work in some cases.
-            bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
-
-            // Only paint if the user said not to use the themed backcolor.
-            if (!Control.UseVisualStyleBackColor)
+            else
             {
-                bool isHighContrastHighlighted = up && IsHighContrastHighlighted();
-                Color color = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
-
-                if (color.HasTransparency())
-                {
-                    using var brush = color.GetCachedSolidBrushScope();
-                    e.GraphicsInternal.FillRectangle(brush, bounds);
-                }
-                else
-                {
-                    using var hdc = new DeviceContextHdcScope(e);
-                    hdc.FillRectangle(
-                        bounds,
-                        isHighContrastHighlighted
-                            ? PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_HIGHLIGHT)
-                            : Control.BackColorBrush);
-                }
-            }
-
-            // This code is mostly taken from the non-themed rendering code path.
-            if (Control.BackgroundImage is not null && !DisplayInformation.HighContrast)
-            {
-                ControlPaint.DrawBackgroundImage(
-                    e.GraphicsInternal,
-                    Control.BackgroundImage,
-                    Color.Transparent,
-                    Control.BackgroundImageLayout,
-                    Control.ClientRectangle,
+                using var hdc = new DeviceContextHdcScope(e);
+                hdc.FillRectangle(
                     bounds,
-                    Control.DisplayRectangle.Location,
-                    Control.RightToLeft);
+                    isHighContrastHighlighted
+                        ? PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_HIGHLIGHT)
+                        : Control.BackColorBrush);
             }
         }
 
-        private void PaintWorker(PaintEventArgs e, bool up, CheckState state)
+        // This code is mostly taken from the non-themed rendering code path.
+        if (Control.BackgroundImage is not null && !DisplayInformation.HighContrast)
         {
-            up = up && state == CheckState.Unchecked;
+            ControlPaint.DrawBackgroundImage(
+                e.GraphicsInternal,
+                Control.BackgroundImage,
+                Color.Transparent,
+                Control.BackgroundImageLayout,
+                Control.ClientRectangle,
+                bounds,
+                Control.DisplayRectangle.Location,
+                Control.RightToLeft);
+        }
+    }
 
-            ColorData colors = PaintRender(e).Calculate();
-            LayoutData layout;
-            if (Application.RenderWithVisualStyles)
-            {
-                // Don't have the text-pressed-down effect when we use themed painting to be consistent with Win32.
-                layout = PaintLayout(e, true).Layout();
-            }
-            else
-            {
-                layout = PaintLayout(e, up).Layout();
-            }
+    private void PaintWorker(PaintEventArgs e, bool up, CheckState state)
+    {
+        up = up && state == CheckState.Unchecked;
 
-            _ = Control as Button;
-            if (Application.RenderWithVisualStyles)
-            {
-                PaintThemedButtonBackground(e, Control.ClientRectangle, up);
-            }
-            else
-            {
-                Brush? backbrush = null;
-                if (state == CheckState.Indeterminate)
-                {
-                    backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
-                }
+        ColorData colors = PaintRender(e).Calculate();
+        LayoutData layout;
+        if (Application.RenderWithVisualStyles)
+        {
+            // Don't have the text-pressed-down effect when we use themed painting to be consistent with Win32.
+            layout = PaintLayout(e, true).Layout();
+        }
+        else
+        {
+            layout = PaintLayout(e, up).Layout();
+        }
 
-                try
-                {
-                    Rectangle bounds = Control.ClientRectangle;
-                    if (up)
-                    {
-                        // We are going to draw a 2 pixel border
-                        bounds.Inflate(-BorderWidth, -BorderWidth);
-                    }
-                    else
-                    {
-                        // We are going to draw a 1 pixel border.
-                        bounds.Inflate(-1, -1);
-                    }
-
-                    PaintButtonBackground(e, bounds, backbrush);
-                }
-                finally
-                {
-                    backbrush?.Dispose();
-                }
+        _ = Control as Button;
+        if (Application.RenderWithVisualStyles)
+        {
+            PaintThemedButtonBackground(e, Control.ClientRectangle, up);
+        }
+        else
+        {
+            Brush? backbrush = null;
+            if (state == CheckState.Indeterminate)
+            {
+                backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
             }
 
-            PaintImage(e, layout);
-
-            // Inflate the focus rectangle to be consistent with the behavior of Win32 app
-            if (Application.RenderWithVisualStyles && Control.FlatStyle != FlatStyle.Standard)
+            try
             {
-                layout.Focus.Inflate(1, 1);
-            }
-
-            if (up & IsHighContrastHighlighted())
-            {
-                Color highlightTextColor = SystemColors.HighlightText;
-                PaintField(e, layout, colors, highlightTextColor, false);
-
-                if (Control.Focused && Control.ShowFocusCues)
-                {
-                    // Drawing focus rectangle of HighlightText color
-                    ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.Focus, highlightTextColor);
-                }
-            }
-            else if (up & IsHighContrastHighlighted())
-            {
-                PaintField(e, layout, colors, SystemColors.HighlightText, true);
-            }
-            else
-            {
-                PaintField(e, layout, colors, colors.WindowText, true);
-            }
-
-            if (!Application.RenderWithVisualStyles)
-            {
-                Rectangle r = Control.ClientRectangle;
-                if (Control.IsDefault)
-                {
-                    r.Inflate(-1, -1);
-                }
-
-                DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
-
+                Rectangle bounds = Control.ClientRectangle;
                 if (up)
                 {
-                    Draw3DBorder(e, r, colors, raised: up);
+                    // We are going to draw a 2 pixel border
+                    bounds.Inflate(-BorderWidth, -BorderWidth);
                 }
                 else
                 {
-                    // Not Draw3DBorder(..., raised: false);
-                    ControlPaint.DrawBorderSimple(e, r, colors.ButtonShadow);
+                    // We are going to draw a 1 pixel border.
+                    bounds.Inflate(-1, -1);
                 }
+
+                PaintButtonBackground(e, bounds, backbrush);
+            }
+            finally
+            {
+                backbrush?.Dispose();
             }
         }
 
-        #region Layout
+        PaintImage(e, layout);
 
-        protected override LayoutOptions Layout(PaintEventArgs e)
+        // Inflate the focus rectangle to be consistent with the behavior of Win32 app
+        if (Application.RenderWithVisualStyles && Control.FlatStyle != FlatStyle.Standard)
         {
-            LayoutOptions layout = PaintLayout(e, up: false);
-            Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintLayout(e, /* up = */ true).GetPreferredSizeCore(LayoutUtils.s_maxSize),
-                "The state of up should not effect PreferredSize");
-            return layout;
+            layout.Focus.Inflate(1, 1);
         }
 
-        private LayoutOptions PaintLayout(PaintEventArgs e, bool up)
+        if (up & IsHighContrastHighlighted())
         {
-            LayoutOptions layout = CommonLayout();
-            layout.TextOffset = !up;
-            layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
+            Color highlightTextColor = SystemColors.HighlightText;
+            PaintField(e, layout, colors, highlightTextColor, false);
 
-            return layout;
+            if (Control.Focused && Control.ShowFocusCues)
+            {
+                // Drawing focus rectangle of HighlightText color
+                ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.Focus, highlightTextColor);
+            }
+        }
+        else if (up & IsHighContrastHighlighted())
+        {
+            PaintField(e, layout, colors, SystemColors.HighlightText, true);
+        }
+        else
+        {
+            PaintField(e, layout, colors, colors.WindowText, true);
         }
 
-        #endregion
+        if (!Application.RenderWithVisualStyles)
+        {
+            Rectangle r = Control.ClientRectangle;
+            if (Control.IsDefault)
+            {
+                r.Inflate(-1, -1);
+            }
+
+            DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
+
+            if (up)
+            {
+                Draw3DBorder(e, r, colors, raised: up);
+            }
+            else
+            {
+                // Not Draw3DBorder(..., raised: false);
+                ControlPaint.DrawBorderSimple(e, r, colors.ButtonShadow);
+            }
+        }
     }
+
+    #region Layout
+
+    protected override LayoutOptions Layout(PaintEventArgs e)
+    {
+        LayoutOptions layout = PaintLayout(e, up: false);
+        Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize) == PaintLayout(e, /* up = */ true).GetPreferredSizeCore(LayoutUtils.s_maxSize),
+            "The state of up should not effect PreferredSize");
+        return layout;
+    }
+
+    private LayoutOptions PaintLayout(PaintEventArgs e, bool up)
+    {
+        LayoutOptions layout = CommonLayout();
+        layout.TextOffset = !up;
+        layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
+
+        return layout;
+    }
+
+    #endregion
 }

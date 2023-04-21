@@ -6,16 +6,15 @@
 
 using Xunit.Sdk;
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+internal static partial class EmfValidator
 {
-    internal static partial class EmfValidator
+    private class WrappedXunitException : XunitException
     {
-        private class WrappedXunitException : XunitException
+        public WrappedXunitException(string userMessage, XunitException innerException)
+            : base(userMessage, innerException)
         {
-            public WrappedXunitException(string userMessage, XunitException innerException)
-                : base(userMessage, innerException)
-            {
-            }
         }
     }
 }

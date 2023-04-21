@@ -5,76 +5,75 @@
 using System.ComponentModel;
 using static Interop;
 
-namespace System.Windows.Forms.PropertyGridInternal.Tests
+namespace System.Windows.Forms.PropertyGridInternal.Tests;
+
+public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
 {
-    public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
+    [WinFormsFact]
+    public void DropDownHolder_AccessibilityObject_Constructor_initializes_fields()
     {
-        [WinFormsFact]
-        public void DropDownHolder_AccessibilityObject_Constructor_initializes_fields()
+        using PropertyGrid propertyGrid = new PropertyGrid();
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+
+        using PropertyGridView.DropDownHolder dropDownHolderControl = new PropertyGridView.DropDownHolder(propertyGridView);
+        PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject dropDownHolderControlAccessibilityObject =
+            Assert.IsAssignableFrom<PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject>(
+                dropDownHolderControl.AccessibilityObject);
+
+        PropertyGridView.DropDownHolder dropDownHolder =
+            dropDownHolderControlAccessibilityObject.TestAccessor().Dynamic._owningDropDownHolder;
+        Assert.NotNull(dropDownHolder);
+        Assert.Same(dropDownHolder, dropDownHolderControl);
+    }
+
+    [WinFormsFact]
+    public void DropDownHolder_AccessibilityObject_Constructor_throws_error_if_passed_control_is_null()
+    {
+        Assert.Throws<ArgumentNullException>(() =>
         {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+            var dropDownHolderAccessibleObject = new PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject(null);
+        });
+    }
 
-            using PropertyGridView.DropDownHolder dropDownHolderControl = new PropertyGridView.DropDownHolder(propertyGridView);
-            PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject dropDownHolderControlAccessibilityObject =
-                Assert.IsAssignableFrom<PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject>(
-                    dropDownHolderControl.AccessibilityObject);
+    [WinFormsFact]
+    public void DropDownHolder_AccessibilityObject_ReturnsExpected()
+    {
+        using PropertyGrid propertyGrid = new();
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        using PropertyGridView.DropDownHolder ownerControl = new(propertyGridView);
+        Control.ControlAccessibleObject accessibilityObject = ownerControl.AccessibilityObject as Control.ControlAccessibleObject;
 
-            PropertyGridView.DropDownHolder dropDownHolder =
-                dropDownHolderControlAccessibilityObject.TestAccessor().Dynamic._owningDropDownHolder;
-            Assert.NotNull(dropDownHolder);
-            Assert.Same(dropDownHolder, dropDownHolderControl);
-        }
+        Assert.Equal(ownerControl, accessibilityObject.Owner);
+        Assert.Equal(SR.PropertyGridViewDropDownControlHolderAccessibleName,
+            accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
 
-        [WinFormsFact]
-        public void DropDownHolder_AccessibilityObject_Constructor_throws_error_if_passed_control_is_null()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                var dropDownHolderAccessibleObject = new PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject(null);
-            });
-        }
+        AccessibleObject selectedGridEntryAccessibleObject = null;
+        Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
 
-        [WinFormsFact]
-        public void DropDownHolder_AccessibilityObject_ReturnsExpected()
-        {
-            using PropertyGrid propertyGrid = new();
-            PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-            using PropertyGridView.DropDownHolder ownerControl = new(propertyGridView);
-            Control.ControlAccessibleObject accessibilityObject = ownerControl.AccessibilityObject as Control.ControlAccessibleObject;
+        PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[0];
+        PropertyDescriptorGridEntry gridEntry = new PropertyDescriptorGridEntry(propertyGrid, null, property, false);
+        propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
-            Assert.Equal(ownerControl, accessibilityObject.Owner);
-            Assert.Equal(SR.PropertyGridViewDropDownControlHolderAccessibleName,
-                accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+        ownerControl.Visible = true;
 
-            AccessibleObject selectedGridEntryAccessibleObject = null;
-            Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
+        Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
 
-            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[0];
-            PropertyDescriptorGridEntry gridEntry = new PropertyDescriptorGridEntry(propertyGrid, null, property, false);
-            propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
+        Assert.Equal(propertyGridView.AccessibilityObject, accessibilityObject.FragmentRoot);
+    }
 
-            ownerControl.Visible = true;
+    [WinFormsFact]
+    public void DropDownHolderAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
+    {
+        using PropertyGrid propertyGrid = new PropertyGrid();
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        using PropertyGridView.DropDownHolder dropDownControlHolder = new PropertyGridView.DropDownHolder(propertyGridView);
+        // AccessibleRole is not set = Default
 
-            selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
-            Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        object actual = dropDownControlHolder.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
 
-            Assert.Equal(propertyGridView.AccessibilityObject, accessibilityObject.FragmentRoot);
-        }
-
-        [WinFormsFact]
-        public void DropDownHolderAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
-        {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-            using PropertyGridView.DropDownHolder dropDownControlHolder = new PropertyGridView.DropDownHolder(propertyGridView);
-            // AccessibleRole is not set = Default
-
-            object actual = dropDownControlHolder.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-
-            Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
-            Assert.False(propertyGrid.IsHandleCreated);
-            Assert.False(dropDownControlHolder.IsHandleCreated);
-        }
+        Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+        Assert.False(propertyGrid.IsHandleCreated);
+        Assert.False(dropDownControlHolder.IsHandleCreated);
     }
 }

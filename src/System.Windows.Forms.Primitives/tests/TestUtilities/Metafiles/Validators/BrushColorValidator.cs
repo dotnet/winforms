@@ -6,12 +6,11 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+internal class BrushColorValidator : IStateValidator
 {
-    internal class BrushColorValidator : IStateValidator
-    {
-        private readonly Color _brushColor;
-        public BrushColorValidator(Color brushColor) => _brushColor = brushColor;
-        public void Validate(DeviceContextState state) => Assert.Equal((COLORREF)_brushColor, state.SelectedBrush.lbColor);
-    }
+    private readonly Color _brushColor;
+    public BrushColorValidator(Color brushColor) => _brushColor = brushColor;
+    public void Validate(DeviceContextState state) => Assert.Equal((COLORREF)_brushColor, state.SelectedBrush.lbColor);
 }

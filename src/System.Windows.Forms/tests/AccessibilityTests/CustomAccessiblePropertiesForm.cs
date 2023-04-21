@@ -4,13 +4,12 @@
 
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App
+namespace Accessibility_Core_App;
+
+public partial class CustomAccessiblePropertiesForm : Form
 {
-    public partial class CustomAccessiblePropertiesForm : Form
+    public CustomAccessiblePropertiesForm()
     {
-        public CustomAccessiblePropertiesForm()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

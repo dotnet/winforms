@@ -6,55 +6,54 @@
 
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design.Behavior
+namespace System.Windows.Forms.Design.Behavior;
+
+public sealed partial class BehaviorService
 {
-    public sealed partial class BehaviorService
+    private class MenuCommandHandler : IMenuCommandService
     {
-        private class MenuCommandHandler : IMenuCommandService
+        private readonly BehaviorService _owner;
+        private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
+
+        public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
         {
-            private readonly BehaviorService _owner;
-            private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
-
-            public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
-            {
-                _owner = owner;
-                MenuService = menuService;
-            }
-
-            public IMenuCommandService MenuService { get; }
-
-            void IMenuCommandService.AddCommand(MenuCommand command) => MenuService.AddCommand(command);
-
-            void IMenuCommandService.RemoveVerb(DesignerVerb verb) => MenuService.RemoveVerb(verb);
-
-            void IMenuCommandService.RemoveCommand(MenuCommand command) => MenuService.RemoveCommand(command);
-
-            MenuCommand IMenuCommandService.FindCommand(CommandID commandID)
-            {
-                try
-                {
-                    if (_currentCommands.Contains(commandID))
-                    {
-                        return null;
-                    }
-
-                    _currentCommands.Push(commandID);
-                    return _owner.FindCommand(commandID, MenuService);
-                }
-                finally
-                {
-                    _currentCommands.Pop();
-                }
-            }
-
-            bool IMenuCommandService.GlobalInvoke(CommandID commandID) => MenuService.GlobalInvoke(commandID);
-
-            void IMenuCommandService.ShowContextMenu(CommandID menuID, int x, int y)
-                => MenuService.ShowContextMenu(menuID, x, y);
-
-            void IMenuCommandService.AddVerb(DesignerVerb verb) => MenuService.AddVerb(verb);
-
-            DesignerVerbCollection IMenuCommandService.Verbs => MenuService.Verbs;
+            _owner = owner;
+            MenuService = menuService;
         }
+
+        public IMenuCommandService MenuService { get; }
+
+        void IMenuCommandService.AddCommand(MenuCommand command) => MenuService.AddCommand(command);
+
+        void IMenuCommandService.RemoveVerb(DesignerVerb verb) => MenuService.RemoveVerb(verb);
+
+        void IMenuCommandService.RemoveCommand(MenuCommand command) => MenuService.RemoveCommand(command);
+
+        MenuCommand IMenuCommandService.FindCommand(CommandID commandID)
+        {
+            try
+            {
+                if (_currentCommands.Contains(commandID))
+                {
+                    return null;
+                }
+
+                _currentCommands.Push(commandID);
+                return _owner.FindCommand(commandID, MenuService);
+            }
+            finally
+            {
+                _currentCommands.Pop();
+            }
+        }
+
+        bool IMenuCommandService.GlobalInvoke(CommandID commandID) => MenuService.GlobalInvoke(commandID);
+
+        void IMenuCommandService.ShowContextMenu(CommandID menuID, int x, int y)
+            => MenuService.ShowContextMenu(menuID, x, y);
+
+        void IMenuCommandService.AddVerb(DesignerVerb verb) => MenuService.AddVerb(verb);
+
+        DesignerVerbCollection IMenuCommandService.Verbs => MenuService.Verbs;
     }
 }

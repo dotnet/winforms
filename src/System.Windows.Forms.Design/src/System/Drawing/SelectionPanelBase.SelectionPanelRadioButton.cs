@@ -4,33 +4,32 @@
 
 using System.Windows.Forms;
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design;
+
+internal abstract partial class SelectionPanelBase
 {
-    internal abstract partial class SelectionPanelBase
+    protected class SelectionPanelRadioButton : RadioButton
     {
-        protected class SelectionPanelRadioButton : RadioButton
+        public SelectionPanelRadioButton()
         {
-            public SelectionPanelRadioButton()
+            AutoCheck = false;
+        }
+
+        protected override bool ShowFocusCues => true;
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            switch (keyData)
             {
-                AutoCheck = false;
+                case Keys.Left:
+                case Keys.Right:
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Return:
+                    return true;
             }
 
-            protected override bool ShowFocusCues => true;
-
-            protected override bool IsInputKey(Keys keyData)
-            {
-                switch (keyData)
-                {
-                    case Keys.Left:
-                    case Keys.Right:
-                    case Keys.Up:
-                    case Keys.Down:
-                    case Keys.Return:
-                        return true;
-                }
-
-                return base.IsInputKey(keyData);
-            }
+            return base.IsInputKey(keyData);
         }
     }
 }

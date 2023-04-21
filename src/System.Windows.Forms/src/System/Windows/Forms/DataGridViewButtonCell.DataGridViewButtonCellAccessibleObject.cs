@@ -4,62 +4,61 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewButtonCell
 {
-    public partial class DataGridViewButtonCell
+    protected class DataGridViewButtonCellAccessibleObject : DataGridViewCellAccessibleObject
     {
-        protected class DataGridViewButtonCellAccessibleObject : DataGridViewCellAccessibleObject
+        public DataGridViewButtonCellAccessibleObject(DataGridViewCell? owner) : base(owner)
         {
-            public DataGridViewButtonCellAccessibleObject(DataGridViewCell? owner) : base(owner)
-            {
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    return SR.DataGridView_AccButtonCellDefaultAction;
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                if (Owner is null)
-                {
-                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
-                }
-
-                if (!(Owner is DataGridViewButtonCell dataGridViewCell))
-                {
-                    return;
-                }
-
-                if (dataGridViewCell.RowIndex == -1)
-                {
-                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
-                }
-
-                DataGridView? dataGridView = dataGridViewCell.DataGridView;
-                if (dataGridView?.IsHandleCreated != true)
-                {
-                    return;
-                }
-
-                if (dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
-                {
-                    dataGridView.OnCellClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                    dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                }
-            }
-
-            public override int GetChildCount() => 0;
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID == UiaCore.UIA.ControlTypePropertyId
-                    ? UiaCore.UIA.ButtonControlTypeId
-                    : base.GetPropertyValue(propertyID);
         }
+
+        public override string DefaultAction
+        {
+            get
+            {
+                return SR.DataGridView_AccButtonCellDefaultAction;
+            }
+        }
+
+        public override void DoDefaultAction()
+        {
+            if (Owner is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+            }
+
+            if (!(Owner is DataGridViewButtonCell dataGridViewCell))
+            {
+                return;
+            }
+
+            if (dataGridViewCell.RowIndex == -1)
+            {
+                throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
+            }
+
+            DataGridView? dataGridView = dataGridViewCell.DataGridView;
+            if (dataGridView?.IsHandleCreated != true)
+            {
+                return;
+            }
+
+            if (dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
+            {
+                dataGridView.OnCellClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
+                dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
+            }
+        }
+
+        public override int GetChildCount() => 0;
+
+        internal override bool IsIAccessibleExSupported() => true;
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            => propertyID == UiaCore.UIA.ControlTypePropertyId
+                ? UiaCore.UIA.ButtonControlTypeId
+                : base.GetPropertyValue(propertyID);
     }
 }

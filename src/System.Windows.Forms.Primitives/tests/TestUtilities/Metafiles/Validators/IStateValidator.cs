@@ -4,10 +4,9 @@
 
 #nullable enable
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+internal interface IStateValidator
 {
-    internal interface IStateValidator
-    {
-        void Validate(DeviceContextState state);
-    }
+    void Validate(DeviceContextState state);
 }

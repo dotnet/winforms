@@ -5,211 +5,210 @@
 using System.Dynamic;
 using System.Reflection;
 
-namespace System
+namespace System;
+
+/// <summary>
+///  Internals (including privates) access wrapper for tests.
+/// </summary>
+/// <typeparam name="T">The type of the class being accessed.</typeparam>
+/// <remarks>
+///  Does not allow access to public members- use the object directly.
+///
+///  One should strive to *not* access internal state where otherwise avoidable.
+///  Ask yourself if you can test the contract of the object in question
+///  *without* manipulating internals directly. Often you can.
+///
+///  Where internals access is more useful are testing building blocks of more
+///  complicated objects, such as internal helper methods or classes.
+///
+///  This can be used to access private/internal objects as well via
+/// </remarks>
+/// <example>
+///  This class can also be derived from to create a strongly typed wrapper
+///  that can then be associated via an extension method for the given type
+///  to provide consistent discovery and access.
+///
+///  <![CDATA[
+///   public class GuidTestAccessor : TestAccessor<Guid>
+///   {
+///     public TestAccessor(Guid instance) : base(instance) {}
+///
+///     public int A => Dynamic._a;
+///   }
+///
+///   public static partial class TestAccessors
+///   {
+///       public static GuidTestAccessor TestAccessor(this Guid guid)
+///           => new GuidTestAccessor(guid);
+///   }
+///  ]]>
+/// </example>
+public class TestAccessor<T> : ITestAccessor
 {
-    /// <summary>
-    ///  Internals (including privates) access wrapper for tests.
-    /// </summary>
-    /// <typeparam name="T">The type of the class being accessed.</typeparam>
-    /// <remarks>
-    ///  Does not allow access to public members- use the object directly.
-    ///
-    ///  One should strive to *not* access internal state where otherwise avoidable.
-    ///  Ask yourself if you can test the contract of the object in question
-    ///  *without* manipulating internals directly. Often you can.
-    ///
-    ///  Where internals access is more useful are testing building blocks of more
-    ///  complicated objects, such as internal helper methods or classes.
-    ///
-    ///  This can be used to access private/internal objects as well via
-    /// </remarks>
-    /// <example>
-    ///  This class can also be derived from to create a strongly typed wrapper
-    ///  that can then be associated via an extension method for the given type
-    ///  to provide consistent discovery and access.
-    ///
-    ///  <![CDATA[
-    ///   public class GuidTestAccessor : TestAccessor<Guid>
-    ///   {
-    ///     public TestAccessor(Guid instance) : base(instance) {}
-    ///
-    ///     public int A => Dynamic._a;
-    ///   }
-    ///
-    ///   public static partial class TestAccessors
-    ///   {
-    ///       public static GuidTestAccessor TestAccessor(this Guid guid)
-    ///           => new GuidTestAccessor(guid);
-    ///   }
-    ///  ]]>
-    /// </example>
-    public class TestAccessor<T> : ITestAccessor
+    private static readonly Type s_type = typeof(T);
+    protected readonly T? _instance;
+    private readonly DynamicWrapper _dynamicWrapper;
+
+    /// <param name="instance">The type instance, can be null for statics.</param>
+    public TestAccessor(T? instance)
     {
-        private static readonly Type s_type = typeof(T);
-        protected readonly T? _instance;
-        private readonly DynamicWrapper _dynamicWrapper;
+        _instance = instance;
+        _dynamicWrapper = new DynamicWrapper(_instance);
+    }
 
-        /// <param name="instance">The type instance, can be null for statics.</param>
-        public TestAccessor(T? instance)
+    /// <inheritdoc/>
+    public TDelegate CreateDelegate<TDelegate>(string? methodName = null)
+        where TDelegate : Delegate
+    {
+        Type type = typeof(TDelegate);
+        MethodInfo? invokeMethodInfo = type.GetMethod("Invoke");
+        Type[] types = invokeMethodInfo is null ? Array.Empty<Type>() : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
+
+        // To make it easier to write a class wrapper with a number of delegates,
+        // we'll take the name from the delegate itself when unspecified.
+        methodName ??= type.Name;
+
+        MethodInfo? methodInfo = s_type.GetMethod(
+            methodName,
+            BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
+            binder: null,
+            types,
+            modifiers: null);
+
+        if (methodInfo is null)
+            throw new ArgumentException($"Could not find non public method {methodName}.");
+
+        return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? null : _instance);
+    }
+
+    /// <inheritdoc/>
+    public dynamic Dynamic => _dynamicWrapper;
+
+    private class DynamicWrapper : DynamicObject
+    {
+        private readonly object? _instance;
+
+        public DynamicWrapper(object? instance)
+            => _instance = instance;
+
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object?[]? args, out object? result)
         {
-            _instance = instance;
-            _dynamicWrapper = new DynamicWrapper(_instance);
-        }
+            result = null;
+            ArgumentNullException.ThrowIfNull(args);
+            ArgumentNullException.ThrowIfNull(binder);
 
-        /// <inheritdoc/>
-        public TDelegate CreateDelegate<TDelegate>(string? methodName = null)
-            where TDelegate : Delegate
-        {
-            Type type = typeof(TDelegate);
-            MethodInfo? invokeMethodInfo = type.GetMethod("Invoke");
-            Type[] types = invokeMethodInfo is null ? Array.Empty<Type>() : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
+            MethodInfo? methodInfo = null;
+            Type? type = s_type;
 
-            // To make it easier to write a class wrapper with a number of delegates,
-            // we'll take the name from the delegate itself when unspecified.
-            methodName ??= type.Name;
+            do
+            {
+                try
+                {
+                    methodInfo = type?.GetMethod(
+                        binder.Name,
+                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                }
+                catch (AmbiguousMatchException)
+                {
+                    // More than one match for the name, specify the arguments.
+                    // We currently do not have a scenario where we are trying to pass null as an argument
+                    // to an overloaded method. This will need to be updated once we have a scenario.
+                    methodInfo = type?.GetMethod(
+                        binder.Name,
+                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
+                        binder: null,
+                        args.Select(a => a!.GetType()).ToArray(),
+                        modifiers: null);
+                }
 
-            MethodInfo? methodInfo = s_type.GetMethod(
-                methodName,
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
-                binder: null,
-                types,
-                modifiers: null);
+                if (methodInfo is not null || type == typeof(object))
+                {
+                    // Found something, or already at the top of the type heirarchy
+                    break;
+                }
+
+                // Walk up the heirarchy
+                type = type?.BaseType;
+            }
+            while (true);
 
             if (methodInfo is null)
-                throw new ArgumentException($"Could not find non public method {methodName}.");
+                return false;
 
-            return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? null : _instance);
+            result = methodInfo.Invoke(_instance, args);
+            return true;
         }
 
-        /// <inheritdoc/>
-        public dynamic Dynamic => _dynamicWrapper;
-
-        private class DynamicWrapper : DynamicObject
+        public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
-            private readonly object? _instance;
+            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            if (info is null)
+                return false;
 
-            public DynamicWrapper(object? instance)
-                => _instance = instance;
+            SetValue(info, value);
+            return true;
+        }
 
-            public override bool TryInvokeMember(InvokeMemberBinder binder, object?[]? args, out object? result)
+        public override bool TryGetMember(GetMemberBinder binder, out object? result)
+        {
+            result = null;
+
+            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            if (info is null)
+                return false;
+
+            result = GetValue(info);
+            return true;
+        }
+
+        private MemberInfo? GetFieldOrPropertyInfo(string memberName)
+        {
+            Type? type = s_type;
+            MemberInfo? info;
+
+            do
             {
-                result = null;
-                ArgumentNullException.ThrowIfNull(args);
-                ArgumentNullException.ThrowIfNull(binder);
-
-                MethodInfo? methodInfo = null;
-                Type? type = s_type;
-
-                do
-                {
-                    try
-                    {
-                        methodInfo = type?.GetMethod(
-                            binder.Name,
-                            BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-                    }
-                    catch (AmbiguousMatchException)
-                    {
-                        // More than one match for the name, specify the arguments.
-                        // We currently do not have a scenario where we are trying to pass null as an argument
-                        // to an overloaded method. This will need to be updated once we have a scenario.
-                        methodInfo = type?.GetMethod(
-                            binder.Name,
-                            BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
-                            binder: null,
-                            args.Select(a => a!.GetType()).ToArray(),
-                            modifiers: null);
-                    }
-
-                    if (methodInfo is not null || type == typeof(object))
-                    {
-                        // Found something, or already at the top of the type heirarchy
-                        break;
-                    }
-
-                    // Walk up the heirarchy
-                    type = type?.BaseType;
-                }
-                while (true);
-
-                if (methodInfo is null)
-                    return false;
-
-                result = methodInfo.Invoke(_instance, args);
-                return true;
-            }
-
-            public override bool TrySetMember(SetMemberBinder binder, object? value)
-            {
-                MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
-                if (info is null)
-                    return false;
-
-                SetValue(info, value);
-                return true;
-            }
-
-            public override bool TryGetMember(GetMemberBinder binder, out object? result)
-            {
-                result = null;
-
-                MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
-                if (info is null)
-                    return false;
-
-                result = GetValue(info);
-                return true;
-            }
-
-            private MemberInfo? GetFieldOrPropertyInfo(string memberName)
-            {
-                Type? type = s_type;
-                MemberInfo? info;
-
-                do
-                {
-                    info = (MemberInfo?)type?.GetField(
+                info = (MemberInfo?)type?.GetField(
+                    memberName,
+                    BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic)
+                    ?? type?.GetProperty(
                         memberName,
-                        BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic)
-                        ?? type?.GetProperty(
-                            memberName,
-                            BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
+                        BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
-                    if (info is not null || type == typeof(object))
-                    {
-                        // Found something, or already at the top of the type heirarchy
-                        break;
-                    }
-
-                    // Walk up the type heirarchy
-                    type = type?.BaseType;
+                if (info is not null || type == typeof(object))
+                {
+                    // Found something, or already at the top of the type heirarchy
+                    break;
                 }
-                while (true);
 
-                return info;
+                // Walk up the type heirarchy
+                type = type?.BaseType;
             }
+            while (true);
 
-            private object? GetValue(MemberInfo memberInfo)
-                => memberInfo switch
-                {
-                    FieldInfo fieldInfo => fieldInfo.GetValue(_instance),
-                    PropertyInfo propertyInfo => propertyInfo.GetValue(_instance),
-                    _ => throw new InvalidOperationException()
-                };
+            return info;
+        }
 
-            private void SetValue(MemberInfo memberInfo, object? value)
+        private object? GetValue(MemberInfo memberInfo)
+            => memberInfo switch
             {
-                switch (memberInfo)
-                {
-                    case FieldInfo fieldInfo:
-                        fieldInfo.SetValue(_instance, value);
-                        break;
-                    case PropertyInfo propertyInfo:
-                        propertyInfo.SetValue(_instance, value);
-                        break;
-                    default:
-                        throw new InvalidOperationException();
-                }
+                FieldInfo fieldInfo => fieldInfo.GetValue(_instance),
+                PropertyInfo propertyInfo => propertyInfo.GetValue(_instance),
+                _ => throw new InvalidOperationException()
+            };
+
+        private void SetValue(MemberInfo memberInfo, object? value)
+        {
+            switch (memberInfo)
+            {
+                case FieldInfo fieldInfo:
+                    fieldInfo.SetValue(_instance, value);
+                    break;
+                case PropertyInfo propertyInfo:
+                    propertyInfo.SetValue(_instance, value);
+                    break;
+                default:
+                    throw new InvalidOperationException();
             }
         }
     }

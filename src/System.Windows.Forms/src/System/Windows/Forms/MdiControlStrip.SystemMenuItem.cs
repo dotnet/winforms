@@ -2,39 +2,38 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal partial class MdiControlStrip
 {
-    internal partial class MdiControlStrip
+    // when the system menu item shortcut is evaluated - pop the dropdown
+    internal class SystemMenuItem : ToolStripMenuItem
     {
-        // when the system menu item shortcut is evaluated - pop the dropdown
-        internal class SystemMenuItem : ToolStripMenuItem
+        public SystemMenuItem()
         {
-            public SystemMenuItem()
+            AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
+        }
+
+        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
+        {
+            if (Visible && ShortcutKeys == keyData)
             {
-                AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
+                ShowDropDown();
+                DropDown.SelectNextToolStripItem(start: null, forward: true);
+                return true;
             }
 
-            protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
-            {
-                if (Visible && ShortcutKeys == keyData)
-                {
-                    ShowDropDown();
-                    DropDown.SelectNextToolStripItem(start: null, forward: true);
-                    return true;
-                }
+            return base.ProcessCmdKey(ref m, keyData);
+        }
 
-                return base.ProcessCmdKey(ref m, keyData);
+        protected override void OnOwnerChanged(EventArgs e)
+        {
+            if (HasDropDownItems && DropDown.Visible)
+            {
+                HideDropDown();
             }
 
-            protected override void OnOwnerChanged(EventArgs e)
-            {
-                if (HasDropDownItems && DropDown.Visible)
-                {
-                    HideDropDown();
-                }
-
-                base.OnOwnerChanged(e);
-            }
+            base.OnOwnerChanged(e);
         }
     }
 }

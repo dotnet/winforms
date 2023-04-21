@@ -4,44 +4,43 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class FontCacheTests
 {
-    public class FontCacheTests
+    [Fact(Skip = "Run manually, takes a few minutes and is very resource intensive.")]
+    public void StressTest()
     {
-        [Fact(Skip = "Run manually, takes a few minutes and is very resource intensive.")]
-        public void StressTest()
+        Font[] fonts = new Font[10];
+        for (int i = 0; i < 10; i++)
         {
-            Font[] fonts = new Font[10];
+            fonts[i] = new Font("Arial", i + 6);
+        }
+
+        FontCache cache = new FontCache(softLimit: 4, hardLimit: 8);
+        Random random = new Random();
+        try
+        {
+            for (int i = 0; i < 10_000; i++)
+            {
+                Thread.Sleep(random.Next(5));
+                Task.Run(() =>
+                {
+                    using var hfont = cache.GetEntry(
+                        fonts[random.Next(10)],
+                        (FONT_QUALITY)random.Next(7));
+
+                    Assert.False(hfont.Object.IsNull);
+                    Thread.Sleep(random.Next(10));
+                });
+            }
+        }
+        finally
+        {
+            cache.Dispose();
             for (int i = 0; i < 10; i++)
             {
-                fonts[i] = new Font("Arial", i + 6);
-            }
-
-            FontCache cache = new FontCache(softLimit: 4, hardLimit: 8);
-            Random random = new Random();
-            try
-            {
-                for (int i = 0; i < 10_000; i++)
-                {
-                    Thread.Sleep(random.Next(5));
-                    Task.Run(() =>
-                    {
-                        using var hfont = cache.GetEntry(
-                            fonts[random.Next(10)],
-                            (FONT_QUALITY)random.Next(7));
-
-                        Assert.False(hfont.Object.IsNull);
-                        Thread.Sleep(random.Next(10));
-                    });
-                }
-            }
-            finally
-            {
-                cache.Dispose();
-                for (int i = 0; i < 10; i++)
-                {
-                    fonts[i]?.Dispose();
-                }
+                fonts[i]?.Dispose();
             }
         }
     }

@@ -2,65 +2,64 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal class MouseHoverTimer : IDisposable
 {
-    internal class MouseHoverTimer : IDisposable
+    private Timer _mouseHoverTimer = new Timer();
+
+    // Consider - weak reference?
+    private ToolStripItem? _currentItem;
+
+    public MouseHoverTimer()
     {
-        private Timer _mouseHoverTimer = new Timer();
+        _mouseHoverTimer.Interval = SystemInformation.MouseHoverTime;
+        _mouseHoverTimer.Tick += new EventHandler(OnTick);
+    }
 
-        // Consider - weak reference?
-        private ToolStripItem? _currentItem;
-
-        public MouseHoverTimer()
+    public void Start(ToolStripItem? item)
+    {
+        if (item != _currentItem)
         {
-            _mouseHoverTimer.Interval = SystemInformation.MouseHoverTime;
-            _mouseHoverTimer.Tick += new EventHandler(OnTick);
+            Cancel(_currentItem);
         }
 
-        public void Start(ToolStripItem? item)
+        _currentItem = item;
+        if (_currentItem is not null)
         {
-            if (item != _currentItem)
-            {
-                Cancel(_currentItem);
-            }
-
-            _currentItem = item;
-            if (_currentItem is not null)
-            {
-                _mouseHoverTimer.Enabled = true;
-            }
+            _mouseHoverTimer.Enabled = true;
         }
+    }
 
-        public void Cancel()
-        {
-            _mouseHoverTimer.Enabled = false;
-            _currentItem = null;
-        }
+    public void Cancel()
+    {
+        _mouseHoverTimer.Enabled = false;
+        _currentItem = null;
+    }
 
-        /// <summary> cancels if and only if this item was the one that
-        ///  requested the timer
-        /// </summary>
-        public void Cancel(ToolStripItem? item)
-        {
-            if (item == _currentItem)
-            {
-                Cancel();
-            }
-        }
-
-        public void Dispose()
+    /// <summary> cancels if and only if this item was the one that
+    ///  requested the timer
+    /// </summary>
+    public void Cancel(ToolStripItem? item)
+    {
+        if (item == _currentItem)
         {
             Cancel();
-            _mouseHoverTimer.Dispose();
         }
+    }
 
-        private void OnTick(object? sender, EventArgs e)
+    public void Dispose()
+    {
+        Cancel();
+        _mouseHoverTimer.Dispose();
+    }
+
+    private void OnTick(object? sender, EventArgs e)
+    {
+        _mouseHoverTimer.Enabled = false;
+        if (_currentItem is not null && !_currentItem.IsDisposed)
         {
-            _mouseHoverTimer.Enabled = false;
-            if (_currentItem is not null && !_currentItem.IsDisposed)
-            {
-                _currentItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseHover);
-            }
+            _currentItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseHover);
         }
     }
 }

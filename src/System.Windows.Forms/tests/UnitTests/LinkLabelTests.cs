@@ -2,19 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
-{
-    public class LinkLabelTests
-    {
-        [WinFormsFact]
-        public void LinkLabel_Constructor()
-        {
-            using var label = new LinkLabel();
+namespace System.Windows.Forms.Tests;
 
-            Assert.NotNull(label);
-            Assert.True(label.LinkArea.IsEmpty);
-            Assert.Equal(0, label.LinkArea.Start);
-            Assert.Equal(0, label.LinkArea.Length);
-        }
+public class LinkLabelTests
+{
+    [WinFormsFact]
+    public void LinkLabel_Constructor()
+    {
+        using var label = new LinkLabel();
+
+        Assert.NotNull(label);
+        Assert.True(label.LinkArea.IsEmpty);
+        Assert.Equal(0, label.LinkArea.Start);
+        Assert.Equal(0, label.LinkArea.Length);
     }
 }

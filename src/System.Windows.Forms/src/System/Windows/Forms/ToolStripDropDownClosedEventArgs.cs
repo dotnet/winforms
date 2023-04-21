@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
-{
-    public class ToolStripDropDownClosedEventArgs : EventArgs
-    {
-        public ToolStripDropDownClosedEventArgs(ToolStripDropDownCloseReason reason)
-        {
-            CloseReason = reason;
-        }
+namespace System.Windows.Forms;
 
-        public ToolStripDropDownCloseReason CloseReason { get; }
+public class ToolStripDropDownClosedEventArgs : EventArgs
+{
+    public ToolStripDropDownClosedEventArgs(ToolStripDropDownCloseReason reason)
+    {
+        CloseReason = reason;
     }
+
+    public ToolStripDropDownCloseReason CloseReason { get; }
 }

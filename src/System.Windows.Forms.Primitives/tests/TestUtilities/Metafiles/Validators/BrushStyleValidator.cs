@@ -4,12 +4,11 @@
 
 #nullable enable
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+internal class BrushStyleValidator : IStateValidator
 {
-    internal class BrushStyleValidator : IStateValidator
-    {
-        private readonly BRUSH_STYLE _brushStyle;
-        public BrushStyleValidator(BRUSH_STYLE brushStyle) => _brushStyle = brushStyle;
-        public void Validate(DeviceContextState state) => Assert.Equal(_brushStyle, state.SelectedBrush.lbStyle);
-    }
+    private readonly BRUSH_STYLE _brushStyle;
+    public BrushStyleValidator(BRUSH_STYLE brushStyle) => _brushStyle = brushStyle;
+    public void Validate(DeviceContextState state) => Assert.Equal(_brushStyle, state.SelectedBrush.lbStyle);
 }

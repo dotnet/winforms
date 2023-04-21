@@ -4,15 +4,14 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
-{
-    public class DataGridViewRowCancelEventArgs : CancelEventArgs
-    {
-        public DataGridViewRowCancelEventArgs(DataGridViewRow? dataGridViewRow)
-        {
-            Row = dataGridViewRow;
-        }
+namespace System.Windows.Forms;
 
-        public DataGridViewRow? Row { get; set; }
+public class DataGridViewRowCancelEventArgs : CancelEventArgs
+{
+    public DataGridViewRowCancelEventArgs(DataGridViewRow? dataGridViewRow)
+    {
+        Row = dataGridViewRow;
     }
+
+    public DataGridViewRow? Row { get; set; }
 }

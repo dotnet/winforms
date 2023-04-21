@@ -10,124 +10,123 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  Provides an editor for an image collection.
+/// </summary>
+internal class ImageCollectionEditor : CollectionEditor
 {
     /// <summary>
-    ///  Provides an editor for an image collection.
+    ///  Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
     /// </summary>
-    internal class ImageCollectionEditor : CollectionEditor
+    public ImageCollectionEditor(Type type)
+        : base(type)
     {
-        /// <summary>
-        ///  Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
-        /// </summary>
-        public ImageCollectionEditor(Type type)
-            : base(type)
+    }
+
+    /// <inheritdoc />
+    protected override string GetDisplayText(object value)
+    {
+        if (value is null)
         {
+            return string.Empty;
         }
 
-        /// <inheritdoc />
-        protected override string GetDisplayText(object value)
+        string text;
+
+        PropertyDescriptor property = TypeDescriptor.GetProperties(value)["Name"];
+        if (property is not null)
         {
-            if (value is null)
+            text = (string)property.GetValue(value);
+            if (!string.IsNullOrEmpty(text))
             {
-                return string.Empty;
+                return text;
             }
-
-            string text;
-
-            PropertyDescriptor property = TypeDescriptor.GetProperties(value)["Name"];
-            if (property is not null)
-            {
-                text = (string)property.GetValue(value);
-                if (!string.IsNullOrEmpty(text))
-                {
-                    return text;
-                }
-            }
-
-            // If we want to show any type information - pretend we're an image.
-            if (value is ImageListImage image)
-            {
-                value = image.Image;
-            }
-
-            text = TypeDescriptor.GetConverter(value).ConvertToString(value);
-            if (string.IsNullOrEmpty(text))
-            {
-                text = value.GetType().Name;
-            }
-
-            return text;
         }
 
-        /// <inheritdoc />
-        protected override object CreateInstance(Type type)
+        // If we want to show any type information - pretend we're an image.
+        if (value is ImageListImage image)
         {
-            UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(typeof(ImageListImage), typeof(UITypeEditor));
-            return editor.EditValue(Context, null);
+            value = image.Image;
         }
 
-        /// <inheritdoc />
-        protected override CollectionForm CreateCollectionForm()
+        text = TypeDescriptor.GetConverter(value).ConvertToString(value);
+        if (string.IsNullOrEmpty(text))
         {
-            CollectionForm form = base.CreateCollectionForm();
-
-            // We want to switch the title to ImageCollection Editor instead of ImageListImage Editor. The collection
-            // editor is actually using ImageListImages, while the collection we're actually editing is the Image
-            // collection.
-            form.Text = SR.ImageCollectionEditorFormText;
-            return form;
+            text = value.GetType().Name;
         }
 
-        /// <summary>
-        ///  Gets images from the given array.
-        /// </summary>
-        /// <param name="array">The input is an <see cref="ArrayList"/> as an object.</param>
-        /// <returns>An <see cref="ArrayList"/> which contains individual images that need to be created.</returns>
-        protected override IList GetObjectsFromInstance(object array) => array as ArrayList;
+        return text;
+    }
 
-        protected override object[] GetItems(object editValue)
+    /// <inheritdoc />
+    protected override object CreateInstance(Type type)
+    {
+        UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(typeof(ImageListImage), typeof(UITypeEditor));
+        return editor.EditValue(Context, null);
+    }
+
+    /// <inheritdoc />
+    protected override CollectionForm CreateCollectionForm()
+    {
+        CollectionForm form = base.CreateCollectionForm();
+
+        // We want to switch the title to ImageCollection Editor instead of ImageListImage Editor. The collection
+        // editor is actually using ImageListImages, while the collection we're actually editing is the Image
+        // collection.
+        form.Text = SR.ImageCollectionEditorFormText;
+        return form;
+    }
+
+    /// <summary>
+    ///  Gets images from the given array.
+    /// </summary>
+    /// <param name="array">The input is an <see cref="ArrayList"/> as an object.</param>
+    /// <returns>An <see cref="ArrayList"/> which contains individual images that need to be created.</returns>
+    protected override IList GetObjectsFromInstance(object array) => array as ArrayList;
+
+    protected override object[] GetItems(object editValue)
+    {
+        if (editValue is not ImageList.ImageCollection source)
         {
-            if (editValue is not ImageList.ImageCollection source)
-            {
-                return base.GetItems(editValue);
-            }
-
-            var imageListImages = new ImageListImage[source.Count];
-            for (int i = 0; i < source.Count; i++)
-            {
-                imageListImages[i] = new ImageListImage(source[i]) { Name = source.Keys[i] };
-            }
-
-            return imageListImages;
+            return base.GetItems(editValue);
         }
 
-        protected override object SetItems(object editValue, object[] value)
+        var imageListImages = new ImageListImage[source.Count];
+        for (int i = 0; i < source.Count; i++)
         {
-            if (editValue is not ImageList.ImageCollection source)
-            {
-                return base.SetItems(editValue, value);
-            }
+            imageListImages[i] = new ImageListImage(source[i]) { Name = source.Keys[i] };
+        }
 
-            source.Clear();
-            if (value is null || value.Length == 0)
-            {
-                return source;
-            }
+        return imageListImages;
+    }
 
-            for (int i = 0; i < value.Length; i++)
-            {
-                if (value[i] is Image image)
-                {
-                    source.Add(image);
-                }
-                else if (value[i] is ImageListImage imageListImage)
-                {
-                    source.Add(imageListImage.Name, imageListImage.Image);
-                }
-            }
+    protected override object SetItems(object editValue, object[] value)
+    {
+        if (editValue is not ImageList.ImageCollection source)
+        {
+            return base.SetItems(editValue, value);
+        }
 
+        source.Clear();
+        if (value is null || value.Length == 0)
+        {
             return source;
         }
+
+        for (int i = 0; i < value.Length; i++)
+        {
+            if (value[i] is Image image)
+            {
+                source.Add(image);
+            }
+            else if (value[i] is ImageListImage imageListImage)
+            {
+                source.Add(imageListImage.Name, imageListImage.Image);
+            }
+        }
+
+        return source;
     }
 }

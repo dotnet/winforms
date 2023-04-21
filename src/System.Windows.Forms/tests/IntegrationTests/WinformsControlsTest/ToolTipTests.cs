@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace WinformsControlsTest
-{
-    public partial class ToolTipTests : Form
-    {
-        public ToolTipTests()
-        {
-            InitializeComponent();
+namespace WinformsControlsTest;
 
-            defaultAutomaticDelayToolTip.AutomaticDelay = 500;
-            defaultAutoPopDelayToolTip.AutoPopDelay = 5000;
-        }
+public partial class ToolTipTests : Form
+{
+    public ToolTipTests()
+    {
+        InitializeComponent();
+
+        defaultAutomaticDelayToolTip.AutomaticDelay = 500;
+        defaultAutoPopDelayToolTip.AutoPopDelay = 5000;
     }
 }

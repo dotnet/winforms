@@ -4,38 +4,37 @@
 
 using System.Collections.ObjectModel;
 
-namespace Microsoft.VisualBasic.ApplicationServices.Tests
+namespace Microsoft.VisualBasic.ApplicationServices.Tests;
+
+public class StartupNextInstanceEventArgsTests
 {
-    public class StartupNextInstanceEventArgsTests
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Ctor_ReadOnlyCollection_Boolean(bool bringToForeground)
     {
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void Ctor_ReadOnlyCollection_Boolean(bool bringToForeground)
-        {
-            var collection = new ReadOnlyCollection<string>(new string[] { "a" });
-            var args = new StartupNextInstanceEventArgs(collection, bringToForeground);
-            Assert.Same(collection, args.CommandLine);
-            Assert.Equal(bringToForeground, args.BringToForeground);
-        }
+        var collection = new ReadOnlyCollection<string>(new string[] { "a" });
+        var args = new StartupNextInstanceEventArgs(collection, bringToForeground);
+        Assert.Same(collection, args.CommandLine);
+        Assert.Equal(bringToForeground, args.BringToForeground);
+    }
 
-        [Fact]
-        public void Ctor_NullCommandLine_ThrowsArgumentNullException()
-        {
-            AssertExtensions.Throws<ArgumentNullException>("list", () => new StartupNextInstanceEventArgs(null, bringToForegroundFlag: true));
-        }
+    [Fact]
+    public void Ctor_NullCommandLine_ThrowsArgumentNullException()
+    {
+        AssertExtensions.Throws<ArgumentNullException>("list", () => new StartupNextInstanceEventArgs(null, bringToForegroundFlag: true));
+    }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void BringToForeground_Set_GetReturnsExpected(bool value)
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void BringToForeground_Set_GetReturnsExpected(bool value)
+    {
+        var collection = new ReadOnlyCollection<string>(new string[] { "a" });
+        var args = new StartupNextInstanceEventArgs(collection, bringToForegroundFlag: true)
         {
-            var collection = new ReadOnlyCollection<string>(new string[] { "a" });
-            var args = new StartupNextInstanceEventArgs(collection, bringToForegroundFlag: true)
-            {
-                BringToForeground = value
-            };
-            Assert.Equal(value, args.BringToForeground);
-        }
+            BringToForeground = value
+        };
+        Assert.Equal(value, args.BringToForeground);
     }
 }

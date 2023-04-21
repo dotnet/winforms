@@ -4,50 +4,49 @@
 
 #nullable disable
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  A collection editor that is specifically designed to edit arrays containing strings.
+/// </summary>
+internal class StringArrayEditor : StringCollectionEditor
 {
-    /// <summary>
-    ///  A collection editor that is specifically designed to edit arrays containing strings.
-    /// </summary>
-    internal class StringArrayEditor : StringCollectionEditor
+    public StringArrayEditor(Type type)
+        : base(type)
     {
-        public StringArrayEditor(Type type)
-            : base(type)
+    }
+
+    protected override Type CreateCollectionItemType() => CollectionType.GetElementType();
+
+    /// <summary>
+    ///  We implement the getting and setting of items on this collection.
+    /// </summary>
+    protected override object[] GetItems(object editValue)
+    {
+        if (editValue is not Array valueArray)
         {
+            return Array.Empty<object>();
         }
 
-        protected override Type CreateCollectionItemType() => CollectionType.GetElementType();
+        object[] items = new object[valueArray.GetLength(0)];
+        Array.Copy(valueArray, items, items.Length);
+        return items;
+    }
 
-        /// <summary>
-        ///  We implement the getting and setting of items on this collection.
-        /// </summary>
-        protected override object[] GetItems(object editValue)
+    /// <summary>
+    ///  We implement the getting and setting of items on this collection.
+    ///  It should return an instance to replace <paramref name="editValue"/> with, or
+    ///  <paramref name="editValue"/> if there is no need to replace the instance.
+    /// </summary>
+    protected override object SetItems(object editValue, object[] value)
+    {
+        if (editValue is Array || editValue is null)
         {
-            if (editValue is not Array valueArray)
-            {
-                return Array.Empty<object>();
-            }
-
-            object[] items = new object[valueArray.GetLength(0)];
-            Array.Copy(valueArray, items, items.Length);
-            return items;
+            Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
+            Array.Copy(value, newArray, value.Length);
+            return newArray;
         }
 
-        /// <summary>
-        ///  We implement the getting and setting of items on this collection.
-        ///  It should return an instance to replace <paramref name="editValue"/> with, or
-        ///  <paramref name="editValue"/> if there is no need to replace the instance.
-        /// </summary>
-        protected override object SetItems(object editValue, object[] value)
-        {
-            if (editValue is Array || editValue is null)
-            {
-                Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
-                Array.Copy(value, newArray, value.Length);
-                return newArray;
-            }
-
-            return editValue;
-        }
+        return editValue;
     }
 }

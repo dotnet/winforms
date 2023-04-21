@@ -4,19 +4,18 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
-{
-    internal partial class MdiControlStrip
-    {
-        // when the system menu item shortcut is evaluated - pop the dropdown
-        internal class ControlBoxMenuItem : ToolStripMenuItem
-        {
-            internal ControlBoxMenuItem(IntPtr hMenu, User32.SC nativeMenuCommandId, IWin32Window targetWindow)
-                : base(hMenu, (int)nativeMenuCommandId, targetWindow)
-            {
-            }
+namespace System.Windows.Forms;
 
-            internal override bool CanKeyboardSelect => false;
+internal partial class MdiControlStrip
+{
+    // when the system menu item shortcut is evaluated - pop the dropdown
+    internal class ControlBoxMenuItem : ToolStripMenuItem
+    {
+        internal ControlBoxMenuItem(IntPtr hMenu, User32.SC nativeMenuCommandId, IWin32Window targetWindow)
+            : base(hMenu, (int)nativeMenuCommandId, targetWindow)
+        {
         }
+
+        internal override bool CanKeyboardSelect => false;
     }
 }

@@ -2,22 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Gives state information about a ListView item/sub-item. Used with owner draw.
+/// </summary>
+[Flags]
+public enum ListViewItemStates
 {
-    /// <summary>
-    ///  Gives state information about a ListView item/sub-item. Used with owner draw.
-    /// </summary>
-    [Flags]
-    public enum ListViewItemStates
-    {
-        Checked = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_CHECKED,
-        Default = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_DEFAULT,
-        Focused = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS,
-        Grayed = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_GRAYED,
-        Hot = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT,
-        Indeterminate = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_INDETERMINATE,
-        Marked = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_MARKED,
-        Selected = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED,
-        ShowKeyboardCues = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SHOWKEYBOARDCUES
-    }
+    Checked = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_CHECKED,
+    Default = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_DEFAULT,
+    Focused = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS,
+    Grayed = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_GRAYED,
+    Hot = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT,
+    Indeterminate = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_INDETERMINATE,
+    Marked = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_MARKED,
+    Selected = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED,
+    ShowKeyboardCues = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SHOWKEYBOARDCUES
 }

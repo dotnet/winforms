@@ -4,7 +4,6 @@
 
 #nullable enable
 
-namespace System.Windows.Forms.Metafiles
-{
-    internal delegate bool ProcessRecordDelegate(ref EmfRecord record);
-}
+namespace System.Windows.Forms.Metafiles;
+
+internal delegate bool ProcessRecordDelegate(ref EmfRecord record);

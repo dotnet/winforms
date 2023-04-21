@@ -4,77 +4,76 @@
 using System.Runtime.InteropServices;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
-namespace System.Drawing.Drawing2D
+namespace System.Drawing.Drawing2D;
+
+public sealed class HatchBrush : Brush
 {
-    public sealed class HatchBrush : Brush
+    public HatchBrush(HatchStyle hatchstyle, Color foreColor) : this(hatchstyle, foreColor, Color.FromArgb(unchecked((int)0xff000000)))
     {
-        public HatchBrush(HatchStyle hatchstyle, Color foreColor) : this(hatchstyle, foreColor, Color.FromArgb(unchecked((int)0xff000000)))
+    }
+
+    public HatchBrush(HatchStyle hatchstyle, Color foreColor, Color backColor)
+    {
+        if (hatchstyle < HatchStyle.Min || hatchstyle > HatchStyle.SolidDiamond)
         {
+            throw new ArgumentException(SR.Format(SR.InvalidEnumArgument, nameof(hatchstyle), hatchstyle, nameof(HatchStyle)), nameof(hatchstyle));
         }
 
-        public HatchBrush(HatchStyle hatchstyle, Color foreColor, Color backColor)
-        {
-            if (hatchstyle < HatchStyle.Min || hatchstyle > HatchStyle.SolidDiamond)
-            {
-                throw new ArgumentException(SR.Format(SR.InvalidEnumArgument, nameof(hatchstyle), hatchstyle, nameof(HatchStyle)), nameof(hatchstyle));
-            }
+        IntPtr nativeBrush;
+        int status = Gdip.GdipCreateHatchBrush(unchecked((int)hatchstyle), foreColor.ToArgb(), backColor.ToArgb(), out nativeBrush);
+        Gdip.CheckStatus(status);
 
-            IntPtr nativeBrush;
-            int status = Gdip.GdipCreateHatchBrush(unchecked((int)hatchstyle), foreColor.ToArgb(), backColor.ToArgb(), out nativeBrush);
+        SetNativeBrushInternal(nativeBrush);
+    }
+
+    internal HatchBrush(IntPtr nativeBrush)
+    {
+        Debug.Assert(nativeBrush != IntPtr.Zero, "Initializing native brush with null.");
+        SetNativeBrushInternal(nativeBrush);
+    }
+
+    public override object Clone()
+    {
+        IntPtr clonedBrush;
+        int status = Gdip.GdipCloneBrush(new HandleRef(this, NativeBrush), out clonedBrush);
+        Gdip.CheckStatus(status);
+
+        return new HatchBrush(clonedBrush);
+    }
+
+    public HatchStyle HatchStyle
+    {
+        get
+        {
+            int hatchStyle;
+            int status = Gdip.GdipGetHatchStyle(new HandleRef(this, NativeBrush), out hatchStyle);
             Gdip.CheckStatus(status);
 
-            SetNativeBrushInternal(nativeBrush);
+            return (HatchStyle)hatchStyle;
         }
+    }
 
-        internal HatchBrush(IntPtr nativeBrush)
+    public Color ForegroundColor
+    {
+        get
         {
-            Debug.Assert(nativeBrush != IntPtr.Zero, "Initializing native brush with null.");
-            SetNativeBrushInternal(nativeBrush);
-        }
-
-        public override object Clone()
-        {
-            IntPtr clonedBrush;
-            int status = Gdip.GdipCloneBrush(new HandleRef(this, NativeBrush), out clonedBrush);
+            int foregroundArgb;
+            int status = Gdip.GdipGetHatchForegroundColor(new HandleRef(this, NativeBrush), out foregroundArgb);
             Gdip.CheckStatus(status);
 
-            return new HatchBrush(clonedBrush);
+            return Color.FromArgb(foregroundArgb);
         }
+    }
 
-        public HatchStyle HatchStyle
+    public Color BackgroundColor
+    {
+        get
         {
-            get
-            {
-                int hatchStyle;
-                int status = Gdip.GdipGetHatchStyle(new HandleRef(this, NativeBrush), out hatchStyle);
-                Gdip.CheckStatus(status);
+            int backgroundArgb;
+            int status = Gdip.GdipGetHatchBackgroundColor(new HandleRef(this, NativeBrush), out backgroundArgb);
+            Gdip.CheckStatus(status);
 
-                return (HatchStyle)hatchStyle;
-            }
-        }
-
-        public Color ForegroundColor
-        {
-            get
-            {
-                int foregroundArgb;
-                int status = Gdip.GdipGetHatchForegroundColor(new HandleRef(this, NativeBrush), out foregroundArgb);
-                Gdip.CheckStatus(status);
-
-                return Color.FromArgb(foregroundArgb);
-            }
-        }
-
-        public Color BackgroundColor
-        {
-            get
-            {
-                int backgroundArgb;
-                int status = Gdip.GdipGetHatchBackgroundColor(new HandleRef(this, NativeBrush), out backgroundArgb);
-                Gdip.CheckStatus(status);
-
-                return Color.FromArgb(backgroundArgb);
-            }
+            return Color.FromArgb(backgroundArgb);
         }
     }
 }

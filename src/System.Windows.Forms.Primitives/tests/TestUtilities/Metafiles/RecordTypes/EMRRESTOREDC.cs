@@ -6,14 +6,13 @@
 
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms.Metafiles
-{
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRRESTOREDC
-    {
-        public EMR emr;
-        public int iRelative;
+namespace System.Windows.Forms.Metafiles;
 
-        public override string ToString() => $"[{nameof(EMRRESTOREDC)}] Index: {iRelative}";
-    }
+[StructLayout(LayoutKind.Sequential)]
+internal struct EMRRESTOREDC
+{
+    public EMR emr;
+    public int iRelative;
+
+    public override string ToString() => $"[{nameof(EMRRESTOREDC)}] Index: {iRelative}";
 }

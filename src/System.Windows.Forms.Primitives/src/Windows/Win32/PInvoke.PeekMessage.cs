@@ -2,22 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    /// <inheritdoc cref="PeekMessage(MSG*, HWND, uint, uint, PEEK_MESSAGE_REMOVE_TYPE)"/>
+    public static unsafe BOOL PeekMessage<T>(
+        MSG* lpMsg,
+        T hWnd,
+        uint wMsgFilterMin,
+        uint wMsgFilterMax,
+        PEEK_MESSAGE_REMOVE_TYPE wRemoveMsg)
+        where T : IHandle<HWND>
     {
-        /// <inheritdoc cref="PeekMessage(MSG*, HWND, uint, uint, PEEK_MESSAGE_REMOVE_TYPE)"/>
-        public static unsafe BOOL PeekMessage<T>(
-            MSG* lpMsg,
-            T hWnd,
-            uint wMsgFilterMin,
-            uint wMsgFilterMax,
-            PEEK_MESSAGE_REMOVE_TYPE wRemoveMsg)
-            where T : IHandle<HWND>
-        {
-            BOOL result = PeekMessage(lpMsg, hWnd.Handle, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
+        BOOL result = PeekMessage(lpMsg, hWnd.Handle, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
+        GC.KeepAlive(hWnd.Wrapper);
+        return result;
     }
 }

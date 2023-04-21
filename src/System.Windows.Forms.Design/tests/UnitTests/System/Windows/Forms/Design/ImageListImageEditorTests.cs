@@ -5,29 +5,28 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace System.Windows.Forms.Design.Tests
+namespace System.Windows.Forms.Design.Tests;
+
+public class ImageListImageEditorTests
 {
-    public class ImageListImageEditorTests
+    [Fact]
+    public void ImageListImageEditor_LoadImageFromStream_BitmapStream_ReturnsExpected()
     {
-        [Fact]
-        public void ImageListImageEditor_LoadImageFromStream_BitmapStream_ReturnsExpected()
-        {
-            var editor = new ImageListImageEditor();
-            var editor_LoadImageFromStream = editor.TestAccessor().CreateDelegate<Func<Stream, bool, ImageListImage>>("LoadImageFromStream");
+        var editor = new ImageListImageEditor();
+        var editor_LoadImageFromStream = editor.TestAccessor().CreateDelegate<Func<Stream, bool, ImageListImage>>("LoadImageFromStream");
 
-            using var stream = new MemoryStream();
-            using var image = new Bitmap(10, 10);
-            image.Save(stream, ImageFormat.Bmp);
-            stream.Position = 0;
+        using var stream = new MemoryStream();
+        using var image = new Bitmap(10, 10);
+        image.Save(stream, ImageFormat.Bmp);
+        stream.Position = 0;
 
-            var result = Assert.IsType<ImageListImage>(editor_LoadImageFromStream(stream, false));
-            var resultImage = Assert.IsType<Bitmap>(result.Image);
-            Assert.Equal(new Size(10, 10), result.Size);
-            Assert.Equal(new Size(10, 10), resultImage.Size);
+        var result = Assert.IsType<ImageListImage>(editor_LoadImageFromStream(stream, false));
+        var resultImage = Assert.IsType<Bitmap>(result.Image);
+        Assert.Equal(new Size(10, 10), result.Size);
+        Assert.Equal(new Size(10, 10), resultImage.Size);
 
-            using var resultStream = new MemoryStream();
-            result.Image.Save(resultStream, ImageFormat.Bmp);
-            Assert.Equal(stream.Length, resultStream.Length);
-        }
+        using var resultStream = new MemoryStream();
+        result.Image.Save(resultStream, ImageFormat.Bmp);
+        Assert.Equal(stream.Length, resultStream.Length);
     }
 }

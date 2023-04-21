@@ -3,32 +3,31 @@
 
 using System.Drawing.Imaging;
 
-namespace System.Drawing.Tests
+namespace System.Drawing.Tests;
+
+public abstract class DrawingTest
 {
-    public abstract class DrawingTest
+    private static Security.Cryptography.MD5 s_md5 = Security.Cryptography.MD5.Create();
+
+    protected unsafe void ValidateBitmapContent(Bitmap bitmap, params byte[] expectedHash)
     {
-        private static Security.Cryptography.MD5 s_md5 = Security.Cryptography.MD5.Create();
-
-        protected unsafe void ValidateBitmapContent(Bitmap bitmap, params byte[] expectedHash)
+        BitmapData data = bitmap.LockBits(new Rectangle(default, bitmap.Size), ImageLockMode.ReadWrite, bitmap.PixelFormat);
+        try
         {
-            BitmapData data = bitmap.LockBits(new Rectangle(default, bitmap.Size), ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            try
+            byte[] hash = new byte[expectedHash.Length];
+            if (!s_md5.TryComputeHash(
+                new ReadOnlySpan<byte>((void*)data.Scan0, data.Stride * data.Height),
+                hash,
+                out _))
             {
-                byte[] hash = new byte[expectedHash.Length];
-                if (!s_md5.TryComputeHash(
-                    new ReadOnlySpan<byte>((void*)data.Scan0, data.Stride * data.Height),
-                    hash,
-                    out _))
-                {
-                    Assert.Fail("Could not compute hash.");
-                }
+                Assert.Fail("Could not compute hash.");
+            }
 
-                Assert.Equal(expectedHash, hash);
-            }
-            finally
-            {
-                bitmap.UnlockBits(data);
-            }
+            Assert.Equal(expectedHash, hash);
+        }
+        finally
+        {
+            bitmap.UnlockBits(data);
         }
     }
 }

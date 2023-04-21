@@ -4,35 +4,34 @@
 
 using Xunit.Abstractions;
 
-namespace System.Windows.Forms.UITests
+namespace System.Windows.Forms.UITests;
+
+public class ComboBoxTests : ControlTestBase
 {
-    public class ComboBoxTests : ControlTestBase
+    public ComboBoxTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
     {
-        public ComboBoxTests(ITestOutputHelper testOutputHelper)
-            : base(testOutputHelper)
-        {
-        }
+    }
 
-        [WinFormsFact]
-        public async Task ComboBoxTest_ChangeAutoCompleteSource_DoesntThrowAsync()
+    [WinFormsFact]
+    public async Task ComboBoxTest_ChangeAutoCompleteSource_DoesntThrowAsync()
+    {
+        await RunSingleControlTestAsync<ComboBox>((form, comboBox) =>
         {
-            await RunSingleControlTestAsync<ComboBox>((form, comboBox) =>
+            // Test case captured from here.
+            // https://github.com/dotnet/winforms/issues/6953
+            comboBox.AutoCompleteCustomSource.AddRange(new[]
             {
-                // Test case captured from here.
-                // https://github.com/dotnet/winforms/issues/6953
-                comboBox.AutoCompleteCustomSource.AddRange(new[]
-                {
-                    "_sss",
-                    "_sss"
-                });
-                comboBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                comboBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
-                comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
-                comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
-
-                return Task.CompletedTask;
+                "_sss",
+                "_sss"
             });
-        }
+            comboBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            comboBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+            comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+            comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+
+            return Task.CompletedTask;
+        });
     }
 }

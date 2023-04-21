@@ -5,29 +5,28 @@
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewButtonCell
 {
-    public partial class DataGridViewButtonCell
+    private static class DataGridViewButtonCellRenderer
     {
-        private static class DataGridViewButtonCellRenderer
+        private static VisualStyleRenderer? s_visualStyleRenderer;
+
+        public static VisualStyleRenderer DataGridViewButtonRenderer
         {
-            private static VisualStyleRenderer? s_visualStyleRenderer;
-
-            public static VisualStyleRenderer DataGridViewButtonRenderer
+            get
             {
-                get
-                {
-                    s_visualStyleRenderer ??= new VisualStyleRenderer(ButtonElement);
+                s_visualStyleRenderer ??= new VisualStyleRenderer(ButtonElement);
 
-                    return s_visualStyleRenderer;
-                }
+                return s_visualStyleRenderer;
             }
+        }
 
-            public static void DrawButton(Graphics g, Rectangle bounds, int buttonState)
-            {
-                DataGridViewButtonRenderer.SetParameters(ButtonElement.ClassName, ButtonElement.Part, buttonState);
-                DataGridViewButtonRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
-            }
+        public static void DrawButton(Graphics g, Rectangle bounds, int buttonState)
+        {
+            DataGridViewButtonRenderer.SetParameters(ButtonElement.ClassName, ButtonElement.Part, buttonState);
+            DataGridViewButtonRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
         }
     }
 }

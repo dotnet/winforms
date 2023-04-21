@@ -4,17 +4,16 @@
 
 using System.Globalization;
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design;
+
+public partial class ColorEditor
 {
-    public partial class ColorEditor
+    /// <summary>
+    ///  Comparer for system colors.
+    /// </summary>
+    private class SystemColorComparer : IComparer<Color>
     {
-        /// <summary>
-        ///  Comparer for system colors.
-        /// </summary>
-        private class SystemColorComparer : IComparer<Color>
-        {
-            public int Compare(Color x, Color y)
-                => string.Compare(x.Name, y.Name, false, CultureInfo.InvariantCulture);
-        }
+        public int Compare(Color x, Color y)
+            => string.Compare(x.Name, y.Name, false, CultureInfo.InvariantCulture);
     }
 }

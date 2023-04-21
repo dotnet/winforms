@@ -1,48 +1,47 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Drawing.Printing
+namespace System.Drawing.Printing;
+
+/// <summary>
+/// Provides data for the <see cref='PrintDocument.QueryPageSettings'/> event.
+/// </summary>
+public class QueryPageSettingsEventArgs : PrintEventArgs
 {
+    private PageSettings _pageSettings;
+
     /// <summary>
-    /// Provides data for the <see cref='PrintDocument.QueryPageSettings'/> event.
+    /// It's too expensive to compare 2 instances of PageSettings class, as the getters
+    /// are accessing the printer spooler, thus we track any explicit invocations of the setters or getters on this class,
+    /// and this field tracks if PageSettings property was accessed. It will return a false
+    /// positive when the user is reading property values, but we'll take a perf hit in this case assuming this event is not
+    /// used often.
     /// </summary>
-    public class QueryPageSettingsEventArgs : PrintEventArgs
+    internal bool PageSettingsChanged;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref='QueryPageSettingsEventArgs'/> class.
+    /// </summary>
+    public QueryPageSettingsEventArgs(PageSettings pageSettings) : base()
     {
-        private PageSettings _pageSettings;
+        _pageSettings = pageSettings;
+    }
 
-        /// <summary>
-        /// It's too expensive to compare 2 instances of PageSettings class, as the getters
-        /// are accessing the printer spooler, thus we track any explicit invocations of the setters or getters on this class,
-        /// and this field tracks if PageSettings property was accessed. It will return a false
-        /// positive when the user is reading property values, but we'll take a perf hit in this case assuming this event is not
-        /// used often.
-        /// </summary>
-        internal bool PageSettingsChanged;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref='QueryPageSettingsEventArgs'/> class.
-        /// </summary>
-        public QueryPageSettingsEventArgs(PageSettings pageSettings) : base()
+    /// <summary>
+    /// Gets or sets the page settings for the page to be printed.
+    /// </summary>
+    public PageSettings PageSettings
+    {
+        get
         {
-            _pageSettings = pageSettings;
+            PageSettingsChanged = true;
+            return _pageSettings;
         }
-
-        /// <summary>
-        /// Gets or sets the page settings for the page to be printed.
-        /// </summary>
-        public PageSettings PageSettings
+        set
         {
-            get
-            {
-                PageSettingsChanged = true;
-                return _pageSettings;
-            }
-            set
-            {
-                value ??= new PageSettings();
-                _pageSettings = value;
-                PageSettingsChanged = true;
-            }
+            value ??= new PageSettings();
+            _pageSettings = value;
+            PageSettingsChanged = true;
         }
     }
 }

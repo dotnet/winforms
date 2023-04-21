@@ -4,15 +4,14 @@
 
 using System.ComponentModel.Design.Serialization;
 
-namespace System.Windows.Forms.Design.Serialization.Tests
+namespace System.Windows.Forms.Design.Serialization.Tests;
+
+public class CollectionCodeDomSerializerTests
 {
-    public class CollectionCodeDomSerializerTests
+    [Fact]
+    public void CollectionCodeDomSerializer_Constructor()
     {
-        [Fact]
-        public void CollectionCodeDomSerializer_Constructor()
-        {
-            CollectionCodeDomSerializer underTest = CollectionCodeDomSerializer.Default;
-            Assert.NotNull(underTest);
-        }
+        CollectionCodeDomSerializer underTest = CollectionCodeDomSerializer.Default;
+        Assert.NotNull(underTest);
     }
 }

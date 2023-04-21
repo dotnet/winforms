@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    public static HANDLE CopyImage<T>(T hImage, GDI_IMAGE_TYPE type, int cx, int cy, IMAGE_FLAGS flags)
+        where T : IHandle<HANDLE>
     {
-        public static HANDLE CopyImage<T>(T hImage, GDI_IMAGE_TYPE type, int cx, int cy, IMAGE_FLAGS flags)
-            where T : IHandle<HANDLE>
-        {
-            HANDLE result = CopyImage(hImage.Handle, type, cx, cy, flags);
-            GC.KeepAlive(hImage.Wrapper);
-            return result;
-        }
+        HANDLE result = CopyImage(hImage.Handle, type, cx, cy, flags);
+        GC.KeepAlive(hImage.Wrapper);
+        return result;
     }
 }

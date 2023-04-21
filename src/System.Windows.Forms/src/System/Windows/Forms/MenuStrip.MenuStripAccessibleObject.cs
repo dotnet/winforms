@@ -2,38 +2,37 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class MenuStrip
 {
-    public partial class MenuStrip
+    internal class MenuStripAccessibleObject : ToolStripAccessibleObject
     {
-        internal class MenuStripAccessibleObject : ToolStripAccessibleObject
+        public MenuStripAccessibleObject(MenuStrip owner)
+            : base(owner)
         {
-            public MenuStripAccessibleObject(MenuStrip owner)
-                : base(owner)
-            {
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.MenuBar;
-                }
-            }
-
-            internal override object? GetPropertyValue(Interop.UiaCore.UIA propertyID) =>
-                propertyID switch
-                {
-                    Interop.UiaCore.UIA.IsControlElementPropertyId => true,
-                    Interop.UiaCore.UIA.IsContentElementPropertyId => false,
-                    _ => base.GetPropertyValue(propertyID)
-                };
         }
+
+        public override AccessibleRole Role
+        {
+            get
+            {
+                AccessibleRole role = Owner.AccessibleRole;
+                if (role != AccessibleRole.Default)
+                {
+                    return role;
+                }
+
+                return AccessibleRole.MenuBar;
+            }
+        }
+
+        internal override object? GetPropertyValue(Interop.UiaCore.UIA propertyID) =>
+            propertyID switch
+            {
+                Interop.UiaCore.UIA.IsControlElementPropertyId => true,
+                Interop.UiaCore.UIA.IsContentElementPropertyId => false,
+                _ => base.GetPropertyValue(propertyID)
+            };
     }
 }

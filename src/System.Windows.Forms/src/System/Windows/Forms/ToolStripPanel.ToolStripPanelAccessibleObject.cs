@@ -3,40 +3,39 @@
 // See the LICENSE file in the project root for more information.
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripPanel
 {
-    public partial class ToolStripPanel
+    internal class ToolStripPanelAccessibleObject : ControlAccessibleObject
     {
-        internal class ToolStripPanelAccessibleObject : ControlAccessibleObject
+        private readonly ToolStripPanel _owningLabel;
+
+        public ToolStripPanelAccessibleObject(ToolStripPanel owner) : base(owner)
         {
-            private readonly ToolStripPanel _owningLabel;
-
-            public ToolStripPanelAccessibleObject(ToolStripPanel owner) : base(owner)
-            {
-                _owningLabel = owner;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = _owningLabel.AccessibleRole;
-
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.Client;
-                }
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
-                => propertyId switch
-                {
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => Owner.CanFocus,
-                    _ => base.GetPropertyValue(propertyId)
-                };
+            _owningLabel = owner;
         }
+
+        public override AccessibleRole Role
+        {
+            get
+            {
+                AccessibleRole role = _owningLabel.AccessibleRole;
+
+                if (role != AccessibleRole.Default)
+                {
+                    return role;
+                }
+
+                return AccessibleRole.Client;
+            }
+        }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyId)
+            => propertyId switch
+            {
+                UiaCore.UIA.IsKeyboardFocusablePropertyId => Owner.CanFocus,
+                _ => base.GetPropertyValue(propertyId)
+            };
     }
 }

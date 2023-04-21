@@ -4,19 +4,18 @@
 
 using System.Windows.Forms.IntegrationTests.Common;
 
-namespace Microsoft.VisualBasic.MyServices.Internal.Tests
+namespace Microsoft.VisualBasic.MyServices.Internal.Tests;
+
+public class ProgressDialogTests
 {
-    public class ProgressDialogTests
+    [Fact]
+    public void ShowProgressDialog()
     {
-        [Fact]
-        public void ShowProgressDialog()
-        {
-            string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
-            var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "ProgressDialog.ShowProgressDialog" };
-            var process = TestHelpers.StartProcess(startInfo);
-            TestHelpers.EndProcess(process, timeout: 1000);
-            Assert.True(process.HasExited);
-            Assert.NotEqual(2, process.ExitCode);
-        }
+        string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
+        var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "ProgressDialog.ShowProgressDialog" };
+        var process = TestHelpers.StartProcess(startInfo);
+        TestHelpers.EndProcess(process, timeout: 1000);
+        Assert.True(process.HasExited);
+        Assert.NotEqual(2, process.ExitCode);
     }
 }

@@ -4,23 +4,22 @@
 
 using System.Windows.Forms.IntegrationTests.Common;
 
-namespace WinformsControlsTest
+namespace WinformsControlsTest;
+
+public partial class ComboBoxes : Form
 {
-    public partial class ComboBoxes : Form
+    public ComboBoxes()
     {
-        public ComboBoxes()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            comboBox1.SelectedIndex = 0;
+        comboBox1.SelectedIndex = 0;
 
-            dataBoundComboBox.DataSource = TestDataSources.GetPersons();
-            dataBoundComboBox.DisplayMember = TestDataSources.PersonDisplayMember;
-        }
+        dataBoundComboBox.DataSource = TestDataSources.GetPersons();
+        dataBoundComboBox.DisplayMember = TestDataSources.PersonDisplayMember;
+    }
 
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            label1.Text = comboBox1.Text;
-        }
+    private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        label1.Text = comboBox1.Text;
     }
 }

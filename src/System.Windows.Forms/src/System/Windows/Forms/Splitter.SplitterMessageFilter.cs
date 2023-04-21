@@ -4,35 +4,34 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Splitter
 {
-    public partial class Splitter
+    private class SplitterMessageFilter : IMessageFilter
     {
-        private class SplitterMessageFilter : IMessageFilter
+        private readonly Splitter _owner;
+
+        public SplitterMessageFilter(Splitter splitter)
         {
-            private readonly Splitter _owner;
+            _owner = splitter;
+        }
 
-            public SplitterMessageFilter(Splitter splitter)
+        /// <summary>
+        /// </summary>
+        public bool PreFilterMessage(ref Message m)
+        {
+            if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
             {
-                _owner = splitter;
+                return false;
             }
 
-            /// <summary>
-            /// </summary>
-            public bool PreFilterMessage(ref Message m)
+            if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
             {
-                if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
-                {
-                    return false;
-                }
-
-                if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
-                {
-                    _owner.SplitEnd(false);
-                }
-
-                return true;
+                _owner.SplitEnd(false);
             }
+
+            return true;
         }
     }
 }

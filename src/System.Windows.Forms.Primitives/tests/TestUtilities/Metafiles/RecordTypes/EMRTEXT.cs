@@ -7,27 +7,26 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms.Metafiles
-{
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRTEXT
-    {
-        public Point ptlReference;
-        public uint nChars;
-        public uint offString;          // Offset to the string
-        public uint fOptions;
-        public RECT rcl;
-        public uint offDx;              // Offset to the inter-character spacing array.
+namespace System.Windows.Forms.Metafiles;
 
-        public unsafe ReadOnlySpan<char> GetText()
+[StructLayout(LayoutKind.Sequential)]
+internal struct EMRTEXT
+{
+    public Point ptlReference;
+    public uint nChars;
+    public uint offString;          // Offset to the string
+    public uint fOptions;
+    public RECT rcl;
+    public uint offDx;              // Offset to the inter-character spacing array.
+
+    public unsafe ReadOnlySpan<char> GetText()
+    {
+        int offset = (int)offString - sizeof(EMREXTTEXTOUTW) + sizeof(EMRTEXT);
+        fixed (Point* p = &ptlReference)
         {
-            int offset = (int)offString - sizeof(EMREXTTEXTOUTW) + sizeof(EMRTEXT);
-            fixed (Point* p = &ptlReference)
-            {
-                byte* b = (byte*)(void*)p;
-                b += offset;
-                return new ReadOnlySpan<char>((void*)b, (int)nChars);
-            }
+            byte* b = (byte*)(void*)p;
+            b += offset;
+            return new ReadOnlySpan<char>((void*)b, (int)nChars);
         }
     }
 }

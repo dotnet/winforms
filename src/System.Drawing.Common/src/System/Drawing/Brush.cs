@@ -6,64 +6,63 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
-namespace System.Drawing
+namespace System.Drawing;
+
+public abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
 {
-    public abstract class Brush : MarshalByRefObject, ICloneable, IDisposable
+#if FINALIZATION_WATCH
+    private string allocationSite = Graphics.GetAllocationStack();
+#endif
+    // Handle to native GDI+ brush object to be used on demand.
+    private IntPtr _nativeBrush;
+
+    public abstract object Clone();
+
+    protected internal void SetNativeBrush(IntPtr brush) => SetNativeBrushInternal(brush);
+    internal void SetNativeBrushInternal(IntPtr brush) => _nativeBrush = brush;
+
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    internal IntPtr NativeBrush => _nativeBrush;
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
     {
 #if FINALIZATION_WATCH
-        private string allocationSite = Graphics.GetAllocationStack();
-#endif
-        // Handle to native GDI+ brush object to be used on demand.
-        private IntPtr _nativeBrush;
-
-        public abstract object Clone();
-
-        protected internal void SetNativeBrush(IntPtr brush) => SetNativeBrushInternal(brush);
-        internal void SetNativeBrushInternal(IntPtr brush) => _nativeBrush = brush;
-
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        internal IntPtr NativeBrush => _nativeBrush;
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-#if FINALIZATION_WATCH
-            Debug.WriteLineIf(!disposing && _nativeBrush != IntPtr.Zero, $"""
-                **********************
-                Disposed through finalization:
-                {allocationSite}
-                """);
+        Debug.WriteLineIf(!disposing && _nativeBrush != IntPtr.Zero, $"""
+            **********************
+            Disposed through finalization:
+            {allocationSite}
+            """);
 #endif
 
-            if (_nativeBrush != IntPtr.Zero)
+        if (_nativeBrush != IntPtr.Zero)
+        {
+            try
             {
-                try
-                {
 #if DEBUG
-                    int status = !Gdip.Initialized ? Gdip.Ok :
+                int status = !Gdip.Initialized ? Gdip.Ok :
 #endif
-                    Gdip.GdipDeleteBrush(new HandleRef(this, _nativeBrush));
+                Gdip.GdipDeleteBrush(new HandleRef(this, _nativeBrush));
 #if DEBUG
-                    Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
 #endif
-                }
-                catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    // Catch all non fatal exceptions. This includes exceptions like EntryPointNotFoundException, that is thrown
-                    // on Windows Nano.
-                }
-                finally
-                {
-                    _nativeBrush = IntPtr.Zero;
-                }
+            }
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            {
+                // Catch all non fatal exceptions. This includes exceptions like EntryPointNotFoundException, that is thrown
+                // on Windows Nano.
+            }
+            finally
+            {
+                _nativeBrush = IntPtr.Zero;
             }
         }
-
-        ~Brush() => Dispose(false);
     }
+
+    ~Brush() => Dispose(false);
 }

@@ -7,476 +7,475 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ClipboardTests
 {
-    public class ClipboardTests
+    [WinFormsFact]
+    public void Clipboard_Clear_InvokeMultipleTimes_Success()
     {
-        [WinFormsFact]
-        public void Clipboard_Clear_InvokeMultipleTimes_Success()
-        {
-            Clipboard.Clear();
-            Assert.False(Clipboard.ContainsAudio());
-            Assert.False(Clipboard.ContainsData("format"));
-            Assert.False(Clipboard.ContainsFileDropList());
-            Assert.False(Clipboard.ContainsImage());
-            Assert.False(Clipboard.ContainsText());
+        Clipboard.Clear();
+        Assert.False(Clipboard.ContainsAudio());
+        Assert.False(Clipboard.ContainsData("format"));
+        Assert.False(Clipboard.ContainsFileDropList());
+        Assert.False(Clipboard.ContainsImage());
+        Assert.False(Clipboard.ContainsText());
 
-            Clipboard.Clear();
-            Assert.False(Clipboard.ContainsAudio());
-            Assert.False(Clipboard.ContainsData("format"));
-            Assert.False(Clipboard.ContainsFileDropList());
-            Assert.False(Clipboard.ContainsImage());
-            Assert.False(Clipboard.ContainsText());
-        }
+        Clipboard.Clear();
+        Assert.False(Clipboard.ContainsAudio());
+        Assert.False(Clipboard.ContainsData("format"));
+        Assert.False(Clipboard.ContainsFileDropList());
+        Assert.False(Clipboard.ContainsImage());
+        Assert.False(Clipboard.ContainsText());
+    }
 
-        [Fact] // x-thread
-        public void Clipboard_Clear_NotSta_ThrowsThreadStateException()
-        {
-            Assert.Throws<ThreadStateException>(() => Clipboard.Clear());
-        }
+    [Fact] // x-thread
+    public void Clipboard_Clear_NotSta_ThrowsThreadStateException()
+    {
+        Assert.Throws<ThreadStateException>(() => Clipboard.Clear());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_ContainsAudio_InvokeMultipleTimes_Success()
-        {
-            bool result = Clipboard.ContainsAudio();
-            Assert.Equal(result, Clipboard.ContainsAudio());
-        }
+    [WinFormsFact]
+    public void Clipboard_ContainsAudio_InvokeMultipleTimes_Success()
+    {
+        bool result = Clipboard.ContainsAudio();
+        Assert.Equal(result, Clipboard.ContainsAudio());
+    }
 
-        [WinFormsTheory]
-        [StringWithNullData]
-        public void Clipboard_ContainsData_InvokeMultipleTimes_Success(string format)
-        {
-            bool result = Clipboard.ContainsData(format);
-            Assert.Equal(result, Clipboard.ContainsData(format));
-            Assert.False(result);
-        }
+    [WinFormsTheory]
+    [StringWithNullData]
+    public void Clipboard_ContainsData_InvokeMultipleTimes_Success(string format)
+    {
+        bool result = Clipboard.ContainsData(format);
+        Assert.Equal(result, Clipboard.ContainsData(format));
+        Assert.False(result);
+    }
 
-        [WinFormsFact]
-        public void Clipboard_ContainsFileDropList_InvokeMultipleTimes_Success()
-        {
-            bool result = Clipboard.ContainsFileDropList();
-            Assert.Equal(result, Clipboard.ContainsFileDropList());
-        }
+    [WinFormsFact]
+    public void Clipboard_ContainsFileDropList_InvokeMultipleTimes_Success()
+    {
+        bool result = Clipboard.ContainsFileDropList();
+        Assert.Equal(result, Clipboard.ContainsFileDropList());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_ContainsImage_InvokeMultipleTimes_Success()
-        {
-            bool result = Clipboard.ContainsImage();
-            Assert.Equal(result, Clipboard.ContainsImage());
-        }
+    [WinFormsFact]
+    public void Clipboard_ContainsImage_InvokeMultipleTimes_Success()
+    {
+        bool result = Clipboard.ContainsImage();
+        Assert.Equal(result, Clipboard.ContainsImage());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_ContainsText_InvokeMultipleTimes_Success()
-        {
-            bool result = Clipboard.ContainsText();
-            Assert.Equal(result, Clipboard.ContainsText());
-        }
+    [WinFormsFact]
+    public void Clipboard_ContainsText_InvokeMultipleTimes_Success()
+    {
+        bool result = Clipboard.ContainsText();
+        Assert.Equal(result, Clipboard.ContainsText());
+    }
 
-        [WinFormsTheory]
-        [EnumData<TextDataFormat>]
-        public void Clipboard_ContainsText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
-        {
-            bool result = Clipboard.ContainsText(format);
-            Assert.Equal(result, Clipboard.ContainsText(format));
-        }
+    [WinFormsTheory]
+    [EnumData<TextDataFormat>]
+    public void Clipboard_ContainsText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
+    {
+        bool result = Clipboard.ContainsText(format);
+        Assert.Equal(result, Clipboard.ContainsText(format));
+    }
 
-        [WinFormsTheory]
-        [InvalidEnumData<TextDataFormat>]
-        public void Clipboard_ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
-        {
-            Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.ContainsText(format));
-        }
+    [WinFormsTheory]
+    [InvalidEnumData<TextDataFormat>]
+    public void Clipboard_ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
+    {
+        Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.ContainsText(format));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_GetAudioStream_InvokeMultipleTimes_Success()
-        {
-            Stream result = Clipboard.GetAudioStream();
-            Assert.Equal(result, Clipboard.GetAudioStream());
-        }
+    [WinFormsFact]
+    public void Clipboard_GetAudioStream_InvokeMultipleTimes_Success()
+    {
+        Stream result = Clipboard.GetAudioStream();
+        Assert.Equal(result, Clipboard.GetAudioStream());
+    }
 
-        [WinFormsTheory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("\t")]
-        public void Clipboard_GetData_NullOrEmptyFormat_Returns_Null(string format)
-        {
-            object result = Clipboard.GetData(format);
-            Assert.Equal(result, Clipboard.GetData(format));
-            Assert.Null(result);
-        }
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("\t")]
+    public void Clipboard_GetData_NullOrEmptyFormat_Returns_Null(string format)
+    {
+        object result = Clipboard.GetData(format);
+        Assert.Equal(result, Clipboard.GetData(format));
+        Assert.Null(result);
+    }
 
-        [WinFormsFact]
-        public void Clipboard_GetDataObject_InvokeMultipleTimes_Success()
-        {
-            object result = Clipboard.GetDataObject();
-            Assert.NotEqual(result, Clipboard.GetDataObject());
-        }
+    [WinFormsFact]
+    public void Clipboard_GetDataObject_InvokeMultipleTimes_Success()
+    {
+        object result = Clipboard.GetDataObject();
+        Assert.NotEqual(result, Clipboard.GetDataObject());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_GetFileDropList_InvokeMultipleTimes_Success()
-        {
-            bool result = Clipboard.ContainsFileDropList();
-            Assert.Equal(result, Clipboard.ContainsFileDropList());
-        }
+    [WinFormsFact]
+    public void Clipboard_GetFileDropList_InvokeMultipleTimes_Success()
+    {
+        bool result = Clipboard.ContainsFileDropList();
+        Assert.Equal(result, Clipboard.ContainsFileDropList());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_GetImage_InvokeMultipleTimes_Success()
-        {
-            bool result = Clipboard.ContainsImage();
-            Assert.Equal(result, Clipboard.ContainsImage());
-        }
+    [WinFormsFact]
+    public void Clipboard_GetImage_InvokeMultipleTimes_Success()
+    {
+        bool result = Clipboard.ContainsImage();
+        Assert.Equal(result, Clipboard.ContainsImage());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_GetText_InvokeMultipleTimes_Success()
-        {
-            bool result = Clipboard.ContainsText();
-            Assert.Equal(result, Clipboard.ContainsText());
-        }
+    [WinFormsFact]
+    public void Clipboard_GetText_InvokeMultipleTimes_Success()
+    {
+        bool result = Clipboard.ContainsText();
+        Assert.Equal(result, Clipboard.ContainsText());
+    }
 
-        [WinFormsTheory]
-        [EnumData<TextDataFormat>]
-        public void Clipboard_GetText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
-        {
-            string result = Clipboard.GetText(format);
-            Assert.Equal(result, Clipboard.GetText(format));
-        }
+    [WinFormsTheory]
+    [EnumData<TextDataFormat>]
+    public void Clipboard_GetText_InvokeTextDataFormatMultipleTimes_Success(TextDataFormat format)
+    {
+        string result = Clipboard.GetText(format);
+        Assert.Equal(result, Clipboard.GetText(format));
+    }
 
-        [WinFormsTheory]
-        [InvalidEnumData<TextDataFormat>]
-        public void Clipboard_GetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
-        {
-            Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.GetText(format));
-        }
+    [WinFormsTheory]
+    [InvalidEnumData<TextDataFormat>]
+    public void Clipboard_GetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
+    {
+        Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.GetText(format));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetAudio_InvokeByteArray_GetReturnsExpected()
+    [WinFormsFact]
+    public void Clipboard_SetAudio_InvokeByteArray_GetReturnsExpected()
+    {
+        byte[] audioBytes = new byte[] { 1, 2, 3 };
+        Clipboard.SetAudio(audioBytes);
+        Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetAudioStream()).ToArray());
+        Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetData(DataFormats.WaveAudio)).ToArray());
+        Assert.True(Clipboard.ContainsAudio());
+        Assert.True(Clipboard.ContainsData(DataFormats.WaveAudio));
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetAudio_InvokeEmptyByteArray_GetReturnsExpected()
+    {
+        byte[] audioBytes = Array.Empty<byte>();
+        Clipboard.SetAudio(audioBytes);
+        Assert.Null(Clipboard.GetAudioStream());
+        Assert.Null(Clipboard.GetData(DataFormats.WaveAudio));
+        Assert.True(Clipboard.ContainsAudio());
+        Assert.True(Clipboard.ContainsData(DataFormats.WaveAudio));
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetAudio_NullAudioBytes_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>("audioBytes", () => Clipboard.SetAudio((byte[])null));
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetAudio_InvokeStream_GetReturnsExpected()
+    {
+        byte[] audioBytes = new byte[] { 1, 2, 3 };
+        using (var audioStream = new MemoryStream(audioBytes))
         {
-            byte[] audioBytes = new byte[] { 1, 2, 3 };
-            Clipboard.SetAudio(audioBytes);
+            Clipboard.SetAudio(audioStream);
             Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetAudioStream()).ToArray());
             Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetData(DataFormats.WaveAudio)).ToArray());
             Assert.True(Clipboard.ContainsAudio());
             Assert.True(Clipboard.ContainsData(DataFormats.WaveAudio));
         }
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetAudio_InvokeEmptyByteArray_GetReturnsExpected()
-        {
-            byte[] audioBytes = Array.Empty<byte>();
-            Clipboard.SetAudio(audioBytes);
-            Assert.Null(Clipboard.GetAudioStream());
-            Assert.Null(Clipboard.GetData(DataFormats.WaveAudio));
-            Assert.True(Clipboard.ContainsAudio());
-            Assert.True(Clipboard.ContainsData(DataFormats.WaveAudio));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetAudio_InvokeEmptyStream_GetReturnsExpected()
+    {
+        var audioStream = new MemoryStream();
+        Clipboard.SetAudio(audioStream);
+        Assert.Null(Clipboard.GetAudioStream());
+        Assert.Null(Clipboard.GetData(DataFormats.WaveAudio));
+        Assert.True(Clipboard.ContainsAudio());
+        Assert.True(Clipboard.ContainsData(DataFormats.WaveAudio));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetAudio_NullAudioBytes_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>("audioBytes", () => Clipboard.SetAudio((byte[])null));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetAudio_NullAudioStream_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>("audioStream", () => Clipboard.SetAudio((Stream)null));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetAudio_InvokeStream_GetReturnsExpected()
-        {
-            byte[] audioBytes = new byte[] { 1, 2, 3 };
-            using (var audioStream = new MemoryStream(audioBytes))
-            {
-                Clipboard.SetAudio(audioStream);
-                Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetAudioStream()).ToArray());
-                Assert.Equal(audioBytes, Assert.IsType<MemoryStream>(Clipboard.GetData(DataFormats.WaveAudio)).ToArray());
-                Assert.True(Clipboard.ContainsAudio());
-                Assert.True(Clipboard.ContainsData(DataFormats.WaveAudio));
-            }
-        }
+    [Fact] // x-thread
+    public void Clipboard_SetAudio_NotSta_ThrowsThreadStateException()
+    {
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetAudio(Array.Empty<byte>()));
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetAudio(new MemoryStream()));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetAudio_InvokeEmptyStream_GetReturnsExpected()
-        {
-            var audioStream = new MemoryStream();
-            Clipboard.SetAudio(audioStream);
-            Assert.Null(Clipboard.GetAudioStream());
-            Assert.Null(Clipboard.GetData(DataFormats.WaveAudio));
-            Assert.True(Clipboard.ContainsAudio());
-            Assert.True(Clipboard.ContainsData(DataFormats.WaveAudio));
-        }
+    [WinFormsTheory]
+    [InlineData("format", null)]
+    [InlineData("format", 1)]
+    public void Clipboard_SetData_Invoke_GetReturnsExpected(string format, object data)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: data is int);
+        Clipboard.SetData(format, data);
+        Assert.Equal(data, Clipboard.GetData(format));
+        Assert.True(Clipboard.ContainsData(format));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetAudio_NullAudioStream_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>("audioStream", () => Clipboard.SetAudio((Stream)null));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetData_NullFormat_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => Clipboard.SetData(format: null, data: new object()));
+    }
 
-        [Fact] // x-thread
-        public void Clipboard_SetAudio_NotSta_ThrowsThreadStateException()
-        {
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetAudio(Array.Empty<byte>()));
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetAudio(new MemoryStream()));
-        }
+    [WinFormsTheory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    public void Clipboard_SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string format)
+    {
+        Assert.Throws<ArgumentException>(() => Clipboard.SetData(format, data: null));
+    }
 
-        [WinFormsTheory]
-        [InlineData("format", null)]
-        [InlineData("format", 1)]
-        public void Clipboard_SetData_Invoke_GetReturnsExpected(string format, object data)
-        {
-            using var formatterScope = new BinaryFormatterScope(enable: data is int);
-            Clipboard.SetData(format, data);
-            Assert.Equal(data, Clipboard.GetData(format));
-            Assert.True(Clipboard.ContainsData(format));
-        }
+    [Fact] // x-thread
+    public void Clipboard_SetData_NotSta_ThrowsThreadStateException()
+    {
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetData("format", data: null));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetData_NullFormat_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => Clipboard.SetData(format: null, data: new object()));
-        }
+    [WinFormsTheory]
+    [InlineData(1)]
+    [InlineData("data")]
+    public void Clipboard_SetDataObject_InvokeObjectNotIComDataObject_GetReturnsExpected(object data)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: data is int);
+        Clipboard.SetDataObject(data);
+        Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
+        Assert.True(Clipboard.ContainsData(data.GetType().FullName));
+    }
 
-        [WinFormsTheory]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("\t")]
-        public void Clipboard_SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string format)
-        {
-            Assert.Throws<ArgumentException>(() => Clipboard.SetData(format, data: null));
-        }
+    [WinFormsTheory]
+    [InlineData(1)]
+    [InlineData("data")]
+    public void Clipboard_SetDataObject_InvokeObjectIComDataObject_GetReturnsExpected(object data)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: data is int);
+        var dataObject = new DataObject(data);
+        Clipboard.SetDataObject(dataObject);
+        Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
+        Assert.True(Clipboard.ContainsData(data.GetType().FullName));
+    }
 
-        [Fact] // x-thread
-        public void Clipboard_SetData_NotSta_ThrowsThreadStateException()
-        {
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetData("format", data: null));
-        }
+    [WinFormsTheory]
+    [InlineData(1, true)]
+    [InlineData(1, false)]
+    [InlineData("data", true)]
+    [InlineData("data", false)]
+    public void Clipboard_SetDataObject_InvokeObjectBoolNotIComDataObject_GetReturnsExpected(object data, bool copy)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: data is int);
+        Clipboard.SetDataObject(data, copy);
+        Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
+        Assert.True(Clipboard.ContainsData(data.GetType().FullName));
+    }
 
-        [WinFormsTheory]
-        [InlineData(1)]
-        [InlineData("data")]
-        public void Clipboard_SetDataObject_InvokeObjectNotIComDataObject_GetReturnsExpected(object data)
-        {
-            using var formatterScope = new BinaryFormatterScope(enable: data is int);
-            Clipboard.SetDataObject(data);
-            Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
-            Assert.True(Clipboard.ContainsData(data.GetType().FullName));
-        }
+    [WinFormsTheory]
+    [InlineData(1, true, 0, 0)]
+    [InlineData(1, false, 1, 2)]
+    [InlineData("data", true, 0, 0)]
+    [InlineData("data", false, 1, 2)]
+    public void Clipboard_SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: data is int);
+        var dataObject = new DataObject(data);
+        Clipboard.SetDataObject(dataObject, copy, retryTimes, retryDelay);
+        Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
+        Assert.True(Clipboard.ContainsData(data.GetType().FullName));
+    }
 
-        [WinFormsTheory]
-        [InlineData(1)]
-        [InlineData("data")]
-        public void Clipboard_SetDataObject_InvokeObjectIComDataObject_GetReturnsExpected(object data)
-        {
-            using var formatterScope = new BinaryFormatterScope(enable: data is int);
-            var dataObject = new DataObject(data);
-            Clipboard.SetDataObject(dataObject);
-            Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
-            Assert.True(Clipboard.ContainsData(data.GetType().FullName));
-        }
+    [WinFormsTheory]
+    [InlineData(1, true, 0, 0)]
+    [InlineData(1, false, 1, 2)]
+    [InlineData("data", true, 0, 0)]
+    [InlineData("data", false, 1, 2)]
+    public void Clipboard_SetDataObject_InvokeObjectBoolIntIntNotIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: data is int);
+        Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
+        Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
+        Assert.True(Clipboard.ContainsData(data.GetType().FullName));
+    }
 
-        [WinFormsTheory]
-        [InlineData(1, true)]
-        [InlineData(1, false)]
-        [InlineData("data", true)]
-        [InlineData("data", false)]
-        public void Clipboard_SetDataObject_InvokeObjectBoolNotIComDataObject_GetReturnsExpected(object data, bool copy)
-        {
-            using var formatterScope = new BinaryFormatterScope(enable: data is int);
-            Clipboard.SetDataObject(data, copy);
-            Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
-            Assert.True(Clipboard.ContainsData(data.GetType().FullName));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetDataObject_NullData_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>("data", () => Clipboard.SetDataObject(null));
+        Assert.Throws<ArgumentNullException>("data", () => Clipboard.SetDataObject(null, copy: true));
+        Assert.Throws<ArgumentNullException>("data", () => Clipboard.SetDataObject(null, copy: true, retryTimes: 10, retryDelay: 0));
+    }
 
-        [WinFormsTheory]
-        [InlineData(1, true, 0, 0)]
-        [InlineData(1, false, 1, 2)]
-        [InlineData("data", true, 0, 0)]
-        [InlineData("data", false, 1, 2)]
-        public void Clipboard_SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
-        {
-            using var formatterScope = new BinaryFormatterScope(enable: data is int);
-            var dataObject = new DataObject(data);
-            Clipboard.SetDataObject(dataObject, copy, retryTimes, retryDelay);
-            Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
-            Assert.True(Clipboard.ContainsData(data.GetType().FullName));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetDataObject_NegativeRetryTimes_ThrowsArgumentOutOfRangeException()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>("retryTimes", () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: -1, retryDelay: 0));
+    }
 
-        [WinFormsTheory]
-        [InlineData(1, true, 0, 0)]
-        [InlineData(1, false, 1, 2)]
-        [InlineData("data", true, 0, 0)]
-        [InlineData("data", false, 1, 2)]
-        public void Clipboard_SetDataObject_InvokeObjectBoolIntIntNotIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
-        {
-            using var formatterScope = new BinaryFormatterScope(enable: data is int);
-            Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
-            Assert.Equal(data, Clipboard.GetDataObject().GetData(data.GetType()));
-            Assert.True(Clipboard.ContainsData(data.GetType().FullName));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetDataObject_NegativeRetryDelay_ThrowsArgumentOutOfRangeException()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>("retryDelay", () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: 10, retryDelay: -1));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetDataObject_NullData_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>("data", () => Clipboard.SetDataObject(null));
-            Assert.Throws<ArgumentNullException>("data", () => Clipboard.SetDataObject(null, copy: true));
-            Assert.Throws<ArgumentNullException>("data", () => Clipboard.SetDataObject(null, copy: true, retryTimes: 10, retryDelay: 0));
-        }
+    [Fact] // x-thread
+    public void Clipboard_SetDataObject_NotSta_ThrowsThreadStateException()
+    {
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetDataObject(null));
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetDataObject(null, copy: true));
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetDataObject(null, copy: true, retryTimes: 10, retryDelay: 0));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetDataObject_NegativeRetryTimes_ThrowsArgumentOutOfRangeException()
+    [WinFormsFact]
+    public void Clipboard_SetFileDropList_Invoke_GetReturnsExpected()
+    {
+        var filePaths = new StringCollection
         {
-            Assert.Throws<ArgumentOutOfRangeException>("retryTimes", () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: -1, retryDelay: 0));
-        }
+            "filePath"
+        };
+        Clipboard.SetFileDropList(filePaths);
+        Assert.Equal(filePaths, Clipboard.GetFileDropList());
+        Assert.True(Clipboard.ContainsFileDropList());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetDataObject_NegativeRetryDelay_ThrowsArgumentOutOfRangeException()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>("retryDelay", () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: 10, retryDelay: -1));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetFileDropList_NullFilePaths_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>("filePaths", () => Clipboard.SetFileDropList(null));
+    }
 
-        [Fact] // x-thread
-        public void Clipboard_SetDataObject_NotSta_ThrowsThreadStateException()
-        {
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetDataObject(null));
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetDataObject(null, copy: true));
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetDataObject(null, copy: true, retryTimes: 10, retryDelay: 0));
-        }
+    [WinFormsFact]
+    public void Clipboard_SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
+    {
+        var filePaths = new StringCollection();
+        Assert.Throws<ArgumentException>(() => Clipboard.SetFileDropList(filePaths));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetFileDropList_Invoke_GetReturnsExpected()
+    [WinFormsTheory]
+    [InlineData("")]
+    [InlineData("\0")]
+    public void Clipboard_SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
+    {
+        var filePaths = new StringCollection
         {
-            var filePaths = new StringCollection
-            {
-                "filePath"
-            };
-            Clipboard.SetFileDropList(filePaths);
-            Assert.Equal(filePaths, Clipboard.GetFileDropList());
-            Assert.True(Clipboard.ContainsFileDropList());
-        }
+            filePath
+        };
+        Assert.Throws<ArgumentException>(() => Clipboard.SetFileDropList(filePaths));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetFileDropList_NullFilePaths_ThrowsArgumentNullException()
+    [Fact] // x-thread
+    public void Clipboard_SetFileDropList_NotSta_ThrowsThreadStateException()
+    {
+        var filePaths = new StringCollection
         {
-            Assert.Throws<ArgumentNullException>("filePaths", () => Clipboard.SetFileDropList(null));
-        }
+            "filePath"
+        };
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetFileDropList(filePaths));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
+    [WinFormsFact]
+    public void Clipboard_SetImage_InvokeBitmap_GetReturnsExpected()
+    {
+        using (var bitmap = new Bitmap(10, 10))
         {
-            var filePaths = new StringCollection();
-            Assert.Throws<ArgumentException>(() => Clipboard.SetFileDropList(filePaths));
+            bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
+            Clipboard.SetImage(bitmap);
+            Bitmap result = Assert.IsType<Bitmap>(Clipboard.GetImage());
+            Assert.Equal(bitmap.Size, result.Size);
+            Assert.Equal(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2), result.GetPixel(1, 2));
+            Assert.True(Clipboard.ContainsImage());
         }
+    }
 
-        [WinFormsTheory]
-        [InlineData("")]
-        [InlineData("\0")]
-        public void Clipboard_SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
+    [WinFormsFact]
+    public void Clipboard_SetImage_InvokeMetafile_GetReturnsExpected()
+    {
+        using (var metafile = new Metafile("bitmaps/telescope_01.wmf"))
         {
-            var filePaths = new StringCollection
-            {
-                filePath
-            };
-            Assert.Throws<ArgumentException>(() => Clipboard.SetFileDropList(filePaths));
+            Clipboard.SetImage(metafile);
+            Assert.Null(Clipboard.GetImage());
+            Assert.True(Clipboard.ContainsImage());
         }
+    }
 
-        [Fact] // x-thread
-        public void Clipboard_SetFileDropList_NotSta_ThrowsThreadStateException()
+    [WinFormsFact]
+    public void Clipboard_SetImage_InvokeEnhancedMetafile_GetReturnsExpected()
+    {
+        using (var metafile = new Metafile("bitmaps/milkmateya01.emf"))
         {
-            var filePaths = new StringCollection
-            {
-                "filePath"
-            };
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetFileDropList(filePaths));
+            Clipboard.SetImage(metafile);
+            Assert.Null(Clipboard.GetImage());
+            Assert.True(Clipboard.ContainsImage());
         }
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetImage_InvokeBitmap_GetReturnsExpected()
-        {
-            using (var bitmap = new Bitmap(10, 10))
-            {
-                bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
-                Clipboard.SetImage(bitmap);
-                Bitmap result = Assert.IsType<Bitmap>(Clipboard.GetImage());
-                Assert.Equal(bitmap.Size, result.Size);
-                Assert.Equal(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2), result.GetPixel(1, 2));
-                Assert.True(Clipboard.ContainsImage());
-            }
-        }
+    [WinFormsFact]
+    public void Clipboard_SetImage_NullImage_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>("image", () => Clipboard.SetImage(null));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetImage_InvokeMetafile_GetReturnsExpected()
+    [Fact] // x-thread
+    public void Clipboard_SetImage_NotSta_ThrowsThreadStateException()
+    {
+        using (var bitmap = new Bitmap(10, 10))
+        using (var metafile = new Metafile("bitmaps/telescope_01.wmf"))
+        using (var enhancedMetafile = new Metafile("bitmaps/milkmateya01.emf"))
         {
-            using (var metafile = new Metafile("bitmaps/telescope_01.wmf"))
-            {
-                Clipboard.SetImage(metafile);
-                Assert.Null(Clipboard.GetImage());
-                Assert.True(Clipboard.ContainsImage());
-            }
+            Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(bitmap));
+            Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(metafile));
+            Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(enhancedMetafile));
         }
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetImage_InvokeEnhancedMetafile_GetReturnsExpected()
-        {
-            using (var metafile = new Metafile("bitmaps/milkmateya01.emf"))
-            {
-                Clipboard.SetImage(metafile);
-                Assert.Null(Clipboard.GetImage());
-                Assert.True(Clipboard.ContainsImage());
-            }
-        }
+    [WinFormsFact]
+    public void Clipboard_SetText_InvokeString_GetReturnsExpected()
+    {
+        Clipboard.SetText("text");
+        Assert.Equal("text", Clipboard.GetText());
+        Assert.True(Clipboard.ContainsText());
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetImage_NullImage_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>("image", () => Clipboard.SetImage(null));
-        }
+    [WinFormsTheory]
+    [EnumData<TextDataFormat>]
+    public void Clipboard_SetText_InvokeStringTextDataFormat_GetReturnsExpected(TextDataFormat format)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: format == TextDataFormat.CommaSeparatedValue);
+        Clipboard.SetText("text", format);
+        Assert.Equal("text", Clipboard.GetText(format));
+        Assert.True(Clipboard.ContainsText(format));
+    }
 
-        [Fact] // x-thread
-        public void Clipboard_SetImage_NotSta_ThrowsThreadStateException()
-        {
-            using (var bitmap = new Bitmap(10, 10))
-            using (var metafile = new Metafile("bitmaps/telescope_01.wmf"))
-            using (var enhancedMetafile = new Metafile("bitmaps/milkmateya01.emf"))
-            {
-                Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(bitmap));
-                Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(metafile));
-                Assert.Throws<ThreadStateException>(() => Clipboard.SetImage(enhancedMetafile));
-            }
-        }
+    [WinFormsTheory]
+    [NullAndEmptyStringData]
+    public void Clipboard_SetText_NullOrEmptyText_ThrowsArgumentNullException(string text)
+    {
+        Assert.Throws<ArgumentNullException>("text", () => Clipboard.SetText(text));
+        Assert.Throws<ArgumentNullException>("text", () => Clipboard.SetText(text, TextDataFormat.Text));
+    }
 
-        [WinFormsFact]
-        public void Clipboard_SetText_InvokeString_GetReturnsExpected()
-        {
-            Clipboard.SetText("text");
-            Assert.Equal("text", Clipboard.GetText());
-            Assert.True(Clipboard.ContainsText());
-        }
+    [WinFormsTheory]
+    [InvalidEnumData<TextDataFormat>]
+    public void Clipboard_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
+    {
+        Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.SetText("text", format));
+    }
 
-        [WinFormsTheory]
-        [EnumData<TextDataFormat>]
-        public void Clipboard_SetText_InvokeStringTextDataFormat_GetReturnsExpected(TextDataFormat format)
-        {
-            using var formatterScope = new BinaryFormatterScope(enable: format == TextDataFormat.CommaSeparatedValue);
-            Clipboard.SetText("text", format);
-            Assert.Equal("text", Clipboard.GetText(format));
-            Assert.True(Clipboard.ContainsText(format));
-        }
-
-        [WinFormsTheory]
-        [NullAndEmptyStringData]
-        public void Clipboard_SetText_NullOrEmptyText_ThrowsArgumentNullException(string text)
-        {
-            Assert.Throws<ArgumentNullException>("text", () => Clipboard.SetText(text));
-            Assert.Throws<ArgumentNullException>("text", () => Clipboard.SetText(text, TextDataFormat.Text));
-        }
-
-        [WinFormsTheory]
-        [InvalidEnumData<TextDataFormat>]
-        public void Clipboard_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
-        {
-            Assert.Throws<InvalidEnumArgumentException>("format", () => Clipboard.SetText("text", format));
-        }
-
-        [Fact] // x-thread
-        public void Clipboard_SetText_NotSta_ThrowsThreadStateException()
-        {
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetText("text"));
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetText("text", TextDataFormat.Text));
-        }
+    [Fact] // x-thread
+    public void Clipboard_SetText_NotSta_ThrowsThreadStateException()
+    {
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetText("text"));
+        Assert.Throws<ThreadStateException>(() => Clipboard.SetText("text", TextDataFormat.Text));
     }
 }

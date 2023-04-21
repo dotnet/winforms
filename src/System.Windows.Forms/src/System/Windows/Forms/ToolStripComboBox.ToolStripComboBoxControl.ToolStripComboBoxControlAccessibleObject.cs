@@ -4,60 +4,59 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripComboBox
 {
-    public partial class ToolStripComboBox
+    internal partial class ToolStripComboBoxControl : ComboBox
     {
-        internal partial class ToolStripComboBoxControl : ComboBox
+        internal class ToolStripComboBoxControlAccessibleObject : ComboBoxAccessibleObject
         {
-            internal class ToolStripComboBoxControlAccessibleObject : ComboBoxAccessibleObject
+            public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl)
+                : base(toolStripComboBoxControl)
             {
-                public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl)
-                    : base(toolStripComboBoxControl)
+            }
+
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                switch (direction)
                 {
-                }
-
-                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-                {
-                    switch (direction)
-                    {
-                        case UiaCore.NavigateDirection.Parent:
-                        case UiaCore.NavigateDirection.PreviousSibling:
-                        case UiaCore.NavigateDirection.NextSibling:
-                            if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
-                            {
-                                return toolStripComboBoxControl.Owner?.AccessibilityObject.FragmentNavigate(direction);
-                            }
-
-                            break;
-                    }
-
-                    return base.FragmentNavigate(direction);
-                }
-
-                internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-                {
-                    get
-                    {
+                    case UiaCore.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                    case UiaCore.NavigateDirection.NextSibling:
                         if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                         {
-                            return toolStripComboBoxControl.Owner?.Owner?.AccessibilityObject;
+                            return toolStripComboBoxControl.Owner?.AccessibilityObject.FragmentNavigate(direction);
                         }
 
-                        return base.FragmentRoot;
-                    }
+                        break;
                 }
 
-                internal override bool IsPatternSupported(UiaCore.UIA patternId)
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+            {
+                get
                 {
-                    if (patternId == UiaCore.UIA.ExpandCollapsePatternId ||
-                        patternId == UiaCore.UIA.ValuePatternId)
+                    if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                     {
-                        return true;
+                        return toolStripComboBoxControl.Owner?.Owner?.AccessibilityObject;
                     }
 
-                    return base.IsPatternSupported(patternId);
+                    return base.FragmentRoot;
                 }
+            }
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.ExpandCollapsePatternId ||
+                    patternId == UiaCore.UIA.ValuePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
             }
         }
     }

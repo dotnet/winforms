@@ -6,113 +6,112 @@ using System.Windows.Forms.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace System.Windows.Forms.Generators
+namespace System.Windows.Forms.Generators;
+
+[Generator(LanguageNames.CSharp)]
+internal class ApplicationConfigurationGenerator : IIncrementalGenerator
 {
-    [Generator(LanguageNames.CSharp)]
-    internal class ApplicationConfigurationGenerator : IIncrementalGenerator
+    private static void Execute(
+        SourceProductionContext context,
+        bool hasSupportedSyntaxNode,
+        string? projectNamespace,
+        OutputKind outputKind,
+        ApplicationConfig? applicationConfig,
+        Diagnostic? applicationConfigDiagnostics)
     {
-        private static void Execute(
-            SourceProductionContext context,
-            bool hasSupportedSyntaxNode,
-            string? projectNamespace,
-            OutputKind outputKind,
-            ApplicationConfig? applicationConfig,
-            Diagnostic? applicationConfigDiagnostics)
+        if (!hasSupportedSyntaxNode)
         {
-            if (!hasSupportedSyntaxNode)
-            {
-                return;
-            }
-
-            if (applicationConfig is null)
-            {
-                if (applicationConfigDiagnostics is not null)
-                {
-                    context.ReportDiagnostic(applicationConfigDiagnostics);
-                }
-
-                return;
-            }
-
-            if (outputKind != OutputKind.WindowsApplication &&
-                // Starting in the 5.0.100 version of the .NET SDK, when OutputType is set to Exe, it is automatically changed to WinExe
-                // for WPF and Windows Forms apps that target any framework version, including .NET Framework.
-                // https://docs.microsoft.com/en-us/dotnet/core/compatibility/sdk/5.0/automatically-infer-winexe-output-type
-                outputKind != OutputKind.ConsoleApplication)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.s_errorUnsupportedProjectType, Location.None, nameof(OutputKind.WindowsApplication)));
-                return;
-            }
-
-            string? code = ApplicationConfigurationInitializeBuilder.GenerateInitialize(projectNamespace, applicationConfig);
-            if (code is not null)
-            {
-                context.AddSource("ApplicationConfiguration.g.cs", code);
-            }
+            return;
         }
 
-        private static string? GetUserProjectNamespace(SyntaxNode node)
+        if (applicationConfig is null)
         {
-            string? ns = null;
-
-            if (node.Ancestors().FirstOrDefault(a => a is NamespaceDeclarationSyntax) is NamespaceDeclarationSyntax namespaceSyntax)
+            if (applicationConfigDiagnostics is not null)
             {
-                ns = namespaceSyntax.Name.ToString();
+                context.ReportDiagnostic(applicationConfigDiagnostics);
             }
 
-            return ns;
+            return;
         }
 
-        public void Initialize(IncrementalGeneratorInitializationContext context)
+        if (outputKind != OutputKind.WindowsApplication &&
+            // Starting in the 5.0.100 version of the .NET SDK, when OutputType is set to Exe, it is automatically changed to WinExe
+            // for WPF and Windows Forms apps that target any framework version, including .NET Framework.
+            // https://docs.microsoft.com/en-us/dotnet/core/compatibility/sdk/5.0/automatically-infer-winexe-output-type
+            outputKind != OutputKind.ConsoleApplication)
         {
-            var outputKindProvider = context.CompilationProvider.Select((compilation, _) => compilation.Options.OutputKind);
-            var syntaxProvider = context.SyntaxProvider.CreateSyntaxProvider(
-                predicate: static (syntaxNode, _) => IsSupportedSyntaxNode(syntaxNode),
-                transform: static (generatorSyntaxContext, _) => GetUserProjectNamespace(generatorSyntaxContext.Node));
-
-            var globalConfig = ProjectFileReader.ReadApplicationConfig(context.AnalyzerConfigOptionsProvider);
-
-            var inputs = outputKindProvider
-                .Combine(syntaxProvider.Collect())
-                .Combine(globalConfig)
-                .Select((data, cancellationToken)
-                    => (OutputKind: data.Left.Left,
-                        ProjectNamespaces: data.Left.Right,
-                        ApplicationConfig: data.Right.ApplicationConfig,
-                        ApplicationConfigDiagnostics: data.Right.Diagnostic));
-
-            context.RegisterSourceOutput(
-                inputs,
-                (context, source) => Execute(context, source.ProjectNamespaces.Length > 0, source.ProjectNamespaces.Length > 0 ? source.ProjectNamespaces[0] : null, source.OutputKind, source.ApplicationConfig, source.ApplicationConfigDiagnostics));
+            context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.s_errorUnsupportedProjectType, Location.None, nameof(OutputKind.WindowsApplication)));
+            return;
         }
 
-        public static bool IsSupportedSyntaxNode(SyntaxNode syntaxNode)
+        string? code = ApplicationConfigurationInitializeBuilder.GenerateInitialize(projectNamespace, applicationConfig);
+        if (code is not null)
         {
+            context.AddSource("ApplicationConfiguration.g.cs", code);
+        }
+    }
+
+    private static string? GetUserProjectNamespace(SyntaxNode node)
+    {
+        string? ns = null;
+
+        if (node.Ancestors().FirstOrDefault(a => a is NamespaceDeclarationSyntax) is NamespaceDeclarationSyntax namespaceSyntax)
+        {
+            ns = namespaceSyntax.Name.ToString();
+        }
+
+        return ns;
+    }
+
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        var outputKindProvider = context.CompilationProvider.Select((compilation, _) => compilation.Options.OutputKind);
+        var syntaxProvider = context.SyntaxProvider.CreateSyntaxProvider(
+            predicate: static (syntaxNode, _) => IsSupportedSyntaxNode(syntaxNode),
+            transform: static (generatorSyntaxContext, _) => GetUserProjectNamespace(generatorSyntaxContext.Node));
+
+        var globalConfig = ProjectFileReader.ReadApplicationConfig(context.AnalyzerConfigOptionsProvider);
+
+        var inputs = outputKindProvider
+            .Combine(syntaxProvider.Collect())
+            .Combine(globalConfig)
+            .Select((data, cancellationToken)
+                => (OutputKind: data.Left.Left,
+                    ProjectNamespaces: data.Left.Right,
+                    ApplicationConfig: data.Right.ApplicationConfig,
+                    ApplicationConfigDiagnostics: data.Right.Diagnostic));
+
+        context.RegisterSourceOutput(
+            inputs,
+            (context, source) => Execute(context, source.ProjectNamespaces.Length > 0, source.ProjectNamespaces.Length > 0 ? source.ProjectNamespaces[0] : null, source.OutputKind, source.ApplicationConfig, source.ApplicationConfigDiagnostics));
+    }
+
+    public static bool IsSupportedSyntaxNode(SyntaxNode syntaxNode)
+    {
 #pragma warning disable SA1513 // Closing brace should be followed by blank line
-            if (syntaxNode is InvocationExpressionSyntax
-                {
-                    ArgumentList.Arguments.Count: 0,
-                    Expression: MemberAccessExpressionSyntax
-                    {
-                        Name.Identifier.ValueText: "Initialize",
-                        Expression:
-                            MemberAccessExpressionSyntax  // For: SourceGenerated.ApplicationConfiguration.Initialize()
-                            {
-                                Name.Identifier.ValueText: "ApplicationConfiguration"
-                            }
-                            or
-                            IdentifierNameSyntax           // For: ApplicationConfiguration.Initialize() with a using statement
-                            {
-                                Identifier.ValueText: "ApplicationConfiguration"
-                            }
-                    }
-                })
+        if (syntaxNode is InvocationExpressionSyntax
             {
-                return true;
-            }
+                ArgumentList.Arguments.Count: 0,
+                Expression: MemberAccessExpressionSyntax
+                {
+                    Name.Identifier.ValueText: "Initialize",
+                    Expression:
+                        MemberAccessExpressionSyntax  // For: SourceGenerated.ApplicationConfiguration.Initialize()
+                        {
+                            Name.Identifier.ValueText: "ApplicationConfiguration"
+                        }
+                        or
+                        IdentifierNameSyntax           // For: ApplicationConfiguration.Initialize() with a using statement
+                        {
+                            Identifier.ValueText: "ApplicationConfiguration"
+                        }
+                }
+            })
+        {
+            return true;
+        }
 #pragma warning restore SA1513 // Closing brace should be followed by blank line
 
-            return false;
-        }
+        return false;
     }
 }

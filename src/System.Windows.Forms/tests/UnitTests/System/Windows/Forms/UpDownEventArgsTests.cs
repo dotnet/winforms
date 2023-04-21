@@ -2,19 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+// NB: doesn't require thread affinity
+public class UpDownEventArgsTests
 {
-    // NB: doesn't require thread affinity
-    public class UpDownEventArgsTests
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void Ctor_Int(int buttonPushed)
     {
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        public void Ctor_Int(int buttonPushed)
-        {
-            var e = new UpDownEventArgs(buttonPushed);
-            Assert.Equal(buttonPushed, e.ButtonID);
-        }
+        var e = new UpDownEventArgs(buttonPushed);
+        Assert.Equal(buttonPushed, e.ButtonID);
     }
 }

@@ -4,13 +4,12 @@
 
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App
+namespace Accessibility_Core_App;
+
+public partial class ContainerControls : Form
 {
-    public partial class ContainerControls : Form
+    public ContainerControls()
     {
-        public ContainerControls()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

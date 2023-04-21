@@ -4,42 +4,41 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Panel
 {
-    public partial class Panel
+    internal class PanelAccessibleObject : ControlAccessibleObject
     {
-        internal class PanelAccessibleObject : ControlAccessibleObject
+        private readonly Panel _owningPanel;
+
+        public PanelAccessibleObject(Panel owner) : base(owner)
         {
-            private readonly Panel _owningPanel;
-
-            public PanelAccessibleObject(Panel owner) : base(owner)
-            {
-                _owningPanel = owner;
-            }
-
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
-
-            public override AccessibleObject? GetChild(int index)
-            {
-                if (!_owningPanel.IsHandleCreated || index < 0 || index >= _owningPanel.Controls.Count)
-                {
-                    return null;
-                }
-
-                return _owningPanel.Controls[index].AccessibilityObject;
-            }
-
-            public override int GetChildCount()
-                => _owningPanel.IsHandleCreated
-                    ? _owningPanel.Controls.Count
-                    : -1;
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-               => propertyID switch
-               {
-                   UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
-                   _ => base.GetPropertyValue(propertyID)
-               };
+            _owningPanel = owner;
         }
+
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+
+        public override AccessibleObject? GetChild(int index)
+        {
+            if (!_owningPanel.IsHandleCreated || index < 0 || index >= _owningPanel.Controls.Count)
+            {
+                return null;
+            }
+
+            return _owningPanel.Controls[index].AccessibilityObject;
+        }
+
+        public override int GetChildCount()
+            => _owningPanel.IsHandleCreated
+                ? _owningPanel.Controls.Count
+                : -1;
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+           => propertyID switch
+           {
+               UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
+               _ => base.GetPropertyValue(propertyID)
+           };
     }
 }

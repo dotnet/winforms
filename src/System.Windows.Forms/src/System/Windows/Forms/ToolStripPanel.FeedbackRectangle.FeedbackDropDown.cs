@@ -6,109 +6,108 @@ using System.ComponentModel;
 using System.Drawing;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripPanel
 {
-    public partial class ToolStripPanel
+    private partial class FeedbackRectangle
     {
-        private partial class FeedbackRectangle
+        private class FeedbackDropDown : ToolStripDropDown
         {
-            private class FeedbackDropDown : ToolStripDropDown
+            private const int MaxPaintsToService = 20;
+            private int _numPaintsServiced; // member variable to protect against re-entrancy
+
+            public FeedbackDropDown(Rectangle bounds) : base()
             {
-                private const int MaxPaintsToService = 20;
-                private int _numPaintsServiced; // member variable to protect against re-entrancy
+                SetStyle(ControlStyles.AllPaintingInWmPaint, false);
+                SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+                SetStyle(ControlStyles.CacheText, true);
+                AutoClose = false;
+                AutoSize = false;
+                DropShadowEnabled = false;
+                Bounds = bounds;
 
-                public FeedbackDropDown(Rectangle bounds) : base()
+                // Set a clipping region with the center excluded.
+                Region region = new(bounds);
+                bounds.Inflate(-1, -1);
+                region.Exclude(bounds);
+                Region = region;
+            }
+
+            // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs
+            // calls UpdateWindow on the hwnd to force the paint to happen now.
+            //
+            // When we're changing the location of the feedback dropdown, we need to
+            // force WM_PAINTS to happen, as things that don't respond to WM_ERASEBKGND
+            // have bits of the dropdown region drawn all over them.
+            private unsafe void ForceSynchronousPaint()
+            {
+                if (IsDisposed || _numPaintsServiced != 0)
                 {
-                    SetStyle(ControlStyles.AllPaintingInWmPaint, false);
-                    SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-                    SetStyle(ControlStyles.CacheText, true);
-                    AutoClose = false;
-                    AutoSize = false;
-                    DropShadowEnabled = false;
-                    Bounds = bounds;
-
-                    // Set a clipping region with the center excluded.
-                    Region region = new(bounds);
-                    bounds.Inflate(-1, -1);
-                    region.Exclude(bounds);
-                    Region = region;
+                    return;
                 }
 
-                // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs
-                // calls UpdateWindow on the hwnd to force the paint to happen now.
-                //
-                // When we're changing the location of the feedback dropdown, we need to
-                // force WM_PAINTS to happen, as things that don't respond to WM_ERASEBKGND
-                // have bits of the dropdown region drawn all over them.
-                private unsafe void ForceSynchronousPaint()
+                // Protect against re-entrancy.
+                try
                 {
-                    if (IsDisposed || _numPaintsServiced != 0)
+                    MSG msg = default;
+                    while (PInvoke.PeekMessage(
+                        &msg,
+                        HWND.Null,
+                        (uint)User32.WM.PAINT,
+                        (uint)User32.WM.PAINT,
+                        PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
                     {
-                        return;
-                    }
+                        PInvoke.UpdateWindow(msg.hwnd);
 
-                    // Protect against re-entrancy.
-                    try
-                    {
-                        MSG msg = default;
-                        while (PInvoke.PeekMessage(
-                            &msg,
-                            HWND.Null,
-                            (uint)User32.WM.PAINT,
-                            (uint)User32.WM.PAINT,
-                            PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+                        // Infinite loop protection.
+                        if (_numPaintsServiced++ > MaxPaintsToService)
                         {
-                            PInvoke.UpdateWindow(msg.hwnd);
-
-                            // Infinite loop protection.
-                            if (_numPaintsServiced++ > MaxPaintsToService)
-                            {
-                                Debug.Fail("Somehow we've gotten ourself in a situation where we're pumping an unreasonable number of paint messages, investigate.");
-                                break;
-                            }
+                            Debug.Fail("Somehow we've gotten ourself in a situation where we're pumping an unreasonable number of paint messages, investigate.");
+                            break;
                         }
                     }
-                    finally
-                    {
-                        _numPaintsServiced = 0;
-                    }
                 }
-
-                protected override void OnPaint(PaintEventArgs e)
+                finally
                 {
+                    _numPaintsServiced = 0;
                 }
+            }
 
-                protected override void OnPaintBackground(PaintEventArgs e)
+            protected override void OnPaint(PaintEventArgs e)
+            {
+            }
+
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                // Respond to everything in WM_ERASEBKGND.
+                Renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(e.Graphics, this));
+                Renderer.DrawToolStripBorder(new ToolStripRenderEventArgs(e.Graphics, this));
+            }
+
+            protected override void OnOpening(CancelEventArgs e)
+            {
+                base.OnOpening(e);
+                e.Cancel = false;
+            }
+
+            public void MoveTo(Point newLocation)
+            {
+                Location = newLocation;
+
+                // If we don't force a paint here, we'll only send WM_ERASEBKGNDs right away
+                // and leave rectangles all over controls that don't respond to that window message.
+                ForceSynchronousPaint();
+            }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (m.MsgInternal == User32.WM.NCHITTEST)
                 {
-                    // Respond to everything in WM_ERASEBKGND.
-                    Renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(e.Graphics, this));
-                    Renderer.DrawToolStripBorder(new ToolStripRenderEventArgs(e.Graphics, this));
+                    m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                 }
 
-                protected override void OnOpening(CancelEventArgs e)
-                {
-                    base.OnOpening(e);
-                    e.Cancel = false;
-                }
-
-                public void MoveTo(Point newLocation)
-                {
-                    Location = newLocation;
-
-                    // If we don't force a paint here, we'll only send WM_ERASEBKGNDs right away
-                    // and leave rectangles all over controls that don't respond to that window message.
-                    ForceSynchronousPaint();
-                }
-
-                protected override void WndProc(ref Message m)
-                {
-                    if (m.MsgInternal == User32.WM.NCHITTEST)
-                    {
-                        m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
-                    }
-
-                    base.WndProc(ref m);
-                }
+                base.WndProc(ref m);
             }
         }
     }

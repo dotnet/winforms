@@ -2,77 +2,76 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <remarks>
+///  Sample Guids
+///  ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"
+///  Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"
+///  Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"
+///  Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"
+/// </remarks>
+public class FileDialogCustomPlace
 {
-    /// <remarks>
-    ///  Sample Guids
-    ///  ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"
-    ///  Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"
-    ///  Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"
-    ///  Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"
-    /// </remarks>
-    public class FileDialogCustomPlace
+    private string _path = string.Empty;
+    private Guid _knownFolderGuid = Guid.Empty;
+
+    public FileDialogCustomPlace(string? path)
     {
-        private string _path = string.Empty;
-        private Guid _knownFolderGuid = Guid.Empty;
+        Path = path;
+    }
 
-        public FileDialogCustomPlace(string? path)
+    public FileDialogCustomPlace(Guid knownFolderGuid)
+    {
+        KnownFolderGuid = knownFolderGuid;
+    }
+
+    [AllowNull]
+    public string Path
+    {
+        get => _path ?? string.Empty;
+        set
         {
-            Path = path;
+            _path = value ?? string.Empty;
+            _knownFolderGuid = Guid.Empty;
         }
+    }
 
-        public FileDialogCustomPlace(Guid knownFolderGuid)
+    public Guid KnownFolderGuid
+    {
+        get => _knownFolderGuid;
+        set
         {
-            KnownFolderGuid = knownFolderGuid;
+            _path = string.Empty;
+            _knownFolderGuid = value;
         }
+    }
 
-        [AllowNull]
-        public string Path
+    public override string ToString()
+    {
+        return $"{base.ToString()} Path: {Path} KnownFolderGuid: {KnownFolderGuid}";
+    }
+
+    internal unsafe IShellItem* GetNativePath()
+    {
+        string filePathString;
+        if (!string.IsNullOrEmpty(_path))
         {
-            get => _path ?? string.Empty;
-            set
+            filePathString = _path;
+        }
+        else
+        {
+            fixed (char* path = filePathString)
+            fixed (Guid* reference = &_knownFolderGuid)
             {
-                _path = value ?? string.Empty;
-                _knownFolderGuid = Guid.Empty;
-            }
-        }
-
-        public Guid KnownFolderGuid
-        {
-            get => _knownFolderGuid;
-            set
-            {
-                _path = string.Empty;
-                _knownFolderGuid = value;
-            }
-        }
-
-        public override string ToString()
-        {
-            return $"{base.ToString()} Path: {Path} KnownFolderGuid: {KnownFolderGuid}";
-        }
-
-        internal unsafe IShellItem* GetNativePath()
-        {
-            string filePathString;
-            if (!string.IsNullOrEmpty(_path))
-            {
-                filePathString = _path;
-            }
-            else
-            {
-                fixed (char* path = filePathString)
-                fixed (Guid* reference = &_knownFolderGuid)
+                int result = PInvoke.SHGetKnownFolderPath(reference, 0, HANDLE.Null, (PWSTR*)path);
+                if (result == 0)
                 {
-                    int result = PInvoke.SHGetKnownFolderPath(reference, 0, HANDLE.Null, (PWSTR*)path);
-                    if (result == 0)
-                    {
-                        return null;
-                    }
+                    return null;
                 }
             }
-
-            return PInvoke.SHCreateShellItem(filePathString);
         }
+
+        return PInvoke.SHCreateShellItem(filePathString);
     }
 }

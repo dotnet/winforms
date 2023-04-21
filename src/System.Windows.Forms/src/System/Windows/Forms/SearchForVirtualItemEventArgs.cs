@@ -4,42 +4,41 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class SearchForVirtualItemEventArgs : EventArgs
 {
-    public class SearchForVirtualItemEventArgs : EventArgs
+    public SearchForVirtualItemEventArgs(
+        bool isTextSearch,
+        bool isPrefixSearch,
+        bool includeSubItemsInSearch,
+        string? text,
+        Point startingPoint,
+        SearchDirectionHint direction,
+        int startIndex)
     {
-        public SearchForVirtualItemEventArgs(
-            bool isTextSearch,
-            bool isPrefixSearch,
-            bool includeSubItemsInSearch,
-            string? text,
-            Point startingPoint,
-            SearchDirectionHint direction,
-            int startIndex)
-        {
-            IsTextSearch = isTextSearch;
-            IsPrefixSearch = isPrefixSearch;
-            IncludeSubItemsInSearch = includeSubItemsInSearch;
-            Text = text;
-            StartingPoint = startingPoint;
-            Direction = direction;
-            StartIndex = startIndex;
-        }
-
-        public bool IsTextSearch { get; }
-
-        public bool IsPrefixSearch { get; }
-
-        public bool IncludeSubItemsInSearch { get; }
-
-        public int Index { get; set; } = -1;
-
-        public string? Text { get; }
-
-        public Point StartingPoint { get; }
-
-        public SearchDirectionHint Direction { get; }
-
-        public int StartIndex { get; }
+        IsTextSearch = isTextSearch;
+        IsPrefixSearch = isPrefixSearch;
+        IncludeSubItemsInSearch = includeSubItemsInSearch;
+        Text = text;
+        StartingPoint = startingPoint;
+        Direction = direction;
+        StartIndex = startIndex;
     }
+
+    public bool IsTextSearch { get; }
+
+    public bool IsPrefixSearch { get; }
+
+    public bool IncludeSubItemsInSearch { get; }
+
+    public int Index { get; set; } = -1;
+
+    public string? Text { get; }
+
+    public Point StartingPoint { get; }
+
+    public SearchDirectionHint Direction { get; }
+
+    public int StartIndex { get; }
 }

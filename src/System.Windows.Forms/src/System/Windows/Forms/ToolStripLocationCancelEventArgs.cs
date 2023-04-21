@@ -5,24 +5,23 @@
 using System.ComponentModel;
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Provides Arguments for the Cancelable LocationChanging Event.
+/// </summary>
+internal class ToolStripLocationCancelEventArgs : CancelEventArgs
 {
     /// <summary>
-    ///  Provides Arguments for the Cancelable LocationChanging Event.
+    ///  Initializes a new instance of the ToolStripLocationCancelEventArgs with cancel value.
     /// </summary>
-    internal class ToolStripLocationCancelEventArgs : CancelEventArgs
+    public ToolStripLocationCancelEventArgs(Point newLocation, bool value) : base(value)
     {
-        /// <summary>
-        ///  Initializes a new instance of the ToolStripLocationCancelEventArgs with cancel value.
-        /// </summary>
-        public ToolStripLocationCancelEventArgs(Point newLocation, bool value) : base(value)
-        {
-            NewLocation = newLocation;
-        }
-
-        /// <summary>
-        ///  Returns the New Location of the ToolStrip.
-        /// </summary>
-        public Point NewLocation { get; }
+        NewLocation = newLocation;
     }
+
+    /// <summary>
+    ///  Returns the New Location of the ToolStrip.
+    /// </summary>
+    public Point NewLocation { get; }
 }

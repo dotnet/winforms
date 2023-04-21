@@ -4,13 +4,12 @@
 
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App
+namespace Accessibility_Core_App;
+
+public partial class Menu_Toolbars_controls : Form
 {
-    public partial class Menu_Toolbars_controls : Form
+    public Menu_Toolbars_controls()
     {
-        public Menu_Toolbars_controls()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -2,24 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Layout
-{
-    internal partial class TableLayout
-    {
-        //sizeProxy. Takes a strip and return its minSize or maxSize accordingly
-        private abstract class SizeProxy
-        {
-            protected Strip strip;
-            public Strip Strip
-            {
-                get { return strip; }
-                set { strip = value; }
-            }
+namespace System.Windows.Forms.Layout;
 
-            public abstract int Size
-            {
-                get; set;
-            }
+internal partial class TableLayout
+{
+    //sizeProxy. Takes a strip and return its minSize or maxSize accordingly
+    private abstract class SizeProxy
+    {
+        protected Strip strip;
+        public Strip Strip
+        {
+            get { return strip; }
+            set { strip = value; }
+        }
+
+        public abstract int Size
+        {
+            get; set;
         }
     }
 }

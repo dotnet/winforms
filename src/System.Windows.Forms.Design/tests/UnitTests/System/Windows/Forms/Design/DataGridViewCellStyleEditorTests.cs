@@ -4,22 +4,21 @@
 
 using System.Drawing.Design;
 
-namespace System.Windows.Forms.Design.Tests
-{
-    public class DataGridViewCellStyleEditorTests
-    {
-        [Fact]
-        public void DataGridViewCellStyleEditor_Ctor_Default()
-        {
-            var editor = new DataGridViewCellStyleEditor();
-            Assert.False(editor.IsDropDownResizable);
-        }
+namespace System.Windows.Forms.Design.Tests;
 
-        [Fact]
-        public void DataGridViewCellStyleEditor_GetEditStyle_ReturnsModal()
-        {
-            var editor = new DataGridViewCellStyleEditor();
-            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(null));
-        }
+public class DataGridViewCellStyleEditorTests
+{
+    [Fact]
+    public void DataGridViewCellStyleEditor_Ctor_Default()
+    {
+        var editor = new DataGridViewCellStyleEditor();
+        Assert.False(editor.IsDropDownResizable);
+    }
+
+    [Fact]
+    public void DataGridViewCellStyleEditor_GetEditStyle_ReturnsModal()
+    {
+        var editor = new DataGridViewCellStyleEditor();
+        Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(null));
     }
 }

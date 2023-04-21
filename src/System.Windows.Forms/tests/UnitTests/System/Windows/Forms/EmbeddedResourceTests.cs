@@ -5,14 +5,14 @@
 using System.Drawing;
 using System.Reflection;
 
-namespace System.Windows.Forms.Tests
-{
-    public class EmbeddedResourceTests
-    {
-        // Get System.Windows.Forms assembly to verify that it contains all the resources that the code uses.
-        private readonly Assembly assembly = Assembly.GetAssembly(typeof(AccessibleObject));
+namespace System.Windows.Forms.Tests;
 
-        private static string s_expectedIconNames = """
+public class EmbeddedResourceTests
+{
+    // Get System.Windows.Forms assembly to verify that it contains all the resources that the code uses.
+    private readonly Assembly assembly = Assembly.GetAssembly(typeof(AccessibleObject));
+
+    private static string s_expectedIconNames = """
             System.Windows.Forms.ActiveDocumentHost
             System.Windows.Forms.alignment
             System.Windows.Forms.alignToGrid
@@ -196,21 +196,21 @@ namespace System.Windows.Forms.Tests
             System.Windows.Forms.wfc
             """;
 
-        public static TheoryData ExpectedIconNames()
-            => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
+    public static TheoryData ExpectedIconNames()
+        => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
 
-        [Theory]
-        [MemberData(nameof(ExpectedIconNames))]
-        public void EmbeddedResource_ResourcesExist_Icon(string resourceName)
-        {
-            using Stream stream = assembly.GetManifestResourceStream(resourceName);
-            Assert.NotNull(stream);
+    [Theory]
+    [MemberData(nameof(ExpectedIconNames))]
+    public void EmbeddedResource_ResourcesExist_Icon(string resourceName)
+    {
+        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        Assert.NotNull(stream);
 
-            using Icon icon = new(stream);
-            Assert.NotNull(icon);
-        }
+        using Icon icon = new(stream);
+        Assert.NotNull(icon);
+    }
 
-        private static string s_expectedCursorNames = """
+    private static string s_expectedCursorNames = """
             System.Windows.Forms.east.cur
             System.Windows.Forms.hsplit.cur
             System.Windows.Forms.ne.cur
@@ -226,21 +226,21 @@ namespace System.Windows.Forms.Tests
             System.Windows.Forms.west.cur
             """;
 
-        public static TheoryData ExpectedCursorNames()
-             => (TheoryData)s_expectedCursorNames.Split(Environment.NewLine).ToTheoryData();
+    public static TheoryData ExpectedCursorNames()
+         => (TheoryData)s_expectedCursorNames.Split(Environment.NewLine).ToTheoryData();
 
-        [Theory]
-        [MemberData(nameof(ExpectedCursorNames))]
-        public void EmbeddedResource_ResourcesExist_Cursor(string resourceName)
-        {
-            using Stream stream = assembly.GetManifestResourceStream(resourceName);
-            Assert.NotNull(stream);
+    [Theory]
+    [MemberData(nameof(ExpectedCursorNames))]
+    public void EmbeddedResource_ResourcesExist_Cursor(string resourceName)
+    {
+        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        Assert.NotNull(stream);
 
-            using Cursor cursor = new(stream);
-            Assert.NotNull(cursor);
-        }
+        using Cursor cursor = new(stream);
+        Assert.NotNull(cursor);
+    }
 
-        private const string expectedResourceNames = """
+    private const string expectedResourceNames = """
             ILLink.Substitutions.xml
             System.SR.resources
             System.Windows.Forms.MdiWindowDialog.resources
@@ -248,17 +248,16 @@ namespace System.Windows.Forms.Tests
             System.Windows.Forms.XPThemes.manifest
             """;
 
-        [Fact]
-        public void EmbeddedResource_VerifyList()
-        {
-            string[] actual = assembly.GetManifestResourceNames();
-            Array.Sort(actual, StringComparer.Ordinal);
+    [Fact]
+    public void EmbeddedResource_VerifyList()
+    {
+        string[] actual = assembly.GetManifestResourceNames();
+        Array.Sort(actual, StringComparer.Ordinal);
 
-            string allNames = $"{s_expectedIconNames}{Environment.NewLine}{s_expectedCursorNames}{Environment.NewLine}{expectedResourceNames}";
-            string[] expected = allNames.Split(Environment.NewLine);
-            Array.Sort(expected, StringComparer.Ordinal);
+        string allNames = $"{s_expectedIconNames}{Environment.NewLine}{s_expectedCursorNames}{Environment.NewLine}{expectedResourceNames}";
+        string[] expected = allNames.Split(Environment.NewLine);
+        Array.Sort(expected, StringComparer.Ordinal);
 
-            AssertExtensions.Equal(expected, actual);
-        }
+        AssertExtensions.Equal(expected, actual);
     }
 }

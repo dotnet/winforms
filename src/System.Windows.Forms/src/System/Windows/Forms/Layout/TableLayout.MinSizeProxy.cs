@@ -2,25 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Layout
-{
-    internal partial class TableLayout
-    {
-        private class MinSizeProxy : SizeProxy
-        {
-            private static readonly MinSizeProxy instance = new MinSizeProxy();
-            public override int Size
-            {
-                get { return strip.MinSize; }
-                set { strip.MinSize = value; }
-            }
+namespace System.Windows.Forms.Layout;
 
-            public static MinSizeProxy GetInstance
+internal partial class TableLayout
+{
+    private class MinSizeProxy : SizeProxy
+    {
+        private static readonly MinSizeProxy instance = new MinSizeProxy();
+        public override int Size
+        {
+            get { return strip.MinSize; }
+            set { strip.MinSize = value; }
+        }
+
+        public static MinSizeProxy GetInstance
+        {
+            get
             {
-                get
-                {
-                    return instance;
-                }
+                return instance;
             }
         }
     }
