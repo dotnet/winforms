@@ -811,7 +811,7 @@ namespace System.Windows.Forms.Tests
                 return RunFileDialogAction(*ofn);
             }
 
-            private protected override IFileDialog* CreateVistaDialog() => null;
+            private protected override ComScope<IFileDialog> CreateVistaDialog() => default;
 
             private protected override string[] ProcessVistaFiles(IFileDialog* dialog) => null;
 

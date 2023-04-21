@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Controls.Dialogs;
 using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;
@@ -162,15 +163,16 @@ namespace System.Windows.Forms
             return item.IsNull ? Array.Empty<string>() : new string[] { GetFilePathFromShellItem(item) };
         }
 
-        private protected override unsafe IFileDialog* CreateVistaDialog()
+        private protected override unsafe ComScope<IFileDialog> CreateVistaDialog()
         {
-            PInvoke.CoCreateInstance(
+            HRESULT hr = PInvoke.CoCreateInstance(
                 in CLSID.FileSaveDialog,
                 pUnkOuter: null,
                 CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_LOCAL_SERVER | CLSCTX.CLSCTX_REMOTE_SERVER,
                 out IFileDialog* fileDialog);
 
-            return fileDialog;
+            Debug.Assert(hr.Succeeded);
+            return new(fileDialog);
         }
     }
 }
