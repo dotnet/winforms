@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.ApplicationInstallationAndServicing;
 using Windows.Win32.System.Com;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Interop.Tests;

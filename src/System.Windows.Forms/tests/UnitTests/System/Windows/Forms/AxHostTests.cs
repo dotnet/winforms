@@ -11,7 +11,6 @@ using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using Xunit;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

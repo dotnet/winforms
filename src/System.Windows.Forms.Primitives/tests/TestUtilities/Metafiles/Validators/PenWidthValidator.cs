@@ -4,8 +4,6 @@
 
 #nullable enable
 
-using Xunit;
-
 namespace System.Windows.Forms.Metafiles
 {
     internal class PenWidthValidator : IStateValidator

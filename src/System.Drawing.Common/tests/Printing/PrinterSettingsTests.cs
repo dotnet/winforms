@@ -27,7 +27,6 @@
 
 using System.Drawing.Imaging;
 using System.Globalization;
-using Xunit;
 
 namespace System.Drawing.Printing.Tests
 {

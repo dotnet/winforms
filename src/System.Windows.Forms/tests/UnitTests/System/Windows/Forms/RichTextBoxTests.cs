@@ -12,7 +12,6 @@ using Moq;
 using Moq.Protected;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Controls.RichEdit;
-using Xunit;
 using static Interop;
 using static Interop.Richedit;
 using static Interop.User32;

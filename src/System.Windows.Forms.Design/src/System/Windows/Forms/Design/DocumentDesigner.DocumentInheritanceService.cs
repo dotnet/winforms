@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace System.Windows.Forms.Design

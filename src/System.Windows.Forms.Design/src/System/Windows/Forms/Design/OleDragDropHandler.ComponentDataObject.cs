@@ -8,7 +8,6 @@ using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.Design

@@ -4,7 +4,6 @@
 
 #nullable enable
 
-using Xunit;
 using Xunit.Sdk;
 
 namespace System.Windows.Forms.Metafiles

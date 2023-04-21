@@ -6,7 +6,6 @@ using System.Reflection;
 using Microsoft.Win32;
 using Windows.Win32;
 using Windows.Win32.Foundation;
-using Xunit;
 using static Windows.Win32.UI.WindowsAndMessaging.SYSTEM_PARAMETERS_INFO_ACTION;
 using static Interop.User32;
 

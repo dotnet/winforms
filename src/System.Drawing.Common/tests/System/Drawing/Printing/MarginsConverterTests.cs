@@ -5,7 +5,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-using Xunit;
 
 namespace System.Drawing.Printing.Tests
 {

@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Design.Tests;
-using Xunit;
 
 namespace System.Windows.Forms.Tests;
 

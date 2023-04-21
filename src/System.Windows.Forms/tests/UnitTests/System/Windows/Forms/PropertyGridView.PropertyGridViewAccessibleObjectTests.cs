@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms.PropertyGridInternal;
-using Xunit;
 using static System.Windows.Forms.Control;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 using static Interop;

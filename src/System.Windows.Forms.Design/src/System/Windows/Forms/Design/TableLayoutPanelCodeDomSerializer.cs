@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
 {

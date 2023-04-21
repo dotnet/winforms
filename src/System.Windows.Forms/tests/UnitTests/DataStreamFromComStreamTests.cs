@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Windows.Win32.System.Com;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

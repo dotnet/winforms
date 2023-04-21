@@ -24,7 +24,6 @@
 
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using Xunit;
 
 namespace System.Drawing.Tests
 {

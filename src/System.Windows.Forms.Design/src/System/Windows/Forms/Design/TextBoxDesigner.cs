@@ -7,7 +7,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
 {

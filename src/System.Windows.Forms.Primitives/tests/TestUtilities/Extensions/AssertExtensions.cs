@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Xunit;
 using Xunit.Sdk;
 using static Interop;
 

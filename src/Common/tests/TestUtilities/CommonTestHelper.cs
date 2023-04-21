@@ -4,7 +4,6 @@
 
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
-using Xunit;
 
 namespace System.Windows.Forms.TestUtilities;
 

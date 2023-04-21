@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.PropertyGridInternal;
-using Xunit;
 using static System.Windows.Forms.PropertyGridInternal.CategoryGridEntry;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 using static Interop;

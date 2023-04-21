@@ -24,7 +24,6 @@
 //
 
 using System.XUnit;
-using Xunit;
 
 namespace System.Drawing.Drawing2D.Tests
 {

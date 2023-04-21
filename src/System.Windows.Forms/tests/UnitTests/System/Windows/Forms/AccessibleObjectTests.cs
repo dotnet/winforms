@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
-using Xunit;
 using static Interop;
 using System.Reflection;
 

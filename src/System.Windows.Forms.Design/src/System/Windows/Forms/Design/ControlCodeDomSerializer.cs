@@ -8,7 +8,6 @@ using System.CodeDom;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace System.Windows.Forms.Design

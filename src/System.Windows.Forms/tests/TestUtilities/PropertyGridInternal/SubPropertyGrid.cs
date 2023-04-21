@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.TestUtilities;

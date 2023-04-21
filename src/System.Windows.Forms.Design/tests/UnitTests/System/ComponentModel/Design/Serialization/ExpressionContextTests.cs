@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
 {

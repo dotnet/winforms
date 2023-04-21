@@ -26,7 +26,6 @@
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Microsoft.DotNet.XUnitExtensions;
-using Xunit;
 
 namespace System.Drawing.Tests
 {

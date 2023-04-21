@@ -8,7 +8,6 @@ using System.ComponentModel.Design;
 using System.Reflection;
 using System.Runtime.Loader;
 using Moq;
-using Xunit;
 
 namespace System.Drawing.Design.Tests
 {

@@ -3,13 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.WindowsAndMessaging;
-using Xunit;
 using Xunit.Abstractions;
 using static Interop;
 using static UiaClient;

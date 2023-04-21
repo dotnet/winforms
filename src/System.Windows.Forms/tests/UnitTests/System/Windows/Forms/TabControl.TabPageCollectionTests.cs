@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using Xunit;
 using static Interop;
 using Size = System.Drawing.Size;
 

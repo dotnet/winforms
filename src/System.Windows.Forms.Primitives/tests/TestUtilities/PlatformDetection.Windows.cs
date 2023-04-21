@@ -5,7 +5,6 @@
 using System.Runtime.InteropServices;
 using System.Security;
 using Microsoft.Win32;
-using Xunit;
 
 namespace System
 {

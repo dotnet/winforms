@@ -5,7 +5,6 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Windows.Win32.System.Ole;
-using Xunit;
 using static Interop;
 using static Interop.User32;
 using IStream = Windows.Win32.System.Com.IStream;

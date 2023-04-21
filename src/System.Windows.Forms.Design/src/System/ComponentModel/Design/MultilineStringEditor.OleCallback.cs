@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
 using Windows.Win32.System.Com;

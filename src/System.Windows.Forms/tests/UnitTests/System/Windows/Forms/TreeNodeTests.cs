@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static Interop.ComCtl32;
 using static Interop.User32;
 

@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using Xunit;
 
 namespace System.Windows.Forms.UITests.Input;
 

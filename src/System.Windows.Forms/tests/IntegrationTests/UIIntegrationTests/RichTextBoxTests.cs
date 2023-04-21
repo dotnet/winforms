@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Xunit;
 using Xunit.Abstractions;
 using static Interop;
 using static Interop.User32;

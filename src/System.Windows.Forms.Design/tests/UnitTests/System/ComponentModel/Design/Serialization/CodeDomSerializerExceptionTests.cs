@@ -7,7 +7,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;
-using Xunit;
 
 namespace System.Windows.Forms.Design.Serialization.Tests
 {

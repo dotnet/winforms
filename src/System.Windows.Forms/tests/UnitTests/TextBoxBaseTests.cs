@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 using static Interop;
 using static Interop.User32;
 using Point = System.Drawing.Point;

@@ -3,11 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.Drawing.Design.Tests
 {

@@ -4,7 +4,6 @@
 
 using System.Windows.Forms.PropertyGridInternal.TestUtilities;
 using System.Windows.Forms.UITests;
-using Xunit;
 using Xunit.Abstractions;
 using static Interop.UiaCore;
 

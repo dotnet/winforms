@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing.Printing;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

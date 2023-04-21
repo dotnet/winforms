@@ -29,9 +29,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Drawing;
 using System.Drawing.Imaging;
-using Xunit;
 
 namespace MonoTests.System.Drawing.Imaging
 {

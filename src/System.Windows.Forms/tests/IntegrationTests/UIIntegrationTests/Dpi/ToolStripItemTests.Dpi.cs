@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.HiDpi;
-using Xunit;
 using Xunit.Abstractions;
 using static Interop;
 

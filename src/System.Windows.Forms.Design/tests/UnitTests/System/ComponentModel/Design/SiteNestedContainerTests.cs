@@ -4,7 +4,6 @@
 
 using System.ComponentModel.Design.Serialization;
 using Moq;
-using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {

@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

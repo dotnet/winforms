@@ -5,7 +5,6 @@
 using System.Runtime.Serialization;
 using System.Windows.Forms.Automation;
 using Accessibility;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests

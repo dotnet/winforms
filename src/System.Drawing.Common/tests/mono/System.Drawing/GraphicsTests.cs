@@ -29,12 +29,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using Microsoft.DotNet.XUnitExtensions;
-using Xunit;
 
 namespace MonoTests.System.Drawing
 {

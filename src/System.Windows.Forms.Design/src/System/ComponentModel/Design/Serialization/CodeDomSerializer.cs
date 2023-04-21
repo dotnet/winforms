@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.CodeDom;
-using System.Diagnostics;
 
 namespace System.ComponentModel.Design.Serialization
 {

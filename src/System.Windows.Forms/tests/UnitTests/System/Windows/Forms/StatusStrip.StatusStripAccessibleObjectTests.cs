@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 using static Interop;
 using static Interop.UiaCore;
 using static System.Windows.Forms.Tests.ToolStripAccessibleObjectTests;

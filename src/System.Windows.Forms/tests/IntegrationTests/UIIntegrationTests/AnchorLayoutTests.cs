@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests

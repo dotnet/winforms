@@ -4,7 +4,6 @@
 
 using System.Collections.Concurrent;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.Resources

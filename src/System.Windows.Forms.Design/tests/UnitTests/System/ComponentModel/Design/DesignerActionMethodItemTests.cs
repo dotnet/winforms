@@ -4,7 +4,6 @@
 
 using System.Collections.Specialized;
 using System.Reflection;
-using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {

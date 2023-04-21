@@ -9,7 +9,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Reflection;
-using Xunit;
 
 namespace System.Windows.Forms.Design.Editors.Tests
 {

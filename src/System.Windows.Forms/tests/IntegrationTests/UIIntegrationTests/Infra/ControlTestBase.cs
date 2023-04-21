@@ -9,7 +9,6 @@ using System.Windows.Forms.UITests.Input;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests

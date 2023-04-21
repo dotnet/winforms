@@ -4,7 +4,6 @@
 
 using System.ComponentModel.Design;
 using Moq;
-using Xunit;
 
 namespace System.Drawing.Design.Tests
 {

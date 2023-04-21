@@ -6,7 +6,6 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.Design.Tests

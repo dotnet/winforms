@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using Xunit;
 using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Design.Tests

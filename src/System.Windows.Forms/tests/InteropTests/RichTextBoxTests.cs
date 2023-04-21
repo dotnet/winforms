@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.UI.Controls.RichEdit;
-using Xunit;
 using static Interop.Richedit;
 
 namespace System.Windows.Forms.Interop.Tests;

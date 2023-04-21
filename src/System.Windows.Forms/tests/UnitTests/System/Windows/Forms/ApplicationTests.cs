@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

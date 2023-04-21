@@ -3,7 +3,6 @@
 
 using System.Drawing.Drawing2D;
 using System.Numerics;
-using Xunit;
 
 namespace System.Drawing.Tests
 {

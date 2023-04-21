@@ -27,7 +27,6 @@
 //   Jordi Mas i Hernandez (jordi@ximian.com)
 //   Sebastien Pouliot  <sebastien@ximian.com>
 //
-using Xunit;
 
 namespace System.Drawing.Imaging.Tests
 {

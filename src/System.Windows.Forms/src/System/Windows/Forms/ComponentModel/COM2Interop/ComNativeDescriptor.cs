@@ -4,8 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;

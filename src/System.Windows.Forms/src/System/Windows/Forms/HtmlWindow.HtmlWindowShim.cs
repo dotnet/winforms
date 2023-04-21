@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop.Mshtml;
 

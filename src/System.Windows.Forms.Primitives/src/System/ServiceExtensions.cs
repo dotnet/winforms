@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms.Primitives.Resources;
 
 namespace System

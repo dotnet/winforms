@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

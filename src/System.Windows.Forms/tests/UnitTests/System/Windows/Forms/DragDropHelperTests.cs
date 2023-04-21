@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
-using Xunit;
 using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 

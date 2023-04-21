@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.Drawing.Design.Tests
 {

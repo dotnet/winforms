@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 #if DEBUG
-using System.Diagnostics;
 #endif
 using System.Drawing;
 using System.Drawing.Text;

@@ -6,7 +6,6 @@ using System.ComponentModel.Design;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
-using Xunit;
 
 namespace System.Windows.Forms.Design.Editors.Tests
 {

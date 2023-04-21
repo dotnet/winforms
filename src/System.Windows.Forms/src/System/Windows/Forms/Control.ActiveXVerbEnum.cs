@@ -5,7 +5,6 @@
 #if DEBUG
 using System.ComponentModel;
 #endif
-using System.Diagnostics;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 

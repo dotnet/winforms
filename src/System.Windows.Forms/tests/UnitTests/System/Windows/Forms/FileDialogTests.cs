@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using Windows.Win32.UI.Controls.Dialogs;
-using Xunit;
 
 namespace System.Windows.Forms.Tests
 {

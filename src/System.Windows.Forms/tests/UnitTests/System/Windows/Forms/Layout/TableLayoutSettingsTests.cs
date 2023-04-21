@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;
-using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
 {

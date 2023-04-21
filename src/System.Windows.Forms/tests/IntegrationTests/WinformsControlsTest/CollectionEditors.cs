@@ -4,7 +4,6 @@
 
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Windows.Forms;
 #if NETCORE
 using System.ComponentModel.Design;
 using System.Drawing.Design;

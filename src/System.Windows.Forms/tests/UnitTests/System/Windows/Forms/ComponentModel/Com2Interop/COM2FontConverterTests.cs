@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using Xunit;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop;
 

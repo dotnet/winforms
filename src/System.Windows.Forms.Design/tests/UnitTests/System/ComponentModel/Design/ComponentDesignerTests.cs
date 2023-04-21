@@ -7,7 +7,6 @@ using System.Configuration;
 using Moq;
 using Moq.Protected;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.ComponentModel.Design.Tests
 {

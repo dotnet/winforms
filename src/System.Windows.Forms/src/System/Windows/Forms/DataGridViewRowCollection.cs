@@ -7,7 +7,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace System.Windows.Forms

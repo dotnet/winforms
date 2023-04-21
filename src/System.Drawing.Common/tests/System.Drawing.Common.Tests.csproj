@@ -31,6 +31,7 @@
     <Compile Include="FontTests.cs" />
     <Compile Include="FontFamilyTests.cs" />
     <Compile Include="GdiPlusHandlesTests.cs" />
+    <Compile Include="GlobalUsings.cs" />
     <Compile Include="GraphicsTests.cs" />
     <Compile Include="Graphics_DrawBezierTests.cs" />
     <Compile Include="Graphics_DrawLineTests.cs" />

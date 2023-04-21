@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
-using Xunit;
 using static System.Windows.Forms.TextBoxBase;
 using static Interop;
 using static Interop.User32;

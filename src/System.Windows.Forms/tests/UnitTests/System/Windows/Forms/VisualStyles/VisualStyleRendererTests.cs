@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests
 {
