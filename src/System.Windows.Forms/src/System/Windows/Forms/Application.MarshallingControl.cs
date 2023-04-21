@@ -2,46 +2,45 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed partial class Application
 {
-    public sealed partial class Application
+    /// <summary>
+    ///  This class allows us to handle sends/posts in our winformssynchcontext on the correct thread via
+    ///  control.invoke().
+    /// </summary>
+    internal sealed class MarshalingControl : Control
     {
-        /// <summary>
-        ///  This class allows us to handle sends/posts in our winformssynchcontext on the correct thread via
-        ///  control.invoke().
-        /// </summary>
-        internal sealed class MarshalingControl : Control
+        internal MarshalingControl()
+            : base(false)
         {
-            internal MarshalingControl()
-                : base(false)
-            {
-                Visible = false;
-                SetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged, false);
-                SetTopLevel(true);
-                CreateControl();
-                CreateHandle();
-            }
+            Visible = false;
+            SetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged, false);
+            SetTopLevel(true);
+            CreateControl();
+            CreateHandle();
+        }
 
-            protected override CreateParams CreateParams
+        protected override CreateParams CreateParams
+        {
+            get
             {
-                get
-                {
-                    CreateParams cp = base.CreateParams;
+                CreateParams cp = base.CreateParams;
 
-                    // Message only windows are cheaper and have fewer issues than full blown invisible windows.
-                    cp.Parent = HWND.HWND_MESSAGE;
-                    return cp;
-                }
+                // Message only windows are cheaper and have fewer issues than full blown invisible windows.
+                cp.Parent = HWND.HWND_MESSAGE;
+                return cp;
             }
+        }
 
-            protected override void OnLayout(LayoutEventArgs levent)
-            {
-            }
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
+        }
 
-            protected override void OnSizeChanged(EventArgs e)
-            {
-                // Don't do anything here -- small perf game of avoiding layout, etc.
-            }
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            // Don't do anything here -- small perf game of avoiding layout, etc.
         }
     }
 }

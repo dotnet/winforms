@@ -7,64 +7,63 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+public partial class ControlDesigner
 {
-    public partial class ControlDesigner
+    private class DockingActionList : DesignerActionList
     {
-        private class DockingActionList : DesignerActionList
+        private readonly ControlDesigner _designer;
+        private readonly IDesignerHost _host;
+
+        public DockingActionList(ControlDesigner owner) : base(owner.Component)
         {
-            private readonly ControlDesigner _designer;
-            private readonly IDesignerHost _host;
+            _designer = owner;
+            _host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+        }
 
-            public DockingActionList(ControlDesigner owner) : base(owner.Component)
+        private string GetActionName()
+        {
+            PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
+            if (dockProp is not null)
             {
-                _designer = owner;
-                _host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+                DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
+                if (dockStyle == DockStyle.Fill)
+                {
+                    return SR.DesignerShortcutUndockInParent;
+                }
+                else
+                {
+                    return SR.DesignerShortcutDockInParent;
+                }
             }
 
-            private string GetActionName()
+            return null;
+        }
+
+        public override DesignerActionItemCollection GetSortedActionItems()
+        {
+            DesignerActionItemCollection items = new DesignerActionItemCollection();
+            string actionName = GetActionName();
+            if (actionName is not null)
             {
+                items.Add(new DesignerActionVerbItem(new DesignerVerb(GetActionName(), OnDockActionClick)));
+            }
+
+            return items;
+        }
+
+        private void OnDockActionClick(object sender, EventArgs e)
+        {
+            if (sender is DesignerVerb designerVerb && _host is not null)
+            {
+                using DesignerTransaction t = _host.CreateTransaction(designerVerb.Text);
+
+                // Set the dock prop to DockStyle.Fill
                 PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
-                if (dockProp is not null)
-                {
-                    DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
-                    if (dockStyle == DockStyle.Fill)
-                    {
-                        return SR.DesignerShortcutUndockInParent;
-                    }
-                    else
-                    {
-                        return SR.DesignerShortcutDockInParent;
-                    }
-                }
-
-                return null;
-            }
-
-            public override DesignerActionItemCollection GetSortedActionItems()
-            {
-                DesignerActionItemCollection items = new DesignerActionItemCollection();
-                string actionName = GetActionName();
-                if (actionName is not null)
-                {
-                    items.Add(new DesignerActionVerbItem(new DesignerVerb(GetActionName(), OnDockActionClick)));
-                }
-
-                return items;
-            }
-
-            private void OnDockActionClick(object sender, EventArgs e)
-            {
-                if (sender is DesignerVerb designerVerb && _host is not null)
-                {
-                    using DesignerTransaction t = _host.CreateTransaction(designerVerb.Text);
-
-                    // Set the dock prop to DockStyle.Fill
-                    PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
-                    DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
-                    dockProp.SetValue(Component, dockStyle == DockStyle.Fill ? DockStyle.None : DockStyle.Fill);
-                    t.Commit();
-                }
+                DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
+                dockProp.SetValue(Component, dockStyle == DockStyle.Fill ? DockStyle.None : DockStyle.Fill);
+                t.Commit();
             }
         }
     }

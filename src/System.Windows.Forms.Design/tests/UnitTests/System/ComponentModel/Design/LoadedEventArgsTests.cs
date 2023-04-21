@@ -4,31 +4,30 @@
 
 using System.Collections;
 
-namespace System.ComponentModel.Design.Tests
-{
-    public class LoadedEventArgsTests
-    {
-        public static IEnumerable<object[]> Ctor_Bool_ICollection_TestData()
-        {
-            yield return new object[] { true, null };
-            yield return new object[] { false, Array.Empty<object>() };
-            yield return new object[] { true, new object[] { null } };
-        }
+namespace System.ComponentModel.Design.Tests;
 
-        [Theory]
-        [MemberData(nameof(Ctor_Bool_ICollection_TestData))]
-        public void Ctor_Bool_ICollection(bool succeeded, ICollection errors)
+public class LoadedEventArgsTests
+{
+    public static IEnumerable<object[]> Ctor_Bool_ICollection_TestData()
+    {
+        yield return new object[] { true, null };
+        yield return new object[] { false, Array.Empty<object>() };
+        yield return new object[] { true, new object[] { null } };
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_Bool_ICollection_TestData))]
+    public void Ctor_Bool_ICollection(bool succeeded, ICollection errors)
+    {
+        var e = new LoadedEventArgs(succeeded, errors);
+        Assert.Equal(succeeded, e.HasSucceeded);
+        if (errors is null)
         {
-            var e = new LoadedEventArgs(succeeded, errors);
-            Assert.Equal(succeeded, e.HasSucceeded);
-            if (errors is null)
-            {
-                Assert.Empty(e.Errors);
-            }
-            else
-            {
-                Assert.Same(errors, e.Errors);
-            }
+            Assert.Empty(e.Errors);
+        }
+        else
+        {
+            Assert.Same(errors, e.Errors);
         }
     }
 }

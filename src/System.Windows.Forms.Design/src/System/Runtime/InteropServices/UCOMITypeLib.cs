@@ -4,27 +4,26 @@
 
 using System.Runtime.InteropServices.ComTypes;
 
-namespace System.Runtime.InteropServices
+namespace System.Runtime.InteropServices;
+
+// UCOMITypeLib is not yet ported to interop on core.
+[Guid("00020402-0000-0000-C000-000000000046")]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+[ComImport]
+public interface UCOMITypeLib
 {
-    // UCOMITypeLib is not yet ported to interop on core.
-    [Guid("00020402-0000-0000-C000-000000000046")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [ComImport]
-    public interface UCOMITypeLib
-    {
-        [PreserveSig]
-        int GetTypeInfoCount();
+    [PreserveSig]
+    int GetTypeInfoCount();
 
-        void GetTypeInfoType(int index, out TYPEKIND pTKind);
+    void GetTypeInfoType(int index, out TYPEKIND pTKind);
 
-        void GetLibAttr(out IntPtr ppTLibAttr);
+    void GetLibAttr(out IntPtr ppTLibAttr);
 
-        void GetDocumentation(int index, out string strName, out string strDocString, out int dwHelpContext, out string strHelpFile);
+    void GetDocumentation(int index, out string strName, out string strDocString, out int dwHelpContext, out string strHelpFile);
 
-        [return: MarshalAs(UnmanagedType.Bool)]
-        bool IsName([MarshalAs(UnmanagedType.LPWStr)] string szNameBuf, int lHashVal);
+    [return: MarshalAs(UnmanagedType.Bool)]
+    bool IsName([MarshalAs(UnmanagedType.LPWStr)] string szNameBuf, int lHashVal);
 
-        [PreserveSig]
-        void ReleaseTLibAttr(IntPtr pTLibAttr);
-    }
+    [PreserveSig]
+    void ReleaseTLibAttr(IntPtr pTLibAttr);
 }

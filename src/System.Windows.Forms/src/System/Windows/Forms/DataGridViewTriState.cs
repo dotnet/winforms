@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public enum DataGridViewTriState
 {
-    public enum DataGridViewTriState
-    {
-        NotSet = 0,
-        True,
-        False
-    }
+    NotSet = 0,
+    True,
+    False
 }

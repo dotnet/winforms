@@ -4,21 +4,20 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class DataGridViewCellValidatingEventArgs : CancelEventArgs
 {
-    public class DataGridViewCellValidatingEventArgs : CancelEventArgs
+    internal DataGridViewCellValidatingEventArgs(int columnIndex, int rowIndex, object? formattedValue)
     {
-        internal DataGridViewCellValidatingEventArgs(int columnIndex, int rowIndex, object? formattedValue)
-        {
-            ColumnIndex = columnIndex;
-            RowIndex = rowIndex;
-            FormattedValue = formattedValue;
-        }
-
-        public int ColumnIndex { get; }
-
-        public int RowIndex { get; }
-
-        public object? FormattedValue { get; }
+        ColumnIndex = columnIndex;
+        RowIndex = rowIndex;
+        FormattedValue = formattedValue;
     }
+
+    public int ColumnIndex { get; }
+
+    public int RowIndex { get; }
+
+    public object? FormattedValue { get; }
 }

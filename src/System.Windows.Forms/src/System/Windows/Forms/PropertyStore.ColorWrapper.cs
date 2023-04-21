@@ -4,18 +4,17 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
-{
-    internal partial class PropertyStore
-    {
-        private sealed class ColorWrapper
-        {
-            public Color Color;
+namespace System.Windows.Forms;
 
-            public ColorWrapper(Color color)
-            {
-                Color = color;
-            }
+internal partial class PropertyStore
+{
+    private sealed class ColorWrapper
+    {
+        public Color Color;
+
+        public ColorWrapper(Color color)
+        {
+            Color = color;
         }
     }
 }

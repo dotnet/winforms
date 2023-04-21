@@ -26,206 +26,205 @@
 //  Andy Hume <andyhume32@yahoo.co.uk>
 //
 
-namespace System.Drawing.Printing.Tests
+namespace System.Drawing.Printing.Tests;
+
+public class PaperSizeTests
 {
-    public class PaperSizeTests
+    [Fact]
+    public void Ctor_Default()
     {
-        [Fact]
-        public void Ctor_Default()
+        var size = new PaperSize();
+        Assert.Equal(PaperKind.Custom, size.Kind);
+        Assert.Equal(0, size.Height);
+        Assert.Empty(size.PaperName);
+        Assert.Equal(0, size.RawKind);
+        Assert.Equal(0, size.Width);
+    }
+
+    [Theory]
+    [InlineData(null, -1, -2)]
+    [InlineData("", 0, 0)]
+    [InlineData("name", 100, 200)]
+    public void Ctor_String_Int_Int(string name, int width, int height)
+    {
+        var size = new PaperSize(name, width, height);
+        Assert.Equal(PaperKind.Custom, size.Kind);
+        Assert.Equal(height, size.Height);
+        Assert.Equal(name, size.PaperName);
+        Assert.Equal(0, size.RawKind);
+        Assert.Equal(width, size.Width);
+    }
+
+    public static IEnumerable<object[]> RawKind_TestData()
+    {
+        yield return new object[] { (int)PaperKind.A4 };
+        yield return new object[] { (int)PaperKind.JapaneseEnvelopeKakuNumber3 };
+        yield return new object[] { (int)PaperKind.Custom };
+        yield return new object[] { 999999 };
+        yield return new object[] { int.MaxValue };
+        yield return new object[] { -1 };
+        yield return new object[] { int.MinValue };
+        yield return new object[] { 2 };
+        yield return new object[] { 1 + (int)PaperKind.PrcEnvelopeNumber10Rotated };
+    }
+
+    public static IEnumerable<object[]> Height_Set_TestData()
+    {
+        foreach (object[] testData in RawKind_TestData())
         {
-            var size = new PaperSize();
-            Assert.Equal(PaperKind.Custom, size.Kind);
-            Assert.Equal(0, size.Height);
-            Assert.Empty(size.PaperName);
-            Assert.Equal(0, size.RawKind);
-            Assert.Equal(0, size.Width);
+            yield return new object[] { testData[0], -1 };
+            yield return new object[] { testData[0], 0 };
+            yield return new object[] { testData[0], 100 };
         }
+    }
 
-        [Theory]
-        [InlineData(null, -1, -2)]
-        [InlineData("", 0, 0)]
-        [InlineData("name", 100, 200)]
-        public void Ctor_String_Int_Int(string name, int width, int height)
+    [Theory]
+    [MemberData(nameof(Height_Set_TestData))]
+    public void Height_Set_GetReturnsExpected(int rawKind, int value)
+    {
+        var size = new PaperSize
         {
-            var size = new PaperSize(name, width, height);
-            Assert.Equal(PaperKind.Custom, size.Kind);
-            Assert.Equal(height, size.Height);
-            Assert.Equal(name, size.PaperName);
-            Assert.Equal(0, size.RawKind);
-            Assert.Equal(width, size.Width);
-        }
+            RawKind = rawKind,
+            Height = value
+        };
+        Assert.Equal(value, size.Height);
 
-        public static IEnumerable<object[]> RawKind_TestData()
+        // Set same.
+        size.Height = value;
+        Assert.Equal(value, size.Height);
+    }
+
+    public static IEnumerable<object[]> NonCustomRawKind_TestData()
+    {
+        yield return new object[] { (int)PaperKind.A4 };
+        yield return new object[] { (int)PaperKind.JapaneseEnvelopeKakuNumber3 };
+        yield return new object[] { 999999 };
+        yield return new object[] { int.MaxValue };
+        yield return new object[] { -1 };
+        yield return new object[] { int.MinValue };
+        yield return new object[] { 1 + (int)PaperKind.PrcEnvelopeNumber10Rotated };
+    }
+
+    [Theory]
+    [MemberData(nameof(NonCustomRawKind_TestData))]
+    public void Height_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
+    {
+        var size = new PaperSize("name", 100, 200)
         {
-            yield return new object[] { (int)PaperKind.A4 };
-            yield return new object[] { (int)PaperKind.JapaneseEnvelopeKakuNumber3 };
-            yield return new object[] { (int)PaperKind.Custom };
-            yield return new object[] { 999999 };
-            yield return new object[] { int.MaxValue };
-            yield return new object[] { -1 };
-            yield return new object[] { int.MinValue };
-            yield return new object[] { 2 };
-            yield return new object[] { 1 + (int)PaperKind.PrcEnvelopeNumber10Rotated };
-        }
+            RawKind = rawKind
+        };
+        AssertExtensions.Throws<ArgumentException>("value", null, () => size.Height = 1);
+    }
 
-        public static IEnumerable<object[]> Height_Set_TestData()
+    public static IEnumerable<object[]> PaperName_Set_TestData()
+    {
+        foreach (object[] testData in RawKind_TestData())
         {
-            foreach (object[] testData in RawKind_TestData())
-            {
-                yield return new object[] { testData[0], -1 };
-                yield return new object[] { testData[0], 0 };
-                yield return new object[] { testData[0], 100 };
-            }
+            yield return new object[] { testData[0], null };
+            yield return new object[] { testData[0], string.Empty };
+            yield return new object[] { testData[0], "name" };
         }
+    }
 
-        [Theory]
-        [MemberData(nameof(Height_Set_TestData))]
-        public void Height_Set_GetReturnsExpected(int rawKind, int value)
+    [Theory]
+    [MemberData(nameof(PaperName_Set_TestData))]
+    public void PaperName_Set_GetReturnsExpected(int rawKind, string value)
+    {
+        var size = new PaperSize
         {
-            var size = new PaperSize
-            {
-                RawKind = rawKind,
-                Height = value
-            };
-            Assert.Equal(value, size.Height);
+            RawKind = rawKind,
+            PaperName = value
+        };
+        Assert.Equal(value, size.PaperName);
 
-            // Set same.
-            size.Height = value;
-            Assert.Equal(value, size.Height);
-        }
+        // Set same.
+        size.PaperName = value;
+        Assert.Equal(value, size.PaperName);
+    }
 
-        public static IEnumerable<object[]> NonCustomRawKind_TestData()
+    [Theory]
+    [MemberData(nameof(NonCustomRawKind_TestData))]
+    public void PaperName_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
+    {
+        var size = new PaperSize("name", 100, 200)
         {
-            yield return new object[] { (int)PaperKind.A4 };
-            yield return new object[] { (int)PaperKind.JapaneseEnvelopeKakuNumber3 };
-            yield return new object[] { 999999 };
-            yield return new object[] { int.MaxValue };
-            yield return new object[] { -1 };
-            yield return new object[] { int.MinValue };
-            yield return new object[] { 1 + (int)PaperKind.PrcEnvelopeNumber10Rotated };
-        }
+            RawKind = rawKind
+        };
+        AssertExtensions.Throws<ArgumentException>("value", null, () => size.PaperName = "name");
+    }
 
-        [Theory]
-        [MemberData(nameof(NonCustomRawKind_TestData))]
-        public void Height_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
+    [Theory]
+    [InlineData((int)PaperKind.Custom, PaperKind.Custom)]
+    [InlineData((int)PaperKind.A4, PaperKind.A4)]
+    [InlineData((int)PaperKind.JapaneseEnvelopeKakuNumber3, PaperKind.JapaneseEnvelopeKakuNumber3)]
+    [InlineData(999999, PaperKind.Custom)]
+    [InlineData(int.MaxValue, PaperKind.Custom)]
+    [InlineData(1 + (int)PaperKind.PrcEnvelopeNumber10Rotated, PaperKind.Custom)]
+    [InlineData(-1, (PaperKind)(-1))]
+    [InlineData(int.MinValue, (PaperKind)int.MinValue)]
+    public void RawKind_Set_GetReturnsExpected(int value, PaperKind expectedKind)
+    {
+        var size = new PaperSize
         {
-            var size = new PaperSize("name", 100, 200)
-            {
-                RawKind = rawKind
-            };
-            AssertExtensions.Throws<ArgumentException>("value", null, () => size.Height = 1);
-        }
+            RawKind = value
+        };
+        Assert.Equal(value, size.RawKind);
+        Assert.Equal(expectedKind, size.Kind);
 
-        public static IEnumerable<object[]> PaperName_Set_TestData()
+        // Set same.
+        size.RawKind = value;
+        Assert.Equal(value, size.RawKind);
+        Assert.Equal(expectedKind, size.Kind);
+    }
+
+    public static IEnumerable<object[]> Width_Set_TestData()
+    {
+        foreach (object[] testData in RawKind_TestData())
         {
-            foreach (object[] testData in RawKind_TestData())
-            {
-                yield return new object[] { testData[0], null };
-                yield return new object[] { testData[0], string.Empty };
-                yield return new object[] { testData[0], "name" };
-            }
+            yield return new object[] { testData[0], -1 };
+            yield return new object[] { testData[0], 0 };
+            yield return new object[] { testData[0], 100 };
         }
+    }
 
-        [Theory]
-        [MemberData(nameof(PaperName_Set_TestData))]
-        public void PaperName_Set_GetReturnsExpected(int rawKind, string value)
+    [Theory]
+    [MemberData(nameof(Width_Set_TestData))]
+    public void Width_Set_GetReturnsExpected(int rawKind, int value)
+    {
+        var size = new PaperSize
         {
-            var size = new PaperSize
-            {
-                RawKind = rawKind,
-                PaperName = value
-            };
-            Assert.Equal(value, size.PaperName);
+            RawKind = rawKind,
+            Width = value
+        };
+        Assert.Equal(value, size.Width);
 
-            // Set same.
-            size.PaperName = value;
-            Assert.Equal(value, size.PaperName);
-        }
+        // Set same.
+        size.Width = value;
+        Assert.Equal(value, size.Width);
+    }
 
-        [Theory]
-        [MemberData(nameof(NonCustomRawKind_TestData))]
-        public void PaperName_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
+    [Theory]
+    [MemberData(nameof(NonCustomRawKind_TestData))]
+    public void Width_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
+    {
+        var size = new PaperSize("name", 100, 200)
         {
-            var size = new PaperSize("name", 100, 200)
-            {
-                RawKind = rawKind
-            };
-            AssertExtensions.Throws<ArgumentException>("value", null, () => size.PaperName = "name");
-        }
+            RawKind = rawKind
+        };
+        AssertExtensions.Throws<ArgumentException>("value", null, () => size.Width = 1);
+    }
 
-        [Theory]
-        [InlineData((int)PaperKind.Custom, PaperKind.Custom)]
-        [InlineData((int)PaperKind.A4, PaperKind.A4)]
-        [InlineData((int)PaperKind.JapaneseEnvelopeKakuNumber3, PaperKind.JapaneseEnvelopeKakuNumber3)]
-        [InlineData(999999, PaperKind.Custom)]
-        [InlineData(int.MaxValue, PaperKind.Custom)]
-        [InlineData(1 + (int)PaperKind.PrcEnvelopeNumber10Rotated, PaperKind.Custom)]
-        [InlineData(-1, (PaperKind)(-1))]
-        [InlineData(int.MinValue, (PaperKind)int.MinValue)]
-        public void RawKind_Set_GetReturnsExpected(int value, PaperKind expectedKind)
-        {
-            var size = new PaperSize
-            {
-                RawKind = value
-            };
-            Assert.Equal(value, size.RawKind);
-            Assert.Equal(expectedKind, size.Kind);
+    public static IEnumerable<object[]> ToString_TestData()
+    {
+        yield return new object[] { new PaperSize(), "[PaperSize  Kind=Custom Height=0 Width=0]" };
+        yield return new object[] { new PaperSize("name", 1, 2), "[PaperSize name Kind=Custom Height=2 Width=1]" };
+        yield return new object[] { new PaperSize("name", -1, -2), "[PaperSize name Kind=Custom Height=-2 Width=-1]" };
+    }
 
-            // Set same.
-            size.RawKind = value;
-            Assert.Equal(value, size.RawKind);
-            Assert.Equal(expectedKind, size.Kind);
-        }
-
-        public static IEnumerable<object[]> Width_Set_TestData()
-        {
-            foreach (object[] testData in RawKind_TestData())
-            {
-                yield return new object[] { testData[0], -1 };
-                yield return new object[] { testData[0], 0 };
-                yield return new object[] { testData[0], 100 };
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(Width_Set_TestData))]
-        public void Width_Set_GetReturnsExpected(int rawKind, int value)
-        {
-            var size = new PaperSize
-            {
-                RawKind = rawKind,
-                Width = value
-            };
-            Assert.Equal(value, size.Width);
-
-            // Set same.
-            size.Width = value;
-            Assert.Equal(value, size.Width);
-        }
-
-        [Theory]
-        [MemberData(nameof(NonCustomRawKind_TestData))]
-        public void Width_SetNonCustomKindConstructor_ThrowsArgumentException(int rawKind)
-        {
-            var size = new PaperSize("name", 100, 200)
-            {
-                RawKind = rawKind
-            };
-            AssertExtensions.Throws<ArgumentException>("value", null, () => size.Width = 1);
-        }
-
-        public static IEnumerable<object[]> ToString_TestData()
-        {
-            yield return new object[] { new PaperSize(), "[PaperSize  Kind=Custom Height=0 Width=0]" };
-            yield return new object[] { new PaperSize("name", 1, 2), "[PaperSize name Kind=Custom Height=2 Width=1]" };
-            yield return new object[] { new PaperSize("name", -1, -2), "[PaperSize name Kind=Custom Height=-2 Width=-1]" };
-        }
-
-        [Theory]
-        [MemberData(nameof(ToString_TestData))]
-        public void ToString_Invoke_ReturnsExpected(PaperSize size, string expected)
-        {
-            Assert.Equal(expected, size.ToString());
-        }
+    [Theory]
+    [MemberData(nameof(ToString_TestData))]
+    public void ToString_Invoke_ReturnsExpected(PaperSize size, string expected)
+    {
+        Assert.Equal(expected, size.ToString());
     }
 }

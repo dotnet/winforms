@@ -4,66 +4,65 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
+///  as well as an All array property, enumeration, etc.
+/// </summary>
+[DefaultEvent(nameof(CollectionChanged))]
+internal class ListManagerBindingsCollection : BindingsCollection
 {
+    private readonly BindingManagerBase _bindingManagerBase;
+
     /// <summary>
-    ///  BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
-    ///  as well as an All array property, enumeration, etc.
+    ///  ColumnsCollection constructor.  Used only by DataSource.
     /// </summary>
-    [DefaultEvent(nameof(CollectionChanged))]
-    internal class ListManagerBindingsCollection : BindingsCollection
+    internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
     {
-        private readonly BindingManagerBase _bindingManagerBase;
+        Debug.Assert(bindingManagerBase is not null, "How could a ListManagerBindingsCollection not have a BindingManagerBase associated with it!");
+        _bindingManagerBase = bindingManagerBase;
+    }
 
-        /// <summary>
-        ///  ColumnsCollection constructor.  Used only by DataSource.
-        /// </summary>
-        internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
+    protected override void AddCore(Binding dataBinding)
+    {
+        ArgumentNullException.ThrowIfNull(dataBinding);
+
+        if (dataBinding.BindingManagerBase == _bindingManagerBase)
         {
-            Debug.Assert(bindingManagerBase is not null, "How could a ListManagerBindingsCollection not have a BindingManagerBase associated with it!");
-            _bindingManagerBase = bindingManagerBase;
+            throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
         }
 
-        protected override void AddCore(Binding dataBinding)
+        if (dataBinding.BindingManagerBase is not null)
         {
-            ArgumentNullException.ThrowIfNull(dataBinding);
-
-            if (dataBinding.BindingManagerBase == _bindingManagerBase)
-            {
-                throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
-            }
-
-            if (dataBinding.BindingManagerBase is not null)
-            {
-                throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
-            }
-
-            dataBinding.BindingManagerBase = _bindingManagerBase;
-            base.AddCore(dataBinding);
+            throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
         }
 
-        protected override void ClearCore()
-        {
-            int numLinks = Count;
-            for (int i = 0; i < numLinks; i++)
-            {
-                this[i].BindingManagerBase = null;
-            }
+        dataBinding.BindingManagerBase = _bindingManagerBase;
+        base.AddCore(dataBinding);
+    }
 
-            base.ClearCore();
+    protected override void ClearCore()
+    {
+        int numLinks = Count;
+        for (int i = 0; i < numLinks; i++)
+        {
+            this[i].BindingManagerBase = null;
         }
 
-        protected override void RemoveCore(Binding dataBinding)
+        base.ClearCore();
+    }
+
+    protected override void RemoveCore(Binding dataBinding)
+    {
+        ArgumentNullException.ThrowIfNull(dataBinding);
+
+        if (dataBinding.BindingManagerBase != _bindingManagerBase)
         {
-            ArgumentNullException.ThrowIfNull(dataBinding);
-
-            if (dataBinding.BindingManagerBase != _bindingManagerBase)
-            {
-                throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));
-            }
-
-            dataBinding.BindingManagerBase = null;
-            base.RemoveCore(dataBinding);
+            throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));
         }
+
+        dataBinding.BindingManagerBase = null;
+        base.RemoveCore(dataBinding);
     }
 }

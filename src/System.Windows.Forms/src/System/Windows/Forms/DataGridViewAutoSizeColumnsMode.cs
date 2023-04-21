@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public enum DataGridViewAutoSizeColumnsMode
 {
-    public enum DataGridViewAutoSizeColumnsMode
-    {
-        AllCells = DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.AllRows,
-        AllCellsExceptHeader = DataGridViewAutoSizeColumnCriteriaInternal.AllRows,
-        DisplayedCells = DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
-        DisplayedCellsExceptHeader = DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
-        None = DataGridViewAutoSizeColumnCriteriaInternal.None,
-        ColumnHeader = DataGridViewAutoSizeColumnCriteriaInternal.Header,
-        Fill = DataGridViewAutoSizeColumnCriteriaInternal.Fill
-    }
+    AllCells = DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.AllRows,
+    AllCellsExceptHeader = DataGridViewAutoSizeColumnCriteriaInternal.AllRows,
+    DisplayedCells = DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
+    DisplayedCellsExceptHeader = DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
+    None = DataGridViewAutoSizeColumnCriteriaInternal.None,
+    ColumnHeader = DataGridViewAutoSizeColumnCriteriaInternal.Header,
+    Fill = DataGridViewAutoSizeColumnCriteriaInternal.Fill
 }

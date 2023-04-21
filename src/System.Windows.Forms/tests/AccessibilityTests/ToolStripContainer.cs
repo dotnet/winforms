@@ -4,13 +4,12 @@
 
 using System.Windows.Forms;
 
-namespace Accessibility_Core_App
+namespace Accessibility_Core_App;
+
+public partial class ToolStripContainer : Form
 {
-    public partial class ToolStripContainer : Form
+    public ToolStripContainer()
     {
-        public ToolStripContainer()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

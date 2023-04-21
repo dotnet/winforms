@@ -4,38 +4,37 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class SplitContainer
 {
-    public partial class SplitContainer
+    private class SplitContainerMessageFilter : IMessageFilter
     {
-        private class SplitContainerMessageFilter : IMessageFilter
+        private readonly SplitContainer _owner;
+
+        public SplitContainerMessageFilter(SplitContainer splitContainer)
         {
-            private readonly SplitContainer _owner;
+            _owner = splitContainer;
+        }
 
-            public SplitContainerMessageFilter(SplitContainer splitContainer)
+        bool IMessageFilter.PreFilterMessage(ref Message m)
+        {
+            if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
             {
-                _owner = splitContainer;
+                return false;
             }
 
-            bool IMessageFilter.PreFilterMessage(ref Message m)
+            if ((m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
+                || (m.MsgInternal == User32.WM.SYSKEYDOWN))
             {
-                if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
-                {
-                    return false;
-                }
-
-                if ((m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
-                    || (m.MsgInternal == User32.WM.SYSKEYDOWN))
-                {
-                    // Notify that splitMOVE was reverted. This is used in ONKEYUP.
-                    _owner._splitBegin = false;
-                    _owner.SplitEnd(false);
-                    _owner._splitterClick = false;
-                    _owner._splitterDrag = false;
-                }
-
-                return true;
+                // Notify that splitMOVE was reverted. This is used in ONKEYUP.
+                _owner._splitBegin = false;
+                _owner.SplitEnd(false);
+                _owner._splitterClick = false;
+                _owner._splitterDrag = false;
             }
+
+            return true;
         }
     }
 }

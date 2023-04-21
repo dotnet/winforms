@@ -4,16 +4,15 @@
 
 #nullable enable
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+internal sealed class SkipTypesValidator : IEmfValidator
 {
-    internal sealed class SkipTypesValidator : IEmfValidator
-    {
-        private readonly ENHANCED_METAFILE_RECORD_TYPE[] _skipTypes;
+    private readonly ENHANCED_METAFILE_RECORD_TYPE[] _skipTypes;
 
-        public SkipTypesValidator(params ENHANCED_METAFILE_RECORD_TYPE[] skipTypes) => _skipTypes = skipTypes;
+    public SkipTypesValidator(params ENHANCED_METAFILE_RECORD_TYPE[] skipTypes) => _skipTypes = skipTypes;
 
-        public bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => _skipTypes.Contains(recordType);
+    public bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => _skipTypes.Contains(recordType);
 
-        public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete) => complete = true;
-    }
+    public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete) => complete = true;
 }

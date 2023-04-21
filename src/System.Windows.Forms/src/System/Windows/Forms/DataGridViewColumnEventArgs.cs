@@ -2,18 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class DataGridViewColumnEventArgs : EventArgs
 {
-    public class DataGridViewColumnEventArgs : EventArgs
+    public DataGridViewColumnEventArgs(DataGridViewColumn dataGridViewColumn)
     {
-        public DataGridViewColumnEventArgs(DataGridViewColumn dataGridViewColumn)
-        {
-            ArgumentNullException.ThrowIfNull(dataGridViewColumn);
+        ArgumentNullException.ThrowIfNull(dataGridViewColumn);
 
-            Debug.Assert(dataGridViewColumn.Index >= -1);
-            Column = dataGridViewColumn;
-        }
-
-        public DataGridViewColumn Column { get; }
+        Debug.Assert(dataGridViewColumn.Index >= -1);
+        Column = dataGridViewColumn;
     }
+
+    public DataGridViewColumn Column { get; }
 }

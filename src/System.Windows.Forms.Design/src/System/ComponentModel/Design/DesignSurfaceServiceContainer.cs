@@ -4,52 +4,51 @@
 
 #nullable disable
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+/// <summary>
+///  A service container that supports "fixed" services.  Fixed  services cannot be removed.
+/// </summary>
+internal sealed class DesignSurfaceServiceContainer : ServiceContainer
 {
+    private readonly HashSet<Type> _fixedServices = new();
+
     /// <summary>
-    ///  A service container that supports "fixed" services.  Fixed  services cannot be removed.
+    ///  We always add ourselves as a service.
     /// </summary>
-    internal sealed class DesignSurfaceServiceContainer : ServiceContainer
+    internal DesignSurfaceServiceContainer(IServiceProvider parentProvider) : base(parentProvider)
     {
-        private readonly HashSet<Type> _fixedServices = new();
+        AddFixedService(typeof(DesignSurfaceServiceContainer), this);
+    }
 
-        /// <summary>
-        ///  We always add ourselves as a service.
-        /// </summary>
-        internal DesignSurfaceServiceContainer(IServiceProvider parentProvider) : base(parentProvider)
+    /// <summary>
+    ///  Removes the given service type from the service container.
+    /// </summary>
+    internal void AddFixedService(Type serviceType, object serviceInstance)
+    {
+        AddService(serviceType, serviceInstance);
+        _fixedServices.Add(serviceType);
+    }
+
+    /// <summary>
+    ///  Removes a previously added fixed service.
+    /// </summary>
+    internal void RemoveFixedService(Type serviceType)
+    {
+        _fixedServices.Remove(serviceType);
+        RemoveService(serviceType);
+    }
+
+    /// <summary>
+    ///  Removes the given service type from the service container.  Throws an exception if the service is fixed.
+    /// </summary>
+    public override void RemoveService(Type serviceType, bool promote)
+    {
+        if (serviceType is not null && _fixedServices.Contains(serviceType))
         {
-            AddFixedService(typeof(DesignSurfaceServiceContainer), this);
+            throw new InvalidOperationException(string.Format(SR.DesignSurfaceServiceIsFixed, serviceType.Name));
         }
 
-        /// <summary>
-        ///  Removes the given service type from the service container.
-        /// </summary>
-        internal void AddFixedService(Type serviceType, object serviceInstance)
-        {
-            AddService(serviceType, serviceInstance);
-            _fixedServices.Add(serviceType);
-        }
-
-        /// <summary>
-        ///  Removes a previously added fixed service.
-        /// </summary>
-        internal void RemoveFixedService(Type serviceType)
-        {
-            _fixedServices.Remove(serviceType);
-            RemoveService(serviceType);
-        }
-
-        /// <summary>
-        ///  Removes the given service type from the service container.  Throws an exception if the service is fixed.
-        /// </summary>
-        public override void RemoveService(Type serviceType, bool promote)
-        {
-            if (serviceType is not null && _fixedServices.Contains(serviceType))
-            {
-                throw new InvalidOperationException(string.Format(SR.DesignSurfaceServiceIsFixed, serviceType.Name));
-            }
-
-            base.RemoveService(serviceType, promote);
-        }
+        base.RemoveService(serviceType, promote);
     }
 }

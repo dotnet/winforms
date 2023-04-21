@@ -5,117 +5,116 @@
 using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
 using static Interop;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+internal partial class PropertyGridView
 {
-    internal partial class PropertyGridView
+    private partial class GridViewTextBox
     {
-        private partial class GridViewTextBox
+        private class GridViewTextBoxAccessibleObject : TextBoxBaseAccessibleObject
         {
-            private class GridViewTextBoxAccessibleObject : TextBoxBaseAccessibleObject
+            private readonly PropertyGridView _owningPropertyGridView;
+
+            public GridViewTextBoxAccessibleObject(GridViewTextBox owner) : base(owner)
             {
-                private readonly PropertyGridView _owningPropertyGridView;
+                _owningPropertyGridView = owner.PropertyGridView;
+            }
 
-                public GridViewTextBoxAccessibleObject(GridViewTextBox owner) : base(owner)
+            public override AccessibleStates State
+            {
+                get
                 {
-                    _owningPropertyGridView = owner.PropertyGridView;
-                }
-
-                public override AccessibleStates State
-                {
-                    get
+                    AccessibleStates states = base.State;
+                    if (IsReadOnly)
                     {
-                        AccessibleStates states = base.State;
-                        if (IsReadOnly)
-                        {
-                            states |= AccessibleStates.ReadOnly;
-                        }
-                        else
-                        {
-                            states &= ~AccessibleStates.ReadOnly;
-                        }
-
-                        return states;
+                        states |= AccessibleStates.ReadOnly;
                     }
-                }
-
-                /// <summary>
-                ///  Returns the element in the specified direction.
-                /// </summary>
-                /// <param name="direction">Indicates the direction in which to navigate.</param>
-                /// <returns>Returns the element in the specified direction.</returns>
-                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-                {
-                    if (!_owningPropertyGridView.IsEditTextBoxCreated
-                        // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
-                        // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
-                        || !_owningPropertyGridView.OwnerGrid.Created
-                        || _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
+                    else
                     {
-                        return null;
+                        states &= ~AccessibleStates.ReadOnly;
                     }
 
-                    return direction switch
-                    {
-                        UiaCore.NavigateDirection.Parent => parent,
-                        UiaCore.NavigateDirection.NextSibling => parent.GetNextChild(this),
-                        UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousChild(this),
-                        _ => base.FragmentNavigate(direction),
-                    };
+                    return states;
+                }
+            }
+
+            /// <summary>
+            ///  Returns the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                if (!_owningPropertyGridView.IsEditTextBoxCreated
+                    // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
+                    // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
+                    || !_owningPropertyGridView.OwnerGrid.Created
+                    || _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
+                {
+                    return null;
                 }
 
-                /// <summary>
-                ///  Gets the top level element.
-                /// </summary>
-                internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-                    => _owningPropertyGridView.OwnerGrid?.AccessibilityObject;
-
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+                return direction switch
                 {
-                    UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
-                    UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
-                    _ => base.GetPropertyValue(propertyID)
+                    UiaCore.NavigateDirection.Parent => parent,
+                    UiaCore.NavigateDirection.NextSibling => parent.GetNextChild(this),
+                    UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousChild(this),
+                    _ => base.FragmentNavigate(direction),
+                };
+            }
+
+            /// <summary>
+            ///  Gets the top level element.
+            /// </summary>
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+                => _owningPropertyGridView.OwnerGrid?.AccessibilityObject;
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+            {
+                UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
+                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
+                _ => base.GetPropertyValue(propertyID)
+            };
+
+            internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
+            {
+                get
+                {
+                    // Prevent sending same runtime ID for all edit boxes. Individual edit in
+                    // each row should have unique runtime ID to prevent incorrect announcement.
+                    // For instance screen reader may announce row 2 for the third row edit
+                    // as the same TextBox control is used both in row 2 and row 3.
+                    return null;
+                }
+            }
+
+            public override string? Name
+            {
+                get
+                {
+                    string? name = Owner.AccessibleName;
+                    if (name is not null)
+                    {
+                        return name;
+                    }
+
+                    return _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject.Name ?? base.Name;
+                }
+            }
+
+            internal override int[] RuntimeId
+                => new int[]
+                {
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(Owner.InternalHandle),
+                    GetHashCode()
                 };
 
-                internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
-                {
-                    get
-                    {
-                        // Prevent sending same runtime ID for all edit boxes. Individual edit in
-                        // each row should have unique runtime ID to prevent incorrect announcement.
-                        // For instance screen reader may announce row 2 for the third row edit
-                        // as the same TextBox control is used both in row 2 and row 3.
-                        return null;
-                    }
-                }
-
-                public override string? Name
-                {
-                    get
-                    {
-                        string? name = Owner.AccessibleName;
-                        if (name is not null)
-                        {
-                            return name;
-                        }
-
-                        return _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject.Name ?? base.Name;
-                    }
-                }
-
-                internal override int[] RuntimeId
-                    => new int[]
-                    {
-                        RuntimeIDFirstItem,
-                        PARAM.ToInt(Owner.InternalHandle),
-                        GetHashCode()
-                    };
-
-                internal override bool IsReadOnly
-                    => _owningPropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
-                        || propertyDescriptorGridEntry.IsPropertyReadOnly;
-            }
+            internal override bool IsReadOnly
+                => _owningPropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
+                    || propertyDescriptorGridEntry.IsPropertyReadOnly;
         }
     }
 }

@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewRowCollection
 {
-    public partial class DataGridViewRowCollection
+    private partial class RowComparer
     {
-        private partial class RowComparer
+        private class ComparedObjectMax
         {
-            private class ComparedObjectMax
-            {
-                public ComparedObjectMax() { }
-            }
+            public ComparedObjectMax() { }
         }
     }
 }

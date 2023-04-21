@@ -4,66 +4,65 @@
 
 using Moq;
 
-namespace System.ComponentModel.Design.Tests
+namespace System.ComponentModel.Design.Tests;
+
+public class DesignerCommandSetTests
 {
-    public class DesignerCommandSetTests
+    [Fact]
+    public void DesignerCommandSet_Ctor_Default()
     {
-        [Fact]
-        public void DesignerCommandSet_Ctor_Default()
-        {
-            var set = new DesignerCommandSet();
-            Assert.Null(set.ActionLists);
-            Assert.Null(set.Verbs);
-        }
+        var set = new DesignerCommandSet();
+        Assert.Null(set.ActionLists);
+        Assert.Null(set.Verbs);
+    }
 
-        [Theory]
-        [StringWithNullData]
-        public void DesignerCommandSet_GetCommands_Invoke_ReturnsNull(string name)
-        {
-            var set = new DesignerCommandSet();
-            Assert.Null(set.GetCommands(name));
-        }
+    [Theory]
+    [StringWithNullData]
+    public void DesignerCommandSet_GetCommands_Invoke_ReturnsNull(string name)
+    {
+        var set = new DesignerCommandSet();
+        Assert.Null(set.GetCommands(name));
+    }
 
-        [Fact]
-        public void DesignerCommandSet_Verbs_OverridenGetCommands_ReturnsExpected()
-        {
-            var collection = new DesignerVerbCollection();
-            var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
-            mockSet
-                .Setup(s => s.GetCommands("Verbs"))
-                .Returns(collection);
-            Assert.Same(collection, mockSet.Object.Verbs);
-        }
+    [Fact]
+    public void DesignerCommandSet_Verbs_OverridenGetCommands_ReturnsExpected()
+    {
+        var collection = new DesignerVerbCollection();
+        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        mockSet
+            .Setup(s => s.GetCommands("Verbs"))
+            .Returns(collection);
+        Assert.Same(collection, mockSet.Object.Verbs);
+    }
 
-        [Fact]
-        public void DesignerCommandSet_Verbs_InvalidOverridenGetCommands_ThrowsInvalidCastException()
-        {
-            var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
-            mockSet
-                .Setup(s => s.GetCommands("Verbs"))
-                .Returns(Array.Empty<object>());
-            Assert.Throws<InvalidCastException>(() => mockSet.Object.Verbs);
-        }
+    [Fact]
+    public void DesignerCommandSet_Verbs_InvalidOverridenGetCommands_ThrowsInvalidCastException()
+    {
+        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        mockSet
+            .Setup(s => s.GetCommands("Verbs"))
+            .Returns(Array.Empty<object>());
+        Assert.Throws<InvalidCastException>(() => mockSet.Object.Verbs);
+    }
 
-        [Fact]
-        public void DesignerCommandSet_ActionLists_OverridenGetCommands_ReturnsExpected()
-        {
-            var collection = new DesignerActionListCollection();
-            var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
-            mockSet
-                .Setup(s => s.GetCommands("ActionLists"))
-                .Returns(collection);
-            Assert.Same(collection, mockSet.Object.ActionLists);
-        }
+    [Fact]
+    public void DesignerCommandSet_ActionLists_OverridenGetCommands_ReturnsExpected()
+    {
+        var collection = new DesignerActionListCollection();
+        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        mockSet
+            .Setup(s => s.GetCommands("ActionLists"))
+            .Returns(collection);
+        Assert.Same(collection, mockSet.Object.ActionLists);
+    }
 
-        [Fact]
-        public void DesignerCommandSet_ActionLists_InvalidOverridenGetCommands_ThrowsInvalidCastException()
-        {
-            var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
-            mockSet
-                .Setup(s => s.GetCommands("ActionLists"))
-                .Returns(Array.Empty<object>());
-            Assert.Throws<InvalidCastException>(() => mockSet.Object.ActionLists);
-        }
+    [Fact]
+    public void DesignerCommandSet_ActionLists_InvalidOverridenGetCommands_ThrowsInvalidCastException()
+    {
+        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        mockSet
+            .Setup(s => s.GetCommands("ActionLists"))
+            .Returns(Array.Empty<object>());
+        Assert.Throws<InvalidCastException>(() => mockSet.Object.ActionLists);
     }
 }

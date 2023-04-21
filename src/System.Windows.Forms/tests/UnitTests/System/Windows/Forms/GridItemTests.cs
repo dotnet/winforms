@@ -4,63 +4,62 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+// NB: doesn't require thread affinity
+public class GridItemTests
 {
-    // NB: doesn't require thread affinity
-    public class GridItemTests
+    [Fact]
+    public void GridItem_Expandable_Get_ReturnsFalse()
     {
-        [Fact]
-        public void GridItem_Expandable_Get_ReturnsFalse()
+        var item = new SubGridItem();
+        Assert.False(item.Expandable);
+    }
+
+    [Fact]
+    public void GridItem_Expanded_Get_ReturnsFalse()
+    {
+        var item = new SubGridItem();
+        Assert.False(item.Expanded);
+    }
+
+    [Theory]
+    [BoolData]
+    public void GridItem_Expanded_Set_ThrowsNotSupportedException(bool value)
+    {
+        var item = new SubGridItem();
+        Assert.Throws<NotSupportedException>(() => item.Expanded = value);
+    }
+
+    [Theory]
+    [StringWithNullData]
+    public void GridItem_Tag_Set_GetReturnsExpected(object value)
+    {
+        var item = new SubGridItem
         {
-            var item = new SubGridItem();
-            Assert.False(item.Expandable);
-        }
+            Tag = value
+        };
+        Assert.Same(value, item.Tag);
 
-        [Fact]
-        public void GridItem_Expanded_Get_ReturnsFalse()
-        {
-            var item = new SubGridItem();
-            Assert.False(item.Expanded);
-        }
+        // Set same.
+        item.Tag = value;
+        Assert.Same(value, item.Tag);
+    }
 
-        [Theory]
-        [BoolData]
-        public void GridItem_Expanded_Set_ThrowsNotSupportedException(bool value)
-        {
-            var item = new SubGridItem();
-            Assert.Throws<NotSupportedException>(() => item.Expanded = value);
-        }
+    private class SubGridItem : GridItem
+    {
+        public override GridItemCollection GridItems => GridItemCollection.Empty;
 
-        [Theory]
-        [StringWithNullData]
-        public void GridItem_Tag_Set_GetReturnsExpected(object value)
-        {
-            var item = new SubGridItem
-            {
-                Tag = value
-            };
-            Assert.Same(value, item.Tag);
+        public override GridItemType GridItemType => GridItemType.Property;
 
-            // Set same.
-            item.Tag = value;
-            Assert.Same(value, item.Tag);
-        }
+        public override string Label => "label";
 
-        private class SubGridItem : GridItem
-        {
-            public override GridItemCollection GridItems => GridItemCollection.Empty;
+        public override GridItem Parent => null;
 
-            public override GridItemType GridItemType => GridItemType.Property;
+        public override PropertyDescriptor PropertyDescriptor => null;
 
-            public override string Label => "label";
+        public override object Value => "value";
 
-            public override GridItem Parent => null;
-
-            public override PropertyDescriptor PropertyDescriptor => null;
-
-            public override object Value => "value";
-
-            public override bool Select() => true;
-        }
+        public override bool Select() => true;
     }
 }

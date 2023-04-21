@@ -10,680 +10,679 @@ using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Mshtml;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed partial class HtmlElement
 {
-    public sealed partial class HtmlElement
+    internal static readonly object s_eventClick = new();
+    internal static readonly object s_eventDoubleClick = new();
+    internal static readonly object s_eventDrag = new();
+    internal static readonly object s_eventDragEnd = new();
+    internal static readonly object s_eventDragLeave = new();
+    internal static readonly object s_eventDragOver = new();
+    internal static readonly object s_eventFocusing = new();
+    internal static readonly object s_eventGotFocus = new();
+    internal static readonly object s_eventLosingFocus = new();
+    internal static readonly object s_eventLostFocus = new();
+    internal static readonly object s_eventKeyDown = new();
+    internal static readonly object s_eventKeyPress = new();
+    internal static readonly object s_eventKeyUp = new();
+    internal static readonly object s_eventMouseDown = new();
+    internal static readonly object s_eventMouseEnter = new();
+    internal static readonly object s_eventMouseLeave = new();
+    internal static readonly object s_eventMouseMove = new();
+    internal static readonly object s_eventMouseOver = new();
+    internal static readonly object s_eventMouseUp = new();
+
+    private readonly IHTMLElement _htmlElement;
+    private readonly HtmlShimManager _shimManager;
+
+    internal HtmlElement(HtmlShimManager shimManager, IHTMLElement element)
     {
-        internal static readonly object s_eventClick = new();
-        internal static readonly object s_eventDoubleClick = new();
-        internal static readonly object s_eventDrag = new();
-        internal static readonly object s_eventDragEnd = new();
-        internal static readonly object s_eventDragLeave = new();
-        internal static readonly object s_eventDragOver = new();
-        internal static readonly object s_eventFocusing = new();
-        internal static readonly object s_eventGotFocus = new();
-        internal static readonly object s_eventLosingFocus = new();
-        internal static readonly object s_eventLostFocus = new();
-        internal static readonly object s_eventKeyDown = new();
-        internal static readonly object s_eventKeyPress = new();
-        internal static readonly object s_eventKeyUp = new();
-        internal static readonly object s_eventMouseDown = new();
-        internal static readonly object s_eventMouseEnter = new();
-        internal static readonly object s_eventMouseLeave = new();
-        internal static readonly object s_eventMouseMove = new();
-        internal static readonly object s_eventMouseOver = new();
-        internal static readonly object s_eventMouseUp = new();
+        _htmlElement = element;
+        Debug.Assert(NativeHtmlElement is not null, "The element object should implement IHTMLElement");
 
-        private readonly IHTMLElement _htmlElement;
-        private readonly HtmlShimManager _shimManager;
+        _shimManager = shimManager;
+    }
 
-        internal HtmlElement(HtmlShimManager shimManager, IHTMLElement element)
+    public HtmlElementCollection All
+    {
+        get
         {
-            _htmlElement = element;
-            Debug.Assert(NativeHtmlElement is not null, "The element object should implement IHTMLElement");
-
-            _shimManager = shimManager;
+            return NativeHtmlElement.GetAll() is IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
         }
+    }
 
-        public HtmlElementCollection All
+    public HtmlElementCollection Children
+    {
+        get
         {
-            get
-            {
-                return NativeHtmlElement.GetAll() is IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
-            }
+            return NativeHtmlElement.GetChildren() is IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
         }
+    }
 
-        public HtmlElementCollection Children
+    public bool CanHaveChildren
+    {
+        get
         {
-            get
-            {
-                return NativeHtmlElement.GetChildren() is IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
-            }
+            return ((IHTMLElement2)NativeHtmlElement).CanHaveChildren();
         }
+    }
 
-        public bool CanHaveChildren
+    public Rectangle ClientRectangle
+    {
+        get
         {
-            get
-            {
-                return ((IHTMLElement2)NativeHtmlElement).CanHaveChildren();
-            }
+            IHTMLElement2 htmlElement2 = (IHTMLElement2)NativeHtmlElement;
+            return new Rectangle(htmlElement2.ClientLeft(), htmlElement2.ClientTop(),
+                htmlElement2.ClientWidth(), htmlElement2.ClientHeight());
         }
+    }
 
-        public Rectangle ClientRectangle
+    public HtmlDocument Document
+    {
+        get
         {
-            get
-            {
-                IHTMLElement2 htmlElement2 = (IHTMLElement2)NativeHtmlElement;
-                return new Rectangle(htmlElement2.ClientLeft(), htmlElement2.ClientTop(),
-                    htmlElement2.ClientWidth(), htmlElement2.ClientHeight());
-            }
+            return NativeHtmlElement.GetDocument() is IHTMLDocument iHTMLDocument ? new HtmlDocument(_shimManager, iHTMLDocument) : null;
         }
+    }
 
-        public HtmlDocument Document
+    public bool Enabled
+    {
+        get
         {
-            get
-            {
-                return NativeHtmlElement.GetDocument() is IHTMLDocument iHTMLDocument ? new HtmlDocument(_shimManager, iHTMLDocument) : null;
-            }
+            return !(((IHTMLElement3)NativeHtmlElement).GetDisabled());
         }
-
-        public bool Enabled
+        set
         {
-            get
-            {
-                return !(((IHTMLElement3)NativeHtmlElement).GetDisabled());
-            }
-            set
-            {
-                ((IHTMLElement3)NativeHtmlElement).SetDisabled(!value);
-            }
+            ((IHTMLElement3)NativeHtmlElement).SetDisabled(!value);
         }
+    }
 
-        private HtmlElementShim ElementShim
+    private HtmlElementShim ElementShim
+    {
+        get
         {
-            get
+            if (ShimManager is not null)
             {
-                if (ShimManager is not null)
+                HtmlElementShim shim = ShimManager.GetElementShim(this);
+                if (shim is null)
                 {
-                    HtmlElementShim shim = ShimManager.GetElementShim(this);
-                    if (shim is null)
-                    {
-                        _shimManager.AddElementShim(this);
-                        shim = ShimManager.GetElementShim(this);
-                    }
-
-                    return shim;
+                    _shimManager.AddElementShim(this);
+                    shim = ShimManager.GetElementShim(this);
                 }
 
-                return null;
-            }
-        }
-
-        public HtmlElement FirstChild
-        {
-            get
-            {
-                IHTMLElement iHtmlElement = null;
-
-                if (NativeHtmlElement is IHTMLDOMNode iHtmlDomNode)
-                {
-                    iHtmlElement = iHtmlDomNode.FirstChild() as IHTMLElement;
-                }
-
-                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
-            }
-        }
-
-        public string Id
-        {
-            get
-            {
-                return NativeHtmlElement.GetId();
-            }
-            set
-            {
-                NativeHtmlElement.SetId(value);
-            }
-        }
-
-        public string InnerHtml
-        {
-            get
-            {
-                return NativeHtmlElement.GetInnerHTML();
-            }
-            set
-            {
-                try
-                {
-                    NativeHtmlElement.SetInnerHTML(value);
-                }
-                catch (COMException ex)
-                {
-                    if (ex.ErrorCode == unchecked((int)0x800a0258))
-                    {
-                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
-                    }
-
-                    throw;
-                }
-            }
-        }
-
-        public string InnerText
-        {
-            get
-            {
-                return NativeHtmlElement.GetInnerText();
-            }
-            set
-            {
-                try
-                {
-                    NativeHtmlElement.SetInnerText(value);
-                }
-                catch (COMException ex)
-                {
-                    if (ex.ErrorCode == unchecked((int)0x800a0258))
-                    {
-                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
-                    }
-
-                    throw;
-                }
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return GetAttribute("Name");
-            }
-            set
-            {
-                SetAttribute("Name", value);
-            }
-        }
-
-        private IHTMLElement NativeHtmlElement
-        {
-            get
-            {
-                return _htmlElement;
-            }
-        }
-
-        public HtmlElement NextSibling
-        {
-            get
-            {
-                IHTMLElement iHtmlElement = null;
-
-                if (NativeHtmlElement is IHTMLDOMNode iHtmlDomNode)
-                {
-                    iHtmlElement = iHtmlDomNode.NextSibling() as IHTMLElement;
-                }
-
-                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
-            }
-        }
-
-        public Rectangle OffsetRectangle
-        {
-            get
-            {
-                return new Rectangle(NativeHtmlElement.GetOffsetLeft(), NativeHtmlElement.GetOffsetTop(),
-                    NativeHtmlElement.GetOffsetWidth(), NativeHtmlElement.GetOffsetHeight());
-            }
-        }
-
-        public HtmlElement OffsetParent
-        {
-            get
-            {
-                IHTMLElement iHtmlElement = NativeHtmlElement.GetOffsetParent();
-                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
-            }
-        }
-
-        public string OuterHtml
-        {
-            get
-            {
-                return NativeHtmlElement.GetOuterHTML();
-            }
-            set
-            {
-                try
-                {
-                    NativeHtmlElement.SetOuterHTML(value);
-                }
-                catch (COMException ex)
-                {
-                    if (ex.ErrorCode == unchecked((int)0x800a0258))
-                    {
-                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
-                    }
-
-                    throw;
-                }
-            }
-        }
-
-        public string OuterText
-        {
-            get
-            {
-                return NativeHtmlElement.GetOuterText();
-            }
-            set
-            {
-                try
-                {
-                    NativeHtmlElement.SetOuterText(value);
-                }
-                catch (COMException ex)
-                {
-                    if (ex.ErrorCode == unchecked((int)0x800a0258))
-                    {
-                        throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
-                    }
-
-                    throw;
-                }
-            }
-        }
-
-        public HtmlElement Parent
-        {
-            get
-            {
-                IHTMLElement iHtmlElement = NativeHtmlElement.GetParentElement();
-                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
-            }
-        }
-
-        public Rectangle ScrollRectangle
-        {
-            get
-            {
-                IHTMLElement2 htmlElement2 = (IHTMLElement2)NativeHtmlElement;
-                return new Rectangle(htmlElement2.GetScrollLeft(), htmlElement2.GetScrollTop(),
-                    htmlElement2.GetScrollWidth(), htmlElement2.GetScrollHeight());
-            }
-        }
-
-        public int ScrollLeft
-        {
-            get
-            {
-                return ((IHTMLElement2)NativeHtmlElement).GetScrollLeft();
-            }
-            set
-            {
-                ((IHTMLElement2)NativeHtmlElement).SetScrollLeft(value);
-            }
-        }
-
-        public int ScrollTop
-        {
-            get
-            {
-                return ((IHTMLElement2)NativeHtmlElement).GetScrollTop();
-            }
-            set
-            {
-                ((IHTMLElement2)NativeHtmlElement).SetScrollTop(value);
-            }
-        }
-
-        private HtmlShimManager ShimManager
-        {
-            get
-            {
-                return _shimManager;
-            }
-        }
-
-        public string Style
-        {
-            get
-            {
-                return NativeHtmlElement.GetStyle().GetCssText();
-            }
-            set
-            {
-                NativeHtmlElement.GetStyle().SetCssText(value);
-            }
-        }
-
-        public string TagName
-        {
-            get
-            {
-                return NativeHtmlElement.GetTagName();
-            }
-        }
-
-        public short TabIndex
-        {
-            get
-            {
-                return ((IHTMLElement2)NativeHtmlElement).GetTabIndex();
-            }
-            set
-            {
-                ((IHTMLElement2)NativeHtmlElement).SetTabIndex(value);
-            }
-        }
-
-        public object DomElement
-        {
-            get
-            {
-                return NativeHtmlElement;
-            }
-        }
-
-        public HtmlElement AppendChild(HtmlElement newElement)
-        {
-            return InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, newElement);
-        }
-
-        public void AttachEventHandler(string eventName, EventHandler eventHandler)
-        {
-            ElementShim.AttachEventHandler(eventName, eventHandler);
-        }
-
-        public void DetachEventHandler(string eventName, EventHandler eventHandler)
-        {
-            ElementShim.DetachEventHandler(eventName, eventHandler);
-        }
-
-        public void Focus()
-        {
-            try
-            {
-                ((IHTMLElement2)NativeHtmlElement).Focus();
-            }
-            catch (COMException ex)
-            {
-                if (ex.ErrorCode == unchecked((int)0x800a083e))
-                {
-                    throw new NotSupportedException(SR.HtmlElementMethodNotSupported);
-                }
-
-                throw;
-            }
-        }
-
-        public string GetAttribute(string attributeName)
-        {
-            object oAttributeValue = NativeHtmlElement.GetAttribute(attributeName, 0);
-            return oAttributeValue is null ? "" : oAttributeValue.ToString();
-        }
-
-        public HtmlElementCollection GetElementsByTagName(string tagName)
-        {
-            IHTMLElementCollection iHTMLElementCollection = ((IHTMLElement2)NativeHtmlElement).GetElementsByTagName(tagName);
-            return iHTMLElementCollection is not null ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
-        }
-
-        public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
-        {
-            IHTMLElement iHtmlElement = ((IHTMLElement2)NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
-                (IHTMLElement)newElement.DomElement);
-            return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
-        }
-
-        public object InvokeMember(string methodName)
-        {
-            return InvokeMember(methodName, null);
-        }
-
-        public unsafe object InvokeMember(string methodName, params object[] parameter)
-        {
-            try
-            {
-                if (NativeHtmlElement is not Oleaut32.IDispatch scriptObject)
-                {
-                    return null;
-                }
-
-                Guid g = Guid.Empty;
-                var names = new string[] { methodName };
-                int dispid = PInvoke.DISPID_UNKNOWN;
-                HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
-                if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
-                {
-                    return null;
-                }
-
-                if (parameter is not null)
-                {
-                    // Reverse the parameter order so that they read naturally after IDispatch.
-                    Array.Reverse(parameter);
-                }
-
-                using VARIANTVector vectorArgs = new(parameter);
-                fixed (VARIANT* pVariant = vectorArgs.Variants)
-                {
-                    DISPPARAMS dispParams = new()
-                    {
-                        rgvarg = pVariant,
-                        cArgs = (uint)vectorArgs.Variants.Length,
-                        rgdispidNamedArgs = null,
-                        cNamedArgs = 0
-                    };
-
-                    var retVals = new object[1];
-                    EXCEPINFO excepInfo = default;
-                    hr = scriptObject.Invoke(
-                        dispid,
-                        &g,
-                        PInvoke.GetThreadLocale(),
-                        DISPATCH_FLAGS.DISPATCH_METHOD,
-                        &dispParams,
-                        retVals,
-                        &excepInfo,
-                        null);
-
-                    if (hr == HRESULT.S_OK)
-                    {
-                        return retVals[0];
-                    }
-                }
-
-                return null;
-            }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
-            {
+                return shim;
             }
 
             return null;
         }
+    }
 
-        public void RemoveFocus()
+    public HtmlElement FirstChild
+    {
+        get
         {
-            ((IHTMLElement2)NativeHtmlElement).Blur();
-        }
+            IHTMLElement iHtmlElement = null;
 
-        // PM review done
-        public void RaiseEvent(string eventName)
+            if (NativeHtmlElement is IHTMLDOMNode iHtmlDomNode)
+            {
+                iHtmlElement = iHtmlDomNode.FirstChild() as IHTMLElement;
+            }
+
+            return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+        }
+    }
+
+    public string Id
+    {
+        get
         {
-            ((IHTMLElement3)NativeHtmlElement).FireEvent(eventName, IntPtr.Zero);
+            return NativeHtmlElement.GetId();
         }
-
-        public void ScrollIntoView(bool alignWithTop)
+        set
         {
-            NativeHtmlElement.ScrollIntoView(alignWithTop);
+            NativeHtmlElement.SetId(value);
         }
+    }
 
-        public void SetAttribute(string attributeName, string value)
+    public string InnerHtml
+    {
+        get
+        {
+            return NativeHtmlElement.GetInnerHTML();
+        }
+        set
         {
             try
             {
-                NativeHtmlElement.SetAttribute(attributeName, value, 0);
+                NativeHtmlElement.SetInnerHTML(value);
             }
-            catch (COMException comException)
+            catch (COMException ex)
             {
-                if (comException.ErrorCode == unchecked((int)0x80020009))
+                if (ex.ErrorCode == unchecked((int)0x800a0258))
                 {
-                    throw new NotSupportedException(SR.HtmlElementAttributeNotSupported);
+                    throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                 }
 
                 throw;
             }
         }
-
-        //
-        // Events:
-        //
-        public event HtmlElementEventHandler Click
-        {
-            add => ElementShim.AddHandler(s_eventClick, value);
-            remove => ElementShim.RemoveHandler(s_eventClick, value);
-        }
-
-        public event HtmlElementEventHandler DoubleClick
-        {
-            add => ElementShim.AddHandler(s_eventDoubleClick, value);
-            remove => ElementShim.RemoveHandler(s_eventDoubleClick, value);
-        }
-
-        public event HtmlElementEventHandler Drag
-        {
-            add => ElementShim.AddHandler(s_eventDrag, value);
-            remove => ElementShim.RemoveHandler(s_eventDrag, value);
-        }
-
-        public event HtmlElementEventHandler DragEnd
-        {
-            add => ElementShim.AddHandler(s_eventDragEnd, value);
-            remove => ElementShim.RemoveHandler(s_eventDragEnd, value);
-        }
-
-        public event HtmlElementEventHandler DragLeave
-        {
-            add => ElementShim.AddHandler(s_eventDragLeave, value);
-            remove => ElementShim.RemoveHandler(s_eventDragLeave, value);
-        }
-
-        public event HtmlElementEventHandler DragOver
-        {
-            add => ElementShim.AddHandler(s_eventDragOver, value);
-            remove => ElementShim.RemoveHandler(s_eventDragOver, value);
-        }
-
-        public event HtmlElementEventHandler Focusing
-        {
-            add => ElementShim.AddHandler(s_eventFocusing, value);
-            remove => ElementShim.RemoveHandler(s_eventFocusing, value);
-        }
-
-        public event HtmlElementEventHandler GotFocus
-        {
-            add => ElementShim.AddHandler(s_eventGotFocus, value);
-            remove => ElementShim.RemoveHandler(s_eventGotFocus, value);
-        }
-
-        public event HtmlElementEventHandler LosingFocus
-        {
-            add => ElementShim.AddHandler(s_eventLosingFocus, value);
-            remove => ElementShim.RemoveHandler(s_eventLosingFocus, value);
-        }
-
-        public event HtmlElementEventHandler LostFocus
-        {
-            add => ElementShim.AddHandler(s_eventLostFocus, value);
-            remove => ElementShim.RemoveHandler(s_eventLostFocus, value);
-        }
-
-        public event HtmlElementEventHandler KeyDown
-        {
-            add => ElementShim.AddHandler(s_eventKeyDown, value);
-            remove => ElementShim.RemoveHandler(s_eventKeyDown, value);
-        }
-
-        public event HtmlElementEventHandler KeyPress
-        {
-            add => ElementShim.AddHandler(s_eventKeyPress, value);
-            remove => ElementShim.RemoveHandler(s_eventKeyPress, value);
-        }
-
-        public event HtmlElementEventHandler KeyUp
-        {
-            add => ElementShim.AddHandler(s_eventKeyUp, value);
-            remove => ElementShim.RemoveHandler(s_eventKeyUp, value);
-        }
-
-        public event HtmlElementEventHandler MouseMove
-        {
-            add => ElementShim.AddHandler(s_eventMouseMove, value);
-            remove => ElementShim.RemoveHandler(s_eventMouseMove, value);
-        }
-
-        public event HtmlElementEventHandler MouseDown
-        {
-            add => ElementShim.AddHandler(s_eventMouseDown, value);
-            remove => ElementShim.RemoveHandler(s_eventMouseDown, value);
-        }
-
-        public event HtmlElementEventHandler MouseOver
-        {
-            add => ElementShim.AddHandler(s_eventMouseOver, value);
-            remove => ElementShim.RemoveHandler(s_eventMouseOver, value);
-        }
-
-        public event HtmlElementEventHandler MouseUp
-        {
-            add => ElementShim.AddHandler(s_eventMouseUp, value);
-            remove => ElementShim.RemoveHandler(s_eventMouseUp, value);
-        }
-
-        /// <summary>
-        ///  Fires when the mouse enters the element
-        /// </summary>
-        public event HtmlElementEventHandler MouseEnter
-        {
-            add => ElementShim.AddHandler(s_eventMouseEnter, value);
-            remove => ElementShim.RemoveHandler(s_eventMouseEnter, value);
-        }
-
-        /// <summary>
-        ///  Fires when the mouse leaves the element
-        /// </summary>
-        public event HtmlElementEventHandler MouseLeave
-        {
-            add => ElementShim.AddHandler(s_eventMouseLeave, value);
-            remove => ElementShim.RemoveHandler(s_eventMouseLeave, value);
-        }
-
-        public static unsafe bool operator ==(HtmlElement left, HtmlElement right)
-        {
-            // Not equal if only one's null.
-            if (left is null != right is null)
-            {
-                return false;
-            }
-
-            // Equal if both are null.
-            if (left is null)
-            {
-                return true;
-            }
-
-            // Neither are null. Get the IUnknowns and compare them.
-            using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlElement);
-            using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlElement);
-            return leftUnknown.Value == rightUnknown.Value;
-        }
-
-        public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
-
-        public override int GetHashCode() => _htmlElement?.GetHashCode() ?? 0;
-
-        public override bool Equals(object obj) => this == (obj as HtmlElement);
     }
+
+    public string InnerText
+    {
+        get
+        {
+            return NativeHtmlElement.GetInnerText();
+        }
+        set
+        {
+            try
+            {
+                NativeHtmlElement.SetInnerText(value);
+            }
+            catch (COMException ex)
+            {
+                if (ex.ErrorCode == unchecked((int)0x800a0258))
+                {
+                    throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
+                }
+
+                throw;
+            }
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return GetAttribute("Name");
+        }
+        set
+        {
+            SetAttribute("Name", value);
+        }
+    }
+
+    private IHTMLElement NativeHtmlElement
+    {
+        get
+        {
+            return _htmlElement;
+        }
+    }
+
+    public HtmlElement NextSibling
+    {
+        get
+        {
+            IHTMLElement iHtmlElement = null;
+
+            if (NativeHtmlElement is IHTMLDOMNode iHtmlDomNode)
+            {
+                iHtmlElement = iHtmlDomNode.NextSibling() as IHTMLElement;
+            }
+
+            return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+        }
+    }
+
+    public Rectangle OffsetRectangle
+    {
+        get
+        {
+            return new Rectangle(NativeHtmlElement.GetOffsetLeft(), NativeHtmlElement.GetOffsetTop(),
+                NativeHtmlElement.GetOffsetWidth(), NativeHtmlElement.GetOffsetHeight());
+        }
+    }
+
+    public HtmlElement OffsetParent
+    {
+        get
+        {
+            IHTMLElement iHtmlElement = NativeHtmlElement.GetOffsetParent();
+            return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+        }
+    }
+
+    public string OuterHtml
+    {
+        get
+        {
+            return NativeHtmlElement.GetOuterHTML();
+        }
+        set
+        {
+            try
+            {
+                NativeHtmlElement.SetOuterHTML(value);
+            }
+            catch (COMException ex)
+            {
+                if (ex.ErrorCode == unchecked((int)0x800a0258))
+                {
+                    throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
+                }
+
+                throw;
+            }
+        }
+    }
+
+    public string OuterText
+    {
+        get
+        {
+            return NativeHtmlElement.GetOuterText();
+        }
+        set
+        {
+            try
+            {
+                NativeHtmlElement.SetOuterText(value);
+            }
+            catch (COMException ex)
+            {
+                if (ex.ErrorCode == unchecked((int)0x800a0258))
+                {
+                    throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
+                }
+
+                throw;
+            }
+        }
+    }
+
+    public HtmlElement Parent
+    {
+        get
+        {
+            IHTMLElement iHtmlElement = NativeHtmlElement.GetParentElement();
+            return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+        }
+    }
+
+    public Rectangle ScrollRectangle
+    {
+        get
+        {
+            IHTMLElement2 htmlElement2 = (IHTMLElement2)NativeHtmlElement;
+            return new Rectangle(htmlElement2.GetScrollLeft(), htmlElement2.GetScrollTop(),
+                htmlElement2.GetScrollWidth(), htmlElement2.GetScrollHeight());
+        }
+    }
+
+    public int ScrollLeft
+    {
+        get
+        {
+            return ((IHTMLElement2)NativeHtmlElement).GetScrollLeft();
+        }
+        set
+        {
+            ((IHTMLElement2)NativeHtmlElement).SetScrollLeft(value);
+        }
+    }
+
+    public int ScrollTop
+    {
+        get
+        {
+            return ((IHTMLElement2)NativeHtmlElement).GetScrollTop();
+        }
+        set
+        {
+            ((IHTMLElement2)NativeHtmlElement).SetScrollTop(value);
+        }
+    }
+
+    private HtmlShimManager ShimManager
+    {
+        get
+        {
+            return _shimManager;
+        }
+    }
+
+    public string Style
+    {
+        get
+        {
+            return NativeHtmlElement.GetStyle().GetCssText();
+        }
+        set
+        {
+            NativeHtmlElement.GetStyle().SetCssText(value);
+        }
+    }
+
+    public string TagName
+    {
+        get
+        {
+            return NativeHtmlElement.GetTagName();
+        }
+    }
+
+    public short TabIndex
+    {
+        get
+        {
+            return ((IHTMLElement2)NativeHtmlElement).GetTabIndex();
+        }
+        set
+        {
+            ((IHTMLElement2)NativeHtmlElement).SetTabIndex(value);
+        }
+    }
+
+    public object DomElement
+    {
+        get
+        {
+            return NativeHtmlElement;
+        }
+    }
+
+    public HtmlElement AppendChild(HtmlElement newElement)
+    {
+        return InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, newElement);
+    }
+
+    public void AttachEventHandler(string eventName, EventHandler eventHandler)
+    {
+        ElementShim.AttachEventHandler(eventName, eventHandler);
+    }
+
+    public void DetachEventHandler(string eventName, EventHandler eventHandler)
+    {
+        ElementShim.DetachEventHandler(eventName, eventHandler);
+    }
+
+    public void Focus()
+    {
+        try
+        {
+            ((IHTMLElement2)NativeHtmlElement).Focus();
+        }
+        catch (COMException ex)
+        {
+            if (ex.ErrorCode == unchecked((int)0x800a083e))
+            {
+                throw new NotSupportedException(SR.HtmlElementMethodNotSupported);
+            }
+
+            throw;
+        }
+    }
+
+    public string GetAttribute(string attributeName)
+    {
+        object oAttributeValue = NativeHtmlElement.GetAttribute(attributeName, 0);
+        return oAttributeValue is null ? "" : oAttributeValue.ToString();
+    }
+
+    public HtmlElementCollection GetElementsByTagName(string tagName)
+    {
+        IHTMLElementCollection iHTMLElementCollection = ((IHTMLElement2)NativeHtmlElement).GetElementsByTagName(tagName);
+        return iHTMLElementCollection is not null ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
+    }
+
+    public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
+    {
+        IHTMLElement iHtmlElement = ((IHTMLElement2)NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
+            (IHTMLElement)newElement.DomElement);
+        return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+    }
+
+    public object InvokeMember(string methodName)
+    {
+        return InvokeMember(methodName, null);
+    }
+
+    public unsafe object InvokeMember(string methodName, params object[] parameter)
+    {
+        try
+        {
+            if (NativeHtmlElement is not Oleaut32.IDispatch scriptObject)
+            {
+                return null;
+            }
+
+            Guid g = Guid.Empty;
+            var names = new string[] { methodName };
+            int dispid = PInvoke.DISPID_UNKNOWN;
+            HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+            if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+            {
+                return null;
+            }
+
+            if (parameter is not null)
+            {
+                // Reverse the parameter order so that they read naturally after IDispatch.
+                Array.Reverse(parameter);
+            }
+
+            using VARIANTVector vectorArgs = new(parameter);
+            fixed (VARIANT* pVariant = vectorArgs.Variants)
+            {
+                DISPPARAMS dispParams = new()
+                {
+                    rgvarg = pVariant,
+                    cArgs = (uint)vectorArgs.Variants.Length,
+                    rgdispidNamedArgs = null,
+                    cNamedArgs = 0
+                };
+
+                var retVals = new object[1];
+                EXCEPINFO excepInfo = default;
+                hr = scriptObject.Invoke(
+                    dispid,
+                    &g,
+                    PInvoke.GetThreadLocale(),
+                    DISPATCH_FLAGS.DISPATCH_METHOD,
+                    &dispParams,
+                    retVals,
+                    &excepInfo,
+                    null);
+
+                if (hr == HRESULT.S_OK)
+                {
+                    return retVals[0];
+                }
+            }
+
+            return null;
+        }
+        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        {
+        }
+
+        return null;
+    }
+
+    public void RemoveFocus()
+    {
+        ((IHTMLElement2)NativeHtmlElement).Blur();
+    }
+
+    // PM review done
+    public void RaiseEvent(string eventName)
+    {
+        ((IHTMLElement3)NativeHtmlElement).FireEvent(eventName, IntPtr.Zero);
+    }
+
+    public void ScrollIntoView(bool alignWithTop)
+    {
+        NativeHtmlElement.ScrollIntoView(alignWithTop);
+    }
+
+    public void SetAttribute(string attributeName, string value)
+    {
+        try
+        {
+            NativeHtmlElement.SetAttribute(attributeName, value, 0);
+        }
+        catch (COMException comException)
+        {
+            if (comException.ErrorCode == unchecked((int)0x80020009))
+            {
+                throw new NotSupportedException(SR.HtmlElementAttributeNotSupported);
+            }
+
+            throw;
+        }
+    }
+
+    //
+    // Events:
+    //
+    public event HtmlElementEventHandler Click
+    {
+        add => ElementShim.AddHandler(s_eventClick, value);
+        remove => ElementShim.RemoveHandler(s_eventClick, value);
+    }
+
+    public event HtmlElementEventHandler DoubleClick
+    {
+        add => ElementShim.AddHandler(s_eventDoubleClick, value);
+        remove => ElementShim.RemoveHandler(s_eventDoubleClick, value);
+    }
+
+    public event HtmlElementEventHandler Drag
+    {
+        add => ElementShim.AddHandler(s_eventDrag, value);
+        remove => ElementShim.RemoveHandler(s_eventDrag, value);
+    }
+
+    public event HtmlElementEventHandler DragEnd
+    {
+        add => ElementShim.AddHandler(s_eventDragEnd, value);
+        remove => ElementShim.RemoveHandler(s_eventDragEnd, value);
+    }
+
+    public event HtmlElementEventHandler DragLeave
+    {
+        add => ElementShim.AddHandler(s_eventDragLeave, value);
+        remove => ElementShim.RemoveHandler(s_eventDragLeave, value);
+    }
+
+    public event HtmlElementEventHandler DragOver
+    {
+        add => ElementShim.AddHandler(s_eventDragOver, value);
+        remove => ElementShim.RemoveHandler(s_eventDragOver, value);
+    }
+
+    public event HtmlElementEventHandler Focusing
+    {
+        add => ElementShim.AddHandler(s_eventFocusing, value);
+        remove => ElementShim.RemoveHandler(s_eventFocusing, value);
+    }
+
+    public event HtmlElementEventHandler GotFocus
+    {
+        add => ElementShim.AddHandler(s_eventGotFocus, value);
+        remove => ElementShim.RemoveHandler(s_eventGotFocus, value);
+    }
+
+    public event HtmlElementEventHandler LosingFocus
+    {
+        add => ElementShim.AddHandler(s_eventLosingFocus, value);
+        remove => ElementShim.RemoveHandler(s_eventLosingFocus, value);
+    }
+
+    public event HtmlElementEventHandler LostFocus
+    {
+        add => ElementShim.AddHandler(s_eventLostFocus, value);
+        remove => ElementShim.RemoveHandler(s_eventLostFocus, value);
+    }
+
+    public event HtmlElementEventHandler KeyDown
+    {
+        add => ElementShim.AddHandler(s_eventKeyDown, value);
+        remove => ElementShim.RemoveHandler(s_eventKeyDown, value);
+    }
+
+    public event HtmlElementEventHandler KeyPress
+    {
+        add => ElementShim.AddHandler(s_eventKeyPress, value);
+        remove => ElementShim.RemoveHandler(s_eventKeyPress, value);
+    }
+
+    public event HtmlElementEventHandler KeyUp
+    {
+        add => ElementShim.AddHandler(s_eventKeyUp, value);
+        remove => ElementShim.RemoveHandler(s_eventKeyUp, value);
+    }
+
+    public event HtmlElementEventHandler MouseMove
+    {
+        add => ElementShim.AddHandler(s_eventMouseMove, value);
+        remove => ElementShim.RemoveHandler(s_eventMouseMove, value);
+    }
+
+    public event HtmlElementEventHandler MouseDown
+    {
+        add => ElementShim.AddHandler(s_eventMouseDown, value);
+        remove => ElementShim.RemoveHandler(s_eventMouseDown, value);
+    }
+
+    public event HtmlElementEventHandler MouseOver
+    {
+        add => ElementShim.AddHandler(s_eventMouseOver, value);
+        remove => ElementShim.RemoveHandler(s_eventMouseOver, value);
+    }
+
+    public event HtmlElementEventHandler MouseUp
+    {
+        add => ElementShim.AddHandler(s_eventMouseUp, value);
+        remove => ElementShim.RemoveHandler(s_eventMouseUp, value);
+    }
+
+    /// <summary>
+    ///  Fires when the mouse enters the element
+    /// </summary>
+    public event HtmlElementEventHandler MouseEnter
+    {
+        add => ElementShim.AddHandler(s_eventMouseEnter, value);
+        remove => ElementShim.RemoveHandler(s_eventMouseEnter, value);
+    }
+
+    /// <summary>
+    ///  Fires when the mouse leaves the element
+    /// </summary>
+    public event HtmlElementEventHandler MouseLeave
+    {
+        add => ElementShim.AddHandler(s_eventMouseLeave, value);
+        remove => ElementShim.RemoveHandler(s_eventMouseLeave, value);
+    }
+
+    public static unsafe bool operator ==(HtmlElement left, HtmlElement right)
+    {
+        // Not equal if only one's null.
+        if (left is null != right is null)
+        {
+            return false;
+        }
+
+        // Equal if both are null.
+        if (left is null)
+        {
+            return true;
+        }
+
+        // Neither are null. Get the IUnknowns and compare them.
+        using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlElement);
+        using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlElement);
+        return leftUnknown.Value == rightUnknown.Value;
+    }
+
+    public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
+
+    public override int GetHashCode() => _htmlElement?.GetHashCode() ?? 0;
+
+    public override bool Equals(object obj) => this == (obj as HtmlElement);
 }

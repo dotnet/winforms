@@ -4,379 +4,378 @@
 
 #nullable disable
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+/// <summary>
+///  This service allows clients to work with all references on a form, not just the top-level sited components.
+/// </summary>
+internal sealed class ReferenceService : IReferenceService, IDisposable
 {
+    private static readonly Attribute[] _attributes = new Attribute[] { DesignerSerializationVisibilityAttribute.Content };
+
+    private IServiceProvider _provider; // service provider we use to get to other services
+    private List<IComponent> _addedComponents; // list of newly added components
+    private List<IComponent> _removedComponents; // list of newly removed components
+    private List<ReferenceHolder> _references; // our current list of references
+    private bool _populating;
+
     /// <summary>
-    ///  This service allows clients to work with all references on a form, not just the top-level sited components.
+    ///  Constructs the ReferenceService.
     /// </summary>
-    internal sealed class ReferenceService : IReferenceService, IDisposable
+    internal ReferenceService(IServiceProvider provider)
     {
-        private static readonly Attribute[] _attributes = new Attribute[] { DesignerSerializationVisibilityAttribute.Content };
+        _provider = provider;
+    }
 
-        private IServiceProvider _provider; // service provider we use to get to other services
-        private List<IComponent> _addedComponents; // list of newly added components
-        private List<IComponent> _removedComponents; // list of newly removed components
-        private List<ReferenceHolder> _references; // our current list of references
-        private bool _populating;
+    /// <summary>
+    ///  Creates an entry for a top-level component and it's children.
+    /// </summary>
+    private void CreateReferences(IComponent component)
+    {
+        CreateReferences(string.Empty, component, component);
+    }
 
-        /// <summary>
-        ///  Constructs the ReferenceService.
-        /// </summary>
-        internal ReferenceService(IServiceProvider provider)
+    /// <summary>
+    ///  Recursively creates references for namespaced objects.
+    /// </summary>
+    private void CreateReferences(string trailingName, object reference, IComponent sitedComponent)
+    {
+        if (reference is null)
         {
-            _provider = provider;
+            return;
         }
 
-        /// <summary>
-        ///  Creates an entry for a top-level component and it's children.
-        /// </summary>
-        private void CreateReferences(IComponent component)
-        {
-            CreateReferences(string.Empty, component, component);
-        }
+        _references.Add(new ReferenceHolder(trailingName, reference, sitedComponent));
 
-        /// <summary>
-        ///  Recursively creates references for namespaced objects.
-        /// </summary>
-        private void CreateReferences(string trailingName, object reference, IComponent sitedComponent)
+        foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(reference, _attributes))
         {
-            if (reference is null)
+            if (property.IsReadOnly)
             {
+                CreateReferences($"{trailingName}.{property.Name}", property.GetValue(reference), sitedComponent);
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Demand populates the _references variable.
+    /// </summary>
+    private void EnsureReferences()
+    {
+        // If the references are null, create them for the first time and connect up our events to listen to changes to the container. Otherwise, check to see if the added or removed lists contain anything for us to sync up.
+        if (_references is null)
+        {
+            ObjectDisposedException.ThrowIf(_provider is null, typeof(IReferenceService));
+
+            IComponentChangeService cs = _provider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            Debug.Assert(cs is not null, "Reference service relies on IComponentChangeService");
+            if (cs is not null)
+            {
+                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
+                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+            }
+
+            if (_provider.GetService(typeof(IContainer)) is not IContainer container)
+            {
+                Debug.Fail("Reference service cannot operate without IContainer");
+                throw new InvalidOperationException();
+            }
+
+            _references = new(container.Components.Count);
+            foreach (IComponent component in container.Components)
+            {
+                CreateReferences(component);
+            }
+        }
+        else if (!_populating)
+        {
+            _populating = true;
+            try
+            {
+                if (_addedComponents is not null && _addedComponents.Count > 0)
+                {
+                    // There is a possibility that this component already exists. If it does, just remove it first and then re-add it.
+                    foreach (IComponent ic in _addedComponents)
+                    {
+                        RemoveReferences(ic);
+                        CreateReferences(ic);
+                    }
+
+                    _addedComponents.Clear();
+                }
+
+                if (_removedComponents is not null && _removedComponents.Count > 0)
+                {
+                    foreach (IComponent ic in _removedComponents)
+                    {
+                        RemoveReferences(ic);
+                    }
+
+                    _removedComponents.Clear();
+                }
+            }
+            finally
+            {
+                _populating = false;
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Listens for component additions to find all the references it contributes.
+    /// </summary>
+    private void OnComponentAdded(object sender, ComponentEventArgs cevent)
+    {
+        _addedComponents ??= new();
+        IComponent compAdded = cevent.Component;
+        if (compAdded.Site is not INestedSite)
+        {
+            _addedComponents.Add(compAdded);
+            _removedComponents?.Remove(compAdded);
+        }
+    }
+
+    /// <summary>
+    ///  Listens for component removes to delete all the references it holds.
+    /// </summary>
+    private void OnComponentRemoved(object sender, ComponentEventArgs cevent)
+    {
+        _removedComponents ??= new();
+        IComponent compRemoved = cevent.Component;
+        if (compRemoved.Site is not INestedSite)
+        {
+            _removedComponents.Add(compRemoved);
+            _addedComponents?.Remove(compRemoved);
+        }
+    }
+
+    /// <summary>
+    ///  Listens for component removes to delete all the references it holds.
+    /// </summary>
+    private void OnComponentRename(object sender, ComponentRenameEventArgs cevent)
+    {
+        foreach (ReferenceHolder reference in _references)
+        {
+            if (ReferenceEquals(reference.SitedComponent, cevent.Component))
+            {
+                reference.ResetName();
                 return;
             }
+        }
+    }
 
-            _references.Add(new ReferenceHolder(trailingName, reference, sitedComponent));
-
-            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(reference, _attributes))
+    /// <summary>
+    ///  Removes all the references that this component owns.
+    /// </summary>
+    private void RemoveReferences(IComponent component)
+    {
+        if (_references is not null)
+        {
+            int size = _references.Count;
+            for (int i = size - 1; i >= 0; i--)
             {
-                if (property.IsReadOnly)
+                if (ReferenceEquals(_references[i].SitedComponent, component))
                 {
-                    CreateReferences($"{trailingName}.{property.Name}", property.GetValue(reference), sitedComponent);
+                    _references.RemoveAt(i);
                 }
             }
         }
+    }
 
-        /// <summary>
-        ///  Demand populates the _references variable.
-        /// </summary>
-        private void EnsureReferences()
+    /// <summary>
+    ///  Cleanup and detach from our events.
+    /// </summary>
+    void IDisposable.Dispose()
+    {
+        if (_references is not null && _provider is not null)
         {
-            // If the references are null, create them for the first time and connect up our events to listen to changes to the container. Otherwise, check to see if the added or removed lists contain anything for us to sync up.
-            if (_references is null)
+            if (_provider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
-                ObjectDisposedException.ThrowIf(_provider is null, typeof(IReferenceService));
-
-                IComponentChangeService cs = _provider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                Debug.Assert(cs is not null, "Reference service relies on IComponentChangeService");
-                if (cs is not null)
-                {
-                    cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                    cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                    cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
-                }
-
-                if (_provider.GetService(typeof(IContainer)) is not IContainer container)
-                {
-                    Debug.Fail("Reference service cannot operate without IContainer");
-                    throw new InvalidOperationException();
-                }
-
-                _references = new(container.Components.Count);
-                foreach (IComponent component in container.Components)
-                {
-                    CreateReferences(component);
-                }
+                cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
+                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
-            else if (!_populating)
+
+            _references = null;
+            _provider = null;
+        }
+    }
+
+    /// <summary>
+    ///  Finds the sited component for a given reference, returning null if not found.
+    /// </summary>
+    IComponent IReferenceService.GetComponent(object reference)
+    {
+        ArgumentNullException.ThrowIfNull(reference);
+
+        EnsureReferences();
+        foreach (ReferenceHolder holder in _references)
+        {
+            if (ReferenceEquals(holder.Reference, reference))
             {
-                _populating = true;
-                try
-                {
-                    if (_addedComponents is not null && _addedComponents.Count > 0)
-                    {
-                        // There is a possibility that this component already exists. If it does, just remove it first and then re-add it.
-                        foreach (IComponent ic in _addedComponents)
-                        {
-                            RemoveReferences(ic);
-                            CreateReferences(ic);
-                        }
-
-                        _addedComponents.Clear();
-                    }
-
-                    if (_removedComponents is not null && _removedComponents.Count > 0)
-                    {
-                        foreach (IComponent ic in _removedComponents)
-                        {
-                            RemoveReferences(ic);
-                        }
-
-                        _removedComponents.Clear();
-                    }
-                }
-                finally
-                {
-                    _populating = false;
-                }
+                return holder.SitedComponent;
             }
         }
 
-        /// <summary>
-        ///  Listens for component additions to find all the references it contributes.
-        /// </summary>
-        private void OnComponentAdded(object sender, ComponentEventArgs cevent)
+        return null;
+    }
+
+    /// <summary>
+    ///  Finds name for a given reference, returning null if not found.
+    /// </summary>
+    string IReferenceService.GetName(object reference)
+    {
+        ArgumentNullException.ThrowIfNull(reference);
+
+        EnsureReferences();
+        foreach (ReferenceHolder holder in _references)
         {
-            _addedComponents ??= new();
-            IComponent compAdded = cevent.Component;
-            if (compAdded.Site is not INestedSite)
+            if (ReferenceEquals(holder.Reference, reference))
             {
-                _addedComponents.Add(compAdded);
-                _removedComponents?.Remove(compAdded);
+                return holder.Name;
             }
         }
 
-        /// <summary>
-        ///  Listens for component removes to delete all the references it holds.
-        /// </summary>
-        private void OnComponentRemoved(object sender, ComponentEventArgs cevent)
+        return null;
+    }
+
+    /// <summary>
+    ///  Finds a reference with the given name, returning null if not found.
+    /// </summary>
+    object IReferenceService.GetReference(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+
+        EnsureReferences();
+        foreach (ReferenceHolder holder in _references)
         {
-            _removedComponents ??= new();
-            IComponent compRemoved = cevent.Component;
-            if (compRemoved.Site is not INestedSite)
+            if (string.Equals(holder.Name, name, StringComparison.OrdinalIgnoreCase))
             {
-                _removedComponents.Add(compRemoved);
-                _addedComponents?.Remove(compRemoved);
+                return holder.Reference;
             }
         }
 
-        /// <summary>
-        ///  Listens for component removes to delete all the references it holds.
-        /// </summary>
-        private void OnComponentRename(object sender, ComponentRenameEventArgs cevent)
+        return null;
+    }
+
+    /// <summary>
+    ///  Returns all references available in this designer.
+    /// </summary>
+    object[] IReferenceService.GetReferences()
+    {
+        EnsureReferences();
+        object[] references = new object[_references.Count];
+
+        for (int i = 0; i < references.Length; i++)
         {
-            foreach (ReferenceHolder reference in _references)
+            references[i] = _references[i].Reference;
+        }
+
+        return references;
+    }
+
+    /// <summary>
+    ///  Returns all references available in this designer that are assignable to the given type.
+    /// </summary>
+    object[] IReferenceService.GetReferences(Type baseType)
+    {
+        ArgumentNullException.ThrowIfNull(baseType);
+
+        EnsureReferences();
+        List<object> results = new(_references.Count);
+        foreach (ReferenceHolder holder in _references)
+        {
+            object reference = holder.Reference;
+            if (baseType.IsAssignableFrom(reference.GetType()))
             {
-                if (ReferenceEquals(reference.SitedComponent, cevent.Component))
-                {
-                    reference.ResetName();
-                    return;
-                }
+                results.Add(reference);
             }
         }
 
-        /// <summary>
-        ///  Removes all the references that this component owns.
-        /// </summary>
-        private void RemoveReferences(IComponent component)
-        {
-            if (_references is not null)
-            {
-                int size = _references.Count;
-                for (int i = size - 1; i >= 0; i--)
-                {
-                    if (ReferenceEquals(_references[i].SitedComponent, component))
-                    {
-                        _references.RemoveAt(i);
-                    }
-                }
-            }
-        }
+        return results.ToArray();
+    }
+
+    /// <summary>
+    ///  The class that holds the information about a reference.
+    /// </summary>
+    private sealed class ReferenceHolder
+    {
+        private readonly string _trailingName;
+        private readonly object _reference;
+        private readonly IComponent _sitedComponent;
+        private string _fullName;
 
         /// <summary>
-        ///  Cleanup and detach from our events.
+        ///  Creates a new reference holder.
         /// </summary>
-        void IDisposable.Dispose()
+        internal ReferenceHolder(string trailingName, object reference, IComponent sitedComponent)
         {
-            if (_references is not null && _provider is not null)
-            {
-                if (_provider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
-                {
-                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-                    cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
-                }
+            _trailingName = trailingName;
+            _reference = reference;
+            _sitedComponent = sitedComponent;
 
-                _references = null;
-                _provider = null;
-            }
-        }
-
-        /// <summary>
-        ///  Finds the sited component for a given reference, returning null if not found.
-        /// </summary>
-        IComponent IReferenceService.GetComponent(object reference)
-        {
-            ArgumentNullException.ThrowIfNull(reference);
-
-            EnsureReferences();
-            foreach (ReferenceHolder holder in _references)
-            {
-                if (ReferenceEquals(holder.Reference, reference))
-                {
-                    return holder.SitedComponent;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        ///  Finds name for a given reference, returning null if not found.
-        /// </summary>
-        string IReferenceService.GetName(object reference)
-        {
-            ArgumentNullException.ThrowIfNull(reference);
-
-            EnsureReferences();
-            foreach (ReferenceHolder holder in _references)
-            {
-                if (ReferenceEquals(holder.Reference, reference))
-                {
-                    return holder.Name;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        ///  Finds a reference with the given name, returning null if not found.
-        /// </summary>
-        object IReferenceService.GetReference(string name)
-        {
-            ArgumentNullException.ThrowIfNull(name);
-
-            EnsureReferences();
-            foreach (ReferenceHolder holder in _references)
-            {
-                if (string.Equals(holder.Name, name, StringComparison.OrdinalIgnoreCase))
-                {
-                    return holder.Reference;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        ///  Returns all references available in this designer.
-        /// </summary>
-        object[] IReferenceService.GetReferences()
-        {
-            EnsureReferences();
-            object[] references = new object[_references.Count];
-
-            for (int i = 0; i < references.Length; i++)
-            {
-                references[i] = _references[i].Reference;
-            }
-
-            return references;
-        }
-
-        /// <summary>
-        ///  Returns all references available in this designer that are assignable to the given type.
-        /// </summary>
-        object[] IReferenceService.GetReferences(Type baseType)
-        {
-            ArgumentNullException.ThrowIfNull(baseType);
-
-            EnsureReferences();
-            List<object> results = new(_references.Count);
-            foreach (ReferenceHolder holder in _references)
-            {
-                object reference = holder.Reference;
-                if (baseType.IsAssignableFrom(reference.GetType()))
-                {
-                    results.Add(reference);
-                }
-            }
-
-            return results.ToArray();
-        }
-
-        /// <summary>
-        ///  The class that holds the information about a reference.
-        /// </summary>
-        private sealed class ReferenceHolder
-        {
-            private readonly string _trailingName;
-            private readonly object _reference;
-            private readonly IComponent _sitedComponent;
-            private string _fullName;
-
-            /// <summary>
-            ///  Creates a new reference holder.
-            /// </summary>
-            internal ReferenceHolder(string trailingName, object reference, IComponent sitedComponent)
-            {
-                _trailingName = trailingName;
-                _reference = reference;
-                _sitedComponent = sitedComponent;
-
-                Debug.Assert(trailingName is not null, "Expected a trailing name");
-                Debug.Assert(reference is not null, "Expected a reference");
-                Debug.Assert(sitedComponent is not null, "Expected a sited component");
+            Debug.Assert(trailingName is not null, "Expected a trailing name");
+            Debug.Assert(reference is not null, "Expected a reference");
+            Debug.Assert(sitedComponent is not null, "Expected a sited component");
 #if DEBUG
-                if (sitedComponent is not null)
-                {
-                    Debug.Assert(sitedComponent.Site is not null, $"Sited component is not really sited: {sitedComponent}");
-                    Debug.Assert(TypeDescriptor.GetComponentName(sitedComponent) is not null, $"Sited component has no name: {sitedComponent}");
-                }
+            if (sitedComponent is not null)
+            {
+                Debug.Assert(sitedComponent.Site is not null, $"Sited component is not really sited: {sitedComponent}");
+                Debug.Assert(TypeDescriptor.GetComponentName(sitedComponent) is not null, $"Sited component has no name: {sitedComponent}");
+            }
 #endif // DEBUG
-            }
+        }
 
-            /// <summary>
-            ///  Resets the name of this reference holder.  It will be re-acquired on demand
-            /// </summary>
-            internal void ResetName()
-            {
-                _fullName = null;
-            }
+        /// <summary>
+        ///  Resets the name of this reference holder.  It will be re-acquired on demand
+        /// </summary>
+        internal void ResetName()
+        {
+            _fullName = null;
+        }
 
-            /// <summary>
-            ///  The name of the reference we are holding.
-            /// </summary>
-            internal string Name
+        /// <summary>
+        ///  The name of the reference we are holding.
+        /// </summary>
+        internal string Name
+        {
+            get
             {
-                get
+                if (_fullName is null)
                 {
-                    if (_fullName is null)
+                    if (_sitedComponent is not null)
                     {
-                        if (_sitedComponent is not null)
+                        string siteName = TypeDescriptor.GetComponentName(_sitedComponent);
+                        if (siteName is not null)
                         {
-                            string siteName = TypeDescriptor.GetComponentName(_sitedComponent);
-                            if (siteName is not null)
-                            {
-                                _fullName = $"{siteName}{_trailingName}";
-                            }
-
-                            Debug.Assert(_sitedComponent.Site is not null, $"Sited component is not really sited: {_sitedComponent}");
-                            Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) is not null, $"Sited component has no name: {_sitedComponent}");
+                            _fullName = $"{siteName}{_trailingName}";
                         }
 
-                        _fullName = string.Empty;
+                        Debug.Assert(_sitedComponent.Site is not null, $"Sited component is not really sited: {_sitedComponent}");
+                        Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) is not null, $"Sited component has no name: {_sitedComponent}");
                     }
 
-                    return _fullName;
+                    _fullName = string.Empty;
                 }
-            }
 
-            /// <summary>
-            ///  The reference we are holding.
-            /// </summary>
-            internal object Reference
-            {
-                get => _reference;
+                return _fullName;
             }
+        }
 
-            /// <summary>
-            ///  The sited component associated with this reference.
-            /// </summary>
-            internal IComponent SitedComponent
-            {
-                get => _sitedComponent;
-            }
+        /// <summary>
+        ///  The reference we are holding.
+        /// </summary>
+        internal object Reference
+        {
+            get => _reference;
+        }
+
+        /// <summary>
+        ///  The sited component associated with this reference.
+        /// </summary>
+        internal IComponent SitedComponent
+        {
+            get => _sitedComponent;
         }
     }
 }

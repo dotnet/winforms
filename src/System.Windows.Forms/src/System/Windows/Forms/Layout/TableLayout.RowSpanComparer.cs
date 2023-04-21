@@ -2,23 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Layout
+namespace System.Windows.Forms.Layout;
+
+internal partial class TableLayout
 {
-    internal partial class TableLayout
+    private class RowSpanComparer : SpanComparer
     {
-        private class RowSpanComparer : SpanComparer
+        private static readonly RowSpanComparer instance = new RowSpanComparer();
+
+        public override int GetSpan(LayoutInfo layoutInfo)
         {
-            private static readonly RowSpanComparer instance = new RowSpanComparer();
+            return layoutInfo.RowSpan;
+        }
 
-            public override int GetSpan(LayoutInfo layoutInfo)
-            {
-                return layoutInfo.RowSpan;
-            }
-
-            public static RowSpanComparer GetInstance
-            {
-                get { return instance; }
-            }
+        public static RowSpanComparer GetInstance
+        {
+            get { return instance; }
         }
     }
 }

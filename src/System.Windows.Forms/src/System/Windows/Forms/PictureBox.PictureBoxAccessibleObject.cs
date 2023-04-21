@@ -4,28 +4,27 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
-{
-    public partial class PictureBox
-    {
-        internal class PictureBoxAccessibleObject : ControlAccessibleObject
-        {
-            public PictureBoxAccessibleObject(PictureBox owner) : base(owner)
-            {
-            }
+namespace System.Windows.Forms;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.ControlTypePropertyId when
-                        // If we don't set a default role for the accessible object
-                        // it will be retrieved from Windows.
-                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                        Owner.AccessibleRole == AccessibleRole.Default
-                        => UiaCore.UIA.PaneControlTypeId,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
-                    _ => base.GetPropertyValue(propertyID)
-                };
+public partial class PictureBox
+{
+    internal class PictureBoxAccessibleObject : ControlAccessibleObject
+    {
+        public PictureBoxAccessibleObject(PictureBox owner) : base(owner)
+        {
         }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            => propertyID switch
+            {
+                UiaCore.UIA.ControlTypePropertyId when
+                    // If we don't set a default role for the accessible object
+                    // it will be retrieved from Windows.
+                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                    Owner.AccessibleRole == AccessibleRole.Default
+                    => UiaCore.UIA.PaneControlTypeId,
+                UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
+                _ => base.GetPropertyValue(propertyID)
+            };
     }
 }

@@ -5,24 +5,23 @@
 using System.Drawing;
 using System.Windows.Forms.Layout;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripDropDownMenu
 {
-    public partial class ToolStripDropDownMenu
+    internal sealed class ToolStripDropDownLayoutEngine : FlowLayout
     {
-        internal sealed class ToolStripDropDownLayoutEngine : FlowLayout
+        public static ToolStripDropDownLayoutEngine LayoutInstance = new();
+
+        internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
         {
-            public static ToolStripDropDownLayoutEngine LayoutInstance = new();
-
-            internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
+            Size preferredSize = base.GetPreferredSize(container, proposedConstraints);
+            if (container is ToolStripDropDownMenu dropDownMenu)
             {
-                Size preferredSize = base.GetPreferredSize(container, proposedConstraints);
-                if (container is ToolStripDropDownMenu dropDownMenu)
-                {
-                    preferredSize.Width = dropDownMenu.MaxItemSize.Width - dropDownMenu.PaddingToTrim;
-                }
-
-                return preferredSize;
+                preferredSize.Width = dropDownMenu.MaxItemSize.Width - dropDownMenu.PaddingToTrim;
             }
+
+            return preferredSize;
         }
     }
 }

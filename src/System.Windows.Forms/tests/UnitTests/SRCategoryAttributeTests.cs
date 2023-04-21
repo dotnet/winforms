@@ -2,24 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
-{
-    // NB: doesn't require thread affinity
-    public class SRCategoryAttributeTests
-    {
-        [Fact]
-        public void VerifyCategoryForValidCategoryAttribute()
-        {
-            SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(nameof(SR.CatAccessibility));
-            Assert.True(string.Equals(srCategoryAttribute.Category, SR.CatAccessibility, StringComparison.Ordinal));
-        }
+namespace System.Windows.Forms.Tests;
 
-        [Fact]
-        public void InvalidCategoryShouldReturnCategoryNameAsIs()
-        {
-            const string fakeCategory = "fakeCategory";
-            SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(fakeCategory);
-            Assert.True(string.Equals(srCategoryAttribute.Category, fakeCategory, StringComparison.Ordinal));
-        }
+// NB: doesn't require thread affinity
+public class SRCategoryAttributeTests
+{
+    [Fact]
+    public void VerifyCategoryForValidCategoryAttribute()
+    {
+        SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(nameof(SR.CatAccessibility));
+        Assert.True(string.Equals(srCategoryAttribute.Category, SR.CatAccessibility, StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void InvalidCategoryShouldReturnCategoryNameAsIs()
+    {
+        const string fakeCategory = "fakeCategory";
+        SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(fakeCategory);
+        Assert.True(string.Equals(srCategoryAttribute.Category, fakeCategory, StringComparison.Ordinal));
     }
 }

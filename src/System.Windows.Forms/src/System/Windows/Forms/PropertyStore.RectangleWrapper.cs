@@ -4,18 +4,17 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
-{
-    internal partial class PropertyStore
-    {
-        private sealed class RectangleWrapper
-        {
-            public Rectangle Rectangle;
+namespace System.Windows.Forms;
 
-            public RectangleWrapper(Rectangle rectangle)
-            {
-                Rectangle = rectangle;
-            }
+internal partial class PropertyStore
+{
+    private sealed class RectangleWrapper
+    {
+        public Rectangle Rectangle;
+
+        public RectangleWrapper(Rectangle rectangle)
+        {
+            Rectangle = rectangle;
         }
     }
 }

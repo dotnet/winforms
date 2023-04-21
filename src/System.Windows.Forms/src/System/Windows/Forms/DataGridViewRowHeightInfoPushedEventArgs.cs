@@ -4,22 +4,21 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class DataGridViewRowHeightInfoPushedEventArgs : HandledEventArgs
 {
-    public class DataGridViewRowHeightInfoPushedEventArgs : HandledEventArgs
+    internal DataGridViewRowHeightInfoPushedEventArgs(int rowIndex, int height, int minimumHeight) : base(false)
     {
-        internal DataGridViewRowHeightInfoPushedEventArgs(int rowIndex, int height, int minimumHeight) : base(false)
-        {
-            Debug.Assert(rowIndex >= -1);
-            RowIndex = rowIndex;
-            Height = height;
-            MinimumHeight = minimumHeight;
-        }
-
-        public int RowIndex { get; }
-
-        public int Height { get; }
-
-        public int MinimumHeight { get; }
+        Debug.Assert(rowIndex >= -1);
+        RowIndex = rowIndex;
+        Height = height;
+        MinimumHeight = minimumHeight;
     }
+
+    public int RowIndex { get; }
+
+    public int Height { get; }
+
+    public int MinimumHeight { get; }
 }

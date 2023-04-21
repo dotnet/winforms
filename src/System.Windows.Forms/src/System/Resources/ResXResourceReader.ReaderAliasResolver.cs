@@ -4,31 +4,30 @@
 
 using System.Reflection;
 
-namespace System.Resources
+namespace System.Resources;
+
+public partial class ResXResourceReader
 {
-    public partial class ResXResourceReader
+    private sealed class ReaderAliasResolver : IAliasResolver
     {
-        private sealed class ReaderAliasResolver : IAliasResolver
+        private readonly Dictionary<string, AssemblyName> _cachedAliases;
+
+        internal ReaderAliasResolver()
         {
-            private readonly Dictionary<string, AssemblyName> _cachedAliases;
+            _cachedAliases = new Dictionary<string, AssemblyName>();
+        }
 
-            internal ReaderAliasResolver()
-            {
-                _cachedAliases = new Dictionary<string, AssemblyName>();
-            }
+        public AssemblyName? ResolveAlias(string alias)
+        {
+            _cachedAliases.TryGetValue(alias, out AssemblyName? result);
+            return result;
+        }
 
-            public AssemblyName? ResolveAlias(string alias)
+        public void PushAlias(string? alias, AssemblyName name)
+        {
+            if (!string.IsNullOrEmpty(alias))
             {
-                _cachedAliases.TryGetValue(alias, out AssemblyName? result);
-                return result;
-            }
-
-            public void PushAlias(string? alias, AssemblyName name)
-            {
-                if (!string.IsNullOrEmpty(alias))
-                {
-                    _cachedAliases[alias] = name;
-                }
+                _cachedAliases[alias] = name;
             }
         }
     }

@@ -4,34 +4,33 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolTip
 {
-    public partial class ToolTip
+    private partial class TipInfo
     {
-        private partial class TipInfo
+        private readonly string? _designerText;
+        private string? _caption;
+
+        public TipInfo(string caption, Type type)
         {
-            private readonly string? _designerText;
-            private string? _caption;
-
-            public TipInfo(string caption, Type type)
+            _caption = caption;
+            TipType = type;
+            if (type == Type.Auto)
             {
-                _caption = caption;
-                TipType = type;
-                if (type == Type.Auto)
-                {
-                    _designerText = caption;
-                }
+                _designerText = caption;
             }
-
-            public string? Caption
-            {
-                get => ((TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? _caption : _designerText;
-                set => _caption = value;
-            }
-
-            public Point Position { get; set; }
-
-            public Type TipType { get; set; } = Type.Auto;
         }
+
+        public string? Caption
+        {
+            get => ((TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? _caption : _designerText;
+            set => _caption = value;
+        }
+
+        public Point Position { get; set; }
+
+        public Type TipType { get; set; } = Type.Auto;
     }
 }

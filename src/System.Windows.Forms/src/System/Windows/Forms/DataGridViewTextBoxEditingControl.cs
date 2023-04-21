@@ -5,321 +5,320 @@
 using System.Drawing;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewEditingControl
 {
-    public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewEditingControl
+    private const DataGridViewContentAlignment AnyTop = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.TopRight;
+    private const DataGridViewContentAlignment AnyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
+    private const DataGridViewContentAlignment AnyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
+
+    private DataGridView? _dataGridView;
+    private bool _valueChanged;
+    private bool _repositionOnValueChange;
+    private int _rowIndex;
+
+    public DataGridViewTextBoxEditingControl() : base()
     {
-        private const DataGridViewContentAlignment AnyTop = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.TopRight;
-        private const DataGridViewContentAlignment AnyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
-        private const DataGridViewContentAlignment AnyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
+        TabStop = false;
+    }
 
-        private DataGridView? _dataGridView;
-        private bool _valueChanged;
-        private bool _repositionOnValueChange;
-        private int _rowIndex;
+    protected override AccessibleObject CreateAccessibilityInstance()
+        => new DataGridViewTextBoxEditingControlAccessibleObject(this);
 
-        public DataGridViewTextBoxEditingControl() : base()
+    public virtual DataGridView? EditingControlDataGridView
+    {
+        get
         {
-            TabStop = false;
+            return _dataGridView;
+        }
+        set
+        {
+            _dataGridView = value;
+        }
+    }
+
+    public virtual object EditingControlFormattedValue
+    {
+        get
+        {
+            return GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
+        }
+        set
+        {
+            Text = (string)value;
+        }
+    }
+
+    public virtual int EditingControlRowIndex
+    {
+        get
+        {
+            return _rowIndex;
+        }
+        set
+        {
+            _rowIndex = value;
+        }
+    }
+
+    public virtual bool EditingControlValueChanged
+    {
+        get
+        {
+            return _valueChanged;
+        }
+        set
+        {
+            _valueChanged = value;
+        }
+    }
+
+    public virtual Cursor EditingPanelCursor
+    {
+        get
+        {
+            return Cursors.Default;
+        }
+    }
+
+    public virtual bool RepositionEditingControlOnValueChange
+    {
+        get
+        {
+            return _repositionOnValueChange;
+        }
+    }
+
+    public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
+    {
+        ArgumentNullException.ThrowIfNull(dataGridViewCellStyle);
+
+        Font = dataGridViewCellStyle.Font;
+        if (dataGridViewCellStyle.BackColor.A < 255)
+        {
+            // Our TextBox does not support transparent back colors
+            Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
+            BackColor = opaqueBackColor;
+
+            if (_dataGridView is not null)
+            {
+                _dataGridView.EditingPanel.BackColor = opaqueBackColor;
+            }
+        }
+        else
+        {
+            BackColor = dataGridViewCellStyle.BackColor;
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance()
-            => new DataGridViewTextBoxEditingControlAccessibleObject(this);
-
-        public virtual DataGridView? EditingControlDataGridView
+        ForeColor = dataGridViewCellStyle.ForeColor;
+        if (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True)
         {
-            get
-            {
-                return _dataGridView;
-            }
-            set
-            {
-                _dataGridView = value;
-            }
+            WordWrap = true;
         }
 
-        public virtual object EditingControlFormattedValue
+        TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
+        _repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & AnyTop) == 0);
+    }
+
+    public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
+    {
+        switch (keyData & Keys.KeyCode)
         {
-            get
-            {
-                return GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
-            }
-            set
-            {
-                Text = (string)value;
-            }
-        }
-
-        public virtual int EditingControlRowIndex
-        {
-            get
-            {
-                return _rowIndex;
-            }
-            set
-            {
-                _rowIndex = value;
-            }
-        }
-
-        public virtual bool EditingControlValueChanged
-        {
-            get
-            {
-                return _valueChanged;
-            }
-            set
-            {
-                _valueChanged = value;
-            }
-        }
-
-        public virtual Cursor EditingPanelCursor
-        {
-            get
-            {
-                return Cursors.Default;
-            }
-        }
-
-        public virtual bool RepositionEditingControlOnValueChange
-        {
-            get
-            {
-                return _repositionOnValueChange;
-            }
-        }
-
-        public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
-        {
-            ArgumentNullException.ThrowIfNull(dataGridViewCellStyle);
-
-            Font = dataGridViewCellStyle.Font;
-            if (dataGridViewCellStyle.BackColor.A < 255)
-            {
-                // Our TextBox does not support transparent back colors
-                Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
-                BackColor = opaqueBackColor;
-
-                if (_dataGridView is not null)
+            case Keys.Right:
+                // If the end of the selection is at the end of the string
+                // let the DataGridView treat the key message
+                if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == Text.Length)) ||
+                    (RightToLeft == RightToLeft.Yes && !(SelectionLength == 0 && SelectionStart == 0)))
                 {
-                    _dataGridView.EditingPanel.BackColor = opaqueBackColor;
+                    return true;
                 }
-            }
-            else
-            {
-                BackColor = dataGridViewCellStyle.BackColor;
-            }
 
-            ForeColor = dataGridViewCellStyle.ForeColor;
-            if (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True)
-            {
-                WordWrap = true;
-            }
+                break;
 
-            TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
-            _repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & AnyTop) == 0);
+            case Keys.Left:
+                // If the end of the selection is at the beginning of the string
+                // or if the entire text is selected and we did not start editing
+                // send this character to the dataGridView, else process the key event
+                if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == 0)) ||
+                    (RightToLeft == RightToLeft.Yes && !(SelectionLength == 0 && SelectionStart == Text.Length)))
+                {
+                    return true;
+                }
+
+                break;
+
+            case Keys.Down:
+                // If the end of the selection is on the last line of the text then
+                // send this character to the dataGridView, else process the key event
+                int end = SelectionStart + SelectionLength;
+                if (Text.IndexOf("\r\n", end) != -1)
+                {
+                    return true;
+                }
+
+                break;
+
+            case Keys.Up:
+                // If the end of the selection is on the first line of the text then
+                // send this character to the dataGridView, else process the key event
+                if (!(Text.IndexOf("\r\n") < 0 || SelectionStart + SelectionLength < Text.IndexOf("\r\n")))
+                {
+                    return true;
+                }
+
+                break;
+
+            case Keys.Home:
+            case Keys.End:
+                if (SelectionLength != Text.Length)
+                {
+                    return true;
+                }
+
+                break;
+
+            case Keys.Prior:
+            case Keys.Next:
+                if (_valueChanged)
+                {
+                    return true;
+                }
+
+                break;
+
+            case Keys.Delete:
+                if (SelectionLength > 0 ||
+                    SelectionStart < Text.Length)
+                {
+                    return true;
+                }
+
+                break;
+
+            case Keys.Enter:
+                if ((keyData & (Keys.Control | Keys.Shift | Keys.Alt)) == Keys.Shift && Multiline && AcceptsReturn)
+                {
+                    return true;
+                }
+
+                break;
         }
 
-        public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
+        return !dataGridViewWantsInputKey;
+    }
+
+    public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
+    {
+        return Text;
+    }
+
+    public virtual void PrepareEditingControlForEdit(bool selectAll)
+    {
+        if (selectAll)
         {
-            switch (keyData & Keys.KeyCode)
-            {
-                case Keys.Right:
-                    // If the end of the selection is at the end of the string
-                    // let the DataGridView treat the key message
-                    if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == Text.Length)) ||
-                        (RightToLeft == RightToLeft.Yes && !(SelectionLength == 0 && SelectionStart == 0)))
-                    {
-                        return true;
-                    }
+            SelectAll();
+        }
+        else
+        {
+            // Do not select all the text, but
+            // position the caret at the end of the text
+            SelectionStart = Text.Length;
+        }
+    }
 
-                    break;
+    private void NotifyDataGridViewOfValueChange()
+    {
+        _valueChanged = true;
+        _dataGridView?.NotifyCurrentCellDirty(true);
+    }
 
-                case Keys.Left:
-                    // If the end of the selection is at the beginning of the string
-                    // or if the entire text is selected and we did not start editing
-                    // send this character to the dataGridView, else process the key event
-                    if ((RightToLeft == RightToLeft.No && !(SelectionLength == 0 && SelectionStart == 0)) ||
-                        (RightToLeft == RightToLeft.Yes && !(SelectionLength == 0 && SelectionStart == Text.Length)))
-                    {
-                        return true;
-                    }
+    protected override void OnMouseWheel(MouseEventArgs e)
+    {
+        // Forwarding to grid control. Can't prevent the TextBox from handling the mouse wheel as expected.
+        _dataGridView?.OnMouseWheelInternal(e);
+    }
 
-                    break;
+    protected override void OnTextChanged(EventArgs e)
+    {
+        base.OnTextChanged(e);
 
-                case Keys.Down:
-                    // If the end of the selection is on the last line of the text then
-                    // send this character to the dataGridView, else process the key event
-                    int end = SelectionStart + SelectionLength;
-                    if (Text.IndexOf("\r\n", end) != -1)
-                    {
-                        return true;
-                    }
+        // Let the DataGridView know about the value change
+        NotifyDataGridViewOfValueChange();
+    }
 
-                    break;
+    protected override bool ProcessKeyEventArgs(ref Message m)
+    {
+        switch ((Keys)(nint)m.WParamInternal)
+        {
+            case Keys.Enter:
+                if (m.MsgInternal == User32.WM.CHAR
+                    && !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
+                {
+                    // Ignore the Enter key and don't add it to the textbox content. This happens when failing
+                    // validation brings up a dialog box for example. Shift-Enter for multiline textboxes need to
+                    // be accepted however.
+                    return true;
+                }
 
-                case Keys.Up:
-                    // If the end of the selection is on the first line of the text then
-                    // send this character to the dataGridView, else process the key event
-                    if (!(Text.IndexOf("\r\n") < 0 || SelectionStart + SelectionLength < Text.IndexOf("\r\n")))
-                    {
-                        return true;
-                    }
+                break;
 
-                    break;
+            case Keys.LineFeed:
+                if (m.MsgInternal == User32.WM.CHAR && ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
+                {
+                    // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
+                    return true;
+                }
 
-                case Keys.Home:
-                case Keys.End:
-                    if (SelectionLength != Text.Length)
-                    {
-                        return true;
-                    }
+                break;
 
-                    break;
+            case Keys.A:
+                if (m.MsgInternal == User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
+                {
+                    SelectAll();
+                    return true;
+                }
 
-                case Keys.Prior:
-                case Keys.Next:
-                    if (_valueChanged)
-                    {
-                        return true;
-                    }
-
-                    break;
-
-                case Keys.Delete:
-                    if (SelectionLength > 0 ||
-                        SelectionStart < Text.Length)
-                    {
-                        return true;
-                    }
-
-                    break;
-
-                case Keys.Enter:
-                    if ((keyData & (Keys.Control | Keys.Shift | Keys.Alt)) == Keys.Shift && Multiline && AcceptsReturn)
-                    {
-                        return true;
-                    }
-
-                    break;
-            }
-
-            return !dataGridViewWantsInputKey;
+                break;
         }
 
-        public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
+        return base.ProcessKeyEventArgs(ref m);
+    }
+
+    internal override void ReleaseUiaProvider(HWND handle)
+    {
+        if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
         {
-            return Text;
+            ((DataGridViewTextBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
         }
 
-        public virtual void PrepareEditingControlForEdit(bool selectAll)
+        base.ReleaseUiaProvider(handle);
+    }
+
+    private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align)
+    {
+        if ((align & AnyRight) != 0)
         {
-            if (selectAll)
-            {
-                SelectAll();
-            }
-            else
-            {
-                // Do not select all the text, but
-                // position the caret at the end of the text
-                SelectionStart = Text.Length;
-            }
+            return HorizontalAlignment.Right;
         }
-
-        private void NotifyDataGridViewOfValueChange()
+        else if ((align & AnyCenter) != 0)
         {
-            _valueChanged = true;
-            _dataGridView?.NotifyCurrentCellDirty(true);
+            return HorizontalAlignment.Center;
         }
-
-        protected override void OnMouseWheel(MouseEventArgs e)
+        else
         {
-            // Forwarding to grid control. Can't prevent the TextBox from handling the mouse wheel as expected.
-            _dataGridView?.OnMouseWheelInternal(e);
+            return HorizontalAlignment.Left;
         }
+    }
 
-        protected override void OnTextChanged(EventArgs e)
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+
+        // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+        if (IsHandleCreated && _dataGridView?.IsAccessibilityObjectCreated == true)
         {
-            base.OnTextChanged(e);
-
-            // Let the DataGridView know about the value change
-            NotifyDataGridViewOfValueChange();
-        }
-
-        protected override bool ProcessKeyEventArgs(ref Message m)
-        {
-            switch ((Keys)(nint)m.WParamInternal)
-            {
-                case Keys.Enter:
-                    if (m.MsgInternal == User32.WM.CHAR
-                        && !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
-                    {
-                        // Ignore the Enter key and don't add it to the textbox content. This happens when failing
-                        // validation brings up a dialog box for example. Shift-Enter for multiline textboxes need to
-                        // be accepted however.
-                        return true;
-                    }
-
-                    break;
-
-                case Keys.LineFeed:
-                    if (m.MsgInternal == User32.WM.CHAR && ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
-                    {
-                        // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
-                        return true;
-                    }
-
-                    break;
-
-                case Keys.A:
-                    if (m.MsgInternal == User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
-                    {
-                        SelectAll();
-                        return true;
-                    }
-
-                    break;
-            }
-
-            return base.ProcessKeyEventArgs(ref m);
-        }
-
-        internal override void ReleaseUiaProvider(HWND handle)
-        {
-            if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
-            {
-                ((DataGridViewTextBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
-            }
-
-            base.ReleaseUiaProvider(handle);
-        }
-
-        private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align)
-        {
-            if ((align & AnyRight) != 0)
-            {
-                return HorizontalAlignment.Right;
-            }
-            else if ((align & AnyCenter) != 0)
-            {
-                return HorizontalAlignment.Center;
-            }
-            else
-            {
-                return HorizontalAlignment.Left;
-            }
-        }
-
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-
-            // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
-            if (IsHandleCreated && _dataGridView?.IsAccessibilityObjectCreated == true)
-            {
-                _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
-            }
+            _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
         }
     }
 }

@@ -4,18 +4,17 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
-{
-    internal partial class PropertyStore
-    {
-        private sealed class SizeWrapper
-        {
-            public Size Size;
+namespace System.Windows.Forms;
 
-            public SizeWrapper(Size size)
-            {
-                Size = size;
-            }
+internal partial class PropertyStore
+{
+    private sealed class SizeWrapper
+    {
+        public Size Size;
+
+        public SizeWrapper(Size size)
+        {
+            Size = size;
         }
     }
 }

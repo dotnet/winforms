@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal sealed partial class FontCache
 {
-    internal sealed partial class FontCache
+    private sealed class FontCacheEntry : CacheEntry
     {
-        private sealed class FontCacheEntry : CacheEntry
-        {
-            public FontCacheEntry(Data data, bool tracked) : base(data, tracked) { }
-            public override HFONT Object => Data.HFONT;
-        }
+        public FontCacheEntry(Data data, bool tracked) : base(data, tracked) { }
+        public override HFONT Object => Data.HFONT;
     }
 }

@@ -4,69 +4,68 @@
 
 using System.Windows.Forms;
 
-namespace Microsoft.VisualBasic.Devices.Tests
+namespace Microsoft.VisualBasic.Devices.Tests;
+
+public class MouseTests
 {
-    public class MouseTests
+    public static bool NoMousePresent => !SystemInformation.MousePresent;
+
+    public static bool NoMouseWheelPresent => NoMousePresent || !SystemInformation.MouseWheelPresent;
+
+    [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent))]
+    public void Mouse_ButtonsSwapped_Get_ReturnsExpected()
     {
-        public static bool NoMousePresent => !SystemInformation.MousePresent;
+        var mouse = new Mouse();
+        Assert.Equal(SystemInformation.MouseButtonsSwapped, mouse.ButtonsSwapped);
+        Assert.Equal(mouse.ButtonsSwapped, mouse.ButtonsSwapped);
+    }
 
-        public static bool NoMouseWheelPresent => NoMousePresent || !SystemInformation.MouseWheelPresent;
-
-        [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent))]
-        public void Mouse_ButtonsSwapped_Get_ReturnsExpected()
+    [ConditionalFact(nameof(NoMousePresent))]
+    public void Mouse_ButtonsSwapped_GetNoMousePresent_ThrowsInvalidOperationException()
+    {
+        if (NoMousePresent)
         {
             var mouse = new Mouse();
-            Assert.Equal(SystemInformation.MouseButtonsSwapped, mouse.ButtonsSwapped);
-            Assert.Equal(mouse.ButtonsSwapped, mouse.ButtonsSwapped);
+            Assert.Throws<InvalidOperationException>(() => mouse.ButtonsSwapped);
         }
+    }
 
-        [ConditionalFact(nameof(NoMousePresent))]
-        public void Mouse_ButtonsSwapped_GetNoMousePresent_ThrowsInvalidOperationException()
-        {
-            if (NoMousePresent)
-            {
-                var mouse = new Mouse();
-                Assert.Throws<InvalidOperationException>(() => mouse.ButtonsSwapped);
-            }
-        }
+    [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent))]
+    public void Mouse_WheelExists_Get_ReturnsExpected()
+    {
+        var mouse = new Mouse();
+        Assert.Equal(SystemInformation.MouseWheelPresent, mouse.WheelExists);
+        Assert.Equal(mouse.WheelExists, mouse.WheelExists);
+    }
 
-        [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent))]
-        public void Mouse_WheelExists_Get_ReturnsExpected()
+    [ConditionalFact(nameof(NoMousePresent))]
+    public void Mouse_WheelExists_GetNoMousePresent_ThrowsInvalidOperationException()
+    {
+        if (NoMousePresent)
         {
             var mouse = new Mouse();
-            Assert.Equal(SystemInformation.MouseWheelPresent, mouse.WheelExists);
-            Assert.Equal(mouse.WheelExists, mouse.WheelExists);
+            Assert.Throws<InvalidOperationException>(() => mouse.WheelExists);
         }
+    }
 
-        [ConditionalFact(nameof(NoMousePresent))]
-        public void Mouse_WheelExists_GetNoMousePresent_ThrowsInvalidOperationException()
+    [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent), nameof(SystemInformation.MouseWheelPresent))]
+    public void Mouse_WheelScrollLines_Get_ReturnsExpected()
+    {
+        if (SystemInformation.MouseWheelPresent)
         {
-            if (NoMousePresent)
-            {
-                var mouse = new Mouse();
-                Assert.Throws<InvalidOperationException>(() => mouse.WheelExists);
-            }
+            var mouse = new Mouse();
+            Assert.Equal(SystemInformation.MouseWheelScrollLines, mouse.WheelScrollLines);
+            Assert.Equal(mouse.WheelScrollLines, mouse.WheelScrollLines);
         }
+    }
 
-        [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent), nameof(SystemInformation.MouseWheelPresent))]
-        public void Mouse_WheelScrollLines_Get_ReturnsExpected()
+    [ConditionalFact(nameof(NoMouseWheelPresent))]
+    public void Mouse_WheelScrollLines_GetNoMouseWheelPresent_ThrowsInvalidOperationException()
+    {
+        if (NoMouseWheelPresent)
         {
-            if (SystemInformation.MouseWheelPresent)
-            {
-                var mouse = new Mouse();
-                Assert.Equal(SystemInformation.MouseWheelScrollLines, mouse.WheelScrollLines);
-                Assert.Equal(mouse.WheelScrollLines, mouse.WheelScrollLines);
-            }
-        }
-
-        [ConditionalFact(nameof(NoMouseWheelPresent))]
-        public void Mouse_WheelScrollLines_GetNoMouseWheelPresent_ThrowsInvalidOperationException()
-        {
-            if (NoMouseWheelPresent)
-            {
-                var mouse = new Mouse();
-                Assert.Throws<InvalidOperationException>(() => mouse.WheelScrollLines);
-            }
+            var mouse = new Mouse();
+            Assert.Throws<InvalidOperationException>(() => mouse.WheelScrollLines);
         }
     }
 }

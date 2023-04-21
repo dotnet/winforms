@@ -4,21 +4,20 @@
 
 using System.Windows.Forms;
 
-namespace System.ComponentModel.Design
-{
-    public abstract partial class ObjectSelectorEditor
-    {
-        public class SelectorNode : TreeNode
-        {
-            public object? value;
+namespace System.ComponentModel.Design;
 
-            /// <summary>
-            ///  Sets label and value to given.
-            /// </summary>
-            public SelectorNode(string label, object? value) : base(label)
-            {
-                this.value = value;
-            }
+public abstract partial class ObjectSelectorEditor
+{
+    public class SelectorNode : TreeNode
+    {
+        public object? value;
+
+        /// <summary>
+        ///  Sets label and value to given.
+        /// </summary>
+        public SelectorNode(string label, object? value) : base(label)
+        {
+            this.value = value;
         }
     }
 }

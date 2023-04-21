@@ -2,124 +2,123 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ToolStripItemCollectionTests
 {
-    public class ToolStripItemCollectionTests
+    [WinFormsTheory]
+    [InlineData("name2")]
+    [InlineData("NAME2")]
+    public void ToolStripItemCollection_Find_InvokeKeyExists_ReturnsExpected(string key)
     {
-        [WinFormsTheory]
-        [InlineData("name2")]
-        [InlineData("NAME2")]
-        public void ToolStripItemCollection_Find_InvokeKeyExists_ReturnsExpected(string key)
+        using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+
+        var child1 = new ToolStripMenuItem
         {
-            using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
-
-            var child1 = new ToolStripMenuItem
-            {
-                Name = "name1"
-            };
-            var child2 = new ToolStripMenuItem
-            {
-                Name = "name2"
-            };
-            var child3 = new ToolStripMenuItem
-            {
-                Name = "name2"
-            };
-
-            var grandchild1 = new ToolStripMenuItem
-            {
-                Name = "name1"
-            };
-            var grandchild2 = new ToolStripMenuItem
-            {
-                Name = "name2"
-            };
-            var grandchild3 = new ToolStripMenuItem
-            {
-                Name = "name2"
-            };
-            child3.DropDownItems.Add(grandchild1);
-            child3.DropDownItems.Add(grandchild2);
-            child3.DropDownItems.Add(grandchild3);
-            ToolStripItemCollection collection = toolStrip.DropDownItems;
-            collection.Add(child1);
-            collection.Add(child2);
-            collection.Add(child3);
-
-            // Search all children.
-            Assert.Equal(new ToolStripMenuItem[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
-
-            // Call again.
-            Assert.Equal(new ToolStripMenuItem[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
-
-            // Don't search all children.
-            Assert.Equal(new ToolStripMenuItem[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
-
-            // Call again.
-            Assert.Equal(new ToolStripMenuItem[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
-        }
-
-        [WinFormsTheory]
-        [InlineData("NoSuchName")]
-        [InlineData("abcd")]
-        [InlineData("abcde")]
-        [InlineData("abcdef")]
-        public void ToolStripItemCollection_Find_InvokeNoSuchKey_ReturnsEmpty(string key)
+            Name = "name1"
+        };
+        var child2 = new ToolStripMenuItem
         {
-            using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
-
-            var child1 = new ToolStripMenuItem()
-            {
-                Name = "name1"
-            };
-            var child2 = new ToolStripMenuItem()
-            {
-                Name = "name2"
-            };
-            var child3 = new ToolStripMenuItem()
-            {
-                Name = "name2"
-            };
-            var collection = toolStrip.DropDown.DisplayedItems;
-            collection.Add(child1);
-            collection.Add(child2);
-            collection.Add(child3);
-
-            Assert.Empty(collection.Find(key, searchAllChildren: true));
-            Assert.Empty(collection.Find(key, searchAllChildren: false));
-        }
-
-        [WinFormsTheory]
-        [NullAndEmptyStringData]
-        public void ToolStripItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
+            Name = "name2"
+        };
+        var child3 = new ToolStripMenuItem
         {
-            using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
-            var collection = toolStrip.DropDown.DisplayedItems;
-            Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
-            Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
-        }
+            Name = "name2"
+        };
 
-        [WinFormsFact]
-        public void ToolStripItemCollection_AddRange_ToolStripItemCollection_Success()
+        var grandchild1 = new ToolStripMenuItem
         {
-            using var contextMenuStrip = new ContextMenuStrip();
-            using var toolStripDropDownButton = new ToolStripDropDownButton();
+            Name = "name1"
+        };
+        var grandchild2 = new ToolStripMenuItem
+        {
+            Name = "name2"
+        };
+        var grandchild3 = new ToolStripMenuItem
+        {
+            Name = "name2"
+        };
+        child3.DropDownItems.Add(grandchild1);
+        child3.DropDownItems.Add(grandchild2);
+        child3.DropDownItems.Add(grandchild3);
+        ToolStripItemCollection collection = toolStrip.DropDownItems;
+        collection.Add(child1);
+        collection.Add(child2);
+        collection.Add(child3);
 
-            // Add 0 items.
-            contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
-            Assert.Equal(0, contextMenuStrip.Items.Count);
+        // Search all children.
+        Assert.Equal(new ToolStripMenuItem[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
 
-            // Add 3 items.
-            toolStripDropDownButton.DropDownItems.Add("a");
-            toolStripDropDownButton.DropDownItems.Add("b");
-            toolStripDropDownButton.DropDownItems.Add("c");
-            contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
-            Assert.Equal(3, contextMenuStrip.Items.Count);
+        // Call again.
+        Assert.Equal(new ToolStripMenuItem[] { child2, child3, grandchild2, grandchild3 }, collection.Find(key, searchAllChildren: true));
 
-            // Validate order.
-            Assert.Equal("a", contextMenuStrip.Items[0].Text);
-            Assert.Equal("b", contextMenuStrip.Items[1].Text);
-            Assert.Equal("c", contextMenuStrip.Items[2].Text);
-        }
+        // Don't search all children.
+        Assert.Equal(new ToolStripMenuItem[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
+
+        // Call again.
+        Assert.Equal(new ToolStripMenuItem[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
+    }
+
+    [WinFormsTheory]
+    [InlineData("NoSuchName")]
+    [InlineData("abcd")]
+    [InlineData("abcde")]
+    [InlineData("abcdef")]
+    public void ToolStripItemCollection_Find_InvokeNoSuchKey_ReturnsEmpty(string key)
+    {
+        using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+
+        var child1 = new ToolStripMenuItem()
+        {
+            Name = "name1"
+        };
+        var child2 = new ToolStripMenuItem()
+        {
+            Name = "name2"
+        };
+        var child3 = new ToolStripMenuItem()
+        {
+            Name = "name2"
+        };
+        var collection = toolStrip.DropDown.DisplayedItems;
+        collection.Add(child1);
+        collection.Add(child2);
+        collection.Add(child3);
+
+        Assert.Empty(collection.Find(key, searchAllChildren: true));
+        Assert.Empty(collection.Find(key, searchAllChildren: false));
+    }
+
+    [WinFormsTheory]
+    [NullAndEmptyStringData]
+    public void ToolStripItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
+    {
+        using ToolStripMenuItem toolStrip = new ToolStripMenuItem();
+        var collection = toolStrip.DropDown.DisplayedItems;
+        Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
+        Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
+    }
+
+    [WinFormsFact]
+    public void ToolStripItemCollection_AddRange_ToolStripItemCollection_Success()
+    {
+        using var contextMenuStrip = new ContextMenuStrip();
+        using var toolStripDropDownButton = new ToolStripDropDownButton();
+
+        // Add 0 items.
+        contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+        Assert.Equal(0, contextMenuStrip.Items.Count);
+
+        // Add 3 items.
+        toolStripDropDownButton.DropDownItems.Add("a");
+        toolStripDropDownButton.DropDownItems.Add("b");
+        toolStripDropDownButton.DropDownItems.Add("c");
+        contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+        Assert.Equal(3, contextMenuStrip.Items.Count);
+
+        // Validate order.
+        Assert.Equal("a", contextMenuStrip.Items[0].Text);
+        Assert.Equal("b", contextMenuStrip.Items[1].Text);
+        Assert.Equal("c", contextMenuStrip.Items[2].Text);
     }
 }

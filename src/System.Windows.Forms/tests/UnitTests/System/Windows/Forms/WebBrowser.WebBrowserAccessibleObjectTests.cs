@@ -5,48 +5,47 @@
 using static System.Windows.Forms.WebBrowser;
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class WebBrowser_WebBrowserAccessibleObjectTests
 {
-    public class WebBrowser_WebBrowserAccessibleObjectTests
+    [WinFormsFact]
+    public void WebBrowserAccessibleObject_Ctor_Default()
     {
-        [WinFormsFact]
-        public void WebBrowserAccessibleObject_Ctor_Default()
+        using WebBrowser webBrowser = new();
+        WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
+
+        Assert.Equal(webBrowser, accessibleObject.Owner);
+        Assert.False(webBrowser.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData((int)UIA.NamePropertyId, "TestName")]
+    [InlineData((int)UIA.AutomationIdPropertyId, "ToolStripContainer1")]
+    public void WebBrowserAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    {
+        using WebBrowser webBrowser = new WebBrowser
         {
-            using WebBrowser webBrowser = new();
-            WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
+            Name = expected.ToString(),
+            AccessibleName = expected.ToString()
+        };
 
-            Assert.Equal(webBrowser, accessibleObject.Owner);
-            Assert.False(webBrowser.IsHandleCreated);
-        }
+        WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
+        object value = accessibleObject.GetPropertyValue((UIA)propertyID);
 
-        [WinFormsTheory]
-        [InlineData((int)UIA.NamePropertyId, "TestName")]
-        [InlineData((int)UIA.AutomationIdPropertyId, "ToolStripContainer1")]
-        public void WebBrowserAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
-        {
-            using WebBrowser webBrowser = new WebBrowser
-            {
-                Name = expected.ToString(),
-                AccessibleName = expected.ToString()
-            };
+        Assert.Equal(expected, value);
+        Assert.False(webBrowser.IsHandleCreated);
+    }
 
-            WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
-            object value = accessibleObject.GetPropertyValue((UIA)propertyID);
+    [WinFormsFact]
+    public void WebBrowserAccessibleObject_GetPropertyValue_HasKeyboardFocus_ReturnsFalse_IfControlHasNoFocus()
+    {
+        using WebBrowser webBrowser = new();
 
-            Assert.Equal(expected, value);
-            Assert.False(webBrowser.IsHandleCreated);
-        }
+        WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
 
-        [WinFormsFact]
-        public void WebBrowserAccessibleObject_GetPropertyValue_HasKeyboardFocus_ReturnsFalse_IfControlHasNoFocus()
-        {
-            using WebBrowser webBrowser = new();
-
-            WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
-            bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
-
-            Assert.False(value);
-            Assert.False(webBrowser.IsHandleCreated);
-        }
+        Assert.False(value);
+        Assert.False(webBrowser.IsHandleCreated);
     }
 }

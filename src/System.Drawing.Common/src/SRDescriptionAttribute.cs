@@ -3,28 +3,27 @@
 
 using System.ComponentModel;
 
-namespace System.Drawing
+namespace System.Drawing;
+
+[AttributeUsage(AttributeTargets.All)]
+internal sealed class SRDescriptionAttribute : DescriptionAttribute
 {
-    [AttributeUsage(AttributeTargets.All)]
-    internal sealed class SRDescriptionAttribute : DescriptionAttribute
+    private bool _replaced;
+
+    public override string Description
     {
-        private bool _replaced;
-
-        public override string Description
+        get
         {
-            get
+            if (!_replaced)
             {
-                if (!_replaced)
-                {
-                    _replaced = true;
-                    DescriptionValue = SR.Format(base.Description);
-                }
-                return base.Description;
+                _replaced = true;
+                DescriptionValue = SR.Format(base.Description);
             }
+            return base.Description;
         }
+    }
 
-        public SRDescriptionAttribute(string description) : base(description)
-        {
-        }
+    public SRDescriptionAttribute(string description) : base(description)
+    {
     }
 }

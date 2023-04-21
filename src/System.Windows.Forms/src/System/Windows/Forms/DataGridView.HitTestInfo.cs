@@ -4,121 +4,120 @@
 
 #nullable disable
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridView
 {
-    public partial class DataGridView
+    public sealed class HitTestInfo
     {
-        public sealed class HitTestInfo
+        internal DataGridViewHitTestType _type = DataGridViewHitTestType.None;
+        internal DataGridViewHitTestTypeInternal _typeInternal = DataGridViewHitTestTypeInternal.None;
+        internal int _row;
+        internal int _col;
+        internal int _adjacentRow;
+        internal int _adjacentCol;
+        internal int _mouseBarOffset;
+        internal int _rowStart;
+        internal int _colStart;
+
+        /// <summary>
+        ///  Allows the <see cref="HitTestInfo"/> object to inform you the extent of the grid.
+        /// </summary>
+        public static readonly HitTestInfo Nowhere = new HitTestInfo();
+
+        internal HitTestInfo()
         {
-            internal DataGridViewHitTestType _type = DataGridViewHitTestType.None;
-            internal DataGridViewHitTestTypeInternal _typeInternal = DataGridViewHitTestTypeInternal.None;
-            internal int _row;
-            internal int _col;
-            internal int _adjacentRow;
-            internal int _adjacentCol;
-            internal int _mouseBarOffset;
-            internal int _rowStart;
-            internal int _colStart;
+            _type = DataGridViewHitTestType.None;
+            _typeInternal = DataGridViewHitTestTypeInternal.None;
+            //this.edge = DataGridViewHitTestTypeCloseEdge.None;
+            _row = _col = -1;
+            _rowStart = _colStart = -1;
+            _adjacentRow = _adjacentCol = -1;
+        }
 
-            /// <summary>
-            ///  Allows the <see cref="HitTestInfo"/> object to inform you the extent of the grid.
-            /// </summary>
-            public static readonly HitTestInfo Nowhere = new HitTestInfo();
-
-            internal HitTestInfo()
+        /// <summary>
+        ///  Gets the number of the clicked column.
+        /// </summary>
+        public int ColumnIndex
+        {
+            get
             {
-                _type = DataGridViewHitTestType.None;
-                _typeInternal = DataGridViewHitTestTypeInternal.None;
-                //this.edge = DataGridViewHitTestTypeCloseEdge.None;
-                _row = _col = -1;
-                _rowStart = _colStart = -1;
-                _adjacentRow = _adjacentCol = -1;
+                return _col;
+            }
+        }
+
+        /// <summary>
+        ///  Gets the
+        ///  number of the clicked row.
+        /// </summary>
+        public int RowIndex
+        {
+            get
+            {
+                return _row;
+            }
+        }
+
+        /// <summary>
+        ///  Gets the left edge of the column.
+        /// </summary>
+        public int ColumnX
+        {
+            get
+            {
+                return _colStart;
+            }
+        }
+
+        /// <summary>
+        ///  Gets the top edge of the row.
+        /// </summary>
+        public int RowY
+        {
+            get
+            {
+                return _rowStart;
+            }
+        }
+
+        /// <summary>
+        ///  Gets the part of the <see cref="DataGridView"/> control, other than the row or column, that was
+        ///  clicked.
+        /// </summary>
+        public DataGridViewHitTestType Type
+        {
+            get
+            {
+                return _type;
+            }
+        }
+
+        /// <summary>
+        ///  Indicates whether two objects are identical.
+        /// </summary>
+        public override bool Equals(object value)
+        {
+            if (value is HitTestInfo hti)
+            {
+                return (_type == hti._type &&
+                        _row == hti._row &&
+                        _col == hti._col);
             }
 
-            /// <summary>
-            ///  Gets the number of the clicked column.
-            /// </summary>
-            public int ColumnIndex
-            {
-                get
-                {
-                    return _col;
-                }
-            }
+            return false;
+        }
 
-            /// <summary>
-            ///  Gets the
-            ///  number of the clicked row.
-            /// </summary>
-            public int RowIndex
-            {
-                get
-                {
-                    return _row;
-                }
-            }
+        /// <summary>
+        ///  Gets the hash code for the <see cref="HitTestInfo"/> instance.
+        /// </summary>
+        public override int GetHashCode() => HashCode.Combine(_type, _row, _col);
 
-            /// <summary>
-            ///  Gets the left edge of the column.
-            /// </summary>
-            public int ColumnX
-            {
-                get
-                {
-                    return _colStart;
-                }
-            }
-
-            /// <summary>
-            ///  Gets the top edge of the row.
-            /// </summary>
-            public int RowY
-            {
-                get
-                {
-                    return _rowStart;
-                }
-            }
-
-            /// <summary>
-            ///  Gets the part of the <see cref="DataGridView"/> control, other than the row or column, that was
-            ///  clicked.
-            /// </summary>
-            public DataGridViewHitTestType Type
-            {
-                get
-                {
-                    return _type;
-                }
-            }
-
-            /// <summary>
-            ///  Indicates whether two objects are identical.
-            /// </summary>
-            public override bool Equals(object value)
-            {
-                if (value is HitTestInfo hti)
-                {
-                    return (_type == hti._type &&
-                            _row == hti._row &&
-                            _col == hti._col);
-                }
-
-                return false;
-            }
-
-            /// <summary>
-            ///  Gets the hash code for the <see cref="HitTestInfo"/> instance.
-            /// </summary>
-            public override int GetHashCode() => HashCode.Combine(_type, _row, _col);
-
-            /// <summary>
-            ///  Gets the type, column number and row number.
-            /// </summary>
-            public override string ToString()
-            {
-                return $"{{ Type:{_type}, Column:{_col}, Row:{_row} }}";
-            }
+        /// <summary>
+        ///  Gets the type, column number and row number.
+        /// </summary>
+        public override string ToString()
+        {
+            return $"{{ Type:{_type}, Column:{_col}, Row:{_row} }}";
         }
     }
 }

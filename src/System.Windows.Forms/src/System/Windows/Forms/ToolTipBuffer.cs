@@ -2,35 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal struct ToolTipBuffer
 {
-    internal struct ToolTipBuffer
+    private char[]? _buffer;
+
+    public unsafe IntPtr Buffer
     {
-        private char[]? _buffer;
-
-        public unsafe IntPtr Buffer
+        get
         {
-            get
+            fixed (char* c = _buffer)
             {
-                fixed (char* c = _buffer)
-                {
-                    return (IntPtr)c;
-                }
+                return (IntPtr)c;
             }
         }
+    }
 
-        public void SetText(string? text)
+    public void SetText(string? text)
+    {
+        text ??= string.Empty;
+
+        if (_buffer is null || _buffer.Length < text.Length + 1)
         {
-            text ??= string.Empty;
-
-            if (_buffer is null || _buffer.Length < text.Length + 1)
-            {
-                _buffer = GC.AllocateUninitializedArray<char>(text.Length + 1, pinned: true);
-            }
-
-            // Copy the string to the allocated memory.
-            text.AsSpan().CopyTo(_buffer);
-            _buffer[text.Length] = '\0';
+            _buffer = GC.AllocateUninitializedArray<char>(text.Length + 1, pinned: true);
         }
+
+        // Copy the string to the allocated memory.
+        text.AsSpan().CopyTo(_buffer);
+        _buffer[text.Length] = '\0';
     }
 }

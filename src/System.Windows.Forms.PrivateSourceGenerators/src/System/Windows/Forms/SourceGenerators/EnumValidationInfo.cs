@@ -2,34 +2,33 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.PrivateSourceGenerators
+namespace System.Windows.Forms.PrivateSourceGenerators;
+
+internal sealed class EnumValidationInfo
 {
-    internal sealed class EnumValidationInfo
+    public ITypeSymbol EnumType { get; }
+    public List<int> Values { get; }
+    public bool IsFlags { get; }
+
+    public EnumValidationInfo(ITypeSymbol enumType, bool isFlags)
     {
-        public ITypeSymbol EnumType { get; }
-        public List<int> Values { get; }
-        public bool IsFlags { get; }
+        EnumType = enumType;
+        IsFlags = isFlags;
+        Values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToList();
+    }
 
-        public EnumValidationInfo(ITypeSymbol enumType, bool isFlags)
+    private static IEnumerable<int> GetElementValues(ITypeSymbol enumType)
+    {
+        foreach (ISymbol member in enumType.GetMembers())
         {
-            EnumType = enumType;
-            IsFlags = isFlags;
-            Values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToList();
-        }
-
-        private static IEnumerable<int> GetElementValues(ITypeSymbol enumType)
-        {
-            foreach (ISymbol member in enumType.GetMembers())
-            {
-                if (member is IFieldSymbol
-                    {
-                        IsStatic: true,
-                        IsConst: true,
-                        ConstantValue: int value
-                    })
+            if (member is IFieldSymbol
                 {
-                    yield return value;
-                }
+                    IsStatic: true,
+                    IsConst: true,
+                    ConstantValue: int value
+                })
+            {
+                yield return value;
             }
         }
     }

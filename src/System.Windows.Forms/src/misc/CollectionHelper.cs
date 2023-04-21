@@ -2,67 +2,66 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Collections.Generic
+namespace System.Collections.Generic;
+
+/// <summary>
+///  Helpers for working with non generic collections.
+/// </summary>
+internal static class CollectionHelper
 {
     /// <summary>
-    ///  Helpers for working with non generic collections.
+    ///  Copies to arrays matching `HashTable.CopyTo`'s behavior.
     /// </summary>
-    internal static class CollectionHelper
+    public static void HashtableCopyTo<TKey, TValue>(this IDictionary<TKey, TValue> source, Array target, int index)
     {
-        /// <summary>
-        ///  Copies to arrays matching `HashTable.CopyTo`'s behavior.
-        /// </summary>
-        public static void HashtableCopyTo<TKey, TValue>(this IDictionary<TKey, TValue> source, Array target, int index)
+        ArgumentNullException.ThrowIfNull(target);
+
+        if (target.Rank != 1)
+            throw new ArgumentException(SR.Arg_RankMultiDimNotSupported, nameof(target));
+        if (index < 0 || (uint)index > (uint)target.Length)
+            throw new ArgumentOutOfRangeException(nameof(index), SR.ArgumentOutOfRange_NeedNonNegNum);
+        if (target.GetLowerBound(0) != 0)
+            throw new ArgumentException(SR.Arg_NonZeroLowerBound, nameof(target));
+        if (target.Length - index < source.Count)
+            throw new ArgumentException(SR.Arg_ArrayPlusOffTooSmall);
+
+        if (target is KeyValuePair<TKey, TValue>[] pairsTarget)
         {
-            ArgumentNullException.ThrowIfNull(target);
-
-            if (target.Rank != 1)
-                throw new ArgumentException(SR.Arg_RankMultiDimNotSupported, nameof(target));
-            if (index < 0 || (uint)index > (uint)target.Length)
-                throw new ArgumentOutOfRangeException(nameof(index), SR.ArgumentOutOfRange_NeedNonNegNum);
-            if (target.GetLowerBound(0) != 0)
-                throw new ArgumentException(SR.Arg_NonZeroLowerBound, nameof(target));
-            if (target.Length - index < source.Count)
-                throw new ArgumentException(SR.Arg_ArrayPlusOffTooSmall);
-
-            if (target is KeyValuePair<TKey, TValue>[] pairsTarget)
+            foreach (KeyValuePair<TKey, TValue> kvp in source)
             {
-                foreach (KeyValuePair<TKey, TValue> kvp in source)
+                pairsTarget[index++] = kvp;
+            }
+        }
+        else if (target is DictionaryEntry[] dictionaryTarget)
+        {
+            foreach (KeyValuePair<TKey, TValue> kvp in source)
+            {
+                if (kvp.Key is not null)
                 {
-                    pairsTarget[index++] = kvp;
+                    dictionaryTarget[index++] = new DictionaryEntry(kvp.Key, kvp.Value);
                 }
             }
-            else if (target is DictionaryEntry[] dictionaryTarget)
+        }
+        else
+        {
+            if (target is not object[] objects)
+            {
+                throw new ArgumentException(SR.Argument_IncompatibleArrayType);
+            }
+
+            try
             {
                 foreach (KeyValuePair<TKey, TValue> kvp in source)
                 {
                     if (kvp.Key is not null)
                     {
-                        dictionaryTarget[index++] = new DictionaryEntry(kvp.Key, kvp.Value);
+                        objects[index++] = new DictionaryEntry(kvp.Key, kvp.Value);
                     }
                 }
             }
-            else
+            catch (ArrayTypeMismatchException)
             {
-                if (target is not object[] objects)
-                {
-                    throw new ArgumentException(SR.Argument_IncompatibleArrayType);
-                }
-
-                try
-                {
-                    foreach (KeyValuePair<TKey, TValue> kvp in source)
-                    {
-                        if (kvp.Key is not null)
-                        {
-                            objects[index++] = new DictionaryEntry(kvp.Key, kvp.Value);
-                        }
-                    }
-                }
-                catch (ArrayTypeMismatchException)
-                {
-                    throw new ArgumentException(SR.Argument_IncompatibleArrayType);
-                }
+                throw new ArgumentException(SR.Argument_IncompatibleArrayType);
             }
         }
     }

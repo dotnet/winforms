@@ -4,93 +4,92 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewComboBoxEditingControl
 {
-    public partial class DataGridViewComboBoxEditingControl
+    /// <summary>
+    ///  Defines the DataGridView ComboBox EditingControl accessible object.
+    /// </summary>
+    internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBoxAccessibleObject
     {
+        private readonly DataGridViewComboBoxEditingControl _ownerControl;
+
         /// <summary>
-        ///  Defines the DataGridView ComboBox EditingControl accessible object.
+        ///  The parent is changed when the editing control is attached to another editing cell.
         /// </summary>
-        internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBoxAccessibleObject
+        private AccessibleObject? _parentAccessibleObject;
+
+        public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl)
+            : base(ownerControl)
         {
-            private readonly DataGridViewComboBoxEditingControl _ownerControl;
+            _ownerControl = ownerControl;
+        }
 
-            /// <summary>
-            ///  The parent is changed when the editing control is attached to another editing cell.
-            /// </summary>
-            private AccessibleObject? _parentAccessibleObject;
+        internal void ClearParent()
+        {
+            _parentAccessibleObject = null;
+        }
 
-            public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl)
-                : base(ownerControl)
+        public override AccessibleObject? Parent
+        {
+            get
             {
-                _ownerControl = ownerControl;
+                return _parentAccessibleObject;
+            }
+        }
+
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        {
+            switch (direction)
+            {
+                case UiaCore.NavigateDirection.Parent:
+                    if (Owner is IDataGridViewEditingControl owner
+                        && owner.EditingControlDataGridView?.EditingControl == owner
+                        && Owner.ToolStripControlHost is null)
+                    {
+                        return _parentAccessibleObject;
+                    }
+
+                    break;
             }
 
-            internal void ClearParent()
+            return base.FragmentNavigate(direction);
+        }
+
+        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+        {
+            get
             {
-                _parentAccessibleObject = null;
+                return (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
+            }
+        }
+
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        {
+            if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
+            {
+                return _ownerControl.DropDownStyle != ComboBoxStyle.Simple;
             }
 
-            public override AccessibleObject? Parent
+            return base.IsPatternSupported(patternId);
+        }
+
+        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        {
+            get
             {
-                get
-                {
-                    return _parentAccessibleObject;
-                }
+                return _ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
             }
+        }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.Parent:
-                        if (Owner is IDataGridViewEditingControl owner
-                            && owner.EditingControlDataGridView?.EditingControl == owner
-                            && Owner.ToolStripControlHost is null)
-                        {
-                            return _parentAccessibleObject;
-                        }
-
-                        break;
-                }
-
-                return base.FragmentNavigate(direction);
-            }
-
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-            {
-                get
-                {
-                    return (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
-                }
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
-                {
-                    return _ownerControl.DropDownStyle != ComboBoxStyle.Simple;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override UiaCore.ExpandCollapseState ExpandCollapseState
-            {
-                get
-                {
-                    return _ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-                }
-            }
-
-            /// <summary>
-            ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
-            /// </summary>
-            /// <param name="parent">The parent accessible object.</param>
-            internal override void SetParent(AccessibleObject? parent)
-            {
-                _parentAccessibleObject = parent;
-            }
+        /// <summary>
+        ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
+        /// </summary>
+        /// <param name="parent">The parent accessible object.</param>
+        internal override void SetParent(AccessibleObject? parent)
+        {
+            _parentAccessibleObject = parent;
         }
     }
 }

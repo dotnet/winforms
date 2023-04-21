@@ -6,130 +6,129 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design;
+
+// NOTE: this class should be almost identical to ImageEditor. The main exception is PaintValue, which has logic
+// that should probably be copied into ImageEditor.
+
+/// <summary>
+/// Provides an editor for visually picking an icon.
+/// </summary>
+public class IconEditor : UITypeEditor
 {
-    // NOTE: this class should be almost identical to ImageEditor. The main exception is PaintValue, which has logic
-    // that should probably be copied into ImageEditor.
+    private static readonly List<string> s_iconExtensions = new List<string>() { "ico" };
+    private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
+    private FileDialog? _fileDialog;
 
-    /// <summary>
-    /// Provides an editor for visually picking an icon.
-    /// </summary>
-    public class IconEditor : UITypeEditor
+    protected static string? CreateExtensionsString(string?[]? extensions, string sep)
     {
-        private static readonly List<string> s_iconExtensions = new List<string>() { "ico" };
-        private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
-        private FileDialog? _fileDialog;
-
-        protected static string? CreateExtensionsString(string?[]? extensions, string sep)
+        if (extensions is null || extensions.Length == 0)
         {
-            if (extensions is null || extensions.Length == 0)
-            {
-                return null;
-            }
-
-            string text = string.Empty;
-            for (int i = 0; i < extensions.Length; i++)
-            {
-                if (string.IsNullOrWhiteSpace(extensions[i]))
-                {
-                    continue;
-                }
-
-                text = $"{text}*.{extensions[i]}";
-                if (i < extensions.Length - 1)
-                {
-                    text += sep;
-                }
-            }
-
-            return text;
+            return null;
         }
 
-        protected static string CreateFilterEntry(IconEditor editor)
+        string text = string.Empty;
+        for (int i = 0; i < extensions.Length; i++)
         {
-            string description = editor.GetFileDialogDescription();
-            string? extensions = CreateExtensionsString(editor.GetExtensions(), ",");
-            string? extensionsWithSemicolons = CreateExtensionsString(editor.GetExtensions(), ";");
-            return $"{description}({extensions})|{extensionsWithSemicolons}";
+            if (string.IsNullOrWhiteSpace(extensions[i]))
+            {
+                continue;
+            }
+
+            text = $"{text}*.{extensions[i]}";
+            if (i < extensions.Length - 1)
+            {
+                text += sep;
+            }
         }
 
-        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+        return text;
+    }
+
+    protected static string CreateFilterEntry(IconEditor editor)
+    {
+        string description = editor.GetFileDialogDescription();
+        string? extensions = CreateExtensionsString(editor.GetExtensions(), ",");
+        string? extensionsWithSemicolons = CreateExtensionsString(editor.GetExtensions(), ";");
+        return $"{description}({extensions})|{extensionsWithSemicolons}";
+    }
+
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+    {
+        // Even though we don't use the editor service this is historically what we did.
+        if (!provider.TryGetService(out IWindowsFormsEditorService? _))
         {
-            // Even though we don't use the editor service this is historically what we did.
-            if (!provider.TryGetService(out IWindowsFormsEditorService? _))
-            {
-                return value;
-            }
-
-            if (_fileDialog is null)
-            {
-                _fileDialog = new OpenFileDialog();
-                var filter = CreateFilterEntry(this);
-
-                Debug.Assert(s_imageExtenders.Length <= 0, "Why does IconEditor have subclasses if Icon doesn't?");
-
-                _fileDialog.Filter = filter;
-            }
-
-            HWND hwndFocus = PInvoke.GetFocus();
-            try
-            {
-                if (_fileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    using FileStream stream = new(_fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    value = LoadFromStream(stream);
-                }
-            }
-            finally
-            {
-                if (!hwndFocus.IsNull)
-                {
-                    PInvoke.SetFocus(hwndFocus);
-                }
-            }
-
             return value;
         }
 
-        /// <summary>
-        /// Retrieves the editing style of the Edit method.  If the method
-        /// is not supported, this will return None.
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
-            => UITypeEditorEditStyle.Modal;
-
-        protected virtual string GetFileDialogDescription() => SR.iconFileDescription;
-
-        protected virtual string[] GetExtensions() => s_iconExtensions.ToArray();
-
-        /// <inheritdoc />
-        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
-
-        protected virtual Icon LoadFromStream(Stream stream) => new(stream);
-
-        /// <inheritdoc />
-        public override void PaintValue(PaintValueEventArgs e)
+        if (_fileDialog is null)
         {
-            if (e?.Value is not Icon icon)
-            {
-                return;
-            }
+            _fileDialog = new OpenFileDialog();
+            var filter = CreateFilterEntry(this);
 
-            // If icon is smaller than rectangle, just center it unscaled in the rectangle.
-            Rectangle rectangle = e.Bounds;
-            if (icon.Width < rectangle.Width)
-            {
-                rectangle.X = (rectangle.Width - icon.Width) / 2;
-                rectangle.Width = icon.Width;
-            }
+            Debug.Assert(s_imageExtenders.Length <= 0, "Why does IconEditor have subclasses if Icon doesn't?");
 
-            if (icon.Height < rectangle.Height)
-            {
-                rectangle.X = (rectangle.Height - icon.Height) / 2;
-                rectangle.Height = icon.Height;
-            }
-
-            e.Graphics.DrawIcon(icon, rectangle);
+            _fileDialog.Filter = filter;
         }
+
+        HWND hwndFocus = PInvoke.GetFocus();
+        try
+        {
+            if (_fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using FileStream stream = new(_fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                value = LoadFromStream(stream);
+            }
+        }
+        finally
+        {
+            if (!hwndFocus.IsNull)
+            {
+                PInvoke.SetFocus(hwndFocus);
+            }
+        }
+
+        return value;
+    }
+
+    /// <summary>
+    /// Retrieves the editing style of the Edit method.  If the method
+    /// is not supported, this will return None.
+    /// </summary>
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
+        => UITypeEditorEditStyle.Modal;
+
+    protected virtual string GetFileDialogDescription() => SR.iconFileDescription;
+
+    protected virtual string[] GetExtensions() => s_iconExtensions.ToArray();
+
+    /// <inheritdoc />
+    public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
+
+    protected virtual Icon LoadFromStream(Stream stream) => new(stream);
+
+    /// <inheritdoc />
+    public override void PaintValue(PaintValueEventArgs e)
+    {
+        if (e?.Value is not Icon icon)
+        {
+            return;
+        }
+
+        // If icon is smaller than rectangle, just center it unscaled in the rectangle.
+        Rectangle rectangle = e.Bounds;
+        if (icon.Width < rectangle.Width)
+        {
+            rectangle.X = (rectangle.Width - icon.Width) / 2;
+            rectangle.Width = icon.Width;
+        }
+
+        if (icon.Height < rectangle.Height)
+        {
+            rectangle.X = (rectangle.Height - icon.Height) / 2;
+            rectangle.Height = icon.Height;
+        }
+
+        e.Graphics.DrawIcon(icon, rectangle);
     }
 }

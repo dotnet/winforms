@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace WinformsControlsTest
+namespace WinformsControlsTest;
+
+public partial class TreeViewTest : Form
 {
-    public partial class TreeViewTest : Form
+    public TreeViewTest()
     {
-        public TreeViewTest()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

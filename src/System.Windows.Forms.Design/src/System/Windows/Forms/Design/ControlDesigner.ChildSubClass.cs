@@ -6,72 +6,71 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+public partial class ControlDesigner
 {
-    public partial class ControlDesigner
+    private class ChildSubClass : NativeWindow, IDesignerTarget
     {
-        private class ChildSubClass : NativeWindow, IDesignerTarget
+        private ControlDesigner _designer;
+
+        // AssignHandle calls NativeWindow::OnHandleChanged, but we do not override it so we should be okay
+        public ChildSubClass(ControlDesigner designer, IntPtr hwnd)
         {
-            private ControlDesigner _designer;
-
-            // AssignHandle calls NativeWindow::OnHandleChanged, but we do not override it so we should be okay
-            public ChildSubClass(ControlDesigner designer, IntPtr hwnd)
+            _designer = designer;
+            if (designer is not null)
             {
-                _designer = designer;
-                if (designer is not null)
-                {
-                    designer.DisposingHandler += new EventHandler(OnDesignerDisposing);
-                }
-
-                AssignHandle(hwnd);
+                designer.DisposingHandler += new EventHandler(OnDesignerDisposing);
             }
 
-            void IDesignerTarget.DefWndProc(ref Message m) => DefWndProc(ref m);
+            AssignHandle(hwnd);
+        }
 
-            public void Dispose() => _designer = null;
+        void IDesignerTarget.DefWndProc(ref Message m) => DefWndProc(ref m);
 
-            private void OnDesignerDisposing(object sender, EventArgs e) => Dispose();
+        public void Dispose() => _designer = null;
 
-            protected override void WndProc(ref Message m)
+        private void OnDesignerDisposing(object sender, EventArgs e) => Dispose();
+
+        protected override void WndProc(ref Message m)
+        {
+            if (_designer is null)
             {
-                if (_designer is null)
-                {
-                    DefWndProc(ref m);
-                    return;
-                }
+                DefWndProc(ref m);
+                return;
+            }
 
-                if (m.MsgInternal == User32.WM.DESTROY)
-                {
-                    _designer.RemoveSubclassedWindow(m.HWnd);
-                }
+            if (m.MsgInternal == User32.WM.DESTROY)
+            {
+                _designer.RemoveSubclassedWindow(m.HWnd);
+            }
 
-                if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)m.WParamInternal.LOWORD == User32.WM.CREATE)
-                {
-                    _designer.HookChildHandles((HWND)(nint)m.LParamInternal); // they will get removed from the collection just above
-                }
+            if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)m.WParamInternal.LOWORD == User32.WM.CREATE)
+            {
+                _designer.HookChildHandles((HWND)(nint)m.LParamInternal); // they will get removed from the collection just above
+            }
 
-                // We want these messages to go through the designer's WndProc method, and we want people to be able
-                // to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers
-                // window target and call their WndProc.
-                IDesignerTarget designerTarget = _designer.DesignerTarget;
-                _designer.DesignerTarget = this;
-                Debug.Assert(m.HWnd == Handle, "Message handle differs from target handle");
+            // We want these messages to go through the designer's WndProc method, and we want people to be able
+            // to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers
+            // window target and call their WndProc.
+            IDesignerTarget designerTarget = _designer.DesignerTarget;
+            _designer.DesignerTarget = this;
+            Debug.Assert(m.HWnd == Handle, "Message handle differs from target handle");
 
-                try
+            try
+            {
+                _designer.WndProc(ref m);
+            }
+            catch (Exception ex)
+            {
+                _designer.SetUnhandledException(Control.FromChildHandle(m.HWnd), ex);
+            }
+            finally
+            {
+                // make sure the designer wasn't destroyed
+                if (_designer is not null && _designer.Component is not null)
                 {
-                    _designer.WndProc(ref m);
-                }
-                catch (Exception ex)
-                {
-                    _designer.SetUnhandledException(Control.FromChildHandle(m.HWnd), ex);
-                }
-                finally
-                {
-                    // make sure the designer wasn't destroyed
-                    if (_designer is not null && _designer.Component is not null)
-                    {
-                        _designer.DesignerTarget = designerTarget;
-                    }
+                    _designer.DesignerTarget = designerTarget;
                 }
             }
         }

@@ -9,74 +9,73 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using static Interop;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  This is the designer for tree view controls.  It inherits
+///  from the base control designer and adds live hit testing
+///  capabilites for the tree view control.
+/// </summary>
+internal class TreeViewDesigner : ControlDesigner
 {
-    /// <summary>
-    ///  This is the designer for tree view controls.  It inherits
-    ///  from the base control designer and adds live hit testing
-    ///  capabilites for the tree view control.
-    /// </summary>
-    internal class TreeViewDesigner : ControlDesigner
+    private ComCtl32.TVHITTESTINFO _tvhit;
+    private DesignerActionListCollection _actionLists;
+    private TreeView _treeView;
+
+    public TreeViewDesigner()
     {
-        private ComCtl32.TVHITTESTINFO _tvhit;
-        private DesignerActionListCollection _actionLists;
-        private TreeView _treeView;
+        AutoResizeHandles = true;
+    }
 
-        public TreeViewDesigner()
+    /// <summary>
+    ///  Disposes of this object.
+    /// </summary>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            AutoResizeHandles = true;
-        }
-
-        /// <summary>
-        ///  Disposes of this object.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_treeView is not null)
-                {
-                    _treeView.AfterExpand -= TreeViewInvalidate;
-                    _treeView.AfterCollapse -= TreeViewInvalidate;
-                    _treeView = null;
-                }
-            }
-
-            base.Dispose(disposing);
-        }
-
-        /// <summary>
-        ///  Allows your component to support a design time user interface. A TabStrip
-        ///  control, for example, has a design time user interface that allows the user
-        ///  to click the tabs to change tabs. To implement this, TabStrip returns
-        ///  true whenever the given point is within its tabs.
-        /// </summary>
-        protected override bool GetHitTest(Point point)
-        {
-            point = Control.PointToClient(point);
-            _tvhit.pt = point;
-            PInvoke.SendMessage(Control, (User32.WM)PInvoke.TVM_HITTEST, 0, ref _tvhit);
-            return _tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON;
-        }
-
-        public override void Initialize(IComponent component)
-        {
-            base.Initialize(component);
-            _treeView = component as TreeView;
-            Debug.Assert(_treeView is not null, "TreeView is null in TreeViewDesigner");
             if (_treeView is not null)
             {
-                _treeView.AfterExpand += TreeViewInvalidate;
-                _treeView.AfterCollapse += TreeViewInvalidate;
+                _treeView.AfterExpand -= TreeViewInvalidate;
+                _treeView.AfterCollapse -= TreeViewInvalidate;
+                _treeView = null;
             }
         }
 
-        private void TreeViewInvalidate(object sender, TreeViewEventArgs e) => _treeView?.Invalidate();
-
-        public override DesignerActionListCollection ActionLists
-            => _actionLists ??= new DesignerActionListCollection
-                {
-                    new TreeViewActionList(this)
-                };
+        base.Dispose(disposing);
     }
+
+    /// <summary>
+    ///  Allows your component to support a design time user interface. A TabStrip
+    ///  control, for example, has a design time user interface that allows the user
+    ///  to click the tabs to change tabs. To implement this, TabStrip returns
+    ///  true whenever the given point is within its tabs.
+    /// </summary>
+    protected override bool GetHitTest(Point point)
+    {
+        point = Control.PointToClient(point);
+        _tvhit.pt = point;
+        PInvoke.SendMessage(Control, (User32.WM)PInvoke.TVM_HITTEST, 0, ref _tvhit);
+        return _tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON;
+    }
+
+    public override void Initialize(IComponent component)
+    {
+        base.Initialize(component);
+        _treeView = component as TreeView;
+        Debug.Assert(_treeView is not null, "TreeView is null in TreeViewDesigner");
+        if (_treeView is not null)
+        {
+            _treeView.AfterExpand += TreeViewInvalidate;
+            _treeView.AfterCollapse += TreeViewInvalidate;
+        }
+    }
+
+    private void TreeViewInvalidate(object sender, TreeViewEventArgs e) => _treeView?.Invalidate();
+
+    public override DesignerActionListCollection ActionLists
+        => _actionLists ??= new DesignerActionListCollection
+            {
+                new TreeViewActionList(this)
+            };
 }

@@ -4,45 +4,44 @@
 
 using System.Windows.Forms.Layout;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripPanel
 {
-    public partial class ToolStripPanel
+    internal partial class ToolStripPanelControlCollection : TypedControlCollection
     {
-        internal partial class ToolStripPanelControlCollection : TypedControlCollection
+        private readonly ToolStripPanel _owner;
+
+        public ToolStripPanelControlCollection(ToolStripPanel owner)
+            : base(owner, typeof(ToolStrip))
         {
-            private readonly ToolStripPanel _owner;
+            _owner = owner;
+        }
 
-            public ToolStripPanelControlCollection(ToolStripPanel owner)
-                : base(owner, typeof(ToolStrip))
+        internal override void AddInternal(Control? value)
+        {
+            if (value is not null)
             {
-                _owner = owner;
-            }
-
-            internal override void AddInternal(Control? value)
-            {
-                if (value is not null)
-                {
-                    using (new LayoutTransaction(value, value, PropertyNames.Parent))
-                    {
-                        base.AddInternal(value);
-                    }
-                }
-                else
+                using (new LayoutTransaction(value, value, PropertyNames.Parent))
                 {
                     base.AddInternal(value);
                 }
             }
-
-            internal void Sort()
+            else
             {
-                if (_owner.Orientation == Orientation.Horizontal)
-                {
-                    InnerList.Sort(new YXComparer());
-                }
-                else
-                {
-                    InnerList.Sort(new XYComparer());
-                }
+                base.AddInternal(value);
+            }
+        }
+
+        internal void Sort()
+        {
+            if (_owner.Orientation == Orientation.Horizontal)
+            {
+                InnerList.Sort(new YXComparer());
+            }
+            else
+            {
+                InnerList.Sort(new XYComparer());
             }
         }
     }

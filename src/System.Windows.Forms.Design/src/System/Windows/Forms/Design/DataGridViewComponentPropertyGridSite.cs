@@ -6,56 +6,55 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms.Design
-{
-    internal class DataGridViewComponentPropertyGridSite : ISite
-    {
-        private readonly IServiceProvider _sp;
-        private readonly IComponent _comp;
-        private bool _inGetService;
+namespace System.Windows.Forms.Design;
 
-        public DataGridViewComponentPropertyGridSite(IServiceProvider sp, IComponent comp)
+internal class DataGridViewComponentPropertyGridSite : ISite
+{
+    private readonly IServiceProvider _sp;
+    private readonly IComponent _comp;
+    private bool _inGetService;
+
+    public DataGridViewComponentPropertyGridSite(IServiceProvider sp, IComponent comp)
+    {
+        _sp = sp;
+        _comp = comp;
+    }
+
+    /// <summary>
+    ///  When implemented by a class, gets the component associated with the <see cref="ISite"/>.
+    /// </summary>
+    public IComponent Component { get => _comp; }
+
+    /// <summary>
+    /// When implemented by a class, gets the container associated with the <see cref="ISite"/>.
+    /// </summary>
+    public IContainer Container { get => null; }
+
+    /// <summary>
+    ///  When implemented by a class, determines whether the component is in design mode.
+    /// </summary>
+    public bool DesignMode { get => false; }
+
+    /// <summary>
+    ///  When implemented by a class, gets or sets the name of the component associated with the <see cref="ISite"/>.
+    /// </summary>
+    public string Name { get; set; }
+
+    public object GetService(Type t)
+    {
+        if (_inGetService || _sp is null)
         {
-            _sp = sp;
-            _comp = comp;
+            return null;
         }
 
-        /// <summary>
-        ///  When implemented by a class, gets the component associated with the <see cref="ISite"/>.
-        /// </summary>
-        public IComponent Component { get => _comp; }
-
-        /// <summary>
-        /// When implemented by a class, gets the container associated with the <see cref="ISite"/>.
-        /// </summary>
-        public IContainer Container { get => null; }
-
-        /// <summary>
-        ///  When implemented by a class, determines whether the component is in design mode.
-        /// </summary>
-        public bool DesignMode { get => false; }
-
-        /// <summary>
-        ///  When implemented by a class, gets or sets the name of the component associated with the <see cref="ISite"/>.
-        /// </summary>
-        public string Name { get; set; }
-
-        public object GetService(Type t)
+        try
         {
-            if (_inGetService || _sp is null)
-            {
-                return null;
-            }
-
-            try
-            {
-                _inGetService = true;
-                return _sp.GetService(t);
-            }
-            finally
-            {
-                _inGetService = false;
-            }
+            _inGetService = true;
+            return _sp.GetService(t);
+        }
+        finally
+        {
+            _inGetService = false;
         }
     }
 }

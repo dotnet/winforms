@@ -5,30 +5,29 @@
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+// NB: doesn't require thread affinity
+public class DataGridViewRowConverterTests
 {
-    // NB: doesn't require thread affinity
-    public class DataGridViewRowConverterTests
+    [Fact]
+    public void CanConvertTo_returns_expected()
     {
-        [Fact]
-        public void CanConvertTo_returns_expected()
-        {
-            using DataGridViewRow row = new DataGridViewRow();
-            TypeConverter converter = TypeDescriptor.GetConverter(row);
+        using DataGridViewRow row = new DataGridViewRow();
+        TypeConverter converter = TypeDescriptor.GetConverter(row);
 
-            Assert.True(converter.CanConvertTo(typeof(InstanceDescriptor)));
-        }
+        Assert.True(converter.CanConvertTo(typeof(InstanceDescriptor)));
+    }
 
-        [Fact]
-        public void ConvertTo_returns_InstanceDescriptor()
-        {
-            using DataGridViewRow row = new DataGridViewRow();
+    [Fact]
+    public void ConvertTo_returns_InstanceDescriptor()
+    {
+        using DataGridViewRow row = new DataGridViewRow();
 
-            TypeConverter converter = TypeDescriptor.GetConverter(row);
-            var descriptor = converter.ConvertTo(row, typeof(InstanceDescriptor));
+        TypeConverter converter = TypeDescriptor.GetConverter(row);
+        var descriptor = converter.ConvertTo(row, typeof(InstanceDescriptor));
 
-            Assert.NotNull(descriptor);
-            Assert.IsType<InstanceDescriptor>(descriptor);
-        }
+        Assert.NotNull(descriptor);
+        Assert.IsType<InstanceDescriptor>(descriptor);
     }
 }

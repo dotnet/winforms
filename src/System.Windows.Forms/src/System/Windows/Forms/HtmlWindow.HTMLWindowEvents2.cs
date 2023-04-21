@@ -5,84 +5,83 @@
 using System.Runtime.InteropServices;
 using static Interop.Mshtml;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed partial class HtmlWindow
 {
-    public sealed partial class HtmlWindow
+    //
+    // Private classes:
+    //
+    [ClassInterface(ClassInterfaceType.None)]
+    private class HTMLWindowEvents2 : StandardOleMarshalObject, /*Enforce calling back on the same thread*/
+        DHTMLWindowEvents2
     {
-        //
-        // Private classes:
-        //
-        [ClassInterface(ClassInterfaceType.None)]
-        private class HTMLWindowEvents2 : StandardOleMarshalObject, /*Enforce calling back on the same thread*/
-            DHTMLWindowEvents2
+        private readonly HtmlWindow _parent;
+
+        public HTMLWindowEvents2(HtmlWindow htmlWindow)
         {
-            private readonly HtmlWindow _parent;
+            _parent = htmlWindow;
+        }
 
-            public HTMLWindowEvents2(HtmlWindow htmlWindow)
-            {
-                _parent = htmlWindow;
-            }
+        public void onafterprint(IHTMLEventObj evtObj) { }
 
-            public void onafterprint(IHTMLEventObj evtObj) { }
+        public void onbeforeprint(IHTMLEventObj evtObj) { }
 
-            public void onbeforeprint(IHTMLEventObj evtObj) { }
+        public void onbeforeunload(IHTMLEventObj evtObj) { }
 
-            public void onbeforeunload(IHTMLEventObj evtObj) { }
+        public void onblur(IHTMLEventObj evtObj)
+        {
+            HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+            FireEvent(HtmlWindow.s_eventLostFocus, e);
+        }
 
-            public void onblur(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventLostFocus, e);
-            }
+        public bool onerror(string description, string urlString, int line)
+        {
+            HtmlElementErrorEventArgs e = new(description, urlString, line);
+            FireEvent(HtmlWindow.s_eventError, e);
+            return e.Handled;
+        }
 
-            public bool onerror(string description, string urlString, int line)
-            {
-                HtmlElementErrorEventArgs e = new(description, urlString, line);
-                FireEvent(HtmlWindow.s_eventError, e);
-                return e.Handled;
-            }
+        public void onfocus(IHTMLEventObj evtObj)
+        {
+            HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+            FireEvent(HtmlWindow.s_eventGotFocus, e);
+        }
 
-            public void onfocus(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventGotFocus, e);
-            }
+        public bool onhelp(IHTMLEventObj evtObj)
+        {
+            HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+            return e.ReturnValue;
+        }
 
-            public bool onhelp(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
+        public void onload(IHTMLEventObj evtObj)
+        {
+            HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+            FireEvent(HtmlWindow.s_eventLoad, e);
+        }
 
-            public void onload(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventLoad, e);
-            }
+        public void onresize(IHTMLEventObj evtObj)
+        {
+            HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+            FireEvent(HtmlWindow.s_eventResize, e);
+        }
 
-            public void onresize(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventResize, e);
-            }
+        public void onscroll(IHTMLEventObj evtObj)
+        {
+            HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+            FireEvent(HtmlWindow.s_eventScroll, e);
+        }
 
-            public void onscroll(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventScroll, e);
-            }
+        public void onunload(IHTMLEventObj evtObj)
+        {
+            HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+            FireEvent(HtmlWindow.s_eventUnload, e);
+            _parent?.WindowShim.OnWindowUnload();
+        }
 
-            public void onunload(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventUnload, e);
-                _parent?.WindowShim.OnWindowUnload();
-            }
-
-            private void FireEvent(object key, EventArgs e)
-            {
-                _parent?.WindowShim.FireEvent(key, e);
-            }
+        private void FireEvent(object key, EventArgs e)
+        {
+            _parent?.WindowShim.FireEvent(key, e);
         }
     }
 }

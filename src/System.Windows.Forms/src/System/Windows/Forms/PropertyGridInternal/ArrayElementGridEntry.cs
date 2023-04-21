@@ -2,43 +2,42 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+internal class ArrayElementGridEntry : GridEntry
 {
-    internal class ArrayElementGridEntry : GridEntry
+    protected int _index;
+
+    public ArrayElementGridEntry(PropertyGrid ownerGrid, GridEntry parent, int index)
+        : base(ownerGrid, parent)
     {
-        protected int _index;
-
-        public ArrayElementGridEntry(PropertyGrid ownerGrid, GridEntry parent, int index)
-            : base(ownerGrid, parent)
-        {
-            _index = index;
-            SetFlag(Flags.RenderReadOnly, parent.EntryFlags.HasFlag(Flags.RenderReadOnly) || parent.ForceReadOnly);
-        }
-
-        public override GridItemType GridItemType => GridItemType.ArrayValue;
-
-        public override bool IsValueEditable => ParentGridEntry.IsValueEditable;
-
-        public override string PropertyLabel => $"[{_index}]";
-
-        public override Type? PropertyType => ParentGridEntry.PropertyType.GetElementType();
-
-        public override object? PropertyValue
-        {
-            get
-            {
-                object owner = GetValueOwner();
-                Debug.Assert(owner is Array, "Owner is not array type!");
-                return ((Array)owner).GetValue(_index);
-            }
-            set
-            {
-                object owner = GetValueOwner();
-                Debug.Assert(owner is Array, "Owner is not array type!");
-                ((Array)owner).SetValue(value, _index);
-            }
-        }
-
-        public override bool ShouldRenderReadOnly => ParentGridEntry.ShouldRenderReadOnly;
+        _index = index;
+        SetFlag(Flags.RenderReadOnly, parent.EntryFlags.HasFlag(Flags.RenderReadOnly) || parent.ForceReadOnly);
     }
+
+    public override GridItemType GridItemType => GridItemType.ArrayValue;
+
+    public override bool IsValueEditable => ParentGridEntry.IsValueEditable;
+
+    public override string PropertyLabel => $"[{_index}]";
+
+    public override Type? PropertyType => ParentGridEntry.PropertyType.GetElementType();
+
+    public override object? PropertyValue
+    {
+        get
+        {
+            object owner = GetValueOwner();
+            Debug.Assert(owner is Array, "Owner is not array type!");
+            return ((Array)owner).GetValue(_index);
+        }
+        set
+        {
+            object owner = GetValueOwner();
+            Debug.Assert(owner is Array, "Owner is not array type!");
+            ((Array)owner).SetValue(value, _index);
+        }
+    }
+
+    public override bool ShouldRenderReadOnly => ParentGridEntry.ShouldRenderReadOnly;
 }

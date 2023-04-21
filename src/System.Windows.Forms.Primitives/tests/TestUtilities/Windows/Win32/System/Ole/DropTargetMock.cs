@@ -5,28 +5,27 @@
 using Windows.Win32.System.Com;
 using Windows.Win32.System.SystemServices;
 
-namespace Windows.Win32.System.Ole
+namespace Windows.Win32.System.Ole;
+
+internal unsafe class DropTargetMock : IDropTarget.Interface, IManagedWrapper<IDropTarget>
 {
-    internal unsafe class DropTargetMock : IDropTarget.Interface, IManagedWrapper<IDropTarget>
+    public virtual HRESULT DragEnter(IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
     {
-        public virtual HRESULT DragEnter(IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
 
-        public virtual HRESULT DragOver(MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
-        {
-            throw new NotImplementedException();
-        }
+    public virtual HRESULT DragOver(MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
+    {
+        throw new NotImplementedException();
+    }
 
-        public virtual HRESULT DragLeave()
-        {
-            throw new NotImplementedException();
-        }
+    public virtual HRESULT DragLeave()
+    {
+        throw new NotImplementedException();
+    }
 
-        public virtual HRESULT Drop(IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
-        {
-            throw new NotImplementedException();
-        }
+    public virtual HRESULT Drop(IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
+    {
+        throw new NotImplementedException();
     }
 }

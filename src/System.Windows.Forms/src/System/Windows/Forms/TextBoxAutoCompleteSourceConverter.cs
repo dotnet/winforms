@@ -4,36 +4,35 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
-{
-    internal class TextBoxAutoCompleteSourceConverter : EnumConverter
-    {
-        public TextBoxAutoCompleteSourceConverter(
-            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]
-            Type type) : base(type)
-        {
-        }
+namespace System.Windows.Forms;
 
-        /// <summary>
-        ///  Gets a collection of standard values for the data type this validator is
-        ///  designed for.
-        /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+internal class TextBoxAutoCompleteSourceConverter : EnumConverter
+{
+    public TextBoxAutoCompleteSourceConverter(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]
+        Type type) : base(type)
+    {
+    }
+
+    /// <summary>
+    ///  Gets a collection of standard values for the data type this validator is
+    ///  designed for.
+    /// </summary>
+    public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+    {
+        StandardValuesCollection values = base.GetStandardValues(context);
+        List<object> list = new();
+        for (int i = 0; i < values.Count; i++)
         {
-            StandardValuesCollection values = base.GetStandardValues(context);
-            List<object> list = new();
-            for (int i = 0; i < values.Count; i++)
+            if (values[i] is object currentItem)
             {
-                if (values[i] is object currentItem)
+                if (string.Equals(currentItem.ToString(), "ListItems"))
                 {
-                    if (string.Equals(currentItem.ToString(), "ListItems"))
-                    {
-                        list.Add(currentItem);
-                    }
+                    list.Add(currentItem);
                 }
             }
-
-            return new StandardValuesCollection(list);
         }
+
+        return new StandardValuesCollection(list);
     }
 }

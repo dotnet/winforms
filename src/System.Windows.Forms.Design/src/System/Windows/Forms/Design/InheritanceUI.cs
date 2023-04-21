@@ -7,108 +7,107 @@
 using System.ComponentModel;
 using System.Drawing;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  This class handles the user interface for inherited components.
+/// </summary>
+internal class InheritanceUI
 {
+    private static Bitmap s_inheritanceGlyph;
+    private static Rectangle s_inheritanceGlyphRect;
+    private ToolTip _tooltip;
+
     /// <summary>
-    ///  This class handles the user interface for inherited components.
+    ///  The bitmap we use to show inheritance.
     /// </summary>
-    internal class InheritanceUI
+    public static Bitmap InheritanceGlyph
     {
-        private static Bitmap s_inheritanceGlyph;
-        private static Rectangle s_inheritanceGlyphRect;
-        private ToolTip _tooltip;
-
-        /// <summary>
-        ///  The bitmap we use to show inheritance.
-        /// </summary>
-        public static Bitmap InheritanceGlyph
+        get
         {
-            get
+            if (s_inheritanceGlyph is null)
             {
-                if (s_inheritanceGlyph is null)
+                s_inheritanceGlyph = new Icon(typeof(InheritanceUI), "InheritedGlyph").ToBitmap();
+
+                if (DpiHelper.IsScalingRequired)
                 {
-                    s_inheritanceGlyph = new Icon(typeof(InheritanceUI), "InheritedGlyph").ToBitmap();
-
-                    if (DpiHelper.IsScalingRequired)
-                    {
-                        DpiHelper.ScaleBitmapLogicalToDevice(ref s_inheritanceGlyph);
-                    }
+                    DpiHelper.ScaleBitmapLogicalToDevice(ref s_inheritanceGlyph);
                 }
-
-                return s_inheritanceGlyph;
             }
+
+            return s_inheritanceGlyph;
+        }
+    }
+
+    /// <summary>
+    ///  The rectangle surrounding the glyph.
+    /// </summary>
+    public static Rectangle InheritanceGlyphRectangle
+    {
+        get
+        {
+            if (s_inheritanceGlyphRect == Rectangle.Empty)
+            {
+                Size size = InheritanceGlyph.Size;
+                s_inheritanceGlyphRect = new Rectangle(0, 0, size.Width, size.Height);
+            }
+
+            return s_inheritanceGlyphRect;
+        }
+    }
+
+    /// <summary>
+    ///  Adds an inherited control to our list.  This creates a tool tip for that control.
+    /// </summary>
+    public void AddInheritedControl(Control c, InheritanceLevel level)
+    {
+        _tooltip ??= new ToolTip
+            {
+                ShowAlways = true
+            };
+
+        Debug.Assert(level != InheritanceLevel.NotInherited, "This should only be called for inherited components.");
+        string text;
+        if (level == InheritanceLevel.InheritedReadOnly)
+        {
+            text = SR.DesignerInheritedReadOnly;
+        }
+        else
+        {
+            text = SR.DesignerInherited;
         }
 
-        /// <summary>
-        ///  The rectangle surrounding the glyph.
-        /// </summary>
-        public static Rectangle InheritanceGlyphRectangle
-        {
-            get
-            {
-                if (s_inheritanceGlyphRect == Rectangle.Empty)
-                {
-                    Size size = InheritanceGlyph.Size;
-                    s_inheritanceGlyphRect = new Rectangle(0, 0, size.Width, size.Height);
-                }
+        _tooltip.SetToolTip(c, text);
 
-                return s_inheritanceGlyphRect;
+        // Also, set all of its non-sited children
+        foreach (Control child in c.Controls)
+        {
+            if (child.Site is null)
+            {
+                _tooltip.SetToolTip(child, text);
             }
         }
+    }
 
-        /// <summary>
-        ///  Adds an inherited control to our list.  This creates a tool tip for that control.
-        /// </summary>
-        public void AddInheritedControl(Control c, InheritanceLevel level)
+    public void Dispose()
+    {
+        _tooltip?.Dispose();
+    }
+
+    /// <summary>
+    ///  Removes a previously added inherited control.
+    /// </summary>
+    public void RemoveInheritedControl(Control c)
+    {
+        if (_tooltip is not null && _tooltip.GetToolTip(c).Length > 0)
         {
-            _tooltip ??= new ToolTip
-                {
-                    ShowAlways = true
-                };
-
-            Debug.Assert(level != InheritanceLevel.NotInherited, "This should only be called for inherited components.");
-            string text;
-            if (level == InheritanceLevel.InheritedReadOnly)
-            {
-                text = SR.DesignerInheritedReadOnly;
-            }
-            else
-            {
-                text = SR.DesignerInherited;
-            }
-
-            _tooltip.SetToolTip(c, text);
-
+            _tooltip.SetToolTip(c, null);
             // Also, set all of its non-sited children
             foreach (Control child in c.Controls)
             {
                 if (child.Site is null)
                 {
-                    _tooltip.SetToolTip(child, text);
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            _tooltip?.Dispose();
-        }
-
-        /// <summary>
-        ///  Removes a previously added inherited control.
-        /// </summary>
-        public void RemoveInheritedControl(Control c)
-        {
-            if (_tooltip is not null && _tooltip.GetToolTip(c).Length > 0)
-            {
-                _tooltip.SetToolTip(c, null);
-                // Also, set all of its non-sited children
-                foreach (Control child in c.Controls)
-                {
-                    if (child.Site is null)
-                    {
-                        _tooltip.SetToolTip(child, null);
-                    }
+                    _tooltip.SetToolTip(child, null);
                 }
             }
         }

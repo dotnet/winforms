@@ -7,36 +7,35 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 
-namespace System.Windows.Forms.Design.Editors.Tests
+namespace System.Windows.Forms.Design.Editors.Tests;
+
+internal sealed class SystemDesignMetadataReader
 {
-    internal sealed class SystemDesignMetadataReader
+    public IReadOnlyList<string> GetExportedTypeNames()
     {
-        public IReadOnlyList<string> GetExportedTypeNames()
+        // Force load System.Design into the appdomain
+        DesignSurface designSurface = new();
+        IDesigner designer = designSurface.CreateDesigner(new Control(), true);
+        Assert.NotNull(designer);
+
+        Assembly systemDesign = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "System.Design");
+
+        using var fs = new FileStream(systemDesign.Location, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var peReader = new PEReader(fs);
+
+        MetadataReader metadataReader = peReader.GetMetadataReader();
+        List<string> typeNames = new();
+
+        foreach (ExportedTypeHandle typeHandle in metadataReader.ExportedTypes)
         {
-            // Force load System.Design into the appdomain
-            DesignSurface designSurface = new();
-            IDesigner designer = designSurface.CreateDesigner(new Control(), true);
-            Assert.NotNull(designer);
+            ExportedType type = metadataReader.GetExportedType(typeHandle);
 
-            Assembly systemDesign = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "System.Design");
+            string ns = metadataReader.GetString(type.Namespace);
+            string name = metadataReader.GetString(type.Name);
 
-            using var fs = new FileStream(systemDesign.Location, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            using var peReader = new PEReader(fs);
-
-            MetadataReader metadataReader = peReader.GetMetadataReader();
-            List<string> typeNames = new();
-
-            foreach (ExportedTypeHandle typeHandle in metadataReader.ExportedTypes)
-            {
-                ExportedType type = metadataReader.GetExportedType(typeHandle);
-
-                string ns = metadataReader.GetString(type.Namespace);
-                string name = metadataReader.GetString(type.Name);
-
-                typeNames.Add($"{ns}.{name}");
-            }
-
-            return typeNames;
+            typeNames.Add($"{ns}.{name}");
         }
+
+        return typeNames;
     }
 }

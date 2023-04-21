@@ -5,32 +5,31 @@
 using System.ComponentModel;
 using Moq;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ContextMenuStripTests
 {
-    public class ContextMenuStripTests
+    [WinFormsFact]
+    public void ContextMenuStrip_Constructor()
     {
-        [WinFormsFact]
-        public void ContextMenuStrip_Constructor()
-        {
-            using var cms = new ContextMenuStrip();
+        using var cms = new ContextMenuStrip();
 
-            Assert.NotNull(cms);
-        }
+        Assert.NotNull(cms);
+    }
 
-        [WinFormsFact]
-        public void ContextMenuStrip_ConstructorIContainer()
-        {
-            IContainer nullContainer = null;
-            var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
-            mockContainer.Setup(x => x.Add(It.IsAny<ContextMenuStrip>())).Verifiable();
+    [WinFormsFact]
+    public void ContextMenuStrip_ConstructorIContainer()
+    {
+        IContainer nullContainer = null;
+        var mockContainer = new Mock<IContainer>(MockBehavior.Strict);
+        mockContainer.Setup(x => x.Add(It.IsAny<ContextMenuStrip>())).Verifiable();
 
-            // act & assert
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
-            Assert.Equal("container", ex.ParamName);
+        // act & assert
+        ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
+        Assert.Equal("container", ex.ParamName);
 
-            using var cms = new ContextMenuStrip(mockContainer.Object);
-            Assert.NotNull(cms);
-            mockContainer.Verify(x => x.Add(cms));
-        }
+        using var cms = new ContextMenuStrip(mockContainer.Object);
+        Assert.NotNull(cms);
+        mockContainer.Verify(x => x.Add(cms));
     }
 }

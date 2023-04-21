@@ -2,24 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Provides data for the <see cref="WebBrowser.OnDocumentCompleted"/> event.
+/// </summary>
+public class WebBrowserDocumentCompletedEventArgs : EventArgs
 {
     /// <summary>
-    ///  Provides data for the <see cref="WebBrowser.OnDocumentCompleted"/> event.
+    ///  Creates an instance of the <see cref="WebBrowserDocumentCompletedEventArgs"/> class.
     /// </summary>
-    public class WebBrowserDocumentCompletedEventArgs : EventArgs
+    public WebBrowserDocumentCompletedEventArgs(Uri? url)
     {
-        /// <summary>
-        ///  Creates an instance of the <see cref="WebBrowserDocumentCompletedEventArgs"/> class.
-        /// </summary>
-        public WebBrowserDocumentCompletedEventArgs(Uri? url)
-        {
-            Url = url;
-        }
-
-        /// <summary>
-        ///  Url of the Document.
-        /// </summary>
-        public Uri? Url { get; }
+        Url = url;
     }
+
+    /// <summary>
+    ///  Url of the Document.
+    /// </summary>
+    public Uri? Url { get; }
 }

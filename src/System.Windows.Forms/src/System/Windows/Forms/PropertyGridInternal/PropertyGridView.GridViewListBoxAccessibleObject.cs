@@ -4,65 +4,64 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+internal partial class PropertyGridView
 {
-    internal partial class PropertyGridView
+    /// <summary>
+    ///  Represents the PropertyGridView ListBox accessibility object.
+    /// </summary>
+    private class GridViewListBoxAccessibleObject : ListBox.ListBoxAccessibleObject
     {
+        private readonly PropertyGridView _owningPropertyGridView;
+
         /// <summary>
-        ///  Represents the PropertyGridView ListBox accessibility object.
+        ///  Constructs the new instance of GridViewListBoxAccessibleObject.
         /// </summary>
-        private class GridViewListBoxAccessibleObject : ListBox.ListBoxAccessibleObject
+        /// <param name="owningGridViewListBox">The owning GridViewListBox.</param>
+        public GridViewListBoxAccessibleObject(GridViewListBox owningGridViewListBox) : base(owningGridViewListBox)
         {
-            private readonly PropertyGridView _owningPropertyGridView;
-
-            /// <summary>
-            ///  Constructs the new instance of GridViewListBoxAccessibleObject.
-            /// </summary>
-            /// <param name="owningGridViewListBox">The owning GridViewListBox.</param>
-            public GridViewListBoxAccessibleObject(GridViewListBox owningGridViewListBox) : base(owningGridViewListBox)
+            if (owningGridViewListBox.OwningPropertyGridView is not PropertyGridView owningPropertyGridView)
             {
-                if (owningGridViewListBox.OwningPropertyGridView is not PropertyGridView owningPropertyGridView)
-                {
-                    throw new ArgumentException(null, nameof(owningGridViewListBox));
-                }
-
-                _owningPropertyGridView = owningPropertyGridView;
+                throw new ArgumentException(null, nameof(owningGridViewListBox));
             }
 
-            /// <summary>
-            ///  Request to return the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                if (!_owningPropertyGridView.DropDownVisible
-                    || _owningPropertyGridView.SelectedGridEntry is null
-                    || _owningPropertyGridView.DropDownControlHolder.Component != Owner
-                    // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
-                    // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
-                    || !_owningPropertyGridView.OwnerGrid.Created)
-                {
-                    return null;
-                }
-
-                return direction switch
-                {
-                    UiaCore.NavigateDirection.Parent => _owningPropertyGridView.DropDownControlHolder.AccessibilityObject,
-                    _ => base.FragmentNavigate(direction)
-                };
-            }
-
-            public override string? Name
-            {
-                get => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
-            }
-
-            /// <summary>
-            ///  Return the element that is the root node of this fragment of UI.
-            /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-                => _owningPropertyGridView.AccessibilityObject;
+            _owningPropertyGridView = owningPropertyGridView;
         }
+
+        /// <summary>
+        ///  Request to return the element in the specified direction.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        {
+            if (!_owningPropertyGridView.DropDownVisible
+                || _owningPropertyGridView.SelectedGridEntry is null
+                || _owningPropertyGridView.DropDownControlHolder.Component != Owner
+                // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
+                // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
+                || !_owningPropertyGridView.OwnerGrid.Created)
+            {
+                return null;
+            }
+
+            return direction switch
+            {
+                UiaCore.NavigateDirection.Parent => _owningPropertyGridView.DropDownControlHolder.AccessibilityObject,
+                _ => base.FragmentNavigate(direction)
+            };
+        }
+
+        public override string? Name
+        {
+            get => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
+        }
+
+        /// <summary>
+        ///  Return the element that is the root node of this fragment of UI.
+        /// </summary>
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            => _owningPropertyGridView.AccessibilityObject;
     }
 }

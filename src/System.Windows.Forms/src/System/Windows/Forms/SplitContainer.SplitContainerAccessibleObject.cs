@@ -4,24 +4,23 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
-{
-    public partial class SplitContainer
-    {
-        internal class SplitContainerAccessibleObject : ControlAccessibleObject
-        {
-            public SplitContainerAccessibleObject(SplitContainer owner) : base(owner)
-            {
-            }
+namespace System.Windows.Forms;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-               => propertyID switch
-               {
-                   UiaCore.UIA.AutomationIdPropertyId => Owner.Name,
-                   UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
-                   UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                   _ => base.GetPropertyValue(propertyID)
-               };
+public partial class SplitContainer
+{
+    internal class SplitContainerAccessibleObject : ControlAccessibleObject
+    {
+        public SplitContainerAccessibleObject(SplitContainer owner) : base(owner)
+        {
         }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+           => propertyID switch
+           {
+               UiaCore.UIA.AutomationIdPropertyId => Owner.Name,
+               UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+               UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+               _ => base.GetPropertyValue(propertyID)
+           };
     }
 }

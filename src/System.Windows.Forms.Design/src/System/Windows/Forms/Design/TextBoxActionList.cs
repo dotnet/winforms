@@ -7,31 +7,30 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class TextBoxActionList : DesignerActionList
 {
-    internal class TextBoxActionList : DesignerActionList
+    public TextBoxActionList(TextBoxDesigner designer) : base(designer.Component)
     {
-        public TextBoxActionList(TextBoxDesigner designer) : base(designer.Component)
-        {
-        }
+    }
 
-        public bool Multiline
+    public bool Multiline
+    {
+        get
         {
-            get
-            {
-                return ((TextBox)Component).Multiline;
-            }
-            set
-            {
-                TypeDescriptor.GetProperties(Component)["Multiline"].SetValue(Component, value);
-            }
+            return ((TextBox)Component).Multiline;
         }
+        set
+        {
+            TypeDescriptor.GetProperties(Component)["Multiline"].SetValue(Component, value);
+        }
+    }
 
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
-            items.Add(new DesignerActionPropertyItem("Multiline", string.Format(SR.MultiLineDisplayName, SR.PropertiesCategoryName, SR.MultiLineDescription)));
-            return items;
-        }
+    public override DesignerActionItemCollection GetSortedActionItems()
+    {
+        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        items.Add(new DesignerActionPropertyItem("Multiline", string.Format(SR.MultiLineDisplayName, SR.PropertiesCategoryName, SR.MultiLineDescription)));
+        return items;
     }
 }

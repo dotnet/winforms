@@ -4,19 +4,18 @@
 
 using Xunit.Sdk;
 
-namespace System.Windows.Forms.InteropTests
-{
-    public abstract class InteropTestBase
-    {
-        public const string NativeTests = "NativeTests";
-        public const string Success = "Success";
+namespace System.Windows.Forms.InteropTests;
 
-        protected static void AssertSuccess(string result)
+public abstract class InteropTestBase
+{
+    public const string NativeTests = "NativeTests";
+    public const string Success = "Success";
+
+    protected static void AssertSuccess(string result)
+    {
+        if (result != Success)
         {
-            if (result != Success)
-            {
-                throw new XunitException(result);
-            }
+            throw new XunitException(result);
         }
     }
 }

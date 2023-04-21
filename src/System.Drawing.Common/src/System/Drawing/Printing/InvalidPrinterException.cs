@@ -3,41 +3,40 @@
 
 using System.Security;
 
-namespace System.Drawing.Printing
+namespace System.Drawing.Printing;
+
+/// <summary>
+/// Represents the exception that is thrown when trying to access a printer using invalid printer settings.
+/// </summary>
+[Serializable]
+public partial class InvalidPrinterException : SystemException
 {
+    private readonly PrinterSettings? _settings;
+
     /// <summary>
-    /// Represents the exception that is thrown when trying to access a printer using invalid printer settings.
+    /// Initializes a new instance of the <see cref='InvalidPrinterException'/> class.
     /// </summary>
-    [Serializable]
-    public partial class InvalidPrinterException : SystemException
+    public InvalidPrinterException(PrinterSettings settings)
+    : base(GenerateMessage(settings))
     {
-        private readonly PrinterSettings? _settings;
+        _settings = settings;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref='InvalidPrinterException'/> class.
-        /// </summary>
-        public InvalidPrinterException(PrinterSettings settings)
-        : base(GenerateMessage(settings))
+    private static string GenerateMessage(PrinterSettings settings)
+    {
+        if (settings.IsDefaultPrinter)
         {
-            _settings = settings;
+            return SR.InvalidPrinterException_NoDefaultPrinter;
         }
-
-        private static string GenerateMessage(PrinterSettings settings)
+        else
         {
-            if (settings.IsDefaultPrinter)
+            try
             {
-                return SR.InvalidPrinterException_NoDefaultPrinter;
+                return SR.Format(SR.InvalidPrinterException_InvalidPrinter, settings.PrinterName);
             }
-            else
+            catch (SecurityException)
             {
-                try
-                {
-                    return SR.Format(SR.InvalidPrinterException_InvalidPrinter, settings.PrinterName);
-                }
-                catch (SecurityException)
-                {
-                    return SR.Format(SR.InvalidPrinterException_InvalidPrinter, SR.CantTellPrinterName);
-                }
+                return SR.Format(SR.InvalidPrinterException_InvalidPrinter, SR.CantTellPrinterName);
             }
         }
     }

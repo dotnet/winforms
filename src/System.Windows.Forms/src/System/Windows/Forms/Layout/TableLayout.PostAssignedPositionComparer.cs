@@ -2,48 +2,47 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Layout
+namespace System.Windows.Forms.Layout;
+
+internal partial class TableLayout
 {
-    internal partial class TableLayout
+    private class PostAssignedPositionComparer : IComparer<LayoutInfo>
     {
-        private class PostAssignedPositionComparer : IComparer<LayoutInfo>
+        private static readonly PostAssignedPositionComparer instance = new PostAssignedPositionComparer();
+
+        public static PostAssignedPositionComparer GetInstance
         {
-            private static readonly PostAssignedPositionComparer instance = new PostAssignedPositionComparer();
+            get { return instance; }
+        }
 
-            public static PostAssignedPositionComparer GetInstance
+        public int Compare(LayoutInfo? x, LayoutInfo? y)
+        {
+            if (IComparerHelpers.CompareReturnIfNull(x, y, out int? returnValue))
             {
-                get { return instance; }
+                return (int)returnValue;
             }
 
-            public int Compare(LayoutInfo? x, LayoutInfo? y)
+            if (x.RowStart < y.RowStart)
             {
-                if (IComparerHelpers.CompareReturnIfNull(x, y, out int? returnValue))
-                {
-                    return (int)returnValue;
-                }
-
-                if (x.RowStart < y.RowStart)
-                {
-                    return -1;
-                }
-
-                if (x.RowStart > y.RowStart)
-                {
-                    return 1;
-                }
-
-                if (x.ColumnStart < y.ColumnStart)
-                {
-                    return -1;
-                }
-
-                if (x.ColumnStart > y.ColumnStart)
-                {
-                    return 1;
-                }
-
-                return 0;
+                return -1;
             }
+
+            if (x.RowStart > y.RowStart)
+            {
+                return 1;
+            }
+
+            if (x.ColumnStart < y.ColumnStart)
+            {
+                return -1;
+            }
+
+            if (x.ColumnStart > y.ColumnStart)
+            {
+                return 1;
+            }
+
+            return 0;
         }
     }
 }

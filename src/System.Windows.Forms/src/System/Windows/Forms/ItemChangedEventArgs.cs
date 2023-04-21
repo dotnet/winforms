@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
-{
-    public class ItemChangedEventArgs : EventArgs
-    {
-        internal ItemChangedEventArgs(int index)
-        {
-            Index = index;
-        }
+namespace System.Windows.Forms;
 
-        public int Index { get; }
+public class ItemChangedEventArgs : EventArgs
+{
+    internal ItemChangedEventArgs(int index)
+    {
+        Index = index;
     }
+
+    public int Index { get; }
 }

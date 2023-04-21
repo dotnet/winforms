@@ -2,27 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
-{
-    public class LinkLabel_LinkComparerTests
-    {
-        public static IEnumerable<object[]> LinkCompare_Return_IsExpected_TestData()
-        {
-            yield return new object[] { null, null, 0 };
-            yield return new object[] { null, new LinkLabel.Link(0, 1), -1 };
-            yield return new object[] { new LinkLabel.Link(0, 1), null, 1 };
-            yield return new object[] { new LinkLabel.Link(0, 1), new LinkLabel.Link(0, 1), 0 };
-            yield return new object[] { new LinkLabel.Link(1, 5), new LinkLabel.Link(2, 5), -1 };
-        }
+namespace System.Windows.Forms.Tests;
 
-        [WinFormsTheory]
-        [MemberData(nameof(LinkCompare_Return_IsExpected_TestData))]
-        public void LinkCompare_Return_IsExpected(object link1, object link2, int expectedValue)
-        {
-            using var linkLabel = new LinkLabel();
-            var comparer = linkLabel.TestAccessor().Dynamic.s_linkComparer;
-            var compareMethod = comparer.GetType().GetMethod("Compare");
-            Assert.Equal(expectedValue, compareMethod.Invoke(comparer, new object[] { link1, link2 }));
-        }
+public class LinkLabel_LinkComparerTests
+{
+    public static IEnumerable<object[]> LinkCompare_Return_IsExpected_TestData()
+    {
+        yield return new object[] { null, null, 0 };
+        yield return new object[] { null, new LinkLabel.Link(0, 1), -1 };
+        yield return new object[] { new LinkLabel.Link(0, 1), null, 1 };
+        yield return new object[] { new LinkLabel.Link(0, 1), new LinkLabel.Link(0, 1), 0 };
+        yield return new object[] { new LinkLabel.Link(1, 5), new LinkLabel.Link(2, 5), -1 };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(LinkCompare_Return_IsExpected_TestData))]
+    public void LinkCompare_Return_IsExpected(object link1, object link2, int expectedValue)
+    {
+        using var linkLabel = new LinkLabel();
+        var comparer = linkLabel.TestAccessor().Dynamic.s_linkComparer;
+        var compareMethod = comparer.GetType().GetMethod("Compare");
+        Assert.Equal(expectedValue, compareMethod.Invoke(comparer, new object[] { link1, link2 }));
     }
 }

@@ -4,53 +4,52 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class LayoutEventArgsTests
 {
-    public class LayoutEventArgsTests
+    public static IEnumerable<object[]> Ctor_IComponent_String_TestData()
     {
-        public static IEnumerable<object[]> Ctor_IComponent_String_TestData()
-        {
-            yield return new object[] { null, null };
-            yield return new object[] { new Control(), "" };
-            yield return new object[] { new SubComponent(), "affectedProperty" };
-        }
+        yield return new object[] { null, null };
+        yield return new object[] { new Control(), "" };
+        yield return new object[] { new SubComponent(), "affectedProperty" };
+    }
 
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_IComponent_String_TestData))]
-        public void Ctor_IComponent_String(IComponent affectedComponent, string affectedProperty)
-        {
-            var e = new LayoutEventArgs(affectedComponent, affectedProperty);
-            Assert.Equal(affectedComponent, e.AffectedComponent);
-            Assert.Equal(affectedComponent as Control, e.AffectedControl);
-            Assert.Equal(affectedProperty, e.AffectedProperty);
-        }
+    [WinFormsTheory]
+    [MemberData(nameof(Ctor_IComponent_String_TestData))]
+    public void Ctor_IComponent_String(IComponent affectedComponent, string affectedProperty)
+    {
+        var e = new LayoutEventArgs(affectedComponent, affectedProperty);
+        Assert.Equal(affectedComponent, e.AffectedComponent);
+        Assert.Equal(affectedComponent as Control, e.AffectedControl);
+        Assert.Equal(affectedProperty, e.AffectedProperty);
+    }
 
-        public static IEnumerable<object[]> Ctor_Control_String_TestData()
-        {
-            yield return new object[] { null, null };
-            yield return new object[] { new Control(), "" };
-            yield return new object[] { new Control(), "affectedProperty" };
-        }
+    public static IEnumerable<object[]> Ctor_Control_String_TestData()
+    {
+        yield return new object[] { null, null };
+        yield return new object[] { new Control(), "" };
+        yield return new object[] { new Control(), "affectedProperty" };
+    }
 
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_Control_String_TestData))]
-        public void Ctor_Control_String(Control affectedControl, string affectedProperty)
-        {
-            var e = new LayoutEventArgs(affectedControl, affectedProperty);
-            Assert.Equal(affectedControl, e.AffectedComponent);
-            Assert.Equal(affectedControl, e.AffectedControl);
-            Assert.Equal(affectedProperty, e.AffectedProperty);
-        }
+    [WinFormsTheory]
+    [MemberData(nameof(Ctor_Control_String_TestData))]
+    public void Ctor_Control_String(Control affectedControl, string affectedProperty)
+    {
+        var e = new LayoutEventArgs(affectedControl, affectedProperty);
+        Assert.Equal(affectedControl, e.AffectedComponent);
+        Assert.Equal(affectedControl, e.AffectedControl);
+        Assert.Equal(affectedProperty, e.AffectedProperty);
+    }
 
-        private class SubComponent : IComponent
-        {
-            public ISite Site { get; set; }
+    private class SubComponent : IComponent
+    {
+        public ISite Site { get; set; }
 
 #pragma warning disable 0067
-            public event EventHandler Disposed;
+        public event EventHandler Disposed;
 #pragma warning restore 0067
 
-            public void Dispose() { }
-        }
+        public void Dispose() { }
     }
 }

@@ -7,16 +7,15 @@
 using System.Runtime.InteropServices;
 using static Interop;
 
-namespace System.Windows.Forms.Metafiles
-{
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct EMREXTCREATEFONTINDIRECTW
-    {
-        public EMR emr;
-        public uint ihFont;
-        public User32.EXTLOGFONTW elfw;
+namespace System.Windows.Forms.Metafiles;
 
-        public override string ToString()
-            => $@"[{nameof(EMREXTCREATEFONTINDIRECTW)}] Index: {ihFont} FaceName: '{elfw.elfLogFont.FaceName.ToString()}' Height: {elfw.elfLogFont.lfHeight} Weight: FW_{elfw.elfLogFont.lfWeight}";
-    }
+[StructLayout(LayoutKind.Sequential)]
+internal struct EMREXTCREATEFONTINDIRECTW
+{
+    public EMR emr;
+    public uint ihFont;
+    public User32.EXTLOGFONTW elfw;
+
+    public override string ToString()
+        => $@"[{nameof(EMREXTCREATEFONTINDIRECTW)}] Index: {ihFont} FaceName: '{elfw.elfLogFont.FaceName.ToString()}' Height: {elfw.elfLogFont.lfHeight} Weight: FW_{elfw.elfLogFont.lfWeight}";
 }

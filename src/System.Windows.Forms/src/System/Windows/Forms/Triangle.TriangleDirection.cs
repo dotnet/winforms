@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal static partial class Triangle
 {
-    internal static partial class Triangle
+    internal enum TriangleDirection
     {
-        internal enum TriangleDirection
-        {
-            Up,
-            Down,
-            Left,
-            Right
-        }
+        Up,
+        Down,
+        Left,
+        Right
     }
 }

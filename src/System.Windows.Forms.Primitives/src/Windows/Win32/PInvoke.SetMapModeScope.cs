@@ -5,52 +5,51 @@
 #if DEBUG
 #endif
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
-    {
-        /// <summary>
-        ///  Helper to scope selecting a given mapping mode into a HDC. Restores the original mapping mode into the HDC
-        ///  when disposed.
-        /// </summary>
-        /// <remarks>
-        ///  <para>
-        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
-        ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
-        ///  </para>
-        /// </remarks>
+    /// <summary>
+    ///  Helper to scope selecting a given mapping mode into a HDC. Restores the original mapping mode into the HDC
+    ///  when disposed.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
+    ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
+    ///  </para>
+    /// </remarks>
 #if DEBUG
-        internal class SetMapModeScope : DisposalTracking.Tracker, IDisposable
+    internal class SetMapModeScope : DisposalTracking.Tracker, IDisposable
 #else
-        internal readonly ref struct SetMapModeScope
+    internal readonly ref struct SetMapModeScope
 #endif
+    {
+        private readonly HDC_MAP_MODE _previousMapMode;
+        private readonly HDC _hdc;
+
+        /// <summary>
+        ///  Sets the <paramref name="mapMode"/> in the given <paramref name="hdc"/> using
+        ///  <see cref="SetMapMode(HDC, HDC_MAP_MODE)"/>.
+        /// </summary>
+        public SetMapModeScope(HDC hdc, HDC_MAP_MODE mapMode)
         {
-            private readonly HDC_MAP_MODE _previousMapMode;
-            private readonly HDC _hdc;
+            _previousMapMode = (HDC_MAP_MODE)SetMapMode(hdc, mapMode);
 
-            /// <summary>
-            ///  Sets the <paramref name="mapMode"/> in the given <paramref name="hdc"/> using
-            ///  <see cref="SetMapMode(HDC, HDC_MAP_MODE)"/>.
-            /// </summary>
-            public SetMapModeScope(HDC hdc, HDC_MAP_MODE mapMode)
+            // If we didn't actually change the map mode, don't keep the HDC so we skip putting back the same state.
+            _hdc = mapMode == _previousMapMode ? default : hdc;
+        }
+
+        public void Dispose()
+        {
+            if (!_hdc.IsNull)
             {
-                _previousMapMode = (HDC_MAP_MODE)SetMapMode(hdc, mapMode);
-
-                // If we didn't actually change the map mode, don't keep the HDC so we skip putting back the same state.
-                _hdc = mapMode == _previousMapMode ? default : hdc;
+                SetMapMode(_hdc, _previousMapMode);
             }
-
-            public void Dispose()
-            {
-                if (!_hdc.IsNull)
-                {
-                    SetMapMode(_hdc, _previousMapMode);
-                }
 
 #if DEBUG
-                GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
 #endif
-            }
         }
     }
 }

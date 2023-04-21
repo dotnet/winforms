@@ -2,26 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Specifies how and if a drag-and-drop operation should continue.
+/// </summary>
+public enum DragAction
 {
     /// <summary>
-    ///  Specifies how and if a drag-and-drop operation should continue.
+    ///  The operation will continue.
     /// </summary>
-    public enum DragAction
-    {
-        /// <summary>
-        ///  The operation will continue.
-        /// </summary>
-        Continue = 0,
+    Continue = 0,
 
-        /// <summary>
-        ///  The operation will stop with a drop.
-        /// </summary>
-        Drop = 1,
+    /// <summary>
+    ///  The operation will stop with a drop.
+    /// </summary>
+    Drop = 1,
 
-        /// <summary>
-        ///  The operation is canceled with no drop message.
-        /// </summary>
-        Cancel = 2,
-    }
+    /// <summary>
+    ///  The operation is canceled with no drop message.
+    /// </summary>
+    Cancel = 2,
 }

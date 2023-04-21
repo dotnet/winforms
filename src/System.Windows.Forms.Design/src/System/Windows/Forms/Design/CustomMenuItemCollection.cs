@@ -4,44 +4,43 @@
 
 using System.Collections;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  A strongly-typed collection that stores ToolStripMenuItem objects for DesignerContextMenu
+/// </summary>
+internal class CustomMenuItemCollection : CollectionBase
 {
     /// <summary>
-    ///  A strongly-typed collection that stores ToolStripMenuItem objects for DesignerContextMenu
+    ///  Constructor
     /// </summary>
-    internal class CustomMenuItemCollection : CollectionBase
+    public CustomMenuItemCollection()
     {
-        /// <summary>
-        ///  Constructor
-        /// </summary>
-        public CustomMenuItemCollection()
-        {
-        }
+    }
 
-        /// <summary>
-        ///  Add value to the collection
-        /// </summary>
-        public int Add(ToolStripItem value)
-        {
-            return List.Add(value);
-        }
+    /// <summary>
+    ///  Add value to the collection
+    /// </summary>
+    public int Add(ToolStripItem value)
+    {
+        return List.Add(value);
+    }
 
-        /// <summary>
-        ///  Add range of values to the collection
-        /// </summary>
-        public void AddRange(ToolStripItem[] value)
+    /// <summary>
+    ///  Add range of values to the collection
+    /// </summary>
+    public void AddRange(ToolStripItem[] value)
+    {
+        for (int i = 0; (i < value.Length); i++)
         {
-            for (int i = 0; (i < value.Length); i++)
-            {
-                Add(value[i]);
-            }
+            Add(value[i]);
         }
+    }
 
-        /// <summary>
-        ///  Abstract base class version for refreshing the items
-        /// </summary>
-        public virtual void RefreshItems()
-        {
-        }
+    /// <summary>
+    ///  Abstract base class version for refreshing the items
+    /// </summary>
+    public virtual void RefreshItems()
+    {
     }
 }

@@ -8,262 +8,261 @@ using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace System.ComponentModel.Design.Serialization
+namespace System.ComponentModel.Design.Serialization;
+
+public sealed partial class CodeDomLocalizationProvider
 {
-    public sealed partial class CodeDomLocalizationProvider
+    /// <summary>
+    ///  The design time language and localizable properties.
+    /// </summary>
+    [ProvideProperty("Language", typeof(IComponent))]
+    [ProvideProperty("LoadLanguage", typeof(IComponent))]
+    [ProvideProperty("Localizable", typeof(IComponent))]
+    internal class LanguageExtenders : IExtenderProvider
     {
-        /// <summary>
-        ///  The design time language and localizable properties.
-        /// </summary>
-        [ProvideProperty("Language", typeof(IComponent))]
-        [ProvideProperty("LoadLanguage", typeof(IComponent))]
-        [ProvideProperty("Localizable", typeof(IComponent))]
-        internal class LanguageExtenders : IExtenderProvider
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IDesignerHost _host;
+        private IComponent _lastRoot;
+        private readonly TypeConverter.StandardValuesCollection _supportedCultures;
+        private bool _localizable;
+        private CultureInfo _language;
+        private CultureInfo _loadLanguage;
+        private CultureInfo _defaultLanguage;
+
+        public LanguageExtenders(IServiceProvider serviceProvider, CultureInfo[] supportedCultures)
         {
-            private readonly IServiceProvider _serviceProvider;
-            private readonly IDesignerHost _host;
-            private IComponent _lastRoot;
-            private readonly TypeConverter.StandardValuesCollection _supportedCultures;
-            private bool _localizable;
-            private CultureInfo _language;
-            private CultureInfo _loadLanguage;
-            private CultureInfo _defaultLanguage;
+            _serviceProvider = serviceProvider;
+            _host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
+            _language = CultureInfo.InvariantCulture;
 
-            public LanguageExtenders(IServiceProvider serviceProvider, CultureInfo[] supportedCultures)
+            if (supportedCultures is not null)
             {
-                _serviceProvider = serviceProvider;
-                _host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                _supportedCultures = new TypeConverter.StandardValuesCollection(supportedCultures);
+            }
+        }
+
+        /// <summary>
+        ///  A collection of custom supported cultures.  This can be null, indicating that the
+        ///  type converter should use the default set of supported cultures.
+        /// </summary>
+        internal TypeConverter.StandardValuesCollection SupportedCultures
+        {
+            get
+            {
+                return _supportedCultures;
+            }
+        }
+
+        /// <summary>
+        ///  Returns the current default language for the thread.
+        /// </summary>
+        private CultureInfo ThreadDefaultLanguage
+        {
+            get
+            {
+                _defaultLanguage ??= Application.CurrentCulture;
+
+                return _defaultLanguage;
+            }
+        }
+
+        /// <summary>
+        ///  Broadcasts a global change, indicating that all objects on the designer have changed.
+        /// </summary>
+        private static void BroadcastGlobalChange(IComponent component)
+        {
+            ISite site = component.Site;
+
+            if (site.TryGetService(out IComponentChangeService changeService)
+                && site.TryGetService(out IContainer container))
+            {
+                foreach (IComponent c in container.Components)
+                {
+                    changeService.OnComponentChanging(c);
+                    changeService.OnComponentChanged(c);
+                }
+            }
+        }
+
+        /// <summary>
+        ///  This method compares the current root component
+        ///  with the last one we saw.  If they don't match,
+        ///  that means the designer has reloaded and we
+        ///  should set all of our properties back to their
+        ///  defaults.  This is more efficient than syncing
+        ///  an event.
+        /// </summary>
+        private void CheckRoot()
+        {
+            if (_host is not null && _host.RootComponent != _lastRoot)
+            {
+                _lastRoot = _host.RootComponent;
                 _language = CultureInfo.InvariantCulture;
+                _loadLanguage = null;
+                _localizable = false;
+            }
+        }
 
-                if (supportedCultures is not null)
-                {
-                    _supportedCultures = new TypeConverter.StandardValuesCollection(supportedCultures);
-                }
+        /// <summary>
+        ///  Gets the language set for the specified object.
+        /// </summary>
+        [DesignOnly(true)]
+        [TypeConverter(typeof(LanguageCultureInfoConverter))]
+        [Category("Design")]
+        [SRDescription("LocalizationProviderLanguageDescr")]
+        public CultureInfo GetLanguage(IComponent o)
+        {
+            CheckRoot();
+
+            return _language;
+        }
+
+        /// <summary>
+        ///  Gets the language we'll use when re-loading the designer.
+        /// </summary>
+        [DesignOnly(true)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public CultureInfo GetLoadLanguage(IComponent o)
+        {
+            CheckRoot();
+
+            // If we never configured the load language, we're always invariant.
+            _loadLanguage ??= CultureInfo.InvariantCulture;
+
+            return _loadLanguage;
+        }
+
+        /// <summary>
+        ///  Gets a value indicating whether the specified object supports design-time localization
+        ///  support.
+        /// </summary>
+        [DesignOnly(true)]
+        [Category("Design")]
+        [SRDescription("LocalizationProviderLocalizableDescr")]
+        public bool GetLocalizable(IComponent o)
+        {
+            CheckRoot();
+
+            return _localizable;
+        }
+
+        /// <summary>
+        ///  Sets the language to use.  When the language is set the designer will be
+        ///  reloaded.
+        /// </summary>
+        public void SetLanguage(IComponent o, CultureInfo language)
+        {
+            CheckRoot();
+
+            language ??= CultureInfo.InvariantCulture;
+
+            bool isInvariantCulture = (language.Equals(CultureInfo.InvariantCulture));
+
+            if (_language.Equals(language))
+            {
+                return;
             }
 
-            /// <summary>
-            ///  A collection of custom supported cultures.  This can be null, indicating that the
-            ///  type converter should use the default set of supported cultures.
-            /// </summary>
-            internal TypeConverter.StandardValuesCollection SupportedCultures
+            _language = language;
+
+            if (!isInvariantCulture)
             {
-                get
-                {
-                    return _supportedCultures;
-                }
+                SetLocalizable(o, true);
             }
 
-            /// <summary>
-            ///  Returns the current default language for the thread.
-            /// </summary>
-            private CultureInfo ThreadDefaultLanguage
+            if (_serviceProvider is not null && _host is not null)
             {
-                get
-                {
-                    _defaultLanguage ??= Application.CurrentCulture;
+                IDesignerLoaderService ls = _serviceProvider.GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
 
-                    return _defaultLanguage;
+                // Only reload if we're not in the process of loading!
+                if (_host.Loading)
+                {
+                    _loadLanguage = language;
                 }
-            }
-
-            /// <summary>
-            ///  Broadcasts a global change, indicating that all objects on the designer have changed.
-            /// </summary>
-            private static void BroadcastGlobalChange(IComponent component)
-            {
-                ISite site = component.Site;
-
-                if (site.TryGetService(out IComponentChangeService changeService)
-                    && site.TryGetService(out IContainer container))
+                else
                 {
-                    foreach (IComponent c in container.Components)
+                    bool reloadSuccessful = false;
+
+                    if (ls is not null)
                     {
-                        changeService.OnComponentChanging(c);
-                        changeService.OnComponentChanged(c);
+                        reloadSuccessful = ls.Reload();
+                    }
+
+                    if (!reloadSuccessful)
+                    {
+                        IUIService uis = (IUIService)_serviceProvider.GetService(typeof(IUIService));
+
+                        uis?.ShowMessage(SR.LocalizationProviderManualReload);
                     }
                 }
             }
+        }
 
-            /// <summary>
-            ///  This method compares the current root component
-            ///  with the last one we saw.  If they don't match,
-            ///  that means the designer has reloaded and we
-            ///  should set all of our properties back to their
-            ///  defaults.  This is more efficient than syncing
-            ///  an event.
-            /// </summary>
-            private void CheckRoot()
+        /// <summary>
+        ///  Sets a value indicating whether or not the specified object has design-time
+        ///  localization support.
+        /// </summary>
+        public void SetLocalizable(IComponent o, bool localizable)
+        {
+            CheckRoot();
+
+            if (localizable != _localizable)
             {
-                if (_host is not null && _host.RootComponent != _lastRoot)
+                _localizable = localizable;
+
+                if (!localizable)
                 {
-                    _lastRoot = _host.RootComponent;
-                    _language = CultureInfo.InvariantCulture;
-                    _loadLanguage = null;
-                    _localizable = false;
-                }
-            }
-
-            /// <summary>
-            ///  Gets the language set for the specified object.
-            /// </summary>
-            [DesignOnly(true)]
-            [TypeConverter(typeof(LanguageCultureInfoConverter))]
-            [Category("Design")]
-            [SRDescription("LocalizationProviderLanguageDescr")]
-            public CultureInfo GetLanguage(IComponent o)
-            {
-                CheckRoot();
-
-                return _language;
-            }
-
-            /// <summary>
-            ///  Gets the language we'll use when re-loading the designer.
-            /// </summary>
-            [DesignOnly(true)]
-            [Browsable(false)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public CultureInfo GetLoadLanguage(IComponent o)
-            {
-                CheckRoot();
-
-                // If we never configured the load language, we're always invariant.
-                _loadLanguage ??= CultureInfo.InvariantCulture;
-
-                return _loadLanguage;
-            }
-
-            /// <summary>
-            ///  Gets a value indicating whether the specified object supports design-time localization
-            ///  support.
-            /// </summary>
-            [DesignOnly(true)]
-            [Category("Design")]
-            [SRDescription("LocalizationProviderLocalizableDescr")]
-            public bool GetLocalizable(IComponent o)
-            {
-                CheckRoot();
-
-                return _localizable;
-            }
-
-            /// <summary>
-            ///  Sets the language to use.  When the language is set the designer will be
-            ///  reloaded.
-            /// </summary>
-            public void SetLanguage(IComponent o, CultureInfo language)
-            {
-                CheckRoot();
-
-                language ??= CultureInfo.InvariantCulture;
-
-                bool isInvariantCulture = (language.Equals(CultureInfo.InvariantCulture));
-
-                if (_language.Equals(language))
-                {
-                    return;
+                    SetLanguage(o, CultureInfo.InvariantCulture);
                 }
 
-                _language = language;
-
-                if (!isInvariantCulture)
+                if (_host is not null && !_host.Loading)
                 {
-                    SetLocalizable(o, true);
-                }
-
-                if (_serviceProvider is not null && _host is not null)
-                {
-                    IDesignerLoaderService ls = _serviceProvider.GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
-
-                    // Only reload if we're not in the process of loading!
-                    if (_host.Loading)
-                    {
-                        _loadLanguage = language;
-                    }
-                    else
-                    {
-                        bool reloadSuccessful = false;
-
-                        if (ls is not null)
-                        {
-                            reloadSuccessful = ls.Reload();
-                        }
-
-                        if (!reloadSuccessful)
-                        {
-                            IUIService uis = (IUIService)_serviceProvider.GetService(typeof(IUIService));
-
-                            uis?.ShowMessage(SR.LocalizationProviderManualReload);
-                        }
-                    }
+                    BroadcastGlobalChange(o);
                 }
             }
+        }
 
-            /// <summary>
-            ///  Sets a value indicating whether or not the specified object has design-time
-            ///  localization support.
-            /// </summary>
-            public void SetLocalizable(IComponent o, bool localizable)
-            {
-                CheckRoot();
+        /// <summary>
+        ///  Gets a value indicating whether the specified object should have its design-time localization support persisted.
+        /// </summary>
+        private bool ShouldSerializeLanguage(IComponent o)
+        {
+            return (_language is not null && _language != CultureInfo.InvariantCulture);
+        }
 
-                if (localizable != _localizable)
-                {
-                    _localizable = localizable;
+        /// <summary>
+        ///  Gets a value indicating whether the specified object should have its design-time localization support persisted.
+        /// </summary>
+        private bool ShouldSerializeLocalizable(IComponent o)
+        {
+            return (_localizable);
+        }
 
-                    if (!localizable)
-                    {
-                        SetLanguage(o, CultureInfo.InvariantCulture);
-                    }
+        /// <summary>
+        ///  Resets the localizable property to the 'defaultLocalizable' value.
+        /// </summary>
+        private void ResetLocalizable(IComponent o)
+        {
+            SetLocalizable(o, false);
+        }
 
-                    if (_host is not null && !_host.Loading)
-                    {
-                        BroadcastGlobalChange(o);
-                    }
-                }
-            }
+        /// <summary>
+        ///  Resets the language for the specified object.
+        /// </summary>
+        private void ResetLanguage(IComponent o)
+        {
+            SetLanguage(o, CultureInfo.InvariantCulture);
+        }
 
-            /// <summary>
-            ///  Gets a value indicating whether the specified object should have its design-time localization support persisted.
-            /// </summary>
-            private bool ShouldSerializeLanguage(IComponent o)
-            {
-                return (_language is not null && _language != CultureInfo.InvariantCulture);
-            }
+        /// <summary>
+        ///  We only extend the root component.
+        /// </summary>
+        public bool CanExtend(object o)
+        {
+            CheckRoot();
 
-            /// <summary>
-            ///  Gets a value indicating whether the specified object should have its design-time localization support persisted.
-            /// </summary>
-            private bool ShouldSerializeLocalizable(IComponent o)
-            {
-                return (_localizable);
-            }
-
-            /// <summary>
-            ///  Resets the localizable property to the 'defaultLocalizable' value.
-            /// </summary>
-            private void ResetLocalizable(IComponent o)
-            {
-                SetLocalizable(o, false);
-            }
-
-            /// <summary>
-            ///  Resets the language for the specified object.
-            /// </summary>
-            private void ResetLanguage(IComponent o)
-            {
-                SetLanguage(o, CultureInfo.InvariantCulture);
-            }
-
-            /// <summary>
-            ///  We only extend the root component.
-            /// </summary>
-            public bool CanExtend(object o)
-            {
-                CheckRoot();
-
-                return (_host is not null && o == _host.RootComponent);
-            }
+            return (_host is not null && o == _host.RootComponent);
         }
     }
 }

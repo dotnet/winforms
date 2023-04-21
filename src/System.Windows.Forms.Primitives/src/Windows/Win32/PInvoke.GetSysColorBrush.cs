@@ -4,16 +4,15 @@
 
 using System.Drawing;
 
-namespace Windows.Win32
-{
-    internal static partial class PInvoke
-    {
-        public static HBRUSH GetSysColorBrush(Color systemColor)
-        {
-            Debug.Assert(systemColor.IsSystemColor);
+namespace Windows.Win32;
 
-            // Extract the COLOR value
-            return PInvoke.GetSysColorBrush((SYS_COLOR_INDEX)(ColorTranslator.ToOle(systemColor) & 0xFF));
-        }
+internal static partial class PInvoke
+{
+    public static HBRUSH GetSysColorBrush(Color systemColor)
+    {
+        Debug.Assert(systemColor.IsSystemColor);
+
+        // Extract the COLOR value
+        return PInvoke.GetSysColorBrush((SYS_COLOR_INDEX)(ColorTranslator.ToOle(systemColor) & 0xFF));
     }
 }

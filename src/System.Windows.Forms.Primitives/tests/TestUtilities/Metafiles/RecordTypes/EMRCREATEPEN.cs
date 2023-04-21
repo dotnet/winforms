@@ -6,16 +6,15 @@
 
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms.Metafiles
-{
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRCREATEPEN
-    {
-        public EMR emr;
-        public uint ihPen;
-        public LOGPEN lopn;
+namespace System.Windows.Forms.Metafiles;
 
-        public override string ToString()
-            => $@"[{nameof(EMRCREATEPEN)}] Index: {ihPen} Style: {lopn.lopnStyle} Width: {lopn.lopnWidth} Color: {lopn.lopnColor.ToSystemColorString()}";
-    }
+[StructLayout(LayoutKind.Sequential)]
+internal struct EMRCREATEPEN
+{
+    public EMR emr;
+    public uint ihPen;
+    public LOGPEN lopn;
+
+    public override string ToString()
+        => $@"[{nameof(EMRCREATEPEN)}] Index: {ihPen} Style: {lopn.lopnStyle} Width: {lopn.lopnWidth} Color: {lopn.lopnColor.ToSystemColorString()}";
 }

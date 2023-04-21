@@ -4,21 +4,20 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
-{
-    public partial class WebBrowser
-    {
-        internal class WebBrowserAccessibleObject : ControlAccessibleObject
-        {
-            public WebBrowserAccessibleObject(WebBrowser owner) : base(owner)
-            { }
+namespace System.Windows.Forms;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
-                    _ => base.GetPropertyValue(propertyID)
-                };
-        }
+public partial class WebBrowser
+{
+    internal class WebBrowserAccessibleObject : ControlAccessibleObject
+    {
+        public WebBrowserAccessibleObject(WebBrowser owner) : base(owner)
+        { }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            => propertyID switch
+            {
+                UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                _ => base.GetPropertyValue(propertyID)
+            };
     }
 }

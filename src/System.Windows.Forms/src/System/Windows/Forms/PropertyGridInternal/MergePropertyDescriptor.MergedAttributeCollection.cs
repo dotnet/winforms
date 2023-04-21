@@ -4,71 +4,70 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+internal partial class MergePropertyDescriptor
 {
-    internal partial class MergePropertyDescriptor
+    private class MergedAttributeCollection : AttributeCollection
     {
-        private class MergedAttributeCollection : AttributeCollection
+        private readonly MergePropertyDescriptor _owner;
+
+        private AttributeCollection[]? _attributeCollections;
+        private Dictionary<Type, Attribute>? _foundAttributes;
+
+        public MergedAttributeCollection(MergePropertyDescriptor owner) : base(attributes: null)
         {
-            private readonly MergePropertyDescriptor _owner;
+            _owner = owner;
+        }
 
-            private AttributeCollection[]? _attributeCollections;
-            private Dictionary<Type, Attribute>? _foundAttributes;
+        public override Attribute? this[[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType] => GetCommonAttribute(attributeType);
 
-            public MergedAttributeCollection(MergePropertyDescriptor owner) : base(attributes: null)
+        private Attribute? GetCommonAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType)
+        {
+            if (_attributeCollections is null)
             {
-                _owner = owner;
+                _attributeCollections = new AttributeCollection[_owner._descriptors.Length];
+                for (int i = 0; i < _owner._descriptors.Length; i++)
+                {
+                    _attributeCollections[i] = _owner._descriptors[i].Attributes;
+                }
             }
 
-            public override Attribute? this[[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType] => GetCommonAttribute(attributeType);
-
-            private Attribute? GetCommonAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType)
+            if (_attributeCollections.Length == 0)
             {
-                if (_attributeCollections is null)
-                {
-                    _attributeCollections = new AttributeCollection[_owner._descriptors.Length];
-                    for (int i = 0; i < _owner._descriptors.Length; i++)
-                    {
-                        _attributeCollections[i] = _owner._descriptors[i].Attributes;
-                    }
-                }
+                return GetDefaultAttribute(attributeType);
+            }
 
-                if (_attributeCollections.Length == 0)
-                {
-                    return GetDefaultAttribute(attributeType);
-                }
-
-                if (_foundAttributes is not null
-                    && _foundAttributes.TryGetValue(attributeType, out Attribute? value))
-                {
-                    return value;
-                }
-
-                value = _attributeCollections[0][attributeType];
-
-                if (value is null)
-                {
-                    return null;
-                }
-
-                for (int i = 1; i < _attributeCollections.Length; i++)
-                {
-                    Attribute? newValue = _attributeCollections[i][attributeType];
-                    if (!value.Equals(newValue))
-                    {
-                        value = GetDefaultAttribute(attributeType);
-                        break;
-                    }
-                }
-
-                _foundAttributes ??= new();
-                if (value is not null)
-                {
-                    _foundAttributes[attributeType] = value;
-                }
-
+            if (_foundAttributes is not null
+                && _foundAttributes.TryGetValue(attributeType, out Attribute? value))
+            {
                 return value;
             }
+
+            value = _attributeCollections[0][attributeType];
+
+            if (value is null)
+            {
+                return null;
+            }
+
+            for (int i = 1; i < _attributeCollections.Length; i++)
+            {
+                Attribute? newValue = _attributeCollections[i][attributeType];
+                if (!value.Equals(newValue))
+                {
+                    value = GetDefaultAttribute(attributeType);
+                    break;
+                }
+            }
+
+            _foundAttributes ??= new();
+            if (value is not null)
+            {
+                _foundAttributes[attributeType] = value;
+            }
+
+            return value;
         }
     }
 }

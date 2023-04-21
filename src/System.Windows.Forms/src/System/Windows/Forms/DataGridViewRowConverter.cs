@@ -7,34 +7,33 @@ using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using System.Reflection;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal class DataGridViewRowConverter : ExpandableObjectConverter
 {
-    internal class DataGridViewRowConverter : ExpandableObjectConverter
+    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
     {
-        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
+        if (destinationType == typeof(InstanceDescriptor))
         {
-            if (destinationType == typeof(InstanceDescriptor))
-            {
-                return true;
-            }
-
-            return base.CanConvertTo(context, destinationType);
+            return true;
         }
 
-        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+        return base.CanConvertTo(context, destinationType);
+    }
+
+    public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+    {
+        ArgumentNullException.ThrowIfNull(destinationType);
+
+        if (value is DataGridViewRow row && destinationType == typeof(InstanceDescriptor))
         {
-            ArgumentNullException.ThrowIfNull(destinationType);
-
-            if (value is DataGridViewRow row && destinationType == typeof(InstanceDescriptor))
+            ConstructorInfo? ctor = row.GetType().GetConstructor(Array.Empty<Type>());
+            if (ctor is not null)
             {
-                ConstructorInfo? ctor = row.GetType().GetConstructor(Array.Empty<Type>());
-                if (ctor is not null)
-                {
-                    return new InstanceDescriptor(ctor, Array.Empty<object>(), isComplete: false);
-                }
+                return new InstanceDescriptor(ctor, Array.Empty<object>(), isComplete: false);
             }
-
-            return base.ConvertTo(context, culture, value, destinationType);
         }
+
+        return base.ConvertTo(context, culture, value, destinationType);
     }
 }

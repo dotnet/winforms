@@ -1,72 +1,71 @@
 ﻿using System.ComponentModel.Design;
 
-namespace DesignSurfaceExt
+namespace DesignSurfaceExt;
+
+public class UndoEngineExt : UndoEngine
 {
-    public class UndoEngineExt : UndoEngine
+    private Stack<UndoEngine.UndoUnit> undoStack = new Stack<UndoEngine.UndoUnit>();
+    private Stack<UndoEngine.UndoUnit> redoStack = new Stack<UndoEngine.UndoUnit>();
+
+    public UndoEngineExt(IServiceProvider provider) : base(provider) { }
+
+    public bool EnableUndo
     {
-        private Stack<UndoEngine.UndoUnit> undoStack = new Stack<UndoEngine.UndoUnit>();
-        private Stack<UndoEngine.UndoUnit> redoStack = new Stack<UndoEngine.UndoUnit>();
+        get { return undoStack.Count > 0; }
+    }
 
-        public UndoEngineExt(IServiceProvider provider) : base(provider) { }
+    public bool EnableRedo
+    {
+        get { return redoStack.Count > 0; }
+    }
 
-        public bool EnableUndo
+    public void Undo()
+    {
+        if (undoStack.Count > 0)
         {
-            get { return undoStack.Count > 0; }
-        }
-
-        public bool EnableRedo
-        {
-            get { return redoStack.Count > 0; }
-        }
-
-        public void Undo()
-        {
-            if (undoStack.Count > 0)
+            try
             {
-                try
-                {
-                    UndoEngine.UndoUnit unit = undoStack.Pop();
-                    unit.Undo();
-                    redoStack.Push(unit);
-                    //Log("::Undo - undo action performed: " + unit.Name);
-                }
-                catch
-                {
-                    //Log("::Undo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
-                }
+                UndoEngine.UndoUnit unit = undoStack.Pop();
+                unit.Undo();
+                redoStack.Push(unit);
+                //Log("::Undo - undo action performed: " + unit.Name);
             }
-            else
+            catch
             {
-                //Log("::Undo - NO undo action to perform!");
+                //Log("::Undo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
             }
         }
-
-        public void Redo()
+        else
         {
-            if (redoStack.Count > 0)
+            //Log("::Undo - NO undo action to perform!");
+        }
+    }
+
+    public void Redo()
+    {
+        if (redoStack.Count > 0)
+        {
+            try
             {
-                try
-                {
-                    UndoEngine.UndoUnit unit = redoStack.Pop();
-                    unit.Undo();
-                    undoStack.Push(unit);
-                    //Log("::Redo - redo action performed: " + unit.Name);
-                }
-                catch
-                {
-                    //Log("::Redo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
-                }
+                UndoEngine.UndoUnit unit = redoStack.Pop();
+                unit.Undo();
+                undoStack.Push(unit);
+                //Log("::Redo - redo action performed: " + unit.Name);
             }
-            else
+            catch
             {
-                //Log("::Redo - NO redo action to perform!");
+                //Log("::Redo() - Exception " + ex.Message + " (line:" + new StackFrame(true).GetFileLineNumber() + ")");
             }
         }
-
-        protected override void AddUndoUnit(UndoEngine.UndoUnit unit)
+        else
         {
-            undoStack.Push(unit);
+            //Log("::Redo - NO redo action to perform!");
         }
+    }
+
+    protected override void AddUndoUnit(UndoEngine.UndoUnit unit)
+    {
+        undoStack.Push(unit);
     }
 }
 

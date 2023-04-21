@@ -7,122 +7,121 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 
-namespace System.Windows.Forms.UITests
+namespace System.Windows.Forms.UITests;
+
+public class SendInput
 {
-    public class SendInput
+    private readonly Func<Task> _waitForIdleAsync;
+
+    public SendInput(Func<Task> waitForIdleAsync)
     {
-        private readonly Func<Task> _waitForIdleAsync;
+        _waitForIdleAsync = waitForIdleAsync;
+    }
 
-        public SendInput(Func<Task> waitForIdleAsync)
+    internal async Task SendAsync(Form window, params object[] keys)
+    {
+        await SendAsync(window, inputSimulator =>
         {
-            _waitForIdleAsync = waitForIdleAsync;
-        }
-
-        internal async Task SendAsync(Form window, params object[] keys)
-        {
-            await SendAsync(window, inputSimulator =>
+            foreach (var key in keys)
             {
-                foreach (var key in keys)
+                switch (key)
                 {
-                    switch (key)
-                    {
-                        case string str:
-                            var text = str.Replace("\r\n", "\r").Replace("\n", "\r");
-                            int index = 0;
-                            while (index < text.Length)
+                    case string str:
+                        var text = str.Replace("\r\n", "\r").Replace("\n", "\r");
+                        int index = 0;
+                        while (index < text.Length)
+                        {
+                            if (text[index] == '\r')
                             {
-                                if (text[index] == '\r')
-                                {
-                                    inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RETURN);
-                                    index++;
-                                }
-                                else
-                                {
-                                    int nextIndex = text.IndexOf('\r', index);
-                                    if (nextIndex == -1)
-                                    {
-                                        nextIndex = text.Length;
-                                    }
-
-                                    inputSimulator.Keyboard.TextEntry(text.Substring(index, nextIndex - index));
-                                    index = nextIndex;
-                                }
+                                inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RETURN);
+                                index++;
                             }
+                            else
+                            {
+                                int nextIndex = text.IndexOf('\r', index);
+                                if (nextIndex == -1)
+                                {
+                                    nextIndex = text.Length;
+                                }
 
-                            break;
+                                inputSimulator.Keyboard.TextEntry(text.Substring(index, nextIndex - index));
+                                index = nextIndex;
+                            }
+                        }
 
-                        case char c:
-                            inputSimulator.Keyboard.TextEntry(c);
-                            break;
+                        break;
 
-                        case VIRTUAL_KEY virtualKeyCode:
-                            inputSimulator.Keyboard.KeyPress(virtualKeyCode);
-                            break;
+                    case char c:
+                        inputSimulator.Keyboard.TextEntry(c);
+                        break;
 
-                        case null:
-                            throw new ArgumentNullException(nameof(keys));
+                    case VIRTUAL_KEY virtualKeyCode:
+                        inputSimulator.Keyboard.KeyPress(virtualKeyCode);
+                        break;
 
-                        default:
-                            throw new ArgumentException($"Unexpected type encountered: {key.GetType()}", nameof(keys));
-                    }
-                }
-            });
-        }
+                    case null:
+                        throw new ArgumentNullException(nameof(keys));
 
-        internal async Task SendAsync(Form window, Action<InputSimulator> actions)
-        {
-            if (actions is null)
-            {
-                throw new ArgumentNullException(nameof(actions));
-            }
-
-            SetForegroundWindow(window);
-            await Task.Run(() => actions(new InputSimulator()));
-
-            await _waitForIdleAsync();
-        }
-
-        private static HWND GetForegroundWindow()
-        {
-            var startTime = DateTime.Now;
-
-            // Attempt to get the foreground window in a loop, as the NativeMethods function can return IntPtr.Zero
-            // in certain circumstances, such as when a window is losing activation.
-            HWND foregroundWindow;
-            do
-            {
-                foregroundWindow = PInvoke.GetForegroundWindow();
-            }
-            while (foregroundWindow == IntPtr.Zero
-                && DateTime.Now - startTime < TimeSpan.FromMilliseconds(500));
-
-            return foregroundWindow;
-        }
-
-        private static void SetForegroundWindow(Form window)
-        {
-            // Make the window a top-most window so it will appear above any existing top-most windows
-            PInvoke.SetWindowPos(window, HWND.HWND_TOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
-
-            // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
-            if (!PInvoke.SetForegroundWindow(window))
-            {
-                string windowTitle = User32.GetWindowText(window);
-                if (PInvoke.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
-                {
-                    string message = $"ForegroundWindow doesn't belong the test process! The current window HWND: {window}, title:{windowTitle}.";
-                    throw new InvalidOperationException(message);
+                    default:
+                        throw new ArgumentException($"Unexpected type encountered: {key.GetType()}", nameof(keys));
                 }
             }
+        });
+    }
 
-            // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
-            PInvoke.SetActiveWindow(window);
-
-            // Give the window the keyboard focus as it may not have been achieved by 'SetActiveWindow'
-            PInvoke.SetFocus(window);
-
-            // Remove the 'Top-Most' qualification from the window
-            PInvoke.SetWindowPos(window, HWND.HWND_NOTOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
+    internal async Task SendAsync(Form window, Action<InputSimulator> actions)
+    {
+        if (actions is null)
+        {
+            throw new ArgumentNullException(nameof(actions));
         }
+
+        SetForegroundWindow(window);
+        await Task.Run(() => actions(new InputSimulator()));
+
+        await _waitForIdleAsync();
+    }
+
+    private static HWND GetForegroundWindow()
+    {
+        var startTime = DateTime.Now;
+
+        // Attempt to get the foreground window in a loop, as the NativeMethods function can return IntPtr.Zero
+        // in certain circumstances, such as when a window is losing activation.
+        HWND foregroundWindow;
+        do
+        {
+            foregroundWindow = PInvoke.GetForegroundWindow();
+        }
+        while (foregroundWindow == IntPtr.Zero
+            && DateTime.Now - startTime < TimeSpan.FromMilliseconds(500));
+
+        return foregroundWindow;
+    }
+
+    private static void SetForegroundWindow(Form window)
+    {
+        // Make the window a top-most window so it will appear above any existing top-most windows
+        PInvoke.SetWindowPos(window, HWND.HWND_TOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
+
+        // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
+        if (!PInvoke.SetForegroundWindow(window))
+        {
+            string windowTitle = User32.GetWindowText(window);
+            if (PInvoke.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
+            {
+                string message = $"ForegroundWindow doesn't belong the test process! The current window HWND: {window}, title:{windowTitle}.";
+                throw new InvalidOperationException(message);
+            }
+        }
+
+        // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
+        PInvoke.SetActiveWindow(window);
+
+        // Give the window the keyboard focus as it may not have been achieved by 'SetActiveWindow'
+        PInvoke.SetFocus(window);
+
+        // Remove the 'Top-Most' qualification from the window
+        PInvoke.SetWindowPos(window, HWND.HWND_NOTOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
     }
 }

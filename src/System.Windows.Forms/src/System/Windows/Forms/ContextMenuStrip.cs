@@ -5,119 +5,118 @@
 using System.ComponentModel;
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  This class is just a conceptual wrapper around ToolStripDropDownMenu.
+/// </summary>
+[DefaultEvent(nameof(Opening))]
+[SRDescription(nameof(SR.DescriptionContextMenuStrip))]
+public class ContextMenuStrip : ToolStripDropDownMenu
 {
-    /// <summary>
-    ///  This class is just a conceptual wrapper around ToolStripDropDownMenu.
-    /// </summary>
-    [DefaultEvent(nameof(Opening))]
-    [SRDescription(nameof(SR.DescriptionContextMenuStrip))]
-    public class ContextMenuStrip : ToolStripDropDownMenu
+    public ContextMenuStrip(IContainer container) : base()
     {
-        public ContextMenuStrip(IContainer container) : base()
-        {
-            // this constructor ensures ContextMenuStrip is disposed properly since its not parented to the form.
-            ArgumentNullException.ThrowIfNull(container);
+        // this constructor ensures ContextMenuStrip is disposed properly since its not parented to the form.
+        ArgumentNullException.ThrowIfNull(container);
 
-            container.Add(this);
+        container.Add(this);
+    }
+
+    public ContextMenuStrip()
+    {
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+    }
+
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))]
+    public Control? SourceControl
+    {
+        get
+        {
+            return SourceControlInternal;
         }
+    }
 
-        public ContextMenuStrip()
-        {
-        }
+    // minimal Clone implementation for DGV support only.
+    internal ContextMenuStrip Clone()
+    {
+        // VERY limited support for cloning.
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
+        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))]
-        public Control? SourceControl
+        // copy over events
+        contextMenuStrip.Events.AddHandlers(Events);
+
+        contextMenuStrip.AutoClose = AutoClose;
+        contextMenuStrip.AutoSize = AutoSize;
+        contextMenuStrip.Bounds = Bounds;
+        contextMenuStrip.ImageList = ImageList;
+        contextMenuStrip.ShowCheckMargin = ShowCheckMargin;
+        contextMenuStrip.ShowImageMargin = ShowImageMargin;
+
+        // copy over relevant properties
+
+        for (int i = 0; i < Items.Count; i++)
         {
-            get
+            ToolStripItem item = Items[i];
+
+            if (item is ToolStripSeparator)
             {
-                return SourceControlInternal;
+                contextMenuStrip.Items.Add(new ToolStripSeparator());
+            }
+            else if (item is ToolStripMenuItem toolStripMenuItem)
+            {
+                contextMenuStrip.Items.Add(toolStripMenuItem.Clone());
             }
         }
 
-        // minimal Clone implementation for DGV support only.
-        internal ContextMenuStrip Clone()
+        return contextMenuStrip;
+    }
+
+    // internal overload so we know whether or not to show mnemonics.
+    internal void ShowInternal(Control source, Point location, bool isKeyboardActivated)
+    {
+        Show(source, location);
+
+        // if we were activated by keyboard - show mnemonics.
+        if (isKeyboardActivated)
         {
-            // VERY limited support for cloning.
+            ToolStripManager.ModalMenuFilter.Instance.ShowUnderlines = true;
+        }
+    }
 
-            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-
-            // copy over events
-            contextMenuStrip.Events.AddHandlers(Events);
-
-            contextMenuStrip.AutoClose = AutoClose;
-            contextMenuStrip.AutoSize = AutoSize;
-            contextMenuStrip.Bounds = Bounds;
-            contextMenuStrip.ImageList = ImageList;
-            contextMenuStrip.ShowCheckMargin = ShowCheckMargin;
-            contextMenuStrip.ShowImageMargin = ShowImageMargin;
-
-            // copy over relevant properties
-
-            for (int i = 0; i < Items.Count; i++)
-            {
-                ToolStripItem item = Items[i];
-
-                if (item is ToolStripSeparator)
-                {
-                    contextMenuStrip.Items.Add(new ToolStripSeparator());
-                }
-                else if (item is ToolStripMenuItem toolStripMenuItem)
-                {
-                    contextMenuStrip.Items.Add(toolStripMenuItem.Clone());
-                }
-            }
-
-            return contextMenuStrip;
+    internal void ShowInTaskbar(int x, int y)
+    {
+        // we need to make ourselves a topmost window
+        WorkingAreaConstrained = false;
+        Rectangle bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.AboveLeft);
+        Rectangle screenBounds = Screen.FromRectangle(bounds).Bounds;
+        if (bounds.Y < screenBounds.Y)
+        {
+            bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.BelowLeft);
+        }
+        else if (bounds.X < screenBounds.X)
+        {
+            bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.AboveRight);
         }
 
-        // internal overload so we know whether or not to show mnemonics.
-        internal void ShowInternal(Control source, Point location, bool isKeyboardActivated)
-        {
-            Show(source, location);
+        bounds = WindowsFormsUtils.ConstrainToBounds(screenBounds, bounds);
 
-            // if we were activated by keyboard - show mnemonics.
-            if (isKeyboardActivated)
-            {
-                ToolStripManager.ModalMenuFilter.Instance.ShowUnderlines = true;
-            }
+        Show(bounds.X, bounds.Y);
+    }
+
+    protected override void SetVisibleCore(bool visible)
+    {
+        if (!visible)
+        {
+            WorkingAreaConstrained = true;
         }
 
-        internal void ShowInTaskbar(int x, int y)
-        {
-            // we need to make ourselves a topmost window
-            WorkingAreaConstrained = false;
-            Rectangle bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.AboveLeft);
-            Rectangle screenBounds = Screen.FromRectangle(bounds).Bounds;
-            if (bounds.Y < screenBounds.Y)
-            {
-                bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.BelowLeft);
-            }
-            else if (bounds.X < screenBounds.X)
-            {
-                bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.AboveRight);
-            }
-
-            bounds = WindowsFormsUtils.ConstrainToBounds(screenBounds, bounds);
-
-            Show(bounds.X, bounds.Y);
-        }
-
-        protected override void SetVisibleCore(bool visible)
-        {
-            if (!visible)
-            {
-                WorkingAreaConstrained = true;
-            }
-
-            base.SetVisibleCore(visible);
-        }
+        base.SetVisibleCore(visible);
     }
 }

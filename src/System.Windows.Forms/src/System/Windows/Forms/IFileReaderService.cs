@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public interface IFileReaderService
 {
-    public interface IFileReaderService
-    {
-        Stream OpenFileFromSource(string relativePath);
-    }
+    Stream OpenFileFromSource(string relativePath);
 }

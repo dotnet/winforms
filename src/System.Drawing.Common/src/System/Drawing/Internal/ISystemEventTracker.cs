@@ -1,10 +1,9 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Drawing.Internal
+namespace System.Drawing.Internal;
+
+internal interface ISystemColorTracker
 {
-    internal interface ISystemColorTracker
-    {
-        void OnSystemColorChanged();
-    }
+    void OnSystemColorChanged();
 }

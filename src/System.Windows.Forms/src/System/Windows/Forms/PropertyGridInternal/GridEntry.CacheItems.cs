@@ -4,23 +4,22 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+internal abstract partial class GridEntry
 {
-    internal abstract partial class GridEntry
+    private class CacheItems
     {
-        private class CacheItems
-        {
-            public string? LastLabel;
-            public Font? LastLabelFont;
-            public int LastLabelWidth;
-            public bool LastShouldSerialize;
-            public object? LastValue;
-            public Font? LastValueFont;
-            public string? LastValueString;
-            public int LastValueTextWidth;
-            public bool UseCompatTextRendering;
-            public bool UseShouldSerialize;
-            public bool UseValueString;
-        }
+        public string? LastLabel;
+        public Font? LastLabelFont;
+        public int LastLabelWidth;
+        public bool LastShouldSerialize;
+        public object? LastValue;
+        public Font? LastValueFont;
+        public string? LastValueString;
+        public int LastValueTextWidth;
+        public bool UseCompatTextRendering;
+        public bool UseShouldSerialize;
+        public bool UseValueString;
     }
 }

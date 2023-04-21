@@ -2,69 +2,41 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewRow
 {
-    public partial class DataGridViewRow
+    private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
     {
-        private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
+        private readonly DataGridViewRow _owningDataGridViewRow;
+        private int[]? _runtimeId;
+
+        internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
         {
-            private readonly DataGridViewRow _owningDataGridViewRow;
-            private int[]? _runtimeId;
+            _owningDataGridViewRow = owner;
+        }
 
-            internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
+        public override string Name => SR.DataGridView_AccSelectedRowCellsName;
+
+        public override AccessibleObject Parent => _owningDataGridViewRow.AccessibilityObject;
+
+        public override AccessibleRole Role => AccessibleRole.Grouping;
+
+        public override AccessibleStates State
+        {
+            get => AccessibleStates.Selected | AccessibleStates.Selectable;
+        }
+
+        public override string Value => Name;
+
+        internal override int[] RuntimeId
+            => _runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+
+        public override AccessibleObject? GetChild(int index)
+        {
+            if (index < GetChildCount())
             {
-                _owningDataGridViewRow = owner;
-            }
-
-            public override string Name => SR.DataGridView_AccSelectedRowCellsName;
-
-            public override AccessibleObject Parent => _owningDataGridViewRow.AccessibilityObject;
-
-            public override AccessibleRole Role => AccessibleRole.Grouping;
-
-            public override AccessibleStates State
-            {
-                get => AccessibleStates.Selected | AccessibleStates.Selectable;
-            }
-
-            public override string Value => Name;
-
-            internal override int[] RuntimeId
-                => _runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
-
-            public override AccessibleObject? GetChild(int index)
-            {
-                if (index < GetChildCount())
-                {
-                    int selectedCellsCount = -1;
-                    for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
-                    {
-                        AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
-                        if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
-                        {
-                            selectedCellsCount++;
-                        }
-
-                        if (selectedCellsCount == index)
-                        {
-                            return child;
-                        }
-                    }
-
-                    Debug.Assert(false, "we should have found already the selected cell");
-                    return null;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-            public override int GetChildCount()
-            {
-                int selectedCellsCount = 0;
-
-                // start the enumeration from 1, because the first acc obj in the data grid view row is the row header cell
+                int selectedCellsCount = -1;
                 for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
                 {
                     AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
@@ -72,53 +44,80 @@ namespace System.Windows.Forms
                     {
                         selectedCellsCount++;
                     }
+
+                    if (selectedCellsCount == index)
+                    {
+                        return child;
+                    }
                 }
 
-                return selectedCellsCount;
+                Debug.Assert(false, "we should have found already the selected cell");
+                return null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public override int GetChildCount()
+        {
+            int selectedCellsCount = 0;
+
+            // start the enumeration from 1, because the first acc obj in the data grid view row is the row header cell
+            for (int i = 1; i < _owningDataGridViewRow.AccessibilityObject.GetChildCount(); i++)
+            {
+                AccessibleObject? child = _owningDataGridViewRow.AccessibilityObject.GetChild(i);
+                if (child is not null && (child.State & AccessibleStates.Selected) == AccessibleStates.Selected)
+                {
+                    selectedCellsCount++;
+                }
             }
 
-            public override AccessibleObject GetSelected() => this;
+            return selectedCellsCount;
+        }
 
-            public override AccessibleObject? GetFocused()
+        public override AccessibleObject GetSelected() => this;
+
+        public override AccessibleObject? GetFocused()
+        {
+            DataGridViewCell? currentCell = _owningDataGridViewRow.DataGridView?.CurrentCell;
+            if (currentCell is not null && currentCell.Selected)
             {
-                DataGridViewCell? currentCell = _owningDataGridViewRow.DataGridView?.CurrentCell;
-                if (currentCell is not null && currentCell.Selected)
-                {
-                    return currentCell.AccessibilityObject;
-                }
-                else
-                {
-                    return null;
-                }
+                return currentCell.AccessibilityObject;
             }
-
-            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
+            else
             {
-                switch (navigationDirection)
-                {
-                    case AccessibleNavigation.FirstChild:
-                        if (GetChildCount() > 0)
-                        {
-                            return GetChild(0);
-                        }
-                        else
-                        {
-                            return null;
-                        }
+                return null;
+            }
+        }
 
-                    case AccessibleNavigation.LastChild:
-                        if (GetChildCount() > 0)
-                        {
-                            return GetChild(GetChildCount() - 1);
-                        }
-                        else
-                        {
-                            return null;
-                        }
-
-                    default:
+        public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
+        {
+            switch (navigationDirection)
+            {
+                case AccessibleNavigation.FirstChild:
+                    if (GetChildCount() > 0)
+                    {
+                        return GetChild(0);
+                    }
+                    else
+                    {
                         return null;
-                }
+                    }
+
+                case AccessibleNavigation.LastChild:
+                    if (GetChildCount() > 0)
+                    {
+                        return GetChild(GetChildCount() - 1);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                default:
+                    return null;
             }
         }
     }

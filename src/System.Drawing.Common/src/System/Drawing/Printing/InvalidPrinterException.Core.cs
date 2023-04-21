@@ -8,26 +8,25 @@ using System.Runtime.Serialization;
  * Instead InvalidPrinterException.Serializable.cs should be used.
  */
 
-namespace System.Drawing.Printing
+namespace System.Drawing.Printing;
+
+[Runtime.CompilerServices.TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+public partial class InvalidPrinterException
 {
-    [Runtime.CompilerServices.TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    public partial class InvalidPrinterException
-    {
 #if NET8_0_OR_GREATER
-        [Obsolete(DiagnosticId = "SYSLIB0051")]
+    [Obsolete(DiagnosticId = "SYSLIB0051")]
 #endif
-        protected InvalidPrinterException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            // Ignoring not deserializable input
-        }
+    protected InvalidPrinterException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+        // Ignoring not deserializable input
+    }
 
 #if NET8_0_OR_GREATER
-        [Obsolete(DiagnosticId = "SYSLIB0051")]
+    [Obsolete(DiagnosticId = "SYSLIB0051")]
 #endif
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("settings", null);
-        }
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue("settings", null);
     }
 }

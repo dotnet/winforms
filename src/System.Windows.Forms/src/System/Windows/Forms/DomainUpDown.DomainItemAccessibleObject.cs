@@ -4,64 +4,63 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DomainUpDown
 {
-    public partial class DomainUpDown
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(
+        Obsoletions.DomainItemAccessibleObjectMessage,
+        error: false,
+        DiagnosticId = Obsoletions.DomainItemAccessibleObjectDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    public class DomainItemAccessibleObject : AccessibleObject
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete(
-            Obsoletions.DomainItemAccessibleObjectMessage,
-            error: false,
-            DiagnosticId = Obsoletions.DomainItemAccessibleObjectDiagnosticId,
-            UrlFormat = Obsoletions.SharedUrlFormat)]
-        public class DomainItemAccessibleObject : AccessibleObject
+        private string? _name;
+
+        public DomainItemAccessibleObject(string? name, AccessibleObject parent)
         {
-            private string? _name;
-
-            public DomainItemAccessibleObject(string? name, AccessibleObject parent)
-            {
-                _name = name;
-            }
-
-            public override string? Name
-            {
-                get
-                {
-                    return _name;
-                }
-                set
-                {
-                    _name = value;
-                }
-            }
-
-            public override AccessibleObject? Parent => null;
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.ListItem;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    return AccessibleStates.Selectable;
-                }
-            }
-
-            public override string? Value
-            {
-                get
-                {
-                    return _name;
-                }
-            }
-
-            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
+            _name = name;
         }
+
+        public override string? Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+
+        public override AccessibleObject? Parent => null;
+
+        public override AccessibleRole Role
+        {
+            get
+            {
+                return AccessibleRole.ListItem;
+            }
+        }
+
+        public override AccessibleStates State
+        {
+            get
+            {
+                return AccessibleStates.Selectable;
+            }
+        }
+
+        public override string? Value
+        {
+            get
+            {
+                return _name;
+            }
+        }
+
+        internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
     }
 }

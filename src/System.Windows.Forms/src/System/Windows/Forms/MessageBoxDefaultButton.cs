@@ -4,32 +4,31 @@
 
 using static Interop.User32;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public enum MessageBoxDefaultButton
 {
-    public enum MessageBoxDefaultButton
-    {
-        /// <summary>
-        ///  Specifies that the first button on the message box should be the
-        ///  default button.
-        /// </summary>
-        Button1 = (int)MB.DEFBUTTON1,
+    /// <summary>
+    ///  Specifies that the first button on the message box should be the
+    ///  default button.
+    /// </summary>
+    Button1 = (int)MB.DEFBUTTON1,
 
-        /// <summary>
-        ///  Specifies that the second button on the message box should be the
-        ///  default button.
-        /// </summary>
-        Button2 = (int)MB.DEFBUTTON2,
+    /// <summary>
+    ///  Specifies that the second button on the message box should be the
+    ///  default button.
+    /// </summary>
+    Button2 = (int)MB.DEFBUTTON2,
 
-        /// <summary>
-        ///  Specifies that the third button on the message box should be the
-        ///  default button.
-        /// </summary>
-        Button3 = (int)MB.DEFBUTTON3,
+    /// <summary>
+    ///  Specifies that the third button on the message box should be the
+    ///  default button.
+    /// </summary>
+    Button3 = (int)MB.DEFBUTTON3,
 
-        /// <summary>
-        ///  Specifies that the Help button on the message box should be the
-        ///  default button.
-        /// </summary>
-        Button4 = (int)MB.DEFBUTTON4,
-    }
+    /// <summary>
+    ///  Specifies that the Help button on the message box should be the
+    ///  default button.
+    /// </summary>
+    Button4 = (int)MB.DEFBUTTON4,
 }

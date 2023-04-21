@@ -4,19 +4,18 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
-{
-    public partial class Control
-    {
-        private sealed class PrintPaintEventArgs : PaintEventArgs
-        {
-            internal Message Message { get; }
+namespace System.Windows.Forms;
 
-            internal PrintPaintEventArgs(Message m, HDC dc, Rectangle clipRect)
-                : base(dc, clipRect, DrawingEventFlags.SaveState)
-            {
-                Message = m;
-            }
+public partial class Control
+{
+    private sealed class PrintPaintEventArgs : PaintEventArgs
+    {
+        internal Message Message { get; }
+
+        internal PrintPaintEventArgs(Message m, HDC dc, Rectangle clipRect)
+            : base(dc, clipRect, DrawingEventFlags.SaveState)
+        {
+            Message = m;
         }
     }
 }

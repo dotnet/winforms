@@ -15,1080 +15,1079 @@ using System.Runtime.InteropServices.Marshalling;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using static Interop;
 
-namespace System.Drawing
+namespace System.Drawing;
+
+/// <summary>
+/// An abstract base class that provides functionality for 'Bitmap', 'Icon', 'Cursor', and 'Metafile' descended classes.
+/// </summary>
+[Editor("System.Drawing.Design.ImageEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+        "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+[ImmutableObject(true)]
+[Serializable]
+[System.Runtime.CompilerServices.TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+[TypeConverter(typeof(ImageConverter))]
+public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISerializable
 {
-    /// <summary>
-    /// An abstract base class that provides functionality for 'Bitmap', 'Icon', 'Cursor', and 'Metafile' descended classes.
-    /// </summary>
-    [Editor("System.Drawing.Design.ImageEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-            "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    [ImmutableObject(true)]
-    [Serializable]
-    [System.Runtime.CompilerServices.TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    [TypeConverter(typeof(ImageConverter))]
-    public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISerializable
-    {
 #if FINALIZATION_WATCH
-        private string allocationSite = Graphics.GetAllocationStack();
+    private string allocationSite = Graphics.GetAllocationStack();
 #endif
 
-        // The signature of this delegate is incorrect. The signature of the corresponding
-        // native callback function is:
-        // extern "C" {
-        //     typedef BOOL (CALLBACK * ImageAbort)(VOID *);
-        //     typedef ImageAbort DrawImageAbort;
-        //     typedef ImageAbort GetThumbnailImageAbort;
-        // }
-        // However, as this delegate is not used in both GDI 1.0 and 1.1, we choose not
-        // to modify it, in order to preserve compatibility.
-        public delegate bool GetThumbnailImageAbort();
+    // The signature of this delegate is incorrect. The signature of the corresponding
+    // native callback function is:
+    // extern "C" {
+    //     typedef BOOL (CALLBACK * ImageAbort)(VOID *);
+    //     typedef ImageAbort DrawImageAbort;
+    //     typedef ImageAbort GetThumbnailImageAbort;
+    // }
+    // However, as this delegate is not used in both GDI 1.0 and 1.1, we choose not
+    // to modify it, in order to preserve compatibility.
+    public delegate bool GetThumbnailImageAbort();
 
 #if NET7_0_OR_GREATER
-        [CustomMarshaller(typeof(GetThumbnailImageAbort), MarshalMode.ManagedToUnmanagedIn, typeof(KeepAliveMarshaller))]
-        internal static class GetThumbnailImageAbortMarshaller
+    [CustomMarshaller(typeof(GetThumbnailImageAbort), MarshalMode.ManagedToUnmanagedIn, typeof(KeepAliveMarshaller))]
+    internal static class GetThumbnailImageAbortMarshaller
+    {
+        internal unsafe struct KeepAliveMarshaller
         {
-            internal unsafe struct KeepAliveMarshaller
+            private delegate BOOL GetThumbnailImageAbortNative(IntPtr callbackdata);
+            private GetThumbnailImageAbortNative? _managed;
+            private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
+            public void FromManaged(GetThumbnailImageAbort managed)
             {
-                private delegate BOOL GetThumbnailImageAbortNative(IntPtr callbackdata);
-                private GetThumbnailImageAbortNative? _managed;
-                private delegate* unmanaged<IntPtr, BOOL> _nativeFunction;
-                public void FromManaged(GetThumbnailImageAbort managed)
+                if (managed is null)
                 {
-                    if (managed is null)
-                    {
-                        _managed = null;
-                        _nativeFunction = null;
-                    }
-                    else
-                    {
-                        _managed = data => managed() ? BOOL.TRUE : BOOL.FALSE;
-                        _nativeFunction = (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
-                    }
+                    _managed = null;
+                    _nativeFunction = null;
                 }
-
-                public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
+                else
                 {
-                    return _nativeFunction;
+                    _managed = data => managed() ? BOOL.TRUE : BOOL.FALSE;
+                    _nativeFunction = (delegate* unmanaged<IntPtr, BOOL>)Marshal.GetFunctionPointerForDelegate(_managed);
                 }
-
-                public void OnInvoked()
-                {
-                    GC.KeepAlive(_managed);
-                }
-
-                public void Free() { }
             }
+
+            public delegate* unmanaged<IntPtr, BOOL> ToUnmanaged()
+            {
+                return _nativeFunction;
+            }
+
+            public void OnInvoked()
+            {
+                GC.KeepAlive(_managed);
+            }
+
+            public void Free() { }
         }
+    }
 #endif
 
-        internal nint _nativeImage;
+    internal nint _nativeImage;
 
-        private object? _userData;
+    private object? _userData;
 
-        // used to work around lack of animated gif encoder... rarely set...
-        private byte[]? _rawData;
+    // used to work around lack of animated gif encoder... rarely set...
+    private byte[]? _rawData;
 
-        [Localizable(false)]
-        [DefaultValue(null)]
-        public object? Tag
+    [Localizable(false)]
+    [DefaultValue(null)]
+    public object? Tag
+    {
+        get => _userData;
+        set => _userData = value;
+    }
+
+    private protected Image() { }
+
+    private protected Image(SerializationInfo info, StreamingContext context)
+    {
+        byte[] dat = (byte[])info.GetValue("Data", typeof(byte[]))!; // Do not rename (binary serialization)
+
+        try
         {
-            get => _userData;
-            set => _userData = value;
+            SetNativeImage(InitializeFromStream(new MemoryStream(dat)));
         }
-
-        private protected Image() { }
-
-        private protected Image(SerializationInfo info, StreamingContext context)
+        catch (ExternalException)
         {
-            byte[] dat = (byte[])info.GetValue("Data", typeof(byte[]))!; // Do not rename (binary serialization)
-
-            try
-            {
-                SetNativeImage(InitializeFromStream(new MemoryStream(dat)));
-            }
-            catch (ExternalException)
-            {
-            }
-            catch (ArgumentException)
-            {
-            }
-            catch (OutOfMemoryException)
-            {
-            }
-            catch (InvalidOperationException)
-            {
-            }
-            catch (NotImplementedException)
-            {
-            }
-            catch (FileNotFoundException)
-            {
-            }
         }
-
-        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
+        catch (ArgumentException)
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                Save(stream);
-                si.AddValue("Data", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
-            }
         }
-
-        /// <summary>
-        /// Creates an <see cref='Image'/> from the specified file.
-        /// </summary>
-        public static Image FromFile(string filename) => FromFile(filename, false);
-
-        public static Image FromFile(string filename, bool useEmbeddedColorManagement)
+        catch (OutOfMemoryException)
         {
-            if (!File.Exists(filename))
-            {
-                // Throw a more specific exception for invalid paths that are null or empty,
-                // contain invalid characters or are too long.
-                filename = Path.GetFullPath(filename);
-                throw new FileNotFoundException(filename);
-            }
+        }
+        catch (InvalidOperationException)
+        {
+        }
+        catch (NotImplementedException)
+        {
+        }
+        catch (FileNotFoundException)
+        {
+        }
+    }
 
-            // GDI+ will read this file multiple times. Get the fully qualified path
-            // so if our app changes default directory we won't get an error
+    void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
+    {
+        using (MemoryStream stream = new MemoryStream())
+        {
+            Save(stream);
+            si.AddValue("Data", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
+        }
+    }
+
+    /// <summary>
+    /// Creates an <see cref='Image'/> from the specified file.
+    /// </summary>
+    public static Image FromFile(string filename) => FromFile(filename, false);
+
+    public static Image FromFile(string filename, bool useEmbeddedColorManagement)
+    {
+        if (!File.Exists(filename))
+        {
+            // Throw a more specific exception for invalid paths that are null or empty,
+            // contain invalid characters or are too long.
             filename = Path.GetFullPath(filename);
+            throw new FileNotFoundException(filename);
+        }
 
-            IntPtr image;
+        // GDI+ will read this file multiple times. Get the fully qualified path
+        // so if our app changes default directory we won't get an error
+        filename = Path.GetFullPath(filename);
 
-            if (useEmbeddedColorManagement)
-            {
-                Gdip.CheckStatus(Gdip.GdipLoadImageFromFileICM(filename, out image));
-            }
-            else
-            {
-                Gdip.CheckStatus(Gdip.GdipLoadImageFromFile(filename, out image));
-            }
+        IntPtr image;
 
+        if (useEmbeddedColorManagement)
+        {
+            Gdip.CheckStatus(Gdip.GdipLoadImageFromFileICM(filename, out image));
+        }
+        else
+        {
+            Gdip.CheckStatus(Gdip.GdipLoadImageFromFile(filename, out image));
+        }
+
+        ValidateImage(image);
+
+        Image img = CreateImageObject(image);
+        EnsureSave(img, filename, null);
+        return img;
+    }
+
+    /// <summary>
+    /// Creates an <see cref='Image'/> from the specified data stream.
+    /// </summary>
+    public static Image FromStream(Stream stream) => Image.FromStream(stream, false);
+
+    public static Image FromStream(Stream stream, bool useEmbeddedColorManagement) => FromStream(stream, useEmbeddedColorManagement, true);
+
+    public static Image FromStream(Stream stream, bool useEmbeddedColorManagement, bool validateImageData)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+
+        IntPtr image = LoadGdipImageFromStream(new GPStream(stream), useEmbeddedColorManagement);
+
+        if (validateImageData)
             ValidateImage(image);
 
-            Image img = CreateImageObject(image);
-            EnsureSave(img, filename, null);
-            return img;
-        }
+        Image img = CreateImageObject(image);
+        EnsureSave(img, null, stream);
+        return img;
+    }
 
-        /// <summary>
-        /// Creates an <see cref='Image'/> from the specified data stream.
-        /// </summary>
-        public static Image FromStream(Stream stream) => Image.FromStream(stream, false);
+    // Used for serialization
+    private IntPtr InitializeFromStream(Stream stream)
+    {
+        IntPtr image = LoadGdipImageFromStream(new GPStream(stream), useEmbeddedColorManagement: false);
+        ValidateImage(image);
 
-        public static Image FromStream(Stream stream, bool useEmbeddedColorManagement) => FromStream(stream, useEmbeddedColorManagement, true);
+        _nativeImage = image;
 
-        public static Image FromStream(Stream stream, bool useEmbeddedColorManagement, bool validateImageData)
+        Gdip.CheckStatus(Gdip.GdipGetImageType(new HandleRef(this, _nativeImage), out _));
+        EnsureSave(this, null, stream);
+        return image;
+    }
+
+    private static unsafe IntPtr LoadGdipImageFromStream(GPStream stream, bool useEmbeddedColorManagement)
+    {
+        using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(stream);
+
+        IntPtr image = IntPtr.Zero;
+        if (useEmbeddedColorManagement)
         {
-            ArgumentNullException.ThrowIfNull(stream);
-
-            IntPtr image = LoadGdipImageFromStream(new GPStream(stream), useEmbeddedColorManagement);
-
-            if (validateImageData)
-                ValidateImage(image);
-
-            Image img = CreateImageObject(image);
-            EnsureSave(img, null, stream);
-            return img;
+            Gdip.CheckStatus(Gdip.GdipLoadImageFromStreamICM(streamWrapper.Ptr, &image));
         }
-
-        // Used for serialization
-        private IntPtr InitializeFromStream(Stream stream)
+        else
         {
-            IntPtr image = LoadGdipImageFromStream(new GPStream(stream), useEmbeddedColorManagement: false);
-            ValidateImage(image);
-
-            _nativeImage = image;
-
-            Gdip.CheckStatus(Gdip.GdipGetImageType(new HandleRef(this, _nativeImage), out _));
-            EnsureSave(this, null, stream);
-            return image;
+            Gdip.CheckStatus(Gdip.GdipLoadImageFromStream(streamWrapper.Ptr, &image));
         }
+        return image;
+    }
 
-        private static unsafe IntPtr LoadGdipImageFromStream(GPStream stream, bool useEmbeddedColorManagement)
-        {
-            using DrawingCom.IStreamWrapper streamWrapper = DrawingCom.GetComWrapper(stream);
+    internal Image(IntPtr nativeImage) => SetNativeImage(nativeImage);
 
-            IntPtr image = IntPtr.Zero;
-            if (useEmbeddedColorManagement)
-            {
-                Gdip.CheckStatus(Gdip.GdipLoadImageFromStreamICM(streamWrapper.Ptr, &image));
-            }
-            else
-            {
-                Gdip.CheckStatus(Gdip.GdipLoadImageFromStream(streamWrapper.Ptr, &image));
-            }
-            return image;
-        }
+    /// <summary>
+    /// Cleans up Windows resources for this <see cref='Image'/>.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        internal Image(IntPtr nativeImage) => SetNativeImage(nativeImage);
+    /// <summary>
+    /// Cleans up Windows resources for this <see cref='Image'/>.
+    /// </summary>
+    ~Image() => Dispose(false);
 
-        /// <summary>
-        /// Cleans up Windows resources for this <see cref='Image'/>.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+    /// <summary>
+    /// Creates an exact copy of this <see cref='Image'/>.
+    /// </summary>
+    public object Clone()
+    {
+        IntPtr cloneImage;
 
-        /// <summary>
-        /// Cleans up Windows resources for this <see cref='Image'/>.
-        /// </summary>
-        ~Image() => Dispose(false);
+        Gdip.CheckStatus(Gdip.GdipCloneImage(new HandleRef(this, _nativeImage), out cloneImage));
+        ValidateImage(cloneImage);
 
-        /// <summary>
-        /// Creates an exact copy of this <see cref='Image'/>.
-        /// </summary>
-        public object Clone()
-        {
-            IntPtr cloneImage;
+        return CreateImageObject(cloneImage);
+    }
 
-            Gdip.CheckStatus(Gdip.GdipCloneImage(new HandleRef(this, _nativeImage), out cloneImage));
-            ValidateImage(cloneImage);
-
-            return CreateImageObject(cloneImage);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
+    protected virtual void Dispose(bool disposing)
+    {
 #if FINALIZATION_WATCH
-            Debug.WriteLineIf(!disposing && nativeImage != IntPtr.Zero, $"""
-                **********************
-                Disposed through finalization:
-                {allocationSite}
-                """);
+        Debug.WriteLineIf(!disposing && nativeImage != IntPtr.Zero, $"""
+            **********************
+            Disposed through finalization:
+            {allocationSite}
+            """);
 #endif
-            if (_nativeImage == IntPtr.Zero)
-                return;
+        if (_nativeImage == IntPtr.Zero)
+            return;
 
-            try
+        try
+        {
+#if DEBUG
+            int status = !Gdip.Initialized ? Gdip.Ok :
+#endif
+            Gdip.GdipDisposeImage(new HandleRef(this, _nativeImage));
+#if DEBUG
+            Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+#endif
+        }
+        catch (Exception ex)
+        {
+            if (ClientUtils.IsSecurityOrCriticalException(ex))
             {
-#if DEBUG
-                int status = !Gdip.Initialized ? Gdip.Ok :
-#endif
-                Gdip.GdipDisposeImage(new HandleRef(this, _nativeImage));
-#if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
-#endif
+                throw;
             }
-            catch (Exception ex)
-            {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
 
-                Debug.Fail($"Exception thrown during Dispose: {ex}");
-            }
-            finally
-            {
-                _nativeImage = IntPtr.Zero;
-            }
+            Debug.Fail($"Exception thrown during Dispose: {ex}");
+        }
+        finally
+        {
+            _nativeImage = IntPtr.Zero;
+        }
+    }
+
+    /// <summary>
+    /// Saves this <see cref='Image'/> to the specified file.
+    /// </summary>
+    public void Save(string filename) => Save(filename, RawFormat);
+
+    /// <summary>
+    /// Saves this <see cref='Image'/> to the specified file in the specified format.
+    /// </summary>
+    public void Save(string filename, ImageFormat format)
+    {
+        ArgumentNullException.ThrowIfNull(format);
+
+        ImageCodecInfo codec = format.FindEncoder() ?? ImageFormat.Png.FindEncoder()!;
+
+        Save(filename, codec, null);
+    }
+
+    /// <summary>
+    ///  Saves this <see cref='Image'/> to the specified file in the specified format and with the specified encoder parameters.
+    /// </summary>
+    public void Save(string filename, ImageCodecInfo encoder, EncoderParameters? encoderParams)
+    {
+        ArgumentNullException.ThrowIfNull(filename);
+        ArgumentNullException.ThrowIfNull(encoder);
+        ThrowIfDirectoryDoesntExist(filename);
+
+        nint nativeParameters = 0;
+
+        if (encoderParams is not null)
+        {
+            _rawData = null;
+            nativeParameters = encoderParams.ConvertToNative();
         }
 
-        /// <summary>
-        /// Saves this <see cref='Image'/> to the specified file.
-        /// </summary>
-        public void Save(string filename) => Save(filename, RawFormat);
-
-        /// <summary>
-        /// Saves this <see cref='Image'/> to the specified file in the specified format.
-        /// </summary>
-        public void Save(string filename, ImageFormat format)
+        try
         {
-            ArgumentNullException.ThrowIfNull(format);
+            Guid guid = encoder.Clsid;
+            bool saved = false;
 
-            ImageCodecInfo codec = format.FindEncoder() ?? ImageFormat.Png.FindEncoder()!;
-
-            Save(filename, codec, null);
-        }
-
-        /// <summary>
-        ///  Saves this <see cref='Image'/> to the specified file in the specified format and with the specified encoder parameters.
-        /// </summary>
-        public void Save(string filename, ImageCodecInfo encoder, EncoderParameters? encoderParams)
-        {
-            ArgumentNullException.ThrowIfNull(filename);
-            ArgumentNullException.ThrowIfNull(encoder);
-            ThrowIfDirectoryDoesntExist(filename);
-
-            nint nativeParameters = 0;
-
-            if (encoderParams is not null)
+            if (_rawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
             {
-                _rawData = null;
-                nativeParameters = encoderParams.ConvertToNative();
+                using (FileStream fs = File.OpenWrite(filename))
+                {
+                    fs.Write(_rawData, 0, _rawData.Length);
+                    saved = true;
+                }
             }
 
-            try
+            if (!saved)
             {
-                Guid guid = encoder.Clsid;
-                bool saved = false;
+                Gdip.CheckStatus(Gdip.GdipSaveImageToFile(
+                    new HandleRef(this, _nativeImage),
+                    filename,
+                    ref guid,
+                    new HandleRef(encoderParams, nativeParameters)));
+            }
+        }
+        finally
+        {
+            if (nativeParameters != 0)
+            {
+                Marshal.FreeHGlobal(nativeParameters);
+            }
+        }
+    }
 
-                if (_rawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
-                {
-                    using (FileStream fs = File.OpenWrite(filename))
-                    {
-                        fs.Write(_rawData, 0, _rawData.Length);
-                        saved = true;
-                    }
-                }
+    private void Save(MemoryStream stream)
+    {
+        // Jpeg loses data, so we don't want to use it to serialize...
+        ImageFormat dest = RawFormat;
+        if (dest.Guid == ImageFormat.Jpeg.Guid)
+            dest = ImageFormat.Png;
 
-                if (!saved)
+        // If we don't find an Encoder (for things like Icon), we just switch back to PNG...
+        ImageCodecInfo codec = dest.FindEncoder() ?? ImageFormat.Png.FindEncoder()!;
+
+        Save(stream, codec, null);
+    }
+
+    /// <summary>
+    /// Saves this <see cref='Image'/> to the specified stream in the specified format.
+    /// </summary>
+    public void Save(Stream stream, ImageFormat format)
+    {
+        ArgumentNullException.ThrowIfNull(format);
+
+        ImageCodecInfo codec = format.FindEncoder()!;
+        Save(stream, codec, null);
+    }
+
+    /// <summary>
+    /// Saves this <see cref='Image'/> to the specified stream in the specified format.
+    /// </summary>
+    public void Save(Stream stream, ImageCodecInfo encoder, EncoderParameters? encoderParams)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(encoder);
+
+        nint nativeParameters = 0;
+
+        if (encoderParams is not null)
+        {
+            _rawData = null;
+            nativeParameters = encoderParams.ConvertToNative();
+        }
+
+        try
+        {
+            Guid guid = encoder.Clsid;
+            bool saved = false;
+
+            if (_rawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
+            {
+                stream.Write(_rawData, 0, _rawData.Length);
+                saved = true;
+            }
+
+            if (!saved)
+            {
+                using var streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream, makeSeekable: false));
+                unsafe
                 {
-                    Gdip.CheckStatus(Gdip.GdipSaveImageToFile(
+                    Gdip.CheckStatus(Gdip.GdipSaveImageToStream(
                         new HandleRef(this, _nativeImage),
-                        filename,
-                        ref guid,
+                        streamWrapper.Ptr,
+                        &guid,
                         new HandleRef(encoderParams, nativeParameters)));
                 }
             }
-            finally
+        }
+        finally
+        {
+            if (nativeParameters != 0)
             {
-                if (nativeParameters != 0)
-                {
-                    Marshal.FreeHGlobal(nativeParameters);
-                }
+                Marshal.FreeHGlobal(nativeParameters);
             }
         }
+    }
 
-        private void Save(MemoryStream stream)
+    /// <summary>
+    ///  Adds an <see cref='EncoderParameters'/> to this <see cref='Image'/>.
+    /// </summary>
+    public void SaveAdd(EncoderParameters? encoderParams)
+    {
+        nint nativeParameters = 0;
+        if (encoderParams is not null)
         {
-            // Jpeg loses data, so we don't want to use it to serialize...
-            ImageFormat dest = RawFormat;
-            if (dest.Guid == ImageFormat.Jpeg.Guid)
-                dest = ImageFormat.Png;
-
-            // If we don't find an Encoder (for things like Icon), we just switch back to PNG...
-            ImageCodecInfo codec = dest.FindEncoder() ?? ImageFormat.Png.FindEncoder()!;
-
-            Save(stream, codec, null);
+            nativeParameters = encoderParams.ConvertToNative();
         }
 
-        /// <summary>
-        /// Saves this <see cref='Image'/> to the specified stream in the specified format.
-        /// </summary>
-        public void Save(Stream stream, ImageFormat format)
+        _rawData = null;
+
+        try
         {
-            ArgumentNullException.ThrowIfNull(format);
-
-            ImageCodecInfo codec = format.FindEncoder()!;
-            Save(stream, codec, null);
-        }
-
-        /// <summary>
-        /// Saves this <see cref='Image'/> to the specified stream in the specified format.
-        /// </summary>
-        public void Save(Stream stream, ImageCodecInfo encoder, EncoderParameters? encoderParams)
-        {
-            ArgumentNullException.ThrowIfNull(stream);
-            ArgumentNullException.ThrowIfNull(encoder);
-
-            nint nativeParameters = 0;
-
-            if (encoderParams is not null)
-            {
-                _rawData = null;
-                nativeParameters = encoderParams.ConvertToNative();
-            }
-
-            try
-            {
-                Guid guid = encoder.Clsid;
-                bool saved = false;
-
-                if (_rawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
-                {
-                    stream.Write(_rawData, 0, _rawData.Length);
-                    saved = true;
-                }
-
-                if (!saved)
-                {
-                    using var streamWrapper = DrawingCom.GetComWrapper(new GPStream(stream, makeSeekable: false));
-                    unsafe
-                    {
-                        Gdip.CheckStatus(Gdip.GdipSaveImageToStream(
-                            new HandleRef(this, _nativeImage),
-                            streamWrapper.Ptr,
-                            &guid,
-                            new HandleRef(encoderParams, nativeParameters)));
-                    }
-                }
-            }
-            finally
-            {
-                if (nativeParameters != 0)
-                {
-                    Marshal.FreeHGlobal(nativeParameters);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Adds an <see cref='EncoderParameters'/> to this <see cref='Image'/>.
-        /// </summary>
-        public void SaveAdd(EncoderParameters? encoderParams)
-        {
-            nint nativeParameters = 0;
-            if (encoderParams is not null)
-            {
-                nativeParameters = encoderParams.ConvertToNative();
-            }
-
-            _rawData = null;
-
-            try
-            {
-                Gdip.CheckStatus(Gdip.GdipSaveAdd(
-                    new HandleRef(this, _nativeImage),
-                    new HandleRef(encoderParams, nativeParameters)));
-            }
-            finally
-            {
-                if (nativeParameters != 0)
-                {
-                    Marshal.FreeHGlobal(nativeParameters);
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Adds an <see cref='EncoderParameters'/> to the specified <see cref='Image'/>.
-        /// </summary>
-        public void SaveAdd(Image image, EncoderParameters? encoderParams)
-        {
-            ArgumentNullException.ThrowIfNull(image);
-
-            nint nativeParameters = 0;
-
-            if (encoderParams is not null)
-            {
-                nativeParameters = encoderParams.ConvertToNative();
-            }
-
-            _rawData = null;
-
-            try
-            {
-                Gdip.CheckStatus(Gdip.GdipSaveAddImage(
-                    new HandleRef(this, _nativeImage),
-                    new HandleRef(image, image._nativeImage),
-                    new HandleRef(encoderParams, nativeParameters)));
-            }
-            finally
-            {
-                if (nativeParameters != 0)
-                {
-                    Marshal.FreeHGlobal(nativeParameters);
-                }
-            }
-        }
-
-        private static void ThrowIfDirectoryDoesntExist(string filename)
-        {
-            var directoryPart = Path.GetDirectoryName(filename);
-            if (!string.IsNullOrEmpty(directoryPart) && !Directory.Exists(directoryPart))
-            {
-                throw new DirectoryNotFoundException(SR.Format(SR.TargetDirectoryDoesNotExist, directoryPart, filename));
-            }
-        }
-
-        /// <summary>
-        /// Gets the width and height of this <see cref='Image'/>.
-        /// </summary>
-        public SizeF PhysicalDimension
-        {
-            get
-            {
-                float width;
-                float height;
-
-                int status = Gdip.GdipGetImageDimension(new HandleRef(this, _nativeImage), out width, out height);
-                Gdip.CheckStatus(status);
-
-                return new SizeF(width, height);
-            }
-        }
-
-        /// <summary>
-        /// Gets the width and height of this <see cref='Image'/>.
-        /// </summary>
-        public Size Size => new Size(Width, Height);
-
-        /// <summary>
-        /// Gets the width of this <see cref='Image'/>.
-        /// </summary>
-        [DefaultValue(false)]
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int Width
-        {
-            get
-            {
-                int width;
-
-                int status = Gdip.GdipGetImageWidth(new HandleRef(this, _nativeImage), out width);
-                Gdip.CheckStatus(status);
-
-                return width;
-            }
-        }
-
-        /// <summary>
-        /// Gets the height of this <see cref='Image'/>.
-        /// </summary>
-        [DefaultValue(false)]
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int Height
-        {
-            get
-            {
-                int height;
-
-                int status = Gdip.GdipGetImageHeight(new HandleRef(this, _nativeImage), out height);
-                Gdip.CheckStatus(status);
-
-                return height;
-            }
-        }
-
-        /// <summary>
-        /// Gets the horizontal resolution, in pixels-per-inch, of this <see cref='Image'/>.
-        /// </summary>
-        public float HorizontalResolution
-        {
-            get
-            {
-                float horzRes;
-
-                int status = Gdip.GdipGetImageHorizontalResolution(new HandleRef(this, _nativeImage), out horzRes);
-                Gdip.CheckStatus(status);
-
-                return horzRes;
-            }
-        }
-
-        /// <summary>
-        /// Gets the vertical resolution, in pixels-per-inch, of this <see cref='Image'/>.
-        /// </summary>
-        public float VerticalResolution
-        {
-            get
-            {
-                float vertRes;
-
-                int status = Gdip.GdipGetImageVerticalResolution(new HandleRef(this, _nativeImage), out vertRes);
-                Gdip.CheckStatus(status);
-
-                return vertRes;
-            }
-        }
-
-        /// <summary>
-        /// Gets attribute flags for this <see cref='Image'/>.
-        /// </summary>
-        [Browsable(false)]
-        public int Flags
-        {
-            get
-            {
-                int flags;
-
-                int status = Gdip.GdipGetImageFlags(new HandleRef(this, _nativeImage), out flags);
-                Gdip.CheckStatus(status);
-
-                return flags;
-            }
-        }
-
-        /// <summary>
-        /// Gets the format of this <see cref='Image'/>.
-        /// </summary>
-        public ImageFormat RawFormat
-        {
-            get
-            {
-                Guid guid = default;
-
-                int status = Gdip.GdipGetImageRawFormat(new HandleRef(this, _nativeImage), ref guid);
-                Gdip.CheckStatus(status);
-
-                return new ImageFormat(guid);
-            }
-        }
-
-        /// <summary>
-        /// Gets the pixel format for this <see cref='Image'/>.
-        /// </summary>
-        public PixelFormat PixelFormat
-        {
-            get
-            {
-                int status = Gdip.GdipGetImagePixelFormat(new HandleRef(this, _nativeImage), out PixelFormat format);
-                return (status != Gdip.Ok) ? PixelFormat.Undefined : format;
-            }
-        }
-
-        /// <summary>
-        /// Gets an array of the property IDs stored in this <see cref='Image'/>.
-        /// </summary>
-        [Browsable(false)]
-        public unsafe int[] PropertyIdList
-        {
-            get
-            {
-                Gdip.CheckStatus(Gdip.GdipGetPropertyCount(new HandleRef(this, _nativeImage), out uint count));
-                if (count == 0)
-                    return Array.Empty<int>();
-
-                var propid = new int[count];
-                fixed (int* pPropid = propid)
-                {
-                    Gdip.CheckStatus(Gdip.GdipGetPropertyIdList(new HandleRef(this, _nativeImage), count, pPropid));
-                }
-
-                return propid;
-            }
-        }
-
-        /// <summary>
-        /// Gets an array of <see cref='PropertyItem'/> objects that describe this <see cref='Image'/>.
-        /// </summary>
-        [Browsable(false)]
-        public unsafe PropertyItem[] PropertyItems
-        {
-            get
-            {
-                Gdip.CheckStatus(Gdip.GdipGetPropertySize(new HandleRef(this, _nativeImage), out uint size, out uint count));
-
-                if (size == 0 || count == 0)
-                    return Array.Empty<PropertyItem>();
-
-                var result = new PropertyItem[(int)count];
-                byte[] buffer = ArrayPool<byte>.Shared.Rent((int)size);
-                fixed (byte *pBuffer = buffer)
-                {
-                    PropertyItemInternal* pPropData = (PropertyItemInternal*)pBuffer;
-                    Gdip.CheckStatus(Gdip.GdipGetAllPropertyItems(new HandleRef(this, _nativeImage), size, count, pPropData));
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        result[i] = new PropertyItem
-                        {
-                            Id = pPropData[i].id,
-                            Len = pPropData[i].len,
-                            Type = pPropData[i].type,
-                            Value = pPropData[i].Value.ToArray()
-                        };
-                    }
-                }
-
-                ArrayPool<byte>.Shared.Return(buffer);
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Gets a bounding rectangle in the specified units for this <see cref='Image'/>.
-        /// </summary>
-        public RectangleF GetBounds(ref GraphicsUnit pageUnit)
-        {
-            Gdip.CheckStatus(Gdip.GdipGetImageBounds(new HandleRef(this, _nativeImage), out RectangleF bounds, out pageUnit));
-            return bounds;
-        }
-
-        /// <summary>
-        /// Gets or sets the color palette used for this <see cref='Image'/>.
-        /// </summary>
-        [Browsable(false)]
-        public ColorPalette Palette
-        {
-            get
-            {
-                Gdip.CheckStatus(Gdip.GdipGetImagePaletteSize(new HandleRef(this, _nativeImage), out int size));
-
-                // "size" is total byte size:
-                // sizeof(ColorPalette) + (pal->Count-1)*sizeof(ARGB)
-
-                ColorPalette palette = new ColorPalette(size);
-
-                // Memory layout is:
-                //    UINT Flags
-                //    UINT Count
-                //    ARGB Entries[size]
-
-                IntPtr memory = Marshal.AllocHGlobal(size);
-                try
-                {
-                    Gdip.CheckStatus(Gdip.GdipGetImagePalette(new HandleRef(this, _nativeImage), memory, size));
-                    palette.ConvertFromMemory(memory);
-                }
-                finally
-                {
-                    Marshal.FreeHGlobal(memory);
-                }
-
-                return palette;
-            }
-            set
-            {
-                IntPtr memory = value.ConvertToMemory();
-
-                try
-                {
-                    Gdip.CheckStatus(Gdip.GdipSetImagePalette(new HandleRef(this, _nativeImage), memory));
-                }
-                finally
-                {
-                    if (memory != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(memory);
-                    }
-                }
-            }
-        }
-
-        // Thumbnail support
-
-        /// <summary>
-        /// Returns the thumbnail for this <see cref='Image'/>.
-        /// </summary>
-        public Image GetThumbnailImage(int thumbWidth, int thumbHeight, GetThumbnailImageAbort? callback, IntPtr callbackData)
-        {
-            IntPtr thumbImage;
-
-            Gdip.CheckStatus(Gdip.GdipGetImageThumbnail(
+            Gdip.CheckStatus(Gdip.GdipSaveAdd(
                 new HandleRef(this, _nativeImage),
-                thumbWidth,
-                thumbHeight,
-                out thumbImage,
-                callback,
-                callbackData));
-
-            return CreateImageObject(thumbImage);
+                new HandleRef(encoderParams, nativeParameters)));
         }
-
-        internal static void ValidateImage(IntPtr image)
+        finally
         {
-            try
+            if (nativeParameters != 0)
             {
-                Gdip.CheckStatus(Gdip.GdipImageForceValidation(image));
-            }
-            catch
-            {
-                Gdip.GdipDisposeImage(image);
-                throw;
+                Marshal.FreeHGlobal(nativeParameters);
             }
         }
+    }
 
-        /// <summary>
-        /// Returns the number of frames of the given dimension.
-        /// </summary>
-        public int GetFrameCount(FrameDimension dimension)
+    /// <summary>
+    ///  Adds an <see cref='EncoderParameters'/> to the specified <see cref='Image'/>.
+    /// </summary>
+    public void SaveAdd(Image image, EncoderParameters? encoderParams)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+
+        nint nativeParameters = 0;
+
+        if (encoderParams is not null)
         {
-            Guid dimensionID = dimension.Guid;
-            Gdip.CheckStatus(Gdip.GdipImageGetFrameCount(new HandleRef(this, _nativeImage), ref dimensionID, out int count));
-            return count;
+            nativeParameters = encoderParams.ConvertToNative();
         }
 
-        /// <summary>
-        /// Gets the specified property item from this <see cref='Image'/>.
-        /// </summary>
-        public unsafe PropertyItem? GetPropertyItem(int propid)
+        _rawData = null;
+
+        try
         {
-            Gdip.CheckStatus(Gdip.GdipGetPropertyItemSize(new HandleRef(this, _nativeImage), propid, out uint size));
+            Gdip.CheckStatus(Gdip.GdipSaveAddImage(
+                new HandleRef(this, _nativeImage),
+                new HandleRef(image, image._nativeImage),
+                new HandleRef(encoderParams, nativeParameters)));
+        }
+        finally
+        {
+            if (nativeParameters != 0)
+            {
+                Marshal.FreeHGlobal(nativeParameters);
+            }
+        }
+    }
 
-            if (size == 0)
-                return null;
+    private static void ThrowIfDirectoryDoesntExist(string filename)
+    {
+        var directoryPart = Path.GetDirectoryName(filename);
+        if (!string.IsNullOrEmpty(directoryPart) && !Directory.Exists(directoryPart))
+        {
+            throw new DirectoryNotFoundException(SR.Format(SR.TargetDirectoryDoesNotExist, directoryPart, filename));
+        }
+    }
 
-            PropertyItem result;
+    /// <summary>
+    /// Gets the width and height of this <see cref='Image'/>.
+    /// </summary>
+    public SizeF PhysicalDimension
+    {
+        get
+        {
+            float width;
+            float height;
+
+            int status = Gdip.GdipGetImageDimension(new HandleRef(this, _nativeImage), out width, out height);
+            Gdip.CheckStatus(status);
+
+            return new SizeF(width, height);
+        }
+    }
+
+    /// <summary>
+    /// Gets the width and height of this <see cref='Image'/>.
+    /// </summary>
+    public Size Size => new Size(Width, Height);
+
+    /// <summary>
+    /// Gets the width of this <see cref='Image'/>.
+    /// </summary>
+    [DefaultValue(false)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public int Width
+    {
+        get
+        {
+            int width;
+
+            int status = Gdip.GdipGetImageWidth(new HandleRef(this, _nativeImage), out width);
+            Gdip.CheckStatus(status);
+
+            return width;
+        }
+    }
+
+    /// <summary>
+    /// Gets the height of this <see cref='Image'/>.
+    /// </summary>
+    [DefaultValue(false)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public int Height
+    {
+        get
+        {
+            int height;
+
+            int status = Gdip.GdipGetImageHeight(new HandleRef(this, _nativeImage), out height);
+            Gdip.CheckStatus(status);
+
+            return height;
+        }
+    }
+
+    /// <summary>
+    /// Gets the horizontal resolution, in pixels-per-inch, of this <see cref='Image'/>.
+    /// </summary>
+    public float HorizontalResolution
+    {
+        get
+        {
+            float horzRes;
+
+            int status = Gdip.GdipGetImageHorizontalResolution(new HandleRef(this, _nativeImage), out horzRes);
+            Gdip.CheckStatus(status);
+
+            return horzRes;
+        }
+    }
+
+    /// <summary>
+    /// Gets the vertical resolution, in pixels-per-inch, of this <see cref='Image'/>.
+    /// </summary>
+    public float VerticalResolution
+    {
+        get
+        {
+            float vertRes;
+
+            int status = Gdip.GdipGetImageVerticalResolution(new HandleRef(this, _nativeImage), out vertRes);
+            Gdip.CheckStatus(status);
+
+            return vertRes;
+        }
+    }
+
+    /// <summary>
+    /// Gets attribute flags for this <see cref='Image'/>.
+    /// </summary>
+    [Browsable(false)]
+    public int Flags
+    {
+        get
+        {
+            int flags;
+
+            int status = Gdip.GdipGetImageFlags(new HandleRef(this, _nativeImage), out flags);
+            Gdip.CheckStatus(status);
+
+            return flags;
+        }
+    }
+
+    /// <summary>
+    /// Gets the format of this <see cref='Image'/>.
+    /// </summary>
+    public ImageFormat RawFormat
+    {
+        get
+        {
+            Guid guid = default;
+
+            int status = Gdip.GdipGetImageRawFormat(new HandleRef(this, _nativeImage), ref guid);
+            Gdip.CheckStatus(status);
+
+            return new ImageFormat(guid);
+        }
+    }
+
+    /// <summary>
+    /// Gets the pixel format for this <see cref='Image'/>.
+    /// </summary>
+    public PixelFormat PixelFormat
+    {
+        get
+        {
+            int status = Gdip.GdipGetImagePixelFormat(new HandleRef(this, _nativeImage), out PixelFormat format);
+            return (status != Gdip.Ok) ? PixelFormat.Undefined : format;
+        }
+    }
+
+    /// <summary>
+    /// Gets an array of the property IDs stored in this <see cref='Image'/>.
+    /// </summary>
+    [Browsable(false)]
+    public unsafe int[] PropertyIdList
+    {
+        get
+        {
+            Gdip.CheckStatus(Gdip.GdipGetPropertyCount(new HandleRef(this, _nativeImage), out uint count));
+            if (count == 0)
+                return Array.Empty<int>();
+
+            var propid = new int[count];
+            fixed (int* pPropid = propid)
+            {
+                Gdip.CheckStatus(Gdip.GdipGetPropertyIdList(new HandleRef(this, _nativeImage), count, pPropid));
+            }
+
+            return propid;
+        }
+    }
+
+    /// <summary>
+    /// Gets an array of <see cref='PropertyItem'/> objects that describe this <see cref='Image'/>.
+    /// </summary>
+    [Browsable(false)]
+    public unsafe PropertyItem[] PropertyItems
+    {
+        get
+        {
+            Gdip.CheckStatus(Gdip.GdipGetPropertySize(new HandleRef(this, _nativeImage), out uint size, out uint count));
+
+            if (size == 0 || count == 0)
+                return Array.Empty<PropertyItem>();
+
+            var result = new PropertyItem[(int)count];
             byte[] buffer = ArrayPool<byte>.Shared.Rent((int)size);
             fixed (byte *pBuffer = buffer)
             {
                 PropertyItemInternal* pPropData = (PropertyItemInternal*)pBuffer;
-                Gdip.CheckStatus(Gdip.GdipGetPropertyItem(new HandleRef(this, _nativeImage), propid, size, pPropData));
+                Gdip.CheckStatus(Gdip.GdipGetAllPropertyItems(new HandleRef(this, _nativeImage), size, count, pPropData));
 
-                result = new PropertyItem
+                for (int i = 0; i < count; i++)
                 {
-                    Id = pPropData->id,
-                    Len = pPropData->len,
-                    Type = pPropData->type,
-                    Value = pPropData->Value.ToArray()
-                };
+                    result[i] = new PropertyItem
+                    {
+                        Id = pPropData[i].id,
+                        Len = pPropData[i].len,
+                        Type = pPropData[i].type,
+                        Value = pPropData[i].Value.ToArray()
+                    };
+                }
             }
 
             ArrayPool<byte>.Shared.Return(buffer);
             return result;
         }
+    }
 
-        /// <summary>
-        /// Selects the frame specified by the given dimension and index.
-        /// </summary>
-        public int SelectActiveFrame(FrameDimension dimension, int frameIndex)
+    /// <summary>
+    /// Gets a bounding rectangle in the specified units for this <see cref='Image'/>.
+    /// </summary>
+    public RectangleF GetBounds(ref GraphicsUnit pageUnit)
+    {
+        Gdip.CheckStatus(Gdip.GdipGetImageBounds(new HandleRef(this, _nativeImage), out RectangleF bounds, out pageUnit));
+        return bounds;
+    }
+
+    /// <summary>
+    /// Gets or sets the color palette used for this <see cref='Image'/>.
+    /// </summary>
+    [Browsable(false)]
+    public ColorPalette Palette
+    {
+        get
         {
-            Guid dimensionID = dimension.Guid;
-            Gdip.CheckStatus(Gdip.GdipImageSelectActiveFrame(new HandleRef(this, _nativeImage), ref dimensionID, frameIndex));
-            return 0;
-        }
+            Gdip.CheckStatus(Gdip.GdipGetImagePaletteSize(new HandleRef(this, _nativeImage), out int size));
 
-        /// <summary>
-        /// Sets the specified property item to the specified value.
-        /// </summary>
-        public unsafe void SetPropertyItem(PropertyItem propitem)
-        {
-            fixed (byte *propItemValue = propitem.Value)
-            {
-                var propItemInternal = new PropertyItemInternal
-                {
-                    id = propitem.Id,
-                    len = propitem.Len,
-                    type = propitem.Type,
-                    value = propItemValue
-                };
-                Gdip.CheckStatus(Gdip.GdipSetPropertyItem(new HandleRef(this, _nativeImage), &propItemInternal));
-            }
-        }
+            // "size" is total byte size:
+            // sizeof(ColorPalette) + (pal->Count-1)*sizeof(ARGB)
 
-        public void RotateFlip(RotateFlipType rotateFlipType)
-        {
-            int status = Gdip.GdipImageRotateFlip(new HandleRef(this, _nativeImage), unchecked((int)rotateFlipType));
-            Gdip.CheckStatus(status);
-        }
+            ColorPalette palette = new ColorPalette(size);
 
-        /// <summary>
-        /// Removes the specified property item from this <see cref='Image'/>.
-        /// </summary>
-        public void RemovePropertyItem(int propid)
-        {
-            int status = Gdip.GdipRemovePropertyItem(new HandleRef(this, _nativeImage), propid);
-            Gdip.CheckStatus(status);
-        }
+            // Memory layout is:
+            //    UINT Flags
+            //    UINT Count
+            //    ARGB Entries[size]
 
-        /// <summary>
-        /// Returns information about the codecs used for this <see cref='Image'/>.
-        /// </summary>
-        public unsafe EncoderParameters? GetEncoderParameterList(Guid encoder)
-        {
-            EncoderParameters parameters;
-
-            Gdip.CheckStatus(Gdip.GdipGetEncoderParameterListSize(
-                new HandleRef(this, _nativeImage),
-                ref encoder,
-                out int size));
-
-            if (size <= 0)
-                return null;
-
-            nint buffer = Marshal.AllocHGlobal(size);
+            IntPtr memory = Marshal.AllocHGlobal(size);
             try
             {
-                Gdip.CheckStatus(Gdip.GdipGetEncoderParameterList(
-                    new HandleRef(this, _nativeImage),
-                    ref encoder,
-                    size,
-                    buffer));
-
-                parameters = EncoderParameters.ConvertFromNative((EncoderParametersNative*)buffer);
+                Gdip.CheckStatus(Gdip.GdipGetImagePalette(new HandleRef(this, _nativeImage), memory, size));
+                palette.ConvertFromMemory(memory);
             }
             finally
             {
-                Marshal.FreeHGlobal(buffer);
+                Marshal.FreeHGlobal(memory);
             }
 
-            return parameters;
+            return palette;
         }
-
-        /// <summary>
-        /// Creates a <see cref='Bitmap'/> from a Windows handle.
-        /// </summary>
-        public static Bitmap FromHbitmap(IntPtr hbitmap) => FromHbitmap(hbitmap, IntPtr.Zero);
-
-        /// <summary>
-        /// Creates a <see cref='Bitmap'/> from the specified Windows handle with the specified color palette.
-        /// </summary>
-        public static Bitmap FromHbitmap(IntPtr hbitmap, IntPtr hpalette)
+        set
         {
-            Gdip.CheckStatus(Gdip.GdipCreateBitmapFromHBITMAP(hbitmap, hpalette, out IntPtr bitmap));
-            return new Bitmap(bitmap);
-        }
+            IntPtr memory = value.ConvertToMemory();
 
-        /// <summary>
-        /// Returns a value indicating whether the pixel format is extended.
-        /// </summary>
-        public static bool IsExtendedPixelFormat(PixelFormat pixfmt)
-        {
-            return (pixfmt & PixelFormat.Extended) != 0;
-        }
-
-        /// <summary>
-        /// Returns a value indicating whether the pixel format is canonical.
-        /// </summary>
-        public static bool IsCanonicalPixelFormat(PixelFormat pixfmt)
-        {
-            // Canonical formats:
-            //
-            //  PixelFormat32bppARGB
-            //  PixelFormat32bppPARGB
-            //  PixelFormat64bppARGB
-            //  PixelFormat64bppPARGB
-
-            return (pixfmt & PixelFormat.Canonical) != 0;
-        }
-
-        internal void SetNativeImage(IntPtr handle)
-        {
-            if (handle == IntPtr.Zero)
-                throw new ArgumentException(SR.NativeHandle0, nameof(handle));
-
-            _nativeImage = handle;
-        }
-
-        // Multi-frame support
-
-        /// <summary>
-        /// Gets an array of GUIDs that represent the dimensions of frames within this <see cref='Image'/>.
-        /// </summary>
-        [Browsable(false)]
-        public unsafe Guid[] FrameDimensionsList
-        {
-            get
+            try
             {
-                Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsCount(new HandleRef(this, _nativeImage), out int count));
-
-                Debug.Assert(count >= 0, "FrameDimensionsList returns bad count");
-                if (count <= 0)
-                    return Array.Empty<Guid>();
-
-                Guid[] guids = new Guid[count];
-                fixed (Guid* g = guids)
+                Gdip.CheckStatus(Gdip.GdipSetImagePalette(new HandleRef(this, _nativeImage), memory));
+            }
+            finally
+            {
+                if (memory != IntPtr.Zero)
                 {
-                    Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsList(new HandleRef(this, _nativeImage), g, count));
+                    Marshal.FreeHGlobal(memory);
                 }
-
-                return guids;
             }
         }
+    }
 
-        /// <summary>
-        /// Returns the size of the specified pixel format.
-        /// </summary>
-        public static int GetPixelFormatSize(PixelFormat pixfmt)
+    // Thumbnail support
+
+    /// <summary>
+    /// Returns the thumbnail for this <see cref='Image'/>.
+    /// </summary>
+    public Image GetThumbnailImage(int thumbWidth, int thumbHeight, GetThumbnailImageAbort? callback, IntPtr callbackData)
+    {
+        IntPtr thumbImage;
+
+        Gdip.CheckStatus(Gdip.GdipGetImageThumbnail(
+            new HandleRef(this, _nativeImage),
+            thumbWidth,
+            thumbHeight,
+            out thumbImage,
+            callback,
+            callbackData));
+
+        return CreateImageObject(thumbImage);
+    }
+
+    internal static void ValidateImage(IntPtr image)
+    {
+        try
         {
-            return (unchecked((int)pixfmt) >> 8) & 0xFF;
+            Gdip.CheckStatus(Gdip.GdipImageForceValidation(image));
         }
-
-        /// <summary>
-        /// Returns a value indicating whether the pixel format contains alpha information.
-        /// </summary>
-        public static bool IsAlphaPixelFormat(PixelFormat pixfmt)
+        catch
         {
-            return (pixfmt & PixelFormat.Alpha) != 0;
+            Gdip.GdipDisposeImage(image);
+            throw;
         }
+    }
 
-        internal static Image CreateImageObject(IntPtr nativeImage)
+    /// <summary>
+    /// Returns the number of frames of the given dimension.
+    /// </summary>
+    public int GetFrameCount(FrameDimension dimension)
+    {
+        Guid dimensionID = dimension.Guid;
+        Gdip.CheckStatus(Gdip.GdipImageGetFrameCount(new HandleRef(this, _nativeImage), ref dimensionID, out int count));
+        return count;
+    }
+
+    /// <summary>
+    /// Gets the specified property item from this <see cref='Image'/>.
+    /// </summary>
+    public unsafe PropertyItem? GetPropertyItem(int propid)
+    {
+        Gdip.CheckStatus(Gdip.GdipGetPropertyItemSize(new HandleRef(this, _nativeImage), propid, out uint size));
+
+        if (size == 0)
+            return null;
+
+        PropertyItem result;
+        byte[] buffer = ArrayPool<byte>.Shared.Rent((int)size);
+        fixed (byte *pBuffer = buffer)
         {
-            Gdip.CheckStatus(Gdip.GdipGetImageType(nativeImage, out int type));
-            switch ((ImageType)type)
+            PropertyItemInternal* pPropData = (PropertyItemInternal*)pBuffer;
+            Gdip.CheckStatus(Gdip.GdipGetPropertyItem(new HandleRef(this, _nativeImage), propid, size, pPropData));
+
+            result = new PropertyItem
             {
-                case ImageType.Bitmap:
-                    return new Bitmap(nativeImage);
-                case ImageType.Metafile:
-                    return new Metafile(nativeImage);
-                default:
-                    throw new ArgumentException(SR.InvalidImage);
+                Id = pPropData->id,
+                Len = pPropData->len,
+                Type = pPropData->type,
+                Value = pPropData->Value.ToArray()
+            };
+        }
+
+        ArrayPool<byte>.Shared.Return(buffer);
+        return result;
+    }
+
+    /// <summary>
+    /// Selects the frame specified by the given dimension and index.
+    /// </summary>
+    public int SelectActiveFrame(FrameDimension dimension, int frameIndex)
+    {
+        Guid dimensionID = dimension.Guid;
+        Gdip.CheckStatus(Gdip.GdipImageSelectActiveFrame(new HandleRef(this, _nativeImage), ref dimensionID, frameIndex));
+        return 0;
+    }
+
+    /// <summary>
+    /// Sets the specified property item to the specified value.
+    /// </summary>
+    public unsafe void SetPropertyItem(PropertyItem propitem)
+    {
+        fixed (byte *propItemValue = propitem.Value)
+        {
+            var propItemInternal = new PropertyItemInternal
+            {
+                id = propitem.Id,
+                len = propitem.Len,
+                type = propitem.Type,
+                value = propItemValue
+            };
+            Gdip.CheckStatus(Gdip.GdipSetPropertyItem(new HandleRef(this, _nativeImage), &propItemInternal));
+        }
+    }
+
+    public void RotateFlip(RotateFlipType rotateFlipType)
+    {
+        int status = Gdip.GdipImageRotateFlip(new HandleRef(this, _nativeImage), unchecked((int)rotateFlipType));
+        Gdip.CheckStatus(status);
+    }
+
+    /// <summary>
+    /// Removes the specified property item from this <see cref='Image'/>.
+    /// </summary>
+    public void RemovePropertyItem(int propid)
+    {
+        int status = Gdip.GdipRemovePropertyItem(new HandleRef(this, _nativeImage), propid);
+        Gdip.CheckStatus(status);
+    }
+
+    /// <summary>
+    /// Returns information about the codecs used for this <see cref='Image'/>.
+    /// </summary>
+    public unsafe EncoderParameters? GetEncoderParameterList(Guid encoder)
+    {
+        EncoderParameters parameters;
+
+        Gdip.CheckStatus(Gdip.GdipGetEncoderParameterListSize(
+            new HandleRef(this, _nativeImage),
+            ref encoder,
+            out int size));
+
+        if (size <= 0)
+            return null;
+
+        nint buffer = Marshal.AllocHGlobal(size);
+        try
+        {
+            Gdip.CheckStatus(Gdip.GdipGetEncoderParameterList(
+                new HandleRef(this, _nativeImage),
+                ref encoder,
+                size,
+                buffer));
+
+            parameters = EncoderParameters.ConvertFromNative((EncoderParametersNative*)buffer);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(buffer);
+        }
+
+        return parameters;
+    }
+
+    /// <summary>
+    /// Creates a <see cref='Bitmap'/> from a Windows handle.
+    /// </summary>
+    public static Bitmap FromHbitmap(IntPtr hbitmap) => FromHbitmap(hbitmap, IntPtr.Zero);
+
+    /// <summary>
+    /// Creates a <see cref='Bitmap'/> from the specified Windows handle with the specified color palette.
+    /// </summary>
+    public static Bitmap FromHbitmap(IntPtr hbitmap, IntPtr hpalette)
+    {
+        Gdip.CheckStatus(Gdip.GdipCreateBitmapFromHBITMAP(hbitmap, hpalette, out IntPtr bitmap));
+        return new Bitmap(bitmap);
+    }
+
+    /// <summary>
+    /// Returns a value indicating whether the pixel format is extended.
+    /// </summary>
+    public static bool IsExtendedPixelFormat(PixelFormat pixfmt)
+    {
+        return (pixfmt & PixelFormat.Extended) != 0;
+    }
+
+    /// <summary>
+    /// Returns a value indicating whether the pixel format is canonical.
+    /// </summary>
+    public static bool IsCanonicalPixelFormat(PixelFormat pixfmt)
+    {
+        // Canonical formats:
+        //
+        //  PixelFormat32bppARGB
+        //  PixelFormat32bppPARGB
+        //  PixelFormat64bppARGB
+        //  PixelFormat64bppPARGB
+
+        return (pixfmt & PixelFormat.Canonical) != 0;
+    }
+
+    internal void SetNativeImage(IntPtr handle)
+    {
+        if (handle == IntPtr.Zero)
+            throw new ArgumentException(SR.NativeHandle0, nameof(handle));
+
+        _nativeImage = handle;
+    }
+
+    // Multi-frame support
+
+    /// <summary>
+    /// Gets an array of GUIDs that represent the dimensions of frames within this <see cref='Image'/>.
+    /// </summary>
+    [Browsable(false)]
+    public unsafe Guid[] FrameDimensionsList
+    {
+        get
+        {
+            Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsCount(new HandleRef(this, _nativeImage), out int count));
+
+            Debug.Assert(count >= 0, "FrameDimensionsList returns bad count");
+            if (count <= 0)
+                return Array.Empty<Guid>();
+
+            Guid[] guids = new Guid[count];
+            fixed (Guid* g = guids)
+            {
+                Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsList(new HandleRef(this, _nativeImage), g, count));
             }
+
+            return guids;
         }
+    }
 
-        internal static unsafe void EnsureSave(Image image, string? filename, Stream? dataStream)
+    /// <summary>
+    /// Returns the size of the specified pixel format.
+    /// </summary>
+    public static int GetPixelFormatSize(PixelFormat pixfmt)
+    {
+        return (unchecked((int)pixfmt) >> 8) & 0xFF;
+    }
+
+    /// <summary>
+    /// Returns a value indicating whether the pixel format contains alpha information.
+    /// </summary>
+    public static bool IsAlphaPixelFormat(PixelFormat pixfmt)
+    {
+        return (pixfmt & PixelFormat.Alpha) != 0;
+    }
+
+    internal static Image CreateImageObject(IntPtr nativeImage)
+    {
+        Gdip.CheckStatus(Gdip.GdipGetImageType(nativeImage, out int type));
+        switch ((ImageType)type)
         {
-            if (image.RawFormat.Equals(ImageFormat.Gif))
+            case ImageType.Bitmap:
+                return new Bitmap(nativeImage);
+            case ImageType.Metafile:
+                return new Metafile(nativeImage);
+            default:
+                throw new ArgumentException(SR.InvalidImage);
+        }
+    }
+
+    internal static unsafe void EnsureSave(Image image, string? filename, Stream? dataStream)
+    {
+        if (image.RawFormat.Equals(ImageFormat.Gif))
+        {
+            bool animatedGif = false;
+
+            Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsCount(new HandleRef(image, image._nativeImage), out int dimensions));
+            if (dimensions <= 0)
             {
-                bool animatedGif = false;
+                return;
+            }
 
-                Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsCount(new HandleRef(image, image._nativeImage), out int dimensions));
-                if (dimensions <= 0)
+            Span<Guid> guids = dimensions < 16 ?
+                stackalloc Guid[dimensions] :
+                new Guid[dimensions];
+
+            fixed (Guid* g = &MemoryMarshal.GetReference(guids))
+            {
+                Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsList(new HandleRef(image, image._nativeImage), g, dimensions));
+            }
+
+            Guid timeGuid = FrameDimension.Time.Guid;
+            for (int i = 0; i < dimensions; i++)
+            {
+                if (timeGuid == guids[i])
                 {
-                    return;
+                    animatedGif = image.GetFrameCount(FrameDimension.Time) > 1;
+                    break;
                 }
+            }
 
-                Span<Guid> guids = dimensions < 16 ?
-                    stackalloc Guid[dimensions] :
-                    new Guid[dimensions];
-
-                fixed (Guid* g = &MemoryMarshal.GetReference(guids))
+            if (animatedGif)
+            {
+                try
                 {
-                    Gdip.CheckStatus(Gdip.GdipImageGetFrameDimensionsList(new HandleRef(image, image._nativeImage), g, dimensions));
-                }
-
-                Guid timeGuid = FrameDimension.Time.Guid;
-                for (int i = 0; i < dimensions; i++)
-                {
-                    if (timeGuid == guids[i])
+                    Stream? created = null;
+                    long lastPos = 0;
+                    if (dataStream != null)
                     {
-                        animatedGif = image.GetFrameCount(FrameDimension.Time) > 1;
-                        break;
+                        lastPos = dataStream.Position;
+                        dataStream.Position = 0;
                     }
-                }
 
-                if (animatedGif)
-                {
                     try
                     {
-                        Stream? created = null;
-                        long lastPos = 0;
-                        if (dataStream != null)
+                        if (dataStream == null)
                         {
-                            lastPos = dataStream.Position;
-                            dataStream.Position = 0;
+                            created = dataStream = File.OpenRead(filename!);
                         }
 
-                        try
+                        image._rawData = new byte[(int)dataStream.Length];
+                        dataStream.Read(image._rawData, 0, (int)dataStream.Length);
+                    }
+                    finally
+                    {
+                        if (created != null)
                         {
-                            if (dataStream == null)
-                            {
-                                created = dataStream = File.OpenRead(filename!);
-                            }
-
-                            image._rawData = new byte[(int)dataStream.Length];
-                            dataStream.Read(image._rawData, 0, (int)dataStream.Length);
+                            created.Close();
                         }
-                        finally
+                        else
                         {
-                            if (created != null)
-                            {
-                                created.Close();
-                            }
-                            else
-                            {
-                                dataStream!.Position = lastPos;
-                            }
+                            dataStream!.Position = lastPos;
                         }
                     }
-                    // possible exceptions for reading the filename
-                    catch (UnauthorizedAccessException)
-                    {
-                    }
-                    catch (DirectoryNotFoundException)
-                    {
-                    }
-                    catch (IOException)
-                    {
-                    }
-                    // possible exceptions for setting/getting the position inside dataStream
-                    catch (NotSupportedException)
-                    {
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                    }
-                    // possible exception when reading stuff into dataStream
-                    catch (ArgumentException)
-                    {
-                    }
+                }
+                // possible exceptions for reading the filename
+                catch (UnauthorizedAccessException)
+                {
+                }
+                catch (DirectoryNotFoundException)
+                {
+                }
+                catch (IOException)
+                {
+                }
+                // possible exceptions for setting/getting the position inside dataStream
+                catch (NotSupportedException)
+                {
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+                // possible exception when reading stuff into dataStream
+                catch (ArgumentException)
+                {
                 }
             }
         }

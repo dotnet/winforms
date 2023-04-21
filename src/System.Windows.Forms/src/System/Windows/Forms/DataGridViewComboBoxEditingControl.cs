@@ -7,176 +7,175 @@
 using System.Drawing;
 using System.Globalization;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
 {
-    public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
+    private DataGridView _dataGridView;
+    private bool _valueChanged;
+    private int _rowIndex;
+
+    public DataGridViewComboBoxEditingControl() : base()
     {
-        private DataGridView _dataGridView;
-        private bool _valueChanged;
-        private int _rowIndex;
+        TabStop = false;
+    }
 
-        public DataGridViewComboBoxEditingControl() : base()
+    protected override AccessibleObject CreateAccessibilityInstance()
+    {
+        return new DataGridViewComboBoxEditingControlAccessibleObject(this);
+    }
+
+    // IDataGridViewEditingControl interface implementation
+
+    public virtual DataGridView EditingControlDataGridView
+    {
+        get
         {
-            TabStop = false;
+            return _dataGridView;
         }
-
-        protected override AccessibleObject CreateAccessibilityInstance()
+        set
         {
-            return new DataGridViewComboBoxEditingControlAccessibleObject(this);
+            _dataGridView = value;
         }
+    }
 
-        // IDataGridViewEditingControl interface implementation
-
-        public virtual DataGridView EditingControlDataGridView
+    public virtual object EditingControlFormattedValue
+    {
+        get
         {
-            get
-            {
-                return _dataGridView;
-            }
-            set
-            {
-                _dataGridView = value;
-            }
+            return GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
         }
-
-        public virtual object EditingControlFormattedValue
+        set
         {
-            get
+            if (value is string valueStr)
             {
-                return GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
-            }
-            set
-            {
-                if (value is string valueStr)
+                Text = valueStr;
+                if (string.Compare(valueStr, Text, true, CultureInfo.CurrentCulture) != 0)
                 {
-                    Text = valueStr;
-                    if (string.Compare(valueStr, Text, true, CultureInfo.CurrentCulture) != 0)
-                    {
-                        SelectedIndex = -1;
-                    }
+                    SelectedIndex = -1;
                 }
             }
         }
+    }
 
-        public virtual int EditingControlRowIndex
+    public virtual int EditingControlRowIndex
+    {
+        get
         {
-            get
-            {
-                return _rowIndex;
-            }
-            set
-            {
-                _rowIndex = value;
-            }
+            return _rowIndex;
+        }
+        set
+        {
+            _rowIndex = value;
+        }
+    }
+
+    public virtual bool EditingControlValueChanged
+    {
+        get
+        {
+            return _valueChanged;
+        }
+        set
+        {
+            _valueChanged = value;
+        }
+    }
+
+    public virtual Cursor EditingPanelCursor
+    {
+        get
+        {
+            return Cursors.Default;
+        }
+    }
+
+    public virtual bool RepositionEditingControlOnValueChange
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+    public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
+    {
+        Font = dataGridViewCellStyle.Font;
+        if (dataGridViewCellStyle.BackColor.A < 255)
+        {
+            // Our ComboBox does not support transparent back colors
+            Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
+            BackColor = opaqueBackColor;
+            _dataGridView.EditingPanel.BackColor = opaqueBackColor;
+        }
+        else
+        {
+            BackColor = dataGridViewCellStyle.BackColor;
         }
 
-        public virtual bool EditingControlValueChanged
+        ForeColor = dataGridViewCellStyle.ForeColor;
+    }
+
+    public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
+    {
+        var maskedKeyData = keyData & Keys.KeyCode;
+        if (maskedKeyData == Keys.Down ||
+            maskedKeyData == Keys.Up ||
+            (DroppedDown && (maskedKeyData == Keys.Escape)) ||
+            maskedKeyData == Keys.Enter)
         {
-            get
-            {
-                return _valueChanged;
-            }
-            set
-            {
-                _valueChanged = value;
-            }
+            return true;
         }
 
-        public virtual Cursor EditingPanelCursor
+        return !dataGridViewWantsInputKey;
+    }
+
+    public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
+    {
+        return Text;
+    }
+
+    public virtual void PrepareEditingControlForEdit(bool selectAll)
+    {
+        if (selectAll)
         {
-            get
-            {
-                return Cursors.Default;
-            }
+            SelectAll();
+        }
+    }
+
+    private void NotifyDataGridViewOfValueChange()
+    {
+        _valueChanged = true;
+        _dataGridView.NotifyCurrentCellDirty(true);
+    }
+
+    protected override void OnSelectedIndexChanged(EventArgs e)
+    {
+        base.OnSelectedIndexChanged(e);
+        if (SelectedIndex != -1)
+        {
+            NotifyDataGridViewOfValueChange();
+        }
+    }
+
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+
+        // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+        if (_dataGridView?.IsAccessibilityObjectCreated == true)
+        {
+            _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
+        }
+    }
+
+    internal override void ReleaseUiaProvider(HWND handle)
+    {
+        if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
+        {
+            ((DataGridViewComboBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
         }
 
-        public virtual bool RepositionEditingControlOnValueChange
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
-        {
-            Font = dataGridViewCellStyle.Font;
-            if (dataGridViewCellStyle.BackColor.A < 255)
-            {
-                // Our ComboBox does not support transparent back colors
-                Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
-                BackColor = opaqueBackColor;
-                _dataGridView.EditingPanel.BackColor = opaqueBackColor;
-            }
-            else
-            {
-                BackColor = dataGridViewCellStyle.BackColor;
-            }
-
-            ForeColor = dataGridViewCellStyle.ForeColor;
-        }
-
-        public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
-        {
-            var maskedKeyData = keyData & Keys.KeyCode;
-            if (maskedKeyData == Keys.Down ||
-                maskedKeyData == Keys.Up ||
-                (DroppedDown && (maskedKeyData == Keys.Escape)) ||
-                maskedKeyData == Keys.Enter)
-            {
-                return true;
-            }
-
-            return !dataGridViewWantsInputKey;
-        }
-
-        public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
-        {
-            return Text;
-        }
-
-        public virtual void PrepareEditingControlForEdit(bool selectAll)
-        {
-            if (selectAll)
-            {
-                SelectAll();
-            }
-        }
-
-        private void NotifyDataGridViewOfValueChange()
-        {
-            _valueChanged = true;
-            _dataGridView.NotifyCurrentCellDirty(true);
-        }
-
-        protected override void OnSelectedIndexChanged(EventArgs e)
-        {
-            base.OnSelectedIndexChanged(e);
-            if (SelectedIndex != -1)
-            {
-                NotifyDataGridViewOfValueChange();
-            }
-        }
-
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-
-            // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
-            if (_dataGridView?.IsAccessibilityObjectCreated == true)
-            {
-                _dataGridView.SetAccessibleObjectParent(AccessibilityObject);
-            }
-        }
-
-        internal override void ReleaseUiaProvider(HWND handle)
-        {
-            if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
-            {
-                ((DataGridViewComboBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
-            }
-
-            base.ReleaseUiaProvider(handle);
-        }
+        base.ReleaseUiaProvider(handle);
     }
 }

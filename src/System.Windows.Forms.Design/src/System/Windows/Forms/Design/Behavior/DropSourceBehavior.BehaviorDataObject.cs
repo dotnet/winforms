@@ -5,37 +5,36 @@
 using System.Collections;
 using System.ComponentModel;
 
-namespace System.Windows.Forms.Design.Behavior
+namespace System.Windows.Forms.Design.Behavior;
+
+internal sealed partial class DropSourceBehavior
 {
-    internal sealed partial class DropSourceBehavior
+    /// <summary>
+    ///  This class extends from <see cref="DataObject"/> and carries additional
+    ///  information such as: the list of Controls currently being dragged and the drag 'Source'.
+    /// </summary>
+    internal class BehaviorDataObject : DataObject
     {
-        /// <summary>
-        ///  This class extends from <see cref="DataObject"/> and carries additional
-        ///  information such as: the list of Controls currently being dragged and the drag 'Source'.
-        /// </summary>
-        internal class BehaviorDataObject : DataObject
+        private readonly DropSourceBehavior _sourceBehavior;
+
+        public BehaviorDataObject(ICollection dragComponents, Control source, DropSourceBehavior sourceBehavior) : base()
         {
-            private readonly DropSourceBehavior _sourceBehavior;
-
-            public BehaviorDataObject(ICollection dragComponents, Control source, DropSourceBehavior sourceBehavior) : base()
-            {
-                DragComponents = dragComponents;
-                Source = source;
-                _sourceBehavior = sourceBehavior;
-                Target = null;
-            }
-
-            public Control Source { get; }
-
-            public ICollection DragComponents { get; }
-
-            public IComponent? Target { get; set; }
-
-            internal void EndDragDrop(bool allowSetChildIndexOnDrop) => _sourceBehavior.EndDragDrop(allowSetChildIndexOnDrop);
-
-            internal void CleanupDrag() => _sourceBehavior.CleanupDrag();
-
-            internal List<IComponent> GetSortedDragControls(ref int primaryControlIndex) => _sourceBehavior.GetSortedDragControls(ref primaryControlIndex);
+            DragComponents = dragComponents;
+            Source = source;
+            _sourceBehavior = sourceBehavior;
+            Target = null;
         }
+
+        public Control Source { get; }
+
+        public ICollection DragComponents { get; }
+
+        public IComponent? Target { get; set; }
+
+        internal void EndDragDrop(bool allowSetChildIndexOnDrop) => _sourceBehavior.EndDragDrop(allowSetChildIndexOnDrop);
+
+        internal void CleanupDrag() => _sourceBehavior.CleanupDrag();
+
+        internal List<IComponent> GetSortedDragControls(ref int primaryControlIndex) => _sourceBehavior.GetSortedDragControls(ref primaryControlIndex);
     }
 }

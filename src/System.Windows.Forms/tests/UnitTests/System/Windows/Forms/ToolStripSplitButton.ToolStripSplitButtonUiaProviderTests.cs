@@ -4,24 +4,23 @@
 
 using static System.Windows.Forms.ToolStripSplitButton;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ToolStripSplitButton_ToolStripSplitButtonUiaProviderTests
 {
-    public class ToolStripSplitButton_ToolStripSplitButtonUiaProviderTests
+    [WinFormsFact]
+    public void ToolStripSplitButtonUiaProvider_Ctor_OwnerToolStripSplitButtonCannotBeNull()
     {
-        [WinFormsFact]
-        public void ToolStripSplitButtonUiaProvider_Ctor_OwnerToolStripSplitButtonCannotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ToolStripSplitButtonUiaProvider(null));
-        }
+        Assert.Throws<ArgumentNullException>(() => new ToolStripSplitButtonUiaProvider(null));
+    }
 
-        [WinFormsFact]
-        public void ToolStripSplitButtonUiaProvider_IsIAccessibleExSupported_ReturnsExpected()
-        {
-            using ToolStripSplitButton toolStripSplitButton = new();
+    [WinFormsFact]
+    public void ToolStripSplitButtonUiaProvider_IsIAccessibleExSupported_ReturnsExpected()
+    {
+        using ToolStripSplitButton toolStripSplitButton = new();
 
-            ToolStripSplitButtonUiaProvider accessibleObject = new(toolStripSplitButton);
+        ToolStripSplitButtonUiaProvider accessibleObject = new(toolStripSplitButton);
 
-            Assert.True(accessibleObject.IsIAccessibleExSupported());
-        }
+        Assert.True(accessibleObject.IsIAccessibleExSupported());
     }
 }

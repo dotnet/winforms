@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
-{
-    public delegate void DrawItemEventHandler(object? sender, DrawItemEventArgs e);
-}
+namespace System.Windows.Forms;
+
+public delegate void DrawItemEventHandler(object? sender, DrawItemEventArgs e);

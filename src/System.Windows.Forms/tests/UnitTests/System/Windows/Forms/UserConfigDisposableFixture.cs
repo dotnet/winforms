@@ -4,27 +4,26 @@
 
 using System.Configuration;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class UserConfigDisposableFixture : IDisposable
 {
-    public class UserConfigDisposableFixture : IDisposable
+    public UserConfigDisposableFixture()
     {
-        public UserConfigDisposableFixture()
-        {
-            DeleteUserConfig();
-        }
+        DeleteUserConfig();
+    }
 
-        public void Dispose()
-        {
-            DeleteUserConfig();
-        }
+    public void Dispose()
+    {
+        DeleteUserConfig();
+    }
 
-        private static void DeleteUserConfig()
+    private static void DeleteUserConfig()
+    {
+        var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+        if (File.Exists(configuration.FilePath))
         {
-            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
-            if (File.Exists(configuration.FilePath))
-            {
-                File.Delete(configuration.FilePath);
-            }
+            File.Delete(configuration.FilePath);
         }
     }
 }

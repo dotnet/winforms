@@ -2,32 +2,31 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Label
 {
-    public partial class Label
+    internal class LabelAccessibleObject : ControlAccessibleObject
     {
-        internal class LabelAccessibleObject : ControlAccessibleObject
+        private readonly Label _owningLabel;
+
+        public LabelAccessibleObject(Label owner) : base(owner)
         {
-            private readonly Label _owningLabel;
+            _owningLabel = owner;
+        }
 
-            public LabelAccessibleObject(Label owner) : base(owner)
+        public override AccessibleRole Role
+        {
+            get
             {
-                _owningLabel = owner;
-            }
+                AccessibleRole role = _owningLabel.AccessibleRole;
 
-            public override AccessibleRole Role
-            {
-                get
+                if (role != AccessibleRole.Default)
                 {
-                    AccessibleRole role = _owningLabel.AccessibleRole;
-
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.StaticText;
+                    return role;
                 }
+
+                return AccessibleRole.StaticText;
             }
         }
     }

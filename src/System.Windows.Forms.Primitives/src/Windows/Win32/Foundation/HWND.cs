@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Windows.Win32.Foundation
+namespace Windows.Win32.Foundation;
+
+internal partial struct HWND : IHandle<HWND>
 {
-    internal partial struct HWND : IHandle<HWND>
-    {
-        HWND IHandle<HWND>.Handle => this;
-        object? IHandle<HWND>.Wrapper => null;
-    }
+    HWND IHandle<HWND>.Handle => this;
+    object? IHandle<HWND>.Wrapper => null;
 }

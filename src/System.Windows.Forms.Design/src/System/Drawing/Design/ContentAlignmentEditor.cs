@@ -7,37 +7,36 @@
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design;
+
+/// <summary>
+///  Provides a <see cref="UITypeEditor"/> for visually editing content alignment.
+/// </summary>
+public partial class ContentAlignmentEditor : UITypeEditor
 {
+    private ContentUI _contentUI;
+
     /// <summary>
-    ///  Provides a <see cref="UITypeEditor"/> for visually editing content alignment.
+    ///  Edits the given object value using the editor style provided by GetEditStyle.
     /// </summary>
-    public partial class ContentAlignmentEditor : UITypeEditor
+    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
     {
-        private ContentUI _contentUI;
-
-        /// <summary>
-        ///  Edits the given object value using the editor style provided by GetEditStyle.
-        /// </summary>
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
         {
-            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
-            {
-                return value;
-            }
-
-            _contentUI ??= new ContentUI();
-
-            _contentUI.Start(editorService, value);
-            editorService.DropDownControl(_contentUI);
-            value = _contentUI.Value;
-            _contentUI.End();
-
             return value;
         }
 
-        /// <inheritdoc />
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-            => UITypeEditorEditStyle.DropDown;
+        _contentUI ??= new ContentUI();
+
+        _contentUI.Start(editorService, value);
+        editorService.DropDownControl(_contentUI);
+        value = _contentUI.Value;
+        _contentUI.End();
+
+        return value;
     }
+
+    /// <inheritdoc />
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        => UITypeEditorEditStyle.DropDown;
 }

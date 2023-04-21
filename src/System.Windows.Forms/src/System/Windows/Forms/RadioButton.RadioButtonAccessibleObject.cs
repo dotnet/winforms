@@ -4,67 +4,66 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class RadioButton
 {
-    public partial class RadioButton
+    public class RadioButtonAccessibleObject : ControlAccessibleObject
     {
-        public class RadioButtonAccessibleObject : ControlAccessibleObject
+        private readonly RadioButton _owningRadioButton;
+
+        public RadioButtonAccessibleObject(RadioButton owner) : base(owner)
         {
-            private readonly RadioButton _owningRadioButton;
-
-            public RadioButtonAccessibleObject(RadioButton owner) : base(owner)
-            {
-                _owningRadioButton = owner;
-            }
-
-            public override string DefaultAction
-                => Owner.AccessibleDefaultActionDescription ?? SR.AccessibleActionCheck;
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    return role != AccessibleRole.Default
-                        ? role
-                        : AccessibleRole.RadioButton;
-                }
-            }
-
-            public override AccessibleStates State
-                => _owningRadioButton.Checked
-                    ? AccessibleStates.Checked | base.State
-                    : base.State;
-
-            internal override bool IsItemSelected
-                => _owningRadioButton.Checked;
-
-            public override void DoDefaultAction()
-            {
-                if (_owningRadioButton.IsHandleCreated)
-                {
-                    _owningRadioButton.PerformClick();
-                }
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId
-                        // This is necessary for compatibility with MSAA proxy:
-                        // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                        => true,
-                    _ => base.GetPropertyValue(propertyID)
-                };
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId switch
-                {
-                    var p when
-                        p == UiaCore.UIA.SelectionItemPatternId => true,
-                    _ => base.IsPatternSupported(patternId)
-                };
+            _owningRadioButton = owner;
         }
+
+        public override string DefaultAction
+            => Owner.AccessibleDefaultActionDescription ?? SR.AccessibleActionCheck;
+
+        public override AccessibleRole Role
+        {
+            get
+            {
+                AccessibleRole role = Owner.AccessibleRole;
+                return role != AccessibleRole.Default
+                    ? role
+                    : AccessibleRole.RadioButton;
+            }
+        }
+
+        public override AccessibleStates State
+            => _owningRadioButton.Checked
+                ? AccessibleStates.Checked | base.State
+                : base.State;
+
+        internal override bool IsItemSelected
+            => _owningRadioButton.Checked;
+
+        public override void DoDefaultAction()
+        {
+            if (_owningRadioButton.IsHandleCreated)
+            {
+                _owningRadioButton.PerformClick();
+            }
+        }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            => propertyID switch
+            {
+                UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                UiaCore.UIA.IsKeyboardFocusablePropertyId
+                    // This is necessary for compatibility with MSAA proxy:
+                    // IsKeyboardFocusable = true regardless the control is enabled/disabled.
+                    => true,
+                _ => base.GetPropertyValue(propertyID)
+            };
+
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            => patternId switch
+            {
+                var p when
+                    p == UiaCore.UIA.SelectionItemPatternId => true,
+                _ => base.IsPatternSupported(patternId)
+            };
     }
 }

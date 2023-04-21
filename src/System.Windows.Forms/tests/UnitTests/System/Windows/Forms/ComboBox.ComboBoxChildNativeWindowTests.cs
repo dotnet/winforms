@@ -2,23 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ComboBox_ComboBoxChildNativeWindowTests
 {
-    public class ComboBox_ComboBoxChildNativeWindowTests
+    [WinFormsFact]
+    public void ComboBoxChildNativeWindow_GetChildAccessibleObject()
     {
-        [WinFormsFact]
-        public void ComboBoxChildNativeWindow_GetChildAccessibleObject()
+        using ComboBox comboBox = new() { DropDownStyle = ComboBoxStyle.DropDown };
+        comboBox.CreateControl();
+
+        var childNativeWindow = comboBox.GetListNativeWindow();
+        Type childWindowTypeEnum = typeof(ComboBox).GetNestedType("ChildWindowType", Reflection.BindingFlags.NonPublic);
+
+        foreach (var childWindowType in Enum.GetValues(childWindowTypeEnum))
         {
-            using ComboBox comboBox = new() { DropDownStyle = ComboBoxStyle.DropDown };
-            comboBox.CreateControl();
-
-            var childNativeWindow = comboBox.GetListNativeWindow();
-            Type childWindowTypeEnum = typeof(ComboBox).GetNestedType("ChildWindowType", Reflection.BindingFlags.NonPublic);
-
-            foreach (var childWindowType in Enum.GetValues(childWindowTypeEnum))
-            {
-                Assert.True(childNativeWindow.TestAccessor().Dynamic.GetChildAccessibleObject() is ComboBox.ChildAccessibleObject);
-            }
+            Assert.True(childNativeWindow.TestAccessor().Dynamic.GetChildAccessibleObject() is ComboBox.ChildAccessibleObject);
         }
     }
 }

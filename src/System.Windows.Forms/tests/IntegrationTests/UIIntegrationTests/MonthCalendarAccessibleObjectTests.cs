@@ -7,49 +7,48 @@ using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop.ComCtl32;
 
-namespace System.Windows.Forms.UITests
+namespace System.Windows.Forms.UITests;
+
+public class MonthCalendarAccessibleObjectTests : ControlTestBase
 {
-    public class MonthCalendarAccessibleObjectTests : ControlTestBase
+    public MonthCalendarAccessibleObjectTests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
     {
-        public MonthCalendarAccessibleObjectTests(ITestOutputHelper testOutputHelper)
-            : base(testOutputHelper)
-        {
-        }
+    }
 
-        [WinFormsFact]
-        public async Task MonthCalendar_GetFromPoint_ReturnsCorrectValueAsync()
+    [WinFormsFact]
+    public async Task MonthCalendar_GetFromPoint_ReturnsCorrectValueAsync()
+    {
+        await RunTestAsync((form, calendar) =>
         {
-            await RunTestAsync((form, calendar) =>
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)calendar.AccessibilityObject;
+            CalendarAccessibleObject calendarAccessibleObject = new(accessibleObject, 0, "Test name");
+
+            MCHITTESTINFO info = new()
             {
-                MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)calendar.AccessibilityObject;
-                CalendarAccessibleObject calendarAccessibleObject = new(accessibleObject, 0, "Test name");
+                uHit = MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY,
+                iRow = 0
+            };
+            MonthCalendarChildAccessibleObject cell = calendarAccessibleObject.GetChildFromPoint(info);
 
-                MCHITTESTINFO info = new()
+            Assert.NotNull(cell);
+
+            return Task.CompletedTask;
+        });
+    }
+
+    private async Task RunTestAsync(Func<Form, MonthCalendar, Task> runTest)
+    {
+        await RunSingleControlTestAsync(
+            testDriverAsync: runTest,
+            createControl: () =>
+            {
+                MonthCalendar control = new()
                 {
-                    uHit = MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY,
-                    iRow = 0
+                    Location = new Point(0, 0)
                 };
-                MonthCalendarChildAccessibleObject cell = calendarAccessibleObject.GetChildFromPoint(info);
 
-                Assert.NotNull(cell);
-
-                return Task.CompletedTask;
+                return control;
             });
-        }
-
-        private async Task RunTestAsync(Func<Form, MonthCalendar, Task> runTest)
-        {
-            await RunSingleControlTestAsync(
-                testDriverAsync: runTest,
-                createControl: () =>
-                {
-                    MonthCalendar control = new()
-                    {
-                        Location = new Point(0, 0)
-                    };
-
-                    return control;
-                });
-        }
     }
 }

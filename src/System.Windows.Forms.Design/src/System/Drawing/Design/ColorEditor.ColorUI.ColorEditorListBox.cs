@@ -4,22 +4,21 @@
 
 using System.Windows.Forms;
 
-namespace System.Drawing.Design
+namespace System.Drawing.Design;
+
+public partial class ColorEditor
 {
-    public partial class ColorEditor
+    private sealed partial class ColorUI
     {
-        private sealed partial class ColorUI
+        private sealed class ColorEditorListBox : ListBox
         {
-            private sealed class ColorEditorListBox : ListBox
+            protected override bool IsInputKey(Keys keyData)
             {
-                protected override bool IsInputKey(Keys keyData)
+                return keyData switch
                 {
-                    return keyData switch
-                    {
-                        Keys.Return => true,
-                        _ => base.IsInputKey(keyData),
-                    };
-                }
+                    Keys.Return => true,
+                    _ => base.IsInputKey(keyData),
+                };
             }
         }
     }

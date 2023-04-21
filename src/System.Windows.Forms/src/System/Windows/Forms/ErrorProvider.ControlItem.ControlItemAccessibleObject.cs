@@ -5,160 +5,159 @@
 using System.Drawing;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ErrorProvider
 {
-    public partial class ErrorProvider
+    internal partial class ControlItem
     {
-        internal partial class ControlItem
+        private class ControlItemAccessibleObject : AccessibleObject
         {
-            private class ControlItemAccessibleObject : AccessibleObject
+            private readonly ControlItem _controlItem;
+            private readonly ErrorWindow? _window;
+            private readonly Control _control;
+            private readonly ErrorProvider _provider;
+
+            public ControlItemAccessibleObject(
+                ControlItem controlItem,
+                ErrorWindow? window,
+                Control control,
+                ErrorProvider provider)
             {
-                private readonly ControlItem _controlItem;
-                private readonly ErrorWindow? _window;
-                private readonly Control _control;
-                private readonly ErrorProvider _provider;
+                _controlItem = controlItem;
+                _window = window;
+                _control = control;
+                _provider = provider;
+            }
 
-                public ControlItemAccessibleObject(
-                    ControlItem controlItem,
-                    ErrorWindow? window,
-                    Control control,
-                    ErrorProvider provider)
+            public override Rectangle Bounds
+                => _control.ParentInternal is not null && _control.ParentInternal.IsHandleCreated
+                    ? _control.ParentInternal.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
+                    : Rectangle.Empty;
+
+            private int ControlItemsCount => _window?.ControlItems.Count ?? 0;
+
+            private int CurrentIndex => _window?.ControlItems.IndexOf(_controlItem) ?? -1;
+
+            /// <summary>
+            ///  Returns the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                switch (direction)
                 {
-                    _controlItem = controlItem;
-                    _window = window;
-                    _control = control;
-                    _provider = provider;
+                    case UiaCore.NavigateDirection.Parent:
+                        return Parent;
+                    case UiaCore.NavigateDirection.NextSibling:
+                        return GetNextSibling();
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        return GetPreviousSibling();
+                    default:
+                        return base.FragmentNavigate(direction);
+                }
+            }
+
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => Parent;
+
+            internal override int GetChildId()
+            {
+                return CurrentIndex + 1;
+            }
+
+            private AccessibleObject? GetNextSibling()
+            {
+                int currentIndex = CurrentIndex;
+
+                //Is a last child
+                if (currentIndex >= ControlItemsCount - 1 || currentIndex < 0)
+                {
+                    return null;
                 }
 
-                public override Rectangle Bounds
-                    => _control.ParentInternal is not null && _control.ParentInternal.IsHandleCreated
-                        ? _control.ParentInternal.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
-                        : Rectangle.Empty;
+                return _window?.ControlItems[currentIndex + 1].AccessibilityObject;
+            }
 
-                private int ControlItemsCount => _window?.ControlItems.Count ?? 0;
+            private AccessibleObject? GetPreviousSibling()
+            {
+                int currentIndex = CurrentIndex;
 
-                private int CurrentIndex => _window?.ControlItems.IndexOf(_controlItem) ?? -1;
-
-                /// <summary>
-                ///  Returns the element in the specified direction.
-                /// </summary>
-                /// <param name="direction">Indicates the direction in which to navigate.</param>
-                /// <returns>Returns the element in the specified direction.</returns>
-                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+                //Is a first child
+                if (currentIndex <= 0 || currentIndex > ControlItemsCount - 1)
                 {
-                    switch (direction)
+                    return null;
+                }
+
+                return _window?.ControlItems[currentIndex - 1].AccessibilityObject;
+            }
+
+            /// <summary>
+            ///  Gets the accessible property value.
+            /// </summary>
+            /// <param name="propertyID">The accessible property ID.</param>
+            /// <returns>The accessible property value.</returns>
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
+                {
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ImageControlTypeId,
+                    UiaCore.UIA.NativeWindowHandlePropertyId => _window?.Handle,
+                    _ => base.GetPropertyValue(propertyID)
+                };
+
+            internal override bool IsIAccessibleExSupported() => true;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
+            internal override bool IsReadOnly => true;
+
+            [AllowNull]
+            public override string Name
+            {
+                get => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;
+                set => base.Name = value;
+            }
+
+            public override AccessibleObject? Parent => _window?.AccessibilityObject;
+
+            public override AccessibleRole Role => AccessibleRole.Alert;
+
+            /// <summary>
+            ///  Gets the runtime ID.
+            /// </summary>
+            internal override int[] RuntimeId
+            {
+                get
+                {
+                    if (_window is null)
                     {
-                        case UiaCore.NavigateDirection.Parent:
-                            return Parent;
-                        case UiaCore.NavigateDirection.NextSibling:
-                            return GetNextSibling();
-                        case UiaCore.NavigateDirection.PreviousSibling:
-                            return GetPreviousSibling();
-                        default:
-                            return base.FragmentNavigate(direction);
-                    }
-                }
-
-                internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => Parent;
-
-                internal override int GetChildId()
-                {
-                    return CurrentIndex + 1;
-                }
-
-                private AccessibleObject? GetNextSibling()
-                {
-                    int currentIndex = CurrentIndex;
-
-                    //Is a last child
-                    if (currentIndex >= ControlItemsCount - 1 || currentIndex < 0)
-                    {
-                        return null;
-                    }
-
-                    return _window?.ControlItems[currentIndex + 1].AccessibilityObject;
-                }
-
-                private AccessibleObject? GetPreviousSibling()
-                {
-                    int currentIndex = CurrentIndex;
-
-                    //Is a first child
-                    if (currentIndex <= 0 || currentIndex > ControlItemsCount - 1)
-                    {
-                        return null;
-                    }
-
-                    return _window?.ControlItems[currentIndex - 1].AccessibilityObject;
-                }
-
-                /// <summary>
-                ///  Gets the accessible property value.
-                /// </summary>
-                /// <param name="propertyID">The accessible property ID.</param>
-                /// <returns>The accessible property value.</returns>
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
-                    propertyID switch
-                    {
-                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ImageControlTypeId,
-                        UiaCore.UIA.NativeWindowHandlePropertyId => _window?.Handle,
-                        _ => base.GetPropertyValue(propertyID)
-                    };
-
-                internal override bool IsIAccessibleExSupported() => true;
-
-                internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                {
-                    if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
-                    {
-                        return true;
-                    }
-
-                    return base.IsPatternSupported(patternId);
-                }
-
-                internal override bool IsReadOnly => true;
-
-                [AllowNull]
-                public override string Name
-                {
-                    get => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;
-                    set => base.Name = value;
-                }
-
-                public override AccessibleObject? Parent => _window?.AccessibilityObject;
-
-                public override AccessibleRole Role => AccessibleRole.Alert;
-
-                /// <summary>
-                ///  Gets the runtime ID.
-                /// </summary>
-                internal override int[] RuntimeId
-                {
-                    get
-                    {
-                        if (_window is null)
-                        {
-                            return new int[]
-                            {
-                                _controlItem.GetHashCode()
-                            };
-                        }
-
-                        Debug.Assert(_window.AccessibilityObject.RuntimeId.Length >= 3);
-
                         return new int[]
                         {
-                            _window.AccessibilityObject.RuntimeId[0],
-                            _window.AccessibilityObject.RuntimeId[1],
-                            _window.AccessibilityObject.RuntimeId[2],
                             _controlItem.GetHashCode()
                         };
                     }
-                }
 
-                public override AccessibleStates State => AccessibleStates.HasPopup | AccessibleStates.ReadOnly;
+                    Debug.Assert(_window.AccessibilityObject.RuntimeId.Length >= 3);
+
+                    return new int[]
+                    {
+                        _window.AccessibilityObject.RuntimeId[0],
+                        _window.AccessibilityObject.RuntimeId[1],
+                        _window.AccessibilityObject.RuntimeId[2],
+                        _controlItem.GetHashCode()
+                    };
+                }
             }
+
+            public override AccessibleStates State => AccessibleStates.HasPopup | AccessibleStates.ReadOnly;
         }
     }
 }

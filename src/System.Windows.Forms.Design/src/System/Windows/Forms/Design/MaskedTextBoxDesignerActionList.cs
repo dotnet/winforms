@@ -7,61 +7,60 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+/// Describes the list of actions that can be performed in the MaskedTextBox control from the
+/// Chrome pannel.
+/// </summary>
+internal class MaskedTextBoxDesignerActionList : DesignerActionList
 {
+    private readonly MaskedTextBox _maskedTextBox;
+    private readonly ITypeDiscoveryService _discoverySvc;
+    private readonly IUIService _uiSvc;
+    private readonly IHelpService _helpService;
+
     /// <summary>
-    /// Describes the list of actions that can be performed in the MaskedTextBox control from the
-    /// Chrome pannel.
+    /// Constructor receiving a MaskedTextBox control the action list applies to.  The ITypeDiscoveryService
+    /// service provider is used to populate the canned mask list control in the MaskDesignerDialog dialog and
+    /// the IUIService provider is used to display the MaskDesignerDialog within VS.
     /// </summary>
-    internal class MaskedTextBoxDesignerActionList : DesignerActionList
+    public MaskedTextBoxDesignerActionList(MaskedTextBoxDesigner designer) : base(designer.Component)
     {
-        private readonly MaskedTextBox _maskedTextBox;
-        private readonly ITypeDiscoveryService _discoverySvc;
-        private readonly IUIService _uiSvc;
-        private readonly IHelpService _helpService;
+        _maskedTextBox = (MaskedTextBox)designer.Component;
+        _discoverySvc = GetService(typeof(ITypeDiscoveryService)) as ITypeDiscoveryService;
+        _uiSvc = GetService(typeof(IUIService)) as IUIService;
+        _helpService = GetService(typeof(IHelpService)) as IHelpService;
 
-        /// <summary>
-        /// Constructor receiving a MaskedTextBox control the action list applies to.  The ITypeDiscoveryService
-        /// service provider is used to populate the canned mask list control in the MaskDesignerDialog dialog and
-        /// the IUIService provider is used to display the MaskDesignerDialog within VS.
-        /// </summary>
-        public MaskedTextBoxDesignerActionList(MaskedTextBoxDesigner designer) : base(designer.Component)
+        if (_discoverySvc is null || _uiSvc is null)
         {
-            _maskedTextBox = (MaskedTextBox)designer.Component;
-            _discoverySvc = GetService(typeof(ITypeDiscoveryService)) as ITypeDiscoveryService;
-            _uiSvc = GetService(typeof(IUIService)) as IUIService;
-            _helpService = GetService(typeof(IHelpService)) as IHelpService;
+            Debug.Fail("could not get either ITypeDiscoveryService or IUIService");
+        }
+    }
 
-            if (_discoverySvc is null || _uiSvc is null)
-            {
-                Debug.Fail("could not get either ITypeDiscoveryService or IUIService");
-            }
+    /// <summary>
+    /// Pops up the Mask design dialog for the user to set the control's mask.
+    /// </summary>
+    public void SetMask()
+    {
+        string mask = MaskPropertyEditor.EditMask(_discoverySvc, _uiSvc, _maskedTextBox, _helpService);
+
+        if (mask is null)
+        {
+            return;
         }
 
-        /// <summary>
-        /// Pops up the Mask design dialog for the user to set the control's mask.
-        /// </summary>
-        public void SetMask()
-        {
-            string mask = MaskPropertyEditor.EditMask(_discoverySvc, _uiSvc, _maskedTextBox, _helpService);
+        PropertyDescriptor maskProperty = TypeDescriptor.GetProperties(_maskedTextBox)["Mask"];
+        maskProperty?.SetValue(_maskedTextBox, mask);
+    }
 
-            if (mask is null)
-            {
-                return;
-            }
-
-            PropertyDescriptor maskProperty = TypeDescriptor.GetProperties(_maskedTextBox)["Mask"];
-            maskProperty?.SetValue(_maskedTextBox, mask);
-        }
-
-        /// <summary>
-        /// Returns the control's action list items.
-        /// </summary>
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
-            items.Add(new DesignerActionMethodItem(this, "SetMask", SR.MaskedTextBoxDesignerVerbsSetMaskDesc));
-            return items;
-        }
+    /// <summary>
+    /// Returns the control's action list items.
+    /// </summary>
+    public override DesignerActionItemCollection GetSortedActionItems()
+    {
+        DesignerActionItemCollection items = new DesignerActionItemCollection();
+        items.Add(new DesignerActionMethodItem(this, "SetMask", SR.MaskedTextBoxDesignerVerbsSetMaskDesc));
+        return items;
     }
 }

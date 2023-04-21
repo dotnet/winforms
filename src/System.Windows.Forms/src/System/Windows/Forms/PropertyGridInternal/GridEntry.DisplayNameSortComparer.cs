@@ -6,20 +6,19 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms.PropertyGridInternal;
+
+internal abstract partial class GridEntry
 {
-    internal abstract partial class GridEntry
+    public class DisplayNameSortComparer : IComparer
     {
-        public class DisplayNameSortComparer : IComparer
+        public int Compare(object? left, object? right)
         {
-            public int Compare(object? left, object? right)
-            {
-                return string.Compare(
-                    ((PropertyDescriptor)left!).DisplayName,
-                    ((PropertyDescriptor)right!).DisplayName,
-                    ignoreCase: true,
-                    CultureInfo.CurrentCulture);
-            }
+            return string.Compare(
+                ((PropertyDescriptor)left!).DisplayName,
+                ((PropertyDescriptor)right!).DisplayName,
+                ignoreCase: true,
+                CultureInfo.CurrentCulture);
         }
     }
 }

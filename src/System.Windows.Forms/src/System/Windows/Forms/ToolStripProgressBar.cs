@@ -5,389 +5,388 @@
 using System.ComponentModel;
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+[DefaultProperty(nameof(Value))]
+public partial class ToolStripProgressBar : ToolStripControlHost
 {
-    [DefaultProperty(nameof(Value))]
-    public partial class ToolStripProgressBar : ToolStripControlHost
+    internal static readonly object EventRightToLeftLayoutChanged = new object();
+
+    private static readonly Padding defaultMargin = new Padding(1, 2, 1, 1);
+    private static readonly Padding defaultStatusStripMargin = new Padding(1, 3, 1, 3);
+    private Padding scaledDefaultMargin = defaultMargin;
+    private Padding scaledDefaultStatusStripMargin = defaultStatusStripMargin;
+
+    public ToolStripProgressBar()
+        : base(CreateControlInstance())
     {
-        internal static readonly object EventRightToLeftLayoutChanged = new object();
-
-        private static readonly Padding defaultMargin = new Padding(1, 2, 1, 1);
-        private static readonly Padding defaultStatusStripMargin = new Padding(1, 3, 1, 3);
-        private Padding scaledDefaultMargin = defaultMargin;
-        private Padding scaledDefaultStatusStripMargin = defaultStatusStripMargin;
-
-        public ToolStripProgressBar()
-            : base(CreateControlInstance())
+        if (Control is ToolStripProgressBarControl toolStripProgressBarControl)
         {
-            if (Control is ToolStripProgressBarControl toolStripProgressBarControl)
-            {
-                toolStripProgressBarControl.Owner = this;
-            }
-
-            if (DpiHelper.IsScalingRequirementMet)
-            {
-                scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
-                scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin);
-            }
+            toolStripProgressBarControl.Owner = this;
         }
 
-        public ToolStripProgressBar(string? name)
-            : this()
+        if (DpiHelper.IsScalingRequirementMet)
         {
-            Name = name;
+            scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
+            scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(defaultStatusStripMargin);
         }
+    }
 
-        /// <summary>
-        ///  Create a strongly typed accessor for the class
-        /// </summary>
-        /// <value></value>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ProgressBar ProgressBar
+    public ToolStripProgressBar(string? name)
+        : this()
+    {
+        Name = name;
+    }
+
+    /// <summary>
+    ///  Create a strongly typed accessor for the class
+    /// </summary>
+    /// <value></value>
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public ProgressBar ProgressBar
+    {
+        get
         {
-            get
+            return (ProgressBar)Control;
+        }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override Image? BackgroundImage
+    {
+        get => base.BackgroundImage;
+        set => base.BackgroundImage = value;
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override ImageLayout BackgroundImageLayout
+    {
+        get => base.BackgroundImageLayout;
+        set => base.BackgroundImageLayout = value;
+    }
+
+    /// <summary>
+    ///  Specify what size you want the item to start out at
+    /// </summary>
+    /// <value></value>
+    protected override Size DefaultSize
+    {
+        get
+        {
+            return new Size(100, 15);
+        }
+    }
+
+    /// <summary>
+    ///  Specify how far from the edges you want to be
+    /// </summary>
+    /// <value></value>
+    protected internal override Padding DefaultMargin
+    {
+        get
+        {
+            if (Owner is not null && Owner is StatusStrip)
             {
-                return (ProgressBar)Control;
+                return scaledDefaultStatusStripMargin;
             }
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image? BackgroundImage
-        {
-            get => base.BackgroundImage;
-            set => base.BackgroundImage = value;
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override ImageLayout BackgroundImageLayout
-        {
-            get => base.BackgroundImageLayout;
-            set => base.BackgroundImageLayout = value;
-        }
-
-        /// <summary>
-        ///  Specify what size you want the item to start out at
-        /// </summary>
-        /// <value></value>
-        protected override Size DefaultSize
-        {
-            get
+            else
             {
-                return new Size(100, 15);
-            }
-        }
-
-        /// <summary>
-        ///  Specify how far from the edges you want to be
-        /// </summary>
-        /// <value></value>
-        protected internal override Padding DefaultMargin
-        {
-            get
-            {
-                if (Owner is not null && Owner is StatusStrip)
-                {
-                    return scaledDefaultStatusStripMargin;
-                }
-                else
-                {
-                    return scaledDefaultMargin;
-                }
-            }
-        }
-
-        [DefaultValue(100)]
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))]
-        public int MarqueeAnimationSpeed
-        {
-            get { return ProgressBar.MarqueeAnimationSpeed; }
-            set { ProgressBar.MarqueeAnimationSpeed = value; }
-        }
-
-        [DefaultValue(100)]
-        [SRCategory(nameof(SR.CatBehavior))]
-        [RefreshProperties(RefreshProperties.Repaint)]
-        [SRDescription(nameof(SR.ProgressBarMaximumDescr))]
-        public int Maximum
-        {
-            get
-            {
-                return ProgressBar.Maximum;
-            }
-            set
-            {
-                ProgressBar.Maximum = value;
+                return scaledDefaultMargin;
             }
         }
+    }
 
-        [DefaultValue(0)]
-        [SRCategory(nameof(SR.CatBehavior))]
-        [RefreshProperties(RefreshProperties.Repaint)]
-        [SRDescription(nameof(SR.ProgressBarMinimumDescr))]
-        public int Minimum
+    [DefaultValue(100)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))]
+    public int MarqueeAnimationSpeed
+    {
+        get { return ProgressBar.MarqueeAnimationSpeed; }
+        set { ProgressBar.MarqueeAnimationSpeed = value; }
+    }
+
+    [DefaultValue(100)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [RefreshProperties(RefreshProperties.Repaint)]
+    [SRDescription(nameof(SR.ProgressBarMaximumDescr))]
+    public int Maximum
+    {
+        get
         {
-            get
-            {
-                return ProgressBar.Minimum;
-            }
-            set
-            {
-                ProgressBar.Minimum = value;
-            }
+            return ProgressBar.Maximum;
+        }
+        set
+        {
+            ProgressBar.Maximum = value;
+        }
+    }
+
+    [DefaultValue(0)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [RefreshProperties(RefreshProperties.Repaint)]
+    [SRDescription(nameof(SR.ProgressBarMinimumDescr))]
+    public int Minimum
+    {
+        get
+        {
+            return ProgressBar.Minimum;
+        }
+        set
+        {
+            ProgressBar.Minimum = value;
+        }
+    }
+
+    /// <summary>
+    ///  This is used for international applications where the language is written from RightToLeft.
+    ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
+    ///  the form, and control placement and text will be from right to left.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [Localizable(true)]
+    [DefaultValue(false)]
+    [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
+    public virtual bool RightToLeftLayout
+    {
+        get
+        {
+            return ProgressBar.RightToLeftLayout;
         }
 
-        /// <summary>
-        ///  This is used for international applications where the language is written from RightToLeft.
-        ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
-        ///  the form, and control placement and text will be from right to left.
-        /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
-        [Localizable(true)]
-        [DefaultValue(false)]
-        [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
-        public virtual bool RightToLeftLayout
+        set
         {
-            get
-            {
-                return ProgressBar.RightToLeftLayout;
-            }
-
-            set
-            {
-                ProgressBar.RightToLeftLayout = value;
-            }
+            ProgressBar.RightToLeftLayout = value;
         }
+    }
 
-        /// <summary>
-        ///  Wrap some commonly used properties
-        /// </summary>
-        /// <value></value>
-        [DefaultValue(10)]
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ProgressBarStepDescr))]
-        public int Step
+    /// <summary>
+    ///  Wrap some commonly used properties
+    /// </summary>
+    /// <value></value>
+    [DefaultValue(10)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ProgressBarStepDescr))]
+    public int Step
+    {
+        get
         {
-            get
-            {
-                return ProgressBar.Step;
-            }
-            set
-            {
-                ProgressBar.Step = value;
-            }
+            return ProgressBar.Step;
         }
-
-        /// <summary>
-        ///  Wrap some commonly used properties
-        /// </summary>
-        /// <value></value>
-        [DefaultValue(ProgressBarStyle.Blocks)]
-        [SRCategory(nameof(SR.CatBehavior))]
-        [SRDescription(nameof(SR.ProgressBarStyleDescr))]
-        public ProgressBarStyle Style
+        set
         {
-            get
-            {
-                return ProgressBar.Style;
-            }
-            set
-            {
-                ProgressBar.Style = value;
-            }
+            ProgressBar.Step = value;
         }
+    }
 
-        /// <summary>
-        ///  Hide the property.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [AllowNull]
-        public override string Text
+    /// <summary>
+    ///  Wrap some commonly used properties
+    /// </summary>
+    /// <value></value>
+    [DefaultValue(ProgressBarStyle.Blocks)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.ProgressBarStyleDescr))]
+    public ProgressBarStyle Style
+    {
+        get
         {
-            get
-            {
-                return Control.Text;
-            }
-            set
-            {
-                Control.Text = value;
-            }
+            return ProgressBar.Style;
         }
-
-        /// <summary>
-        ///  Wrap some commonly used properties
-        /// </summary>
-        /// <value></value>
-        [DefaultValue(0)]
-        [SRCategory(nameof(SR.CatBehavior))]
-        [Bindable(true)]
-        [SRDescription(nameof(SR.ProgressBarValueDescr))]
-        public int Value
+        set
         {
-            get
-            {
-                return ProgressBar.Value;
-            }
-            set
-            {
-                ProgressBar.Value = value;
-            }
+            ProgressBar.Style = value;
         }
+    }
 
-        private static Control CreateControlInstance()
+    /// <summary>
+    ///  Hide the property.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
+    public override string Text
+    {
+        get
         {
-            ProgressBar progressBar = new ToolStripProgressBarControl
-            {
-                Size = new Size(100, 15)
-            };
-            return progressBar;
+            return Control.Text;
         }
-
-        private void HandleRightToLeftLayoutChanged(object? sender, EventArgs e)
+        set
         {
-            OnRightToLeftLayoutChanged(e);
+            Control.Text = value;
         }
+    }
 
-        protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
+    /// <summary>
+    ///  Wrap some commonly used properties
+    /// </summary>
+    /// <value></value>
+    [DefaultValue(0)]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [Bindable(true)]
+    [SRDescription(nameof(SR.ProgressBarValueDescr))]
+    public int Value
+    {
+        get
         {
+            return ProgressBar.Value;
+        }
+        set
+        {
+            ProgressBar.Value = value;
+        }
+    }
+
+    private static Control CreateControlInstance()
+    {
+        ProgressBar progressBar = new ToolStripProgressBarControl
+        {
+            Size = new Size(100, 15)
+        };
+        return progressBar;
+    }
+
+    private void HandleRightToLeftLayoutChanged(object? sender, EventArgs e)
+    {
+        OnRightToLeftLayoutChanged(e);
+    }
+
+    protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
+    {
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
-            RaiseEvent(EventRightToLeftLayoutChanged, e);
+        RaiseEvent(EventRightToLeftLayoutChanged, e);
 #pragma warning restore CA2252
-        }
+    }
 
-        protected override void OnSubscribeControlEvents(Control? control)
+    protected override void OnSubscribeControlEvents(Control? control)
+    {
+        if (control is ProgressBar bar)
         {
-            if (control is ProgressBar bar)
-            {
-                // Please keep this alphabetized and in sync with Unsubscribe.
-                bar.RightToLeftLayoutChanged += new EventHandler(HandleRightToLeftLayoutChanged);
-            }
-
-            base.OnSubscribeControlEvents(control);
+            // Please keep this alphabetized and in sync with Unsubscribe.
+            bar.RightToLeftLayoutChanged += new EventHandler(HandleRightToLeftLayoutChanged);
         }
 
-        protected override void OnUnsubscribeControlEvents(Control? control)
+        base.OnSubscribeControlEvents(control);
+    }
+
+    protected override void OnUnsubscribeControlEvents(Control? control)
+    {
+        if (control is ProgressBar bar)
         {
-            if (control is ProgressBar bar)
-            {
-                // Please keep this alphabetized and in sync with Subscribe.
-                bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
-            }
-
-            base.OnUnsubscribeControlEvents(control);
+            // Please keep this alphabetized and in sync with Subscribe.
+            bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
         }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler? KeyDown
-        {
-            add => base.KeyDown += value;
-            remove => base.KeyDown -= value;
-        }
+        base.OnUnsubscribeControlEvents(control);
+    }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyPressEventHandler? KeyPress
-        {
-            add => base.KeyPress += value;
-            remove => base.KeyPress -= value;
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event KeyEventHandler? KeyDown
+    {
+        add => base.KeyDown += value;
+        remove => base.KeyDown -= value;
+    }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event KeyEventHandler? KeyUp
-        {
-            add => base.KeyUp += value;
-            remove => base.KeyUp -= value;
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event KeyPressEventHandler? KeyPress
+    {
+        add => base.KeyPress += value;
+        remove => base.KeyPress -= value;
+    }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler? LocationChanged
-        {
-            add => base.LocationChanged += value;
-            remove => base.LocationChanged -= value;
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event KeyEventHandler? KeyUp
+    {
+        add => base.KeyUp += value;
+        remove => base.KeyUp -= value;
+    }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler? OwnerChanged
-        {
-            add => base.OwnerChanged += value;
-            remove => base.OwnerChanged -= value;
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler? LocationChanged
+    {
+        add => base.LocationChanged += value;
+        remove => base.LocationChanged -= value;
+    }
 
-        [SRCategory(nameof(SR.CatPropertyChanged))]
-        [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler? RightToLeftLayoutChanged
-        {
-            add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
-            remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler? OwnerChanged
+    {
+        add => base.OwnerChanged += value;
+        remove => base.OwnerChanged -= value;
+    }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler? TextChanged
-        {
-            add => base.TextChanged += value;
-            remove => base.TextChanged -= value;
-        }
+    [SRCategory(nameof(SR.CatPropertyChanged))]
+    [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
+    public event EventHandler? RightToLeftLayoutChanged
+    {
+        add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
+        remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
+    }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler? Validated
-        {
-            add => base.Validated += value;
-            remove => base.Validated -= value;
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler? TextChanged
+    {
+        add => base.TextChanged += value;
+        remove => base.TextChanged -= value;
+    }
 
-        /// <summary>
-        ///  Hide the event.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event CancelEventHandler? Validating
-        {
-            add => base.Validating += value;
-            remove => base.Validating -= value;
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler? Validated
+    {
+        add => base.Validated += value;
+        remove => base.Validated -= value;
+    }
 
-        public void Increment(int value)
-        {
-            ProgressBar.Increment(value);
-        }
+    /// <summary>
+    ///  Hide the event.
+    /// </summary>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event CancelEventHandler? Validating
+    {
+        add => base.Validating += value;
+        remove => base.Validating -= value;
+    }
 
-        public void PerformStep()
-        {
-            ProgressBar.PerformStep();
-        }
+    public void Increment(int value)
+    {
+        ProgressBar.Increment(value);
+    }
+
+    public void PerformStep()
+    {
+        ProgressBar.PerformStep();
     }
 }

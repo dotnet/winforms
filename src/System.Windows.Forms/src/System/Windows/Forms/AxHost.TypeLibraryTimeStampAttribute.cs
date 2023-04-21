@@ -4,19 +4,18 @@
 
 using System.Globalization;
 
-namespace System.Windows.Forms
-{
-    public abstract partial class AxHost
-    {
-        [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
-        public sealed class TypeLibraryTimeStampAttribute : Attribute
-        {
-            public TypeLibraryTimeStampAttribute(string timestamp)
-            {
-                Value = DateTime.Parse(timestamp, CultureInfo.InvariantCulture);
-            }
+namespace System.Windows.Forms;
 
-            public DateTime Value { get; }
+public abstract partial class AxHost
+{
+    [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
+    public sealed class TypeLibraryTimeStampAttribute : Attribute
+    {
+        public TypeLibraryTimeStampAttribute(string timestamp)
+        {
+            Value = DateTime.Parse(timestamp, CultureInfo.InvariantCulture);
         }
+
+        public DateTime Value { get; }
     }
 }

@@ -6,26 +6,25 @@
 
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms.Metafiles
-{
-    /// <summary>
-    ///  Record that represents a 16 bit Poly record.
-    /// </summary>
-    /// <remarks>
-    ///   Not an actual Win32 define, encapsulates:
-    ///
-    ///   - EMRSETTEXTCOLOR
-    ///   - EMRSETBKCOLOR
-    /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRSETCOLOR
-    {
-        public EMR emr;
-        public COLORREF crColor;
+namespace System.Windows.Forms.Metafiles;
 
-        public override string ToString()
-        {
-            return $"[EMR{emr.iType}] Color: {crColor.ToSystemColorString()}";
-        }
+/// <summary>
+///  Record that represents a 16 bit Poly record.
+/// </summary>
+/// <remarks>
+///   Not an actual Win32 define, encapsulates:
+///
+///   - EMRSETTEXTCOLOR
+///   - EMRSETBKCOLOR
+/// </remarks>
+[StructLayout(LayoutKind.Sequential)]
+internal struct EMRSETCOLOR
+{
+    public EMR emr;
+    public COLORREF crColor;
+
+    public override string ToString()
+    {
+        return $"[EMR{emr.iType}] Color: {crColor.ToSystemColorString()}";
     }
 }

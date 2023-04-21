@@ -4,39 +4,38 @@
 
 using Microsoft.VisualBasic.Devices;
 
-namespace Microsoft.VisualBasic.MyServices.Tests
+namespace Microsoft.VisualBasic.MyServices.Tests;
+
+public class SpecialDirectoriesProxyTests
 {
-    public class SpecialDirectoriesProxyTests
+    [Fact]
+    public void Properties()
     {
-        [Fact]
-        public void Properties()
+        SpecialDirectoriesProxy specialDirectories = new ServerComputer().FileSystem.SpecialDirectories;
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData, () => specialDirectories.AllUsersApplicationData);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.CurrentUserApplicationData, () => specialDirectories.CurrentUserApplicationData);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Desktop, () => specialDirectories.Desktop);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyDocuments, () => specialDirectories.MyDocuments);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyMusic, () => specialDirectories.MyMusic);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyPictures, () => specialDirectories.MyPictures);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Programs, () => specialDirectories.Programs);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.ProgramFiles, () => specialDirectories.ProgramFiles);
+        VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Temp, () => specialDirectories.Temp);
+    }
+
+    private static void VerifySpecialDirectory(Func<string> getExpected, Func<string> getActual)
+    {
+        string expected;
+        try
         {
-            SpecialDirectoriesProxy specialDirectories = new ServerComputer().FileSystem.SpecialDirectories;
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData, () => specialDirectories.AllUsersApplicationData);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.CurrentUserApplicationData, () => specialDirectories.CurrentUserApplicationData);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Desktop, () => specialDirectories.Desktop);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyDocuments, () => specialDirectories.MyDocuments);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyMusic, () => specialDirectories.MyMusic);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.MyPictures, () => specialDirectories.MyPictures);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Programs, () => specialDirectories.Programs);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.ProgramFiles, () => specialDirectories.ProgramFiles);
-            VerifySpecialDirectory(() => Microsoft.VisualBasic.FileIO.SpecialDirectories.Temp, () => specialDirectories.Temp);
+            expected = getExpected();
+        }
+        catch (Exception)
+        {
+            return;
         }
 
-        private static void VerifySpecialDirectory(Func<string> getExpected, Func<string> getActual)
-        {
-            string expected;
-            try
-            {
-                expected = getExpected();
-            }
-            catch (Exception)
-            {
-                return;
-            }
-
-            string actual = getActual();
-            Assert.Equal(expected, actual);
-        }
+        string actual = getActual();
+        Assert.Equal(expected, actual);
     }
 }

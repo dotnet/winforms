@@ -4,50 +4,49 @@
 
 #nullable disable
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+public partial class CollectionEditor
 {
-    public partial class CollectionEditor
+    internal class PropertyGridSite : ISite
     {
-        internal class PropertyGridSite : ISite
+        private readonly IServiceProvider _sp;
+        private bool _inGetService;
+
+        public PropertyGridSite(IServiceProvider sp, IComponent comp)
         {
-            private readonly IServiceProvider _sp;
-            private bool _inGetService;
+            _sp = sp;
+            Component = comp;
+        }
 
-            public PropertyGridSite(IServiceProvider sp, IComponent comp)
+        public IComponent Component { get; }
+
+        public IContainer Container => null;
+
+        public bool DesignMode => false;
+
+        public string Name
+        {
+            get => null;
+            set { }
+        }
+
+        public object GetService(Type t)
+        {
+            if (!_inGetService && _sp is not null)
             {
-                _sp = sp;
-                Component = comp;
-            }
-
-            public IComponent Component { get; }
-
-            public IContainer Container => null;
-
-            public bool DesignMode => false;
-
-            public string Name
-            {
-                get => null;
-                set { }
-            }
-
-            public object GetService(Type t)
-            {
-                if (!_inGetService && _sp is not null)
+                try
                 {
-                    try
-                    {
-                        _inGetService = true;
-                        return _sp.GetService(t);
-                    }
-                    finally
-                    {
-                        _inGetService = false;
-                    }
+                    _inGetService = true;
+                    return _sp.GetService(t);
                 }
-
-                return null;
+                finally
+                {
+                    _inGetService = false;
+                }
             }
+
+            return null;
         }
     }
 }

@@ -4,18 +4,17 @@
 
 #nullable enable
 
-namespace System.Drawing.Design.Tests
-{
-    public partial class ColorEditor_CustomColorDialogTests
-    {
-        [WinFormsFact]
-        public void CustomColorDialog_Ctor_Default()
-        {
-            Type? typeCustomColorDialog = typeof(ColorEditor).Assembly.GetTypes().SingleOrDefault(t => t.Name == "CustomColorDialog");
-            Assert.NotNull(typeCustomColorDialog);
+namespace System.Drawing.Design.Tests;
 
-            using ColorDialog dialog = (ColorDialog)Activator.CreateInstance(typeCustomColorDialog!)!;
-            Assert.NotNull(dialog);
-        }
+public partial class ColorEditor_CustomColorDialogTests
+{
+    [WinFormsFact]
+    public void CustomColorDialog_Ctor_Default()
+    {
+        Type? typeCustomColorDialog = typeof(ColorEditor).Assembly.GetTypes().SingleOrDefault(t => t.Name == "CustomColorDialog");
+        Assert.NotNull(typeCustomColorDialog);
+
+        using ColorDialog dialog = (ColorDialog)Activator.CreateInstance(typeCustomColorDialog!)!;
+        Assert.NotNull(dialog);
     }
 }

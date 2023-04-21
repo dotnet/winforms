@@ -7,186 +7,185 @@ using System.Drawing;
 using System.Windows.Forms.Design;
 using Moq;
 
-namespace System.Windows.Forms.TestUtilities
+namespace System.Windows.Forms.TestUtilities;
+
+public static class CommonTestHelperEx
 {
-    public static class CommonTestHelperEx
+    public static TheoryData<Color, Color> GetBackColorTheoryData()
     {
-        public static TheoryData<Color, Color> GetBackColorTheoryData()
+        return new TheoryData<Color, Color>
         {
-            return new TheoryData<Color, Color>
-            {
-                { Color.Red, Color.Red },
-                { Color.Empty, Control.DefaultBackColor }
-            };
-        }
+            { Color.Red, Color.Red },
+            { Color.Empty, Control.DefaultBackColor }
+        };
+    }
 
-        public static TheoryData<Color, Color> GetForeColorTheoryData()
+    public static TheoryData<Color, Color> GetForeColorTheoryData()
+    {
+        return new TheoryData<Color, Color>
         {
-            return new TheoryData<Color, Color>
-            {
-                { Color.Red, Color.Red },
-                { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) },
-                { Color.White, Color.White },
-                { Color.Black, Color.Black },
-                { Color.Empty, Control.DefaultForeColor }
-            };
-        }
+            { Color.Red, Color.Red },
+            { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) },
+            { Color.White, Color.White },
+            { Color.Black, Color.Black },
+            { Color.Empty, Control.DefaultForeColor }
+        };
+    }
 
-        public static TheoryData<Image> GetImageTheoryData()
+    public static TheoryData<Image> GetImageTheoryData()
+    {
+        var data = new TheoryData<Image>
         {
-            var data = new TheoryData<Image>
-            {
-                new Bitmap(10, 10),
-                null
-            };
-            return data;
-        }
+            new Bitmap(10, 10),
+            null
+        };
+        return data;
+    }
 
-        public static TheoryData<Font> GetFontTheoryData()
+    public static TheoryData<Font> GetFontTheoryData()
+    {
+        var data = new TheoryData<Font>
         {
-            var data = new TheoryData<Font>
-            {
-                SystemFonts.MenuFont,
-                null
-            };
-            return data;
-        }
+            SystemFonts.MenuFont,
+            null
+        };
+        return data;
+    }
 
-        public static TheoryData<Type> GetTypeWithNullTheoryData()
+    public static TheoryData<Type> GetTypeWithNullTheoryData()
+    {
+        var data = new TheoryData<Type>
         {
-            var data = new TheoryData<Type>
-            {
-                null,
-                typeof(int)
-            };
-            return data;
-        }
+            null,
+            typeof(int)
+        };
+        return data;
+    }
 
-        public static TheoryData<RightToLeft, RightToLeft> GetRightToLeftTheoryData()
+    public static TheoryData<RightToLeft, RightToLeft> GetRightToLeftTheoryData()
+    {
+        var data = new TheoryData<RightToLeft, RightToLeft>
         {
-            var data = new TheoryData<RightToLeft, RightToLeft>
-            {
-                { RightToLeft.Inherit, RightToLeft.No },
-                { RightToLeft.Yes, RightToLeft.Yes },
-                { RightToLeft.No, RightToLeft.No }
-            };
-            return data;
-        }
+            { RightToLeft.Inherit, RightToLeft.No },
+            { RightToLeft.Yes, RightToLeft.Yes },
+            { RightToLeft.No, RightToLeft.No }
+        };
+        return data;
+    }
 
-        public static TheoryData<Padding> GetPaddingTheoryData()
+    public static TheoryData<Padding> GetPaddingTheoryData()
+    {
+        var data = new TheoryData<Padding>
         {
-            var data = new TheoryData<Padding>
-            {
-                new Padding(),
-                new Padding(1, 2, 3, 4),
-                new Padding(1),
-                new Padding(-1, -2, -3, -4)
-            };
-            return data;
-        }
+            new Padding(),
+            new Padding(1, 2, 3, 4),
+            new Padding(1),
+            new Padding(-1, -2, -3, -4)
+        };
+        return data;
+    }
 
-        public static TheoryData<Padding, Padding> GetPaddingNormalizedTheoryData()
+    public static TheoryData<Padding, Padding> GetPaddingNormalizedTheoryData()
+    {
+        var data = new TheoryData<Padding, Padding>
         {
-            var data = new TheoryData<Padding, Padding>
-            {
-                { new Padding(), new Padding() },
-                { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4) },
-                { new Padding(1), new Padding(1) },
-                { new Padding(-1, -2, -3, -4), Padding.Empty }
-            };
-            return data;
-        }
+            { new Padding(), new Padding() },
+            { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4) },
+            { new Padding(1), new Padding(1) },
+            { new Padding(-1, -2, -3, -4), Padding.Empty }
+        };
+        return data;
+    }
 
-        public static TheoryData<Cursor> GetCursorTheoryData()
+    public static TheoryData<Cursor> GetCursorTheoryData()
+    {
+        var data = new TheoryData<Cursor>
         {
-            var data = new TheoryData<Cursor>
-            {
-                null,
-                new Cursor((IntPtr)1)
-            };
-            return data;
-        }
+            null,
+            new Cursor((IntPtr)1)
+        };
+        return data;
+    }
 
-        public static TheoryData<PaintEventArgs> GetPaintEventArgsTheoryData()
+    public static TheoryData<PaintEventArgs> GetPaintEventArgsTheoryData()
+    {
+        var image = new Bitmap(10, 10);
+        Graphics graphics = Graphics.FromImage(image);
+        return new TheoryData<PaintEventArgs>
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-            return new TheoryData<PaintEventArgs>
-            {
-                null,
-                new PaintEventArgs(graphics, Rectangle.Empty)
-            };
-        }
+            null,
+            new PaintEventArgs(graphics, Rectangle.Empty)
+        };
+    }
 
-        public static TheoryData<KeyEventArgs> GetKeyEventArgsTheoryData()
+    public static TheoryData<KeyEventArgs> GetKeyEventArgsTheoryData()
+    {
+        return new TheoryData<KeyEventArgs>
         {
-            return new TheoryData<KeyEventArgs>
-            {
-                new KeyEventArgs(Keys.None),
-                new KeyEventArgs(Keys.Cancel)
-            };
-        }
+            new KeyEventArgs(Keys.None),
+            new KeyEventArgs(Keys.Cancel)
+        };
+    }
 
-        public static TheoryData<KeyPressEventArgs> GetKeyPressEventArgsTheoryData()
+    public static TheoryData<KeyPressEventArgs> GetKeyPressEventArgsTheoryData()
+    {
+        var data = new TheoryData<KeyPressEventArgs>
         {
-            var data = new TheoryData<KeyPressEventArgs>
-            {
-                null,
-                new KeyPressEventArgs('1')
-            };
-            return data;
-        }
+            null,
+            new KeyPressEventArgs('1')
+        };
+        return data;
+    }
 
-        public static TheoryData<LayoutEventArgs> GetLayoutEventArgsTheoryData()
+    public static TheoryData<LayoutEventArgs> GetLayoutEventArgsTheoryData()
+    {
+        var data = new TheoryData<LayoutEventArgs>
         {
-            var data = new TheoryData<LayoutEventArgs>
-            {
-                null,
-                new LayoutEventArgs(null, null),
-                new LayoutEventArgs(new Control(), "affectedProperty")
-            };
-            return data;
-        }
+            null,
+            new LayoutEventArgs(null, null),
+            new LayoutEventArgs(new Control(), "affectedProperty")
+        };
+        return data;
+    }
 
-        public static TheoryData<MouseEventArgs> GetMouseEventArgsTheoryData()
+    public static TheoryData<MouseEventArgs> GetMouseEventArgsTheoryData()
+    {
+        return new TheoryData<MouseEventArgs>
         {
-            return new TheoryData<MouseEventArgs>
-            {
-                null,
-                new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4),
-                new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)
-            };
-        }
+            null,
+            new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4),
+            new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)
+        };
+    }
 
-        public static TheoryData<IServiceProvider, object> GetEditValueInvalidProviderTestData()
+    public static TheoryData<IServiceProvider, object> GetEditValueInvalidProviderTestData()
+    {
+        var nullServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+        nullServiceProviderMock
+            .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
+            .Returns(null);
+        var invalidServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+        invalidServiceProviderMock
+            .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
+            .Returns(new object());
+        var value = new object();
+        return new TheoryData<IServiceProvider, object>
         {
-            var nullServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            nullServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(null);
-            var invalidServiceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-            invalidServiceProviderMock
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(new object());
-            var value = new object();
-            return new TheoryData<IServiceProvider, object>
-            {
-                { null, null },
-                { null, value },
-                { nullServiceProviderMock.Object, null },
-                { nullServiceProviderMock.Object, value },
-                { invalidServiceProviderMock.Object, null },
-                { invalidServiceProviderMock.Object, value }
-            };
-        }
+            { null, null },
+            { null, value },
+            { nullServiceProviderMock.Object, null },
+            { nullServiceProviderMock.Object, value },
+            { invalidServiceProviderMock.Object, null },
+            { invalidServiceProviderMock.Object, value }
+        };
+    }
 
-        public static TheoryData<ITypeDescriptorContext> GetITypeDescriptorContextTestData()
+    public static TheoryData<ITypeDescriptorContext> GetITypeDescriptorContextTestData()
+    {
+        return new TheoryData<ITypeDescriptorContext>
         {
-            return new TheoryData<ITypeDescriptorContext>
-            {
-                null,
-                new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object
-            };
-        }
+            null,
+            new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object
+        };
     }
 }

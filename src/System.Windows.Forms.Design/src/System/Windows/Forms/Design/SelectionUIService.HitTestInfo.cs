@@ -4,66 +4,65 @@
 
 #nullable disable
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal sealed partial class SelectionUIService
 {
-    internal sealed partial class SelectionUIService
+    private readonly struct HitTestInfo : IEquatable<HitTestInfo>
     {
-        private readonly struct HitTestInfo : IEquatable<HitTestInfo>
+        public readonly int hitTest;
+        public readonly SelectionUIItem selectionUIHit;
+        public readonly bool containerSelector;
+
+        public HitTestInfo(int hitTest, SelectionUIItem selectionUIHit)
         {
-            public readonly int hitTest;
-            public readonly SelectionUIItem selectionUIHit;
-            public readonly bool containerSelector;
+            this.hitTest = hitTest;
+            this.selectionUIHit = selectionUIHit;
+        }
 
-            public HitTestInfo(int hitTest, SelectionUIItem selectionUIHit)
+        public HitTestInfo(int hitTest, SelectionUIItem selectionUIHit, bool containerSelector)
+        {
+            this.hitTest = hitTest;
+            this.selectionUIHit = selectionUIHit;
+            this.containerSelector = containerSelector;
+        }
+
+        // Standard 'catch all - rethrow critical' exception pattern
+        public override bool Equals(object obj)
+        {
+            try
             {
-                this.hitTest = hitTest;
-                this.selectionUIHit = selectionUIHit;
+                return Equals((HitTestInfo)obj);
             }
-
-            public HitTestInfo(int hitTest, SelectionUIItem selectionUIHit, bool containerSelector)
+            catch (Exception ex)
             {
-                this.hitTest = hitTest;
-                this.selectionUIHit = selectionUIHit;
-                this.containerSelector = containerSelector;
-            }
-
-            // Standard 'catch all - rethrow critical' exception pattern
-            public override bool Equals(object obj)
-            {
-                try
+                if (ClientUtils.IsCriticalException(ex))
                 {
-                    return Equals((HitTestInfo)obj);
+                    throw;
                 }
-                catch (Exception ex)
-                {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
-                }
-
-                return false;
             }
 
-            public bool Equals(HitTestInfo other)
-                => hitTest == other.hitTest
-                    && selectionUIHit == other.selectionUIHit
-                    && containerSelector == other.containerSelector;
+            return false;
+        }
 
-            public static bool operator ==(HitTestInfo left, HitTestInfo right) => left.Equals(right);
+        public bool Equals(HitTestInfo other)
+            => hitTest == other.hitTest
+                && selectionUIHit == other.selectionUIHit
+                && containerSelector == other.containerSelector;
 
-            public static bool operator !=(HitTestInfo left, HitTestInfo right) => !left.Equals(right);
+        public static bool operator ==(HitTestInfo left, HitTestInfo right) => left.Equals(right);
 
-            public override int GetHashCode()
+        public static bool operator !=(HitTestInfo left, HitTestInfo right) => !left.Equals(right);
+
+        public override int GetHashCode()
+        {
+            int hash = hitTest | selectionUIHit.GetHashCode();
+            if (containerSelector)
             {
-                int hash = hitTest | selectionUIHit.GetHashCode();
-                if (containerSelector)
-                {
-                    hash |= 0x10000;
-                }
-
-                return hash;
+                hash |= 0x10000;
             }
+
+            return hash;
         }
     }
 }

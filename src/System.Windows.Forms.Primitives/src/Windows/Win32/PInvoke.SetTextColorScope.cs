@@ -5,52 +5,51 @@
 #if DEBUG
 #endif
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
-    {
-        /// <summary>
-        ///  Helper to scope selecting a given foreground text color into a HDC. Restores the original text color into
-        ///  into the HDC when disposed.
-        /// </summary>
-        /// <remarks>
-        ///  <para>
-        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
-        ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
-        ///  </para>
-        /// </remarks>
+    /// <summary>
+    ///  Helper to scope selecting a given foreground text color into a HDC. Restores the original text color into
+    ///  into the HDC when disposed.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
+    ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
+    ///  </para>
+    /// </remarks>
 #if DEBUG
-        internal class SetTextColorScope : DisposalTracking.Tracker, IDisposable
+    internal class SetTextColorScope : DisposalTracking.Tracker, IDisposable
 #else
-        internal readonly ref struct SetTextColorScope
+    internal readonly ref struct SetTextColorScope
 #endif
+    {
+        private readonly COLORREF _previousColor;
+        private readonly HDC _hdc;
+
+        /// <summary>
+        ///  Sets text color <paramref name="color"/> in the given <paramref name="hdc"/> using
+        ///  <see cref="SetTextColor(HDC, COLORREF)"/>.
+        /// </summary>
+        public SetTextColorScope(HDC hdc, COLORREF color)
         {
-            private readonly COLORREF _previousColor;
-            private readonly HDC _hdc;
+            _previousColor = SetTextColor(hdc, color);
 
-            /// <summary>
-            ///  Sets text color <paramref name="color"/> in the given <paramref name="hdc"/> using
-            ///  <see cref="SetTextColor(HDC, COLORREF)"/>.
-            /// </summary>
-            public SetTextColorScope(HDC hdc, COLORREF color)
+            // If we didn't actually change the color, don't keep the HDC so we skip putting back the same state.
+            _hdc = color == _previousColor ? default : hdc;
+        }
+
+        public void Dispose()
+        {
+            if (!_hdc.IsNull)
             {
-                _previousColor = SetTextColor(hdc, color);
-
-                // If we didn't actually change the color, don't keep the HDC so we skip putting back the same state.
-                _hdc = color == _previousColor ? default : hdc;
+                SetTextColor(_hdc, _previousColor);
             }
-
-            public void Dispose()
-            {
-                if (!_hdc.IsNull)
-                {
-                    SetTextColor(_hdc, _previousColor);
-                }
 
 #if DEBUG
-                GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
 #endif
-            }
         }
     }
 }

@@ -4,30 +4,29 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+[AttributeUsage(AttributeTargets.All)]
+internal sealed class SRDescriptionAttribute : DescriptionAttribute
 {
-    [AttributeUsage(AttributeTargets.All)]
-    internal sealed class SRDescriptionAttribute : DescriptionAttribute
+    private bool replaced;
+
+    public SRDescriptionAttribute(string description)
+        : base(description)
     {
-        private bool replaced;
+    }
 
-        public SRDescriptionAttribute(string description)
-            : base(description)
+    public override string Description
+    {
+        get
         {
-        }
-
-        public override string Description
-        {
-            get
+            if (!replaced)
             {
-                if (!replaced)
-                {
-                    replaced = true;
-                    DescriptionValue = SR.GetResourceString(base.Description);
-                }
-
-                return base.Description;
+                replaced = true;
+                DescriptionValue = SR.GetResourceString(base.Description);
             }
+
+            return base.Description;
         }
     }
 }

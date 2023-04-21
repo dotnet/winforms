@@ -5,14 +5,14 @@
 using System.Drawing;
 using System.Reflection;
 
-namespace System.Windows.Forms.Design.Tests
-{
-    public class EmbeddedResourceTests
-    {
-        // Get System.Windows.Forms.Design assembly to verify that it contains all the icons that the code uses.
-        private readonly Assembly assembly = Assembly.GetAssembly(typeof(AnchorEditor));
+namespace System.Windows.Forms.Design.Tests;
 
-        private static string s_expectedIconNames = """
+public class EmbeddedResourceTests
+{
+    // Get System.Windows.Forms.Design assembly to verify that it contains all the icons that the code uses.
+    private readonly Assembly assembly = Assembly.GetAssembly(typeof(AnchorEditor));
+
+    private static string s_expectedIconNames = """
             System.ComponentModel.Design.Arrow
             System.ComponentModel.Design.ComponentEditorPage
             System.ComponentModel.Design.DateTimeFormat
@@ -62,21 +62,21 @@ namespace System.Windows.Forms.Design.Tests
             System.Windows.Forms.Design.UserControlToolboxItem
             """;
 
-        public static TheoryData ExpectedIconNames()
-            => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
+    public static TheoryData ExpectedIconNames()
+        => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
 
-        [Theory]
-        [MemberData(nameof(ExpectedIconNames))]
-        public void EmbeddedResource_ResourcesExist_Icon(string resourceName)
-        {
-            using Stream stream = assembly.GetManifestResourceStream(resourceName);
-            Assert.NotNull(stream);
+    [Theory]
+    [MemberData(nameof(ExpectedIconNames))]
+    public void EmbeddedResource_ResourcesExist_Icon(string resourceName)
+    {
+        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        Assert.NotNull(stream);
 
-            using Icon icon = new(stream);
-            Assert.NotNull(icon);
-        }
+        using Icon icon = new(stream);
+        Assert.NotNull(icon);
+    }
 
-        private const string expectedResourceNames = """
+    private const string expectedResourceNames = """
             System.ComponentModel.Design.CollectionEditor.resources
             System.SR.resources
             System.Windows.Forms.Design.BorderSidesEditor.resources
@@ -89,16 +89,15 @@ namespace System.Windows.Forms.Design.Tests
             System.Windows.Forms.Design.StringCollectionEditor.resources
             """;
 
-        [Fact]
-        public void EmbeddedResource_VerifyList()
-        {
-            string[] actual = assembly.GetManifestResourceNames();
-            Array.Sort(actual, StringComparer.Ordinal);
+    [Fact]
+    public void EmbeddedResource_VerifyList()
+    {
+        string[] actual = assembly.GetManifestResourceNames();
+        Array.Sort(actual, StringComparer.Ordinal);
 
-            string[] expected = $"{s_expectedIconNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
-            Array.Sort(expected, StringComparer.Ordinal);
+        string[] expected = $"{s_expectedIconNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
+        Array.Sort(expected, StringComparer.Ordinal);
 
-            AssertExtensions.Equal(expected, actual);
-        }
+        AssertExtensions.Equal(expected, actual);
     }
 }

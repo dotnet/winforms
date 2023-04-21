@@ -4,25 +4,24 @@
 
 using System.Collections.ObjectModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class FileDialogCustomPlacesCollection : Collection<FileDialogCustomPlace>
 {
-    public class FileDialogCustomPlacesCollection : Collection<FileDialogCustomPlace>
+    internal unsafe void Apply(IFileDialog* dialog)
     {
-        internal unsafe void Apply(IFileDialog* dialog)
+        for (int i = Items.Count - 1; i >= 0; --i)
         {
-            for (int i = Items.Count - 1; i >= 0; --i)
+            FileDialogCustomPlace customPlace = Items[i];
+            using ComScope<IShellItem> shellItem = new(customPlace.GetNativePath());
+            if (!shellItem.IsNull)
             {
-                FileDialogCustomPlace customPlace = Items[i];
-                using ComScope<IShellItem> shellItem = new(customPlace.GetNativePath());
-                if (!shellItem.IsNull)
-                {
-                    dialog->AddPlace(shellItem, 0);
-                }
+                dialog->AddPlace(shellItem, 0);
             }
         }
-
-        public void Add(string? path) => Add(new FileDialogCustomPlace(path));
-
-        public void Add(Guid knownFolderGuid) => Add(new FileDialogCustomPlace(knownFolderGuid));
     }
+
+    public void Add(string? path) => Add(new FileDialogCustomPlace(path));
+
+    public void Add(Guid knownFolderGuid) => Add(new FileDialogCustomPlace(knownFolderGuid));
 }

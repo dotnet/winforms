@@ -6,12 +6,11 @@
 
 using System.Numerics;
 
-namespace System.Windows.Forms.Metafiles
+namespace System.Windows.Forms.Metafiles;
+
+internal class TransformValidator : IStateValidator
 {
-    internal class TransformValidator : IStateValidator
-    {
-        private readonly Matrix3x2 _transform;
-        public TransformValidator(Matrix3x2 transform) => _transform = transform;
-        public void Validate(DeviceContextState state) => Assert.Equal(_transform, state.Transform);
-    }
+    private readonly Matrix3x2 _transform;
+    public TransformValidator(Matrix3x2 transform) => _transform = transform;
+    public void Validate(DeviceContextState state) => Assert.Equal(_transform, state.Transform);
 }

@@ -4,105 +4,104 @@
 
 using static Interop.Mshtml;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed class HtmlHistory : IDisposable
 {
-    public sealed class HtmlHistory : IDisposable
+    private IOmHistory htmlHistory;
+    private bool disposed;
+
+    internal HtmlHistory(IOmHistory history)
     {
-        private IOmHistory htmlHistory;
-        private bool disposed;
+        htmlHistory = history;
+        Debug.Assert(NativeOmHistory is not null, "The history object should implement IOmHistory");
+    }
 
-        internal HtmlHistory(IOmHistory history)
+    private IOmHistory NativeOmHistory
+    {
+        get
         {
-            htmlHistory = history;
-            Debug.Assert(NativeOmHistory is not null, "The history object should implement IOmHistory");
+            ObjectDisposedException.ThrowIf(disposed, this);
+            return htmlHistory;
         }
+    }
 
-        private IOmHistory NativeOmHistory
+    public void Dispose()
+    {
+        htmlHistory = null!;
+        disposed = true;
+        GC.SuppressFinalize(this);
+    }
+
+    public int Length
+    {
+        get
         {
-            get
-            {
-                ObjectDisposedException.ThrowIf(disposed, this);
-                return htmlHistory;
-            }
+            return (int)NativeOmHistory.GetLength();
         }
+    }
 
-        public void Dispose()
+    public void Back(int numberBack)
+    {
+        if (numberBack < 0)
         {
-            htmlHistory = null!;
-            disposed = true;
-            GC.SuppressFinalize(this);
+            throw new ArgumentOutOfRangeException(nameof(numberBack), numberBack, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberBack), numberBack, 0));
         }
-
-        public int Length
+        else if (numberBack > 0)
         {
-            get
-            {
-                return (int)NativeOmHistory.GetLength();
-            }
+            object oNumForward = (object)(-numberBack);
+            NativeOmHistory.Go(ref oNumForward);
         }
+    }
 
-        public void Back(int numberBack)
+    public void Forward(int numberForward)
+    {
+        if (numberForward < 0)
         {
-            if (numberBack < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(numberBack), numberBack, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberBack), numberBack, 0));
-            }
-            else if (numberBack > 0)
-            {
-                object oNumForward = (object)(-numberBack);
-                NativeOmHistory.Go(ref oNumForward);
-            }
+            throw new ArgumentOutOfRangeException(nameof(numberForward), numberForward, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberForward), numberForward, 0));
         }
-
-        public void Forward(int numberForward)
+        else if (numberForward > 0)
         {
-            if (numberForward < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(numberForward), numberForward, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberForward), numberForward, 0));
-            }
-            else if (numberForward > 0)
-            {
-                object oNumForward = (object)numberForward;
-                NativeOmHistory.Go(ref oNumForward);
-            }
+            object oNumForward = (object)numberForward;
+            NativeOmHistory.Go(ref oNumForward);
         }
+    }
 
-        /// <summary>
-        ///  Go to a specific Uri in the history
-        /// </summary>
-        public void Go(Uri url)
-        {
-            Go(url.ToString());
-        }
+    /// <summary>
+    ///  Go to a specific Uri in the history
+    /// </summary>
+    public void Go(Uri url)
+    {
+        Go(url.ToString());
+    }
 
-        /// <summary>
-        ///  Go to a specific url(string) in the history
-        /// </summary>
-        ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
-        ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-        ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
-        ///  break.
-        public void Go(string urlString)
-        {
-            object loc = (object)urlString;
-            NativeOmHistory.Go(ref loc);
-        }
+    /// <summary>
+    ///  Go to a specific url(string) in the history
+    /// </summary>
+    ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+    ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
+    ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+    ///  break.
+    public void Go(string urlString)
+    {
+        object loc = (object)urlString;
+        NativeOmHistory.Go(ref loc);
+    }
 
-        /// <summary>
-        ///  Go to the specified position in the history list
-        /// </summary>
-        public void Go(int relativePosition)
-        {
-            object loc = (object)relativePosition;
-            NativeOmHistory.Go(ref loc);
-        }
+    /// <summary>
+    ///  Go to the specified position in the history list
+    /// </summary>
+    public void Go(int relativePosition)
+    {
+        object loc = (object)relativePosition;
+        NativeOmHistory.Go(ref loc);
+    }
 
-        public object DomHistory
+    public object DomHistory
+    {
+        get
         {
-            get
-            {
-                return NativeOmHistory;
-            }
+            return NativeOmHistory;
         }
     }
 }

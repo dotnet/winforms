@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal enum TemplateNodeSelectionState
 {
-    internal enum TemplateNodeSelectionState
-    {
-        None = 0,
-        TemplateNodeSelected = 1,
-        SplitButtonSelected = 2,
-        DropDownSelected = 3,
-        MouseOverLabel = 4,
-        MouseOverHotRegion = 5,
-        HotRegionSelected = 6
-    }
+    None = 0,
+    TemplateNodeSelected = 1,
+    SplitButtonSelected = 2,
+    DropDownSelected = 3,
+    MouseOverLabel = 4,
+    MouseOverHotRegion = 5,
+    HotRegionSelected = 6
 }

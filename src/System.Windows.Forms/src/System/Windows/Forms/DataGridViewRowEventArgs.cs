@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
-{
-    public class DataGridViewRowEventArgs : EventArgs
-    {
-        public DataGridViewRowEventArgs(DataGridViewRow dataGridViewRow)
-        {
-            Row = dataGridViewRow.OrThrowIfNull();
-        }
+namespace System.Windows.Forms;
 
-        public DataGridViewRow Row { get; }
+public class DataGridViewRowEventArgs : EventArgs
+{
+    public DataGridViewRowEventArgs(DataGridViewRow dataGridViewRow)
+    {
+        Row = dataGridViewRow.OrThrowIfNull();
     }
+
+    public DataGridViewRow Row { get; }
 }

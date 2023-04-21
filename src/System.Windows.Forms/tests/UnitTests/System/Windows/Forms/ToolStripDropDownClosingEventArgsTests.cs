@@ -2,19 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+// NB: doesn't require thread affinity
+public class ToolStripDropDownClosingEventArgsTests
 {
-    // NB: doesn't require thread affinity
-    public class ToolStripDropDownClosingEventArgsTests
+    [Theory]
+    [InlineData(ToolStripDropDownCloseReason.AppClicked)]
+    [InlineData((ToolStripDropDownCloseReason)(ToolStripDropDownCloseReason.AppFocusChange - 1))]
+    public void Ctor_CloseReason(ToolStripDropDownCloseReason closeReason)
     {
-        [Theory]
-        [InlineData(ToolStripDropDownCloseReason.AppClicked)]
-        [InlineData((ToolStripDropDownCloseReason)(ToolStripDropDownCloseReason.AppFocusChange - 1))]
-        public void Ctor_CloseReason(ToolStripDropDownCloseReason closeReason)
-        {
-            var e = new ToolStripDropDownClosingEventArgs(closeReason);
-            Assert.Equal(closeReason, e.CloseReason);
-            Assert.False(e.Cancel);
-        }
+        var e = new ToolStripDropDownClosingEventArgs(closeReason);
+        Assert.Equal(closeReason, e.CloseReason);
+        Assert.False(e.Cancel);
     }
 }

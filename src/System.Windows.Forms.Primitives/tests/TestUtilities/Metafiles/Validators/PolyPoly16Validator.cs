@@ -6,37 +6,36 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Metafiles
-{
-    internal abstract class PolyPoly16Validator : StateValidator
-    {
-        private readonly Rectangle? _bounds;
-        private readonly int? _polyCount;
+namespace System.Windows.Forms.Metafiles;
 
-        /// <param name="bounds">Optional bounds to validate.</param>
-        /// <param name="polyCount">Number of expected polys.</param>
-        /// <param name="stateValidators">Optional device context state validation to perform.</param>
-        public PolyPoly16Validator(
-            RECT? bounds,
-            int? polyCount,
-            params IStateValidator[] stateValidators) : base(stateValidators)
+internal abstract class PolyPoly16Validator : StateValidator
+{
+    private readonly Rectangle? _bounds;
+    private readonly int? _polyCount;
+
+    /// <param name="bounds">Optional bounds to validate.</param>
+    /// <param name="polyCount">Number of expected polys.</param>
+    /// <param name="stateValidators">Optional device context state validation to perform.</param>
+    public PolyPoly16Validator(
+        RECT? bounds,
+        int? polyCount,
+        params IStateValidator[] stateValidators) : base(stateValidators)
+    {
+        // Full point validation still needs implemented
+        _polyCount = polyCount;
+        _bounds = bounds;
+    }
+
+    protected unsafe void Validate(EMRPOLYPOLY16* poly)
+    {
+        if (_bounds.HasValue)
         {
-            // Full point validation still needs implemented
-            _polyCount = polyCount;
-            _bounds = bounds;
+            Assert.Equal(_bounds.Value, (Rectangle)poly->rclBounds);
         }
 
-        protected unsafe void Validate(EMRPOLYPOLY16* poly)
+        if (_polyCount.HasValue)
         {
-            if (_bounds.HasValue)
-            {
-                Assert.Equal(_bounds.Value, (Rectangle)poly->rclBounds);
-            }
-
-            if (_polyCount.HasValue)
-            {
-                Assert.Equal(_polyCount.Value, (int)poly->nPolys);
-            }
+            Assert.Equal(_polyCount.Value, (int)poly->nPolys);
         }
     }
 }

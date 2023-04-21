@@ -7,104 +7,103 @@
 using System.Collections;
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal class RelatedPropertyManager : PropertyManager
 {
-    internal class RelatedPropertyManager : PropertyManager
+    private BindingManagerBase parentManager;
+    private string dataField;
+    private PropertyDescriptor fieldInfo;
+
+    internal RelatedPropertyManager(BindingManagerBase parentManager, string dataField) : base(GetCurrentOrNull(parentManager), dataField)
     {
-        private BindingManagerBase parentManager;
-        private string dataField;
-        private PropertyDescriptor fieldInfo;
+        Bind(parentManager, dataField);
+    }
 
-        internal RelatedPropertyManager(BindingManagerBase parentManager, string dataField) : base(GetCurrentOrNull(parentManager), dataField)
+    private void Bind(BindingManagerBase parentManager, string dataField)
+    {
+        Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
+        this.parentManager = parentManager;
+        this.dataField = dataField;
+        fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
+        if (fieldInfo is null)
         {
-            Bind(parentManager, dataField);
+            throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
         }
 
-        private void Bind(BindingManagerBase parentManager, string dataField)
-        {
-            Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
-            this.parentManager = parentManager;
-            this.dataField = dataField;
-            fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
-            if (fieldInfo is null)
-            {
-                throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
-            }
+        parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
+        Refresh();
+    }
 
-            parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
-            Refresh();
+    internal override string GetListName()
+    {
+        string name = GetListName(new ArrayList());
+        if (name.Length > 0)
+        {
+            return name;
         }
 
-        internal override string GetListName()
-        {
-            string name = GetListName(new ArrayList());
-            if (name.Length > 0)
-            {
-                return name;
-            }
+        return base.GetListName();
+    }
 
-            return base.GetListName();
+    protected internal override string GetListName(ArrayList listAccessors)
+    {
+        listAccessors.Insert(0, fieldInfo);
+        return parentManager.GetListName(listAccessors);
+    }
+
+    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
+    {
+        PropertyDescriptor[] accessors;
+
+        if (listAccessors is not null && listAccessors.Length > 0)
+        {
+            accessors = new PropertyDescriptor[listAccessors.Length + 1];
+            listAccessors.CopyTo(accessors, 1);
+        }
+        else
+        {
+            accessors = new PropertyDescriptor[1];
         }
 
-        protected internal override string GetListName(ArrayList listAccessors)
+        // Set this accessor (add to the beginning)
+        accessors[0] = fieldInfo;
+
+        // Get props
+        return parentManager.GetItemProperties(accessors);
+    }
+
+    private void ParentManager_CurrentItemChanged(object sender, EventArgs e)
+    {
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        EndCurrentEdit();
+        SetDataSource(GetCurrentOrNull(parentManager));
+        OnCurrentChanged(EventArgs.Empty);
+    }
+
+    internal override Type BindType
+    {
+        get
         {
-            listAccessors.Insert(0, fieldInfo);
-            return parentManager.GetListName(listAccessors);
+            return fieldInfo.PropertyType;
         }
+    }
 
-        internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
+    public override object Current
+    {
+        get
         {
-            PropertyDescriptor[] accessors;
-
-            if (listAccessors is not null && listAccessors.Length > 0)
-            {
-                accessors = new PropertyDescriptor[listAccessors.Length + 1];
-                listAccessors.CopyTo(accessors, 1);
-            }
-            else
-            {
-                accessors = new PropertyDescriptor[1];
-            }
-
-            // Set this accessor (add to the beginning)
-            accessors[0] = fieldInfo;
-
-            // Get props
-            return parentManager.GetItemProperties(accessors);
+            return (DataSource is not null) ? fieldInfo.GetValue(DataSource) : null;
         }
+    }
 
-        private void ParentManager_CurrentItemChanged(object sender, EventArgs e)
-        {
-            Refresh();
-        }
-
-        private void Refresh()
-        {
-            EndCurrentEdit();
-            SetDataSource(GetCurrentOrNull(parentManager));
-            OnCurrentChanged(EventArgs.Empty);
-        }
-
-        internal override Type BindType
-        {
-            get
-            {
-                return fieldInfo.PropertyType;
-            }
-        }
-
-        public override object Current
-        {
-            get
-            {
-                return (DataSource is not null) ? fieldInfo.GetValue(DataSource) : null;
-            }
-        }
-
-        private static object GetCurrentOrNull(BindingManagerBase parentManager)
-        {
-            bool anyCurrent = (parentManager.Position >= 0 && parentManager.Position < parentManager.Count);
-            return anyCurrent ? parentManager.Current : null;
-        }
+    private static object GetCurrentOrNull(BindingManagerBase parentManager)
+    {
+        bool anyCurrent = (parentManager.Position >= 0 && parentManager.Position < parentManager.Count);
+        return anyCurrent ? parentManager.Current : null;
     }
 }

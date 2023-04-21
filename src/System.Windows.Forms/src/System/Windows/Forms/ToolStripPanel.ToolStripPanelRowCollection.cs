@@ -10,187 +10,186 @@ using System.ComponentModel;
 #endif
 using System.Windows.Forms.Layout;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripPanel
 {
-    public partial class ToolStripPanel
+    [ListBindable(false)]
+    public class ToolStripPanelRowCollection : ArrangedElementCollection, IList
     {
-        [ListBindable(false)]
-        public class ToolStripPanelRowCollection : ArrangedElementCollection, IList
+        private readonly ToolStripPanel _owner;
+
+        public ToolStripPanelRowCollection(ToolStripPanel owner)
         {
-            private readonly ToolStripPanel _owner;
+            _owner = owner;
+        }
 
-            public ToolStripPanelRowCollection(ToolStripPanel owner)
+        public ToolStripPanelRowCollection(ToolStripPanel owner, ToolStripPanelRow[] value)
+        {
+            _owner = owner;
+            AddRange(value);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public new virtual ToolStripPanelRow this[int index]
+        {
+            get
             {
-                _owner = owner;
+                return (ToolStripPanelRow)(InnerList[index]);
             }
+        }
 
-            public ToolStripPanelRowCollection(ToolStripPanel owner, ToolStripPanelRow[] value)
-            {
-                _owner = owner;
-                AddRange(value);
-            }
+        public int Add(ToolStripPanelRow value)
+        {
+            ArgumentNullException.ThrowIfNull(value);
 
-            /// <summary>
-            ///
-            /// </summary>
-            public new virtual ToolStripPanelRow this[int index]
+            int retVal = ((IList)InnerList).Add(value);
+            OnAdd(value, retVal);
+            return retVal;
+        }
+
+        public void AddRange(ToolStripPanelRow[] value)
+        {
+            ArgumentNullException.ThrowIfNull(value);
+
+            ToolStripPanel currentOwner = _owner;
+            currentOwner?.SuspendLayout();
+
+            try
             {
-                get
+                for (int i = 0; i < value.Length; i++)
                 {
-                    return (ToolStripPanelRow)(InnerList[index]);
+                    Add(value[i]);
                 }
             }
-
-            public int Add(ToolStripPanelRow value)
+            finally
             {
-                ArgumentNullException.ThrowIfNull(value);
-
-                int retVal = ((IList)InnerList).Add(value);
-                OnAdd(value, retVal);
-                return retVal;
+                currentOwner?.ResumeLayout();
             }
+        }
 
-            public void AddRange(ToolStripPanelRow[] value)
+        public void AddRange(ToolStripPanelRowCollection value)
+        {
+            ArgumentNullException.ThrowIfNull(value);
+
+            ToolStripPanel currentOwner = _owner;
+            currentOwner?.SuspendLayout();
+
+            try
             {
-                ArgumentNullException.ThrowIfNull(value);
-
-                ToolStripPanel currentOwner = _owner;
-                currentOwner?.SuspendLayout();
-
-                try
+                int currentCount = value.Count;
+                for (int i = 0; i < currentCount; i++)
                 {
-                    for (int i = 0; i < value.Length; i++)
-                    {
-                        Add(value[i]);
-                    }
-                }
-                finally
-                {
-                    currentOwner?.ResumeLayout();
+                    Add(value[i]);
                 }
             }
-
-            public void AddRange(ToolStripPanelRowCollection value)
+            finally
             {
-                ArgumentNullException.ThrowIfNull(value);
-
-                ToolStripPanel currentOwner = _owner;
-                currentOwner?.SuspendLayout();
-
-                try
-                {
-                    int currentCount = value.Count;
-                    for (int i = 0; i < currentCount; i++)
-                    {
-                        Add(value[i]);
-                    }
-                }
-                finally
-                {
-                    currentOwner?.ResumeLayout();
-                }
+                currentOwner?.ResumeLayout();
             }
+        }
 
-            public bool Contains(ToolStripPanelRow value)
+        public bool Contains(ToolStripPanelRow value)
+        {
+            return InnerList.Contains(value);
+        }
+
+        public virtual void Clear()
+        {
+            _owner?.SuspendLayout();
+
+            try
             {
-                return InnerList.Contains(value);
-            }
-
-            public virtual void Clear()
-            {
-                _owner?.SuspendLayout();
-
-                try
+                while (Count != 0)
                 {
-                    while (Count != 0)
-                    {
-                        RemoveAt(Count - 1);
-                    }
-                }
-                finally
-                {
-                    _owner?.ResumeLayout();
+                    RemoveAt(Count - 1);
                 }
             }
-
-            void IList.Clear() { Clear(); }
-            bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
-            bool IList.Contains(object value) { return InnerList.Contains(value); }
-            bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
-            void IList.RemoveAt(int index) { RemoveAt(index); }
-            void IList.Remove(object value) { Remove(value as ToolStripPanelRow); }
-            int IList.Add(object value) { return Add(value as ToolStripPanelRow); }
-            int IList.IndexOf(object value) { return IndexOf(value as ToolStripPanelRow); }
-            void IList.Insert(int index, object value) { Insert(index, value as ToolStripPanelRow); }
-
-            object IList.this[int index]
+            finally
             {
-                get { return InnerList[index]; }
-                set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
+                _owner?.ResumeLayout();
             }
+        }
 
-            public int IndexOf(ToolStripPanelRow value)
+        void IList.Clear() { Clear(); }
+        bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
+        bool IList.Contains(object value) { return InnerList.Contains(value); }
+        bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
+        void IList.RemoveAt(int index) { RemoveAt(index); }
+        void IList.Remove(object value) { Remove(value as ToolStripPanelRow); }
+        int IList.Add(object value) { return Add(value as ToolStripPanelRow); }
+        int IList.IndexOf(object value) { return IndexOf(value as ToolStripPanelRow); }
+        void IList.Insert(int index, object value) { Insert(index, value as ToolStripPanelRow); }
+
+        object IList.this[int index]
+        {
+            get { return InnerList[index]; }
+            set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
+        }
+
+        public int IndexOf(ToolStripPanelRow value)
+        {
+            return InnerList.IndexOf(value);
+        }
+
+        public void Insert(int index, ToolStripPanelRow value)
+        {
+            ArgumentNullException.ThrowIfNull(value);
+
+            InnerList.Insert(index, value);
+            OnAdd(value, index);
+        }
+
+        private void OnAdd(ToolStripPanelRow value, int index)
+        {
+            if (_owner is not null)
             {
-                return InnerList.IndexOf(value);
+                LayoutTransaction.DoLayout(_owner, value, PropertyNames.Parent);
             }
+        }
 
-            public void Insert(int index, ToolStripPanelRow value)
-            {
-                ArgumentNullException.ThrowIfNull(value);
-
-                InnerList.Insert(index, value);
-                OnAdd(value, index);
-            }
-
-            private void OnAdd(ToolStripPanelRow value, int index)
-            {
-                if (_owner is not null)
-                {
-                    LayoutTransaction.DoLayout(_owner, value, PropertyNames.Parent);
-                }
-            }
-
-            /// <summary>
-            ///  Do proper cleanup of ownership, etc.
-            /// </summary>
-            private static void OnAfterRemove(ToolStripPanelRow row)
-            {
+        /// <summary>
+        ///  Do proper cleanup of ownership, etc.
+        /// </summary>
+        private static void OnAfterRemove(ToolStripPanelRow row)
+        {
 #if DEBUG
-                if (s_toolStripPanelMissingRowDebug.TraceVerbose)
+            if (s_toolStripPanelMissingRowDebug.TraceVerbose)
+            {
+                if (row is not null)
                 {
-                    if (row is not null)
-                    {
-                        Debug.Write("Removing row: ");
-                        row.Debug_PrintRowID();
-                        Debug.WriteLine(new StackTrace().ToString());
-                    }
+                    Debug.Write("Removing row: ");
+                    row.Debug_PrintRowID();
+                    Debug.WriteLine(new StackTrace().ToString());
                 }
+            }
 #endif
 
-            }
+        }
 
-            public void Remove(ToolStripPanelRow value)
+        public void Remove(ToolStripPanelRow value)
+        {
+            InnerList.Remove(value);
+            OnAfterRemove(value);
+        }
+
+        public void RemoveAt(int index)
+        {
+            ToolStripPanelRow item = null;
+            if (index < Count && index >= 0)
             {
-                InnerList.Remove(value);
-                OnAfterRemove(value);
+                item = (ToolStripPanelRow)(InnerList[index]);
             }
 
-            public void RemoveAt(int index)
-            {
-                ToolStripPanelRow item = null;
-                if (index < Count && index >= 0)
-                {
-                    item = (ToolStripPanelRow)(InnerList[index]);
-                }
+            InnerList.RemoveAt(index);
+            OnAfterRemove(item);
+        }
 
-                InnerList.RemoveAt(index);
-                OnAfterRemove(item);
-            }
-
-            public void CopyTo(ToolStripPanelRow[] array, int index)
-            {
-                InnerList.CopyTo(array, index);
-            }
+        public void CopyTo(ToolStripPanelRow[] array, int index)
+        {
+            InnerList.CopyTo(array, index);
         }
     }
 }

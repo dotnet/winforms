@@ -4,30 +4,29 @@
 
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class ListControlUnboundActionList : DesignerActionList
 {
-    internal class ListControlUnboundActionList : DesignerActionList
+    private readonly ComponentDesigner _designer;
+
+    public ListControlUnboundActionList(ComponentDesigner designer) : base(designer.Component)
     {
-        private readonly ComponentDesigner _designer;
+        _designer = designer;
+    }
 
-        public ListControlUnboundActionList(ComponentDesigner designer) : base(designer.Component)
-        {
-            _designer = designer;
-        }
+    public void InvokeItemsDialog()
+    {
+        EditorServiceContext.EditValue(_designer, Component, "Items");
+    }
 
-        public void InvokeItemsDialog()
-        {
-            EditorServiceContext.EditValue(_designer, Component, "Items");
-        }
-
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection returnItems = new DesignerActionItemCollection();
-            returnItems.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
-                SR.ListControlUnboundActionListEditItemsDisplayName,
-                SR.ItemsCategoryName,
-                SR.ListControlUnboundActionListEditItemsDescription, true));
-            return returnItems;
-        }
+    public override DesignerActionItemCollection GetSortedActionItems()
+    {
+        DesignerActionItemCollection returnItems = new DesignerActionItemCollection();
+        returnItems.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
+            SR.ListControlUnboundActionListEditItemsDisplayName,
+            SR.ItemsCategoryName,
+            SR.ListControlUnboundActionListEditItemsDescription, true));
+        return returnItems;
     }
 }

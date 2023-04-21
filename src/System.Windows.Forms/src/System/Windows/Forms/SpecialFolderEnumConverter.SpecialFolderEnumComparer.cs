@@ -4,18 +4,17 @@
 
 using System.Collections;
 
-namespace System.Windows.Forms
-{
-    internal partial class SpecialFolderEnumConverter
-    {
-        private class SpecialFolderEnumComparer : IComparer
-        {
-            public static readonly SpecialFolderEnumComparer Default = new SpecialFolderEnumComparer();
+namespace System.Windows.Forms;
 
-            public int Compare(object? a, object? b)
-            {
-                return string.Compare(a?.ToString(), b?.ToString(), StringComparison.InvariantCulture);
-            }
+internal partial class SpecialFolderEnumConverter
+{
+    private class SpecialFolderEnumComparer : IComparer
+    {
+        public static readonly SpecialFolderEnumComparer Default = new SpecialFolderEnumComparer();
+
+        public int Compare(object? a, object? b)
+        {
+            return string.Compare(a?.ToString(), b?.ToString(), StringComparison.InvariantCulture);
         }
     }
 }

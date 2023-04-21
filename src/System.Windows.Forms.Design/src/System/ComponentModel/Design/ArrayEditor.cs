@@ -4,60 +4,59 @@
 
 #nullable disable
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+/// <summary>
+///  Edits an array of values.
+/// </summary>
+public class ArrayEditor : CollectionEditor
 {
     /// <summary>
-    ///  Edits an array of values.
+    ///  Initializes a new instance of <see cref="ArrayEditor"/>
+    ///  using the specified type for the array.
     /// </summary>
-    public class ArrayEditor : CollectionEditor
+    public ArrayEditor(Type type) : base(type)
     {
-        /// <summary>
-        ///  Initializes a new instance of <see cref="ArrayEditor"/>
-        ///  using the specified type for the array.
-        /// </summary>
-        public ArrayEditor(Type type) : base(type)
+    }
+
+    /// <summary>
+    ///  Gets or sets the data type this collection contains.
+    /// </summary>
+    protected override Type CreateCollectionItemType()
+        => CollectionType?.GetElementType();
+
+    /// <summary>
+    ///  Gets the items in the array.
+    /// </summary>
+    protected override object[] GetItems(object editValue)
+    {
+        if (editValue is Array valueArray)
         {
+            object[] items = new object[valueArray.GetLength(0)];
+            Array.Copy(valueArray, items, items.Length);
+            return items;
         }
 
-        /// <summary>
-        ///  Gets or sets the data type this collection contains.
-        /// </summary>
-        protected override Type CreateCollectionItemType()
-            => CollectionType?.GetElementType();
+        return Array.Empty<object>();
+    }
 
-        /// <summary>
-        ///  Gets the items in the array.
-        /// </summary>
-        protected override object[] GetItems(object editValue)
+    /// <summary>
+    ///  Sets the items in the array.
+    /// </summary>
+    protected override object SetItems(object editValue, object[] value)
+    {
+        if (editValue is not null && !(editValue is Array))
         {
-            if (editValue is Array valueArray)
-            {
-                object[] items = new object[valueArray.GetLength(0)];
-                Array.Copy(valueArray, items, items.Length);
-                return items;
-            }
-
-            return Array.Empty<object>();
+            return editValue;
         }
 
-        /// <summary>
-        ///  Sets the items in the array.
-        /// </summary>
-        protected override object SetItems(object editValue, object[] value)
+        if (value is null)
         {
-            if (editValue is not null && !(editValue is Array))
-            {
-                return editValue;
-            }
-
-            if (value is null)
-            {
-                return null;
-            }
-
-            Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
-            Array.Copy(value, newArray, value.Length);
-            return newArray;
+            return null;
         }
+
+        Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
+        Array.Copy(value, newArray, value.Length);
+        return newArray;
     }
 }

@@ -4,19 +4,18 @@
 
 using System.ComponentModel;
 
-namespace Windows.Win32
-{
-    internal static partial class PInvoke
-    {
-        public static unsafe IShellItem* SHCreateItemFromParsingName(string path)
-        {
-            HRESULT hr = SHCreateItemFromParsingName(path, pbc: null, in IID.GetRef<IShellItem>(), out void* ppv);
-            if (hr.Failed)
-            {
-                throw new Win32Exception((int)hr);
-            }
+namespace Windows.Win32;
 
-            return (IShellItem*)ppv;
+internal static partial class PInvoke
+{
+    public static unsafe IShellItem* SHCreateItemFromParsingName(string path)
+    {
+        HRESULT hr = SHCreateItemFromParsingName(path, pbc: null, in IID.GetRef<IShellItem>(), out void* ppv);
+        if (hr.Failed)
+        {
+            throw new Win32Exception((int)hr);
         }
+
+        return (IShellItem*)ppv;
     }
 }

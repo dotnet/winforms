@@ -4,37 +4,36 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal static partial class GdiCache
 {
-    internal static partial class GdiCache
-    {
-        /// <summary>
-        ///  Scope that creates a wrapping <see cref="Drawing.Graphics"/> for a <see cref="ScreenDcCache.ScreenDcScope"/>
-        ///  and manages disposal of the <see cref="Drawing.Graphics"/> and the scope.
-        /// </summary>
+    /// <summary>
+    ///  Scope that creates a wrapping <see cref="Drawing.Graphics"/> for a <see cref="ScreenDcCache.ScreenDcScope"/>
+    ///  and manages disposal of the <see cref="Drawing.Graphics"/> and the scope.
+    /// </summary>
 #if DEBUG
-        internal class ScreenGraphicsScope : DisposalTracking.Tracker, IDisposable
+    internal class ScreenGraphicsScope : DisposalTracking.Tracker, IDisposable
 #else
-        internal readonly ref struct ScreenGraphicsScope
+    internal readonly ref struct ScreenGraphicsScope
 #endif
+    {
+        private readonly ScreenDcCache.ScreenDcScope _dcScope;
+        public Graphics Graphics { get; }
+
+        public ScreenGraphicsScope(scoped ref ScreenDcCache.ScreenDcScope scope)
         {
-            private readonly ScreenDcCache.ScreenDcScope _dcScope;
-            public Graphics Graphics { get; }
+            _dcScope = scope;
+            Graphics = scope.HDC.CreateGraphics();
+        }
 
-            public ScreenGraphicsScope(scoped ref ScreenDcCache.ScreenDcScope scope)
-            {
-                _dcScope = scope;
-                Graphics = scope.HDC.CreateGraphics();
-            }
+        public static implicit operator Graphics(in ScreenGraphicsScope scope) => scope.Graphics;
 
-            public static implicit operator Graphics(in ScreenGraphicsScope scope) => scope.Graphics;
-
-            public void Dispose()
-            {
-                Graphics?.Dispose();
-                _dcScope.Dispose();
-                DisposalTracking.SuppressFinalize(this!);
-            }
+        public void Dispose()
+        {
+            Graphics?.Dispose();
+            _dcScope.Dispose();
+            DisposalTracking.SuppressFinalize(this!);
         }
     }
 }

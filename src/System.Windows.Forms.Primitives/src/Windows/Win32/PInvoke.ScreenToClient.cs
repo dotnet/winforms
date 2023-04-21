@@ -4,16 +4,15 @@
 
 using System.Drawing;
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    public static BOOL ScreenToClient<T>(T hWnd, ref Point lpPoint)
+        where T : IHandle<HWND>
     {
-        public static BOOL ScreenToClient<T>(T hWnd, ref Point lpPoint)
-            where T : IHandle<HWND>
-        {
-            BOOL result = ScreenToClient(hWnd.Handle, ref lpPoint);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
+        BOOL result = ScreenToClient(hWnd.Handle, ref lpPoint);
+        GC.KeepAlive(hWnd.Wrapper);
+        return result;
     }
 }

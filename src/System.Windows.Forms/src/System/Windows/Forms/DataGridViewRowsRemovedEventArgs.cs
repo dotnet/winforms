@@ -4,28 +4,27 @@
 
 using System.Globalization;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class DataGridViewRowsRemovedEventArgs : EventArgs
 {
-    public class DataGridViewRowsRemovedEventArgs : EventArgs
+    public DataGridViewRowsRemovedEventArgs(int rowIndex, int rowCount)
     {
-        public DataGridViewRowsRemovedEventArgs(int rowIndex, int rowCount)
+        if (rowIndex < 0)
         {
-            if (rowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowIndex), rowIndex.ToString(CultureInfo.CurrentCulture), 0));
-            }
-
-            if (rowCount < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowCount), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowCount), rowCount.ToString(CultureInfo.CurrentCulture), 1));
-            }
-
-            RowIndex = rowIndex;
-            RowCount = rowCount;
+            throw new ArgumentOutOfRangeException(nameof(rowIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowIndex), rowIndex.ToString(CultureInfo.CurrentCulture), 0));
         }
 
-        public int RowIndex { get; }
+        if (rowCount < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(rowCount), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowCount), rowCount.ToString(CultureInfo.CurrentCulture), 1));
+        }
 
-        public int RowCount { get; }
+        RowIndex = rowIndex;
+        RowCount = rowCount;
     }
+
+    public int RowIndex { get; }
+
+    public int RowCount { get; }
 }

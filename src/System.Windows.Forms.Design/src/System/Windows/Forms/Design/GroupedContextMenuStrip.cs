@@ -7,85 +7,84 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class GroupedContextMenuStrip : ContextMenuStrip
 {
-    internal class GroupedContextMenuStrip : ContextMenuStrip
+    private StringCollection _groupOrdering;
+    private ContextMenuStripGroupCollection _groups;
+    private bool _populated;
+
+    public bool Populated
     {
-        private StringCollection _groupOrdering;
-        private ContextMenuStripGroupCollection _groups;
-        private bool _populated;
+        set => _populated = value;
+    }
 
-        public bool Populated
+    public GroupedContextMenuStrip()
+    {
+    }
+
+    public ContextMenuStripGroupCollection Groups
+    {
+        get
         {
-            set => _populated = value;
+            _groups ??= new ContextMenuStripGroupCollection();
+
+            return _groups;
         }
+    }
 
-        public GroupedContextMenuStrip()
+    public StringCollection GroupOrdering
+    {
+        get
         {
+            _groupOrdering ??= new StringCollection();
+
+            return _groupOrdering;
         }
+    }
 
-        public ContextMenuStripGroupCollection Groups
+    // merges all the items which are currently in the groups into the items collection.
+    public void Populate()
+    {
+        Items.Clear();
+        foreach (string groupName in GroupOrdering)
         {
-            get
+            if (_groups.ContainsKey(groupName))
             {
-                _groups ??= new ContextMenuStripGroupCollection();
+                List<ToolStripItem> items = _groups[groupName].Items;
 
-                return _groups;
-            }
-        }
-
-        public StringCollection GroupOrdering
-        {
-            get
-            {
-                _groupOrdering ??= new StringCollection();
-
-                return _groupOrdering;
-            }
-        }
-
-        // merges all the items which are currently in the groups into the items collection.
-        public void Populate()
-        {
-            Items.Clear();
-            foreach (string groupName in GroupOrdering)
-            {
-                if (_groups.ContainsKey(groupName))
+                if (Items.Count > 0 && items.Count > 0)
                 {
-                    List<ToolStripItem> items = _groups[groupName].Items;
+                    Items.Add(new ToolStripSeparator());
+                }
 
-                    if (Items.Count > 0 && items.Count > 0)
-                    {
-                        Items.Add(new ToolStripSeparator());
-                    }
-
-                    foreach (ToolStripItem item in items)
-                    {
-                        Items.Add(item);
-                    }
+                foreach (ToolStripItem item in items)
+                {
+                    Items.Add(item);
                 }
             }
-
-            _populated = true;
         }
 
-        protected override void OnOpening(CancelEventArgs e)
+        _populated = true;
+    }
+
+    protected override void OnOpening(CancelEventArgs e)
+    {
+        SuspendLayout();
+        if (!_populated)
         {
-            SuspendLayout();
-            if (!_populated)
-            {
-                Populate();
-            }
-
-            RefreshItems();
-            ResumeLayout(true);
-            PerformLayout();
-            e.Cancel = (Items.Count == 0);
-            base.OnOpening(e);
+            Populate();
         }
 
-        public virtual void RefreshItems()
-        {
-        }
+        RefreshItems();
+        ResumeLayout(true);
+        PerformLayout();
+        e.Cancel = (Items.Count == 0);
+        base.OnOpening(e);
+    }
+
+    public virtual void RefreshItems()
+    {
     }
 }

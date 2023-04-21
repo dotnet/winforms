@@ -2,29 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class TreeViewHitTestInfoTests
 {
-    public class TreeViewHitTestInfoTests
+    public static IEnumerable<object[]> Ctor_TreeNode_TreeViewHitTestLocations_TestData()
     {
-        public static IEnumerable<object[]> Ctor_TreeNode_TreeViewHitTestLocations_TestData()
+        foreach (TreeViewHitTestLocations hitLocation in Enum.GetValues(typeof(TreeViewHitTestLocations)))
         {
-            foreach (TreeViewHitTestLocations hitLocation in Enum.GetValues(typeof(TreeViewHitTestLocations)))
-            {
-                yield return new object[] { null, hitLocation };
-                yield return new object[] { new TreeNode(), hitLocation };
-            }
-
-            yield return new object[] { null, 0 };
-            yield return new object[] { new TreeNode(), 0 };
+            yield return new object[] { null, hitLocation };
+            yield return new object[] { new TreeNode(), hitLocation };
         }
 
-        [WinFormsTheory]
-        [MemberData(nameof(Ctor_TreeNode_TreeViewHitTestLocations_TestData))]
-        public void TreeViewHitTestInfo_Ctor_TreeNode_TreeViewHitTestLocations(TreeNode hitNode, TreeViewHitTestLocations hitLocation)
-        {
-            var hitTestInfo = new TreeViewHitTestInfo(hitNode, hitLocation);
-            Assert.Same(hitNode, hitTestInfo.Node);
-            Assert.Equal(hitLocation, hitTestInfo.Location);
-        }
+        yield return new object[] { null, 0 };
+        yield return new object[] { new TreeNode(), 0 };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(Ctor_TreeNode_TreeViewHitTestLocations_TestData))]
+    public void TreeViewHitTestInfo_Ctor_TreeNode_TreeViewHitTestLocations(TreeNode hitNode, TreeViewHitTestLocations hitLocation)
+    {
+        var hitTestInfo = new TreeViewHitTestInfo(hitNode, hitLocation);
+        Assert.Same(hitNode, hitTestInfo.Node);
+        Assert.Equal(hitLocation, hitTestInfo.Location);
     }
 }

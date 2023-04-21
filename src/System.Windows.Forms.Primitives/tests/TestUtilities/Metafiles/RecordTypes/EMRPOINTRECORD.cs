@@ -7,27 +7,26 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms.Metafiles
-{
-    /// <summary>
-    ///  Record that just has a single point value.
-    /// </summary>
-    /// <remarks>
-    ///   Not an actual Win32 define, encapsulates:
-    ///
-    ///    - EMRLINETO
-    ///    - EMRMOVETOEX
-    ///    - EMROFFSETCLIPRGN
-    ///    - EMRSETVIEWPORTORGEX
-    ///    - EMRSETWINDOWORGEX
-    ///    - EMRSETBRUSHORGEX
-    /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRPOINTRECORD
-    {
-        public EMR emr;
-        public Point point;
+namespace System.Windows.Forms.Metafiles;
 
-        public override string ToString() => $"[EMR{emr.iType}] Point: {point}";
-    }
+/// <summary>
+///  Record that just has a single point value.
+/// </summary>
+/// <remarks>
+///   Not an actual Win32 define, encapsulates:
+///
+///    - EMRLINETO
+///    - EMRMOVETOEX
+///    - EMROFFSETCLIPRGN
+///    - EMRSETVIEWPORTORGEX
+///    - EMRSETWINDOWORGEX
+///    - EMRSETBRUSHORGEX
+/// </remarks>
+[StructLayout(LayoutKind.Sequential)]
+internal struct EMRPOINTRECORD
+{
+    public EMR emr;
+    public Point point;
+
+    public override string ToString() => $"[EMR{emr.iType}] Point: {point}";
 }

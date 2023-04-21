@@ -4,62 +4,61 @@
 
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
 {
-    public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
+    [WinFormsFact]
+    public void ToolStripTextBoxAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
     {
-        [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
+        using var toolStripTextBox = new ToolStripTextBox()
         {
-            using var toolStripTextBox = new ToolStripTextBox()
-            {
-                Name = "Name1",
-                AccessibleName = "Test Name"
-            };
+            Name = "Name1",
+            AccessibleName = "Test Name"
+        };
 
-            AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
-            var accessibleName = toolStripTextBoxAccessibleObject.GetPropertyValue(UIA.NamePropertyId);
+        AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
+        var accessibleName = toolStripTextBoxAccessibleObject.GetPropertyValue(UIA.NamePropertyId);
 
-            Assert.Equal("Test Name", accessibleName);
-        }
+        Assert.Equal("Test Name", accessibleName);
+    }
 
-        [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
+    [WinFormsFact]
+    public void ToolStripTextBoxAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
+    {
+        using var toolStripTextBox = new ToolStripTextBox();
+        AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
+
+        bool supportsLegacyIAccessiblePatternId = toolStripTextBoxAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId);
+
+        Assert.True(supportsLegacyIAccessiblePatternId);
+    }
+
+    [WinFormsFact]
+    public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
+    {
+        using var toolStripTextBox = new ToolStripTextBox()
         {
-            using var toolStripTextBox = new ToolStripTextBox();
-            AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
+            AccessibleRole = AccessibleRole.Link
+        };
 
-            bool supportsLegacyIAccessiblePatternId = toolStripTextBoxAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId);
+        AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
+        var accessibleObjectRole = toolStripTextBoxAccessibleObject.Role;
 
-            Assert.True(supportsLegacyIAccessiblePatternId);
-        }
+        Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+    }
 
-        [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
+    [WinFormsFact]
+    public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
+    {
+        using var toolStripTextBox = new ToolStripTextBox()
         {
-            using var toolStripTextBox = new ToolStripTextBox()
-            {
-                AccessibleRole = AccessibleRole.Link
-            };
+            AccessibleDescription = "Test Description"
+        };
 
-            AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
-            var accessibleObjectRole = toolStripTextBoxAccessibleObject.Role;
+        AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
+        var accessibleObjectDescription = toolStripTextBoxAccessibleObject.Description;
 
-            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
-        }
-
-        [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
-        {
-            using var toolStripTextBox = new ToolStripTextBox()
-            {
-                AccessibleDescription = "Test Description"
-            };
-
-            AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
-            var accessibleObjectDescription = toolStripTextBoxAccessibleObject.Description;
-
-            Assert.Equal("Test Description", accessibleObjectDescription);
-        }
+        Assert.Equal("Test Description", accessibleObjectDescription);
     }
 }

@@ -5,22 +5,21 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Saves and restores the entire state of a <see cref="Graphics"/>.
+/// </summary>
+internal readonly ref struct GraphicsStateScope
 {
-    /// <summary>
-    ///  Saves and restores the entire state of a <see cref="Graphics"/>.
-    /// </summary>
-    internal readonly ref struct GraphicsStateScope
+    private readonly GraphicsState _state;
+    private readonly Graphics _graphics;
+
+    public GraphicsStateScope(Graphics graphics)
     {
-        private readonly GraphicsState _state;
-        private readonly Graphics _graphics;
-
-        public GraphicsStateScope(Graphics graphics)
-        {
-            _state = graphics.Save();
-            _graphics = graphics;
-        }
-
-        public void Dispose() => _graphics.Restore(_state);
+        _state = graphics.Save();
+        _graphics = graphics;
     }
+
+    public void Dispose() => _graphics.Restore(_state);
 }

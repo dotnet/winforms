@@ -4,36 +4,35 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Specifies the type of caption button to display.
+/// </summary>
+public enum CaptionButton
 {
     /// <summary>
-    ///  Specifies the type of caption button to display.
+    ///  A Close button.
     /// </summary>
-    public enum CaptionButton
-    {
-        /// <summary>
-        ///  A Close button.
-        /// </summary>
-        Close = (int)User32.DFCS.CAPTIONCLOSE,
+    Close = (int)User32.DFCS.CAPTIONCLOSE,
 
-        /// <summary>
-        ///  A Help button.
-        /// </summary>
-        Help = (int)User32.DFCS.CAPTIONHELP,
+    /// <summary>
+    ///  A Help button.
+    /// </summary>
+    Help = (int)User32.DFCS.CAPTIONHELP,
 
-        /// <summary>
-        ///  A Maximize button.
-        /// </summary>
-        Maximize = (int)User32.DFCS.CAPTIONMAX,
+    /// <summary>
+    ///  A Maximize button.
+    /// </summary>
+    Maximize = (int)User32.DFCS.CAPTIONMAX,
 
-        /// <summary>
-        ///  A Minimize button.
-        /// </summary>
-        Minimize = (int)User32.DFCS.CAPTIONMIN,
+    /// <summary>
+    ///  A Minimize button.
+    /// </summary>
+    Minimize = (int)User32.DFCS.CAPTIONMIN,
 
-        /// <summary>
-        ///  A Restore button.
-        /// </summary>
-        Restore = (int)User32.DFCS.CAPTIONRESTORE,
-    }
+    /// <summary>
+    ///  A Restore button.
+    /// </summary>
+    Restore = (int)User32.DFCS.CAPTIONRESTORE,
 }

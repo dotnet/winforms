@@ -4,7 +4,6 @@
 
 #nullable enable
 
-namespace System.Windows.Forms.Metafiles
-{
-    internal delegate bool ProcessRecordWithStateDelegate(ref EmfRecord record, DeviceContextState state);
-}
+namespace System.Windows.Forms.Metafiles;
+
+internal delegate bool ProcessRecordWithStateDelegate(ref EmfRecord record, DeviceContextState state);

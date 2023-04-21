@@ -4,60 +4,59 @@
 
 using static Interop.ComCtl32;
 
-namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
+namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
+
+public class TASKDIALOGCONFIGIconUnionTests
 {
-    public class TASKDIALOGCONFIGIconUnionTests
+    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    public unsafe void TASKDIALOGCONFIGIconUnion_x32_Size()
     {
-        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
-        public unsafe void TASKDIALOGCONFIGIconUnion_x32_Size()
+        if (Environment.Is64BitProcess)
         {
-            if (Environment.Is64BitProcess)
-            {
-                return;
-            }
-
-            Assert.Equal(4, sizeof(TASKDIALOGCONFIG.IconUnion));
+            return;
         }
 
-        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
-        public unsafe void TASKDIALOGCONFIGIconUnion_x32_ensure_layout()
+        Assert.Equal(4, sizeof(TASKDIALOGCONFIG.IconUnion));
+    }
+
+    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
+    public unsafe void TASKDIALOGCONFIGIconUnion_x32_ensure_layout()
+    {
+        if (Environment.Is64BitProcess)
         {
-            if (Environment.Is64BitProcess)
-            {
-                return;
-            }
-
-            TASKDIALOGCONFIG.IconUnion sut = new TASKDIALOGCONFIG.IconUnion();
-            byte* addr = (byte*)&sut;
-
-            Assert.Equal(0, (byte*)&sut.hIcon - addr);  // 4, HICON
-            Assert.Equal(0, (byte*)&sut.pszIcon - addr);  // 4, PCWSTR
+            return;
         }
 
-        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
-        public unsafe void TASKDIALOGCONFIGIconUnion_x64_Size()
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return;
-            }
+        TASKDIALOGCONFIG.IconUnion sut = new TASKDIALOGCONFIG.IconUnion();
+        byte* addr = (byte*)&sut;
 
-            Assert.Equal(8, sizeof(TASKDIALOGCONFIG.IconUnion));
+        Assert.Equal(0, (byte*)&sut.hIcon - addr);  // 4, HICON
+        Assert.Equal(0, (byte*)&sut.pszIcon - addr);  // 4, PCWSTR
+    }
+
+    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    public unsafe void TASKDIALOGCONFIGIconUnion_x64_Size()
+    {
+        if (!Environment.Is64BitProcess)
+        {
+            return;
         }
 
-        [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
-        public unsafe void TASKDIALOGCONFIGIconUnion_x64_ensure_layout()
+        Assert.Equal(8, sizeof(TASKDIALOGCONFIG.IconUnion));
+    }
+
+    [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
+    public unsafe void TASKDIALOGCONFIGIconUnion_x64_ensure_layout()
+    {
+        if (!Environment.Is64BitProcess)
         {
-            if (!Environment.Is64BitProcess)
-            {
-                return;
-            }
-
-            TASKDIALOGCONFIG.IconUnion sut = new TASKDIALOGCONFIG.IconUnion();
-            byte* addr = (byte*)&sut;
-
-            Assert.Equal(0, (byte*)&sut.hIcon - addr);  // 8, HICON
-            Assert.Equal(0, (byte*)&sut.pszIcon - addr);  // 8, PCWSTR
+            return;
         }
+
+        TASKDIALOGCONFIG.IconUnion sut = new TASKDIALOGCONFIG.IconUnion();
+        byte* addr = (byte*)&sut;
+
+        Assert.Equal(0, (byte*)&sut.hIcon - addr);  // 8, HICON
+        Assert.Equal(0, (byte*)&sut.pszIcon - addr);  // 8, PCWSTR
     }
 }

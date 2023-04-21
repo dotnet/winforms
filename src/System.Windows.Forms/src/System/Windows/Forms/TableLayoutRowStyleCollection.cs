@@ -5,32 +5,31 @@
 using System.Collections;
 using System.Windows.Forms.Layout;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class TableLayoutRowStyleCollection : TableLayoutStyleCollection
 {
-    public class TableLayoutRowStyleCollection : TableLayoutStyleCollection
+    internal TableLayoutRowStyleCollection(IArrangedElement Owner) : base(Owner) { }
+    internal TableLayoutRowStyleCollection() : base(null) { }
+
+    internal override string PropertyName
     {
-        internal TableLayoutRowStyleCollection(IArrangedElement Owner) : base(Owner) { }
-        internal TableLayoutRowStyleCollection() : base(null) { }
-
-        internal override string PropertyName
-        {
-            get { return PropertyNames.RowStyles; }
-        }
-
-        public int Add(RowStyle rowStyle) => ((IList)this).Add(rowStyle);
-
-        public void Insert(int index, RowStyle rowStyle) => ((IList)this).Insert(index, rowStyle);
-
-        public new RowStyle this[int index]
-        {
-            get => (RowStyle)((IList)this)[index]!;
-            set => ((IList)this)[index] = value;
-        }
-
-        public void Remove(RowStyle rowStyle) => ((IList)this).Remove(rowStyle);
-
-        public bool Contains(RowStyle rowStyle) => ((IList)this).Contains(rowStyle);
-
-        public int IndexOf(RowStyle rowStyle) => ((IList)this).IndexOf(rowStyle);
+        get { return PropertyNames.RowStyles; }
     }
+
+    public int Add(RowStyle rowStyle) => ((IList)this).Add(rowStyle);
+
+    public void Insert(int index, RowStyle rowStyle) => ((IList)this).Insert(index, rowStyle);
+
+    public new RowStyle this[int index]
+    {
+        get => (RowStyle)((IList)this)[index]!;
+        set => ((IList)this)[index] = value;
+    }
+
+    public void Remove(RowStyle rowStyle) => ((IList)this).Remove(rowStyle);
+
+    public bool Contains(RowStyle rowStyle) => ((IList)this).Contains(rowStyle);
+
+    public int IndexOf(RowStyle rowStyle) => ((IList)this).IndexOf(rowStyle);
 }

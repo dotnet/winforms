@@ -4,19 +4,18 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class DataGridViewTextBoxCell_DataGridViewTextBoxCellAccessibleObject
 {
-    public class DataGridViewTextBoxCell_DataGridViewTextBoxCellAccessibleObject
+    [WinFormsFact]
+    public void DataGridViewTextBoxCellAccessibleObject_ControlType_IsDataItem()
     {
-        [WinFormsFact]
-        public void DataGridViewTextBoxCellAccessibleObject_ControlType_IsDataItem()
-        {
-            using var cell = new DataGridViewTextBoxCell();
-            AccessibleObject accessibleObject = cell.AccessibilityObject;
+        using var cell = new DataGridViewTextBoxCell();
+        AccessibleObject accessibleObject = cell.AccessibilityObject;
 
-            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
 
-            Assert.Equal(UiaCore.UIA.DataItemControlTypeId, actual);
-        }
+        Assert.Equal(UiaCore.UIA.DataItemControlTypeId, actual);
     }
 }

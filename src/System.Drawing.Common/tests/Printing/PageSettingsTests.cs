@@ -27,39 +27,38 @@
 //  Jordi Mas i Hernandez (jordi@ximian.com)
 //
 
-namespace System.Drawing.Printing.Tests
+namespace System.Drawing.Printing.Tests;
+
+public class PageSettingsTests
 {
-    public class PageSettingsTests
+    [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
+    public void Clone_Success()
     {
-        [ConditionalFact(Helpers.AnyInstalledPrinters, Helpers.WindowsRS3OrEarlier)] // RS4 failures: https://github.com/dotnet/winforms/issues/8816
-        public void Clone_Success()
-        {
-            PageSettings ps = new PageSettings();
-            ps.Color = false;
-            ps.Landscape = true;
-            ps.Margins = new Margins(120, 130, 140, 150);
-            ps.PaperSize = new PaperSize("My Custom Size", 222, 333);
-            PageSettings clone = (PageSettings)ps.Clone();
+        PageSettings ps = new PageSettings();
+        ps.Color = false;
+        ps.Landscape = true;
+        ps.Margins = new Margins(120, 130, 140, 150);
+        ps.PaperSize = new PaperSize("My Custom Size", 222, 333);
+        PageSettings clone = (PageSettings)ps.Clone();
 
-            Assert.Equal(ps.Color, clone.Color);
-            Assert.Equal(ps.Landscape, clone.Landscape);
-            Assert.Equal(ps.Margins, clone.Margins);
-            Assert.Same(ps.PrinterSettings, clone.PrinterSettings);
+        Assert.Equal(ps.Color, clone.Color);
+        Assert.Equal(ps.Landscape, clone.Landscape);
+        Assert.Equal(ps.Margins, clone.Margins);
+        Assert.Same(ps.PrinterSettings, clone.PrinterSettings);
 
-            // PaperSize
-            Assert.Equal(ps.PaperSize.PaperName, clone.PaperSize.PaperName);
-            Assert.Equal(ps.PaperSize.Width, clone.PaperSize.Width);
-            Assert.Equal(ps.PaperSize.Height, clone.PaperSize.Height);
-            Assert.Equal(ps.PaperSize.Kind, clone.PaperSize.Kind);
+        // PaperSize
+        Assert.Equal(ps.PaperSize.PaperName, clone.PaperSize.PaperName);
+        Assert.Equal(ps.PaperSize.Width, clone.PaperSize.Width);
+        Assert.Equal(ps.PaperSize.Height, clone.PaperSize.Height);
+        Assert.Equal(ps.PaperSize.Kind, clone.PaperSize.Kind);
 
-            // PrinterResolution
-            Assert.Equal(ps.PrinterResolution.X, clone.PrinterResolution.X);
-            Assert.Equal(ps.PrinterResolution.Y, clone.PrinterResolution.Y);
-            Assert.Equal(ps.PrinterResolution.Kind, clone.PrinterResolution.Kind);
+        // PrinterResolution
+        Assert.Equal(ps.PrinterResolution.X, clone.PrinterResolution.X);
+        Assert.Equal(ps.PrinterResolution.Y, clone.PrinterResolution.Y);
+        Assert.Equal(ps.PrinterResolution.Kind, clone.PrinterResolution.Kind);
 
-            // PaperSource
-            Assert.Equal(ps.PaperSource.Kind, clone.PaperSource.Kind);
-            Assert.Equal(ps.PaperSource.SourceName, clone.PaperSource.SourceName);
-        }
+        // PaperSource
+        Assert.Equal(ps.PaperSource.Kind, clone.PaperSource.Kind);
+        Assert.Equal(ps.PaperSource.SourceName, clone.PaperSource.SourceName);
     }
 }

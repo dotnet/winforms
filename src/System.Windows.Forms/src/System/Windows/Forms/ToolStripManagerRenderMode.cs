@@ -4,13 +4,12 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public enum ToolStripManagerRenderMode
 {
-    public enum ToolStripManagerRenderMode
-    {
-        [Browsable(false)]
-        Custom = ToolStripRenderMode.Custom,
-        System = ToolStripRenderMode.System,
-        Professional = ToolStripRenderMode.Professional
-    }
+    [Browsable(false)]
+    Custom = ToolStripRenderMode.Custom,
+    System = ToolStripRenderMode.System,
+    Professional = ToolStripRenderMode.Professional
 }

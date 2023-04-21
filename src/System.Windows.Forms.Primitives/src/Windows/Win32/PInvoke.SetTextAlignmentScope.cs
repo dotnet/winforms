@@ -5,51 +5,50 @@
 #if DEBUG
 #endif
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
-    {
-        /// <summary>
-        ///  Helper to scope selecting a given text alignment mode into a HDC. Restores the original text alignment
-        ///  mode into the HDC when disposed.
-        /// </summary>
-        /// <remarks>
-        ///  <para>
-        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
-        ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
-        ///  </para>
-        /// </remarks>
+    /// <summary>
+    ///  Helper to scope selecting a given text alignment mode into a HDC. Restores the original text alignment
+    ///  mode into the HDC when disposed.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
+    ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
+    ///  </para>
+    /// </remarks>
 #if DEBUG
-        internal class SetTextAlignmentScope : DisposalTracking.Tracker, IDisposable
+    internal class SetTextAlignmentScope : DisposalTracking.Tracker, IDisposable
 #else
-        internal readonly ref struct SetTextAlignmentScope
+    internal readonly ref struct SetTextAlignmentScope
 #endif
+    {
+        private readonly TEXT_ALIGN_OPTIONS _previousTa;
+        private readonly HDC _hdc;
+
+        /// <summary>
+        ///  Sets <paramref name="ta"/> in the given <paramref name="hdc"/> using <see cref="SetTextAlign(HDC, TEXT_ALIGN_OPTIONS)"/>.
+        /// </summary>
+        public SetTextAlignmentScope(HDC hdc, TEXT_ALIGN_OPTIONS ta)
         {
-            private readonly TEXT_ALIGN_OPTIONS _previousTa;
-            private readonly HDC _hdc;
+            _previousTa = (TEXT_ALIGN_OPTIONS)SetTextAlign(hdc, ta);
 
-            /// <summary>
-            ///  Sets <paramref name="ta"/> in the given <paramref name="hdc"/> using <see cref="SetTextAlign(HDC, TEXT_ALIGN_OPTIONS)"/>.
-            /// </summary>
-            public SetTextAlignmentScope(HDC hdc, TEXT_ALIGN_OPTIONS ta)
+            // If we didn't actually change the TA, don't keep the HDC so we skip putting back the same state.
+            _hdc = _previousTa == ta ? default : hdc;
+        }
+
+        public void Dispose()
+        {
+            if (!_hdc.IsNull)
             {
-                _previousTa = (TEXT_ALIGN_OPTIONS)SetTextAlign(hdc, ta);
-
-                // If we didn't actually change the TA, don't keep the HDC so we skip putting back the same state.
-                _hdc = _previousTa == ta ? default : hdc;
+                SetTextAlign(_hdc, _previousTa);
             }
-
-            public void Dispose()
-            {
-                if (!_hdc.IsNull)
-                {
-                    SetTextAlign(_hdc, _previousTa);
-                }
 
 #if DEBUG
-                GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
 #endif
-            }
         }
     }
 }

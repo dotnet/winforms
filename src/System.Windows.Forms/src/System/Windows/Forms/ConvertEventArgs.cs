@@ -2,18 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public class ConvertEventArgs : EventArgs
 {
-    public class ConvertEventArgs : EventArgs
+    public ConvertEventArgs(object? value, Type? desiredType)
     {
-        public ConvertEventArgs(object? value, Type? desiredType)
-        {
-            Value = value;
-            DesiredType = desiredType;
-        }
-
-        public object? Value { get; set; }
-
-        public Type? DesiredType { get; }
+        Value = value;
+        DesiredType = desiredType;
     }
+
+    public object? Value { get; set; }
+
+    public Type? DesiredType { get; }
 }

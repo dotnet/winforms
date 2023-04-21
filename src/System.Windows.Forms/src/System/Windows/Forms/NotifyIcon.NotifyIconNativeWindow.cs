@@ -5,70 +5,69 @@
 using System.Runtime.InteropServices;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public sealed partial class NotifyIcon
 {
-    public sealed partial class NotifyIcon
+    /// <summary>
+    ///  Defines a placeholder window that the NotifyIcon is attached to.
+    /// </summary>
+    private class NotifyIconNativeWindow : NativeWindow
     {
+        internal NotifyIcon _reference;
+        private GCHandle _rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
+
         /// <summary>
-        ///  Defines a placeholder window that the NotifyIcon is attached to.
+        ///  Create a new NotifyIcon, and bind the window to the NotifyIcon component.
         /// </summary>
-        private class NotifyIconNativeWindow : NativeWindow
+        internal NotifyIconNativeWindow(NotifyIcon component)
         {
-            internal NotifyIcon _reference;
-            private GCHandle _rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
+            _reference = component;
+        }
 
-            /// <summary>
-            ///  Create a new NotifyIcon, and bind the window to the NotifyIcon component.
-            /// </summary>
-            internal NotifyIconNativeWindow(NotifyIcon component)
+        ~NotifyIconNativeWindow()
+        {
+            // This same post is done in Control's Dispose method, so if you change
+            // it, change it there too.
+            if (Handle != IntPtr.Zero)
             {
-                _reference = component;
+                User32.PostMessageW(this, User32.WM.CLOSE);
             }
 
-            ~NotifyIconNativeWindow()
-            {
-                // This same post is done in Control's Dispose method, so if you change
-                // it, change it there too.
-                if (Handle != IntPtr.Zero)
-                {
-                    User32.PostMessageW(this, User32.WM.CLOSE);
-                }
+            // This releases the handle from our window proc, re-routing it back to
+            // the system.
+        }
 
-                // This releases the handle from our window proc, re-routing it back to
-                // the system.
-            }
-
-            public void LockReference(bool locked)
+        public void LockReference(bool locked)
+        {
+            if (locked)
             {
-                if (locked)
+                if (!_rootRef.IsAllocated)
                 {
-                    if (!_rootRef.IsAllocated)
-                    {
-                        _rootRef = GCHandle.Alloc(_reference, GCHandleType.Normal);
-                    }
-                }
-                else
-                {
-                    if (_rootRef.IsAllocated)
-                    {
-                        _rootRef.Free();
-                    }
+                    _rootRef = GCHandle.Alloc(_reference, GCHandleType.Normal);
                 }
             }
-
-            protected override void OnThreadException(Exception e)
+            else
             {
-                Application.OnThreadException(e);
+                if (_rootRef.IsAllocated)
+                {
+                    _rootRef.Free();
+                }
             }
+        }
 
-            /// <summary>
-            ///  Pass messages on to the NotifyIcon object's wndproc handler.
-            /// </summary>
-            protected override void WndProc(ref Message m)
-            {
-                Debug.Assert(_reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
-                _reference.WndProc(ref m);
-            }
+        protected override void OnThreadException(Exception e)
+        {
+            Application.OnThreadException(e);
+        }
+
+        /// <summary>
+        ///  Pass messages on to the NotifyIcon object's wndproc handler.
+        /// </summary>
+        protected override void WndProc(ref Message m)
+        {
+            Debug.Assert(_reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
+            _reference.WndProc(ref m);
         }
     }
 }

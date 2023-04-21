@@ -5,302 +5,301 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Helper class used by ToolStripManager that implements most of the logic to save out and apply
+///  settings for toolstrips on a form.
+/// </summary>
+internal partial class ToolStripSettingsManager
 {
-    /// <summary>
-    ///  Helper class used by ToolStripManager that implements most of the logic to save out and apply
-    ///  settings for toolstrips on a form.
-    /// </summary>
-    internal partial class ToolStripSettingsManager
+    private readonly Form form;
+    private readonly string formKey;
+
+    internal ToolStripSettingsManager(Form owner, string formKey)
     {
-        private readonly Form form;
-        private readonly string formKey;
+        form = owner;
+        this.formKey = formKey;
+    }
 
-        internal ToolStripSettingsManager(Form owner, string formKey)
+    internal void Load()
+    {
+        List<SettingsStub> savedToolStripSettingsObjects = new();
+
+        List<ToolStrip> toolStripControls = new();
+        FindControls(true, form.Controls, toolStripControls);
+
+        foreach (ToolStrip toolStrip in toolStripControls)
         {
-            form = owner;
-            this.formKey = formKey;
-        }
-
-        internal void Load()
-        {
-            List<SettingsStub> savedToolStripSettingsObjects = new();
-
-            List<ToolStrip> toolStripControls = new();
-            FindControls(true, form.Controls, toolStripControls);
-
-            foreach (ToolStrip toolStrip in toolStripControls)
+            if (!string.IsNullOrEmpty(toolStrip.Name))
             {
-                if (!string.IsNullOrEmpty(toolStrip.Name))
+                ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
+
+                // Check if we have settings saved out for this toolstrip. If so, add it to our apply list.
+                if (!toolStripSettings.IsDefault)
                 {
-                    ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
-
-                    // Check if we have settings saved out for this toolstrip. If so, add it to our apply list.
-                    if (!toolStripSettings.IsDefault)
-                    {
-                        savedToolStripSettingsObjects.Add(new SettingsStub(toolStripSettings));
-                    }
-                }
-            }
-
-            ApplySettings(savedToolStripSettingsObjects);
-        }
-
-        internal void Save()
-        {
-            List<ToolStrip> toolStripControls = new();
-            FindControls(true, form.Controls, toolStripControls);
-
-            foreach (ToolStrip toolStrip in toolStripControls)
-            {
-                if (!string.IsNullOrEmpty(toolStrip.Name))
-                {
-                    ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
-                    SettingsStub stub = new SettingsStub(toolStrip);
-
-                    toolStripSettings.ItemOrder = stub.ItemOrder;
-                    toolStripSettings.Name = stub.Name;
-                    toolStripSettings.Location = stub.Location;
-                    toolStripSettings.Size = stub.Size;
-                    toolStripSettings.ToolStripPanelName = stub.ToolStripPanelName;
-                    toolStripSettings.Visible = stub.Visible;
-
-                    toolStripSettings.Save();
+                    savedToolStripSettingsObjects.Add(new SettingsStub(toolStripSettings));
                 }
             }
         }
 
-        internal static string GetItemOrder(ToolStrip toolStrip)
+        ApplySettings(savedToolStripSettingsObjects);
+    }
+
+    internal void Save()
+    {
+        List<ToolStrip> toolStripControls = new();
+        FindControls(true, form.Controls, toolStripControls);
+
+        foreach (ToolStrip toolStrip in toolStripControls)
         {
-            if (toolStrip.Items.Count == 0)
+            if (!string.IsNullOrEmpty(toolStrip.Name))
             {
-                return string.Empty;
+                ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
+                SettingsStub stub = new SettingsStub(toolStrip);
+
+                toolStripSettings.ItemOrder = stub.ItemOrder;
+                toolStripSettings.Name = stub.Name;
+                toolStripSettings.Location = stub.Location;
+                toolStripSettings.Size = stub.Size;
+                toolStripSettings.ToolStripPanelName = stub.ToolStripPanelName;
+                toolStripSettings.Visible = stub.Visible;
+
+                toolStripSettings.Save();
             }
+        }
+    }
 
-            StringBuilder itemNames = new StringBuilder(toolStrip.Items.Count);
-
-            for (int i = 0; i < toolStrip.Items.Count; i++)
-            {
-                itemNames.Append(toolStrip.Items[i].Name ?? "null");
-                itemNames.Append(',');
-            }
-
-            return itemNames.ToString(0, itemNames.Length - 1);
+    internal static string GetItemOrder(ToolStrip toolStrip)
+    {
+        if (toolStrip.Items.Count == 0)
+        {
+            return string.Empty;
         }
 
-        private void ApplySettings(List<SettingsStub> toolStripSettingsToApply)
+        StringBuilder itemNames = new StringBuilder(toolStrip.Items.Count);
+
+        for (int i = 0; i < toolStrip.Items.Count; i++)
         {
-            if (toolStripSettingsToApply.Count == 0)
+            itemNames.Append(toolStrip.Items[i].Name ?? "null");
+            itemNames.Append(',');
+        }
+
+        return itemNames.ToString(0, itemNames.Length - 1);
+    }
+
+    private void ApplySettings(List<SettingsStub> toolStripSettingsToApply)
+    {
+        if (toolStripSettingsToApply.Count == 0)
+        {
+            return;
+        }
+
+        SuspendAllLayout(form);
+
+        // iterate through all the toolstrips and build up a hash of where the items
+        // are right now.
+        Dictionary<string, ToolStrip> itemLocationHash = BuildItemOriginationHash();
+
+        // build up a hash of where we want the ToolStrips to go
+        Dictionary<object, List<SettingsStub>> toolStripPanelDestinationHash = new Dictionary<object, List<SettingsStub>>();
+
+        foreach (SettingsStub toolStripSettings in toolStripSettingsToApply)
+        {
+            object? destinationPanel = !string.IsNullOrEmpty(toolStripSettings.ToolStripPanelName) ? toolStripSettings.ToolStripPanelName : null;
+
+            if (destinationPanel is null)
             {
-                return;
+                // Not in a panel.
+                if (!string.IsNullOrEmpty(toolStripSettings.Name))
+                {
+                    // apply the toolstrip settings.
+                    ToolStrip toolStrip = ToolStripManager.FindToolStrip(form, toolStripSettings.Name);
+                    ApplyToolStripSettings(toolStrip, toolStripSettings, itemLocationHash);
+                }
+            }
+            else
+            {
+                // This toolStrip is in a ToolStripPanel. We will process it below.
+                if (!toolStripPanelDestinationHash.ContainsKey(destinationPanel))
+                {
+                    toolStripPanelDestinationHash[destinationPanel] = new List<SettingsStub>();
+                }
+
+                toolStripPanelDestinationHash[destinationPanel].Add(toolStripSettings);
+            }
+        }
+
+        // Build up a list of the toolstrippanels to party on.
+        List<ToolStripPanel> toolStripPanels = new();
+        FindControls(true, form.Controls, toolStripPanels);
+        foreach (ToolStripPanel toolStripPanel in toolStripPanels)
+        {
+            // Set all the controls to visible false.
+            foreach (Control c in toolStripPanel.Controls)
+            {
+                c.Visible = false;
             }
 
-            SuspendAllLayout(form);
+            string toolStripPanelName = toolStripPanel.Name;
 
-            // iterate through all the toolstrips and build up a hash of where the items
-            // are right now.
-            Dictionary<string, ToolStrip> itemLocationHash = BuildItemOriginationHash();
-
-            // build up a hash of where we want the ToolStrips to go
-            Dictionary<object, List<SettingsStub>> toolStripPanelDestinationHash = new Dictionary<object, List<SettingsStub>>();
-
-            foreach (SettingsStub toolStripSettings in toolStripSettingsToApply)
+            // Handle the ToolStripPanels inside a ToolStripContainer
+            if (string.IsNullOrEmpty(toolStripPanelName) && toolStripPanel.Parent is ToolStripContainer && !string.IsNullOrEmpty(toolStripPanel.Parent.Name))
             {
-                object? destinationPanel = !string.IsNullOrEmpty(toolStripSettings.ToolStripPanelName) ? toolStripSettings.ToolStripPanelName : null;
+                toolStripPanelName = $"{toolStripPanel.Parent.Name}.{toolStripPanel.Dock}";
+            }
 
-                if (destinationPanel is null)
+            toolStripPanel.BeginInit();
+            // get the associated toolstrips for this panel
+            if (toolStripPanelDestinationHash.TryGetValue(toolStripPanelName, out List<SettingsStub>? stubSettings))
+            {
+                foreach (SettingsStub settings in stubSettings)
                 {
-                    // Not in a panel.
-                    if (!string.IsNullOrEmpty(toolStripSettings.Name))
+                    if (!string.IsNullOrEmpty(settings.Name))
                     {
                         // apply the toolstrip settings.
-                        ToolStrip toolStrip = ToolStripManager.FindToolStrip(form, toolStripSettings.Name);
-                        ApplyToolStripSettings(toolStrip, toolStripSettings, itemLocationHash);
+                        ToolStrip toolStrip = ToolStripManager.FindToolStrip(form, settings.Name);
+                        ApplyToolStripSettings(toolStrip, settings, itemLocationHash);
+                        toolStripPanel.Join(toolStrip, settings.Location);
                     }
-                }
-                else
-                {
-                    // This toolStrip is in a ToolStripPanel. We will process it below.
-                    if (!toolStripPanelDestinationHash.ContainsKey(destinationPanel))
-                    {
-                        toolStripPanelDestinationHash[destinationPanel] = new List<SettingsStub>();
-                    }
-
-                    toolStripPanelDestinationHash[destinationPanel].Add(toolStripSettings);
                 }
             }
 
-            // Build up a list of the toolstrippanels to party on.
-            List<ToolStripPanel> toolStripPanels = new();
-            FindControls(true, form.Controls, toolStripPanels);
-            foreach (ToolStripPanel toolStripPanel in toolStripPanels)
-            {
-                // Set all the controls to visible false.
-                foreach (Control c in toolStripPanel.Controls)
-                {
-                    c.Visible = false;
-                }
-
-                string toolStripPanelName = toolStripPanel.Name;
-
-                // Handle the ToolStripPanels inside a ToolStripContainer
-                if (string.IsNullOrEmpty(toolStripPanelName) && toolStripPanel.Parent is ToolStripContainer && !string.IsNullOrEmpty(toolStripPanel.Parent.Name))
-                {
-                    toolStripPanelName = $"{toolStripPanel.Parent.Name}.{toolStripPanel.Dock}";
-                }
-
-                toolStripPanel.BeginInit();
-                // get the associated toolstrips for this panel
-                if (toolStripPanelDestinationHash.TryGetValue(toolStripPanelName, out List<SettingsStub>? stubSettings))
-                {
-                    foreach (SettingsStub settings in stubSettings)
-                    {
-                        if (!string.IsNullOrEmpty(settings.Name))
-                        {
-                            // apply the toolstrip settings.
-                            ToolStrip toolStrip = ToolStripManager.FindToolStrip(form, settings.Name);
-                            ApplyToolStripSettings(toolStrip, settings, itemLocationHash);
-                            toolStripPanel.Join(toolStrip, settings.Location);
-                        }
-                    }
-                }
-
-                toolStripPanel.EndInit();
-            }
-
-            ResumeAllLayout(form, true);
+            toolStripPanel.EndInit();
         }
 
-        private static void ApplyToolStripSettings(ToolStrip toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
+        ResumeAllLayout(form, true);
+    }
+
+    private static void ApplyToolStripSettings(ToolStrip toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
+    {
+        if (toolStrip is not null)
         {
-            if (toolStrip is not null)
+            toolStrip.Visible = settings.Visible;
+            toolStrip.Size = settings.Size;
+
+            // Apply the item order changes.
+            string? itemNames = settings.ItemOrder;
+            if (!string.IsNullOrEmpty(itemNames))
             {
-                toolStrip.Visible = settings.Visible;
-                toolStrip.Size = settings.Size;
+                string[] keys = itemNames.Split(',');
+                Regex r = ContiguousNonWhitespace();
 
-                // Apply the item order changes.
-                string? itemNames = settings.ItemOrder;
-                if (!string.IsNullOrEmpty(itemNames))
+                // Shuffle items according to string.
+                for (int i = 0; ((i < toolStrip.Items.Count) && (i < keys.Length)); i++)
                 {
-                    string[] keys = itemNames.Split(',');
-                    Regex r = ContiguousNonWhitespace();
-
-                    // Shuffle items according to string.
-                    for (int i = 0; ((i < toolStrip.Items.Count) && (i < keys.Length)); i++)
+                    Match match = r.Match(keys[i]);
+                    if (match.Success)
                     {
-                        Match match = r.Match(keys[i]);
-                        if (match.Success)
+                        string key = match.Value;
+                        if (!string.IsNullOrEmpty(key) && itemLocationHash.TryGetValue(key, out ToolStrip? value))
                         {
-                            string key = match.Value;
-                            if (!string.IsNullOrEmpty(key) && itemLocationHash.TryGetValue(key, out ToolStrip? value))
-                            {
-                                toolStrip.Items.Insert(i, value.Items[key]);
-                            }
+                            toolStrip.Items.Insert(i, value.Items[key]);
                         }
                     }
                 }
             }
         }
+    }
 
-        [GeneratedRegex("\\S+")]
-        private static partial Regex ContiguousNonWhitespace();
+    [GeneratedRegex("\\S+")]
+    private static partial Regex ContiguousNonWhitespace();
 
-        private Dictionary<string, ToolStrip> BuildItemOriginationHash()
+    private Dictionary<string, ToolStrip> BuildItemOriginationHash()
+    {
+        Dictionary<string, ToolStrip> itemLocationHash = new Dictionary<string, ToolStrip>();
+
+        List<ToolStrip> toolStripControls = new();
+        FindControls(true, form.Controls, toolStripControls);
+
+        foreach (ToolStrip toolStrip in toolStripControls)
         {
-            Dictionary<string, ToolStrip> itemLocationHash = new Dictionary<string, ToolStrip>();
-
-            List<ToolStrip> toolStripControls = new();
-            FindControls(true, form.Controls, toolStripControls);
-
-            foreach (ToolStrip toolStrip in toolStripControls)
+            foreach (ToolStripItem item in toolStrip.Items)
             {
-                foreach (ToolStripItem item in toolStrip.Items)
+                if (!string.IsNullOrEmpty(item.Name))
                 {
-                    if (!string.IsNullOrEmpty(item.Name))
-                    {
-                        Debug.Assert(!itemLocationHash.ContainsKey(item.Name), "WARNING: ToolStripItem name not unique.");
-                        itemLocationHash[item.Name] = toolStrip;
-                    }
+                    Debug.Assert(!itemLocationHash.ContainsKey(item.Name), "WARNING: ToolStripItem name not unique.");
+                    itemLocationHash[item.Name] = toolStrip;
+                }
+            }
+        }
+
+        return itemLocationHash;
+    }
+
+    private void FindControls<T>(bool searchAllChildren, Control.ControlCollection controlsToLookIn, List<T> foundControls)
+        where T : Control
+    {
+        try
+        {
+            // Perform breadth first search - as it's likely people will want controls belonging
+            // to the same parent close to each other.
+            for (int i = 0; i < controlsToLookIn.Count; i++)
+            {
+                if (controlsToLookIn[i] is null)
+                {
+                    continue;
+                }
+
+                if (controlsToLookIn[i] is T control)
+                {
+                    foundControls.Add(control);
                 }
             }
 
-            return itemLocationHash;
-        }
-
-        private void FindControls<T>(bool searchAllChildren, Control.ControlCollection controlsToLookIn, List<T> foundControls)
-            where T : Control
-        {
-            try
+            // Optional recursive search for controls in child collections.
+            if (searchAllChildren)
             {
-                // Perform breadth first search - as it's likely people will want controls belonging
-                // to the same parent close to each other.
                 for (int i = 0; i < controlsToLookIn.Count; i++)
                 {
-                    if (controlsToLookIn[i] is null)
+                    if (controlsToLookIn[i] is null || controlsToLookIn[i] is Form)
                     {
                         continue;
                     }
 
-                    if (controlsToLookIn[i] is T control)
+                    if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
                     {
-                        foundControls.Add(control);
-                    }
-                }
-
-                // Optional recursive search for controls in child collections.
-                if (searchAllChildren)
-                {
-                    for (int i = 0; i < controlsToLookIn.Count; i++)
-                    {
-                        if (controlsToLookIn[i] is null || controlsToLookIn[i] is Form)
-                        {
-                            continue;
-                        }
-
-                        if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
-                        {
-                            // If it has a valid child collection, append those results to our collection.
-                            FindControls(searchAllChildren, controlsToLookIn[i].Controls, foundControls);
-                        }
+                        // If it has a valid child collection, append those results to our collection.
+                        FindControls(searchAllChildren, controlsToLookIn[i].Controls, foundControls);
                     }
                 }
             }
-            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
-            {
-            }
+        }
+        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+        {
+        }
+    }
+
+    private string GetSettingsKey(ToolStrip toolStrip)
+    {
+        if (toolStrip is not null)
+        {
+            return $"{formKey}.{toolStrip.Name}";
         }
 
-        private string GetSettingsKey(ToolStrip toolStrip)
-        {
-            if (toolStrip is not null)
-            {
-                return $"{formKey}.{toolStrip.Name}";
-            }
+        return string.Empty;
+    }
 
-            return string.Empty;
+    private void ResumeAllLayout(Control start, bool performLayout)
+    {
+        Control.ControlCollection controlsCollection = start.Controls;
+
+        for (int i = 0; i < controlsCollection.Count; i++)
+        {
+            ResumeAllLayout(controlsCollection[i], performLayout);
         }
 
-        private void ResumeAllLayout(Control start, bool performLayout)
+        start.ResumeLayout(performLayout);
+    }
+
+    private void SuspendAllLayout(Control start)
+    {
+        start.SuspendLayout();
+
+        Control.ControlCollection controlsCollection = start.Controls;
+        for (int i = 0; i < controlsCollection.Count; i++)
         {
-            Control.ControlCollection controlsCollection = start.Controls;
-
-            for (int i = 0; i < controlsCollection.Count; i++)
-            {
-                ResumeAllLayout(controlsCollection[i], performLayout);
-            }
-
-            start.ResumeLayout(performLayout);
-        }
-
-        private void SuspendAllLayout(Control start)
-        {
-            start.SuspendLayout();
-
-            Control.ControlCollection controlsCollection = start.Controls;
-            for (int i = 0; i < controlsCollection.Count; i++)
-            {
-                SuspendAllLayout(controlsCollection[i]);
-            }
+            SuspendAllLayout(controlsCollection[i]);
         }
     }
 }

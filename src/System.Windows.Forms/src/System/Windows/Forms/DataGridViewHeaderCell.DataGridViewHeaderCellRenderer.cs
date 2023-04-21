@@ -4,22 +4,21 @@
 
 using System.Windows.Forms.VisualStyles;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class DataGridViewHeaderCell
 {
-    public partial class DataGridViewHeaderCell
+    private static class DataGridViewHeaderCellRenderer
     {
-        private static class DataGridViewHeaderCellRenderer
+        private static VisualStyleRenderer? s_visualStyleRenderer;
+
+        public static VisualStyleRenderer VisualStyleRenderer
         {
-            private static VisualStyleRenderer? s_visualStyleRenderer;
-
-            public static VisualStyleRenderer VisualStyleRenderer
+            get
             {
-                get
-                {
-                    s_visualStyleRenderer ??= new VisualStyleRenderer(VisualStyleElement.Header.Item.Normal);
+                s_visualStyleRenderer ??= new VisualStyleRenderer(VisualStyleElement.Header.Item.Normal);
 
-                    return s_visualStyleRenderer;
-                }
+                return s_visualStyleRenderer;
             }
         }
     }

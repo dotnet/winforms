@@ -4,34 +4,33 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripStatusLabel
 {
-    public partial class ToolStripStatusLabel
+    internal class ToolStripStatusLabelAccessibleObject : ToolStripLabelAccessibleObject
     {
-        internal class ToolStripStatusLabelAccessibleObject : ToolStripLabelAccessibleObject
+        private readonly ToolStripStatusLabel _owningToolStripStatusLabel;
+
+        public ToolStripStatusLabelAccessibleObject(ToolStripStatusLabel ownerItem) : base(ownerItem)
         {
-            private readonly ToolStripStatusLabel _owningToolStripStatusLabel;
-
-            public ToolStripStatusLabelAccessibleObject(ToolStripStatusLabel ownerItem) : base(ownerItem)
-            {
-                _owningToolStripStatusLabel = ownerItem;
-            }
-
-            /// <summary>
-            ///  Raises the LiveRegionChanged UIA event.
-            /// </summary>
-            /// <returns>True if operation succeeds, False otherwise.</returns>
-            public override bool RaiseLiveRegionChanged()
-            {
-                return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
-                propertyID switch
-                {
-                    UiaCore.UIA.LiveSettingPropertyId => _owningToolStripStatusLabel.LiveSetting,
-                    _ => base.GetPropertyValue(propertyID)
-                };
+            _owningToolStripStatusLabel = ownerItem;
         }
+
+        /// <summary>
+        ///  Raises the LiveRegionChanged UIA event.
+        /// </summary>
+        /// <returns>True if operation succeeds, False otherwise.</returns>
+        public override bool RaiseLiveRegionChanged()
+        {
+            return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
+        }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+            propertyID switch
+            {
+                UiaCore.UIA.LiveSettingPropertyId => _owningToolStripStatusLabel.LiveSetting,
+                _ => base.GetPropertyValue(propertyID)
+            };
     }
 }

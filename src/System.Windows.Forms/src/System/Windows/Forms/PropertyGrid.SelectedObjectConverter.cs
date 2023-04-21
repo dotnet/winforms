@@ -4,15 +4,14 @@
 
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class PropertyGrid
 {
-    public partial class PropertyGrid
+    internal class SelectedObjectConverter : ReferenceConverter
     {
-        internal class SelectedObjectConverter : ReferenceConverter
+        public SelectedObjectConverter() : base(typeof(IComponent))
         {
-            public SelectedObjectConverter() : base(typeof(IComponent))
-            {
-            }
         }
     }
 }

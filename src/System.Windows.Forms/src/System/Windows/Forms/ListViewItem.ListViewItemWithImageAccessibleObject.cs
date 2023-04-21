@@ -5,86 +5,85 @@
 using System.Drawing;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ListViewItem
 {
-    public partial class ListViewItem
+    internal abstract class ListViewItemWithImageAccessibleObject : ListViewItemBaseAccessibleObject
     {
-        internal abstract class ListViewItemWithImageAccessibleObject : ListViewItemBaseAccessibleObject
+        private const int ImageAccessibleObjectIndex = 0;
+
+        private ListViewItemImageAccessibleObject? _imageAccessibleObject;
+
+        public ListViewItemWithImageAccessibleObject(ListViewItem owningItem) : base(owningItem)
         {
-            private const int ImageAccessibleObjectIndex = 0;
+        }
 
-            private ListViewItemImageAccessibleObject? _imageAccessibleObject;
+        internal override int FirstSubItemIndex => HasImage ? 1 : 0;
 
-            public ListViewItemWithImageAccessibleObject(ListViewItem owningItem) : base(owningItem)
+        private ListViewItemImageAccessibleObject ImageAccessibleObject => _imageAccessibleObject ??= new(_owningItem);
+
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        {
+            switch (direction)
             {
+                case UiaCore.NavigateDirection.FirstChild:
+                case UiaCore.NavigateDirection.LastChild:
+                    return GetChild(ImageAccessibleObjectIndex);
             }
 
-            internal override int FirstSubItemIndex => HasImage ? 1 : 0;
+            return base.FragmentNavigate(direction);
+        }
 
-            private ListViewItemImageAccessibleObject ImageAccessibleObject => _imageAccessibleObject ??= new(_owningItem);
+        internal AccessibleObject GetAccessibleObject(Point point)
+        {
+            return HasImage && ImageAccessibleObject.GetImageRectangle().Contains(point)
+                ? ImageAccessibleObject
+                : this;
+        }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        public override AccessibleObject? GetChild(int index)
+        {
+            if (_owningListView.View != View)
             {
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.FirstChild:
-                    case UiaCore.NavigateDirection.LastChild:
-                        return GetChild(ImageAccessibleObjectIndex);
-                }
-
-                return base.FragmentNavigate(direction);
+                throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            internal AccessibleObject GetAccessibleObject(Point point)
+            return index == ImageAccessibleObjectIndex && HasImage
+                ? ImageAccessibleObject
+                : (AccessibleObject?)null;
+        }
+
+        public override int GetChildCount()
+        {
+            if (_owningListView.View != View)
             {
-                return HasImage && ImageAccessibleObject.GetImageRectangle().Contains(point)
-                    ? ImageAccessibleObject
-                    : this;
+                throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            public override AccessibleObject? GetChild(int index)
-            {
-                if (_owningListView.View != View)
-                {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
-                }
+            return !_owningListView.IsHandleCreated || !HasImage
+                ? InvalidIndex
+                : 1;
+        }
 
-                return index == ImageAccessibleObjectIndex && HasImage
-                    ? ImageAccessibleObject
-                    : (AccessibleObject?)null;
-            }
+        internal override int GetChildIndex(AccessibleObject? child)
+            => child is ListViewItemImageAccessibleObject
+                ? ImageAccessibleObjectIndex
+                : InvalidIndex;
 
-            public override int GetChildCount()
-            {
-                if (_owningListView.View != View)
-                {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
-                }
+        internal override Rectangle GetSubItemBounds(int accessibleChildIndex)
+            => _owningListView.IsHandleCreated && accessibleChildIndex == ImageAccessibleObjectIndex && HasImage
+                ? ImageAccessibleObject.Bounds
+                : Rectangle.Empty;
 
-                return !_owningListView.IsHandleCreated || !HasImage
-                    ? InvalidIndex
-                    : 1;
-            }
+        /// <devdoc>
+        ///  Caller should ensure that the current OS is Windows 8 or greater.
+        /// </devdoc>
+        internal override void ReleaseChildUiaProviders()
+        {
+            base.ReleaseChildUiaProviders();
 
-            internal override int GetChildIndex(AccessibleObject? child)
-                => child is ListViewItemImageAccessibleObject
-                    ? ImageAccessibleObjectIndex
-                    : InvalidIndex;
-
-            internal override Rectangle GetSubItemBounds(int accessibleChildIndex)
-                => _owningListView.IsHandleCreated && accessibleChildIndex == ImageAccessibleObjectIndex && HasImage
-                    ? ImageAccessibleObject.Bounds
-                    : Rectangle.Empty;
-
-            /// <devdoc>
-            ///  Caller should ensure that the current OS is Windows 8 or greater.
-            /// </devdoc>
-            internal override void ReleaseChildUiaProviders()
-            {
-                base.ReleaseChildUiaProviders();
-
-                UiaCore.UiaDisconnectProvider(_imageAccessibleObject);
-            }
+            UiaCore.UiaDisconnectProvider(_imageAccessibleObject);
         }
     }
 }

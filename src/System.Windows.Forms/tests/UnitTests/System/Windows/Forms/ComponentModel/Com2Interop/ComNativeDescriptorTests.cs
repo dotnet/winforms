@@ -11,126 +11,125 @@ using Windows.Win32.System.Ole;
 using WMPLib;
 using static Interop;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
+namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests;
+
+public class ComNativeDescriptorTests
 {
-    public class ComNativeDescriptorTests
+    [StaFact]
+    public void ComNativeDescriptor_GetProperties_FromIPictureDisp()
     {
-        [StaFact]
-        public void ComNativeDescriptor_GetProperties_FromIPictureDisp()
+        using Bitmap bitmap = new(10, 20);
+        object iPictureDisp = IPictureDisp.CreateObjectFromImage(bitmap);
+        Assert.NotNull(iPictureDisp);
+
+        var properties = TypeDescriptor.GetProperties(iPictureDisp);
+        Assert.NotNull(properties);
+        Assert.Equal(5, properties.Count);
+
+        var handleProperty = properties["Handle"];
+        Assert.IsType<Com2PropertyDescriptor>(handleProperty);
+        Assert.True(handleProperty.IsReadOnly);
+        Assert.Equal("Misc", handleProperty.Category);
+        Assert.False(handleProperty.IsLocalizable);
+        Assert.Equal("Interop+Oleaut32+IDispatch", handleProperty.ComponentType.FullName);
+
+        // OLE_HANDLE
+        Assert.Equal("System.Int32", handleProperty.PropertyType.FullName);
+
+        Assert.Equal(DesignerSerializationVisibility.Visible, handleProperty.SerializationVisibility);
+        Assert.False(handleProperty.CanResetValue(iPictureDisp));
+        Assert.False(handleProperty.ShouldSerializeValue(iPictureDisp));
+        Assert.NotEqual(0, handleProperty.GetValue(iPictureDisp));
+
+        var converter = (Com2ExtendedTypeConverter)handleProperty.Converter;
+        Assert.IsAssignableFrom<Int32Converter>(converter.InnerConverter);
+
+        var typeProperty = properties["Type"];
+        Assert.NotNull(typeProperty);
+        Assert.True(typeProperty.IsReadOnly);
+        Assert.Equal("Misc", typeProperty.Category);
+        Assert.False(typeProperty.IsLocalizable);
+        Assert.Equal("Interop+Oleaut32+IDispatch", typeProperty.ComponentType.FullName);
+
+        Assert.Equal("System.Int16", typeProperty.PropertyType.FullName);
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)(short)typeProperty.GetValue(iPictureDisp));
+    }
+
+    [StaFact]
+    public void ComNativeDescriptor_GetProperties_FromIPicture()
+    {
+        // While we ask for IPicture, the underlying native class also supports IDispatch, so we get support
+        // in the type descriptor.
+        using Bitmap bitmap = new(10, 20);
+        object iPicture = IPicture.CreateObjectFromImage(bitmap);
+        Assert.NotNull(iPicture);
+
+        var properties = TypeDescriptor.GetProperties(iPicture);
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)(short)properties["Type"].GetValue(iPicture));
+    }
+
+    [StaFact]
+    public void ComNativeDescriptor_GetProperties_FromActiveXControl()
+    {
+        Guid guid = typeof(WindowsMediaPlayerClass).GUID;
+        HRESULT hr = Ole32.CoCreateInstance(
+            in guid,
+            IntPtr.Zero,
+            CLSCTX.CLSCTX_INPROC_SERVER,
+            in IID.GetRef<IUnknown>(),
+            out object mediaPlayer);
+
+        Assert.Equal(HRESULT.S_OK, hr);
+
+        var properties = TypeDescriptor.GetProperties(mediaPlayer);
+        Assert.NotNull(properties);
+        Assert.Equal(25, properties.Count);
+
+        var urlProperty = properties["URL"];
+        Assert.IsType<Com2PropertyDescriptor>(urlProperty);
+        Assert.False(urlProperty.IsReadOnly);
+        Assert.Equal("Misc", urlProperty.Category);
+        Assert.False(urlProperty.IsLocalizable);
+        Assert.Equal("Interop+Oleaut32+IDispatch", urlProperty.ComponentType.FullName);
+
+        Assert.Equal("System.String", urlProperty.PropertyType.FullName);
+
+        Assert.Equal(DesignerSerializationVisibility.Visible, urlProperty.SerializationVisibility);
+        Assert.False(urlProperty.CanResetValue(mediaPlayer));
+        Assert.False(urlProperty.ShouldSerializeValue(mediaPlayer));
+        Assert.Equal(string.Empty, urlProperty.GetValue(mediaPlayer));
+
+        urlProperty.SetValue(mediaPlayer, "Movie.mpg");
+
+        // This will be the fully qualified path name, which is based on the current directory.
+        Assert.EndsWith("Movie.mpg", (string)urlProperty.GetValue(mediaPlayer));
+
+        var converter = (Com2ExtendedTypeConverter)urlProperty.Converter;
+        Assert.IsAssignableFrom<StringConverter>(converter.InnerConverter);
+    }
+
+    [WinFormsFact(Skip = "Causes test run to abort, must be run manually.")]
+    public void ComNativeDescriptor_GetProperties_FromSimpleVBControl()
+    {
+        if (RuntimeInformation.ProcessArchitecture != Architecture.X86)
         {
-            using Bitmap bitmap = new(10, 20);
-            object iPictureDisp = IPictureDisp.CreateObjectFromImage(bitmap);
-            Assert.NotNull(iPictureDisp);
-
-            var properties = TypeDescriptor.GetProperties(iPictureDisp);
-            Assert.NotNull(properties);
-            Assert.Equal(5, properties.Count);
-
-            var handleProperty = properties["Handle"];
-            Assert.IsType<Com2PropertyDescriptor>(handleProperty);
-            Assert.True(handleProperty.IsReadOnly);
-            Assert.Equal("Misc", handleProperty.Category);
-            Assert.False(handleProperty.IsLocalizable);
-            Assert.Equal("Interop+Oleaut32+IDispatch", handleProperty.ComponentType.FullName);
-
-            // OLE_HANDLE
-            Assert.Equal("System.Int32", handleProperty.PropertyType.FullName);
-
-            Assert.Equal(DesignerSerializationVisibility.Visible, handleProperty.SerializationVisibility);
-            Assert.False(handleProperty.CanResetValue(iPictureDisp));
-            Assert.False(handleProperty.ShouldSerializeValue(iPictureDisp));
-            Assert.NotEqual(0, handleProperty.GetValue(iPictureDisp));
-
-            var converter = (Com2ExtendedTypeConverter)handleProperty.Converter;
-            Assert.IsAssignableFrom<Int32Converter>(converter.InnerConverter);
-
-            var typeProperty = properties["Type"];
-            Assert.NotNull(typeProperty);
-            Assert.True(typeProperty.IsReadOnly);
-            Assert.Equal("Misc", typeProperty.Category);
-            Assert.False(typeProperty.IsLocalizable);
-            Assert.Equal("Interop+Oleaut32+IDispatch", typeProperty.ComponentType.FullName);
-
-            Assert.Equal("System.Int16", typeProperty.PropertyType.FullName);
-            Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)(short)typeProperty.GetValue(iPictureDisp));
+            return;
         }
 
-        [StaFact]
-        public void ComNativeDescriptor_GetProperties_FromIPicture()
-        {
-            // While we ask for IPicture, the underlying native class also supports IDispatch, so we get support
-            // in the type descriptor.
-            using Bitmap bitmap = new(10, 20);
-            object iPicture = IPicture.CreateObjectFromImage(bitmap);
-            Assert.NotNull(iPicture);
+        // Not much to see with this control, but it does exercise a fair amount of code.
+        ComClasses.VisualBasicSimpleControl.CreateInstance(out object vbcontrol).ThrowOnFailure();
 
-            var properties = TypeDescriptor.GetProperties(iPicture);
-            Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)(short)properties["Type"].GetValue(iPicture));
-        }
+        var properties = TypeDescriptor.GetProperties(vbcontrol);
+        Assert.Empty(properties);
 
-        [StaFact]
-        public void ComNativeDescriptor_GetProperties_FromActiveXControl()
-        {
-            Guid guid = typeof(WindowsMediaPlayerClass).GUID;
-            HRESULT hr = Ole32.CoCreateInstance(
-                in guid,
-                IntPtr.Zero,
-                CLSCTX.CLSCTX_INPROC_SERVER,
-                in IID.GetRef<IUnknown>(),
-                out object mediaPlayer);
+        var events = TypeDescriptor.GetEvents(vbcontrol);
+        Assert.Empty(events);
 
-            Assert.Equal(HRESULT.S_OK, hr);
-
-            var properties = TypeDescriptor.GetProperties(mediaPlayer);
-            Assert.NotNull(properties);
-            Assert.Equal(25, properties.Count);
-
-            var urlProperty = properties["URL"];
-            Assert.IsType<Com2PropertyDescriptor>(urlProperty);
-            Assert.False(urlProperty.IsReadOnly);
-            Assert.Equal("Misc", urlProperty.Category);
-            Assert.False(urlProperty.IsLocalizable);
-            Assert.Equal("Interop+Oleaut32+IDispatch", urlProperty.ComponentType.FullName);
-
-            Assert.Equal("System.String", urlProperty.PropertyType.FullName);
-
-            Assert.Equal(DesignerSerializationVisibility.Visible, urlProperty.SerializationVisibility);
-            Assert.False(urlProperty.CanResetValue(mediaPlayer));
-            Assert.False(urlProperty.ShouldSerializeValue(mediaPlayer));
-            Assert.Equal(string.Empty, urlProperty.GetValue(mediaPlayer));
-
-            urlProperty.SetValue(mediaPlayer, "Movie.mpg");
-
-            // This will be the fully qualified path name, which is based on the current directory.
-            Assert.EndsWith("Movie.mpg", (string)urlProperty.GetValue(mediaPlayer));
-
-            var converter = (Com2ExtendedTypeConverter)urlProperty.Converter;
-            Assert.IsAssignableFrom<StringConverter>(converter.InnerConverter);
-        }
-
-        [WinFormsFact(Skip = "Causes test run to abort, must be run manually.")]
-        public void ComNativeDescriptor_GetProperties_FromSimpleVBControl()
-        {
-            if (RuntimeInformation.ProcessArchitecture != Architecture.X86)
-            {
-                return;
-            }
-
-            // Not much to see with this control, but it does exercise a fair amount of code.
-            ComClasses.VisualBasicSimpleControl.CreateInstance(out object vbcontrol).ThrowOnFailure();
-
-            var properties = TypeDescriptor.GetProperties(vbcontrol);
-            Assert.Empty(properties);
-
-            var events = TypeDescriptor.GetEvents(vbcontrol);
-            Assert.Empty(events);
-
-            var attributes = TypeDescriptor.GetAttributes(vbcontrol);
-            Assert.Equal(2, attributes.Count);
-            BrowsableAttribute browsable = (BrowsableAttribute)attributes[0];
-            Assert.True(browsable.Browsable);
-            DesignTimeVisibleAttribute visible = (DesignTimeVisibleAttribute)attributes[1];
-            Assert.False(visible.Visible);
-        }
+        var attributes = TypeDescriptor.GetAttributes(vbcontrol);
+        Assert.Equal(2, attributes.Count);
+        BrowsableAttribute browsable = (BrowsableAttribute)attributes[0];
+        Assert.True(browsable.Browsable);
+        DesignTimeVisibleAttribute visible = (DesignTimeVisibleAttribute)attributes[1];
+        Assert.False(visible.Visible);
     }
 }

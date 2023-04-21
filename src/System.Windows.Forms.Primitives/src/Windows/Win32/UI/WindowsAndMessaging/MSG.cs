@@ -4,20 +4,19 @@
 
 using System.Windows.Forms;
 
-namespace Windows.Win32.UI.WindowsAndMessaging
-{
-    internal partial struct MSG
-    {
-        public static implicit operator Message(MSG msg)
-            => Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+namespace Windows.Win32.UI.WindowsAndMessaging;
 
-        public static implicit operator MSG(Message message)
-            => new()
-            {
-                hwnd = message.HWND,
-                message = (uint)message.MsgInternal,
-                wParam = message.WParamInternal,
-                lParam = message.LParamInternal
-            };
-    }
+internal partial struct MSG
+{
+    public static implicit operator Message(MSG msg)
+        => Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+
+    public static implicit operator MSG(Message message)
+        => new()
+        {
+            hwnd = message.HWND,
+            message = (uint)message.MsgInternal,
+            wParam = message.WParamInternal,
+            lParam = message.LParamInternal
+        };
 }

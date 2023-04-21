@@ -6,37 +6,36 @@ using System.ComponentModel;
 using System.Globalization;
 using Windows.Win32.System.Ole;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal partial class Com2IPerPropertyBrowsingHandler
 {
-    internal partial class Com2IPerPropertyBrowsingHandler
+    /// <summary>
+    ///  Used to identify the enums that we added.
+    /// </summary>
+    private class Com2IPerPropertyEnumConverter : Com2EnumConverter
     {
-        /// <summary>
-        ///  Used to identify the enums that we added.
-        /// </summary>
-        private class Com2IPerPropertyEnumConverter : Com2EnumConverter
+        private readonly Com2IPerPropertyBrowsingEnum _itemsEnum;
+
+        public Com2IPerPropertyEnumConverter(Com2IPerPropertyBrowsingEnum items) : base(items)
         {
-            private readonly Com2IPerPropertyBrowsingEnum _itemsEnum;
+            _itemsEnum = items;
+        }
 
-            public Com2IPerPropertyEnumConverter(Com2IPerPropertyBrowsingEnum items) : base(items)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destType)
+        {
+            if (destType == typeof(string) && !_itemsEnum.ArraysFetched)
             {
-                _itemsEnum = items;
-            }
-
-            public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destType)
-            {
-                if (destType == typeof(string) && !_itemsEnum.ArraysFetched)
+                object? currentValue = _itemsEnum.Target.GetValue(_itemsEnum.Target.TargetObject);
+                if ((currentValue == value || (currentValue is not null && currentValue.Equals(value)))
+                    && _itemsEnum.Target.TargetObject is IPerPropertyBrowsing.Interface propertyBrowsing
+                    && TryGetDisplayString(propertyBrowsing, _itemsEnum.Target.DISPID, out string? displayString))
                 {
-                    object? currentValue = _itemsEnum.Target.GetValue(_itemsEnum.Target.TargetObject);
-                    if ((currentValue == value || (currentValue is not null && currentValue.Equals(value)))
-                        && _itemsEnum.Target.TargetObject is IPerPropertyBrowsing.Interface propertyBrowsing
-                        && TryGetDisplayString(propertyBrowsing, _itemsEnum.Target.DISPID, out string? displayString))
-                    {
-                        return displayString;
-                    }
+                    return displayString;
                 }
-
-                return base.ConvertTo(context, culture, value, destType);
             }
+
+            return base.ConvertTo(context, culture, value, destType);
         }
     }
 }

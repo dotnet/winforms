@@ -4,30 +4,29 @@
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripDropDownMenu : ToolStripDropDown
 {
-    public partial class ToolStripDropDownMenu : ToolStripDropDown
+    internal class ToolStripDropDownMenuAccessibleObject : ToolStripDropDownAccessibleObject
     {
-        internal class ToolStripDropDownMenuAccessibleObject : ToolStripDropDownAccessibleObject
-        {
-            public ToolStripDropDownMenuAccessibleObject(ToolStripDropDownMenu owner) : base(owner)
-            { }
+        public ToolStripDropDownMenuAccessibleObject(ToolStripDropDownMenu owner) : base(owner)
+        { }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-                => direction switch
-                {
-                    UiaCore.NavigateDirection.Parent when Owner is ToolStripDropDownMenu menu
-                        => menu.OwnerItem?.AccessibilityObject,
-                    _ => base.FragmentNavigate(direction)
-                };
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            => direction switch
+            {
+                UiaCore.NavigateDirection.Parent when Owner is ToolStripDropDownMenu menu
+                    => menu.OwnerItem?.AccessibilityObject,
+                _ => base.FragmentNavigate(direction)
+            };
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
-                propertyID switch
-                {
-                    UiaCore.UIA.IsControlElementPropertyId => true,
-                    UiaCore.UIA.IsContentElementPropertyId => Owner is ContextMenuStrip,
-                    _ => base.GetPropertyValue(propertyID)
-                };
-        }
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+            propertyID switch
+            {
+                UiaCore.UIA.IsControlElementPropertyId => true,
+                UiaCore.UIA.IsContentElementPropertyId => Owner is ContextMenuStrip,
+                _ => base.GetPropertyValue(propertyID)
+            };
     }
 }

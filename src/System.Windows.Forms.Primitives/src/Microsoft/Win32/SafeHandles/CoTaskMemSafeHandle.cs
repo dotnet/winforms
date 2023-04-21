@@ -4,21 +4,20 @@
 
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Win32.SafeHandles
+namespace Microsoft.Win32.SafeHandles;
+
+internal sealed class CoTaskMemSafeHandle : SafeHandle
 {
-    internal sealed class CoTaskMemSafeHandle : SafeHandle
+    internal CoTaskMemSafeHandle() : base(IntPtr.Zero, true)
     {
-        internal CoTaskMemSafeHandle() : base(IntPtr.Zero, true)
-        {
-        }
+    }
 
-        public override bool IsInvalid => IsClosed || handle == IntPtr.Zero;
+    public override bool IsInvalid => IsClosed || handle == IntPtr.Zero;
 
-        protected override bool ReleaseHandle()
-        {
-            Marshal.FreeCoTaskMem(handle);
-            handle = IntPtr.Zero;
-            return true;
-        }
+    protected override bool ReleaseHandle()
+    {
+        Marshal.FreeCoTaskMem(handle);
+        handle = IntPtr.Zero;
+        return true;
     }
 }

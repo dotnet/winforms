@@ -7,14 +7,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.VisualBasic.Testing;
 
-namespace System.Windows.Forms.Analyzers.Tests
+namespace System.Windows.Forms.Analyzers.Tests;
+
+public static partial class VisualBasicCodeFixVerifier<TAnalyzer, TCodeFix>
+    where TAnalyzer : DiagnosticAnalyzer, new()
+    where TCodeFix : CodeFixProvider, new()
 {
-    public static partial class VisualBasicCodeFixVerifier<TAnalyzer, TCodeFix>
-        where TAnalyzer : DiagnosticAnalyzer, new()
-        where TCodeFix : CodeFixProvider, new()
+    public class Test : VisualBasicCodeFixTest<TAnalyzer, TCodeFix, XUnitVerifier>
     {
-        public class Test : VisualBasicCodeFixTest<TAnalyzer, TCodeFix, XUnitVerifier>
-        {
-        }
     }
 }

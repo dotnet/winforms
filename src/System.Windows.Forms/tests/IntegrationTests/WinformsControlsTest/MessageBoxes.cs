@@ -4,65 +4,64 @@
 
 #nullable enable
 
-namespace WinformsControlsTest
+namespace WinformsControlsTest;
+
+public partial class MessageBoxes : Form
 {
-    public partial class MessageBoxes : Form
+    private readonly ToolStripButton _btnOpen;
+    private readonly MessageBoxProxy _messgageBoxProxy = new MessageBoxProxy();
+
+    public MessageBoxes()
     {
-        private readonly ToolStripButton _btnOpen;
-        private readonly MessageBoxProxy _messgageBoxProxy = new MessageBoxProxy();
+        InitializeComponent();
 
-        public MessageBoxes()
+        _btnOpen = new("Show MessageBox")
         {
-            InitializeComponent();
+            Image = (System.Drawing.Bitmap?)(resources.GetObject("OpenDialog")),
+            Enabled = false
+        };
 
-            _btnOpen = new("Show MessageBox")
-            {
-                Image = (System.Drawing.Bitmap?)(resources.GetObject("OpenDialog")),
-                Enabled = false
-            };
-
-            _btnOpen.Click += (s, e) =>
-            {
-                MessageBox.Show(this, _messgageBoxProxy.Text, _messgageBoxProxy.Caption,
-                    _messgageBoxProxy.Buttons, _messgageBoxProxy.Icon,
-                    _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options,
-                    "mspaint.chm", HelpNavigator.KeywordIndex, "ovals");
-            };
-
-            ToolStrip toolbar = GetToolbar();
-            toolbar.Items.Add(new ToolStripSeparator { Visible = true });
-            toolbar.Items.Add(_btnOpen);
-
-            propertyGrid1.SelectedObject = _messgageBoxProxy;
-        }
-
-        private ToolStrip GetToolbar()
+        _btnOpen.Click += (s, e) =>
         {
-            foreach (Control control in propertyGrid1.Controls)
+            MessageBox.Show(this, _messgageBoxProxy.Text, _messgageBoxProxy.Caption,
+                _messgageBoxProxy.Buttons, _messgageBoxProxy.Icon,
+                _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options,
+                "mspaint.chm", HelpNavigator.KeywordIndex, "ovals");
+        };
+
+        ToolStrip toolbar = GetToolbar();
+        toolbar.Items.Add(new ToolStripSeparator { Visible = true });
+        toolbar.Items.Add(_btnOpen);
+
+        propertyGrid1.SelectedObject = _messgageBoxProxy;
+    }
+
+    private ToolStrip GetToolbar()
+    {
+        foreach (Control control in propertyGrid1.Controls)
+        {
+            ToolStrip? toolStrip = control as ToolStrip;
+            if (toolStrip is not null)
             {
-                ToolStrip? toolStrip = control as ToolStrip;
-                if (toolStrip is not null)
-                {
-                    return toolStrip;
-                }
+                return toolStrip;
             }
-
-            throw new MissingMemberException("Unable to find the toolstrip in the PropertyGrid.");
         }
 
-        private void propertyGrid1_SelectedObjectsChanged(object sender, EventArgs e)
-        {
-            _btnOpen.Enabled = propertyGrid1.SelectedObject is not null;
-        }
+        throw new MissingMemberException("Unable to find the toolstrip in the PropertyGrid.");
+    }
 
-        private class MessageBoxProxy
-        {
-            public string Caption { get; set; } = "My Caption";
-            public string Text { get; set; } = "Opps, I did it again...";
-            public MessageBoxButtons Buttons { get; set; }
-            public MessageBoxIcon Icon { get; set; }
-            public MessageBoxDefaultButton DefaultButton { get; set; }
-            public MessageBoxOptions Options { get; set; }
-        }
+    private void propertyGrid1_SelectedObjectsChanged(object sender, EventArgs e)
+    {
+        _btnOpen.Enabled = propertyGrid1.SelectedObject is not null;
+    }
+
+    private class MessageBoxProxy
+    {
+        public string Caption { get; set; } = "My Caption";
+        public string Text { get; set; } = "Opps, I did it again...";
+        public MessageBoxButtons Buttons { get; set; }
+        public MessageBoxIcon Icon { get; set; }
+        public MessageBoxDefaultButton DefaultButton { get; set; }
+        public MessageBoxOptions Options { get; set; }
     }
 }

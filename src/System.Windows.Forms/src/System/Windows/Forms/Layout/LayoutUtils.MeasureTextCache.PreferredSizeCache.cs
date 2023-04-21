@@ -4,21 +4,20 @@
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Layout
+namespace System.Windows.Forms.Layout;
+
+internal partial class LayoutUtils
 {
-    internal partial class LayoutUtils
+    private struct PreferredSizeCache
     {
-        private struct PreferredSizeCache
+        public Size ConstrainingSize;
+
+        public Size PreferredSize;
+
+        public PreferredSizeCache(Size constrainingSize, Size preferredSize)
         {
-            public Size ConstrainingSize;
-
-            public Size PreferredSize;
-
-            public PreferredSizeCache(Size constrainingSize, Size preferredSize)
-            {
-                ConstrainingSize = constrainingSize;
-                PreferredSize = preferredSize;
-            }
+            ConstrainingSize = constrainingSize;
+            PreferredSize = preferredSize;
         }
     }
 }

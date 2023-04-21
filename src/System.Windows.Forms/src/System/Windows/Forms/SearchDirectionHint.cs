@@ -4,13 +4,12 @@
 
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public enum SearchDirectionHint
 {
-    public enum SearchDirectionHint
-    {
-        Up = VIRTUAL_KEY.VK_UP,
-        Down = VIRTUAL_KEY.VK_DOWN,
-        Left = VIRTUAL_KEY.VK_LEFT,
-        Right = VIRTUAL_KEY.VK_RIGHT,
-    }
+    Up = VIRTUAL_KEY.VK_UP,
+    Down = VIRTUAL_KEY.VK_DOWN,
+    Left = VIRTUAL_KEY.VK_LEFT,
+    Right = VIRTUAL_KEY.VK_RIGHT,
 }

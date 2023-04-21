@@ -6,125 +6,124 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  A TypeConverter for LinkLabel.Link objects. Access this class through the TypeDescriptor.
+/// </summary>
+public class LinkConverter : TypeConverter
 {
     /// <summary>
-    ///  A TypeConverter for LinkLabel.Link objects. Access this class through the TypeDescriptor.
+    ///  Determines if this converter can convert an object in the given source
+    ///  type to the native type of the converter.
     /// </summary>
-    public class LinkConverter : TypeConverter
+    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
     {
-        /// <summary>
-        ///  Determines if this converter can convert an object in the given source
-        ///  type to the native type of the converter.
-        /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
+        if (sourceType == typeof(string))
         {
-            if (sourceType == typeof(string))
-            {
-                return true;
-            }
-
-            return base.CanConvertFrom(context, sourceType);
+            return true;
         }
 
-        /// <summary>
-        ///  Gets a value indicating whether this converter can convert an object to the given
-        ///  destination type using the context.
-        /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
-        {
-            if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(string))
-            {
-                return true;
-            }
+        return base.CanConvertFrom(context, sourceType);
+    }
 
-            return base.CanConvertTo(context, destinationType);
+    /// <summary>
+    ///  Gets a value indicating whether this converter can convert an object to the given
+    ///  destination type using the context.
+    /// </summary>
+    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
+    {
+        if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(string))
+        {
+            return true;
         }
 
-        /// <summary>
-        ///  Converts the given object to the converter's native type.
-        /// </summary>
-        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
-        {
-            if (value is string valueStr)
-            {
-                string text = valueStr.Trim();
-                if (text.Length == 0)
-                {
-                    return null;
-                }
+        return base.CanConvertTo(context, destinationType);
+    }
 
-                // Parse 2 integer values.
+    /// <summary>
+    ///  Converts the given object to the converter's native type.
+    /// </summary>
+    public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
+    {
+        if (value is string valueStr)
+        {
+            string text = valueStr.Trim();
+            if (text.Length == 0)
+            {
+                return null;
+            }
+
+            // Parse 2 integer values.
+            culture ??= CultureInfo.CurrentCulture;
+
+            char sep = culture.TextInfo.ListSeparator[0];
+            string[] tokens = text.Split(new char[] { sep });
+            int[] values = new int[tokens.Length];
+
+            if (values.Length != 2)
+            {
+                throw new ArgumentException(
+                    string.Format(
+                        SR.TextParseFailedFormat,
+                        text,
+                        "Start, Length"));
+            }
+
+            TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
+            }
+
+            return new LinkLabel.Link(values[0], values[1]);
+        }
+
+        return base.ConvertFrom(context, culture, value);
+    }
+
+    /// <summary>
+    ///  Converts the given object to another type. The most common types to convert
+    ///  are to and from a string object. The default implementation will make a call
+    ///  to ToString on the object if the object is valid and if the destination
+    ///  type is string. If this cannot convert to the destination type, this will
+    ///  throw a NotSupportedException.
+    /// </summary>
+    public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+    {
+        if (value is LinkLabel.Link link)
+        {
+            if (destinationType == typeof(string))
+            {
                 culture ??= CultureInfo.CurrentCulture;
 
-                char sep = culture.TextInfo.ListSeparator[0];
-                string[] tokens = text.Split(new char[] { sep });
-                int[] values = new int[tokens.Length];
-
-                if (values.Length != 2)
-                {
-                    throw new ArgumentException(
-                        string.Format(
-                            SR.TextParseFailedFormat,
-                            text,
-                            "Start, Length"));
-                }
-
+                string sep = culture.TextInfo.ListSeparator + " ";
                 TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-                for (int i = 0; i < values.Length; i++)
+                string?[] args = new string?[]
                 {
-                    values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
-                }
-
-                return new LinkLabel.Link(values[0], values[1]);
+                    intConverter.ConvertToString(context, culture, link.Start),
+                    intConverter.ConvertToString(context, culture, link.Length)
+                };
+                return string.Join(sep, args);
             }
 
-            return base.ConvertFrom(context, culture, value);
-        }
-
-        /// <summary>
-        ///  Converts the given object to another type. The most common types to convert
-        ///  are to and from a string object. The default implementation will make a call
-        ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string. If this cannot convert to the destination type, this will
-        ///  throw a NotSupportedException.
-        /// </summary>
-        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
-        {
-            if (value is LinkLabel.Link link)
+            if (destinationType == typeof(InstanceDescriptor))
             {
-                if (destinationType == typeof(string))
+                if (link.LinkData is null)
                 {
-                    culture ??= CultureInfo.CurrentCulture;
-
-                    string sep = culture.TextInfo.ListSeparator + " ";
-                    TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-                    string?[] args = new string?[]
-                    {
-                        intConverter.ConvertToString(context, culture, link.Start),
-                        intConverter.ConvertToString(context, culture, link.Length)
-                    };
-                    return string.Join(sep, args);
-                }
-
-                if (destinationType == typeof(InstanceDescriptor))
-                {
-                    if (link.LinkData is null)
-                    {
-                        return new InstanceDescriptor(
-                            typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int) }),
-                            new object[] { link.Start, link.Length },
-                            true);
-                    }
-
                     return new InstanceDescriptor(
-                        typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(object) }),
-                        new object[] { link.Start, link.Length, link.LinkData },
+                        typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int) }),
+                        new object[] { link.Start, link.Length },
                         true);
                 }
-            }
 
-            return base.ConvertTo(context, culture, value, destinationType);
+                return new InstanceDescriptor(
+                    typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(object) }),
+                    new object[] { link.Start, link.Length, link.LinkData },
+                    true);
+            }
         }
+
+        return base.ConvertTo(context, culture, value, destinationType);
     }
 }

@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.VisualStyles
+namespace System.Windows.Forms.VisualStyles;
+
+public enum ScrollBarSizeBoxState
 {
-    public enum ScrollBarSizeBoxState
-    {
-        RightAlign = 1,
-        LeftAlign = 2
-    }
+    RightAlign = 1,
+    LeftAlign = 2
 }

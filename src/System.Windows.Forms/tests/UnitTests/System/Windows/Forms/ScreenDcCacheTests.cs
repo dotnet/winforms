@@ -2,26 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Tests
-{
-    public class ScreenDcCacheTests
-    {
-        [Fact(Skip = "Run manually, takes a few minutes and is very resource intensive.")]
-        public void StressTest()
-        {
-            Random random = new Random();
-            using ScreenDcCache cache = new ScreenDcCache();
+namespace System.Windows.Forms.Tests;
 
-            for (int i = 0; i < 10000; i++)
+public class ScreenDcCacheTests
+{
+    [Fact(Skip = "Run manually, takes a few minutes and is very resource intensive.")]
+    public void StressTest()
+    {
+        Random random = new Random();
+        using ScreenDcCache cache = new ScreenDcCache();
+
+        for (int i = 0; i < 10000; i++)
+        {
+            Thread.Sleep(random.Next(5));
+            Task.Run(() =>
             {
+                using var screen = cache.Acquire();
+                Assert.False(screen.HDC.IsNull);
                 Thread.Sleep(random.Next(5));
-                Task.Run(() =>
-                {
-                    using var screen = cache.Acquire();
-                    Assert.False(screen.HDC.IsNull);
-                    Thread.Sleep(random.Next(5));
-                });
-            }
+            });
         }
     }
 }

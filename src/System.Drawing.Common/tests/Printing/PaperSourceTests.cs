@@ -26,68 +26,67 @@
 //  Andy Hume <andyhume32@yahoo.co.uk>
 //
 
-namespace System.Drawing.Printing.Tests
+namespace System.Drawing.Printing.Tests;
+
+public class PaperSourceTests
 {
-    public class PaperSourceTests
+    [Fact]
+    public void Ctor_Default()
     {
-        [Fact]
-        public void Ctor_Default()
+        var source = new PaperSource();
+        Assert.Equal(PaperSourceKind.Custom, source.Kind);
+        Assert.Equal((int)PaperSourceKind.Custom, source.RawKind);
+        Assert.Empty(source.SourceName);
+    }
+
+    [Theory]
+    [InlineData((int)PaperSourceKind.Custom, PaperSourceKind.Custom)]
+    [InlineData((int)PaperSourceKind.Upper, PaperSourceKind.Upper)]
+    [InlineData((int)PaperSourceKind.TractorFeed, PaperSourceKind.TractorFeed)]
+    [InlineData((int)PaperSourceKind.SmallFormat, PaperSourceKind.SmallFormat)]
+    [InlineData((int)PaperSourceKind.Middle, PaperSourceKind.Middle)]
+    [InlineData((int)PaperSourceKind.ManualFeed, PaperSourceKind.ManualFeed)]
+    [InlineData((int)PaperSourceKind.Manual, PaperSourceKind.Manual)]
+    [InlineData((int)PaperSourceKind.Lower, PaperSourceKind.Lower)]
+    [InlineData((int)PaperSourceKind.LargeFormat, PaperSourceKind.LargeFormat)]
+    [InlineData((int)PaperSourceKind.LargeCapacity, PaperSourceKind.LargeCapacity)]
+    [InlineData((int)PaperSourceKind.FormSource, PaperSourceKind.FormSource)]
+    [InlineData((int)PaperSourceKind.Envelope, PaperSourceKind.Envelope)]
+    [InlineData((int)PaperSourceKind.Cassette, PaperSourceKind.Cassette)]
+    [InlineData((int)PaperSourceKind.AutomaticFeed, PaperSourceKind.AutomaticFeed)]
+    [InlineData(int.MaxValue, PaperSourceKind.Custom)]
+    [InlineData(int.MinValue, (PaperSourceKind)int.MinValue)]
+    [InlineData(0, (PaperSourceKind)0)]
+    [InlineData(256, PaperSourceKind.Custom)]
+    public void RawKind_Set_GetReturnsExpected(int value, PaperSourceKind expectedKind)
+    {
+        var source = new PaperSource
         {
-            var source = new PaperSource();
-            Assert.Equal(PaperSourceKind.Custom, source.Kind);
-            Assert.Equal((int)PaperSourceKind.Custom, source.RawKind);
-            Assert.Empty(source.SourceName);
-        }
+            RawKind = value
+        };
+        Assert.Equal(value, source.RawKind);
+        Assert.Equal(expectedKind, source.Kind);
 
-        [Theory]
-        [InlineData((int)PaperSourceKind.Custom, PaperSourceKind.Custom)]
-        [InlineData((int)PaperSourceKind.Upper, PaperSourceKind.Upper)]
-        [InlineData((int)PaperSourceKind.TractorFeed, PaperSourceKind.TractorFeed)]
-        [InlineData((int)PaperSourceKind.SmallFormat, PaperSourceKind.SmallFormat)]
-        [InlineData((int)PaperSourceKind.Middle, PaperSourceKind.Middle)]
-        [InlineData((int)PaperSourceKind.ManualFeed, PaperSourceKind.ManualFeed)]
-        [InlineData((int)PaperSourceKind.Manual, PaperSourceKind.Manual)]
-        [InlineData((int)PaperSourceKind.Lower, PaperSourceKind.Lower)]
-        [InlineData((int)PaperSourceKind.LargeFormat, PaperSourceKind.LargeFormat)]
-        [InlineData((int)PaperSourceKind.LargeCapacity, PaperSourceKind.LargeCapacity)]
-        [InlineData((int)PaperSourceKind.FormSource, PaperSourceKind.FormSource)]
-        [InlineData((int)PaperSourceKind.Envelope, PaperSourceKind.Envelope)]
-        [InlineData((int)PaperSourceKind.Cassette, PaperSourceKind.Cassette)]
-        [InlineData((int)PaperSourceKind.AutomaticFeed, PaperSourceKind.AutomaticFeed)]
-        [InlineData(int.MaxValue, PaperSourceKind.Custom)]
-        [InlineData(int.MinValue, (PaperSourceKind)int.MinValue)]
-        [InlineData(0, (PaperSourceKind)0)]
-        [InlineData(256, PaperSourceKind.Custom)]
-        public void RawKind_Set_GetReturnsExpected(int value, PaperSourceKind expectedKind)
+        // Set same.
+        source.RawKind = value;
+        Assert.Equal(value, source.RawKind);
+        Assert.Equal(expectedKind, source.Kind);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("sourceName")]
+    public void SourceName_Set_GetReturnsExpected(string value)
+    {
+        var source = new PaperSource
         {
-            var source = new PaperSource
-            {
-                RawKind = value
-            };
-            Assert.Equal(value, source.RawKind);
-            Assert.Equal(expectedKind, source.Kind);
+            SourceName = value
+        };
+        Assert.Equal(value, source.SourceName);
 
-            // Set same.
-            source.RawKind = value;
-            Assert.Equal(value, source.RawKind);
-            Assert.Equal(expectedKind, source.Kind);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("sourceName")]
-        public void SourceName_Set_GetReturnsExpected(string value)
-        {
-            var source = new PaperSource
-            {
-                SourceName = value
-            };
-            Assert.Equal(value, source.SourceName);
-
-            // Set same.
-            source.SourceName = value;
-            Assert.Equal(value, source.SourceName);
-        }
+        // Set same.
+        source.SourceName = value;
+        Assert.Equal(value, source.SourceName);
     }
 }

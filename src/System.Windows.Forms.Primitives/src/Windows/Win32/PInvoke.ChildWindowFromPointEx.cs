@@ -4,16 +4,15 @@
 
 using System.Drawing;
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    public static HWND ChildWindowFromPointEx<T>(T hwndParent, Point pt, CWP_FLAGS uFlags)
+        where T : IHandle<HWND>
     {
-        public static HWND ChildWindowFromPointEx<T>(T hwndParent, Point pt, CWP_FLAGS uFlags)
-            where T : IHandle<HWND>
-        {
-            HWND result = ChildWindowFromPointEx(hwndParent.Handle, pt, uFlags);
-            GC.KeepAlive(hwndParent.Wrapper);
-            return result;
-        }
+        HWND result = ChildWindowFromPointEx(hwndParent.Handle, pt, uFlags);
+        GC.KeepAlive(hwndParent.Wrapper);
+        return result;
     }
 }

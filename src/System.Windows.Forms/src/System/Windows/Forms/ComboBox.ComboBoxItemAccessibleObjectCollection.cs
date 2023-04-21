@@ -4,28 +4,27 @@
 
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ComboBox
 {
-    public partial class ComboBox
+    internal class ComboBoxItemAccessibleObjectCollection : Dictionary<Entry, ComboBoxItemAccessibleObject>
     {
-        internal class ComboBoxItemAccessibleObjectCollection : Dictionary<Entry, ComboBoxItemAccessibleObject>
+        private readonly ComboBox _owningComboBox;
+
+        public ComboBoxItemAccessibleObjectCollection(ComboBox owningComboBox)
         {
-            private readonly ComboBox _owningComboBox;
+            _owningComboBox = owningComboBox;
+        }
 
-            public ComboBoxItemAccessibleObjectCollection(ComboBox owningComboBox)
+        public ComboBoxItemAccessibleObject GetComboBoxItemAccessibleObject(Entry key)
+        {
+            if (!ContainsKey(key))
             {
-                _owningComboBox = owningComboBox;
+                Add(key, new ComboBoxItemAccessibleObject(_owningComboBox, key));
             }
 
-            public ComboBoxItemAccessibleObject GetComboBoxItemAccessibleObject(Entry key)
-            {
-                if (!ContainsKey(key))
-                {
-                    Add(key, new ComboBoxItemAccessibleObject(_owningComboBox, key));
-                }
-
-                return this[key];
-            }
+            return this[key];
         }
     }
 }
