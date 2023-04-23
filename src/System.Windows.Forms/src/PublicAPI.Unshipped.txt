@@ -1,0 +1,7 @@
+System.Windows.Forms.TaskDialogLinkClickedEventArgs
+System.Windows.Forms.TaskDialogLinkClickedEventArgs.LinkHref.get -> string!
+System.Windows.Forms.TaskDialogLinkClickedEventArgs.TaskDialogLinkClickedEventArgs(string! linkHref) -> void
+System.Windows.Forms.TaskDialogPage.EnableLinks.get -> bool
+System.Windows.Forms.TaskDialogPage.EnableLinks.set -> void
+System.Windows.Forms.TaskDialogPage.LinkClicked -> System.EventHandler<System.Windows.Forms.TaskDialogLinkClickedEventArgs!>?
+System.Windows.Forms.TaskDialogPage.OnLinkClicked(System.Windows.Forms.TaskDialogLinkClickedEventArgs! e) -> void

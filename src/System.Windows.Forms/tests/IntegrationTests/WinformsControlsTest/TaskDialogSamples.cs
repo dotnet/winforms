@@ -38,6 +38,7 @@ public class TaskDialogSamples : Form
         AddButtonForAction("Multi-Page Dialog (modeless)", ShowMultiPageTaskDialog);
         AddButtonForAction("Elevation Required", ShowElevatedProcessTaskDialog);
         AddButtonForAction("Events Demo", ShowEventsDemoTaskDialog);
+        AddButtonForAction("Hyperlinks Demo", ShowHyperlinksDemoTaskDialog);
     }
 
     private void ShowSimpleTaskDialog()
@@ -527,5 +528,24 @@ public class TaskDialogSamples : Form
 
         var dialogResult = TaskDialog.ShowDialog(page1);
         Console.WriteLine($"---> Dialog Result: {dialogResult}");
+    }
+
+    private void ShowHyperlinksDemoTaskDialog()
+    {
+        var page = new TaskDialogPage
+        {
+            Caption = Text,
+            Text = """<a href="Href 1">Link with accelerator &1</a> Text with literal '&&' <a href="Href 2">Link with accelerator &2</a>""",
+            Footnote = new() { Text = """<a href="Href 3">Link with literal '&&'</a> Text with &accelerator""" },
+            Expander = new() { Text = """<a href="Href 4">Link 4</a>""" },
+            EnableLinks = true,
+        };
+
+        page.LinkClicked += (_, e) =>
+        {
+            page.Heading = "Clicked: " + e.LinkHref;
+        };
+
+        TaskDialog.ShowDialog(page);
     }
 }
