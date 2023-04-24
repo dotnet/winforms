@@ -248,7 +248,7 @@ public class PrintDocumentTests : FileCleanupTestBase
     {
         using (var document = new PrintDocument())
         {
-            var expected = string.Format("[PrintDocument {0}]", document.DocumentName);
+            var expected = $"[PrintDocument {document.DocumentName}]";
             Assert.Equal(expected, document.ToString());
         }
     }

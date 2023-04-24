@@ -219,7 +219,7 @@ public class MetafileFulltrustTest
                 Assert.Equal(MetafileType.EmfPlusOnly, mh.Type);
                 break;
             default:
-                Assert.True(false, string.Format("Unknown EmfType '{0}'", type));
+                Assert.True(false, $"Unknown EmfType '{type}'");
                 break;
         }
     }
@@ -326,7 +326,7 @@ public class MetafileFulltrustTest
 
     private void CreateFilename(EmfType type, bool single)
     {
-        string name = string.Format("{0}-{1}.emf", type, single ? "Single" : "Multiple");
+        string name = $"{type}-{(single ? "Single" : "Multiple")}.emf";
         string filename = Path.Combine(Path.GetTempPath(), name);
         Metafile mf;
         using (Bitmap bmp = new Bitmap(100, 100, PixelFormat.Format32bppArgb))
