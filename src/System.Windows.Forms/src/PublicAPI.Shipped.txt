@@ -536,6 +536,7 @@ System.Windows.Forms.AutoCompleteStringCollection.this[int index].set -> void
 ~System.Windows.Forms.ComboBox.FindStringExact(string s, int startIndex) -> int
 ~System.Windows.Forms.ComboBox.Items.get -> System.Windows.Forms.ComboBox.ObjectCollection
 System.Windows.Forms.ComboBox.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object![]! items) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.Contains(object? value) -> bool
 System.Windows.Forms.ComboBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
@@ -837,6 +838,7 @@ System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.
 System.Windows.Forms.HtmlWindowCollection.this[string! windowId].get -> System.Windows.Forms.HtmlWindow?
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection! items) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem![]! items) -> void
 System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem! item) -> bool
 System.Windows.Forms.ListView.ListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
 System.Windows.Forms.ListView.ListViewItemCollection.Find(string! key, bool searchAllSubItems) -> System.Windows.Forms.ListViewItem![]!
@@ -1447,6 +1449,7 @@ virtual System.Windows.Forms.ToolStripPanelRow.OnLayout(System.Windows.Forms.Lay
 ~virtual System.Windows.Forms.TreeNodeCollection.Add(string key, string text, string imageKey, string selectedImageKey) -> System.Windows.Forms.TreeNode
 ~virtual System.Windows.Forms.TreeNodeCollection.Add(string text) -> System.Windows.Forms.TreeNode
 ~virtual System.Windows.Forms.TreeNodeCollection.Add(System.Windows.Forms.TreeNode node) -> int
+~virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode[] nodes) -> void
 ~virtual System.Windows.Forms.TreeNodeCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.TreeNodeCollection.IndexOfKey(string key) -> int
 ~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string key, string text) -> System.Windows.Forms.TreeNode
@@ -7554,6 +7557,7 @@ System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.I
 System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Icon! value) -> void
 System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value) -> void
 System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value, System.Drawing.Color transparentColor) -> int
+System.Windows.Forms.ImageList.ImageCollection.AddRange(System.Drawing.Image![]! images) -> void
 System.Windows.Forms.ImageList.ImageCollection.AddStrip(System.Drawing.Image! value) -> int
 System.Windows.Forms.ImageList.ImageCollection.Clear() -> void
 System.Windows.Forms.ImageList.ImageCollection.Contains(System.Drawing.Image! image) -> bool
@@ -8102,6 +8106,7 @@ System.Windows.Forms.ListBox.MultiColumn.get -> bool
 System.Windows.Forms.ListBox.MultiColumn.set -> void
 System.Windows.Forms.ListBox.ObjectCollection
 System.Windows.Forms.ListBox.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(object![]! items) -> void
 System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection! value) -> void
 System.Windows.Forms.ListBox.ObjectCollection.Contains(object! value) -> bool
 System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
@@ -8419,6 +8424,7 @@ System.Windows.Forms.ListViewGroupCollapsedState.Expanded = 1 -> System.Windows.
 System.Windows.Forms.ListViewGroupCollection
 System.Windows.Forms.ListViewGroupCollection.Add(string? key, string? headerText) -> System.Windows.Forms.ListViewGroup!
 System.Windows.Forms.ListViewGroupCollection.Add(System.Windows.Forms.ListViewGroup! group) -> int
+System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroup![]! groups) -> void
 System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroupCollection! groups) -> void
 System.Windows.Forms.ListViewGroupCollection.Clear() -> void
 System.Windows.Forms.ListViewGroupCollection.Contains(System.Windows.Forms.ListViewGroup! value) -> bool
@@ -8499,7 +8505,9 @@ System.Windows.Forms.ListViewItem.ListViewSubItemCollection
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(System.Windows.Forms.ListViewItem.ListViewSubItem! item) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items) -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Clear() -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Contains(System.Windows.Forms.ListViewItem.ListViewSubItem? subItem) -> bool
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Count.get -> int
@@ -10118,6 +10126,7 @@ System.Windows.Forms.TabControl.TabPageCollection.Add(string? key, string? text,
 System.Windows.Forms.TabControl.TabPageCollection.Add(string? key, string? text, string! imageKey) -> void
 System.Windows.Forms.TabControl.TabPageCollection.Add(string? text) -> void
 System.Windows.Forms.TabControl.TabPageCollection.Add(System.Windows.Forms.TabPage! value) -> void
+System.Windows.Forms.TabControl.TabPageCollection.AddRange(System.Windows.Forms.TabPage![]! pages) -> void
 System.Windows.Forms.TabControl.TabPageCollection.Contains(System.Windows.Forms.TabPage! page) -> bool
 System.Windows.Forms.TabControl.TabPageCollection.Count.get -> int
 System.Windows.Forms.TabControl.TabPageCollection.GetEnumerator() -> System.Collections.IEnumerator!
@@ -13125,6 +13134,7 @@ virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text) -
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text, int width) -> System.Windows.Forms.ColumnHeader!
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign) -> System.Windows.Forms.ColumnHeader!
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(System.Windows.Forms.ColumnHeader! value) -> int
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader![]! values) -> void
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Clear() -> void
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.ContainsKey(string? key) -> bool
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.IndexOfKey(string? key) -> int
