@@ -375,3 +375,7 @@ Temporary Items
 InteropTests/NativeTests/out
 /src/System.Windows.Forms/src/comctl32.dll
 *.received.*
+
+# Normally do not want to pick up changes in the scratch project, this will ignore files that aren't already tracked.
+# 'git update-index --assume-unchanged <filename>' will allow ignoring changes for tracked files.
+**/ScratchProject/
