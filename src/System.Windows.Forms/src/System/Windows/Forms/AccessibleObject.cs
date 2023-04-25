@@ -200,7 +200,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     public virtual string? Value
     {
-        // This might be better to never return null?
+        // This might be better to never return null or return null instead of string.Empty?
         get => SystemIAccessible is null ? string.Empty : SystemIAccessible.TryGetValue(CHILDID_SELF);
         set => SystemIAccessible.TrySetValue(CHILDID_SELF, value);
     }
@@ -1929,7 +1929,8 @@ public unsafe partial class AccessibleObject :
         if (result.Succeeded && accessible is not null)
         {
 #if DEBUG
-            // AccessibleObject is not set up for deterministic disposal.
+            // AccessibleObject is not set up for deterministic disposal (we can't create them in a using block),
+            // As such, these handles will always be finalized.
             SystemIAccessible = new(accessible, takeOwnership: true, trackDisposal: false);
 #else
             SystemIAccessible = new(accessible, takeOwnership: true);

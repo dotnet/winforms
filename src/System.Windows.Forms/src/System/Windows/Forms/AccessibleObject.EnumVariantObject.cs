@@ -45,7 +45,7 @@ public partial class AccessibleObject
         HRESULT IEnumVARIANT.Interface.Reset()
         {
             _currentChild = 0;
-            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnum(out HRESULT result);
+            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnumVARIANT(out HRESULT result);
             if (result.Succeeded)
             {
                 enumVariant.Value->Reset();
@@ -61,7 +61,7 @@ public partial class AccessibleObject
         {
             _currentChild += celt;
 
-            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnum(out HRESULT result);
+            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnumVARIANT(out HRESULT result);
             if (result.Succeeded)
             {
                 enumVariant.Value->Skip(celt);
@@ -134,7 +134,7 @@ public partial class AccessibleObject
         {
             uint fetched = 0;
 
-            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnum(out HRESULT result);
+            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnumVARIANT(out HRESULT result);
             if (result.Succeeded)
             {
                 enumVariant.Value->Next(celt, rgVar, &fetched);
@@ -168,7 +168,7 @@ public partial class AccessibleObject
         /// </remarks>
         private unsafe void NextFromSystemReordered(uint celt, VARIANT* rgVar, uint* pCeltFetched, int[] newOrder)
         {
-            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnum(out HRESULT result);
+            using ComScope<IEnumVARIANT> enumVariant = TryGetSystemEnumVARIANT(out HRESULT result);
             if (result.Failed)
             {
                 return;
@@ -224,7 +224,7 @@ public partial class AccessibleObject
             }
         }
 
-        private ComScope<IEnumVARIANT> TryGetSystemEnum(out HRESULT result)
+        private ComScope<IEnumVARIANT> TryGetSystemEnumVARIANT(out HRESULT result)
         {
             if (_owner._systemIEnumVariant is { } systemEnum)
             {

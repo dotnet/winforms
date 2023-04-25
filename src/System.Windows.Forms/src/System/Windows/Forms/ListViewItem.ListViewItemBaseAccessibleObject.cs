@@ -193,16 +193,17 @@ public partial class ListViewItem
 
                 return new int[]
                 {
-                owningListViewRuntimeId[0],
-                owningListViewRuntimeId[1],
-                4, // Win32-control specific RuntimeID constant.
-                // RuntimeId uses hash code instead of item's index. When items are removed,
-                // indexes of below items shift. But when UiaDisconnectProvider is called for item
-                // with updated index, it in fact disconnects the item which had the index initially,
-                // apparently because of lack of synchronization with RuntimeId updates.
-                // Similar applies for items within a group, where adding the group's index
-                // was preventing from correct disconnection of items on removal.
-                _owningItem.GetHashCode()
+                    owningListViewRuntimeId[0],
+                    owningListViewRuntimeId[1],
+                    // Win32-control specific RuntimeID constant.
+                    4,
+                    // RuntimeId uses hash code instead of item's index. When items are removed,
+                    // indexes of below items shift. But when UiaDisconnectProvider is called for item
+                    // with updated index, it in fact disconnects the item which had the index initially,
+                    // apparently because of lack of synchronization with RuntimeId updates.
+                    // Similar applies for items within a group, where adding the group's index
+                    // was preventing from correct disconnection of items on removal.
+                    _owningItem.GetHashCode()
                 };
             }
         }
