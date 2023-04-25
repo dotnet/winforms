@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Accessibility;
 
 internal static partial class Interop
 {
@@ -12,7 +11,7 @@ internal static partial class Interop
         [ComImport]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid("E44C3566-915D-4070-99C6-047BFF5A08F5")]
-        public interface ILegacyIAccessibleProvider
+        public unsafe interface ILegacyIAccessibleProvider
         {
             void Select(int flagsSelect);
 
@@ -20,7 +19,8 @@ internal static partial class Interop
 
             void SetValue([MarshalAs(UnmanagedType.LPWStr)] string szValue);
 
-            IAccessible? GetIAccessible();
+            [PreserveSig]
+            HRESULT GetIAccessible(Windows.Win32.UI.Accessibility.IAccessible** ppAccessible);
 
             int ChildId { get; }
 

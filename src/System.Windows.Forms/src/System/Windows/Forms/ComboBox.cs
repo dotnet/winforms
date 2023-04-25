@@ -3022,9 +3022,6 @@ public partial class ComboBox : ListControl
     protected override void OnDisplayMemberChanged(EventArgs e)
     {
         base.OnDisplayMemberChanged(e);
-
-        //
-
         RefreshItems();
     }
 
@@ -3058,11 +3055,11 @@ public partial class ComboBox : ListControl
                 // childID = CHILDID_SELF - 1 (the -1 will resolve to CHILDID_SELF when we call NotifyWinEvent)
                 AccessibilityNotifyClients(AccessibleEvents.Focus, childID: -1);
             }
-            else if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
+            else if (_childEdit is not null && _childEdit.Handle != 0)
             {
                 // Focus on edit field so that its changes are announced, e.g. when selecting items by arrows.
                 NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(_childEdit, _childEdit.Handle),
-                    objType: OBJID.CLIENT, objID: NativeMethods.CHILDID_SELF);
+                    objType: OBJID.CLIENT, objID: (int)PInvoke.CHILDID_SELF);
             }
 
             // Notify Collapsed/expanded property change.

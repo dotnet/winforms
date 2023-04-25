@@ -1586,7 +1586,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetIAccessible(IUnknown*
 
         // Negative tests
         hr = pLegacyIAccessibleProvider->GetIAccessible(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

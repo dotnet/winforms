@@ -69,7 +69,7 @@ public partial class TrackBar
             {
                 // The "GetChildId" method returns to the id of the trackbar element,
                 // which allows to use the native "accDoDefaultAction" method when the "Invoke" method is called
-                ParentInternal.GetSystemIAccessibleInternal()?.accDoDefaultAction(GetChildId());
+                ParentInternal.SystemIAccessible.TryDoDefaultAction(GetChildId());
             }
         }
     }

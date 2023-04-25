@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class TabControl
 {
-    internal class TabControlAccessibleObject : ControlAccessibleObject
+    internal sealed class TabControlAccessibleObject : ControlAccessibleObject
     {
         private readonly TabControl _owningTabControl;
 
@@ -22,15 +22,14 @@ public partial class TabControl
         {
             get
             {
-                if (!_owningTabControl.IsHandleCreated || GetSystemIAccessibleInternal() is null)
+                if (!_owningTabControl.IsHandleCreated)
                 {
                     return Rectangle.Empty;
                 }
 
-                // The "NativeMethods.CHILDID_SELF" constant returns to the id of the TabPage,
-                // which allows to use the native "accLocation" method to get the "Bounds" property
-                GetSystemIAccessibleInternal()!.accLocation(out int left, out int top, out int width, out int height, NativeMethods.CHILDID_SELF);
-                return new(left, top, width, height);
+                // The CHILDID_SELF constant returns to the id of the TabPage, which allows to use the native
+                // "accLocation" method to get the "Bounds" property
+                return SystemIAccessible.TryGetLocation(CHILDID_SELF);
             }
         }
 
@@ -40,11 +39,9 @@ public partial class TabControl
                 : AccessibleRole.PageTabList;
 
         public override AccessibleStates State
-            // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
-            // which allows to use the native "get_accState" method to get the "State" property
-            => GetSystemIAccessibleInternal()?.get_accState(NativeMethods.CHILDID_SELF) is object accState
-                ? (AccessibleStates)accState
-                : AccessibleStates.None;
+            // The CHILDID_SELF constant returns to the id of the trackbar, which allows to use the native
+            // "get_accState" method to get the "State" property
+            => SystemIAccessible.TryGetState(CHILDID_SELF);
 
         internal override IRawElementProviderFragmentRoot FragmentRoot => this;
 

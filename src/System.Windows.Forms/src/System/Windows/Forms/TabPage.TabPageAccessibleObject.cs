@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class TabPage
 {
-    internal class TabPageAccessibleObject : ControlAccessibleObject
+    internal sealed class TabPageAccessibleObject : ControlAccessibleObject
     {
         private readonly TabPage _owningTabPage;
 
@@ -22,22 +22,18 @@ public partial class TabPage
         {
             get
             {
-                if (!_owningTabPage.IsHandleCreated || GetSystemIAccessibleInternal() is null)
+                if (!_owningTabPage.IsHandleCreated)
                 {
                     return Rectangle.Empty;
                 }
 
-                // The "NativeMethods.CHILDID_SELF" constant returns to the id of the TabPage,
-                // which allows to use the native "accLocation" method to get the "Bounds" property
-                GetSystemIAccessibleInternal()!.accLocation(out int left, out int top, out int width, out int height, NativeMethods.CHILDID_SELF);
-                return new(left, top, width, height);
+                // The CHILDID_SELF constant returns to the id of the TabPage, which allows to use the native
+                // "accLocation" method to get the "Bounds" property
+                return SystemIAccessible.TryGetLocation(CHILDID_SELF);
             }
         }
 
-        public override AccessibleStates State
-            => GetSystemIAccessibleInternal()?.get_accState(GetChildId()) is object accState
-                ? (AccessibleStates)accState
-                : AccessibleStates.None;
+        public override AccessibleStates State => SystemIAccessible.TryGetState(GetChildId());
 
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => OwningTabControl?.AccessibilityObject;
 
@@ -58,9 +54,8 @@ public partial class TabPage
             return _owningTabPage.Controls[index].AccessibilityObject;
         }
 
-        public override int GetChildCount() => _owningTabPage.IsHandleCreated
-                                                ? _owningTabPage.Controls.Count
-                                                : -1;
+        public override int GetChildCount()
+            => _owningTabPage.IsHandleCreated ? _owningTabPage.Controls.Count : -1;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {

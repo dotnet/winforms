@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
@@ -12,37 +11,31 @@ namespace System.Windows.Forms;
 public partial class ComboBox
 {
     /// <summary>
-    ///  Represents the ComboBox item accessible object.
+    ///  Represents the <see cref="ComboBox"/> item accessible object.
     /// </summary>
-    internal class ComboBoxItemAccessibleObject : AccessibleObject
+    internal sealed class ComboBoxItemAccessibleObject : AccessibleObject
     {
         private readonly ComboBox _owningComboBox;
         private readonly Entry _owningItem;
-        private IAccessible? _systemIAccessible;
 
         /// <summary>
-        ///  Initializes new instance of ComboBox item accessible object.
+        ///  Initializes new instance of <see cref="ComboBox"/> item accessible object.
         /// </summary>
-        /// <param name="owningComboBox">The owning ComboBox.</param>
-        /// <param name="owningItem">The owning ComboBox item.</param>
+        /// <param name="owningComboBox">The owning <see cref="ComboBox"/>.</param>
+        /// <param name="owningItem">The owning <see cref="ComboBox"/> item.</param>
         public ComboBoxItemAccessibleObject(ComboBox owningComboBox, Entry owningItem)
         {
             _owningComboBox = owningComboBox.OrThrowIfNull();
             _owningItem = owningItem;
-
-            _systemIAccessible = _owningComboBox.ChildListAccessibleObject.GetSystemIAccessibleInternal();
         }
 
-        /// <summary>
-        ///  Gets the ComboBox Item bounds.
-        /// </summary>
         public override Rectangle Bounds
         {
             get
             {
                 int currentIndex = GetCurrentIndex();
                 var listHandle = _owningComboBox.GetListHandle();
-                RECT itemRect = default(RECT);
+                RECT itemRect = default;
 
                 int result = (int)PInvoke.SendMessage(
                     listHandle,
@@ -62,10 +55,8 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Gets the ComboBox item default action.
-        /// </summary>
-        public override string? DefaultAction => _systemIAccessible?.accDefaultAction[GetChildId()];
+        public override string? DefaultAction
+            => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
@@ -74,7 +65,7 @@ public partial class ComboBox
                 return _owningComboBox.ChildListAccessibleObject;
             }
 
-            if (!(_owningComboBox.ChildListAccessibleObject is ComboBoxChildListUiaProvider comboBoxChildListUiaProvider))
+            if (_owningComboBox.ChildListAccessibleObject is not ComboBoxChildListUiaProvider comboBoxChildListUiaProvider)
             {
                 return base.FragmentNavigate(direction);
             }
@@ -126,55 +117,32 @@ public partial class ComboBox
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        /// <summary>
-        ///  Gets the help text.
-        /// </summary>
-        public override string? Help => _systemIAccessible?.accHelp[GetChildId()];
+        public override string? Help
+            => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetHelp(GetChildId());
 
-        /// <summary>
-        ///  Indicates whether specified pattern is supported.
-        /// </summary>
-        /// <param name="patternId">The pattern ID.</param>
-        /// <returns>True if specified </returns>
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                patternId == UiaCore.UIA.InvokePatternId ||
-                patternId == UiaCore.UIA.ScrollItemPatternId ||
-                patternId == UiaCore.UIA.SelectionItemPatternId)
+            switch (patternId)
             {
-                return true;
+                case UiaCore.UIA.LegacyIAccessiblePatternId:
+                case UiaCore.UIA.InvokePatternId:
+                case UiaCore.UIA.ScrollItemPatternId:
+                case UiaCore.UIA.SelectionItemPatternId:
+                    return true;
+                default:
+                    return base.IsPatternSupported(patternId);
             }
-
-            return base.IsPatternSupported(patternId);
         }
 
-        /// <summary>
-        ///  Gets or sets the accessible name.
-        /// </summary>
         public override string? Name
         {
             get => _owningComboBox is null ? base.Name : _owningComboBox.GetItemText(_owningItem.Item);
             set => base.Name = value;
         }
 
-        /// <summary>
-        ///  Gets the accessible role.
-        /// </summary>
         public override AccessibleRole Role
-        {
-            get
-            {
-                var accRole = _systemIAccessible?.get_accRole(GetChildId());
-                return accRole is not null
-                    ? (AccessibleRole)accRole
-                    : AccessibleRole.None;
-            }
-        }
+            => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetRole(GetChildId());
 
-        /// <summary>
-        ///  Gets the runtime ID.
-        /// </summary>
         internal override int[] RuntimeId
             => new int[]
             {
@@ -184,27 +152,18 @@ public partial class ComboBox
                 _owningItem.GetHashCode()
             };
 
-        /// <summary>
-        ///  Gets the accessible state.
-        /// </summary>
         public override AccessibleStates State
         {
             get
             {
-                var accState = _systemIAccessible?.get_accState(GetChildId());
-                if (accState is null)
-                {
-                    return AccessibleStates.None;
-                }
-
-                AccessibleStates accessibleStates = (AccessibleStates)accState;
+                AccessibleStates state = _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetState(GetChildId());
 
                 if (!_owningComboBox.DroppedDown || !_owningComboBox.ChildListAccessibleObject.Bounds.IntersectsWith(Bounds))
                 {
-                    accessibleStates |= AccessibleStates.Offscreen;
+                    state |= AccessibleStates.Offscreen;
                 }
 
-                return accessibleStates;
+                return state;
             }
         }
 

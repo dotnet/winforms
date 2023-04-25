@@ -38,8 +38,6 @@ internal static class NativeMethods
     public const int XBUTTON1 = 0x0001;
     public const int XBUTTON2 = 0x0002;
 
-    public const int CHILDID_SELF = 0;
-
     public const int UiaRootObjectId = -25;
     public const int UiaAppendRuntimeId = 3;
 

@@ -6915,8 +6915,8 @@ public partial class DataGridView
 
     protected override AccessibleObject GetAccessibilityObjectById(int objectId)
     {
-        // decrement the objectId because in our implementation of AccessibilityClient notification objectId's are 1 - based.
-        // 0 == NativeMethods.CHILDID_SELF corresponds to the AccessibleObject itself
+        // Decrement the objectId because in our implementation of AccessibilityClient notification objectId's
+        // are 1 - based. 0 == CHILDID_SELF which corresponds to the AccessibleObject itself
         return AccessibilityObject.GetChild(objectId - 1);
     }
 
