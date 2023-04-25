@@ -132,7 +132,8 @@ public sealed partial class AnchorEditor
                 bottom,
                 right
             });
-            ResumeLayout();
+
+            ResumeLayout(false);
         }
 
         protected override void OnGotFocus(EventArgs e)
