@@ -331,13 +331,13 @@ public unsafe partial class Control :
     // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
     private Dictionary<int, Font>? _dpiFonts;
 
-        // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo, particularly in cases involving nested containers.
-        internal bool _childControlsNeedAnchorLayout;
+    // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo, particularly in cases involving nested containers.
+    internal bool _childControlsNeedAnchorLayout;
 
-        // Inform whether the AnchorsInfo needs to be reevaluated, especially when the control's bounds have been altered explicitly.
-        internal bool _forceAnchorCalculations;
+    // Inform whether the AnchorsInfo needs to be reevaluated, especially when the control's bounds have been altered explicitly.
+    internal bool _forceAnchorCalculations;
 
-        internal byte LayoutSuspendCount { get; private set; }
+    internal byte LayoutSuspendCount { get; private set; }
 
 #if DEBUG
     internal void AssertLayoutSuspendCount(int value)
@@ -4560,34 +4560,34 @@ public unsafe partial class Control :
                 OnRightToLeftChanged(EventArgs.Empty);
             }
 
-                if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty) && Created)
-                {
-                    // We do not want to call our parent's BindingContext property here.
-                    // We have no idea if us or any of our children are using data binding,
-                    // and invoking the property would just create the binding manager, which
-                    // we don't need.  We just blindly notify that the binding manager has
-                    // changed, and if anyone cares, they will do the comparison at that time.
-                    OnBindingContextChanged(EventArgs.Empty);
-                }
-            }
-            else
+            if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty) && Created)
             {
-                _parent = value;
-                OnParentChanged(EventArgs.Empty);
-            }
-
-            SetState(States.CheckedHost, false);
-
-            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
-            try
-            {
-                ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
-            }
-            finally
-            {
-                _forceAnchorCalculations = false;
+                // We do not want to call our parent's BindingContext property here.
+                // We have no idea if us or any of our children are using data binding,
+                // and invoking the property would just create the binding manager, which
+                // we don't need.  We just blindly notify that the binding manager has
+                // changed, and if anyone cares, they will do the comparison at that time.
+                OnBindingContextChanged(EventArgs.Empty);
             }
         }
+        else
+        {
+            _parent = value;
+            OnParentChanged(EventArgs.Empty);
+        }
+
+        SetState(States.CheckedHost, false);
+
+        _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
+        try
+        {
+            ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
+        }
+        finally
+        {
+            _forceAnchorCalculations = false;
+        }
+    }
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.ControlOnParentChangedDescr))]
@@ -10636,34 +10636,34 @@ public unsafe partial class Control :
         }
     }
 
-        /// <summary>
-        ///  Sets the bounds of the control.
-        /// </summary>
-        public void SetBounds(int x, int y, int width, int height)
+    /// <summary>
+    ///  Sets the bounds of the control.
+    /// </summary>
+    public void SetBounds(int x, int y, int width, int height)
+    {
+        if (_x != x || _y != y || _width != width ||
+            _height != height)
         {
-            if (_x != x || _y != y || _width != width ||
-                _height != height)
+            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            try
             {
-                _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
-                try
-                {
-                    SetBoundsCore(x, y, width, height, BoundsSpecified.All);
-                }
-                finally
-                {
-                    _forceAnchorCalculations = false;
-                }
+                SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+            }
+            finally
+            {
+                _forceAnchorCalculations = false;
+            }
 
-                // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
-                // have refreshed the interior layout.  We only need to layout the parent.
-                LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
-            }
-            else
-            {
-                // Still need to init scaling.
-                InitScaling(BoundsSpecified.All);
-            }
+            // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
+            // have refreshed the interior layout.  We only need to layout the parent.
+            LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Bounds);
         }
+        else
+        {
+            // Still need to init scaling.
+            InitScaling(BoundsSpecified.All);
+        }
+    }
 
     /// <summary>
     ///  Sets the bounds of the control.
@@ -10690,18 +10690,18 @@ public unsafe partial class Control :
             height = _height;
         }
 
-            if (_x != x || _y != y || _width != width ||
-                _height != height)
+        if (_x != x || _y != y || _width != width ||
+            _height != height)
+        {
+            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            try
             {
-                _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
-                try
-                {
-                    SetBoundsCore(x, y, width, height, specified);
-                }
-                finally
-                {
-                    _forceAnchorCalculations = false;
-                }
+                SetBoundsCore(x, y, width, height, specified);
+            }
+            finally
+            {
+                _forceAnchorCalculations = false;
+            }
 
             // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
             // have refreshed the interior layout or the resized control.  We only need to layout
