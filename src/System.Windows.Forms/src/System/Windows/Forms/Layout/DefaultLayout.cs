@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Primitives;
+using static System.Windows.Forms.Control;
 
 namespace System.Windows.Forms.Layout;
 
@@ -712,17 +713,32 @@ internal partial class DefaultLayout : LayoutEngine
         return CommonProperties.GetAutoSize(container);
     }
 
+    private static void UpdateAnchorsIteratively(Control control)
+    {
+        UpdateAnchorInfoV2(control);
+
+        // If control does not have child controls or control is not yet ready to compute anchors, skip iterating over child controls.
+        if (!control._childControlsNeedAnchorLayout || control.Parent?._childControlsNeedAnchorLayout == true)
+        {
+            return;
+        }
+
+        // Compute anchors if any child controls require it.
+        ControlCollection controls = control.Controls;
+        for (int i = 0; i < controls.Count; i++)
+        {
+            UpdateAnchorsIteratively(controls[i]);
+        }
+
+        return;
+    }
+
     /// <summary>
     ///  Updates the control's anchors information based on the control's current bounds.
     /// </summary>
     private static void UpdateAnchorInfo(IArrangedElement element)
     {
         Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
-
-        if (!CommonProperties.GetNeedsAnchorLayout(element))
-        {
-            return;
-        }
 
         Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Update anchor info");
         Debug.Indent();
@@ -736,7 +752,7 @@ internal partial class DefaultLayout : LayoutEngine
         // If AnchorLayoutV2 switch is enabled, use V2 Layout.
         if (UseAnchorLayoutV2(element))
         {
-            UpdateAnchorInfoV2((Control)element);
+            UpdateAnchorsIteratively((Control)element);
             return;
         }
 
@@ -844,7 +860,7 @@ internal partial class DefaultLayout : LayoutEngine
     ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
     ///  Developers may opt-out of this new behavior using switch <see cref="Primitives.LocalAppContextSwitches.AnchorLayoutV2"/>.
     /// </devdoc>
-    internal static void UpdateAnchorInfoV2(Control control, bool recalculateAnchors = false)
+    internal static void UpdateAnchorInfoV2(Control control)
     {
         if (!CommonProperties.GetNeedsAnchorLayout(control))
         {
@@ -860,34 +876,39 @@ internal partial class DefaultLayout : LayoutEngine
             return;
         }
 
-        // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
-        // outside of serialized source and happen only in design-time scenario. Hence, checking for
-        // LayoutSuspendCount > 1.
-        bool ancestorInDesignMode = control.IsAncestorSiteInDesignMode;
-        if ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
-            || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0))
-        {
-            return;
-        }
-
-        // Anchors are already scaled for the new DPI.
-        if (DpiScalingInProgress(control, parent))
-        {
-            return;
-        }
-
         AnchorInfo anchorInfo = GetAnchorInfo(control);
+
+        // AnchorsInfo is not computed yet. Check if control is ready for AnchorInfo calculation at this time.
         if (anchorInfo is null)
         {
-            anchorInfo = new AnchorInfo();
-            SetAnchorInfo(control, anchorInfo);
+            // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
+            // outside of serialized source and happen only in design-time scenario. Hence, checking for
+            // LayoutSuspendCount > 1.
+            bool ancestorInDesignMode = control.IsAncestorSiteInDesignMode;
+            if ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
+                || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0))
+            {
+                // Mark parent to indicate that one of its child control requires AnchorsInfo to be calculated.
+                parent._childControlsNeedAnchorLayout = true;
+                return;
+            }
         }
-        else if (!recalculateAnchors)
+
+        if (anchorInfo is not null && !control._forceAnchorCalculations)
         {
             // Only control's Size or Parent change, prompts recalculation of anchors. Otherwise,
             // we skip updating anchors for the control.
             return;
         }
+
+        if (anchorInfo is null)
+        {
+            anchorInfo = new AnchorInfo();
+            SetAnchorInfo(control, anchorInfo);
+        }
+
+        // Reset parent flag as we now ready to iterate over all children requiring AnchorInfo calculation.
+        parent._childControlsNeedAnchorLayout = false;
 
         Rectangle displayRectangle = control.Parent.DisplayRectangle;
         Rectangle elementBounds = GetCachedBounds(control);
@@ -900,28 +921,6 @@ internal partial class DefaultLayout : LayoutEngine
 
         anchorInfo.Right = displayRectangle.Width - (x + elementBounds.Width);
         anchorInfo.Bottom = displayRectangle.Height - (y + elementBounds.Height);
-
-        // Walk through parent hierarchy and check if scaling due to DPI change is in progress.
-        static bool DpiScalingInProgress(Control control, Control parent)
-        {
-            if (control.ScalingInProgress
-                || (control is ContainerControl container && container._dpiScalingInProgress))
-            {
-                return true;
-            }
-
-            while (parent is not null)
-            {
-                if (parent is ContainerControl parentContainer && parentContainer._dpiScalingInProgress)
-                {
-                    return true;
-                }
-
-                parent = parent.Parent;
-            }
-
-            return false;
-        }
     }
 
     public static AnchorStyles GetAnchor(IArrangedElement element) => CommonProperties.xGetAnchor(element);
@@ -990,7 +989,10 @@ internal partial class DefaultLayout : LayoutEngine
                         element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
 
                         // Restore Anchor information as its now relevant again.
-                        UpdateAnchorInfo(element);
+                        if (CommonProperties.GetNeedsAnchorLayout(element))
+                        {
+                            UpdateAnchorInfo(element);
+                        }
                     }
                 }
                 else
@@ -1138,7 +1140,8 @@ internal partial class DefaultLayout : LayoutEngine
         Debug.Assert(specified == BoundsSpecified.None || GetCachedBounds(element) == element.Bounds,
             "Attempt to InitLayout while element has active cached bounds.");
 
-        if (specified != BoundsSpecified.None && CommonProperties.GetNeedsAnchorLayout(element))
+        if (specified != BoundsSpecified.None &&
+            (CommonProperties.GetNeedsAnchorLayout(element) || (UseAnchorLayoutV2(element) && ((Control)element)._childControlsNeedAnchorLayout)))
         {
             UpdateAnchorInfo(element);
         }

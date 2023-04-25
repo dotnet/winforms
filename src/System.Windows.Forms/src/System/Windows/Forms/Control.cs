@@ -331,6 +331,12 @@ public unsafe partial class Control :
     // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
     private Dictionary<int, Font>? _dpiFonts;
 
+    // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo, particularly in cases involving nested containers.
+    internal bool _childControlsNeedAnchorLayout;
+
+    // Inform whether the AnchorsInfo needs to be reevaluated, especially when the control's bounds have been altered explicitly.
+    internal bool _forceAnchorCalculations;
+
     internal byte LayoutSuspendCount { get; private set; }
 
 #if DEBUG
@@ -4570,9 +4576,17 @@ public unsafe partial class Control :
             OnParentChanged(EventArgs.Empty);
         }
 
-        UpdateAnchorsIfRequired();
         SetState(States.CheckedHost, false);
-        ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
+
+        _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2; // Parent has changed. AnchorsInfo should be recalculated.
+        try
+        {
+            ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
+        }
+        finally
+        {
+            _forceAnchorCalculations = false;
+        }
     }
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -10630,7 +10644,15 @@ public unsafe partial class Control :
         if (_x != x || _y != y || _width != width ||
             _height != height)
         {
-            SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            try
+            {
+                SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+            }
+            finally
+            {
+                _forceAnchorCalculations = false;
+            }
 
             // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
             // have refreshed the interior layout.  We only need to layout the parent.
@@ -10641,16 +10663,6 @@ public unsafe partial class Control :
             // Still need to init scaling.
             InitScaling(BoundsSpecified.All);
         }
-    }
-
-    private void UpdateAnchorsIfRequired()
-    {
-        if (!LocalAppContextSwitches.AnchorLayoutV2)
-        {
-            return;
-        }
-
-        DefaultLayout.UpdateAnchorInfoV2(this, recalculateAnchors: true);
     }
 
     /// <summary>
@@ -10681,8 +10693,15 @@ public unsafe partial class Control :
         if (_x != x || _y != y || _width != width ||
             _height != height)
         {
-            SetBoundsCore(x, y, width, height, specified);
-            UpdateAnchorsIfRequired();
+            _forceAnchorCalculations = LocalAppContextSwitches.AnchorLayoutV2;
+            try
+            {
+                SetBoundsCore(x, y, width, height, specified);
+            }
+            finally
+            {
+                _forceAnchorCalculations = false;
+            }
 
             // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
             // have refreshed the interior layout or the resized control.  We only need to layout
