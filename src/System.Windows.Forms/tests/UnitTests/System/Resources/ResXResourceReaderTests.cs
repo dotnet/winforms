@@ -4,9 +4,7 @@
 
 using System.Collections;
 using System.Text;
-using System.Windows.Forms;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
 namespace System.Resources.Tests;
 

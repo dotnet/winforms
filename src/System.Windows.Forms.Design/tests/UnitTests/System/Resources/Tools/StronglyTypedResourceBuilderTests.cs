@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 using System.Windows.Forms.TestUtilities;
 using AxWMPLib;
 using Microsoft.CSharp;
