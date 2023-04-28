@@ -1378,7 +1378,7 @@ public class TabControlControlCollectionTests
         // Remove selected again.
         collection.Remove(value3);
         Assert.Empty(collection);
-        Assert.Throws<ArgumentOutOfRangeException>(() => owner.SelectedTab);
+        Assert.Null(owner.SelectedTab);
     }
 
     [WinFormsFact]

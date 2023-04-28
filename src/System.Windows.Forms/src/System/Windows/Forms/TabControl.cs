@@ -66,7 +66,7 @@ public partial class TabControl : Control
     private readonly User32.WM _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
 
     // State
-    private List<TabPage>? _tabPages;
+    private readonly List<TabPage> _tabPages = new();
     private int _lastSelection;
     private short _windowId;
 
@@ -726,7 +726,7 @@ public partial class TabControl : Control
         get
         {
             int index = SelectedIndex;
-            if (index == -1 || _tabPages is null)
+            if (index == -1 || _tabPages.Count == 0)
             {
                 return null;
             }
@@ -1048,14 +1048,11 @@ public partial class TabControl : Control
 
     internal int FindTabPage(TabPage? tabPage)
     {
-        if (_tabPages is not null)
+        for (int i = 0; i < _tabPages.Count; i++)
         {
-            for (int i = 0; i < _tabPages.Count; i++)
+            if (_tabPages[i].Equals(tabPage))
             {
-                if (_tabPages[i].Equals(tabPage))
-                {
-                    return i;
-                }
+                return i;
             }
         }
 
@@ -1074,7 +1071,7 @@ public partial class TabControl : Control
             throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
         }
 
-        return _tabPages![index];
+        return _tabPages[index];
     }
 
     /// <summary>
@@ -1082,7 +1079,7 @@ public partial class TabControl : Control
     /// </summary>
     protected virtual object[] GetItems()
     {
-        if (_tabPages is not null && _tabPages.Count > 0)
+        if (_tabPages.Count > 0)
         {
             return _tabPages.ToArray();
         }
@@ -1101,7 +1098,7 @@ public partial class TabControl : Control
         {
             for (int i = 0; i < tabPageCount; i++)
             {
-                result[i] = _tabPages![i];
+                result[i] = _tabPages[i];
             }
         }
 
@@ -1159,8 +1156,6 @@ public partial class TabControl : Control
 
     internal void Insert(int index, TabPage tabPage)
     {
-        _tabPages ??= new List<TabPage>();
-
         _tabPages.Insert(index, tabPage);
 
         _cachedDisplayRect = Rectangle.Empty;
@@ -1568,7 +1563,7 @@ public partial class TabControl : Control
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_DELETEALLITEMS);
         }
 
-        _tabPages = null;
+        _tabPages.Clear();
 
         base.RecreateHandleCore();
 
@@ -1601,7 +1596,7 @@ public partial class TabControl : Control
             PInvoke.SendMessage(this, ((User32.WM)PInvoke.TCM_DELETEALLITEMS));
         }
 
-        _tabPages = null;
+        _tabPages.Clear();
     }
 
     private void RemoveTabPage(int index)
@@ -1611,7 +1606,7 @@ public partial class TabControl : Control
             throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
         }
 
-        if (index < _tabPages!.Count)
+        if (index < _tabPages.Count)
         {
             _tabPages.RemoveAt(index);
         }
@@ -1679,7 +1674,7 @@ public partial class TabControl : Control
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETCURSEL, (WPARAM)index);
         }
 
-        _tabPages![index] = value;
+        _tabPages[index] = value;
     }
 
     /// <summary>
