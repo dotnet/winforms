@@ -159,6 +159,7 @@ public partial class Form : ContainerControl
     // preventing rounding error in size calculations with float DPI factor and rounding it to nearest integer.
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
+    private bool _inRecreateHandle;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -252,7 +253,7 @@ public partial class Form : ContainerControl
                 {
                     _formState[FormStateIsWindowActivated] = 1;
 
-                    // Check if validation has been cancelled to avoid raising Validation event multiple times.
+                    // Check if validation has been canceled to avoid raising Validation event multiple times.
                     if (!ValidationCancelled)
                     {
                         if (ActiveControl is null)
@@ -3891,7 +3892,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnFormClosed(FormClosedEventArgs e)
     {
-        //Remove the form from Application.OpenForms (nothing happens if isn't present)
+        // Remove the form from Application.OpenForms (nothing happens if isn't present)
         Application.OpenForms.Remove(this);
 
         ((FormClosedEventHandler?)Events[EVENT_FORMCLOSED])?.Invoke(this, e);
@@ -4005,8 +4006,9 @@ public partial class Form : ContainerControl
         base.OnHandleDestroyed(e);
         _formStateEx[FormStateExUseMdiChildProc] = 0;
 
-        // just make sure we're no longer in the forms collection list
-        Application.OpenForms.Remove(this);
+        // If currently we are not in RecreateHandle call just make sure we're no longer in the forms collection list
+        if (!_inRecreateHandle)
+            Application.OpenForms.Remove(this);
     }
 
     /// <summary>
@@ -4702,7 +4704,7 @@ public partial class Form : ContainerControl
         {
             oldStartPosition = StartPosition;
 
-            // Set the startup postion to manual, to stop the form from
+            // Set the startup position to manual, to stop the form from
             // changing position each time RecreateHandle() is called.
             StartPosition = FormStartPosition.Manual;
         }
@@ -4718,7 +4720,9 @@ public partial class Form : ContainerControl
             callback.ResetOwners();
         }
 
+        _inRecreateHandle = true;
         base.RecreateHandleCore();
+        _inRecreateHandle = false;
 
         // Set the owner of the windows in the list back to the new Form's handle
         callback?.SetOwners(Handle);
