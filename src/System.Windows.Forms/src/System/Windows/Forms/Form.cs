@@ -4006,9 +4006,12 @@ public partial class Form : ContainerControl
         base.OnHandleDestroyed(e);
         _formStateEx[FormStateExUseMdiChildProc] = 0;
 
-        // If currently we are not in RecreateHandle call just make sure we're no longer in the forms collection list
+        // Remove the form from OpenForms collection only if we're not recreating the handle of this form
+        // (e.g., when ShowInTaskbar or RightToLeft properties get changed).
         if (!_inRecreateHandle)
+        {
             Application.OpenForms.Remove(this);
+        }
     }
 
     /// <summary>
@@ -4721,8 +4724,14 @@ public partial class Form : ContainerControl
         }
 
         _inRecreateHandle = true;
-        base.RecreateHandleCore();
-        _inRecreateHandle = false;
+        try
+        {
+            base.RecreateHandleCore();
+        }
+        finally
+        {
+            _inRecreateHandle = false;
+        }
 
         // Set the owner of the windows in the list back to the new Form's handle
         callback?.SetOwners(Handle);

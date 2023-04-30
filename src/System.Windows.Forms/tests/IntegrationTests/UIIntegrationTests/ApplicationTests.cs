@@ -20,17 +20,17 @@ public class ApplicationTests : ControlTestBase
         await RunTestAsync(form =>
         {
             form.Show();
-            var child = new Form() { RightToLeft = RightToLeft.No };
+            using Form child = new() { RightToLeft = RightToLeft.No };
             child.Show(form);
 
-            var formCnt = 2;
-            Assert.Equal(formCnt, Application.OpenForms.Count);
+            const int expectedFormCount = 2;
+            Assert.Equal(expectedFormCount, Application.OpenForms.Count);
             child.RightToLeft = RightToLeft.Yes;
-            Assert.Equal(formCnt, Application.OpenForms.Count);
+            Assert.Equal(expectedFormCount, Application.OpenForms.Count);
             child.ShowInTaskbar = !child.ShowInTaskbar;
-            Assert.Equal(formCnt, Application.OpenForms.Count);
+            Assert.Equal(expectedFormCount, Application.OpenForms.Count);
             child.RecreateHandleCore();
-            Assert.Equal(formCnt, Application.OpenForms.Count);
+            Assert.Equal(expectedFormCount, Application.OpenForms.Count);
 
             return Task.CompletedTask;
         });
