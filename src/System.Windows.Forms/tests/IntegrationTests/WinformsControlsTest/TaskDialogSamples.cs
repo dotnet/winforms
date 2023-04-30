@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Drawing;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WinformsControlsTest;
@@ -14,21 +13,33 @@ public class TaskDialogSamples : Form
     {
         this.Text = "Task Dialog Demos";
 
-        int currentButtonCount = 0;
+        AutoSize = true;
+        AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        MinimizeBox = false;
+        MaximizeBox = false;
+
+        var flowLayout = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.TopDown,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Parent = this,
+        };
+
         void AddButtonForAction(string name, Action action)
         {
-            int nextButton = ++currentButtonCount;
-
-            var button = new Button()
+            var button = new Button
             {
                 Text = name,
-                Size = new Size(180, 23),
-                Location = new Point(nextButton / 20 * 200 + 20, nextButton % 20 * 30)
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Anchor = AnchorStyles.Left | AnchorStyles.Right,
             };
 
             button.Click += (s, e) => action();
 
-            Controls.Add(button);
+            flowLayout.Controls.Add(button);
         }
 
         AddButtonForAction("Confirmation Dialog (3x)", ShowSimpleTaskDialog);
