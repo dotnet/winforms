@@ -342,24 +342,24 @@
 ~override System.Windows.Forms.RichTextBox.SelectedText.set -> void
 ~override System.Windows.Forms.RichTextBox.Text.get -> string
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
-~override System.Windows.Forms.TabControl.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.TabControl.BackgroundImage.set -> void
-~override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.TabControl.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.TabControl.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.TabControl.OnEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnKeyDown(System.Windows.Forms.KeyEventArgs ke) -> void
-~override System.Windows.Forms.TabControl.OnLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.OnStyleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.TabControl.Text.get -> string
-~override System.Windows.Forms.TabControl.Text.set -> void
-~override System.Windows.Forms.TabControl.ToString() -> string
+override System.Windows.Forms.TabControl.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.TabControl.BackgroundImage.set -> void
+override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.TabControl.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
+override System.Windows.Forms.TabControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.TabControl.OnEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnKeyDown(System.Windows.Forms.KeyEventArgs! ke) -> void
+override System.Windows.Forms.TabControl.OnLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnStyleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.Text.get -> string!
+override System.Windows.Forms.TabControl.Text.set -> void
+override System.Windows.Forms.TabControl.ToString() -> string!
 override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStrip.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs! e) -> void
@@ -941,17 +941,17 @@ System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(Syst
 ~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
-~System.Windows.Forms.TabControl.DeselectTab(string tabPageName) -> void
-~System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage tabPage) -> void
-~System.Windows.Forms.TabControl.GetControl(int index) -> System.Windows.Forms.Control
-~System.Windows.Forms.TabControl.GetToolTipText(object item) -> string
-~System.Windows.Forms.TabControl.ImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.TabControl.ImageList.set -> void
-~System.Windows.Forms.TabControl.SelectedTab.get -> System.Windows.Forms.TabPage
-~System.Windows.Forms.TabControl.SelectedTab.set -> void
-~System.Windows.Forms.TabControl.SelectTab(string tabPageName) -> void
-~System.Windows.Forms.TabControl.SelectTab(System.Windows.Forms.TabPage tabPage) -> void
-~System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection
+System.Windows.Forms.TabControl.DeselectTab(string! tabPageName) -> void
+System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage! tabPage) -> void
+System.Windows.Forms.TabControl.GetControl(int index) -> System.Windows.Forms.Control!
+System.Windows.Forms.TabControl.GetToolTipText(object! item) -> string!
+System.Windows.Forms.TabControl.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.TabControl.ImageList.set -> void
+System.Windows.Forms.TabControl.SelectedTab.get -> System.Windows.Forms.TabPage?
+System.Windows.Forms.TabControl.SelectedTab.set -> void
+System.Windows.Forms.TabControl.SelectTab(string! tabPageName) -> void
+System.Windows.Forms.TabControl.SelectTab(System.Windows.Forms.TabPage! tabPage) -> void
+System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection!
 System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control?
 System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control?
 System.Windows.Forms.ToolStrip.GetItemAt(int x, int y) -> System.Windows.Forms.ToolStripItem?
@@ -1398,15 +1398,15 @@ virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string! key].g
 ~virtual System.Windows.Forms.RichTextBox.OnProtected(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnSelectionChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.GetItems() -> object[]
-~virtual System.Windows.Forms.TabControl.GetItems(System.Type baseType) -> object[]
-~virtual System.Windows.Forms.TabControl.OnDeselected(System.Windows.Forms.TabControlEventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.OnDeselecting(System.Windows.Forms.TabControlCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.OnSelected(System.Windows.Forms.TabControlEventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs e) -> void
+virtual System.Windows.Forms.TabControl.GetItems() -> object![]!
+virtual System.Windows.Forms.TabControl.GetItems(System.Type! baseType) -> object![]!
+virtual System.Windows.Forms.TabControl.OnDeselected(System.Windows.Forms.TabControlEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnDeselecting(System.Windows.Forms.TabControlCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnSelected(System.Windows.Forms.TabControlEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.OnItemAdded(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
@@ -10083,18 +10083,18 @@ System.Windows.Forms.TabControl.Alignment.get -> System.Windows.Forms.TabAlignme
 System.Windows.Forms.TabControl.Alignment.set -> void
 System.Windows.Forms.TabControl.Appearance.get -> System.Windows.Forms.TabAppearance
 System.Windows.Forms.TabControl.Appearance.set -> void
-System.Windows.Forms.TabControl.BackColorChanged -> System.EventHandler
-System.Windows.Forms.TabControl.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.TabControl.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.TabControl.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.TabControl.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.TabControl.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TabControl.ControlCollection
 System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windows.Forms.TabControl! owner) -> void
-System.Windows.Forms.TabControl.Deselected -> System.Windows.Forms.TabControlEventHandler
-System.Windows.Forms.TabControl.Deselecting -> System.Windows.Forms.TabControlCancelEventHandler
+System.Windows.Forms.TabControl.Deselected -> System.Windows.Forms.TabControlEventHandler?
+System.Windows.Forms.TabControl.Deselecting -> System.Windows.Forms.TabControlCancelEventHandler?
 System.Windows.Forms.TabControl.DeselectTab(int index) -> void
-System.Windows.Forms.TabControl.DrawItem -> System.Windows.Forms.DrawItemEventHandler
+System.Windows.Forms.TabControl.DrawItem -> System.Windows.Forms.DrawItemEventHandler?
 System.Windows.Forms.TabControl.DrawMode.get -> System.Windows.Forms.TabDrawMode
 System.Windows.Forms.TabControl.DrawMode.set -> void
-System.Windows.Forms.TabControl.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.TabControl.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.TabControl.GetTabRect(int index) -> System.Drawing.Rectangle
 System.Windows.Forms.TabControl.HotTrack.get -> bool
 System.Windows.Forms.TabControl.HotTrack.set -> void
@@ -10104,15 +10104,15 @@ System.Windows.Forms.TabControl.Multiline.get -> bool
 System.Windows.Forms.TabControl.Multiline.set -> void
 System.Windows.Forms.TabControl.Padding.get -> System.Drawing.Point
 System.Windows.Forms.TabControl.Padding.set -> void
-System.Windows.Forms.TabControl.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.TabControl.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.TabControl.RemoveAll() -> void
-System.Windows.Forms.TabControl.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.TabControl.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TabControl.RowCount.get -> int
-System.Windows.Forms.TabControl.Selected -> System.Windows.Forms.TabControlEventHandler
+System.Windows.Forms.TabControl.Selected -> System.Windows.Forms.TabControlEventHandler?
 System.Windows.Forms.TabControl.SelectedIndex.get -> int
 System.Windows.Forms.TabControl.SelectedIndex.set -> void
-System.Windows.Forms.TabControl.SelectedIndexChanged -> System.EventHandler
-System.Windows.Forms.TabControl.Selecting -> System.Windows.Forms.TabControlCancelEventHandler
+System.Windows.Forms.TabControl.SelectedIndexChanged -> System.EventHandler?
+System.Windows.Forms.TabControl.Selecting -> System.Windows.Forms.TabControlCancelEventHandler?
 System.Windows.Forms.TabControl.SelectTab(int index) -> void
 System.Windows.Forms.TabControl.ShowToolTips.get -> bool
 System.Windows.Forms.TabControl.ShowToolTips.set -> void
@@ -10140,7 +10140,7 @@ System.Windows.Forms.TabControl.TabPageCollection.IsReadOnly.get -> bool
 System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage! value) -> void
 System.Windows.Forms.TabControl.TabPageCollection.RemoveAt(int index) -> void
 System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl! owner) -> void
-System.Windows.Forms.TabControl.TextChanged -> System.EventHandler
+System.Windows.Forms.TabControl.TextChanged -> System.EventHandler?
 System.Windows.Forms.TabControl.UpdateTabSelection(bool updateFocus) -> void
 System.Windows.Forms.TabControlAction
 System.Windows.Forms.TabControlAction.Deselected = 3 -> System.Windows.Forms.TabControlAction
