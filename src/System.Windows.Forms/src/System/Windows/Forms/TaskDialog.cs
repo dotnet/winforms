@@ -271,7 +271,8 @@ public partial class TaskDialog : IWin32Window
         (((GCHandle)lpRefData).Target as TaskDialog)!.HandleTaskDialogCallback(
             hwnd,
             msg,
-            wParam);
+            wParam,
+            lParam);
 
     private static bool IsTaskDialogButtonCommitting(TaskDialogButton? button)
     {
@@ -785,7 +786,8 @@ public partial class TaskDialog : IWin32Window
     private HRESULT HandleTaskDialogCallback(
         HWND hWnd,
         TASKDIALOG_NOTIFICATIONS notification,
-        IntPtr wParam)
+        IntPtr wParam,
+        IntPtr lParam)
     {
         Debug.Assert(_boundPage is not null);
 
@@ -1038,6 +1040,12 @@ public partial class TaskDialog : IWin32Window
 
                 case TASKDIALOG_NOTIFICATIONS.TDN_HELP:
                     _boundPage.OnHelpRequest(EventArgs.Empty);
+                    break;
+
+                case TASKDIALOG_NOTIFICATIONS.TDN_HYPERLINK_CLICKED:
+                    string? linkHref = Marshal.PtrToStringUni(lParam);
+                    Debug.Assert(linkHref is not null);
+                    _boundPage.OnLinkClicked(new TaskDialogLinkClickedEventArgs(linkHref));
                     break;
             }
         }

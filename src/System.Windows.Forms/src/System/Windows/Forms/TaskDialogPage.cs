@@ -513,6 +513,50 @@ public class TaskDialogPage
     }
 
     /// <summary>
+    /// <para>
+    ///   Gets or sets a value that specifies whether the task dialog should
+    ///   interpret strings in the form <c>&lt;a href="target"&gt;link Text&lt;/a&gt;</c>
+    ///   as hyperlink when specified in the <see cref="Text"/>,
+    ///   <see cref="TaskDialogExpander.Text"/>,
+    ///   or <see cref="TaskDialogFootnote.Text"/> properties.
+    ///   When the user clicks on such a link, the <see cref="LinkClicked"/>
+    ///   event is raised, containing the value of the <c>target</c> attribute.
+    /// </para>
+    /// </summary>
+    /// <value>
+    ///   <see langword="true"/> to enable links; otherwise, <see langword="false"/>.
+    ///   The default value is <see langword="false"/>.
+    /// </value>
+    /// <remarks>
+    /// <para>
+    ///   The Task Dialog will not actually execute any links.
+    ///   Link execution must be handled in the <see cref="LinkClicked"/> event.
+    /// </para>
+    /// <para>
+    ///   Note: Enabling this setting causes the <c>"&amp;"</c> character to be
+    ///   interpreted as a prefix for an access key character (mnemonic) if at least
+    ///   one link is used. To show a literal <c>"&amp;"</c> character, it must be escaped
+    ///   as <c>"&amp;&amp;"</c>.
+    /// </para>
+    /// <para>
+    ///   When you enable this setting and you want to display text
+    ///   without interpreting links, you must replace the strings <c>"&lt;a"</c>
+    ///   and <c>"&lt;A"</c> with something like <c>"&lt;\u200Ba"</c>.
+    /// </para>
+    /// </remarks>
+    public bool EnableLinks { get; set; }
+
+    /// <summary>
+    ///   Occurs when the user has clicked on a link.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    ///   This event will only be raised if <see cref="EnableLinks"/> is set to <see langword="true"/>.
+    /// </para>
+    /// </remarks>
+    public event EventHandler<TaskDialogLinkClickedEventArgs>? LinkClicked;
+
+    /// <summary>
     ///   Gets the <see cref="TaskDialog"/> instance which this page
     ///   is currently bound to.
     /// </summary>
@@ -861,6 +905,11 @@ public class TaskDialogPage
         if (_boundCustomButtons.Any(e => e.IsCreated && e is TaskDialogCommandLinkButton))
             flags |= TASKDIALOG_FLAGS.TDF_USE_COMMAND_LINKS;
 
+        if (EnableLinks)
+        {
+            flags |= TASKDIALOG_FLAGS.TDF_ENABLE_HYPERLINKS;
+        }
+
         if (_checkBox is not null)
         {
             flags |= _checkBox.Bind(this);
@@ -980,6 +1029,12 @@ public class TaskDialogPage
     /// </summary>
     /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
     protected internal void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
+
+    /// <summary>
+    ///   Raises the <see cref="LinkClicked"/> event.
+    /// </summary>
+    /// <param name="e">A <see cref="TaskDialogLinkClickedEventArgs"/> that contains the event data.</param>
+    protected internal void OnLinkClicked(TaskDialogLinkClickedEventArgs e) => LinkClicked?.Invoke(this, e);
 
     private bool GetFlag(TASKDIALOG_FLAGS flag) => (_flags & flag) == flag;
 
