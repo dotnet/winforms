@@ -204,19 +204,14 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         if (DpiHelper.IsScalingRequirementMet)
         {
-            ScaleDpiConstants();
+            _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(s_defaultPadding);
+            _scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownPadding);
+            _scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(s_checkMarkBitmapSize);
         }
 
         Overflow = ToolStripItemOverflow.Never;
         MouseDownAndUpMustBeInSameItem = false;
         SupportsDisabledHotTracking = true;
-    }
-
-    private void ScaleDpiConstants(int newDpi = 0)
-    {
-        _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(s_defaultPadding, newDpi);
-        _scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownPadding, newDpi);
-        _scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(s_checkMarkBitmapSize, newDpi);
     }
 
     /// <summary>
