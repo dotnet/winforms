@@ -118,5 +118,18 @@ public class ContextMenuStrip : ToolStripDropDownMenu
         }
 
         base.SetVisibleCore(visible);
+
+        // There are two problems we're facing when trying to scale ContextMenuStrip:
+        //    1. When the "visible" property is set to false, the control window doesn't receive the "DPI_CHANGED" message.
+        //       As a result, the ContextMenuStrip window doesn't scale itself when moved from one monitor to another on the "PerMonitorV2" process.
+        //    2. If a window is invisible(with "visible" set to false), the "GetDpiForWindow()" API returns the DPI of the primary monitor.
+        // Because of this inconsistency, we intentionally recreate the handle that triggers scaling according to the new DPI, after setting the "visible" property.
+        if (visible
+            && IsHandleCreated
+            && DpiHelper.IsPerMonitorV2Awareness
+            && DeviceDpi != (int)PInvoke.GetDpiForWindow(this))
+        {
+            RecreateHandle();
+        }
     }
 }

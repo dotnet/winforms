@@ -204,14 +204,19 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         if (DpiHelper.IsScalingRequirementMet)
         {
-            _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(s_defaultPadding);
-            _scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownPadding);
-            _scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(s_checkMarkBitmapSize);
+            ScaleDpiConstants();
         }
 
         Overflow = ToolStripItemOverflow.Never;
         MouseDownAndUpMustBeInSameItem = false;
         SupportsDisabledHotTracking = true;
+    }
+
+    private void ScaleDpiConstants(int newDpi = 0)
+    {
+        _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(s_defaultPadding, newDpi);
+        _scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownPadding, newDpi);
+        _scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(s_checkMarkBitmapSize, newDpi);
     }
 
     /// <summary>
@@ -320,7 +325,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                         {
                             if (DpiHelper.IsScalingRequired)
                             {
-                                DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp);
+                                DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp, DeviceDpi);
                             }
 
                             t_indeterminateCheckedImage = indeterminateCheckedBmp;
@@ -345,7 +350,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                         {
                             if (DpiHelper.IsScalingRequired)
                             {
-                                DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp);
+                                DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp, DeviceDpi);
                             }
 
                             t_checkedImage = checkedBmp;
@@ -675,6 +680,10 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(s_defaultPadding, value);
             _scaledDefaultDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_defaultDropDownPadding, value);
             _scaledCheckMarkBitmapSize = DpiHelper.LogicalToDeviceUnits(s_checkMarkBitmapSize, value);
+            t_indeterminateCheckedImage?.Dispose();
+            t_indeterminateCheckedImage = null;
+            t_checkedImage?.Dispose();
+            t_checkedImage = null;
         }
     }
 
