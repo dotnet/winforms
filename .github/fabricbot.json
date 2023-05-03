@@ -1765,6 +1765,51 @@
           }
         ]
       }
+    },
+    {
+      "taskType": "trigger",
+      "capabilityId": "IssueResponder",
+      "subCapability": "IssuesOnlyResponder",
+      "version": "1.0",
+      "config": {
+        "conditions": {
+          "operator": "or",
+          "operands": [
+            {
+              "name": "isAction",
+              "parameters": {
+                "action": "closed"
+              }
+            }
+          ]
+        },
+        "eventType": "issue",
+        "eventNames": [
+          "issues",
+          "project_card"
+        ],
+        "taskName": "Remove intermediate labels from closed issue.",
+        "actions": [
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": "untriaged"
+            }
+          },
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": ":mailbox_with_no_mail: waiting-author-feedback"
+            }
+          },
+          {
+            "name": "removeLabel",
+            "parameters": {
+              "label": ":mailbox_with_mail: waiting-for-testing"
+            }
+          }
+        ]
+      }
     }
   ],
   "userGroups": []
