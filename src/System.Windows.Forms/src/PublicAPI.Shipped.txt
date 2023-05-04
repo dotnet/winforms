@@ -471,18 +471,18 @@ static System.Windows.Forms.ToolStrip.SetItemParent(System.Windows.Forms.ToolStr
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.AutoCompleteStringCollection.Add(string value) -> int
-~System.Windows.Forms.AutoCompleteStringCollection.AddRange(string[] value) -> void
-~System.Windows.Forms.AutoCompleteStringCollection.Contains(string value) -> bool
-~System.Windows.Forms.AutoCompleteStringCollection.CopyTo(string[] array, int index) -> void
-~System.Windows.Forms.AutoCompleteStringCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.AutoCompleteStringCollection.IndexOf(string value) -> int
-~System.Windows.Forms.AutoCompleteStringCollection.Insert(int index, string value) -> void
-~System.Windows.Forms.AutoCompleteStringCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
-~System.Windows.Forms.AutoCompleteStringCollection.Remove(string value) -> void
-~System.Windows.Forms.AutoCompleteStringCollection.SyncRoot.get -> object
-~System.Windows.Forms.AutoCompleteStringCollection.this[int index].get -> string
-~System.Windows.Forms.AutoCompleteStringCollection.this[int index].set -> void
+System.Windows.Forms.AutoCompleteStringCollection.Add(string! value) -> int
+System.Windows.Forms.AutoCompleteStringCollection.AddRange(string![]! value) -> void
+System.Windows.Forms.AutoCompleteStringCollection.Contains(string! value) -> bool
+System.Windows.Forms.AutoCompleteStringCollection.CopyTo(string![]! array, int index) -> void
+System.Windows.Forms.AutoCompleteStringCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.AutoCompleteStringCollection.IndexOf(string! value) -> int
+System.Windows.Forms.AutoCompleteStringCollection.Insert(int index, string! value) -> void
+System.Windows.Forms.AutoCompleteStringCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! e) -> void
+System.Windows.Forms.AutoCompleteStringCollection.Remove(string! value) -> void
+System.Windows.Forms.AutoCompleteStringCollection.SyncRoot.get -> object!
+System.Windows.Forms.AutoCompleteStringCollection.this[int index].get -> string!
+System.Windows.Forms.AutoCompleteStringCollection.this[int index].set -> void
 ~System.Windows.Forms.AxHost.AxHost(string clsid) -> void
 ~System.Windows.Forms.AxHost.AxHost(string clsid, int flags) -> void
 ~System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl
@@ -4647,7 +4647,7 @@ System.Windows.Forms.AutoCompleteSource.RecentlyUsedList = 4 -> System.Windows.F
 System.Windows.Forms.AutoCompleteStringCollection
 System.Windows.Forms.AutoCompleteStringCollection.AutoCompleteStringCollection() -> void
 System.Windows.Forms.AutoCompleteStringCollection.Clear() -> void
-System.Windows.Forms.AutoCompleteStringCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler
+System.Windows.Forms.AutoCompleteStringCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.AutoCompleteStringCollection.Count.get -> int
 System.Windows.Forms.AutoCompleteStringCollection.IsReadOnly.get -> bool
 System.Windows.Forms.AutoCompleteStringCollection.IsSynchronized.get -> bool
