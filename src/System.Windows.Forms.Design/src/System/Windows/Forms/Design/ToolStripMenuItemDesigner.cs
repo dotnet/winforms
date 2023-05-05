@@ -1859,7 +1859,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             if (itemToBeDeleted.Owner is ToolStripDropDown owner)
             {
                 //Get the ownerItem
-                ToolStripDropDownItem ownerItem = (ToolStripDropDownItem)((ToolStripDropDown)(itemToBeDeleted.Owner)).OwnerItem;
+                ToolStripDropDownItem ownerItem = (ToolStripDropDownItem)owner.OwnerItem;
                 if (ownerItem is not null && ownerItem == MenuItem)
                 {
                     int itemIndex = ownerItem.DropDownItems.IndexOf(itemToBeDeleted);
@@ -1944,7 +1944,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             if (itemToBeDeleted.Owner is ToolStripDropDown owner)
             {
                 //Get the ownerItem
-                ToolStripDropDownItem ownerItem = (ToolStripDropDownItem)((ToolStripDropDown)(itemToBeDeleted.Owner)).OwnerItem;
+                ToolStripDropDownItem ownerItem = (ToolStripDropDownItem)owner.OwnerItem;
                 if (ownerItem is not null && ownerItem == MenuItem)
                 {
                     RemoveItemBodyGlyph(itemToBeDeleted);
@@ -2621,7 +2621,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         /// </summary>
         public override void OnDragEnter(Glyph g, DragEventArgs e)
         {
-            if (e.Data is ToolStripItemDataObject data)
+            if (e.Data is ToolStripItemDataObject)
             {
                 e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
             }
@@ -2636,7 +2636,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         /// </summary>
         public override void OnDragOver(Glyph g, DragEventArgs e)
         {
-            if (e.Data is ToolStripItemDataObject data)
+            if (e.Data is ToolStripItemDataObject)
             {
                 e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
             }

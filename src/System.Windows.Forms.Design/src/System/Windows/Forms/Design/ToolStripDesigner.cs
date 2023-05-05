@@ -2348,7 +2348,6 @@ internal class ToolStripDesigner : ControlDesigner
                 if (_editorNode is not null && (SelectionService.PrimarySelection == ToolStrip || itemSelected))
                 {
                     bool originalSyncSelection = FireSyncSelection;
-                    ToolStripPanel parent = ToolStrip.Parent as ToolStripPanel;
                     try
                     {
                         FireSyncSelection = true;

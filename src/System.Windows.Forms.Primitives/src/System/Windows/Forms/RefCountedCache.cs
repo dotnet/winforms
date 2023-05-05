@@ -119,14 +119,13 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey> 
         [SkipLocalsInit]
         Scope Add(TKey key)
         {
-            Scope scope = default!;
-
             if (_list.Count >= _softLimit)
             {
                 // Try to free up space
                 Clean();
             }
 
+            Scope scope;
             if (_list.Count < _hardLimit)
             {
                 // We've got space, add to the cache

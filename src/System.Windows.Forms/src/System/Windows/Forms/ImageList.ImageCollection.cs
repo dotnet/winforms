@@ -265,12 +265,12 @@ public sealed partial class ImageList
 
         int IList.Add(object? value)
         {
-            if (!(value is Image image))
+            if (value is not Image image)
             {
                 throw new ArgumentException(SR.ImageListBadImage, nameof(value));
             }
 
-            Add((Image)value);
+            Add(image);
             return Count - 1;
         }
 

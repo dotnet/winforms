@@ -6694,7 +6694,7 @@ public unsafe partial class Control :
     {
         s_controlKeyboardRouting.TraceVerbose($"Control.IsInputChar 0x{((int)charCode):X}");
 
-        int mask = 0;
+        int mask;
         if (charCode == (char)(int)Keys.Tab)
         {
             mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB);
