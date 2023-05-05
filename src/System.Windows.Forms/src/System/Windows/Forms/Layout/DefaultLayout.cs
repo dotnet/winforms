@@ -691,7 +691,7 @@ internal partial class DefaultLayout : LayoutEngine
             // Finish the preferredSize computation and clear cached anchored positions.
             preferredSizeForAnchoring = GetAnchorPreferredSize(container);
 
-            Padding containerPadding = Padding.Empty;
+            Padding containerPadding;
             if (container is Control control)
             {
                 // Calling this will respect Control.DefaultPadding.

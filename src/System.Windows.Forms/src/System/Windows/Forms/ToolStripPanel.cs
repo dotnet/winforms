@@ -766,8 +766,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.IndexOutOfRange, row.ToString(CultureInfo.CurrentCulture)));
         }
 
-        Point location = Point.Empty;
-        Rectangle dragRect = Rectangle.Empty;
+        Rectangle dragRect;
         if (row >= RowsInternal.Count)
         {
             dragRect = DragBounds;
@@ -777,6 +776,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             dragRect = RowsInternal[row].DragBounds;
         }
 
+        Point location;
         if (Orientation == Orientation.Horizontal)
         {
             location = new Point(0, dragRect.Bottom - 1);
@@ -820,7 +820,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
     internal void MoveControl(ToolStrip? toolStripToDrag, Point screenLocation)
     {
-        if (toolStripToDrag is not ISupportToolStripPanel draggedControl)
+        if (toolStripToDrag is not ISupportToolStripPanel)
         {
             Debug.Fail("Move called on immovable object.");
             return;

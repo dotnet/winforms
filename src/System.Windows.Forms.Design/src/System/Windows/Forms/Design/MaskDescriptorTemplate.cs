@@ -36,9 +36,7 @@ internal class MaskDescriptorTemplate : MaskDescriptor
             return;
         }
 
-        string msg;
-
-        if (!IsValidMaskDescriptor(this, out msg))
+        if (!IsValidMaskDescriptor(this, out _))
         {
             // Don't throw here, callers should check the Mask property for validity. See the ValidMaskDescriptorList below.
             _mask = null;

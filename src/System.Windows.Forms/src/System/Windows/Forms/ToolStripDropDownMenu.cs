@@ -362,8 +362,6 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             _maxItemSize.Height = Math.Max(maxImageSize.Height + _scaledImagePadding.Vertical, _maxItemSize.Height);
         }
 
-        bool useDefaultCheckMarginWidth = (ShowCheckMargin && (maxCheckSize.Width == 0));
-        bool useDefaultImageMarginWidth = (ShowImageMargin && (maxImageSize.Width == 0));
         // Always save space for an arrow
         maxArrowSize = new Size(_scaledArrowSize, _maxItemSize.Height);
 
