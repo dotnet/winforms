@@ -18,14 +18,14 @@ public abstract partial class AxHost
     {
         private readonly AxPropertyDescriptor _target;
         private readonly AxHost _owner;
-        private string[] _names;
+        private string?[] _names;
         private uint[] _cookies;
         private bool _arraysFetched;
 
         public AxPerPropertyBrowsingEnum(
             AxPropertyDescriptor targetObject,
             AxHost owner,
-            string[] names,
+            string?[] names,
             uint[] cookies)
         {
             _target = targetObject;
@@ -121,7 +121,7 @@ public abstract partial class AxHost
             }
         }
 
-        internal void RefreshArrays(string[] names, uint[] cookies)
+        internal void RefreshArrays(string?[] names, uint[] cookies)
         {
             _names = names;
             _cookies = cookies;

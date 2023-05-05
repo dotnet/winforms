@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -18,10 +16,10 @@ public abstract partial class AxHost
     {
         private readonly PropertyDescriptor _baseDescriptor;
         internal AxHost _owner;
-        private readonly DispIdAttribute _dispid;
+        private readonly DispIdAttribute? _dispid;
 
-        private TypeConverter _converter;
-        private UITypeEditor _editor;
+        private TypeConverter? _converter;
+        private UITypeEditor? _editor;
         private readonly List<Attribute> _updateAttributes = new();
         private int _flags;
 
@@ -91,7 +89,7 @@ public abstract partial class AxHost
         }
 
         internal int Dispid
-            => _baseDescriptor.TryGetAttribute(out DispIdAttribute dispid)
+            => _baseDescriptor.TryGetAttribute(out DispIdAttribute? dispid)
                 ? dispid.Value
                 : PInvoke.DISPID_UNKNOWN;
 
@@ -112,7 +110,7 @@ public abstract partial class AxHost
         }
 
         [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode)]
-        public override object GetEditor(Type editorBaseType)
+        public override object? GetEditor(Type editorBaseType)
         {
             ArgumentNullException.ThrowIfNull(editorBaseType);
 
@@ -158,7 +156,7 @@ public abstract partial class AxHost
             return Guid.Empty;
         }
 
-        public override object GetValue(object component)
+        public override object? GetValue(object? component)
         {
             if ((!GetFlag(FlagIgnoreCanAccessProperties) && !_owner.CanAccessProperties) || GetFlag(FlagGetterThrew))
             {
@@ -193,7 +191,7 @@ public abstract partial class AxHost
             }
         }
 
-        public void OnValueChanged(object component)
+        public void OnValueChanged(object? component)
         {
             OnValueChanged(component, EventArgs.Empty);
         }
@@ -215,7 +213,7 @@ public abstract partial class AxHost
             }
         }
 
-        public override void SetValue(object component, object value)
+        public override void SetValue(object? component, object? value)
         {
             if (!GetFlag(FlagIgnoreCanAccessProperties) && !_owner.CanAccessProperties)
             {
@@ -260,7 +258,7 @@ public abstract partial class AxHost
                 return;
             }
 
-            List<Attribute> attributes = new(AttributeArray);
+            List<Attribute> attributes = new(AttributeArray!);
             attributes.AddRange(_updateAttributes);
             AttributeArray = attributes.ToArray();
             _updateAttributes.Clear();
@@ -317,18 +315,20 @@ public abstract partial class AxHost
 
                     if (hr == HRESULT.S_OK)
                     {
-                        string[] names = caStrings.ConvertAndFree();
+                        string?[] names = caStrings.ConvertAndFree();
                         uint[] cookies = caCookies.ConvertAndFree();
 
                         if (names.Length > 0 && cookies.Length > 0)
                         {
                             if (_converter is null)
                             {
-                                _converter = new AxEnumConverter(this, new AxPerPropertyBrowsingEnum(
+                                _converter = new AxEnumConverter(
                                     this,
-                                    _owner,
-                                    names,
-                                    cookies));
+                                    new AxPerPropertyBrowsingEnum(
+                                        this,
+                                        _owner,
+                                        names,
+                                        cookies));
                             }
                             else if (_converter is AxEnumConverter enumConverter)
                             {
