@@ -40,7 +40,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     private string? groupName;
 
     private ListViewSubItemCollection? listViewSubItemCollection;
-    private ListViewSubItem[]? subItems;
+    private List<ListViewSubItem> subItems = new();
 
     // we stash the last index we got as a seed to GetDisplayIndex.
     private int lastIndex = -1;
@@ -95,10 +95,10 @@ public partial class ListViewItem : ICloneable, ISerializable
         ImageIndexer.Index = imageIndex;
         if (items is not null && items.Length > 0)
         {
-            subItems = new ListViewSubItem[items.Length];
+            subItems.EnsureCapacity(items.Length);
             for (int i = 0; i < items.Length; i++)
             {
-                subItems[i] = new ListViewSubItem(this, items[i]);
+                subItems.Add(new ListViewSubItem(this, items[i]));
             }
 
             SubItemCount = items.Length;
@@ -116,8 +116,9 @@ public partial class ListViewItem : ICloneable, ISerializable
     public ListViewItem(ListViewSubItem[] subItems, int imageIndex)
         : this()
     {
+        ArgumentNullException.ThrowIfNull(subItems);
+
         ImageIndexer.Index = imageIndex;
-        this.subItems = subItems.OrThrowIfNull();
         SubItemCount = subItems.Length;
 
         // Update the owner of these subitems
@@ -126,6 +127,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             ArgumentNullException.ThrowIfNull(subItems[i], nameof(subItems));
 
             subItems[i]._owner = this;
+            this.subItems.Add(subItems[i]);
         }
     }
 
@@ -184,10 +186,10 @@ public partial class ListViewItem : ICloneable, ISerializable
         ImageIndexer.Key = imageKey;
         if (items is not null && items.Length > 0)
         {
-            subItems = new ListViewSubItem[items.Length];
+            subItems = new List<ListViewSubItem>(items.Length);
             for (int i = 0; i < items.Length; i++)
             {
-                subItems[i] = new ListViewSubItem(this, items[i]);
+                subItems.Add(new ListViewSubItem(this, items[i]));
             }
 
             SubItemCount = items.Length;
@@ -205,8 +207,9 @@ public partial class ListViewItem : ICloneable, ISerializable
     public ListViewItem(ListViewSubItem[] subItems, string? imageKey)
         : this()
     {
+        ArgumentNullException.ThrowIfNull(subItems);
+
         ImageIndexer.Key = imageKey;
-        this.subItems = subItems.OrThrowIfNull();
         SubItemCount = subItems.Length;
 
         // Update the owner of these subitems
@@ -215,6 +218,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             ArgumentNullException.ThrowIfNull(subItems[i], nameof(subItems));
 
             subItems[i]._owner = this;
+            this.subItems.Add(subItems[i]);
         }
     }
 
@@ -290,7 +294,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems![0].BackColor;
+                return subItems[0].BackColor;
             }
         }
         set => SubItems[0].BackColor = value;
@@ -398,7 +402,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems![0].Font;
+                return subItems[0].Font;
             }
         }
         set => SubItems[0].Font = value;
@@ -421,7 +425,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems![0].ForeColor;
+                return subItems[0].ForeColor;
             }
         }
         set
@@ -616,7 +620,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems![0].Name;
+                return subItems[0].Name;
             }
         }
         set => SubItems[0].Name = value;
@@ -780,8 +784,8 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             if (SubItemCount == 0)
             {
-                subItems = new ListViewSubItem[1];
-                subItems[0] = new ListViewSubItem(this, string.Empty);
+                subItems = new List<ListViewSubItem>(1);
+                subItems.Add(new ListViewSubItem(this, string.Empty));
                 SubItemCount = 1;
             }
 
@@ -902,8 +906,8 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
 
         Type clonedType = GetType();
-        ListViewItem newItem = null;
 
+        ListViewItem newItem;
         if (clonedType == typeof(ListViewItem))
         {
             newItem = new ListViewItem(clonedSubItems, ImageIndexer.Index);
@@ -913,7 +917,11 @@ public partial class ListViewItem : ICloneable, ISerializable
             newItem = (ListViewItem)Activator.CreateInstance(clonedType);
         }
 
-        newItem.subItems = clonedSubItems;
+        foreach (ListViewSubItem subItem in clonedSubItems)
+        {
+            newItem.subItems.Add(subItem);
+        }
+
         newItem.ImageIndexer.Index = ImageIndexer.Index;
         newItem.SubItemCount = SubItemCount;
         newItem.Checked = Checked;
@@ -1248,16 +1256,13 @@ public partial class ListViewItem : ICloneable, ISerializable
 
         if (foundSubItems)
         {
-            ListViewSubItem[] newItems = new ListViewSubItem[SubItemCount];
+            subItems.EnsureCapacity(SubItemCount);
             for (int i = 1; i < SubItemCount; i++)
             {
                 ListViewSubItem newItem = (ListViewSubItem)info.GetValue($"SubItem{i}", typeof(ListViewSubItem));
                 newItem._owner = this;
-                newItems[i] = newItem;
+                subItems.Add(newItem);
             }
-
-            newItems[0] = subItems[0];
-            subItems = newItems;
         }
     }
 

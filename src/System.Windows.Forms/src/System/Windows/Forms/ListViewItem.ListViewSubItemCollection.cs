@@ -50,7 +50,7 @@ public partial class ListViewItem
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                return _owner.subItems![index];
+                return _owner.subItems[index];
             }
             set
             {
@@ -59,7 +59,7 @@ public partial class ListViewItem
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                ListViewSubItem oldSubItem = _owner.subItems![index];
+                ListViewSubItem oldSubItem = _owner.subItems[index];
 
                 _owner.subItems[index] = value.OrThrowIfNull();
                 value._owner = _owner;
@@ -113,9 +113,9 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(item);
 
-            EnsureSubItemSpace(1, -1);
+            EnsureSubItemsCapacity(1);
             item._owner = _owner;
-            _owner.subItems![_owner.SubItemCount] = item;
+            _owner.subItems.Add(item);
             _owner.UpdateSubItems(_owner.SubItemCount++);
             return item;
         }
@@ -138,13 +138,14 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(items);
 
-            EnsureSubItemSpace(items.Length, -1);
+            EnsureSubItemsCapacity(items.Length);
             foreach (ListViewSubItem item in items)
             {
                 if (item is not null)
                 {
                     item._owner = _owner;
-                    _owner.subItems![_owner.SubItemCount++] = item;
+                    _owner.subItems.Add(item);
+                    _owner.SubItemCount++;
                 }
             }
 
@@ -155,12 +156,13 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(items);
 
-            EnsureSubItemSpace(items.Length, -1);
+            EnsureSubItemsCapacity(items.Length);
             foreach (string item in items)
             {
                 if (item is not null)
                 {
-                    _owner.subItems![_owner.SubItemCount++] = new ListViewSubItem(_owner, item);
+                    _owner.subItems.Add(new ListViewSubItem(_owner, item));
+                    _owner.SubItemCount++;
                 }
             }
 
@@ -171,12 +173,13 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(items);
 
-            EnsureSubItemSpace(items.Length, -1);
+            EnsureSubItemsCapacity(items.Length);
             foreach (string item in items)
             {
                 if (item is not null)
                 {
-                    _owner.subItems![_owner.SubItemCount++] = new ListViewSubItem(_owner, item, foreColor, backColor, font);
+                    _owner.subItems.Add(new ListViewSubItem(_owner, item, foreColor, backColor, font));
+                    _owner.SubItemCount++;
                 }
             }
 
@@ -201,9 +204,10 @@ public partial class ListViewItem
                 for (int i = 0; i < oldCount; i++)
                 {
                     _owner.SubItems[i]._owner = null;
-                    _owner.subItems![i].ReleaseUiaProvider();
+                    _owner.subItems[i].ReleaseUiaProvider();
                 }
 
+                _owner.subItems.Clear();
                 _owner.SubItemCount = 0;
                 _owner.UpdateSubItems(-1, oldCount);
             }
@@ -227,68 +231,24 @@ public partial class ListViewItem
         public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
         /// <summary>
-        ///  Ensures that the sub item array has the given capacity. If it doesn't, it enlarges the
-        ///  array until it does. If index is -1, additional space is tacked onto the end. If it is a valid
-        ///  insertion index into the array, this will move the array data to accomodate the space.
+        ///  Checks that the sub items list size does not exceed the MaxSubItems value
+        ///  and ensures that it has the given capacity.
         /// </summary>
-        private void EnsureSubItemSpace(int size, int index)
+        private void EnsureSubItemsCapacity(int capacity)
         {
             if (_owner.SubItemCount == MaxSubItems)
             {
                 throw new InvalidOperationException(SR.ErrorCollectionFull);
             }
 
-            if (_owner.subItems is null || _owner.SubItemCount + size > _owner.subItems.Length)
-            {
-                // Must grow array. Don't do it just by size, though;
-                // chunk it for efficiency.
-                if (_owner.subItems is null)
-                {
-                    int newSize = (size > 4) ? size : 4;
-                    _owner.subItems = new ListViewSubItem[newSize];
-                }
-                else
-                {
-                    int newSize = _owner.subItems.Length * 2;
-                    while (newSize - _owner.SubItemCount < size)
-                    {
-                        newSize *= 2;
-                    }
-
-                    ListViewSubItem[] newItems = new ListViewSubItem[newSize];
-
-                    // When copying to the member variable use index if it was provided.
-                    if (index != -1)
-                    {
-                        Array.Copy(_owner.subItems, 0, newItems, 0, index);
-                        Array.Copy(_owner.subItems, index, newItems, index + size, _owner.SubItemCount - index);
-                    }
-                    else
-                    {
-                        Array.Copy(_owner.subItems, newItems, _owner.SubItemCount);
-                    }
-
-                    _owner.subItems = newItems;
-                }
-            }
-            else
-            {
-                // We had plenty of room. Just move the items if we need to
-                if (index != -1)
-                {
-                    for (int i = _owner.SubItemCount - 1; i >= index; i--)
-                    {
-                        _owner.subItems[i + size] = _owner.subItems[i];
-                    }
-                }
-            }
+            _owner.subItems.EnsureCapacity(capacity);
         }
 
         public int IndexOf(ListViewSubItem? subItem)
         {
             for (int index = 0; index < Count; ++index)
             {
-                if (_owner.subItems![index] == subItem)
+                if (_owner.subItems[index] == subItem)
                 {
                     return index;
                 }
@@ -354,10 +314,10 @@ public partial class ListViewItem
 
             item._owner = _owner;
 
-            EnsureSubItemSpace(1, index);
+            EnsureSubItemsCapacity(1);
 
             // Insert new item
-            _owner.subItems![index] = item;
+            _owner.subItems.Insert(index, item);
             _owner.SubItemCount++;
             _owner.UpdateSubItems(-1);
         }
@@ -397,18 +357,14 @@ public partial class ListViewItem
             }
 
             // Remove ourselves as the owner.
-            _owner.subItems![index]._owner = null;
-            _owner.subItems![index].ReleaseUiaProvider();
+            _owner.subItems[index]._owner = null;
+            _owner.subItems[index].ReleaseUiaProvider();
 
             // Collapse the items
-            for (int i = index + 1; i < _owner.SubItemCount; i++)
-            {
-                _owner.subItems[i - 1] = _owner.subItems[i];
-            }
+            _owner.subItems.RemoveAt(index);
 
             int oldCount = _owner.SubItemCount;
             _owner.SubItemCount--;
-            _owner.subItems[_owner.SubItemCount] = null!;
             _owner.UpdateSubItems(-1, oldCount);
         }
 
@@ -428,20 +384,13 @@ public partial class ListViewItem
         {
             if (Count > 0)
             {
-                Array.Copy(_owner.subItems!, 0, dest, index, Count);
+                ((ICollection)_owner.subItems).CopyTo(dest, index);
             }
         }
 
         public IEnumerator GetEnumerator()
         {
-            if (_owner.subItems is not null)
-            {
-                return new ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
-            }
-            else
-            {
-                return Array.Empty<ListViewSubItem>().GetEnumerator();
-            }
+            return _owner.subItems.GetEnumerator();
         }
     }
 }
