@@ -9,6 +9,15 @@ namespace System.Resources.Tests;
 // NB: doesn't require thread affinity
 public class ResXResourceWriterTests
 {
+    private readonly byte[] _testBytes = new byte[] { 1, 2, 3 };
+    private readonly string _testString1 = "TestString1";
+    private readonly string _testString2 = "TestString2";
+    private readonly string _ResxFileName = "test.resx";
+    private readonly DateTime _testDateTime = new DateTime(2023, 5, 4);
+#nullable enable
+    private readonly Func<Type?, string> _typeNameConverter = type => type?.AssemblyQualifiedName ?? string.Empty;
+#nullable disable
+
     [Fact]
     public void TestRoundTrip()
     {
@@ -43,10 +52,10 @@ public class ResXResourceWriterTests
     public void ResXResourceWriter_Constructor_FileName_CreatesInstance()
     {
         // Arrange
-        string fileName = "test.resx";
+        string fileName = _ResxFileName;
 
         // Act
-        ResXResourceWriter writer = new ResXResourceWriter(fileName);
+        using ResXResourceWriter writer = new ResXResourceWriter(fileName);
 
         // Assert
         Assert.NotNull(writer);
@@ -56,11 +65,10 @@ public class ResXResourceWriterTests
     public void ResXResourceWriter_Constructor_FileNameAndTypeNameConverter_CreatesInstance()
     {
         // Arrange
-        string fileName = "test.resx";
-        Func<Type?, string> typeNameConverter = type => type?.AssemblyQualifiedName;
+        string fileName = _ResxFileName;
 
         // Act
-        ResXResourceWriter writer = new ResXResourceWriter(fileName, typeNameConverter);
+        using ResXResourceWriter writer = new ResXResourceWriter(fileName, _typeNameConverter);
 
         // Assert
         Assert.NotNull(writer);
@@ -70,10 +78,10 @@ public class ResXResourceWriterTests
     public void ResXResourceWriter_Constructor_Stream_CreatesInstance()
     {
         // Arrange
-        Stream stream = new MemoryStream();
+        using Stream stream = new MemoryStream();
 
         // Act
-        ResXResourceWriter writer = new ResXResourceWriter(stream);
+        using ResXResourceWriter writer = new ResXResourceWriter(stream);
 
         // Assert
         Assert.NotNull(writer);
@@ -83,11 +91,10 @@ public class ResXResourceWriterTests
     public void ResXResourceWriter_Constructor_StreamAndTypeNameConverter_CreatesInstance()
     {
         // Arrange
-        Stream stream = new MemoryStream();
-        Func<Type?, string> typeNameConverter = type => type?.AssemblyQualifiedName;
+        using Stream stream = new MemoryStream();
 
         // Act
-        ResXResourceWriter writer = new ResXResourceWriter(stream, typeNameConverter);
+        using ResXResourceWriter writer = new ResXResourceWriter(stream, _typeNameConverter);
 
         // Assert
         Assert.NotNull(writer);
@@ -97,10 +104,10 @@ public class ResXResourceWriterTests
     public void ResXResourceWriter_Constructor_TextWriter_CreatesInstance()
     {
         // Arrange
-        TextWriter textWriter = new StringWriter();
+        using TextWriter textWriter = new StringWriter();
 
         // Act
-        ResXResourceWriter writer = new ResXResourceWriter(textWriter);
+        using ResXResourceWriter writer = new ResXResourceWriter(textWriter);
 
         // Assert
         Assert.NotNull(writer);
@@ -110,11 +117,10 @@ public class ResXResourceWriterTests
     public void ResXResourceWriter_Constructor_TextWriterAndTypeNameConverter_CreatesInstance()
     {
         // Arrange
-        TextWriter textWriter = new StringWriter();
-        Func<Type?, string> typeNameConverter = type => type?.AssemblyQualifiedName;
+        using TextWriter textWriter = new StringWriter();
 
         // Act
-        ResXResourceWriter writer = new ResXResourceWriter(textWriter, typeNameConverter);
+        using ResXResourceWriter writer = new ResXResourceWriter(textWriter, _typeNameConverter);
 
         // Assert
         Assert.NotNull(writer);
@@ -124,168 +130,154 @@ public class ResXResourceWriterTests
     public void ResXResourceWriter_AddMetadata_ByteValue_AddsMetadataToResourceFile()
     {
         // Arrange
-        string name = "TestMetaData";
-        byte[] value = new byte[] { 1, 2, 3 };
-        ResXResourceWriter writer = new ResXResourceWriter("test.resx");
+        using ResXResourceWriter writer = new ResXResourceWriter(_ResxFileName);
 
         // Act
-        writer.AddMetadata(name, value);
+        writer.AddMetadata(_testString1, _testBytes);
         writer.Generate();
         writer.Close();
 
         // Assert
-        using ResXResourceReader reader = new ResXResourceReader("test.resx");
+        using ResXResourceReader reader = new ResXResourceReader(_ResxFileName);
         var metadataEnumerator = reader.GetMetadataEnumerator();
         Assert.NotNull(metadataEnumerator);
         Assert.True(metadataEnumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)metadataEnumerator.Current;
-        Assert.Equal(name, currentEntry.Key);
-        Assert.Equal(value, currentEntry.Value);
+        Assert.Equal(_testString1, currentEntry.Key);
+        Assert.Equal(_testBytes, currentEntry.Value);
     }
 
     [Fact]
     public void ResXResourceWriter_AddMetadata_StringValue_AddsMetadataToResourceFile()
     {
         // Arrange
-        string name = "TestMetaData";
-        string value = "TestString";
-        ResXResourceWriter writer = new ResXResourceWriter("test.resx");
+        using ResXResourceWriter writer = new ResXResourceWriter(_ResxFileName);
 
         // Act
-        writer.AddMetadata(name, value);
+        writer.AddMetadata(_testString1, _testString2);
         writer.Generate();
         writer.Close();
 
         // Assert
-        using ResXResourceReader reader = new ResXResourceReader("test.resx");
+        using ResXResourceReader reader = new ResXResourceReader(_ResxFileName);
         var metadataEnumerator = reader.GetMetadataEnumerator();
         Assert.NotNull(metadataEnumerator);
         Assert.True(metadataEnumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)metadataEnumerator.Current;
-        Assert.Equal(name, currentEntry.Key);
-        Assert.Equal(value, currentEntry.Value);
+        Assert.Equal(_testString1, currentEntry.Key);
+        Assert.Equal(_testString2, currentEntry.Value);
     }
 
     [Fact]
     public void ResXResourceWriter_AddMetadata_ObjectValue_AddsMetadataToResourceFile()
     {
         // Arrange
-        string name = "TestMetaData";
-        object value = new DateTime(2023, 05, 04);
-        ResXResourceWriter writer = new ResXResourceWriter("test.resx");
+        using ResXResourceWriter writer = new ResXResourceWriter(_ResxFileName);
 
         // Act
-        writer.AddMetadata(name, value);
+        writer.AddMetadata(_testString1, _testDateTime);
         writer.Generate();
         writer.Close();
 
         // Assert
-        using ResXResourceReader reader = new ResXResourceReader("test.resx");
+        using ResXResourceReader reader = new ResXResourceReader(_ResxFileName);
         var metadataEnumerator = reader.GetMetadataEnumerator();
         Assert.NotNull(metadataEnumerator);
         Assert.True(metadataEnumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)metadataEnumerator.Current;
-        Assert.Equal(name, currentEntry.Key);
-        Assert.Equal(value, currentEntry.Value);
+        Assert.Equal(_testString1, currentEntry.Key);
+        Assert.Equal(_testDateTime, currentEntry.Value);
     }
 
     [Fact]
     public void ResXResourceWriter_AddResource_ByteValue_AddsResourceToResourceFile()
     {
         // Arrange
-        string name = "TestResource";
-        byte[] value = new byte[] { 1, 2, 3 };
-        ResXResourceWriter writer = new ResXResourceWriter("test.resx");
+        using ResXResourceWriter writer = new ResXResourceWriter(_ResxFileName);
 
         // Act
-        writer.AddResource(name, value);
+        writer.AddResource(_testString1, _testBytes);
         writer.Generate();
         writer.Close();
 
         // Assert
-        using ResXResourceReader reader = new ResXResourceReader("test.resx");
+        using ResXResourceReader reader = new ResXResourceReader(_ResxFileName);
         var enumerator = reader.GetEnumerator();
         Assert.NotNull(enumerator);
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;
-        Assert.Equal(name, currentEntry.Key);
-        Assert.Equal(value, currentEntry.Value);
+        Assert.Equal(_testString1, currentEntry.Key);
+        Assert.Equal(_testBytes, currentEntry.Value);
     }
 
     [Fact]
     public void ResXResourceWriter_AddResource_StringValue_AddsResourceToResourceFile()
     {
         // Arrange
-        string name = "TestResource";
-        string value = "TestString";
-        ResXResourceWriter writer = new ResXResourceWriter("test.resx");
+        using ResXResourceWriter writer = new ResXResourceWriter(_ResxFileName);
 
         // Act
-        writer.AddResource(name, value);
+        writer.AddResource(_testString1, _testString2);
         writer.Generate();
         writer.Close();
 
         // Assert
-        using ResXResourceReader reader = new ResXResourceReader("test.resx");
+        using ResXResourceReader reader = new ResXResourceReader(_ResxFileName);
         var enumerator = reader.GetEnumerator();
         Assert.NotNull(enumerator);
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;
-        Assert.Equal(name, currentEntry.Key);
-        Assert.Equal(value, currentEntry.Value);
+        Assert.Equal(_testString1, currentEntry.Key);
+        Assert.Equal(_testString2, currentEntry.Value);
     }
 
     [Fact]
     public void ResXResourceWriter_AddResource_ObjectValue_AddsResourceToResourceFile()
     {
         // Arrange
-        string name = "TestResource";
-        object value = new DateTime(2023, 05, 04);
-        ResXResourceWriter writer = new ResXResourceWriter("test.resx");
+        using ResXResourceWriter writer = new ResXResourceWriter(_ResxFileName);
 
         // Act
-        writer.AddResource(name, value);
+        writer.AddResource(_testString1, _testDateTime);
         writer.Generate();
         writer.Close();
 
         // Assert
-        using ResXResourceReader reader = new ResXResourceReader("test.resx");
+        using ResXResourceReader reader = new ResXResourceReader(_ResxFileName);
         var enumerator = reader.GetEnumerator();
         Assert.NotNull(enumerator);
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;
-        Assert.Equal(name, currentEntry.Key);
-        Assert.Equal(value, currentEntry.Value);
+        Assert.Equal(_testString1, currentEntry.Key);
+        Assert.Equal(_testDateTime, currentEntry.Value);
     }
 
     [Fact]
     public void ResXResourceWriter_AddResource_ResxDataNodeValue_AddsResourceToResourceFile()
     {
         // Arrange
-        string name = "TestResource";
-        object value = new DateTime(2023, 05, 04);
-        ResXDataNode dataNode = new ResXDataNode(name, value);
-        ResXResourceWriter writer = new ResXResourceWriter("test.resx");
+        ResXDataNode dataNode = new ResXDataNode(_testString1, _testDateTime);
+        using ResXResourceWriter writer = new ResXResourceWriter(_ResxFileName);
 
         // Act
-        writer.AddResource(name, dataNode);
+        writer.AddResource(_testString1, dataNode);
         writer.Generate();
         writer.Close();
 
         // Assert
-        using ResXResourceReader reader = new ResXResourceReader("test.resx");
+        using ResXResourceReader reader = new ResXResourceReader(_ResxFileName);
         var enumerator = reader.GetEnumerator();
         Assert.NotNull(enumerator);
         Assert.True(enumerator.MoveNext());
 
         var currentEntry = (DictionaryEntry)enumerator.Current;
-        Assert.Equal(name, currentEntry.Key);
-        Assert.Equal(value, currentEntry.Value);
+        Assert.Equal(_testString1, currentEntry.Key);
+        Assert.Equal(_testDateTime, currentEntry.Value);
     }
 }
