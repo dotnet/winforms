@@ -459,7 +459,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
             return;
         }
 
-        object value = _errorManager.Current;
+        object? value = _errorManager.Current;
         if (value is not IDataErrorInfo)
         {
             return;

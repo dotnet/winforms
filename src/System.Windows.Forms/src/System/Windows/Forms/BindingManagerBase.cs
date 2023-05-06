@@ -57,7 +57,7 @@ public abstract class BindingManagerBase
         _onDataErrorHandler?.Invoke(this, new BindingManagerDataErrorEventArgs(e));
     }
 
-    public abstract object Current { get; }
+    public abstract object? Current { get; }
 
     private protected abstract void SetDataSource(object dataSource);
 
@@ -271,7 +271,7 @@ public abstract class BindingManagerBase
         }
     }
 
-    internal abstract object DataSource { get; }
+    internal abstract object? DataSource { get; }
 
     internal abstract bool IsBinding { get; }
 

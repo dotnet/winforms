@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -11,17 +9,17 @@ namespace System.Windows.Forms;
 
 public class PropertyManager : BindingManagerBase
 {
-    private object _dataSource;
-    private readonly string _propName;
-    private PropertyDescriptor _propInfo;
+    private object? _dataSource;
+    private readonly string? _propName;
+    private PropertyDescriptor? _propInfo;
     private bool _bound;
 
     /// <summary>
     ///  An object that represents the object to which the property belongs.
     /// </summary>
-    public override object Current => _dataSource;
+    public override object? Current => _dataSource;
 
-    private void PropertyChanged(object sender, EventArgs ea)
+    private void PropertyChanged(object? sender, EventArgs ea)
     {
         EndCurrentEdit();
         OnCurrentChanged(EventArgs.Empty);
@@ -31,7 +29,7 @@ public class PropertyManager : BindingManagerBase
     {
         if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
         {
-            _propInfo.RemoveValueChanged(_dataSource, new EventHandler(PropertyChanged));
+            _propInfo?.RemoveValueChanged(_dataSource, new EventHandler(PropertyChanged));
             _propInfo = null;
         }
 
@@ -63,16 +61,16 @@ public class PropertyManager : BindingManagerBase
         SetDataSource(dataSource);
     }
 
-    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
+    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
     {
         return ListBindingHelper.GetListItemProperties(_dataSource, listAccessors);
     }
 
-    internal override Type BindType => _dataSource.GetType();
+    internal override Type BindType => _dataSource!.GetType();
 
     internal override string GetListName()
     {
-        return $"{TypeDescriptor.GetClassName(_dataSource)}.{_propName}";
+        return $"{TypeDescriptor.GetClassName(_dataSource!)}.{_propName}";
     }
 
     public override void SuspendBinding()
@@ -120,14 +118,14 @@ public class PropertyManager : BindingManagerBase
     ///  Gets the name of the list supplying the data for the binding.
     /// </summary>
     /// <returns>Always returns an empty string.</returns>
-    protected internal override string GetListName(ArrayList listAccessors) => string.Empty;
+    protected internal override string GetListName(ArrayList? listAccessors) => string.Empty;
 
     /// <summary>
     ///  Cancels the current edit.
     /// </summary>
     public override void CancelCurrentEdit()
     {
-        IEditableObject obj = Current as IEditableObject;
+        IEditableObject? obj = Current as IEditableObject;
         obj?.CancelEdit();
         PushData();
     }
@@ -141,7 +139,7 @@ public class PropertyManager : BindingManagerBase
 
         if (success)
         {
-            IEditableObject obj = Current as IEditableObject;
+            IEditableObject? obj = Current as IEditableObject;
             obj?.EndEdit();
         }
     }
@@ -177,7 +175,7 @@ public class PropertyManager : BindingManagerBase
         _onCurrentItemChangedHandler?.Invoke(this, ea);
     }
 
-    internal override object DataSource => _dataSource;
+    internal override object? DataSource => _dataSource;
 
     internal override bool IsBinding => _dataSource is not null;
 
