@@ -292,10 +292,10 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
     bool IList.Contains(object? value) { return InnerList.Contains(value); }
     void IList.RemoveAt(int index) { RemoveAt(index); }
-    void IList.Remove(object? value) { Remove((value as ToolStripItem)!); }
-    int IList.Add(object? value) { return Add((value as ToolStripItem)!); }
-    int IList.IndexOf(object? value) { return IndexOf((value as ToolStripItem)!); }
-    void IList.Insert(int index, object? value) { Insert(index, (value as ToolStripItem)!); }
+    void IList.Remove(object? value) { Remove((ToolStripItem)value!); }
+    int IList.Add(object? value) { return Add((ToolStripItem)value!); }
+    int IList.IndexOf(object? value) { return IndexOf((ToolStripItem)value!); }
+    void IList.Insert(int index, object? value) { Insert(index, (ToolStripItem)value!); }
 
     object? IList.this[int index]
     {
