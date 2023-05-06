@@ -7,8 +7,6 @@
 using System.CodeDom;
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
-#if DEBUG
-#endif
 
 namespace System.Windows.Forms.Design;
 

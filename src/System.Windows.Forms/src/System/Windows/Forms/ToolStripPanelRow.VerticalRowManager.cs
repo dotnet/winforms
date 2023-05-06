@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-#if DEBUG
-#endif
 using System.Drawing;
 using System.Windows.Forms.Layout;
 

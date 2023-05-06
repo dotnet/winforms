@@ -2,12 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
-#if DEBUG
-#endif
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
@@ -115,15 +111,15 @@ public partial class ToolStripPanel
 
         void IList.Clear() { Clear(); }
         bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
-        bool IList.Contains(object value) { return InnerList.Contains(value); }
+        bool IList.Contains(object? value) { return InnerList.Contains(value); }
         bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
         void IList.RemoveAt(int index) { RemoveAt(index); }
-        void IList.Remove(object value) { Remove(value as ToolStripPanelRow); }
-        int IList.Add(object value) { return Add(value as ToolStripPanelRow); }
-        int IList.IndexOf(object value) { return IndexOf(value as ToolStripPanelRow); }
-        void IList.Insert(int index, object value) { Insert(index, value as ToolStripPanelRow); }
+        void IList.Remove(object? value) { Remove((ToolStripPanelRow)value!); }
+        int IList.Add(object? value) { return Add((ToolStripPanelRow)value!); }
+        int IList.IndexOf(object? value) { return IndexOf((ToolStripPanelRow)value!); }
+        void IList.Insert(int index, object? value) { Insert(index, (ToolStripPanelRow)value!); }
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get { return InnerList[index]; }
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
@@ -153,7 +149,7 @@ public partial class ToolStripPanel
         /// <summary>
         ///  Do proper cleanup of ownership, etc.
         /// </summary>
-        private static void OnAfterRemove(ToolStripPanelRow row)
+        private static void OnAfterRemove(ToolStripPanelRow? row)
         {
 #if DEBUG
             if (s_toolStripPanelMissingRowDebug.TraceVerbose)
@@ -177,7 +173,7 @@ public partial class ToolStripPanel
 
         public void RemoveAt(int index)
         {
-            ToolStripPanelRow item = null;
+            ToolStripPanelRow? item = null;
             if (index < Count && index >= 0)
             {
                 item = (ToolStripPanelRow)(InnerList[index]);
