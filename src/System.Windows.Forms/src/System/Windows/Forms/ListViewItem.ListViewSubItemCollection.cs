@@ -50,7 +50,7 @@ public partial class ListViewItem
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                return _owner.subItems[index];
+                return _owner._subItems[index];
             }
             set
             {
@@ -59,9 +59,9 @@ public partial class ListViewItem
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                ListViewSubItem oldSubItem = _owner.subItems[index];
+                ListViewSubItem oldSubItem = _owner._subItems[index];
 
-                _owner.subItems[index] = value.OrThrowIfNull();
+                _owner._subItems[index] = value.OrThrowIfNull();
                 value._owner = _owner;
 
                 oldSubItem._owner = null;
@@ -115,7 +115,7 @@ public partial class ListViewItem
 
             EnsureSubItemsCapacity(1);
             item._owner = _owner;
-            _owner.subItems.Add(item);
+            _owner._subItems.Add(item);
             _owner.UpdateSubItems(_owner.SubItemCount++);
             return item;
         }
@@ -144,7 +144,7 @@ public partial class ListViewItem
                 if (item is not null)
                 {
                     item._owner = _owner;
-                    _owner.subItems.Add(item);
+                    _owner._subItems.Add(item);
                     _owner.SubItemCount++;
                 }
             }
@@ -161,7 +161,7 @@ public partial class ListViewItem
             {
                 if (item is not null)
                 {
-                    _owner.subItems.Add(new ListViewSubItem(_owner, item));
+                    _owner._subItems.Add(new ListViewSubItem(_owner, item));
                     _owner.SubItemCount++;
                 }
             }
@@ -178,7 +178,7 @@ public partial class ListViewItem
             {
                 if (item is not null)
                 {
-                    _owner.subItems.Add(new ListViewSubItem(_owner, item, foreColor, backColor, font));
+                    _owner._subItems.Add(new ListViewSubItem(_owner, item, foreColor, backColor, font));
                     _owner.SubItemCount++;
                 }
             }
@@ -204,10 +204,10 @@ public partial class ListViewItem
                 for (int i = 0; i < oldCount; i++)
                 {
                     _owner.SubItems[i]._owner = null;
-                    _owner.subItems[i].ReleaseUiaProvider();
+                    _owner._subItems[i].ReleaseUiaProvider();
                 }
 
-                _owner.subItems.Clear();
+                _owner._subItems.Clear();
                 _owner.SubItemCount = 0;
                 _owner.UpdateSubItems(-1, oldCount);
             }
@@ -241,14 +241,14 @@ public partial class ListViewItem
                 throw new InvalidOperationException(SR.ErrorCollectionFull);
             }
 
-            _owner.subItems.EnsureCapacity(capacity);
+            _owner._subItems.EnsureCapacity(capacity);
         }
 
         public int IndexOf(ListViewSubItem? subItem)
         {
             for (int index = 0; index < Count; ++index)
             {
-                if (_owner.subItems[index] == subItem)
+                if (_owner._subItems[index] == subItem)
                 {
                     return index;
                 }
@@ -317,7 +317,7 @@ public partial class ListViewItem
             EnsureSubItemsCapacity(1);
 
             // Insert new item
-            _owner.subItems.Insert(index, item);
+            _owner._subItems.Insert(index, item);
             _owner.SubItemCount++;
             _owner.UpdateSubItems(-1);
         }
@@ -357,11 +357,11 @@ public partial class ListViewItem
             }
 
             // Remove ourselves as the owner.
-            _owner.subItems[index]._owner = null;
-            _owner.subItems[index].ReleaseUiaProvider();
+            _owner._subItems[index]._owner = null;
+            _owner._subItems[index].ReleaseUiaProvider();
 
             // Collapse the items
-            _owner.subItems.RemoveAt(index);
+            _owner._subItems.RemoveAt(index);
 
             int oldCount = _owner.SubItemCount;
             _owner.SubItemCount--;
@@ -384,13 +384,13 @@ public partial class ListViewItem
         {
             if (Count > 0)
             {
-                ((ICollection)_owner.subItems).CopyTo(dest, index);
+                ((ICollection)_owner._subItems).CopyTo(dest, index);
             }
         }
 
         public IEnumerator GetEnumerator()
         {
-            return _owner.subItems.GetEnumerator();
+            return _owner._subItems.GetEnumerator();
         }
     }
 }

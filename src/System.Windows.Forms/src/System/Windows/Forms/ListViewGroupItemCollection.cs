@@ -102,7 +102,7 @@ internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IIn
         ListViewGroup? oldGroup = item.Group;
         if (oldGroup != newGroup)
         {
-            item.group = newGroup;
+            item._group = newGroup;
             oldGroup?.Items.Remove(item);
             UpdateNativeListViewItem(item);
         }
@@ -112,9 +112,9 @@ internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IIn
     {
         Items.Remove(item);
 
-        if (item.group == _group)
+        if (item._group == _group)
         {
-            item.group = null;
+            item._group = null;
             UpdateNativeListViewItem(item);
         }
     }

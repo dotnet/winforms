@@ -3477,7 +3477,7 @@ public partial class ListView : Control
     /// </summary>
     internal int GetDisplayIndex(ListViewItem item, int lastIndex)
     {
-        Debug.Assert(item.listView == this, "Can't GetDisplayIndex if the list item doesn't belong to us");
+        Debug.Assert(item._listView == this, "Can't GetDisplayIndex if the list item doesn't belong to us");
         Debug.Assert(item.ID != -1, "ListViewItem has no ID yet");
 
         ApplyUpdateCachedItems();
@@ -4098,7 +4098,7 @@ public partial class ListView : Control
             {
                 for (int i = 0; i < items.Length; i++)
                 {
-                    if (items[i].listView is not null)
+                    if (items[i]._listView is not null)
                     {
                         throw new ArgumentException(string.Format(SR.OnlyOneControl, items[i].Text), "item");
                     }
@@ -4125,7 +4125,7 @@ public partial class ListView : Control
         {
             ListViewItem item = items[i];
 
-            if (checkHosting && item.listView is not null)
+            if (checkHosting && item._listView is not null)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text), "item");
             }

@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public partial class ListViewItem : IKeyboardToolTip
 {
-    private bool AllowsToolTips => listView?.ShowItemToolTips ?? false;
+    private bool AllowsToolTips => _listView?.ShowItemToolTips ?? false;
 
     bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => AllowsToolTips;
 
@@ -23,12 +23,12 @@ public partial class ListViewItem : IKeyboardToolTip
     IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
     {
         List<Rectangle> neighboringRectangles = new List<Rectangle>();
-        if (listView is null)
+        if (_listView is null)
         {
             return neighboringRectangles;
         }
 
-        switch (listView.View)
+        switch (_listView.View)
         {
             case View.SmallIcon:
             case View.LargeIcon:
@@ -48,12 +48,12 @@ public partial class ListViewItem : IKeyboardToolTip
 
                 if (Index > 0)
                 {
-                    neighboringRectangles.Add(listView.Items[Index - 1].AccessibilityObject.Bounds);
+                    neighboringRectangles.Add(_listView.Items[Index - 1].AccessibilityObject.Bounds);
                 }
 
-                if (Index < listView.Items.Count - 1)
+                if (Index < _listView.Items.Count - 1)
                 {
-                    neighboringRectangles.Add(listView.Items[Index + 1].AccessibilityObject.Bounds);
+                    neighboringRectangles.Add(_listView.Items[Index + 1].AccessibilityObject.Bounds);
                 }
 
                 break;
@@ -62,13 +62,13 @@ public partial class ListViewItem : IKeyboardToolTip
         return neighboringRectangles;
     }
 
-    IWin32Window? IKeyboardToolTip.GetOwnerWindow() => listView;
+    IWin32Window? IKeyboardToolTip.GetOwnerWindow() => _listView;
 
-    bool IKeyboardToolTip.HasRtlModeEnabled() => listView?.RightToLeft == RightToLeft.Yes;
+    bool IKeyboardToolTip.HasRtlModeEnabled() => _listView?.RightToLeft == RightToLeft.Yes;
 
     bool IKeyboardToolTip.IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
 
-    bool IKeyboardToolTip.IsHoveredWithMouse() => listView?.AccessibilityObject.Bounds.Contains(Control.MousePosition) ?? false;
+    bool IKeyboardToolTip.IsHoveredWithMouse() => _listView?.AccessibilityObject.Bounds.Contains(Control.MousePosition) ?? false;
 
     void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
 
@@ -82,22 +82,22 @@ public partial class ListViewItem : IKeyboardToolTip
 
     private Rectangle GetNativeRectangle(int index)
     {
-        if (listView is null)
+        if (_listView is null)
         {
             return Rectangle.Empty;
         }
 
-        ListViewItem item = listView.Items[index];
+        ListViewItem item = _listView.Items[index];
         if (item.Group is not null && item.Group.CollapsedState == ListViewGroupCollapsedState.Collapsed)
         {
             return Rectangle.Empty;
         }
 
-        Rectangle itemBounds = listView.GetItemRect(index, ItemBoundsPortion.Label);
-        Rectangle listviewBounds = listView.AccessibilityObject.Bounds;
+        Rectangle itemBounds = _listView.GetItemRect(index, ItemBoundsPortion.Label);
+        Rectangle listviewBounds = _listView.AccessibilityObject.Bounds;
         Point point = new Point(listviewBounds.X + itemBounds.X, listviewBounds.Y + itemBounds.Y);
 
-        switch (listView.View)
+        switch (_listView.View)
         {
             case View.Details:
             case View.List:
