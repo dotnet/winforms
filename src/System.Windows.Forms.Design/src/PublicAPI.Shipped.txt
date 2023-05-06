@@ -397,10 +397,10 @@ System.ComponentModel.Design.Serialization.StatementContext.StatementCollection.
 ~System.Windows.Forms.Design.AxImporter.Options.outputName -> string
 ~System.Windows.Forms.Design.AxImporter.Options.publicKey -> byte[]
 ~System.Windows.Forms.Design.AxImporter.Options.references -> System.Windows.Forms.Design.AxImporter.IReferenceResolver
-~System.Windows.Forms.Design.Behavior.Adorner.BehaviorService.get -> System.Windows.Forms.Design.Behavior.BehaviorService
-~System.Windows.Forms.Design.Behavior.Adorner.BehaviorService.set -> void
-~System.Windows.Forms.Design.Behavior.Adorner.Glyphs.get -> System.Windows.Forms.Design.Behavior.GlyphCollection
-~System.Windows.Forms.Design.Behavior.Adorner.Invalidate(System.Drawing.Region region) -> void
+System.Windows.Forms.Design.Behavior.Adorner.BehaviorService.get -> System.Windows.Forms.Design.Behavior.BehaviorService?
+System.Windows.Forms.Design.Behavior.Adorner.BehaviorService.set -> void
+System.Windows.Forms.Design.Behavior.Adorner.Glyphs.get -> System.Windows.Forms.Design.Behavior.GlyphCollection!
+System.Windows.Forms.Design.Behavior.Adorner.Invalidate(System.Drawing.Region! region) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.BehaviorDragDropEventArgs(System.Collections.ICollection dragComponents) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.DragComponents.get -> System.Collections.ICollection
 ~System.Windows.Forms.Design.Behavior.BehaviorService.Adorners.get -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior;
@@ -16,7 +14,7 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 public sealed class Adorner
 {
-    private BehaviorService _behaviorService; //ptr back to the BehaviorService
+    private BehaviorService? _behaviorService; //ptr back to the BehaviorService
     private readonly GlyphCollection _glyphs; //collection of Glyphs that this particular Adorner manages
 
     /// <summary>
@@ -32,7 +30,7 @@ public sealed class Adorner
     ///  When an Adorner is added to the BehaviorService's AdornerCollection, the collection
     ///  will set this property so that the Adorner can call back to the BehaviorService.
     /// </summary>
-    public BehaviorService BehaviorService
+    public BehaviorService? BehaviorService
     {
         get => _behaviorService;
         set => _behaviorService = value;
