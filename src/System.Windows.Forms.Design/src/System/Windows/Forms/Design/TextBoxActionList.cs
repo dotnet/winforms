@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -11,7 +9,8 @@ namespace System.Windows.Forms.Design;
 
 internal class TextBoxActionList : DesignerActionList
 {
-    public TextBoxActionList(TextBoxDesigner designer) : base(designer.Component)
+    public TextBoxActionList(TextBoxDesigner designer)
+        : base(designer.Component)
     {
     }
 
@@ -19,11 +18,11 @@ internal class TextBoxActionList : DesignerActionList
     {
         get
         {
-            return ((TextBox)Component).Multiline;
+            return ((TextBox)Component!).Multiline;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component)["Multiline"].SetValue(Component, value);
+            TypeDescriptor.GetProperties(Component!)["Multiline"]!.SetValue(Component, value);
         }
     }
 

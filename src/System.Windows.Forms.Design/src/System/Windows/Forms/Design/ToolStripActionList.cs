@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -13,18 +11,17 @@ internal class ToolStripActionList : DesignerActionList
 {
     private readonly ToolStrip _toolStrip;
     private bool _autoShow;
-    private readonly ToolStripDesigner _designer;
 
     private readonly ChangeToolStripParentVerb _changeParentVerb;
-    private readonly StandardMenuStripVerb _standardItemsVerb;
+    private readonly StandardMenuStripVerb? _standardItemsVerb;
 
-    public ToolStripActionList(ToolStripDesigner designer) : base(designer.Component)
+    public ToolStripActionList(ToolStripDesigner designer)
+        : base(designer.Component)
     {
         _toolStrip = (ToolStrip)designer.Component;
-        _designer = designer;
 
         _changeParentVerb = new ChangeToolStripParentVerb(SR.ToolStripDesignerEmbedVerb, designer);
-        if (!(_toolStrip is StatusStrip))
+        if (_toolStrip is not StatusStrip)
         {
             _standardItemsVerb = new StandardMenuStripVerb(designer);
         }
@@ -38,8 +35,7 @@ internal class ToolStripActionList : DesignerActionList
         get
         {
             // Make sure the component is not being inherited -- we can't delete these!
-            InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(_toolStrip)[typeof(InheritanceAttribute)];
-            if (ia is null || ia.InheritanceLevel == InheritanceLevel.NotInherited)
+            if (!TypeDescriptorHelper.TryGetAttribute(_toolStrip, out InheritanceAttribute? ia) || ia.InheritanceLevel == InheritanceLevel.NotInherited)
             {
                 return true;
             }
@@ -53,8 +49,7 @@ internal class ToolStripActionList : DesignerActionList
         get
         {
             // Make sure the component is not being inherited -- we can't delete these!
-            InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(_toolStrip)[typeof(InheritanceAttribute)];
-            if (ia is null || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+            if (!TypeDescriptorHelper.TryGetAttribute(_toolStrip, out InheritanceAttribute? ia) || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
             {
                 return true;
             }
@@ -64,9 +59,9 @@ internal class ToolStripActionList : DesignerActionList
     }
 
     //helper function to get the property on the actual Control
-    private object GetProperty(string propertyName)
+    private object? GetProperty(string propertyName)
     {
-        PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
+        PropertyDescriptor? getProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
         Debug.Assert(getProperty is not null, "Could not find given property in control.");
         if (getProperty is not null)
         {
@@ -79,7 +74,7 @@ internal class ToolStripActionList : DesignerActionList
     //helper function to change the property on the actual Control
     private void ChangeProperty(string propertyName, object value)
     {
-        PropertyDescriptor changingProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
+        PropertyDescriptor? changingProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
         Debug.Assert(changingProperty is not null, "Could not find given property in control.");
         changingProperty?.SetValue(_toolStrip, value);
     }
@@ -101,7 +96,7 @@ internal class ToolStripActionList : DesignerActionList
 
     public DockStyle Dock
     {
-        get => (DockStyle)GetProperty(nameof(Dock));
+        get => (DockStyle)GetProperty(nameof(Dock))!;
         set
         {
             if (value != Dock)
@@ -113,7 +108,7 @@ internal class ToolStripActionList : DesignerActionList
 
     public ToolStripRenderMode RenderMode
     {
-        get => (ToolStripRenderMode)GetProperty(nameof(RenderMode));
+        get => (ToolStripRenderMode)GetProperty(nameof(RenderMode))!;
         set
         {
             if (value != RenderMode)
@@ -125,7 +120,7 @@ internal class ToolStripActionList : DesignerActionList
 
     public ToolStripGripStyle GripStyle
     {
-        get => (ToolStripGripStyle)GetProperty(nameof(GripStyle));
+        get => (ToolStripGripStyle)GetProperty(nameof(GripStyle))!;
         set
         {
             if (value != GripStyle)
@@ -138,7 +133,7 @@ internal class ToolStripActionList : DesignerActionList
     private void InvokeEmbedVerb()
     {
         // Hide the Panel...
-        DesignerActionUIService actionUIService = (DesignerActionUIService)_toolStrip.Site.GetService(typeof(DesignerActionUIService));
+        DesignerActionUIService? actionUIService = (DesignerActionUIService?)_toolStrip.Site?.GetService(typeof(DesignerActionUIService));
         actionUIService?.HideUI(_toolStrip);
 
         _changeParentVerb.ChangeParent();
@@ -146,7 +141,7 @@ internal class ToolStripActionList : DesignerActionList
 
     private void InvokeInsertStandardItemsVerb()
     {
-        _standardItemsVerb.InsertItems();
+        _standardItemsVerb?.InsertItems();
     }
 
     /// <summary>

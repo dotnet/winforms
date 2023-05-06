@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -14,15 +12,16 @@ internal class ContextMenuStripActionList : DesignerActionList
     private readonly ToolStripDropDown _toolStripDropDown;
     private bool _autoShow;
 
-    public ContextMenuStripActionList(ToolStripDropDownDesigner designer) : base(designer.Component)
+    public ContextMenuStripActionList(ToolStripDropDownDesigner designer)
+        : base(designer.Component)
     {
         _toolStripDropDown = (ToolStripDropDown)designer.Component;
     }
 
     //helper function to get the property on the actual Control
-    private object GetProperty(string propertyName)
+    private object? GetProperty(string propertyName)
     {
-        PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_toolStripDropDown)[propertyName];
+        PropertyDescriptor? getProperty = TypeDescriptor.GetProperties(_toolStripDropDown)[propertyName];
         Debug.Assert(getProperty is not null, "Could not find given property in control.");
         if (getProperty is not null)
         {
@@ -35,7 +34,7 @@ internal class ContextMenuStripActionList : DesignerActionList
     //helper function to change the property on the actual Control
     private void ChangeProperty(string propertyName, object value)
     {
-        PropertyDescriptor changingProperty = TypeDescriptor.GetProperties(_toolStripDropDown)[propertyName];
+        PropertyDescriptor? changingProperty = TypeDescriptor.GetProperties(_toolStripDropDown)[propertyName];
         Debug.Assert(changingProperty is not null, "Could not find given property in control.");
         changingProperty?.SetValue(_toolStripDropDown, value);
     }
@@ -57,7 +56,7 @@ internal class ContextMenuStripActionList : DesignerActionList
 
     public bool ShowImageMargin
     {
-        get => (bool)GetProperty(nameof(ShowImageMargin));
+        get => (bool)GetProperty(nameof(ShowImageMargin))!;
         set
         {
             if (value != ShowImageMargin)
@@ -69,7 +68,7 @@ internal class ContextMenuStripActionList : DesignerActionList
 
     public bool ShowCheckMargin
     {
-        get => (bool)GetProperty(nameof(ShowCheckMargin));
+        get => (bool)GetProperty(nameof(ShowCheckMargin))!;
         set
         {
             if (value != ShowCheckMargin)
@@ -81,7 +80,7 @@ internal class ContextMenuStripActionList : DesignerActionList
 
     public ToolStripRenderMode RenderMode
     {
-        get => (ToolStripRenderMode)GetProperty(nameof(RenderMode));
+        get => (ToolStripRenderMode)GetProperty(nameof(RenderMode))!;
         set
         {
             if (value != RenderMode)

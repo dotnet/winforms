@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.ComponentModel;
 
@@ -12,7 +10,8 @@ namespace System.Windows.Forms.Design;
 internal class ListViewActionList : DesignerActionList
 {
     private readonly ComponentDesigner _designer;
-    public ListViewActionList(ComponentDesigner designer) : base(designer.Component)
+    public ListViewActionList(ComponentDesigner designer)
+        : base(designer.Component)
     {
         _designer = designer;
     }
@@ -36,35 +35,35 @@ internal class ListViewActionList : DesignerActionList
     {
         get
         {
-            return ((ListView)Component).View;
+            return ((ListView)Component!).View;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component)["View"].SetValue(Component, value);
+            TypeDescriptor.GetProperties(Component!)["View"]!.SetValue(Component, value);
         }
     }
 
-    public ImageList LargeImageList
+    public ImageList? LargeImageList
     {
         get
         {
-            return ((ListView)Component).LargeImageList;
+            return ((ListView)Component!).LargeImageList;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component)["LargeImageList"].SetValue(Component, value);
+            TypeDescriptor.GetProperties(Component!)["LargeImageList"]!.SetValue(Component, value);
         }
     }
 
-    public ImageList SmallImageList
+    public ImageList? SmallImageList
     {
         get
         {
-            return ((ListView)Component).SmallImageList;
+            return ((ListView)Component!).SmallImageList;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component)["SmallImageList"].SetValue(Component, value);
+            TypeDescriptor.GetProperties(Component!)["SmallImageList"]!.SetValue(Component, value);
         }
     }
 

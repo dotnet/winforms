@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -12,7 +10,9 @@ namespace System.Windows.Forms.Design;
 internal class TreeViewActionList : DesignerActionList
 {
     private readonly TreeViewDesigner _designer;
-    public TreeViewActionList(TreeViewDesigner designer) : base(designer.Component)
+
+    public TreeViewActionList(TreeViewDesigner designer)
+        : base(designer.Component)
     {
         _designer = designer;
     }
@@ -26,11 +26,11 @@ internal class TreeViewActionList : DesignerActionList
     {
         get
         {
-            return ((TreeView)Component).ImageList;
+            return ((TreeView)Component!).ImageList;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component)["ImageList"].SetValue(Component, value);
+            TypeDescriptor.GetProperties(Component!)["ImageList"]!.SetValue(Component, value);
         }
     }
 
