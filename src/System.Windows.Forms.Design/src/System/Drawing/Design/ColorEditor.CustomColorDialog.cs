@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -22,7 +20,7 @@ public partial class ColorEditor
         public CustomColorDialog()
         {
             // colordlg.data was copied from VB6's dlg-4300.dlg
-            using Stream stream = s_assembly.GetManifestResourceStream(s_resourceName);
+            using Stream stream = s_assembly.GetManifestResourceStream(s_resourceName)!;
 
             int size = (int)(stream.Length - stream.Position);
             byte[] buffer = new byte[size];
