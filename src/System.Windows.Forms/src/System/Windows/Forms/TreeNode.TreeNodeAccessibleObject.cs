@@ -116,7 +116,7 @@ public partial class TreeNode
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
             => patternId switch
             {
-                UiaCore.UIA.ExpandCollapsePatternId => _owningTreeNode.childCount > 0,
+                UiaCore.UIA.ExpandCollapsePatternId => _owningTreeNode.childNodes.Count > 0,
                 UiaCore.UIA.LegacyIAccessiblePatternId => true,
                 UiaCore.UIA.ScrollItemPatternId => true,
                 UiaCore.UIA.SelectionItemPatternId => true,
