@@ -396,7 +396,7 @@ override System.Windows.Forms.ToolStripControlHost.Site.get -> System.ComponentM
 override System.Windows.Forms.ToolStripControlHost.Site.set -> void
 override System.Windows.Forms.ToolStripControlHost.Text.get -> string!
 override System.Windows.Forms.ToolStripControlHost.Text.set -> void
-~override System.Windows.Forms.ToolTip.ToString() -> string
+override System.Windows.Forms.ToolTip.ToString() -> string!
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
@@ -990,7 +990,7 @@ System.Windows.Forms.ToolStripPanelRow.LayoutEngine.get -> System.Windows.Forms.
 System.Windows.Forms.ToolStripPanelRow.ToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
 System.Windows.Forms.ToolStripPanelRow.ToolStripPanelRow(System.Windows.Forms.ToolStripPanel! parent) -> void
 ~System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control control) -> string
-~System.Windows.Forms.ToolTip.Hide(System.Windows.Forms.IWin32Window win) -> void
+System.Windows.Forms.ToolTip.Hide(System.Windows.Forms.IWin32Window! win) -> void
 ~System.Windows.Forms.ToolTip.SetToolTip(System.Windows.Forms.Control control, string caption) -> void
 ~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window) -> void
 ~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, int duration) -> void
