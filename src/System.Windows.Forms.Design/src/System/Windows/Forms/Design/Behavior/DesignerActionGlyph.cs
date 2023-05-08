@@ -160,7 +160,7 @@ internal sealed class DesignerActionGlyph : Glyph
         IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
         Point topRight = Point.Empty;
         //handle the case that our comp is a control
-        if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner is not null)
+        if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner?.BehaviorService is not null)
         {
             topRight = _adorner.BehaviorService.ControlToAdornerWindow(relatedControl);
             topRight.X += relatedControl.Width;
