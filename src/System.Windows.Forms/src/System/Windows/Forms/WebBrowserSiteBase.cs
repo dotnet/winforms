@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -34,7 +32,7 @@ public unsafe class WebBrowserSiteBase :
     IDisposable
 {
     private readonly WebBrowserBase host;
-    private AxHost.ConnectionPointCookie connectionPoint;
+    private AxHost.ConnectionPointCookie? connectionPoint;
 
     //
     // The constructor takes an WebBrowserBase as a parameter, so unfortunately,
@@ -360,7 +358,7 @@ public unsafe class WebBrowserSiteBase :
 
     internal virtual void OnPropertyChanged(int dispid)
     {
-        if (Host.Site.TryGetService(out IComponentChangeService changeService))
+        if (Host.Site.TryGetService(out IComponentChangeService? changeService))
         {
             try
             {
