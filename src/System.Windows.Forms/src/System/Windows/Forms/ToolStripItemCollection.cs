@@ -376,20 +376,17 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     /// <summary>
     ///  Do proper cleanup of ownership, etc.
     /// </summary>
-    private void OnAfterRemove(ToolStripItem? item)
+    private void OnAfterRemove(ToolStripItem item)
     {
         if (_itemsCollection)
         {
             ToolStrip? parent = null;
-            if (item is not null)
-            {
-                parent = item.ParentInternal;
-                item.SetOwner(null);
-            }
+            parent = item.ParentInternal;
+            item.SetOwner(null);
 
             if (_owner is not null)
             {
-                _owner.OnItemRemovedInternal(item!);
+                _owner.OnItemRemovedInternal(item);
 
                 if (!_owner.IsDisposingItems)
                 {
@@ -434,6 +431,10 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
         if (index < Count && index >= 0)
         {
             item = (ToolStripItem)(InnerList[index]);
+        }
+        else
+        {
+            throw new IndexOutOfRangeException();
         }
 
         InnerList.RemoveAt(index);
