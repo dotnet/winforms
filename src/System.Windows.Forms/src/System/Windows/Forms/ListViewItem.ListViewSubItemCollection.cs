@@ -113,7 +113,7 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(item);
 
-            EnsureSubItemsCapacity(1);
+            EnsureAdditionalCapacity(1);
             item._owner = _owner;
             _owner._subItems.Add(item);
             _owner.UpdateSubItems(_owner.SubItemCount++);
@@ -138,7 +138,7 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(items);
 
-            EnsureSubItemsCapacity(items.Length);
+            EnsureAdditionalCapacity(items.Length);
             foreach (ListViewSubItem item in items)
             {
                 if (item is not null)
@@ -156,7 +156,7 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(items);
 
-            EnsureSubItemsCapacity(items.Length);
+            EnsureAdditionalCapacity(items.Length);
             foreach (string item in items)
             {
                 if (item is not null)
@@ -173,7 +173,7 @@ public partial class ListViewItem
         {
             ArgumentNullException.ThrowIfNull(items);
 
-            EnsureSubItemsCapacity(items.Length);
+            EnsureAdditionalCapacity(items.Length);
             foreach (string item in items)
             {
                 if (item is not null)
@@ -234,14 +234,14 @@ public partial class ListViewItem
         ///  Checks that the sub items list size does not exceed the MaxSubItems value
         ///  and ensures that it has the given capacity.
         /// </summary>
-        private void EnsureSubItemsCapacity(int capacity)
+        private void EnsureAdditionalCapacity(int additionalCapacity)
         {
-            if (_owner.SubItemCount == MaxSubItems)
+            if (_owner.SubItemCount >= MaxSubItems)
             {
                 throw new InvalidOperationException(SR.ErrorCollectionFull);
             }
 
-            _owner._subItems.EnsureCapacity(capacity);
+            _owner._subItems.EnsureCapacity(_owner._subItems.Count + additionalCapacity);
         }
 
         public int IndexOf(ListViewSubItem? subItem)
@@ -314,7 +314,7 @@ public partial class ListViewItem
 
             item._owner = _owner;
 
-            EnsureSubItemsCapacity(1);
+            EnsureAdditionalCapacity(1);
 
             // Insert new item
             _owner._subItems.Insert(index, item);
