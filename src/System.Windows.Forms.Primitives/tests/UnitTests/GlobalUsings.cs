@@ -7,3 +7,4 @@ global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;
 global using Windows.Win32.UI.WindowsAndMessaging;
 global using Xunit;
+global using FluentAssertions;
