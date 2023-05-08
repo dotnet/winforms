@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Design;
@@ -19,7 +17,7 @@ internal sealed partial class SelectionUIService
         {
         }
 
-        public override Cursor GetCursorAtPoint(Point point)
+        public override Cursor? GetCursorAtPoint(Point point)
         {
             if ((GetHitTest(point) & CONTAINER_SELECTOR) != 0 && (GetRules() & SelectionRules.Moveable) != SelectionRules.None)
             {
