@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat;
@@ -56,7 +57,7 @@ internal abstract class Record : IRecord
         PrimitiveType.UInt64 => reader.ReadUInt64(),
         PrimitiveType.Single => reader.ReadSingle(),
         PrimitiveType.Double => reader.ReadDouble(),
-        PrimitiveType.Decimal => reader.ReadDecimal(),
+        PrimitiveType.Decimal => decimal.Parse(reader.ReadString(), CultureInfo.InvariantCulture),
         PrimitiveType.DateTime => reader.ReadDateTime(),
         PrimitiveType.TimeSpan => new TimeSpan(reader.ReadInt64()),
         // String is handled with a record, never on it's own
@@ -94,7 +95,7 @@ internal abstract class Record : IRecord
                 writer.Write((char)value);
                 break;
             case PrimitiveType.Decimal:
-                writer.Write((decimal)value);
+                writer.Write(((decimal)value).ToString(CultureInfo.InvariantCulture));
                 break;
             case PrimitiveType.Double:
                 writer.Write((double)value);
