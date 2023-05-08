@@ -31,7 +31,7 @@ internal sealed class BinaryObjectString : IRecord<BinaryObjectString>
         BinaryReader reader,
         RecordMap recordMap)
     {
-        BinaryObjectString record = new(reader.ReadInt32(), reader.ReadLengthPrefixedString());
+        BinaryObjectString record = new(reader.ReadInt32(), reader.ReadString());
 
         recordMap[record.ObjectId] = record;
         return record;
@@ -41,7 +41,7 @@ internal sealed class BinaryObjectString : IRecord<BinaryObjectString>
     {
         writer.Write((byte)RecordType);
         writer.Write(ObjectId);
-        writer.WriteLengthPrefixedString(Value);
+        writer.Write(Value);
     }
 
     public override bool Equals(object? obj)

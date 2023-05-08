@@ -49,7 +49,7 @@ internal readonly struct MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryT
                     info[i] = (type, (PrimitiveType)reader.ReadByte());
                     break;
                 case BinaryType.SystemClass:
-                    info[i] = (type, reader.ReadLengthPrefixedString());
+                    info[i] = (type, reader.ReadString());
                     break;
                 case BinaryType.Class:
                     info[i] = (type, ClassTypeInfo.Parse(reader));
@@ -84,7 +84,7 @@ internal readonly struct MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryT
                     writer.Write((byte)info!);
                     break;
                 case BinaryType.SystemClass:
-                    writer.WriteLengthPrefixedString((string)info!);
+                    writer.Write((string)info!);
                     break;
                 case BinaryType.Class:
                     ((ClassTypeInfo)info!).Write(writer);

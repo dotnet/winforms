@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat;
@@ -113,5 +114,32 @@ internal static class BinaryFormatReader
         }
 
         return hashtable;
+    }
+
+    /// <summary>
+    ///  Creates a <see cref="DateTime"/> object from raw data with validation.
+    /// </summary>
+    /// <exception cref="SerializationException"><paramref name="data"/> was invalid.</exception>
+    internal static DateTime CreateDateTimeFromData(long data)
+    {
+        // Copied from System.Runtime.Serialization.Formatters.Binary.BinaryParser
+
+        // Use DateTime's public constructor to validate the input, but we
+        // can't return that result as it strips off the kind. To address
+        // that, store the value directly into a DateTime via an unsafe cast.
+        // See BinaryFormatterWriter.WriteDateTime for details.
+
+        try
+        {
+            const long TicksMask = 0x3FFFFFFFFFFFFFFF;
+            _ = new DateTime(data & TicksMask);
+        }
+        catch (ArgumentException ex)
+        {
+            // Bad data
+            throw new SerializationException(ex.Message, ex);
+        }
+
+        return Unsafe.As<long, DateTime>(ref data);
     }
 }

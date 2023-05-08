@@ -30,12 +30,12 @@ internal class ClassInfo : IBinaryWriteable
     public static ClassInfo Parse(BinaryReader reader, out Count memberCount)
     {
         Id objectId = reader.ReadInt32();
-        string name = reader.ReadLengthPrefixedString();
+        string name = reader.ReadString();
         memberCount = reader.ReadInt32();
         List<string> memberNames = new(Math.Min(BinaryFormattedObject.MaxNewCollectionSize, memberCount));
         for (int i = 0; i < memberCount; i++)
         {
-            memberNames.Add(reader.ReadLengthPrefixedString());
+            memberNames.Add(reader.ReadString());
         }
 
         return new(objectId, name, memberNames);
@@ -44,12 +44,12 @@ internal class ClassInfo : IBinaryWriteable
     public void Write(BinaryWriter writer)
     {
         writer.Write(ObjectId);
-        writer.WriteLengthPrefixedString(Name);
+        writer.Write(Name);
         writer.Write(MemberNames.Count);
 
         foreach (string name in MemberNames)
         {
-            writer.WriteLengthPrefixedString(name);
+            writer.Write(name);
         }
     }
 }

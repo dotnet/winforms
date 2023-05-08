@@ -370,10 +370,17 @@ public partial class DataObject
         private static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
         {
             long startPosition = stream.Position;
-            BinaryFormattedObject format = new(stream, leaveOpen: true);
-            if (format.TryGetPrimitiveType(out object? value))
+            try
             {
-                return value;
+                BinaryFormattedObject format = new(stream, leaveOpen: true);
+                if (format.TryGetPrimitiveType(out object? value))
+                {
+                    return value;
+                }
+            }
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            {
+                // Couldn't parse for some reason, let the BinaryFormatter handle it.
             }
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete

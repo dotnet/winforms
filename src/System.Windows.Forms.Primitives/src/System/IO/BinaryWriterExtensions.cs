@@ -3,24 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace System.IO;
 
 internal static class BinaryWriterExtensions
 {
-    /// <summary>
-    ///  Writes a UTF-8 string prefixed by a 7-bit encoded length. Does not include a trailing null.
-    /// </summary>
-    public static void WriteLengthPrefixedString(this BinaryWriter writer, string value)
-    {
-        Encoding encoding = Encoding.UTF8;
-        using BufferScope<byte> buffer = new(stackalloc byte[256], encoding.GetMaxByteCount(value.Length));
-        int length = encoding.GetBytes(value, buffer);
-        writer.Write7BitEncodedInt(length);
-        writer.Write(buffer[..length]);
-    }
-
     /// <summary>
     ///  Writes a <see cref="DateTime"/> object to the given <paramref name="writer"/>.
     /// </summary>

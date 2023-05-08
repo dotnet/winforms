@@ -28,7 +28,7 @@ internal sealed class BinaryLibrary : IRecord<BinaryLibrary>
         BinaryLibrary record = new()
         {
             LibraryId = reader.ReadInt32(),
-            LibraryName = reader.ReadLengthPrefixedString()
+            LibraryName = reader.ReadString()
         };
 
         recordMap[record.LibraryId] = record;
@@ -39,6 +39,6 @@ internal sealed class BinaryLibrary : IRecord<BinaryLibrary>
     {
         writer.Write((byte)RecordType);
         writer.Write(LibraryId);
-        writer.WriteLengthPrefixedString(LibraryName);
+        writer.Write(LibraryName);
     }
 }

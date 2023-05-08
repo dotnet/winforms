@@ -26,12 +26,12 @@ internal readonly struct ClassTypeInfo : IBinaryWriteable
     }
 
     public static ClassTypeInfo Parse(BinaryReader reader) => new(
-        reader.ReadLengthPrefixedString(),
+        reader.ReadString(),
         reader.ReadInt32());
 
     public void Write(BinaryWriter writer)
     {
-        writer.WriteLengthPrefixedString(TypeName);
+        writer.Write(TypeName);
         writer.Write(LibraryId);
     }
 }

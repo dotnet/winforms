@@ -116,7 +116,7 @@ internal sealed class BinaryFormattedObject
     private bool TryGetPrimitiveTypeInternal([NotNullWhen(true)] out object? value)
     {
         value = null;
-        if (RecordCount < 3)
+        if (RecordCount != 3)
         {
             return false;
         }
@@ -132,12 +132,15 @@ internal sealed class BinaryFormattedObject
             return false;
         }
 
+        // Basic primitive types
         if (s_systemPrimitiveTypeNames.Contains(systemClass.Name)
             && systemClass.MemberTypeInfo[0].Type == BinaryType.Primitive)
         {
             value = systemClass.MemberValues[0];
             return true;
         }
+
+        // Handle decimal, nint, nuint, TimeSpan, DateTime
 
         if (systemClass.Name == typeof(TimeSpan).FullName)
         {
@@ -147,8 +150,7 @@ internal sealed class BinaryFormattedObject
 
         if (systemClass.Name == typeof(DateTime).FullName)
         {
-            ulong ulongValue = (ulong)systemClass["dateData"];
-            value = Unsafe.As<ulong, DateTime>(ref ulongValue);
+            value = BinaryFormatReader.CreateDateTimeFromData((long)systemClass["dateData"]);
             return true;
         }
 
@@ -165,7 +167,6 @@ internal sealed class BinaryFormattedObject
             return true;
         }
 
-        // Handle decimal, nint, nuint, TimeSpan, DateTime
         if (systemClass.Name == typeof(decimal).FullName)
         {
             Span<int> bits = stackalloc int[4]

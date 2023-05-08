@@ -70,7 +70,7 @@ internal abstract class ClassRecord : Record
                     memberValues.Add(ReadPrimitiveType(reader, (PrimitiveType)info!));
                     break;
                 case BinaryType.String:
-                    memberValues.Add(reader.ReadLengthPrefixedString());
+                    memberValues.Add(reader.ReadString());
                     break;
                 case BinaryType.Object:
                 case BinaryType.StringArray:
@@ -99,7 +99,7 @@ internal abstract class ClassRecord : Record
                     WritePrimitiveType(writer, (PrimitiveType)info!, memberValues[i]);
                     break;
                 case BinaryType.String:
-                    writer.WriteLengthPrefixedString((string)memberValues[i]);
+                    writer.Write((string)memberValues[i]);
                     break;
                 case BinaryType.Object:
                 case BinaryType.StringArray:
