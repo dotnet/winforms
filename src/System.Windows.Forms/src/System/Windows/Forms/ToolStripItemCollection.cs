@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -16,7 +14,7 @@ namespace System.Windows.Forms;
 [ListBindable(false)]
 public class ToolStripItemCollection : ArrangedElementCollection, IList
 {
-    private readonly ToolStrip _owner;
+    private readonly ToolStrip? _owner;
     private readonly bool _itemsCollection;
     private readonly bool _isReadOnly;
 
@@ -24,12 +22,12 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     // references. Note this is not thread safe - but WinForms has to be run in a STA anyways.
     private int _lastAccessedIndex = -1;
 
-    internal ToolStripItemCollection(ToolStrip owner, bool itemsCollection)
+    internal ToolStripItemCollection(ToolStrip? owner, bool itemsCollection)
         : this(owner, itemsCollection, isReadOnly: false)
     {
     }
 
-    internal ToolStripItemCollection(ToolStrip owner, bool itemsCollection, bool isReadOnly)
+    internal ToolStripItemCollection(ToolStrip? owner, bool itemsCollection, bool isReadOnly)
     {
         _owner = owner;
         _itemsCollection = itemsCollection;
@@ -55,7 +53,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     /// <summary>
     ///  Retrieves the child control with the specified key.
     /// </summary>
-    public virtual ToolStripItem this[string key]
+    public virtual ToolStripItem? this[string? key]
     {
         get
         {
@@ -78,24 +76,24 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
         }
     }
 
-    public ToolStripItem Add(string text)
+    public ToolStripItem Add(string? text)
     {
         return Add(text, null, null);
     }
 
-    public ToolStripItem Add(Image image)
+    public ToolStripItem Add(Image? image)
     {
         return Add(null, image, null);
     }
 
-    public ToolStripItem Add(string text, Image image)
+    public ToolStripItem Add(string? text, Image? image)
     {
         return Add(text, image, null);
     }
 
-    public ToolStripItem Add(string text, Image image, EventHandler onClick)
+    public ToolStripItem Add(string? text, Image? image, EventHandler? onClick)
     {
-        ToolStripItem item = _owner.CreateDefaultItem(text, image, onClick);
+        ToolStripItem item = _owner!.CreateDefaultItem(text, image, onClick);
         Add(item);
         return item;
     }
@@ -126,7 +124,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
 
         // ToolStripDropDown will look for PropertyNames.Items to determine if it needs
         // to resize itself.
-        using (new LayoutTransaction(_owner, _owner, PropertyNames.Items))
+        using (new LayoutTransaction(_owner, _owner!, PropertyNames.Items))
         {
             for (int i = 0; i < toolStripItems.Length; i++)
             {
@@ -146,7 +144,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
 
         // ToolStripDropDown will look for PropertyNames.Items to determine if it needs
         // to resize itself.
-        using (new LayoutTransaction(_owner, _owner, PropertyNames.Items))
+        using (new LayoutTransaction(_owner, _owner!, PropertyNames.Items))
         {
             for (int i = 0; i < toolStripItems.Count; i++)
             {
@@ -175,7 +173,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
             return;
         }
 
-        ToolStripOverflow overflow = null;
+        ToolStripOverflow? overflow = null;
 
         if (_owner is not null && !_owner.IsDisposingItems)
         {
@@ -205,7 +203,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     /// <summary>
     ///  Returns true if the collection contains an item with the specified key, false otherwise.
     /// </summary>
-    public virtual bool ContainsKey(string key)
+    public virtual bool ContainsKey(string? key)
     {
         return IsValidIndex(IndexOfKey(key));
     }
@@ -292,14 +290,14 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
 
     void IList.Clear() { Clear(); }
     bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
-    bool IList.Contains(object value) { return InnerList.Contains(value); }
+    bool IList.Contains(object? value) { return InnerList.Contains(value); }
     void IList.RemoveAt(int index) { RemoveAt(index); }
-    void IList.Remove(object value) { Remove(value as ToolStripItem); }
-    int IList.Add(object value) { return Add(value as ToolStripItem); }
-    int IList.IndexOf(object value) { return IndexOf(value as ToolStripItem); }
-    void IList.Insert(int index, object value) { Insert(index, value as ToolStripItem); }
+    void IList.Remove(object? value) { Remove((value as ToolStripItem)!); }
+    int IList.Add(object? value) { return Add((value as ToolStripItem)!); }
+    int IList.IndexOf(object? value) { return IndexOf((value as ToolStripItem)!); }
+    void IList.Insert(int index, object? value) { Insert(index, (value as ToolStripItem)!); }
 
-    object IList.this[int index]
+    object? IList.this[int index]
     {
         get { return InnerList[index]; }
         set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
@@ -335,7 +333,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     /// <summary>
     ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
     /// </summary>
-    public virtual int IndexOfKey(string key)
+    public virtual int IndexOfKey(string? key)
     {
         // Step 0 - Arg validation
         if ((key is null) || (key.Length == 0))
@@ -378,11 +376,11 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     /// <summary>
     ///  Do proper cleanup of ownership, etc.
     /// </summary>
-    private void OnAfterRemove(ToolStripItem item)
+    private void OnAfterRemove(ToolStripItem? item)
     {
         if (_itemsCollection)
         {
-            ToolStrip parent = null;
+            ToolStrip? parent = null;
             if (item is not null)
             {
                 parent = item.ParentInternal;
@@ -391,7 +389,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
 
             if (_owner is not null)
             {
-                _owner.OnItemRemovedInternal(item);
+                _owner.OnItemRemovedInternal(item!);
 
                 if (!_owner.IsDisposingItems)
                 {
@@ -403,7 +401,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
                     // is really being removed from the master collection.
                     if (parent is not null && parent != _owner)
                     {
-                        parent.OnItemVisibleChanged(e, /*performLayout*/false);
+                        parent.OnItemVisibleChanged(e, performLayout: false);
                     }
                 }
             }
@@ -432,7 +430,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
             throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
         }
 
-        ToolStripItem item = null;
+        ToolStripItem? item = null;
         if (index < Count && index >= 0)
         {
             item = (ToolStripItem)(InnerList[index]);
@@ -445,7 +443,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     /// <summary>
     ///  Removes the child item with the specified key.
     /// </summary>
-    public virtual void RemoveByKey(string key)
+    public virtual void RemoveByKey(string? key)
     {
         if (IsReadOnly)
         {
