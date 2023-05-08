@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -64,9 +62,9 @@ internal sealed partial class SelectionUIService
         internal SelectionUIService _selUIsvc;
         internal Rectangle _innerRect = Rectangle.Empty; // inner part of selection (== control bounds)
         internal Rectangle _outerRect = Rectangle.Empty; // outer part of selection (inner + border size)
-        internal Region _region; // region object that defines the shape
+        internal Region? _region; // region object that defines the shape
         internal object _component; // the component we're rendering
-        private readonly Control _control;
+        private readonly Control? _control;
         private SelectionStyles _selectionStyle; // how do we draw this thing?
         private SelectionRules _selectionRules;
         private readonly ISelectionUIHandler _handler; // the components selection UI handler (can be null)
@@ -188,9 +186,9 @@ internal sealed partial class SelectionUIService
         /// <summary>
         ///  Retrieves an appropriate cursor at the given point.  If there is no appropriate cursor here (ie, the point lies outside the selection rectangle), then this will return null.
         /// </summary>
-        public virtual Cursor GetCursorAtPoint(Point point)
+        public virtual Cursor? GetCursorAtPoint(Point point)
         {
-            Cursor cursor = null;
+            Cursor? cursor = null;
             if (PointWithinSelection(point))
             {
                 int nOffset = -1;
