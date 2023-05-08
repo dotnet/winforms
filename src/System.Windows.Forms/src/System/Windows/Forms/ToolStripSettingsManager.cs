@@ -194,7 +194,7 @@ internal partial class ToolStripSettingsManager
                         string key = match.Value;
                         if (!string.IsNullOrEmpty(key) && itemLocationHash.TryGetValue(key, out ToolStrip? value))
                         {
-                            toolStrip.Items.Insert(i, value.Items[key]);
+                            toolStrip.Items.Insert(i, value.Items[key]!);
                         }
                     }
                 }

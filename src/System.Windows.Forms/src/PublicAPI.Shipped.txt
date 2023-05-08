@@ -960,20 +960,20 @@ System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripIte
 System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control!
 System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c) -> void
 System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c, string! name) -> void
-~System.Windows.Forms.ToolStripItemCollection.Add(string text) -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image) -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripItemCollection.Add(System.Drawing.Image image) -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripItemCollection.Add(System.Windows.Forms.ToolStripItem value) -> int
-~System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItem[] toolStripItems) -> void
-~System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItemCollection toolStripItems) -> void
-~System.Windows.Forms.ToolStripItemCollection.Contains(System.Windows.Forms.ToolStripItem value) -> bool
-~System.Windows.Forms.ToolStripItemCollection.CopyTo(System.Windows.Forms.ToolStripItem[] array, int index) -> void
-~System.Windows.Forms.ToolStripItemCollection.Find(string key, bool searchAllChildren) -> System.Windows.Forms.ToolStripItem[]
-~System.Windows.Forms.ToolStripItemCollection.IndexOf(System.Windows.Forms.ToolStripItem value) -> int
-~System.Windows.Forms.ToolStripItemCollection.Insert(int index, System.Windows.Forms.ToolStripItem value) -> void
-~System.Windows.Forms.ToolStripItemCollection.Remove(System.Windows.Forms.ToolStripItem value) -> void
-~System.Windows.Forms.ToolStripItemCollection.ToolStripItemCollection(System.Windows.Forms.ToolStrip owner, System.Windows.Forms.ToolStripItem[] value) -> void
+System.Windows.Forms.ToolStripItemCollection.Add(string? text) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Image? image) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(System.Drawing.Image? image) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(System.Windows.Forms.ToolStripItem! value) -> int
+System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
+System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItemCollection! toolStripItems) -> void
+System.Windows.Forms.ToolStripItemCollection.Contains(System.Windows.Forms.ToolStripItem! value) -> bool
+System.Windows.Forms.ToolStripItemCollection.CopyTo(System.Windows.Forms.ToolStripItem![]! array, int index) -> void
+System.Windows.Forms.ToolStripItemCollection.Find(string! key, bool searchAllChildren) -> System.Windows.Forms.ToolStripItem![]!
+System.Windows.Forms.ToolStripItemCollection.IndexOf(System.Windows.Forms.ToolStripItem! value) -> int
+System.Windows.Forms.ToolStripItemCollection.Insert(int index, System.Windows.Forms.ToolStripItem! value) -> void
+System.Windows.Forms.ToolStripItemCollection.Remove(System.Windows.Forms.ToolStripItem! value) -> void
+System.Windows.Forms.ToolStripItemCollection.ToolStripItemCollection(System.Windows.Forms.ToolStrip! owner, System.Windows.Forms.ToolStripItem![]! value) -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow! value) -> int
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection! value) -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow![]! value) -> void
@@ -1428,11 +1428,11 @@ virtual System.Windows.Forms.ToolStripControlHost.OnSubscribeControlEvents(Syste
 virtual System.Windows.Forms.ToolStripControlHost.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
 virtual System.Windows.Forms.ToolStripControlHost.OnValidated(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripControlHost.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.ToolStripItemCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.ToolStripItemCollection.this[int index].get -> System.Windows.Forms.ToolStripItem
-~virtual System.Windows.Forms.ToolStripItemCollection.this[string key].get -> System.Windows.Forms.ToolStripItem
+virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ToolStripItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.ToolStripItemCollection.this[int index].get -> System.Windows.Forms.ToolStripItem!
+virtual System.Windows.Forms.ToolStripItemCollection.this[string? key].get -> System.Windows.Forms.ToolStripItem?
 virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.this[int index].get -> System.Windows.Forms.ToolStripPanelRow!
 virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control! control, int index) -> void
 virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control! control, int index) -> void
