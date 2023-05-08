@@ -499,7 +499,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     {
         if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control is not null)
         {
-            if (e.AffectedComponent is ISupportToolStripPanel draggedControl && RowsInternal.Contains(draggedControl.ToolStripPanelRow))
+            if (e.AffectedComponent is ISupportToolStripPanel draggedControl && RowsInternal.Contains(draggedControl.ToolStripPanelRow!))
             {
                 // there's a problem in the base onlayout... if toolstrip needs more space it talks to us
                 // not the row that needs layout.
@@ -1183,7 +1183,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
                     static object GetRow(ISupportToolStripPanel draggedToolStrip, ToolStripPanelRowCollection rows)
                     {
-                        int rowIndex = rows.IndexOf(draggedToolStrip.ToolStripPanelRow);
+                        int rowIndex = rows.IndexOf(draggedToolStrip.ToolStripPanelRow!);
                         return rowIndex == -1
                             ? "unknown"
                             : rowIndex;
