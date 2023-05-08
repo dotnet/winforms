@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -58,7 +57,7 @@ internal class HtmlToClrEventProxy : IReflect
 
     // Methods
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
-    FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
+    FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
     {
         return typeIReflectImplementation.GetField(name, bindingAttr);
     }
@@ -92,13 +91,13 @@ internal class HtmlToClrEventProxy : IReflect
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-    MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
+    MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
     {
         return typeIReflectImplementation.GetMethod(name, bindingAttr);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-    MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+    MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
     {
         return typeIReflectImplementation.GetMethod(name, bindingAttr, binder, types, modifiers);
     }
@@ -116,13 +115,13 @@ internal class HtmlToClrEventProxy : IReflect
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
-    PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
+    PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
     {
         return typeIReflectImplementation.GetProperty(name, bindingAttr);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
-    PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
+    PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder? binder, Type? returnType, Type[] types, ParameterModifier[]? modifiers)
     {
         return typeIReflectImplementation.GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
     }
@@ -131,13 +130,13 @@ internal class HtmlToClrEventProxy : IReflect
     // If we get a call for DISPID=0, fire the CLR event.
     //
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, Globalization.CultureInfo culture, string[] namedParameters)
+    object? IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder? binder, object? target, object?[]? args, ParameterModifier[]? modifiers, CultureInfo? culture, string[]? namedParameters)
     {
-        //
         if (name == "[DISPID=0]")
         {
             // we know we're getting called back to fire the event - translate this now into a CLR event.
             OnHtmlEvent();
+
             // since there's no return value for void, return null.
             return null;
         }
