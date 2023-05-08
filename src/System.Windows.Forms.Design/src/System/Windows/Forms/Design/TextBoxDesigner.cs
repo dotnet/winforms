@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -18,7 +16,7 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
 {
     private char passwordChar;
 
-    private DesignerActionListCollection _actionLists;
+    private DesignerActionListCollection? _actionLists;
     public override DesignerActionListCollection ActionLists
     {
         get
@@ -46,7 +44,7 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
     {
         base.PreFilterProperties(properties);
 
-        PropertyDescriptor prop;
+        PropertyDescriptor? prop;
 
         string[] shadowProps = new string[]
         {
@@ -57,7 +55,7 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            prop = (PropertyDescriptor)properties[shadowProps[i]];
+            prop = (PropertyDescriptor?)properties[shadowProps[i]];
             if (prop is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxDesigner), prop, empty);
@@ -75,7 +73,7 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
     {
         get
         {
-            TextBox tb = Control as TextBox;
+            TextBox tb = (Control as TextBox)!;
             Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
             if (tb.UseSystemPasswordChar)
@@ -89,7 +87,7 @@ internal class TextBoxDesigner : TextBoxBaseDesigner
         }
         set
         {
-            TextBox tb = Control as TextBox;
+            TextBox tb = (Control as TextBox)!;
             Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
             passwordChar = value;
