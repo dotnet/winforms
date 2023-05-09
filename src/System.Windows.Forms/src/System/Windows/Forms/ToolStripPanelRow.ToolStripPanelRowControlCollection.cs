@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms.Layout;
@@ -32,7 +30,7 @@ public partial class ToolStripPanelRow
     internal partial class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
     {
         private readonly ToolStripPanelRow _owner;
-        private ArrangedElementCollection _cellCollection;
+        private ArrangedElementCollection? _cellCollection;
 
         public ToolStripPanelRowControlCollection(ToolStripPanelRow owner)
         {
@@ -149,13 +147,17 @@ public partial class ToolStripPanelRow
 
         private Control GetControl(int index)
         {
-            Control control = null;
-            ToolStripPanelCell cell = null;
+            Control? control = null;
+            ToolStripPanelCell? cell = null;
 
             if (index < Count && index >= 0)
             {
                 cell = (ToolStripPanelCell)(InnerList[index]);
-                control = cell?.Control;
+                control = cell.Control;
+            }
+            else
+            {
+                throw new IndexOutOfRangeException();
             }
 
             return control;
@@ -179,19 +181,19 @@ public partial class ToolStripPanelRow
 
         bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
 
-        bool IList.Contains(object value) { return InnerList.Contains(value); }
+        bool IList.Contains(object? value) { return InnerList.Contains(value); }
 
         bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
 
         void IList.RemoveAt(int index) { RemoveAt(index); }
 
-        void IList.Remove(object value) { Remove(value as Control); }
+        void IList.Remove(object? value) { Remove((Control)value!); }
 
-        int IList.Add(object value) { return Add(value as Control); }
+        int IList.Add(object? value) { return Add((Control)value!); }
 
-        int IList.IndexOf(object value) { return IndexOf(value as Control); }
+        int IList.IndexOf(object? value) { return IndexOf((Control)value!); }
 
-        void IList.Insert(int index, object value) { Insert(index, value as Control); }
+        void IList.Insert(int index, object? value) { Insert(index, (Control)value!); }
 
         public int IndexOf(Control value)
         {
@@ -211,12 +213,12 @@ public partial class ToolStripPanelRow
         {
             ArgumentNullException.ThrowIfNull(value);
 
-            if (!(value is ISupportToolStripPanel control))
+            if (value is not ISupportToolStripPanel control)
             {
                 throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
             }
 
-            InnerList.Insert(index, control.ToolStripPanelCell);
+            InnerList.Insert(index, control.ToolStripPanelCell!);
             OnAdd(control, index);
         }
 
@@ -242,7 +244,7 @@ public partial class ToolStripPanelRow
         {
             if (_owner is not null)
             {
-                LayoutTransaction layoutTransaction = null;
+                LayoutTransaction? layoutTransaction = null;
                 if (ToolStripPanel is not null && ToolStripPanel.ParentInternal is not null)
                 {
                     layoutTransaction = new LayoutTransaction(ToolStripPanel, ToolStripPanel.ParentInternal, PropertyNames.Parent);
