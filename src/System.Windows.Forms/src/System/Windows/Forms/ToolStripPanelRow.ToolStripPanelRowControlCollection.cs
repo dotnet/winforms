@@ -147,20 +147,13 @@ public partial class ToolStripPanelRow
 
         private Control GetControl(int index)
         {
-            Control? control = null;
-            ToolStripPanelCell? cell = null;
-
             if (index < Count && index >= 0)
             {
-                cell = (ToolStripPanelCell)(InnerList[index]);
-                control = cell.Control;
-            }
-            else
-            {
-                throw new IndexOutOfRangeException();
+                var cell = (ToolStripPanelCell)(InnerList[index]);
+                return cell.Control;
             }
 
-            return control;
+            throw new IndexOutOfRangeException();
         }
 
         private int IndexOfControl(Control c)
