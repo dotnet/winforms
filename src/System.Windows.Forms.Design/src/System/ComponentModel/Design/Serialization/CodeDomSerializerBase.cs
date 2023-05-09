@@ -147,7 +147,7 @@ public abstract partial class CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(manager);
         ArgumentNullException.ThrowIfNull(exceptionText);
 
-        CodeStatement? statement = (CodeStatement?)manager.Context[typeof(CodeStatement)];
+        CodeStatement? statement = manager.GetContext<CodeStatement>();
         CodeLinePragma? linePragma = statement?.LinePragma;
 
         Exception exception = new CodeDomSerializerException(exceptionText, linePragma)
@@ -368,7 +368,7 @@ public abstract partial class CodeDomSerializerBase
             if (de is not null)
             {
                 string? ourObjectName;
-                if (manager.Context[typeof(RootContext)] is RootContext root && root.Value == value)
+                if (manager.TryGetContext(out RootContext? root) && root.Value == value)
                 {
                     ourObjectName = "$this";
                 }
@@ -569,8 +569,8 @@ public abstract partial class CodeDomSerializerBase
             {
                 // We only support binding methods to the root object.
                 object? eventAttachObject = DeserializeExpression(manager, null, delegateCreate.TargetObject);
-                RootContext? rootExp = (RootContext?)manager.Context[typeof(RootContext)];
-                bool isRoot = rootExp is null || (rootExp is not null && rootExp.Value == eventAttachObject);
+                RootContext? rootExp = manager.GetContext<RootContext>();
+                bool isRoot = rootExp is null || rootExp.Value == eventAttachObject;
                 TraceIf(TraceLevel.Warning, !isRoot, "Event is bound to an object other than the root.  We do not support this.");
                 if (isRoot)
                 {
@@ -582,7 +582,7 @@ public abstract partial class CodeDomSerializerBase
                         EventDescriptor? evt = GetEventsHelper(manager, targetObject, null)[statement.Event.EventName];
                         if (evt is not null)
                         {
-                            IEventBindingService? evtSvc = (IEventBindingService?)manager.GetService(typeof(IEventBindingService));
+                            IEventBindingService? evtSvc = manager.GetService<IEventBindingService>();
                             if (evtSvc is not null)
                             {
                                 PropertyDescriptor prop = evtSvc.GetEventProperty(evt);
@@ -619,9 +619,7 @@ public abstract partial class CodeDomSerializerBase
                 object? lhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, fieldReferenceEx.TargetObject);
                 if (lhs is not null)
                 {
-                    RootContext? root = (RootContext?)manager.Context[typeof(RootContext)];
-
-                    if (root is not null && root.Value == lhs)
+                    if (manager.TryGetContext(out RootContext? root) && root.Value == lhs)
                     {
                         Trace(TraceLevel.Verbose, "Processing RHS");
                         object? rhs = DeserializeExpression(manager, fieldReferenceEx.FieldName, statement.Right);
@@ -790,15 +788,14 @@ public abstract partial class CodeDomSerializerBase
                 else if (result is CodeThisReferenceExpression)
                 { //(is -> as doesn't help here, since the cast is different)
                     Trace(TraceLevel.Verbose, "'this' reference");
-                    RootContext? rootExp = (RootContext?)manager.Context[typeof(RootContext)];
-                    if (rootExp is not null)
+                    if (manager.TryGetContext(out RootContext? rootExp))
                     {
                         result = rootExp.Value;
                     }
                     else
                     {
                         // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bound against the root component.
-                        if (manager.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                        if (manager.GetService<IDesignerHost>() is { } host)
                         {
                             result = host.RootComponent;
                         }
@@ -903,7 +900,7 @@ public abstract partial class CodeDomSerializerBase
                     if (target is not null and not CodeExpression)
                     {
                         // If the target is the root object, then this won't be found through reflection.  Instead, ask the manager for the field by name.
-                        RootContext? rootExp = (RootContext?)manager.Context[typeof(RootContext)];
+                        RootContext? rootExp = manager.GetContext<RootContext>();
                         if (rootExp is not null && rootExp.Value == target)
                         {
                             object? namedObject = manager.GetInstance(fieldReferenceEx.FieldName);
@@ -1070,7 +1067,7 @@ public abstract partial class CodeDomSerializerBase
                 }
                 else if (result is CodeBaseReferenceExpression)
                 { //(is -> as doesn't help here, since the cast is different)
-                    RootContext? rootExp = (RootContext?)manager.Context[typeof(RootContext)];
+                    RootContext? rootExp = manager.GetContext<RootContext>();
                     result = rootExp?.Value;
 
                     break;
@@ -1369,7 +1366,7 @@ public abstract partial class CodeDomSerializerBase
                 }
             }
 
-            RootContext? rootExp = (RootContext?)manager.Context[typeof(RootContext)];
+            RootContext? rootExp = manager.GetContext<RootContext>();
             bool isRoot = rootExp is null || rootExp.Value == eventAttachObject;
 
             if (handlerMethodName is null)
@@ -1393,7 +1390,7 @@ public abstract partial class CodeDomSerializerBase
 
                         if (evt is not null)
                         {
-                            IEventBindingService? evtSvc = (IEventBindingService?)manager.GetService(typeof(IEventBindingService));
+                            IEventBindingService? evtSvc = manager.GetService<IEventBindingService>();
 
                             if (evtSvc is not null)
                             {
@@ -1887,7 +1884,7 @@ public abstract partial class CodeDomSerializerBase
 
         // Is the expression part of a prior SetExpression call?
 
-        if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table)
+        if (manager.TryGetContext(out ExpressionTable? table))
         {
             expression = table.GetExpression(value);
             TraceIf(TraceLevel.Verbose, expression is not null, $"Resolved through expression table : {expression}");
@@ -1896,7 +1893,7 @@ public abstract partial class CodeDomSerializerBase
         // Check to see if this object represents the root context.
         if (expression is null)
         {
-            if (manager.Context[typeof(RootContext)] is RootContext rootEx && ReferenceEquals(rootEx.Value, value))
+            if (manager.TryGetContext(out RootContext? rootEx) && ReferenceEquals(rootEx.Value, value))
             {
                 expression = rootEx.Expression;
                 TraceIf(TraceLevel.Verbose, expression is not null, $"Resolved through root expression context : {expression}");
@@ -1913,7 +1910,7 @@ public abstract partial class CodeDomSerializerBase
             string? objectName = manager.GetName(value);
             if (objectName is null || objectName.Contains('.'))
             {
-                if (manager.GetService(typeof(IReferenceService)) is IReferenceService refSvc)
+                if (manager.GetService<IReferenceService>() is { } refSvc)
                 {
                     objectName = refSvc.GetName(value);
                     if (objectName is not null && objectName.Contains('.'))
@@ -1951,7 +1948,7 @@ public abstract partial class CodeDomSerializerBase
         // Finally, the expression context.
         if (expression is null)
         {
-            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
+            if (manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value))
             {
                 expression = ctx.Expression;
             }
@@ -1962,13 +1959,13 @@ public abstract partial class CodeDomSerializerBase
             // set up cache dependencies
             // we check to see if there is anything on the stack
             // if there is we make the parent entry a dependency of the current entry
-            ComponentCache.Entry? parentEntry = (ComponentCache.Entry?)manager.Context[typeof(ComponentCache.Entry)];
-            ComponentCache? cache = (ComponentCache?)manager.Context[typeof(ComponentCache)];
+            ComponentCache.Entry? parentEntry = manager.GetContext<ComponentCache.Entry>();
 
             object? parentEntryComponent = parentEntry?.Component;
-            if (parentEntryComponent is not null && parentEntryComponent != value /* don't make ourselves dependent with ourselves */)
+            if (manager.TryGetContext(out ComponentCache? cache) && parentEntryComponent is not null &&
+                parentEntryComponent != value /* don't make ourselves dependent with ourselves */)
             {
-                ComponentCache.Entry? entry = cache?.GetEntryAll(value);
+                ComponentCache.Entry? entry = cache.GetEntryAll(value);
                 entry?.AddDependency(parentEntryComponent);
             }
         }
@@ -2056,7 +2053,7 @@ public abstract partial class CodeDomSerializerBase
         // for serializing null, we pass null to the serialization manager otherwise, external IDesignerSerializationProviders wouldn't be given a chance to  serialize null their own special way.
         Type? t = value?.GetType();
 
-        return (CodeDomSerializer?)manager.GetSerializer(t, typeof(CodeDomSerializer));
+        return manager.GetSerializer<CodeDomSerializer>(t);
     }
 
     /// <summary>
@@ -2067,7 +2064,7 @@ public abstract partial class CodeDomSerializerBase
     /// </summary>
     protected CodeDomSerializer? GetSerializer(IDesignerSerializationManager manager, Type valueType)
     {
-        return manager.GetSerializer(valueType, typeof(CodeDomSerializer)) as CodeDomSerializer;
+        return manager.GetSerializer<CodeDomSerializer>(valueType);
     }
 
     protected bool IsSerialized(IDesignerSerializationManager manager, object value)
@@ -2087,7 +2084,7 @@ public abstract partial class CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(value);
 
         // Is the expression part of a prior SetExpression call?
-        if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table)
+        if (manager.TryGetContext(out ExpressionTable? table))
         {
             hasExpression = honorPreset ? table.ContainsPresetExpression(value) : table.GetExpression(value) is not null;
         }
@@ -2109,7 +2106,7 @@ public abstract partial class CodeDomSerializerBase
 
         TypeConverter converter = TypeDescriptor.GetConverter(value);
         // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
-        if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
+        if (manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value))
         {
             CodeExpression expression = ctx.Expression;
             //Okay, we found a preset creation expression. We just need to find if it isComplete.
@@ -2188,7 +2185,7 @@ public abstract partial class CodeDomSerializerBase
                 ExpressionContext? newCtx = null;
 
                 // If there is an ExpressionContext on the stack, we need to fix up its type to be the parameter type, so the argument objects get serialized correctly.
-                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx)
+                if (manager.TryGetContext(out ExpressionContext? ctx))
                 {
                     newCtx = new ExpressionContext(ctx.Expression, parameters[i].ParameterType, ctx.Owner);
                     manager.Context.Push(newCtx);
@@ -2294,19 +2291,19 @@ public abstract partial class CodeDomSerializerBase
         {
             string baseName;
             Type targetType = GetReflectionTypeHelper(manager, value);
-            INameCreationService? ns = manager.GetService(typeof(INameCreationService)) as INameCreationService;
-            TraceIf(TraceLevel.Warning, ns is null, "Need to generate a unique name but we have no name creation service.");
+            INameCreationService? ns = manager.GetService<INameCreationService>();
             if (ns is not null)
             {
                 baseName = ns.CreateName(null, targetType);
             }
             else
             {
+                Trace(TraceLevel.Warning, "Need to generate a unique name but we have no name creation service.");
                 baseName = targetType.Name.ToLower(CultureInfo.InvariantCulture);
             }
 
             int suffixIndex = 1;
-            ComponentCache? cache = manager.Context[typeof(ComponentCache)] as ComponentCache;
+            ComponentCache? cache = manager.GetContext<ComponentCache>();
             // Declare this name to the serializer.  If there is already a name defined, keep trying.
             do
             {
@@ -2315,7 +2312,7 @@ public abstract partial class CodeDomSerializerBase
             while (manager.GetInstance(name) is not null || (cache is not null && cache.ContainsLocalName(name)));
 
             manager.SetName(value, name);
-            if (manager.Context[typeof(ComponentCache.Entry)] is ComponentCache.Entry entry)
+            if (manager.TryGetContext(out ComponentCache.Entry? entry))
             {
                 entry.AddLocalName(name);
             }
@@ -2342,7 +2339,7 @@ public abstract partial class CodeDomSerializerBase
             manager.Context.Push(descriptor);
             try
             {
-                MemberCodeDomSerializer? memberSerializer = (MemberCodeDomSerializer?)manager.GetSerializer(descriptor.GetType(), typeof(MemberCodeDomSerializer));
+                MemberCodeDomSerializer? memberSerializer = manager.GetSerializer<MemberCodeDomSerializer>(descriptor.GetType());
 
                 TraceIf(TraceLevel.Error, memberSerializer is null, $"Event {descriptor.Name} cannot be serialized because it has no serializer.");
                 if (memberSerializer is not null && memberSerializer.ShouldSerialize(manager, value, descriptor))
@@ -2503,7 +2500,7 @@ public abstract partial class CodeDomSerializerBase
         manager.Context.Push(propertyToSerialize);
         try
         {
-            MemberCodeDomSerializer? memberSerializer = (MemberCodeDomSerializer?)manager.GetSerializer(propertyToSerialize.GetType(), typeof(MemberCodeDomSerializer));
+            MemberCodeDomSerializer? memberSerializer = manager.GetSerializer<MemberCodeDomSerializer>(propertyToSerialize.GetType());
             TraceIf(TraceLevel.Error, memberSerializer is null, $"Property {propertyToSerialize.Name} cannot be serialized because it has no serializer.");
             if (memberSerializer is not null && memberSerializer.ShouldSerialize(manager, value, propertyToSerialize))
             {
@@ -2592,7 +2589,7 @@ public abstract partial class CodeDomSerializerBase
                     {
                         // The Whidbey model for serializing a complex object is to call SetExpression with the object's reference expression and then  call on the various Serialize Property / Event methods.  This is incompatible with legacy code, and if not handled legacy code may serialize incorrectly or even stack fault.  To handle this, we keep a private "Legacy Expression Table".  This is a table that we fill in here.  We don't fill in the actual legacy expression here.  Rather,  we fill it with a marker value and obtain the legacy expression  above in GetLegacyExpression.  If we hit this case, we then save the expression in GetExpression so that future calls to IsSerialized will succeed.
                         SetLegacyExpression(manager, value);
-                        if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
+                        if (manager.TryGetContext(out StatementContext? statementCtx))
                         {
                             saveStatements = statementCtx.StatementCollection[value];
                         }
@@ -2640,7 +2637,7 @@ public abstract partial class CodeDomSerializerBase
                     {
                         Trace(TraceLevel.Verbose, "Serialization produced additional statements");
                         // See if we have a place for these statements to be stored.  If not, then check the context.
-                        saveStatements ??= manager.Context[typeof(CodeStatementCollection)] as CodeStatementCollection;
+                        saveStatements ??= manager.GetContext<CodeStatementCollection>();
 
                         if (saveStatements is not null)
                         {
@@ -2676,7 +2673,7 @@ public abstract partial class CodeDomSerializerBase
     private static CodeExpression? GetLegacyExpression(IDesignerSerializationManager manager, object value)
     {
         CodeExpression? expression = null;
-        if (manager.Context[typeof(LegacyExpressionTable)] is LegacyExpressionTable table)
+        if (manager.TryGetContext(out LegacyExpressionTable? table))
         {
             object? exp = table[value];
             if (exp == value)
@@ -2694,8 +2691,7 @@ public abstract partial class CodeDomSerializerBase
                 {
                     Trace(TraceLevel.Verbose, $"Object is reference ({name}) Creating reference expression");
                     // Check to see if this is a reference to the root component.  If it is, then use "this".
-                    RootContext? root = (RootContext?)manager.Context[typeof(RootContext)];
-                    if (root is not null)
+                    if (manager.TryGetContext(out RootContext? root))
                     {
                         if (root.Value == value)
                         {
@@ -2748,8 +2744,7 @@ public abstract partial class CodeDomSerializerBase
     {
         if (value is IComponent)
         {
-            LegacyExpressionTable? table = (LegacyExpressionTable?)manager.Context[typeof(LegacyExpressionTable)];
-            if (table is null)
+            if (!manager.TryGetContext(out LegacyExpressionTable? table))
             {
                 table = new LegacyExpressionTable();
                 manager.Context.Append(table);
@@ -2793,7 +2788,7 @@ public abstract partial class CodeDomSerializerBase
             CodeStatementCollection? saveStatements = null;
             if (value is not null)
             {
-                if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
+                if (manager.TryGetContext(out StatementContext? statementCtx))
                 {
                     saveStatements = statementCtx.StatementCollection[value];
                 }
@@ -2839,8 +2834,7 @@ public abstract partial class CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(value);
         ArgumentNullException.ThrowIfNull(expression);
 
-        ExpressionTable? table = (ExpressionTable?)manager.Context[typeof(ExpressionTable)];
-        if (table is null)
+        if (!manager.TryGetContext(out ExpressionTable? table))
         {
             table = new ExpressionTable();
             manager.Context.Append(table);
@@ -2974,7 +2968,7 @@ public abstract partial class CodeDomSerializerBase
                                 Type? type = GetType(manager, fieldReferenceEx.FieldName, names);
                                 if (type is not null)
                                 {
-                                    if (manager.GetSerializer(type, typeof(CodeDomSerializer)) is CodeDomSerializer serializer)
+                                    if (manager.TryGetSerializer(type, out CodeDomSerializer? serializer))
                                     {
                                         string? componentName = serializer.GetTargetComponentName(statement, expression, type);
                                         if (!string.IsNullOrEmpty(componentName))
@@ -3022,7 +3016,7 @@ public abstract partial class CodeDomSerializerBase
                                 Type? type = GetType(manager, variableReferenceEx.VariableName, names);
                                 if (type is not null)
                                 {
-                                    if (manager.GetSerializer(type, typeof(CodeDomSerializer)) is CodeDomSerializer serializer)
+                                    if (manager.TryGetSerializer(type, out CodeDomSerializer? serializer))
                                     {
                                         string? componentName = serializer.GetTargetComponentName(statement, expression, type);
                                         if (!string.IsNullOrEmpty(componentName))
