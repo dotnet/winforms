@@ -21,7 +21,12 @@ public partial class ControlDesigner
 
         private string? GetActionName()
         {
-            PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(Component!)["Dock"];
+            if (Component is null)
+            {
+                return null;
+            }
+
+            PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
             if (dockProp is not null)
             {
                 DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component)!;
