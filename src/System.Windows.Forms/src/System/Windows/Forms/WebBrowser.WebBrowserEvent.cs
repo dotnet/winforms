@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
@@ -47,7 +45,7 @@ public partial class WebBrowser
                 Debug.Assert(urlObject is null || urlObject is string, "invalid url type");
                 Debug.Assert(targetFrameName is null || targetFrameName is string, "invalid targetFrameName type");
                 Debug.Assert(headers is null || headers is string, "invalid headers type");
-                //
+
                 // If during running interop code, the variant.bstr value gets set
                 // to -1 on return back to native code, if the original value was null, we
                 // have to set targetFrameName and headers to string.Empty.
@@ -71,12 +69,12 @@ public partial class WebBrowser
         {
             Debug.Assert(urlObject is null || urlObject is string, "invalid url");
             _haveNavigated = true;
-            if (_parent.documentStreamToSetOnLoad is not null && (string)urlObject == "about:blank")
+            if (_parent.documentStreamToSetOnLoad is not null && (string?)urlObject == "about:blank")
             {
                 HtmlDocument htmlDocument = _parent.Document;
                 if (htmlDocument is not null)
                 {
-                    IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
+                    IPersistStreamInit.Interface? psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
                     using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_parent.documentStreamToSetOnLoad));
                     psi.Load(pStream);
@@ -87,7 +85,7 @@ public partial class WebBrowser
             }
             else
             {
-                string urlString = urlObject is null ? string.Empty : urlObject.ToString();
+                string urlString = urlObject is null ? string.Empty : urlObject.ToString()!;
                 WebBrowserDocumentCompletedEventArgs e = new WebBrowserDocumentCompletedEventArgs(
                         new Uri(urlString));
                 _parent.OnDocumentCompleted(e);
