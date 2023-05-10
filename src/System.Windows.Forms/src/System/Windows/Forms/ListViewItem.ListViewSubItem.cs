@@ -79,7 +79,7 @@ public partial class ListViewItem
                     return style.backColor;
                 }
 
-                return _owner?.listView?.BackColor ?? SystemColors.Window;
+                return _owner?._listView?.BackColor ?? SystemColors.Window;
             }
             set
             {
@@ -98,9 +98,9 @@ public partial class ListViewItem
         {
             get
             {
-                if (_owner?.listView is not null && _owner.listView.IsHandleCreated)
+                if (_owner?._listView is not null && _owner._listView.IsHandleCreated)
                 {
-                    return _owner.listView.GetSubItemRect(_owner.Index, _owner.SubItems.IndexOf(this));
+                    return _owner._listView.GetSubItemRect(_owner.Index, _owner.SubItems.IndexOf(this));
                 }
                 else
                 {
@@ -139,6 +139,7 @@ public partial class ListViewItem
         internal bool CustomStyle => style is not null;
 
         [Localizable(true)]
+        [AllowNull]
         public Font Font
         {
             get
@@ -148,7 +149,7 @@ public partial class ListViewItem
                     return style.font;
                 }
 
-                return _owner?.listView?.Font ?? Control.DefaultFont;
+                return _owner?._listView?.Font ?? Control.DefaultFont;
             }
             set
             {
@@ -171,7 +172,7 @@ public partial class ListViewItem
                     return style.foreColor;
                 }
 
-                return _owner?.listView?.ForeColor ?? SystemColors.WindowText;
+                return _owner?._listView?.ForeColor ?? SystemColors.WindowText;
             }
             set
             {

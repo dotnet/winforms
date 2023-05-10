@@ -851,7 +851,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
     {
         using ListView listView = new();
         ListViewItem listViewItem = new("Test item");
-        listViewItem.listView = listView;
+        listViewItem._listView = listView;
         ListViewItem.ListViewSubItem subItem = new(listViewItem, "Test subItem");
 
         object actual = subItem.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId);

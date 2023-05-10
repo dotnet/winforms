@@ -23,14 +23,14 @@ public partial class ListViewItem
             get
             {
                 Rectangle imageRectangle = GetImageRectangle();
-                return _owningItem.ListView.RectangleToScreen(imageRectangle);
+                return _owningItem.ListView!.RectangleToScreen(imageRectangle);
             }
         }
 
         public override string DefaultAction => string.Empty;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => _owningItem.ListView.AccessibilityObject;
+        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+            => _owningItem.ListView?.AccessibilityObject;
 
         public override AccessibleObject Parent => _owningItem.AccessibilityObject;
 
@@ -55,7 +55,7 @@ public partial class ListViewItem
 
         public override int GetChildCount() => 0;
 
-        internal Rectangle GetImageRectangle() => _owningItem.ListView.GetItemRect(_owningItem.Index, ItemBoundsPortion.Icon);
+        internal Rectangle GetImageRectangle() => _owningItem.ListView!.GetItemRect(_owningItem.Index, ItemBoundsPortion.Icon);
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch

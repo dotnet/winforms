@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -33,29 +31,29 @@ public partial class ListViewItem : ICloneable, ISerializable
     private static readonly BitVector32.Section s_savedStateImageIndexSection = BitVector32.CreateSection(15, s_stateWholeRowOneStyleSection);
     private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_savedStateImageIndexSection);
 
-    private int indentCount;
-    private Point position = new Point(-1, -1);
+    private int _indentCount;
+    private Point _position = new Point(-1, -1);
 
-    internal ListView listView;
+    internal ListView? _listView;
 
-    internal ListViewGroup group;
-    private string groupName;
+    internal ListViewGroup? _group;
+    private string? _groupName;
 
-    private ListViewSubItemCollection listViewSubItemCollection;
-    private ListViewSubItem[] subItems;
+    private ListViewSubItemCollection? _listViewSubItemCollection;
+    private List<ListViewSubItem> _subItems = new();
 
     // we stash the last index we got as a seed to GetDisplayIndex.
-    private int lastIndex = -1;
+    private int _lastIndex = -1;
 
     // An ID unique relative to a given list view that comctl uses to identify items.
     internal int ID = -1;
 
-    private BitVector32 state;
-    private ListViewItemImageIndexer imageIndexer;
-    private string toolTipText = string.Empty;
-    private object userData;
+    private BitVector32 _state;
+    private ListViewItemImageIndexer? _imageIndexer;
+    private string _toolTipText = string.Empty;
+    private object? _userData;
 
-    private AccessibleObject _accessibilityObject;
+    private AccessibleObject? _accessibilityObject;
     private View _accessibilityObjectView;
 
     public ListViewItem()
@@ -68,51 +66,59 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// <summary>
     ///  Creates a ListViewItem object from an Stream.
     /// </summary>
-    protected ListViewItem(SerializationInfo info, StreamingContext context) : this()
+    protected ListViewItem(SerializationInfo info, StreamingContext context)
+        : this()
     {
         Deserialize(info, context);
     }
 
-    public ListViewItem(string text) : this(text, ImageList.Indexer.DefaultIndex)
+    public ListViewItem(string? text)
+        : this(text, ImageList.Indexer.DefaultIndex)
     {
     }
 
-    public ListViewItem(string text, int imageIndex) : this()
+    public ListViewItem(string? text, int imageIndex)
+        : this()
     {
         ImageIndexer.Index = imageIndex;
         Text = text;
     }
 
-    public ListViewItem(string[] items) : this(items, ImageList.Indexer.DefaultIndex)
+    public ListViewItem(string[]? items)
+        : this(items, ImageList.Indexer.DefaultIndex)
     {
     }
 
-    public ListViewItem(string[] items, int imageIndex) : this()
+    public ListViewItem(string[]? items, int imageIndex)
+        : this()
     {
         ImageIndexer.Index = imageIndex;
         if (items is not null && items.Length > 0)
         {
-            subItems = new ListViewSubItem[items.Length];
+            _subItems.EnsureCapacity(items.Length);
             for (int i = 0; i < items.Length; i++)
             {
-                subItems[i] = new ListViewSubItem(this, items[i]);
+                _subItems.Add(new ListViewSubItem(this, items[i]));
             }
 
             SubItemCount = items.Length;
         }
     }
 
-    public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font) : this(items, imageIndex)
+    public ListViewItem(string[]? items, int imageIndex, Color foreColor, Color backColor, Font? font)
+        : this(items, imageIndex)
     {
         ForeColor = foreColor;
         BackColor = backColor;
         Font = font;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this()
+    public ListViewItem(ListViewSubItem[] subItems, int imageIndex)
+        : this()
     {
+        ArgumentNullException.ThrowIfNull(subItems);
+
         ImageIndexer.Index = imageIndex;
-        this.subItems = subItems.OrThrowIfNull();
         SubItemCount = subItems.Length;
 
         // Update the owner of these subitems
@@ -121,76 +127,89 @@ public partial class ListViewItem : ICloneable, ISerializable
             ArgumentNullException.ThrowIfNull(subItems[i], nameof(subItems));
 
             subItems[i]._owner = this;
+            _subItems.Add(subItems[i]);
         }
     }
 
-    public ListViewItem(ListViewGroup group) : this()
+    public ListViewItem(ListViewGroup? group)
+        : this()
     {
         Group = group;
     }
 
-    public ListViewItem(string text, ListViewGroup group) : this(text)
+    public ListViewItem(string? text, ListViewGroup? group)
+        : this(text)
     {
         Group = group;
     }
 
-    public ListViewItem(string text, int imageIndex, ListViewGroup group) : this(text, imageIndex)
+    public ListViewItem(string? text, int imageIndex, ListViewGroup? group)
+        : this(text, imageIndex)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, ListViewGroup group) : this(items)
+    public ListViewItem(string[]? items, ListViewGroup? group)
+        : this(items)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, int imageIndex, ListViewGroup group) : this(items, imageIndex)
+    public ListViewItem(string[]? items, int imageIndex, ListViewGroup? group)
+        : this(items, imageIndex)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageIndex, foreColor, backColor, font)
+    public ListViewItem(string[]? items, int imageIndex, Color foreColor, Color backColor, Font? font, ListViewGroup? group)
+        : this(items, imageIndex, foreColor, backColor, font)
     {
         Group = group;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, int imageIndex, ListViewGroup group) : this(subItems, imageIndex)
+    public ListViewItem(ListViewSubItem[] subItems, int imageIndex, ListViewGroup? group)
+        : this(subItems, imageIndex)
     {
         Group = group;
     }
 
-    public ListViewItem(string text, string imageKey) : this()
+    public ListViewItem(string? text, string? imageKey)
+        : this()
     {
         ImageIndexer.Key = imageKey;
         Text = text;
     }
 
-    public ListViewItem(string[] items, string imageKey) : this()
+    public ListViewItem(string[]? items, string? imageKey)
+        : this()
     {
         ImageIndexer.Key = imageKey;
         if (items is not null && items.Length > 0)
         {
-            subItems = new ListViewSubItem[items.Length];
+            _subItems = new List<ListViewSubItem>(items.Length);
             for (int i = 0; i < items.Length; i++)
             {
-                subItems[i] = new ListViewSubItem(this, items[i]);
+                _subItems.Add(new ListViewSubItem(this, items[i]));
             }
 
             SubItemCount = items.Length;
         }
     }
 
-    public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font) : this(items, imageKey)
+    public ListViewItem(string[]? items, string? imageKey, Color foreColor, Color backColor, Font? font)
+        : this(items, imageKey)
     {
         ForeColor = foreColor;
         BackColor = backColor;
         Font = font;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this()
+    public ListViewItem(ListViewSubItem[] subItems, string? imageKey)
+        : this()
     {
+        ArgumentNullException.ThrowIfNull(subItems);
+
         ImageIndexer.Key = imageKey;
-        this.subItems = subItems.OrThrowIfNull();
         SubItemCount = subItems.Length;
 
         // Update the owner of these subitems
@@ -199,25 +218,30 @@ public partial class ListViewItem : ICloneable, ISerializable
             ArgumentNullException.ThrowIfNull(subItems[i], nameof(subItems));
 
             subItems[i]._owner = this;
+            _subItems.Add(subItems[i]);
         }
     }
 
-    public ListViewItem(string text, string imageKey, ListViewGroup group) : this(text, imageKey)
+    public ListViewItem(string? text, string? imageKey, ListViewGroup? group)
+        : this(text, imageKey)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, string imageKey, ListViewGroup group) : this(items, imageKey)
+    public ListViewItem(string[]? items, string? imageKey, ListViewGroup? group)
+        : this(items, imageKey)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageKey, foreColor, backColor, font)
+    public ListViewItem(string[]? items, string? imageKey, Color foreColor, Color backColor, Font? font, ListViewGroup? group)
+        : this(items, imageKey, foreColor, backColor, font)
     {
         Group = group;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, string imageKey, ListViewGroup group) : this(subItems, imageKey)
+    public ListViewItem(ListViewSubItem[] subItems, string? imageKey, ListViewGroup? group)
+        : this(subItems, imageKey)
     {
         Group = group;
     }
@@ -226,7 +250,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         get
         {
-            ListView owningListView = listView ?? Group?.ListView
+            ListView owningListView = _listView ?? Group?.ListView
                 ?? throw new InvalidOperationException(SR.ListViewItemAccessibilityObjectRequiresListView);
 
             if (_accessibilityObject is null || owningListView.View != _accessibilityObjectView)
@@ -261,16 +285,16 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             if (SubItemCount == 0)
             {
-                if (listView is not null)
+                if (_listView is not null)
                 {
-                    return listView.BackColor;
+                    return _listView.BackColor;
                 }
 
                 return SystemColors.Window;
             }
             else
             {
-                return subItems[0].BackColor;
+                return _subItems[0].BackColor;
             }
         }
         set => SubItems[0].BackColor = value;
@@ -285,9 +309,9 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         get
         {
-            if (listView is not null)
+            if (_listView is not null)
             {
-                return listView.GetItemRect(Index);
+                return _listView.GetItemRect(Index);
             }
             else
             {
@@ -306,17 +330,17 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             if (Checked != value)
             {
-                if (listView is not null && listView.IsHandleCreated)
+                if (_listView is not null && _listView.IsHandleCreated)
                 {
                     StateImageIndex = value ? 1 : 0;
 
                     // the setter for StateImageIndex calls ItemChecked handler
                     // thus need to verify validity of the listView again
-                    if (listView is not null && !listView.UseCompatibleStateImageBehavior)
+                    if (_listView is not null && !_listView.UseCompatibleStateImageBehavior)
                     {
-                        if (!listView.CheckBoxes)
+                        if (!_listView.CheckBoxes)
                         {
-                            listView.UpdateSavedCheckedItems(this, value);
+                            _listView.UpdateSavedCheckedItems(this, value);
                         }
                     }
                 }
@@ -337,9 +361,9 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         get
         {
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                return listView.GetItemState(Index, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_FOCUSED) != 0;
+                return _listView.GetItemState(Index, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_FOCUSED) != 0;
             }
 
             return false;
@@ -347,11 +371,11 @@ public partial class ListViewItem : ICloneable, ISerializable
 
         set
         {
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                listView.SetItemState(Index, value ? LIST_VIEW_ITEM_STATE_FLAGS.LVIS_FOCUSED : 0, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_FOCUSED);
+                _listView.SetItemState(Index, value ? LIST_VIEW_ITEM_STATE_FLAGS.LVIS_FOCUSED : 0, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_FOCUSED);
 
-                if (listView.IsAccessibilityObjectCreated)
+                if (_listView.IsAccessibilityObjectCreated)
                 {
                     AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }
@@ -362,22 +386,23 @@ public partial class ListViewItem : ICloneable, ISerializable
     [Localizable(true)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatAppearance))]
+    [AllowNull]
     public Font Font
     {
         get
         {
             if (SubItemCount == 0)
             {
-                if (listView is not null)
+                if (_listView is not null)
                 {
-                    return listView.Font;
+                    return _listView.Font;
                 }
 
                 return Control.DefaultFont;
             }
             else
             {
-                return subItems[0].Font;
+                return _subItems[0].Font;
             }
         }
         set => SubItems[0].Font = value;
@@ -391,16 +416,16 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             if (SubItemCount == 0)
             {
-                if (listView is not null)
+                if (_listView is not null)
                 {
-                    return listView.ForeColor;
+                    return _listView.ForeColor;
                 }
 
                 return SystemColors.WindowText;
             }
             else
             {
-                return subItems[0].ForeColor;
+                return _subItems[0].ForeColor;
             }
         }
         set
@@ -412,12 +437,12 @@ public partial class ListViewItem : ICloneable, ISerializable
     [DefaultValue(null)]
     [Localizable(true)]
     [SRCategory(nameof(SR.CatBehavior))]
-    public ListViewGroup Group
+    public ListViewGroup? Group
     {
-        get => group;
+        get => _group;
         set
         {
-            if (group != value)
+            if (_group != value)
             {
                 if (value is not null)
                 {
@@ -425,14 +450,14 @@ public partial class ListViewItem : ICloneable, ISerializable
                 }
                 else
                 {
-                    group.Items.Remove(this);
+                    _group!.Items.Remove(this);
                 }
             }
 
-            Debug.Assert(group == value, "BUG: group member variable wasn't updated!");
+            Debug.Assert(_group == value, "BUG: group member variable wasn't updated!");
 
             // If the user specifically sets the group then don't use the groupName again.
-            groupName = null;
+            _groupName = null;
         }
     }
 
@@ -465,14 +490,14 @@ public partial class ListViewItem : ICloneable, ISerializable
 
             ImageIndexer.Index = value;
 
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                listView.SetItemImage(itemIndex: Index, imageIndex: ImageIndexer.ActualIndex);
+                _listView.SetItemImage(itemIndex: Index, imageIndex: ImageIndexer.ActualIndex);
             }
         }
     }
 
-    internal ListViewItemImageIndexer ImageIndexer => imageIndexer ??= new ListViewItemImageIndexer(this);
+    internal ListViewItemImageIndexer ImageIndexer => _imageIndexer ??= new ListViewItemImageIndexer(this);
 
     /// <summary>
     ///  Returns the ListViewItem's currently set image index
@@ -491,29 +516,29 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             ImageIndexer.Key = value;
 
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                listView.SetItemImage(Index, ImageIndexer.ActualIndex);
+                _listView.SetItemImage(Index, ImageIndexer.ActualIndex);
             }
         }
     }
 
     [Browsable(false)]
-    public ImageList ImageList
+    public ImageList? ImageList
     {
         get
         {
-            if (listView is not null)
+            if (_listView is not null)
             {
-                switch (listView.View)
+                switch (_listView.View)
                 {
                     case View.LargeIcon:
                     case View.Tile:
-                        return listView.LargeImageList;
+                        return _listView.LargeImageList;
                     case View.SmallIcon:
                     case View.Details:
                     case View.List:
-                        return listView.SmallImageList;
+                        return _listView.SmallImageList;
                 }
             }
 
@@ -526,7 +551,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [SRCategory(nameof(SR.CatDisplay))]
     public int IndentCount
     {
-        get => indentCount;
+        get => _indentCount;
         set
         {
             if (value < 0)
@@ -534,12 +559,12 @@ public partial class ListViewItem : ICloneable, ISerializable
                 throw new ArgumentOutOfRangeException(nameof(IndentCount), SR.ListViewIndentCountCantBeNegative);
             }
 
-            if (value != indentCount)
+            if (value != _indentCount)
             {
-                indentCount = value;
-                if (listView is not null && listView.IsHandleCreated)
+                _indentCount = value;
+                if (_listView is not null && _listView.IsHandleCreated)
                 {
-                    listView.SetItemIndentCount(Index, indentCount);
+                    _listView.SetItemIndentCount(Index, _indentCount);
                 }
             }
         }
@@ -553,16 +578,16 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         get
         {
-            if (listView is not null)
+            if (_listView is not null)
             {
                 // if the list is virtual, the ComCtrl control does not keep any information
                 // about any list view items, so we use our cache instead.
-                if (!listView.VirtualMode)
+                if (!_listView.VirtualMode)
                 {
-                    lastIndex = listView.GetDisplayIndex(this, lastIndex);
+                    _lastIndex = _listView.GetDisplayIndex(this, _lastIndex);
                 }
 
-                return lastIndex;
+                return _lastIndex;
             }
             else
             {
@@ -576,7 +601,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     ///  control has been assigned yet.
     /// </summary>
     [Browsable(false)]
-    public ListView ListView => listView;
+    public ListView? ListView => _listView;
 
     /// <summary>
     ///  Name associated with this ListViewItem
@@ -584,6 +609,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [Localizable(true)]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public string Name
     {
         get
@@ -594,7 +620,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems[0].Name;
+                return _subItems[0].Name;
             }
         }
         set => SubItems[0].Name = value;
@@ -607,23 +633,23 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         get
         {
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                position = listView.GetItemPosition(Index);
+                _position = _listView.GetItemPosition(Index);
             }
 
-            return position;
+            return _position;
         }
         set
         {
-            if (!value.Equals(position))
+            if (!value.Equals(_position))
             {
-                position = value;
-                if (listView is not null && listView.IsHandleCreated)
+                _position = value;
+                if (_listView is not null && _listView.IsHandleCreated)
                 {
-                    if (!listView.VirtualMode)
+                    if (!_listView.VirtualMode)
                     {
-                        listView.SetItemPosition(Index, position.X, position.Y);
+                        _listView.SetItemPosition(Index, _position.X, _position.Y);
                     }
                 }
             }
@@ -641,15 +667,15 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             // State goes from zero to 15, but we need a negative
             // number, so we store + 1.
-            return state[s_savedStateImageIndexSection] - 1;
+            return _state[s_savedStateImageIndexSection] - 1;
         }
         set
         {
             // flag whether we've set a value.
-            state[s_stateImageMaskSet] = (value == ImageList.Indexer.DefaultIndex ? 0 : 1);
+            _state[s_stateImageMaskSet] = (value == ImageList.Indexer.DefaultIndex ? 0 : 1);
 
             // push in the actual value
-            state[s_savedStateImageIndexSection] = value + 1;
+            _state[s_savedStateImageIndexSection] = value + 1;
         }
     }
 
@@ -662,34 +688,34 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         get
         {
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                return listView.GetItemState(Index, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED) != 0;
+                return _listView.GetItemState(Index, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED) != 0;
             }
 
             return StateSelected;
         }
         set
         {
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                listView.SetItemState(Index, value ? LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED : 0, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED);
+                _listView.SetItemState(Index, value ? LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED : 0, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED);
 
                 // update comctl32's selection information.
-                listView.SetSelectionMark(Index);
+                _listView.SetSelectionMark(Index);
             }
             else
             {
                 StateSelected = value;
-                if (listView is not null && listView.IsHandleCreated)
+                if (_listView is not null && _listView.IsHandleCreated)
                 {
                     // Set the selected state on the list view item only if the list view's Handle is already created.
-                    listView.CacheSelectedStateForItem(this, value);
+                    _listView.CacheSelectedStateForItem(this, value);
                 }
             }
         }
     }
-
+#nullable disable
     [Localizable(true)]
     [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
@@ -702,9 +728,9 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         get
         {
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                LIST_VIEW_ITEM_STATE_FLAGS state = listView.GetItemState(Index, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK);
+                LIST_VIEW_ITEM_STATE_FLAGS state = _listView.GetItemState(Index, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK);
                 return (((int)state >> 12) - 1);   // index is 1-based
             }
 
@@ -717,26 +743,26 @@ public partial class ListViewItem : ICloneable, ISerializable
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
             }
 
-            if (listView is not null && listView.IsHandleCreated)
+            if (_listView is not null && _listView.IsHandleCreated)
             {
-                this.state[s_stateImageMaskSet] = (value == ImageList.Indexer.DefaultIndex ? 0 : 1);
+                _state[s_stateImageMaskSet] = (value == ImageList.Indexer.DefaultIndex ? 0 : 1);
                 LIST_VIEW_ITEM_STATE_FLAGS state = (LIST_VIEW_ITEM_STATE_FLAGS)((value + 1) << 12);  // index is 1-based
-                listView.SetItemState(Index, state, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK);
+                _listView.SetItemState(Index, state, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK);
             }
 
             SavedStateImageIndex = value;
         }
     }
 
-    internal bool StateImageSet => (state[s_stateImageMaskSet] != 0);
+    internal bool StateImageSet => (_state[s_stateImageMaskSet] != 0);
 
     /// <summary>
     ///  Accessor for our state bit vector.
     /// </summary>
     internal bool StateSelected
     {
-        get => state[s_stateSelectedSection] == 1;
-        set => state[s_stateSelectedSection] = value ? 1 : 0;
+        get => _state[s_stateSelectedSection] == 1;
+        set => _state[s_stateSelectedSection] = value ? 1 : 0;
     }
 
     /// <summary>
@@ -744,8 +770,8 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     private int SubItemCount // Do NOT rename (binary serialization).
     {
-        get => state[s_subItemCountSection];
-        set => state[s_subItemCountSection] = value;
+        get => _state[s_subItemCountSection];
+        set => _state[s_subItemCountSection] = value;
     }
 
     [SRCategory(nameof(SR.CatData))]
@@ -758,12 +784,12 @@ public partial class ListViewItem : ICloneable, ISerializable
         {
             if (SubItemCount == 0)
             {
-                subItems = new ListViewSubItem[1];
-                subItems[0] = new ListViewSubItem(this, string.Empty);
+                _subItems = new List<ListViewSubItem>(1);
+                _subItems.Add(new ListViewSubItem(this, string.Empty));
                 SubItemCount = 1;
             }
 
-            return listViewSubItemCollection ??= new ListViewSubItemCollection(this);
+            return _listViewSubItemCollection ??= new ListViewSubItemCollection(this);
         }
     }
 
@@ -775,8 +801,8 @@ public partial class ListViewItem : ICloneable, ISerializable
     [TypeConverter(typeof(StringConverter))]
     public object Tag
     {
-        get => userData;
-        set => userData = value;
+        get => _userData;
+        set => _userData = value;
     }
 
     /// <summary>
@@ -795,7 +821,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems[0].Text;
+                return _subItems[0].Text;
             }
         }
         set => SubItems[0].Text = value;
@@ -808,19 +834,19 @@ public partial class ListViewItem : ICloneable, ISerializable
     [DefaultValue("")]
     public string ToolTipText
     {
-        get => toolTipText;
+        get => _toolTipText;
         set
         {
             value ??= string.Empty;
 
-            if (!WindowsFormsUtils.SafeCompareStrings(toolTipText, value, ignoreCase: false))
+            if (!WindowsFormsUtils.SafeCompareStrings(_toolTipText, value, ignoreCase: false))
             {
-                toolTipText = value;
+                _toolTipText = value;
 
                 // tell the list view about this change
-                if (listView is not null && listView.IsHandleCreated)
+                if (_listView is not null && _listView.IsHandleCreated)
                 {
-                    listView.ListViewItemToolTipChanged(this);
+                    _listView.ListViewItemToolTipChanged(this);
                 }
             }
         }
@@ -836,8 +862,8 @@ public partial class ListViewItem : ICloneable, ISerializable
     [SRCategory(nameof(SR.CatAppearance))]
     public bool UseItemStyleForSubItems
     {
-        get => state[s_stateWholeRowOneStyleSection] == 1;
-        set => state[s_stateWholeRowOneStyleSection] = value ? 1 : 0;
+        get => _state[s_stateWholeRowOneStyleSection] == 1;
+        set => _state[s_stateWholeRowOneStyleSection] = value ? 1 : 0;
     }
 
     /// <summary>
@@ -880,8 +906,8 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
 
         Type clonedType = GetType();
-        ListViewItem newItem = null;
 
+        ListViewItem newItem;
         if (clonedType == typeof(ListViewItem))
         {
             newItem = new ListViewItem(clonedSubItems, ImageIndexer.Index);
@@ -891,7 +917,11 @@ public partial class ListViewItem : ICloneable, ISerializable
             newItem = (ListViewItem)Activator.CreateInstance(clonedType);
         }
 
-        newItem.subItems = clonedSubItems;
+        foreach (ListViewSubItem subItem in clonedSubItems)
+        {
+            newItem._subItems.Add(subItem);
+        }
+
         newItem.ImageIndexer.Index = ImageIndexer.Index;
         newItem.SubItemCount = SubItemCount;
         newItem.Checked = Checked;
@@ -904,9 +934,9 @@ public partial class ListViewItem : ICloneable, ISerializable
             newItem.ImageIndexer.Key = ImageIndexer.Key;
         }
 
-        newItem.indentCount = indentCount;
+        newItem._indentCount = _indentCount;
         newItem.StateImageIndex = StateImageIndex;
-        newItem.toolTipText = toolTipText;
+        newItem._toolTipText = _toolTipText;
         newItem.BackColor = BackColor;
         newItem.ForeColor = ForeColor;
         newItem.Font = Font;
@@ -921,9 +951,9 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     public virtual void EnsureVisible()
     {
-        if (listView is not null && listView.IsHandleCreated)
+        if (_listView is not null && _listView.IsHandleCreated)
         {
-            listView.EnsureVisible(Index);
+            _listView.EnsureVisible(Index);
         }
     }
 
@@ -942,9 +972,9 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     public Rectangle GetBounds(ItemBoundsPortion portion)
     {
-        if (listView is not null && listView.IsHandleCreated)
+        if (_listView is not null && _listView.IsHandleCreated)
         {
-            return listView.GetItemRect(Index, portion);
+            return _listView.GetItemRect(Index, portion);
         }
 
         return default(Rectangle);
@@ -952,9 +982,9 @@ public partial class ListViewItem : ICloneable, ISerializable
 
     public ListViewSubItem GetSubItemAt(int x, int y)
     {
-        if (listView is not null && listView.IsHandleCreated && listView.View == View.Details)
+        if (_listView is not null && _listView.IsHandleCreated && _listView.View == View.Details)
         {
-            listView.GetSubItemAt(x, y, out int iItem, out int iSubItem);
+            _listView.GetSubItemAt(x, y, out int iItem, out int iSubItem);
             if (iItem == Index && iSubItem != -1 && iSubItem < SubItems.Count)
             {
                 return SubItems[iSubItem];
@@ -971,11 +1001,11 @@ public partial class ListViewItem : ICloneable, ISerializable
     internal void Host(ListView parent, int id, int index)
     {
         // Don't let the name "host" fool you -- Handle is not necessarily created
-        Debug.Assert(listView is null || !listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
+        Debug.Assert(_listView is null || !_listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
         Debug.Assert(parent is null || !parent.VirtualMode, "ListViewItem::Host can't be used w/ a virtual list");
 
         ID = id;
-        listView = parent;
+        _listView = parent;
 
         // If the index is valid, then the handle has been created.
         if (index != -1)
@@ -983,7 +1013,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             UpdateStateToListView(index);
         }
 
-        KeyboardToolTipStateMachine.Instance.Hook(this, listView.KeyboardToolTip);
+        KeyboardToolTipStateMachine.Instance.Hook(this, _listView.KeyboardToolTip);
     }
 
     internal void ReleaseUiaProvider()
@@ -1011,18 +1041,18 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     internal void UpdateGroupFromName()
     {
-        Debug.Assert(listView is not null, "This method is used only when items are parented in a list view");
-        Debug.Assert(!listView.VirtualMode, "we need to update the group only when the user specifies the list view items in localizable forms");
-        if (string.IsNullOrEmpty(groupName))
+        Debug.Assert(_listView is not null, "This method is used only when items are parented in a list view");
+        Debug.Assert(!_listView.VirtualMode, "we need to update the group only when the user specifies the list view items in localizable forms");
+        if (string.IsNullOrEmpty(_groupName))
         {
             return;
         }
 
-        ListViewGroup group = listView.Groups[groupName];
+        ListViewGroup group = _listView.Groups[_groupName];
         Group = group;
 
         // Use the group name only once.
-        groupName = null;
+        _groupName = null;
     }
 
     internal void UpdateStateToListView(int index)
@@ -1038,7 +1068,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     internal void UpdateStateToListView(int index, ref LVITEMW lvItem, bool updateOwner)
     {
-        Debug.Assert(listView.IsHandleCreated, "Should only invoke UpdateStateToListView when handle is created.");
+        Debug.Assert(_listView.IsHandleCreated, "Should only invoke UpdateStateToListView when handle is created.");
 
         if (index == -1)
         {
@@ -1046,7 +1076,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
         else
         {
-            lastIndex = index;
+            _lastIndex = index;
         }
 
         // Update Item state in one shot
@@ -1069,26 +1099,26 @@ public partial class ListViewItem : ICloneable, ISerializable
         lvItem.stateMask |= stateMask;
         lvItem.state |= itemState;
 
-        if (listView.GroupsEnabled)
+        if (_listView.GroupsEnabled)
         {
             lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
-            lvItem.iGroupId = listView.GetNativeGroupId(this);
+            lvItem.iGroupId = _listView.GetNativeGroupId(this);
 
-            nint result = PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_ISGROUPVIEWENABLED);
+            nint result = PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_ISGROUPVIEWENABLED);
             Debug.Assert(!updateOwner || result != 0, "Groups not enabled");
-            result = PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
+            result = PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
             Debug.Assert(!updateOwner || result != 0, $"Doesn't contain group id: {lvItem.iGroupId}");
         }
 
         if (updateOwner)
         {
-            PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_SETITEMW, 0, ref lvItem);
+            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETITEMW, 0, ref lvItem);
         }
     }
 
     internal void UpdateStateFromListView(int displayIndex, bool checkSelection)
     {
-        if (listView is not null && listView.IsHandleCreated && displayIndex != -1)
+        if (_listView is not null && _listView.IsHandleCreated && displayIndex != -1)
         {
             // Get information from comctl control
             var lvItem = new LVITEMW
@@ -1111,7 +1141,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
 
             lvItem.iItem = displayIndex;
-            PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETITEMW, 0, ref lvItem);
+            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETITEMW, 0, ref lvItem);
 
             // Update this class' information
             if (checkSelection)
@@ -1121,12 +1151,12 @@ public partial class ListViewItem : ICloneable, ISerializable
 
             SavedStateImageIndex = ((int)(lvItem.state & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) - 1;
 
-            group = null;
+            _group = null;
             foreach (ListViewGroup lvg in ListView.Groups)
             {
                 if (lvg.ID == lvItem.iGroupId)
                 {
-                    group = lvg;
+                    _group = lvg;
                     break;
                 }
             }
@@ -1139,24 +1169,24 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         UpdateStateFromListView(displayIndex, checkSelection);
 
-        if (listView is not null)
+        if (_listView is not null)
         {
-            if ((listView.Site is null || !listView.Site.DesignMode) && group is not null)
+            if ((_listView.Site is null || !_listView.Site.DesignMode) && _group is not null)
             {
-                group.Items.Remove(this);
+                _group.Items.Remove(this);
             }
 
-            KeyboardToolTipStateMachine.Instance.Unhook(this, listView.KeyboardToolTip);
+            KeyboardToolTipStateMachine.Instance.Unhook(this, _listView.KeyboardToolTip);
         }
 
         ReleaseUiaProvider();
 
         // Make sure you do these last, as the first several lines depends on this information
         ID = -1;
-        listView = null;
+        _listView = null;
     }
 
-    public virtual void Remove() => listView?.Items.Remove(this);
+    public virtual void Remove() => _listView?.Items.Remove(this);
 
     protected virtual void Deserialize(SerializationInfo info, StreamingContext context)
     {
@@ -1210,7 +1240,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             else if (entry.Name == nameof(Group))
             {
                 ListViewGroup group = (ListViewGroup)info.GetValue(nameof(Group), typeof(ListViewGroup));
-                groupName = group.Name;
+                _groupName = group.Name;
             }
         }
 
@@ -1226,16 +1256,13 @@ public partial class ListViewItem : ICloneable, ISerializable
 
         if (foundSubItems)
         {
-            ListViewSubItem[] newItems = new ListViewSubItem[SubItemCount];
+            _subItems.EnsureCapacity(SubItemCount);
             for (int i = 1; i < SubItemCount; i++)
             {
                 ListViewSubItem newItem = (ListViewSubItem)info.GetValue($"SubItem{i}", typeof(ListViewSubItem));
                 newItem._owner = this;
-                newItems[i] = newItem;
+                _subItems.Add(newItem);
             }
-
-            newItems[0] = subItems[0];
-            subItems = newItems;
         }
     }
 
@@ -1256,7 +1283,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             info.AddValue(nameof(SubItemCount), SubItemCount);
             for (int i = 1; i < SubItemCount; i++)
             {
-                info.AddValue($"SubItem{i}", subItems[i], typeof(ListViewSubItem));
+                info.AddValue($"SubItem{i}", _subItems[i], typeof(ListViewSubItem));
             }
         }
 
@@ -1277,22 +1304,22 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         Debug.Assert(listView is not null && listView.VirtualMode, "ListViewItem::SetItemIndex should be used only when the list is virtual");
         Debug.Assert(index > -1, "can't set the index on a virtual list view item to -1");
-        this.listView = listView;
-        lastIndex = index;
+        _listView = listView;
+        _lastIndex = index;
     }
 
     internal static bool ShouldSerializeText() => false;
 
-    private bool ShouldSerializePosition() => !position.Equals(new Point(-1, -1));
+    private bool ShouldSerializePosition() => !_position.Equals(new Point(-1, -1));
 
     public override string ToString() => $"ListViewItem: {{{Text}}}";
 
     internal void InvalidateListView()
     {
         // The ListItem's state (or a SubItem's state) has changed, so invalidate the ListView control
-        if (listView is not null && listView.IsHandleCreated)
+        if (_listView is not null && _listView.IsHandleCreated)
         {
-            listView.Invalidate();
+            _listView.Invalidate();
         }
     }
 
@@ -1300,25 +1327,25 @@ public partial class ListViewItem : ICloneable, ISerializable
 
     internal void UpdateSubItems(int index, int oldCount)
     {
-        if (listView is not null && listView.IsHandleCreated)
+        if (_listView is not null && _listView.IsHandleCreated)
         {
             int subItemCount = SubItemCount;
             int itemIndex = Index;
             if (index != -1)
             {
-                listView.SetItemText(itemIndex, index, subItems[index].Text);
+                _listView.SetItemText(itemIndex, index, _subItems[index].Text);
             }
             else
             {
                 for (int i = 0; i < subItemCount; i++)
                 {
-                    listView.SetItemText(itemIndex, i, subItems[i].Text);
+                    _listView.SetItemText(itemIndex, i, _subItems[i].Text);
                 }
             }
 
             for (int i = subItemCount; i < oldCount; i++)
             {
-                listView.SetItemText(itemIndex, i, string.Empty);
+                _listView.SetItemText(itemIndex, i, string.Empty);
             }
         }
     }
