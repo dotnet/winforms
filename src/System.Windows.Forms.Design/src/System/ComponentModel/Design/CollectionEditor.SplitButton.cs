@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -190,7 +188,7 @@ public partial class CollectionEditor
             if (ContextMenuStrip is null || !ContextMenuStrip.Visible)
             {
                 SetButtonDrawState();
-                if (Bounds.Contains(Parent.PointToClient(Cursor.Position)) && !_dropDownRectangle.Contains(mevent.Location))
+                if (Parent is not null && Bounds.Contains(Parent.PointToClient(Cursor.Position)) && !_dropDownRectangle.Contains(mevent.Location))
                 {
                     OnClick(new EventArgs());
                 }
@@ -269,7 +267,7 @@ public partial class CollectionEditor
                 new Point(middle.X, middle.Y + s_offset2Y)
             };
 
-            deviceContext.TryGetGraphics(create: true).FillPolygon(SystemBrushes.ControlText, arrow);
+            deviceContext.TryGetGraphics(create: true)?.FillPolygon(SystemBrushes.ControlText, arrow);
         }
 
         private void ShowContextMenuStrip()
@@ -282,7 +280,7 @@ public partial class CollectionEditor
             }
         }
 
-        private void ContextMenuStrip_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        private void ContextMenuStrip_Closed(object? sender, ToolStripDropDownClosedEventArgs e)
         {
             if (sender is ContextMenuStrip cms)
             {
@@ -294,7 +292,7 @@ public partial class CollectionEditor
 
         private void SetButtonDrawState()
         {
-            if (Bounds.Contains(Parent.PointToClient(Cursor.Position)))
+            if (Parent is not null && Bounds.Contains(Parent.PointToClient(Cursor.Position)))
             {
                 State = PushButtonState.Hot;
             }

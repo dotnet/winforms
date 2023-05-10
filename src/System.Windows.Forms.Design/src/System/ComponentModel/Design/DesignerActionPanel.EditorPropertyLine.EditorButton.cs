@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -141,8 +139,21 @@ internal sealed partial class DesignerActionPanel
                                     attrs.SetRemapTable(new ColorMap[] { cm }, ColorAdjustType.Bitmap);
                                     int imageWidth = arrowBitmap.Width;
                                     int imageHeight = arrowBitmap.Height;
-                                    g.DrawImage(arrowBitmap, new Rectangle((Width - imageWidth + 1) / 2, (Height - imageHeight + 1) / 2, imageWidth, imageHeight),
-                                                0, 0, imageWidth, imageWidth, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
+                                    g.DrawImage(
+                                        arrowBitmap,
+                                        new Rectangle(
+                                            (Width - imageWidth + 1) / 2,
+                                            (Height - imageHeight + 1) / 2,
+                                            imageWidth,
+                                            imageHeight),
+                                        0,
+                                        0,
+                                        imageWidth,
+                                        imageWidth,
+                                        GraphicsUnit.Pixel,
+                                        attrs,
+                                        callback: null,
+                                        IntPtr.Zero);
                                 }
                                 finally
                                 {
