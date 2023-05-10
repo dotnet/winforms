@@ -23,8 +23,8 @@ public partial class ListViewGroup
 
             // Using item from group for getting of ListView is a workaround for https://github.com/dotnet/winforms/issues/4019
             _owningListView = owningGroup.ListView
-                ?? (owningGroup.Items.Count > 0 && _owningGroup.Items[0].ListView is not null
-                    ? _owningGroup.Items[0].ListView!
+                ?? (owningGroup.Items.Count > 0 && _owningGroup.Items[0].ListView is ListView listView
+                    ? listView
                     : throw new InvalidOperationException(nameof(owningGroup.ListView)));
 
             _owningListViewAccessibilityObject = _owningListView.AccessibilityObject as ListView.ListViewAccessibleObject
