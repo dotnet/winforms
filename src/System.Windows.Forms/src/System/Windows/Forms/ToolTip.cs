@@ -1521,10 +1521,14 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
         }
 
         Rectangle toolRectangle = tool.GetNativeScreenRectangle();
+
         // At first, place the tooltip at the middle of the tool (default location).
         int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
         int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
-        SetTool(tool.GetOwnerWindow()!, text, TipInfo.Type.Absolute, new Point(pointX, pointY));
+        var ownerWindow = tool.GetOwnerWindow();
+        Debug.Assert(ownerWindow is not null);
+
+        SetTool(ownerWindow, text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
         // Then look for a better ToolTip location.
         if (TryGetBubbleSize(tool, out Size bubbleSize))
@@ -1540,7 +1544,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
             {
                 if (!_tools.TryGetValue(toolAsControl, out TipInfo? tipInfo))
                 {
-                    if (tool.GetOwnerWindow() is Control ownerWindowAsControl
+                    if (ownerWindow is Control ownerWindowAsControl
                         && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
                     {
                         tipInfo.Position = new Point(pointX, pointY);
@@ -1561,7 +1565,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
 
         if (!IsPersistent)
         {
-            StartTimer(tool.GetOwnerWindow()!, duration);
+            StartTimer(ownerWindow, duration);
         }
     }
 
