@@ -4,6 +4,7 @@
 
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 
@@ -13,20 +14,42 @@ public abstract unsafe partial class AxHost
 {
     internal class PropertyBagStream : IPropertyBag.Interface
     {
-        private Hashtable _bag = new();
+        private readonly Hashtable _bag;
 
-        internal void Read(Stream stream)
+        internal PropertyBagStream() => _bag = new();
+
+        internal PropertyBagStream(Stream stream)
         {
+            long position = stream.Position;
             try
             {
+                BinaryFormattedObject format = new(stream, leaveOpen: true);
+                if (format.TryGetPrimitiveHashtable(out _bag!))
+                {
+                    return;
+                }
+            }
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            {
+                // Don't usually expect to fall into this case as we should usually not have anything
+                // in the stream other than primitive VARIANTs, which are handled. If there are arrays or
+                // interface pointers we'd hit this.
+                Debug.WriteLine($"PropertyBagStream: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+            }
+
+            try
+            {
+                stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
-            catch
+            catch (Exception inner) when (!ClientUtils.IsCriticalException(inner))
             {
-                // Error reading.  Just init an empty hashtable.
-                _bag = new Hashtable();
+                Debug.Fail($"PropertyBagStream: {nameof(BinaryFormatter)} failed with {inner.Message}");
+#pragma warning restore SYSLIB0011
+
+                // Error reading. Just init an empty hashtable.
+                _bag = new();
             }
         }
 
@@ -74,11 +97,23 @@ public abstract unsafe partial class AxHost
             return HRESULT.S_OK;
         }
 
-        internal void Write(Stream stream)
+        internal void Save(Stream stream)
         {
+            long position = stream.Position;
+
+            try
+            {
+                BinaryFormatWriter.WritePrimitiveHashtable(stream, _bag);
+            }
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            {
+                Debug.WriteLine($"PropertyBagStream.Save: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+
+                stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            new BinaryFormatter().Serialize(stream, _bag);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                new BinaryFormatter().Serialize(stream, _bag);
+#pragma warning restore SYSLIB0011
+            }
         }
     }
 }

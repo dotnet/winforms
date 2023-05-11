@@ -92,20 +92,23 @@ public class ListTests
     [MemberData(nameof(PrimitiveLists_TestData))]
     public void List_Primitive_Read(IList list)
     {
-        Stream stream = list.Serialize();
-        IList result = list switch
+        BinaryFormattedObject format = list.SerializeAndParse();
+
+        object? deserialized;
+        bool success = list switch
         {
-            List<int> => BinaryFormatReader.ReadPrimitiveList<int>(stream),
-            List<float> => BinaryFormatReader.ReadPrimitiveList<float>(stream),
-            List<byte> => BinaryFormatReader.ReadPrimitiveList<byte>(stream),
-            List<char> => BinaryFormatReader.ReadPrimitiveList<char>(stream),
+            List<int> => format.TryGetPrimitiveList<int>(out deserialized),
+            List<float> => format.TryGetPrimitiveList<float>(out deserialized),
+            List<byte> => format.TryGetPrimitiveList<byte>(out deserialized),
+            List<char> => format.TryGetPrimitiveList<char>(out deserialized),
             _ => throw new InvalidOperationException(),
         };
 
-        result.Should().BeEquivalentTo(list);
+        success.Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(list);
     }
 
-    public static TheoryData<IList> PrimitiveLists_TestData = new()
+    public static TheoryData<IList> PrimitiveLists_TestData => new()
     {
         new List<int>(),
         new List<float>() { 3.14f },

@@ -61,7 +61,7 @@ internal abstract class Record : IRecord
         PrimitiveType.DateTime => reader.ReadDateTime(),
         PrimitiveType.TimeSpan => new TimeSpan(reader.ReadInt64()),
         // String is handled with a record, never on it's own
-        _ => throw new SerializationException(),
+        _ => throw new SerializationException($"Failure trying to read primitve '{primitiveType}'"),
     };
 
     /// <summary>
@@ -181,7 +181,7 @@ internal abstract class Record : IRecord
             RecordType.ArraySingleString => ReadSpecificRecord<ArraySingleString>(recordMap),
             RecordType.MethodCall => throw new NotSupportedException(),
             RecordType.MethodReturn => throw new NotSupportedException(),
-            _ => throw new SerializationException(),
+            _ => throw new SerializationException("Unexpected record type."),
         };
 
         unsafe TRecord ReadSpecificRecord<TRecord>(RecordMap recordMap) where TRecord : class, IRecord<TRecord>

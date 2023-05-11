@@ -63,7 +63,7 @@ public class HashTableTests
     public void WriteHashtables(Hashtable hashtable)
     {
         using MemoryStream stream = new();
-        BinaryFormatWriter.WriteHashtableOfStrings(stream, hashtable);
+        BinaryFormatWriter.WritePrimitiveHashtable(stream, hashtable);
         stream.Position = 0;
 
         using var formatterScope = new BinaryFormatterScope(enable: true);
@@ -83,9 +83,27 @@ public class HashTableTests
     [MemberData(nameof(Hashtables_TestData))]
     public void ReadHashtables(Hashtable hashtable)
     {
-        Hashtable deserialized = BinaryFormatReader.ReadHashtableOfStrings(hashtable.Serialize());
+        BinaryFormattedObject format = hashtable.SerializeAndParse();
+        format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
 
-        deserialized.Count.Should().Be(hashtable.Count);
+        deserialized!.Count.Should().Be(hashtable.Count);
+        foreach (var key in hashtable.Keys)
+        {
+            deserialized[key].Should().Be(hashtable[key]);
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(Hashtables_TestData))]
+    public void RoundTripHashtables(Hashtable hashtable)
+    {
+        using MemoryStream stream = new();
+        BinaryFormatWriter.WritePrimitiveHashtable(stream, hashtable);
+        stream.Position = 0;
+
+        BinaryFormattedObject format = new(stream);
+        format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
+        deserialized!.Count.Should().Be(hashtable.Count);
         foreach (var key in hashtable.Keys)
         {
             deserialized[key].Should().Be(hashtable[key]);
@@ -98,6 +116,27 @@ public class HashTableTests
         new Hashtable()
         {
             { "This", "That" }
+        },
+        new Hashtable()
+        {
+            { "Meaning", 42 }
+        },
+        new Hashtable()
+        {
+            { 42, 42 }
+        },
+        new Hashtable()
+        {
+            { 42, 42 },
+            { 43, 42 }
+        },
+        new Hashtable()
+        {
+            { "Hastings", new DateTime(1066, 10, 14) }
+        },
+        new Hashtable()
+        {
+            { "Decimal", decimal.MaxValue }
         },
         new Hashtable()
         {
@@ -128,6 +167,13 @@ public class HashTableTests
             { "Yowza", "Binks" },
             { "Youza", "Binks" },
             { "Meeza", null }
+        },
+        new Hashtable()
+        {
+            { decimal.MinValue, decimal.MaxValue },
+            { float.MinValue, float.MaxValue },
+            { DateTime.MinValue, DateTime.MaxValue },
+            { TimeSpan.MinValue, TimeSpan.MaxValue }
         },
         // Stress the string interning
         MakeRepeatedHashtable(50, "Ditto"),

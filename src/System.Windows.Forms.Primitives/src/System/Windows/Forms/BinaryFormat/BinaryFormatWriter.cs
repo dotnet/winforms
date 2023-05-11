@@ -307,10 +307,15 @@ internal static class BinaryFormatWriter
     }
 
     /// <summary>
-    ///  Writes a <see cref="Hashtable"/> of strings to the given stream in binary format.
+    ///  Writes a <see cref="Hashtable"/> of primitive to primitive values to the given stream in binary format.
     /// </summary>
-    /// <exception cref="ArgumentException"><paramref name="hashtable"/> contained non-<see langword="string"/> values</exception>
-    public static void WriteHashtableOfStrings(Stream stream, Hashtable hashtable)
+    /// <remarks>
+    ///  <para>
+    ///   Primitive types are anything in the <see cref="PrimitiveType"/> enum.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="ArgumentException"><paramref name="hashtable"/> contained non-primitive values.</exception>
+    public static void WritePrimitiveHashtable(Stream stream, Hashtable hashtable)
     {
         // Get the ISerializable data from the hashtable. This way we don't have to worry about
         // getting the LoadFactor, Version, etc. wrong.
@@ -355,7 +360,7 @@ internal static class BinaryFormatWriter
 
         systemClass.Write(writer);
 
-        // We've used 1, 2 and 3 for the class id and array ids
+        // We've used 1, 2 and 3 for the class id and array ids.
         int currentId = 4;
 
         // Using an array converter to save a temporary array allocation. By not doing this we come much closer
@@ -368,7 +373,7 @@ internal static class BinaryFormatWriter
             (object value) => value switch
             {
                 string stringValue => strings.GetStringRecord(stringValue, ref currentId),
-                _ => throw new ArgumentException("Only strings are permitted")
+                _ => new MemberPrimitiveTyped(value)
             });
 
         ArraySingleObject array = new(new(2, keys.Length), keyConverter);
@@ -380,46 +385,12 @@ internal static class BinaryFormatWriter
             {
                 null => ObjectNull.Instance,
                 string stringValue => strings.GetStringRecord(stringValue, ref currentId),
-                _ => throw new ArgumentException("Only strings are permitted")
+                _ => new MemberPrimitiveTyped(value)
             });
 
         array = new(new(3, values.Length), valueConverter);
         array.Write(writer);
 
         MessageEnd.Instance.Write(writer);
-    }
-
-    public static PrimitiveType GetPrimitiveType(object @object)
-    {
-        if (@object is null)
-        {
-            return PrimitiveType.Null;
-        }
-
-        Type type = @object.GetType();
-        if (type == typeof(TimeSpan))
-        {
-            return PrimitiveType.TimeSpan;
-        }
-
-        return Type.GetTypeCode(type) switch
-        {
-            TypeCode.Boolean => PrimitiveType.Boolean,
-            TypeCode.Char => PrimitiveType.Char,
-            TypeCode.SByte => PrimitiveType.SByte,
-            TypeCode.Byte => PrimitiveType.Byte,
-            TypeCode.Int16 => PrimitiveType.Int16,
-            TypeCode.UInt16 => PrimitiveType.UInt16,
-            TypeCode.Int32 => PrimitiveType.Int32,
-            TypeCode.UInt32 => PrimitiveType.UInt32,
-            TypeCode.Int64 => PrimitiveType.Int64,
-            TypeCode.UInt64 => PrimitiveType.UInt64,
-            TypeCode.Single => PrimitiveType.Single,
-            TypeCode.Double => PrimitiveType.Double,
-            TypeCode.Decimal => PrimitiveType.Decimal,
-            TypeCode.DateTime => PrimitiveType.DateTime,
-            TypeCode.String => PrimitiveType.String,
-            _ => default,
-        };
     }
 }

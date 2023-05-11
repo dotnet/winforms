@@ -938,7 +938,7 @@ internal unsafe partial struct VARIANT : IDisposable
     private static T ThrowInvalidCast<T>() => throw new InvalidCastException();
 
     /// <summary>
-    ///  Converts the given object to <see cref="VARIANT"/>. WARNING: Only handles <see cref="string"/>.
+    ///  Converts the given object to <see cref="VARIANT"/>.
     /// </summary>
     public static VARIANT FromObject(object? value)
     {

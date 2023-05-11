@@ -2,13 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
 
 namespace System.Windows.Forms.Tests;
 
 public unsafe class AxHost_PropertyBagStreamTests
 {
-    [WinFormsFact]
+    [Fact]
     public void PropertyBagStream_WriteReadRoundTrip_FormatterEnabled()
     {
         using var formatterScope = new BinaryFormatterScope(enable: true);
@@ -20,12 +22,11 @@ public unsafe class AxHost_PropertyBagStreamTests
         Assert.True(hr.Succeeded);
 
         using MemoryStream stream = new();
-        bag.Write(stream);
+        bag.Save(stream);
         Assert.NotEqual(0, stream.Length);
         stream.Position = 0;
 
-        AxHost.PropertyBagStream newBag = new();
-        newBag.Read(stream);
+        AxHost.PropertyBagStream newBag = new(stream);
 
         VARIANT integer = new();
         hr = newBag.Read("Integer", ref integer, null);
@@ -38,7 +39,7 @@ public unsafe class AxHost_PropertyBagStreamTests
         Assert.Equal(obj.Name, ((NameClass)dispatch.ToObject()).Name);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyBagStream_WriteReadRoundTrip_FormatterDisabled()
     {
         using var formatterScope = new BinaryFormatterScope(enable: false);
@@ -50,10 +51,56 @@ public unsafe class AxHost_PropertyBagStreamTests
         Assert.True(hr.Succeeded);
 
         using MemoryStream stream = new();
-        Assert.Throws<NotSupportedException>(() => bag.Write(stream));
-        Assert.Equal(0, stream.Length);
-        stream.Position = 0;
+        Assert.Throws<NotSupportedException>(() => bag.Save(stream));
+        Assert.Equal(0, stream.Position);
     }
+
+    [Theory]
+    [MemberData(nameof(TestData_PrimitiveValues))]
+    public void PropertyBagStream_WriteReadRoundTrip_Primitives_FormatterDisabled(object value)
+    {
+        using var formatterScope = new BinaryFormatterScope(enable: false);
+
+        AxHost.PropertyBagStream bag = new();
+        using VARIANT variant = default;
+        Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+        string name = value.GetType().FullName!;
+
+        HRESULT hr = bag.Write(value.GetType().FullName!, variant);
+        Assert.True(hr.Succeeded);
+
+        using MemoryStream stream = new();
+        bag.Save(stream);
+        Assert.NotEqual(0, stream.Length);
+        stream.Position = 0;
+
+        IPropertyBag.Interface newBag = new AxHost.PropertyBagStream(stream);
+        using VARIANT result = new();
+        hr = newBag.Read(name, &result, null);
+        Assert.True(hr.Succeeded);
+        Assert.Equal(variant.ToObject(), result.ToObject());
+    }
+
+    public static TheoryData<object> TestData_PrimitiveValues => new()
+    {
+        int.MaxValue,
+        uint.MaxValue,
+        long.MaxValue,
+        ulong.MaxValue,
+        short.MaxValue,
+        ushort.MaxValue,
+        byte.MaxValue,
+        sbyte.MaxValue,
+        true,
+        float.MaxValue,
+        double.MaxValue,
+        char.MaxValue,
+        // TimeSpan has no VARIANT conversion
+        // TimeSpan.MaxValue,
+        DateTime.MaxValue,
+        decimal.MaxValue,
+        "RightRound"
+    };
 
     [Serializable]
     private class NameClass

@@ -17,7 +17,6 @@ namespace System.Windows.Forms.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-
 internal readonly struct MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryType Type, object? Info)>
 {
     private readonly IList<(BinaryType Type, object? Info)> _info;
