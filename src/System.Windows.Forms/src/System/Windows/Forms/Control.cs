@@ -2122,9 +2122,13 @@ public unsafe partial class Control :
     internal Font GetScaledFont(Font font, int newDpi, int oldDpi)
     {
         Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2),
-            $"Fonts need to be cached only for PermonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
+            $"Fonts need to be cached only for PerMonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
 
-        _dpiFonts ??= new Dictionary<int, Font>();
+        _dpiFonts ??= new Dictionary<int, Font>
+        {
+            { oldDpi, font.WithSize(font.Size) }
+        };
+
         if (_dpiFonts.TryGetValue(newDpi, out Font? scaledFont))
         {
             return scaledFont!;
@@ -5123,6 +5127,7 @@ public unsafe partial class Control :
                     Properties.SetObject(s_controlsCollectionProperty, null);
                 }
 
+                ClearDpiFonts();
                 base.Dispose(disposing);
             }
             finally
