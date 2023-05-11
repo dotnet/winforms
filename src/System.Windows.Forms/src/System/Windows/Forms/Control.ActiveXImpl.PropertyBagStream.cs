@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Runtime.Serialization.Formatters.Binary;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
+using System.Windows.Forms.BinaryFormat;
 
 namespace System.Windows.Forms;
 
@@ -22,45 +22,25 @@ public partial class Control
 
             internal void Read(IStream* istream)
             {
-                // Visual Basic's memory streams don't support seeking, so we have to work around this limitation
-                // here. We do this by copying the contents of the stream into a MemoryStream object.
-                const int PAGE_SIZE = 0x1000; // one page (4096b)
-                byte[] streamData = new byte[PAGE_SIZE];
-                using (DataStreamFromComStream comStream = new(istream))
-                {
-                    int offset = 0;
-                    int count = comStream.Read(streamData, offset, PAGE_SIZE);
-                    int totalCount = count;
-
-                    while (count == PAGE_SIZE)
-                    {
-                        byte[] newChunk = new byte[streamData.Length + PAGE_SIZE];
-                        Array.Copy(streamData, newChunk, streamData.Length);
-                        streamData = newChunk;
-
-                        offset += PAGE_SIZE;
-                        count = comStream.Read(streamData, offset, PAGE_SIZE);
-                        totalCount += count;
-                    }
-                }
-
-                MemoryStream stream = new(streamData);
+                Stream stream = new DataStreamFromComStream(istream);
+                bool success = false;
 
                 try
                 {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    BinaryFormattedObject format = new(stream);
+                    success = format.TryGetPrimitiveHashtable(out _bag!);
                 }
-                catch (Exception e)
+                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
-                    if (ClientUtils.IsCriticalException(e))
-                    {
-                        throw;
-                    }
+                    // We should never hit this case outside of corrupted data. This bag only ever has
+                    // strings put in it.
+                    Debug.Fail(e.Message);
+                }
 
-                    // Error reading.  Just init an empty hashtable.
-                    _bag = new Hashtable();
+                if (!success)
+                {
+                    // Error reading. Just init an empty hashtable.
+                    _bag = new();
                 }
             }
 
@@ -98,9 +78,7 @@ public partial class Control
             internal void Write(IStream* istream)
             {
                 using DataStreamFromComStream stream = new(istream);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                new BinaryFormatter().Serialize(stream, _bag);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                BinaryFormatWriter.WritePrimitiveHashtable(stream, _bag);
             }
         }
     }

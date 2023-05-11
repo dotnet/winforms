@@ -112,9 +112,8 @@ public abstract partial class AxHost
                         byte[]? data = enumerator.Value as byte[];
                         if (data is not null)
                         {
-                            _propertyBag = new PropertyBagStream();
                             using MemoryStream memoryStream = new(data);
-                            _propertyBag.Read(memoryStream);
+                            _propertyBag = new PropertyBagStream(memoryStream);
                         }
                     }
                     catch (Exception e)
@@ -344,7 +343,7 @@ public abstract partial class AxHost
                 try
                 {
                     using MemoryStream propertyBagBinaryStream = new();
-                    _propertyBag.Write(propertyBagBinaryStream);
+                    _propertyBag.Save(propertyBagBinaryStream);
                     info.AddValue(PropertyBagSerializationName, propertyBagBinaryStream.ToArray());
                 }
                 catch (Exception e)

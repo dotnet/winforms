@@ -25,6 +25,19 @@ internal sealed class MemberPrimitiveTyped : Record, IRecord<MemberPrimitiveType
         Value = value;
     }
 
+    /// <exception cref="ArgumentException"><paramref name="value"/> is not primitive.</exception>
+    internal MemberPrimitiveTyped(object value)
+    {
+        PrimitiveType primitiveType = GetPrimitiveType(value.GetType());
+        if (primitiveType == default)
+        {
+            throw new ArgumentException($"{nameof(value)} is not primitive.");
+        }
+
+        PrimitiveType = primitiveType;
+        Value = value;
+    }
+
     public static RecordType RecordType => RecordType.MemberPrimitiveTyped;
 
     static MemberPrimitiveTyped IBinaryFormatParseable<MemberPrimitiveTyped>.Parse(
@@ -40,6 +53,7 @@ internal sealed class MemberPrimitiveTyped : Record, IRecord<MemberPrimitiveType
     public override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
+        writer.Write((byte)PrimitiveType);
         WritePrimitiveType(writer, PrimitiveType, Value);
     }
 }

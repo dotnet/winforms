@@ -12,9 +12,9 @@ namespace System.Windows.Forms.Tests;
 public unsafe class Control_ActiveXImplTests
 {
     [WinFormsFact]
-    public void ActiveXImpl_SaveLoad_RoundTrip_FormatterEnabled()
+    public void ActiveXImpl_SaveLoad_RoundTrip_FormatterDisabled()
     {
-        using var formatterScope = new BinaryFormatterScope(enable: true);
+        using var formatterScope = new BinaryFormatterScope(enable: false);
         using Control control = new();
         control.BackColor = Color.Bisque;
         IPersistStreamInit.Interface persistStream = control;
@@ -29,26 +29,6 @@ public unsafe class Control_ActiveXImplTests
         hr = persistStream.Load(istream.Value);
         Assert.True(hr.Succeeded);
         Assert.Equal(Color.Bisque, control.BackColor);
-    }
-
-    [WinFormsFact]
-    public void ActiveXImpl_SaveLoad_RoundTrip_FormatterDisabled()
-    {
-        using var formatterScope = new BinaryFormatterScope(enable: false);
-        using Control control = new();
-        control.BackColor = Color.Bisque;
-        IPersistStreamInit.Interface persistStream = control;
-
-        using MemoryStream memoryStream = new();
-        using var istream = ComHelpers.GetComScope<IStream>(new GPStream(memoryStream));
-        var istreamPointer = istream.Value;
-
-        // Even though there are no properties that need BinaryFormatter in this case, it is ultimately saving
-        // AxHost.PropertyBagStream, which itself uses BinaryFormatter to save its Hashtable. There is never
-        // anything put in this Hashtable other than string/string pairs, so we *could* convert it to NOT use the
-        // BinaryFormatter for the bag itself. There would have to be a config switch most likely and a compat
-        // piece to look at the incoming stream to see if it is a BinaryFormatted stream.
-        Assert.Throws<NotSupportedException>(() => persistStream.Save(istreamPointer, fClearDirty: BOOL.FALSE));
     }
 
     [WinFormsFact]
