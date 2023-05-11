@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.CodeDom;
 
 namespace System.ComponentModel.Design.Serialization;
@@ -15,20 +13,13 @@ namespace System.ComponentModel.Design.Serialization;
 [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
 public class CodeDomSerializer : CodeDomSerializerBase
 {
-    private static CodeDomSerializer s_default;
-    private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
-    private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
-    private static readonly CodeThisReferenceExpression _thisRef = new();
+    private static CodeDomSerializer? s_default;
+    private static readonly Attribute[] s_runTimeFilter = { DesignOnlyAttribute.No };
+    private static readonly Attribute[] s_designTimeFilter = { DesignOnlyAttribute.Yes };
+    private static readonly Attribute[] s_deserializeFilter = { BrowsableAttribute.Yes };
+    private static readonly CodeThisReferenceExpression s_thisRef = new();
 
-    internal static CodeDomSerializer Default
-    {
-        get
-        {
-            s_default ??= new CodeDomSerializer();
-
-            return s_default;
-        }
-    }
+    internal static CodeDomSerializer Default => s_default ??= new CodeDomSerializer();
 
     /// <summary>
     ///  Determines which statement group the given statement should belong to.  The expression parameter
@@ -36,19 +27,14 @@ public class CodeDomSerializer : CodeDomSerializerBase
     ///  of this statement.  This method returns the name of the component this statement should be grouped
     ///  with.
     /// </summary>
-    public virtual string GetTargetComponentName(CodeStatement statement, CodeExpression expression, Type targetType)
+    public virtual string? GetTargetComponentName(CodeStatement? statement, CodeExpression? expression, Type? targetType)
     {
-        string name = null;
-        if (expression is CodeVariableReferenceExpression variableReferenceEx)
+        return expression switch
         {
-            name = variableReferenceEx.VariableName;
-        }
-        else if (expression is CodeFieldReferenceExpression fieldReferenceEx)
-        {
-            name = fieldReferenceEx.FieldName;
-        }
-
-        return name;
+            CodeVariableReferenceExpression variableReferenceEx => variableReferenceEx.VariableName,
+            CodeFieldReferenceExpression fieldReferenceEx => fieldReferenceEx.FieldName,
+            _ => null,
+        };
     }
 
     /// <summary>
@@ -56,9 +42,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     ///  will use the serialization manager to create objects and resolve
     ///  data types.  The root of the object graph is returned.
     /// </summary>
-    public virtual object Deserialize(IDesignerSerializationManager manager, object codeObject)
+    public virtual object? Deserialize(IDesignerSerializationManager manager, object codeObject)
     {
-        object instance = null;
+        object? instance = null;
         ArgumentNullException.ThrowIfNull(manager);
         ArgumentNullException.ThrowIfNull(codeObject);
 
@@ -69,45 +55,39 @@ public class CodeDomSerializer : CodeDomSerializerBase
             {
                 instance = DeserializeExpression(manager, null, expression);
             }
-            else
+            else if (codeObject is CodeStatementCollection statements)
             {
-                if (codeObject is CodeStatementCollection statements)
+                foreach (CodeStatement element in statements)
                 {
-                    foreach (CodeStatement element in statements)
+                    // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
+                    if (instance is null)
                     {
-                        // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
-                        if (instance is null)
+                        instance = DeserializeStatementToInstance(manager, element);
+                        if (instance is not null)
                         {
-                            instance = DeserializeStatementToInstance(manager, element);
-                            if (instance is not null)
+                            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance, s_deserializeFilter);
+                            foreach (PropertyDescriptor prop in props)
                             {
-                                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance, new Attribute[] { BrowsableAttribute.Yes });
-                                foreach (PropertyDescriptor prop in props)
+                                if (!prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden) &&
+                                    prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) &&
+                                    manager.GetSerializer(prop.PropertyType, typeof(CodeDomSerializer)) is not CollectionCodeDomSerializer)
                                 {
-                                    if (!prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden) &&
-                                        prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) &&
-                                        !(manager.GetSerializer(prop.PropertyType, typeof(CodeDomSerializer)) is CollectionCodeDomSerializer))
-                                    {
-                                        ResetBrowsableProperties(prop.GetValue(instance));
-                                    }
+                                    ResetBrowsableProperties(prop.GetValue(instance));
                                 }
                             }
                         }
-                        else
-                        {
-                            DeserializeStatement(manager, element);
-                        }
                     }
-                }
-                else
-                {
-                    if (!(codeObject is CodeStatement statement))
+                    else
                     {
-                        Debug.Fail("CodeDomSerializer::Deserialize requires a CodeExpression, CodeStatement or CodeStatementCollection to parse");
-                        string supportedTypes = $"{nameof(CodeExpression)}, {nameof(CodeStatement)}, {nameof(CodeStatementCollection)}";
-                        throw new ArgumentException(string.Format(SR.SerializerBadElementTypes, codeObject.GetType().Name, supportedTypes));
+                        DeserializeStatement(manager, element);
                     }
                 }
+            }
+            else if (codeObject is not CodeStatement)
+            {
+                Debug.Fail("CodeDomSerializer::Deserialize requires a CodeExpression, CodeStatement or CodeStatementCollection to parse");
+                string supportedTypes = $"{nameof(CodeExpression)}, {nameof(CodeStatement)}, {nameof(CodeStatementCollection)}";
+                throw new ArgumentException(string.Format(SR.SerializerBadElementTypes, codeObject.GetType().Name, supportedTypes));
             }
         }
 
@@ -120,9 +100,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     ///  resulting statement was a variable assign statement, a variable
     ///  declaration with an init expression, or a field assign statement.
     /// </summary>
-    protected object DeserializeStatementToInstance(IDesignerSerializationManager manager, CodeStatement statement)
+    protected object? DeserializeStatementToInstance(IDesignerSerializationManager manager, CodeStatement statement)
     {
-        object instance = null;
+        object? instance = null;
         if (statement is CodeAssignStatement assign)
         {
             if (assign.Left is CodeFieldReferenceExpression fieldRef)
@@ -130,20 +110,17 @@ public class CodeDomSerializer : CodeDomSerializerBase
                 Trace(TraceLevel.Verbose, $"Assigning instance to field {fieldRef.FieldName}");
                 instance = DeserializeExpression(manager, fieldRef.FieldName, assign.Right);
             }
+            else if (assign.Left is CodeVariableReferenceExpression varRef)
+            {
+                Trace(TraceLevel.Verbose, $"Assigning instance to variable {varRef.VariableName}");
+                instance = DeserializeExpression(manager, varRef.VariableName, assign.Right);
+            }
             else
             {
-                if (assign.Left is CodeVariableReferenceExpression varRef)
-                {
-                    Trace(TraceLevel.Verbose, $"Assigning instance to variable {varRef.VariableName}");
-                    instance = DeserializeExpression(manager, varRef.VariableName, assign.Right);
-                }
-                else
-                {
-                    DeserializeStatement(manager, assign);
-                }
+                DeserializeStatement(manager, assign);
             }
         }
-        else if (statement is CodeVariableDeclarationStatement varDecl && varDecl.InitExpression is not null)
+        else if (statement is CodeVariableDeclarationStatement { InitExpression: not null } varDecl)
         {
             Trace(TraceLevel.Verbose, $"Initializing variable declaration for variable {varDecl.Name}");
             instance = DeserializeExpression(manager, varDecl.Name, varDecl.InitExpression);
@@ -160,9 +137,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     /// <summary>
     ///  Serializes the given object into a CodeDom object.
     /// </summary>
-    public virtual object Serialize(IDesignerSerializationManager manager, object value)
+    public virtual object? Serialize(IDesignerSerializationManager manager, object value)
     {
-        object result = null;
+        object? result = null;
         ArgumentNullException.ThrowIfNull(manager);
         ArgumentNullException.ThrowIfNull(value);
 
@@ -170,29 +147,18 @@ public class CodeDomSerializer : CodeDomSerializerBase
         {
             Trace(TraceLevel.Verbose, $"Type: {value.GetType().Name}");
 
-            if (value is Type)
+            if (value is Type type)
             {
-                result = new CodeTypeOfExpression((Type)value);
+                result = new CodeTypeOfExpression(type);
             }
             else
             {
                 bool isComplete = false;
-                bool isPreset;
-                CodeExpression expression = SerializeCreationExpression(manager, value, out bool isCompleteExpression);
+                CodeExpression? expression = SerializeCreationExpression(manager, value, out bool isCompleteExpression);
                 // if the object is not a component we will honor the return value from SerializeCreationExpression.  For compat reasons we ignore the value if the object is a component.
-                if (!(value is IComponent))
+                if (value is not IComponent)
                 {
                     isComplete = isCompleteExpression;
-                }
-
-                // We need to find out if SerializeCreationExpression returned a preset expression.
-                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
-                {
-                    isPreset = true;
-                }
-                else
-                {
-                    isPreset = false;
                 }
 
                 TraceIf(TraceLevel.Verbose, expression is null, "Unable to create object; aborting.");
@@ -209,28 +175,30 @@ public class CodeDomSerializer : CodeDomSerializerBase
                         // Ok, we have an incomplete expression. That means we've created the object but we will need to set properties on it to configure it.  Therefore, we need to have a variable reference to it unless we were given a preset expression already.
                         CodeStatementCollection statements = new CodeStatementCollection();
 
+                        // We need to find out if SerializeCreationExpression returned a preset expression.
+                        bool isPreset = manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value);
+
                         if (isPreset)
                         {
                             SetExpression(manager, value, expression, true);
                         }
                         else
                         {
-                            CodeExpression variableReference;
                             string varName = GetUniqueName(manager, value);
-                            string varTypeName = TypeDescriptor.GetClassName(value);
+                            string? varTypeName = TypeDescriptor.GetClassName(value);
 
-                            CodeVariableDeclarationStatement varDecl = new CodeVariableDeclarationStatement(varTypeName, varName);
+                            CodeVariableDeclarationStatement varDecl = new CodeVariableDeclarationStatement(varTypeName!, varName);
                             Trace(TraceLevel.Verbose, $"Generating local : {varName}");
                             varDecl.InitExpression = expression;
                             statements.Add(varDecl);
-                            variableReference = new CodeVariableReferenceExpression(varName);
+                            CodeExpression variableReference = new CodeVariableReferenceExpression(varName);
                             SetExpression(manager, value, variableReference);
                         }
 
                         // Finally, we need to walk properties and events for this object
-                        SerializePropertiesToResources(manager, statements, value, _designTimeFilter);
-                        SerializeProperties(manager, statements, value, _runTimeFilter);
-                        SerializeEvents(manager, statements, value, _runTimeFilter);
+                        SerializePropertiesToResources(manager, statements, value, s_designTimeFilter);
+                        SerializeProperties(manager, statements, value, s_runTimeFilter);
+                        SerializeEvents(manager, statements, value, s_runTimeFilter);
                         result = statements;
                     }
                 }
@@ -243,9 +211,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     /// <summary>
     ///  Serializes the given object into a CodeDom object.
     /// </summary>
-    public virtual object SerializeAbsolute(IDesignerSerializationManager manager, object value)
+    public virtual object? SerializeAbsolute(IDesignerSerializationManager manager, object value)
     {
-        object data;
+        object? data;
         SerializeAbsoluteContext abs = new SerializeAbsoluteContext();
         manager.Context.Push(abs);
         try
@@ -272,7 +240,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
 
         CodeStatementCollection statements = new CodeStatementCollection();
         // See if we have an existing expression for this member.  If not, fabricate one
-        CodeExpression expression = GetExpression(manager, owningObject);
+        CodeExpression? expression = GetExpression(manager, owningObject);
         if (expression is null)
         {
             string name = GetUniqueName(manager, owningObject);
@@ -284,16 +252,13 @@ public class CodeDomSerializer : CodeDomSerializerBase
         {
             SerializeProperty(manager, statements, owningObject, property);
         }
+        else if (member is EventDescriptor evt)
+        {
+            SerializeEvent(manager, statements, owningObject, evt);
+        }
         else
         {
-            if (member is EventDescriptor evt)
-            {
-                SerializeEvent(manager, statements, owningObject, evt);
-            }
-            else
-            {
-                throw new NotSupportedException(string.Format(SR.SerializerMemberTypeNotSerializable, member.GetType().FullName));
-            }
+            throw new NotSupportedException(string.Format(SR.SerializerMemberTypeNotSerializable, member.GetType().FullName));
         }
 
         return statements;
@@ -333,9 +298,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     ///  of a statement.
     /// </summary>
     [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
-    protected CodeExpression SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
+    protected CodeExpression? SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
     {
-        CodeExpression expression = null;
+        CodeExpression? expression = null;
         using (TraceScope($"CodeDomSerializer::{nameof(SerializeToReferenceExpression)}"))
         {
             // First - try GetExpression
@@ -343,11 +308,11 @@ public class CodeDomSerializer : CodeDomSerializerBase
             // Next, we check for a named IComponent, and return a reference to it.
             if (expression is null && value is IComponent)
             {
-                string name = manager.GetName(value);
+                string? name = manager.GetName(value);
                 bool referenceName = false;
                 if (name is null)
                 {
-                    IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
+                    IReferenceService? referenceService = manager.GetService<IReferenceService>();
                     if (referenceService is not null)
                     {
                         name = referenceService.GetName(value);
@@ -359,20 +324,22 @@ public class CodeDomSerializer : CodeDomSerializerBase
                 {
                     Trace(TraceLevel.Verbose, $"Object is reference ({name}) Creating reference expression");
                     // Check to see if this is a reference to the root component.  If it is, then use "this".
-                    RootContext root = (RootContext)manager.Context[typeof(RootContext)];
-                    if (root is not null && root.Value == value)
+                    if (manager.TryGetContext(out RootContext? root) && root.Value == value)
                     {
                         expression = root.Expression;
                     }
-                    else if (referenceName && name.IndexOf('.') != -1)
-                    {
-                        // if it's a reference name with a dot, we've actually got a property here...
-                        int dotIndex = name.IndexOf('.');
-                        expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(_thisRef, name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
-                    }
                     else
                     {
-                        expression = new CodeFieldReferenceExpression(_thisRef, name);
+                        int dotIndex = name.IndexOf('.');
+                        if (referenceName && dotIndex != -1)
+                        {
+                            // if it's a reference name with a dot, we've actually got a property here...
+                            expression = new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(s_thisRef, name.Substring(0, dotIndex)), name.Substring(dotIndex + 1));
+                        }
+                        else
+                        {
+                            expression = new CodeFieldReferenceExpression(s_thisRef, name);
+                        }
                     }
                 }
             }
@@ -381,7 +348,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
         return expression;
     }
 
-    private static void ResetBrowsableProperties(object instance)
+    private static void ResetBrowsableProperties(object? instance)
     {
         if (instance is null)
         {

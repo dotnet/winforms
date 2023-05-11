@@ -581,7 +581,7 @@ public abstract partial class CodeDomSerializerBase
         {
             // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.
             //Perf: is -> as changes, change ordering based on possibility of occurrence
-            CodeExpression? expression = statement.Left;
+            CodeExpression expression = statement.Left;
 
             Trace(TraceLevel.Verbose, "Processing LHS");
             if (expression is CodePropertyReferenceExpression propertyReferenceEx)
@@ -2574,7 +2574,7 @@ public abstract partial class CodeDomSerializerBase
                     object? result = null;
                     try
                     {
-                        result = serializer.Serialize(manager, value);
+                        result = serializer.Serialize(manager, value!);
                     }
                     finally
                     {
