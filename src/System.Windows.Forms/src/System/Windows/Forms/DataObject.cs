@@ -10,6 +10,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Windows.Forms.BinaryFormat;
 using static Interop;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -804,6 +805,11 @@ public unsafe partial class DataObject :
 
     private static void SaveObjectToHandleSerializer(Stream stream, object data, bool restrictSerialization)
     {
+        if (BinaryFormatWriter.TryWritePrimitive(stream, data))
+        {
+            return;
+        }
+
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new BinaryFormatter();
         if (restrictSerialization)

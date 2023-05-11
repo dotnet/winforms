@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Windows.Forms.BinaryFormat;
 using static Interop;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using Com = Windows.Win32.System.Com;
@@ -368,7 +369,23 @@ public partial class DataObject
 
         private static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
         {
+            long startPosition = stream.Position;
+            try
+            {
+                BinaryFormattedObject format = new(stream, leaveOpen: true);
+                if (format.TryGetPrimitiveType(out object? value))
+                {
+                    return value;
+                }
+            }
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            {
+                // Couldn't parse for some reason, let the BinaryFormatter handle it.
+            }
+
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+
+            stream.Position = startPosition;
             BinaryFormatter formatter = new BinaryFormatter();
             if (restrictDeserialization)
             {
