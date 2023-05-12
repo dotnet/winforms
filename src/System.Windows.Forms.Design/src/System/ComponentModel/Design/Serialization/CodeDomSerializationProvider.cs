@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Resources;
 
@@ -20,19 +18,19 @@ internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvi
     ///  that is of the correct type, it should return it.
     ///  Otherwise, it should return null.
     /// </summary>
-    object IDesignerSerializationProvider.GetSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+    object? IDesignerSerializationProvider.GetSerializer(IDesignerSerializationManager manager, object? currentSerializer, Type? objectType, Type serializerType)
     {
         if (serializerType == typeof(CodeDomSerializer))
         {
-            return GetCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
+            return GetCodeDomSerializer(currentSerializer, objectType);
         }
         else if (serializerType == typeof(MemberCodeDomSerializer))
         {
-            return GetMemberCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
+            return GetMemberCodeDomSerializer(currentSerializer, objectType);
         }
         else if (serializerType == typeof(TypeCodeDomSerializer))
         {
-            return GetTypeCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
+            return GetTypeCodeDomSerializer(currentSerializer, objectType);
         }
 
         return null; // don't understand this type of serializer.
@@ -41,7 +39,7 @@ internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvi
     /// <summary>
     ///  Returns a code dom serializer
     /// </summary>
-    private static object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+    private static object? GetCodeDomSerializer(object? currentSerializer, Type? objectType)
     {
         // If this isn't a serializer type we recognize, do nothing.  Also, if metadata specified
         // a custom serializer, then use it.
@@ -104,7 +102,7 @@ internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvi
     /// <summary>
     ///  Returns a code dom serializer for members
     /// </summary>
-    private static object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+    private static object? GetMemberCodeDomSerializer(object? currentSerializer, Type? objectType)
     {
         // Don't provide our serializer if someone else already had one
         if (currentSerializer is not null)
@@ -128,7 +126,7 @@ internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvi
     /// <summary>
     ///  Returns a code dom serializer for types
     /// </summary>
-    private static object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+    private static object? GetTypeCodeDomSerializer(object? currentSerializer, Type? objectType)
     {
         // Don't provide our serializer if someone else already had one
         if (currentSerializer is not null)
