@@ -9,8 +9,8 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/aa509b5a-620a-4592-a5d8-7e9613e0a03e">
-///    [MS-NRBF] 2.3.1.2
+///   <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/982b2f50-6367-402a-aaf2-44ee96e2a5e0">
+///    [MS-NRBF] 2.4.3.2
 ///   </see>
 ///  </para>
 /// </remarks>

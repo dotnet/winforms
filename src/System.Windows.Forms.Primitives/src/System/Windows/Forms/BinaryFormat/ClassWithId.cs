@@ -61,9 +61,9 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>
         static IReadOnlyList<object> ReadDataFromRefId(BinaryReader reader, RecordMap recordMap, ClassRecord record) => record switch
         {
             ClassWithMembersAndTypes classWithMembersAndTypes
-                => ReadDataFromMemberTypeInfo(reader, recordMap, classWithMembersAndTypes.MemberTypeInfo),
+                => ReadValuesFromMemberTypeInfo(reader, recordMap, classWithMembersAndTypes.MemberTypeInfo),
             SystemClassWithMembersAndTypes systemClassWithMembersAndTypes
-                => ReadDataFromMemberTypeInfo(reader, recordMap, systemClassWithMembersAndTypes.MemberTypeInfo),
+                => ReadValuesFromMemberTypeInfo(reader, recordMap, systemClassWithMembersAndTypes.MemberTypeInfo),
             ClassWithMembers classWithMembers
                 => ReadRecords(reader, recordMap, classWithMembers.MemberValues.Count),
             SystemClassWithMembers systemClassWithMembers
@@ -81,10 +81,10 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>
         switch (_metadataClass)
         {
             case ClassWithMembersAndTypes classWithMembersAndTypes:
-                WriteDataFromMemberTypeInfo(writer, classWithMembersAndTypes.MemberTypeInfo, MemberValues);
+                WriteValuesFromMemberTypeInfo(writer, classWithMembersAndTypes.MemberTypeInfo, MemberValues);
                 break;
             case SystemClassWithMembersAndTypes systemClassWithMembersAndTypes:
-                WriteDataFromMemberTypeInfo(writer, systemClassWithMembersAndTypes.MemberTypeInfo, MemberValues);
+                WriteValuesFromMemberTypeInfo(writer, systemClassWithMembersAndTypes.MemberTypeInfo, MemberValues);
                 break;
             case ClassWithMembers or SystemClassWithMembers:
                 WriteRecords(writer, MemberValues);

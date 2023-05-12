@@ -43,7 +43,7 @@ internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithM
             classInfo,
             memberTypeInfo,
             reader.ReadInt32(),
-            ReadDataFromMemberTypeInfo(reader, recordMap, memberTypeInfo));
+            ReadValuesFromMemberTypeInfo(reader, recordMap, memberTypeInfo));
 
         // Index this record by the id of the embedded ClassInfo's object id.
         recordMap[record.ClassInfo.ObjectId] = record;
@@ -56,6 +56,6 @@ internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithM
         ClassInfo.Write(writer);
         MemberTypeInfo.Write(writer);
         writer.Write(LibraryId);
-        WriteDataFromMemberTypeInfo(writer, MemberTypeInfo, MemberValues);
+        WriteValuesFromMemberTypeInfo(writer, MemberTypeInfo, MemberValues);
     }
 }

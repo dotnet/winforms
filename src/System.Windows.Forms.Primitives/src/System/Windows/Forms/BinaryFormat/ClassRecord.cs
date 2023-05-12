@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization;
-
 namespace System.Windows.Forms.BinaryFormat;
 
 /// <summary>
@@ -53,61 +51,5 @@ internal abstract class ClassRecord : Record
     {
         // Not sure what gets us into this state yet.
         return ReadRecords(reader, recordMap, info.MemberNames.Count);
-    }
-
-    private protected static IReadOnlyList<object> ReadDataFromMemberTypeInfo(
-        BinaryReader reader,
-        RecordMap recordMap,
-        MemberTypeInfo memberTypeInfo)
-    {
-        List<object> memberValues = new();
-        memberValues.EnsureCapacity(memberTypeInfo.Count);
-        foreach ((BinaryType type, object? info) in memberTypeInfo)
-        {
-            switch (type)
-            {
-                case BinaryType.Primitive:
-                    memberValues.Add(ReadPrimitiveType(reader, (PrimitiveType)info!));
-                    break;
-                case BinaryType.String:
-                case BinaryType.Object:
-                case BinaryType.StringArray:
-                case BinaryType.PrimitiveArray:
-                case BinaryType.Class:
-                case BinaryType.SystemClass:
-                case BinaryType.ObjectArray:
-                    memberValues.Add(ReadBinaryFormatRecord(reader, recordMap));
-                    break;
-                default:
-                    throw new SerializationException();
-            }
-        }
-
-        return memberValues;
-    }
-
-    private protected static void WriteDataFromMemberTypeInfo(BinaryWriter writer, MemberTypeInfo memberTypeInfo, IReadOnlyList<object> memberValues)
-    {
-        for (int i = 0; i < memberTypeInfo.Count; i++)
-        {
-            (BinaryType type, object? info) = memberTypeInfo[i];
-            switch (type)
-            {
-                case BinaryType.Primitive:
-                    WritePrimitiveType(writer, (PrimitiveType)info!, memberValues[i]);
-                    break;
-                case BinaryType.String:
-                case BinaryType.Object:
-                case BinaryType.StringArray:
-                case BinaryType.PrimitiveArray:
-                case BinaryType.Class:
-                case BinaryType.SystemClass:
-                case BinaryType.ObjectArray:
-                    ((IRecord)memberValues[i]).Write(writer);
-                    break;
-                default:
-                    throw new SerializationException();
-            }
-        }
     }
 }
