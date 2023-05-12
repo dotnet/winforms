@@ -18,4 +18,26 @@ internal static class MemberDescriptorExtensions
         <[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] T>(
         this MemberDescriptor descriptor) where T : Attribute
         => descriptor?.Attributes[typeof(T)] as T;
+
+    public static bool TryGetValue<T>(this PropertyDescriptor descriptor, object? component, out T? value)
+    {
+        if (descriptor.PropertyType == typeof(T))
+        {
+            value = (T?)descriptor.GetValue(component);
+            return true;
+        }
+
+        value = default;
+        return false;
+    }
+
+    public static T? GetValue<T>(this PropertyDescriptor descriptor, object? component) where T : class
+    {
+        if (descriptor.PropertyType == typeof(T))
+        {
+            return (T?)descriptor.GetValue(component);
+        }
+
+        return null;
+    }
 }
