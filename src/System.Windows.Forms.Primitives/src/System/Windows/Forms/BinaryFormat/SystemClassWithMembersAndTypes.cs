@@ -36,7 +36,7 @@ internal sealed class SystemClassWithMembersAndTypes : ClassRecord, IRecord<Syst
         SystemClassWithMembersAndTypes record = new(
             classInfo,
             memberTypeInfo,
-            ReadDataFromMemberTypeInfo(reader, recordMap, memberTypeInfo));
+            ReadValuesFromMemberTypeInfo(reader, recordMap, memberTypeInfo));
 
         // Index this record by the id of the embedded ClassInfo's object id.
         recordMap[record.ClassInfo.ObjectId] = record;
@@ -48,6 +48,6 @@ internal sealed class SystemClassWithMembersAndTypes : ClassRecord, IRecord<Syst
         writer.Write((byte)RecordType);
         ClassInfo.Write(writer);
         MemberTypeInfo.Write(writer);
-        WriteDataFromMemberTypeInfo(writer, MemberTypeInfo, MemberValues);
+        WriteValuesFromMemberTypeInfo(writer, MemberTypeInfo, MemberValues);
     }
 }

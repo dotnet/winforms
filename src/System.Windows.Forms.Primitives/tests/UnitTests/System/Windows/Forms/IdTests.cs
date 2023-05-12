@@ -7,10 +7,9 @@ namespace System.Windows.Forms.Tests;
 public class IdTests
 {
     [Fact]
-    public void IdDoesNotAcceptNegativeValues()
+    public void IdSignedAreEquivalent()
     {
-        Func<Id> func = () => (Id)(-1);
-        func.Should().Throw<ArgumentOutOfRangeException>();
+        ((Id)1).Should().Be((Id)(-1));
     }
 
     [Fact]

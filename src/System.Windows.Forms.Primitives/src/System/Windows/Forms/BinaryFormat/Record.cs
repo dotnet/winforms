@@ -133,7 +133,8 @@ internal abstract class Record : IRecord
             // String is handled with a record, never on it's own
             case PrimitiveType.Null:
             case PrimitiveType.String:
-                throw new SerializationException();
+            default:
+                throw new ArgumentException("Invalid primitive type.", nameof(primitiveType));
         }
     }
 
@@ -167,8 +168,8 @@ internal abstract class Record : IRecord
             RecordType.SystemClassWithMembersAndTypes => ReadSpecificRecord<SystemClassWithMembersAndTypes>(recordMap),
             RecordType.ClassWithMembersAndTypes => ReadSpecificRecord<ClassWithMembersAndTypes>(recordMap),
             RecordType.BinaryObjectString => ReadSpecificRecord<BinaryObjectString>(recordMap),
-            // The BinaryArray record is used for multidimensional arrays
-            RecordType.BinaryArray => throw new NotImplementedException(),
+            // The BinaryArray record is used for all types of arrays, but we currently only support single dimension.
+            RecordType.BinaryArray => ReadSpecificRecord<BinaryArray>(recordMap),
             RecordType.MemberPrimitiveTyped => ReadSpecificRecord<MemberPrimitiveTyped>(recordMap),
             RecordType.MemberReference => ReadSpecificRecord<MemberReference>(recordMap),
             RecordType.ObjectNull => ReadSpecificRecord<ObjectNull>(recordMap),
@@ -181,7 +182,7 @@ internal abstract class Record : IRecord
             RecordType.ArraySingleString => ReadSpecificRecord<ArraySingleString>(recordMap),
             RecordType.MethodCall => throw new NotSupportedException(),
             RecordType.MethodReturn => throw new NotSupportedException(),
-            _ => throw new SerializationException("Unexpected record type."),
+            _ => throw new SerializationException("Invalid record type."),
         };
 
         unsafe TRecord ReadSpecificRecord<TRecord>(RecordMap recordMap) where TRecord : class, IRecord<TRecord>
@@ -236,7 +237,7 @@ internal abstract class Record : IRecord
         {
             if (objects[i] is not IRecord record)
             {
-                throw new ArgumentException(null, nameof(objects));
+                throw new ArgumentException("Invalid record.", nameof(objects));
             }
 
             // Aggregate consecutive null records.
@@ -258,6 +259,75 @@ internal abstract class Record : IRecord
         if (nullCount > 0)
         {
             NullRecord.Write(writer, nullCount);
+        }
+    }
+
+    /// <summary>
+    ///  Reads object member values using <paramref name="memberTypeInfo"/>.
+    /// </summary>
+    private protected static IReadOnlyList<object> ReadValuesFromMemberTypeInfo(
+        BinaryReader reader,
+        RecordMap recordMap,
+        MemberTypeInfo memberTypeInfo)
+    {
+        List<object> memberValues = new(memberTypeInfo.Count);
+        foreach ((BinaryType type, object? info) in memberTypeInfo)
+        {
+            memberValues.Add(ReadValue(reader, recordMap, type, info));
+        }
+
+        return memberValues;
+    }
+
+    /// <summary>
+    ///  Reads an object member value of <paramref name="type"/> with optional clarifying <paramref name="typeInfo"/>.
+    /// </summary>
+    /// <exception cref="SerializationException"><paramref name="type"/> was unexpected.</exception>
+    private protected static object ReadValue(
+        BinaryReader reader,
+        RecordMap recordMap,
+        BinaryType type,
+        object? typeInfo) => type switch
+        {
+            BinaryType.Primitive => ReadPrimitiveType(reader, (PrimitiveType)typeInfo!),
+            BinaryType.String
+                or BinaryType.Object
+                or BinaryType.StringArray
+                or BinaryType.PrimitiveArray
+                or BinaryType.Class
+                or BinaryType.SystemClass
+                or BinaryType.ObjectArray => ReadBinaryFormatRecord(reader, recordMap),
+            _ => throw new SerializationException("Invalid binary type."),
+        };
+
+    /// <summary>
+    ///  Writes <paramref name="memberValues"/> as specified by the <paramref name="memberTypeInfo"/>
+    /// </summary>
+    private protected static void WriteValuesFromMemberTypeInfo(
+        BinaryWriter writer,
+        MemberTypeInfo memberTypeInfo,
+        IReadOnlyList<object> memberValues)
+    {
+        for (int i = 0; i < memberTypeInfo.Count; i++)
+        {
+            (BinaryType type, object? info) = memberTypeInfo[i];
+            switch (type)
+            {
+                case BinaryType.Primitive:
+                    WritePrimitiveType(writer, (PrimitiveType)info!, memberValues[i]);
+                    break;
+                case BinaryType.String:
+                case BinaryType.Object:
+                case BinaryType.StringArray:
+                case BinaryType.PrimitiveArray:
+                case BinaryType.Class:
+                case BinaryType.SystemClass:
+                case BinaryType.ObjectArray:
+                    ((IRecord)memberValues[i]).Write(writer);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid binary type.", nameof(memberTypeInfo));
+            }
         }
     }
 
