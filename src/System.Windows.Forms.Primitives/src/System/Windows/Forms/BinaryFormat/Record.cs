@@ -134,7 +134,7 @@ internal abstract class Record : IRecord
             case PrimitiveType.Null:
             case PrimitiveType.String:
             default:
-                throw new SerializationException();
+                throw new ArgumentException("Invalid primitive type.", nameof(primitiveType));
         }
     }
 
@@ -168,7 +168,7 @@ internal abstract class Record : IRecord
             RecordType.SystemClassWithMembersAndTypes => ReadSpecificRecord<SystemClassWithMembersAndTypes>(recordMap),
             RecordType.ClassWithMembersAndTypes => ReadSpecificRecord<ClassWithMembersAndTypes>(recordMap),
             RecordType.BinaryObjectString => ReadSpecificRecord<BinaryObjectString>(recordMap),
-            // The BinaryArray record is used all types of arrays, but we currently only support single dimension.
+            // The BinaryArray record is used for all types of arrays, but we currently only support single dimension.
             RecordType.BinaryArray => ReadSpecificRecord<BinaryArray>(recordMap),
             RecordType.MemberPrimitiveTyped => ReadSpecificRecord<MemberPrimitiveTyped>(recordMap),
             RecordType.MemberReference => ReadSpecificRecord<MemberReference>(recordMap),
@@ -182,7 +182,7 @@ internal abstract class Record : IRecord
             RecordType.ArraySingleString => ReadSpecificRecord<ArraySingleString>(recordMap),
             RecordType.MethodCall => throw new NotSupportedException(),
             RecordType.MethodReturn => throw new NotSupportedException(),
-            _ => throw new SerializationException("Unexpected record type."),
+            _ => throw new SerializationException("Invalid record type."),
         };
 
         unsafe TRecord ReadSpecificRecord<TRecord>(RecordMap recordMap) where TRecord : class, IRecord<TRecord>
@@ -237,7 +237,7 @@ internal abstract class Record : IRecord
         {
             if (objects[i] is not IRecord record)
             {
-                throw new ArgumentException(null, nameof(objects));
+                throw new ArgumentException("Invalid record.", nameof(objects));
             }
 
             // Aggregate consecutive null records.
@@ -270,8 +270,7 @@ internal abstract class Record : IRecord
         RecordMap recordMap,
         MemberTypeInfo memberTypeInfo)
     {
-        List<object> memberValues = new();
-        memberValues.EnsureCapacity(memberTypeInfo.Count);
+        List<object> memberValues = new(memberTypeInfo.Count);
         foreach ((BinaryType type, object? info) in memberTypeInfo)
         {
             memberValues.Add(ReadValue(reader, recordMap, type, info));
@@ -298,7 +297,7 @@ internal abstract class Record : IRecord
                 or BinaryType.Class
                 or BinaryType.SystemClass
                 or BinaryType.ObjectArray => ReadBinaryFormatRecord(reader, recordMap),
-            _ => throw new SerializationException("Unexpected BinaryType."),
+            _ => throw new SerializationException("Invalid binary type."),
         };
 
     /// <summary>
@@ -327,7 +326,7 @@ internal abstract class Record : IRecord
                     ((IRecord)memberValues[i]).Write(writer);
                     break;
                 default:
-                    throw new SerializationException("Unexpected BinaryType.");
+                    throw new ArgumentException("Invalid binary type.", nameof(memberTypeInfo));
             }
         }
     }
