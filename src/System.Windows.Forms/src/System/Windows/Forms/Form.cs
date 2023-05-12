@@ -4339,6 +4339,19 @@ public partial class Form : ContainerControl
         remove => Events.RemoveHandler(EVENT_DPI_CHANGED, value);
     }
 
+    internal void FormDpiChangedBeforeParent(int oldDpi, int newDpi)
+    {
+        DpiChangedEventArgs e = new DpiChangedEventArgs(oldDpi, newDpi);
+        Size desiredSize = Size.Empty;
+        if (!OnGetDpiScaledSize(e.DeviceDpiOld, e.DeviceDpiNew, ref desiredSize) || desiredSize.IsEmpty)
+        {
+            Debug.Assert(false, $"Form's size could not be calculated for the DPI: {newDpi}");
+        }
+
+        e.SuggestedRectangle = new Rectangle(Location, desiredSize);
+        OnDpiChanged(e);
+    }
+
     /// <summary>
     ///  Handles the WM_DPICHANGED message
     /// </summary>
@@ -4363,7 +4376,7 @@ public partial class Form : ContainerControl
         Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
 
         // If AutoScaleMode=AutoScaleMode.Dpi then we continue with the linear size we get from Windows for the top-level window.
-        if (AutoScaleMode == AutoScaleMode.Dpi)
+        if (AutoScaleMode == AutoScaleMode.Dpi && !DesignMode)
         {
             return false;
         }

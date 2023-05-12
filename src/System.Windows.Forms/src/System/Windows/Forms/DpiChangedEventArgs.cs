@@ -23,11 +23,17 @@ public sealed class DpiChangedEventArgs : CancelEventArgs
         SuggestedRectangle = *(RECT*)(nint)m.LParamInternal;
     }
 
+    internal DpiChangedEventArgs(int oldDpi, int newDpi)
+    {
+        DeviceDpiOld = oldDpi;
+        DeviceDpiNew = newDpi;
+    }
+
     public int DeviceDpiOld { get; }
 
     public int DeviceDpiNew { get; }
 
-    public Rectangle SuggestedRectangle { get; }
+    public Rectangle SuggestedRectangle { get; internal set; }
 
     public override string ToString() => $"was: {DeviceDpiOld}, now: {DeviceDpiNew}";
 }

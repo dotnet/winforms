@@ -2245,7 +2245,11 @@ public unsafe partial class Control :
             //ask the parent if it has the font height
             int localFontHeight = -1;
 
-            if (ParentInternal is not null && ParentInternal.CanAccessProperties)
+            // In design scenarios, Form is hosted within in the editor (VisualStudio). We stop iterating
+            // the parent hierarchy at the Form while getting Font for the WinForms application.
+            if (!(DesignMode && this is Form)
+                && ParentInternal is not null
+                && ParentInternal.CanAccessProperties)
             {
                 localFontHeight = ParentInternal.FontHeight;
             }
@@ -12198,6 +12202,15 @@ public unsafe partial class Control :
         OnMouseLeave(EventArgs.Empty);
     }
 
+    internal int GetNewDpi(ref Message m)
+    {
+        // In order to support tests, will be querying Dpi from the message first.
+        int newDeviceDpi = (short)m.WParamInternal.LOWORD;
+
+        // On certain OS versions, for non-test scenarios, WParam may be empty.
+        return newDeviceDpi == 0 ? (int)PInvoke.GetDpiForWindow(this) : newDeviceDpi;
+    }
+
     /// <summary>
     ///  Handles the WM_DPICHANGED_BEFOREPARENT message. This message is not sent to top level windows.
     /// </summary>
@@ -12206,18 +12219,29 @@ public unsafe partial class Control :
         DefWndProc(ref m);
 
         _oldDeviceDpi = _deviceDpi;
-
-        // In order to support tests, will be querying Dpi from the message first.
-        int newDeviceDpi = (short)m.WParamInternal.LOWORD;
-
-        // On certain OS versions, for non-test scenarios, WParam may be empty.
-        if (newDeviceDpi == 0)
-        {
-            newDeviceDpi = (int)PInvoke.GetDpiForWindow(this);
-        }
+        int newDeviceDpi = GetNewDpi(ref m);
 
         if (_oldDeviceDpi == newDeviceDpi)
         {
+            OnDpiChangedBeforeParent(EventArgs.Empty);
+            return;
+        }
+
+        // During runtime scenarios in a WinForms application, the main Form is considered a top-level window.
+        // Consequently, it will only receive the WM_DPICHANGED message in PerMonitorV2 applications.
+        // On the other hand, child controls within the Form will receive both WM_DPICHANGED_BEFOREPARENT
+        // and WM_DPICHANGED_AFTERPARENT messages. However, in WinForms designer scenarios,
+        // the Form behaves differently. It functions as a child window hosted within Visual Studio.
+        // As a result, during design-time, the Form will receive WM_DPICHANGED_BEFOREPARENT and
+        // WM_DPICHANGED_AFTERPARENT messages instead of WM_DPICHANGED, just like any other child controls would.
+        // This is special case and only applies to the design scenarios in VisualStudio.
+        if (this is Form form)
+        {
+            if (DesignMode)
+            {
+                form.FormDpiChangedBeforeParent(_oldDeviceDpi, newDeviceDpi);
+            }
+
             OnDpiChangedBeforeParent(EventArgs.Empty);
             return;
         }
