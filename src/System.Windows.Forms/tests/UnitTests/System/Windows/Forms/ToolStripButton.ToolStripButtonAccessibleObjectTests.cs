@@ -12,8 +12,8 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripButtonAccessibleObject_Ctor_Default()
     {
-        using ToolStripButton toolStripButton = new ToolStripButton();
-        ToolStripButtonAccessibleObject accessibleObject = new ToolStripButtonAccessibleObject(toolStripButton);
+        using ToolStripButton toolStripButton = new();
+        ToolStripButtonAccessibleObject accessibleObject = new(toolStripButton);
 
         Assert.Equal(toolStripButton, accessibleObject.Owner);
     }
@@ -21,7 +21,7 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
     {
-        using ToolStripButton toolStripButton = new ToolStripButton();
+        using ToolStripButton toolStripButton = new();
         // AccessibleRole is not set = Default
 
         object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
@@ -32,12 +32,38 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
     [WinFormsFact]
     public void ToolStripButtonAccessibleObject_Role_IsPushButton_ByDefault()
     {
-        using ToolStripButton toolStripButton = new ToolStripButton();
+        using ToolStripButton toolStripButton = new();
         // AccessibleRole is not set = Default
 
         AccessibleRole actual = toolStripButton.AccessibilityObject.Role;
 
         Assert.Equal(AccessibleRole.PushButton, actual);
+    }
+
+    [WinFormsFact]
+    public void ToolStripButtonAccessibleObject_Role_IsCheckButton_IfCheckOnClick()
+    {
+        using ToolStripButton toolStripButton = new()
+        {
+            CheckOnClick = true
+        };
+
+        AccessibleRole actual = toolStripButton.AccessibilityObject.Role;
+
+        Assert.Equal(AccessibleRole.CheckButton, actual);
+    }
+
+    [WinFormsFact]
+    public void ToolStripButtonAccessibleObject_Role_IsCheckButton_IfChecked()
+    {
+        using ToolStripButton toolStripButton = new()
+        {
+            Checked = true
+        };
+
+        AccessibleRole actual = toolStripButton.AccessibilityObject.Role;
+
+        Assert.Equal(AccessibleRole.CheckButton, actual);
     }
 
     public static IEnumerable<object[]> ToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
@@ -59,7 +85,7 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
     [MemberData(nameof(ToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
     public void ToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
     {
-        using ToolStripButton toolStripButton = new ToolStripButton();
+        using ToolStripButton toolStripButton = new();
         toolStripButton.AccessibleRole = role;
 
         object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
@@ -68,16 +94,30 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
         Assert.Equal(expected, actual);
     }
 
-    [WinFormsTheory]
-    [MemberData(nameof(ToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
-    public void ToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsButton_ForCustomRole_IfCheckOnClick(AccessibleRole role)
+    [WinFormsFact]
+    public void ToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsCheckBox_IfCheckOnClick()
     {
-        using ToolStripButton toolStripButton = new ToolStripButton();
-        toolStripButton.CheckOnClick = true;
-        toolStripButton.AccessibleRole = role;
+        using ToolStripButton toolStripButton = new()
+        {
+            CheckOnClick = true
+        };
 
         object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = UiaCore.UIA.ButtonControlTypeId;
+        UiaCore.UIA expected = UiaCore.UIA.CheckBoxControlTypeId;
+
+        Assert.Equal(expected, actual);
+    }
+
+    [WinFormsFact]
+    public void ToolStripButtonAccessibleObject_GetPropertyValue_ControlType_IsCheckBox_IfChecked()
+    {
+        using ToolStripButton toolStripButton = new()
+        {
+            Checked = true
+        };
+
+        object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        UiaCore.UIA expected = UiaCore.UIA.CheckBoxControlTypeId;
 
         Assert.Equal(expected, actual);
     }
