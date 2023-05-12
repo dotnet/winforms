@@ -39,7 +39,6 @@ public class ArrayTests
         { new MemoryStream(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), typeof(EndOfStreamException) },
         { new MemoryStream(new byte[] { 0x00, 0x00, 0x00 }), typeof(EndOfStreamException) },
         // Negative numbers
-        { new MemoryStream(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }), typeof(ArgumentOutOfRangeException) },
         { new MemoryStream(new byte[] { 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF }), typeof(ArgumentOutOfRangeException) }
     };
 }

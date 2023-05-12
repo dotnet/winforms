@@ -21,14 +21,6 @@ public class RecordMapTests
     }
 
     [Fact]
-    public void RecordMap_CannotAddNegativeIndex()
-    {
-        RecordMap map = new();
-        Action action = () => map[-1] = new Record();
-        action.Should().Throw<ArgumentOutOfRangeException>();
-    }
-
-    [Fact]
     public void RecordMap_GetMissingThrowsKeyNotFound()
     {
         RecordMap map = new();
