@@ -12686,7 +12686,6 @@ virtual System.Windows.Forms.Control.ContextMenuStrip.get -> System.Windows.Form
 virtual System.Windows.Forms.Control.ContextMenuStrip.set -> void
 virtual System.Windows.Forms.Control.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
 virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
-virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
 virtual System.Windows.Forms.Control.ControlCollection.Clear() -> void
 virtual System.Windows.Forms.Control.ControlCollection.ContainsKey(string? key) -> bool
 virtual System.Windows.Forms.Control.ControlCollection.GetChildIndex(System.Windows.Forms.Control! child, bool throwException) -> int
