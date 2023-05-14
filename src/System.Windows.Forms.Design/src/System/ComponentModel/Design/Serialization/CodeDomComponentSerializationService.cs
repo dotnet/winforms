@@ -563,7 +563,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         private class ComponentListCodeDomSerializer : CodeDomSerializer
         {
             internal static readonly ComponentListCodeDomSerializer s_instance = new();
-            private Hashtable? _statementsTable;
+            private Dictionary<string, OrderedCodeStatementCollection?>? _statementsTable;
             private Dictionary<string, List<CodeExpression>>? _expressions;
             private Hashtable? _objectState; // only used during deserialization
             private bool _applyDefaults = true;
@@ -624,17 +624,14 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
                 methodMap.Add(completeStatements);
                 methodMap.Combine();
-                _statementsTable = new Hashtable();
+                _statementsTable = new Dictionary<string, OrderedCodeStatementCollection?>();
 
                 // generate statement table keyed on component name
                 FillStatementTable(manager, _statementsTable, mappedStatements);
 
                 // We need to also ensure that for every entry in the statement table we have a corresponding entry in objectNames.  Otherwise, we won't deserialize completely.
                 HashSet<string> completeNames = new(objectNames);
-                foreach (string mappedKey in _statementsTable.Keys)
-                {
-                    completeNames.Add(mappedKey);
-                }
+                completeNames.UnionWith(_statementsTable.Keys);
 
                 _objectState = new Hashtable(objectState.Keys.Count);
                 foreach (DictionaryEntry de in objectState)
@@ -801,7 +798,8 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 // If it doesn't contain an OrderedCodeStatementsCollection this means one of two things:
                 // 1. We already resolved this name and shoved an instance in there.  In this case we just return the instance
                 // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserialize those.
-                if (_statementsTable![name] is OrderedCodeStatementCollection statements)
+                _statementsTable!.TryGetValue(name, out OrderedCodeStatementCollection? statements);
+                if (statements is not null)
                 {
                     _objectState[name] = null;
                     _statementsTable[name] = null; // prevent recursion
@@ -850,7 +848,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                                         resolved = instance is not null;
                                         if (resolved)
                                         {
-                                            _statementsTable[name] = instance;
+                                            _statementsTable[name] = (OrderedCodeStatementCollection?)instance;
                                         }
                                     }
                                     catch (Exception ex)
@@ -893,7 +891,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 }
                 else
                 {
-                    resolved = _statementsTable[name] is not null;
+                    resolved = ((IDictionary)_statementsTable)[name] is not null;
                     if (!resolved)
                     {
                         // this is condition 2 of the comment at the start of this method.
