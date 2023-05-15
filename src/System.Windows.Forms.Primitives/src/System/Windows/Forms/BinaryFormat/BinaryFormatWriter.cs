@@ -14,22 +14,28 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </summary>
 internal static class BinaryFormatWriter
 {
-    private static readonly IReadOnlyList<string> s_hashtableMemberNames = new List<string>()
+    private static string[]? s_hashtableMemberNames;
+
+    private static string[] HashtableMemberNames => s_hashtableMemberNames ??= new string[]
     {
         "LoadFactor", "Version", "Comparer", "HashCodeProvider", "HashSize", "Keys", "Values"
     };
 
-    private static readonly IReadOnlyList<string> s_listMemberNames = new List<string>()
+    private static string[]? s_listMemberNames;
+
+    private static string[] ListMemberNames => s_listMemberNames ??= new string[]
     {
         "_items", "_size", "_version"
     };
 
-    private static readonly IReadOnlyList<string> s_decimalMemberNames = new List<string>()
+    private static string[]? s_decimalMemberNames;
+
+    private static string[] DecimalMemberNames => s_decimalMemberNames ??= new string[]
     {
         "flags", "hi", "lo", "mid"
     };
 
-    private static readonly IReadOnlyList<string> s_dateTimeMemberNames = new List<string>()
+    private static readonly string[] s_dateTimeMemberNames = new string[]
     {
         "ticks", "dateData"
     };
@@ -61,21 +67,16 @@ internal static class BinaryFormatWriter
         SerializationHeader.Default.Write(writer);
 
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, typeof(decimal).FullName!, s_decimalMemberNames),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
+            new ClassInfo(1, typeof(decimal).FullName!, DecimalMemberNames),
+            new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Int32),
                 (BinaryType.Primitive, PrimitiveType.Int32),
                 (BinaryType.Primitive, PrimitiveType.Int32),
-                (BinaryType.Primitive, PrimitiveType.Int32)
-            }),
-            new List<object>()
-            {
-                ints[3],
-                ints[2],
-                ints[0],
-                ints[1]
-            }).Write(writer);
+                (BinaryType.Primitive, PrimitiveType.Int32)),
+            ints[3],
+            ints[2],
+            ints[0],
+            ints[1]).Write(writer);
 
         MessageEnd.Instance.Write(writer);
     }
@@ -94,16 +95,11 @@ internal static class BinaryFormatWriter
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(DateTime).FullName!, s_dateTimeMemberNames),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
+            new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Int64),
-                (BinaryType.Primitive, PrimitiveType.UInt64)
-            }),
-            new List<object>()
-            {
-                value.Ticks,
-                Unsafe.As<DateTime, ulong>(ref value)
-            }).Write(writer);
+                (BinaryType.Primitive, PrimitiveType.UInt64)),
+            value.Ticks,
+            Unsafe.As<DateTime, ulong>(ref value)).Write(writer);
 
         MessageEnd.Instance.Write(writer);
     }
@@ -119,14 +115,8 @@ internal static class BinaryFormatWriter
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(TimeSpan).FullName!, new string[] { "_ticks" }),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
-                (BinaryType.Primitive, PrimitiveType.Int64),
-            }),
-            new List<object>()
-            {
-                value.Ticks
-            }).Write(writer);
+            new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
+            value.Ticks).Write(writer);
 
         MessageEnd.Instance.Write(writer);
     }
@@ -142,14 +132,8 @@ internal static class BinaryFormatWriter
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nint).FullName!, new string[] { "value" }),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
-                (BinaryType.Primitive, PrimitiveType.Int64),
-            }),
-            new List<object>()
-            {
-                (long)value
-            }).Write(writer);
+            new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
+            (long)value).Write(writer);
 
         MessageEnd.Instance.Write(writer);
     }
@@ -165,14 +149,8 @@ internal static class BinaryFormatWriter
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nuint).FullName!, new string[] { "value" }),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
-                (BinaryType.Primitive, PrimitiveType.UInt64),
-            }),
-            new List<object>()
-            {
-                (ulong)value
-            }).Write(writer);
+            new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.UInt64)),
+            (ulong)value).Write(writer);
 
         MessageEnd.Instance.Write(writer);
     }
@@ -251,14 +229,8 @@ internal static class BinaryFormatWriter
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, type.FullName!, new string[] { "m_value" }),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
-                (BinaryType.Primitive, primitiveType),
-            }),
-            new List<object>()
-            {
-                primitive
-            }).Write(writer);
+            new MemberTypeInfo((BinaryType.Primitive, primitiveType)),
+            primitive).Write(writer);
 
         MessageEnd.Instance.Write(writer);
     }
@@ -279,23 +251,16 @@ internal static class BinaryFormatWriter
 
         SerializationHeader.Default.Write(writer);
 
-        SystemClassWithMembersAndTypes systemClass = new(
-            new ClassInfo(1, $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {Mscorlib}]]", s_listMemberNames),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
+        new SystemClassWithMembersAndTypes(
+            new ClassInfo(1, $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {Mscorlib}]]", ListMemberNames),
+            new MemberTypeInfo(
                 (BinaryType.PrimitiveArray, primitiveType),
                 (BinaryType.Primitive, PrimitiveType.Int32),
-                (BinaryType.Primitive, PrimitiveType.Int32),
-            }),
-            new List<object>()
-            {
-                new MemberReference(2),
-                list.Count,
-                // _version doesn't matter
-                0
-            });
-
-        systemClass.Write(writer);
+                (BinaryType.Primitive, PrimitiveType.Int32)),
+            new MemberReference(2),
+            list.Count,
+            // _version doesn't matter
+            0).Write(writer);
 
         ArraySinglePrimitive array = new(
             new(2, list.Count),
@@ -333,32 +298,25 @@ internal static class BinaryFormatWriter
         using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
 
         SerializationHeader.Default.Write(writer);
-        SystemClassWithMembersAndTypes systemClass = new(
-            new ClassInfo(1, "System.Collections.Hashtable", s_hashtableMemberNames),
-            new MemberTypeInfo(new List<(BinaryType Type, object? Info)>
-            {
+        new SystemClassWithMembersAndTypes(
+            new ClassInfo(1, "System.Collections.Hashtable", HashtableMemberNames),
+            new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Single),
                 (BinaryType.Primitive, PrimitiveType.Int32),
                 (BinaryType.SystemClass, "System.Collections.IComparer"),
                 (BinaryType.SystemClass, "System.Collections.IHashCodeProvider"),
                 (BinaryType.Primitive, PrimitiveType.Int32),
                 (BinaryType.ObjectArray, null),
-                (BinaryType.ObjectArray, null)
-            }),
-            new List<object>()
-            {
-                info.GetValue<float>("LoadFactor"),
-                info.GetValue<int>("Version"),
-                // No need to persist the comparer and hashcode provider
-                ObjectNull.Instance,
-                ObjectNull.Instance,
-                info.GetValue<int>("HashSize"),
-                // MemberReference to Arrays here
-                new MemberReference(2),
-                new MemberReference(3)
-            });
-
-        systemClass.Write(writer);
+                (BinaryType.ObjectArray, null)),
+            info.GetValue<float>("LoadFactor"),
+            info.GetValue<int>("Version"),
+            // No need to persist the comparer and hashcode provider
+            ObjectNull.Instance,
+            ObjectNull.Instance,
+            info.GetValue<int>("HashSize"),
+            // MemberReference to Arrays here
+            new MemberReference(2),
+            new MemberReference(3)).Write(writer);
 
         // We've used 1, 2 and 3 for the class id and array ids.
         int currentId = 4;

@@ -30,6 +30,15 @@ internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithM
         LibraryId = libraryId;
     }
 
+    public ClassWithMembersAndTypes(
+        ClassInfo classInfo,
+        MemberTypeInfo memberTypeInfo,
+        Id libraryId,
+        params object[] memberValues)
+        : this(classInfo, memberTypeInfo, libraryId, (IReadOnlyList<object>)memberValues)
+    {
+    }
+
     public static RecordType RecordType => RecordType.ClassWithMembersAndTypes;
 
     static ClassWithMembersAndTypes IBinaryFormatParseable<ClassWithMembersAndTypes>.Parse(

@@ -18,10 +18,21 @@ internal sealed class SystemClassWithMembersAndTypes : ClassRecord, IRecord<Syst
 {
     public MemberTypeInfo MemberTypeInfo { get; }
 
-    public SystemClassWithMembersAndTypes(ClassInfo classInfo, MemberTypeInfo memberTypeInfo, IReadOnlyList<object> memberValues)
+    public SystemClassWithMembersAndTypes(
+        ClassInfo classInfo,
+        MemberTypeInfo memberTypeInfo,
+        IReadOnlyList<object> memberValues)
         : base(classInfo, memberValues)
     {
         MemberTypeInfo = memberTypeInfo;
+    }
+
+    public SystemClassWithMembersAndTypes(
+        ClassInfo classInfo,
+        MemberTypeInfo memberTypeInfo,
+        params object[] memberValues)
+        : this(classInfo, memberTypeInfo, (IReadOnlyList<object>)memberValues)
+    {
     }
 
     public static RecordType RecordType => RecordType.SystemClassWithMembersAndTypes;
