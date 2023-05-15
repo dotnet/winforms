@@ -195,4 +195,17 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
 
         Assert.Equal(0, clickCounter);
     }
+
+    [WinFormsFact]
+    public void ToolStripButtonAccessibleObject_Toggle_DoesNotChangeChecked_IfTogglePatternNotSupported()
+    {
+        using ToolStripButton toolStripButton = new();
+
+        Assert.False(toolStripButton.AccessibilityObject.IsPatternSupported(UiaCore.UIA.TogglePatternId));
+        Assert.False(toolStripButton.Checked);
+
+        toolStripButton.AccessibilityObject.Toggle();
+
+        Assert.False(toolStripButton.Checked);
+    }
 }

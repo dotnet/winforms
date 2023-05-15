@@ -70,7 +70,7 @@ public partial class ToolStripButton
 
         internal override void Toggle()
         {
-            if (_ownerItem.CheckOnClick)
+            if (IsPatternSupported(UiaCore.UIA.TogglePatternId))
             {
                 _ownerItem.Checked = !_ownerItem.Checked;
             }
