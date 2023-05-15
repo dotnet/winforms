@@ -2045,6 +2045,23 @@ public partial class AccessibleObjectTests
         mockAccessibleObject.Verify(a => a.Role, Times.Once());
     }
 
+    [WinFormsFact]
+    public void AccessibleObject_IAccessibleget_accRole_InvokeDefaultSelfNotAClientObject_ReturnsExpected()
+    {
+        int childID = (int)PInvoke.CHILDID_SELF;
+
+        using Control control = new Control();
+        control.CreateControl();
+
+        var accessibleObject = new SubAccessibleObject();
+        accessibleObject.UseStdAccessibleObjects(control.Handle, childID);
+        accessibleObject.AccessibleObjectId = User32.OBJID.WINDOW; 
+
+        IAccessible iAccessible = accessibleObject;
+        Assert.Equal(AccessibleRole.Window, iAccessible.get_accRole(childID));
+        Assert.True(control.IsHandleCreated);
+    }
+
     [WinFormsTheory]
     [InlineData(AccessibleRole.None, 2, 1, 0)]
     [InlineData(AccessibleRole.Default, 2, 1, 0)]
