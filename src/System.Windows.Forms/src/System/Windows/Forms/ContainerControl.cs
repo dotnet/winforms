@@ -1452,21 +1452,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
             // WM_DPICHANGED event. Failing to apply SuggestedRectangle will result in a circular WM_DPICHANGED
             // events on the control.
 
-            // Note: SuggestedRectangle supplied  by WM_DPICHANGED event is Dpi (not Font) scaled. if top-level window is
-            // Font scaled, we might see deviations in the expected bounds and may result in adding Scrollbars (horizontal/vertical)
-            if (IsHandleCreated)
-            {
-                PInvoke.SetWindowPos(
-                    this,
-                    HWND.HWND_TOP,
-                    suggestedRectangle.X,
-                    suggestedRectangle.Y,
-                    suggestedRectangle.Width,
-                    suggestedRectangle.Height,
-                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
-            }
-
-            // Bounds are already scaled for the top-level window. We would need to skip scaling of
+            // Bounds are being scaled for the top-level window via SuggestedRectangle. We would need to skip scaling of
             // this control further by the 'OnFontChanged' event.
             _isScaledByDpiChangedEvent = true;
 
@@ -1482,6 +1468,18 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 {
                     OnFontChanged(EventArgs.Empty);
                 }
+            }
+
+            if (IsHandleCreated)
+            {
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
+                    suggestedRectangle.X,
+                    suggestedRectangle.Y,
+                    suggestedRectangle.Width,
+                    suggestedRectangle.Height,
+                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
         }
         finally
