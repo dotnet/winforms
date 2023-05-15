@@ -1186,7 +1186,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
 
         KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
     }
-
+#nullable enable
     /// <summary>
     ///  Sets the delay time of TTDT_* values.
     /// </summary>
@@ -1222,7 +1222,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Associates <see cref="ToolTip"/> text with the specified control.
     /// </summary>
-    public void SetToolTip(Control control, string caption)
+    public void SetToolTip(Control control, string? caption)
     {
         TipInfo info = new(caption, TipInfo.Type.Auto);
         SetToolTipInternal(control, info);
@@ -1243,7 +1243,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
         }
         else if (!empty)
         {
-            _tools[control] = info;
+            _tools[control] = info!;
         }
 
         if (!empty && !exists)
@@ -1264,7 +1264,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
 
             if (exists && !empty && handlesCreated && !DesignMode)
             {
-                ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
+                ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info!.Caption);
                 toolInfo.SendMessage(this, (User32.WM)PInvoke.TTM_SETTOOLINFOW);
                 SetToolTipToControl(control);
             }
@@ -1322,7 +1322,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Shows a tooltip for specified text, window, and hotspot
     /// </summary>
-    private void ShowTooltip(string text, IWin32Window window, int duration)
+    private void ShowTooltip(string? text, IWin32Window window, int duration)
     {
         ArgumentNullException.ThrowIfNull(window);
 
@@ -1363,7 +1363,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
             }
             else
             {
-                if (!_tools.TryGetValue(associatedControl, out TipInfo tipInfo))
+                if (!_tools.TryGetValue(associatedControl, out TipInfo? tipInfo))
                 {
                     tipInfo = new TipInfo(text, TipInfo.Type.SemiAbsolute);
                 }
@@ -1392,7 +1392,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Associates <see cref="ToolTip"/> with the specified control and displays it.
     /// </summary>
-    public void Show(string text, IWin32Window window)
+    public void Show(string? text, IWin32Window window)
     {
         // Check if the foreground window is the TopLevelWindow
         if (IsWindowActive(window))
@@ -1405,7 +1405,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     ///  Associates <see cref="ToolTip"/> with the specified control and displays it for the
     ///  specified duration.
     /// </summary>
-    public void Show(string text, IWin32Window window, int duration)
+    public void Show(string? text, IWin32Window window, int duration)
     {
         ArgumentNullException.ThrowIfNull(window);
 
@@ -1423,7 +1423,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Associates <see cref="ToolTip"/> with the specified control and displays it.
     /// </summary>
-    public void Show(string text, IWin32Window window, Point point)
+    public void Show(string? text, IWin32Window window, Point point)
     {
         ArgumentNullException.ThrowIfNull(window);
 
@@ -1442,7 +1442,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Associates <see cref="ToolTip"/> with the specified control and displays it.
     /// </summary>
-    public void Show(string text, IWin32Window window, Point point, int duration)
+    public void Show(string? text, IWin32Window window, Point point, int duration)
     {
         ArgumentNullException.ThrowIfNull(window);
 
@@ -1469,7 +1469,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Associates <see cref="ToolTip"/> with the specified control and displays it.
     /// </summary>
-    public void Show(string text, IWin32Window window, int x, int y)
+    public void Show(string? text, IWin32Window window, int x, int y)
     {
         ArgumentNullException.ThrowIfNull(window);
 
@@ -1486,7 +1486,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Associates <see cref="ToolTip"/> with the specified control and displays it.
     /// </summary>
-    public void Show(string text, IWin32Window window, int x, int y, int duration)
+    public void Show(string? text, IWin32Window window, int x, int y, int duration)
     {
         ArgumentNullException.ThrowIfNull(window);
 
@@ -1509,7 +1509,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
         }
     }
 
-    internal void ShowKeyboardToolTip(string text, IKeyboardToolTip tool, int duration)
+    internal void ShowKeyboardToolTip(string? text, IKeyboardToolTip tool, int duration)
     {
         ArgumentNullException.ThrowIfNull(tool);
 
@@ -1521,10 +1521,14 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
         }
 
         Rectangle toolRectangle = tool.GetNativeScreenRectangle();
+
         // At first, place the tooltip at the middle of the tool (default location).
         int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
         int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
-        SetTool(tool.GetOwnerWindow(), text, TipInfo.Type.Absolute, new Point(pointX, pointY));
+        var ownerWindow = tool.GetOwnerWindow();
+        Debug.Assert(ownerWindow is not null);
+
+        SetTool(ownerWindow, text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
         // Then look for a better ToolTip location.
         if (TryGetBubbleSize(tool, out Size bubbleSize))
@@ -1538,9 +1542,9 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
             // Update TipInfo for the tool with optimal position.
             if (tool is Control toolAsControl)
             {
-                if (!_tools.TryGetValue(toolAsControl, out TipInfo tipInfo))
+                if (!_tools.TryGetValue(toolAsControl, out TipInfo? tipInfo))
                 {
-                    if (tool.GetOwnerWindow() is Control ownerWindowAsControl
+                    if (ownerWindow is Control ownerWindowAsControl
                         && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
                     {
                         tipInfo.Position = new Point(pointX, pointY);
@@ -1561,10 +1565,10 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
 
         if (!IsPersistent)
         {
-            StartTimer(tool.GetOwnerWindow(), duration);
+            StartTimer(ownerWindow, duration);
         }
     }
-#nullable enable
+
     private bool TryGetBubbleSize(IKeyboardToolTip tool, out Size bubbleSize)
     {
         // Get bubble size to use it for optimal position calculation. Requesting the bubble
@@ -1825,7 +1829,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
         }
     }
 
-    private void SetTool(IWin32Window window, string text, TipInfo.Type type, Point position)
+    private void SetTool(IWin32Window window, string? text, TipInfo.Type type, Point position)
     {
         Control? tool = window as Control;
         if (tool is not null && _tools.ContainsKey(tool))

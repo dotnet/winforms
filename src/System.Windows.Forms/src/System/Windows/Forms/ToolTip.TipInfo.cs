@@ -13,7 +13,7 @@ public partial class ToolTip
         private readonly string? _designerText;
         private string? _caption;
 
-        public TipInfo(string caption, Type type)
+        public TipInfo(string? caption, Type type)
         {
             _caption = caption;
             TipType = type;

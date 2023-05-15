@@ -991,13 +991,13 @@ System.Windows.Forms.ToolStripPanelRow.ToolStripPanel.get -> System.Windows.Form
 System.Windows.Forms.ToolStripPanelRow.ToolStripPanelRow(System.Windows.Forms.ToolStripPanel! parent) -> void
 ~System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control control) -> string
 System.Windows.Forms.ToolTip.Hide(System.Windows.Forms.IWin32Window! win) -> void
-~System.Windows.Forms.ToolTip.SetToolTip(System.Windows.Forms.Control control, string caption) -> void
-~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window) -> void
-~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, int duration) -> void
-~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, int x, int y) -> void
-~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, int x, int y, int duration) -> void
-~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, System.Drawing.Point point) -> void
-~System.Windows.Forms.ToolTip.Show(string text, System.Windows.Forms.IWin32Window window, System.Drawing.Point point, int duration) -> void
+System.Windows.Forms.ToolTip.SetToolTip(System.Windows.Forms.Control! control, string? caption) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int duration) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int x, int y) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int x, int y, int duration) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, System.Drawing.Point point) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, System.Drawing.Point point, int duration) -> void
 ~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeNode.FullPath.get -> string
 ~System.Windows.Forms.TreeNode.ImageKey.get -> string
