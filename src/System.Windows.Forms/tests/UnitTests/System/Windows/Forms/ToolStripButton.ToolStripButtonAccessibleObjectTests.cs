@@ -142,6 +142,19 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
         Assert.Equal(expected, actual);
     }
 
+    [WinFormsFact]
+    public void ToolStripButtonAccessibleObject_IsTogglePatternSupported_ReturnsTrue_IfAccessibleRoleIsCheckButton()
+    {
+        using ToolStripButton toolStripButton = new()
+        {
+            AccessibleRole = AccessibleRole.CheckButton
+        };
+
+        object actual = toolStripButton.AccessibilityObject.IsPatternSupported(UiaCore.UIA.TogglePatternId);
+
+        Assert.Equal(true, actual);
+    }
+
     [WinFormsTheory]
     [InlineData(CheckState.Checked, (int)UiaCore.ToggleState.On)]
     [InlineData(CheckState.Unchecked, (int)UiaCore.ToggleState.Off)]

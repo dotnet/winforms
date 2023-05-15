@@ -23,7 +23,7 @@ public partial class ToolStripButton
         internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
             patternId switch
             {
-                UiaCore.UIA.TogglePatternId => _ownerItem.CheckOnClick || _ownerItem.Checked,
+                UiaCore.UIA.TogglePatternId => Role == AccessibleRole.CheckButton,
                 _ => base.IsPatternSupported(patternId)
             };
 
