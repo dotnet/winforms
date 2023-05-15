@@ -23,6 +23,8 @@ internal readonly struct MemberTypeInfo : IBinaryWriteable, IEnumerable<(BinaryT
 
     public MemberTypeInfo(IList<(BinaryType Type, object? Info)> info) => _info = info;
 
+    public MemberTypeInfo(params (BinaryType Type, object? Info)[] info) => _info = info;
+
     public readonly (BinaryType Type, object? Info) this[int index] => _info[index];
     public readonly int Count => _info.Count;
 
