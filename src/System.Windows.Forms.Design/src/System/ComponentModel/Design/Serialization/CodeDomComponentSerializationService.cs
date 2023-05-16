@@ -184,12 +184,6 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         private const string AssembliesKey = "Assemblies";
         private const string ResourcesKey = "Resources";
         private const string ShimKey = "Shim";
-        private const int StateCode = 0;
-        private const int StateCtx = 1;
-        private const int StateProperties = 2;
-        private const int StateResources = 3;
-        private const int StateEvents = 4;
-        private const int StateModifier = 5;
 
         private MemoryStream? _resourceStream;
 
@@ -199,7 +193,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
         // These fields persist across the store
         private readonly List<string> _objectNames;
-        private Dictionary<string, object?[]>? _objectState;
+        private Dictionary<string, CodeDomComponentSerializationState>? _objectState;
         private LocalResourceManager? _resources;
         private readonly List<string> _shimObjectNames;
 
@@ -291,7 +285,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         {
             if (_objectState is null)
             {
-                Dictionary<string, object?[]> state = new(_objects!.Count);
+                Dictionary<string, CodeDomComponentSerializationState> state = new(_objects!.Count);
                 DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
                 if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
                 {
@@ -341,12 +335,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
                 AssemblyNames = new AssemblyName[assemblies.Count];
                 assemblies.Values.CopyTo(AssemblyNames, 0);
-#if DEBUG
-                foreach (KeyValuePair<string, object?[]> de in state)
-                {
-                    TraceCode(de.Key, de.Value);
-                }
-#endif
+
+                TraceCode(state);
+
                 _objectState = state;
                 _objects = null;
             }
@@ -485,62 +476,63 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             throw new PlatformNotSupportedException();
         }
 
-#if DEBUG
-        internal static void TraceCode(string name, object?[] state)
+        [Conditional("DEBUG")]
+        internal static void TraceCode(Dictionary<string, CodeDomComponentSerializationState> state)
         {
-            if (!s_trace.TraceVerbose)
+            if (!s_trace!.TraceVerbose)
             {
                 return;
             }
 
-            // The code is stored as the first slot in an array.
-            object? code = state[StateCode];
-
-            if (code is null)
+            foreach (KeyValuePair<string, CodeDomComponentSerializationState> de in state)
             {
-                return;
-            }
+                object? code = de.Value.Code;
 
-            CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-            using var sw = new StringWriter(CultureInfo.InvariantCulture);
-            Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {name}: ");
-            Debug.Indent();
-
-            if (code is CodeTypeDeclaration codeTypeDeclaration)
-            {
-                codeGenerator.GenerateCodeFromType(codeTypeDeclaration, sw, null!);
-            }
-            else if (code is CodeStatementCollection statements)
-            {
-                foreach (CodeStatement statement in statements)
+                if (code is null)
                 {
-                    codeGenerator.GenerateCodeFromStatement(statement, sw, null!);
+                    continue;
                 }
-            }
-            else if (code is CodeStatement codeStatement)
-            {
-                codeGenerator.GenerateCodeFromStatement(codeStatement, sw, null!);
-            }
-            else if (code is CodeExpression codeExpression)
-            {
-                codeGenerator.GenerateCodeFromExpression(codeExpression, sw, null!);
-            }
-            else
-            {
-                sw.Write("Unknown code type: ");
-                sw.WriteLine(code.GetType().Name);
-            }
 
-            // spit this line by line so it respects the indent.
-            StringReader sr = new StringReader(sw.ToString());
-            for (string? ln = sr.ReadLine(); ln is not null; ln = sr.ReadLine())
-            {
-                Debug.WriteLine(ln);
-            }
+                CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
+                using var sw = new StringWriter(CultureInfo.InvariantCulture);
+                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {de.Key}: ");
+                Debug.Indent();
 
-            Debug.Unindent();
+                if (code is CodeTypeDeclaration codeTypeDeclaration)
+                {
+                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, sw, null!);
+                }
+                else if (code is CodeStatementCollection statements)
+                {
+                    foreach (CodeStatement statement in statements)
+                    {
+                        codeGenerator.GenerateCodeFromStatement(statement, sw, null!);
+                    }
+                }
+                else if (code is CodeStatement codeStatement)
+                {
+                    codeGenerator.GenerateCodeFromStatement(codeStatement, sw, null!);
+                }
+                else if (code is CodeExpression codeExpression)
+                {
+                    codeGenerator.GenerateCodeFromExpression(codeExpression, sw, null!);
+                }
+                else
+                {
+                    sw.Write("Unknown code type: ");
+                    sw.WriteLine(code.GetType().Name);
+                }
+
+                // spit this line by line so it respects the indent.
+                StringReader sr = new StringReader(sw.ToString());
+                for (string? ln = sr.ReadLine(); ln is not null; ln = sr.ReadLine())
+                {
+                    Debug.WriteLine(ln);
+                }
+
+                Debug.Unindent();
+            }
         }
-#endif
 
         /// <summary>
         ///  Implements the save part of ISerializable. Used in unit tests only.
@@ -564,7 +556,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             internal static readonly ComponentListCodeDomSerializer s_instance = new();
             private Dictionary<string, OrderedCodeStatementCollection?>? _statementsTable;
             private Dictionary<string, List<CodeExpression>>? _expressions;
-            private Dictionary<string, object?[]>? _objectState; // only used during deserialization
+            private Dictionary<string, CodeDomComponentSerializationState>? _objectState; // only used during deserialization
             private bool _applyDefaults = true;
             private readonly HashSet<string> _nameResolveGuard = new();
 
@@ -608,17 +600,17 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             /// <summary>
             ///  Deserializes the given object state.  The results are contained within the  serialization manager's name table.  The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
             /// </summary>
-            internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, object?[]> objectState, List<string> objectNames, bool applyDefaults)
+            internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, CodeDomComponentSerializationState> objectState, List<string> objectNames, bool applyDefaults)
             {
                 CodeStatementCollection completeStatements = new CodeStatementCollection();
                 _expressions = new();
                 _applyDefaults = applyDefaults;
                 foreach (string name in objectNames)
                 {
-                    if (objectState.TryGetValue(name, out object?[]? state))
+                    if (objectState.TryGetValue(name, out CodeDomComponentSerializationState? state))
                     {
-                        PopulateCompleteStatements(state[StateCode], name, completeStatements);
-                        PopulateCompleteStatements(state[StateCtx], name, completeStatements);
+                        PopulateCompleteStatements(state.Code, name, completeStatements);
+                        PopulateCompleteStatements(state.Ctx, name, completeStatements);
                     }
                 }
 
@@ -677,10 +669,10 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 }
             }
 
-            private void DeserializeDefaultProperties(IDesignerSerializationManager manager, string name, object? state)
+            private void DeserializeDefaultProperties(IDesignerSerializationManager manager, string name, List<string>? defProps)
             {
                 // Next, default properties, but only if we successfully  resolved.
-                if (state is null || !_applyDefaults)
+                if (defProps is null || !_applyDefaults)
                 {
                     return;
                 }
@@ -692,7 +684,6 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 }
 
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
-                string[] defProps = (string[])state;
                 foreach (string propName in defProps)
                 {
                     PropertyDescriptor? prop = props[propName];
@@ -710,7 +701,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 }
             }
 
-            private static void DeserializeDesignTimeProperties(IDesignerSerializationManager manager, string name, object? state)
+            private static void DeserializeDesignTimeProperties(IDesignerSerializationManager manager, string name, Dictionary<string, object?>? state)
             {
                 if (state is null)
                 {
@@ -725,9 +716,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
 
-                foreach (DictionaryEntry de in (IDictionary)state)
+                foreach (KeyValuePair<string, object?> de in state)
                 {
-                    PropertyDescriptor? prop = props[(string)de.Key];
+                    PropertyDescriptor? prop = props[de.Key];
                     prop?.SetValue(comp, de.Value);
                 }
             }
@@ -874,12 +865,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                         resolved = true;
                     }
 
-                    if (_objectState!.Remove(name, out object?[]? state))
+                    if (_objectState!.Remove(name, out CodeDomComponentSerializationState? state))
                     {
-                        DeserializeDefaultProperties(manager, name, state[StateProperties]);
-                        DeserializeDesignTimeProperties(manager, name, state[StateResources]);
-                        DeserializeEventResets(manager, name, state[StateEvents]);
-                        DeserializeModifier(manager, name, state[StateModifier]);
+                        DeserializeState(manager, name, state);
                     }
 
                     if (_expressions!.Remove(name, out List<CodeExpression>? exps))
@@ -921,12 +909,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                         }
 
                         // In this case we still need to correctly deserialize default properties &  design-time only properties.
-                        if (resolved && _objectState!.TryGetValue(name, out object?[]? state))
+                        if (resolved && _objectState!.TryGetValue(name, out CodeDomComponentSerializationState? state))
                         {
-                            DeserializeDefaultProperties(manager, name, state[StateProperties]);
-                            DeserializeDesignTimeProperties(manager, name, state[StateResources]);
-                            DeserializeEventResets(manager, name, state[StateEvents]);
-                            DeserializeModifier(manager, name, state[StateModifier]);
+                            DeserializeState(manager, name, state);
                         }
                     }
 
@@ -940,9 +925,17 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 return resolved;
             }
 
-            private static void DeserializeEventResets(IDesignerSerializationManager? manager, string name, object? state)
+            private void DeserializeState(IDesignerSerializationManager manager, string name, CodeDomComponentSerializationState state)
             {
-                if (state is List<string> eventNames && manager is not null && !string.IsNullOrEmpty(name))
+                DeserializeDefaultProperties(manager, name, state.Properties);
+                DeserializeDesignTimeProperties(manager, name, state.Resources);
+                DeserializeEventResets(manager, name, state.Events);
+                DeserializeModifier(manager, name, state.Modifier);
+            }
+
+            private static void DeserializeEventResets(IDesignerSerializationManager? manager, string name, List<string>? eventNames)
+            {
+                if (eventNames is not null && manager is not null && !string.IsNullOrEmpty(name))
                 {
                     object? comp = manager.GetInstance(name);
                     if (comp is not null && manager.GetService(typeof(IEventBindingService)) is IEventBindingService ebs)
@@ -1014,7 +1007,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             /// <summary>
             ///  Serializes the given set of objects (contained in objectData) into the given object state dictionary.
             /// </summary>
-            internal void Serialize(IDesignerSerializationManager manager, Dictionary<object, ObjectData> objectData, Dictionary<string, object?[]> objectState, IList shimObjectNames)
+            internal void Serialize(IDesignerSerializationManager manager, Dictionary<object, ObjectData> objectData, Dictionary<string, CodeDomComponentSerializationState> objectState, IList shimObjectNames)
             {
                 if (manager.GetService<IContainer>() is {} container)
                 {
@@ -1029,15 +1022,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 {
                     foreach (ObjectData data in objectData.Values)
                     {
-                        // Saved state. Slot 0 is the code gen
-                        // Slot 1 is for generated statements coming from the context.
-                        // Slot 2 is an array of default properties.
-                        // Slot 3 is for design time props.Any may be null.
-                        // Slot 4 is for events that need to be reset.
-                        // Slot 5 is for the modifier property of the object.
-                        // Since it is DSV.Hidden, it won't be serialized. We special case it here.
-
-                        object?[] state = new object[6];
+                        object? code = null;
+                        CodeStatementCollection? ctxStatements = null;
+                        Dictionary<string, object?>? resources = null;
                         CodeStatementCollection extraStatements = new CodeStatementCollection();
                         manager.Context.Push(extraStatements);
                         if (manager.TryGetSerializer(data._value.GetType(), out CodeDomSerializer? serializer))
@@ -1046,19 +1033,19 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                             {
                                 if (!IsSerialized(manager, data._value))
                                 {
-                                    state[StateCode] = data.Absolute
+                                    code = data.Absolute
                                         ? serializer.SerializeAbsolute(manager, data._value)
                                         : serializer.Serialize(manager, data._value);
 
-                                    CodeStatementCollection? ctxStatements = statementCtx.StatementCollection[data._value];
-                                    if (ctxStatements is not null && ctxStatements.Count > 0)
+                                    ctxStatements = statementCtx.StatementCollection[data._value];
+                                    if (ctxStatements?.Count == 0)
                                     {
-                                        state[StateCtx] = ctxStatements;
+                                        ctxStatements = null;
                                     }
 
                                     if (extraStatements.Count > 0)
                                     {
-                                        if (state[StateCode] is CodeStatementCollection existingStatements)
+                                        if (code is CodeStatementCollection existingStatements)
                                         {
                                             existingStatements.AddRange(extraStatements);
                                         }
@@ -1066,7 +1053,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                                 }
                                 else
                                 {
-                                    state[StateCode] = statementCtx.StatementCollection[data._value];
+                                    code = statementCtx.StatementCollection[data._value];
                                 }
                             }
                             else
@@ -1080,9 +1067,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
                                         if (md._member is PropertyDescriptor prop && prop.PropertyType.IsSerializable)
                                         {
-                                            state[StateResources] ??= new Hashtable();
+                                            resources ??= new Dictionary<string, object?>();
 
-                                            ((Hashtable)state[StateResources]!)[prop.Name] = prop.GetValue(data._value);
+                                            resources[prop.Name] = prop.GetValue(data._value);
                                         }
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
                                     }
@@ -1094,13 +1081,13 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                                     }
                                 }
 
-                                state[StateCode] = codeStatements;
+                                code = codeStatements;
                             }
                         }
 
                         if (extraStatements.Count > 0)
                         {
-                            if (state[StateCode] is CodeStatementCollection existingStatements)
+                            if (code is CodeStatementCollection existingStatements)
                             {
                                 existingStatements.AddRange(extraStatements);
                             }
@@ -1173,24 +1160,11 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                         }
 
                         // Check for non-default modifiers property
-                        if (TypeDescriptor.GetProperties(data._value)["Modifiers"] is PropertyDescriptor modifier)
-                        {
-                            state[StateModifier] = modifier.GetValue(data._value);
-                        }
+                        object? modifier = TypeDescriptor.GetProperties(data._value)["Modifiers"]?.GetValue(data._value);
 
-                        if (defaultPropList is not null)
+                        if (code is not null || defaultPropList is not null)
                         {
-                            state[StateProperties] = defaultPropList.ToArray();
-                        }
-
-                        if (defaultEventList is not null)
-                        {
-                            state[StateEvents] = defaultEventList;
-                        }
-
-                        if (state[StateCode] is not null || state[StateProperties] is not null)
-                        {
-                            objectState[data._name] = state;
+                            objectState[data._name] = new CodeDomComponentSerializationState(code, ctxStatements, defaultPropList, resources, defaultEventList, modifier);
                         }
                     }
                 }
@@ -1519,6 +1493,32 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
                 return t;
             }
+        }
+    }
+
+    // Saved state
+    internal sealed class CodeDomComponentSerializationState
+    {
+        public readonly object? Code; // code gen
+        public readonly CodeStatementCollection? Ctx; // generated statements coming from the context
+        public readonly List<string>? Properties; // default properties
+        public readonly Dictionary<string, object?>? Resources; // design time properties
+        public readonly List<string>? Events; // events that need to be reset
+        public readonly object? Modifier; // modifier property of the object
+
+        public CodeDomComponentSerializationState(object? code,
+            CodeStatementCollection? ctxStatements,
+            List<string>? properties,
+            Dictionary<string, object?>? resources,
+            List<string>? events,
+            object? modifier)
+        {
+            Code = code;
+            Ctx = ctxStatements;
+            Properties = properties;
+            Resources = resources;
+            Events = events;
+            Modifier = modifier;
         }
     }
 }
