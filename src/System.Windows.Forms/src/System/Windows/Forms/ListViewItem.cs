@@ -1050,8 +1050,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             return;
         }
 
-        ListViewGroup? group = _listView.Groups[_groupName];
-        Group = group;
+        Group = _listView.Groups[_groupName];
 
         // Use the group name only once.
         _groupName = null;
