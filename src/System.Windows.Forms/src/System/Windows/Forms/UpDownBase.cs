@@ -982,7 +982,7 @@ public abstract partial class UpDownBase : ContainerControl
             return;
         }
 
-        string caption = toolTip.GetToolTip(this);
+        string? caption = toolTip.GetToolTip(this);
         toolTip.SetToolTip(_upDownEdit, caption);
         toolTip.SetToolTip(_upDownButtons, caption);
     }

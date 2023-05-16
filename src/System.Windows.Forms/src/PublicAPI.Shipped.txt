@@ -794,7 +794,7 @@ System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitma
 ~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
-~System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control control) -> string
+System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control? control) -> string?
 ~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeNode.FullPath.get -> string
 ~System.Windows.Forms.TreeNode.ImageKey.get -> string
