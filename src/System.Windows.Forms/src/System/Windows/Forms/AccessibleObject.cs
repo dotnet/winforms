@@ -1569,7 +1569,7 @@ public unsafe partial class AccessibleObject :
         int count = SystemIAccessible.TryGetChildCount();
 
         // Unclear why this returns null for no children.
-        return (count == 0 || childID is not int id) ? null : SystemIAccessible.TryGetRole(id);
+        return count == 0 ? null : SystemIAccessible.TryGetRole(ChildIdToVARIANT(childID));
     }
 
     /// <summary>
