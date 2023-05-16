@@ -357,7 +357,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         /// </summary>
         internal List<object> Deserialize(IServiceProvider provider, IContainer? container = null)
         {
-            List<object> collection = new List<object>();
+            List<object> collection = new();
             Deserialize(provider, container, true, true, collection);
             return collection;
         }
@@ -576,6 +576,11 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
             private void PopulateCompleteStatements(object? data, string name, CodeStatementCollection completeStatements)
             {
+                if (data is null)
+                {
+                    return;
+                }
+
                 if (data is CodeStatementCollection statements)
                 {
                     completeStatements.AddRange(statements);
@@ -595,7 +600,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
                     exps.Add(expression);
                 }
-                else if (data is not null)
+                else
                 {
                     Debug.Fail($"No case for {data.GetType().Name}");
                 }
@@ -681,47 +686,55 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             private void DeserializeDefaultProperties(IDesignerSerializationManager manager, string name, object? state)
             {
                 // Next, default properties, but only if we successfully  resolved.
-                if (state is not null && _applyDefaults)
+                if (state is null || !_applyDefaults)
                 {
-                    object? comp = manager.GetInstance(name);
-                    if (comp is not null)
-                    {
-                        PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
-                        string[] defProps = (string[])state;
-                        foreach (string propName in defProps)
-                        {
-                            PropertyDescriptor? prop = props[propName];
-                            if (prop is not null && prop.CanResetValue(comp))
-                            {
-                                Trace(TraceLevel.Verbose, $"Resetting default for {name}.{propName}");
-                                // If there is a member relationship setup for this property, we should disconnect it first. This makes sense, since if there was a previous relationship, we would have serialized it and not come here at all.
-                                if (manager.TryGetService(out MemberRelationshipService? relationships) && relationships[comp, prop] != MemberRelationship.Empty)
-                                {
-                                    relationships[comp, prop] = MemberRelationship.Empty;
-                                }
+                    return;
+                }
 
-                                prop.ResetValue(comp);
-                            }
+                object? comp = manager.GetInstance(name);
+                if (comp is null)
+                {
+                    return;
+                }
+
+                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
+                string[] defProps = (string[])state;
+                foreach (string propName in defProps)
+                {
+                    PropertyDescriptor? prop = props[propName];
+                    if (prop is not null && prop.CanResetValue(comp))
+                    {
+                        Trace(TraceLevel.Verbose, $"Resetting default for {name}.{propName}");
+                        // If there is a member relationship setup for this property, we should disconnect it first. This makes sense, since if there was a previous relationship, we would have serialized it and not come here at all.
+                        if (manager.TryGetService(out MemberRelationshipService? relationships) && relationships[comp, prop] != MemberRelationship.Empty)
+                        {
+                            relationships[comp, prop] = MemberRelationship.Empty;
                         }
+
+                        prop.ResetValue(comp);
                     }
                 }
             }
 
             private static void DeserializeDesignTimeProperties(IDesignerSerializationManager manager, string name, object? state)
             {
-                if (state is not null)
+                if (state is null)
                 {
-                    object? comp = manager.GetInstance(name);
-                    if (comp is not null)
-                    {
-                        PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
+                    return;
+                }
 
-                        foreach (DictionaryEntry de in (IDictionary)state)
-                        {
-                            PropertyDescriptor? prop = props[(string)de.Key];
-                            prop?.SetValue(comp, de.Value);
-                        }
-                    }
+                object? comp = manager.GetInstance(name);
+                if (comp is null)
+                {
+                    return;
+                }
+
+                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
+
+                foreach (DictionaryEntry de in (IDictionary)state)
+                {
+                    PropertyDescriptor? prop = props[(string)de.Key];
+                    prop?.SetValue(comp, de.Value);
                 }
             }
 
@@ -731,45 +744,43 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             /// </summary>
             private static IComponent? ResolveNestedName(IDesignerSerializationManager? manager, string name, [NotNullIfNotNull(nameof(manager))] out string? outerComponent)
             {
-                IComponent? curComp = null;
-                if (manager is not null)
-                {
-                    bool moreChunks;
-                    // We need to resolve the first chunk using the manager. other chunks will be resolved within the nested containers.
-                    int curIndex = name.IndexOf('.');
-                    Debug.Assert(curIndex > 0, "ResolvedNestedName accepts only nested names!");
-                    outerComponent = name.Substring(0, curIndex);
-                    curComp = manager.GetInstance(outerComponent) as IComponent;
-
-                    do
-                    {
-                        int prevIndex = curIndex;
-                        curIndex = name.IndexOf('.', curIndex + 1);
-
-                        moreChunks = curIndex != -1;
-                        string compName = moreChunks
-                            ? name.Substring(prevIndex + 1, curIndex)
-                            : name.Substring(prevIndex + 1);
-
-                        if (string.IsNullOrEmpty(compName))
-                        {
-                            return null;
-                        }
-
-                        ISite? site = curComp?.Site;
-                        if (!site.TryGetService(out INestedContainer? container))
-                        {
-                            return null;
-                        }
-
-                        curComp = container.Components[compName];
-                    }
-                    while (moreChunks);
-                }
-                else
+                if (manager is null)
                 {
                     outerComponent = null;
+                    return null;
                 }
+
+                bool moreChunks;
+                // We need to resolve the first chunk using the manager. other chunks will be resolved within the nested containers.
+                int curIndex = name.IndexOf('.');
+                Debug.Assert(curIndex > 0, "ResolvedNestedName accepts only nested names!");
+                outerComponent = name.Substring(0, curIndex);
+                IComponent? curComp = manager.GetInstance(outerComponent) as IComponent;
+
+                do
+                {
+                    int prevIndex = curIndex;
+                    curIndex = name.IndexOf('.', curIndex + 1);
+
+                    moreChunks = curIndex != -1;
+                    string compName = moreChunks
+                        ? name.Substring(prevIndex + 1, curIndex)
+                        : name.Substring(prevIndex + 1);
+
+                    if (string.IsNullOrEmpty(compName))
+                    {
+                        return null;
+                    }
+
+                    ISite? site = curComp?.Site;
+                    if (!site.TryGetService(out INestedContainer? container))
+                    {
+                        return null;
+                    }
+
+                    curComp = container.Components[compName];
+                }
+                while (moreChunks);
 
                 return curComp;
             }
