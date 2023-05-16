@@ -291,7 +291,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         {
             if (_objectState is null)
             {
-                Hashtable state = new Hashtable(_objects!.Count);
+                Hashtable state = new(_objects!.Count);
                 DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
                 if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
                 {
