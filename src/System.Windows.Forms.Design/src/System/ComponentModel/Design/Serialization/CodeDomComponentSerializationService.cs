@@ -199,7 +199,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
         // These fields persist across the store
         private readonly List<string> _objectNames;
-        private Hashtable? _objectState;
+        private Dictionary<string, object?[]>? _objectState;
         private LocalResourceManager? _resources;
         private readonly List<string> _shimObjectNames;
 
@@ -291,7 +291,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         {
             if (_objectState is null)
             {
-                Hashtable state = new(_objects!.Count);
+                Dictionary<string, object?[]> state = new(_objects!.Count);
                 DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
                 if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
                 {
@@ -342,9 +342,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 AssemblyNames = new AssemblyName[assemblies.Count];
                 assemblies.Values.CopyTo(AssemblyNames, 0);
 #if DEBUG
-                foreach (DictionaryEntry de in state)
+                foreach (KeyValuePair<string, object?[]> de in state)
                 {
-                    TraceCode((string)de.Key, de.Value);
+                    TraceCode(de.Key, de.Value);
                 }
 #endif
                 _objectState = state;
@@ -486,16 +486,15 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         }
 
 #if DEBUG
-        internal static void TraceCode(string name, object? code)
+        internal static void TraceCode(string name, object?[] state)
         {
-            if (code is null || !s_trace.TraceVerbose)
+            if (!s_trace.TraceVerbose)
             {
                 return;
             }
 
             // The code is stored as the first slot in an array.
-            object?[] state = (object?[])code;
-            code = state[StateCode];
+            object? code = state[StateCode];
 
             if (code is null)
             {
@@ -565,7 +564,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             internal static readonly ComponentListCodeDomSerializer s_instance = new();
             private Dictionary<string, OrderedCodeStatementCollection?>? _statementsTable;
             private Dictionary<string, List<CodeExpression>>? _expressions;
-            private Hashtable? _objectState; // only used during deserialization
+            private Dictionary<string, object?[]>? _objectState; // only used during deserialization
             private bool _applyDefaults = true;
             private readonly HashSet<string> _nameResolveGuard = new();
 
@@ -609,15 +608,14 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             /// <summary>
             ///  Deserializes the given object state.  The results are contained within the  serialization manager's name table.  The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
             /// </summary>
-            internal void Deserialize(IDesignerSerializationManager manager, IDictionary objectState, List<string> objectNames, bool applyDefaults)
+            internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, object?[]> objectState, List<string> objectNames, bool applyDefaults)
             {
                 CodeStatementCollection completeStatements = new CodeStatementCollection();
                 _expressions = new();
                 _applyDefaults = applyDefaults;
                 foreach (string name in objectNames)
                 {
-                    object?[]? state = (object?[]?)objectState[name];
-                    if (state is not null)
+                    if (objectState.TryGetValue(name, out object?[]? state))
                     {
                         PopulateCompleteStatements(state[StateCode], name, completeStatements);
                         PopulateCompleteStatements(state[StateCtx], name, completeStatements);
@@ -638,11 +636,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 HashSet<string> completeNames = new(objectNames);
                 completeNames.UnionWith(_statementsTable.Keys);
 
-                _objectState = new Hashtable(objectState.Keys.Count);
-                foreach (DictionaryEntry de in objectState)
-                {
-                    _objectState.Add(de.Key, de.Value);
-                }
+                _objectState = new(objectState);
 
                 ResolveNameEventHandler resolveNameHandler = new ResolveNameEventHandler(OnResolveName);
                 manager.ResolveName += resolveNameHandler;
@@ -788,7 +782,6 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             private bool ResolveName(IDesignerSerializationManager manager, string name, bool canInvokeManager)
             {
                 bool resolved = false;
-                object?[]? state = (object?[]?)_objectState![name];
                 // Check for a nested name. Components that are sited within NestedContainers need to be looked up in their nested container, and won't be resolvable directly via the manager.
                 if (name.IndexOf('.') > 0)
                 {
@@ -812,7 +805,6 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 _statementsTable!.TryGetValue(name, out OrderedCodeStatementCollection? statements);
                 if (statements is not null)
                 {
-                    _objectState[name] = null;
                     _statementsTable[name] = null; // prevent recursion
                     // we look through the statements to find the variableRef or fieldRef that matches this name
                     string? typeName = null;
@@ -882,7 +874,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                         resolved = true;
                     }
 
-                    if (state is not null)
+                    if (_objectState!.Remove(name, out object?[]? state))
                     {
                         DeserializeDefaultProperties(manager, name, state[StateProperties]);
                         DeserializeDesignTimeProperties(manager, name, state[StateResources]);
@@ -929,7 +921,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                         }
 
                         // In this case we still need to correctly deserialize default properties &  design-time only properties.
-                        if (resolved && state is not null)
+                        if (resolved && _objectState!.TryGetValue(name, out object?[]? state))
                         {
                             DeserializeDefaultProperties(manager, name, state[StateProperties]);
                             DeserializeDesignTimeProperties(manager, name, state[StateResources]);
@@ -1022,7 +1014,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             /// <summary>
             ///  Serializes the given set of objects (contained in objectData) into the given object state dictionary.
             /// </summary>
-            internal void Serialize(IDesignerSerializationManager manager, IDictionary objectData, IDictionary objectState, IList shimObjectNames)
+            internal void Serialize(IDesignerSerializationManager manager, IDictionary objectData, Dictionary<string, object?[]> objectState, IList shimObjectNames)
             {
                 if (manager.GetService<IContainer>() is {} container)
                 {
