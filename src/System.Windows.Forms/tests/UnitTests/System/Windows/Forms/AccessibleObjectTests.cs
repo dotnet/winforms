@@ -2050,7 +2050,7 @@ public partial class AccessibleObjectTests
     {
         int childID = (int)PInvoke.CHILDID_SELF;
 
-        using Control control = new Control();
+        using Control control = new();
         control.CreateControl();
 
         var accessibleObject = new SubAccessibleObject();
