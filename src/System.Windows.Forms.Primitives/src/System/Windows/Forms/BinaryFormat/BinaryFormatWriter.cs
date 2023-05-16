@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -47,11 +46,8 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteString(Stream stream, string value)
     {
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-        SerializationHeader.Default.Write(writer);
-        BinaryObjectString binaryString = new(1, value);
-        binaryString.Write(writer);
-        MessageEnd.Instance.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
+        new BinaryObjectString(1, value).Write(writer);
     }
 
     /// <summary>
@@ -62,9 +58,7 @@ internal static class BinaryFormatWriter
         Span<int> ints = stackalloc int[4];
         decimal.TryGetBits(value, ints, out _);
 
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-
-        SerializationHeader.Default.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(decimal).FullName!, DecimalMemberNames),
@@ -77,8 +71,6 @@ internal static class BinaryFormatWriter
             ints[2],
             ints[0],
             ints[1]).Write(writer);
-
-        MessageEnd.Instance.Write(writer);
     }
 
     /// <summary>
@@ -86,9 +78,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteDateTime(Stream stream, DateTime value)
     {
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-
-        SerializationHeader.Default.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
 
         // We could use ISerializable here to get the data, but it is pretty
         // heavy weight, and the internals of DateTime should never change.
@@ -100,8 +90,6 @@ internal static class BinaryFormatWriter
                 (BinaryType.Primitive, PrimitiveType.UInt64)),
             value.Ticks,
             Unsafe.As<DateTime, ulong>(ref value)).Write(writer);
-
-        MessageEnd.Instance.Write(writer);
     }
 
     /// <summary>
@@ -109,16 +97,12 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteTimeSpan(Stream stream, TimeSpan value)
     {
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-
-        SerializationHeader.Default.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(TimeSpan).FullName!, new string[] { "_ticks" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
             value.Ticks).Write(writer);
-
-        MessageEnd.Instance.Write(writer);
     }
 
     /// <summary>
@@ -126,16 +110,12 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteNativeInt(Stream stream, nint value)
     {
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-
-        SerializationHeader.Default.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nint).FullName!, new string[] { "value" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
             (long)value).Write(writer);
-
-        MessageEnd.Instance.Write(writer);
     }
 
     /// <summary>
@@ -143,16 +123,12 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WriteNativeUInt(Stream stream, nuint value)
     {
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-
-        SerializationHeader.Default.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nuint).FullName!, new string[] { "value" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.UInt64)),
             (ulong)value).Write(writer);
-
-        MessageEnd.Instance.Write(writer);
     }
 
     /// <summary>
@@ -223,16 +199,12 @@ internal static class BinaryFormatWriter
             return;
         }
 
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-
-        SerializationHeader.Default.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, type.FullName!, new string[] { "m_value" }),
             new MemberTypeInfo((BinaryType.Primitive, primitiveType)),
             primitive).Write(writer);
-
-        MessageEnd.Instance.Write(writer);
     }
 
     /// <summary>
@@ -247,9 +219,7 @@ internal static class BinaryFormatWriter
             throw new NotSupportedException($"{nameof(T)} is not primitive.");
         }
 
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
-
-        SerializationHeader.Default.Write(writer);
+        using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {Mscorlib}]]", ListMemberNames),
@@ -262,13 +232,10 @@ internal static class BinaryFormatWriter
             // _version doesn't matter
             0).Write(writer);
 
-        ArraySinglePrimitive array = new(
+        new ArraySinglePrimitive(
             new(2, list.Count),
             primitiveType,
-            new ListConverter<T, object>(list, (T value) => value));
-        array.Write(writer);
-
-        MessageEnd.Instance.Write(writer);
+            new ListConverter<T, object>(list, (T value) => value)).Write(writer);
     }
 
     /// <summary>
@@ -295,9 +262,8 @@ internal static class BinaryFormatWriter
         object[] keys = info.GetValue<object[]>("Keys")!;
         object?[] values = info.GetValue<object?[]>("Values")!;
 
-        using BinaryWriter writer = new(stream, Encoding.UTF8, leaveOpen: true);
+        using var writer = new BinaryFormatWriterScope(stream);
 
-        SerializationHeader.Default.Write(writer);
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, "System.Collections.Hashtable", HashtableMemberNames),
             new MemberTypeInfo(
@@ -348,7 +314,5 @@ internal static class BinaryFormatWriter
 
         array = new(new(3, values.Length), valueConverter);
         array.Write(writer);
-
-        MessageEnd.Instance.Write(writer);
     }
 }
