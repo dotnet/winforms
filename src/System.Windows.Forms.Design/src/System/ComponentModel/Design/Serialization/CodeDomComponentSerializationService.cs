@@ -984,14 +984,14 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             ///  must do this for everything that we are serializing that is not marked as EntireObject.
             ///  Otherwise reference could leak and cause the entire object to be serialized.
             /// </summary>
-            internal void SetupVariableReferences(IDesignerSerializationManager manager, IContainer container, IDictionary objectData, IList shimObjectNames)
+            internal void SetupVariableReferences(IDesignerSerializationManager manager, IContainer container, Dictionary<object, ObjectData> objectData, IList shimObjectNames)
             {
                 foreach (IComponent c in container.Components)
                 {
                     string? name = TypeDescriptor.GetComponentName(c);
                     if (name is not null && name.Length > 0)
                     {
-                        bool needVar = !(objectData.Contains(c) && ((ObjectData)objectData[c]!).EntireObject);
+                        bool needVar = !(objectData.TryGetValue(c, out ObjectData? data) && data.EntireObject);
 
                         if (needVar)
                         {
@@ -1014,7 +1014,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             /// <summary>
             ///  Serializes the given set of objects (contained in objectData) into the given object state dictionary.
             /// </summary>
-            internal void Serialize(IDesignerSerializationManager manager, IDictionary objectData, Dictionary<string, object?[]> objectState, IList shimObjectNames)
+            internal void Serialize(IDesignerSerializationManager manager, Dictionary<object, ObjectData> objectData, Dictionary<string, object?[]> objectState, IList shimObjectNames)
             {
                 if (manager.GetService<IContainer>() is {} container)
                 {
