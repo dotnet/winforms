@@ -47,6 +47,7 @@ partial class ToolStripTests
         this.toolStrip2_Button3 = new System.Windows.Forms.ToolStripButton();
         this.toolStrip2_Button4 = new System.Windows.Forms.ToolStripButton();
         this.toolStrip2_Button5 = new System.Windows.Forms.ToolStripButton();
+        this.toolStrip2_Button6 = new System.Windows.Forms.ToolStripButton();
         this.toolStrip2_SplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
         this.toolStrip2_DropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
         this.toolStrip2_DropDownButton1_ChildButton1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +81,7 @@ partial class ToolStripTests
         this.toolStrip2_Button3,
         this.toolStrip2_Button4,
         this.toolStrip2_Button5,
+        this.toolStrip2_Button6,
         this.toolStrip2_SplitButton1,
         this.toolStrip2_DropDownButton1,});
         this.toolStrip2.Location = new System.Drawing.Point(0, 22);
@@ -129,6 +131,13 @@ partial class ToolStripTests
         this.toolStrip2_Button5.Name = "toolStrip2_Button5";
         this.toolStrip2_Button5.Size = new System.Drawing.Size(114, 22);
         this.toolStrip2_Button5.Text = "toolStrip2_Button5";
+        // 
+        // toolStrip2_Button6
+        //
+        this.toolStrip2_Button6.AccessibleRole = AccessibleRole.CheckButton;
+        this.toolStrip2_Button6.Name = "toolStrip2_Button6";
+        this.toolStrip2_Button6.Size = new System.Drawing.Size(114, 22);
+        this.toolStrip2_Button6.Text = "CheckButton role";
         // 
         // toolStrip2_SplitButton1_ChildButton1
         // 
@@ -271,6 +280,7 @@ partial class ToolStripTests
     private System.Windows.Forms.ToolStripButton toolStrip2_Button3;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button4;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button5;
+    private System.Windows.Forms.ToolStripButton toolStrip2_Button6;
     private System.Windows.Forms.ToolStripSplitButton toolStrip2_SplitButton1;
     private System.Windows.Forms.ToolStripDropDownButton toolStrip2_DropDownButton1;
     private System.Windows.Forms.ToolStripMenuItem toolStrip2_DropDownButton1_ChildButton1;

@@ -20,22 +20,10 @@ public partial class ToolStripButton
             _ownerItem = ownerItem;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
-            propertyID switch
-            {
-                // If we don't set a default role for the accessible object
-                // it will be retrieved from Windows.
-                // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                UiaCore.UIA.ControlTypePropertyId when
-                    _ownerItem.CheckOnClick
-                    => UiaCore.UIA.ButtonControlTypeId,
-                _ => base.GetPropertyValue(propertyID)
-            };
-
         internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
             patternId switch
             {
-                UiaCore.UIA.TogglePatternId => _ownerItem.CheckOnClick || _ownerItem.Checked,
+                UiaCore.UIA.TogglePatternId => Role == AccessibleRole.CheckButton,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -43,7 +31,13 @@ public partial class ToolStripButton
         {
             get
             {
-                if (_ownerItem.CheckOnClick)
+                AccessibleRole role = _ownerItem.AccessibleRole;
+                if (role != AccessibleRole.Default)
+                {
+                    return role;
+                }
+
+                if (_ownerItem.CheckOnClick || _ownerItem.Checked)
                 {
                     return AccessibleRole.CheckButton;
                 }
@@ -76,7 +70,7 @@ public partial class ToolStripButton
 
         internal override void Toggle()
         {
-            if (_ownerItem.CheckOnClick)
+            if (IsPatternSupported(UiaCore.UIA.TogglePatternId))
             {
                 _ownerItem.Checked = !_ownerItem.Checked;
             }

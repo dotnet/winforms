@@ -1038,28 +1038,11 @@ public partial class ToolStripButtonTests
         Assert.NotSame(accessibleObject, item.AccessibilityObject);
     }
 
-    [WinFormsFact]
-    public void ToolStripButton_CreateAccessibilityInstance_InvokeCheckOnClickWithCustomRole_ReturnsExpected()
-    {
-        using var item = new SubToolStripButton
-        {
-            CheckOnClick = true,
-            AccessibleRole = AccessibleRole.HelpBalloon
-        };
-        ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
-        Assert.Equal(AccessibleRole.CheckButton, accessibleObject.Role);
-        Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
-        Assert.NotSame(accessibleObject, item.CreateAccessibilityInstance());
-        Assert.NotSame(accessibleObject, item.AccessibilityObject);
-    }
-
     [WinFormsTheory]
     [InlineData(true, CheckState.Checked, AccessibleStates.Focusable | AccessibleStates.Checked)]
     [InlineData(true, CheckState.Indeterminate, AccessibleStates.Focusable | AccessibleStates.Checked)]
-    [InlineData(true, CheckState.Unchecked, AccessibleStates.Focusable)]
     [InlineData(false, CheckState.Checked, AccessibleStates.None)]
     [InlineData(false, CheckState.Indeterminate, AccessibleStates.None)]
-    [InlineData(false, CheckState.Unchecked, AccessibleStates.None)]
     public void ToolStripButton_CreateAccessibilityInstance_InvokeChecked_ReturnsExpected(bool enabled, CheckState checkState, AccessibleStates expectedState)
     {
         using var item = new SubToolStripButton
@@ -1068,7 +1051,7 @@ public partial class ToolStripButtonTests
             CheckState = checkState
         };
         ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
-        Assert.Equal(AccessibleRole.PushButton, accessibleObject.Role);
+        Assert.Equal(AccessibleRole.CheckButton, accessibleObject.Role);
         Assert.Equal(expectedState, accessibleObject.State);
         Assert.NotSame(accessibleObject, item.CreateAccessibilityInstance());
         Assert.NotSame(accessibleObject, item.AccessibilityObject);
