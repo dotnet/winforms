@@ -14,30 +14,19 @@ namespace System.Windows.Forms.BinaryFormat;
 internal static class BinaryFormatWriter
 {
     private static string[]? s_hashtableMemberNames;
-
-    private static string[] HashtableMemberNames => s_hashtableMemberNames ??= new string[]
+    private static string[] HashtableMemberNames => s_hashtableMemberNames ??= new[]
     {
         "LoadFactor", "Version", "Comparer", "HashCodeProvider", "HashSize", "Keys", "Values"
     };
 
     private static string[]? s_listMemberNames;
-
-    private static string[] ListMemberNames => s_listMemberNames ??= new string[]
-    {
-        "_items", "_size", "_version"
-    };
+    private static string[] ListMemberNames => s_listMemberNames ??= new[] { "_items", "_size", "_version" };
 
     private static string[]? s_decimalMemberNames;
+    private static string[] DecimalMemberNames => s_decimalMemberNames ??= new[] { "flags", "hi", "lo", "mid" };
 
-    private static string[] DecimalMemberNames => s_decimalMemberNames ??= new string[]
-    {
-        "flags", "hi", "lo", "mid"
-    };
-
-    private static readonly string[] s_dateTimeMemberNames = new string[]
-    {
-        "ticks", "dateData"
-    };
+    private static readonly string[] s_dateTimeMemberNames = new[] { "ticks", "dateData" };
+    private static readonly string[] s_primitiveMemberName = new[] { "m_value" };
 
     private const string Mscorlib = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
 
@@ -155,54 +144,46 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static void WritePrimitive(Stream stream, object primitive)
     {
-        // These aren't considered primitive per the binary format, but are primitives in .NET.
-        if (primitive is nint nativeInt)
-        {
-            WriteNativeInt(stream, nativeInt);
-            return;
-        }
-
-        if (primitive is nuint nativeUint)
-        {
-            WriteNativeUInt(stream, nativeUint);
-            return;
-        }
-
-        if (primitive is string stringValue)
-        {
-            WriteString(stream, stringValue);
-            return;
-        }
-
         Type type = primitive.GetType();
-
         PrimitiveType primitiveType = Record.GetPrimitiveType(type);
+
         if (primitiveType == default)
         {
+            // These two are considered primitive by .NET but not the binary format spec
+            switch (primitive)
+            {
+                case nint nativeInt:
+                    WritePrimitive(stream, nativeInt);
+                    return;
+                case nuint nativeUint:
+                    WritePrimitive(stream, nativeUint);
+                    return;
+            }
+
             throw new NotSupportedException($"{nameof(primitive)} is not primitive.");
         }
 
         // These are handled differently from the rest of the primitive types when serialized on their own.
-        if (primitiveType == PrimitiveType.Decimal)
+        switch (primitiveType)
         {
-            WriteDecimal(stream, (decimal)primitive);
-            return;
-        }
-        else if (primitiveType == PrimitiveType.DateTime)
-        {
-            WriteDateTime(stream, (DateTime)primitive);
-            return;
-        }
-        else if (primitiveType == PrimitiveType.TimeSpan)
-        {
-            WriteTimeSpan(stream, (TimeSpan)primitive);
-            return;
+            case PrimitiveType.String:
+                WriteString(stream, (string)primitive);
+                return;
+            case PrimitiveType.Decimal:
+                WriteDecimal(stream, (decimal)primitive);
+                return;
+            case PrimitiveType.DateTime:
+                WriteDateTime(stream, (DateTime)primitive);
+                return;
+            case PrimitiveType.TimeSpan:
+                WriteTimeSpan(stream, (TimeSpan)primitive);
+                return;
         }
 
         using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, type.FullName!, new string[] { "m_value" }),
+            new ClassInfo(1, type.FullName!, s_primitiveMemberName),
             new MemberTypeInfo((BinaryType.Primitive, primitiveType)),
             primitive).Write(writer);
     }
