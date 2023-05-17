@@ -17,13 +17,8 @@ internal partial class FormatControl
             _owner = owner;
         }
 
-        public override string TopLabelString
-        {
-            get
-            {
-                return SR.BindingFormattingDialogFormatTypeCustomExplanation;
-            }
-        }
+        public override string TopLabelString =>
+            SR.BindingFormattingDialogFormatTypeCustomExplanation;
 
         public override string SampleString
         {
@@ -33,10 +28,10 @@ internal partial class FormatControl
 
                 if (string.IsNullOrEmpty(formatString))
                 {
-                    return "";
+                    return string.Empty;
                 }
 
-                string label = "";
+                string label = string.Empty;
 
                 // first see if the formatString is one of DateTime's format strings
                 if (DateTimeFormatType.ParseStatic(formatString))
@@ -46,7 +41,7 @@ internal partial class FormatControl
 
                 // the formatString was not one of DateTime's strings
                 // Try a double
-                if (label.Equals(""))
+                if (label.Equals(string.Empty))
                 {
                     try
                     {
@@ -54,13 +49,13 @@ internal partial class FormatControl
                     }
                     catch (FormatException)
                     {
-                        label = "";
+                        label = string.Empty;
                     }
                 }
 
                 // double failed.
                 // Try an Int
-                if (label.Equals(""))
+                if (label.Equals(string.Empty))
                 {
                     try
                     {
@@ -68,13 +63,13 @@ internal partial class FormatControl
                     }
                     catch (FormatException)
                     {
-                        label = "";
+                        label = string.Empty;
                     }
                 }
 
                 // int failed.
                 // apply the formatString to the dateTime value
-                if (label.Equals(""))
+                if (label.Equals(string.Empty))
                 {
                     try
                     {
@@ -82,11 +77,11 @@ internal partial class FormatControl
                     }
                     catch (FormatException)
                     {
-                        label = "";
+                        label = string.Empty;
                     }
                 }
 
-                if (label.Equals(""))
+                if (label.Equals(string.Empty))
                 {
                     label = SR.BindingFormattingDialogFormatTypeCustomInvalidFormat;
                 }
@@ -95,45 +90,15 @@ internal partial class FormatControl
             }
         }
 
-        public override bool DropDownVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool DropDownVisible => false;
 
-        public override bool ListBoxVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool ListBoxVisible => false;
 
-        public override bool FormatStringTextBoxVisible
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool FormatStringTextBoxVisible => true;
 
-        public override bool FormatLabelVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool FormatLabelVisible => false;
 
-        public override string FormatString
-        {
-            get
-            {
-                return _owner.customStringTextBox.Text;
-            }
-        }
+        public override string FormatString => _owner.customStringTextBox.Text;
 
         public static bool ParseStatic(string formatString)
         {
@@ -141,19 +106,12 @@ internal partial class FormatControl
             return true;
         }
 
-        public override bool Parse(string formatString)
-        {
-            return ParseStatic(formatString);
-        }
+        public override bool Parse(string formatString) => ParseStatic(formatString);
 
-        public override void PushFormatStringIntoFormatType(string formatString)
-        {
+        public override void PushFormatStringIntoFormatType(string formatString) =>
             _owner.customStringTextBox.Text = formatString;
-        }
 
-        public override string ToString()
-        {
-            return SR.BindingFormattingDialogFormatTypeCustom;
-        }
+        public override string ToString() =>
+            SR.BindingFormattingDialogFormatTypeCustom;
     }
 }

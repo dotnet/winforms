@@ -17,13 +17,8 @@ internal partial class FormatControl
             _owner = owner;
         }
 
-        public override string TopLabelString
-        {
-            get
-            {
-                return SR.BindingFormattingDialogFormatTypeDateTimeExplanation;
-            }
-        }
+        public override string TopLabelString =>
+            SR.BindingFormattingDialogFormatTypeDateTimeExplanation;
 
         public override string SampleString
         {
@@ -31,36 +26,18 @@ internal partial class FormatControl
             {
                 if (_owner.dateTimeFormatsListBox.SelectedItem is null)
                 {
-                    return "";
+                    return string.Empty;
                 }
 
                 return s_dateTimeFormatValue.ToString(FormatString, CultureInfo.CurrentCulture);
             }
         }
 
-        public override bool DropDownVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool DropDownVisible => false;
 
-        public override bool ListBoxVisible
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool ListBoxVisible => true;
 
-        public override bool FormatLabelVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool FormatLabelVisible => false;
 
         public override string FormatString
         {
@@ -71,31 +48,20 @@ internal partial class FormatControl
             }
         }
 
-        public override bool FormatStringTextBoxVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool FormatStringTextBoxVisible => false;
 
-        public static bool ParseStatic(string formatString)
-        {
-            return formatString.Equals("d") ||
-                   formatString.Equals("D") ||
-                   formatString.Equals("f") ||
-                   formatString.Equals("F") ||
-                   formatString.Equals("g") ||
-                   formatString.Equals("G") ||
-                   formatString.Equals("t") ||
-                   formatString.Equals("T") ||
-                   formatString.Equals("M");
-        }
+        public static bool ParseStatic(string formatString) =>
+            formatString.Equals("d") ||
+            formatString.Equals("D") ||
+            formatString.Equals("f") ||
+            formatString.Equals("F") ||
+            formatString.Equals("g") ||
+            formatString.Equals("G") ||
+            formatString.Equals("t") ||
+            formatString.Equals("T") ||
+            formatString.Equals("M");
 
-        public override bool Parse(string formatString)
-        {
-            return ParseStatic(formatString);
-        }
+        public override bool Parse(string formatString) => ParseStatic(formatString);
 
         public override void PushFormatStringIntoFormatType(string formatString)
         {
@@ -144,9 +110,6 @@ internal partial class FormatControl
             _owner.dateTimeFormatsListBox.SelectedIndex = selectedIndex;
         }
 
-        public override string ToString()
-        {
-            return SR.BindingFormattingDialogFormatTypeDateTime;
-        }
+        public override string ToString() => SR.BindingFormattingDialogFormatTypeDateTime;
     }
 }

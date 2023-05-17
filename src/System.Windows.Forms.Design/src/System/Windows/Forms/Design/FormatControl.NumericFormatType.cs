@@ -17,45 +17,17 @@ internal partial class FormatControl
             _owner = owner;
         }
 
-        public override string TopLabelString
-        {
-            get
-            {
-                return SR.BindingFormattingDialogFormatTypeNumericExplanation;
-            }
-        }
+        public override string TopLabelString =>
+            SR.BindingFormattingDialogFormatTypeNumericExplanation;
 
-        public override string SampleString
-        {
-            get
-            {
-                return (-1234.5678).ToString(FormatString, CultureInfo.CurrentCulture);
-            }
-        }
+        public override string SampleString =>
+            (-1234.5678).ToString(FormatString, CultureInfo.CurrentCulture);
 
-        public override bool DropDownVisible
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool DropDownVisible => true;
 
-        public override bool ListBoxVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool ListBoxVisible => false;
 
-        public override bool FormatLabelVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool FormatLabelVisible => false;
 
         public override string FormatString
         {
@@ -79,34 +51,23 @@ internal partial class FormatControl
                         return "N6";
                     default:
                         Debug.Fail("decimalPlacesUpDown should allow only up to 6 digits");
-                        return "";
+                        return string.Empty;
                 }
             }
         }
 
-        public override bool FormatStringTextBoxVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool FormatStringTextBoxVisible => false;
 
-        public static bool ParseStatic(string formatString)
-        {
-            return formatString.Equals("N0") ||
-                   formatString.Equals("N1") ||
-                   formatString.Equals("N2") ||
-                   formatString.Equals("N3") ||
-                   formatString.Equals("N4") ||
-                   formatString.Equals("N5") ||
-                   formatString.Equals("N6");
-        }
+        public static bool ParseStatic(string formatString) =>
+            formatString.Equals("N0") ||
+            formatString.Equals("N1") ||
+            formatString.Equals("N2") ||
+            formatString.Equals("N3") ||
+            formatString.Equals("N4") ||
+            formatString.Equals("N5") ||
+            formatString.Equals("N6");
 
-        public override bool Parse(string formatString)
-        {
-            return ParseStatic(formatString);
-        }
+        public override bool Parse(string formatString) => ParseStatic(formatString);
 
         public override void PushFormatStringIntoFormatType(string formatString)
         {
@@ -143,9 +104,6 @@ internal partial class FormatControl
             }
         }
 
-        public override string ToString()
-        {
-            return SR.BindingFormattingDialogFormatTypeNumeric;
-        }
+        public override string ToString() => SR.BindingFormattingDialogFormatTypeNumeric;
     }
 }

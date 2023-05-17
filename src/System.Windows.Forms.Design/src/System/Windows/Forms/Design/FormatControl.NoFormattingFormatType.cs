@@ -8,75 +8,28 @@ internal partial class FormatControl
 {
     private class NoFormattingFormatType : FormatTypeClass
     {
-        public override string TopLabelString
-        {
-            get
-            {
-                return SR.BindingFormattingDialogFormatTypeNoFormattingExplanation;
-            }
-        }
+        public override string TopLabelString =>
+            SR.BindingFormattingDialogFormatTypeNoFormattingExplanation;
 
-        public override string SampleString
-        {
-            get
-            {
-                return "-1234.5";
-            }
-        }
+        public override string SampleString => "-1234.5";
 
-        public override bool DropDownVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool DropDownVisible => false;
 
-        public override bool ListBoxVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool ListBoxVisible => false;
 
-        public override bool FormatLabelVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool FormatLabelVisible => false;
 
-        public override string FormatString
-        {
-            get
-            {
-                return "";
-            }
-        }
+        public override string FormatString => string.Empty;
 
-        public override bool FormatStringTextBoxVisible
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool FormatStringTextBoxVisible => false;
 
-        public override bool Parse(string formatString)
-        {
-            return false;
-        }
+        public override bool Parse(string formatString) => false;
 
         public override void PushFormatStringIntoFormatType(string formatString)
         {
             // nothing to do;
         }
 
-        public override string ToString()
-        {
-            return SR.BindingFormattingDialogFormatTypeNoFormatting;
-        }
+        public override string ToString() => SR.BindingFormattingDialogFormatTypeNoFormatting;
     }
 }
