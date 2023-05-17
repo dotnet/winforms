@@ -29,7 +29,7 @@ public partial class PrintPreviewControl
 
         public override Rectangle Bounds
             => _owningPrintPreviewControl.IsHandleCreated && _owningPrintPreviewControl.Parent is not null
-                        ? _owningPrintPreviewControl.Parent.RectangleToScreen(_owningPrintPreviewControl.Bounds)
-                        : Rectangle.Empty;
+                ? _owningPrintPreviewControl.Parent.RectangleToScreen(_owningPrintPreviewControl.Bounds)
+                : Rectangle.Empty;
     }
 }
