@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel.Design.Serialization;
 
 namespace System.ComponentModel.Design;
@@ -17,14 +14,14 @@ internal sealed partial class DesignerHost
     internal class Site : ISite, IServiceContainer, IDictionaryService
     {
         private readonly IComponent _component;
-        private Hashtable _dictionary;
+        private Dictionary<object, object>? _dictionary;
         private readonly DesignerHost _host;
-        private string _name;
+        private string? _name;
         private bool _disposed;
-        private SiteNestedContainer _nestedContainer;
+        private SiteNestedContainer? _nestedContainer;
         private readonly Container _container;
 
-        internal Site(IComponent component, DesignerHost host, string name, Container container)
+        internal Site(IComponent component, DesignerHost host, string? name, Container container)
         {
             _component = component;
             _host = host;
@@ -39,9 +36,9 @@ internal sealed partial class DesignerHost
         {
             get
             {
-                SiteNestedContainer nc = ((IServiceProvider)this).GetService(typeof(INestedContainer)) as SiteNestedContainer;
+                SiteNestedContainer nc = (((IServiceProvider)this).GetService(typeof(INestedContainer)) as SiteNestedContainer)!;
                 Debug.Assert(nc is not null, "We failed to resolve a nested container.");
-                IServiceContainer sc = nc.GetServiceInternal(typeof(IServiceContainer)) as IServiceContainer;
+                IServiceContainer sc = (nc.GetServiceInternal(typeof(IServiceContainer)) as IServiceContainer)!;
                 Debug.Assert(sc is not null, "We failed to resolve a service container from the nested container.");
                 return sc;
             }
@@ -50,14 +47,14 @@ internal sealed partial class DesignerHost
         /// <summary>
         ///  Retrieves the key corresponding to the given value.
         /// </summary>
-        object IDictionaryService.GetKey(object value)
+        object? IDictionaryService.GetKey(object? value)
         {
-            if (_dictionary is not null)
+            if (value is not null && _dictionary is not null)
             {
-                foreach (DictionaryEntry de in _dictionary)
+                foreach (KeyValuePair<object, object> de in _dictionary)
                 {
                     object o = de.Value;
-                    if (value is not null && value.Equals(o))
+                    if (value.Equals(o))
                     {
                         return de.Key;
                     }
@@ -70,22 +67,22 @@ internal sealed partial class DesignerHost
         /// <summary>
         ///  Retrieves the value corresponding to the given key.
         /// </summary>
-        object IDictionaryService.GetValue(object key)
+        object? IDictionaryService.GetValue(object key)
         {
-            if (_dictionary is not null)
+            if (_dictionary is null || !_dictionary.TryGetValue(key, out object? value))
             {
-                return _dictionary[key];
+                return null;
             }
 
-            return null;
+            return value;
         }
 
         /// <summary>
         ///  Stores the given key-value pair in an object's site.  This key-value pair is stored on a per-object basis, and is a handy place to save additional information about a component.
         /// </summary>
-        void IDictionaryService.SetValue(object key, object value)
+        void IDictionaryService.SetValue(object key, object? value)
         {
-            _dictionary ??= new Hashtable();
+            _dictionary ??= new();
 
             if (value is null)
             {
@@ -148,7 +145,7 @@ internal sealed partial class DesignerHost
         /// <summary>
         ///  Returns the requested service.
         /// </summary>
-        object IServiceProvider.GetService(Type service)
+        object? IServiceProvider.GetService(Type service)
         {
             ArgumentNullException.ThrowIfNull(service);
 
@@ -227,7 +224,7 @@ internal sealed partial class DesignerHost
         /// <summary>
         ///  The name of the component.
         /// </summary>
-        string ISite.Name
+        string? ISite.Name
         {
             get => _name;
             set
@@ -239,7 +236,7 @@ internal sealed partial class DesignerHost
                     bool validateName = true;
                     if (value.Length > 0)
                     {
-                        IComponent namedComponent = _container.Components[value];
+                        IComponent? namedComponent = _container.Components[value];
                         validateName = (_component != namedComponent);
                         // allow renames that are just case changes of the current name.
                         if (namedComponent is not null && validateName)
@@ -261,7 +258,7 @@ internal sealed partial class DesignerHost
                     }
 
                     // It is OK to change the name to this value.  Announce the change and do it.
-                    string oldName = _name;
+                    string? oldName = _name;
                     _name = value;
                     _host.OnComponentRename(_component, oldName, _name);
                 }

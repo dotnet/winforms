@@ -406,7 +406,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  This is invoked by the designer host when it has finished the load.
     /// </summary>
-    internal void OnLoaded(bool successful, ICollection errors)
+    internal void OnLoaded(bool successful, ICollection? errors)
     {
         IsLoaded = successful;
         _loadErrors = errors;

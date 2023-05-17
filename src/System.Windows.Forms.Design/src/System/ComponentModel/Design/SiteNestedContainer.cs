@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 /// <summary>
@@ -13,11 +11,11 @@ namespace System.ComponentModel.Design;
 internal sealed class SiteNestedContainer : NestedContainer
 {
     private readonly DesignerHost _host;
-    private IServiceContainer _services;
-    private readonly string _containerName;
+    private IServiceContainer? _services;
+    private readonly string? _containerName;
     private bool _safeToCallOwner;
 
-    internal SiteNestedContainer(IComponent owner, string containerName, DesignerHost host) : base(owner)
+    internal SiteNestedContainer(IComponent owner, string? containerName, DesignerHost host) : base(owner)
     {
         _containerName = containerName;
         _host = host;
@@ -27,11 +25,11 @@ internal sealed class SiteNestedContainer : NestedContainer
     /// <summary>
     ///  Override to support named containers.
     /// </summary>
-    protected override string OwnerName
+    protected override string? OwnerName
     {
         get
         {
-            string ownerName = base.OwnerName;
+            string? ownerName = base.OwnerName;
             if (string.IsNullOrEmpty(_containerName))
             {
                 return ownerName;
@@ -44,9 +42,9 @@ internal sealed class SiteNestedContainer : NestedContainer
     /// <summary>
     ///  Called to add a component to its container.
     /// </summary>
-    public override void Add(IComponent component, string name)
+    public override void Add(IComponent? component, string? name)
     {
-        if (!_host.AddToContainerPreProcess(component, name, this))
+        if (!_host.AddToContainerPreProcess(component!, name, this))
         {
             return;
         }
@@ -55,7 +53,7 @@ internal sealed class SiteNestedContainer : NestedContainer
         base.Add(component, name);
         try
         {
-            _host.AddToContainerPostProcess(component, name, this);
+            _host.AddToContainerPostProcess(component!, this);
         }
         catch (Exception t)
         {
@@ -71,7 +69,7 @@ internal sealed class SiteNestedContainer : NestedContainer
     /// <summary>
     ///  Creates a site for the component within the container.
     /// </summary>
-    protected override ISite CreateSite(IComponent component, string name)
+    protected override ISite CreateSite(IComponent component, string? name)
     {
         ArgumentNullException.ThrowIfNull(component);
 
@@ -81,20 +79,20 @@ internal sealed class SiteNestedContainer : NestedContainer
     /// <summary>
     ///  Called to remove a component from its container.
     /// </summary>
-    public override void Remove(IComponent component)
+    public override void Remove(IComponent? component)
     {
-        if (!_host.RemoveFromContainerPreProcess(component, this))
+        if (!_host.RemoveFromContainerPreProcess(component!, this))
         {
             return;
         }
 
         RemoveWithoutUnsiting(component);
-        _host.RemoveFromContainerPostProcess(component, this);
+        _host.RemoveFromContainerPostProcess(component!, this);
     }
 
-    protected override object GetService(Type serviceType)
+    protected override object? GetService(Type serviceType)
     {
-        object service = base.GetService(serviceType);
+        object? service = base.GetService(serviceType);
         if (service is not null)
         {
             return service;
@@ -126,20 +124,20 @@ internal sealed class SiteNestedContainer : NestedContainer
         }
     }
 
-    internal object GetServiceInternal(Type serviceType) => GetService(serviceType);
+    internal object? GetServiceInternal(Type serviceType) => GetService(serviceType);
 
     private sealed class NestedSite : DesignerHost.Site, INestedSite
     {
         private readonly SiteNestedContainer _container;
-        private readonly string _name;
+        private readonly string? _name;
 
-        internal NestedSite(IComponent component, DesignerHost host, string name, Container container) : base(component, host, name, container)
+        internal NestedSite(IComponent component, DesignerHost host, string? name, SiteNestedContainer container) : base(component, host, name, container)
         {
-            _container = container as SiteNestedContainer;
+            _container = container;
             _name = name;
         }
 
-        public string FullName
+        public string? FullName
         {
             get
             {
@@ -148,8 +146,8 @@ internal sealed class SiteNestedContainer : NestedContainer
                     return null;
                 }
 
-                string ownerName = _container.OwnerName;
-                string childName = ((ISite)this).Name;
+                string? ownerName = _container.OwnerName;
+                string? childName = ((ISite)this).Name;
                 if (ownerName is null)
                 {
                     return childName;
