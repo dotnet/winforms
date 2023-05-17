@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.Windows.Forms.Design;
@@ -68,7 +66,7 @@ internal partial class FormatControl
         {
             get
             {
-                DateTimeFormatsListBoxItem item = _owner.dateTimeFormatsListBox.SelectedItem as DateTimeFormatsListBoxItem;
+                DateTimeFormatsListBoxItem item = (_owner.dateTimeFormatsListBox.SelectedItem as DateTimeFormatsListBoxItem)!;
                 return item.FormatString;
             }
         }

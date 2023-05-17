@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -28,28 +26,19 @@ internal class DataGridViewCellStyleBuilder : Form
     private TableLayoutPanel _sampleViewGridsTableLayoutPanel;
     private Label _normalLabel;
     private Label _selectedLabel;
-    private readonly IHelpService _helpService;
-    private readonly IComponent _comp;
-    private readonly IServiceProvider _serviceProvider;
 
-    private DataGridViewCellStyle _cellStyle;
-    private ITypeDescriptorContext _context;
+    private DataGridViewCellStyle? _cellStyle;
+    private ITypeDescriptorContext? _context;
 
     public DataGridViewCellStyleBuilder(IServiceProvider serviceProvider, IComponent comp)
     {
         // Required for Windows Form Designer support
         InitializeComponent();
+
         // Adds columns and rows to the grid, also resizes them
         InitializeGrids();
 
         _listenerDataGridView = new DataGridView();
-        _serviceProvider = serviceProvider;
-        _comp = comp;
-
-        if (_serviceProvider is not null)
-        {
-            _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
-        }
 
         _cellStyleProperties.Site = new DataGridViewComponentPropertyGridSite(serviceProvider, comp);
     }
@@ -79,7 +68,8 @@ internal class DataGridViewCellStyleBuilder : Form
         _sampleDataGridView.Rows.Add(row);
     }
 
-    public DataGridViewCellStyle CellStyle
+    [DisallowNull]
+    public DataGridViewCellStyle? CellStyle
     {
         get => _cellStyle;
         set
@@ -97,7 +87,7 @@ internal class DataGridViewCellStyleBuilder : Form
         set => _context = value;
     }
 
-    private void ListenerDataGridViewDefaultCellStyleChanged(object sender, EventArgs e)
+    private void ListenerDataGridViewDefaultCellStyleChanged(object? sender, EventArgs e)
     {
         DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(_cellStyle);
         _sampleDataGridView.DefaultCellStyle = cellStyleTmp;
@@ -108,6 +98,19 @@ internal class DataGridViewCellStyleBuilder : Form
     /// <summary>
     /// Required method for Designer support - do not modify the contents of this method with the code editor.
     /// </summary>
+    [MemberNotNull(nameof(_cellStyleProperties))]
+    [MemberNotNull(nameof(_sampleViewTableLayoutPanel))]
+    [MemberNotNull(nameof(_sampleViewGridsTableLayoutPanel))]
+    [MemberNotNull(nameof(_normalLabel))]
+    [MemberNotNull(nameof(_sampleDataGridView))]
+    [MemberNotNull(nameof(_selectedLabel))]
+    [MemberNotNull(nameof(_sampleDataGridViewSelected))]
+    [MemberNotNull(nameof(_label1))]
+    [MemberNotNull(nameof(_okButton))]
+    [MemberNotNull(nameof(_cancelButton))]
+    [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
+    [MemberNotNull(nameof(_previewGroupBox))]
+    [MemberNotNull(nameof(_overarchingTableLayoutPanel))]
     private void InitializeComponent()
     {
         ComponentResourceManager resources = new ComponentResourceManager(typeof(DataGridViewCellStyleBuilder));
@@ -275,13 +278,13 @@ internal class DataGridViewCellStyleBuilder : Form
         }
     }
 
-    private void DataGridViewCellStyleBuilder_HelpButtonClicked(object sender, CancelEventArgs e)
+    private void DataGridViewCellStyleBuilder_HelpButtonClicked(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
         DataGridViewCellStyleBuilder_HelpRequestHandled();
     }
 
-    private void DataGridViewCellStyleBuilder_HelpRequested(object sender, HelpEventArgs e)
+    private void DataGridViewCellStyleBuilder_HelpRequested(object? sender, HelpEventArgs e)
     {
         e.Handled = true;
         DataGridViewCellStyleBuilder_HelpRequestHandled();
@@ -289,13 +292,13 @@ internal class DataGridViewCellStyleBuilder : Form
 
     private void DataGridViewCellStyleBuilder_HelpRequestHandled()
     {
-        if (_context.GetService(typeof(IHelpService)) is IHelpService helpService)
+        if (_context!.GetService(typeof(IHelpService)) is IHelpService helpService)
         {
             helpService.ShowHelpFromKeyword("vs.CellStyleDialog");
         }
     }
 
-    private void DataGridViewCellStyleBuilder_Load(object sender, EventArgs e)
+    private void DataGridViewCellStyleBuilder_Load(object? sender, EventArgs e)
     {
         // The cell inside the sampleDataGridView should not be selected.
         _sampleDataGridView.ClearSelection();
@@ -312,7 +315,7 @@ internal class DataGridViewCellStyleBuilder : Form
         _sampleDataGridViewSelected.Layout += new LayoutEventHandler(sampleDataGridView_Layout);
     }
 
-    private void sampleDataGridView_CellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
+    private void sampleDataGridView_CellStateChanged(object? sender, DataGridViewCellStateChangedEventArgs e)
     {
         Debug.Assert(e.Cell == _sampleDataGridView.Rows[0].Cells[0], "the sample data grid view has only one cell");
         Debug.Assert(sender == _sampleDataGridView, "did we forget to unhook notification");
@@ -323,16 +326,16 @@ internal class DataGridViewCellStyleBuilder : Form
         }
     }
 
-    private void sampleDataGridView_Layout(object sender, LayoutEventArgs e)
+    private void sampleDataGridView_Layout(object? sender, LayoutEventArgs e)
     {
-        DataGridView dataGridView = (DataGridView)sender;
+        DataGridView dataGridView = (DataGridView)sender!;
         dataGridView.Rows[0].Height = dataGridView.Height;
         dataGridView.Columns[0].Width = dataGridView.Width;
     }
 
     private class DialogDataGridViewCell : DataGridViewTextBoxCell
     {
-        private DialogDataGridViewCellAccessibleObject _accObj;
+        private DialogDataGridViewCellAccessibleObject? _accObj;
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             _accObj ??= new DialogDataGridViewCellAccessibleObject(this);
@@ -346,8 +349,9 @@ internal class DataGridViewCellStyleBuilder : Form
             {
             }
 
-            private string _name = "";
-            public override string Name
+            private string? _name = string.Empty;
+
+            public override string? Name
             {
                 get => _name;
                 set => _name = value;

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -17,8 +15,8 @@ internal class FormatStringDialog : Form
     private Button _okButton;
     private FormatControl _formatControl1;
     private bool _dirty;
-    private DataGridViewCellStyle _dgvCellStyle;
-    private ListControl _listControl;
+    private DataGridViewCellStyle? _dgvCellStyle;
+    private ListControl? _listControl;
 
     public FormatStringDialog(ITypeDescriptorContext context)
     {
@@ -66,13 +64,13 @@ internal class FormatStringDialog : Form
         }
     }
 
-    private void FormatStringDialog_HelpButtonClicked(object sender, CancelEventArgs e)
+    private void FormatStringDialog_HelpButtonClicked(object? sender, CancelEventArgs e)
     {
         FormatStringDialog_HelpRequestHandled();
         e.Cancel = true;
     }
 
-    private void FormatStringDialog_HelpRequested(object sender, HelpEventArgs e)
+    private void FormatStringDialog_HelpRequested(object? sender, HelpEventArgs e)
     {
         FormatStringDialog_HelpRequestHandled();
         e.Handled = true;
@@ -97,9 +95,9 @@ internal class FormatStringDialog : Form
         _cancelButton.Left += formatControlRightSideOffset - cancelButtonRightSideOffset;
     }
 
-    private static int GetRightSideOffset(Control ctl)
+    private static int GetRightSideOffset(Control? ctl)
     {
-        int result = ctl.Width;
+        int result = ctl!.Width;
 
         while (ctl is not null)
         {
@@ -110,11 +108,11 @@ internal class FormatStringDialog : Form
         return result;
     }
 
-    private void FormatStringDialog_Load(object sender, EventArgs e)
+    private void FormatStringDialog_Load(object? sender, EventArgs e)
     {
         // make a reasonable guess what user control should be shown
-        string formatString = _dgvCellStyle is not null ? _dgvCellStyle.Format : _listControl.FormatString;
-        object nullValue = _dgvCellStyle?.NullValue;
+        string formatString = _dgvCellStyle is not null ? _dgvCellStyle.Format : _listControl!.FormatString;
+        object? nullValue = _dgvCellStyle?.NullValue;
         string formatType = string.Empty;
 
         if (!string.IsNullOrEmpty(formatString))
@@ -162,6 +160,9 @@ internal class FormatStringDialog : Form
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
     /// </summary>
+    [MemberNotNull(nameof(_cancelButton))]
+    [MemberNotNull(nameof(_okButton))]
+    [MemberNotNull(nameof(_formatControl1))]
     private void InitializeComponent()
     {
         _cancelButton = new Button();
@@ -222,12 +223,12 @@ internal class FormatStringDialog : Form
         ResumeLayout(false);
     }
 
-    private void cancelButton_Click(object sender, EventArgs e)
+    private void cancelButton_Click(object? sender, EventArgs e)
     {
         _dirty = false;
     }
 
-    private void okButton_Click(object sender, EventArgs e)
+    private void okButton_Click(object? sender, EventArgs e)
     {
         PushChanges();
     }
@@ -272,7 +273,7 @@ internal class FormatStringDialog : Form
         }
         else
         {
-            _listControl.FormatString = formatTypeItem.FormatString;
+            _listControl!.FormatString = formatTypeItem.FormatString;
         }
 
         _dirty = true;
