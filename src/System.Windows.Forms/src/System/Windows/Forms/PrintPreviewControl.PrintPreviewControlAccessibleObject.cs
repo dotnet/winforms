@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -25,5 +26,10 @@ public partial class PrintPreviewControl
                 UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyID)
             };
+
+        public override Rectangle Bounds
+            => _owningPrintPreviewControl.IsHandleCreated && _owningPrintPreviewControl.Parent is not null
+                ? _owningPrintPreviewControl.Parent.RectangleToScreen(_owningPrintPreviewControl.Bounds)
+                : Rectangle.Empty;
     }
 }
