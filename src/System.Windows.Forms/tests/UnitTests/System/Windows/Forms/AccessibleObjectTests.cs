@@ -2053,9 +2053,7 @@ public partial class AccessibleObjectTests
         using Control control = new();
         control.CreateControl();
 
-        var accessibleObject = new SubAccessibleObject();
-        accessibleObject.UseStdAccessibleObjects(control.Handle, childID);
-        accessibleObject.AccessibleObjectId = User32.OBJID.WINDOW; 
+        AccessibleObject accessibleObject = control.TestAccessor().Dynamic.NcAccessibilityObject;
 
         IAccessible iAccessible = accessibleObject;
         Assert.Equal(AccessibleRole.Window, iAccessible.get_accRole(childID));
