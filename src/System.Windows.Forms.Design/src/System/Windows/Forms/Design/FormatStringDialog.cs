@@ -95,14 +95,14 @@ internal class FormatStringDialog : Form
         _cancelButton.Left += formatControlRightSideOffset - cancelButtonRightSideOffset;
     }
 
-    private static int GetRightSideOffset(Control? ctl)
+    private static int GetRightSideOffset(Control ctl)
     {
-        int result = ctl!.Width;
-
-        while (ctl is not null)
+        int result = ctl.Width;
+        Control? control = ctl;
+        while (control is not null)
         {
-            result += ctl.Left;
-            ctl = ctl.Parent;
+            result += control.Left;
+            control = control.Parent;
         }
 
         return result;
