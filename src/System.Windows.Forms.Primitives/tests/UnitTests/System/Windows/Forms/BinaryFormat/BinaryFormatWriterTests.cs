@@ -96,5 +96,6 @@ public class BinaryFormatWriterTests
             ListTests.PrimitiveLists_TestData).Concat(
             ListTests.ArrayLists_TestData).Concat(
             PrimitiveTypeTests.Primitive_Data).Concat(
-            SystemDrawingTests.SystemDrawing_TestData);
+            SystemDrawingTests.SystemDrawing_TestData).Concat(
+            ArrayTests.Array_TestData);
 }

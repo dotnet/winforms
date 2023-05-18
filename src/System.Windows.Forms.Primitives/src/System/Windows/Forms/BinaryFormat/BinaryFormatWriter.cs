@@ -393,6 +393,36 @@ internal static class BinaryFormatWriter
     }
 
     /// <summary>
+    ///  Writes the given <paramref name="array"/> in binary format if supported.
+    /// </summary>
+    public static bool TryWriteArray(Stream stream, Array array)
+    {
+        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(array.GetType().GetElementType()!);
+
+        if (primitiveType == default)
+        {
+            return false;
+        }
+
+        using BinaryFormatWriterScope writer = new(stream);
+        if (primitiveType == PrimitiveType.String)
+        {
+            StringRecordsCollection strings = new(currentId: 2);
+            new ArraySingleString(
+                new ArrayInfo(1, array.Length),
+                ListConverter.GetPrimitiveConverter(array, strings)).Write(writer);
+            return true;
+        }
+
+        new ArraySinglePrimitive(
+            new ArrayInfo(1, array.Length),
+            primitiveType,
+            new ListConverter<object?>(array, o => o!)).Write(writer);
+
+        return true;
+    }
+
+    /// <summary>
     ///  Tries to write the given <paramref name="hashtable"/> if supported.
     /// </summary>
     public static bool TryWriteHashtable(Stream stream, Hashtable hashtable)
@@ -484,6 +514,8 @@ internal static class BinaryFormatWriter
             case string stringValue:
                 WriteString(stream, stringValue);
                 return true;
+            case Array arrayValue:
+                return TryWriteArray(stream, arrayValue);
             case decimal decimalValue:
                 WriteDecimal(stream, decimalValue);
                 return true;

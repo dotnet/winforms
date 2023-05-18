@@ -319,6 +319,51 @@ internal static class BinaryFormattedObjectExtensions
     }
 
     /// <summary>
+    ///  Tries to get this object as an <see cref="Array"/> of primitive types.
+    /// </summary>
+    public static bool TryGetPrimitiveArray(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    {
+        value = null;
+        if (format.RecordCount != 3)
+        {
+            return false;
+        }
+
+        if (format[1] is ArraySingleString stringArray)
+        {
+            value = format.GetStringValues(stringArray, stringArray.Length).ToArray();
+            return true;
+        }
+
+        if (format[1] is not ArraySinglePrimitive primitiveArray)
+        {
+            return false;
+        }
+
+        value = primitiveArray.PrimitiveType switch
+        {
+            PrimitiveType.Boolean => primitiveArray.ArrayObjects.Cast<bool>().ToArray(),
+            PrimitiveType.Byte => primitiveArray.ArrayObjects.Cast<byte>().ToArray(),
+            PrimitiveType.Char => primitiveArray.ArrayObjects.Cast<char>().ToArray(),
+            PrimitiveType.Decimal => primitiveArray.ArrayObjects.Cast<decimal>().ToArray(),
+            PrimitiveType.Double => primitiveArray.ArrayObjects.Cast<double>().ToArray(),
+            PrimitiveType.Int16 => primitiveArray.ArrayObjects.Cast<short>().ToArray(),
+            PrimitiveType.Int32 => primitiveArray.ArrayObjects.Cast<int>().ToArray(),
+            PrimitiveType.Int64 => primitiveArray.ArrayObjects.Cast<long>().ToArray(),
+            PrimitiveType.SByte => primitiveArray.ArrayObjects.Cast<sbyte>().ToArray(),
+            PrimitiveType.Single => primitiveArray.ArrayObjects.Cast<float>().ToArray(),
+            PrimitiveType.TimeSpan => primitiveArray.ArrayObjects.Cast<TimeSpan>().ToArray(),
+            PrimitiveType.DateTime => primitiveArray.ArrayObjects.Cast<DateTime>().ToArray(),
+            PrimitiveType.UInt16 => primitiveArray.ArrayObjects.Cast<ushort>().ToArray(),
+            PrimitiveType.UInt32 => primitiveArray.ArrayObjects.Cast<uint>().ToArray(),
+            PrimitiveType.UInt64 => primitiveArray.ArrayObjects.Cast<ulong>().ToArray(),
+            _ => null
+        };
+
+        return value is not null;
+    }
+
+    /// <summary>
     ///  Trys to get this object as a binary formatted <see cref="Hashtable"/> of <see cref="PrimitiveType"/> keys and values.
     /// </summary>
     public static bool TryGetPrimitiveHashtable(this BinaryFormattedObject format, [NotNullWhen(true)] out Hashtable? hashtable)
@@ -406,6 +451,7 @@ internal static class BinaryFormattedObjectExtensions
         [NotNullWhen(true)] out object? value)
         => format.TryGetPrimitiveType(out value)
             || format.TryGetPrimitiveList(out value)
+            || format.TryGetPrimitiveArray(out value)
             || format.TryGetPrimitiveArrayList(out value)
             || format.TryGetPrimitiveHashtable(out value)
             || format.TryGetRectangleF(out value)
