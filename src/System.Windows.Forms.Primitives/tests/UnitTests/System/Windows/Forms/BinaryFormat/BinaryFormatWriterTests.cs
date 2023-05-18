@@ -36,7 +36,7 @@ public class BinaryFormatWriterTests
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value).Should().BeTrue();
         stream.Position = 0;
 
-        using BinaryFormatterScope formaterScope = new BinaryFormatterScope(enable: true);
+        using BinaryFormatterScope formaterScope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
         BinaryFormatter formatter = new();
 #pragma warning restore SYSLIB0011 // Type or member is obsolete

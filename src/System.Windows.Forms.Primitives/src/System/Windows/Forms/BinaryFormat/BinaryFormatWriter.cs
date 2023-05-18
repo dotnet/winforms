@@ -196,10 +196,10 @@ internal static class BinaryFormatWriter
             switch (primitive)
             {
                 case nint nativeInt:
-                    WritePrimitive(stream, nativeInt);
+                    WriteNativeInt(stream, nativeInt);
                     return;
                 case nuint nativeUint:
-                    WritePrimitive(stream, nativeUint);
+                    WriteNativeUInt(stream, nativeUint);
                     return;
             }
 
