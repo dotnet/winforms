@@ -12,6 +12,7 @@ namespace System.Windows.Forms;
 public partial class ToolStripButton : ToolStripItem
 {
     private CheckState _checkState = CheckState.Unchecked;
+    private CheckState _prevCheckState = CheckState.Unchecked;
     private const int StandardButtonWidth = 23;
     private int _standardButtonWidth = StandardButtonWidth;
 
@@ -102,6 +103,7 @@ public partial class ToolStripButton : ToolStripItem
 
             if (value != _checkState)
             {
+                _prevCheckState = _checkState;
                 _checkState = value;
                 Invalidate();
                 OnCheckedChanged(EventArgs.Empty);
@@ -184,6 +186,13 @@ public partial class ToolStripButton : ToolStripItem
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
         AccessibilityNotifyClients(AccessibleEvents.StateChange);
+
+        if (IsAccessibilityObjectCreated &&
+            AccessibilityObject is ToolStripButtonAccessibleObject accessibilityObject)
+        {
+            accessibilityObject.OnCheckStateChanged(_prevCheckState, _checkState);
+        }
+
         ((EventHandler?)Events[s_checkStateChangedEvent])?.Invoke(this, e);
     }
 
