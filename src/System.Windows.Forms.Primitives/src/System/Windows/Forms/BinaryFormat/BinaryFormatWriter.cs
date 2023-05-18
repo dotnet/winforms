@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
@@ -28,7 +29,11 @@ internal static class BinaryFormatWriter
     private static readonly string[] s_dateTimeMemberNames = new[] { "ticks", "dateData" };
     private static readonly string[] s_primitiveMemberName = new[] { "m_value" };
 
-    private const string Mscorlib = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+    private static string[]? s_pointMemberNames;
+    private static string[] PointMemberNames => s_pointMemberNames ??= new[] { "x", "y" };
+
+    private static string[]? s_rectangleMemberNames;
+    private static string[] RectangleMemberNames => s_rectangleMemberNames ??= new[] { "x", "y", "width", "height" };
 
     /// <summary>
     ///  Writes a <see langword="string"/> in binary format.
@@ -87,7 +92,6 @@ internal static class BinaryFormatWriter
     public static void WriteTimeSpan(Stream stream, TimeSpan value)
     {
         using var writer = new BinaryFormatWriterScope(stream);
-
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(TimeSpan).FullName!, new string[] { "_ticks" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
@@ -100,7 +104,6 @@ internal static class BinaryFormatWriter
     public static void WriteNativeInt(Stream stream, nint value)
     {
         using var writer = new BinaryFormatWriterScope(stream);
-
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nint).FullName!, new string[] { "value" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.Int64)),
@@ -113,7 +116,6 @@ internal static class BinaryFormatWriter
     public static void WriteNativeUInt(Stream stream, nuint value)
     {
         using var writer = new BinaryFormatWriterScope(stream);
-
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, typeof(nuint).FullName!, new string[] { "value" }),
             new MemberTypeInfo((BinaryType.Primitive, PrimitiveType.UInt64)),
@@ -121,7 +123,45 @@ internal static class BinaryFormatWriter
     }
 
     /// <summary>
-    ///  Attempts to write a primitive value or string in binary format.
+    ///  Writes a <see cref="PointF"/> in binary format.
+    /// </summary>
+    public static void WritePointF(Stream stream, PointF value)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, typeof(PointF).FullName!, PointMemberNames),
+            libraryId: 2,
+            new MemberTypeInfo(
+                (BinaryType.Primitive, PrimitiveType.Single),
+                (BinaryType.Primitive, PrimitiveType.Single)),
+            value.X,
+            value.Y).Write(writer);
+    }
+
+    /// <summary>
+    ///  Writes a <see cref="RectangleF"/> in binary format.
+    /// </summary>
+    public static void WriteRectangleF(Stream stream, RectangleF value)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, typeof(RectangleF).FullName!, RectangleMemberNames),
+            libraryId: 2,
+            new MemberTypeInfo(
+                (BinaryType.Primitive, PrimitiveType.Single),
+                (BinaryType.Primitive, PrimitiveType.Single),
+                (BinaryType.Primitive, PrimitiveType.Single),
+                (BinaryType.Primitive, PrimitiveType.Single)),
+            value.X,
+            value.Y,
+            value.Width,
+            value.Height).Write(writer);
+    }
+
+    /// <summary>
+    ///  Attempts to write a <see cref="PrimitiveType"/> value in binary format.
     /// </summary>
     /// <returns><see langword="true"/> if successful.</returns>
     public static bool TryWritePrimitive(Stream stream, object primitive)
@@ -132,7 +172,7 @@ internal static class BinaryFormatWriter
             WritePrimitive(stream, primitive);
             return true;
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (ArgumentException)
         {
             stream.Position = originalPosition;
             return false;
@@ -140,12 +180,15 @@ internal static class BinaryFormatWriter
     }
 
     /// <summary>
-    ///  Writes a primitive value or string in binary format.
+    ///  Writes a .NET primitive value in binary format.
     /// </summary>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="primitive"/> is not a a primitive value.
+    /// </exception>
     public static void WritePrimitive(Stream stream, object primitive)
     {
         Type type = primitive.GetType();
-        PrimitiveType primitiveType = Record.GetPrimitiveType(type);
+        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(type);
 
         if (primitiveType == default)
         {
@@ -160,7 +203,7 @@ internal static class BinaryFormatWriter
                     return;
             }
 
-            throw new NotSupportedException($"{nameof(primitive)} is not primitive.");
+            throw new ArgumentException($"{nameof(primitive)} is not primitive.");
         }
 
         // These are handled differently from the rest of the primitive types when serialized on their own.
@@ -181,7 +224,6 @@ internal static class BinaryFormatWriter
         }
 
         using var writer = new BinaryFormatWriterScope(stream);
-
         new SystemClassWithMembersAndTypes(
             new ClassInfo(1, type.FullName!, s_primitiveMemberName),
             new MemberTypeInfo((BinaryType.Primitive, primitiveType)),
@@ -189,12 +231,40 @@ internal static class BinaryFormatWriter
     }
 
     /// <summary>
+    ///  Writes a <see cref="List{String}"/> in binary format.
+    /// </summary>
+    public static void WriteStringList(Stream stream, List<string> list)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+
+        new SystemClassWithMembersAndTypes(
+            new ClassInfo(
+                1,
+                $"System.Collections.Generic.List`1[[{TypeInfo.StringType}, {TypeInfo.MscorlibAssemblyName}]]",
+                ListMemberNames),
+            new MemberTypeInfo(
+                (BinaryType.StringArray, null),
+                (BinaryType.Primitive, PrimitiveType.Int32),
+                (BinaryType.Primitive, PrimitiveType.Int32)),
+            new MemberReference(2),
+            list.Count,
+            // _version doesn't matter
+            0).Write(writer);
+
+        StringRecordsCollection strings = new(currentId: 3);
+
+        new ArraySingleString(
+            new ArrayInfo(2, list.Count),
+            new ListConverter<string>(list, strings.GetStringRecord)).Write(writer);
+    }
+
+    /// <summary>
     ///  Writes a primitive list in binary format.
     /// </summary>
-    public static void WritePrimitiveList<T>(Stream stream, IReadOnlyList<T> list)
+    public static void WritePrimitiveList<T>(Stream stream, List<T> list)
         where T : unmanaged
     {
-        PrimitiveType primitiveType = Record.GetPrimitiveType(typeof(T));
+        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(typeof(T));
         if (primitiveType == default)
         {
             throw new NotSupportedException($"{nameof(T)} is not primitive.");
@@ -203,7 +273,10 @@ internal static class BinaryFormatWriter
         using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {Mscorlib}]]", ListMemberNames),
+            new ClassInfo(
+                1,
+                $"System.Collections.Generic.List`1[[{typeof(T).FullName}, {TypeInfo.MscorlibAssemblyName}]]",
+                ListMemberNames),
             new MemberTypeInfo(
                 (BinaryType.PrimitiveArray, primitiveType),
                 (BinaryType.Primitive, PrimitiveType.Int32),
@@ -214,9 +287,127 @@ internal static class BinaryFormatWriter
             0).Write(writer);
 
         new ArraySinglePrimitive(
-            new(2, list.Count),
+            new ArrayInfo(2, list.Count),
             primitiveType,
-            new ListConverter<T, object>(list, (T value) => value)).Write(writer);
+            new ListConverter<T>(list, (T value) => value!)).Write(writer);
+    }
+
+    /// <summary>
+    ///  Writes the given <paramref name="list"/> in binary format if supported.
+    /// </summary>
+    public static bool TryWritePrimitiveList(Stream stream, IList list)
+    {
+        Type type = list.GetType();
+        if (!type.IsGenericType || type.GetGenericTypeDefinition() != typeof(List<>))
+        {
+            return false;
+        }
+
+        switch (list)
+        {
+            case List<string> typedList:
+                WriteStringList(stream, typedList);
+                return true;
+            case List<int> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<byte> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<sbyte> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<short> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<ushort> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<uint> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<long> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<ulong> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<float> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<double> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<decimal> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<DateTime> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<TimeSpan> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+            case List<char> typedList:
+                WritePrimitiveList(stream, typedList);
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///  Writes the given <paramref name="list"/> in binary format if supported.
+    /// </summary>
+    public static bool TryWriteArrayList(Stream stream, ArrayList list)
+    {
+        long position = stream.Position;
+        try
+        {
+            Write(stream, list);
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            stream.Position = position;
+            return false;
+        }
+
+        static void Write(Stream stream, ArrayList list)
+        {
+            using BinaryFormatWriterScope writer = new(stream);
+            new SystemClassWithMembersAndTypes(
+                new ClassInfo(1, typeof(ArrayList).FullName!, ListMemberNames),
+                new MemberTypeInfo(
+                    (BinaryType.ObjectArray, null),
+                    (BinaryType.Primitive, PrimitiveType.Int32),
+                    (BinaryType.Primitive, PrimitiveType.Int32)),
+                new MemberReference(2),
+                list.Count,
+                // _version doesn't matter
+                0).Write(writer);
+
+            new ArraySingleObject(
+                new ArrayInfo(2, list.Count),
+                ListConverter.GetPrimitiveConverter(list, new StringRecordsCollection(currentId: 3))).Write(writer);
+        }
+    }
+
+    /// <summary>
+    ///  Tries to write the given <paramref name="hashtable"/> if supported.
+    /// </summary>
+    public static bool TryWriteHashtable(Stream stream, Hashtable hashtable)
+    {
+        long position = stream.Position;
+        try
+        {
+            WritePrimitiveHashtable(stream, hashtable);
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            stream.Position = position;
+            return false;
+        }
     }
 
     /// <summary>
@@ -265,35 +456,57 @@ internal static class BinaryFormatWriter
             new MemberReference(2),
             new MemberReference(3)).Write(writer);
 
-        // We've used 1, 2 and 3 for the class id and array ids.
-        int currentId = 4;
+        // 1, 2 and 3 are used for the class id and array ids.
+        StringRecordsCollection strings = new(currentId: 4);
 
-        // Using an array converter to save a temporary array allocation. By not doing this we come much closer
-        // to the memory usage of BinaryFormatter for large hashsets.
+        new ArraySingleObject(
+            new ArrayInfo(2, keys.Length),
+            ListConverter.GetPrimitiveConverter(keys, strings)).Write(writer);
+        new ArraySingleObject(
+            new ArrayInfo(3, values.Length),
+            ListConverter.GetPrimitiveConverter(values, strings)).Write(writer);
+    }
 
-        StringRecordsCollection strings = new();
+    /// <summary>
+    ///  Writes the given <paramref name="value"/> if supported.
+    /// </summary>
+    public static bool TryWriteFrameworkObject(Stream stream, object value)
+    {
+        Type type = value.GetType();
+        if (type.IsPrimitive)
+        {
+            WritePrimitive(stream, value);
+            return true;
+        }
 
-        ListConverter<object, object> keyConverter = new(
-            keys,
-            (object value) => value switch
-            {
-                string stringValue => strings.GetStringRecord(stringValue, ref currentId),
-                _ => new MemberPrimitiveTyped(value)
-            });
+        switch (value)
+        {
+            case string stringValue:
+                WriteString(stream, stringValue);
+                return true;
+            case decimal decimalValue:
+                WriteDecimal(stream, decimalValue);
+                return true;
+            case DateTime dateTime:
+                WriteDateTime(stream, dateTime);
+                return true;
+            case TimeSpan timeSpan:
+                WriteTimeSpan(stream, timeSpan);
+                return true;
+            case PointF point:
+                WritePointF(stream, point);
+                return true;
+            case RectangleF rectangle:
+                WriteRectangleF(stream, rectangle);
+                return true;
+            case Hashtable hashtable:
+                return TryWriteHashtable(stream, hashtable);
+            case ArrayList arrayList:
+                return TryWriteArrayList(stream, arrayList);
+        }
 
-        ArraySingleObject array = new(new(2, keys.Length), keyConverter);
-        array.Write(writer);
-
-        ListConverter<object?, object> valueConverter = new(
-            values,
-            (object? value) => value switch
-            {
-                null => ObjectNull.Instance,
-                string stringValue => strings.GetStringRecord(stringValue, ref currentId),
-                _ => new MemberPrimitiveTyped(value)
-            });
-
-        array = new(new(3, values.Length), valueConverter);
-        array.Write(writer);
+        return type.IsGenericType
+            && type.GetGenericTypeDefinition() == typeof(List<>)
+            && TryWritePrimitiveList(stream, (IList)value);
     }
 }

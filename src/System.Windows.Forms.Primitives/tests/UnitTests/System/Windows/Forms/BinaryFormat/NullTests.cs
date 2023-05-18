@@ -11,7 +11,7 @@ public class NullTests
     {
         // We read a byte on the way in so there is nothing to check.
 
-        ObjectNull.ObjectNullMultiple256 objectNull = new(1000);
+        NullRecord.ObjectNullMultiple256 objectNull = new(1000);
 
         using BinaryWriter writer = new(new MemoryStream());
         Action action = () => objectNull.Write(writer);
@@ -21,11 +21,11 @@ public class NullTests
     [Fact]
     public void ObjectNullMultiple256_WritesCorrectly()
     {
-        ObjectNull.ObjectNullMultiple256 objectNull = new(0xCA);
+        NullRecord.ObjectNullMultiple256 objectNull = new(0xCA);
 
         byte[] buffer = new byte[2];
         using BinaryWriter writer = new(new MemoryStream(buffer));
         objectNull.Write(writer);
-        buffer.Should().BeEquivalentTo(new byte[] { (byte)ObjectNull.ObjectNullMultiple256.RecordType, 0xCA });
+        buffer.Should().BeEquivalentTo(new byte[] { (byte)NullRecord.ObjectNullMultiple256.RecordType, 0xCA });
     }
 }

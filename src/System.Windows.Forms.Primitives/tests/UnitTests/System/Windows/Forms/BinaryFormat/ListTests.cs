@@ -10,6 +10,102 @@ namespace System.Windows.Forms.BinaryFormat.Tests;
 public class ListTests
 {
     [Fact]
+    public void ArrayList_ParseEmpty()
+    {
+        BinaryFormattedObject format = new ArrayList().SerializeAndParse();
+        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
+
+        systemClass.Name.Should().Be(typeof(ArrayList).FullName);
+        systemClass.MemberNames.Should().BeEquivalentTo(new string[] { "_items", "_size", "_version" });
+        systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
+
+        format[2].Should().BeOfType<ArraySingleObject>();
+    }
+
+    [Theory]
+    [MemberData(nameof(ArrayList_Primitive_Data))]
+    public void ArrayList_ParsePrimitives(object value)
+    {
+        BinaryFormattedObject format = new ArrayList()
+        {
+            value
+        }.SerializeAndParse();
+
+        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
+
+        systemClass.Name.Should().Be(typeof(ArrayList).FullName);
+        systemClass.MemberNames.Should().BeEquivalentTo(new string[] { "_items", "_size", "_version" });
+        systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
+
+        ArraySingleObject array = (ArraySingleObject)format[2];
+        MemberPrimitiveTyped primitve = (MemberPrimitiveTyped)array[0];
+        primitve.Value.Should().Be(value);
+    }
+
+    [Fact]
+    public void ArrayList_ParseString()
+    {
+        BinaryFormattedObject format = new ArrayList()
+        {
+            "JarJar"
+        }.SerializeAndParse();
+
+        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
+
+        systemClass.Name.Should().Be(typeof(ArrayList).FullName);
+        systemClass.MemberNames.Should().BeEquivalentTo(new string[] { "_items", "_size", "_version" });
+        systemClass.MemberTypeInfo[0].Should().Be((BinaryType.ObjectArray, null));
+
+        ArraySingleObject array = (ArraySingleObject)format[2];
+        BinaryObjectString binaryString = (BinaryObjectString)array[0];
+        binaryString.Value.Should().Be("JarJar");
+    }
+
+    public static TheoryData<object> ArrayList_Primitive_Data => new()
+    {
+        int.MaxValue,
+        uint.MaxValue,
+        long.MaxValue,
+        ulong.MaxValue,
+        short.MaxValue,
+        ushort.MaxValue,
+        byte.MaxValue,
+        sbyte.MaxValue,
+        true,
+        float.MaxValue,
+        double.MaxValue,
+        char.MaxValue,
+        TimeSpan.MaxValue,
+        DateTime.MaxValue,
+        decimal.MaxValue,
+    };
+
+    public static TheoryData<ArrayList> ArrayLists_TestData => new()
+    {
+        new ArrayList(),
+        new ArrayList()
+        {
+            int.MaxValue,
+            uint.MaxValue,
+            long.MaxValue,
+            ulong.MaxValue,
+            short.MaxValue,
+            ushort.MaxValue,
+            byte.MaxValue,
+            sbyte.MaxValue,
+            true,
+            float.MaxValue,
+            double.MaxValue,
+            char.MaxValue,
+            TimeSpan.MaxValue,
+            DateTime.MaxValue,
+            decimal.MaxValue,
+            "You betcha"
+        },
+        new ArrayList() { "Same", "old", "same", "old" }
+    };
+
+    [Fact]
     public void List_Int_ParseEmpty()
     {
         BinaryFormattedObject format = new List<int>().SerializeAndParse();
@@ -93,18 +189,7 @@ public class ListTests
     public void List_Primitive_Read(IList list)
     {
         BinaryFormattedObject format = list.SerializeAndParse();
-
-        object? deserialized;
-        bool success = list switch
-        {
-            List<int> => format.TryGetPrimitiveList<int>(out deserialized),
-            List<float> => format.TryGetPrimitiveList<float>(out deserialized),
-            List<byte> => format.TryGetPrimitiveList<byte>(out deserialized),
-            List<char> => format.TryGetPrimitiveList<char>(out deserialized),
-            _ => throw new InvalidOperationException(),
-        };
-
-        success.Should().BeTrue();
+        format.TryGetPrimitiveList(out object? deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(list);
     }
 

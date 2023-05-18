@@ -13,12 +13,20 @@ internal class StringRecordsCollection
     private readonly Dictionary<string, int> _strings = new();
     private readonly Dictionary<int, MemberReference> _memberReferences = new();
 
+    public int CurrentId { get; set; }
+
+    public StringRecordsCollection(int currentId) => CurrentId = currentId;
+
     /// <summary>
     ///  Returns the appropriate record for the given string.
     /// </summary>
-    /// <param name="nextId">The id to use if needed, will be incremented if used.</param>
-    public IRecord GetStringRecord(string value, ref int nextId)
+    public IRecord GetStringRecord(string? value)
     {
+        if (value is null)
+        {
+            return ObjectNull.Instance;
+        }
+
         if (_strings.TryGetValue(value, out int id))
         {
             // The record with the data has already been retrieved, only a reference is needed now
@@ -32,9 +40,9 @@ internal class StringRecordsCollection
             return reference;
         }
 
-        _strings[value] = nextId;
-        IRecord record = new BinaryObjectString(nextId, value);
-        nextId++;
+        _strings[value] = CurrentId;
+        IRecord record = new BinaryObjectString(CurrentId, value);
+        CurrentId++;
         return record;
     }
 }

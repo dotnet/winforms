@@ -16,8 +16,14 @@ namespace System.Windows.Forms.BinaryFormat;
 /// </remarks>
 internal sealed class BinaryLibrary : IRecord<BinaryLibrary>
 {
-    public Id LibraryId;
-    public string LibraryName = string.Empty;
+    public Id LibraryId { get; }
+    public string LibraryName { get; }
+
+    public BinaryLibrary(Id libraryId, string libraryName)
+    {
+        LibraryId = libraryId;
+        LibraryName = libraryName;
+    }
 
     public static RecordType RecordType => RecordType.BinaryLibrary;
 
@@ -25,11 +31,9 @@ internal sealed class BinaryLibrary : IRecord<BinaryLibrary>
         BinaryReader reader,
         RecordMap recordMap)
     {
-        BinaryLibrary record = new()
-        {
-            LibraryId = reader.ReadInt32(),
-            LibraryName = reader.ReadString()
-        };
+        BinaryLibrary record = new(
+            reader.ReadInt32(),
+            reader.ReadString());
 
         recordMap[record.LibraryId] = record;
         return record;

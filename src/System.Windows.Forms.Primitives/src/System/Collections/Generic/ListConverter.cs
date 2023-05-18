@@ -13,24 +13,24 @@ namespace System.Collections.Generic;
 ///   through the list this class should usually be avoided.
 ///  </para>
 /// </remarks>
-internal class ListConverter<TIn, TOut> : IReadOnlyList<TOut>
+internal class ListConverter<TIn> : IReadOnlyList<object>
 {
-    private readonly IReadOnlyList<TIn> _values;
-    private readonly Func<TIn, TOut> _converter;
+    private readonly IList _values;
+    private readonly Func<TIn, object> _converter;
 
-    public ListConverter(IReadOnlyList<TIn> values, Func<TIn, TOut> conveter)
+    public ListConverter(IList values, Func<TIn, object> converter)
     {
         _values = values;
-        _converter = conveter;
+        _converter = converter;
     }
 
-    public TOut this[int index] => _converter(_values[index]);
+    public object this[int index] => _converter((TIn)_values[index]!);
 
     public int Count => _values.Count;
 
     // Saving a little bit of code by not writing an enumerator. It isn't huge, so this can be
     // added if needed.
 
-    IEnumerator<TOut> IEnumerable<TOut>.GetEnumerator() => throw new NotImplementedException();
+    IEnumerator<object> IEnumerable<object>.GetEnumerator() => throw new NotImplementedException();
     IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
 }
