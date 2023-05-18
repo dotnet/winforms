@@ -2048,15 +2048,13 @@ public partial class AccessibleObjectTests
     [WinFormsFact]
     public void AccessibleObject_IAccessibleget_accRole_InvokeDefaultSelfNotAClientObject_ReturnsExpected()
     {
-        int childID = (int)PInvoke.CHILDID_SELF;
-
         using Control control = new();
         control.CreateControl();
 
         AccessibleObject accessibleObject = control.TestAccessor().Dynamic.NcAccessibilityObject;
 
         IAccessible iAccessible = accessibleObject;
-        Assert.Equal(AccessibleRole.Window, iAccessible.get_accRole(childID));
+        Assert.Equal(AccessibleRole.Window, iAccessible.get_accRole((int)PInvoke.CHILDID_SELF));
         Assert.True(control.IsHandleCreated);
     }
 
