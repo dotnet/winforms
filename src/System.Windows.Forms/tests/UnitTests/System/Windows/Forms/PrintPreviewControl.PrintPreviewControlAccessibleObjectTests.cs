@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
@@ -62,5 +63,36 @@ public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
 
         Assert.False(value);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void PrintPreviewControlAccessibleObject_Bounds_NoParent_ReturnsExpected()
+    {
+        using PrintPreviewControl control = new();
+
+        AccessibleObject accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
+
+        Assert.Equal(Rectangle.Empty, accessibleObject.Bounds);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void PrintPreviewControlAccessibleObject_Bounds_ReturnsExpected()
+    {
+        using PrintPreviewControl control = new();
+
+        using Panel panel = new();
+        panel.Controls.Add(control);
+        panel.CreateControl();
+
+        Point controlScreenLocation = panel.PointToScreen(control.Location);
+        Size controlBoundsSize = control.Bounds.Size;
+
+        AccessibleObject accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
+        Rectangle accessibleObjectBounds = accessibleObject.Bounds;
+
+        Assert.Equal(controlScreenLocation, accessibleObjectBounds.Location);
+        Assert.Equal(controlBoundsSize, accessibleObjectBounds.Size);
+        Assert.True(control.IsHandleCreated);
     }
 }
