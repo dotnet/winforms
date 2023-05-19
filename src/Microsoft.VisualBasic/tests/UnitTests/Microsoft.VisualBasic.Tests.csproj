@@ -8,7 +8,6 @@
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
-    <PackageReference Include="xunit.assert" Version="$(XUnitAssertVersion)" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
   </ItemGroup>
   
