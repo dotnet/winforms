@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+
 namespace System.Windows.Forms.BinaryFormat.Tests;
 
 public class ArrayTests
@@ -41,4 +43,41 @@ public class ArrayTests
         // Negative numbers
         { new MemoryStream(new byte[] { 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF }), typeof(ArgumentOutOfRangeException) }
     };
+
+    [Theory]
+    [MemberData(nameof(StringArray_Parse_Data))]
+    public void StringArray_Parse(string?[] strings)
+    {
+        BinaryFormattedObject format = strings.SerializeAndParse();
+        format.RecordCount.Should().BeGreaterThanOrEqualTo(3);
+        ArraySingleString array = (ArraySingleString)format[1];
+        format.GetStringValues(array, strings.Length).Should().BeEquivalentTo(strings);
+    }
+
+    public static TheoryData<string?[]> StringArray_Parse_Data => new()
+    {
+        new string?[] { "one", "two" },
+        new string?[] { "yes", "no", null },
+        new string?[] { "same", "same", "same" }
+    };
+
+    [Theory]
+    [MemberData(nameof(PrimitiveArray_Parse_Data))]
+    public void PrimitiveArray_Parse(Array array)
+    {
+        BinaryFormattedObject format = array.SerializeAndParse();
+        format.RecordCount.Should().BeGreaterThanOrEqualTo(3);
+        ArraySinglePrimitive arrayRecord = (ArraySinglePrimitive)format[1];
+        ((IEnumerable)arrayRecord.ArrayObjects).Should().BeEquivalentTo((IEnumerable)array);
+    }
+
+    public static TheoryData<Array> PrimitiveArray_Parse_Data => new()
+    {
+        new int[] { 1, 2, 3 },
+        new int[] { 1, 2, 1 },
+        new float[] { 1.0f, float.NaN, float.PositiveInfinity },
+        new DateTime[] { DateTime.MaxValue }
+    };
+
+    public static IEnumerable<object[]> Array_TestData => StringArray_Parse_Data.Concat(PrimitiveArray_Parse_Data);
 }

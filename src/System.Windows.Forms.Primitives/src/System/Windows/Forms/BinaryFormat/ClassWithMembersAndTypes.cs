@@ -21,8 +21,8 @@ internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithM
 
     public ClassWithMembersAndTypes(
         ClassInfo classInfo,
-        MemberTypeInfo memberTypeInfo,
         Id libraryId,
+        MemberTypeInfo memberTypeInfo,
         IReadOnlyList<object> memberValues)
         : base(classInfo, memberValues)
     {
@@ -32,10 +32,10 @@ internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithM
 
     public ClassWithMembersAndTypes(
         ClassInfo classInfo,
-        MemberTypeInfo memberTypeInfo,
         Id libraryId,
+        MemberTypeInfo memberTypeInfo,
         params object[] memberValues)
-        : this(classInfo, memberTypeInfo, libraryId, (IReadOnlyList<object>)memberValues)
+        : this(classInfo, libraryId, memberTypeInfo, (IReadOnlyList<object>)memberValues)
     {
     }
 
@@ -50,8 +50,8 @@ internal sealed class ClassWithMembersAndTypes : ClassRecord, IRecord<ClassWithM
 
         ClassWithMembersAndTypes record = new(
             classInfo,
-            memberTypeInfo,
             reader.ReadInt32(),
+            memberTypeInfo,
             ReadValuesFromMemberTypeInfo(reader, recordMap, memberTypeInfo));
 
         // Index this record by the id of the embedded ClassInfo's object id.

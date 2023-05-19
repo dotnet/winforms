@@ -28,7 +28,7 @@ internal sealed class MemberPrimitiveTyped : Record, IRecord<MemberPrimitiveType
     /// <exception cref="ArgumentException"><paramref name="value"/> is not primitive.</exception>
     internal MemberPrimitiveTyped(object value)
     {
-        PrimitiveType primitiveType = GetPrimitiveType(value.GetType());
+        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(value.GetType());
         if (primitiveType == default)
         {
             throw new ArgumentException($"{nameof(value)} is not primitive.");
