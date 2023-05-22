@@ -76,8 +76,19 @@ public partial class ToolStripButton
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState =>
-            _ownerItem.CheckState switch
+        internal override UiaCore.ToggleState ToggleState
+            => CheckStateToToggleState(_ownerItem.CheckState);
+
+        internal void OnCheckStateChanged(CheckState oldValue, CheckState newValue)
+        {
+            RaiseAutomationPropertyChangedEvent(
+                UiaCore.UIA.ToggleToggleStatePropertyId,
+                CheckStateToToggleState(oldValue),
+                CheckStateToToggleState(newValue));
+        }
+
+        private static UiaCore.ToggleState CheckStateToToggleState(CheckState checkState)
+            => checkState switch
             {
                 CheckState.Checked => UiaCore.ToggleState.On,
                 CheckState.Unchecked => UiaCore.ToggleState.Off,
