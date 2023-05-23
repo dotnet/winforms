@@ -290,7 +290,7 @@ public unsafe partial class Control :
     private readonly ControlNativeWindow _window;
 
     private Control? _parent;
-    private Control? _reflectParent;
+    private WeakReference<Control>? _reflectParent;
     private CreateParams? _createParams;
     private int _x;
     private int _y;
@@ -491,7 +491,6 @@ public unsafe partial class Control :
             if (accessibleObject is null)
             {
                 accessibleObject = CreateAccessibilityInstance();
-
                 Properties.SetObject(s_accessibilityProperty, accessibleObject);
             }
 
@@ -3032,13 +3031,13 @@ public unsafe partial class Control :
 
     private Control? ReflectParent
     {
-        get => _reflectParent;
+        get => _reflectParent?.TryGetTarget(out Control? parent) ?? false ? parent : null;
         set
         {
             value?.AddReflectChild();
 
-            Control? existing = _reflectParent;
-            _reflectParent = value;
+            Control? existing = ReflectParent;
+            _reflectParent = value is not null ? new(value) : null;
             existing?.RemoveReflectChild();
         }
     }
@@ -4895,7 +4894,7 @@ public unsafe partial class Control :
 
             _window.CreateHandle(cp);
 
-            UpdateReflectParent(true);
+            UpdateReflectParent();
         }
         finally
         {
@@ -5077,8 +5076,8 @@ public unsafe partial class Control :
             }
         }
 
-        // Set reflectparent = null regardless of whether we are in the finalizer thread or not.
-        UpdateReflectParent(findNewParent: false);
+        ReflectParent = null;
+
         if (disposing)
         {
             if (GetState(States.Disposing))
@@ -5098,6 +5097,8 @@ public unsafe partial class Control :
             SuspendLayout();
             try
             {
+                Properties.SetObject(s_ncAccessibilityProperty, value: null);
+
                 DisposeAxControls();
                 ((ActiveXImpl?)Properties.GetObject(s_activeXImplProperty))?.Dispose();
 
@@ -5529,18 +5530,13 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Control? FromHandle(IntPtr handle)
     {
-        NativeWindow? w = NativeWindow.FromHandle(handle);
-        while (w is not null && w is not ControlNativeWindow)
+        NativeWindow? nativeWindow = NativeWindow.FromHandle(handle);
+        while (nativeWindow is not null and not ControlNativeWindow)
         {
-            w = w.PreviousWindow;
+            nativeWindow = nativeWindow.PreviousWindow;
         }
 
-        if (w is ControlNativeWindow controlNativeWindow)
-        {
-            return controlNativeWindow.GetControl();
-        }
-
-        return null;
+        return nativeWindow is ControlNativeWindow controlNativeWindow ? controlNativeWindow.GetControl() : null;
     }
 
     // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
@@ -7929,11 +7925,14 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Inheriting classes should override this method to find out when the
-    ///  handle is about to be destroyed.
-    ///  Call base.OnHandleDestroyed last.
     ///  Raises the <see cref="HandleDestroyed"/> event.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Inheriting classes should override this method to find out when the handle is about to be destroyed.
+    ///   Call base.OnHandleDestroyed last.
+    ///  </para>
+    /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnHandleDestroyed(EventArgs e)
     {
@@ -7947,12 +7946,12 @@ public unsafe partial class Control :
 
         // Private accessibility object for control, used to wrap the object that
         // OLEACC.DLL creates to represent the control's non-client (NC) region.
-        if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject ncAccObj)
+        if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject nonClientAccessibleObject)
         {
-            ncAccObj.Handle = IntPtr.Zero;
+            nonClientAccessibleObject.Handle = IntPtr.Zero;
         }
 
-        UpdateReflectParent(findNewParent: false);
+        ReflectParent = null;
 
         if (!RecreatingHandle)
         {
@@ -9915,18 +9914,25 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Reflects the specified message to the control that is bound to hWnd.
+    ///  Reflects the specified message to the control that is bound to the specified handle.
     /// </summary>
+    /// <returns>
+    ///  <see langword="true"/> if the message was reflected; otherwise, <see langword="false"/>.
+    /// </returns>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static bool ReflectMessage(IntPtr hWnd, ref Message m)
     {
-        Control? control = FromHandle(hWnd);
-        if (control is null)
+        if (FromHandle(hWnd) is not { } control)
         {
             return false;
         }
 
-        m.ResultInternal = (LRESULT)PInvoke.SendMessage(control, User32.WM.REFLECT | m.MsgInternal, m.WParamInternal, m.LParamInternal);
+        m.ResultInternal = PInvoke.SendMessage(
+            control,
+            User32.WM.REFLECT | m.MsgInternal,
+            m.WParamInternal,
+            m.LParamInternal);
+
         return true;
     }
 
@@ -11568,13 +11574,13 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Updates the child control's position in the control array to correctly
-    ///  reflect its index.
+    ///  Updates the child control's position in the control array to correctly reflect its index.
     /// </summary>
     private void UpdateChildControlIndex(Control control)
     {
         // Don't reorder the child control array for tab controls. Implemented as a special case
         // in order to keep the method private.
+        //
         // Also short-circuit when the Control class is instantiated directly. This is to provide
         // consistency with the behavior prior to bug fix https://github.com/dotnet/winforms/issues/7837
         if (this is TabControl || GetType() == typeof(Control))
@@ -11583,39 +11589,45 @@ public unsafe partial class Control :
         }
 
         int newIndex = 0;
-        int curIndex = Controls.GetChildIndex(control);
+        int currentIndex = Controls.GetChildIndex(control);
         HWND hWnd = control.InternalHandle;
         while (!(hWnd = PInvoke.GetWindow(hWnd, GET_WINDOW_CMD.GW_HWNDPREV)).IsNull)
         {
-            Control? c = FromHandle(hWnd);
-            if (c is not null)
+            Control? previousControl = FromHandle(hWnd);
+            if (previousControl is not null)
             {
-                newIndex = Controls.GetChildIndex(c, throwException: false) + 1;
+                newIndex = Controls.GetChildIndex(previousControl, throwException: false) + 1;
                 break;
             }
         }
 
-        if (newIndex > curIndex)
+        if (newIndex > currentIndex)
         {
             newIndex--;
         }
 
-        if (newIndex != curIndex)
+        if (newIndex != currentIndex)
         {
             Controls.SetChildIndex(control, newIndex);
         }
     }
 
-    // whenever we create our handle, we need to get ahold of the HWND of our parent,
-    // and track if that thing is destroyed, because any messages sent to our parent (e.g. WM_NOTIFY, WM_DRAWITEM, etc)
-    // will continue to be sent to that window even after we do a SetParent call until the handle is recreated.
-    // So here we keep track of that, and if that window ever gets destroyed, we'll recreate our handle.
-    //
-    // Scenario is when you've got a control in one parent, you move it to another, then destroy the first parent.  It'll stop
-    // getting any reflected messages because Windows will send them to the original parent.
-    private void UpdateReflectParent(bool findNewParent)
+    private void UpdateReflectParent()
     {
-        if (!Disposing && findNewParent && IsHandleCreated)
+        // WM_REFLECT messages (e.g. WM_NOTIFY, WM_DRAWITEM, etc) will always be sent to the original parent HWND. As
+        // such, we need to track our parent HWND to see if it is changed so that we can recreate our own handle.
+        //
+        // Scenario is when you've got a control in one parent, you move it to another, then destroy the first parent.  It'll stop
+        // getting any reflected messages because Windows will send them to the original parent.
+        //
+        // See:
+        //
+        // https://learn.microsoft.com/cpp/mfc/tn061-on-notify-and-wm-notify-messages
+        // https://learn.microsoft.com/cpp/mfc/tn062-message-reflection-for-windows-controls?view=msvc-170
+        // https://learn.microsoft.com/windows/win32/controls/wm-notify
+        // https://learn.microsoft.com/windows/win32/controls/wm-drawitem
+
+        if (!Disposing && IsHandleCreated)
         {
             HWND parentHandle = PInvoke.GetParent(this);
             if (!parentHandle.IsNull)
@@ -12439,49 +12451,39 @@ public unsafe partial class Control :
     /// </summary>
     private void WmOwnerDraw(ref Message m)
     {
-        bool reflectCalled = false;
-
-        int ctrlId = (int)m.WParamInternal;
-        HWND p = PInvoke.GetDlgItem(m.HWND, ctrlId);
-        if (p.IsNull)
+        int controlId = (int)m.WParamInternal;
+        HWND dialogItem = PInvoke.GetDlgItem(m.HWND, controlId);
+        if (dialogItem.IsNull)
         {
-            // On 64-bit platforms wParam is already 64 bit but the control ID stored in it is only 32-bit
+            // On 64-bit platforms wParam is already 64 bit but the control ID stored in it is only 32-bit.
             // Empirically, we have observed that the 64 bit HWND is just a sign extension of the 32-bit ctrl ID
             // Since WParam is already 64-bit, we need to discard the high dword first and then re-extend the
             // 32-bit value treating it as signed.
-            p = (HWND)ctrlId;
+            dialogItem = (HWND)controlId;
         }
 
-        if (!ReflectMessage(p, ref m))
+        if (ReflectMessage(dialogItem, ref m))
         {
-            // Additional check For Control. TabControl truncates the HWND value.
-            HWND handle = NativeWindow.GetHandleFromWindowId((short)m.WParamInternal.LOWORD);
-            if (!handle.IsNull)
-            {
-                Control? control = FromHandle(handle);
-                if (control is not null)
-                {
-                    m.ResultInternal = PInvoke.SendMessage(
-                        control,
-                        User32.WM.REFLECT | m.MsgInternal,
-                        (WPARAM)handle, m.LParamInternal);
-                    reflectCalled = true;
-                }
-            }
-        }
-        else
-        {
-            reflectCalled = true;
+            return;
         }
 
-        if (!reflectCalled)
+        // Try the parameter as a WindowId. TabControl truncates the HWND value.
+        HWND handle = NativeWindow.GetHandleFromWindowId((short)m.WParamInternal.LOWORD);
+        if (!handle.IsNull && FromHandle(handle) is { } control)
         {
-            DefWndProc(ref m);
+            m.ResultInternal = PInvoke.SendMessage(
+                control,
+                User32.WM.REFLECT | m.MsgInternal,
+                (WPARAM)handle, m.LParamInternal);
+
+            return;
         }
+
+        DefWndProc(ref m);
     }
 
     /// <summary>
-    ///  Handles the WM_PAINT messages.  This should only be called for userpaint controls.
+    ///  Handles the WM_PAINT messages. This should only be called for userpaint controls.
     /// </summary>
     private void WmPaint(ref Message m)
     {
