@@ -19,7 +19,7 @@ public class MDITests : ControlTestBase
     {
         await RunTestAsync(form =>
         {
-            using Form childForm = new()
+            using CustomForm childForm = new()
             {
                 MdiParent = form,
                 WindowState = FormWindowState.Minimized
@@ -41,7 +41,7 @@ public class MDITests : ControlTestBase
     {
         await RunTestAsync(form =>
         {
-            using Form childForm = new()
+            using CustomForm childForm = new()
             {
                 MdiParent = form,
                 WindowState = FormWindowState.Minimized
@@ -59,7 +59,7 @@ public class MDITests : ControlTestBase
         });
     }
 
-    private async Task RunTestAsync(Func<Form, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, Task> runTest)
     {
         await RunFormWithoutControlAsync(
             testDriverAsync: runTest,

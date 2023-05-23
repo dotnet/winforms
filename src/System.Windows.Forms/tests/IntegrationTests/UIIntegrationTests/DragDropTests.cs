@@ -64,7 +64,7 @@ public class DragDropTests : ControlTestBase
 
         Button? button = null;
         object? data = null;
-        await RunFormWithoutControlAsync(() => new Form(), async (form) =>
+        await RunFormWithoutControlAsync(() => new CustomForm(), async (form) =>
         {
             form.AllowDrop = true;
             form.ClientSize = new Size(100, 100);
@@ -280,7 +280,7 @@ public class DragDropTests : ControlTestBase
 
         ListViewItem? listViewItem = null;
         object? data = null;
-        await RunFormWithoutControlAsync(() => new Form(), async (form) =>
+        await RunFormWithoutControlAsync(() => new CustomForm(), async (form) =>
         {
             form.AllowDrop = true;
             form.ClientSize = new Size(100, 100);
@@ -588,7 +588,7 @@ public class DragDropTests : ControlTestBase
         }
     }
 
-    class DragDropForm : Form
+    class DragDropForm : CustomForm
     {
         public ListBox ListDragSource;
         public ListBox ListDragTarget;
@@ -867,7 +867,7 @@ public class DragDropTests : ControlTestBase
             // Cancel the drag if the mouse moves off the form.
             if (sender is ListBox lb)
             {
-                Form form = lb.FindForm()!;
+                CustomForm form = (CustomForm)lb.FindForm()!;
 
                 // Cancel the drag if the mouse moves off the form. The screenOffset
                 // takes into account any desktop bands that may be at the top or left
@@ -903,7 +903,7 @@ public class DragDropTests : ControlTestBase
         }
     }
 
-    class DragImageDropDescriptionForm : Form
+    class DragImageDropDescriptionForm : CustomForm
     {
         private readonly Bitmap _dragImage = new("./Resources/image.png");
         private readonly Bitmap _dragAcceptBmp = new("./Resources/DragAccept.bmp");

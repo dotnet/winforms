@@ -26,7 +26,7 @@ public class ImageListTests : ControlTestBase
     public void ImageList_FinalizerReleasesNativeHandle_ReturnsExpected()
     {
         // Warm up to create any GDI handles that are necessary, e.g. fonts, brushes, etc.
-        using (Form form = CreateForm())
+        using (CustomForm form = CreateForm())
         {
             form.Show();
         }
@@ -35,7 +35,7 @@ public class ImageListTests : ControlTestBase
         TestOutputHelper.WriteLine($"GDI handles before: {startGdiHandleCount}");
 
         // Now test for real
-        using (Form form = CreateForm())
+        using (CustomForm form = CreateForm())
         {
             form.Show();
         }
@@ -63,7 +63,7 @@ public class ImageListTests : ControlTestBase
         }
     }
 
-    private Form CreateForm()
+    private CustomForm CreateForm()
     {
         ListView listView1 = new()
         {
@@ -75,7 +75,7 @@ public class ImageListTests : ControlTestBase
             UseCompatibleStateImageBehavior = false
         };
 
-        Form form = new();
+        CustomForm form = new();
         form.AutoScaleMode = AutoScaleMode.Font;
         form.Controls.Add(listView1);
         form.Name = "ListViewTest";

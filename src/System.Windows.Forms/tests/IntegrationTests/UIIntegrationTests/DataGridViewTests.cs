@@ -71,7 +71,7 @@ public class DataGridViewTests : ControlTestBase
         });
     }
 
-    private async Task RunTestAsync(Func<Form, DataGridView, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, DataGridView, Task> runTest)
     {
         await RunSingleControlTestAsync(
             testDriverAsync: runTest,

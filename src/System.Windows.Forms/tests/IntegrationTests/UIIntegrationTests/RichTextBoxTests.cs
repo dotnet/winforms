@@ -254,7 +254,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
         }
     }
 
-    private async Task RunTestAsync(Func<Form, RichTextBox, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, RichTextBox, Task> runTest)
     {
         await RunSingleControlTestAsync(
             testDriverAsync: runTest,

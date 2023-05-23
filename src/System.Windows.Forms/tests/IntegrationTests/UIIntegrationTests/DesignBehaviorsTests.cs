@@ -119,7 +119,7 @@ public class DesignBehaviorsTests : ControlTestBase
                 var effects = node.TreeView.DoDragDrop(dataObject!, DragDropEffects.Copy);
             }
 
-            async Task InitiateDrangDropAsync(Form form, Point startCoordinates, Control rootView)
+            async Task InitiateDrangDropAsync(CustomForm form, Point startCoordinates, Control rootView)
             {
                 var virtualPointStart = ToVirtualPoint(startCoordinates);
                 startCoordinates.Offset(110, 50);

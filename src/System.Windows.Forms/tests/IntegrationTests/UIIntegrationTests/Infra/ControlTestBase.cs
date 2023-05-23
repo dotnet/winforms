@@ -172,7 +172,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         var rect = control.DisplayRectangle;
         var centerOfRect = GetCenter(rect);
         var centerOnScreen = control.PointToScreen(centerOfRect);
-        await MoveMouseAsync(control.FindForm()!, centerOnScreen);
+        await MoveMouseAsync((CustomForm)control.FindForm()!, centerOnScreen);
     }
 
     protected internal static Point ToVirtualPoint(Point point)
@@ -183,7 +183,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             (int)Math.Ceiling((65535.0 / (primaryMonitor.Height - 1)) * point.Y));
     }
 
-    protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)
+    protected async Task MoveMouseAsync(CustomForm window, Point point, bool assertCorrectLocation = true)
     {
         TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
         Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
@@ -218,13 +218,13 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         }
     }
 
-    protected async Task RunSingleControlTestAsync<T>(Func<Form, T, Task> testDriverAsync)
+    protected async Task RunSingleControlTestAsync<T>(Func<CustomForm, T, Task> testDriverAsync)
         where T : Control, new()
     {
         await RunFormAsync(
             () =>
             {
-                var form = new Form();
+                var form = new CustomForm();
                 form.TopMost = true;
 
                 var control = new T();
@@ -235,13 +235,13 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             testDriverAsync);
     }
 
-    protected async Task RunSingleControlTestAsync<T>(Func<Form, T, Task> testDriverAsync, Func<T> createControl, Func<Form>? createForm = null)
+    protected async Task RunSingleControlTestAsync<T>(Func<CustomForm, T, Task> testDriverAsync, Func<T> createControl, Func<CustomForm>? createForm = null)
         where T : Control, new()
     {
         await RunFormAsync(
             () =>
             {
-                Form form;
+                CustomForm form;
                 if (createForm is null)
                 {
                     form = new();
@@ -263,14 +263,14 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             testDriverAsync);
     }
 
-    protected async Task RunControlPairTestAsync<T1, T2>(Func<Form, (T1 control1, T2 control2), Task> testDriverAsync)
+    protected async Task RunControlPairTestAsync<T1, T2>(Func<CustomForm, (T1 control1, T2 control2), Task> testDriverAsync)
         where T1 : Control, new()
         where T2 : Control, new()
     {
         await RunFormAsync(
             () =>
             {
-                var form = new Form();
+                var form = new CustomForm();
                 form.TopMost = true;
 
                 var control1 = new T1();
@@ -288,9 +288,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             testDriverAsync);
     }
 
-    protected async Task RunFormAsync<T>(Func<(Form dialog, T control)> createDialog, Func<Form, T, Task> testDriverAsync)
+    protected async Task RunFormAsync<T>(Func<(CustomForm dialog, T control)> createDialog, Func<CustomForm, T, Task> testDriverAsync)
     {
-        Form? dialog = null;
+        CustomForm? dialog = null;
         T? control = default;
 
         TaskCompletionSource<VoidResult> gate = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -298,7 +298,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         {
             await gate.Task;
             await JoinableTaskFactory.SwitchToMainThreadAsync();
-            await WaitForIdleAsync();
+            await WaitForIdleAsync(null);
             try
             {
                 await testDriverAsync(dialog!, control!);
@@ -328,7 +328,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     }
 
     protected async Task RunFormWithoutControlAsync<TForm>(Func<TForm> createForm, Func<TForm, Task> testDriverAsync)
-        where TForm : Form
+        where TForm : CustomForm
     {
         TForm? dialog = null;
 
@@ -337,7 +337,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         {
             await gate.Task;
             await JoinableTaskFactory.SwitchToMainThreadAsync();
-            await WaitForIdleAsync();
+            await WaitForIdleAsync(null);
             try
             {
                 await testDriverAsync(dialog!);

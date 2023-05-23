@@ -560,7 +560,7 @@ public class ListViewTests : ControlTestBase
         listView.Items.Add(listViewItem);
     }
 
-    private async Task RunTestAsync(Func<Form, ListView, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, ListView, Task> runTest)
     {
         await RunSingleControlTestAsync(
             testDriverAsync: runTest,

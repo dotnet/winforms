@@ -182,7 +182,7 @@ public class MonthCalendarTests : ControlTestBase
         return cell.Bounds.Location + (cell.Bounds.Size / 2);
     }
 
-    private async Task ClickOnDateAsync(Form form, MonthCalendar calendar, DateTime date)
+    private async Task ClickOnDateAsync(CustomForm form, MonthCalendar calendar, DateTime date)
     {
         await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
         await InputSimulator.SendAsync(
@@ -190,7 +190,7 @@ public class MonthCalendarTests : ControlTestBase
             inputSimulator => inputSimulator.Mouse.LeftButtonClick());
     }
 
-    private async Task ClickOnDateTwiceAsync(Form form, MonthCalendar calendar, DateTime date)
+    private async Task ClickOnDateTwiceAsync(CustomForm form, MonthCalendar calendar, DateTime date)
     {
         await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
         await InputSimulator.SendAsync(
@@ -201,7 +201,7 @@ public class MonthCalendarTests : ControlTestBase
                                             .LeftButtonClick());
     }
 
-    private async Task RunClickTestAsync(Func<Form, MonthCalendar, Task> runTest)
+    private async Task RunClickTestAsync(Func<CustomForm, MonthCalendar, Task> runTest)
     {
         await RunSingleControlTestAsync(
             testDriverAsync: runTest,
@@ -225,7 +225,7 @@ public class MonthCalendarTests : ControlTestBase
             });
     }
 
-    private async Task RunTestAsync(Func<Form, MonthCalendar, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, MonthCalendar, Task> runTest)
     {
         await RunSingleControlTestAsync(
             testDriverAsync: runTest,

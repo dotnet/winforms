@@ -381,7 +381,7 @@ public class ButtonTests : ControlTestBase
         });
     }
 
-    private async Task RunTestAsync(Func<Form, Button, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, Button, Task> runTest)
     {
         await RunSingleControlTestAsync(
             testDriverAsync: runTest,

@@ -18,7 +18,7 @@ public class SendInput
         _waitForIdleAsync = waitForIdleAsync;
     }
 
-    internal async Task SendAsync(Form window, params object[] keys)
+    internal async Task SendAsync(CustomForm window, params object[] keys)
     {
         await SendAsync(window, inputSimulator =>
         {
@@ -69,7 +69,7 @@ public class SendInput
         });
     }
 
-    internal async Task SendAsync(Form window, Action<InputSimulator> actions)
+    internal async Task SendAsync(CustomForm window, Action<InputSimulator> actions)
     {
         if (actions is null)
         {
@@ -77,10 +77,22 @@ public class SendInput
         }
 
         SetForegroundWindow(window);
-        await Task.Run(() => actions(new InputSimulator()));
 
-        await _waitForIdleAsync();
+        // Reset wait event on CustomForm.
+        var resetEvent = window.GetManualResetEventSlim();
+        resetEvent.Reset();
+
+        Task<bool> waitTask = Task.Run(() => resetEvent.Wait(5000));
+        await Task.Run(() => actions(new InputSimulator()));
+        await SendTestInputAsync();
+
+        await _waitForIdleAsync(window);
+
+        // Wait until test input is received by CustomForm.
+        await waitTask;
     }
+
+    private async Task SendTestInputAsync() => await Task.Run(() => new InputSimulator().Keyboard.KeyPress(CustomForm.TestKey));
 
     private static HWND GetForegroundWindow()
     {
@@ -99,7 +111,7 @@ public class SendInput
         return foregroundWindow;
     }
 
-    private static void SetForegroundWindow(Form window)
+    private static void SetForegroundWindow(CustomForm window)
     {
         // Make the window a top-most window so it will appear above any existing top-most windows
         PInvoke.SetWindowPos(window, HWND.HWND_TOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);

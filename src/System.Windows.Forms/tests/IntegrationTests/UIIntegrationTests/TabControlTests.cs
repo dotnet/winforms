@@ -66,7 +66,7 @@ public class TabControlTests : ControlTestBase
         });
     }
 
-    private async Task<bool> IsHoveredWithMouseAsync(Form form, TabControl tabControl, Point point, bool assertCorrectLocation = true)
+    private async Task<bool> IsHoveredWithMouseAsync(CustomForm form, TabControl tabControl, Point point, bool assertCorrectLocation = true)
     {
         await MoveMouseAsync(form, tabControl.PointToScreen(point), assertCorrectLocation);
 
@@ -76,7 +76,7 @@ public class TabControlTests : ControlTestBase
         return result && resultOfPage1 && resultOfPage2;
     }
 
-    private async Task RunTestAsync(Func<Form, TabControl, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, TabControl, Task> runTest)
     {
         await RunSingleControlTestAsync(
             testDriverAsync: runTest,

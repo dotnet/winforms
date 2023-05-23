@@ -29,7 +29,7 @@ public class ToolStripTests : ControlTestBase
 
         static void ShowForm(ImageList sharedImageList)
         {
-            using Form form = new();
+            using CustomForm form = new();
             using ToolStripButton toolStripButton = new()
             {
                 ImageKey = "square",
@@ -65,7 +65,7 @@ public class ToolStripTests : ControlTestBase
     [WinFormsFact]
     public void ToolStrip_Hiding_ToolStripMenuItem_OnDropDownClosed_ShouldNotThrow()
     {
-        using Form form = new();
+        using CustomForm form = new();
 
         using ToolStripMenuItem menu1 = new("Menu1");
         using ToolStripMenuItem menu1Item1 = new("Item1");

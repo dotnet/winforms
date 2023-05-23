@@ -36,7 +36,7 @@ public class ApplicationTests : ControlTestBase
         });
     }
 
-    private async Task RunTestAsync(Func<Form, Task> runTest)
+    private async Task RunTestAsync(Func<CustomForm, Task> runTest)
     {
         await RunFormWithoutControlAsync(
             testDriverAsync: runTest,

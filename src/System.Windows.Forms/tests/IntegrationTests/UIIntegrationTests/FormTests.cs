@@ -140,12 +140,12 @@ public class FormTests : ControlTestBase
         });
     }
 
-    private async Task RunEmptyFormTestAsync(Func<Form, Task> testDriverAsync)
+    private async Task RunEmptyFormTestAsync(Func<CustomForm, Task> testDriverAsync)
     {
         await RunFormWithoutControlAsync(
             () =>
             {
-                var form = new Form();
+                var form = new CustomForm();
                 form.TopMost = true;
 
                 return form;
