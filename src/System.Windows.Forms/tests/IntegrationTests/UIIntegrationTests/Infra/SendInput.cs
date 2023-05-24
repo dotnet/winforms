@@ -83,7 +83,7 @@ public class SendInput
         var resetEvent = window.GetManualResetEventSlim();
         resetEvent.Reset();
 
-        Task<bool> waitTask = Task.Run(() => resetEvent.Wait(5000));
+        //Task<bool> waitTask = Task.Run(() => resetEvent.Wait(5000));
         await Task.Run(() => actions(new InputSimulator()));
 
         // Sending test input as end of input message. SendInput is async and might have not been dispatched to the control before we proceed with further verifications.
@@ -93,7 +93,7 @@ public class SendInput
         await _waitForIdleAsync();
 
         // Wait until test input is received by CustomForm.
-        if (!await waitTask)
+        if (!await Task.Run(() => resetEvent.Wait(5000)))
         {
             if (CheckMessageQueue(out int count))
             {
