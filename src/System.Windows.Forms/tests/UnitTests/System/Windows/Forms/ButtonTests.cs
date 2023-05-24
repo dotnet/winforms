@@ -585,8 +585,7 @@ public class ButtonTests
         }
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsFact]
     public void Button_AutoSize_SetCachedPreferredSize_DoesNotInvalidate()
     {
         using var control = new Button
@@ -684,8 +683,7 @@ public class ButtonTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsFact]
     public void Button_Font_SetCachedPreferredSize_Invalidates()
     {
         using var font = new Font("Arial", 100f);
@@ -940,8 +938,7 @@ public class ButtonTests
         }
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsFact]
     public void Button_Text_SetCachedPreferredSize_Invalidates()
     {
         using var control = new Button
@@ -1193,8 +1190,7 @@ public class ButtonTests
         yield return new object[] { AutoSizeMode.GrowOnly, new Size(int.MaxValue, int.MaxValue), new Size(75, 23) };
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_System_TestData))]
     public void Button_GetPreferredSize_InvokeSystem_ReturnsExpected(AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
@@ -1242,8 +1238,7 @@ public class ButtonTests
         yield return new object[] { AutoSizeMode.GrowOnly, new Size(int.MaxValue, int.MaxValue), new Size(75, 23) };
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_SystemWithPadding_TestData))]
     public void Button_GetPreferredSize_InvokeSystemWithPadding_ReturnsExpected(AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
@@ -1292,8 +1287,7 @@ public class ButtonTests
         yield return new object[] { AutoSizeMode.GrowOnly, new Size(int.MaxValue, int.MaxValue), new Size(18, 15) };
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_SystemWithPaddingSmallSize_TestData))]
     public void Button_GetPreferredSize_InvokeSystemWithPaddingSmallSize_ReturnsExpected(AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
@@ -1325,8 +1319,7 @@ public class ButtonTests
         yield return new object[] { new Size(1, 1) };
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_SystemWithText_TestData))]
     public void Button_GetPreferredSize_InvokeSystemGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
@@ -1349,8 +1342,7 @@ public class ButtonTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_SystemWithText_TestData))]
     public void Button_GetPreferredSize_InvokeSystemGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {
@@ -1431,8 +1423,7 @@ public class ButtonTests
         }
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_Flat_TestData))]
     public void Button_GetPreferredSize_InvokeFlat_ReturnsExpected(FlatStyle flatStyle, AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
@@ -1509,8 +1500,7 @@ public class ButtonTests
         }
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithPadding_TestData))]
     public void Button_GetPreferredSize_InvokeFlatWithPadding_ReturnsExpected(FlatStyle flatStyle, AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
@@ -1588,8 +1578,7 @@ public class ButtonTests
         }
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithPaddingSmallSize_TestData))]
     public void Button_GetPreferredSize_InvokeFlatWithPaddingSmallSize_ReturnsExpected(FlatStyle flatStyle, AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
     {
@@ -1621,8 +1610,7 @@ public class ButtonTests
         yield return new object[] { new Size(1, 1) };
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeFlatGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
@@ -1645,8 +1633,7 @@ public class ButtonTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeFlatGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {
@@ -1669,8 +1656,7 @@ public class ButtonTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokePopupGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
@@ -1693,8 +1679,7 @@ public class ButtonTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokePopupGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {
@@ -1717,8 +1702,7 @@ public class ButtonTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeStandardGrowOnlyWithText_ReturnsExpected(Size proposedSize)
     {
@@ -1741,8 +1725,7 @@ public class ButtonTests
         Assert.False(control.IsHandleCreated);
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
-    [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
+    [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_FlatWithText_TestData))]
     public void Button_GetPreferredSize_InvokeStandardGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
     {

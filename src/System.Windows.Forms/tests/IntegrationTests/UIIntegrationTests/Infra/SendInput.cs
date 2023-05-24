@@ -92,7 +92,10 @@ public class SendInput
         await _waitForIdleAsync();
 
         // Wait until test input is received by CustomForm.
-        await waitTask;
+        if (!await waitTask)
+        {
+            throw new TimeoutException("Timeout reached while waiting to process SendInput.");
+        }
     }
 
     private async Task SendTestInputAsync() => await Task.Run(() => new InputSimulator().Keyboard.KeyPress(CustomForm.TestKey));

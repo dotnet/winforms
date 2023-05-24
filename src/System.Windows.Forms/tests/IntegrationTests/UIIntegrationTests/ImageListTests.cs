@@ -21,8 +21,7 @@ public class ImageListTests : ControlTestBase
     {
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/6635")]
-    [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/6635")]
+    [WinFormsFact]
     public void ImageList_FinalizerReleasesNativeHandle_ReturnsExpected()
     {
         // Warm up to create any GDI handles that are necessary, e.g. fonts, brushes, etc.

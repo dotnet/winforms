@@ -339,6 +339,7 @@ public class ButtonTests : ControlTestBase
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RETURN));
 
             Assert.True(wasClicked);
+            Assert.True(false);
         });
     }
 
