@@ -659,7 +659,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.GoBack();
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             retVal = false;
         }
@@ -680,7 +680,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.GoForward();
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             retVal = false;
         }
@@ -796,7 +796,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -819,7 +819,7 @@ public partial class WebBrowser : WebBrowserBase
                 AxIWebBrowser2.Refresh();
             }
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -845,7 +845,7 @@ public partial class WebBrowser : WebBrowserBase
                 AxIWebBrowser2.Refresh2(ref level);
             }
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -882,7 +882,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PAGESETUP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -897,7 +897,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -911,7 +911,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINTPREVIEW, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -926,7 +926,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PROPERTIES, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -941,7 +941,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_SAVEAS, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }
@@ -955,7 +955,7 @@ public partial class WebBrowser : WebBrowserBase
         {
             AxIWebBrowser2.Stop();
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }

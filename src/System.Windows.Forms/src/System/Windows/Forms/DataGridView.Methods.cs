@@ -3207,13 +3207,8 @@ public partial class DataGridView
                             dataGridViewEditingCell.EditingCellValueChanged = false;
                         }
                     }
-                    catch (Exception exception)
+                    catch (Exception exception) when (!exception.IsCriticalException())
                     {
-                        if (ClientUtils.IsCriticalException(exception))
-                        {
-                            throw;
-                        }
-
                         dgvdee2 = new(
                             exception,
                             _ptCurrentCell.X,
@@ -9950,13 +9945,8 @@ public partial class DataGridView
                 dataGridViewEditingCell.EditingCellValueChanged = false;
             }
         }
-        catch (Exception exception)
+        catch (Exception exception) when (!exception.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(exception))
-            {
-                throw;
-            }
-
             dgvdee = new(
                 exception,
                 _ptCurrentCell.X,
@@ -9997,13 +9987,8 @@ public partial class DataGridView
             dataGridViewCell.InitializeEditingControl(_ptCurrentCell.Y, initialFormattedValue, dataGridViewCellStyle);
             ((IDataGridViewEditingControl)EditingControl).EditingControlValueChanged = false;
         }
-        catch (Exception exception)
+        catch (Exception exception) when (!exception.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(exception))
-            {
-                throw;
-            }
-
             dgvdee = new(
                 exception,
                 _ptCurrentCell.X,
@@ -17260,16 +17245,12 @@ public partial class DataGridView
                 }
             }
 
-            base.OnPaint(e); // raise paint event
+            // Raise paint event
+            base.OnPaint(e);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             Debug.Fail($"DataGridView.OnPaint exception: {ex.Message} stack trace {ex.StackTrace}");
-
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
         }
     }
 
@@ -20628,13 +20609,8 @@ public partial class DataGridView
                                         {
                                             DataConnection.DeleteRow(rowIndex);
                                         }
-                                        catch (Exception exception)
+                                        catch (Exception exception) when (!exception.IsCriticalException())
                                         {
-                                            if (ClientUtils.IsCriticalException(exception))
-                                            {
-                                                throw;
-                                            }
-
                                             // this is tricky.
                                             // the back-end threw an exception. At that stage, we did not delete the dataGridView row
                                             // from our collection of dataGridView rows.
@@ -25894,13 +25870,8 @@ public partial class DataGridView
         {
             val = dataGridViewCurrentCell.ParseFormattedValue(formattedValue, dgvcpe.InheritedCellStyle, null, null);
         }
-        catch (Exception e)
+        catch (Exception e) when (!e.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(e))
-            {
-                throw;
-            }
-
             exception = e;
             return false;
         }

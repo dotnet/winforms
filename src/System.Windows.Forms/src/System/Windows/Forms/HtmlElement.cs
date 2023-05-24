@@ -497,7 +497,7 @@ public sealed partial class HtmlElement
 
             return null;
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
 

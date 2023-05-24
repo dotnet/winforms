@@ -1147,7 +1147,7 @@ public partial class PictureBox : Control, ISupportInitialize
                     LoadAsync();
                 }
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
                 _image = ErrorImage;
             }

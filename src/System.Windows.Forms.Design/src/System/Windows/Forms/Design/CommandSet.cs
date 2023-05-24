@@ -379,7 +379,7 @@ internal class CommandSet : IDisposable
 
                 return true;
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
             }
         }
@@ -608,13 +608,9 @@ internal class CommandSet : IDisposable
             {
                 return (Point)prop.GetValue(comp);
             }
-            catch (Exception e)
+            catch (Exception e) when (!e.IsCriticalException())
             {
                 Debug.Fail("Commands may be disabled, the location property was not accessible", e.ToString());
-                if (ClientUtils.IsCriticalException(e))
-                {
-                    throw;
-                }
             }
         }
 
@@ -3875,7 +3871,7 @@ internal class CommandSet : IDisposable
             {
                 uiService?.ShowError(e, string.Format(SR.CommandSetError, e.Message));
 
-                if (ClientUtils.IsCriticalException(e))
+                if (e.IsCriticalException())
                 {
                     throw;
                 }

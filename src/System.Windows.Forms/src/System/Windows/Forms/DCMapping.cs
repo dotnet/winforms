@@ -97,7 +97,7 @@ internal struct DCMapping : IDisposable
                 selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
                 "SIMPLEREGION or NULLLREGION expected.");
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
     }

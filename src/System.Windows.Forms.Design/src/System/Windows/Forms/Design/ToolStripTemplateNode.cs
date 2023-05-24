@@ -1404,12 +1404,8 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
             Debug.Assert(_addItemButton.DropDownItems.Count > 0);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
         }
 
         _miniToolStrip.Items.AddRange(new ToolStripItem[]

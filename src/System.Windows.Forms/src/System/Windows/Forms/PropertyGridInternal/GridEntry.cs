@@ -1973,7 +1973,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             OwnerGridView.SelectedGridEntry = this;
             return true;
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
 

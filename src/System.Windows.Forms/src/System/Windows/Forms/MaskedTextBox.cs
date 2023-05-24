@@ -2356,15 +2356,11 @@ public partial class MaskedTextBox : TextBoxBase
                         formattedNullValue: null,
                         Formatter.GetDefaultDataSourceNullValue(_validatingType));
                 }
-                catch (Exception exception)
+                catch (Exception exception) when (!exception.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(exception))
+                    if (exception.InnerException is not null)
                     {
-                        throw;
-                    }
-
-                    if (exception.InnerException is not null) // Outer exception is a generic TargetInvocationException.
-                    {
+                        // Outer exception is a generic TargetInvocationException.
                         exception = exception.InnerException;
                     }
 
@@ -2761,15 +2757,11 @@ public partial class MaskedTextBox : TextBoxBase
                 Clipboard.SetText(text);
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             // Note: Sometimes the above operation throws but it successfully sets the
             // data in the clipboard. This usually happens when the Application's Main
             // is not attributed with [STAThread].
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
         }
 
         return true;
@@ -2904,13 +2896,8 @@ public partial class MaskedTextBox : TextBoxBase
         {
             text = Clipboard.GetText();
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
-
             Debug.Fail(ex.ToString());
             return;
         }

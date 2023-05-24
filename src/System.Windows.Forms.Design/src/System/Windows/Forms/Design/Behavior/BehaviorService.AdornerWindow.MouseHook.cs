@@ -111,7 +111,7 @@ public sealed partial class BehaviorService
                             _currentAdornerWindow._behaviorService.ShowError(ex);
                         }
 
-                        if (ClientUtils.IsCriticalException(ex))
+                        if (ex.IsCriticalException())
                         {
                             throw;
                         }

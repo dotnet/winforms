@@ -558,7 +558,7 @@ public class Binding
                 _inOnBindingComplete = true;
                 _onComplete?.Invoke(this, e);
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
                 // BindingComplete event is intended primarily as an "FYI" event with support for cancellation.
                 // User code should not be throwing exceptions from this event as a way to signal new error conditions (they should use

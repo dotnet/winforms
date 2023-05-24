@@ -243,7 +243,7 @@ public partial class Control
                     }
                 }
             }
-            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+            catch (Exception e) when (!e.IsCriticalException())
             {
             }
         }

@@ -569,13 +569,9 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                     return;
                 }
             }
-            catch (Exception e)
+            catch (Exception e) when (!e.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(e))
-                {
-                    throw;
-                }
-                else if (e != CheckoutException.Canceled)
+                if (e != CheckoutException.Canceled)
                 {
                     DisplayError(e);
                 }
@@ -724,13 +720,9 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception e) when (!e.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(e))
-            {
-                throw;
-            }
-            else if (e != CheckoutException.Canceled)
+            if (e != CheckoutException.Canceled)
             {
                 DisplayError(e);
             }
@@ -738,7 +730,9 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     }
 
     /// <summary>
-    ///  If the selection manager move, this indicates that the form has autoscrolling enabled and has been scrolled.  We have to invalidate here because we may get moved before the rest of the components so we may draw the selection in the wrong spot.
+    ///  If the selection manager move, this indicates that the form has autoscrolling enabled and has been scrolled.
+    ///  We have to invalidate here because we may get moved before the rest of the components so we may draw the
+    ///  selection in the wrong spot.
     /// </summary>
     protected override void OnMove(EventArgs e)
     {

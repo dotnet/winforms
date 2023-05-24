@@ -88,12 +88,8 @@ internal class TemplateNodeCustomMenuItemCollection : CustomMenuItemCollection
                 {
                     image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                 }
-                catch (Exception e)
+                catch (Exception e) when (!e.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(e))
-                    {
-                        throw;
-                    }
                 }
 
                 PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(component)["Image"];
@@ -126,7 +122,7 @@ internal class TemplateNodeCustomMenuItemCollection : CustomMenuItemCollection
                 newItemTransaction = null;
             }
 
-            if (ClientUtils.IsCriticalException(ex))
+            if (ex.IsCriticalException())
             {
                 throw;
             }

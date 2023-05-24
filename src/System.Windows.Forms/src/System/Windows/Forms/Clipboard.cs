@@ -357,7 +357,7 @@ public static class Clipboard
             {
                 Path.GetFullPath(path!);
             }
-            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+            catch (Exception e) when (!e.IsCriticalException())
             {
                 throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"), e);
             }

@@ -541,7 +541,7 @@ public abstract class ListControl : Control
                 formattedNullValue: null,
                 DBNull.Value);
         }
-        catch (Exception exception) when (!ClientUtils.IsCriticalException(exception))
+        catch (Exception exception) when (!exception.IsCriticalException())
         {
             // if we did not do any work then return the old ItemText
             return Convert.ToString(item, CultureInfo.CurrentCulture);

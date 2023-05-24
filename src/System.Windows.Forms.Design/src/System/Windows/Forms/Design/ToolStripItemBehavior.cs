@@ -801,7 +801,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         designerTransaction = null;
                     }
 
-                    if (ClientUtils.IsCriticalException(ex))
+                    if (ex.IsCriticalException())
                     {
                         throw;
                     }

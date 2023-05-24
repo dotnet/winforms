@@ -77,7 +77,7 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
             CategorizePropertyEntries();
             return expandable;
         }
-        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+        catch (Exception e) when (!e.IsCriticalException())
         {
             return false;
         }

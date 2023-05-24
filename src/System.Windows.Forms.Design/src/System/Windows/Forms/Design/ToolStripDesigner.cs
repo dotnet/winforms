@@ -606,12 +606,8 @@ internal class ToolStripDesigner : ControlDesigner
                     {
                         image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                     }
-                    catch (Exception e)
+                    catch (Exception e) when (!e.IsCriticalException())
                     {
-                        if (ClientUtils.IsCriticalException(e))
-                        {
-                            throw;
-                        }
                     }
 
                     PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)["Image"];

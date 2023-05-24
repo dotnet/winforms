@@ -411,7 +411,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             // Cancel our new Item transaction
             TryCancelTransaction(ref newItemTransaction);
 
-            if (ClientUtils.IsCriticalException(ex))
+            if (ex.IsCriticalException())
             {
                 throw;
             }
@@ -450,7 +450,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         catch (Exception ex)
         {
             TryCancelTransaction(ref newItemTransaction);
-            if (ClientUtils.IsCriticalException(ex))
+            if (ex.IsCriticalException())
             {
                 throw;
             }
@@ -489,7 +489,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         catch (Exception ex)
         {
             TryCancelTransaction(ref newItemTransaction);
-            if (ClientUtils.IsCriticalException(ex))
+            if (ex.IsCriticalException())
             {
                 throw;
             }
@@ -528,12 +528,8 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 {
                     image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ex.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
                 }
 
                 ChangeProperty(component, "Image", image);
@@ -555,12 +551,11 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 newItemTransaction = null;
             }
 
-            if (ClientUtils.IsCriticalException(ex))
+            if (ex.IsCriticalException())
             {
                 throw;
             }
         }
-
         finally
         {
             newItemTransaction?.Commit();

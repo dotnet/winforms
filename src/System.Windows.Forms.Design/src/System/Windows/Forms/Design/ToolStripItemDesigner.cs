@@ -398,7 +398,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
 
                     selectionManager?.Refresh();
 
-                    if (ClientUtils.IsCriticalException(e))
+                    if (e.IsCriticalException())
                     {
                         throw;
                     }
@@ -821,12 +821,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 {
                     image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ex.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
                 }
 
                 PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(newItem)["Image"];
