@@ -30,7 +30,7 @@ internal abstract partial class GridEntry
             _runtimeId = new[]
             {
                 RuntimeIDFirstItem,
-                (int)(owner.OwnerGridView?.InternalHandle ?? HWND.Null),
+                (int)(owner?.OwnerGridView?.InternalHandle ?? HWND.Null),
                 GetHashCode()
             };
         }
