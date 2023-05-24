@@ -13,6 +13,8 @@ public abstract partial class UpDownBase
     {
         internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
         {
+            private int[]? _runtimeId;
+
             private DirectionButtonAccessibleObject? _upButton;
             private DirectionButtonAccessibleObject? _downButton;
 
@@ -112,7 +114,7 @@ public abstract partial class UpDownBase
             public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.SpinButton);
 
             internal override int[] RuntimeId
-                => !this.TryGetOwnerAs(out UpDownButtons? owner) ? base.RuntimeId : new int[]
+                => _runtimeId ??= !this.TryGetOwnerAs(out UpDownButtons? owner) ? base.RuntimeId : new int[]
                 {
                     RuntimeIDFirstItem,
                     PARAM.ToInt(owner.InternalHandle),

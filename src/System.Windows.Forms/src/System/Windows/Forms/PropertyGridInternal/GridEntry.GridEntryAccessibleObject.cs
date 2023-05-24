@@ -13,8 +13,7 @@ internal abstract partial class GridEntry
     {
         private readonly WeakReference<GridEntry> _owningGridEntry;
 
-        // Used by UIAutomation
-        private int[]? _runtimeId;
+        private readonly int[] _runtimeId;
 
         private delegate void SelectDelegate(AccessibleSelection flags);
 
@@ -22,6 +21,18 @@ internal abstract partial class GridEntry
         {
             Debug.Assert(owner is not null, "GridEntryAccessibleObject must have a valid owner GridEntry");
             _owningGridEntry = new(owner);
+
+            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a.
+            // Second item can be anything, but it's good to supply HWND. Third and others are optional, but in case of
+            // GridItem we need it, to make it unique. Grid items are not controls, they don't have hwnd - we use hwnd
+            // of PropertyGridView.
+
+            _runtimeId = new[]
+            {
+                RuntimeIDFirstItem,
+                (int)(owner.OwnerGridView?.InternalHandle ?? HWND.Null),
+                GetHashCode()
+            };
         }
 
         private protected override string AutomationId => GetHashCode().ToString();
@@ -185,16 +196,7 @@ internal abstract partial class GridEntry
             }
         }
 
-        // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a. Second item
-        // can be anything, but it's good to supply HWND. Third and others are optional, but in case of GridItem we need it, to make it unique.
-        // Grid items are not controls, they don't have hwnd - we use hwnd of PropertyGridView.
-        internal override int[] RuntimeId =>
-            _runtimeId ??= !this.TryGetOwnerAs(out GridEntry? owner) ? base.RuntimeId : new int[]
-            {
-                RuntimeIDFirstItem,
-                (int)(owner.OwnerGridView?.InternalHandle ?? HWND.Null),
-                GetHashCode()
-            };
+        internal override int[] RuntimeId => _runtimeId;
 
         private PropertyGridView? PropertyGridView
         {

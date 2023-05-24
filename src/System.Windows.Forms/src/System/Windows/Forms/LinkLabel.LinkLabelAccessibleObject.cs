@@ -11,6 +11,8 @@ public partial class LinkLabel
 {
     internal class LinkLabelAccessibleObject : LabelAccessibleObject
     {
+        private int[]? _runtimeId;
+
         public LinkLabelAccessibleObject(LinkLabel owner) : base(owner)
         {
         }
@@ -77,7 +79,7 @@ public partial class LinkLabel
         internal override bool IsIAccessibleExSupported() => true;
 
         internal override int[] RuntimeId
-            => !this.TryGetOwnerAs(out LinkLabel? owner) ? base.RuntimeId : new int[]
+            => _runtimeId ??= !this.TryGetOwnerAs(out LinkLabel? owner) ? base.RuntimeId : new int[]
             {
                 RuntimeIDFirstItem,
                 PARAM.ToInt(owner.InternalHandle),

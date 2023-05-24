@@ -12,6 +12,7 @@ public partial class DataGridView
     internal class DataGridViewEditingPanelAccessibleObject : ControlAccessibleObject
     {
         private readonly WeakReference<DataGridView> _ownerDataGridView;
+        private int[]? _runtimeId;
 
         public DataGridViewEditingPanelAccessibleObject(DataGridView dataGridView, Panel panel) : base(panel)
         {
@@ -27,7 +28,7 @@ public partial class DataGridView
                 : UiaCore.StubFragmentRoot.Instance;
 
         internal override int[] RuntimeId
-            => this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.RuntimeId : base.RuntimeId;
+            => _runtimeId ??= this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.RuntimeId : base.RuntimeId;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {

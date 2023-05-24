@@ -13,6 +13,8 @@ internal partial class PropertyGridView
     {
         private class GridViewTextBoxAccessibleObject : TextBoxBaseAccessibleObject
         {
+            private int[]? _runtimeId;
+
             public GridViewTextBoxAccessibleObject(GridViewTextBox owner) : base(owner)
             {
             }
@@ -98,7 +100,7 @@ internal partial class PropertyGridView
             }
 
             internal override int[] RuntimeId
-                => !this.TryGetOwnerAs(out Control? owner) ? base.RuntimeId : new int[]
+                => _runtimeId ??= !this.TryGetOwnerAs(out Control? owner) ? base.RuntimeId : new int[]
                 {
                     RuntimeIDFirstItem,
                     PARAM.ToInt(owner.InternalHandle),
