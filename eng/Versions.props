@@ -6,7 +6,7 @@
     <PatchVersion>0</PatchVersion>
     <!-- version in our package name #.#.#-below.#####.## -->
     <PreReleaseVersionLabel>preview</PreReleaseVersionLabel>
-    <PreReleaseVersionIteration>5</PreReleaseVersionIteration>
+    <PreReleaseVersionIteration>6</PreReleaseVersionIteration>
     <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp5.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
