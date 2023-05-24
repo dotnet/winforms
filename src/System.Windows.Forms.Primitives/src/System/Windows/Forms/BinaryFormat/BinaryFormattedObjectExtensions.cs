@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -32,24 +31,48 @@ internal static class BinaryFormattedObjectExtensions
             _ => false,
         };
 
+    private delegate bool TryGetDelegate(BinaryFormattedObject format, [NotNullWhen(true)] out object? value);
+
+    private static bool TryGet(TryGetDelegate get, BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    {
+        try
+        {
+            return get(format, out value);
+        }
+        catch (Exception ex) when (ex is KeyNotFoundException or InvalidCastException)
+        {
+            // This should only really happen with corrupted data.
+            Debug.Fail(ex.Message);
+            value = default;
+            return false;
+        }
+    }
+
     /// <summary>
     ///  Tries to get this object as a <see cref="PointF"/>.
     /// </summary>
     public static bool TryGetPointF(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
     {
-        if (format.RecordCount < 4
-            || format[1] is not BinaryLibrary binaryLibrary
-            || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
-            || format[2] is not ClassWithMembersAndTypes classInfo
-            || classInfo.Name != typeof(PointF).FullName
-            || classInfo.MemberValues.Count != 2)
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
             value = default;
-            return false;
-        }
 
-        value = new PointF((float)classInfo["x"], (float)classInfo["y"]);
-        return true;
+            if (format.RecordCount < 4
+                || format[1] is not BinaryLibrary binaryLibrary
+                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
+                || format[2] is not ClassWithMembersAndTypes classInfo
+                || classInfo.Name != typeof(PointF).FullName
+                || classInfo.MemberValues.Count != 2)
+            {
+                return false;
+            }
+
+            value = new PointF((float)classInfo["x"], (float)classInfo["y"]);
+
+            return true;
+        }
     }
 
     /// <summary>
@@ -57,24 +80,30 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetRectangleF(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
     {
-        if (format.RecordCount < 4
-            || format[1] is not BinaryLibrary binaryLibrary
-            || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
-            || format[2] is not ClassWithMembersAndTypes classInfo
-            || classInfo.Name != typeof(RectangleF).FullName
-            || classInfo.MemberValues.Count != 4)
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
             value = default;
-            return false;
-        }
 
-        value = new RectangleF(
+            if (format.RecordCount < 4
+                || format[1] is not BinaryLibrary binaryLibrary
+                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
+                || format[2] is not ClassWithMembersAndTypes classInfo
+                || classInfo.Name != typeof(RectangleF).FullName
+                || classInfo.MemberValues.Count != 4)
+            {
+                return false;
+            }
+
+            value = new RectangleF(
             (float)classInfo["x"],
             (float)classInfo["y"],
             (float)classInfo["width"],
             (float)classInfo["height"]);
 
-        return true;
+            return true;
+        }
     }
 
     /// <summary>
@@ -83,64 +112,69 @@ internal static class BinaryFormattedObjectExtensions
     /// <returns><see langword="true"/> if this represented a primitive type or string.</returns>
     public static bool TryGetPrimitiveType(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
     {
-        value = null;
-        if (format.RecordCount < 3)
-        {
-            return false;
-        }
+        return TryGet(Get, format, out value);
 
-        if (format[1] is BinaryObjectString binaryString)
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
-            value = binaryString.Value;
-            return true;
-        }
+            value = default;
+            if (format.RecordCount < 3)
+            {
+                return false;
+            }
 
-        if (format[1] is not SystemClassWithMembersAndTypes systemClass)
-        {
-            return false;
-        }
+            if (format[1] is BinaryObjectString binaryString)
+            {
+                value = binaryString.Value;
+                return true;
+            }
 
-        if (IsPrimitiveTypeClassName(systemClass.Name) && systemClass.MemberTypeInfo[0].Type == BinaryType.Primitive)
-        {
-            value = systemClass.MemberValues[0];
-            return true;
-        }
+            if (format[1] is not SystemClassWithMembersAndTypes systemClass)
+            {
+                return false;
+            }
 
-        if (systemClass.Name == typeof(TimeSpan).FullName)
-        {
-            value = new TimeSpan((long)systemClass.MemberValues[0]);
-            return true;
-        }
+            if (IsPrimitiveTypeClassName(systemClass.Name) && systemClass.MemberTypeInfo[0].Type == BinaryType.Primitive)
+            {
+                value = systemClass.MemberValues[0];
+                return true;
+            }
 
-        switch (systemClass.Name)
-        {
-            case TypeInfo.TimeSpanType:
+            if (systemClass.Name == typeof(TimeSpan).FullName)
+            {
                 value = new TimeSpan((long)systemClass.MemberValues[0]);
                 return true;
-            case TypeInfo.DateTimeType:
-                ulong ulongValue = (ulong)systemClass["dateData"];
-                value = Unsafe.As<ulong, DateTime>(ref ulongValue);
-                return true;
-            case TypeInfo.DecimalType:
-                Span<int> bits = stackalloc int[4]
-                {
-                    (int)systemClass["lo"],
-                    (int)systemClass["mid"],
-                    (int)systemClass["hi"],
-                    (int)systemClass["flags"]
-                };
+            }
 
-                value = new decimal(bits);
-                return true;
-            case TypeInfo.IntPtrType:
-                // Rehydrating still throws even though casting doesn't any more
-                value = checked((nint)(long)systemClass.MemberValues[0]);
-                return true;
-            case TypeInfo.UIntPtrType:
-                value = checked((nuint)(ulong)systemClass.MemberValues[0]);
-                return true;
-            default:
-                return false;
+            switch (systemClass.Name)
+            {
+                case TypeInfo.TimeSpanType:
+                    value = new TimeSpan((long)systemClass.MemberValues[0]);
+                    return true;
+                case TypeInfo.DateTimeType:
+                    ulong ulongValue = (ulong)systemClass["dateData"];
+                    value = Unsafe.As<ulong, DateTime>(ref ulongValue);
+                    return true;
+                case TypeInfo.DecimalType:
+                    Span<int> bits = stackalloc int[4]
+                    {
+                        (int)systemClass["lo"],
+                        (int)systemClass["mid"],
+                        (int)systemClass["hi"],
+                        (int)systemClass["flags"]
+                    };
+
+                    value = new decimal(bits);
+                    return true;
+                case TypeInfo.IntPtrType:
+                    // Rehydrating still throws even though casting doesn't any more
+                    value = checked((nint)(long)systemClass.MemberValues[0]);
+                    return true;
+                case TypeInfo.UIntPtrType:
+                    value = checked((nuint)(ulong)systemClass.MemberValues[0]);
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 
@@ -149,129 +183,94 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveList(this BinaryFormattedObject format, [NotNullWhen(true)] out object? list)
     {
-        list = null;
+        return TryGet(Get, format, out list);
 
-        const string ListTypeName = "System.Collections.Generic.List`1[[";
-
-        if (format.RecordCount != 4
-            || format[1] is not SystemClassWithMembersAndTypes classInfo
-            || !classInfo.Name.StartsWith(ListTypeName, StringComparison.Ordinal)
-            || format[2] is not ArrayRecord array)
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? list)
         {
-            return false;
-        }
+            list = null;
 
-        int commaIndex = classInfo.Name.IndexOf(',');
-        if (commaIndex == -1)
-        {
-            return false;
-        }
+            const string ListTypeName = "System.Collections.Generic.List`1[[";
 
-        ReadOnlySpan<char> typeName = classInfo.Name.AsSpan()[ListTypeName.Length..commaIndex];
-        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(typeName);
-
-        int size;
-        try
-        {
-            // Lists serialize the entire backing array.
-            if ((size = (int)classInfo["_size"]) > array.Length)
+            if (format.RecordCount != 4
+                || format[1] is not SystemClassWithMembersAndTypes classInfo
+                || !classInfo.Name.StartsWith(ListTypeName, StringComparison.Ordinal)
+                || format[2] is not ArrayRecord array)
             {
                 return false;
             }
-        }
-        catch (KeyNotFoundException)
-        {
-            return false;
-        }
 
-        switch (primitiveType)
-        {
-            case default(PrimitiveType):
+            int commaIndex = classInfo.Name.IndexOf(',');
+            if (commaIndex == -1)
+            {
                 return false;
-            case PrimitiveType.String:
-                if (array is ArraySingleString stringArray)
+            }
+
+            ReadOnlySpan<char> typeName = classInfo.Name.AsSpan()[ListTypeName.Length..commaIndex];
+            PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(typeName);
+
+            int size;
+            try
+            {
+                // Lists serialize the entire backing array.
+                if ((size = (int)classInfo["_size"]) > array.Length)
                 {
-                    List<string> stringList = new(size);
-                    stringList.AddRange((IEnumerable<string>)format.GetStringValues(stringArray, size));
-                    list = stringList;
-                    return true;
+                    return false;
                 }
-
+            }
+            catch (KeyNotFoundException)
+            {
                 return false;
+            }
+
+            switch (primitiveType)
+            {
+                case default(PrimitiveType):
+                    return false;
+                case PrimitiveType.String:
+                    if (array is ArraySingleString stringArray)
+                    {
+                        List<string> stringList = new(size);
+                        stringList.AddRange((IEnumerable<string>)format.GetStringValues(stringArray, size));
+                        list = stringList;
+                        return true;
+                    }
+
+                    return false;
+            }
+
+            if (array is not ArraySinglePrimitive primitiveArray || primitiveArray.PrimitiveType != primitiveType)
+            {
+                return false;
+            }
+
+            IList primitiveList = primitiveType switch
+            {
+                PrimitiveType.Boolean => new List<bool>(size),
+                PrimitiveType.Byte => new List<byte>(size),
+                PrimitiveType.Char => new List<char>(size),
+                PrimitiveType.Decimal => new List<decimal>(size),
+                PrimitiveType.Double => new List<double>(size),
+                PrimitiveType.Int16 => new List<short>(size),
+                PrimitiveType.Int32 => new List<int>(size),
+                PrimitiveType.Int64 => new List<long>(size),
+                PrimitiveType.SByte => new List<sbyte>(size),
+                PrimitiveType.Single => new List<float>(size),
+                PrimitiveType.TimeSpan => new List<TimeSpan>(size),
+                PrimitiveType.DateTime => new List<DateTime>(size),
+                PrimitiveType.UInt16 => new List<ushort>(size),
+                PrimitiveType.UInt32 => new List<uint>(size),
+                PrimitiveType.UInt64 => new List<ulong>(size),
+                _ => throw new InvalidOperationException()
+            };
+
+            foreach (object item in array.Take(size))
+            {
+                primitiveList.Add(item);
+            }
+
+            list = primitiveList;
+            return true;
         }
-
-        if (array is not ArraySinglePrimitive primitiveArray || primitiveArray.PrimitiveType != primitiveType)
-        {
-            return false;
-        }
-
-        IList primitiveList = primitiveType switch
-        {
-            PrimitiveType.Boolean => new List<bool>(size),
-            PrimitiveType.Byte => new List<byte>(size),
-            PrimitiveType.Char => new List<char>(size),
-            PrimitiveType.Decimal => new List<decimal>(size),
-            PrimitiveType.Double => new List<double>(size),
-            PrimitiveType.Int16 => new List<short>(size),
-            PrimitiveType.Int32 => new List<int>(size),
-            PrimitiveType.Int64 => new List<long>(size),
-            PrimitiveType.SByte => new List<sbyte>(size),
-            PrimitiveType.Single => new List<float>(size),
-            PrimitiveType.TimeSpan => new List<TimeSpan>(size),
-            PrimitiveType.DateTime => new List<DateTime>(size),
-            PrimitiveType.UInt16 => new List<ushort>(size),
-            PrimitiveType.UInt32 => new List<uint>(size),
-            PrimitiveType.UInt64 => new List<ulong>(size),
-            _ => throw new InvalidOperationException()
-        };
-
-        foreach (object item in array.Take(size))
-        {
-            primitiveList.Add(item);
-        }
-
-        list = primitiveList;
-        return true;
-    }
-
-    /// <summary>
-    ///  Reads a binary formatted primitive list.
-    /// </summary>
-    /// <exception cref="NotSupportedException"><typeparamref name="T"/> was not primitive.</exception>
-    /// <exception cref="SerializationException">Data isn't a valid <see cref="List{T}"/>.</exception>
-    public static bool TryGetPrimitiveList<T>(this BinaryFormattedObject format, [NotNullWhen(true)] out List<T>? list)
-        where T : unmanaged
-    {
-        if (!typeof(T).IsPrimitive)
-        {
-            throw new NotSupportedException($"{nameof(T)} is not primitive.");
-        }
-
-        list = null;
-
-        if (format.RecordCount != 4
-            || format[1] is not SystemClassWithMembersAndTypes classInfo
-            || !classInfo.Name.StartsWith($"System.Collections.Generic.List`1[[{typeof(T).FullName}", StringComparison.Ordinal)
-            || format[2] is not ArraySinglePrimitive array
-            || array.PrimitiveType != TypeInfo.GetPrimitiveType(typeof(T)))
-        {
-            return false;
-        }
-
-        int count;
-        try
-        {
-            count = (int)classInfo["_size"];
-        }
-        catch (Exception ex)
-        {
-            throw ex.ConvertToSerializationException();
-        }
-
-        List<T> newList = new(count);
-        newList.AddRange(array.Take(count).Cast<T>());
-        list = newList;
-        return true;
     }
 
     /// <summary>
@@ -279,43 +278,48 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveArrayList(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
     {
-        value = null;
+        return TryGet(Get, format, out value);
 
-        if (format.RecordCount != 4
-            || format[1] is not SystemClassWithMembersAndTypes classInfo
-            || classInfo.Name != typeof(ArrayList).FullName
-            || format[2] is not ArraySingleObject array)
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
-            return false;
-        }
+            value = null;
 
-        int size;
-        try
-        {
-            // Lists serialize the entire backing array.
-            if ((size = (int)classInfo["_size"]) > array.Length)
-            {
-                return false;
-            }
-        }
-        catch (KeyNotFoundException)
-        {
-            return false;
-        }
-
-        ArrayList arrayList = new(size);
-        for (int i = 0; i < size; i++)
-        {
-            if (!format.TryGetPrimitiveRecordValueOrNull((IRecord)array[i], out object? item))
+            if (format.RecordCount != 4
+                || format[1] is not SystemClassWithMembersAndTypes classInfo
+                || classInfo.Name != typeof(ArrayList).FullName
+                || format[2] is not ArraySingleObject array)
             {
                 return false;
             }
 
-            arrayList.Add(item);
-        }
+            int size;
+            try
+            {
+                // Lists serialize the entire backing array.
+                if ((size = (int)classInfo["_size"]) > array.Length)
+                {
+                    return false;
+                }
+            }
+            catch (KeyNotFoundException)
+            {
+                return false;
+            }
 
-        value = arrayList;
-        return true;
+            ArrayList arrayList = new(size);
+            for (int i = 0; i < size; i++)
+            {
+                if (!format.TryGetPrimitiveRecordValueOrNull((IRecord)array[i], out object? item))
+                {
+                    return false;
+                }
+
+                arrayList.Add(item);
+            }
+
+            value = arrayList;
+            return true;
+        }
     }
 
     /// <summary>
@@ -323,44 +327,49 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveArray(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
     {
-        value = null;
-        if (format.RecordCount != 3)
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
-            return false;
+            value = null;
+            if (format.RecordCount != 3)
+            {
+                return false;
+            }
+
+            if (format[1] is ArraySingleString stringArray)
+            {
+                value = format.GetStringValues(stringArray, stringArray.Length).ToArray();
+                return true;
+            }
+
+            if (format[1] is not ArraySinglePrimitive primitiveArray)
+            {
+                return false;
+            }
+
+            value = primitiveArray.PrimitiveType switch
+            {
+                PrimitiveType.Boolean => primitiveArray.ArrayObjects.Cast<bool>().ToArray(),
+                PrimitiveType.Byte => primitiveArray.ArrayObjects.Cast<byte>().ToArray(),
+                PrimitiveType.Char => primitiveArray.ArrayObjects.Cast<char>().ToArray(),
+                PrimitiveType.Decimal => primitiveArray.ArrayObjects.Cast<decimal>().ToArray(),
+                PrimitiveType.Double => primitiveArray.ArrayObjects.Cast<double>().ToArray(),
+                PrimitiveType.Int16 => primitiveArray.ArrayObjects.Cast<short>().ToArray(),
+                PrimitiveType.Int32 => primitiveArray.ArrayObjects.Cast<int>().ToArray(),
+                PrimitiveType.Int64 => primitiveArray.ArrayObjects.Cast<long>().ToArray(),
+                PrimitiveType.SByte => primitiveArray.ArrayObjects.Cast<sbyte>().ToArray(),
+                PrimitiveType.Single => primitiveArray.ArrayObjects.Cast<float>().ToArray(),
+                PrimitiveType.TimeSpan => primitiveArray.ArrayObjects.Cast<TimeSpan>().ToArray(),
+                PrimitiveType.DateTime => primitiveArray.ArrayObjects.Cast<DateTime>().ToArray(),
+                PrimitiveType.UInt16 => primitiveArray.ArrayObjects.Cast<ushort>().ToArray(),
+                PrimitiveType.UInt32 => primitiveArray.ArrayObjects.Cast<uint>().ToArray(),
+                PrimitiveType.UInt64 => primitiveArray.ArrayObjects.Cast<ulong>().ToArray(),
+                _ => null
+            };
+
+            return value is not null;
         }
-
-        if (format[1] is ArraySingleString stringArray)
-        {
-            value = format.GetStringValues(stringArray, stringArray.Length).ToArray();
-            return true;
-        }
-
-        if (format[1] is not ArraySinglePrimitive primitiveArray)
-        {
-            return false;
-        }
-
-        value = primitiveArray.PrimitiveType switch
-        {
-            PrimitiveType.Boolean => primitiveArray.ArrayObjects.Cast<bool>().ToArray(),
-            PrimitiveType.Byte => primitiveArray.ArrayObjects.Cast<byte>().ToArray(),
-            PrimitiveType.Char => primitiveArray.ArrayObjects.Cast<char>().ToArray(),
-            PrimitiveType.Decimal => primitiveArray.ArrayObjects.Cast<decimal>().ToArray(),
-            PrimitiveType.Double => primitiveArray.ArrayObjects.Cast<double>().ToArray(),
-            PrimitiveType.Int16 => primitiveArray.ArrayObjects.Cast<short>().ToArray(),
-            PrimitiveType.Int32 => primitiveArray.ArrayObjects.Cast<int>().ToArray(),
-            PrimitiveType.Int64 => primitiveArray.ArrayObjects.Cast<long>().ToArray(),
-            PrimitiveType.SByte => primitiveArray.ArrayObjects.Cast<sbyte>().ToArray(),
-            PrimitiveType.Single => primitiveArray.ArrayObjects.Cast<float>().ToArray(),
-            PrimitiveType.TimeSpan => primitiveArray.ArrayObjects.Cast<TimeSpan>().ToArray(),
-            PrimitiveType.DateTime => primitiveArray.ArrayObjects.Cast<DateTime>().ToArray(),
-            PrimitiveType.UInt16 => primitiveArray.ArrayObjects.Cast<ushort>().ToArray(),
-            PrimitiveType.UInt32 => primitiveArray.ArrayObjects.Cast<uint>().ToArray(),
-            PrimitiveType.UInt64 => primitiveArray.ArrayObjects.Cast<ulong>().ToArray(),
-            _ => null
-        };
-
-        return value is not null;
     }
 
     /// <summary>
@@ -378,32 +387,37 @@ internal static class BinaryFormattedObjectExtensions
     /// </summary>
     public static bool TryGetPrimitiveHashtable(this BinaryFormattedObject format, [NotNullWhen(true)] out object? hashtable)
     {
-        hashtable = null;
+        return TryGet(Get, format, out hashtable);
 
-        if (format.RecordCount < 5
-            || format[1] is not SystemClassWithMembersAndTypes classInfo
-            || !classInfo.Name.SequenceEqual("System.Collections.Hashtable")
-            || format[2] is not ArraySingleObject keys
-            || format[3] is not ArraySingleObject values
-            || keys.Length != values.Length)
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? hashtable)
         {
-            return false;
-        }
+            hashtable = null;
 
-        Hashtable temp = new(keys.Length);
-        for (int i = 0; i < keys.Length; i++)
-        {
-            if (!format.TryGetPrimitiveRecordValue((IRecord)keys[i], out object? key)
-                || !format.TryGetPrimitiveRecordValueOrNull((IRecord)values[i], out object? value))
+            if (format.RecordCount < 5
+                || format[1] is not SystemClassWithMembersAndTypes classInfo
+                || !classInfo.Name.SequenceEqual("System.Collections.Hashtable")
+                || format[2] is not ArraySingleObject keys
+                || format[3] is not ArraySingleObject values
+                || keys.Length != values.Length)
             {
                 return false;
             }
 
-            temp[key] = value;
-        }
+            Hashtable temp = new(keys.Length);
+            for (int i = 0; i < keys.Length; i++)
+            {
+                if (!format.TryGetPrimitiveRecordValue((IRecord)keys[i], out object? key)
+                    || !format.TryGetPrimitiveRecordValueOrNull((IRecord)values[i], out object? value))
+                {
+                    return false;
+                }
 
-        hashtable = temp;
-        return true;
+                temp[key] = value;
+            }
+
+            hashtable = temp;
+            return true;
+        }
     }
 
     /// <summary>

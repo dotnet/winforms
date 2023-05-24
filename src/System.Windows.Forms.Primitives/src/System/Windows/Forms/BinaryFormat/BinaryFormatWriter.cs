@@ -165,19 +165,7 @@ internal static class BinaryFormatWriter
     /// </summary>
     /// <returns><see langword="true"/> if successful.</returns>
     public static bool TryWritePrimitive(Stream stream, object primitive)
-    {
-        long originalPosition = stream.Position;
-        try
-        {
-            WritePrimitive(stream, primitive);
-            return true;
-        }
-        catch (ArgumentException)
-        {
-            stream.Position = originalPosition;
-            return false;
-        }
-    }
+        => TryWrite(WritePrimitive, stream, primitive);
 
     /// <summary>
     ///  Writes a .NET primitive value in binary format.
@@ -303,56 +291,61 @@ internal static class BinaryFormatWriter
             return false;
         }
 
-        switch (list)
-        {
-            case List<string> typedList:
-                WriteStringList(stream, typedList);
-                return true;
-            case List<int> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<byte> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<sbyte> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<short> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<ushort> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<uint> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<long> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<ulong> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<float> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<double> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<decimal> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<DateTime> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<TimeSpan> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-            case List<char> typedList:
-                WritePrimitiveList(stream, typedList);
-                return true;
-        }
+        return TryWrite(Write, stream, list);
 
-        return false;
+        static bool Write(Stream stream, IList list)
+        {
+            switch (list)
+            {
+                case List<string> typedList:
+                    WriteStringList(stream, typedList);
+                    return true;
+                case List<int> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<byte> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<sbyte> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<short> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<ushort> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<uint> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<long> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<ulong> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<float> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<double> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<decimal> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<DateTime> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<TimeSpan> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+                case List<char> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     /// <summary>
@@ -360,19 +353,9 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static bool TryWriteArrayList(Stream stream, ArrayList list)
     {
-        long position = stream.Position;
-        try
-        {
-            Write(stream, list);
-            return true;
-        }
-        catch (ArgumentException)
-        {
-            stream.Position = position;
-            return false;
-        }
+        return TryWrite(Write, stream, list);
 
-        static void Write(Stream stream, ArrayList list)
+        static bool Write(Stream stream, ArrayList list)
         {
             using BinaryFormatWriterScope writer = new(stream);
             new SystemClassWithMembersAndTypes(
@@ -389,6 +372,8 @@ internal static class BinaryFormatWriter
             new ArraySingleObject(
                 new ArrayInfo(2, list.Count),
                 ListConverter.GetPrimitiveConverter(list, new StringRecordsCollection(currentId: 3))).Write(writer);
+
+            return true;
         }
     }
 
@@ -397,48 +382,41 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static bool TryWriteArray(Stream stream, Array array)
     {
-        PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(array.GetType().GetElementType()!);
+        return TryWrite(Write, stream, array);
 
-        if (primitiveType == default)
+        static bool Write(Stream stream, Array array)
         {
-            return false;
-        }
+            PrimitiveType primitiveType = TypeInfo.GetPrimitiveType(array.GetType().GetElementType()!);
 
-        using BinaryFormatWriterScope writer = new(stream);
-        if (primitiveType == PrimitiveType.String)
-        {
-            StringRecordsCollection strings = new(currentId: 2);
-            new ArraySingleString(
+            if (primitiveType == default)
+            {
+                return false;
+            }
+
+            using BinaryFormatWriterScope writer = new(stream);
+            if (primitiveType == PrimitiveType.String)
+            {
+                StringRecordsCollection strings = new(currentId: 2);
+                new ArraySingleString(
+                    new ArrayInfo(1, array.Length),
+                    ListConverter.GetPrimitiveConverter(array, strings)).Write(writer);
+                return true;
+            }
+
+            new ArraySinglePrimitive(
                 new ArrayInfo(1, array.Length),
-                ListConverter.GetPrimitiveConverter(array, strings)).Write(writer);
+                primitiveType,
+                new ListConverter<object?>(array, o => o!)).Write(writer);
+
             return true;
         }
-
-        new ArraySinglePrimitive(
-            new ArrayInfo(1, array.Length),
-            primitiveType,
-            new ListConverter<object?>(array, o => o!)).Write(writer);
-
-        return true;
     }
 
     /// <summary>
     ///  Tries to write the given <paramref name="hashtable"/> if supported.
     /// </summary>
     public static bool TryWriteHashtable(Stream stream, Hashtable hashtable)
-    {
-        long position = stream.Position;
-        try
-        {
-            WritePrimitiveHashtable(stream, hashtable);
-            return true;
-        }
-        catch (ArgumentException)
-        {
-            stream.Position = position;
-            return false;
-        }
-    }
+        => TryWrite(WritePrimitiveHashtable, stream, hashtable);
 
     /// <summary>
     ///  Writes a <see cref="Hashtable"/> of primitive to primitive values to the given stream in binary format.
@@ -502,43 +480,86 @@ internal static class BinaryFormatWriter
     /// </summary>
     public static bool TryWriteFrameworkObject(Stream stream, object value)
     {
-        Type type = value.GetType();
-        if (type.IsPrimitive)
+        return TryWrite(Write, stream, value);
+
+        static bool Write(Stream stream, object value)
         {
-            WritePrimitive(stream, value);
-            return true;
+            Type type = value.GetType();
+            if (type.IsPrimitive)
+            {
+                WritePrimitive(stream, value);
+                return true;
+            }
+
+            switch (value)
+            {
+                case string stringValue:
+                    WriteString(stream, stringValue);
+                    return true;
+                case Array arrayValue:
+                    return TryWriteArray(stream, arrayValue);
+                case decimal decimalValue:
+                    WriteDecimal(stream, decimalValue);
+                    return true;
+                case DateTime dateTime:
+                    WriteDateTime(stream, dateTime);
+                    return true;
+                case TimeSpan timeSpan:
+                    WriteTimeSpan(stream, timeSpan);
+                    return true;
+                case PointF point:
+                    WritePointF(stream, point);
+                    return true;
+                case RectangleF rectangle:
+                    WriteRectangleF(stream, rectangle);
+                    return true;
+                case Hashtable hashtable:
+                    return TryWriteHashtable(stream, hashtable);
+                case ArrayList arrayList:
+                    return TryWriteArrayList(stream, arrayList);
+            }
+
+            return type.IsGenericType
+                && type.GetGenericTypeDefinition() == typeof(List<>)
+                && TryWritePrimitiveList(stream, (IList)value);
+        }
+    }
+
+    /// <summary>
+    ///  Simple wrapper to ensure the <paramref name="stream"/> is reset to it's original position if the
+    ///  <paramref name="action"/> throws.
+    /// </summary>
+    public static bool TryWrite<T>(Action<Stream, T> action, Stream stream, T value)
+        => TryWrite(
+            (s, o) => { action(s, o); return true; },
+            stream,
+            value);
+
+    /// <summary>
+    ///  Simple wrapper to ensure the <paramref name="stream"/> is reset to it's original position if the
+    ///  <paramref name="func"/> throws or returns <see langword="false"/>.
+    /// </summary>
+    public static bool TryWrite<T>(Func<Stream, T, bool> func, Stream stream, T value)
+    {
+        long position = stream.Position;
+        bool success;
+
+        try
+        {
+            success = func(stream, value);
+        }
+        catch (Exception ex) when (!ex.IsCriticalException())
+        {
+            Debug.WriteLine($"Failed to binary format: {ex.Message}");
+            Debug.Assert(ex is ArgumentException, "We should only be getting ArgumentExceptions on write.");
+            success = false;
         }
 
-        switch (value)
+        if (!success)
         {
-            case string stringValue:
-                WriteString(stream, stringValue);
-                return true;
-            case Array arrayValue:
-                return TryWriteArray(stream, arrayValue);
-            case decimal decimalValue:
-                WriteDecimal(stream, decimalValue);
-                return true;
-            case DateTime dateTime:
-                WriteDateTime(stream, dateTime);
-                return true;
-            case TimeSpan timeSpan:
-                WriteTimeSpan(stream, timeSpan);
-                return true;
-            case PointF point:
-                WritePointF(stream, point);
-                return true;
-            case RectangleF rectangle:
-                WriteRectangleF(stream, rectangle);
-                return true;
-            case Hashtable hashtable:
-                return TryWriteHashtable(stream, hashtable);
-            case ArrayList arrayList:
-                return TryWriteArrayList(stream, arrayList);
+            stream.Position = position;
         }
 
-        return type.IsGenericType
-            && type.GetGenericTypeDefinition() == typeof(List<>)
-            && TryWritePrimitiveList(stream, (IList)value);
+        return success;
     }
 }

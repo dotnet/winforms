@@ -8,7 +8,7 @@ using System.Text;
 namespace System.Windows.Forms.BinaryFormat;
 
 /// <summary>
-///  Object model for the binary format put out by BinaryFormatter. It parses andcreates a model but does not
+///  Object model for the binary format put out by BinaryFormatter. It parses and creates a model but does not
 ///  instantiate any reference types outside of string.
 /// </summary>
 /// <remarks>
@@ -35,7 +35,6 @@ internal sealed class BinaryFormattedObject
     /// <summary>
     ///  Creates <see cref="BinaryFormattedObject"/> by parsing <paramref name="stream"/>.
     /// </summary>
-    /// <param name="leaveOpen"></param>
     public BinaryFormattedObject(Stream stream, bool leaveOpen = false)
     {
         ArgumentNullException.ThrowIfNull(stream);

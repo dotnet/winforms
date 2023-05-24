@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Drawing;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.BinaryFormat.Tests;
@@ -10,7 +11,7 @@ namespace System.Windows.Forms.BinaryFormat.Tests;
 public class ListTests
 {
     [Fact]
-    public void ArrayList_ParseEmpty()
+    public void BinaryFormattedObject_ParseEmptyArrayList()
     {
         BinaryFormattedObject format = new ArrayList().SerializeAndParse();
         SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
@@ -24,7 +25,7 @@ public class ListTests
 
     [Theory]
     [MemberData(nameof(ArrayList_Primitive_Data))]
-    public void ArrayList_ParsePrimitives(object value)
+    public void BinaryFormattedObject_ParsePrimitivesArrayList(object value)
     {
         BinaryFormattedObject format = new ArrayList()
         {
@@ -43,7 +44,7 @@ public class ListTests
     }
 
     [Fact]
-    public void ArrayList_ParseString()
+    public void BinaryFormattedObject_ParseStringArrayList()
     {
         BinaryFormattedObject format = new ArrayList()
         {
@@ -105,8 +106,21 @@ public class ListTests
         new ArrayList() { "Same", "old", "same", "old" }
     };
 
+    public static TheoryData<ArrayList> ArrayLists_UnsupportedTestData => new()
+    {
+        new ArrayList()
+        {
+            new object(),
+        },
+        new ArrayList()
+        {
+            int.MaxValue,
+            new Point()
+        }
+    };
+
     [Fact]
-    public void List_Int_ParseEmpty()
+    public void BinaryFormattedObject_ParseEmptyIntList()
     {
         BinaryFormattedObject format = new List<int>().SerializeAndParse();
         SystemClassWithMembersAndTypes classInfo = (SystemClassWithMembersAndTypes)format[1];
@@ -137,7 +151,7 @@ public class ListTests
     }
 
     [Fact]
-    public void List_String_ParseEmpty()
+    public void BinaryFormattedObject_ParseEmptyStringList()
     {
         BinaryFormattedObject format = new List<string>().SerializeAndParse();
         SystemClassWithMembersAndTypes classInfo = (SystemClassWithMembersAndTypes)format[1];
@@ -151,28 +165,10 @@ public class ListTests
 
     [Theory]
     [MemberData(nameof(PrimitiveLists_TestData))]
-    public void List_Primitive_Write(IList list)
+    public void BinaryFormatWriter_TryWritePrimitiveList(IList list)
     {
         using MemoryStream stream = new();
-
-        switch (list)
-        {
-            case List<int> intList:
-                BinaryFormatWriter.WritePrimitiveList(stream, intList);
-                break;
-            case List<float> floatList:
-                BinaryFormatWriter.WritePrimitiveList(stream, floatList);
-                break;
-            case List<byte> byteList:
-                BinaryFormatWriter.WritePrimitiveList(stream, byteList);
-                break;
-            case List<char> charList:
-                BinaryFormatWriter.WritePrimitiveList(stream, charList);
-                break;
-            default:
-                throw new InvalidOperationException();
-        }
-
+        BinaryFormatWriter.TryWritePrimitiveList(stream, list).Should().BeTrue();
         stream.Position = 0;
 
         using var formatterScope = new BinaryFormatterScope(enable: true);
@@ -185,8 +181,17 @@ public class ListTests
     }
 
     [Theory]
+    [MemberData(nameof(Lists_UnsupportedTestData))]
+    public void BinaryFormatWriter_TryWritePrimitiveList_Unsupported(IList list)
+    {
+        using MemoryStream stream = new();
+        BinaryFormatWriter.TryWritePrimitiveList(stream, list).Should().BeFalse();
+        stream.Position.Should().Be(0);
+    }
+
+    [Theory]
     [MemberData(nameof(PrimitiveLists_TestData))]
-    public void List_Primitive_Read(IList list)
+    public void BinaryFormattedObjectExtensions_TryGetPrimitiveList(IList list)
     {
         BinaryFormattedObject format = list.SerializeAndParse();
         format.TryGetPrimitiveList(out object? deserialized).Should().BeTrue();
@@ -202,5 +207,16 @@ public class ListTests
         new List<byte>() { 0xDE, 0xAD, 0xBE, 0xEF },
         new List<char>() { 'a', 'b',  'c', 'd', 'e', 'f', 'g', 'h' },
         new List<char>() { 'a', '\0',  'c' },
+        new List<string>() { "Believe", "it", "or", "not" },
+        new List<decimal>() { 42m },
+        new List<DateTime>() { new(2000, 1, 1) },
+        new List<TimeSpan>() { new(0, 0, 50) }
+    };
+
+    public static TheoryData<IList> Lists_UnsupportedTestData => new()
+    {
+        new List<object>(),
+        new List<nint>(),
+        new List<(int, int)>()
     };
 }
