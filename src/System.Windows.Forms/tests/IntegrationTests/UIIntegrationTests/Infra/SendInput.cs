@@ -84,9 +84,12 @@ public class SendInput
 
         Task<bool> waitTask = Task.Run(() => resetEvent.Wait(5000));
         await Task.Run(() => actions(new InputSimulator()));
+
+        // Sending test input as end of input message. SendInput is async and might have not been dispatched to the control before we proceed with further verifications.
+        // Test input is introduced to helps synchronize the input being sent and confirms that the underlying control has received input before proceeding.
         await SendTestInputAsync();
 
-        await _waitForIdleAsync(window);
+        await _waitForIdleAsync();
 
         // Wait until test input is received by CustomForm.
         await waitTask;

@@ -298,7 +298,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         {
             await gate.Task;
             await JoinableTaskFactory.SwitchToMainThreadAsync();
-            await WaitForIdleAsync(null);
+            await WaitForIdleAsync();
             try
             {
                 await testDriverAsync(dialog!, control!);
@@ -337,7 +337,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         {
             await gate.Task;
             await JoinableTaskFactory.SwitchToMainThreadAsync();
-            await WaitForIdleAsync(null);
+            await WaitForIdleAsync();
             try
             {
                 await testDriverAsync(dialog!);
