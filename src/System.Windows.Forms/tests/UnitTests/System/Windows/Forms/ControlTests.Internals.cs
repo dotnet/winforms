@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
@@ -422,5 +423,24 @@ public partial class ControlTests
         control.NotifyLeave();
 
         Assert.True(wasChanged);
+    }
+
+    [WinFormsFact]
+    public void Control_ReflectParentDoesNotRootParent()
+    {
+        using Control control = new();
+        CreateAndDispose(control);
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        Assert.Null(control.TestAccessor().Dynamic.ReflectParent);
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static void CreateAndDispose(Control control)
+        {
+            using Form form = new();
+            form.Controls.Add(control);
+            form.Show();
+            form.Controls.Remove(control);
+            Assert.NotNull(control.TestAccessor().Dynamic.ReflectParent);
+        }
     }
 }

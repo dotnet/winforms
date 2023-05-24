@@ -41,7 +41,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
 
         Assert.NotNull(propertyDescriptorGridEntryAccessibleObject);
 
-        object owningGridEntry = propertyDescriptorGridEntryAccessibleObject.TestAccessor().Dynamic._owningPropertyDescriptorGridEntry;
+        GridEntry owningGridEntry = ((IAccessibleOwner<GridEntry>)propertyDescriptorGridEntryAccessibleObject).Owner;
 
         Assert.Equal(propertyDescriptorGridEntryTestEntity, owningGridEntry);
     }

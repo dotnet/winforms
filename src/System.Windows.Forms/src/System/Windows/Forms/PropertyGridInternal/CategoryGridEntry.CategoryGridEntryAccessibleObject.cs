@@ -13,15 +13,12 @@ internal partial class CategoryGridEntry
     /// </summary>
     internal class CategoryGridEntryAccessibleObject : GridEntryAccessibleObject
     {
-        private readonly CategoryGridEntry _owningCategoryGridEntry;
-
         /// <summary>
         ///  Initializes new instance of CategoryGridEntryAccessibleObject.
         /// </summary>
         /// <param name="owningCategoryGridEntry">The owning Category Grid Entry object.</param>
         public CategoryGridEntryAccessibleObject(CategoryGridEntry owningCategoryGridEntry) : base(owningCategoryGridEntry)
         {
-            _owningCategoryGridEntry = owningCategoryGridEntry;
         }
 
         public override AccessibleRole Role => AccessibleRole.ButtonDropDownGrid;
@@ -33,12 +30,15 @@ internal partial class CategoryGridEntry
         {
             get
             {
-                if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
+                if (!this.TryGetOwnerAs(out CategoryGridEntry? owner)
+                    || Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
                 {
                     return -1;
                 }
 
-                if (parent.Owner is not PropertyGridView gridView || gridView.OwnerGrid is null || !gridView.OwnerGrid.SortedByCategories)
+                if (!parent.TryGetOwnerAs(out PropertyGridView? gridView)
+                    || gridView.OwnerGrid is null
+                    || !gridView.OwnerGrid.SortedByCategories)
                 {
                     return -1;
                 }
@@ -52,7 +52,7 @@ internal partial class CategoryGridEntry
                 int categoryIndex = 0;
                 foreach (var topLevelGridEntry in topLevelGridEntries)
                 {
-                    if (_owningCategoryGridEntry == topLevelGridEntry)
+                    if (owner == topLevelGridEntry)
                     {
                         return categoryIndex;
                     }
@@ -74,7 +74,8 @@ internal partial class CategoryGridEntry
         /// <returns>Returns the element in the specified direction.</returns>
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
+            if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent
+                || !this.TryGetOwnerAs(out CategoryGridEntry? owner))
             {
                 return null;
             }
@@ -82,10 +83,10 @@ internal partial class CategoryGridEntry
             return direction switch
             {
                 UiaCore.NavigateDirection.Parent => Parent,
-                UiaCore.NavigateDirection.NextSibling => parent.GetNextCategory(_owningCategoryGridEntry),
-                UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousCategory(_owningCategoryGridEntry),
-                UiaCore.NavigateDirection.FirstChild => parent.GetFirstChildProperty(_owningCategoryGridEntry),
-                UiaCore.NavigateDirection.LastChild => parent.GetLastChildProperty(_owningCategoryGridEntry),
+                UiaCore.NavigateDirection.NextSibling => parent.GetNextCategory(owner),
+                UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousCategory(owner),
+                UiaCore.NavigateDirection.FirstChild => parent.GetFirstChildProperty(owner),
+                UiaCore.NavigateDirection.LastChild => parent.GetLastChildProperty(owner),
                 _ => base.FragmentNavigate(direction),
             };
         }

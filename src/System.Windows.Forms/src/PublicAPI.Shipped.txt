@@ -5172,7 +5172,6 @@ System.Windows.Forms.Control.ControlAccessibleObject.Handle.set -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int childID) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int objectID, int childID) -> void
-System.Windows.Forms.Control.ControlAccessibleObject.Owner.get -> System.Windows.Forms.Control!
 System.Windows.Forms.Control.ControlAdded -> System.Windows.Forms.ControlEventHandler?
 System.Windows.Forms.Control.ControlCollection
 System.Windows.Forms.Control.ControlCollection.Contains(System.Windows.Forms.Control? control) -> bool

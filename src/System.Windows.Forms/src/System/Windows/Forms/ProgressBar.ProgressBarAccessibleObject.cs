@@ -14,29 +14,21 @@ public partial class ProgressBar
         {
         }
 
-        private ProgressBar OwningProgressBar => (ProgressBar)Owner;
-
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
         {
-            if (patternId == UiaCore.UIA.ValuePatternId ||
-                patternId == UiaCore.UIA.RangeValuePatternId)
-            {
-                return true;
-            }
-
-            return base.IsPatternSupported(patternId);
-        }
+            UiaCore.UIA.ValuePatternId or UiaCore.UIA.RangeValuePatternId => true,
+            _ => base.IsPatternSupported(patternId),
+        };
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId when
+                UiaCore.UIA.ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    Owner.AccessibleRole == AccessibleRole.Default
                     => UiaCore.UIA.ProgressBarControlTypeId,
                 UiaCore.UIA.IsKeyboardFocusablePropertyId =>
                     // This is necessary for compatibility with MSAA proxy:
@@ -51,19 +43,17 @@ public partial class ProgressBar
             };
 
         internal override void SetValue(double newValue)
-        {
-            throw new InvalidOperationException("Progress Bar is read-only.");
-        }
+            => throw new InvalidOperationException("Progress Bar is read-only.");
 
         internal override double LargeChange => double.NaN;
 
-        internal override double Maximum => OwningProgressBar.Maximum;
+        internal override double Maximum => this.TryGetOwnerAs(out ProgressBar? owner) ? owner.Maximum : 0;
 
-        internal override double Minimum => OwningProgressBar.Minimum;
+        internal override double Minimum => this.TryGetOwnerAs(out ProgressBar? owner) ? owner.Minimum : 0;
 
         internal override double SmallChange => double.NaN;
 
-        internal override double RangeValue => OwningProgressBar.Value;
+        internal override double RangeValue => this.TryGetOwnerAs(out ProgressBar? owner) ? owner.Value : 0;
 
         internal override bool IsReadOnly => true;
     }

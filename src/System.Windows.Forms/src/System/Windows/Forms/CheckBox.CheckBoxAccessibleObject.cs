@@ -10,44 +10,22 @@ public partial class CheckBox
 {
     public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject
     {
-        private readonly CheckBox _owningCheckBox;
-
         public CheckBoxAccessibleObject(Control owner)
-            : base((owner is CheckBox owningCheckBox) ? owner : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(Owner), typeof(CheckBox))))
+            : base((owner is CheckBox owningCheckBox)
+                  ? owner
+                  : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(owner), typeof(CheckBox))))
         {
-            _owningCheckBox = owningCheckBox;
         }
 
         public override string DefaultAction
-        {
-            get
-            {
-                string? defaultAction = Owner.AccessibleDefaultActionDescription;
+            => this.TryGetOwnerAs(out CheckBox? owner)
+                ? owner.AccessibleDefaultActionDescription ?? (owner.Checked ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck)
+                : string.Empty;
 
-                if (defaultAction is not null)
-                {
-                    return defaultAction;
-                }
-
-                return _owningCheckBox.Checked
-                    ? SR.AccessibleActionUncheck
-                    : SR.AccessibleActionCheck;
-            }
-        }
-
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = Owner.AccessibleRole;
-                return role != AccessibleRole.Default
-                    ? role
-                    : AccessibleRole.CheckButton;
-            }
-        }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.CheckButton);
 
         public override AccessibleStates State
-            => _owningCheckBox.CheckState switch
+            => !this.TryGetOwnerAs(out CheckBox? owner) ? base.State : owner.CheckState switch
             {
                 CheckState.Checked => AccessibleStates.Checked | base.State,
                 CheckState.Indeterminate => AccessibleStates.Indeterminate | base.State,
@@ -55,7 +33,7 @@ public partial class CheckBox
             };
 
         internal override UiaCore.ToggleState ToggleState
-            => _owningCheckBox.Checked
+            => this.TryGetOwnerAs(out CheckBox? owner) && owner.Checked
                 ? UiaCore.ToggleState.On
                 : UiaCore.ToggleState.Off;
 
@@ -70,7 +48,7 @@ public partial class CheckBox
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out Control? owner) && owner.Focused,
                 UiaCore.UIA.IsKeyboardFocusablePropertyId
                     =>
                     // This is necessary for compatibility with MSAA proxy:
@@ -81,27 +59,28 @@ public partial class CheckBox
 
         public override void DoDefaultAction()
         {
-            if (_owningCheckBox.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out CheckBox? owner) || !owner.IsHandleCreated)
             {
-                _owningCheckBox.AccObjDoDefaultAction = true;
+                return;
             }
 
             try
             {
+                owner.AccObjDoDefaultAction = true;
                 base.DoDefaultAction();
             }
             finally
             {
-                if (_owningCheckBox.IsHandleCreated)
-                {
-                    _owningCheckBox.AccObjDoDefaultAction = false;
-                }
+                owner.AccObjDoDefaultAction = false;
             }
         }
 
         internal override void Toggle()
         {
-            _owningCheckBox.Checked = !_owningCheckBox.Checked;
+            if (this.TryGetOwnerAs(out CheckBox? owner))
+            {
+                owner.Checked = !owner.Checked;
+            }
         }
     }
 }

@@ -19,29 +19,29 @@ public partial class ColorEditor
                 _cells = new ColorCellAccessibleObject[CellsAcross * CellsDown];
             }
 
-            internal ColorPalette ColorPalette => (ColorPalette)Owner;
+            internal ColorPalette? ColorPalette => (ColorPalette?)Owner;
 
             public override int GetChildCount() => CellsAcross * CellsDown;
 
             public override AccessibleObject? GetChild(int id)
             {
-                if (id < 0 || id >= CellsAcross * CellsDown)
+                if (ColorPalette is not { } palette || id < 0 || id >= CellsAcross * CellsDown)
                 {
                     return null;
                 }
 
-                return _cells[id] ??= new ColorCellAccessibleObject(this, ColorPalette.GetColorFromCell(id), id);
+                return _cells[id] ??= new ColorCellAccessibleObject(this, palette.GetColorFromCell(id), id);
             }
 
             public override AccessibleObject? HitTest(int x, int y)
             {
-                if (!ColorPalette.IsHandleCreated)
+                if (ColorPalette is not { } palette || !palette.IsHandleCreated)
                 {
                     return base.HitTest(x, y);
                 }
 
                 // Convert from screen to client coordinates
-                Point point = ColorPalette.PointToClient(new(x, y));
+                Point point = palette.PointToClient(new(x, y));
 
                 int cell = GetCellFromLocationMouse(point.X, point.Y);
                 if (cell != -1)

@@ -14,7 +14,7 @@ public partial class MaskedTextBox
 
         public override string? Name
         {
-            get => string.IsNullOrEmpty((Owner as MaskedTextBox)?.Mask)
+            get => !this.TryGetOwnerAs(out MaskedTextBox? owner) || string.IsNullOrEmpty(owner.Mask)
                 ? base.Name
                 // If base.Name is null mask template will be used as a name, which is not descriptive for users.
                 // Instead, we want to show an empty string to signal developers to set an appropriate name.
@@ -22,6 +22,7 @@ public partial class MaskedTextBox
             set => base.Name = value;
         }
 
-        protected override string ValueInternal => Owner.WindowText;
+        protected override string ValueInternal
+            => this.TryGetOwnerAs(out MaskedTextBox? owner) ? owner.WindowText : string.Empty;
     }
 }

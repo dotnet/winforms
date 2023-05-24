@@ -13,11 +13,8 @@ internal partial class PropertyGridView
     {
         private class GridViewTextBoxAccessibleObject : TextBoxBaseAccessibleObject
         {
-            private readonly PropertyGridView _owningPropertyGridView;
-
             public GridViewTextBoxAccessibleObject(GridViewTextBox owner) : base(owner)
             {
-                _owningPropertyGridView = owner.PropertyGridView;
             }
 
             public override AccessibleStates State
@@ -38,18 +35,14 @@ internal partial class PropertyGridView
                 }
             }
 
-            /// <summary>
-            ///  Returns the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!_owningPropertyGridView.IsEditTextBoxCreated
+                if (!this.TryGetOwnerAs(out GridViewTextBox? owner)
+                    || !owner.PropertyGridView.IsEditTextBoxCreated
                     // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
                     // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
-                    || !_owningPropertyGridView.OwnerGrid.Created
-                    || _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
+                    || !owner.PropertyGridView.OwnerGrid.Created
+                    || owner.PropertyGridView.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
                 {
                     return null;
                 }
@@ -63,17 +56,16 @@ internal partial class PropertyGridView
                 };
             }
 
-            /// <summary>
-            ///  Gets the top level element.
-            /// </summary>
             internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-                => _owningPropertyGridView.OwnerGrid?.AccessibilityObject;
+                => this.TryGetOwnerAs(out GridViewTextBox? owner)
+                    ? owner.PropertyGridView.OwnerGrid?.AccessibilityObject
+                    : null;
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
             {
-                UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
+                UiaCore.UIA.ClassNamePropertyId when this.TryGetOwnerAs(out object? owner) => owner.GetType().ToString(),
                 UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out Control? owner) && owner.Focused,
                 UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
                 _ => base.GetPropertyValue(propertyID)
             };
@@ -94,26 +86,28 @@ internal partial class PropertyGridView
             {
                 get
                 {
-                    string? name = Owner.AccessibleName;
-                    if (name is not null)
+                    if (!this.TryGetOwnerAs(out GridViewTextBox? owner))
                     {
-                        return name;
+                        return base.Name;
                     }
 
-                    return _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject.Name ?? base.Name;
+                    return owner.AccessibleName is { } name
+                        ? name
+                        : owner.PropertyGridView.SelectedGridEntry?.AccessibilityObject.Name ?? base.Name;
                 }
             }
 
             internal override int[] RuntimeId
-                => new int[]
+                => !this.TryGetOwnerAs(out Control? owner) ? base.RuntimeId : new int[]
                 {
                     RuntimeIDFirstItem,
-                    PARAM.ToInt(Owner.InternalHandle),
+                    PARAM.ToInt(owner.InternalHandle),
                     GetHashCode()
                 };
 
             internal override bool IsReadOnly
-                => _owningPropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
+                => !this.TryGetOwnerAs(out GridViewTextBox? owner)
+                    || owner.PropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
                     || propertyDescriptorGridEntry.IsPropertyReadOnly;
         }
     }

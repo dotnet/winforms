@@ -11,33 +11,25 @@ public partial class LinkLabel
 {
     internal class LinkLabelAccessibleObject : LabelAccessibleObject
     {
-        private readonly LinkLabel _owningLinkLabel;
-
         public LinkLabelAccessibleObject(LinkLabel owner) : base(owner)
         {
-            _owningLinkLabel = owner;
         }
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-        {
-            if (!_owningLinkLabel.IsHandleCreated)
-            {
-                return base.ElementProviderFromPoint(x, y);
-            }
-
-            return HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
-        }
+            => !this.TryGetOwnerAs(out LinkLabel? owner) || !owner.IsHandleCreated
+                ? base.ElementProviderFromPoint(x, y)
+                : HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             => direction switch
             {
                 UiaCore.NavigateDirection.FirstChild
-                    => _owningLinkLabel.Links.Count != 0
-                        ? _owningLinkLabel.Links[0].AccessibleObject
+                    => !this.TryGetOwnerAs(out LinkLabel? owner) ? null : owner.Links.Count != 0
+                        ? owner.Links[0].AccessibleObject
                         : null,
                 UiaCore.NavigateDirection.LastChild
-                    => _owningLinkLabel.Links.Count != 0
-                        ? _owningLinkLabel.Links[^1].AccessibleObject
+                    => !this.TryGetOwnerAs(out LinkLabel? owner) ? null : owner.Links.Count != 0
+                        ? owner.Links[^1].AccessibleObject
                         : null,
                 _ => base.FragmentNavigate(direction),
             };
@@ -46,15 +38,15 @@ public partial class LinkLabel
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (index >= 0 && index < GetChildCount())
+            if (this.TryGetOwnerAs(out LinkLabel? owner) && index >= 0 && index < GetChildCount())
             {
-                return _owningLinkLabel.Links[index].AccessibleObject;
+                return owner.Links[index].AccessibleObject;
             }
 
             return null;
         }
 
-        public override int GetChildCount() => _owningLinkLabel.Links.Count;
+        public override int GetChildCount() => this.TryGetOwnerAs(out LinkLabel? owner) ? owner.Links.Count : 0;
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
@@ -66,35 +58,30 @@ public partial class LinkLabel
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!_owningLinkLabel.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out LinkLabel? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
 
-            Point p = Owner.PointToClient(new Point(x, y));
-            Link? hit = _owningLinkLabel.PointInLink(p.X, p.Y);
+            Point p = owner.PointToClient(new Point(x, y));
+            Link? hit = owner.PointInLink(p.X, p.Y);
 
             if (hit is not null)
             {
                 return hit.AccessibleObject;
             }
 
-            if (Bounds.Contains(x, y))
-            {
-                return this;
-            }
-
-            return null;
+            return Bounds.Contains(x, y) ? this : null;
         }
 
         internal override bool IsIAccessibleExSupported() => true;
 
         internal override int[] RuntimeId
-            => new int[]
+            => !this.TryGetOwnerAs(out LinkLabel? owner) ? base.RuntimeId : new int[]
             {
                 RuntimeIDFirstItem,
-                PARAM.ToInt(_owningLinkLabel.InternalHandle),
-                _owningLinkLabel.GetHashCode()
+                PARAM.ToInt(owner.InternalHandle),
+                owner.GetHashCode()
             };
     }
 }

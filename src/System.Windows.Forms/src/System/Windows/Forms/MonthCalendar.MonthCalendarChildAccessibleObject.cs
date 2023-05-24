@@ -53,10 +53,10 @@ public partial class MonthCalendar
         // because GetChildId requires _monthCalendarAccessibleObject existing
         // but it will be null because an inherited constructor is not called yet.
         internal override int[] RuntimeId
-            => new int[]
+            => !_monthCalendarAccessibleObject.TryGetOwnerAs(out Control? owner) ? base.RuntimeId : new int[]
             {
                 RuntimeIDFirstItem,
-                ((nint)_monthCalendarAccessibleObject.Owner.InternalHandle).ToInt32(),
+                (int)(nint)owner.InternalHandle,
                 GetChildId()
             };
 

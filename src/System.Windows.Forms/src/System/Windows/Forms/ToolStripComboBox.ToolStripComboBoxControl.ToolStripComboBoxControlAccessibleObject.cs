@@ -24,9 +24,9 @@ public partial class ToolStripComboBox
                     case UiaCore.NavigateDirection.Parent:
                     case UiaCore.NavigateDirection.PreviousSibling:
                     case UiaCore.NavigateDirection.NextSibling:
-                        if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
+                        if (this.TryGetOwnerAs(out ToolStripComboBoxControl? owner))
                         {
-                            return toolStripComboBoxControl.Owner?.AccessibilityObject.FragmentNavigate(direction);
+                            return owner.Owner?.AccessibilityObject.FragmentNavigate(direction);
                         }
 
                         break;
@@ -36,28 +36,15 @@ public partial class ToolStripComboBox
             }
 
             internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+                => this.TryGetOwnerAs(out ToolStripComboBoxControl? owner)
+                    ? owner.Owner?.Owner?.AccessibilityObject
+                    : base.FragmentRoot;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
             {
-                get
-                {
-                    if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
-                    {
-                        return toolStripComboBoxControl.Owner?.Owner?.AccessibilityObject;
-                    }
-
-                    return base.FragmentRoot;
-                }
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ExpandCollapsePatternId ||
-                    patternId == UiaCore.UIA.ValuePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                UiaCore.UIA.ExpandCollapsePatternId or UiaCore.UIA.ValuePatternId => true,
+                _ => base.IsPatternSupported(patternId)
+            };
         }
     }
 }

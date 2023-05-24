@@ -16,11 +16,8 @@ public abstract partial class UpDownBase
             private DirectionButtonAccessibleObject? _upButton;
             private DirectionButtonAccessibleObject? _downButton;
 
-            private UpDownButtons _owner;
-
             public UpDownButtonsAccessibleObject(UpDownButtons owner) : base(owner)
             {
-                _owner = owner;
             }
 
             internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
@@ -95,17 +92,13 @@ public abstract partial class UpDownBase
                 get
                 {
                     string? baseName = base.Name;
-                    if (string.IsNullOrEmpty(baseName))
-                    {
-                        return SR.DefaultUpDownButtonsAccessibleName;
-                    }
-
-                    return baseName;
+                    return string.IsNullOrEmpty(baseName) ? SR.DefaultUpDownButtonsAccessibleName : baseName;
                 }
                 set => base.Name = value;
             }
 
-            public override AccessibleObject Parent => _owner.AccessibilityObject;
+            public override AccessibleObject? Parent
+                => this.TryGetOwnerAs(out UpDownButtons? owner) ? owner.AccessibilityObject : null;
 
             internal void ReleaseChildUiaProviders()
             {
@@ -116,30 +109,14 @@ public abstract partial class UpDownBase
                 _downButton = null;
             }
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
+            public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.SpinButton);
 
-                    return AccessibleRole.SpinButton;
-                }
-            }
-
-            /// <summary>
-            ///  Gets the runtime ID. We need to provide a unique ID others are implementing this in the same manner first item
-            ///  is static - 0x2a (RuntimeIDFirstItem) second item can be anything, but it's good to supply HWND.
-            /// </summary>
             internal override int[] RuntimeId
-                => new int[]
+                => !this.TryGetOwnerAs(out UpDownButtons? owner) ? base.RuntimeId : new int[]
                 {
                     RuntimeIDFirstItem,
-                    PARAM.ToInt(_owner.InternalHandle),
-                    _owner.GetHashCode()
+                    PARAM.ToInt(owner.InternalHandle),
+                    owner.GetHashCode()
                 };
         }
     }

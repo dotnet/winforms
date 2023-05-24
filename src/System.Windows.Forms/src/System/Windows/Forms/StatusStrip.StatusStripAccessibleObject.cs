@@ -14,23 +14,12 @@ public partial class StatusStrip
         {
         }
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = Owner.AccessibleRole;
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
-
-                return AccessibleRole.StatusBar;
-            }
-        }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.StatusBar);
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => Owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
+            => this.TryGetOwnerAs(out StatusStrip? owner) && owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus() => Owner.IsHandleCreated ? GetFocused() : null;
+        internal override UiaCore.IRawElementProviderFragment? GetFocus()
+            => this.TryGetOwnerAs(out StatusStrip? owner) && owner.IsHandleCreated ? GetFocused() : null;
     }
 }

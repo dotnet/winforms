@@ -17,7 +17,7 @@ public partial class ToolStripContainer
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
            => propertyID switch
            {
-               UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+               UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ToolStripContainer? owner) && owner.Focused,
                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                _ => base.GetPropertyValue(propertyID)
            };

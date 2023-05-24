@@ -10,47 +10,37 @@ public partial class RadioButton
 {
     public class RadioButtonAccessibleObject : ControlAccessibleObject
     {
-        private readonly RadioButton _owningRadioButton;
-
         public RadioButtonAccessibleObject(RadioButton owner) : base(owner)
         {
-            _owningRadioButton = owner;
         }
 
         public override string DefaultAction
-            => Owner.AccessibleDefaultActionDescription ?? SR.AccessibleActionCheck;
+            => this.TryGetOwnerAs(out RadioButton? owner) && owner.AccessibleDefaultActionDescription is { } description
+                ? description
+                : SR.AccessibleActionCheck;
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = Owner.AccessibleRole;
-                return role != AccessibleRole.Default
-                    ? role
-                    : AccessibleRole.RadioButton;
-            }
-        }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.RadioButton);
 
         public override AccessibleStates State
-            => _owningRadioButton.Checked
+            => this.TryGetOwnerAs(out RadioButton? owner) && owner.Checked
                 ? AccessibleStates.Checked | base.State
                 : base.State;
 
         internal override bool IsItemSelected
-            => _owningRadioButton.Checked;
+            => this.TryGetOwnerAs(out RadioButton? owner) && owner.Checked;
 
         public override void DoDefaultAction()
         {
-            if (_owningRadioButton.IsHandleCreated)
+            if (this.TryGetOwnerAs(out RadioButton? owner) && owner.IsHandleCreated)
             {
-                _owningRadioButton.PerformClick();
+                owner.PerformClick();
             }
         }
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out RadioButton? owner) && owner.Focused,
                 UiaCore.UIA.IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.

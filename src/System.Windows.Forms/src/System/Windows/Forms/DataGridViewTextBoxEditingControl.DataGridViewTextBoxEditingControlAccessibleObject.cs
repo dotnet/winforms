@@ -28,16 +28,16 @@ public partial class DataGridViewTextBoxEditingControl
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
 
-        public override string Name => Owner.AccessibleName ?? SR.DataGridView_AccEditingControlAccName;
+        public override string Name => this.GetOwnerAccessibleName(SR.DataGridView_AccEditingControlAccName);
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
                 case UiaCore.NavigateDirection.Parent:
-                    if (Owner is IDataGridViewEditingControl owner
-                        && owner.EditingControlDataGridView?.EditingControl == owner
-                        && Owner.ToolStripControlHost is null)
+                    if (this.TryGetOwnerAs(out Control? owner) && owner is IDataGridViewEditingControl editingControl
+                        && editingControl.EditingControlDataGridView?.EditingControl == owner
+                        && owner.ToolStripControlHost is null)
                     {
                         return _parentAccessibleObject;
                     }
@@ -49,16 +49,16 @@ public partial class DataGridViewTextBoxEditingControl
         }
 
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-            => (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
+            => this.TryGetOwnerAs(out IDataGridViewEditingControl? owner)
+                ? owner.EditingControlDataGridView?.AccessibilityObject
+                : null;
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {
-                // If we don't set a default role for the accessible object
-                // it will be retrieved from Windows.
+                // If we don't set a default role for the accessible object it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                UiaCore.UIA.ControlTypePropertyId when
-                    Owner.AccessibleRole == AccessibleRole.Default
+                UiaCore.UIA.ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     => UiaCore.UIA.EditControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };

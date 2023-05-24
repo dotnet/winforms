@@ -16,7 +16,7 @@ public partial class WebBrowser
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out WebBrowser? owner) && owner.Focused,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

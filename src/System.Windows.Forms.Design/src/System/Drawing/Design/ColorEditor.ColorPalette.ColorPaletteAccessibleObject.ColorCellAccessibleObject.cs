@@ -30,14 +30,13 @@ public partial class ColorEditor
                     get
                     {
                         Point cellPt = Get2DFrom1D(_cell);
-                        Rectangle rect = default(Rectangle);
+                        Rectangle rect = default;
                         FillRectWithCellBounds(cellPt.X, cellPt.Y, ref rect);
 
                         // Translate rect to screen coordinates
                         var pt = new Point(rect.X, rect.Y);
-                        var palette = _parent.ColorPalette;
 
-                        if (palette.IsHandleCreated)
+                        if (_parent.ColorPalette is { } palette && palette.IsHandleCreated)
                         {
                             PInvoke.ClientToScreen(palette, ref pt);
                         }
@@ -57,7 +56,7 @@ public partial class ColorEditor
                     get
                     {
                         AccessibleStates state = base.State;
-                        if (_cell == _parent.ColorPalette.FocusedCell)
+                        if (_parent.ColorPalette is { } palette && _cell == palette.FocusedCell)
                         {
                             state |= AccessibleStates.Focused;
                         }

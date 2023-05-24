@@ -17,7 +17,7 @@ public class CategoryGridEntryAccessibleObjectTests
         using NoAssertContext context = new();
         var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
 
-        Assert.Null(accessibilityObject.TestAccessor().Dynamic._owningCategoryGridEntry);
+        Assert.Null(((IAccessibleOwner<GridEntry>)accessibilityObject).Owner);
     }
 
     [WinFormsFact]

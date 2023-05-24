@@ -13,8 +13,6 @@ internal partial class PropertyGridView
     /// </summary>
     private class GridViewListBoxAccessibleObject : ListBox.ListBoxAccessibleObject
     {
-        private readonly PropertyGridView _owningPropertyGridView;
-
         /// <summary>
         ///  Constructs the new instance of GridViewListBoxAccessibleObject.
         /// </summary>
@@ -25,43 +23,33 @@ internal partial class PropertyGridView
             {
                 throw new ArgumentException(null, nameof(owningGridViewListBox));
             }
-
-            _owningPropertyGridView = owningPropertyGridView;
         }
 
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!_owningPropertyGridView.DropDownVisible
-                || _owningPropertyGridView.SelectedGridEntry is null
-                || _owningPropertyGridView.DropDownControlHolder.Component != Owner
+            if (!this.TryGetOwnerAs(out GridViewListBox? owner)
+                || !owner.OwningPropertyGridView.DropDownVisible
+                || owner.OwningPropertyGridView.SelectedGridEntry is null
+                || owner.OwningPropertyGridView.DropDownControlHolder.Component != owner
                 // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
                 // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
-                || !_owningPropertyGridView.OwnerGrid.Created)
+                || !owner.OwningPropertyGridView.OwnerGrid.Created)
             {
                 return null;
             }
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => _owningPropertyGridView.DropDownControlHolder.AccessibilityObject,
+                UiaCore.NavigateDirection.Parent => owner.OwningPropertyGridView.DropDownControlHolder.AccessibilityObject,
                 _ => base.FragmentNavigate(direction)
             };
         }
 
-        public override string? Name
-        {
-            get => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
-        }
+        public override string? Name => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
 
-        /// <summary>
-        ///  Return the element that is the root node of this fragment of UI.
-        /// </summary>
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => _owningPropertyGridView.AccessibilityObject;
+            => this.TryGetOwnerAs(out GridViewListBox? owner)
+                ? owner.OwningPropertyGridView.AccessibilityObject
+                : UiaCore.StubFragmentRoot.Instance;
     }
 }

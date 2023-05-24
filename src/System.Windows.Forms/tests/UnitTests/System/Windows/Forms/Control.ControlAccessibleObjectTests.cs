@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization;
 using System.Windows.Forms.Automation;
 using Accessibility;
 using static Interop;
@@ -1070,13 +1069,6 @@ public class Control_ControlAccessibleObjectTests
         using var ownerControl = new Control();
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
         Assert.Equal("ControlAccessibleObject: Owner = System.Windows.Forms.Control", accessibleObject.ToString());
-    }
-
-    [WinFormsFact]
-    public void ControlAccessibleObject_ToString_InvokeNotInitialized_Success()
-    {
-        Control.ControlAccessibleObject accessibleObject = Assert.IsType<Control.ControlAccessibleObject>(FormatterServices.GetUninitializedObject(typeof(Control.ControlAccessibleObject)));
-        Assert.Equal("ControlAccessibleObject: Owner = null", accessibleObject.ToString());
     }
 
     [WinFormsFact]

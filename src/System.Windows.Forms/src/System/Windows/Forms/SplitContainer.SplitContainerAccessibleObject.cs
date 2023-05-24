@@ -17,8 +17,8 @@ public partial class SplitContainer
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
            => propertyID switch
            {
-               UiaCore.UIA.AutomationIdPropertyId => Owner.Name,
-               UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+               UiaCore.UIA.AutomationIdPropertyId when this.TryGetOwnerAs(out SplitContainer? owner) => owner.Name,
+               UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out SplitContainer? owner) && owner.Focused,
                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                _ => base.GetPropertyValue(propertyID)
            };

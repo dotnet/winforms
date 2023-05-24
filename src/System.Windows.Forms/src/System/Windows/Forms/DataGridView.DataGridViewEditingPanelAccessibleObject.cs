@@ -11,50 +11,44 @@ public partial class DataGridView
 {
     internal class DataGridViewEditingPanelAccessibleObject : ControlAccessibleObject
     {
-        private readonly DataGridView _ownerDataGridView;
-        private readonly Panel _panel;
+        private readonly WeakReference<DataGridView> _ownerDataGridView;
 
         public DataGridViewEditingPanelAccessibleObject(DataGridView dataGridView, Panel panel) : base(panel)
         {
-            _ownerDataGridView = dataGridView;
-            _panel = panel;
+            _ownerDataGridView = new(dataGridView);
         }
-
-        #region IRawElementProviderFragment Implementation
 
         internal override Rectangle BoundingRectangle
-        {
-            get
-            {
-                return _panel.AccessibilityObject.Bounds;
-            }
-        }
+            => this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.Bounds : default;
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-        {
-            get
-            {
-                return _ownerDataGridView.AccessibilityObject;
-            }
-        }
+            => _ownerDataGridView.TryGetTarget(out var owner)
+                ? owner.AccessibilityObject
+                : UiaCore.StubFragmentRoot.Instance;
 
-        internal override int[] RuntimeId => _panel.AccessibilityObject.RuntimeId;
+        internal override int[] RuntimeId
+            => this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.RuntimeId : base.RuntimeId;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
+            if (!_ownerDataGridView.TryGetTarget(out var owner))
+            {
+                return null;
+            }
+
             switch (direction)
             {
                 case UiaCore.NavigateDirection.Parent:
-                    DataGridViewCell currentCell = _ownerDataGridView.CurrentCell;
-                    if (currentCell is not null && _ownerDataGridView.IsCurrentCellInEditMode)
+                    DataGridViewCell currentCell = owner.CurrentCell;
+                    if (currentCell is not null && owner.IsCurrentCellInEditMode)
                     {
-                        return currentCell.AccessibilityObject;
+                        return owner.AccessibilityObject;
                     }
 
                     break;
                 case UiaCore.NavigateDirection.FirstChild:
                 case UiaCore.NavigateDirection.LastChild:
-                    return _ownerDataGridView.EditingControlAccessibleObject;
+                    return owner.EditingControlAccessibleObject;
             }
 
             return base.FragmentNavigate(direction);
@@ -64,36 +58,31 @@ public partial class DataGridView
 
         internal override void SetFocus()
         {
-            if (_panel.IsHandleCreated && _panel.CanFocus)
+            if (this.TryGetOwnerAs(out Panel? owner) && owner.IsHandleCreated && owner.CanFocus)
             {
-                _panel.Focus();
+                owner.Focus();
             }
         }
-
-        #endregion
-
-        #region IRawElementProviderSimple Implementation
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
             propertyId switch
             {
-                UiaCore.UIA.AccessKeyPropertyId => _panel.AccessibilityObject.KeyboardShortcut,
-                UiaCore.UIA.ControlTypePropertyId =>
-                    // If we don't set a default role for the accessible object
-                    // it will be retrieved from Windows.
+                UiaCore.UIA.AccessKeyPropertyId => this.TryGetOwnerAs(out Panel? owner)
+                    ? owner.AccessibilityObject.KeyboardShortcut
+                    : null,
+                UiaCore.UIA.ControlTypePropertyId => this.GetOwnerAccessibleRole() == AccessibleRole.Default
+                    // If we don't set a default role for the accessible object it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    Owner.AccessibleRole == AccessibleRole.Default
-                        ? UiaCore.UIA.PaneControlTypeId
-                        : base.GetPropertyValue(propertyId),
-                UiaCore.UIA.HasKeyboardFocusPropertyId => _ownerDataGridView.CurrentCell is not null,
+                    ? UiaCore.UIA.PaneControlTypeId
+                    : base.GetPropertyValue(propertyId),
+                UiaCore.UIA.HasKeyboardFocusPropertyId
+                    => _ownerDataGridView.TryGetTarget(out var owner) && owner.CurrentCell is not null,
                 UiaCore.UIA.IsContentElementPropertyId => true,
                 UiaCore.UIA.IsControlElementPropertyId => true,
-                UiaCore.UIA.IsEnabledPropertyId => _ownerDataGridView.Enabled,
+                UiaCore.UIA.IsEnabledPropertyId => _ownerDataGridView.TryGetTarget(out var owner) && owner.Enabled,
                 UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
                 UiaCore.UIA.ProviderDescriptionPropertyId => SR.DataGridViewEditingPanelUiaProviderDescription,
                 _ => base.GetPropertyValue(propertyId)
             };
-
-        #endregion
     }
 }

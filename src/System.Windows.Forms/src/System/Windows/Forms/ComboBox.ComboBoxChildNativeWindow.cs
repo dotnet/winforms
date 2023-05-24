@@ -20,7 +20,7 @@ public partial class ComboBox
             _childWindowType = childWindowType;
         }
 
-        protected override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch ((User32.WM)m.Msg)
             {

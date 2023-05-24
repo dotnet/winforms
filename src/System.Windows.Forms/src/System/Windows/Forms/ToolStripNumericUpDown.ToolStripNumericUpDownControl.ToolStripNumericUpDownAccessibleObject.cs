@@ -23,21 +23,13 @@ internal partial class ToolStripNumericUpDown
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    UiaCore.UIA.ControlTypePropertyId when
-                        Owner.AccessibleRole == AccessibleRole.Default
+                    UiaCore.UIA.ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
                         => UiaCore.UIA.SpinnerControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                => patternId == UiaCore.UIA.ValuePatternId || base.IsPatternSupported(patternId);
         }
     }
 }

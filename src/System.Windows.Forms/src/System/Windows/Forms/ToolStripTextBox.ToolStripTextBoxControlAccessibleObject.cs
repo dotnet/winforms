@@ -17,14 +17,12 @@ public partial class ToolStripTextBox
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {
-                // If we don't set a default role for the accessible object
-                // it will be retrieved from Windows.
+                // If we don't set a default role for the accessible object it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                UiaCore.UIA.ControlTypePropertyId when
-                    Owner.AccessibleRole == AccessibleRole.Default
+                UiaCore.UIA.ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     => UiaCore.UIA.EditControlTypeId,
                 UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(Owner.ToolStripControlHost?.Placement, Bounds),
+                UiaCore.UIA.IsOffscreenPropertyId when this.TryGetOwnerAs(out TextBox? owner) => GetIsOffscreenPropertyValue(owner.ToolStripControlHost?.Placement, Bounds),
                 _ => base.GetPropertyValue(propertyID)
             };
     }
