@@ -323,10 +323,6 @@
 ~override System.Windows.Forms.PropertyGrid.Site.set -> void
 ~override System.Windows.Forms.PropertyGrid.Text.get -> string
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
-override System.Windows.Forms.PropertyManager.Current.get -> object?
-override System.Windows.Forms.PropertyManager.GetListName(System.Collections.ArrayList? listAccessors) -> string!
-override System.Windows.Forms.PropertyManager.OnCurrentChanged(System.EventArgs! ea) -> void
-override System.Windows.Forms.PropertyManager.OnCurrentItemChanged(System.EventArgs! ea) -> void
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.RichTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -342,61 +338,6 @@ override System.Windows.Forms.PropertyManager.OnCurrentItemChanged(System.EventA
 ~override System.Windows.Forms.RichTextBox.SelectedText.set -> void
 ~override System.Windows.Forms.RichTextBox.Text.get -> string
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
-override System.Windows.Forms.TabControl.BackgroundImage.get -> System.Drawing.Image?
-override System.Windows.Forms.TabControl.BackgroundImage.set -> void
-override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.TabControl.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
-override System.Windows.Forms.TabControl.CreateParams.get -> System.Windows.Forms.CreateParams!
-override System.Windows.Forms.TabControl.OnEnter(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnFontChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnGotFocus(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnHandleCreated(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnHandleDestroyed(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnKeyDown(System.Windows.Forms.KeyEventArgs! ke) -> void
-override System.Windows.Forms.TabControl.OnLeave(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnLostFocus(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnResize(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.OnStyleChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.TabControl.Text.get -> string!
-override System.Windows.Forms.TabControl.Text.set -> void
-override System.Windows.Forms.TabControl.ToString() -> string!
-override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.ToolStrip.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
-override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnFontChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnHandleCreated(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnHandleDestroyed(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnLeave(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnLostFocus(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnMouseCaptureChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnMouseDown(System.Windows.Forms.MouseEventArgs! mea) -> void
-override System.Windows.Forms.ToolStrip.OnMouseLeave(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnMouseMove(System.Windows.Forms.MouseEventArgs! mea) -> void
-override System.Windows.Forms.ToolStrip.OnMouseUp(System.Windows.Forms.MouseEventArgs! mea) -> void
-override System.Windows.Forms.ToolStrip.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnRightToLeftChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
-override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ToolStrip.ToString() -> string!
-override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image?
-override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
-override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.ToolStripControlHost.Font.get -> System.Drawing.Font!
-override System.Windows.Forms.ToolStripControlHost.Font.set -> void
-override System.Windows.Forms.ToolStripControlHost.Image.get -> System.Drawing.Image?
-override System.Windows.Forms.ToolStripControlHost.Image.set -> void
-override System.Windows.Forms.ToolStripControlHost.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
-override System.Windows.Forms.ToolStripControlHost.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-override System.Windows.Forms.ToolStripControlHost.OnParentChanged(System.Windows.Forms.ToolStrip? oldParent, System.Windows.Forms.ToolStrip? newParent) -> void
-override System.Windows.Forms.ToolStripControlHost.Site.get -> System.ComponentModel.ISite?
-override System.Windows.Forms.ToolStripControlHost.Site.set -> void
-override System.Windows.Forms.ToolStripControlHost.Text.get -> string!
-override System.Windows.Forms.ToolStripControlHost.Text.set -> void
-override System.Windows.Forms.ToolTip.ToString() -> string!
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
@@ -449,15 +390,6 @@ override System.Windows.Forms.ToolTip.ToString() -> string!
 ~static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
-static System.Windows.Forms.ListBindingHelper.GetList(object? dataSource, string? dataMember) -> object?
-static System.Windows.Forms.ListBindingHelper.GetList(object? list) -> object?
-static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? dataSource, string? dataMember, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> System.ComponentModel.PropertyDescriptorCollection!
-static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? list) -> System.ComponentModel.PropertyDescriptorCollection!
-static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? list, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> System.ComponentModel.PropertyDescriptorCollection!
-static System.Windows.Forms.ListBindingHelper.GetListItemType(object? dataSource, string? dataMember) -> System.Type?
-static System.Windows.Forms.ListBindingHelper.GetListItemType(object? list) -> System.Type?
-static System.Windows.Forms.ListBindingHelper.GetListName(object? list, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> string!
-static System.Windows.Forms.ToolStrip.SetItemParent(System.Windows.Forms.ToolStripItem! item, System.Windows.Forms.ToolStrip! parent) -> void
 ~static System.Windows.Forms.ToolStripManager.FindToolStrip(string toolStripName) -> System.Windows.Forms.ToolStrip
 ~static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form targetForm) -> void
 ~static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form targetForm, string key) -> void
@@ -471,18 +403,6 @@ static System.Windows.Forms.ToolStrip.SetItemParent(System.Windows.Forms.ToolStr
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
-System.Windows.Forms.AutoCompleteStringCollection.Add(string! value) -> int
-System.Windows.Forms.AutoCompleteStringCollection.AddRange(string![]! value) -> void
-System.Windows.Forms.AutoCompleteStringCollection.Contains(string! value) -> bool
-System.Windows.Forms.AutoCompleteStringCollection.CopyTo(string![]! array, int index) -> void
-System.Windows.Forms.AutoCompleteStringCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.AutoCompleteStringCollection.IndexOf(string! value) -> int
-System.Windows.Forms.AutoCompleteStringCollection.Insert(int index, string! value) -> void
-System.Windows.Forms.AutoCompleteStringCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! e) -> void
-System.Windows.Forms.AutoCompleteStringCollection.Remove(string! value) -> void
-System.Windows.Forms.AutoCompleteStringCollection.SyncRoot.get -> object!
-System.Windows.Forms.AutoCompleteStringCollection.this[int index].get -> string!
-System.Windows.Forms.AutoCompleteStringCollection.this[int index].set -> void
 ~System.Windows.Forms.AxHost.AxHost(string clsid) -> void
 ~System.Windows.Forms.AxHost.AxHost(string clsid, int flags) -> void
 ~System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl
@@ -535,15 +455,6 @@ System.Windows.Forms.AutoCompleteStringCollection.this[int index].set -> void
 ~System.Windows.Forms.ComboBox.FindStringExact(string s) -> int
 ~System.Windows.Forms.ComboBox.FindStringExact(string s, int startIndex) -> int
 ~System.Windows.Forms.ComboBox.Items.get -> System.Windows.Forms.ComboBox.ObjectCollection
-System.Windows.Forms.ComboBox.ObjectCollection.Add(object! item) -> int
-System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object![]! items) -> void
-System.Windows.Forms.ComboBox.ObjectCollection.Contains(object? value) -> bool
-System.Windows.Forms.ComboBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
-System.Windows.Forms.ComboBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.ComboBox.ObjectCollection.IndexOf(object? value) -> int
-System.Windows.Forms.ComboBox.ObjectCollection.Insert(int index, object? item) -> void
-System.Windows.Forms.ComboBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ComboBox! owner) -> void
-System.Windows.Forms.ComboBox.ObjectCollection.Remove(object? value) -> void
 ~System.Windows.Forms.ComboBox.SelectedItem.get -> object
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
@@ -833,56 +744,9 @@ System.Windows.Forms.ComboBox.ObjectCollection.Remove(object? value) -> void
 ~System.Windows.Forms.HtmlWindow.StatusBarText.set -> void
 ~System.Windows.Forms.HtmlWindow.Url.get -> System.Uri
 ~System.Windows.Forms.HtmlWindow.WindowFrameElement.get -> System.Windows.Forms.HtmlElement
-System.Windows.Forms.HtmlWindowCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow?
-System.Windows.Forms.HtmlWindowCollection.this[string! windowId].get -> System.Windows.Forms.HtmlWindow?
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection! items) -> void
-System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem![]! items) -> void
-System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem! item) -> bool
-System.Windows.Forms.ListView.ListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
-System.Windows.Forms.ListView.ListViewItemCollection.Find(string! key, bool searchAllSubItems) -> System.Windows.Forms.ListViewItem![]!
-System.Windows.Forms.ListView.ListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.ListView.ListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem! item) -> int
-System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text) -> System.Windows.Forms.ListViewItem!
-System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
-System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
-System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, System.Windows.Forms.ListViewItem! item) -> System.Windows.Forms.ListViewItem!
-System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
 ~System.Windows.Forms.ListViewItem.FindNearestItem(System.Windows.Forms.SearchDirectionHint searchDirection) -> System.Windows.Forms.ListViewItem
-System.Windows.Forms.ListViewItem.Font.get -> System.Drawing.Font!
-System.Windows.Forms.ListViewItem.Font.set -> void
 ~System.Windows.Forms.ListViewItem.GetSubItemAt(int x, int y) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-System.Windows.Forms.ListViewItem.Group.get -> System.Windows.Forms.ListViewGroup?
-System.Windows.Forms.ListViewItem.Group.set -> void
-System.Windows.Forms.ListViewItem.ImageKey.get -> string!
-System.Windows.Forms.ListViewItem.ImageKey.set -> void
-System.Windows.Forms.ListViewItem.ImageList.get -> System.Windows.Forms.ImageList?
-System.Windows.Forms.ListViewItem.ListView.get -> System.Windows.Forms.ListView?
-System.Windows.Forms.ListViewItem.ListViewItem(string? text) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string? text, int imageIndex) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string? text, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string? text, string? imageKey) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string? text, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string? text, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, int imageIndex) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, string? imageKey) -> void
-System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
-System.Windows.Forms.ListViewItem.Name.get -> string!
-System.Windows.Forms.ListViewItem.Name.set -> void
 ~System.Windows.Forms.ListViewItem.SubItems.get -> System.Windows.Forms.ListViewItem.ListViewSubItemCollection
 ~System.Windows.Forms.ListViewItem.Tag.get -> object
 ~System.Windows.Forms.ListViewItem.Tag.set -> void
@@ -941,63 +805,7 @@ System.Windows.Forms.ListViewItem.Name.set -> void
 ~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
-System.Windows.Forms.TabControl.DeselectTab(string! tabPageName) -> void
-System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage! tabPage) -> void
-System.Windows.Forms.TabControl.GetControl(int index) -> System.Windows.Forms.Control!
-System.Windows.Forms.TabControl.GetToolTipText(object! item) -> string!
-System.Windows.Forms.TabControl.ImageList.get -> System.Windows.Forms.ImageList?
-System.Windows.Forms.TabControl.ImageList.set -> void
-System.Windows.Forms.TabControl.SelectedTab.get -> System.Windows.Forms.TabPage?
-System.Windows.Forms.TabControl.SelectedTab.set -> void
-System.Windows.Forms.TabControl.SelectTab(string! tabPageName) -> void
-System.Windows.Forms.TabControl.SelectTab(System.Windows.Forms.TabPage! tabPage) -> void
-System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection!
-System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control?
-System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control?
-System.Windows.Forms.ToolStrip.GetItemAt(int x, int y) -> System.Windows.Forms.ToolStripItem?
-System.Windows.Forms.ToolStrip.GetItemAt(System.Drawing.Point point) -> System.Windows.Forms.ToolStripItem?
-System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem! item, System.Drawing.Point location) -> void
-System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control!
-System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c) -> void
-System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c, string! name) -> void
-System.Windows.Forms.ToolStripItemCollection.Add(string? text) -> System.Windows.Forms.ToolStripItem!
-System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Image? image) -> System.Windows.Forms.ToolStripItem!
-System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
-System.Windows.Forms.ToolStripItemCollection.Add(System.Drawing.Image? image) -> System.Windows.Forms.ToolStripItem!
-System.Windows.Forms.ToolStripItemCollection.Add(System.Windows.Forms.ToolStripItem! value) -> int
-System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
-System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItemCollection! toolStripItems) -> void
-System.Windows.Forms.ToolStripItemCollection.Contains(System.Windows.Forms.ToolStripItem! value) -> bool
-System.Windows.Forms.ToolStripItemCollection.CopyTo(System.Windows.Forms.ToolStripItem![]! array, int index) -> void
-System.Windows.Forms.ToolStripItemCollection.Find(string! key, bool searchAllChildren) -> System.Windows.Forms.ToolStripItem![]!
-System.Windows.Forms.ToolStripItemCollection.IndexOf(System.Windows.Forms.ToolStripItem! value) -> int
-System.Windows.Forms.ToolStripItemCollection.Insert(int index, System.Windows.Forms.ToolStripItem! value) -> void
-System.Windows.Forms.ToolStripItemCollection.Remove(System.Windows.Forms.ToolStripItem! value) -> void
-System.Windows.Forms.ToolStripItemCollection.ToolStripItemCollection(System.Windows.Forms.ToolStrip! owner, System.Windows.Forms.ToolStripItem![]! value) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow! value) -> int
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection! value) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow![]! value) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Contains(System.Windows.Forms.ToolStripPanelRow! value) -> bool
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.CopyTo(System.Windows.Forms.ToolStripPanelRow![]! array, int index) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.IndexOf(System.Windows.Forms.ToolStripPanelRow! value) -> int
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Insert(int index, System.Windows.Forms.ToolStripPanelRow! value) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Remove(System.Windows.Forms.ToolStripPanelRow! value) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.ToolStripPanelRowCollection(System.Windows.Forms.ToolStripPanel! owner) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.ToolStripPanelRowCollection(System.Windows.Forms.ToolStripPanel! owner, System.Windows.Forms.ToolStripPanelRow![]! value) -> void
-System.Windows.Forms.ToolStripPanelRow.CanMove(System.Windows.Forms.ToolStrip! toolStripToDrag) -> bool
-System.Windows.Forms.ToolStripPanelRow.Controls.get -> System.Windows.Forms.Control![]!
-System.Windows.Forms.ToolStripPanelRow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
-System.Windows.Forms.ToolStripPanelRow.ToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
-System.Windows.Forms.ToolStripPanelRow.ToolStripPanelRow(System.Windows.Forms.ToolStripPanel! parent) -> void
 ~System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control control) -> string
-System.Windows.Forms.ToolTip.Hide(System.Windows.Forms.IWin32Window! win) -> void
-System.Windows.Forms.ToolTip.SetToolTip(System.Windows.Forms.Control! control, string? caption) -> void
-System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window) -> void
-System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int duration) -> void
-System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int x, int y) -> void
-System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int x, int y, int duration) -> void
-System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, System.Drawing.Point point) -> void
-System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, System.Drawing.Point point, int duration) -> void
 ~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeNode.FullPath.get -> string
 ~System.Windows.Forms.TreeNode.ImageKey.get -> string
@@ -1116,8 +924,6 @@ System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Windo
 ~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
 ~virtual System.Windows.Forms.ComboBox.AddItemsCore(object[] value) -> void
-virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].get -> object?
-virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.ComboBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnDropDown(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnDropDownClosed(System.EventArgs e) -> void
@@ -1359,21 +1165,6 @@ virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].set -> vo
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? key, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? key, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(System.Windows.Forms.ListViewItem! value) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.ContainsKey(string? key) -> bool
-virtual System.Windows.Forms.ListView.ListViewItemCollection.IndexOfKey(string? key) -> int
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? key, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? key, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.Remove(System.Windows.Forms.ListViewItem! item) -> void
-virtual System.Windows.Forms.ListView.ListViewItemCollection.RemoveByKey(string! key) -> void
-virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem!
-virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].set -> void
-virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string! key].get -> System.Windows.Forms.ListViewItem?
 ~virtual System.Windows.Forms.ListViewItem.Clone() -> object
 ~virtual System.Windows.Forms.ListViewItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
@@ -1398,45 +1189,6 @@ virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string! key].g
 ~virtual System.Windows.Forms.RichTextBox.OnProtected(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnSelectionChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs e) -> void
-virtual System.Windows.Forms.TabControl.GetItems() -> object![]!
-virtual System.Windows.Forms.TabControl.GetItems(System.Type! baseType) -> object![]!
-virtual System.Windows.Forms.TabControl.OnDeselected(System.Windows.Forms.TabControlEventArgs! e) -> void
-virtual System.Windows.Forms.TabControl.OnDeselecting(System.Windows.Forms.TabControlCancelEventArgs! e) -> void
-virtual System.Windows.Forms.TabControl.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
-virtual System.Windows.Forms.TabControl.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.TabControl.OnSelected(System.Windows.Forms.TabControlEventArgs! e) -> void
-virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnItemAdded(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnItemRemoved(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnLayoutCompleted(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnLayoutStyleChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnPaintGrip(System.Windows.Forms.PaintEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnLeave(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnLostFocus(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnValidated(System.EventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripControlHost.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
-virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string? key) -> bool
-virtual System.Windows.Forms.ToolStripItemCollection.IndexOfKey(string? key) -> int
-virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string? key) -> void
-virtual System.Windows.Forms.ToolStripItemCollection.this[int index].get -> System.Windows.Forms.ToolStripItem!
-virtual System.Windows.Forms.ToolStripItemCollection.this[string? key].get -> System.Windows.Forms.ToolStripItem?
-virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.this[int index].get -> System.Windows.Forms.ToolStripPanelRow!
-virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control! control, int index) -> void
-virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control! control, int index) -> void
-virtual System.Windows.Forms.ToolStripPanelRow.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
 ~virtual System.Windows.Forms.TreeNode.Clone() -> object
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
@@ -2480,7 +2232,11 @@ override System.Windows.Forms.PropertyGridInternal.PropertiesTab.TabName.get -> 
 override System.Windows.Forms.PropertyManager.AddNew() -> void
 override System.Windows.Forms.PropertyManager.CancelCurrentEdit() -> void
 override System.Windows.Forms.PropertyManager.Count.get -> int
+override System.Windows.Forms.PropertyManager.Current.get -> object?
 override System.Windows.Forms.PropertyManager.EndCurrentEdit() -> void
+override System.Windows.Forms.PropertyManager.GetListName(System.Collections.ArrayList? listAccessors) -> string!
+override System.Windows.Forms.PropertyManager.OnCurrentChanged(System.EventArgs! ea) -> void
+override System.Windows.Forms.PropertyManager.OnCurrentItemChanged(System.EventArgs! ea) -> void
 override System.Windows.Forms.PropertyManager.Position.get -> int
 override System.Windows.Forms.PropertyManager.Position.set -> void
 override System.Windows.Forms.PropertyManager.RemoveAt(int index) -> void
@@ -2658,11 +2414,16 @@ override System.Windows.Forms.StatusStrip.SetDisplayedItems() -> void
 override System.Windows.Forms.StatusStrip.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.TabControl.BackColor.get -> System.Drawing.Color
 override System.Windows.Forms.TabControl.BackColor.set -> void
+override System.Windows.Forms.TabControl.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.TabControl.BackgroundImage.set -> void
 override System.Windows.Forms.TabControl.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
 override System.Windows.Forms.TabControl.BackgroundImageLayout.set -> void
 override System.Windows.Forms.TabControl.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
 override System.Windows.Forms.TabControl.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
+override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.TabControl.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 override System.Windows.Forms.TabControl.CreateHandle() -> void
+override System.Windows.Forms.TabControl.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.TabControl.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.TabControl.DisplayRectangle.get -> System.Drawing.Rectangle
 override System.Windows.Forms.TabControl.Dispose(bool disposing) -> void
@@ -2671,8 +2432,21 @@ override System.Windows.Forms.TabControl.DoubleBuffered.set -> void
 override System.Windows.Forms.TabControl.ForeColor.get -> System.Drawing.Color
 override System.Windows.Forms.TabControl.ForeColor.set -> void
 override System.Windows.Forms.TabControl.IsInputKey(System.Windows.Forms.Keys keyData) -> bool
+override System.Windows.Forms.TabControl.OnEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnKeyDown(System.Windows.Forms.KeyEventArgs! ke) -> void
+override System.Windows.Forms.TabControl.OnLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.TabControl.OnStyleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.TabControl.ProcessKeyPreview(ref System.Windows.Forms.Message m) -> bool
 override System.Windows.Forms.TabControl.ScaleCore(float dx, float dy) -> void
+override System.Windows.Forms.TabControl.Text.get -> string!
+override System.Windows.Forms.TabControl.Text.set -> void
+override System.Windows.Forms.TabControl.ToString() -> string!
 override System.Windows.Forms.TabControl.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.TableLayoutPanel.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 override System.Windows.Forms.TableLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
@@ -2767,6 +2541,8 @@ override System.Windows.Forms.ToolStrip.AutoSize.get -> bool
 override System.Windows.Forms.ToolStrip.AutoSize.set -> void
 override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext?
 override System.Windows.Forms.ToolStrip.BindingContext.set -> void
+override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStrip.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 override System.Windows.Forms.ToolStrip.Cursor.get -> System.Windows.Forms.Cursor!
 override System.Windows.Forms.ToolStrip.Cursor.set -> void
 override System.Windows.Forms.ToolStrip.DefaultMargin.get -> System.Windows.Forms.Padding
@@ -2781,6 +2557,25 @@ override System.Windows.Forms.ToolStrip.Font.set -> void
 override System.Windows.Forms.ToolStrip.IsInputChar(char charCode) -> bool
 override System.Windows.Forms.ToolStrip.IsInputKey(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.ToolStrip.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
+override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnMouseCaptureChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnMouseDown(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStrip.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnMouseMove(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStrip.OnMouseUp(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStrip.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
+override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStrip.ProcessCmdKey(ref System.Windows.Forms.Message m, System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.ToolStrip.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.ToolStrip.ProcessMnemonic(char charCode) -> bool
@@ -2792,6 +2587,7 @@ override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.GetChild(int i
 override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.GetChildCount() -> int
 override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
+override System.Windows.Forms.ToolStrip.ToString() -> string!
 override System.Windows.Forms.ToolStrip.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.ToolStripButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripButton.DefaultAutoToolTip.get -> bool
@@ -2839,17 +2635,27 @@ override System.Windows.Forms.ToolStripContentPanel.OnHandleCreated(System.Event
 override System.Windows.Forms.ToolStripContentPanel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.ToolStripControlHost.BackColor.get -> System.Drawing.Color
 override System.Windows.Forms.ToolStripControlHost.BackColor.set -> void
+override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
 override System.Windows.Forms.ToolStripControlHost.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
 override System.Windows.Forms.ToolStripControlHost.BackgroundImageLayout.set -> void
 override System.Windows.Forms.ToolStripControlHost.CanSelect.get -> bool
+override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripControlHost.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.ToolStripControlHost.Dispose(bool disposing) -> void
 override System.Windows.Forms.ToolStripControlHost.Enabled.get -> bool
 override System.Windows.Forms.ToolStripControlHost.Enabled.set -> void
+override System.Windows.Forms.ToolStripControlHost.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStripControlHost.Font.set -> void
 override System.Windows.Forms.ToolStripControlHost.ForeColor.get -> System.Drawing.Color
 override System.Windows.Forms.ToolStripControlHost.ForeColor.set -> void
 override System.Windows.Forms.ToolStripControlHost.GetPreferredSize(System.Drawing.Size constrainingSize) -> System.Drawing.Size
+override System.Windows.Forms.ToolStripControlHost.Image.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripControlHost.Image.set -> void
 override System.Windows.Forms.ToolStripControlHost.OnBoundsChanged() -> void
+override System.Windows.Forms.ToolStripControlHost.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStripControlHost.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripControlHost.OnParentChanged(System.Windows.Forms.ToolStrip? oldParent, System.Windows.Forms.ToolStrip? newParent) -> void
 override System.Windows.Forms.ToolStripControlHost.ProcessCmdKey(ref System.Windows.Forms.Message m, System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.ToolStripControlHost.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.ToolStripControlHost.ProcessMnemonic(char charCode) -> bool
@@ -2859,8 +2665,12 @@ override System.Windows.Forms.ToolStripControlHost.RightToLeft.get -> System.Win
 override System.Windows.Forms.ToolStripControlHost.RightToLeft.set -> void
 override System.Windows.Forms.ToolStripControlHost.Selected.get -> bool
 override System.Windows.Forms.ToolStripControlHost.SetVisibleCore(bool visible) -> void
+override System.Windows.Forms.ToolStripControlHost.Site.get -> System.ComponentModel.ISite?
+override System.Windows.Forms.ToolStripControlHost.Site.set -> void
 override System.Windows.Forms.ToolStripControlHost.Size.get -> System.Drawing.Size
 override System.Windows.Forms.ToolStripControlHost.Size.set -> void
+override System.Windows.Forms.ToolStripControlHost.Text.get -> string!
+override System.Windows.Forms.ToolStripControlHost.Text.set -> void
 override System.Windows.Forms.ToolStripControlHost.TextDirection.get -> System.Windows.Forms.ToolStripTextDirection
 override System.Windows.Forms.ToolStripControlHost.TextDirection.set -> void
 override System.Windows.Forms.ToolStripDropDown.Anchor.get -> System.Windows.Forms.AnchorStyles
@@ -3102,6 +2912,7 @@ override System.Windows.Forms.ToolStripTextBox.GetPreferredSize(System.Drawing.S
 override System.Windows.Forms.ToolStripTextBox.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
 override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
 override System.Windows.Forms.ToolTip.Dispose(bool disposing) -> void
+override System.Windows.Forms.ToolTip.ToString() -> string!
 override System.Windows.Forms.TrackBar.AutoSize.get -> bool
 override System.Windows.Forms.TrackBar.AutoSize.set -> void
 override System.Windows.Forms.TrackBar.BackgroundImage.get -> System.Drawing.Image?
@@ -3542,6 +3353,14 @@ static System.Windows.Forms.InputLanguage.FromCulture(System.Globalization.Cultu
 static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.Windows.Forms.InputLanguageCollection!
 static System.Windows.Forms.LinkArea.operator !=(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
 static System.Windows.Forms.LinkArea.operator ==(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
+static System.Windows.Forms.ListBindingHelper.GetList(object? dataSource, string? dataMember) -> object?
+static System.Windows.Forms.ListBindingHelper.GetList(object? list) -> object?
+static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? dataSource, string? dataMember, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> System.ComponentModel.PropertyDescriptorCollection!
+static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? list) -> System.ComponentModel.PropertyDescriptorCollection!
+static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? list, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> System.ComponentModel.PropertyDescriptorCollection!
+static System.Windows.Forms.ListBindingHelper.GetListItemType(object? dataSource, string? dataMember) -> System.Type?
+static System.Windows.Forms.ListBindingHelper.GetListItemType(object? list) -> System.Type?
+static System.Windows.Forms.ListBindingHelper.GetListName(object? list, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> string!
 static System.Windows.Forms.MessageBox.Show(string? text) -> System.Windows.Forms.DialogResult
 static System.Windows.Forms.MessageBox.Show(string? text, string? caption) -> System.Windows.Forms.DialogResult
 static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
@@ -3844,6 +3663,7 @@ static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceConte
 static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+static System.Windows.Forms.ToolStrip.SetItemParent(System.Windows.Forms.ToolStripItem! item, System.Windows.Forms.ToolStrip! parent) -> void
 static System.Windows.Forms.ToolStripManager.IsShortcutDefined(System.Windows.Forms.Keys shortcut) -> bool
 static System.Windows.Forms.ToolStripManager.IsValidShortcut(System.Windows.Forms.Keys shortcut) -> bool
 static System.Windows.Forms.ToolStripManager.RendererChanged -> System.EventHandler
@@ -4645,13 +4465,25 @@ System.Windows.Forms.AutoCompleteSource.ListItems = 256 -> System.Windows.Forms.
 System.Windows.Forms.AutoCompleteSource.None = 128 -> System.Windows.Forms.AutoCompleteSource
 System.Windows.Forms.AutoCompleteSource.RecentlyUsedList = 4 -> System.Windows.Forms.AutoCompleteSource
 System.Windows.Forms.AutoCompleteStringCollection
+System.Windows.Forms.AutoCompleteStringCollection.Add(string! value) -> int
+System.Windows.Forms.AutoCompleteStringCollection.AddRange(string![]! value) -> void
 System.Windows.Forms.AutoCompleteStringCollection.AutoCompleteStringCollection() -> void
 System.Windows.Forms.AutoCompleteStringCollection.Clear() -> void
 System.Windows.Forms.AutoCompleteStringCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
+System.Windows.Forms.AutoCompleteStringCollection.Contains(string! value) -> bool
+System.Windows.Forms.AutoCompleteStringCollection.CopyTo(string![]! array, int index) -> void
 System.Windows.Forms.AutoCompleteStringCollection.Count.get -> int
+System.Windows.Forms.AutoCompleteStringCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.AutoCompleteStringCollection.IndexOf(string! value) -> int
+System.Windows.Forms.AutoCompleteStringCollection.Insert(int index, string! value) -> void
 System.Windows.Forms.AutoCompleteStringCollection.IsReadOnly.get -> bool
 System.Windows.Forms.AutoCompleteStringCollection.IsSynchronized.get -> bool
+System.Windows.Forms.AutoCompleteStringCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! e) -> void
+System.Windows.Forms.AutoCompleteStringCollection.Remove(string! value) -> void
 System.Windows.Forms.AutoCompleteStringCollection.RemoveAt(int index) -> void
+System.Windows.Forms.AutoCompleteStringCollection.SyncRoot.get -> object!
+System.Windows.Forms.AutoCompleteStringCollection.this[int index].get -> string!
+System.Windows.Forms.AutoCompleteStringCollection.this[int index].set -> void
 System.Windows.Forms.AutoScaleMode
 System.Windows.Forms.AutoScaleMode.Dpi = 2 -> System.Windows.Forms.AutoScaleMode
 System.Windows.Forms.AutoScaleMode.Font = 1 -> System.Windows.Forms.AutoScaleMode
@@ -5211,9 +5043,18 @@ System.Windows.Forms.ComboBox.MaxLength.get -> int
 System.Windows.Forms.ComboBox.MaxLength.set -> void
 System.Windows.Forms.ComboBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler
 System.Windows.Forms.ComboBox.ObjectCollection
+System.Windows.Forms.ComboBox.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object![]! items) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.Clear() -> void
+System.Windows.Forms.ComboBox.ObjectCollection.Contains(object? value) -> bool
+System.Windows.Forms.ComboBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.Count.get -> int
+System.Windows.Forms.ComboBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ComboBox.ObjectCollection.IndexOf(object? value) -> int
+System.Windows.Forms.ComboBox.ObjectCollection.Insert(int index, object? item) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.IsReadOnly.get -> bool
+System.Windows.Forms.ComboBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ComboBox! owner) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.Remove(object? value) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ComboBox.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ComboBox.Padding.set -> void
@@ -7464,6 +7305,9 @@ System.Windows.Forms.HtmlWindow.Size.set -> void
 System.Windows.Forms.HtmlWindow.Unload -> System.Windows.Forms.HtmlElementEventHandler
 System.Windows.Forms.HtmlWindowCollection
 System.Windows.Forms.HtmlWindowCollection.Count.get -> int
+System.Windows.Forms.HtmlWindowCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow?
+System.Windows.Forms.HtmlWindowCollection.this[string! windowId].get -> System.Windows.Forms.HtmlWindow?
 System.Windows.Forms.IBindableComponent
 System.Windows.Forms.IBindableComponent.BindingContext.get -> System.Windows.Forms.BindingContext?
 System.Windows.Forms.IBindableComponent.BindingContext.set -> void
@@ -8313,8 +8157,20 @@ System.Windows.Forms.ListView.LargeImageList.get -> System.Windows.Forms.ImageLi
 System.Windows.Forms.ListView.LargeImageList.set -> void
 System.Windows.Forms.ListView.ListView() -> void
 System.Windows.Forms.ListView.ListViewItemCollection
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection! items) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem![]! items) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem! item) -> bool
+System.Windows.Forms.ListView.ListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
 System.Windows.Forms.ListView.ListViewItemCollection.Count.get -> int
+System.Windows.Forms.ListView.ListViewItemCollection.Find(string! key, bool searchAllSubItems) -> System.Windows.Forms.ListViewItem![]!
+System.Windows.Forms.ListView.ListViewItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListView.ListViewItemCollection.IndexOf(System.Windows.Forms.ListViewItem! item) -> int
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text) -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, System.Windows.Forms.ListViewItem! item) -> System.Windows.Forms.ListViewItem!
 System.Windows.Forms.ListView.ListViewItemCollection.IsReadOnly.get -> bool
+System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
 System.Windows.Forms.ListView.ListViewItemSorter.get -> System.Collections.IComparer?
 System.Windows.Forms.ListView.ListViewItemSorter.set -> void
 System.Windows.Forms.ListView.MultiSelect.get -> bool
@@ -8474,15 +8330,45 @@ System.Windows.Forms.ListViewItem.Checked.get -> bool
 System.Windows.Forms.ListViewItem.Checked.set -> void
 System.Windows.Forms.ListViewItem.Focused.get -> bool
 System.Windows.Forms.ListViewItem.Focused.set -> void
+System.Windows.Forms.ListViewItem.Font.get -> System.Drawing.Font!
+System.Windows.Forms.ListViewItem.Font.set -> void
 System.Windows.Forms.ListViewItem.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ListViewItem.ForeColor.set -> void
 System.Windows.Forms.ListViewItem.GetBounds(System.Windows.Forms.ItemBoundsPortion portion) -> System.Drawing.Rectangle
+System.Windows.Forms.ListViewItem.Group.get -> System.Windows.Forms.ListViewGroup?
+System.Windows.Forms.ListViewItem.Group.set -> void
 System.Windows.Forms.ListViewItem.ImageIndex.get -> int
 System.Windows.Forms.ListViewItem.ImageIndex.set -> void
+System.Windows.Forms.ListViewItem.ImageKey.get -> string!
+System.Windows.Forms.ListViewItem.ImageKey.set -> void
+System.Windows.Forms.ListViewItem.ImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.ListViewItem.IndentCount.get -> int
 System.Windows.Forms.ListViewItem.IndentCount.set -> void
 System.Windows.Forms.ListViewItem.Index.get -> int
+System.Windows.Forms.ListViewItem.ListView.get -> System.Windows.Forms.ListView?
 System.Windows.Forms.ListViewItem.ListViewItem() -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, int imageIndex) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, string? imageKey) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, int imageIndex) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, string? imageKey) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
 System.Windows.Forms.ListViewItem.ListViewSubItem
 System.Windows.Forms.ListViewItem.ListViewSubItem.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.ListViewItem.ListViewSubItem.BackColor.set -> void
@@ -8520,6 +8406,8 @@ System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Remove(System.Window
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem.ListViewSubItem!
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.this[int index].set -> void
+System.Windows.Forms.ListViewItem.Name.get -> string!
+System.Windows.Forms.ListViewItem.Name.set -> void
 System.Windows.Forms.ListViewItem.Position.get -> System.Drawing.Point
 System.Windows.Forms.ListViewItem.Position.set -> void
 System.Windows.Forms.ListViewItem.Selected.get -> bool
@@ -10091,13 +9979,19 @@ System.Windows.Forms.TabControl.ControlCollection.ControlCollection(System.Windo
 System.Windows.Forms.TabControl.Deselected -> System.Windows.Forms.TabControlEventHandler?
 System.Windows.Forms.TabControl.Deselecting -> System.Windows.Forms.TabControlCancelEventHandler?
 System.Windows.Forms.TabControl.DeselectTab(int index) -> void
+System.Windows.Forms.TabControl.DeselectTab(string! tabPageName) -> void
+System.Windows.Forms.TabControl.DeselectTab(System.Windows.Forms.TabPage! tabPage) -> void
 System.Windows.Forms.TabControl.DrawItem -> System.Windows.Forms.DrawItemEventHandler?
 System.Windows.Forms.TabControl.DrawMode.get -> System.Windows.Forms.TabDrawMode
 System.Windows.Forms.TabControl.DrawMode.set -> void
 System.Windows.Forms.TabControl.ForeColorChanged -> System.EventHandler?
+System.Windows.Forms.TabControl.GetControl(int index) -> System.Windows.Forms.Control!
 System.Windows.Forms.TabControl.GetTabRect(int index) -> System.Drawing.Rectangle
+System.Windows.Forms.TabControl.GetToolTipText(object! item) -> string!
 System.Windows.Forms.TabControl.HotTrack.get -> bool
 System.Windows.Forms.TabControl.HotTrack.set -> void
+System.Windows.Forms.TabControl.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.TabControl.ImageList.set -> void
 System.Windows.Forms.TabControl.ItemSize.get -> System.Drawing.Size
 System.Windows.Forms.TabControl.ItemSize.set -> void
 System.Windows.Forms.TabControl.Multiline.get -> bool
@@ -10112,8 +10006,12 @@ System.Windows.Forms.TabControl.Selected -> System.Windows.Forms.TabControlEvent
 System.Windows.Forms.TabControl.SelectedIndex.get -> int
 System.Windows.Forms.TabControl.SelectedIndex.set -> void
 System.Windows.Forms.TabControl.SelectedIndexChanged -> System.EventHandler?
+System.Windows.Forms.TabControl.SelectedTab.get -> System.Windows.Forms.TabPage?
+System.Windows.Forms.TabControl.SelectedTab.set -> void
 System.Windows.Forms.TabControl.Selecting -> System.Windows.Forms.TabControlCancelEventHandler?
 System.Windows.Forms.TabControl.SelectTab(int index) -> void
+System.Windows.Forms.TabControl.SelectTab(string! tabPageName) -> void
+System.Windows.Forms.TabControl.SelectTab(System.Windows.Forms.TabPage! tabPage) -> void
 System.Windows.Forms.TabControl.ShowToolTips.get -> bool
 System.Windows.Forms.TabControl.ShowToolTips.set -> void
 System.Windows.Forms.TabControl.SizeMode.get -> System.Windows.Forms.TabSizeMode
@@ -10140,6 +10038,7 @@ System.Windows.Forms.TabControl.TabPageCollection.IsReadOnly.get -> bool
 System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage! value) -> void
 System.Windows.Forms.TabControl.TabPageCollection.RemoveAt(int index) -> void
 System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl! owner) -> void
+System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection!
 System.Windows.Forms.TabControl.TextChanged -> System.EventHandler?
 System.Windows.Forms.TabControl.UpdateTabSelection(bool updateFocus) -> void
 System.Windows.Forms.TabControlAction
@@ -10365,6 +10264,9 @@ System.Windows.Forms.TaskDialogIcon.IconHandle.get -> nint
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(nint iconHandle) -> void
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Bitmap! image) -> void
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Icon! icon) -> void
+System.Windows.Forms.TaskDialogLinkClickedEventArgs
+System.Windows.Forms.TaskDialogLinkClickedEventArgs.LinkHref.get -> string!
+System.Windows.Forms.TaskDialogLinkClickedEventArgs.TaskDialogLinkClickedEventArgs(string! linkHref) -> void
 System.Windows.Forms.TaskDialogPage
 System.Windows.Forms.TaskDialogPage.AllowCancel.get -> bool
 System.Windows.Forms.TaskDialogPage.AllowCancel.set -> void
@@ -10379,6 +10281,8 @@ System.Windows.Forms.TaskDialogPage.Created -> System.EventHandler?
 System.Windows.Forms.TaskDialogPage.DefaultButton.get -> System.Windows.Forms.TaskDialogButton?
 System.Windows.Forms.TaskDialogPage.DefaultButton.set -> void
 System.Windows.Forms.TaskDialogPage.Destroyed -> System.EventHandler?
+System.Windows.Forms.TaskDialogPage.EnableLinks.get -> bool
+System.Windows.Forms.TaskDialogPage.EnableLinks.set -> void
 System.Windows.Forms.TaskDialogPage.Expander.get -> System.Windows.Forms.TaskDialogExpander?
 System.Windows.Forms.TaskDialogPage.Expander.set -> void
 System.Windows.Forms.TaskDialogPage.Footnote.get -> System.Windows.Forms.TaskDialogFootnote?
@@ -10388,10 +10292,12 @@ System.Windows.Forms.TaskDialogPage.Heading.set -> void
 System.Windows.Forms.TaskDialogPage.HelpRequest -> System.EventHandler?
 System.Windows.Forms.TaskDialogPage.Icon.get -> System.Windows.Forms.TaskDialogIcon?
 System.Windows.Forms.TaskDialogPage.Icon.set -> void
+System.Windows.Forms.TaskDialogPage.LinkClicked -> System.EventHandler<System.Windows.Forms.TaskDialogLinkClickedEventArgs!>?
 System.Windows.Forms.TaskDialogPage.Navigate(System.Windows.Forms.TaskDialogPage! page) -> void
 System.Windows.Forms.TaskDialogPage.OnCreated(System.EventArgs! e) -> void
 System.Windows.Forms.TaskDialogPage.OnDestroyed(System.EventArgs! e) -> void
 System.Windows.Forms.TaskDialogPage.OnHelpRequest(System.EventArgs! e) -> void
+System.Windows.Forms.TaskDialogPage.OnLinkClicked(System.Windows.Forms.TaskDialogLinkClickedEventArgs! e) -> void
 System.Windows.Forms.TaskDialogPage.ProgressBar.get -> System.Windows.Forms.TaskDialogProgressBar?
 System.Windows.Forms.TaskDialogPage.ProgressBar.set -> void
 System.Windows.Forms.TaskDialogPage.RadioButtons.get -> System.Windows.Forms.TaskDialogRadioButtonCollection!
@@ -10607,6 +10513,10 @@ System.Windows.Forms.ToolStrip.EndDrag -> System.EventHandler?
 System.Windows.Forms.ToolStrip.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStrip.ForeColor.set -> void
 System.Windows.Forms.ToolStrip.ForeColorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control?
+System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control?
+System.Windows.Forms.ToolStrip.GetItemAt(int x, int y) -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStrip.GetItemAt(System.Drawing.Point point) -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.ToolStrip.GripDisplayStyle.get -> System.Windows.Forms.ToolStripGripDisplayStyle
 System.Windows.Forms.ToolStrip.GripMargin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStrip.GripMargin.set -> void
@@ -10640,6 +10550,7 @@ System.Windows.Forms.ToolStrip.RenderMode.get -> System.Windows.Forms.ToolStripR
 System.Windows.Forms.ToolStrip.RenderMode.set -> void
 System.Windows.Forms.ToolStrip.ResetMinimumSize() -> void
 System.Windows.Forms.ToolStrip.SetAutoScrollMargin(int x, int y) -> void
+System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem! item, System.Drawing.Point location) -> void
 System.Windows.Forms.ToolStrip.ShowItemToolTips.get -> bool
 System.Windows.Forms.ToolStrip.ShowItemToolTips.set -> void
 System.Windows.Forms.ToolStrip.Stretch.get -> bool
@@ -10809,6 +10720,7 @@ System.Windows.Forms.ToolStripContentPanelRenderEventHandler
 System.Windows.Forms.ToolStripControlHost
 System.Windows.Forms.ToolStripControlHost.CausesValidation.get -> bool
 System.Windows.Forms.ToolStripControlHost.CausesValidation.set -> void
+System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control!
 System.Windows.Forms.ToolStripControlHost.ControlAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.ToolStripControlHost.ControlAlign.set -> void
 System.Windows.Forms.ToolStripControlHost.DisplayStyle.get -> System.Windows.Forms.ToolStripItemDisplayStyle
@@ -10836,6 +10748,8 @@ System.Windows.Forms.ToolStripControlHost.TextAlign.get -> System.Drawing.Conten
 System.Windows.Forms.ToolStripControlHost.TextAlign.set -> void
 System.Windows.Forms.ToolStripControlHost.TextImageRelation.get -> System.Windows.Forms.TextImageRelation
 System.Windows.Forms.ToolStripControlHost.TextImageRelation.set -> void
+System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c) -> void
+System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control! c, string! name) -> void
 System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject
 System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject.ToolStripHostedControlAccessibleObject(System.Windows.Forms.Control! toolStripHostedControl, System.Windows.Forms.ToolStripControlHost? toolStripControlHost) -> void
 System.Windows.Forms.ToolStripControlHost.Validated -> System.EventHandler?
@@ -11114,7 +11028,21 @@ System.Windows.Forms.ToolStripItemClickedEventArgs.ClickedItem.get -> System.Win
 System.Windows.Forms.ToolStripItemClickedEventArgs.ToolStripItemClickedEventArgs(System.Windows.Forms.ToolStripItem? clickedItem) -> void
 System.Windows.Forms.ToolStripItemClickedEventHandler
 System.Windows.Forms.ToolStripItemCollection
+System.Windows.Forms.ToolStripItemCollection.Add(string? text) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Image? image) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(System.Drawing.Image? image) -> System.Windows.Forms.ToolStripItem!
+System.Windows.Forms.ToolStripItemCollection.Add(System.Windows.Forms.ToolStripItem! value) -> int
+System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
+System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItemCollection! toolStripItems) -> void
+System.Windows.Forms.ToolStripItemCollection.Contains(System.Windows.Forms.ToolStripItem! value) -> bool
+System.Windows.Forms.ToolStripItemCollection.CopyTo(System.Windows.Forms.ToolStripItem![]! array, int index) -> void
+System.Windows.Forms.ToolStripItemCollection.Find(string! key, bool searchAllChildren) -> System.Windows.Forms.ToolStripItem![]!
+System.Windows.Forms.ToolStripItemCollection.IndexOf(System.Windows.Forms.ToolStripItem! value) -> int
+System.Windows.Forms.ToolStripItemCollection.Insert(int index, System.Windows.Forms.ToolStripItem! value) -> void
+System.Windows.Forms.ToolStripItemCollection.Remove(System.Windows.Forms.ToolStripItem! value) -> void
 System.Windows.Forms.ToolStripItemCollection.RemoveAt(int index) -> void
+System.Windows.Forms.ToolStripItemCollection.ToolStripItemCollection(System.Windows.Forms.ToolStrip! owner, System.Windows.Forms.ToolStripItem![]! value) -> void
 System.Windows.Forms.ToolStripItemDisplayStyle
 System.Windows.Forms.ToolStripItemDisplayStyle.Image = 2 -> System.Windows.Forms.ToolStripItemDisplayStyle
 System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText = 3 -> System.Windows.Forms.ToolStripItemDisplayStyle
@@ -11259,7 +11187,17 @@ System.Windows.Forms.ToolStripPanel.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripPanel.ToolStripPanel() -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow! value) -> int
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection! value) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow![]! value) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Contains(System.Windows.Forms.ToolStripPanelRow! value) -> bool
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.CopyTo(System.Windows.Forms.ToolStripPanelRow![]! array, int index) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.IndexOf(System.Windows.Forms.ToolStripPanelRow! value) -> int
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Insert(int index, System.Windows.Forms.ToolStripPanelRow! value) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Remove(System.Windows.Forms.ToolStripPanelRow! value) -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.RemoveAt(int index) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.ToolStripPanelRowCollection(System.Windows.Forms.ToolStripPanel! owner) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.ToolStripPanelRowCollection(System.Windows.Forms.ToolStripPanel! owner, System.Windows.Forms.ToolStripPanelRow![]! value) -> void
 System.Windows.Forms.ToolStripPanelRenderEventArgs
 System.Windows.Forms.ToolStripPanelRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
 System.Windows.Forms.ToolStripPanelRenderEventArgs.Handled.get -> bool
@@ -11269,11 +11207,16 @@ System.Windows.Forms.ToolStripPanelRenderEventArgs.ToolStripPanelRenderEventArgs
 System.Windows.Forms.ToolStripPanelRenderEventHandler
 System.Windows.Forms.ToolStripPanelRow
 System.Windows.Forms.ToolStripPanelRow.Bounds.get -> System.Drawing.Rectangle
+System.Windows.Forms.ToolStripPanelRow.CanMove(System.Windows.Forms.ToolStrip! toolStripToDrag) -> bool
+System.Windows.Forms.ToolStripPanelRow.Controls.get -> System.Windows.Forms.Control![]!
 System.Windows.Forms.ToolStripPanelRow.DisplayRectangle.get -> System.Drawing.Rectangle
+System.Windows.Forms.ToolStripPanelRow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 System.Windows.Forms.ToolStripPanelRow.Margin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStripPanelRow.Margin.set -> void
 System.Windows.Forms.ToolStripPanelRow.OnBoundsChanged(System.Drawing.Rectangle oldBounds, System.Drawing.Rectangle newBounds) -> void
 System.Windows.Forms.ToolStripPanelRow.Orientation.get -> System.Windows.Forms.Orientation
+System.Windows.Forms.ToolStripPanelRow.ToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripPanelRow.ToolStripPanelRow(System.Windows.Forms.ToolStripPanel! parent) -> void
 System.Windows.Forms.ToolStripProfessionalRenderer
 System.Windows.Forms.ToolStripProfessionalRenderer.ColorTable.get -> System.Windows.Forms.ProfessionalColorTable!
 System.Windows.Forms.ToolStripProfessionalRenderer.RoundedEdges.get -> bool
@@ -11537,6 +11480,7 @@ System.Windows.Forms.ToolTip.CanExtend(object! target) -> bool
 System.Windows.Forms.ToolTip.Draw -> System.Windows.Forms.DrawToolTipEventHandler?
 System.Windows.Forms.ToolTip.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolTip.ForeColor.set -> void
+System.Windows.Forms.ToolTip.Hide(System.Windows.Forms.IWin32Window! win) -> void
 System.Windows.Forms.ToolTip.InitialDelay.get -> int
 System.Windows.Forms.ToolTip.InitialDelay.set -> void
 System.Windows.Forms.ToolTip.IsBalloon.get -> bool
@@ -11547,6 +11491,13 @@ System.Windows.Forms.ToolTip.Popup -> System.Windows.Forms.PopupEventHandler?
 System.Windows.Forms.ToolTip.RemoveAll() -> void
 System.Windows.Forms.ToolTip.ReshowDelay.get -> int
 System.Windows.Forms.ToolTip.ReshowDelay.set -> void
+System.Windows.Forms.ToolTip.SetToolTip(System.Windows.Forms.Control! control, string? caption) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int duration) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int x, int y) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, int x, int y, int duration) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, System.Drawing.Point point) -> void
+System.Windows.Forms.ToolTip.Show(string? text, System.Windows.Forms.IWin32Window! window, System.Drawing.Point point, int duration) -> void
 System.Windows.Forms.ToolTip.ShowAlways.get -> bool
 System.Windows.Forms.ToolTip.ShowAlways.set -> void
 System.Windows.Forms.ToolTip.StopTimer() -> void
@@ -12654,6 +12605,8 @@ virtual System.Windows.Forms.ColorDialog.ShowHelp.get -> bool
 virtual System.Windows.Forms.ColorDialog.ShowHelp.set -> void
 virtual System.Windows.Forms.ColorDialog.SolidColorOnly.get -> bool
 virtual System.Windows.Forms.ColorDialog.SolidColorOnly.set -> void
+virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].get -> object?
+virtual System.Windows.Forms.ComboBox.ObjectCollection.this[int index].set -> void
 virtual System.Windows.Forms.CommonDialog.HookProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
 virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs! e) -> void
 virtual System.Windows.Forms.CommonDialog.OwnerWndProc(nint hWnd, int msg, nint wparam, nint lparam) -> nint
@@ -13142,8 +13095,23 @@ virtual System.Windows.Forms.ListView.ColumnHeaderCollection.RemoveAt(int index)
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.RemoveByKey(string? key) -> void
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.this[int index].get -> System.Windows.Forms.ColumnHeader!
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.this[string? key].get -> System.Windows.Forms.ColumnHeader?
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? key, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? key, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(System.Windows.Forms.ListViewItem! value) -> System.Windows.Forms.ListViewItem!
 virtual System.Windows.Forms.ListView.ListViewItemCollection.Clear() -> void
+virtual System.Windows.Forms.ListView.ListViewItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ListView.ListViewItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? key, string? text, int imageIndex) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? key, string? text, string? imageKey) -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.Remove(System.Windows.Forms.ListViewItem! item) -> void
 virtual System.Windows.Forms.ListView.ListViewItemCollection.RemoveAt(int index) -> void
+virtual System.Windows.Forms.ListView.ListViewItemCollection.RemoveByKey(string! key) -> void
+virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].get -> System.Windows.Forms.ListViewItem!
+virtual System.Windows.Forms.ListView.ListViewItemCollection.this[int index].set -> void
+virtual System.Windows.Forms.ListView.ListViewItemCollection.this[string! key].get -> System.Windows.Forms.ListViewItem?
 virtual System.Windows.Forms.ListView.OnAfterLabelEdit(System.Windows.Forms.LabelEditEventArgs! e) -> void
 virtual System.Windows.Forms.ListView.OnBeforeLabelEdit(System.Windows.Forms.LabelEditEventArgs! e) -> void
 virtual System.Windows.Forms.ListView.OnCacheVirtualItems(System.Windows.Forms.CacheVirtualItemsEventArgs! e) -> void
@@ -13281,6 +13249,15 @@ virtual System.Windows.Forms.ScrollBar.OnValueChanged(System.EventArgs! e) -> vo
 virtual System.Windows.Forms.Splitter.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs! sevent) -> void
 virtual System.Windows.Forms.Splitter.OnSplitterMoving(System.Windows.Forms.SplitterEventArgs! sevent) -> void
 virtual System.Windows.Forms.StatusStrip.OnSpringTableLayoutCore() -> void
+virtual System.Windows.Forms.TabControl.GetItems() -> object![]!
+virtual System.Windows.Forms.TabControl.GetItems(System.Type! baseType) -> object![]!
+virtual System.Windows.Forms.TabControl.OnDeselected(System.Windows.Forms.TabControlEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnDeselecting(System.Windows.Forms.TabControlCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnSelected(System.Windows.Forms.TabControlEventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.TabControl.OnSelecting(System.Windows.Forms.TabControlCancelEventArgs! e) -> void
 virtual System.Windows.Forms.TabControl.RightToLeftLayout.get -> bool
 virtual System.Windows.Forms.TabControl.RightToLeftLayout.set -> void
 virtual System.Windows.Forms.TabControl.TabPageCollection.Clear() -> void
@@ -13324,6 +13301,15 @@ virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Form
 virtual System.Windows.Forms.ToolStrip.GetNextItem(System.Windows.Forms.ToolStripItem? start, System.Windows.Forms.ArrowDirection direction) -> System.Windows.Forms.ToolStripItem?
 virtual System.Windows.Forms.ToolStrip.Items.get -> System.Windows.Forms.ToolStripItemCollection!
 virtual System.Windows.Forms.ToolStrip.MaxItemSize.get -> System.Drawing.Size
+virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnItemAdded(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnItemRemoved(System.Windows.Forms.ToolStripItemEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnLayoutCompleted(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnLayoutStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnPaintGrip(System.Windows.Forms.PaintEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStrip.RestoreFocus() -> void
 virtual System.Windows.Forms.ToolStrip.SetDisplayedItems() -> void
 virtual System.Windows.Forms.ToolStrip.TextDirection.get -> System.Windows.Forms.ToolStripTextDirection
@@ -13339,6 +13325,18 @@ virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs! e)
 virtual System.Windows.Forms.ToolStripContentPanel.OnLoad(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripContentPanel.OnRendererChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripControlHost.Focused.get -> bool
+virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnLostFocus(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnValidated(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripControlHost.OnValidating(System.ComponentModel.CancelEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripDropDown.OnClosed(System.Windows.Forms.ToolStripDropDownClosedEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripDropDown.OnClosing(System.Windows.Forms.ToolStripDropDownClosingEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripDropDown.OnOpened(System.EventArgs! e) -> void
@@ -13448,12 +13446,21 @@ virtual System.Windows.Forms.ToolStripItem.TextAlign.set -> void
 virtual System.Windows.Forms.ToolStripItem.TextDirection.get -> System.Windows.Forms.ToolStripTextDirection
 virtual System.Windows.Forms.ToolStripItem.TextDirection.set -> void
 virtual System.Windows.Forms.ToolStripItemCollection.Clear() -> void
+virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.ToolStripItemCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.ToolStripItemCollection.this[int index].get -> System.Windows.Forms.ToolStripItem!
+virtual System.Windows.Forms.ToolStripItemCollection.this[string? key].get -> System.Windows.Forms.ToolStripItem?
 virtual System.Windows.Forms.ToolStripMenuItem.OnCheckedChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripMenuItem.OnCheckStateChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripPanel.OnRendererChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Clear() -> void
+virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.this[int index].get -> System.Windows.Forms.ToolStripPanelRow!
 virtual System.Windows.Forms.ToolStripPanelRow.DefaultMargin.get -> System.Windows.Forms.Padding
 virtual System.Windows.Forms.ToolStripPanelRow.DefaultPadding.get -> System.Windows.Forms.Padding
+virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control! control, int index) -> void
+virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control! control, int index) -> void
+virtual System.Windows.Forms.ToolStripPanelRow.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripPanelRow.OnOrientationChanged() -> void
 virtual System.Windows.Forms.ToolStripPanelRow.Padding.get -> System.Windows.Forms.Padding
 virtual System.Windows.Forms.ToolStripPanelRow.Padding.set -> void
