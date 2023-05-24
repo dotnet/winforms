@@ -6,6 +6,7 @@ using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms.UITests;
 
@@ -94,8 +95,36 @@ public class SendInput
         // Wait until test input is received by CustomForm.
         if (!await waitTask)
         {
-            throw new TimeoutException("Timeout reached while waiting to process SendInput.");
+            if (CheckMessageQueue(out int count))
+            {
+                throw new TimeoutException($"Timeout reached while waiting to process SendInput. Timeout may need to be increased. - {count}");
+            }
+            else
+            {
+                throw new TimeoutException($"Timeout reached while waiting to process SendInput, Message queue has input.  - {count}");
+            }
         }
+    }
+
+    private unsafe bool CheckMessageQueue(out int count)
+    {
+        MSG msg = default;
+        count = 0;
+        while (PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+        {
+            count++;
+            var message = (Message)msg;
+            if (message.MsgInternal is WM.KEYDOWN or WM.KEYUP)
+            {
+                var keyCode = (VIRTUAL_KEY)(int)message.WParamInternal;
+                if (keyCode == CustomForm.TestKey)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private async Task SendTestInputAsync() => await Task.Run(() => new InputSimulator().Keyboard.KeyPress(CustomForm.TestKey));
