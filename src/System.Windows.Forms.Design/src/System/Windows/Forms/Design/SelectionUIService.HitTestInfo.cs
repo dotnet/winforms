@@ -34,12 +34,8 @@ internal sealed partial class SelectionUIService
             {
                 return Equals((HitTestInfo)obj);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
             }
 
             return false;

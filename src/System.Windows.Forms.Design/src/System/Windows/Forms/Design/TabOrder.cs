@@ -833,12 +833,8 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
                 Invalidate();
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
         }
     }
 }

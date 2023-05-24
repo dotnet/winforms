@@ -237,7 +237,7 @@ internal partial class HelpPane : PropertyGrid.SnappableControl
             {
                 _titleLabel.Font = new(Font, FontStyle.Bold);
             }
-            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+            catch (Exception e) when (!e.IsCriticalException())
             {
             }
 

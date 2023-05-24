@@ -1466,7 +1466,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         catch (Exception e)
         {
             DisplayError(e);
-            if (ClientUtils.IsCriticalException(e))
+            if (e.IsCriticalException())
             {
                 throw;
             }

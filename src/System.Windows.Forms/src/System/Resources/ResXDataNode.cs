@@ -261,15 +261,11 @@ public sealed class ResXDataNode : ISerializable
                 return;
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             // Some custom type converters will throw in ConvertTo(string) to indicate that the object should
             // be serialized through ISerializable instead of as a string. This is semi-wrong, but something we
             // will have to live with to allow user created Cursors to be serializable.
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
         }
 
         bool toByteArray = converter.CanConvertTo(typeof(byte[]));
@@ -530,7 +526,7 @@ public sealed class ResXDataNode : ISerializable
                     {
                         // It would be better to catch SerializationException but the underlying type resolver
                         // can throw things like FileNotFoundException.
-                        if (ClientUtils.IsCriticalException(ex))
+                        if (ex.IsCriticalException())
                         {
                             throw;
                         }

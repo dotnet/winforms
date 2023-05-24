@@ -142,7 +142,7 @@ internal partial class LinkAreaEditor
                 _sampleEdit.SelectionStart = linkArea.Start;
                 _sampleEdit.SelectionLength = linkArea.Length;
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
             }
         }

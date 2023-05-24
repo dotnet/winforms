@@ -281,7 +281,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
                 }
             }
         }
-        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+        catch (Exception e) when (!e.IsCriticalException())
         {
         }
     }

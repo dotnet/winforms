@@ -29,7 +29,7 @@ public abstract unsafe partial class AxHost
                     return;
                 }
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
                 // Don't usually expect to fall into this case as we should usually not have anything
                 // in the stream other than primitive VARIANTs, which are handled. If there are arrays or
@@ -43,7 +43,7 @@ public abstract unsafe partial class AxHost
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
             }
-            catch (Exception inner) when (!ClientUtils.IsCriticalException(inner))
+            catch (Exception inner) when (!inner.IsCriticalException())
             {
                 Debug.Fail($"PropertyBagStream: {nameof(BinaryFormatter)} failed with {inner.Message}");
 #pragma warning restore SYSLIB0011
@@ -105,7 +105,7 @@ public abstract unsafe partial class AxHost
             {
                 BinaryFormatWriter.WritePrimitiveHashtable(stream, _bag);
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
                 Debug.WriteLine($"PropertyBagStream.Save: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
 

@@ -1189,13 +1189,8 @@ public partial class DataGridView
             {
                 errInfo = CurrencyManager[rowIndex] as IDataErrorInfo;
             }
-            catch (Exception exception)
+            catch (Exception exception) when (!exception.IsCriticalException() || exception is IndexOutOfRangeException)
             {
-                if (ClientUtils.IsCriticalException(exception) && !(exception is IndexOutOfRangeException))
-                {
-                    throw;
-                }
-
                 DataGridViewDataErrorEventArgs dgvdee = new(
                     exception,
                     columnIndex: -1,
@@ -1208,14 +1203,7 @@ public partial class DataGridView
                 }
             }
 
-            if (errInfo is not null)
-            {
-                return errInfo.Error;
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return errInfo is not null ? errInfo.Error : string.Empty;
         }
 
         public string GetError(int boundColumnIndex, int columnIndex, int rowIndex)
@@ -1227,13 +1215,8 @@ public partial class DataGridView
             {
                 errInfo = CurrencyManager[rowIndex] as IDataErrorInfo;
             }
-            catch (Exception exception)
+            catch (Exception exception) when (!exception.IsCriticalException() || exception is IndexOutOfRangeException)
             {
-                if (ClientUtils.IsCriticalException(exception) && !(exception is IndexOutOfRangeException))
-                {
-                    throw;
-                }
-
                 DataGridViewDataErrorEventArgs dgvdee = new(
                     exception,
                     columnIndex,
@@ -1264,13 +1247,8 @@ public partial class DataGridView
             {
                 value = _props[boundColumnIndex].GetValue(CurrencyManager[rowIndex]);
             }
-            catch (Exception exception)
+            catch (Exception exception) when (!exception.IsCriticalException() || exception is IndexOutOfRangeException)
             {
-                if (ClientUtils.IsCriticalException(exception) && !(exception is IndexOutOfRangeException))
-                {
-                    throw;
-                }
-
                 DataGridViewDataErrorEventArgs dgvdee = new(
                     exception,
                     columnIndex,
@@ -1446,15 +1424,10 @@ public partial class DataGridView
                     {
                         CurrencyManager.Position = e.RowIndex;
                     }
-                    catch (Exception exception)
+                    catch (Exception exception) when (!exception.IsCriticalException())
                     {
-                        if (ClientUtils.IsCriticalException(exception))
-                        {
-                            throw;
-                        }
-
                         DataGridViewCellCancelEventArgs dgvce = new DataGridViewCellCancelEventArgs(e.ColumnIndex, e.RowIndex);
-                        ProcessException(exception, dgvce, false /*beginEdit*/);
+                        ProcessException(exception, dgvce, beginEdit: false);
                     }
 
                     if (CurrencyManager.Current is IEditableObject iEditObj)
@@ -1504,14 +1477,9 @@ public partial class DataGridView
                 {
                     CurrencyManager.EndCurrentEdit();
                 }
-                catch (Exception exception)
+                catch (Exception exception) when (!exception.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(exception))
-                    {
-                        throw;
-                    }
-
-                    ProcessException(exception, e, true /*beginEdit*/);
+                    ProcessException(exception, e, beginEdit: true);
                 }
                 finally
                 {
@@ -1584,13 +1552,8 @@ public partial class DataGridView
 
                 _props[boundColumnIndex].SetValue(CurrencyManager[rowIndex], value);
             }
-            catch (Exception exception)
+            catch (Exception exception) when (!exception.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(exception))
-                {
-                    throw;
-                }
-
                 DataGridViewCellCancelEventArgs e = new DataGridViewCellCancelEventArgs(columnIndex, rowIndex);
                 ProcessException(exception, e, false);
                 return !e.Cancel;

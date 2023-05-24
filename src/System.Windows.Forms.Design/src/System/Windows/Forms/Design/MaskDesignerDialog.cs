@@ -370,12 +370,8 @@ internal class MaskDesignerDialog : Form
                 MaskDescriptor maskDescriptor = (MaskDescriptor)Activator.CreateInstance(t);
                 InsertMaskDescriptor(0, maskDescriptor);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
             }
         }
     }

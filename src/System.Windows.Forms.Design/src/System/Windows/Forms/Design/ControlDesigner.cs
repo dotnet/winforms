@@ -1719,7 +1719,7 @@ public partial class ControlDesigner : ComponentDesigner
             catch (Exception e)
             {
                 _liveRegion = false;
-                if (ClientUtils.IsCriticalException(e))
+                if (e.IsCriticalException())
                 {
                     throw;
                 }
@@ -2396,7 +2396,7 @@ public partial class ControlDesigner : ComponentDesigner
         catch (Exception e)
         {
             DisplayError(e);
-            if (ClientUtils.IsCriticalException(e))
+            if (e.IsCriticalException())
             {
                 throw;
             }

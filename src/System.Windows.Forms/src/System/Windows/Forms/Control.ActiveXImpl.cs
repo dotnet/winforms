@@ -1162,7 +1162,7 @@ public partial class Control
                 {
                     Debug.Fail("Unexpected failure reading property", ex.ToString());
 
-                    if (ClientUtils.IsCriticalException(ex))
+                    if (ex.IsCriticalException())
                     {
                         throw;
                     }
@@ -1421,7 +1421,7 @@ public partial class Control
                 {
                     prop.Value = Font.FromHfont(pQaContainer->pFont->hFont);
                 }
-                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+                catch (Exception e) when (!e.IsCriticalException())
                 {
                     // Do NULL, so we just defer to the default font
                     prop.Value = null;

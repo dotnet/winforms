@@ -1430,12 +1430,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception e) when (!e.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(e))
-            {
-                throw;
-            }
         }
     }
 
@@ -1460,12 +1456,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception e) when (!e.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(e))
-            {
-                throw;
-            }
         }
     }
 

@@ -378,7 +378,7 @@ public partial class DataObject
                     return value;
                 }
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
                 // Couldn't parse for some reason, let the BinaryFormatter handle it.
             }

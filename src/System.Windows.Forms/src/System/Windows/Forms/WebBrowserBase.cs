@@ -364,7 +364,7 @@ public unsafe partial class WebBrowserBase : Control
                 processed = true;
             }
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             Debug.Fail($"error in processMnemonic: {ex}");
         }

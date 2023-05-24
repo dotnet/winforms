@@ -186,13 +186,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 {
                     InitializeDisplayMemberPropertyDescriptor(DisplayMember);
                 }
-                catch (Exception exception)
+                catch (Exception exception) when (!exception.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(exception))
-                    {
-                        throw;
-                    }
-
                     Debug.Assert(DisplayMember is not null && DisplayMember.Length > 0);
                     DisplayMemberInternal = null;
                 }
@@ -201,13 +196,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 {
                     InitializeValueMemberPropertyDescriptor(ValueMember);
                 }
-                catch (Exception exception)
+                catch (Exception exception) when (!exception.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(exception))
-                    {
-                        throw;
-                    }
-
                     Debug.Assert(ValueMember is not null && ValueMember.Length > 0);
                     ValueMemberInternal = null;
                 }

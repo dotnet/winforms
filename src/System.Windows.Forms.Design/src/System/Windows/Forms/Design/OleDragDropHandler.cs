@@ -157,13 +157,9 @@ internal partial class OleDragDropHandler
                     return dropOk;
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                // we return false on any exception
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
+                // We return false on any exception.
             }
         }
 
@@ -418,17 +414,12 @@ internal partial class OleDragDropHandler
             {
                 backColor = comp.BackColor;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
             }
 
             // If we are moving, we must make sure that the location property of the component
             // is not read only.  Otherwise, we can't move the thing.
-            //
             bool readOnlyLocation = true;
 
             PropertyDescriptor loc = TypeDescriptor.GetProperties(comps[i])["Location"];

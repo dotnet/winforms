@@ -66,7 +66,7 @@ public partial class Control
             {
                 return Font.FromHfont(nativeFont.hFont);
             }
-            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+            catch (Exception e) when (!e.IsCriticalException())
             {
                 return DefaultFont;
             }

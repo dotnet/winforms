@@ -547,7 +547,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         {
             return Font.FromLogFont(logfont);
         }
-        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+        catch (Exception e) when (!e.IsCriticalException())
         {
             // Looks like the font was not true type
             return null;

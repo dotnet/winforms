@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using System.Xml;
 
 namespace System.Resources;
@@ -396,7 +395,7 @@ public partial class ResXResourceReader : IResourceReader
             }
             catch (Exception e)
             {
-                if (ClientUtils.IsCriticalException(e))
+                if (e.IsCriticalException())
                 {
                     throw;
                 }

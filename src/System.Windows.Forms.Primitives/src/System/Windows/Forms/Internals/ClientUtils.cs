@@ -8,14 +8,6 @@ namespace System.Windows.Forms;
 
 internal static class ClientUtils
 {
-    public static bool IsCriticalException(Exception ex)
-        => ex is NullReferenceException
-            || ex is StackOverflowException
-            || ex is OutOfMemoryException
-            || ex is ThreadAbortException
-            || ex is IndexOutOfRangeException
-            || ex is AccessViolationException;
-
     private enum CharType
     {
         None,

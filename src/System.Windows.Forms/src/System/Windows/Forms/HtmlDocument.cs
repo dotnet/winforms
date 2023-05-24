@@ -146,20 +146,14 @@ public sealed partial class HtmlDocument
     {
         get
         {
-            Color c = Color.Empty;
             try
             {
-                c = ColorFromObject(NativeHtmlDocument2.GetBgColor());
+                return ColorFromObject(NativeHtmlDocument2.GetBgColor());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
+                return Color.Empty;
             }
-
-            return c;
         }
         set
         {
@@ -172,20 +166,14 @@ public sealed partial class HtmlDocument
     {
         get
         {
-            Color c = Color.Empty;
             try
             {
-                c = ColorFromObject(NativeHtmlDocument2.GetFgColor());
+                return ColorFromObject(NativeHtmlDocument2.GetFgColor());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
+                return Color.Empty;
             }
-
-            return c;
         }
         set
         {
@@ -198,20 +186,14 @@ public sealed partial class HtmlDocument
     {
         get
         {
-            Color c = Color.Empty;
             try
             {
-                c = ColorFromObject(NativeHtmlDocument2.GetLinkColor());
+                return ColorFromObject(NativeHtmlDocument2.GetLinkColor());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
+                return Color.Empty;
             }
-
-            return c;
         }
         set
         {
@@ -224,20 +206,14 @@ public sealed partial class HtmlDocument
     {
         get
         {
-            Color c = Color.Empty;
             try
             {
-                c = ColorFromObject(NativeHtmlDocument2.GetAlinkColor());
+                return ColorFromObject(NativeHtmlDocument2.GetAlinkColor());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
+                return Color.Empty;
             }
-
-            return c;
         }
         set
         {
@@ -250,20 +226,14 @@ public sealed partial class HtmlDocument
     {
         get
         {
-            Color c = Color.Empty;
             try
             {
-                c = ColorFromObject(NativeHtmlDocument2.GetVlinkColor());
+                return ColorFromObject(NativeHtmlDocument2.GetVlinkColor());
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
+                return Color.Empty;
             }
-
-            return c;
         }
         set
         {
@@ -477,7 +447,7 @@ public sealed partial class HtmlDocument
 
             return null;
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
         }
 
@@ -590,12 +560,8 @@ public sealed partial class HtmlDocument
                 return Color.FromArgb(255, Color.FromArgb(intColor));
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
         }
 
         return Color.Empty;

@@ -84,12 +84,8 @@ internal class StandardCommandToolStripMenuItem : ToolStripMenuItem
 
                     ImageTransparentColor = Color.Magenta;
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ex.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
                 }
             }
 

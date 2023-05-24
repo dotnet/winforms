@@ -1759,22 +1759,18 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         {
             try
             {
-                formattedValue = Formatter.FormatObject(formattedValue,
-                                                        FormattedValueType,
-                                                        valueTypeConverter ?? ValueTypeConverter, /*sourceConverter*/
-                                                        formattedValueTypeConverter ?? FormattedValueTypeConverter, /*targetConverter*/
-                                                        cellStyle.Format,
-                                                        cellStyle.FormatProvider,
-                                                        cellStyle.NullValue,
-                                                        cellStyle.DataSourceNullValue);
+                formattedValue = Formatter.FormatObject(
+                    formattedValue,
+                    FormattedValueType,
+                    sourceConverter: valueTypeConverter ?? ValueTypeConverter,
+                    targetConverter: formattedValueTypeConverter ?? FormattedValueTypeConverter,
+                    cellStyle.Format,
+                    cellStyle.FormatProvider,
+                    cellStyle.NullValue,
+                    cellStyle.DataSourceNullValue);
             }
-            catch (Exception exception)
+            catch (Exception exception) when (!exception.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(exception))
-                {
-                    throw;
-                }
-
                 // Formatting failed, raise OnDataError event.
                 DataGridViewDataErrorEventArgs dgvdee = new(
                     exception,

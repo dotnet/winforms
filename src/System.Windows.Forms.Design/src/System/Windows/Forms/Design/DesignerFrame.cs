@@ -163,7 +163,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 changeService.OnComponentChanging(_designerSite.Component);
                 changeService.OnComponentChanged(_designerSite.Component);
             }
-            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
             }
         }

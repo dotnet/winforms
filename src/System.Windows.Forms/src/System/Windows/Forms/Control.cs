@@ -7990,17 +7990,10 @@ public unsafe partial class Control :
 
             SetAcceptDrops(false);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
-
-            // Some ActiveX controls throw exceptions when
-            // you ask for the text property after you have destroyed their handle. We
-            // don't want those exceptions to bubble all the way to the top, since
-            // we leave our state in a mess.
+            // Some ActiveX controls throw exceptions when you ask for the text property after you have destroyed their
+            // handle. We don't want those exceptions to bubble all the way to the top, since we leave our state in a mess.
         }
     }
 
@@ -12546,7 +12539,7 @@ public unsafe partial class Control :
                 }
 #endif
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException() || ex is OutOfMemoryException)
             {
                 // BufferContext.Allocate will throw out of memory exceptions when it fails to create a device
                 // dependent bitmap while trying to get information about the device we are painting on.
@@ -12559,10 +12552,6 @@ public unsafe partial class Control :
                 // between that case and real out of memory exceptions but we see no reasons justifying the
                 // additional complexity.
 
-                if (ClientUtils.IsCriticalException(ex) && ex is not OutOfMemoryException)
-                {
-                    throw;
-                }
 #if DEBUG
                 if (s_bufferPinkRect.Enabled)
                 {

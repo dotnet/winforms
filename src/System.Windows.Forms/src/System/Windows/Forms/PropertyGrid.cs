@@ -239,7 +239,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
             SetSelectState(0);
         }
-        catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
             Debug.Fail(ex.ToString());
         }

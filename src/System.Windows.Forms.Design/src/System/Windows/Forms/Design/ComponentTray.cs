@@ -1074,7 +1074,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             catch (Exception e)
             {
                 DisplayError(e);
-                if (ClientUtils.IsCriticalException(e))
+                if (e.IsCriticalException())
                 {
                     throw;
                 }
@@ -1229,7 +1229,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                     catch (Exception ex)
                     {
                         DisplayError(ex);
-                        if (ClientUtils.IsCriticalException(ex))
+                        if (ex.IsCriticalException())
                         {
                             throw;
                         }
@@ -1255,13 +1255,9 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                     Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ss is not null), "ISelectionService not found");
                     ss?.SetSelectedComponents(new object[] { mainDesigner.Component });
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ex.IsCriticalException())
                 {
-                    // nothing we can really do here; just eat it.
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
+                    // Nothing we can really do here; just eat it.
                 }
             }
         }
@@ -1347,13 +1343,9 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ss is not null), "ISelectionService not found");
                 ss?.SetSelectedComponents(comps);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
-                // nothing we can really do here; just eat it.
-                if (ClientUtils.IsCriticalException(ex))
-                {
-                    throw;
-                }
+                // Nothing we can really do here; just eat it.
             }
 
             mouseDragStart = InvalidPoint;
@@ -2903,14 +2895,9 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
 
                         comps = ds.Deserialize(serializationData);
                     }
-                    catch (Exception e)
+                    catch (Exception e) when (!e.IsCriticalException())
                     {
-                        if (ClientUtils.IsCriticalException(e))
-                        {
-                            throw;
-                        }
-
-                        // we return false on any exception
+                        // We return false on any exception.
                     }
                 }
             }

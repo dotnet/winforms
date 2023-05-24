@@ -30,7 +30,7 @@ public partial class Control
                     BinaryFormattedObject format = new(stream);
                     success = format.TryGetPrimitiveHashtable(out _bag!);
                 }
-                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+                catch (Exception e) when (!e.IsCriticalException())
                 {
                     // We should never hit this case outside of corrupted data. This bag only ever has
                     // strings put in it.

@@ -1534,25 +1534,17 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
             try
             {
-                //There may be a wizard displaying as a result of CreateTool.
-                //we do not want the behavior service thinking there he is dragging while this wizard is up
-                //it causes the cursor to constantly flicker to the toolbox cursor.
-                //this will cause the BehSvc to return from 'drag mode'
-                //
+                // There may be a wizard displaying as a result of CreateTool.
+                // we do not want the behavior service thinking there he is dragging while this wizard is up
+                // it causes the cursor to constantly flicker to the toolbox cursor.
+                // this will cause the BehSvc to return from 'drag mode'
                 BehaviorService?.EndDragNotification();
 
                 CreateTool(_mouseDragTool, new Point(de.X, de.Y));
             }
-            catch (Exception e)
+            catch (Exception e) when (!e.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(e))
-                {
-                    throw;
-                }
-                else
-                {
-                    DisplayError(e);
-                }
+                DisplayError(e);
             }
 
             _mouseDragTool = null;
@@ -1973,16 +1965,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                     CreateTool(tool, baseVar);
                     _toolboxService?.SelectedToolboxItemUsed();
                 }
-                catch (Exception e)
+                catch (Exception e) when (!e.IsCriticalException())
                 {
-                    if (ClientUtils.IsCriticalException(e))
-                    {
-                        throw;
-                    }
-                    else
-                    {
-                        DisplayError(e);
-                    }
+                    DisplayError(e);
                 }
             }
 
@@ -1990,14 +1975,12 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         }
 
         // Don't do anything else if the user wants to cancel.
-        //
         if (cancel)
         {
             return;
         }
 
         // If we have a valid toolbox item, create the tool
-        //
         if (tool is not null)
         {
             try
@@ -2018,23 +2001,14 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 CreateTool(tool, offset);
                 _toolboxService?.SelectedToolboxItemUsed();
             }
-            catch (Exception e)
+            catch (Exception e) when (!e.IsCriticalException())
             {
-                if (ClientUtils.IsCriticalException(e))
-                {
-                    throw;
-                }
-                else
-                {
-                    DisplayError(e);
-                }
+                DisplayError(e);
             }
         }
         else
         {
-            // Now find the set of controls within this offset and
-            // select them.
-            //
+            // Now find the set of controls within this offset and select them.
             var selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc is not null)
             {
