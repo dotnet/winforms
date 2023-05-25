@@ -5,12 +5,12 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Interface to encapsulate ownership of an accessible object.
+///  Interface to describe ownership by another object.
 /// </summary>
-internal interface IAccessibleOwner<T> where T : class
+internal interface IOwnedObject<TOwner> where TOwner : class
 {
     /// <summary>
-    ///  The owner of the accessible object. Use <see cref="AccessibleOwnerExtensions.TryGetOwnerAs"/> for all access.
+    ///  The owner of this object. Use <see cref="OwnedObjectExtensions.TryGetOwnerAs"/> for all access.
     /// </summary>
-    T? Owner { get; }
+    TOwner? Owner { get; }
 }

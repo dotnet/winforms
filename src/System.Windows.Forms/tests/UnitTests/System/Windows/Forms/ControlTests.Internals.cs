@@ -436,6 +436,8 @@ public partial class ControlTests
         [MethodImpl(MethodImplOptions.NoInlining)]
         static void CreateAndDispose(Control control)
         {
+            // Note that rooting of locals changes between release and debug. Having a separate method here
+            // ensures that we'll always get it collected when doing GC.Collect out in the caller.
             using Form form = new();
             form.Controls.Add(control);
             form.Show();

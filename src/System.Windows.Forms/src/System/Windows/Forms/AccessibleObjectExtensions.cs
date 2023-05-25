@@ -300,4 +300,32 @@ internal static unsafe class AccessibleObjectExtensions
         result = accessible.Value->get_accChildCount(out int count);
         return count;
     }
+
+    /// <summary>
+    ///  Gets the accessible object's owner control's accesssible role.
+    /// </summary>
+    public static AccessibleRole GetOwnerAccessibleRole<TAccessible>(
+        this TAccessible accessibleObject,
+        AccessibleRole defaultRole = AccessibleRole.Default)
+        where TAccessible : AccessibleObject, IOwnedObject<Control>
+    {
+        AccessibleRole role = accessibleObject.Owner?.AccessibleRole ?? AccessibleRole.Default;
+        return role == AccessibleRole.Default ? defaultRole : role;
+    }
+
+    /// <summary>
+    ///  Gets the accessible object's owner control's accesssible name.
+    /// </summary>
+    [return: NotNullIfNotNull(nameof(defaultName))]
+    public static string? GetOwnerAccessibleName<TAccessible>(
+        this TAccessible accessibleObject,
+        string? defaultName = null) where TAccessible : AccessibleObject, IOwnedObject<Control>
+        => accessibleObject.Owner?.AccessibleName ?? defaultName;
+
+    /// <summary>
+    ///  Gets the accessible object's owner control's accesssible text.
+    /// </summary>
+    public static string GetOwnerText<TAccessible>(this TAccessible accessibleObject, string defaultText = "")
+        where TAccessible : AccessibleObject, IOwnedObject<Control>
+        => accessibleObject.Owner?.Text ?? defaultText;
 }

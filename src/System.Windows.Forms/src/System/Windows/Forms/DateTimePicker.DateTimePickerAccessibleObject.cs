@@ -50,7 +50,7 @@ public partial class DateTimePicker
 
         // Note: returns empty string instead of null, because the date value replaces null,
         // so name is not empty in this case even if AccessibleName is not set.
-        public override string Name => this.GetOwnerAccessibleName();
+        public override string Name => this.GetOwnerAccessibleName("");
 
         public override string Value
         {

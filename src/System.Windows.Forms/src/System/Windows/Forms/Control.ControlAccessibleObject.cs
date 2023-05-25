@@ -15,7 +15,7 @@ public partial class Control
     /// <summary>
     ///  An implementation of AccessibleChild for use with Controls.
     /// </summary>
-    public class ControlAccessibleObject : AccessibleObject, IAccessibleOwner<Control>
+    public class ControlAccessibleObject : AccessibleObject, IOwnedObject<Control>
     {
         /// <summary>
         ///  Associated window handle (if any).

@@ -9,11 +9,11 @@ namespace System.Windows.Forms.PropertyGridInternal;
 
 internal abstract partial class GridEntry
 {
-    public class GridEntryAccessibleObject : AccessibleObject, IAccessibleOwner<GridEntry>
+    public class GridEntryAccessibleObject : AccessibleObject, IOwnedObject<GridEntry>
     {
         private readonly WeakReference<GridEntry> _owningGridEntry;
 
-        private readonly int[] _runtimeId;
+        private int[]? _runtimeId;
 
         private delegate void SelectDelegate(AccessibleSelection flags);
 
@@ -21,18 +21,6 @@ internal abstract partial class GridEntry
         {
             Debug.Assert(owner is not null, "GridEntryAccessibleObject must have a valid owner GridEntry");
             _owningGridEntry = new(owner);
-
-            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a.
-            // Second item can be anything, but it's good to supply HWND. Third and others are optional, but in case of
-            // GridItem we need it, to make it unique. Grid items are not controls, they don't have hwnd - we use hwnd
-            // of PropertyGridView.
-
-            _runtimeId = new[]
-            {
-                RuntimeIDFirstItem,
-                (int)(owner?.OwnerGridView?.InternalHandle ?? HWND.Null),
-                GetHashCode()
-            };
         }
 
         private protected override string AutomationId => GetHashCode().ToString();
@@ -196,7 +184,18 @@ internal abstract partial class GridEntry
             }
         }
 
-        internal override int[] RuntimeId => _runtimeId;
+        internal override int[] RuntimeId => _runtimeId ??= new[]
+        {
+            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a.
+            // Second item can be anything, but it's good to supply HWND. Third and others are optional, but in case of
+            // GridItem we need it, to make it unique. Grid items are not controls, they don't have hwnd - we use hwnd
+            // of PropertyGridView.
+            RuntimeIDFirstItem,
+            this.TryGetOwnerAs(out GridEntry? owner)
+                ? (int)(owner?.OwnerGridView?.InternalHandle ?? HWND.Null)
+                : (int)HWND.Null,
+            GetHashCode()
+        };
 
         private PropertyGridView? PropertyGridView
         {
@@ -213,7 +212,7 @@ internal abstract partial class GridEntry
             }
         }
 
-        GridEntry? IAccessibleOwner<GridEntry>.Owner
+        GridEntry? IOwnedObject<GridEntry>.Owner
             => _owningGridEntry.TryGetTarget(out GridEntry? target) ? target : null;
 
         public override void DoDefaultAction()
