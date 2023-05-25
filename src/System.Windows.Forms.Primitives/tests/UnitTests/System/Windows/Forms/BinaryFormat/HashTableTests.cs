@@ -3,12 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Drawing;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.BinaryFormat.Tests;
 
-public class HashTableTests
+public class HashtableTests
 {
     [Fact]
     public void HashTable_GetObjectData()
@@ -60,7 +61,7 @@ public class HashTableTests
 
     [Theory]
     [MemberData(nameof(Hashtables_TestData))]
-    public void WriteHashtables(Hashtable hashtable)
+    public void BinaryFormatWriter_WriteHashtables(Hashtable hashtable)
     {
         using MemoryStream stream = new();
         BinaryFormatWriter.WritePrimitiveHashtable(stream, hashtable);
@@ -80,8 +81,17 @@ public class HashTableTests
     }
 
     [Theory]
+    [MemberData(nameof(Hashtables_UnsupportedTestData))]
+    public void BinaryFormatWriter_WriteUnsupportedHashtables(Hashtable hashtable)
+    {
+        using MemoryStream stream = new();
+        Action action = () => BinaryFormatWriter.WritePrimitiveHashtable(stream, hashtable);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Theory]
     [MemberData(nameof(Hashtables_TestData))]
-    public void ReadHashtables(Hashtable hashtable)
+    public void BinaryFormattedObjectExtensions_TryGetPrimitiveHashtable(Hashtable hashtable)
     {
         BinaryFormattedObject format = hashtable.SerializeAndParse();
         format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeTrue();
@@ -110,7 +120,7 @@ public class HashTableTests
         }
     }
 
-    public static TheoryData<Hashtable> Hashtables_TestData = new()
+    public static TheoryData<Hashtable> Hashtables_TestData => new()
     {
         new Hashtable(),
         new Hashtable()
@@ -182,6 +192,30 @@ public class HashTableTests
         MakeRepeatedHashtable(255, null),
         MakeRepeatedHashtable(256, null),
         MakeRepeatedHashtable(257, null)
+    };
+
+    public static TheoryData<Hashtable> Hashtables_UnsupportedTestData => new()
+    {
+        new Hashtable()
+        {
+            { new object(), new object() }
+        },
+        new Hashtable()
+        {
+            { "Foo", new object() }
+        },
+        new Hashtable()
+        {
+            { "Foo", new Point() }
+        },
+        new Hashtable()
+        {
+            { "Foo", new PointF() }
+        },
+        new Hashtable()
+        {
+            { "Foo", (nint)42 }
+        },
     };
 
     private static Hashtable MakeRepeatedHashtable(int countOfEntries, object? value)

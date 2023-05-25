@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Drawing;
 
 namespace System.Windows.Forms.BinaryFormat.Tests;
 
@@ -80,4 +81,10 @@ public class ArrayTests
     };
 
     public static IEnumerable<object[]> Array_TestData => StringArray_Parse_Data.Concat(PrimitiveArray_Parse_Data);
+
+    public static TheoryData<Array> Array_UnsupportedTestData => new()
+    {
+        new Point[] { new Point() },
+        new object[] { new object() },
+    };
 }

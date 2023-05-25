@@ -30,7 +30,7 @@ public class BinaryFormatWriterTests
 
     [Theory]
     [MemberData(nameof(TryWriteObject_SupportedObjects_TestData))]
-    public void TryWriteObject_SupportedObjects_BinaryFormatterRead(object value)
+    public void BinaryFormatWriter_TryWriteObject_SupportedObjects_BinaryFormatterRead(object value)
     {
         using MemoryStream stream = new();
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value).Should().BeTrue();
@@ -63,7 +63,7 @@ public class BinaryFormatWriterTests
 
     [Theory]
     [MemberData(nameof(TryWriteObject_SupportedObjects_TestData))]
-    public void TryWriteObject_SupportedObjects_RoundTrip(object value)
+    public void BinaryFormatWriter_TryWriteObject_SupportedObjects_RoundTrip(object value)
     {
         using MemoryStream stream = new();
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value).Should().BeTrue();
@@ -91,11 +91,26 @@ public class BinaryFormatWriterTests
         }
     }
 
+    [Theory]
+    [MemberData(nameof(TryWriteObject_UnsupportedObjects_TestData))]
+    public void BinaryFormatWriter_TryWriteObject_UnsupportedObjects_RoundTrip(object value)
+    {
+        using MemoryStream stream = new();
+        BinaryFormatWriter.TryWriteFrameworkObject(stream, value).Should().BeFalse();
+        stream.Position.Should().Be(0);
+    }
+
     public static IEnumerable<object[]?> TryWriteObject_SupportedObjects_TestData =>
-        HashTableTests.Hashtables_TestData.Concat(
+        HashtableTests.Hashtables_TestData.Concat(
             ListTests.PrimitiveLists_TestData).Concat(
             ListTests.ArrayLists_TestData).Concat(
             PrimitiveTypeTests.Primitive_Data).Concat(
             SystemDrawingTests.SystemDrawing_TestData).Concat(
             ArrayTests.Array_TestData);
+
+    public static IEnumerable<object[]?> TryWriteObject_UnsupportedObjects_TestData =>
+        HashtableTests.Hashtables_UnsupportedTestData.Concat(
+            ListTests.Lists_UnsupportedTestData).Concat(
+            ListTests.ArrayLists_UnsupportedTestData).Concat(
+            ArrayTests.Array_UnsupportedTestData);
 }
