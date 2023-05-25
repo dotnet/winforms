@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.BinaryFormat;
 using System.Xml;
 
 namespace System.Resources;
@@ -37,7 +38,8 @@ public sealed class ResXDataNode : ISerializable
     private IFormatter? _binaryFormatter;
 
     // This is going to be used to check if a ResXDataNode is of type ResXFileRef
-    private static readonly ITypeResolutionService s_internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
+    private static readonly ITypeResolutionService s_internalTypeResolver
+        = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
 
     // Callback function to get type name for multitargeting.
     // No public property to force using constructors for the following reasons:
@@ -89,7 +91,7 @@ public sealed class ResXDataNode : ISerializable
         {
             throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         if (value is not null)
         {
@@ -161,12 +163,7 @@ public sealed class ResXDataNode : ISerializable
         }
         set
         {
-            ArgumentNullException.ThrowIfNull(value, nameof(Name));
-            if (value.Length == 0)
-            {
-                throw new ArgumentException(nameof(Name));
-            }
-
+            ArgumentException.ThrowIfNullOrEmpty(value, nameof(Name));
             _name = value;
         }
     }
@@ -201,7 +198,8 @@ public sealed class ResXDataNode : ISerializable
         string raw = Convert.ToBase64String(data);
         if (raw.Length > lineWrap)
         {
-            StringBuilder output = new StringBuilder(raw.Length + (raw.Length / lineWrap) * 3); // word wrap on lineWrap chars, \r\n
+            // Word wrap on lineWrap chars, \r\n
+            StringBuilder output = new StringBuilder(raw.Length + (raw.Length / lineWrap) * 3);
             int current = 0;
             for (; current < raw.Length - lineWrap; current += lineWrap)
             {
@@ -241,20 +239,20 @@ public sealed class ResXDataNode : ISerializable
             return;
         }
 
-        Type valueType = (value is null) ? typeof(object) : value.GetType();
+        Type valueType = value?.GetType() ?? typeof(object);
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
         if (value is not null && !valueType.IsSerializable)
         {
             throw new InvalidOperationException(string.Format(SR.NotSerializableType, _name, valueType.FullName));
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         TypeConverter converter = TypeDescriptor.GetConverter(valueType);
-        bool toString = converter.CanConvertTo(typeof(string));
-        bool fromString = converter.CanConvertFrom(typeof(string));
+
         try
         {
-            if (toString && fromString)
+            // Can round trip through string.
+            if (converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
             {
                 nodeInfo.ValueData = converter.ConvertToInvariantString(value) ?? string.Empty;
                 nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, _typeNameConverter);
@@ -268,10 +266,9 @@ public sealed class ResXDataNode : ISerializable
             // will have to live with to allow user created Cursors to be serializable.
         }
 
-        bool toByteArray = converter.CanConvertTo(typeof(byte[]));
-        bool fromByteArray = converter.CanConvertFrom(typeof(byte[]));
-        if (toByteArray && fromByteArray)
+        if (converter.CanConvertTo(typeof(byte[])) && converter.CanConvertFrom(typeof(byte[])))
         {
+            // Can round trip through byte[]
             byte[]? data = (byte[]?)converter.ConvertTo(value, typeof(byte[]));
             nodeInfo.ValueData = data is null ? string.Empty : ToBase64WrappedString(data);
             nodeInfo.MimeType = ResXResourceWriter.ByteArraySerializedObjectMimeType;
@@ -288,25 +285,45 @@ public sealed class ResXDataNode : ISerializable
 
 #pragma warning disable SYSLIB0051 // Type or member is obsolete
         SerializeWithBinaryFormatter(_binaryFormatter, nodeInfo, value, _typeNameConverter);
-#pragma warning restore SYSLIB0051 // Type or member is obsolete
+#pragma warning restore SYSLIB0051
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        static void SerializeWithBinaryFormatter(IFormatter? binaryFormatter, DataNodeInfo nodeInfo, object value, Func<Type?, string>? typeNameConverter)
+        static void SerializeWithBinaryFormatter(
+            IFormatter? binaryFormatter,
+            DataNodeInfo nodeInfo,
+            object value,
+            Func<Type?, string>? typeNameConverter)
         {
             binaryFormatter ??= new BinaryFormatter
             {
                 Binder = new ResXSerializationBinder(typeNameConverter)
             };
 
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream stream = new())
             {
-                binaryFormatter.Serialize(ms, value);
-                nodeInfo.ValueData = ToBase64WrappedString(ms.ToArray());
+                bool success = false;
+                try
+                {
+                    success = BinaryFormatWriter.TryWriteFrameworkObject(stream, value);
+                }
+                catch (Exception ex) when (!ex.IsCriticalException())
+                {
+                    // Being extra cautious here, but the Try method above should never throw in normal circumstances.
+                    Debug.Fail($"Unexpected exception writing binary formatted data. {ex.Message}");
+                }
+
+                if (!success)
+                {
+                    stream.SetLength(0);
+                    binaryFormatter.Serialize(stream, value);
+                }
+
+                nodeInfo.ValueData = ToBase64WrappedString(stream.ToArray());
             }
 
             nodeInfo.MimeType = ResXResourceWriter.DefaultSerializedObjectMimeType;
         }
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
     }
 
     private object? GenerateObjectFromDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)
@@ -314,106 +331,127 @@ public sealed class ResXDataNode : ISerializable
         string? mimeTypeName = dataNodeInfo.MimeType;
 
         // Default behavior: if we don't have a type name, it's a string.
-        string? typeName =
-            string.IsNullOrEmpty(dataNodeInfo.TypeName)
-                ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), _typeNameConverter)
-                : dataNodeInfo.TypeName;
+        string? typeName = string.IsNullOrEmpty(dataNodeInfo.TypeName)
+            ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), _typeNameConverter)
+            : dataNodeInfo.TypeName;
 
-        if (string.IsNullOrEmpty(mimeTypeName))
+        if (!string.IsNullOrEmpty(mimeTypeName))
         {
-            if (string.IsNullOrEmpty(typeName))
-            {
-                // If mimeTypeName and typeName are not filled in, the value must be a string.
-                Debug.Assert(_value is string, "Resource entries with no Type or MimeType must be encoded as strings");
-                return null;
-            }
-
-            Type? type = ResolveType(typeName, typeResolver);
-            if (type is null)
-            {
-                string newMessage = string.Format(SR.TypeLoadException, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
-                XmlException xml = new XmlException(newMessage, null, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
-                throw new TypeLoadException(newMessage, xml);
-            }
-
-            if (type == typeof(ResXNullRef))
-            {
-                return null;
-            }
-
-            if (type == typeof(byte[]) ||
-                (typeName.Contains("System.Byte[]") && (typeName.Contains("mscorlib") || typeName.Contains("System.Private.CoreLib"))))
-            {
-                // Handle byte[]'s, which are stored as base-64 encoded strings. We can't hard-code byte[] type
-                // name due to version number updates & potential whitespace issues with ResX files.
-                return FromBase64WrappedString(dataNodeInfo.ValueData);
-            }
-
-            TypeConverter converter = TypeDescriptor.GetConverter(type);
-            if (!converter.CanConvertFrom(typeof(string)))
-            {
-                Debug.WriteLine($"Converter for {type.FullName} doesn't support string conversion");
-                return null;
-            }
-
-            try
-            {
-                return converter.ConvertFromInvariantString(dataNodeInfo.ValueData);
-            }
-            catch (NotSupportedException nse)
-            {
-                string newMessage = string.Format(SR.NotSupported, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X, nse.Message);
-                XmlException xml = new XmlException(newMessage, nse, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
-                throw new NotSupportedException(newMessage, xml);
-            }
+            // Handle application/x-microsoft.net.object.bytearray.base64.
+            return ResolveMimeType(mimeTypeName);
         }
 
-        if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)
-            && !string.IsNullOrEmpty(typeName))
+        if (string.IsNullOrEmpty(typeName))
         {
-            Type? type = ResolveType(typeName, typeResolver);
-            if (type is null)
-            {
-                string newMessage = string.Format(SR.TypeLoadException, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
-                XmlException xml = new XmlException(newMessage, null, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
-                throw new TypeLoadException(newMessage, xml);
-            }
-            else
-            {
-                TypeConverter converter = TypeDescriptor.GetConverter(type);
-                if (converter.CanConvertFrom(typeof(byte[]))
-                    && FromBase64WrappedString(dataNodeInfo.ValueData) is { } serializedData)
-                {
-                    return converter.ConvertFrom(serializedData);
-                }
-            }
+            // If mimeTypeName and typeName are not filled in, the value must be a string.
+            Debug.Assert(_value is string, "Resource entries with no Type or MimeType must be encoded as strings");
+            return null;
         }
 
-        return null;
+        Type type = ResolveTypeName(typeName);
+
+        if (type == typeof(ResXNullRef))
+        {
+            return null;
+        }
+
+        if (type == typeof(byte[])
+            || (typeName.Contains("System.Byte[]") && (typeName.Contains("mscorlib") || typeName.Contains("System.Private.CoreLib"))))
+        {
+            // Handle byte[]'s, which are stored as base-64 encoded strings. We can't hard-code byte[] type
+            // name due to version number updates & potential whitespace issues with ResX files.
+            return FromBase64WrappedString(dataNodeInfo.ValueData);
+        }
+
+        TypeConverter converter = TypeDescriptor.GetConverter(type);
+        if (!converter.CanConvertFrom(typeof(string)))
+        {
+            Debug.WriteLine($"Converter for {type.FullName} doesn't support string conversion");
+            return null;
+        }
+
+        try
+        {
+            return converter.ConvertFromInvariantString(dataNodeInfo.ValueData);
+        }
+        catch (NotSupportedException nse)
+        {
+            string newMessage = string.Format(SR.NotSupported, typeName, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X, nse.Message);
+            XmlException xml = new XmlException(newMessage, nse, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X);
+            throw new NotSupportedException(newMessage, xml);
+        }
+
+        Type ResolveTypeName(string typeName)
+        {
+            if (ResolveType(typeName, typeResolver) is not Type type)
+            {
+                string newMessage = string.Format(
+                    SR.TypeLoadException,
+                    typeName,
+                    dataNodeInfo.ReaderPosition.Y,
+                    dataNodeInfo.ReaderPosition.X);
+
+                throw new TypeLoadException(
+                    newMessage,
+                    new XmlException(newMessage, null, dataNodeInfo.ReaderPosition.Y, dataNodeInfo.ReaderPosition.X));
+            }
+
+            return type;
+        }
+
+        object? ResolveMimeType(string mimeTypeName)
+        {
+            if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)
+                && !string.IsNullOrEmpty(typeName)
+                && TypeDescriptor.GetConverter(ResolveTypeName(typeName)) is { } converter
+                && converter.CanConvertFrom(typeof(byte[]))
+                && FromBase64WrappedString(dataNodeInfo.ValueData) is { } serializedData)
+            {
+                return converter.ConvertFrom(serializedData);
+            }
+
+            return null;
+        }
     }
 
     [Obsolete(DiagnosticId = "SYSLIB0051")]
     private object? GenerateObjectFromBinaryDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService? typeResolver)
     {
-        string? mimeTypeName = dataNodeInfo.MimeType;
-        if (!string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType))
+        if (!string.Equals(dataNodeInfo.MimeType, ResXResourceWriter.BinSerializedObjectMimeType))
         {
             return null;
         }
 
         byte[] serializedData = FromBase64WrappedString(dataNodeInfo.ValueData);
 
-        if (!(serializedData?.Length > 0))
+        if (serializedData.Length <= 0)
         {
             return null;
         }
 
+        using MemoryStream stream = new(serializedData, writable: false);
+
+        try
+        {
+            BinaryFormattedObject format = new(stream, leaveOpen: true);
+            if (format.TryGetFrameworkObject(out object? value))
+            {
+                return value;
+            }
+        }
+        catch (Exception ex) when (!ex.IsCriticalException())
+        {
+            // Being extra cautious here, but the Try method above should never throw in normal circumstances.
+            Debug.Fail($"Unexpected exception getting binary formatted data.");
+        }
+
+        stream.Position = 0;
         _binaryFormatter ??= new BinaryFormatter
         {
             Binder = new ResXSerializationBinder(typeResolver)
         };
 
-        object? result = _binaryFormatter.Deserialize(new MemoryStream(serializedData));
+        object? result = _binaryFormatter.Deserialize(stream);
         if (result is ResXNullRef)
         {
             result = null;
@@ -480,10 +518,9 @@ public sealed class ResXDataNode : ISerializable
         // The type name here is always a fully qualified name.
         if (!string.IsNullOrEmpty(_typeName))
         {
-            return
-                _typeName == MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter)
-                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter)
-                    : _typeName;
+            return _typeName == MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter)
+                ? MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter)
+                : _typeName;
         }
 
         string? typeName = FileRefType;
@@ -518,9 +555,11 @@ public sealed class ResXDataNode : ISerializable
                     try
                     {
 #pragma warning disable SYSLIB0051 // Type or member is obsolete
-                        var type = _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver)?.GetType() : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver)?.GetType();
-#pragma warning restore SYSLIB0051 // Type or member is obsolete
-                        typeName = MultitargetUtil.GetAssemblyQualifiedName(type, _typeNameConverter);
+                        Type? type = _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType
+                            ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver)?.GetType()
+                            : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver)?.GetType();
+#pragma warning restore SYSLIB0051
+                        typeName = type is null ? null : MultitargetUtil.GetAssemblyQualifiedName(type, _typeNameConverter);
                     }
                     catch (Exception ex)
                     {
@@ -569,10 +608,9 @@ public sealed class ResXDataNode : ISerializable
             if (FileRefType is not null && ResolveType(FileRefType, typeResolver) is not null)
             {
                 // We have the fully qualified name for this type
-                _fileRef =
-                    FileRefTextEncoding is not null
-                        ? new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding))
-                        : new ResXFileRef(FileRefFullPath, FileRefType);
+                _fileRef = FileRefTextEncoding is not null
+                    ? new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding))
+                    : new ResXFileRef(FileRefFullPath, FileRefType);
                 return TypeDescriptor.GetConverter(typeof(ResXFileRef)).ConvertFrom(_fileRef.ToString());
             }
 
@@ -582,7 +620,9 @@ public sealed class ResXDataNode : ISerializable
         {
             // It's embedded, deserialize it.
 #pragma warning disable SYSLIB0051 // Type or member is obsolete
-            return _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver) : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
+            return _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType
+                ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver)
+                : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
 #pragma warning restore SYSLIB0051 // Type or member is obsolete
         }
 
@@ -599,22 +639,22 @@ public sealed class ResXDataNode : ISerializable
     {
         if (text.IndexOfAny(s_specialChars) != -1)
         {
-            StringBuilder sb = new StringBuilder(text.Length);
-            foreach (var ch in text)
+            StringBuilder builder = new(text.Length);
+            foreach (char c in text)
             {
-                switch (ch)
+                switch (c)
                 {
                     case ' ':
                     case '\r':
                     case '\n':
                         break;
                     default:
-                        sb.Append(ch);
+                        builder.Append(c);
                         break;
                 }
             }
 
-            return Convert.FromBase64String(sb.ToString());
+            return Convert.FromBase64String(builder.ToString());
         }
 
         return Convert.FromBase64String(text);

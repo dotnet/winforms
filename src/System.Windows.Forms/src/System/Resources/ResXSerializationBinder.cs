@@ -70,19 +70,20 @@ internal class ResXSerializationBinder : SerializationBinder
     // Get the multitarget-aware string representation for the give type.
     public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
     {
-        // Normally we don't change typeName when changing the target framework,
-        // only assembly version or assembly name might change, thus we are setting
+        // Normally we don't change the type name when changing the target framework, only assembly version or assembly name might change, thus we are setting
         // typeName only if it changed with the framework version.
         // If binder passes in a null, BinaryFormatter will use the original value or
         // for un-serializable types will redirect to another type.
+        //
         // For example:
         //
-        // Encoding = Encoding.GetEncoding("shift_jis");
-        // public Encoding Encoding { get; set; }
-        // property type (Encoding) is abstract, but the value is instantiated to a specific class,
-        // and should be serialized as a specific class in order to be able to instantiate the result.
+        //   Encoding = Encoding.GetEncoding("shift_jis");
+        //   public Encoding Encoding { get; set; }
         //
-        // another example are singleton objects like DBNull.Value which are serialized by System.UnitySerializationHolder
+        // Property type (Encoding) is abstract, but the value is instantiated to a specific class, and should be
+        // serialized as a specific class in order to be able to instantiate the result.
+        //
+        // Another example are singleton objects like DBNull.Value which are serialized by System.UnitySerializationHolder.
         typeName = null;
         if (_typeNameConverter is not null)
         {
@@ -93,7 +94,7 @@ internal class ResXSerializationBinder : SerializationBinder
                 if (pos > 0 && pos < assemblyQualifiedTypeName.Length - 1)
                 {
                     assemblyName = assemblyQualifiedTypeName[(pos + 1)..].TrimStart();
-                    string newTypeName = assemblyQualifiedTypeName.Substring(0, pos);
+                    string newTypeName = assemblyQualifiedTypeName[..pos];
                     if (!string.Equals(newTypeName, serializedType.FullName, StringComparison.InvariantCulture))
                     {
                         typeName = newTypeName;

@@ -29,6 +29,7 @@ public unsafe partial class DataObject :
 {
     private const string CF_DEPRECATED_FILENAME = "FileName";
     private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
+    private const string BitmapFullName = "System.Drawing.Bitmap";
 
     private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
@@ -42,12 +43,17 @@ public unsafe partial class DataObject :
 
     private readonly IDataObject _innerData;
 
-    // We use this to identify that a stream is actually a serialized object.  On read,
-    // we don't know if the contents of a stream were saved "raw" or if the stream is really
-    // pointing to a serialized object.  If we saved an object, we prefix it with this
-    // guid.
-
-    private static readonly byte[] s_serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
+    // We use this to identify that a stream is actually a serialized object. On read, we don't know if the contents
+    // of a stream were saved "raw" or if the stream is really pointing to a serialized object. If we saved an object,
+    // we prefix it with this guid.
+    private static readonly byte[] s_serializedObjectID = new byte[]
+    {
+        // FD9EA796-3B13-4370-A679-56106BB288FB
+        0x96, 0xa7, 0x9e, 0xfd,
+        0x13, 0x3b,
+        0x70, 0x43,
+        0xa6, 0x79, 0x56, 0x10, 0x6b, 0xb2, 0x88, 0xfb
+    };
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IDataObject"/>.
@@ -252,8 +258,7 @@ public unsafe partial class DataObject :
     }
 
     /// <summary>
-    ///  Gets a list of all formats that data stored in this instance is associated
-    ///  with or can be converted to.
+    ///  Gets a list of all formats that data stored in this instance is associated with or can be converted to.
     /// </summary>
     public virtual string[] GetFormats()
     {
@@ -261,45 +266,28 @@ public unsafe partial class DataObject :
         return GetFormats(autoConvert: true);
     }
 
-    // <-- WHIDBEY ADDITIONS
+    public virtual bool ContainsAudio() => GetDataPresent(DataFormats.WaveAudioConstant, autoConvert: false);
 
-    public virtual bool ContainsAudio()
-    {
-        return GetDataPresent(DataFormats.WaveAudio, autoConvert: false);
-    }
+    public virtual bool ContainsFileDropList() => GetDataPresent(DataFormats.FileDropConstant, autoConvert: true);
 
-    public virtual bool ContainsFileDropList()
-    {
-        return GetDataPresent(DataFormats.FileDrop, autoConvert: true);
-    }
+    public virtual bool ContainsImage() => GetDataPresent(DataFormats.BitmapConstant, autoConvert: true);
 
-    public virtual bool ContainsImage()
-    {
-        return GetDataPresent(DataFormats.Bitmap, autoConvert: true);
-    }
-
-    public virtual bool ContainsText()
-    {
-        return ContainsText(TextDataFormat.UnicodeText);
-    }
+    public virtual bool ContainsText() => ContainsText(TextDataFormat.UnicodeText);
 
     public virtual bool ContainsText(TextDataFormat format)
     {
-        //valid values are 0x0 to 0x4
+        // Valid values are 0x0 to 0x4
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
         return GetDataPresent(ConvertToDataFormats(format), autoConvert: false);
     }
 
-    public virtual Stream? GetAudioStream()
-    {
-        return GetData(DataFormats.WaveAudio, false) as Stream;
-    }
+    public virtual Stream? GetAudioStream() => GetData(DataFormats.WaveAudio, autoConvert: false) as Stream;
 
     public virtual StringCollection GetFileDropList()
     {
-        StringCollection dropList = new StringCollection();
-        if (GetData(DataFormats.FileDrop, true) is string[] strings)
+        StringCollection dropList = new();
+        if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
         {
             dropList.AddRange(strings);
         }
@@ -307,15 +295,9 @@ public unsafe partial class DataObject :
         return dropList;
     }
 
-    public virtual Image? GetImage()
-    {
-        return GetData(DataFormats.Bitmap, true) as Image;
-    }
+    public virtual Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
 
-    public virtual string GetText()
-    {
-        return GetText(TextDataFormat.UnicodeText);
-    }
+    public virtual string GetText() => GetText(TextDataFormat.UnicodeText);
 
     public virtual string GetText(TextDataFormat format)
     {
@@ -325,19 +307,10 @@ public unsafe partial class DataObject :
         return GetData(ConvertToDataFormats(format), false) is string text ? text : string.Empty;
     }
 
-    public virtual void SetAudio(byte[] audioBytes)
-    {
-        ArgumentNullException.ThrowIfNull(audioBytes);
-
-        SetAudio(new MemoryStream(audioBytes));
-    }
+    public virtual void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
 
     public virtual void SetAudio(Stream audioStream)
-    {
-        ArgumentNullException.ThrowIfNull(audioStream);
-
-        SetData(DataFormats.WaveAudio, false, audioStream);
-    }
+        => SetData(DataFormats.WaveAudioConstant, autoConvert: false, audioStream.OrThrowIfNull());
 
     public virtual void SetFileDropList(StringCollection filePaths)
     {
@@ -345,14 +318,14 @@ public unsafe partial class DataObject :
 
         string[] strings = new string[filePaths.Count];
         filePaths.CopyTo(strings, 0);
-        SetData(DataFormats.FileDrop, true, strings);
+        SetData(DataFormats.FileDropConstant, true, strings);
     }
 
     public virtual void SetImage(Image image)
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        SetData(DataFormats.Bitmap, true, image);
+        SetData(DataFormats.BitmapConstant, true, image);
     }
 
     public virtual void SetText(string textData)
@@ -372,61 +345,38 @@ public unsafe partial class DataObject :
 
     private static string ConvertToDataFormats(TextDataFormat format) => format switch
     {
-        TextDataFormat.UnicodeText => DataFormats.UnicodeText,
-        TextDataFormat.Rtf => DataFormats.Rtf,
-        TextDataFormat.Html => DataFormats.Html,
-        TextDataFormat.CommaSeparatedValue => DataFormats.CommaSeparatedValue,
-        _ => DataFormats.UnicodeText,
+        TextDataFormat.UnicodeText => DataFormats.UnicodeTextConstant,
+        TextDataFormat.Rtf => DataFormats.RtfConstant,
+        TextDataFormat.Html => DataFormats.HtmlConstant,
+        TextDataFormat.CommaSeparatedValue => DataFormats.CsvConstant,
+        _ => DataFormats.UnicodeTextConstant,
     };
-
-    // END - WHIDBEY ADDITIONS -->
 
     /// <summary>
     ///  Returns all the "synonyms" for the specified format.
     /// </summary>
-    private static string[]? GetMappedFormats(string format)
+    private static string[]? GetMappedFormats(string format) => format switch
     {
-        if (format is null)
-        {
-            return null;
-        }
-
-        if (format.Equals(DataFormats.Text)
-            || format.Equals(DataFormats.UnicodeText)
-            || format.Equals(DataFormats.StringFormat))
-        {
-            return new string[]
+        null => null,
+        DataFormats.TextConstant or DataFormats.UnicodeTextConstant or DataFormats.StringConstant => new string[]
             {
-                DataFormats.StringFormat,
-                DataFormats.UnicodeText,
-                DataFormats.Text,
-            };
-        }
-
-        if (format.Equals(DataFormats.FileDrop)
-            || format.Equals(CF_DEPRECATED_FILENAME)
-            || format.Equals(CF_DEPRECATED_FILENAMEW))
-        {
-            return new string[]
+                DataFormats.StringConstant,
+                DataFormats.UnicodeTextConstant,
+                DataFormats.TextConstant
+            },
+        DataFormats.FileDropConstant or CF_DEPRECATED_FILENAME or CF_DEPRECATED_FILENAMEW => new string[]
             {
-                DataFormats.FileDrop,
+                DataFormats.FileDropConstant,
                 CF_DEPRECATED_FILENAMEW,
-                CF_DEPRECATED_FILENAME,
-            };
-        }
-
-        if (format.Equals(DataFormats.Bitmap)
-            || format.Equals((typeof(Bitmap)).FullName))
-        {
-            return new string[]
+                CF_DEPRECATED_FILENAME
+            },
+        DataFormats.BitmapConstant or BitmapFullName => new string[]
             {
-                (typeof(Bitmap)).FullName!,
-                DataFormats.Bitmap,
-            };
-        }
-
-        return new string[] { format };
-    }
+                BitmapFullName,
+                DataFormats.BitmapConstant
+            },
+        _ => new string[] { format }
+    };
 
     /// <summary>
     ///  Returns true if the tymed is useable.
@@ -549,7 +499,7 @@ public unsafe partial class DataObject :
     }
 
     /// <summary>
-    /// Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
+    ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
     /// </summary>
     int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
     {
@@ -723,107 +673,79 @@ public unsafe partial class DataObject :
     /// <param name="format">format name</param>
     /// <returns>true - serialize only safe types, strings or bitmaps.</returns>
     private static bool RestrictDeserializationToSafeTypes(string format)
-    {
-        return format.Equals(DataFormats.StringFormat)
-            || format.Equals(typeof(Bitmap).FullName)
-            || format.Equals(DataFormats.CommaSeparatedValue)
-            || format.Equals(DataFormats.Dib)
-            || format.Equals(DataFormats.Dif)
-            || format.Equals(DataFormats.Locale)
-            || format.Equals(DataFormats.PenData)
-            || format.Equals(DataFormats.Riff)
-            || format.Equals(DataFormats.SymbolicLink)
-            || format.Equals(DataFormats.Tiff)
-            || format.Equals(DataFormats.WaveAudio)
-            || format.Equals(DataFormats.Bitmap)
-            || format.Equals(DataFormats.EnhancedMetafile)
-            || format.Equals(DataFormats.Palette)
-            || format.Equals(DataFormats.MetafilePict);
-    }
+        => format is DataFormats.StringConstant
+            or BitmapFullName
+            or DataFormats.CsvConstant
+            or DataFormats.DibConstant
+            or DataFormats.DifConstant
+            or DataFormats.LocaleConstant
+            or DataFormats.PenDataConstant
+            or DataFormats.RiffConstant
+            or DataFormats.SymbolicLinkConstant
+            or DataFormats.TiffConstant
+            or DataFormats.WaveAudioConstant
+            or DataFormats.BitmapConstant
+            or DataFormats.EmfConstant
+            or DataFormats.PaletteConstant
+            or DataFormats.WmfConstant;
 
-    private HRESULT SaveDataToHandle(object data, string format, ref STGMEDIUM medium)
+    private HRESULT SaveDataToHandle(object data, string format, ref STGMEDIUM medium) => format switch
     {
-        HRESULT hr = HRESULT.E_FAIL;
-        if (data is Stream dataStream)
-        {
-            hr = SaveStreamToHandle(ref medium.unionmember, dataStream);
-        }
-        else if (format.Equals(DataFormats.Text)
-            || format.Equals(DataFormats.Rtf)
-            || format.Equals(DataFormats.OemText))
-        {
-            hr = SaveStringToHandle(medium.unionmember, data.ToString()!, false);
-        }
-        else if (format.Equals(DataFormats.Html))
-        {
-            hr = SaveHtmlToHandle(medium.unionmember, data.ToString()!);
-        }
-        else if (format.Equals(DataFormats.UnicodeText))
-        {
-            hr = SaveStringToHandle(medium.unionmember, data.ToString()!, true);
-        }
-        else if (format.Equals(DataFormats.FileDrop))
-        {
-            hr = SaveFileListToHandle(medium.unionmember, (string[])data);
-        }
-        else if (format.Equals(CF_DEPRECATED_FILENAME))
-        {
-            string[] filelist = (string[])data;
-            hr = SaveStringToHandle(medium.unionmember, filelist[0], false);
-        }
-        else if (format.Equals(CF_DEPRECATED_FILENAMEW))
-        {
-            string[] filelist = (string[])data;
-            hr = SaveStringToHandle(medium.unionmember, filelist[0], true);
-        }
-        else if (format.Equals(DataFormats.Dib) && data is Image)
-        {
+        _ when data is Stream dataStream
+            => SaveStreamToHandle(ref medium.unionmember, dataStream),
+        DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant
+            => SaveStringToHandle(medium.unionmember, data.ToString()!, unicode: false),
+        DataFormats.HtmlConstant
+            => SaveHtmlToHandle(medium.unionmember, data.ToString()!),
+        DataFormats.UnicodeTextConstant
+            => SaveStringToHandle(medium.unionmember, data.ToString()!, unicode: true),
+        DataFormats.FileDropConstant
+            => SaveFileListToHandle(medium.unionmember, (string[])data),
+        CF_DEPRECATED_FILENAME
+            => SaveStringToHandle(medium.unionmember, ((string[])data)[0], unicode: false),
+        CF_DEPRECATED_FILENAMEW
+            => SaveStringToHandle(medium.unionmember, ((string[])data)[0], unicode: true),
+        DataFormats.DibConstant when data is Image
             // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
             // an HBITMAP and publish a Dib, we don't need to support this.
-            hr = HRESULT.DV_E_TYMED;
-        }
+            => HRESULT.DV_E_TYMED,
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-        else if (format.Equals(DataFormats.Serializable)
-            || data is ISerializable
-            || (data is not null && data.GetType().IsSerializable))
+        _ when format == DataFormats.SerializableConstant || data is ISerializable || data.GetType().IsSerializable
+#pragma warning restore
+            => SaveObjectToHandle(ref medium.unionmember, data, RestrictDeserializationToSafeTypes(format)),
+        _ => HRESULT.E_FAIL
+    };
+
+    private static HRESULT SaveObjectToHandle(ref nint handle, object data, bool restrictSerialization)
+    {
+        using MemoryStream stream = new();
+        stream.Write(s_serializedObjectID);
+        long position = stream.Position;
+        bool success = false;
+
+        try
         {
-            hr = SaveObjectToHandle(ref medium.unionmember, data, RestrictDeserializationToSafeTypes(format));
+            success = BinaryFormatWriter.TryWriteFrameworkObject(stream, data);
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
-
-        return hr;
-    }
-
-    private static HRESULT SaveObjectToHandle(ref IntPtr handle, object data, bool restrictSerialization)
-    {
-        Stream stream = new MemoryStream();
-        BinaryWriter bw = new BinaryWriter(stream);
-        bw.Write(s_serializedObjectID);
-        SaveObjectToHandleSerializer(stream, data, restrictSerialization);
-        return SaveStreamToHandle(ref handle, stream);
-    }
-
-    private static void SaveObjectToHandleSerializer(Stream stream, object data, bool restrictSerialization)
-    {
-        if (BinaryFormatWriter.TryWritePrimitive(stream, data))
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            return;
+            // Being extra cautious here, but the Try method above should never throw in normal circumstances.
+            Debug.Fail($"Unexpected exception writing binary formatted data. {ex.Message}");
         }
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new BinaryFormatter();
-        if (restrictSerialization)
+        if (!success)
         {
-            formatter.Binder = new BitmapBinder();
+            new BinaryFormatter()
+            {
+                Binder = restrictSerialization ? new BitmapBinder() : null
+            }.Serialize(stream, data);
         }
+#pragma warning restore SYSLIB0011
 
-        formatter.Serialize(stream, data);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+        return SaveStreamToHandle(ref handle, stream);
     }
 
-    /// <summary>
-    ///  Saves stream out to handle.
-    /// </summary>
     private static unsafe HRESULT SaveStreamToHandle(ref nint handle, Stream stream)
     {
         if (handle != 0)
@@ -831,7 +753,7 @@ public unsafe partial class DataObject :
             PInvoke.GlobalFree(handle);
         }
 
-        int size = (int)stream.Length;
+        int size = checked((int)stream.Length);
         handle = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
         if (handle == 0)
         {
@@ -846,7 +768,7 @@ public unsafe partial class DataObject :
 
         try
         {
-            var span = new Span<byte>(ptr, size);
+            Span<byte> span = new(ptr, size);
             stream.Position = 0;
             stream.Read(span);
         }

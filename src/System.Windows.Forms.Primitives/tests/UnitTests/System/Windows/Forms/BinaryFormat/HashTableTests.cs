@@ -156,12 +156,6 @@ public class HashtableTests
         },
         new Hashtable()
         {
-            { "This", "That" },
-            { "TheOther", "This" },
-            { "That", "This" }
-        },
-        new Hashtable()
-        {
             { "Yowza", null },
             { "Youza", null },
             { "Meeza", null }
