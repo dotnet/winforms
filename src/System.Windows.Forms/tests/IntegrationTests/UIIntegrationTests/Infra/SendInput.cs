@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.UITests.Input;
-using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit.Abstractions;
