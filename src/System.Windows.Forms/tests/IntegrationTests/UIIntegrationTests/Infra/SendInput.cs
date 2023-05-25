@@ -3,10 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.UITests.Input;
+using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms.UITests;
 
@@ -79,55 +79,26 @@ public class SendInput
 
         SetForegroundWindow(window);
 
-        // Reset wait event on CustomForm.
-        var resetEvent = window.GetManualResetEventSlim();
-        resetEvent.Reset();
+        // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again.
+        window.ResetManualResetEventSlim();
 
-        //Task<bool> waitTask = Task.Run(() => resetEvent.Wait(5000));
-        await Task.Run(() => actions(new InputSimulator()));
+        InputSimulator inputSimulator = new InputSimulator();
+        actions(inputSimulator);
 
-        // Sending test input as end of input message. SendInput is async and might have not been dispatched to the control before we proceed with further verifications.
-        // Test input is introduced to helps synchronize the input being sent and confirms that the underlying control has received input before proceeding.
-        await SendTestInputAsync();
+        // Sending TestKey as end of the input message. SendInput is async and might have not been dispatched to the
+        // control before we proceed with further verifications. TestKey is introduced to helps synchronize the
+        // input being sent and confirms that the underlying control has received input before proceeding.
+        inputSimulator.Keyboard.KeyPress(CustomForm.TestKey);
 
         await _waitForIdleAsync();
 
-        // Wait until test input is received by CustomForm.
-        if (!await Task.Run(() => resetEvent.Wait(5000)))
+        // Wait for the completion of input processing in CustomForm or until CustomForm is closed/destroyed by the
+        // preceding input sent before the TestKey input, and block the thread accordingly.
+        if (window.HandleInternal != IntPtr.Zero && !window.WaitOnManualResetEventSlim(5000))
         {
-            if (CheckMessageQueue(out int count))
-            {
-                throw new TimeoutException($"Timeout reached while waiting to process SendInput. Timeout may need to be increased. - {count}");
-            }
-            else
-            {
-                throw new TimeoutException($"Timeout reached while waiting to process SendInput, Message queue has input.  - {count}");
-            }
+            throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
         }
     }
-
-    private unsafe bool CheckMessageQueue(out int count)
-    {
-        MSG msg = default;
-        count = 0;
-        while (PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
-        {
-            count++;
-            var message = (Message)msg;
-            if (message.MsgInternal is WM.KEYDOWN or WM.KEYUP)
-            {
-                var keyCode = (VIRTUAL_KEY)(int)message.WParamInternal;
-                if (keyCode == CustomForm.TestKey)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private async Task SendTestInputAsync() => await Task.Run(() => new InputSimulator().Keyboard.KeyPress(CustomForm.TestKey));
 
     private static HWND GetForegroundWindow()
     {

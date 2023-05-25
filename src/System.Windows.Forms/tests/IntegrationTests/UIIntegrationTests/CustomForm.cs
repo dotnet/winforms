@@ -11,7 +11,23 @@ namespace System.Windows.Forms.UITests
         private ManualResetEventSlim? _manualResetEventSlim;
         internal const VIRTUAL_KEY TestKey = VIRTUAL_KEY.VK_NUMLOCK;
 
-        public ManualResetEventSlim GetManualResetEventSlim() => _manualResetEventSlim ??= new ManualResetEventSlim();
+        public void ResetManualResetEventSlim()
+        {
+            _manualResetEventSlim ??= new ManualResetEventSlim();
+            _manualResetEventSlim.Reset();
+        }
+
+        public void SetManualResetEventSlim()
+        {
+            _manualResetEventSlim.OrThrowIfNull();
+            _manualResetEventSlim.Set();
+        }
+
+        public bool WaitOnManualResetEventSlim(int timeOut)
+        {
+            _manualResetEventSlim.OrThrowIfNull();
+            return _manualResetEventSlim.Wait(5000);
+        }
 
         public CustomForm ()
         {
