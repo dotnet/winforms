@@ -6,6 +6,7 @@ using System.Windows.Forms.UITests.Input;
 using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
+using Xunit.Abstractions;
 using static Interop;
 
 namespace System.Windows.Forms.UITests;
@@ -13,10 +14,12 @@ namespace System.Windows.Forms.UITests;
 public class SendInput
 {
     private readonly Func<Task> _waitForIdleAsync;
+    private readonly ITestOutputHelper _testOutputHelper;
 
-    public SendInput(Func<Task> waitForIdleAsync)
+    public SendInput(Func<Task> waitForIdleAsync, ITestOutputHelper testOutputHelper)
     {
         _waitForIdleAsync = waitForIdleAsync;
+        _testOutputHelper = testOutputHelper;
     }
 
     internal async Task SendAsync(CustomForm window, params object[] keys)
@@ -78,17 +81,17 @@ public class SendInput
         }
 
         SetForegroundWindow(window);
+        InputSimulator inputSimulator = new InputSimulator();
+        actions(inputSimulator);
 
         // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again.
         window.ResetManualResetEventSlim();
-
-        InputSimulator inputSimulator = new InputSimulator();
-        actions(inputSimulator);
 
         // Sending TestKey as end of the input message. SendInput is async and might have not been dispatched to the
         // control before we proceed with further verifications. TestKey is introduced to helps synchronize the
         // input being sent and confirms that the underlying control has received input before proceeding.
         inputSimulator.Keyboard.KeyPress(CustomForm.TestKey);
+        _testOutputHelper.WriteLine($"TestKey sent to window - {window.HandleInternal}");
 
         await _waitForIdleAsync();
 
@@ -96,6 +99,13 @@ public class SendInput
         // preceding input sent before the TestKey input, and block the thread accordingly.
         if (window.HandleInternal != IntPtr.Zero && !window.WaitOnManualResetEventSlim(5000))
         {
+            if (window.WaitOnManualResetEventSlim(15000))
+            {
+                _testOutputHelper.WriteLine("Increased timeout helped.");
+                throw new TimeoutException($"Increased timeout required.");
+            }
+
+            _testOutputHelper.WriteLine($"Increased timeout didn't help.");
             throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
         }
     }

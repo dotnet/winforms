@@ -20,12 +20,22 @@ namespace System.Windows.Forms.UITests
         public void SetManualResetEventSlim()
         {
             _manualResetEventSlim.OrThrowIfNull();
+            if (HandleInternal == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("window is closed/destroyed and Handle is null");
+            }
+
             _manualResetEventSlim.Set();
         }
 
         public bool WaitOnManualResetEventSlim(int timeOut)
         {
             _manualResetEventSlim.OrThrowIfNull();
+            if (HandleInternal == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("window is closed/destroyed and Handle is null");
+            }
+
             return _manualResetEventSlim.Wait(5000);
         }
 

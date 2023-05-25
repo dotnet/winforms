@@ -55,7 +55,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected JoinableTaskFactory JoinableTaskFactory { get; private set; } = null!;
 
-    protected SendInput InputSimulator => new(WaitForIdleAsync);
+    protected SendInput InputSimulator => new(WaitForIdleAsync, TestOutputHelper!);
 
     public virtual Task InitializeAsync()
     {
