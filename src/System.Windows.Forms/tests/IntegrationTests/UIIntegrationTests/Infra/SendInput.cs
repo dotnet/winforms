@@ -81,33 +81,56 @@ public class SendInput
         }
 
         SetForegroundWindow(window);
-        InputSimulator inputSimulator = new InputSimulator();
-        actions(inputSimulator);
+        //InputSimulator inputSimulator = new InputSimulator();
+        actions(new InputSimulator());
+        Thread.Sleep(100);
+        /*    if (window.HandleInternal != IntPtr.Zero)
+            {
+                // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again.
+                // window.ResetManualResetEventSlim();
+                window.TestKeyProcessed = false;
+                // Sending TestKey as end of the input message. SendInput is async and might have not been dispatched to the
+                // control before we proceed with further verifications. TestKey is introduced to helps synchronize the
+                // input being sent and confirms that the underlying control has received input before proceeding.
+                window.Focus();
+                new InputSimulator().Keyboard.KeyPress(CustomForm.TestKey);
+                _testOutputHelper.WriteLine($"TestKey sent to window - {window.HandleInternal}");
+                Thread.Sleep(100);
+                await Task.Run(() =>
+                {
+                    int timeOut = 15000;
+                    while (!window.TestKeyProcessed && timeOut > 0 && !window.ParentClosed)
+                    {
+                        Thread.Sleep(100);
+                        timeOut -= 100;
+                    }
 
-        // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again.
-        window.ResetManualResetEventSlim();
+                    if (timeOut <= 0)
+                    {
+                        throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
+                    }
+                });
 
-        // Sending TestKey as end of the input message. SendInput is async and might have not been dispatched to the
-        // control before we proceed with further verifications. TestKey is introduced to helps synchronize the
-        // input being sent and confirms that the underlying control has received input before proceeding.
-        inputSimulator.Keyboard.KeyPress(CustomForm.TestKey);
-        _testOutputHelper.WriteLine($"TestKey sent to window - {window.HandleInternal}");
+                await Task.Run(() =>
+                {
+                    // Wait for the completion of input processing in CustomForm or until CustomForm is closed/destroyed by the
+                    // preceding input sent before the TestKey input, and block the thread accordingly.
+                    if (!window.WaitOnManualResetEventSlim(5000))
+                    {
+                        if (window.WaitOnManualResetEventSlim(15000))
+                        {
+                            _testOutputHelper.WriteLine("Increased timeout helped.");
+                            throw new TimeoutException($"Increased timeout required.");
+                        }
+
+                        _testOutputHelper.WriteLine($"Increased timeout didn't help.");
+                        throw new TimeoutException($"Timeout reached while waiting to process SendInput. {window.HandleInternal}");
+                    }
+                });
+
+            }*/
 
         await _waitForIdleAsync();
-
-        // Wait for the completion of input processing in CustomForm or until CustomForm is closed/destroyed by the
-        // preceding input sent before the TestKey input, and block the thread accordingly.
-        if (window.HandleInternal != IntPtr.Zero && !window.WaitOnManualResetEventSlim(5000))
-        {
-            if (window.WaitOnManualResetEventSlim(15000))
-            {
-                _testOutputHelper.WriteLine("Increased timeout helped.");
-                throw new TimeoutException($"Increased timeout required.");
-            }
-
-            _testOutputHelper.WriteLine($"Increased timeout didn't help.");
-            throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
-        }
     }
 
     private static HWND GetForegroundWindow()

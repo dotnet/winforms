@@ -25,9 +25,10 @@ namespace System.Windows.Forms.UITests
                     var keyCode = (VIRTUAL_KEY)(int)m.WParamInternal;
                     if (keyCode == TestKey)
                     {
-                        if (parentForm._manualResetEventSlim is not null && !parentForm._manualResetEventSlim.IsSet)
+                        //if (parentForm._manualResetEventSlim is not null && !parentForm._manualResetEventSlim.IsSet)
                         {
-                            parentForm._manualResetEventSlim.Set();
+                           // parentForm._manualResetEventSlim.Set();
+                            parentForm.TestKeyProcessed = true;
                         }
 
                         return true;

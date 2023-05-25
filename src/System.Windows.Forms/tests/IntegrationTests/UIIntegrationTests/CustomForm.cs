@@ -10,6 +10,9 @@ namespace System.Windows.Forms.UITests
     {
         private ManualResetEventSlim? _manualResetEventSlim;
         internal const VIRTUAL_KEY TestKey = VIRTUAL_KEY.VK_NUMLOCK;
+        private readonly InputRedirector _messageFilter;
+        internal bool TestKeyProcessed;
+        internal bool ParentClosed;
 
         public void ResetManualResetEventSlim()
         {
@@ -31,17 +34,21 @@ namespace System.Windows.Forms.UITests
         public bool WaitOnManualResetEventSlim(int timeOut)
         {
             _manualResetEventSlim.OrThrowIfNull();
-            if (HandleInternal == IntPtr.Zero)
-            {
-                throw new InvalidOperationException("window is closed/destroyed and Handle is null");
-            }
-
-            return _manualResetEventSlim.Wait(5000);
+            return _manualResetEventSlim.Wait(timeOut);
         }
 
         public CustomForm ()
         {
-            Application.AddMessageFilter(new InputRedirector(this));
+            _messageFilter = new InputRedirector(this);
+            Application.AddMessageFilter(_messageFilter);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            ParentClosed = true;
+            _manualResetEventSlim?.Set();
+            Application.RemoveMessageFilter(_messageFilter);
         }
     }
 }
