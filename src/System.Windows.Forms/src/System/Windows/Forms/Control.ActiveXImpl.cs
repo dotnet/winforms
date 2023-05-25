@@ -1196,7 +1196,7 @@ public partial class Control
                     object? deserialized = null;
                     try
                     {
-                        BinaryFormattedObject format = new(stream);
+                        BinaryFormattedObject format = new(stream, leaveOpen: true);
                         success = format.TryGetFrameworkObject(out deserialized);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
