@@ -715,7 +715,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
         }
     }
-#nullable disable
+
     [Localizable(true)]
     [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
     [DefaultValue(ImageList.Indexer.DefaultIndex)]
@@ -799,7 +799,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [SRDescription(nameof(SR.ControlTagDescr))]
     [DefaultValue(null)]
     [TypeConverter(typeof(StringConverter))]
-    public object Tag
+    public object? Tag
     {
         get => _userData;
         set => _userData = value;
@@ -811,6 +811,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [Localizable(true)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatAppearance))]
+    [AllowNull]
     public string Text
     {
         get
@@ -832,6 +833,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue("")]
+    [AllowNull]
     public string ToolTipText
     {
         get => _toolTipText;
@@ -873,7 +875,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         if (Index >= 0)
         {
-            ListView lv = ListView;
+            ListView lv = ListView!;
             if (lv.LabelEdit == false)
             {
                 throw new InvalidOperationException(SR.ListViewBeginEditFailed);
@@ -914,7 +916,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
         else
         {
-            newItem = (ListViewItem)Activator.CreateInstance(clonedType);
+            newItem = (ListViewItem)Activator.CreateInstance(clonedType)!;
         }
 
         foreach (ListViewSubItem subItem in clonedSubItems)
@@ -957,13 +959,13 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
     }
 
-    public ListViewItem FindNearestItem(SearchDirectionHint searchDirection)
+    public ListViewItem? FindNearestItem(SearchDirectionHint searchDirection)
     {
         Rectangle r = Bounds;
         int xCenter = r.Left + (r.Right - r.Left) / 2;
         int yCenter = r.Top + (r.Bottom - r.Top) / 2;
 
-        return ListView.FindNearestItem(searchDirection, xCenter, yCenter);
+        return ListView?.FindNearestItem(searchDirection, xCenter, yCenter);
     }
 
     /// <summary>
@@ -980,7 +982,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         return default(Rectangle);
     }
 
-    public ListViewSubItem GetSubItemAt(int x, int y)
+    public ListViewSubItem? GetSubItemAt(int x, int y)
     {
         if (_listView is not null && _listView.IsHandleCreated && _listView.View == View.Details)
         {
@@ -1013,7 +1015,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             UpdateStateToListView(index);
         }
 
-        KeyboardToolTipStateMachine.Instance.Hook(this, _listView.KeyboardToolTip);
+        KeyboardToolTipStateMachine.Instance.Hook(this, _listView!.KeyboardToolTip);
     }
 
     internal void ReleaseUiaProvider()
@@ -1048,7 +1050,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             return;
         }
 
-        ListViewGroup group = _listView.Groups[_groupName];
+        ListViewGroup? group = _listView.Groups[_groupName];
         Group = group;
 
         // Use the group name only once.
@@ -1068,7 +1070,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// </summary>
     internal void UpdateStateToListView(int index, ref LVITEMW lvItem, bool updateOwner)
     {
-        Debug.Assert(_listView.IsHandleCreated, "Should only invoke UpdateStateToListView when handle is created.");
+        Debug.Assert(_listView!.IsHandleCreated, "Should only invoke UpdateStateToListView when handle is created.");
 
         if (index == -1)
         {
@@ -1152,7 +1154,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             SavedStateImageIndex = ((int)(lvItem.state & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) - 1;
 
             _group = null;
-            foreach (ListViewGroup lvg in ListView.Groups)
+            foreach (ListViewGroup lvg in ListView!.Groups)
             {
                 if (lvg.ID == lvItem.iGroupId)
                 {
@@ -1192,7 +1194,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     {
         bool foundSubItems = false;
 
-        string imageKey = null;
+        string? imageKey = null;
         int imageIndex = ImageList.Indexer.DefaultIndex;
 
         foreach (SerializationEntry entry in info)
@@ -1219,7 +1221,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else if (entry.Name == nameof(BackColor))
             {
-                BackColor = (Color)info.GetValue(nameof(BackColor), typeof(Color));
+                BackColor = (Color)info.GetValue(nameof(BackColor), typeof(Color))!;
             }
             else if (entry.Name == nameof(Checked))
             {
@@ -1227,11 +1229,11 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else if (entry.Name == nameof(Font))
             {
-                Font = (Font)info.GetValue(nameof(Font), typeof(Font));
+                Font = (Font)info.GetValue(nameof(Font), typeof(Font))!;
             }
             else if (entry.Name == nameof(ForeColor))
             {
-                ForeColor = (Color)info.GetValue(nameof(ForeColor), typeof(Color));
+                ForeColor = (Color)info.GetValue(nameof(ForeColor), typeof(Color))!;
             }
             else if (entry.Name == nameof(UseItemStyleForSubItems))
             {
@@ -1239,7 +1241,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else if (entry.Name == nameof(Group))
             {
-                ListViewGroup group = (ListViewGroup)info.GetValue(nameof(Group), typeof(ListViewGroup));
+                ListViewGroup group = (ListViewGroup)info.GetValue(nameof(Group), typeof(ListViewGroup))!;
                 _groupName = group.Name;
             }
         }
@@ -1259,7 +1261,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             _subItems.EnsureCapacity(SubItemCount);
             for (int i = 1; i < SubItemCount; i++)
             {
-                ListViewSubItem newItem = (ListViewSubItem)info.GetValue($"SubItem{i}", typeof(ListViewSubItem));
+                ListViewSubItem newItem = (ListViewSubItem)info.GetValue($"SubItem{i}", typeof(ListViewSubItem))!;
                 newItem._owner = this;
                 _subItems.Add(newItem);
             }
