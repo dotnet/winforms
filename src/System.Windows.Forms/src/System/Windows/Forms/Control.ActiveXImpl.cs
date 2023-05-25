@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Windows.Forms.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
@@ -260,8 +261,7 @@ public partial class Control
         internal HWND HWNDParent { get; private set; }
 
         /// <summary>
-        ///  Retrieves the number of logical pixels per inch on the
-        ///  primary monitor.
+        ///  Retrieves the number of logical pixels per inch on the primary monitor.
         /// </summary>
         private static Point LogPixels
         {
@@ -1019,8 +1019,7 @@ public partial class Control
         internal HRESULT IsDirty() => _activeXState[s_isDirty] ? HRESULT.S_OK : HRESULT.S_FALSE;
 
         /// <summary>
-        ///  Looks at the property to see if it should be loaded / saved as a resource or
-        ///  through a type converter.
+        ///  Looks at the property to see if it should be loaded / saved as a resource or  through a type converter.
         /// </summary>
         private bool IsResourceProperty(PropertyDescriptor property)
         {
@@ -1033,8 +1032,15 @@ public partial class Control
                 return false;
             }
 
-            // Otherwise we require the type explicitly implements ISerializable.
-            return property.GetValue(_control) is ISerializable;
+            // Otherwise we require the type explicitly implements ISerializable. Strangely, in the past this only
+            // worked off of the current value. If the current value was null checking it for ISerializable would always
+            // fail. This means properties would never load into a reference type property if it's current value was null.
+            //
+            // While we could always just check the property type for serializable this would break derived class scenario
+            // where it adds ISerializable but the property type doesn't have it. In this scenario it would still not work
+            // if the value is null on load. Not enabling that scenario for now as it would require more refactoring.
+            return property.PropertyType.IsAssignableTo(typeof(ISerializable))
+                || property.GetValue(_control) is ISerializable;
         }
 
         /// <summary>
@@ -1185,12 +1191,27 @@ public partial class Control
 
                     // Resource property. We encode these as base 64 strings. To load them, we convert
                     // to a binary blob and then de-serialize.
-                    byte[] bytes = Convert.FromBase64String(value);
-                    using MemoryStream stream = new MemoryStream(bytes);
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    currentProperty.SetValue(_control, new BinaryFormatter().Deserialize(stream));
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    using MemoryStream stream = new(Convert.FromBase64String(value), writable: false);
+                    bool success = false;
+                    object? deserialized = null;
+                    try
+                    {
+                        BinaryFormattedObject format = new(stream);
+                        success = format.TryGetFrameworkObject(out deserialized);
+                    }
+                    catch (Exception ex) when (!ex.IsCriticalException())
+                    {
+                    }
 
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                    if (!success)
+                    {
+                        stream.Position = 0;
+                        deserialized = new BinaryFormatter().Deserialize(stream);
+                    }
+#pragma warning restore
+
+                    currentProperty.SetValue(_control, deserialized);
                     return true;
                 }
 
@@ -1570,15 +1591,31 @@ public partial class Control
                 if (IsResourceProperty(currentProperty))
                 {
                     // Resource property.  Save this to the bag as a 64bit encoded string.
-                    using MemoryStream stream = new MemoryStream();
+                    using MemoryStream stream = new();
+                    object sourceValue = currentProperty.GetValue(_control)!;
+                    bool success = false;
+
+                    try
+                    {
+                        success = BinaryFormatWriter.TryWriteFrameworkObject(stream, sourceValue);
+                    }
+                    catch (Exception ex) when (!ex.IsCriticalException())
+                    {
+                        Debug.Fail($"Failed to write with BinaryFormatWriter: {ex.Message}");
+                    }
+
+                    if (!success)
+                    {
+                        stream.SetLength(0);
+
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    new BinaryFormatter().Serialize(stream, props[i].GetValue(_control)!);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                    byte[] bytes = new byte[(int)stream.Length];
-                    stream.Position = 0;
-                    stream.Read(bytes, 0, bytes.Length);
-                    using VARIANT data = (VARIANT)new BSTR(Convert.ToBase64String(bytes));
-                    propertyBag->Write(props[i].Name, data);
+                        new BinaryFormatter().Serialize(stream, sourceValue);
+#pragma warning restore
+                    }
+
+                    using VARIANT data = (VARIANT)new BSTR(Convert.ToBase64String(
+                        new ReadOnlySpan<byte>(stream.GetBuffer(), 0, (int)stream.Length)));
+                    propertyBag->Write(currentProperty.Name, data);
                     continue;
                 }
 
@@ -1597,7 +1634,7 @@ public partial class Control
                     byte[] data = (byte[])converter.ConvertTo(
                         context: null,
                         CultureInfo.InvariantCulture,
-                        props[i].GetValue(_control),
+                        currentProperty.GetValue(_control),
                         typeof(byte[]))!;
 
                     value = Convert.ToBase64String(data);
@@ -1606,7 +1643,7 @@ public partial class Control
                 if (value is not null)
                 {
                     using VARIANT variant = (VARIANT)(new BSTR(value));
-                    fixed (char* pszPropName = props[i].Name)
+                    fixed (char* pszPropName = currentProperty.Name)
                     {
                         propertyBag->Write(pszPropName, &variant);
                     }
