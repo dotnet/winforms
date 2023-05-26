@@ -11,66 +11,52 @@ namespace System.Windows.Forms;
 public partial class DataObject
 {
     /// <summary>
-    ///  Binder that restricts DataObject content deserialization to Bitmap type and
-    ///  serialization to strings and Bitmaps.
+    ///  Binder that restricts deserialization to Bitmap type and serialization to strings and Bitmaps.
     ///  Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
     /// </summary>
     private class BitmapBinder : SerializationBinder
     {
-        // Bitmap type lives in different assemblies in the .NET Framework and in .NET Core.
-        // However we allow desktop content to be deserialization in Core and Core content
-        // deserialized on desktop. To support this round trip,
-        // Bitmap type identity is unified to the desktop type during serialization
-        // and we use the desktop type name when filtering as well.
+        // Bitmap type lives in different assemblies in the .NET Framework and in .NET Core. To support serialization
+        // between both runtimes the .NET Framework identities are used.
         private const string AllowedTypeName = "System.Drawing.Bitmap";
         private const string AllowedAssemblyName = "System.Drawing";
-        // PublicKeyToken=b03f5f7f11d50a3a
+
+        // .NET Framework PublicKeyToken=b03f5f7f11d50a3a
         private static ReadOnlySpan<byte> AllowedToken => new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
 
-        /// <summary>
-        ///  Only safe to deserialize types are bypassing this callback, Strings
-        ///  and arrays of primitive types in particular. We are explicitly allowing
-        ///  System.Drawing.Bitmap type to bind using the default binder.
-        /// </summary>
-        /// <param name="assemblyName"></param>
-        /// <param name="typeName"></param>
-        /// <returns>null - continue with the default binder.</returns>
         public override Type? BindToType(string assemblyName, string typeName)
         {
-            if (string.CompareOrdinal(typeName, AllowedTypeName) == 0)
+            // Only safe to deserialize types are bypassing this callback. Strings and arrays of primitive types in
+            // particular. We are explicitly allowing the System.Drawing.Bitmap type to bind using the default binder.
+
+            if (AllowedTypeName.Equals(typeName, StringComparison.Ordinal))
             {
-                AssemblyName? nameToBind = null;
                 try
                 {
-                    nameToBind = new AssemblyName(assemblyName);
+                    AssemblyName nameToBind = new(assemblyName);
+                    if (AllowedAssemblyName.Equals(nameToBind.Name, StringComparison.Ordinal)
+                        && AllowedToken.SequenceEqual(nameToBind.GetPublicKeyToken()))
+                    {
+                        // Continue with the default binder.
+                        return null;
+                    }
                 }
-                catch
+                catch (Exception ex) when (ex is ArgumentException or FileLoadException)
                 {
-                }
-
-                if (nameToBind is not null
-                    && string.Equals(nameToBind.Name, AllowedAssemblyName, StringComparison.Ordinal)
-                    && nameToBind.GetPublicKeyToken().AsSpan().SequenceEqual(AllowedToken))
-                {
-                    return null;
                 }
             }
 
             throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
         }
 
-        /// <summary>
-        ///  Bitmap and string types are safe type to serialize/deserialize.
-        /// </summary>
-        /// <param name="serializedType"></param>
-        /// <param name="assemblyName"></param>
-        /// <param name="typeName"></param>
         public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
         {
-            // null strings will follow the default codepath in BinaryFormatter
+            // Null values will follow the default codepath in BinaryFormatter.
             assemblyName = null;
             typeName = null;
-            if (serializedType is not null && !serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
+
+            // Bitmap and string types are safe types to serialize/deserialize.
+            if (!serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
             {
                 throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, serializedType.FullName));
             }

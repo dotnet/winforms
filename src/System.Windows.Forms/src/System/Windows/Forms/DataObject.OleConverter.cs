@@ -319,7 +319,6 @@ public partial class DataObject
                 // object.  We identify a serialized object by writing the
                 // bytes for the guid serializedObjectID at the front
                 // of the stream.  Check for that here.
-                //
                 if (size > s_serializedObjectID.Length)
                 {
                     isSerializedObject = true;
@@ -333,7 +332,6 @@ public partial class DataObject
                     }
 
                     // Advance the byte pointer.
-                    //
                     if (isSerializedObject)
                     {
                         index = s_serializedObjectID.Length;
@@ -353,18 +351,12 @@ public partial class DataObject
         }
 
         /// <summary>
-        ///  Creates a new instance of the Object that has been persisted into the
-        ///  handle.
+        ///  Creates a new instance of the object that has been persisted into the handle.
         /// </summary>
         private static object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
         {
             Stream stream = ReadByteStreamFromHandle(handle, out bool isSerializedObject);
-            if (isSerializedObject)
-            {
-                return ReadObjectFromHandleDeserializer(stream, restrictDeserialization);
-            }
-
-            return stream;
+            return isSerializedObject ? ReadObjectFromHandleDeserializer(stream, restrictDeserialization) : stream;
         }
 
         private static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
@@ -372,36 +364,31 @@ public partial class DataObject
             long startPosition = stream.Position;
             try
             {
-                BinaryFormattedObject format = new(stream, leaveOpen: true);
-                if (format.TryGetPrimitiveType(out object? value))
+                if (new BinaryFormattedObject(stream, leaveOpen: true).TryGetFrameworkObject(out object? value))
                 {
                     return value;
                 }
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
-                // Couldn't parse for some reason, let the BinaryFormatter handle it.
+                // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
             }
-
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
 
             stream.Position = startPosition;
-            BinaryFormatter formatter = new BinaryFormatter();
-            if (restrictDeserialization)
-            {
-                formatter.Binder = new BitmapBinder();
-            }
 
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-            formatter.AssemblyFormat = FormatterAssemblyStyle.Simple;
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
-            return formatter.Deserialize(stream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+            return new BinaryFormatter()
+            {
+                Binder = restrictDeserialization ? new BitmapBinder() : null,
+                AssemblyFormat = FormatterAssemblyStyle.Simple
+            }.Deserialize(stream);
+#pragma warning restore SYSLIB0050
+#pragma warning restore SYSLIB0011
         }
 
         /// <summary>
-        ///  Parses the HDROP format and returns a list of strings using
-        ///  the DragQueryFile function.
+        ///  Parses the HDROP format and returns a list of strings using the DragQueryFile function.
         /// </summary>
         private static unsafe string[]? ReadFileListFromHandle(HDROP hdrop)
         {

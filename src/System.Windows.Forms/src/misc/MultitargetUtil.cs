@@ -6,55 +6,33 @@ namespace System.Resources;
 
 /// <summary>
 ///  Helper class supporting Multitarget type assembly qualified name resolution for ResX API.
-///  Note: this file is compiled into different assemblies (runtime and VSIP assemblies ...)
 /// </summary>
 internal static class MultitargetUtil
 {
     /// <summary>
-    ///  This method gets assembly info for the corresponding type. If the delegate
-    ///  is provided it is used to get this information.
+    ///  This method gets the assembly qualified name for the corresponding type, prefering
+    ///  the <paramref name="typeNameConverter"/> if provided.
     /// </summary>
-    public static string? GetAssemblyQualifiedName(Type? type, Func<Type, string>? typeNameConverter)
+    public static string? GetAssemblyQualifiedName(Type type, Func<Type, string>? typeNameConverter)
     {
+        if (type is null)
+        {
+            return null;
+        }
+
         string? assemblyQualifiedName = null;
 
-        if (type is not null)
+        if (typeNameConverter is not null)
         {
-            if (typeNameConverter is not null)
+            try
             {
-                try
-                {
-                    assemblyQualifiedName = typeNameConverter(type);
-                }
-                catch (Exception e)
-                {
-                    if (IsCriticalException(e))
-                    {
-                        throw;
-                    }
-                }
+                assemblyQualifiedName = typeNameConverter(type);
             }
-
-            if (string.IsNullOrEmpty(assemblyQualifiedName))
+            catch (Exception e) when (!e.IsCriticalException())
             {
-                assemblyQualifiedName = type.AssemblyQualifiedName;
             }
         }
 
-        return assemblyQualifiedName;
-    }
-
-    // ExecutionEngineException is obsolete and shouldn't be used (to catch, throw or reference) anymore.
-    // Pragma added to prevent converting the "type is obsolete" warning into build error.
-    private static bool IsCriticalException(Exception ex)
-    {
-        return ex is NullReferenceException
-                || ex is StackOverflowException
-                || ex is OutOfMemoryException
-                || ex is Threading.ThreadAbortException
-                || ex is ExecutionEngineException
-                || ex is IndexOutOfRangeException
-                || ex is AccessViolationException
-                || ex is Security.SecurityException;
+        return string.IsNullOrEmpty(assemblyQualifiedName) ? type.AssemblyQualifiedName : assemblyQualifiedName;
     }
 }

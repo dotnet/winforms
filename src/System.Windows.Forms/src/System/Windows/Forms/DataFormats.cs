@@ -16,134 +16,134 @@ namespace System.Windows.Forms;
 /// </summary>
 public static partial class DataFormats
 {
+    internal const string TextConstant = "Text";
+    internal const string UnicodeTextConstant = "UnicodeText";
+    internal const string DibConstant = "DeviceIndependentBitmap";
+    internal const string BitmapConstant = "Bitmap";
+    internal const string EmfConstant = "EnhancedMetafile";
+    internal const string WmfConstant = "MetaFilePict";
+    internal const string SymbolicLinkConstant = "SymbolicLink";
+    internal const string DifConstant = "DataInterchangeFormat";
+    internal const string TiffConstant = "TaggedImageFileFormat";
+    internal const string OemTextConstant = "OEMText";
+    internal const string PaletteConstant = "Palette";
+    internal const string PenDataConstant = "PenData";
+    internal const string RiffConstant = "RiffAudio";
+    internal const string WaveAudioConstant = "WaveAudio";
+    internal const string FileDropConstant = "FileDrop";
+    internal const string LocaleConstant = "Locale";
+    internal const string HtmlConstant = "HTML Format";
+    internal const string RtfConstant = "Rich Text Format";
+    internal const string CsvConstant = "Csv";
+    internal const string StringConstant = "System.String";
+    internal const string SerializableConstant = "WindowsForms10PersistentObject";
+
     /// <summary>
-    ///  Specifies the standard ANSI text format. This <see langword="static"/>
-    ///  field is read-only.
+    ///  Specifies the standard ANSI text format.
     /// </summary>
-    public static readonly string Text = "Text";
+    public static readonly string Text = TextConstant;
 
     /// <summary>
     ///  Specifies the standard Windows Unicode text format.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string UnicodeText = "UnicodeText";
+    public static readonly string UnicodeText = UnicodeTextConstant;
 
     /// <summary>
     ///  Specifies the Windows Device Independent Bitmap (DIB) format.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Dib = "DeviceIndependentBitmap";
+    public static readonly string Dib = DibConstant;
 
     /// <summary>
     ///  Specifies a Windows bitmap format.
-    ///  This <see langword="static"/> field is read-only. </summary>
-    public static readonly string Bitmap = "Bitmap";
+    /// </summary>
+    public static readonly string Bitmap = BitmapConstant;
 
     /// <summary>
     ///  Specifies the Windows enhanced metafile format.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string EnhancedMetafile = "EnhancedMetafile";
+    public static readonly string EnhancedMetafile = EmfConstant;
 
     /// <summary>
     ///  Specifies the Windows metafile format, which WinForms does not directly use.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string MetafilePict = "MetaFilePict";
+    public static readonly string MetafilePict = WmfConstant;
 
     /// <summary>
     ///  Specifies the Windows symbolic link format, which WinForms does not directly use.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string SymbolicLink = "SymbolicLink";
+    public static readonly string SymbolicLink = SymbolicLinkConstant;
 
     /// <summary>
     ///  Specifies the Windows data interchange format, which WinForms does not directly use.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Dif = "DataInterchangeFormat";
+    public static readonly string Dif = DifConstant;
 
     /// <summary>
     ///  Specifies the Tagged Image File Format (TIFF), which WinForms does not directly use.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Tiff = "TaggedImageFileFormat";
+    public static readonly string Tiff = TiffConstant;
 
     /// <summary>
     ///  Specifies the standard Windows original equipment manufacturer (OEM) text format.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string OemText = "OEMText";
+    public static readonly string OemText = OemTextConstant;
 
     /// <summary>
     ///  Specifies the Windows palette format.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Palette = "Palette";
+    public static readonly string Palette = PaletteConstant;
 
     /// <summary>
     ///  Specifies the Windows pen data format, which consists of pen strokes for handwriting
-    ///  software; Win Formsdoes not use this format.
-    ///  This <see langword="static"/> field is read-only.
+    ///  software; WinForms does not use this format.
     /// </summary>
-    public static readonly string PenData = "PenData";
+    public static readonly string PenData = PenDataConstant;
 
     /// <summary>
-    ///  Specifies the Resource Interchange File Format (RIFF) audio format, which WinForms
-    ///  does not directly use.
-    ///  This <see langword="static"/> field is read-only.
+    ///  Specifies the Resource Interchange File Format (RIFF) audio format, which WinForms does not directly use.
     /// </summary>
-    public static readonly string Riff = "RiffAudio";
+    public static readonly string Riff = RiffConstant;
 
     /// <summary>
-    ///  Specifies the wave audio format, which Win Forms does not
-    ///  directly use. This <see langword="static"/> field is read-only.
+    ///  Specifies the wave audio format, which Win Forms does not directly use.
     /// </summary>
-    public static readonly string WaveAudio = "WaveAudio";
+    public static readonly string WaveAudio = WaveAudioConstant;
 
     /// <summary>
     ///  Specifies the Windows file drop format, which WinForms does not directly use.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string FileDrop = "FileDrop";
+    public static readonly string FileDrop = FileDropConstant;
 
     /// <summary>
     ///  Specifies the Windows culture format, which WinForms does not directly use.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Locale = "Locale";
+    public static readonly string Locale = LocaleConstant;
 
     /// <summary>
     ///  Specifies text consisting of HTML data.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Html = "HTML Format";
+    public static readonly string Html = HtmlConstant;
 
     /// <summary>
     ///  Specifies text consisting of Rich Text Format (RTF) data.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Rtf = "Rich Text Format";
+    public static readonly string Rtf = RtfConstant;
 
     /// <summary>
     ///  Specifies a comma-separated value (CSV) format, which is a common interchange format
     ///  used by spreadsheets. This format is not used directly by WinForms.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string CommaSeparatedValue = "Csv";
+    public static readonly string CommaSeparatedValue = CsvConstant;
 
     /// <summary>
-    ///  Specifies the Win Forms string class format, which WinForms uses to store string
-    ///  objects.
-    ///  This <see langword="static"/> field is read-only.
+    ///  Specifies the WinForms string class format, which WinForms uses to store string objects.
     /// </summary>
-    public static readonly string StringFormat = typeof(string).FullName!;
+    public static readonly string StringFormat = StringConstant;
 
     /// <summary>
     ///  Specifies a format that encapsulates any type of WinForms object.
-    ///  This <see langword="static"/> field is read-only.
     /// </summary>
-    public static readonly string Serializable = Application.WindowsFormsVersion + "PersistentObject";
+    public static readonly string Serializable = SerializableConstant;
 
     private static Format[]? s_formatList;
     private static int s_formatCount;
@@ -151,8 +151,7 @@ public static partial class DataFormats
     private static readonly object s_internalSyncObject = new object();
 
     /// <summary>
-    ///  Gets a <see cref="Format"/> with the Windows
-    ///  Clipboard numeric ID and name for the specified format.
+    ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified format.
     /// </summary>
     public static Format GetFormat(string format)
     {
@@ -197,8 +196,7 @@ public static partial class DataFormats
     }
 
     /// <summary>
-    ///  Gets a <see cref="Format"/> with the Windows
-    ///  Clipboard numeric ID and name for the specified ID.
+    ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
     /// </summary>
     public static Format GetFormat(int id)
     {
@@ -261,27 +259,30 @@ public static partial class DataFormats
         {
             s_formatList = new Format[]
             {
-                //         Text name        Win32 format ID
-                new Format(UnicodeText,       (int)User32.CF.UNICODETEXT),
-                new Format(Text,              (int)User32.CF.TEXT),
-                new Format(Bitmap,            (int)User32.CF.BITMAP),
-                new Format(MetafilePict,      (int)User32.CF.METAFILEPICT),
-                new Format(EnhancedMetafile,  (int)User32.CF.ENHMETAFILE),
-                new Format(Dif,               (int)User32.CF.DIF),
-                new Format(Tiff,              (int)User32.CF.TIFF),
-                new Format(OemText,           (int)User32.CF.OEMTEXT),
-                new Format(Dib,               (int)User32.CF.DIB),
-                new Format(Palette,           (int)User32.CF.PALETTE),
-                new Format(PenData,           (int)User32.CF.PENDATA),
-                new Format(Riff,              (int)User32.CF.RIFF),
-                new Format(WaveAudio,         (int)User32.CF.WAVE),
-                new Format(SymbolicLink,      (int)User32.CF.SYLK),
-                new Format(FileDrop,          (int)User32.CF.HDROP),
-                new Format(Locale,            (int)User32.CF.LOCALE)
+                //         Text name                  Win32 format ID
+                new Format(UnicodeTextConstant,       (int)User32.CF.UNICODETEXT),
+                new Format(TextConstant,              (int)User32.CF.TEXT),
+                new Format(BitmapConstant,            (int)User32.CF.BITMAP),
+                new Format(WmfConstant,               (int)User32.CF.METAFILEPICT),
+                new Format(EmfConstant,               (int)User32.CF.ENHMETAFILE),
+                new Format(DifConstant,               (int)User32.CF.DIF),
+                new Format(TiffConstant,              (int)User32.CF.TIFF),
+                new Format(OemTextConstant,           (int)User32.CF.OEMTEXT),
+                new Format(DibConstant,               (int)User32.CF.DIB),
+                new Format(PaletteConstant,           (int)User32.CF.PALETTE),
+                new Format(PenDataConstant,           (int)User32.CF.PENDATA),
+                new Format(RiffConstant,              (int)User32.CF.RIFF),
+                new Format(WaveAudioConstant,         (int)User32.CF.WAVE),
+                new Format(SymbolicLinkConstant,      (int)User32.CF.SYLK),
+                new Format(FileDropConstant,          (int)User32.CF.HDROP),
+                new Format(LocaleConstant,            (int)User32.CF.LOCALE)
             };
 
             s_formatCount = s_formatList.Length;
         }
-        else s_formatList ??= Array.Empty<Format>();
+        else
+        {
+            s_formatList ??= Array.Empty<Format>();
+        }
     }
 }
