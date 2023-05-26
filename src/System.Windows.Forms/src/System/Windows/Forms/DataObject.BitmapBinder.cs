@@ -27,7 +27,7 @@ public partial class DataObject
         public override Type? BindToType(string assemblyName, string typeName)
         {
             // Only safe to deserialize types are bypassing this callback. Strings and arrays of primitive types in
-            // particular. We are explicitly allowing System.Drawing.Bitmap type to bind using the default binder.
+            // particular. We are explicitly allowing the System.Drawing.Bitmap type to bind using the default binder.
 
             if (AllowedTypeName.Equals(typeName, StringComparison.Ordinal))
             {
