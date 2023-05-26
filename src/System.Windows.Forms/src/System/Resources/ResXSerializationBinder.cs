@@ -81,7 +81,7 @@ internal class ResXSerializationBinder : SerializationBinder
 
     public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
     {
-        // Normally we don't change the type name when changing the target framework, only the assembly name.
+        // Normally, we don't change the type name when changing the target framework, only the assembly name.
         // Setting the out values to null indicates that we want default handling.
 
         if (_typeNameConverter is not null)
