@@ -27,9 +27,9 @@ public partial class PrintPreviewControl
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        public override Rectangle Bounds
-            => _owningPrintPreviewControl.IsHandleCreated && _owningPrintPreviewControl.Parent is not null
-                ? _owningPrintPreviewControl.Parent.RectangleToScreen(_owningPrintPreviewControl.Bounds)
+        internal override Rectangle BoundingRectangle
+            => _owningPrintPreviewControl.IsHandleCreated
+                ? _owningPrintPreviewControl.GetToolNativeScreenRectangle()
                 : Rectangle.Empty;
     }
 }
