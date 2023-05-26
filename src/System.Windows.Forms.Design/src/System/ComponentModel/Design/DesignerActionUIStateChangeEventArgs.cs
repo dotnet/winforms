@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 /// <summary>
@@ -14,7 +12,7 @@ public class DesignerActionUIStateChangeEventArgs : EventArgs
     /// <summary>
     ///  Constructor that requires the object in question, the type of change and the remaining actionlists left for the object on the related object.
     /// </summary>
-    public DesignerActionUIStateChangeEventArgs(object relatedObject, DesignerActionUIStateChangeType changeType)
+    public DesignerActionUIStateChangeEventArgs(object? relatedObject, DesignerActionUIStateChangeType changeType)
     {
         RelatedObject = relatedObject;
         ChangeType = changeType;
@@ -23,7 +21,7 @@ public class DesignerActionUIStateChangeEventArgs : EventArgs
     /// <summary>
     ///  The object this change is related to.
     /// </summary>
-    public object RelatedObject { get; }
+    public object? RelatedObject { get; }
 
     /// <summary>
     ///  The type of changed that caused the related event to be thrown.
