@@ -5,7 +5,6 @@
 using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
-using Xunit.Abstractions;
 using static Interop;
 
 namespace System.Windows.Forms.UITests;
@@ -13,12 +12,10 @@ namespace System.Windows.Forms.UITests;
 public class SendInput
 {
     private readonly Func<Task> _waitForIdleAsync;
-    private readonly ITestOutputHelper _testOutputHelper;
 
-    public SendInput(Func<Task> waitForIdleAsync, ITestOutputHelper testOutputHelper)
+    public SendInput(Func<Task> waitForIdleAsync)
     {
         _waitForIdleAsync = waitForIdleAsync;
-        _testOutputHelper = testOutputHelper;
     }
 
     internal async Task SendAsync(CustomForm window, params object[] keys)
@@ -80,56 +77,38 @@ public class SendInput
         }
 
         SetForegroundWindow(window);
-        //InputSimulator inputSimulator = new InputSimulator();
-        actions(new InputSimulator());
-        Thread.Sleep(100);
-        /*    if (window.HandleInternal != IntPtr.Zero)
-            {
-                // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again.
-                // window.ResetManualResetEventSlim();
-                window.TestKeyProcessed = false;
-                // Sending TestKey as end of the input message. SendInput is async and might have not been dispatched to the
-                // control before we proceed with further verifications. TestKey is introduced to helps synchronize the
-                // input being sent and confirms that the underlying control has received input before proceeding.
-                window.Focus();
-                new InputSimulator().Keyboard.KeyPress(CustomForm.TestKey);
-                _testOutputHelper.WriteLine($"TestKey sent to window - {window.HandleInternal}");
-                Thread.Sleep(100);
-                await Task.Run(() =>
-                {
-                    int timeOut = 15000;
-                    while (!window.TestKeyProcessed && timeOut > 0 && !window.ParentClosed)
-                    {
-                        Thread.Sleep(100);
-                        timeOut -= 100;
-                    }
-
-                    if (timeOut <= 0)
-                    {
-                        throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
-                    }
-                });
-
-                await Task.Run(() =>
-                {
-                    // Wait for the completion of input processing in CustomForm or until CustomForm is closed/destroyed by the
-                    // preceding input sent before the TestKey input, and block the thread accordingly.
-                    if (!window.WaitOnManualResetEventSlim(5000))
-                    {
-                        if (window.WaitOnManualResetEventSlim(15000))
-                        {
-                            _testOutputHelper.WriteLine("Increased timeout helped.");
-                            throw new TimeoutException($"Increased timeout required.");
-                        }
-
-                        _testOutputHelper.WriteLine($"Increased timeout didn't help.");
-                        throw new TimeoutException($"Timeout reached while waiting to process SendInput. {window.HandleInternal}");
-                    }
-                });
-
-            }*/
-
+        actions(ControlTestBase.s_inputSimulator);
         await _waitForIdleAsync();
+
+        if (window.DoNotSendTestInput)
+        {
+            // Scenarios where Application level Message filter is bypassed. ex: DragDrop that has capture could not let test input to be sent to Message filter.
+            // We add small delay as work around for SendInput synchronization.
+            Thread.Sleep(100);
+        }
+        else
+        // If Window/Form is not closed, Wait for TestInput to be received by the Form before proceeding with further verification.
+        if (window.HandleInternal != IntPtr.Zero && !window.DoNotSendTestInput && !window.ParentClosed)
+        {
+            Thread.Sleep(10);
+
+            // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again (Once TestInput is received).
+            window.ResetManualResetEventSlim();
+
+            // To ensure proper synchronization between the input being sent and further verifications, we introduce the TestKey
+            // as the end of the input message. Since SendInput is an asynchronous operation and may not have been dispatched to
+            // the control yet, the TestKey helps confirm that the underlying control has received the input before we proceed.
+            ControlTestBase.s_inputSimulator.Keyboard.KeyPress(CustomForm.TestKey);
+
+            await Task.Run(() =>
+            {
+                // Wait for the completion of input(sent via SendInput) processing.
+                if (!window.WaitOnManualResetEventSlim(5000))
+                {
+                    throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
+                }
+            });
+        }
     }
 
     private static HWND GetForegroundWindow()

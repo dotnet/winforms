@@ -30,7 +30,7 @@ public class DataGridViewTests : ControlTestBase
             Point targetPoint = ToVirtualPoint(dataGridView.PointToScreen(cellCenter));
 
             // Move mouse cursor over any cell of the first row to trigger a tooltip.
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y));
 
@@ -59,7 +59,7 @@ public class DataGridViewTests : ControlTestBase
 
             // Move mouse cursor over any cell of the first row to trigger a tooltip.
             // Wait 1 second to make sure that the toolTip appeared, it has some delay (500 ms by default).
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y).Sleep(TimeSpan.FromMilliseconds(1000)));
 

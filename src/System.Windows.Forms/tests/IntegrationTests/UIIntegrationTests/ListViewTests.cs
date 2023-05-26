@@ -32,7 +32,7 @@ public class ListViewTests : ControlTestBase
 
             Point itemCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].Bounds));
             await MoveMouseAsync(form, itemCenter);
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.LeftButtonDoubleClick());
 
@@ -59,51 +59,51 @@ public class ListViewTests : ControlTestBase
 
             item1.Selected = true;
 
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
             Assert.False(item1.Selected);
             Assert.True(item2.Selected);
             Assert.False(item3.Selected);
             Assert.False(collapsedStateChangedFired);
 
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
             Assert.False(item1.Selected);
             Assert.False(item2.Selected);
             Assert.True(item3.Selected);
             Assert.False(collapsedStateChangedFired);
 
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT));
             Assert.False(item1.Selected);
             Assert.False(item2.Selected);
             Assert.True(item3.Selected);
             Assert.False(collapsedStateChangedFired);
 
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT).KeyPress(VIRTUAL_KEY.VK_LEFT));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT).KeyPress(VIRTUAL_KEY.VK_LEFT));
             Assert.True(item1.Selected);
             Assert.False(item2.Selected);
             Assert.False(item3.Selected);
             Assert.False(collapsedStateChangedFired);
 
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT));
             Assert.True(item1.Selected);
             Assert.False(item2.Selected);
             Assert.False(item3.Selected);
             Assert.False(collapsedStateChangedFired);
 
             // Selects header, which selects all items in group
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_UP));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_UP));
             Assert.True(item2.Selected);
             Assert.True(item2.Selected);
             Assert.True(item2.Selected);
             Assert.False(collapsedStateChangedFired);
 
             // Collapse group
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT).KeyPress(VIRTUAL_KEY.VK_UP).KeyPress(VIRTUAL_KEY.VK_LEFT));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_LEFT).KeyPress(VIRTUAL_KEY.VK_UP).KeyPress(VIRTUAL_KEY.VK_LEFT));
             Assert.Equal(ListViewGroupCollapsedState.Collapsed, group.CollapsedState);
             Assert.True(collapsedStateChangedFired);
 
             // Expand group
             collapsedStateChangedFired = false;
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_UP).KeyPress(VIRTUAL_KEY.VK_RIGHT));
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_UP).KeyPress(VIRTUAL_KEY.VK_RIGHT));
             Assert.True(collapsedStateChangedFired);
             Assert.Equal(ListViewGroupCollapsedState.Expanded, group.CollapsedState);
         });
@@ -491,13 +491,13 @@ public class ListViewTests : ControlTestBase
 
             Point listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[0].SubItems[1].Bounds));
             await MoveMouseAsync(form, listViewCenter);
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                form,
                inputSimulator => inputSimulator.Keyboard.KeyDown(VIRTUAL_KEY.VK_SHIFT)
                                                 .Mouse.LeftButtonClick());
             listViewCenter = GetCenter(listView.RectangleToScreen(listView.Items[2].SubItems[1].Bounds));
             await MoveMouseAsync(form, listViewCenter);
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                form,
                inputSimulator => inputSimulator.Mouse.LeftButtonClick()
                                                .Keyboard.KeyUp(VIRTUAL_KEY.VK_SHIFT));

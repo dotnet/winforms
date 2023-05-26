@@ -650,7 +650,7 @@ public class SiteNestedContainerTests
         Assert.Null(component.Site.Name);
     }
 
-    [Fact(Skip = "Unstable test. See https://github.com/dotnet/winforms/issues/1151")]
+    [Fact]
     public void SiteNestedContainer_Add_Unloading_Nop()
     {
         using var surface = new SubDesignSurface();

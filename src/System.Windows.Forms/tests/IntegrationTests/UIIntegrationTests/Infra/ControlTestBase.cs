@@ -24,6 +24,8 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     private Point? _mousePosition;
 
+    internal static readonly InputSimulator s_inputSimulator = new InputSimulator();
+
     static ControlTestBase()
     {
         DataCollectionService.InstallFirstChanceExceptionHandler();
@@ -55,7 +57,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected JoinableTaskFactory JoinableTaskFactory { get; private set; } = null!;
 
-    protected SendInput InputSimulator => new(WaitForIdleAsync, TestOutputHelper!);
+    protected SendInput Input => new(WaitForIdleAsync);
 
     public virtual Task InitializeAsync()
     {
@@ -190,7 +192,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         var virtualPoint = ToVirtualPoint(point);
         TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
 
-        await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X, virtualPoint.Y));
+        await Input.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X, virtualPoint.Y));
 
         // ⚠ The call to GetCursorPos is required for correct behavior.
         if (!PInvoke.GetCursorPos(out Point actualPoint))

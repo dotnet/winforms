@@ -36,13 +36,13 @@ public class DragDropTests : ControlTestBase
             await MoveMouseToControlAsync(form.ListDragSource);
 
             // Select the item under the caret
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
             var targetMousePosition = ToVirtualPoint(form.ListDragTarget.PointToScreen(new Point(20, 20)));
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
@@ -64,7 +64,7 @@ public class DragDropTests : ControlTestBase
 
         Button? button = null;
         object? data = null;
-        await RunFormWithoutControlAsync(() => new CustomForm(), async (form) =>
+        await RunFormWithoutControlAsync(() => new CustomForm(doNotSendTestInput: true), async (form) =>
         {
             form.AllowDrop = true;
             form.ClientSize = new Size(100, 100);
@@ -105,7 +105,7 @@ public class DragDropTests : ControlTestBase
             var virtualPointStart = ToVirtualPoint(startCoordinates);
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator
                     => inputSimulator.Mouse
@@ -211,7 +211,7 @@ public class DragDropTests : ControlTestBase
 
                 Assert.Equal((int)HRESULT.S_OK, uiAutomationElement?.SetFocus());
 
-                await InputSimulator.SendAsync(
+                await Input.SendAsync(
                         dragDropForm,
                         inputSimulator
                             => inputSimulator.Mouse
@@ -280,7 +280,7 @@ public class DragDropTests : ControlTestBase
 
         ListViewItem? listViewItem = null;
         object? data = null;
-        await RunFormWithoutControlAsync(() => new CustomForm(), async (form) =>
+        await RunFormWithoutControlAsync(() => new CustomForm(doNotSendTestInput: true), async (form) =>
         {
             form.AllowDrop = true;
             form.ClientSize = new Size(100, 100);
@@ -320,7 +320,7 @@ public class DragDropTests : ControlTestBase
             var virtualPointStart = ToVirtualPoint(startCoordinates);
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator
                     => inputSimulator.Mouse
@@ -384,7 +384,7 @@ public class DragDropTests : ControlTestBase
             var virtualPointStart = ToVirtualPoint(startCoordinates);
             var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator
                     => inputSimulator.Mouse
@@ -400,7 +400,7 @@ public class DragDropTests : ControlTestBase
                         .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
                         .LeftButtonUp());
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator
                     => inputSimulator.Mouse
@@ -434,7 +434,7 @@ public class DragDropTests : ControlTestBase
             Point virtualPointStart = ToVirtualPoint(startCoordinates);
             startCoordinates.Offset(155, 0);
             Point virtualPointEnd = ToVirtualPoint(startCoordinates);
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
                                                                 .LeftButtonDown()
@@ -462,7 +462,7 @@ public class DragDropTests : ControlTestBase
             string dragAcceptRtfTextContent = richTextBox.Text;
 
             await MoveMouseToControlAsync(form.ToolStrip);
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
@@ -470,14 +470,14 @@ public class DragDropTests : ControlTestBase
             toolStripItemCoordinates.Offset(0, 40);
             Point virtualToolStripItemCoordinates = ToVirtualPoint(toolStripItemCoordinates);
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualToolStripItemCoordinates.X, virtualToolStripItemCoordinates.Y));
 
             Point virtualPointStart = virtualToolStripItemCoordinates;
             toolStripItemCoordinates.Offset(50, 50);
             Point virtualPointEnd = ToVirtualPoint(toolStripItemCoordinates);
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X, virtualPointStart.Y)
                                                                 .LeftButtonDown()
@@ -606,7 +606,7 @@ public class DragDropTests : ControlTestBase
 
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public DragDropForm(ITestOutputHelper testOutputHelper)
+        public DragDropForm(ITestOutputHelper testOutputHelper) : base(doNotSendTestInput: true)
         {
             ListDragSource = new ListBox();
             ListDragTarget = new ListBox();
@@ -915,7 +915,7 @@ public class DragDropTests : ControlTestBase
         public RichTextBox RichTextBoxDropTarget;
         public ToolStrip ToolStrip = new();
 
-        public DragImageDropDescriptionForm(ITestOutputHelper testOutputHelper)
+        public DragImageDropDescriptionForm(ITestOutputHelper testOutputHelper) : base(doNotSendTestInput: true)
         {
             _testOutputHelper = testOutputHelper;
             PictureBoxDragSource = new PictureBox();

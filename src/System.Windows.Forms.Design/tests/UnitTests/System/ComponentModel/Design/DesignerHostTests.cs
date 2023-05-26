@@ -882,7 +882,7 @@ public class DesignerHostTests
         mockTypeDescriptionProviderService.Verify(s => s.GetProvider(component), Times.Never());
     }
 
-    [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+    [WinFormsFact]
     public void DesignerHost_Add_DuringUnload_ThrowsException()
     {
         var surface = new SubDesignSurface();
@@ -1810,7 +1810,7 @@ public class DesignerHostTests
         Assert.Throws<InvalidOperationException>(() => disposable.Dispose());
     }
 
-    [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+    [WinFormsFact]
     public void DesignerHost_Add_DesignerDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
     {
         var surface = new SubDesignSurface();
@@ -1825,7 +1825,7 @@ public class DesignerHostTests
         Assert.False(host.Loading);
     }
 
-    [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1151")]
+    [WinFormsFact]
     public void DesignerHost_Add_ComponentDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
     {
         var surface = new SubDesignSurface();
@@ -1840,7 +1840,7 @@ public class DesignerHostTests
         Assert.False(host.Loading);
     }
 
-    [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+    [WinFormsFact]
     public void DesignerHost_Add_RootDesignerDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
     {
         var surface = new SubDesignSurface();
@@ -1853,7 +1853,7 @@ public class DesignerHostTests
         Assert.False(host.Loading);
     }
 
-    [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+    [WinFormsFact]
     public void DesignerHost_Add_RootComponentDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
     {
         var surface = new SubDesignSurface();

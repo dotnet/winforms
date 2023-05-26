@@ -125,7 +125,7 @@ public class DesignBehaviorsTests : ControlTestBase
                 startCoordinates.Offset(110, 50);
                 var virtualPointEnd = ToVirtualPoint(startCoordinates);
 
-                await InputSimulator.SendAsync(
+                await Input.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
                                                           .LeftButtonDown()

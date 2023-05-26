@@ -71,7 +71,7 @@ public class FontMetrics
         Assert.Equal(height, extent.Height);
     }
 
-    [Theory(Skip = "Flaky in debug builds. See: https://github.com/dotnet/winforms/issues/8612")]
+    [Theory]
     [MemberData(nameof(MeasureTextData))]
     public void Font_MeasureText(string family, float size, Size proposedSize, uint dt, Size expected)
     {

@@ -146,7 +146,7 @@ public class PropertyManagerTests
         mockDataSource.Verify(o => o.EndEdit(), Times.Exactly(2));
     }
 
-    [WinFormsTheory(Skip = "Flaky test, see: https://github.com/dotnet/winforms/issues/1030")]
+    [WinFormsTheory]
     [InlineData(true, 0)]
     [InlineData(false, 1)]
     public void PropertyManager_EndCurrentEdit_IEditableObjectCurrentNotSuccess_DoesNotCallEndEdit(bool cancel, int expectedCallCount)

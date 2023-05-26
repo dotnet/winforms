@@ -45,7 +45,7 @@ public class RichTextBoxTests : ControlTestBase
                 pt.X += 2;
                 pt.Y += 2;
                 await MoveMouseAsync(form, pt);
-                await InputSimulator.SendAsync(
+                await Input.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Mouse.LeftButtonClick());
             }
@@ -102,7 +102,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 pt.X += 2;
                 pt.Y += 2;
                 await MoveMouseAsync(form, pt);
-                await InputSimulator.SendAsync(
+                await Input.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Mouse.LeftButtonClick());
             }
@@ -159,7 +159,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 pt.X += 2;
                 pt.Y += 2;
                 await MoveMouseAsync(form, pt);
-                await InputSimulator.SendAsync(
+                await Input.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Mouse.LeftButtonClick());
             }

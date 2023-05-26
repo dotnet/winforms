@@ -40,7 +40,7 @@ public class ButtonTests : ControlTestBase
             Assert.Equal(DialogResult.None, form.DialogResult);
             Assert.True(form.Visible);
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
@@ -61,7 +61,7 @@ public class ButtonTests : ControlTestBase
 
             Assert.True(button.Focus());
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_SPACE));
 
@@ -79,7 +79,7 @@ public class ButtonTests : ControlTestBase
 
             Assert.True(button.Focus());
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
 
@@ -95,7 +95,7 @@ public class ButtonTests : ControlTestBase
         {
             form.CancelButton = button;
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
 
@@ -115,7 +115,7 @@ public class ButtonTests : ControlTestBase
             var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2);
             await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
@@ -139,7 +139,7 @@ public class ButtonTests : ControlTestBase
             var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
             await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
@@ -165,7 +165,7 @@ public class ButtonTests : ControlTestBase
             var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2);
             await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
@@ -195,7 +195,7 @@ public class ButtonTests : ControlTestBase
             var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
             await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
@@ -224,13 +224,13 @@ public class ButtonTests : ControlTestBase
             control2.Click += (sender, e) => control2ClickCount++;
 
             await MoveMouseToControlAsync(control1);
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
             Assert.Equal(1, control1ClickCount);
             Assert.Equal(0, control2ClickCount);
 
             await MoveMouseToControlAsync(control2);
-            await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+            await Input.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
             Assert.Equal(1, control1ClickCount);
             Assert.Equal(1, control2ClickCount);
@@ -258,7 +258,7 @@ public class ButtonTests : ControlTestBase
             Point virtualPoint = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X),
                 (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
@@ -293,7 +293,7 @@ public class ButtonTests : ControlTestBase
             int verticalResolution = primaryMonitor.Height;
             Point virtualPoint = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
             Point virtualPoint1 = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen1.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen1.Y));
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse
                     .LeftButtonDown()
@@ -334,7 +334,7 @@ public class ButtonTests : ControlTestBase
             await MoveMouseToControlAsync(button);
 
             // Send the Enter press
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RETURN));
 
@@ -354,7 +354,7 @@ public class ButtonTests : ControlTestBase
             button.Click += (x, y) => wasClicked = true;
 
             // Send the shortcut ALT+C (the same as SendKeys.SendWait("%C"))
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LMENU, VIRTUAL_KEY.VK_C));
 
@@ -373,7 +373,7 @@ public class ButtonTests : ControlTestBase
             button.Click += (x, y) => wasClicked = true;
 
             // Send a random ALT+L (the same as SendKeys.SendWait("%l"))
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LMENU, VIRTUAL_KEY.VK_L));
 

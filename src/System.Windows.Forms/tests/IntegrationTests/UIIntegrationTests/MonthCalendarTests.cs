@@ -29,7 +29,7 @@ public class MonthCalendarTests : ControlTestBase
         await RunTestAsync(async (form, calendar) =>
         {
             await MoveMouseToControlAsync(calendar);
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.LeftButtonClick());
         });
@@ -40,7 +40,7 @@ public class MonthCalendarTests : ControlTestBase
     {
         await RunTestAsync(async (form, calendar) =>
         {
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard
                                                 .KeyPress(VIRTUAL_KEY.VK_RIGHT)
@@ -53,7 +53,7 @@ public class MonthCalendarTests : ControlTestBase
     {
         await RunTestAsync(async (form, calendar) =>
         {
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard
                                                 .KeyPress(VIRTUAL_KEY.VK_RIGHT)
@@ -151,7 +151,7 @@ public class MonthCalendarTests : ControlTestBase
             TaskCompletionSource<VoidResult> dateChanged = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
             calendar.DateChanged += (sender, e) => dateChanged.TrySetResult(default);
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Mouse.LeftButtonClick());
 
@@ -185,7 +185,7 @@ public class MonthCalendarTests : ControlTestBase
     private async Task ClickOnDateAsync(CustomForm form, MonthCalendar calendar, DateTime date)
     {
         await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
-        await InputSimulator.SendAsync(
+        await Input.SendAsync(
             form,
             inputSimulator => inputSimulator.Mouse.LeftButtonClick());
     }
@@ -193,7 +193,7 @@ public class MonthCalendarTests : ControlTestBase
     private async Task ClickOnDateTwiceAsync(CustomForm form, MonthCalendar calendar, DateTime date)
     {
         await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
-        await InputSimulator.SendAsync(
+        await Input.SendAsync(
             form,
             inputSimulator => inputSimulator.Mouse
                                             .LeftButtonClick()

@@ -36,8 +36,9 @@ public class FormTests : ControlTestBase
             form.Size = new Size(300, 310);
 
             form.WindowState = windowState;
+            form.DoNotSendTestInput = true;
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_Z));
 
@@ -45,7 +46,7 @@ public class FormTests : ControlTestBase
             await Task.Delay(SnapLayoutDelayMS);
 
             // Snap left
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT)
                                                          .KeyPress(VIRTUAL_KEY.VK_RETURN));
@@ -56,7 +57,7 @@ public class FormTests : ControlTestBase
             // user can select one to dock next to our form. It also takes the keyboard focus away.
             // If left in this state, subsequently run tests will fail since keyboard focus is not
             // given to any newly launched window until this panel is dismissed.
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
 
@@ -96,7 +97,7 @@ public class FormTests : ControlTestBase
 
             form.WindowState = windowState;
 
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_Z));
 
@@ -104,7 +105,7 @@ public class FormTests : ControlTestBase
             await Task.Delay(SnapLayoutDelayMS);
 
             // Snap right
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_RIGHT)
                                                          .KeyPress(VIRTUAL_KEY.VK_RIGHT)
@@ -116,7 +117,7 @@ public class FormTests : ControlTestBase
             // user can select one to dock next to our form. It also takes the keyboard focus away.
             // If left in this state, subsequently run tests will fail since keyboard focus is not
             // given to any newly launched window until this panel is dismissed.
-            await InputSimulator.SendAsync(
+            await Input.SendAsync(
                 form,
                 inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
 

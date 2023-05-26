@@ -10,8 +10,10 @@ namespace System.Windows.Forms.UITests
     {
         private ManualResetEventSlim? _manualResetEventSlim;
         internal const VIRTUAL_KEY TestKey = VIRTUAL_KEY.VK_NUMLOCK;
+
+        public bool DoNotSendTestInput { get; internal set; }
+
         private readonly InputRedirector _messageFilter;
-        internal bool TestKeyProcessed;
         internal bool ParentClosed;
 
         public void ResetManualResetEventSlim()
@@ -37,8 +39,9 @@ namespace System.Windows.Forms.UITests
             return _manualResetEventSlim.Wait(timeOut);
         }
 
-        public CustomForm ()
+        public CustomForm (bool doNotSendTestInput = false)
         {
+            DoNotSendTestInput = doNotSendTestInput;
             _messageFilter = new InputRedirector(this);
             Application.AddMessageFilter(_messageFilter);
         }
