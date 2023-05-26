@@ -351,7 +351,7 @@ public partial class DataObject
         }
 
         /// <summary>
-        ///  Creates a new instance of the Object that has been persisted into the handle.
+        ///  Creates a new instance of the object that has been persisted into the handle.
         /// </summary>
         private static object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
         {
