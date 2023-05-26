@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
-
 namespace System.Windows.Forms;
 
 public partial class ToolStripMenuItem
