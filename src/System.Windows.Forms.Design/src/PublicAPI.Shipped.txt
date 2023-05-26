@@ -178,14 +178,14 @@
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category, string description, bool includeAsDesignerVerb) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.get -> System.ComponentModel.IComponent
 ~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.set -> void
-~System.ComponentModel.Design.DesignerActionService.Add(System.ComponentModel.IComponent comp, System.ComponentModel.Design.DesignerActionList actionList) -> void
-~System.ComponentModel.Design.DesignerActionService.Add(System.ComponentModel.IComponent comp, System.ComponentModel.Design.DesignerActionListCollection designerActionListCollection) -> void
-~System.ComponentModel.Design.DesignerActionService.Contains(System.ComponentModel.IComponent comp) -> bool
-~System.ComponentModel.Design.DesignerActionService.DesignerActionService(System.IServiceProvider serviceProvider) -> void
-~System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent component) -> System.ComponentModel.Design.DesignerActionListCollection
-~System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.Design.DesignerActionList actionList) -> void
-~System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.IComponent comp) -> void
-~System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.IComponent comp, System.ComponentModel.Design.DesignerActionList actionList) -> void
+System.ComponentModel.Design.DesignerActionService.Add(System.ComponentModel.IComponent! comp, System.ComponentModel.Design.DesignerActionList! actionList) -> void
+System.ComponentModel.Design.DesignerActionService.Add(System.ComponentModel.IComponent! comp, System.ComponentModel.Design.DesignerActionListCollection! designerActionListCollection) -> void
+System.ComponentModel.Design.DesignerActionService.Contains(System.ComponentModel.IComponent! comp) -> bool
+System.ComponentModel.Design.DesignerActionService.DesignerActionService(System.IServiceProvider? serviceProvider) -> void
+System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent! component) -> System.ComponentModel.Design.DesignerActionListCollection!
+System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.Design.DesignerActionList! actionList) -> void
+System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.IComponent! comp) -> void
+System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.IComponent! comp, System.ComponentModel.Design.DesignerActionList! actionList) -> void
 ~System.ComponentModel.Design.DesignerActionUIService.HideUI(System.ComponentModel.IComponent component) -> void
 ~System.ComponentModel.Design.DesignerActionUIService.Refresh(System.ComponentModel.IComponent component) -> void
 ~System.ComponentModel.Design.DesignerActionUIService.ShouldAutoShow(System.ComponentModel.IComponent component) -> bool
@@ -398,9 +398,9 @@
 ~virtual System.ComponentModel.Design.ComponentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 ~virtual System.ComponentModel.Design.ComponentDesigner.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection
 ~virtual System.ComponentModel.Design.DesignerActionMethodItem.MemberName.get -> string
-~virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection
-~virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
-~virtual System.ComponentModel.Design.DesignerActionService.GetComponentServiceActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
+virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent! component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection!
+virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent! component, System.ComponentModel.Design.DesignerActionListCollection! actionLists) -> void
+virtual System.ComponentModel.Design.DesignerActionService.GetComponentServiceActions(System.ComponentModel.IComponent! component, System.ComponentModel.Design.DesignerActionListCollection! actionLists) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string methodName) -> void
@@ -659,7 +659,7 @@ System.ComponentModel.Design.DesignerActionPropertyItem.RelatedComponent.get -> 
 System.ComponentModel.Design.DesignerActionPropertyItem.RelatedComponent.set -> void
 System.ComponentModel.Design.DesignerActionService
 System.ComponentModel.Design.DesignerActionService.Clear() -> void
-System.ComponentModel.Design.DesignerActionService.DesignerActionListsChanged -> System.ComponentModel.Design.DesignerActionListsChangedEventHandler
+System.ComponentModel.Design.DesignerActionService.DesignerActionListsChanged -> System.ComponentModel.Design.DesignerActionListsChangedEventHandler?
 System.ComponentModel.Design.DesignerActionService.Dispose() -> void
 System.ComponentModel.Design.DesignerActionTextItem
 System.ComponentModel.Design.DesignerActionTextItem.DesignerActionTextItem(string? displayName, string? category) -> void

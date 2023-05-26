@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design;
@@ -14,9 +12,9 @@ namespace System.ComponentModel.Design;
 public class DesignerActionService : IDisposable
 {
     private readonly Dictionary<IComponent, DesignerActionListCollection> _designerActionLists; // this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
-    private DesignerActionListsChangedEventHandler _designerActionListsChanged;
-    private readonly IServiceProvider _serviceProvider; // standard service provider
-    private readonly ISelectionService _selSvc; // selection service
+    private DesignerActionListsChangedEventHandler? _designerActionListsChanged;
+    private readonly IServiceProvider? _serviceProvider; // standard service provider
+    private readonly ISelectionService? _selSvc; // selection service
     private readonly HashSet<IComponent> _componentToVerbsEventHookedUp; //Hashset of components which have events hooked up.
     // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
     private bool _reEntrantCode;
@@ -24,22 +22,20 @@ public class DesignerActionService : IDisposable
     /// <summary>
     ///  Standard constructor. A Service Provider is necessary for monitoring selection and component changes.
     /// </summary>
-    public DesignerActionService(IServiceProvider serviceProvider)
+    public DesignerActionService(IServiceProvider? serviceProvider)
     {
         if (serviceProvider is not null)
         {
             _serviceProvider = serviceProvider;
-            if (serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
-            {
-                host.AddService(typeof(DesignerActionService), this);
-            }
+            IDesignerHost? host = serviceProvider.GetService<IDesignerHost>();
+            host?.AddService(typeof(DesignerActionService), this);
 
             if (serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
                 cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
             }
 
-            _selSvc = serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
+            _selSvc = serviceProvider.GetService<ISelectionService>();
         }
 
         _designerActionLists = new();
@@ -49,7 +45,7 @@ public class DesignerActionService : IDisposable
     /// <summary>
     ///  This event is thrown whenever a DesignerActionList is removed or added for any object.
     /// </summary>
-    public event DesignerActionListsChangedEventHandler DesignerActionListsChanged
+    public event DesignerActionListsChangedEventHandler? DesignerActionListsChanged
     {
         add => _designerActionListsChanged += value;
         remove => _designerActionListsChanged -= value;
@@ -63,7 +59,7 @@ public class DesignerActionService : IDisposable
         ArgumentNullException.ThrowIfNull(comp);
         ArgumentNullException.ThrowIfNull(designerActionListCollection);
 
-        if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection dhlc))
+        if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection? dhlc))
         {
             dhlc.AddRange(designerActionListCollection);
         }
@@ -101,7 +97,7 @@ public class DesignerActionService : IDisposable
         _designerActionLists.Clear();
 
         // Fire our DesignerActionsChanged event for each comp we just removed.
-        foreach (Component comp in compsRemoved)
+        foreach (IComponent comp in compsRemoved)
         {
             OnDesignerActionListsChanged(new(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
         }
@@ -128,10 +124,8 @@ public class DesignerActionService : IDisposable
     {
         if (disposing && _serviceProvider is not null)
         {
-            if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
-            {
-                host.RemoveService(typeof(DesignerActionService));
-            }
+            IDesignerHost? host = _serviceProvider.GetService<IDesignerHost>();
+            host?.RemoveService(typeof(DesignerActionService));
 
             if (_serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
@@ -172,68 +166,66 @@ public class DesignerActionService : IDisposable
         ArgumentNullException.ThrowIfNull(component);
         ArgumentNullException.ThrowIfNull(actionLists);
 
-        if (component.Site is IServiceContainer sc)
+        IServiceContainer? sc = component.Site as IServiceContainer;
+        if (sc.TryGetService(out DesignerCommandSet? dcs))
         {
-            if (sc.GetService(typeof(DesignerCommandSet)) is DesignerCommandSet dcs)
+            DesignerActionListCollection? pullCollection = dcs.ActionLists;
+            if (pullCollection is not null)
             {
-                DesignerActionListCollection pullCollection = dcs.ActionLists;
-                if (pullCollection is not null)
-                {
-                    actionLists.AddRange(pullCollection);
-                }
+                actionLists.AddRange(pullCollection);
+            }
 
-                // if we don't find any, add the verbs for this component there...
-                if (actionLists.Count == 0)
+            // if we don't find any, add the verbs for this component there...
+            if (actionLists.Count == 0)
+            {
+                DesignerVerbCollection? verbs = dcs.Verbs;
+                if (verbs is not null && verbs.Count != 0)
                 {
-                    DesignerVerbCollection verbs = dcs.Verbs;
-                    if (verbs is not null && verbs.Count != 0)
+                    List<DesignerVerb> verbsArray = new();
+                    bool hookupEvents = _componentToVerbsEventHookedUp.Add(component);
+
+                    foreach (DesignerVerb verb in verbs)
                     {
-                        List<DesignerVerb> verbsArray = new();
-                        bool hookupEvents = _componentToVerbsEventHookedUp.Add(component);
-
-                        foreach (DesignerVerb verb in verbs)
+                        if (verb is null)
                         {
-                            if (verb is null)
-                            {
-                                continue;
-                            }
-
-                            if (hookupEvents)
-                            {
-                                verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
-                            }
-
-                            if (verb.Enabled && verb.Visible)
-                            {
-                                verbsArray.Add(verb);
-                            }
+                            continue;
                         }
 
-                        if (verbsArray.Count != 0)
+                        if (hookupEvents)
                         {
-                            actionLists.Add(new DesignerActionVerbList(verbsArray.ToArray()));
+                            verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
+                        }
+
+                        if (verb.Enabled && verb.Visible)
+                        {
+                            verbsArray.Add(verb);
                         }
                     }
-                }
 
-                // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
-                // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an empty actionlist collection
-                if (pullCollection is not null)
-                {
-                    foreach (DesignerActionList actionList in pullCollection)
+                    if (verbsArray.Count != 0)
                     {
-                        DesignerActionItemCollection collection = actionList?.GetSortedActionItems();
-                        if (collection is null || collection.Count == 0)
-                        {
-                            actionLists.Remove(actionList);
-                        }
+                        actionLists.Add(new DesignerActionVerbList(verbsArray.ToArray()));
+                    }
+                }
+            }
+
+            // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
+            // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an empty actionlist collection
+            if (pullCollection is not null)
+            {
+                foreach (DesignerActionList actionList in pullCollection)
+                {
+                    DesignerActionItemCollection? collection = actionList?.GetSortedActionItems();
+                    if (collection is null || collection.Count == 0)
+                    {
+                        actionLists.Remove(actionList);
                     }
                 }
             }
         }
     }
 
-    private void OnVerbStatusChanged(object sender, EventArgs args)
+    private void OnVerbStatusChanged(object? sender, EventArgs args)
     {
         if (!_reEntrantCode)
         {
@@ -244,12 +236,12 @@ public class DesignerActionService : IDisposable
                 {
                     if (comp.Site is IServiceContainer sc)
                     {
-                        DesignerCommandSet dcs = (DesignerCommandSet)sc.GetService(typeof(DesignerCommandSet));
-                        foreach (DesignerVerb verb in dcs.Verbs)
+                        DesignerCommandSet dcs = (DesignerCommandSet)sc.GetService(typeof(DesignerCommandSet))!;
+                        foreach (DesignerVerb verb in dcs.Verbs!)
                         {
                             if (verb == sender)
                             {
-                                DesignerActionUIService dapUISvc = (DesignerActionUIService)sc.GetService(typeof(DesignerActionUIService));
+                                DesignerActionUIService? dapUISvc = sc.GetService<DesignerActionUIService>();
                                 dapUISvc?.Refresh(comp); // we need to refresh, a verb on the current panel has changed its state
                             }
                         }
@@ -268,13 +260,13 @@ public class DesignerActionService : IDisposable
         ArgumentNullException.ThrowIfNull(component);
         ArgumentNullException.ThrowIfNull(actionLists);
 
-        if (_designerActionLists.TryGetValue(component, out DesignerActionListCollection pushCollection))
+        if (_designerActionLists.TryGetValue(component, out DesignerActionListCollection? pushCollection))
         {
             actionLists.AddRange(pushCollection);
             // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
             foreach (DesignerActionList actionList in pushCollection)
             {
-                DesignerActionItemCollection collection = actionList?.GetSortedActionItems();
+                DesignerActionItemCollection? collection = actionList?.GetSortedActionItems();
                 if (collection is null || collection.Count == 0)
                 {
                     actionLists.Remove(actionList);
@@ -286,9 +278,9 @@ public class DesignerActionService : IDisposable
     /// <summary>
     ///  We hook the OnComponentRemoved event so we can clean up  all associated actions.
     /// </summary>
-    private void OnComponentRemoved(object source, ComponentEventArgs ce)
+    private void OnComponentRemoved(object? source, ComponentEventArgs ce)
     {
-        Remove(ce.Component);
+        Remove(ce.Component!);
     }
 
     /// <summary>
@@ -322,7 +314,7 @@ public class DesignerActionService : IDisposable
         //find the associated component
         foreach (IComponent comp in _designerActionLists.Keys)
         {
-            if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection dacl) && dacl.Contains(actionList))
+            if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection? dacl) && dacl.Contains(actionList))
             {
                 Remove(comp, actionList);
                 break;
@@ -338,7 +330,7 @@ public class DesignerActionService : IDisposable
         ArgumentNullException.ThrowIfNull(comp);
         ArgumentNullException.ThrowIfNull(actionList);
 
-        if (!_designerActionLists.TryGetValue(comp, out DesignerActionListCollection actionLists) || !actionLists.Contains(actionList))
+        if (!_designerActionLists.TryGetValue(comp, out DesignerActionListCollection? actionLists) || !actionLists.Contains(actionList))
         {
             return;
         }
@@ -364,20 +356,18 @@ public class DesignerActionService : IDisposable
         }
     }
 
-    internal event DesignerActionUIStateChangeEventHandler DesignerActionUIStateChange
+    internal event DesignerActionUIStateChangeEventHandler? DesignerActionUIStateChange
     {
         add
         {
-            DesignerActionUIService dapUISvc = (DesignerActionUIService)_serviceProvider.GetService(typeof(DesignerActionUIService));
-            if (dapUISvc is not null)
+            if (_serviceProvider.TryGetService(out DesignerActionUIService? dapUISvc))
             {
                 dapUISvc.DesignerActionUIStateChange += value;
             }
         }
         remove
         {
-            DesignerActionUIService dapUISvc = (DesignerActionUIService)_serviceProvider.GetService(typeof(DesignerActionUIService));
-            if (dapUISvc is not null)
+            if (_serviceProvider.TryGetService(out DesignerActionUIService? dapUISvc))
             {
                 dapUISvc.DesignerActionUIStateChange -= value;
             }
