@@ -1036,7 +1036,7 @@ public partial class Control
             // worked off of the current value. If the current value was null checking it for ISerializable would always
             // fail. This means properties would never load into a reference type property if it's current value was null.
             //
-            // While we could always just check the property type for serializable this would break derived class scenario
+            // While we could always just check the property type for serializable this would break derived class scenarios
             // where it adds ISerializable but the property type doesn't have it. In this scenario it would still not work
             // if the value is null on load. Not enabling that scenario for now as it would require more refactoring.
             return property.PropertyType.IsAssignableTo(typeof(ISerializable))
