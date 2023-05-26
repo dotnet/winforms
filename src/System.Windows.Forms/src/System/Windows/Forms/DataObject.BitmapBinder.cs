@@ -55,7 +55,7 @@ public partial class DataObject
             assemblyName = null;
             typeName = null;
 
-            // Bitmap and string types are safe type to serialize/deserialize.
+            // Bitmap and string types are safe types to serialize/deserialize.
             if (!serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
             {
                 throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, serializedType.FullName));
