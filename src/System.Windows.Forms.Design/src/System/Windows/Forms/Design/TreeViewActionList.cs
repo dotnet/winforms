@@ -10,11 +10,13 @@ namespace System.Windows.Forms.Design;
 internal class TreeViewActionList : DesignerActionList
 {
     private readonly TreeViewDesigner _designer;
+    private readonly TreeView _treeView;
 
     public TreeViewActionList(TreeViewDesigner designer)
         : base(designer.Component)
     {
         _designer = designer;
+        _treeView = (TreeView)designer.Component;
     }
 
     public void InvokeNodesDialog()
@@ -26,11 +28,11 @@ internal class TreeViewActionList : DesignerActionList
     {
         get
         {
-            return ((TreeView)Component!).ImageList;
+            return _treeView.ImageList;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component!)["ImageList"]!.SetValue(Component, value);
+            TypeDescriptor.GetProperties(_treeView)["ImageList"]!.SetValue(Component, value);
         }
     }
 

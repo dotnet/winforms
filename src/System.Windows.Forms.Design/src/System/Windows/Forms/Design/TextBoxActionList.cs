@@ -9,20 +9,23 @@ namespace System.Windows.Forms.Design;
 
 internal class TextBoxActionList : DesignerActionList
 {
+    private readonly TextBox _textBox;
+
     public TextBoxActionList(TextBoxDesigner designer)
         : base(designer.Component)
     {
+        _textBox = (TextBox)designer.Component;
     }
 
     public bool Multiline
     {
         get
         {
-            return ((TextBox)Component!).Multiline;
+            return _textBox.Multiline;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component!)["Multiline"]!.SetValue(Component, value);
+            TypeDescriptor.GetProperties(_textBox)["Multiline"]!.SetValue(Component, value);
         }
     }
 

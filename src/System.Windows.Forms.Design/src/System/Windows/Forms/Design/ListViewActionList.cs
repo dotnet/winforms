@@ -10,10 +10,13 @@ namespace System.Windows.Forms.Design;
 internal class ListViewActionList : DesignerActionList
 {
     private readonly ComponentDesigner _designer;
+    private readonly ListView _listView;
+
     public ListViewActionList(ComponentDesigner designer)
         : base(designer.Component)
     {
         _designer = designer;
+        _listView = (ListView)Component!;
     }
 
     public void InvokeItemsDialog()
@@ -35,11 +38,11 @@ internal class ListViewActionList : DesignerActionList
     {
         get
         {
-            return ((ListView)Component!).View;
+            return _listView.View;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component!)["View"]!.SetValue(Component, value);
+            TypeDescriptor.GetProperties(_listView)["View"]!.SetValue(Component, value);
         }
     }
 
@@ -47,11 +50,11 @@ internal class ListViewActionList : DesignerActionList
     {
         get
         {
-            return ((ListView)Component!).LargeImageList;
+            return _listView.LargeImageList;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component!)["LargeImageList"]!.SetValue(Component, value);
+            TypeDescriptor.GetProperties(_listView)["LargeImageList"]!.SetValue(Component, value);
         }
     }
 
@@ -59,11 +62,11 @@ internal class ListViewActionList : DesignerActionList
     {
         get
         {
-            return ((ListView)Component!).SmallImageList;
+            return _listView.SmallImageList;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component!)["SmallImageList"]!.SetValue(Component, value);
+            TypeDescriptor.GetProperties(_listView)["SmallImageList"]!.SetValue(Component, value);
         }
     }
 
