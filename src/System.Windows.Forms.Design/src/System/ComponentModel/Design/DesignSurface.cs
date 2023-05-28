@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
@@ -15,16 +13,14 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class DesignSurface : IDisposable, IServiceProvider
 {
-    private readonly IServiceProvider _parentProvider;
     private ServiceContainer _serviceContainer;
     private DesignerHost _host;
-    private ICollection _loadErrors;
-    private bool _loaded;
+    private ICollection? _loadErrors;
 
     /// <summary>
     ///  Creates a new DesignSurface.
     /// </summary>
-    public DesignSurface() : this((IServiceProvider)null)
+    public DesignSurface() : this((IServiceProvider?)null)
     {
     }
 
@@ -32,10 +28,9 @@ public class DesignSurface : IDisposable, IServiceProvider
     ///  Creates a new DesignSurface given a parent service provider.
     /// </summary>
     /// <param name="parentProvider"> The parent service provider. If there is no parent used to resolve services this can be null. </param>
-    public DesignSurface(IServiceProvider parentProvider)
+    public DesignSurface(IServiceProvider? parentProvider)
     {
-        _parentProvider = parentProvider;
-        _serviceContainer = new DesignSurfaceServiceContainer(_parentProvider);
+        _serviceContainer = new DesignSurfaceServiceContainer(parentProvider);
 
         // Configure our default services
         ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
@@ -60,7 +55,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     ///  Creates a new DesignSurface given a parent service provider.
     /// </summary>
     /// <param name="parentProvider"> The parent service provider.  If there is no parent used to resolve services this can be null. </param>
-    public DesignSurface(IServiceProvider parentProvider, Type rootComponentType) : this(parentProvider)
+    public DesignSurface(IServiceProvider? parentProvider, Type rootComponentType) : this(parentProvider)
     {
         ArgumentNullException.ThrowIfNull(rootComponentType);
 
@@ -82,29 +77,12 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Returns true if the design surface is currently loaded. This will be true when a successful load has completed, or false for all other cases.
     /// </summary>
-    public bool IsLoaded
-    {
-        get
-        {
-            return _loaded;
-        }
-    }
+    public bool IsLoaded { get; private set; }
 
     /// <summary>
     ///  Returns a collection of LoadErrors or a void collection.
     /// </summary>
-    public ICollection LoadErrors
-    {
-        get
-        {
-            if (_loadErrors is not null)
-            {
-                return _loadErrors;
-            }
-
-            return Array.Empty<object>();
-        }
-    }
+    public ICollection LoadErrors => _loadErrors ?? Array.Empty<object>();
 
     /// <summary>
     ///  Returns true if DTEL (WSOD) is currently loading.
@@ -142,7 +120,7 @@ public class DesignSurface : IDisposable, IServiceProvider
                 throw new ObjectDisposedException(ToString());
             }
 
-            IComponent rootComponent = ((IDesignerHost)_host).RootComponent;
+            IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)
             {
                 // Check to see if we have any load errors.  If so, use them.
@@ -168,7 +146,7 @@ public class DesignSurface : IDisposable, IServiceProvider
                 };
             }
 
-            if (!(((IDesignerHost)_host).GetDesigner(rootComponent) is IRootDesigner rootDesigner))
+            if (((IDesignerHost)_host).GetDesigner(rootComponent) is not IRootDesigner rootDesigner)
             {
                 throw new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                 {
@@ -176,7 +154,7 @@ public class DesignSurface : IDisposable, IServiceProvider
                 };
             }
 
-            ViewTechnology[] designerViews = rootDesigner.SupportedTechnologies;
+            ViewTechnology[]? designerViews = rootDesigner.SupportedTechnologies;
             if (designerViews is null || designerViews.Length == 0)
             {
                 throw new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
@@ -193,38 +171,38 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Adds a event handler to listen to the Disposed event on the component.
     /// </summary>
-    public event EventHandler Disposed;
+    public event EventHandler? Disposed;
 
     /// <summary>
     ///  Adds a event handler to listen to the Flushed event on the component. This is called after the design surface has asked the designer loader to flush its state.
     /// </summary>
-    public event EventHandler Flushed;
+    public event EventHandler? Flushed;
 
     /// <summary>
     ///  Called when the designer load has completed.  This is called for successful loads as well as unsuccessful ones.  If code in this event handler throws an exception the designer will be unloaded.
     /// </summary>
-    public event LoadedEventHandler Loaded;
+    public event LoadedEventHandler? Loaded;
 
     /// <summary>
     ///  Called when the designer load is about to begin the loading process.
     /// </summary>
-    public event EventHandler Loading;
+    public event EventHandler? Loading;
 
     /// <summary>
     ///  Called when the designer has completed the unloading
     ///  process.
     /// </summary>
-    public event EventHandler Unloaded;
+    public event EventHandler? Unloaded;
 
     /// <summary>
     ///  Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
     /// </summary>
-    public event EventHandler Unloading;
+    public event EventHandler? Unloading;
 
     /// <summary>
     ///  Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
     /// </summary>
-    public event EventHandler ViewActivated;
+    public event EventHandler? ViewActivated;
 
     /// <summary>
     ///  This method begins the loading process with the given designer loader.  Designer loading can be asynchronous, so the loading may continue to  progress after this call has returned.  Listen to the Loaded event to know when the design surface has completed loading.
@@ -253,7 +231,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     ///  This method is called to create a component of the given type.
     /// </summary>
     [Obsolete("CreateComponent has been replaced by CreateInstance and will be removed after Beta2")]
-    protected internal virtual IComponent CreateComponent(Type componentType)
+    protected internal virtual IComponent? CreateComponent(Type componentType)
     {
         return CreateInstance(componentType) as IComponent;
     }
@@ -261,35 +239,27 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  This method is called to create a designer for a component.
     /// </summary>
-    protected internal virtual IDesigner CreateDesigner(IComponent component, bool rootDesigner)
+    protected internal virtual IDesigner? CreateDesigner(IComponent component, bool rootDesigner)
     {
         ArgumentNullException.ThrowIfNull(component);
         ObjectDisposedException.ThrowIf(_host is null, this);
 
-        IDesigner designer;
-        if (rootDesigner)
-        {
-            designer = TypeDescriptor.CreateDesigner(component, typeof(IRootDesigner)) as IRootDesigner;
-        }
-        else
-        {
-            designer = TypeDescriptor.CreateDesigner(component, typeof(IDesigner));
-        }
-
-        return designer;
+        return rootDesigner
+            ? TypeDescriptor.CreateDesigner(component, typeof(IRootDesigner)) as IRootDesigner
+            : TypeDescriptor.CreateDesigner(component, typeof(IDesigner));
     }
 
     /// <summary>
     ///  This method is called to create an instance of the given type.  If the type is a component
     ///  this will search for a constructor of type IContainer first, and then an empty constructor.
     /// </summary>
-    protected internal virtual object CreateInstance(Type type)
+    protected internal virtual object? CreateInstance(Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
 
         // Locate an appropriate constructor for IComponents.
-        object instance = null;
-        ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
+        object? instance = null;
+        ConstructorInfo? ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
         if (ctor is not null)
         {
             instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
@@ -323,7 +293,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
     /// </summary>
-    public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
+    public INestedContainer CreateNestedContainer(IComponent owningComponent, string? containerName)
     {
         ObjectDisposedException.ThrowIf(_host is null, this);
         ArgumentNullException.ThrowIfNull(owningComponent);
@@ -367,8 +337,8 @@ public class DesignSurface : IDisposable, IServiceProvider
             }
             finally
             {
-                _host = null;
-                _serviceContainer = null;
+                _host = null!;
+                _serviceContainer = null!;
             }
         }
     }
@@ -388,14 +358,9 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// </summary>
     /// <param name="serviceType"> The type of service to retrieve. </param>
     /// <returns> An instance of the requested service or null if the service could not be found. </returns>
-    public object GetService(Type serviceType)
+    public object? GetService(Type serviceType)
     {
-        if (_serviceContainer is not null)
-        {
-            return _serviceContainer.GetService(serviceType);
-        }
-
-        return null;
+        return _serviceContainer?.GetService(serviceType);
     }
 
     /// <summary>
@@ -426,7 +391,7 @@ public class DesignSurface : IDisposable, IServiceProvider
 
         if (serviceType == typeof(IExtenderListService))
         {
-            return GetService(typeof(IExtenderProviderService));
+            return GetService(typeof(IExtenderProviderService))!;
         }
 
         if (serviceType == typeof(ITypeDescriptorFilterService))
@@ -443,12 +408,12 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// </summary>
     internal void OnLoaded(bool successful, ICollection errors)
     {
-        _loaded = successful;
+        IsLoaded = successful;
         _loadErrors = errors;
 
         if (successful)
         {
-            IComponent rootComponent = ((IDesignerHost)_host).RootComponent;
+            IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)
             {
                 ArrayList newErrors = new ArrayList();
@@ -517,7 +482,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     internal void OnUnloading()
     {
         OnUnloading(EventArgs.Empty);
-        _loaded = false;
+        IsLoaded = false;
     }
 
     /// <summary>
@@ -551,7 +516,7 @@ public class DesignSurface : IDisposable, IServiceProvider
         public override void BeginLoad(IDesignerLoaderHost loaderHost)
         {
             loaderHost.CreateComponent(_type);
-            loaderHost.EndLoad(_type.FullName, true, null);
+            loaderHost.EndLoad(_type.FullName!, true, null);
         }
 
         public override void Dispose()

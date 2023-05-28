@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 /// <summary>
@@ -12,12 +10,12 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class DesignSurfaceManager : IServiceProvider, IDisposable
 {
-    private readonly IServiceProvider _parentProvider;
-    private ServiceContainer _serviceContainer;
-    private ActiveDesignSurfaceChangedEventHandler _activeDesignSurfaceChanged;
-    private DesignSurfaceEventHandler _designSurfaceCreated;
-    private DesignSurfaceEventHandler _designSurfaceDisposed;
-    private EventHandler _selectionChanged;
+    private readonly IServiceProvider? _parentProvider;
+    private ServiceContainer? _serviceContainer;
+    private ActiveDesignSurfaceChangedEventHandler? _activeDesignSurfaceChanged;
+    private DesignSurfaceEventHandler? _designSurfaceCreated;
+    private DesignSurfaceEventHandler? _designSurfaceDisposed;
+    private EventHandler? _selectionChanged;
 
     /// <summary>
     ///  Creates a new designer application.
@@ -31,7 +29,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  Creates a new designer application and provides a
     ///  parent service provider.
     /// </summary>
-    public DesignSurfaceManager(IServiceProvider parentProvider)
+    public DesignSurfaceManager(IServiceProvider? parentProvider)
     {
         _parentProvider = parentProvider;
 
@@ -48,24 +46,9 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  your own implementation of IDesignerEventService you should
     ///  override this property to notify your service appropriately.
     /// </summary>
-    public virtual DesignSurface ActiveDesignSurface
+    public virtual DesignSurface? ActiveDesignSurface
     {
-        get
-        {
-            IDesignerEventService eventService = EventService;
-            if (eventService is null)
-            {
-                return null;
-            }
-
-            IDesignerHost activeHost = eventService.ActiveDesigner;
-            if (activeHost is null)
-            {
-                return null;
-            }
-
-            return activeHost.GetService(typeof(DesignSurface)) as DesignSurface;
-        }
+        get => EventService?.ActiveDesigner?.GetService<DesignSurface>();
         set
         {
             // If we are providing IDesignerEventService, then we are responsible for
@@ -84,51 +67,31 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  A collection of design surfaces.  This is offered
     ///  for convience, and simply maps to IDesignerEventService.
     /// </summary>
-    public DesignSurfaceCollection DesignSurfaces
-    {
-        get
-        {
-            IDesignerEventService eventService = EventService;
-            if (eventService is not null)
-            {
-                return new DesignSurfaceCollection(eventService.Designers);
-            }
-
-            return new DesignSurfaceCollection(null);
-        }
-    }
+    public DesignSurfaceCollection DesignSurfaces => new(EventService?.Designers);
 
     /// <summary>
     ///  We access this a lot.
     /// </summary>
-    private IDesignerEventService EventService => GetService(typeof(IDesignerEventService)) as IDesignerEventService;
+    private IDesignerEventService? EventService => GetService(typeof(IDesignerEventService)) as IDesignerEventService;
 
     /// <summary>
     ///  Provides access to the designer application's
     ///  ServiceContainer. This property allows
     ///  inheritors to add their own services.
     /// </summary>
-    protected ServiceContainer ServiceContainer
-    {
-        get
-        {
-            _serviceContainer ??= new ServiceContainer(_parentProvider);
-
-            return _serviceContainer;
-        }
-    }
+    protected ServiceContainer ServiceContainer => _serviceContainer ??= new ServiceContainer(_parentProvider);
 
     /// <summary>
     ///  This event is raised when a new design surface gains
     ///  activation.  This is mapped through IDesignerEventService.
     /// </summary>
-    public event ActiveDesignSurfaceChangedEventHandler ActiveDesignSurfaceChanged
+    public event ActiveDesignSurfaceChangedEventHandler? ActiveDesignSurfaceChanged
     {
         add
         {
             if (_activeDesignSurfaceChanged is null)
             {
-                IDesignerEventService eventService = EventService;
+                IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
                     eventService.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
@@ -145,7 +108,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 return;
             }
 
-            IDesignerEventService eventService = EventService;
+            IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
                 eventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
@@ -157,13 +120,13 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  This event is raised when a new design surface is
     ///  created.  This is mapped through IDesignerEventService.
     /// </summary>
-    public event DesignSurfaceEventHandler DesignSurfaceCreated
+    public event DesignSurfaceEventHandler? DesignSurfaceCreated
     {
         add
         {
             if (_designSurfaceCreated is null)
             {
-                IDesignerEventService eventService = EventService;
+                IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
                     eventService.DesignerCreated += new DesignerEventHandler(OnDesignerCreated);
@@ -180,7 +143,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 return;
             }
 
-            IDesignerEventService eventService = EventService;
+            IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
                 eventService.DesignerCreated -= new DesignerEventHandler(OnDesignerCreated);
@@ -192,13 +155,13 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  This event is raised when a design surface is disposed.
     ///  This is mapped through IDesignerEventService.
     /// </summary>
-    public event DesignSurfaceEventHandler DesignSurfaceDisposed
+    public event DesignSurfaceEventHandler? DesignSurfaceDisposed
     {
         add
         {
             if (_designSurfaceDisposed is null)
             {
-                IDesignerEventService eventService = EventService;
+                IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
                     eventService.DesignerDisposed += new DesignerEventHandler(OnDesignerDisposed);
@@ -215,7 +178,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 return;
             }
 
-            IDesignerEventService eventService = EventService;
+            IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
                 eventService.DesignerDisposed -= new DesignerEventHandler(OnDesignerDisposed);
@@ -228,13 +191,13 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  selection of component set changes.  This is mapped
     ///  through IDesignerEventService.
     /// </summary>
-    public event EventHandler SelectionChanged
+    public event EventHandler? SelectionChanged
     {
         add
         {
             if (_selectionChanged is null)
             {
-                IDesignerEventService eventService = EventService;
+                IDesignerEventService? eventService = EventService;
                 if (eventService is not null)
                 {
                     eventService.SelectionChanged += new EventHandler(OnSelectionChanged);
@@ -251,7 +214,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
                 return;
             }
 
-            IDesignerEventService eventService = EventService;
+            IDesignerEventService? eventService = EventService;
             if (eventService is not null)
             {
                 eventService.SelectionChanged -= new EventHandler(OnSelectionChanged);
@@ -299,7 +262,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
         // notifying it of new designers coming into place.  If we aren't
         // the ones providing the event service, then whoever is providing
         // it will be responsible for updating it when new designers are created.
-        DesignerEventService eventService = GetService(typeof(IDesignerEventService)) as DesignerEventService;
+        DesignerEventService? eventService = GetService(typeof(IDesignerEventService)) as DesignerEventService;
         eventService?.OnCreateDesigner(surface);
 
         return surface;
@@ -337,7 +300,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  Retrieves a service in this design surface's service
     ///  container.
     /// </summary>
-    public object GetService(Type serviceType) => _serviceContainer?.GetService(serviceType);
+    public object? GetService(Type serviceType) => _serviceContainer?.GetService(serviceType);
 
     /// <summary>
     ///  Private method that demand-creates services we offer.
@@ -352,7 +315,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  A new instance of the service.  It is an error to call this with
     ///  a service type it doesn't know how to create
     /// </returns>
-    private object OnCreateService(IServiceContainer container, Type serviceType)
+    private static object? OnCreateService(IServiceContainer container, Type serviceType)
     {
         if (serviceType == typeof(IDesignerEventService))
         {
@@ -367,23 +330,13 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  Handles the IDesignerEventService event and relays it to
     ///  DesignSurfaceManager's similar event.
     /// </summary>
-    private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
+    private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs e)
     {
         Debug.Assert(_activeDesignSurfaceChanged is not null, "Should have detached this event handler.");
         if (_activeDesignSurfaceChanged is not null)
         {
-            DesignSurface newSurface = null;
-            DesignSurface oldSurface = null;
-
-            if (e.OldDesigner is not null)
-            {
-                oldSurface = e.OldDesigner.GetService(typeof(DesignSurface)) as DesignSurface;
-            }
-
-            if (e.NewDesigner is not null)
-            {
-                newSurface = e.NewDesigner.GetService(typeof(DesignSurface)) as DesignSurface;
-            }
+            DesignSurface? oldSurface = e.OldDesigner?.GetService<DesignSurface>();
+            DesignSurface? newSurface = e.NewDesigner?.GetService<DesignSurface>();
 
             _activeDesignSurfaceChanged(this, new ActiveDesignSurfaceChangedEventArgs(oldSurface, newSurface));
         }
@@ -393,7 +346,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  Handles the IDesignerEventService event and relays it to
     ///  DesignSurfaceManager's similar event.
     /// </summary>
-    private void OnDesignerCreated(object sender, DesignerEventArgs e)
+    private void OnDesignerCreated(object? sender, DesignerEventArgs e)
     {
         Debug.Assert(_designSurfaceCreated is not null, "Should have detached this event handler.");
         if (_designSurfaceCreated is null)
@@ -401,7 +354,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             return;
         }
 
-        if (e.Designer.GetService(typeof(DesignSurface)) is DesignSurface surface)
+        if (e.Designer!.GetService(typeof(DesignSurface)) is DesignSurface surface)
         {
             _designSurfaceCreated(this, new DesignSurfaceEventArgs(surface));
         }
@@ -411,7 +364,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  Handles the IDesignerEventService event and relays it to
     ///  DesignSurfaceManager's similar event.
     /// </summary>
-    private void OnDesignerDisposed(object sender, DesignerEventArgs e)
+    private void OnDesignerDisposed(object? sender, DesignerEventArgs e)
     {
         Debug.Assert(_designSurfaceDisposed is not null, "Should have detached this event handler.");
         if (_designSurfaceDisposed is null)
@@ -419,7 +372,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             return;
         }
 
-        if (e.Designer.GetService(typeof(DesignSurface)) is DesignSurface surface)
+        if (e.Designer!.GetService(typeof(DesignSurface)) is DesignSurface surface)
         {
             _designSurfaceDisposed(this, new DesignSurfaceEventArgs(surface));
         }
@@ -429,7 +382,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  Handles the IDesignerEventService event and relays it to
     ///  DesignSurfaceManager's similar event.
     /// </summary>
-    private void OnSelectionChanged(object sender, EventArgs e)
+    private void OnSelectionChanged(object? sender, EventArgs e)
     {
         Debug.Assert(_selectionChanged is not null, "Should have detached this event handler.");
         _selectionChanged?.Invoke(this, e);
@@ -449,11 +402,11 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
             _secondaryProvider = secondaryProvider;
         }
 
-        object IServiceProvider.GetService(Type serviceType)
+        object? IServiceProvider.GetService(Type serviceType)
         {
             ArgumentNullException.ThrowIfNull(serviceType);
 
-            object service = _primaryProvider.GetService(serviceType);
+            object? service = _primaryProvider.GetService(serviceType);
 
             service ??= _secondaryProvider.GetService(serviceType);
 
