@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Globalization;
 
@@ -17,13 +15,13 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class MenuCommandService : IMenuCommandService, IDisposable
 {
-    private IServiceProvider _serviceProvider;
+    private IServiceProvider? _serviceProvider;
     private readonly Dictionary<Guid, List<MenuCommand>> _commandGroups;
     private readonly object _commandGroupsLock;
     private readonly EventHandler _commandChangedHandler;
-    private MenuCommandsChangedEventHandler _commandsChangedHandler;
-    private List<DesignerVerb> _globalVerbs;
-    private ISelectionService _selectionService;
+    private MenuCommandsChangedEventHandler? _commandsChangedHandler;
+    private List<DesignerVerb>? _globalVerbs;
+    private ISelectionService? _selectionService;
 
     internal static TraceSwitch MENUSERVICE = new("MENUSERVICE", "MenuCommandService: Track menu command routing");
 
@@ -32,17 +30,17 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     // selected designer wants to offer.  This collection changes with the
     // current selection.
     //
-    private DesignerVerbCollection _currentVerbs;
+    private DesignerVerbCollection? _currentVerbs;
 
     // this is the type that we last picked up verbs from
     // so we know when we need to refresh
     //
-    private Type _verbSourceType;
+    private Type? _verbSourceType;
 
     /// <summary>
     ///  Creates a new menu command service.
     /// </summary>
-    public MenuCommandService(IServiceProvider serviceProvider)
+    public MenuCommandService(IServiceProvider? serviceProvider)
     {
         _serviceProvider = serviceProvider;
         _commandGroupsLock = new object();
@@ -55,7 +53,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     ///  This event is thrown whenever a MenuCommand is removed
     ///  or added
     /// </summary>
-    public event MenuCommandsChangedEventHandler MenuCommandsChanged
+    public event MenuCommandsChangedEventHandler? MenuCommandsChanged
     {
         add
         {
@@ -77,7 +75,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
         get
         {
             EnsureVerbs();
-            return _currentVerbs;
+            return _currentVerbs!;
         }
     }
 
@@ -89,23 +87,25 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     {
         ArgumentNullException.ThrowIfNull(command);
 
+        CommandID commandId = command.CommandID!;
+
         // If the command already exists, it is an error to add
         // a duplicate.
         //
-        if (((IMenuCommandService)this).FindCommand(command.CommandID) is not null)
+        if (((IMenuCommandService)this).FindCommand(commandId) is not null)
         {
-            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, SR.MenuCommandService_DuplicateCommand, command.CommandID.ToString()));
+            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, SR.MenuCommandService_DuplicateCommand, commandId.ToString()));
         }
 
         lock (_commandGroupsLock)
         {
-            if (!_commandGroups.TryGetValue(command.CommandID.Guid, out List<MenuCommand> commandsList))
+            if (!_commandGroups.TryGetValue(commandId.Guid, out List<MenuCommand>? commandsList))
             {
                 commandsList = new()
                 {
                     command
                 };
-                _commandGroups.Add(command.CommandID.Guid, commandsList);
+                _commandGroups.Add(commandId.Guid, commandsList);
             }
             else
             {
@@ -126,6 +126,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     ///  This method is intended for objects that want to offer a verb that is
     ///  available regardless of what components are selected.
     /// </summary>
+    [MemberNotNull(nameof(_globalVerbs))]
     public virtual void AddVerb(DesignerVerb verb)
     {
         ArgumentNullException.ThrowIfNull(verb);
@@ -163,7 +164,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
             if (_serviceProvider is not null)
             {
-                _serviceProvider = null;
+                _serviceProvider = null!;
                 TypeDescriptor.Refreshed -= new RefreshEventHandler(OnTypeRefreshed);
             }
 
@@ -197,29 +198,25 @@ public class MenuCommandService : IMenuCommandService, IDisposable
         {
             if (_selectionService is null)
             {
-                _selectionService = GetService(typeof(ISelectionService)) as ISelectionService;
-
-                if (_selectionService is not null)
+                if (TryGetService(out _selectionService))
                 {
                     _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
                 }
             }
 
             int verbCount = 0;
-            DesignerVerbCollection localVerbs = null;
-            DesignerVerbCollection designerActionVerbs = new DesignerVerbCollection(); // we instantiate this one here...
-            IDesignerHost designerHost = GetService(typeof(IDesignerHost)) as IDesignerHost;
+            DesignerVerbCollection? localVerbs = null;
+            List<DesignerVerb> designerActionVerbs = new(); // we instantiate this one here...
 
-            if (_selectionService is not null && designerHost is not null && _selectionService.SelectionCount == 1)
+            if (_selectionService?.SelectionCount == 1 && TryGetService(out IDesignerHost? designerHost))
             {
-                object selectedComponent = _selectionService.PrimarySelection;
-                if (selectedComponent is IComponent &&
+                if (_selectionService.PrimarySelection is IComponent selectedComponent &&
                     !TypeDescriptor.GetAttributes(selectedComponent).Contains(InheritanceAttribute.InheritedReadOnly))
                 {
                     useGlobalVerbs = (selectedComponent == designerHost.RootComponent);
 
                     // LOCAL VERBS
-                    IDesigner designer = designerHost.GetDesigner((IComponent)selectedComponent);
+                    IDesigner? designer = designerHost.GetDesigner(selectedComponent);
                     if (designer is not null)
                     {
                         localVerbs = designer.Verbs;
@@ -235,10 +232,9 @@ public class MenuCommandService : IMenuCommandService, IDisposable
                     }
 
                     // DesignerAction Verbs
-                    DesignerActionService daSvc = GetService(typeof(DesignerActionService)) as DesignerActionService;
-                    if (daSvc is not null)
+                    if (TryGetService(out DesignerActionService? daSvc))
                     {
-                        DesignerActionListCollection actionLists = daSvc.GetComponentActions(selectedComponent as IComponent);
+                        DesignerActionListCollection actionLists = daSvc.GetComponentActions(selectedComponent);
                         if (actionLists is not null)
                         {
                             foreach (DesignerActionList list in actionLists)
@@ -248,11 +244,10 @@ public class MenuCommandService : IMenuCommandService, IDisposable
                                 {
                                     for (int i = 0; i < dai.Count; i++)
                                     {
-                                        DesignerActionMethodItem dami = dai[i] as DesignerActionMethodItem;
-                                        if (dami is not null && dami.IncludeAsDesignerVerb)
+                                        if (dai[i] is DesignerActionMethodItem dami && dami.IncludeAsDesignerVerb)
                                         {
                                             EventHandler handler = new EventHandler(dami.Invoke);
-                                            DesignerVerb verb = new DesignerVerb(dami.DisplayName, handler);
+                                            DesignerVerb verb = new DesignerVerb(dami.DisplayName!, handler);
                                             designerActionVerbs.Add(verb);
                                             verbCount++;
                                         }
@@ -265,12 +260,11 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             }
 
             // GLOBAL VERBS
-            if (useGlobalVerbs && _globalVerbs is null)
+            if (_globalVerbs is null)
             {
                 useGlobalVerbs = false;
             }
-
-            if (useGlobalVerbs)
+            else if (useGlobalVerbs)
             {
                 verbCount += _globalVerbs.Count;
             }
@@ -282,7 +276,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             // PRIORITY ORDER FROM HIGH TO LOW: LOCAL VERBS - DESIGNERACTION VERBS - GLOBAL VERBS
             if (useGlobalVerbs)
             {
-                for (int i = 0; i < _globalVerbs.Count; i++)
+                for (int i = 0; i < _globalVerbs!.Count; i++)
                 {
                     string key = _globalVerbs[i].Text;
                     verbsOrder.Add(_globalVerbs[i]);
@@ -294,9 +288,9 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             {
                 for (int i = 0; i < designerActionVerbs.Count; i++)
                 {
-                    string key = designerActionVerbs[i].Text;
-                    verbsOrder.Add(designerActionVerbs[i]);
-                    buildVerbs[key] = verbsOrder.Count - 1;
+                    DesignerVerb designerActionVerb = designerActionVerbs[i];
+                    verbsOrder.Add(designerActionVerb);
+                    buildVerbs[designerActionVerb.Text] = verbsOrder.Count - 1;
                 }
             }
 
@@ -304,13 +298,14 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             {
                 for (int i = 0; i < localVerbs.Count; i++)
                 {
-                    string key = localVerbs[i].Text;
-                    verbsOrder.Add(localVerbs[i]);
-                    buildVerbs[key] = verbsOrder.Count - 1;
+                    DesignerVerb localVerb = localVerbs[i]!;
+                    verbsOrder.Add(localVerb);
+                    buildVerbs[localVerb.Text] = verbsOrder.Count - 1;
                 }
             }
 
             // look for duplicate, prepare the result table
+            //TODO: isn't 'result' too big if there are duplicates?
             DesignerVerb[] result = new DesignerVerb[buildVerbs.Count];
             int j = 0;
             for (int i = 0; i < verbsOrder.Count; i++)
@@ -332,7 +327,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     ///  Searches for the given command ID and returns the MenuCommand
     ///  associated with it.
     /// </summary>
-    public MenuCommand FindCommand(CommandID commandID)
+    public MenuCommand? FindCommand(CommandID commandID)
     {
         return FindCommand(commandID.Guid, commandID.ID);
     }
@@ -341,12 +336,12 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     ///  Locates the requested command. This will throw an appropriate
     ///  ComFailException if the command couldn't be found.
     /// </summary>
-    protected MenuCommand FindCommand(Guid guid, int id)
+    protected MenuCommand? FindCommand(Guid guid, int id)
     {
         Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"MCS Searching for command: {guid} : {id}");
 
         // Search in the list of commands only if the command group is known
-        List<MenuCommand> commands;
+        List<MenuCommand>? commands;
         lock (_commandGroupsLock)
         {
             _commandGroups.TryGetValue(guid, out commands);
@@ -357,7 +352,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found group");
             foreach (MenuCommand command in commands)
             {
-                if (command.CommandID.ID == id)
+                if (command.CommandID!.ID == id)
                 {
                     Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t... MCS Found Command");
                     return command;
@@ -373,7 +368,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             int currentID = StandardCommands.VerbFirst.ID;
             foreach (DesignerVerb verb in _currentVerbs)
             {
-                CommandID cid = verb.CommandID;
+                CommandID cid = verb.CommandID!;
 
                 if (cid.ID == id)
                 {
@@ -401,7 +396,9 @@ public class MenuCommandService : IMenuCommandService, IDisposable
                 }
 
                 if (cid.Equals(StandardCommands.VerbFirst))
+                {
                     currentID++;
+                }
             }
         }
 
@@ -411,9 +408,9 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     /// <summary>
     ///  Get the command list for a given GUID
     /// </summary>
-    protected ICollection GetCommandList(Guid guid)
+    protected ICollection? GetCommandList(Guid guid)
     {
-        List<MenuCommand> commands = null;
+        List<MenuCommand>? commands;
         lock (_commandGroupsLock)
         {
             _commandGroups.TryGetValue(guid, out commands);
@@ -424,10 +421,16 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
     /// <summary>
     /// </summary>
-    protected object GetService(Type serviceType)
+    protected object? GetService(Type serviceType)
     {
         ArgumentNullException.ThrowIfNull(serviceType);
         return _serviceProvider?.GetService(serviceType);
+    }
+
+    private protected bool TryGetService<T>([NotNullWhen(true)] out T? service) where T : class
+    {
+        service = GetService(typeof(T)) as T;
+        return service is not null;
     }
 
     /// <summary>
@@ -439,7 +442,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     public virtual bool GlobalInvoke(CommandID commandID)
     {
         // try to find it locally
-        MenuCommand cmd = ((IMenuCommandService)this).FindCommand(commandID);
+        MenuCommand? cmd = ((IMenuCommandService)this).FindCommand(commandID);
         if (cmd is not null)
         {
             cmd.Invoke();
@@ -458,7 +461,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     public virtual bool GlobalInvoke(CommandID commandId, object arg)
     {
         // try to find it locally
-        MenuCommand cmd = ((IMenuCommandService)this).FindCommand(commandId);
+        MenuCommand? cmd = ((IMenuCommandService)this).FindCommand(commandId);
         if (cmd is not null)
         {
             cmd.Invoke(arg);
@@ -471,10 +474,10 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     /// <summary>
     ///  This is called by a menu command when it's status has changed.
     /// </summary>
-    private void OnCommandChanged(object sender, EventArgs e)
+    private void OnCommandChanged(object? sender, EventArgs e)
     {
         Debug.WriteLineIf(MENUSERVICE.TraceVerbose, $"Command dirty: {((sender is not null) ? sender.ToString() : "(null sender)")}");
-        OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandChanged, (MenuCommand)sender));
+        OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandChanged, (MenuCommand?)sender));
     }
 
     /// <summary>
@@ -482,10 +485,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     /// </summary>
     protected virtual void OnCommandsChanged(MenuCommandsChangedEventArgs e)
     {
-        if (_commandsChangedHandler is not null)
-        {
-            _commandsChangedHandler(this, e);
-        }
+        _commandsChangedHandler?.Invoke(this, e);
     }
 
     /// <summary>
@@ -504,7 +504,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     ///  This is called by the selection service when the selection has changed.  Here
     ///  we invalidate our verb list.
     /// </summary>
-    private void OnSelectionChanging(object sender, EventArgs e)
+    private void OnSelectionChanging(object? sender, EventArgs e)
     {
         if (_currentVerbs is not null)
         {
@@ -522,12 +522,10 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
         lock (_commandGroupsLock)
         {
-            if (_commandGroups.TryGetValue(command.CommandID.Guid, out List<MenuCommand> commands))
+            if (_commandGroups.TryGetValue(command.CommandID!.Guid, out List<MenuCommand>? commands))
             {
-                int index = commands.IndexOf(command);
-                if (index != -1)
+                if (commands.Remove(command))
                 {
-                    commands.RemoveAt(index);
                     // If there are no more commands in this command group, remove the group
                     if (commands.Count == 0)
                     {
@@ -558,10 +556,8 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
         if (_globalVerbs is not null)
         {
-            int index = _globalVerbs.IndexOf(verb);
-            if (index != -1)
+            if (_globalVerbs.Remove(verb))
             {
-                _globalVerbs.RemoveAt(index);
                 EnsureVerbs();
                 if (((IMenuCommandService)this).Verbs.Contains(verb))
                 {
