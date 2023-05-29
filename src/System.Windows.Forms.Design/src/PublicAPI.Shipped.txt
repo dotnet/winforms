@@ -323,18 +323,18 @@ abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.P
 ~System.Windows.Forms.Design.AxImporter.Options.outputName -> string
 ~System.Windows.Forms.Design.AxImporter.Options.publicKey -> byte[]
 ~System.Windows.Forms.Design.AxImporter.Options.references -> System.Windows.Forms.Design.AxImporter.IReferenceResolver
-~System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.BehaviorDragDropEventArgs(System.Collections.ICollection dragComponents) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.DragComponents.get -> System.Collections.ICollection
-~System.Windows.Forms.Design.Behavior.BehaviorService.Adorners.get -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection
-~System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowGraphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.Design.Behavior.BehaviorService.ControlRectInAdornerWindow(System.Windows.Forms.Control c) -> System.Drawing.Rectangle
-~System.Windows.Forms.Design.Behavior.BehaviorService.ControlToAdornerWindow(System.Windows.Forms.Control c) -> System.Drawing.Point
-~System.Windows.Forms.Design.Behavior.BehaviorService.CurrentBehavior.get -> System.Windows.Forms.Design.Behavior.Behavior
-~System.Windows.Forms.Design.Behavior.BehaviorService.GetNextBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> System.Windows.Forms.Design.Behavior.Behavior
-~System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Region r) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorService.PopBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> System.Windows.Forms.Design.Behavior.Behavior
-~System.Windows.Forms.Design.Behavior.BehaviorService.PushBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorService.PushCaptureBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
+System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.BehaviorDragDropEventArgs(System.Collections.ICollection! dragComponents) -> void
+System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.DragComponents.get -> System.Collections.ICollection!
+System.Windows.Forms.Design.Behavior.BehaviorService.Adorners.get -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection!
+System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowGraphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.Design.Behavior.BehaviorService.ControlRectInAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Rectangle
+System.Windows.Forms.Design.Behavior.BehaviorService.ControlToAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Point
+System.Windows.Forms.Design.Behavior.BehaviorService.CurrentBehavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
+System.Windows.Forms.Design.Behavior.BehaviorService.GetNextBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
+System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Region! r) -> void
+System.Windows.Forms.Design.Behavior.BehaviorService.PopBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
+System.Windows.Forms.Design.Behavior.BehaviorService.PushBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
+System.Windows.Forms.Design.Behavior.BehaviorService.PushCaptureBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add(System.Windows.Forms.Design.Behavior.Adorner value) -> int
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection value) -> void
@@ -349,7 +349,7 @@ abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.P
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Remove(System.Windows.Forms.Design.Behavior.Adorner value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].get -> System.Windows.Forms.Design.Behavior.Adorner
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].set -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.BehaviorServiceAdornerCollectionEnumerator(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection mappings) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.BehaviorServiceAdornerCollectionEnumerator(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! mappings) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
 System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
 System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
@@ -955,14 +955,14 @@ System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
 System.Windows.Forms.Design.Behavior.BehaviorService
 System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowPointToScreen(System.Drawing.Point p) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowToScreen() -> System.Drawing.Point
-System.Windows.Forms.Design.Behavior.BehaviorService.BeginDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
+System.Windows.Forms.Design.Behavior.BehaviorService.BeginDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler?
 System.Windows.Forms.Design.Behavior.BehaviorService.Dispose() -> void
-System.Windows.Forms.Design.Behavior.BehaviorService.EndDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
+System.Windows.Forms.Design.Behavior.BehaviorService.EndDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler?
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate() -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Rectangle rect) -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.MapAdornerWindowPoint(nint handle, System.Drawing.Point pt) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.ScreenToAdornerWindow(System.Drawing.Point p) -> System.Drawing.Point
-System.Windows.Forms.Design.Behavior.BehaviorService.Synchronize -> System.EventHandler
+System.Windows.Forms.Design.Behavior.BehaviorService.Synchronize -> System.EventHandler?
 System.Windows.Forms.Design.Behavior.BehaviorService.SyncSelection() -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator
