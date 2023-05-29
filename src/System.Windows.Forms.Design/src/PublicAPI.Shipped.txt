@@ -11,8 +11,8 @@
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor, System.CodeDom.CodeStatementCollection statements) -> void
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.ShouldSerialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor) -> bool
 ~abstract System.ComponentModel.Design.UndoEngine.AddUndoUnit(System.ComponentModel.Design.UndoEngine.UndoUnit unit) -> void
-~abstract System.Windows.Forms.Design.Behavior.Glyph.GetHitTest(System.Drawing.Point p) -> System.Windows.Forms.Cursor
-~abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.PaintEventArgs pe) -> void
+abstract System.Windows.Forms.Design.Behavior.Glyph.GetHitTest(System.Drawing.Point p) -> System.Windows.Forms.Cursor?
+abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.PaintEventArgs! pe) -> void
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string
@@ -351,8 +351,8 @@
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].set -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.BehaviorServiceAdornerCollectionEnumerator(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection mappings) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
-~System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
-~System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
+System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
+System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.Add(System.Windows.Forms.Design.Behavior.Glyph value) -> int
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.GlyphCollection value) -> void
@@ -486,7 +486,7 @@
 ~virtual System.Drawing.Design.ToolboxItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Drawing.Design.ToolboxItem.ValidatePropertyValue(string propertyName, object value) -> object
 ~virtual System.Drawing.Design.ToolboxItem.Version.get -> string
-~virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior
+virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
 ~virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.AddComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
