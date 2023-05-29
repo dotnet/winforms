@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Configuration;
 using System.Windows.Forms.Design;
@@ -14,11 +12,11 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, IComponentInitializer
 {
-    private InheritanceAttribute _inheritanceAttribute;
-    private Dictionary<string, InheritedPropertyDescriptor> _inheritedProps;
-    private DesignerVerbCollection _verbs;
-    private DesignerActionListCollection _actionLists;
-    private ShadowPropertyCollection _shadowProperties;
+    private InheritanceAttribute? _inheritanceAttribute;
+    private Dictionary<string, InheritedPropertyDescriptor>? _inheritedProps;
+    private DesignerVerbCollection? _verbs;
+    private DesignerActionListCollection? _actionLists;
+    private ShadowPropertyCollection? _shadowProperties;
     private bool _settingsKeyExplicitlySet;
 
     private protected const string SettingsKeyName = "SettingsKey";
@@ -55,13 +53,14 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     internal virtual bool CanBeAssociatedWith(IDesigner parentDesigner) => true;
 
     /// <summary>
-    ///  Gets or sets a value indicating whether or not this component is being inherited.
+    ///  Gets a value indicating whether or not this component is being inherited.
     /// </summary>
+    [MemberNotNullWhen(true, nameof(InheritanceAttribute))]
     protected bool Inherited
     {
         get
         {
-            InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+            InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
             return inheritanceAttribute is not null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited);
         }
     }
@@ -76,26 +75,26 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  the parent component.  The default implementation of this property returns the root component
     ///  for all components that are not the root component, and it returns null for the root component.
     /// </summary>
-    protected virtual IComponent ParentComponent
+    protected virtual IComponent? ParentComponent
     {
         get
         {
-            IComponent root = GetService<IDesignerHost>()?.RootComponent;
+            IComponent? root = GetService<IDesignerHost>()?.RootComponent;
             return root == Component ? null : root;
         }
     }
 
     /// <summary>
-    ///  Gets or sets the inheritance attribute for this component.
+    ///  Gets the inheritance attribute for this component.
     /// </summary>
-    protected virtual InheritanceAttribute InheritanceAttribute
+    protected virtual InheritanceAttribute? InheritanceAttribute
     {
         get
         {
             if (_inheritanceAttribute is null)
             {
                 // Record if this component is being inherited or not.
-                if (TryGetService(out IInheritanceService inheritanceService))
+                if (TryGetService(out IInheritanceService? inheritanceService))
                 {
                     _inheritanceAttribute = inheritanceService.GetInheritanceAttribute(Component);
                 }
@@ -113,6 +112,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Gets a collection that houses shadow properties.  Shadow properties. are properties that fall through to
     ///  the underlying component before they are set, but return their set values once they are set.
     /// </summary>
+    [MemberNotNull(nameof(_shadowProperties))]
     protected ShadowPropertyCollection ShadowProperties => _shadowProperties ??= new ShadowPropertyCollection(this);
 
     /// <summary>
@@ -128,7 +128,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///
     ///  The default implemenation of this method does nothing.
     /// </summary>
-    public virtual void InitializeExistingComponent(IDictionary defaultValues)
+    public virtual void InitializeExistingComponent(IDictionary? defaultValues)
         => throw new NotImplementedException(SR.NotImplementedByDesign);
 
     /// <summary>
@@ -139,7 +139,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  may even ignore the defaultValues dictionary altogether if you wish.
     ///  The default implemenation of this method does nothing.
     /// </summary>
-    public virtual void InitializeNewComponent(IDictionary defaultValues)
+    public virtual void InitializeNewComponent(IDictionary? defaultValues)
     {
         // execute legacy code
         InitializeNonDefault();
@@ -169,7 +169,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Gets or sets the component this designer is designing.
     /// </summary>
-    public IComponent Component { get; private set; }
+    public IComponent Component { get; private set; } = null!;
 
     /// <summary>
     ///  Gets the design-time verbs supported by the component associated with the designer.
@@ -187,16 +187,16 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         get
         {
             ICollection comps = AssociatedComponents;
-            if (comps is not null && comps.Count > 0 && TryGetService(out IDesignerHost host))
+            if (comps is not null && comps.Count > 0 && TryGetService(out IDesignerHost? host))
             {
                 IDesigner[] designers = new IDesigner[comps.Count];
                 int idx = 0;
                 foreach (IComponent comp in comps.OfType<IComponent>())
                 {
-                    designers[idx] = host.GetDesigner(comp);
-                    if (designers[idx] is not null)
+                    IDesigner? designer = host.GetDesigner(comp);
+                    if (designer is not null)
                     {
-                        idx++;
+                        designers[idx++] = designer;
                     }
                 }
 
@@ -204,9 +204,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 // the norm, we don't optimize for that.
                 if (idx < designers.Length)
                 {
-                    IDesigner[] newDesigners = new IDesigner[idx];
-                    Array.Copy(designers, 0, newDesigners, 0, idx);
-                    designers = newDesigners;
+                    Array.Resize(ref designers, idx);
                 }
 
                 return designers;
@@ -216,12 +214,12 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         }
     }
 
-    IDesigner ITreeDesigner.Parent
+    IDesigner? ITreeDesigner.Parent
     {
         get
         {
-            IComponent parent = ParentComponent;
-            if (parent is not null && TryGetService(out IDesignerHost host))
+            IComponent? parent = ParentComponent;
+            if (parent is not null && TryGetService(out IDesignerHost? host))
             {
                 return host.GetDesigner(parent);
             }
@@ -246,17 +244,17 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     public virtual void DoDefaultAction()
     {
         // If the event binding service is not available, there is nothing much we can do, so just return.
-        if (!TryGetService(out IEventBindingService ebs)
-            || !TryGetService(out ISelectionService selectionService))
+        if (!TryGetService(out IEventBindingService? ebs)
+            || !TryGetService(out ISelectionService? selectionService))
         {
             return;
         }
 
         ICollection components = selectionService.GetSelectedComponents();
-        EventDescriptor thisDefaultEvent = null;
-        string thisHandler = null;
-        IDesignerHost host = GetService<IDesignerHost>();
-        DesignerTransaction t = null;
+        EventDescriptor? thisDefaultEvent = null;
+        string? thisHandler = null;
+        IDesignerHost? host = GetService<IDesignerHost>();
+        DesignerTransaction? t = null;
 
         if (components is null)
         {
@@ -267,14 +265,15 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         {
             foreach (IComponent comp in components.OfType<IComponent>())
             {
-                EventDescriptor defaultEvent = TypeDescriptor.GetDefaultEvent(comp);
-                PropertyDescriptor defaultPropEvent = null;
+                EventDescriptor? defaultEvent = TypeDescriptor.GetDefaultEvent(comp);
                 bool eventChanged = false;
 
-                if (defaultEvent is not null)
+                if (defaultEvent is null)
                 {
-                    defaultPropEvent = ebs.GetEventProperty(defaultEvent);
+                    continue;
                 }
+
+                PropertyDescriptor? defaultPropEvent = ebs.GetEventProperty(defaultEvent);
 
                 // If we couldn't find a property for this event, or of the property is read only, then abort.
                 if (defaultPropEvent is null || defaultPropEvent.IsReadOnly)
@@ -295,9 +294,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 }
 
                 // handler will be null if there is no explicit event hookup in the parsed init method
-                object result = defaultPropEvent.GetValue(comp);
-                string handler = result as string;
-                if (handler is null)
+                object? result = defaultPropEvent.GetValue(comp);
+                if (result is not string handler)
                 {
                     // Skip invalid properties.
                     if (result is not null)
@@ -364,7 +362,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 Component is not null,
                 "this.component needs to be set before this method is valid.");
 
-            return TryGetService(out IDesignerHost host) && Component == host.RootComponent;
+            return TryGetService(out IDesignerHost? host) && Component == host.RootComponent;
         }
     }
 
@@ -378,20 +376,20 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         // For inherited components, save off the current values so we can compute a delta.  We also do this for
         // the root component, but, as it is ALWAYS inherited, the computation of default values favors the
         // presence of a default value attribute over the current code value.
-        bool isRoot = TryGetService(out IDesignerHost host) && component == host.RootComponent;
+        bool isRoot = TryGetService(out IDesignerHost? host) && component == host.RootComponent;
 
         if (component?.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) is null)
         {
             sc.AddService<DesignerCommandSet>(new CDDesignerCommandSet(this));
         }
 
-        if (TryGetService(out IComponentChangeService cs))
+        if (TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
         }
 
-        InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
-        if (isRoot || InheritanceAttribute is null || !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
+        InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
+        if (isRoot || inheritanceAttribute is null || !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
         {
             InitializeInheritedProperties();
         }
@@ -400,7 +398,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     private void InitializeInheritedProperties()
     {
         Dictionary<string, InheritedPropertyDescriptor> props = new();
-        InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+        InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
         bool readOnlyInherit = inheritanceAttribute is not null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly);
 
         if (!readOnlyInherit)
@@ -443,7 +441,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Invokes the get inheritance attribute of the specified ComponentDesigner.
     /// </summary>
-    protected InheritanceAttribute InvokeGetInheritanceAttribute(ComponentDesigner toInvoke)
+    [return: NotNullIfNotNull(nameof(toInvoke))]
+    protected InheritanceAttribute? InvokeGetInheritanceAttribute(ComponentDesigner? toInvoke)
         => toInvoke?.InheritanceAttribute;
 
     /// <summary>
@@ -453,12 +452,12 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     {
         if (disposing)
         {
-            if (TryGetService(out IComponentChangeService cs))
+            if (TryGetService(out IComponentChangeService? cs))
             {
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            Component = null;
+            Component = null!;
             _inheritedProps = null;
         }
     }
@@ -466,11 +465,11 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Raised when a component's name changes.  Here we update the SettingsKey property if necessary.
     /// </summary>
-    private void OnComponentRename(object sender, ComponentRenameEventArgs e)
+    private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
     {
         if (Component is IPersistComponentSettings)
         {
-            IComponent rootComponent = GetService<IDesignerHost>()?.RootComponent;
+            IComponent? rootComponent = GetService<IDesignerHost>()?.RootComponent;
 
             // SettingsKey is formed based on the name of the component and the root component. If either of
             // these change, we reset settings key (if it hasn't been explicitly set) so it can be recomputed.
@@ -484,34 +483,37 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
     /// </summary>
-    private string SettingsKey
+    private string? SettingsKey
     {
         get
         {
-            if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
+            string? settingsKeyName = (string?)ShadowProperties[SettingsKeyName];
+            if (string.IsNullOrEmpty(settingsKeyName))
             {
-                IComponent rootComponent = GetService<IDesignerHost>()?.RootComponent;
+                IComponent? rootComponent = GetService<IDesignerHost>()?.RootComponent;
 
                 if (Component is IPersistComponentSettings persistableComponent && rootComponent is not null)
                 {
                     if (string.IsNullOrEmpty(persistableComponent.SettingsKey))
                     {
-                        if (rootComponent is not null && rootComponent != persistableComponent)
+                        if (rootComponent != persistableComponent)
                         {
-                            ShadowProperties[SettingsKeyName] = $"{rootComponent.Site.Name}.{Component.Site.Name}";
+                            settingsKeyName = $"{rootComponent.Site!.Name}.{Component.Site!.Name}";
                         }
                         else
                         {
-                            ShadowProperties[SettingsKeyName] = Component.Site.Name;
+                            settingsKeyName = Component.Site!.Name;
                         }
+
+                        ShadowProperties[SettingsKeyName] = settingsKeyName;
                     }
 
-                    persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
+                    persistableComponent.SettingsKey = settingsKeyName;
                     return persistableComponent.SettingsKey;
                 }
             }
 
-            return ShadowProperties[SettingsKeyName] as string;
+            return settingsKeyName;
         }
         set
         {
@@ -549,24 +551,12 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Provides a way for a designer to get services from the hosting environment.
     /// </summary>
-    protected virtual object GetService(Type serviceType)
-    {
-        if (Component is not null)
-        {
-            ISite site = Component.Site;
-            if (site is not null)
-            {
-                return site.GetService(serviceType);
-            }
-        }
+    protected virtual object? GetService(Type serviceType) => Component?.Site?.GetService(serviceType);
 
-        return null;
-    }
-
-    internal T GetService<T>() where T : class
+    internal T? GetService<T>() where T : class
         => GetService(typeof(T)) as T;
 
-    internal bool TryGetService<T>(out T service) where T : class
+    internal bool TryGetService<T>([NotNullWhen(true)] out T? service) where T : class
     {
         service = GetService<T>();
         return service is not null;
@@ -578,15 +568,14 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     public virtual void OnSetComponentDefaults()
     {
-        ISite site = Component?.Site;
+        ISite? site = Component?.Site;
         if (site is not null)
         {
-            IComponent component = Component;
-            PropertyDescriptor pd = TypeDescriptor.GetDefaultProperty(component);
-            if (pd is not null && pd.PropertyType.Equals(typeof(string)))
+            IComponent component = Component!;
+            PropertyDescriptor? pd = TypeDescriptor.GetDefaultProperty(component);
+            if (pd is not null && pd.TryGetValue(component, out string? current))
             {
-                string current = (string)pd.GetValue(component);
-                if (current is null || current.Length == 0)
+                if (string.IsNullOrEmpty(current))
                 {
                     pd.SetValue(component, site.Name);
                 }
@@ -604,7 +593,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of member attributes the component it is designing will expose
     ///  through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PostFilterAttributes(IDictionary attributes)
+    protected virtual void PostFilterAttributes(IDictionary? attributes)
     {
         // If this component is being inherited, mark it as such in the class attributes.
         // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and
@@ -620,7 +609,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
             return;
         }
 
-        InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+        InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
         if (inheritanceAttribute is not null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited))
         {
             attributes[typeof(InheritanceAttribute)] = InheritanceAttribute;
@@ -630,7 +619,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Allows a designer to filter the set of events the component it is designing will expose through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PostFilterEvents(IDictionary events)
+    protected virtual void PostFilterEvents(IDictionary? events)
     {
         // If this component is being privately inherited, we need to filter the events to make them read-only.
         if (events is null)
@@ -638,18 +627,18 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
             return;
         }
 
-        InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
+        InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
         if (inheritanceAttribute is null || !inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
         {
             return;
         }
 
-        EventDescriptor[] values = new EventDescriptor[events.Values.Count];
+        EventDescriptor?[] values = new EventDescriptor[events.Values.Count];
         events.Values.CopyTo(values, 0);
 
         for (int i = 0; i < values.Length; i++)
         {
-            EventDescriptor evt = values[i];
+            EventDescriptor? evt = values[i];
             if (evt is not null)
             {
                 events[evt.Name] = TypeDescriptor.CreateEvent(evt.ComponentType, evt, ReadOnlyAttribute.Yes);
@@ -660,14 +649,14 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PostFilterProperties(IDictionary properties)
+    protected virtual void PostFilterProperties(IDictionary? properties)
     {
-        if (_inheritedProps is null)
+        if (properties is null || _inheritedProps is null)
         {
             return;
         }
 
-        bool readOnlyInherit = InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly);
+        bool readOnlyInherit = InheritanceAttribute.InheritedReadOnly.Equals(InheritanceAttribute);
         if (readOnlyInherit)
         {
             // Now loop through all the properties.  For each one, try to match a pre-created property.
@@ -675,10 +664,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
             PropertyDescriptor[] values = new PropertyDescriptor[properties.Values.Count];
             properties.Values.CopyTo(values, 0);
 
-            for (int i = 0; i < values.Length; i++)
+            foreach (PropertyDescriptor prop in values)
             {
-                PropertyDescriptor prop = values[i];
-
                 // This is a private component. Therefore, the user should not be allowed to modify any properties.
                 // We replace all properties with read-only versions.
                 properties[prop.Name] = TypeDescriptor.CreateProperty(prop.ComponentType, prop, ReadOnlyAttribute.Yes);
@@ -691,7 +678,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         foreach (KeyValuePair<string, InheritedPropertyDescriptor> de in _inheritedProps)
         {
             // replace the property descriptor it was created with with the new one in case we're shadowing
-            PropertyDescriptor newInnerProp = (PropertyDescriptor)properties[de.Key];
+            PropertyDescriptor? newInnerProp = (PropertyDescriptor?)properties[de.Key];
             if (newInnerProp is not null)
             {
                 InheritedPropertyDescriptor inheritedPropDesc = de.Value;
@@ -705,7 +692,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of member attributes the component it is designing will expose
     ///  through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PreFilterAttributes(IDictionary attributes)
+    protected virtual void PreFilterAttributes(IDictionary? attributes)
     {
     }
 
@@ -713,7 +700,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of events the component it is designing will expose through the
     ///  TypeDescriptor object.
     /// </summary>
-    protected virtual void PreFilterEvents(IDictionary events)
+    protected virtual void PreFilterEvents(IDictionary? events)
     {
     }
 
@@ -721,11 +708,10 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of properties the component it is designing will expose through
     ///  the TypeDescriptor object.
     /// </summary>
-    protected virtual void PreFilterProperties(IDictionary properties)
+    protected virtual void PreFilterProperties(IDictionary? properties)
     {
         if (Component is IPersistComponentSettings
-            && properties is not null
-            && properties[SettingsKeyName] is PropertyDescriptor prop)
+            && properties?[SettingsKeyName] is PropertyDescriptor prop)
         {
             properties[SettingsKeyName] = TypeDescriptor.CreateProperty(
                 typeof(ComponentDesigner),
@@ -738,7 +724,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Notifies the <see cref="IComponentChangeService"/> that this component has been changed.
     ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
     /// </summary>
-    protected void RaiseComponentChanged(MemberDescriptor member, object oldValue, object newValue)
+    protected void RaiseComponentChanged(MemberDescriptor? member, object? oldValue, object? newValue)
         => GetService<IComponentChangeService>()?.OnComponentChanged(Component, member, oldValue, newValue);
 
     /// <summary>
@@ -746,6 +732,6 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  about to be changed. You only need to call this when you are affecting component properties directly and
     ///  not through the MemberDescriptor's accessors.
     /// </summary>
-    protected void RaiseComponentChanging(MemberDescriptor member)
+    protected void RaiseComponentChanging(MemberDescriptor? member)
         => GetService<IComponentChangeService>()?.OnComponentChanging(Component, member);
 }
