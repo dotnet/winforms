@@ -76,7 +76,8 @@ public unsafe partial class DataObject :
             takeOwnership: true,
             out ComTypes.IDataObject? comTypesData);
 
-        Debug.Assert(success);
+        Debug.Assert(success && comTypesData is not null);
+
         return new(comTypesData!);
     }
 

@@ -26,6 +26,7 @@ CloseDesktop
 CloseEnhMetaFile
 CloseHandle
 CloseThemeData
+CLIPBRD_E_BAD_DATA
 CLR_*
 CLSCTX
 cmb4

@@ -471,4 +471,28 @@ public class ClipboardTests
         Assert.Throws<ThreadStateException>(() => Clipboard.SetText("text"));
         Assert.Throws<ThreadStateException>(() => Clipboard.SetText("text", TextDataFormat.Text));
     }
+
+    [WinFormsFact]
+    public void ClipBoard_SetData_CustomFormat_Color()
+    {
+        using BinaryFormatterScope scope = new(enable: true);
+        string format = nameof(ClipBoard_SetData_CustomFormat_Color);
+        Clipboard.SetData(format, Color.Black);
+        Assert.True(Clipboard.ContainsData(format));
+        Assert.Equal(Color.Black, Clipboard.GetData(format));
+    }
+
+    [WinFormsFact]
+    public void ClipBoard_SetData_CustomFormat_Color_BinaryFormatterDisabled_Throws()
+    {
+        using BinaryFormatterScope scope = new(enable: false);
+        string format = nameof(ClipBoard_SetData_CustomFormat_Color);
+
+        // This will "succeed", but fail under the covers. Windows doesn't return any errors when setting data.
+        Clipboard.SetData(format, Color.Black);
+        Assert.True(Clipboard.ContainsData(format));
+
+        // The data is invalid, which surfaces as CLIPBRD_E_BAD_DATA which we swallow and return null for.
+        Assert.Null(Clipboard.GetData(format));
+    }
 }
