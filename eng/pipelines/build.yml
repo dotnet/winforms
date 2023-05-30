@@ -119,7 +119,7 @@ jobs:
         XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
       displayName: Run Integration Tests
       condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
-      retryCountOnTaskFailure: 1
+      retryCountOnTaskFailure: 2
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd

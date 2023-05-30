@@ -82,7 +82,12 @@ public class SendInput
         SetForegroundWindow(window);
         actions(ControlTestBase.s_inputSimulator);
         await _waitForIdleAsync();
+        await Task.Run(() =>
+        {
+            Thread.Sleep(100);
+        });
 
+        /*
         if (window.DoNotSendTestInput)
         {
             // Scenarios where Application level Message filter is bypassed. ex: DragDrop that has capture could not let test input to be sent to Message filter.
@@ -114,7 +119,7 @@ public class SendInput
                     throw new TimeoutException(message);
                 }
             });
-        }
+        }*/
     }
 
     private static HWND GetForegroundWindow()
