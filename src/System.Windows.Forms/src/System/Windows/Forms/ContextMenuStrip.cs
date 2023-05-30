@@ -134,4 +134,34 @@ public class ContextMenuStrip : ToolStripDropDownMenu
             RecreateHandle();
         }
     }
+
+    protected override void OnOpened(EventArgs e)
+    {
+        if (IsHandleCreated && !IsInDesignMode)
+        {
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(Interop.UiaCore.UIA.MenuOpenedEventId);
+            }
+        }
+
+        base.OnOpened(e);
+    }
+
+    protected override void OnClosed(ToolStripDropDownClosedEventArgs e)
+    {
+        base.OnClosed(e);
+
+        if (IsHandleCreated && !IsInDesignMode)
+        {
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(Interop.UiaCore.UIA.MenuClosedEventId);
+            }
+
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
+        }
+    }
 }

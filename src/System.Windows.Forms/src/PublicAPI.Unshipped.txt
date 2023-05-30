@@ -1,0 +1,2 @@
+override System.Windows.Forms.ContextMenuStrip.OnClosed(System.Windows.Forms.ToolStripDropDownClosedEventArgs! e) -> void
+override System.Windows.Forms.ContextMenuStrip.OnOpened(System.EventArgs! e) -> void
