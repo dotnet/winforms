@@ -84,15 +84,21 @@ public class SendInput
         {
             // Scenarios where Application level Message filter is bypassed. ex: DragDrop that has capture could not let test input to be sent to Message filter.
             // We add small delay as work around for SendInput synchronization.
-            Thread.Sleep(100);
+            await Task.Run(() =>
+            {
+                Thread.Sleep(100);
+            });
         }
         else
         // If Window/Form is not closed, Wait for TestInput to be received by the Form before proceeding with further verification.
-        if (window.HandleInternal != IntPtr.Zero && !window.DoNotSendTestInput && !window.ParentClosed)
+        if (window.HandleInternal != IntPtr.Zero && !window.ParentClosed)
         {
-            Thread.Sleep(10);
+            await Task.Run(() =>
+            {
+                Thread.Sleep(10);
+            });
 
-            // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again (Once TestInput is received).
+            // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again (When TestInput is received).
             window.ResetManualResetEventSlim();
 
             // To ensure proper synchronization between the input being sent and further verifications, we introduce the TestKey
@@ -100,14 +106,11 @@ public class SendInput
             // the control yet, the TestKey helps confirm that the underlying control has received the input before we proceed.
             ControlTestBase.s_inputSimulator.Keyboard.KeyPress(CustomForm.TestKey);
 
-            await Task.Run(() =>
+            // Wait for the completion of input(sent via SendInput) processing.
+            if (!window.WaitOnManualResetEventSlim(5000))
             {
-                // Wait for the completion of input(sent via SendInput) processing.
-                if (!window.WaitOnManualResetEventSlim(5000))
-                {
-                    throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
-                }
-            });
+                throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
+            }
         }
     }
 
