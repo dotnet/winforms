@@ -10,6 +10,7 @@ namespace System.Windows.Forms.UITests
     {
         private ManualResetEventSlim? _manualResetEventSlim;
         internal const VIRTUAL_KEY TestKey = VIRTUAL_KEY.VK_NUMLOCK;
+        internal const int Timeout = 5000;
 
         public bool DoNotSendTestInput { get; internal set; }
 

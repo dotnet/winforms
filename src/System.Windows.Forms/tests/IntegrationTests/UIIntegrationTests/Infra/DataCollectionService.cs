@@ -15,6 +15,7 @@ internal static class DataCollectionService
     private static readonly ConditionalWeakTable<Exception, StrongBox<bool>> LoggedExceptions = new();
     private static ImmutableList<CustomLoggerData> _customInProcessLoggers = ImmutableList<CustomLoggerData>.Empty;
     private static bool _firstChanceExceptionHandlerInstalled;
+    private static int _testOrder;
 
     [ThreadStatic]
     private static bool _inHandler;
@@ -167,7 +168,8 @@ internal static class DataCollectionService
             File.WriteAllText(CreateLogFileName(logDir, timestamp, testName, errorId, logId: string.Empty, "log"), ex.ToString());
             foreach (var (callback, logId, extension) in _customInProcessLoggers)
             {
-                callback(CreateLogFileName(logDir, timestamp, testName, errorId, logId, extension));
+                callback(CreateLogFileName(logDir, timestamp, $"{_testOrder}{testName}", errorId, logId, extension));
+                _testOrder++;
             }
         }
         finally

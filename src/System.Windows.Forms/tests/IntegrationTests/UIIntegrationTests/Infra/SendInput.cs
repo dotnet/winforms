@@ -5,6 +5,7 @@
 using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
+using Xunit.Abstractions;
 using static Interop;
 
 namespace System.Windows.Forms.UITests;
@@ -12,10 +13,12 @@ namespace System.Windows.Forms.UITests;
 public class SendInput
 {
     private readonly Func<Task> _waitForIdleAsync;
+    private readonly protected ITestOutputHelper _testOutputHelper;
 
-    public SendInput(Func<Task> waitForIdleAsync)
+    public SendInput(Func<Task> waitForIdleAsync, ITestOutputHelper testOutputHelper)
     {
         _waitForIdleAsync = waitForIdleAsync;
+        _testOutputHelper = testOutputHelper;
     }
 
     internal async Task SendAsync(CustomForm window, params object[] keys)
@@ -93,11 +96,6 @@ public class SendInput
         // If Window/Form is not closed, Wait for TestInput to be received by the Form before proceeding with further verification.
         if (window.HandleInternal != IntPtr.Zero && !window.ParentClosed)
         {
-            await Task.Run(() =>
-            {
-                Thread.Sleep(10);
-            });
-
             // Reset ManualResetEventSlim on CustomForm so we can block thread until it is set again (When TestInput is received).
             window.ResetManualResetEventSlim();
 
@@ -106,11 +104,16 @@ public class SendInput
             // the control yet, the TestKey helps confirm that the underlying control has received the input before we proceed.
             ControlTestBase.s_inputSimulator.Keyboard.KeyPress(CustomForm.TestKey);
 
-            // Wait for the completion of input(sent via SendInput) processing.
-            if (!window.WaitOnManualResetEventSlim(5000))
+            await Task.Run(() =>
             {
-                throw new TimeoutException($"Timeout reached while waiting to process SendInput.");
-            }
+                // Wait for the completion of input(sent via SendInput) processing.
+                if (!window.WaitOnManualResetEventSlim(CustomForm.Timeout))
+                {
+                    string message = $"Timeout {CustomForm.Timeout}ms reached while waiting to process TestKey.";
+                    _testOutputHelper.WriteLine(message);
+                    throw new TimeoutException(message);
+                }
+            });
         }
     }
 
