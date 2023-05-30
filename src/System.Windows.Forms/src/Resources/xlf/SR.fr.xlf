@@ -10236,6 +10236,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Indique si l'élément doit être dessiné de droite à gauche pour les langues RTL.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="new">Occurs when the Selected property value changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemSize">
         <source>The size of the item.</source>
         <target state="translated">La taille de l'élément.</target>

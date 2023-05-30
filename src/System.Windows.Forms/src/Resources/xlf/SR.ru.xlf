@@ -10237,6 +10237,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Определяет, будет ли элемент отображаться справа налево для RTL-языков (с направлением письма справа налево).</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="new">Occurs when the Selected property value changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemSize">
         <source>The size of the item.</source>
         <target state="translated">Размер элемента.</target>

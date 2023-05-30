@@ -10236,6 +10236,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Indica se o item deve desenhar da direita para a esquerda nos idiomas RTL (com escrita direcionada da direita para a esquerda).</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="new">Occurs when the Selected property value changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemSize">
         <source>The size of the item.</source>
         <target state="translated">O tamanho do item.</target>

@@ -10236,6 +10236,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Indica se l'elemento deve essere disegnato da destra a sinistra per le lingue RTL.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="new">Occurs when the Selected property value changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemSize">
         <source>The size of the item.</source>
         <target state="translated">La dimensione dell'elemento.</target>

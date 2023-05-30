@@ -10236,6 +10236,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">RTL 언어의 경우 항목을 오른쪽에서 왼쪽으로 그릴지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="new">Occurs when the Selected property value changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemSize">
         <source>The size of the item.</source>
         <target state="translated">항목의 크기입니다.</target>

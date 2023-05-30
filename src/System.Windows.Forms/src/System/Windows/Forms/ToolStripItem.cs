@@ -93,6 +93,7 @@ public abstract partial class ToolStripItem : BindableComponent,
     internal static readonly object s_ownerChangedEvent = new object();
     internal static readonly object s_paintEvent = new object();
     internal static readonly object s_textChangedEvent = new object();
+    internal static readonly object s_selectedChangedEvent = new object();
 
     internal static readonly object s_commandChangedEvent = new();
     internal static readonly object s_commandParameterChangedEvent = new();
@@ -854,12 +855,14 @@ public abstract partial class ToolStripItem : BindableComponent,
                 if (!_state[s_stateEnabled])
                 {
                     bool wasSelected = _state[s_stateSelected];
+
                     // clear all the other states.
                     _state[s_stateSelected | s_statePressed] = false;
 
                     if (wasSelected)
                     {
                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                        OnSelectedChanged(EventArgs.Empty);
                     }
                 }
 
@@ -1834,6 +1837,18 @@ public abstract partial class ToolStripItem : BindableComponent,
             (ParentInternal is not null && ParentInternal.IsSelectionSuspended &&
              ParentInternal.LastMouseDownedItem == this));
 
+    [SRDescription(nameof(SR.ToolStripItemSelectedChangedDescr))]
+    public event EventHandler? SelectedChanged
+    {
+        add => Events.AddHandler(s_selectedChangedEvent, value);
+        remove => Events.RemoveHandler(s_selectedChangedEvent, value);
+    }
+
+    protected virtual void OnSelectedChanged(EventArgs e)
+    {
+        RaiseEvent(s_selectedChangedEvent, e);
+    }
+
     protected internal virtual bool ShowKeyboardCues
         => DesignMode || ToolStripManager.ShowMenuFocusCues;
 
@@ -2580,9 +2595,16 @@ public abstract partial class ToolStripItem : BindableComponent,
     {
         if (_state[s_stateMouseDownAndNoDrag] || _state[s_statePressed] || _state[s_stateSelected])
         {
+            bool wasSelected = _state[s_stateSelected];
+
             _state[s_stateMouseDownAndNoDrag | s_statePressed | s_stateSelected] = false;
 
             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+
+            if (wasSelected)
+            {
+                OnSelectedChanged(EventArgs.Empty);
+            }
 
             Invalidate();
         }
@@ -3250,6 +3272,8 @@ public abstract partial class ToolStripItem : BindableComponent,
 
             KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
 
+            OnSelectedChanged(EventArgs.Empty);
+
             forceRaiseAccessibilityFocusChanged = true;
         }
 
@@ -3642,6 +3666,8 @@ public abstract partial class ToolStripItem : BindableComponent,
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
             }
+
+            OnSelectedChanged(EventArgs.Empty);
         }
     }
 

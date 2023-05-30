@@ -1,0 +1,2 @@
+System.Windows.Forms.ToolStripItem.SelectedChanged -> System.EventHandler?
+virtual System.Windows.Forms.ToolStripItem.OnSelectedChanged(System.EventArgs! e) -> void

@@ -10236,6 +10236,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">表示項目是否使用 RTL 語言的方式由右至左繪製。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemSelectedChangedDescr">
+        <source>Occurs when the Selected property value changes.</source>
+        <target state="new">Occurs when the Selected property value changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemSize">
         <source>The size of the item.</source>
         <target state="translated">項目的大小。</target>
