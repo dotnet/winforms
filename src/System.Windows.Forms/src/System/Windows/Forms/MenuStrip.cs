@@ -171,7 +171,13 @@ public partial class MenuStrip : ToolStrip
     {
         if (IsHandleCreated)
         {
-            AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, -1);
+            if (!TabStop && !DesignMode && IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuModeStartEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
+            }
+
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, User32.OBJID.MENU, -1);
         }
 
         ((EventHandler?)Events[EventMenuActivate])?.Invoke(this, e);
@@ -181,7 +187,13 @@ public partial class MenuStrip : ToolStrip
     {
         if (IsHandleCreated)
         {
-            AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, -1);
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, User32.OBJID.MENU, -1);
+
+            if (!TabStop && !DesignMode && IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuClosedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuModeEndEventId);
+            }
         }
 
         ((EventHandler?)Events[EventMenuDeactivate])?.Invoke(this, e);

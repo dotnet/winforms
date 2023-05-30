@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -132,6 +133,36 @@ public class ContextMenuStrip : ToolStripDropDownMenu
             && DeviceDpi != (int)PInvoke.GetDpiForWindow(this))
         {
             RecreateHandle();
+        }
+    }
+
+    protected override void OnOpened(EventArgs e)
+    {
+        if (IsHandleCreated && !IsInDesignMode)
+        {
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
+            }
+        }
+
+        base.OnOpened(e);
+    }
+
+    protected override void OnClosed(ToolStripDropDownClosedEventArgs e)
+    {
+        base.OnClosed(e);
+
+        if (IsHandleCreated && !IsInDesignMode)
+        {
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuClosedEventId);
+            }
+
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
         }
     }
 }

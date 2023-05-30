@@ -1254,14 +1254,6 @@ public partial class ToolStripDropDown : ToolStrip
 
     protected virtual void OnClosed(ToolStripDropDownClosedEventArgs e)
     {
-        if (IsHandleCreated)
-        {
-            if (ownerItem is null || !ownerItem.IsInDesignMode)
-            {
-                AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
-            }
-        }
-
         ((ToolStripDropDownClosedEventHandler?)Events[EventClosed])?.Invoke(this, e);
     }
 
@@ -1316,14 +1308,6 @@ public partial class ToolStripDropDown : ToolStrip
 
     protected virtual void OnOpened(EventArgs e)
     {
-        if (IsHandleCreated)
-        {
-            if (ownerItem is null || !ownerItem.IsInDesignMode)
-            {
-                AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
-            }
-        }
-
         ((EventHandler?)Events[EventOpened])?.Invoke(this, e);
     }
 
