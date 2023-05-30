@@ -171,13 +171,10 @@ public partial class MenuStrip : ToolStrip
     {
         if (IsHandleCreated)
         {
-            if (!TabStop)
+            if (!TabStop && !DesignMode && IsAccessibilityObjectCreated)
             {
-                if (IsAccessibilityObjectCreated && !DesignMode)
-                {
-                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuModeStartEventId);
-                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
-                }
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuModeStartEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
             }
 
             AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, User32.OBJID.MENU, -1);
