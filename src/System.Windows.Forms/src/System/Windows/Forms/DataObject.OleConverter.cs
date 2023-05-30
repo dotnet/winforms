@@ -22,45 +22,38 @@ namespace System.Windows.Forms;
 public partial class DataObject
 {
     /// <summary>
-    ///  OLE Converter.  This class embodies the nastiness required to convert from our
-    ///  managed types to standard OLE clipboard formats.
+    ///  Maps <see cref="IComDataObject"/> to <see cref="IDataObject"/> for reading data only.
     /// </summary>
-    private class OleConverter : IDataObject
+    private sealed class OleConverter : IDataObject
     {
-        internal IComDataObject _innerData;
+        private readonly IComDataObject _innerData;
 
         public OleConverter(IComDataObject data)
         {
+            Debug.Assert(data is not null);
             CompModSwitches.DataObject.TraceVerbose("OleConverter: Constructed OleConverter");
             _innerData = data;
         }
 
-        /// <summary>
-        ///  Returns the data Object we are wrapping
-        /// </summary>
-        public IComDataObject OleDataObject
-        {
-            get
-            {
-                return _innerData;
-            }
-        }
+        public IComDataObject OleDataObject => _innerData;
 
         /// <summary>
         ///  Uses IStream and retrieves the specified format from the bound IComDataObject.
         /// </summary>
         private unsafe object? GetDataFromOleIStream(string format)
         {
-            FORMATETC formatetc = default;
             STGMEDIUM medium = default;
 
-            formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-            formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
-            formatetc.lindex = -1;
-            formatetc.tymed = TYMED.TYMED_ISTREAM;
+            FORMATETC formatetc = new()
+            {
+                cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
+                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                lindex = -1,
+                tymed = TYMED.TYMED_ISTREAM
+            };
 
             // Limit the # of exceptions we may throw below.
-            if ((int)HRESULT.S_OK != QueryGetDataUnsafe(ref formatetc))
+            if (_innerData.QueryGetData(ref formatetc) != (int)HRESULT.S_OK)
             {
                 return null;
             }
@@ -82,13 +75,15 @@ public partial class DataObject
                     using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.unionmember);
                     pStream.Value->Stat(out Com.STATSTG sstg, Com.STATFLAG.STATFLAG_DEFAULT);
 
-                    hglobal = PInvoke.GlobalAlloc(
-                        GMEM_MOVEABLE | GMEM_ZEROINIT,
-                        (uint)sstg.cbSize);
+                    hglobal = PInvoke.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (uint)sstg.cbSize);
+
                     // Not throwing here because the other out of memory condition on GlobalAlloc
                     // happens inside innerData.GetData and gets turned into a null return value.
                     if (hglobal == 0)
+                    {
                         return null;
+                    }
+
                     void* ptr = PInvoke.GlobalLock(hglobal);
                     pStream.Value->Read((byte*)ptr, (uint)sstg.cbSize, null);
                     PInvoke.GlobalUnlock(hglobal);
@@ -101,78 +96,172 @@ public partial class DataObject
             finally
             {
                 if (hglobal != 0)
+                {
                     PInvoke.GlobalFree(hglobal);
+                }
 
                 Ole32.ReleaseStgMedium(ref medium);
             }
         }
 
         /// <summary>
-        ///  Retrieves the specified form from the specified hglobal.
+        ///  Retrieves the specified format from the specified hglobal.
         /// </summary>
-        private static object? GetDataFromHGLOBAL(string format, IntPtr hglobal)
+        private static object? GetDataFromHGLOBAL(string format, nint hglobal)
         {
-            object? data = null;
-
-            if (hglobal != IntPtr.Zero)
+            if (hglobal == 0)
             {
-                // Convert from OLE to IW objects
-                if (format.Equals(DataFormats.Text)
-                    || format.Equals(DataFormats.Rtf)
-                    || format.Equals(DataFormats.OemText))
-                {
-                    data = ReadStringFromHandle(hglobal, false);
-                }
-                else if (format.Equals(DataFormats.Html))
-                {
-                    data = ReadHtmlFromHandle(hglobal);
-                }
-
-                else if (format.Equals(DataFormats.UnicodeText))
-                {
-                    data = ReadStringFromHandle(hglobal, true);
-                }
-                else if (format.Equals(DataFormats.FileDrop))
-                {
-                    data = ReadFileListFromHandle((HDROP)hglobal);
-                }
-                else if (format.Equals(CF_DEPRECATED_FILENAME))
-                {
-                    data = new string[] { ReadStringFromHandle(hglobal, false) };
-                }
-                else if (format.Equals(CF_DEPRECATED_FILENAMEW))
-                {
-                    data = new string[] { ReadStringFromHandle(hglobal, true) };
-                }
-                else
-                {
-                    data = ReadObjectFromHandle(hglobal, DataObject.RestrictDeserializationToSafeTypes(format));
-                }
+                return null;
             }
 
-            return data;
+            return format switch
+            {
+                DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant
+                    => ReadStringFromHGLOBAL(hglobal, unicode: false),
+                DataFormats.HtmlConstant => ReadUtf8StringFromHGLOBAL(hglobal),
+                DataFormats.UnicodeTextConstant => ReadStringFromHGLOBAL(hglobal, unicode: true),
+                DataFormats.FileDropConstant => ReadFileListFromHandle((HDROP)hglobal),
+                CF_DEPRECATED_FILENAME => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
+                CF_DEPRECATED_FILENAMEW => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: true) },
+                _ => ReadObjectFromHandle(hglobal, RestrictDeserializationToSafeTypes(format))
+            };
+
+            static unsafe string ReadStringFromHGLOBAL(nint hglobal, bool unicode)
+            {
+                string? stringData = null;
+
+                void* buffer = PInvoke.GlobalLock(hglobal);
+                try
+                {
+                    stringData = unicode ? new string((char*)buffer) : new string((sbyte*)buffer);
+                }
+                finally
+                {
+                    PInvoke.GlobalUnlock(hglobal);
+                }
+
+                return stringData;
+            }
+
+            static unsafe string ReadUtf8StringFromHGLOBAL(nint hglobal)
+            {
+                void* buffer = PInvoke.GlobalLock(hglobal);
+                try
+                {
+                    int size = (int)PInvoke.GlobalSize(hglobal);
+                    return Encoding.UTF8.GetString((byte*)buffer, size - 1);
+                }
+                finally
+                {
+                    PInvoke.GlobalUnlock(hglobal);
+                }
+            }
         }
 
         /// <summary>
-        ///  Uses HGLOBALs and retrieves the specified format from the bound IComDataObject.
+        ///  Extracts a managed object from the innerData of the specified format.
+        ///  This is the base of the OLE to managed conversion.
         /// </summary>
-        private object? GetDataFromOleHGLOBAL(string format, out bool done)
+        /// <param name="doNotContinue">
+        ///  A restricted type was encountered, do not continue trying to deserialize.
+        /// </param>
+        private object? GetDataFromBoundOleDataObject(string format, out bool doNotContinue)
         {
-            done = false;
-            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
-
-            FORMATETC formatetc = default(FORMATETC);
-            STGMEDIUM medium = default(STGMEDIUM);
-
-            formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-            formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
-            formatetc.lindex = -1;
-            formatetc.tymed = TYMED.TYMED_HGLOBAL;
-
             object? data = null;
-
-            if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
+            doNotContinue = false;
+            try
             {
+                // Try to get the data a bitmap first.
+                data = GetDataFromOleOther(format, _innerData);
+
+                // Check for one of our standard data types.
+                data ??= GetDataFromOleHGLOBAL(format, out doNotContinue);
+
+                if (data is null && !doNotContinue)
+                {
+                    // Lastly check to see if the data is an IStream.
+                    data = GetDataFromOleIStream(format);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Fail(e.ToString());
+            }
+
+            return data;
+
+            // Currently this only supports Bitmap
+            static object? GetDataFromOleOther(string format, IComDataObject dataObject)
+            {
+                if (format != DataFormats.BitmapConstant)
+                {
+                    return null;
+                }
+
+                FORMATETC formatetc = new()
+                {
+                    cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    tymed = TYMED.TYMED_GDI
+                };
+
+                STGMEDIUM medium = default;
+
+                if (dataObject.QueryGetData(ref formatetc) == (int)HRESULT.S_OK)
+                {
+                    try
+                    {
+                        dataObject.GetData(ref formatetc, out medium);
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                object? data = null;
+
+                try
+                {
+                    if (medium.tymed == TYMED.TYMED_GDI && medium.unionmember != 0 && format.Equals(DataFormats.Bitmap))
+                    {
+                        // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
+                        // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
+                        if (Image.FromHbitmap(medium.unionmember) is Image clipboardImage)
+                        {
+                            data = (Image)clipboardImage.Clone();
+                            clipboardImage.Dispose();
+                        }
+                    }
+                }
+                finally
+                {
+                    Ole32.ReleaseStgMedium(ref medium);
+                }
+
+                return data;
+            }
+
+            object? GetDataFromOleHGLOBAL(string format, out bool doNotContinue)
+            {
+                doNotContinue = false;
+
+                FORMATETC formatetc = new()
+                {
+                    cfFormat = (short)(ushort)DataFormats.GetFormat(format).Id,
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = -1,
+                    tymed = TYMED.TYMED_HGLOBAL
+                };
+
+                if (_innerData.QueryGetData(ref formatetc) != (int)HRESULT.S_OK)
+                {
+                    return null;
+                }
+
+                object? data = null;
+                STGMEDIUM medium = default;
+
                 try
                 {
                     _innerData.GetData(ref formatetc, out medium);
@@ -184,7 +273,15 @@ public partial class DataObject
                 }
                 catch (RestrictedTypeDeserializationException)
                 {
-                    done = true;
+                    doNotContinue = true;
+                }
+                catch (COMException ex) when (ex.HResult == HRESULT.CLIPBRD_E_BAD_DATA)
+                {
+                    // One of the ways this can happen is when we attempt to put binary formatted data onto the
+                    // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
+                    // The data state, however, is not good, and this error will be returned by Windows when asking to
+                    // get the data out.
+                    Debug.WriteLine("CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
                 }
                 catch
                 {
@@ -193,108 +290,9 @@ public partial class DataObject
                 {
                     Ole32.ReleaseStgMedium(ref medium);
                 }
+
+                return data;
             }
-
-            return data;
-        }
-
-        /// <summary>
-        ///  Retrieves the specified format data from the bound IComDataObject, from
-        ///  other sources that IStream and HGLOBAL... this is really just a place
-        ///  to put the "special" formats like BITMAP, ENHMF, etc.
-        /// </summary>
-        private object? GetDataFromOleOther(string format)
-        {
-            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
-
-            FORMATETC formatetc = default(FORMATETC);
-            STGMEDIUM medium = default(STGMEDIUM);
-
-            TYMED tymed = (TYMED)0;
-
-            if (format.Equals(DataFormats.Bitmap))
-            {
-                tymed = TYMED.TYMED_GDI;
-            }
-
-            if (tymed == (TYMED)0)
-            {
-                return null;
-            }
-
-            formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
-            formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
-            formatetc.lindex = -1;
-            formatetc.tymed = tymed;
-
-            object? data = null;
-            if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
-            {
-                try
-                {
-                    _innerData.GetData(ref formatetc, out medium);
-                }
-                catch
-                {
-                }
-            }
-
-            try
-            {
-                if (medium.tymed == TYMED.TYMED_GDI && medium.unionmember != IntPtr.Zero)
-                {
-                    if (format.Equals(DataFormats.Bitmap))
-                    {
-                        // ASURT 140870 -- GDI+ doesn't own this HBITMAP, but we can't
-                        // delete it while the object is still around.  So we have to do the really expensive
-                        // thing of cloning the image so we can release the HBITMAP.
-
-                        // This bitmap is created by the com object which originally copied the bitmap to the
-                        // clipboard. We call Add here, since DeleteObject calls Remove.
-                        Image clipboardImage = Image.FromHbitmap(medium.unionmember);
-                        if (clipboardImage is not null)
-                        {
-                            Image firstImage = clipboardImage;
-                            clipboardImage = (Image)clipboardImage.Clone();
-                            firstImage.Dispose();
-                        }
-
-                        data = clipboardImage;
-                    }
-                }
-            }
-            finally
-            {
-                Ole32.ReleaseStgMedium(ref medium);
-            }
-
-            return data;
-        }
-
-        /// <summary>
-        ///  Extracts a managed Object from the innerData of the specified
-        ///  format. This is the base of the OLE to managed conversion.
-        /// </summary>
-        private object? GetDataFromBoundOleDataObject(string format, out bool done)
-        {
-            object? data = null;
-            done = false;
-            try
-            {
-                data = GetDataFromOleOther(format);
-                data ??= GetDataFromOleHGLOBAL(format, out done);
-
-                if (data is null && !done)
-                {
-                    data = GetDataFromOleIStream(format);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.Fail(e.ToString());
-            }
-
-            return data;
         }
 
         /// <summary>
@@ -302,8 +300,8 @@ public partial class DataObject
         /// </summary>
         private static unsafe Stream ReadByteStreamFromHandle(nint handle, out bool isSerializedObject)
         {
-            void* ptr = PInvoke.GlobalLock(handle);
-            if (ptr is null)
+            void* buffer = PInvoke.GlobalLock(handle);
+            if (buffer is null)
             {
                 throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
             }
@@ -312,34 +310,15 @@ public partial class DataObject
             {
                 int size = (int)PInvoke.GlobalSize(handle);
                 byte[] bytes = new byte[size];
-                Marshal.Copy((nint)ptr, bytes, 0, size);
+                Marshal.Copy((nint)buffer, bytes, 0, size);
                 int index = 0;
 
-                // The object here can either be a stream or a serialized
-                // object.  We identify a serialized object by writing the
-                // bytes for the guid serializedObjectID at the front
-                // of the stream.  Check for that here.
-                if (size > s_serializedObjectID.Length)
-                {
-                    isSerializedObject = true;
-                    for (int i = 0; i < s_serializedObjectID.Length; i++)
-                    {
-                        if (s_serializedObjectID[i] != bytes[i])
-                        {
-                            isSerializedObject = false;
-                            break;
-                        }
-                    }
+                // The object here can either be a stream or a serialized object. We identify a serialized object by
+                // writing the bytes for the guid serializedObjectID at the front of the stream.  Check for that here.
 
-                    // Advance the byte pointer.
-                    if (isSerializedObject)
-                    {
-                        index = s_serializedObjectID.Length;
-                    }
-                }
-                else
+                if (isSerializedObject = bytes.AsSpan().StartsWith(s_serializedObjectID))
                 {
-                    isSerializedObject = false;
+                    index = s_serializedObjectID.Length;
                 }
 
                 return new MemoryStream(bytes, index, bytes.Length - index);
@@ -356,35 +335,35 @@ public partial class DataObject
         private static object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
         {
             Stream stream = ReadByteStreamFromHandle(handle, out bool isSerializedObject);
-            return isSerializedObject ? ReadObjectFromHandleDeserializer(stream, restrictDeserialization) : stream;
-        }
+            return !isSerializedObject ? stream : ReadObjectFromHandleDeserializer(stream, restrictDeserialization);
 
-        private static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
-        {
-            long startPosition = stream.Position;
-            try
+            static object ReadObjectFromHandleDeserializer(Stream stream, bool restrictDeserialization)
             {
-                if (new BinaryFormattedObject(stream, leaveOpen: true).TryGetFrameworkObject(out object? value))
+                long startPosition = stream.Position;
+                try
                 {
-                    return value;
+                    if (new BinaryFormattedObject(stream, leaveOpen: true).TryGetFrameworkObject(out object? value))
+                    {
+                        return value;
+                    }
                 }
-            }
-            catch (Exception ex) when (!ex.IsCriticalException())
-            {
-                // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
-            }
+                catch (Exception ex) when (!ex.IsCriticalException())
+                {
+                    // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
+                }
 
-            stream.Position = startPosition;
+                stream.Position = startPosition;
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-            return new BinaryFormatter()
-            {
-                Binder = restrictDeserialization ? new BitmapBinder() : null,
-                AssemblyFormat = FormatterAssemblyStyle.Simple
-            }.Deserialize(stream);
+                return new BinaryFormatter()
+                {
+                    Binder = restrictDeserialization ? new BitmapBinder() : null,
+                    AssemblyFormat = FormatterAssemblyStyle.Simple
+                }.Deserialize(stream);
 #pragma warning restore SYSLIB0050
 #pragma warning restore SYSLIB0011
+            }
         }
 
         /// <summary>
@@ -399,7 +378,7 @@ public partial class DataObject
             }
 
             Span<char> fileName = stackalloc char[PInvoke.MAX_PATH + 1];
-            var files = new string[count];
+            string[] files = new string[count];
 
             fixed (char* buffer = fileName)
             {
@@ -419,137 +398,57 @@ public partial class DataObject
             return files;
         }
 
-        /// <summary>
-        ///  Creates a string from the data stored in handle. If
-        ///  unicode is set to true, then the string is assume to be Unicode,
-        ///  else DBCS (ASCI) is assumed.
-        /// </summary>
-        private static unsafe string ReadStringFromHandle(nint handle, bool unicode)
+        public object? GetData(string format, bool autoConvert)
         {
-            string? stringData = null;
+            object? data = GetDataFromBoundOleDataObject(format, out bool doNotContinue);
 
-            void* ptr = PInvoke.GlobalLock(handle);
-            try
+            if (doNotContinue
+                || !autoConvert
+                || (data is not null && data is not MemoryStream)
+                || GetMappedFormats(format) is not { } mappedFormats)
             {
-                if (unicode)
+                return data;
+            }
+
+            object? originalData = data;
+
+            // Try to find a mapped format that works better.
+            foreach (string mappedFormat in mappedFormats)
+            {
+                if (!format.Equals(mappedFormat))
                 {
-                    stringData = new string((char*)ptr);
-                }
-                else
-                {
-                    stringData = new string((sbyte*)ptr);
-                }
-            }
-            finally
-            {
-                PInvoke.GlobalUnlock(handle);
-            }
-
-            return stringData;
-        }
-
-        private static unsafe string ReadHtmlFromHandle(nint handle)
-        {
-            void* ptr = PInvoke.GlobalLock(handle);
-            try
-            {
-                int size = (int)PInvoke.GlobalSize(handle);
-                return Encoding.UTF8.GetString((byte*)ptr, size - 1);
-            }
-            finally
-            {
-                PInvoke.GlobalUnlock(handle);
-            }
-        }
-
-        //=------------------------------------------------------------------------=
-        // IDataObject
-        //=------------------------------------------------------------------------=
-        public virtual object? GetData(string format, bool autoConvert)
-        {
-            object? baseVar = GetDataFromBoundOleDataObject(format, out bool done);
-            object? original = baseVar;
-
-            if (!done && autoConvert && (baseVar is null || baseVar is MemoryStream))
-            {
-                string[]? mappedFormats = GetMappedFormats(format);
-                if (mappedFormats is not null)
-                {
-                    for (int i = 0; ((!done) && (i < mappedFormats.Length)); i++)
+                    data = GetDataFromBoundOleDataObject(mappedFormat, out doNotContinue);
+                    if (doNotContinue)
                     {
-                        if (!format.Equals(mappedFormats[i]))
-                        {
-                            baseVar = GetDataFromBoundOleDataObject(mappedFormats[i], out done);
-                            if (!done && baseVar is not null && !(baseVar is MemoryStream))
-                            {
-                                original = null;
-                                break;
-                            }
-                        }
+                        break;
+                    }
+
+                    if (data is not null and not MemoryStream)
+                    {
+                        return data;
                     }
                 }
             }
 
-            if (original is not null)
-            {
-                return original;
-            }
-            else
-            {
-                return baseVar;
-            }
+            return originalData ?? data;
         }
 
-        public virtual object? GetData(string format)
-        {
-            return GetData(format, true);
-        }
+        public object? GetData(string format) => GetData(format, autoConvert: true);
 
-        public virtual object? GetData(Type format)
-        {
-            return GetData(format.FullName!);
-        }
+        public object? GetData(Type format) => GetData(format.FullName!);
 
-        public virtual void SetData(string format, bool autoConvert, object? data)
-        {
-        }
+        public void SetData(string format, bool autoConvert, object? data) { }
+        public void SetData(string format, object? data) { }
 
-        public virtual void SetData(string format, object? data)
-        {
-            SetData(format, true, data);
-        }
+        public void SetData(Type format, object? data) { }
 
-        public virtual void SetData(Type format, object? data)
-        {
-            SetData(format.FullName!, data);
-        }
+        public void SetData(object? data) { }
 
-        public virtual void SetData(object? data)
-        {
-            if (data is ISerializable)
-            {
-                SetData(DataFormats.Serializable, data);
-            }
-            else
-            {
-                SetData(data!.GetType(), data);
-            }
-        }
-
-        private int QueryGetDataUnsafe(ref FORMATETC formatetc)
-        {
-            return _innerData.QueryGetData(ref formatetc);
-        }
-
-        public virtual bool GetDataPresent(Type format)
-        {
-            return GetDataPresent(format.FullName!);
-        }
+        public bool GetDataPresent(Type format) => GetDataPresent(format.FullName!);
 
         private bool GetDataPresentInner(string format)
         {
-            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
-            FORMATETC formatetc = new FORMATETC
+            FORMATETC formatetc = new()
             {
                 cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
                 dwAspect = DVASPECT.DVASPECT_CONTENT,
@@ -561,49 +460,40 @@ public partial class DataObject
                 formatetc.tymed |= s_allowedTymeds[i];
             }
 
-            int hr = QueryGetDataUnsafe(ref formatetc);
+            int hr = _innerData.QueryGetData(ref formatetc);
             return hr == (int)HRESULT.S_OK;
         }
 
-        public virtual bool GetDataPresent(string format, bool autoConvert)
+        public bool GetDataPresent(string format, bool autoConvert)
         {
-            bool baseVar = GetDataPresentInner(format);
+            bool dataPresent = GetDataPresentInner(format);
 
-            if (!baseVar && autoConvert)
+            if (dataPresent || !autoConvert || GetMappedFormats(format) is not { } mappedFormats)
             {
-                string[]? mappedFormats = GetMappedFormats(format);
-                if (mappedFormats is not null)
+                return dataPresent;
+            }
+
+            foreach (string mappedFormat in mappedFormats)
+            {
+                if (!format.Equals(mappedFormat) && (dataPresent = GetDataPresentInner(mappedFormat)))
                 {
-                    for (int i = 0; i < mappedFormats.Length; i++)
-                    {
-                        if (!format.Equals(mappedFormats[i]))
-                        {
-                            baseVar = GetDataPresentInner(mappedFormats[i]);
-                            if (baseVar)
-                            {
-                                break;
-                            }
-                        }
-                    }
+                    break;
                 }
             }
 
-            return baseVar;
+            return dataPresent;
         }
 
-        public virtual bool GetDataPresent(string format)
-        {
-            return GetDataPresent(format, true);
-        }
+        public bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
 
-        public virtual string[] GetFormats(bool autoConvert)
+        public string[] GetFormats(bool autoConvert)
         {
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
 
             IEnumFORMATETC? enumFORMATETC = null;
 
             // Since we are only adding elements to the HashSet, the order will be preserved.
-            HashSet<string> distinctFormats = new HashSet<string>();
+            HashSet<string> distinctFormats = new();
             try
             {
                 enumFORMATETC = _innerData.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -616,7 +506,7 @@ public partial class DataObject
             {
                 enumFORMATETC.Reset();
 
-                FORMATETC[] formatetc = new FORMATETC[] { default(FORMATETC) };
+                FORMATETC[] formatetc = new FORMATETC[] { default };
                 int[] retrieved = new int[] { 1 };
 
                 while (retrieved[0] > 0)
@@ -652,9 +542,6 @@ public partial class DataObject
             return distinctFormats.ToArray();
         }
 
-        public virtual string[] GetFormats()
-        {
-            return GetFormats(true);
-        }
+        public string[] GetFormats() => GetFormats(autoConvert: true);
     }
 }
