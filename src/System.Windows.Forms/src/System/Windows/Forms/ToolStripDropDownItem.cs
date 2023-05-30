@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -503,9 +504,9 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         if (accessibilityIsOn && AccessibilityObject is ToolStripItemAccessibleObject accessibleObject)
         {
             accessibleObject.RaiseAutomationPropertyChangedEvent(
-                Interop.UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                Interop.UiaCore.ExpandCollapseState.Collapsed,
-                Interop.UiaCore.ExpandCollapseState.Expanded);
+                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UiaCore.ExpandCollapseState.Collapsed,
+                UiaCore.ExpandCollapseState.Expanded);
         }
     }
 
@@ -532,9 +533,9 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         if (IsAccessibilityObjectCreated && AccessibilityObject is ToolStripItemAccessibleObject accessibleObject)
         {
             accessibleObject.RaiseAutomationPropertyChangedEvent(
-                Interop.UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                Interop.UiaCore.ExpandCollapseState.Expanded,
-                Interop.UiaCore.ExpandCollapseState.Collapsed);
+                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UiaCore.ExpandCollapseState.Expanded,
+                UiaCore.ExpandCollapseState.Collapsed);
         }
     }
 

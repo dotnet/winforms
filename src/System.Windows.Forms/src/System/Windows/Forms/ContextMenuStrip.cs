@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -143,7 +144,7 @@ public class ContextMenuStrip : ToolStripDropDownMenu
 
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(Interop.UiaCore.UIA.MenuOpenedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
             }
         }
 
@@ -158,7 +159,7 @@ public class ContextMenuStrip : ToolStripDropDownMenu
         {
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(Interop.UiaCore.UIA.MenuClosedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuClosedEventId);
             }
 
             AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
