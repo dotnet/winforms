@@ -23,11 +23,11 @@ public partial class DataObject
     /// <summary>
     ///  Maps <see cref="IComDataObject"/> to <see cref="IDataObject"/> for reading data only.
     /// </summary>
-    private sealed class OleConverter : IDataObject
+    private sealed class ComDataObjectAdapter : IDataObject
     {
         private readonly IComDataObject _innerData;
 
-        public OleConverter(IComDataObject data)
+        public ComDataObjectAdapter(IComDataObject data)
         {
             Debug.Assert(data is not null);
             CompModSwitches.DataObject.TraceVerbose("OleConverter: Constructed OleConverter");
