@@ -35,7 +35,8 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
         using ListView control = new()
         {
             View = view,
-            SmallImageList = imageCollection
+            SmallImageList = imageCollection,
+            LargeImageList = imageCollection
         };
         control.Items.Add(listViewItem);
 
@@ -74,7 +75,8 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
         using ListView control = new()
         {
             View = view,
-            SmallImageList = imageCollection
+            SmallImageList = imageCollection,
+            LargeImageList = imageCollection
         };
         control.Items.Add(listViewItem);
 
@@ -110,7 +112,8 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
         using ListView control = new()
         {
             View = view,
-            SmallImageList = imageCollection
+            SmallImageList = imageCollection,
+            LargeImageList = imageCollection
         };
         control.Items.Add(listViewItem);
         control.CreateControl();
