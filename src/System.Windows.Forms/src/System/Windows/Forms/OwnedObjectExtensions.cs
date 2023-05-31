@@ -10,12 +10,12 @@ internal static class OwnedObjectExtensions
     ///  Tries to get the owner as the given type.
     /// </summary>
     public static bool TryGetOwnerAs<TOwner, TAs>(
-        this IOwnedObject<TOwner> owner,
+        this IOwnedObject<TOwner> ownedObject,
         [NotNullWhen(true)] out TAs? ownerAs)
         where TOwner : class
         where TAs : class
     {
-        ownerAs = owner.Owner as TAs;
+        ownerAs = ownedObject.Owner as TAs;
         return ownerAs is not null;
     }
 }

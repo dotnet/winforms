@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.CompilerServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
 using static Interop;
@@ -1567,6 +1568,24 @@ public class Control_ControlAccessibleObjectTests
 
         Assert.Equal(expected, actual);
         Assert.False(ownerControl.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ControlAccessibleObject_DoesNotRootControl()
+    {
+        Control.ControlAccessibleObject accessibleObject = CreateAndDisposeControl();
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        Assert.False(accessibleObject.TryGetOwnerAs(out Control _));
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static Control.ControlAccessibleObject CreateAndDisposeControl()
+        {
+            using Control control = new();
+            var accessibleObject = (Control.ControlAccessibleObject)control.AccessibilityObject;
+            Assert.NotNull(accessibleObject);
+            Assert.True(accessibleObject.TryGetOwnerAs(out Control _));
+            return accessibleObject;
+        }
     }
 
     // ContextMenuStrip, From, ToolStripDropDown, ToolStripDropDownMenu
