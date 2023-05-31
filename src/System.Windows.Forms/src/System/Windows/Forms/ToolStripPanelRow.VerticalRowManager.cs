@@ -452,7 +452,6 @@ public partial class ToolStripPanelRow
                             }
                         }
 
-                        Control controlToPushAside = Row.ControlsInternal[index];
                         // Plop the new control in the midst of the row in question.
                         if (index < Row.ControlsInternal.Count)
                         {
