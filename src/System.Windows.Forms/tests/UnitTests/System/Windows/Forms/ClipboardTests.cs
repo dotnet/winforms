@@ -336,8 +336,10 @@ public class ClipboardTests
     {
         var filePaths = new StringCollection
         {
-            "filePath"
+            "filePath",
+            "filePath2"
         };
+
         Clipboard.SetFileDropList(filePaths);
         Assert.Equal(filePaths, Clipboard.GetFileDropList());
         Assert.True(Clipboard.ContainsFileDropList());
