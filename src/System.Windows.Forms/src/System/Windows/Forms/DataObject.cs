@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms.BinaryFormat;
 using static Interop;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -33,13 +34,7 @@ public unsafe partial class DataObject :
 
     private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
-    private static readonly TYMED[] s_allowedTymeds =
-        new TYMED[]
-        {
-            TYMED.TYMED_HGLOBAL,
-            TYMED.TYMED_ISTREAM,
-            TYMED.TYMED_GDI
-        };
+    private const TYMED AllowedTymeds = TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
 
     private readonly IDataObject _innerData;
 
@@ -132,39 +127,6 @@ public unsafe partial class DataObject :
     public DataObject(string format, object data) : this() => SetData(format, data);
 
     internal DataObject(string format, bool autoConvert, object data) : this() => SetData(format, autoConvert, data);
-
-    private static HBITMAP GetCompatibleBitmap(Bitmap bm)
-    {
-        using var screenDC = User32.GetDcScope.ScreenDC;
-
-        // GDI+ returns a DIBSECTION based HBITMAP. The clipboard deals well
-        // only with bitmaps created using CreateCompatibleBitmap(). So, we
-        // convert the DIBSECTION into a compatible bitmap.
-        HBITMAP hBitmap = bm.GetHBITMAP();
-
-        // Create a compatible DC to render the source bitmap.
-        using PInvoke.CreateDcScope sourceDC = new(screenDC);
-        using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, hBitmap);
-
-        // Create a compatible DC and a new compatible bitmap.
-        using PInvoke.CreateDcScope destinationDC = new(screenDC);
-        HBITMAP bitmap = PInvoke.CreateCompatibleBitmap(screenDC, bm.Size.Width, bm.Size.Height);
-
-        // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-        using PInvoke.SelectObjectScope destinationBitmapSelection = new(destinationDC, bitmap);
-        PInvoke.BitBlt(
-            destinationDC,
-            0,
-            0,
-            bm.Size.Width,
-            bm.Size.Height,
-            sourceDC,
-            0,
-            0,
-            ROP_CODE.SRCCOPY);
-
-        return bitmap;
-    }
 
     /// <summary>
     ///  Retrieves the data associated with the specified data format, using an automated conversion parameter to
@@ -358,56 +320,7 @@ public unsafe partial class DataObject :
     /// <summary>
     ///  Returns true if the tymed is useable.
     /// </summary>
-    private static bool GetTymedUseable(TYMED tymed)
-    {
-        for (int i = 0; i < s_allowedTymeds.Length; i++)
-        {
-            if ((tymed & s_allowedTymeds[i]) != 0)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    ///  Populates Ole datastructes from a WinForms dataObject. This is the core of WinForms to OLE conversion.
-    /// </summary>
-    private void GetDataIntoOleStructs(ref FORMATETC formatetc, ref STGMEDIUM medium)
-    {
-        if (!GetTymedUseable(formatetc.tymed) || !GetTymedUseable(medium.tymed))
-        {
-            Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
-        }
-
-        string format = DataFormats.GetFormat(formatetc.cfFormat).Name;
-
-        if (!GetDataPresent(format))
-        {
-            Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_FORMATETC);
-        }
-
-        object? data = GetData(format);
-
-        if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
-        {
-            SaveDataToHandle(data!, format, ref medium).ThrowOnFailure();
-        }
-        else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
-        {
-            if (format.Equals(DataFormats.Bitmap) && data is Bitmap bm
-                && bm is not null)
-            {
-                // Save bitmap
-                medium.unionmember = (IntPtr)GetCompatibleBitmap(bm);
-            }
-        }
-        else
-        {
-            Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
-        }
-    }
+    private static bool GetTymedUseable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
 
     int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
     {
@@ -481,7 +394,8 @@ public unsafe partial class DataObject :
             converter.OleDataObject.GetData(ref formatetc, out medium);
             return;
         }
-        else if (DragDropHelper.IsInDragLoop(_innerData))
+
+        if (DragDropHelper.IsInDragLoop(_innerData))
         {
             string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
             if (!_innerData.GetDataPresent(formatName))
@@ -506,32 +420,30 @@ public unsafe partial class DataObject :
             Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
         }
 
-        if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
-        {
-            medium.tymed = TYMED.TYMED_HGLOBAL;
-            medium.unionmember = PInvoke.GlobalAlloc(
-                GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
-                1);
-            if (medium.unionmember == IntPtr.Zero)
-            {
-                throw new OutOfMemoryException();
-            }
-
-            try
-            {
-                ((ComTypes.IDataObject)this).GetDataHere(ref formatetc, ref medium);
-            }
-            catch
-            {
-                PInvoke.GlobalFree(medium.unionmember);
-                medium.unionmember = IntPtr.Zero;
-                throw;
-            }
-        }
-        else
+        if (!formatetc.tymed.HasFlag(TYMED.TYMED_HGLOBAL))
         {
             medium.tymed = formatetc.tymed;
             ((ComTypes.IDataObject)this).GetDataHere(ref formatetc, ref medium);
+            return;
+        }
+
+        medium.tymed = TYMED.TYMED_HGLOBAL;
+        medium.unionmember = PInvoke.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, 1);
+
+        if (medium.unionmember == 0)
+        {
+            throw new OutOfMemoryException();
+        }
+
+        try
+        {
+            ((ComTypes.IDataObject)this).GetDataHere(ref formatetc, ref medium);
+        }
+        catch
+        {
+            PInvoke.GlobalFree(medium.unionmember);
+            medium.unionmember = 0;
+            throw;
         }
     }
 
@@ -541,10 +453,72 @@ public unsafe partial class DataObject :
         if (_innerData is ComDataObjectAdapter converter)
         {
             converter.OleDataObject.GetDataHere(ref formatetc, ref medium);
+            return;
         }
-        else
+
+        if (!GetTymedUseable(formatetc.tymed) || !GetTymedUseable(medium.tymed))
         {
-            GetDataIntoOleStructs(ref formatetc, ref medium);
+            Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
+        }
+
+        string format = DataFormats.GetFormat(formatetc.cfFormat).Name;
+
+        if (!GetDataPresent(format))
+        {
+            Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_FORMATETC);
+        }
+
+        object? data = GetData(format);
+
+        if (formatetc.tymed.HasFlag(TYMED.TYMED_HGLOBAL))
+        {
+            SaveDataToHGLOBAL(data!, format, ref medium).ThrowOnFailure();
+            return;
+        }
+
+        if (formatetc.tymed.HasFlag(TYMED.TYMED_GDI))
+        {
+            if (format.Equals(DataFormats.Bitmap) && data is Bitmap bitmap)
+            {
+                // Save bitmap
+                medium.unionmember = (nint)GetCompatibleBitmap(bitmap);
+            }
+
+            return;
+        }
+
+        Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
+
+        static HBITMAP GetCompatibleBitmap(Bitmap bitmap)
+        {
+            using var screenDC = User32.GetDcScope.ScreenDC;
+
+            // GDI+ returns a DIBSECTION based HBITMAP. The clipboard only deals well with bitmaps created using
+            // CreateCompatibleBitmap(). So, we convert the DIBSECTION into a compatible bitmap.
+            HBITMAP hbitmap = bitmap.GetHBITMAP();
+
+            // Create a compatible DC to render the source bitmap.
+            using PInvoke.CreateDcScope sourceDC = new(screenDC);
+            using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, hbitmap);
+
+            // Create a compatible DC and a new compatible bitmap.
+            using PInvoke.CreateDcScope destinationDC = new(screenDC);
+            HBITMAP compatibleBitmap = PInvoke.CreateCompatibleBitmap(screenDC, bitmap.Size.Width, bitmap.Size.Height);
+
+            // Select the new bitmap into a compatible DC and render the blt the original bitmap.
+            using PInvoke.SelectObjectScope destinationBitmapSelection = new(destinationDC, compatibleBitmap);
+            PInvoke.BitBlt(
+                destinationDC,
+                0,
+                0,
+                bitmap.Size.Width,
+                bitmap.Size.Height,
+                sourceDC,
+                0,
+                0,
+                ROP_CODE.SRCCOPY);
+
+            return compatibleBitmap;
         }
     }
 
@@ -556,34 +530,28 @@ public unsafe partial class DataObject :
             return converter.OleDataObject.QueryGetData(ref formatetc);
         }
 
-        if (formatetc.dwAspect == DVASPECT.DVASPECT_CONTENT)
-        {
-            if (GetTymedUseable(formatetc.tymed))
-            {
-                if (formatetc.cfFormat == 0)
-                {
-                    CompModSwitches.DataObject.TraceVerbose(
-                        "QueryGetData::returning S_FALSE because cfFormat == 0");
-                    return (int)HRESULT.S_FALSE;
-                }
-                else if (!GetDataPresent(DataFormats.GetFormat(formatetc.cfFormat).Name))
-                {
-                    return (int)HRESULT.DV_E_FORMATETC;
-                }
-            }
-            else
-            {
-                return (int)HRESULT.DV_E_TYMED;
-            }
-        }
-        else
+        if (formatetc.dwAspect != DVASPECT.DVASPECT_CONTENT)
         {
             return (int)HRESULT.DV_E_DVASPECT;
         }
 
-        CompModSwitches.DataObject.TraceVerbose(
-            $"QueryGetData::cfFormat {(ushort)formatetc.cfFormat} found");
+        if (!GetTymedUseable(formatetc.tymed))
+        {
+            return (int)HRESULT.DV_E_TYMED;
+        }
 
+        if (formatetc.cfFormat == 0)
+        {
+            CompModSwitches.DataObject.TraceVerbose("QueryGetData::returning S_FALSE because cfFormat == 0");
+            return (int)HRESULT.S_FALSE;
+        }
+
+        if (!GetDataPresent(DataFormats.GetFormat(formatetc.cfFormat).Name))
+        {
+            return (int)HRESULT.DV_E_FORMATETC;
+        }
+
+        CompModSwitches.DataObject.TraceVerbose($"QueryGetData::cfFormat {(ushort)formatetc.cfFormat} found");
         return (int)HRESULT.S_OK;
     }
 
@@ -595,7 +563,8 @@ public unsafe partial class DataObject :
             converter.OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
             return;
         }
-        else if (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.IsInDragLoop(_innerData))
+
+        if (DragDropHelper.IsInDragLoopFormat(pFormatetcIn) || DragDropHelper.IsInDragLoop(_innerData))
         {
             string formatName = DataFormats.GetFormat(pFormatetcIn.cfFormat).Name;
             if (_innerData.GetDataPresent(formatName) && _innerData.GetData(formatName) is DragDropFormat dragDropFormat)
@@ -637,22 +606,22 @@ public unsafe partial class DataObject :
             or DataFormats.PaletteConstant
             or DataFormats.WmfConstant;
 
-    private HRESULT SaveDataToHandle(object data, string format, ref STGMEDIUM medium) => format switch
+    private HRESULT SaveDataToHGLOBAL(object data, string format, ref STGMEDIUM medium) => format switch
     {
         _ when data is Stream dataStream
-            => SaveStreamToHandle(ref medium.unionmember, dataStream),
+            => SaveStreamToHGLOBAL(ref medium.unionmember, dataStream),
         DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant
-            => SaveStringToHandle(medium.unionmember, data.ToString()!, unicode: false),
+            => SaveStringToHGLOBAL(medium.unionmember, data.ToString()!, unicode: false),
         DataFormats.HtmlConstant
-            => SaveHtmlToHandle(medium.unionmember, data.ToString()!),
+            => SaveHtmlToHGLOBAL(medium.unionmember, data.ToString()!),
         DataFormats.UnicodeTextConstant
-            => SaveStringToHandle(medium.unionmember, data.ToString()!, unicode: true),
+            => SaveStringToHGLOBAL(medium.unionmember, data.ToString()!, unicode: true),
         DataFormats.FileDropConstant
-            => SaveFileListToHandle(medium.unionmember, (string[])data),
+            => SaveFileListToHGLOBAL(medium.unionmember, (string[])data),
         CF_DEPRECATED_FILENAME
-            => SaveStringToHandle(medium.unionmember, ((string[])data)[0], unicode: false),
+            => SaveStringToHGLOBAL(medium.unionmember, ((string[])data)[0], unicode: false),
         CF_DEPRECATED_FILENAMEW
-            => SaveStringToHandle(medium.unionmember, ((string[])data)[0], unicode: true),
+            => SaveStringToHGLOBAL(medium.unionmember, ((string[])data)[0], unicode: true),
         DataFormats.DibConstant when data is Image
             // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
             // an HBITMAP and publish a Dib, we don't need to support this.
@@ -660,11 +629,11 @@ public unsafe partial class DataObject :
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
         _ when format == DataFormats.SerializableConstant || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
-            => SaveObjectToHandle(ref medium.unionmember, data, RestrictDeserializationToSafeTypes(format)),
+            => SaveObjectToHGLOBAL(ref medium.unionmember, data, RestrictDeserializationToSafeTypes(format)),
         _ => HRESULT.E_FAIL
     };
 
-    private static HRESULT SaveObjectToHandle(ref nint handle, object data, bool restrictSerialization)
+    private static HRESULT SaveObjectToHGLOBAL(ref nint hglobal, object data, bool restrictSerialization)
     {
         using MemoryStream stream = new();
         stream.Write(s_serializedObjectID);
@@ -691,38 +660,38 @@ public unsafe partial class DataObject :
         }
 #pragma warning restore SYSLIB0011
 
-        return SaveStreamToHandle(ref handle, stream);
+        return SaveStreamToHGLOBAL(ref hglobal, stream);
     }
 
-    private static HRESULT SaveStreamToHandle(ref nint handle, Stream stream)
+    private static HRESULT SaveStreamToHGLOBAL(ref nint hglobal, Stream stream)
     {
-        if (handle != 0)
+        if (hglobal != 0)
         {
-            PInvoke.GlobalFree(handle);
+            PInvoke.GlobalFree(hglobal);
         }
 
         int size = checked((int)stream.Length);
-        handle = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
-        if (handle == 0)
+        hglobal = PInvoke.GlobalAlloc(GMEM_MOVEABLE, (uint)size);
+        if (hglobal == 0)
         {
             return HRESULT.E_OUTOFMEMORY;
         }
 
-        void* ptr = PInvoke.GlobalLock(handle);
-        if (ptr is null)
+        void* buffer = PInvoke.GlobalLock(hglobal);
+        if (buffer is null)
         {
             return HRESULT.E_OUTOFMEMORY;
         }
 
         try
         {
-            Span<byte> span = new(ptr, size);
+            Span<byte> span = new(buffer, size);
             stream.Position = 0;
             stream.Read(span);
         }
         finally
         {
-            PInvoke.GlobalUnlock(handle);
+            PInvoke.GlobalUnlock(hglobal);
         }
 
         return HRESULT.S_OK;
@@ -731,14 +700,14 @@ public unsafe partial class DataObject :
     /// <summary>
     ///  Saves a list of files out to the handle in HDROP format.
     /// </summary>
-    private HRESULT SaveFileListToHandle(IntPtr handle, string[] files)
+    private HRESULT SaveFileListToHGLOBAL(nint hglobal, string[] files)
     {
         if (files is null || files.Length == 0)
         {
             return HRESULT.S_OK;
         }
 
-        if (handle == IntPtr.Zero)
+        if (hglobal == 0)
         {
             return HRESULT.E_INVALIDARG;
         }
@@ -751,54 +720,49 @@ public unsafe partial class DataObject :
 
         // Determine the size of the data structure.
         uint sizeInBytes = (uint)sizeof(DROPFILES);
-        for (int i = 0; i < files.Length; i++)
+        foreach (string file in files)
         {
-            sizeInBytes += ((uint)files[i].Length + 1) * 2;
+            sizeInBytes += (uint)(file.Length + 1) * sizeof(char);
         }
 
-        sizeInBytes += 2;
+        sizeInBytes += sizeof(char);
 
         // Allocate the Win32 memory
-        nint newHandle = PInvoke.GlobalReAlloc(
-            handle,
-            sizeInBytes,
-            (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE);
+        nint newHandle = PInvoke.GlobalReAlloc(hglobal, sizeInBytes, (uint)GMEM_MOVEABLE);
         if (newHandle == 0)
         {
             return HRESULT.E_OUTOFMEMORY;
         }
 
-        void* basePtr = PInvoke.GlobalLock(newHandle);
-        if (basePtr is null)
+        void* buffer = PInvoke.GlobalLock(newHandle);
+        if (buffer is null)
         {
             return HRESULT.E_OUTOFMEMORY;
         }
 
         // Write out the DROPFILES struct.
-        DROPFILES* pDropFiles = (DROPFILES*)basePtr;
-        pDropFiles->pFiles = (uint)sizeof(DROPFILES);
-        pDropFiles->pt = Point.Empty;
-        pDropFiles->fNC = false;
-        pDropFiles->fWide = true;
+        DROPFILES* dropFiles = (DROPFILES*)buffer;
+        *dropFiles = new DROPFILES()
+        {
+            pFiles = (uint)sizeof(DROPFILES),
+            pt = Point.Empty,
+            fNC = false,
+            fWide = true
+        };
 
-        char* dataPtr = (char*)((byte*)basePtr + pDropFiles->pFiles);
+        Span<char> fileBuffer = new(
+            (char*)((byte*)buffer + dropFiles->pFiles),
+            ((int)sizeInBytes - (int)dropFiles->pFiles) / sizeof(char));
 
         // Write out the strings.
-        for (int i = 0; i < files.Length; i++)
+        foreach (string file in files)
         {
-            int bytesToCopy = files[i].Length * 2;
-            fixed (char* pFile = files[i])
-            {
-                Buffer.MemoryCopy(pFile, dataPtr, bytesToCopy, bytesToCopy);
-            }
-
-            dataPtr = (char*)((byte*)dataPtr + bytesToCopy);
-            *dataPtr = '\0';
-            dataPtr++;
+            file.CopyTo(fileBuffer);
+            fileBuffer[file.Length] = '\0';
+            fileBuffer = fileBuffer[(file.Length + 1)..];
         }
 
-        *dataPtr = '\0';
-        dataPtr++;
+        fileBuffer[0] = '\0';
 
         PInvoke.GlobalUnlock(newHandle);
         return HRESULT.S_OK;
@@ -807,9 +771,9 @@ public unsafe partial class DataObject :
     /// <summary>
     ///  Save string to handle. If unicode is set to true then the string is saved as Unicode, else it is saves as DBCS.
     /// </summary>
-    private HRESULT SaveStringToHandle(IntPtr handle, string str, bool unicode)
+    private HRESULT SaveStringToHGLOBAL(nint hglobal, string value, bool unicode)
     {
-        if (handle == IntPtr.Zero)
+        if (hglobal == 0)
         {
             return HRESULT.E_INVALIDARG;
         }
@@ -817,48 +781,46 @@ public unsafe partial class DataObject :
         nint newHandle = 0;
         if (unicode)
         {
-            uint byteSize = (uint)str.Length * 2 + 2;
-            newHandle = PInvoke.GlobalReAlloc(
-                handle,
-                byteSize,
-                (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
+            uint byteSize = (uint)value.Length * sizeof(char) + sizeof(char);
+            newHandle = PInvoke.GlobalReAlloc(hglobal, byteSize, (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
             if (newHandle == 0)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            char* ptr = (char*)PInvoke.GlobalLock(newHandle);
-            if (ptr is null)
+            char* buffer = (char*)PInvoke.GlobalLock(newHandle);
+            if (buffer is null)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            var data = new Span<char>(ptr, str.Length + 1);
-            str.AsSpan().CopyTo(data);
-            data[str.Length] = '\0'; // Null terminator.
+            Span<char> data = new(buffer, value.Length + 1);
+            value.AsSpan().CopyTo(data);
+
+            // Null terminate.
+            data[value.Length] = '\0';
         }
         else
         {
-            fixed (char* pStr = str)
+            fixed (char* c = value)
             {
-                int pinvokeSize = PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, str, str.Length, null, 0, null, null);
-                newHandle = PInvoke.GlobalReAlloc(
-                    handle,
-                    (uint)pinvokeSize + 1,
-                    (uint)GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | (uint)GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
+                int pinvokeSize = PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, value, value.Length, null, 0, null, null);
+                newHandle = PInvoke.GlobalReAlloc(hglobal, (uint)pinvokeSize + 1, (uint)GMEM_MOVEABLE | (uint)GMEM_ZEROINIT);
                 if (newHandle == 0)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
 
-                byte* ptr = (byte*)PInvoke.GlobalLock(newHandle);
-                if (ptr is null)
+                byte* buffer = (byte*)PInvoke.GlobalLock(newHandle);
+                if (buffer is null)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
 
-                PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, str, str.Length, ptr, pinvokeSize, null, null);
-                ptr[pinvokeSize] = 0; // Null terminator
+                PInvoke.WideCharToMultiByte(PInvoke.CP_ACP, 0, value, value.Length, buffer, pinvokeSize, null, null);
+
+                // Null terminate
+                buffer[pinvokeSize] = 0;
             }
         }
 
@@ -866,34 +828,33 @@ public unsafe partial class DataObject :
         return HRESULT.S_OK;
     }
 
-    private static HRESULT SaveHtmlToHandle(IntPtr handle, string str)
+    private static HRESULT SaveHtmlToHGLOBAL(nint hglobal, string value)
     {
-        if (handle == IntPtr.Zero)
+        if (hglobal == 0)
         {
             return HRESULT.E_INVALIDARG;
         }
 
-        int byteLength = Encoding.UTF8.GetByteCount(str);
-        nint newHandle = PInvoke.GlobalReAlloc(
-            handle,
-            (uint)byteLength + 1,
-            (uint)(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT));
+        int byteLength = Encoding.UTF8.GetByteCount(value);
+        nint newHandle = PInvoke.GlobalReAlloc(hglobal, (uint)byteLength + 1, (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
         if (newHandle == 0)
         {
             return HRESULT.E_OUTOFMEMORY;
         }
 
-        byte* ptr = (byte*)PInvoke.GlobalLock(newHandle);
-        if (ptr is null)
+        byte* buffer = (byte*)PInvoke.GlobalLock(newHandle);
+        if (buffer is null)
         {
             return HRESULT.E_OUTOFMEMORY;
         }
 
         try
         {
-            var span = new Span<byte>(ptr, byteLength + 1);
-            Encoding.UTF8.GetBytes(str, span);
-            span[byteLength] = 0; // Null terminator
+            Span<byte> span = new(buffer, byteLength + 1);
+            Encoding.UTF8.GetBytes(value, span);
+
+            // Null terminate
+            span[byteLength] = 0;
         }
         finally
         {
