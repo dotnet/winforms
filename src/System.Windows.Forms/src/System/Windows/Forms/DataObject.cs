@@ -794,7 +794,7 @@ public unsafe partial class DataObject :
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            var data = new Span<char>(buffer, value.Length + 1);
+            Span<char> data = new(buffer, value.Length + 1);
             value.AsSpan().CopyTo(data);
 
             // Null terminate.
@@ -850,7 +850,7 @@ public unsafe partial class DataObject :
 
         try
         {
-            var span = new Span<byte>(buffer, byteLength + 1);
+            Span<byte> span = new(buffer, byteLength + 1);
             Encoding.UTF8.GetBytes(value, span);
 
             // Null terminate
