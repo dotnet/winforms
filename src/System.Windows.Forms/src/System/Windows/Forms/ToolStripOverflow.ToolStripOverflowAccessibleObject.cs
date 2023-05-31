@@ -14,20 +14,20 @@ public partial class ToolStripOverflow
         { }
 
         public override AccessibleObject? GetChild(int index)
-            => Owner is ToolStripOverflow overflow && (index >= 0 || index < overflow.DisplayedItems.Count)
-                ? overflow.DisplayedItems[index].AccessibilityObject
+            => this.TryGetOwnerAs(out ToolStripOverflow? owner) && (index >= 0 || index < owner.DisplayedItems.Count)
+                ? owner.DisplayedItems[index].AccessibilityObject
                 : null;
 
         public override int GetChildCount()
-            => Owner is ToolStripOverflow overflow
-                ? overflow.DisplayedItems.Count
+            => this.TryGetOwnerAs(out ToolStripOverflow? owner)
+                ? owner.DisplayedItems.Count
                 : 0;
 
         internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                NavigateDirection.Parent when Owner is ToolStripOverflow menu
-                    => menu.OwnerItem?.AccessibilityObject,
+                NavigateDirection.Parent when this.TryGetOwnerAs(out ToolStripOverflow? owner)
+                    => owner.OwnerItem?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction),
             };
     }

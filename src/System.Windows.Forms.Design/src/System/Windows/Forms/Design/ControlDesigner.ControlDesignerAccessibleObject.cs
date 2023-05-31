@@ -88,12 +88,12 @@ public partial class ControlDesigner
 
         private AccessibleObject? GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
         {
-            if (cao is null)
+            if (cao is null || cao.Owner is not { } owner)
             {
                 return null;
             }
 
-            if (DesignerHost.GetDesigner(cao.Owner) is ControlDesigner ctlDesigner)
+            if (DesignerHost.GetDesigner(owner) is ControlDesigner ctlDesigner)
             {
                 return ctlDesigner.AccessibilityObject;
             }

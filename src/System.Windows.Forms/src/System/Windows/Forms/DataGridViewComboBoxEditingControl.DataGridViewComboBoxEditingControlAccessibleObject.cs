@@ -13,8 +13,6 @@ public partial class DataGridViewComboBoxEditingControl
     /// </summary>
     internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBoxAccessibleObject
     {
-        private readonly DataGridViewComboBoxEditingControl _ownerControl;
-
         /// <summary>
         ///  The parent is changed when the editing control is attached to another editing cell.
         /// </summary>
@@ -23,30 +21,20 @@ public partial class DataGridViewComboBoxEditingControl
         public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl)
             : base(ownerControl)
         {
-            _ownerControl = ownerControl;
         }
 
-        internal void ClearParent()
-        {
-            _parentAccessibleObject = null;
-        }
+        internal void ClearParent() => _parentAccessibleObject = null;
 
-        public override AccessibleObject? Parent
-        {
-            get
-            {
-                return _parentAccessibleObject;
-            }
-        }
+        public override AccessibleObject? Parent => _parentAccessibleObject;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
                 case UiaCore.NavigateDirection.Parent:
-                    if (Owner is IDataGridViewEditingControl owner
-                        && owner.EditingControlDataGridView?.EditingControl == owner
-                        && Owner.ToolStripControlHost is null)
+                    if (this.TryGetOwnerAs(out Control? owner) && owner is IDataGridViewEditingControl editingControl
+                        && editingControl.EditingControlDataGridView?.EditingControl == owner
+                        && owner.ToolStripControlHost is null)
                     {
                         return _parentAccessibleObject;
                     }
@@ -58,38 +46,26 @@ public partial class DataGridViewComboBoxEditingControl
         }
 
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-        {
-            get
-            {
-                return (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
-            }
-        }
+            => this.TryGetOwnerAs(out IDataGridViewEditingControl? owner)
+                ? owner.EditingControlDataGridView?.AccessibilityObject
+                : null;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
         {
-            if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
-            {
-                return _ownerControl.DropDownStyle != ComboBoxStyle.Simple;
-            }
-
-            return base.IsPatternSupported(patternId);
-        }
+            UiaCore.UIA.ExpandCollapsePatternId when this.TryGetOwnerAs(out DataGridViewComboBoxEditingControl? owner)
+                => owner.DropDownStyle != ComboBoxStyle.Simple,
+            _ => base.IsPatternSupported(patternId)
+        };
 
         internal override UiaCore.ExpandCollapseState ExpandCollapseState
-        {
-            get
-            {
-                return _ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-            }
-        }
+            => this.TryGetOwnerAs(out DataGridViewComboBoxEditingControl? owner) && owner.DroppedDown
+                ? UiaCore.ExpandCollapseState.Expanded
+                : UiaCore.ExpandCollapseState.Collapsed;
 
         /// <summary>
         ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
         /// </summary>
         /// <param name="parent">The parent accessible object.</param>
-        internal override void SetParent(AccessibleObject? parent)
-        {
-            _parentAccessibleObject = parent;
-        }
+        internal override void SetParent(AccessibleObject? parent) => _parentAccessibleObject = parent;
     }
 }

@@ -76,11 +76,12 @@ public abstract partial class TextBoxBase
 
         public override string? Value => !_owningTextBoxBase.PasswordProtect ? ValueInternal : SR.AccessDenied;
 
-        protected virtual string ValueInternal => Owner.Text;
+        protected virtual string ValueInternal
+            => this.TryGetOwnerAs(out Control? owner) && owner.Text is { } text ? text : string.Empty;
 
         internal override void SetFocus()
         {
-            if (!Owner.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out Control? owner) || !owner.IsHandleCreated)
             {
                 return;
             }
@@ -92,7 +93,11 @@ public abstract partial class TextBoxBase
 
         internal override void SetValue(string? newValue)
         {
-            Owner.Text = newValue;
+            if (this.TryGetOwnerAs(out Control? owner))
+            {
+                owner.Text = newValue;
+            }
+
             base.SetValue(newValue);
         }
 

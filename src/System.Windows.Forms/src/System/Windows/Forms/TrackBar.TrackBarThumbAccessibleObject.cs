@@ -17,15 +17,21 @@ public partial class TrackBar
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!OwningTrackBar.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out TrackBar? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
 
             return direction switch
             {
-                UiaCore.NavigateDirection.PreviousSibling => ParentInternal.FirstButtonAccessibleObject.IsDisplayed ? ParentInternal.FirstButtonAccessibleObject : null,
-                UiaCore.NavigateDirection.NextSibling => ParentInternal.LastButtonAccessibleObject.IsDisplayed ? ParentInternal.LastButtonAccessibleObject : null,
+                UiaCore.NavigateDirection.PreviousSibling
+                    => ParentInternal?.FirstButtonAccessibleObject?.IsDisplayed ?? false
+                        ? ParentInternal.FirstButtonAccessibleObject
+                        : null,
+                UiaCore.NavigateDirection.NextSibling
+                    => ParentInternal?.LastButtonAccessibleObject?.IsDisplayed ?? false
+                        ? ParentInternal.LastButtonAccessibleObject
+                        : null,
                 _ => base.FragmentNavigate(direction)
             };
         }

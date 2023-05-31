@@ -13,19 +13,7 @@ public partial class MenuStrip
         {
         }
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = Owner.AccessibleRole;
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
-
-                return AccessibleRole.MenuBar;
-            }
-        }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.MenuBar);
 
         internal override object? GetPropertyValue(Interop.UiaCore.UIA propertyID) =>
             propertyID switch

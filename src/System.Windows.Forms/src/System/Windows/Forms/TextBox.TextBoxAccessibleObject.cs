@@ -14,9 +14,8 @@ public partial class TextBox
             switch (propertyID)
             {
                 case UiaCore.UIA.HelpTextPropertyId:
-                    string? placeholderText = (Owner as TextBox)?.PlaceholderText;
+                    string? placeholderText = this.TryGetOwnerAs(out TextBox? owner) ? owner.PlaceholderText : null;
                     return string.IsNullOrEmpty(placeholderText) ? base.GetPropertyValue(propertyID) : placeholderText;
-
                 default:
                     return base.GetPropertyValue(propertyID);
             }

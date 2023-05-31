@@ -28,13 +28,13 @@ public abstract partial class UpDownBase
                 {
                     get
                     {
-                        if (!_parent.Owner.IsHandleCreated)
+                        if (!_parent.TryGetOwnerAs(out UpDownButtons? owner) || !owner.IsHandleCreated)
                         {
                             return Rectangle.Empty;
                         }
 
                         // Get button bounds
-                        Rectangle bounds = ((UpDownButtons)_parent.Owner).Bounds;
+                        Rectangle bounds = owner.Bounds;
                         bounds.Height /= 2;
 
                         if (!_up)
@@ -43,7 +43,7 @@ public abstract partial class UpDownBase
                         }
 
                         // Convert to screen coords
-                        return ((UpDownButtons)_parent.Owner).ParentInternal?.RectangleToScreen(bounds) ?? Rectangle.Empty;
+                        return owner.ParentInternal?.RectangleToScreen(bounds) ?? Rectangle.Empty;
                     }
                 }
 
@@ -51,14 +51,13 @@ public abstract partial class UpDownBase
 
                 public override void DoDefaultAction()
                 {
-                    UpDownButtons ownerControl = _parent._owner;
-                    if (!ownerControl.IsHandleCreated)
+                    if (!_parent.TryGetOwnerAs(out UpDownButtons? owner) || !owner.IsHandleCreated)
                     {
                         return;
                     }
 
                     int buttonId = _up ? (int)ButtonID.Up : (int)ButtonID.Down;
-                    ownerControl.OnUpDown(new UpDownEventArgs(buttonId));
+                    owner.OnUpDown(new UpDownEventArgs(buttonId));
                 }
 
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(

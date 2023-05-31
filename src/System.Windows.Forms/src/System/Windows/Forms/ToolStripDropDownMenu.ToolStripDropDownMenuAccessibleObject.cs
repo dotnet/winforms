@@ -16,8 +16,8 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.Parent when Owner is ToolStripDropDownMenu menu
-                    => menu.OwnerItem?.AccessibilityObject,
+                UiaCore.NavigateDirection.Parent when this.TryGetOwnerAs(out ToolStripDropDownMenu? owner)
+                    => owner.OwnerItem?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction)
             };
 
@@ -25,7 +25,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             propertyID switch
             {
                 UiaCore.UIA.IsControlElementPropertyId => true,
-                UiaCore.UIA.IsContentElementPropertyId => Owner is ContextMenuStrip,
+                UiaCore.UIA.IsContentElementPropertyId => this.TryGetOwnerAs(out ContextMenuStrip? _),
                 _ => base.GetPropertyValue(propertyID)
             };
     }

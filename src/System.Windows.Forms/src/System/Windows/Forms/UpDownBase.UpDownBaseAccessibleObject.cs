@@ -13,7 +13,7 @@ public abstract partial class UpDownBase
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (Owner is not UpDownBase owner)
+            if (!this.TryGetOwnerAs(out UpDownBase? owner))
             {
                 return null;
             }
@@ -30,16 +30,6 @@ public abstract partial class UpDownBase
 
         public override int GetChildCount() => 2;
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = Owner.AccessibleRole;
-
-                return role != AccessibleRole.Default
-                    ? role
-                    : AccessibleRole.SpinButton;
-            }
-        }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.SpinButton);
     }
 }

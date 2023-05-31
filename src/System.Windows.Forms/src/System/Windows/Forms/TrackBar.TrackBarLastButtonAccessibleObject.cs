@@ -15,14 +15,14 @@ public partial class TrackBar
 
         public override string DefaultAction => SR.AccessibleActionPress;
 
-        public override string? Name
-            => OwningTrackBar.Orientation == Orientation.Horizontal
-               && (OwningTrackBar.RightToLeft == RightToLeft.No || ParentInternal.IsMirrored)
-                    ? SR.TrackBarLargeIncreaseButtonName
-                    : SR.TrackBarLargeDecreaseButtonName;
+        public override string? Name => !this.TryGetOwnerAs(out TrackBar? owner) || ParentInternal is not { } parent
+            ? null
+            : owner.Orientation == Orientation.Horizontal && (owner.RightToLeft == RightToLeft.No || parent.IsMirrored)
+                ? SR.TrackBarLargeIncreaseButtonName
+                : SR.TrackBarLargeDecreaseButtonName;
 
         public override AccessibleStates State
-            => !OwningTrackBar.IsHandleCreated || IsDisplayed
+            => !this.TryGetOwnerAs(out TrackBar? owner) || !owner.IsHandleCreated || IsDisplayed
                 ? AccessibleStates.None
                 : AccessibleStates.Invisible;
 
@@ -30,32 +30,35 @@ public partial class TrackBar
         {
             get
             {
-                if (!OwningTrackBar.IsHandleCreated || !base.IsDisplayed)
+                if (!this.TryGetOwnerAs(out TrackBar? owner)
+                    || ParentInternal is not { } parent
+                    || !owner.IsHandleCreated
+                    || !base.IsDisplayed)
                 {
                     return false;
                 }
 
-                if (OwningTrackBar.Minimum == OwningTrackBar.Maximum)
+                if (owner.Minimum == owner.Maximum)
                 {
                     return true;
                 }
 
-                return OwningTrackBar.Orientation == Orientation.Vertical || ParentInternal.RTLLayoutDisabled
-                        ? OwningTrackBar.Minimum != OwningTrackBar.Value
-                        : OwningTrackBar.Maximum != OwningTrackBar.Value;
+                return owner.Orientation == Orientation.Vertical || parent.RTLLayoutDisabled
+                    ? owner.Minimum != owner.Value
+                    : owner.Maximum != owner.Value;
             }
         }
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!OwningTrackBar.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out TrackBar? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
 
             return direction switch
             {
-                UiaCore.NavigateDirection.PreviousSibling => IsDisplayed ? ParentInternal.ThumbAccessibleObject : null,
+                UiaCore.NavigateDirection.PreviousSibling => IsDisplayed ? ParentInternal?.ThumbAccessibleObject : null,
                 UiaCore.NavigateDirection.NextSibling => null,
                 _ => base.FragmentNavigate(direction)
             };
@@ -65,11 +68,11 @@ public partial class TrackBar
 
         internal override void Invoke()
         {
-            if (OwningTrackBar.IsHandleCreated)
+            if (this.TryGetOwnerAs(out TrackBar? owner) && owner.IsHandleCreated)
             {
                 // The "GetChildId" method returns to the id of the trackbar element,
                 // which allows to use the native "accDoDefaultAction" method when the "Invoke" method is called
-                ParentInternal.SystemIAccessible.TryDoDefaultAction(GetChildId());
+                ParentInternal?.SystemIAccessible.TryDoDefaultAction(GetChildId());
             }
         }
     }

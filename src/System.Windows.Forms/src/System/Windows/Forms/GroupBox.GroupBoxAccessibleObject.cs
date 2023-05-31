@@ -14,19 +14,7 @@ public partial class GroupBox
         {
         }
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = Owner.AccessibleRole;
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
-
-                return AccessibleRole.Grouping;
-            }
-        }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Grouping);
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch

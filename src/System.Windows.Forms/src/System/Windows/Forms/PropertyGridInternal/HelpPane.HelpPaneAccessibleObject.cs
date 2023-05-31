@@ -13,7 +13,7 @@ internal partial class HelpPane
     /// </summary>
     internal class HelpPaneAccessibleObject : ControlAccessibleObject
     {
-        private readonly PropertyGrid _parentPropertyGrid;
+        private readonly WeakReference<PropertyGrid> _parentPropertyGrid;
 
         /// <summary>
         ///  Initializes new instance of the <see cref="HelpPaneAccessibleObject"/>.
@@ -22,13 +22,13 @@ internal partial class HelpPane
         /// <param name="parentPropertyGrid">The parent <see cref="PropertyGrid"/> control.</param>
         public HelpPaneAccessibleObject(HelpPane owningHelpPane, PropertyGrid parentPropertyGrid) : base(owningHelpPane)
         {
-            _parentPropertyGrid = parentPropertyGrid;
+            _parentPropertyGrid = new(parentPropertyGrid);
         }
 
-        /// <inheritdoc />
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (_parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
+            if (_parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
+                && target.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
                 UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget is not null)
@@ -40,7 +40,6 @@ internal partial class HelpPane
             return base.FragmentNavigate(direction);
         }
 
-        /// <inheritdoc />
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {
@@ -48,7 +47,22 @@ internal partial class HelpPane
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        public override string Name => Owner?.AccessibleName
-            ?? string.Format(SR.PropertyGridHelpPaneAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
+        public override string Name
+        {
+            get
+            {
+                if (this.TryGetOwnerAs(out Control? owner))
+                {
+                    if (owner.Name is { } name)
+                    {
+                        return name;
+                    }
+                }
+
+                return _parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
+                    ? string.Format(SR.PropertyGridHelpPaneAccessibleNameTemplate, target.AccessibilityObject.Name)
+                    : string.Empty;
+            }
+        }
     }
 }

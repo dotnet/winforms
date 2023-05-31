@@ -11,28 +11,25 @@ public partial class ToolStrip
 {
     public class ToolStripAccessibleObject : ControlAccessibleObject
     {
-        private readonly ToolStrip _owningToolStrip;
-
         public ToolStripAccessibleObject(ToolStrip owner) : base(owner)
         {
-            _owningToolStrip = owner;
         }
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => _owningToolStrip.IsHandleCreated ? HitTest((int)x, (int)y) : null;
+            => this.TryGetOwnerAs(out ToolStrip? owner) && owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
         /// <summary>
         ///  Return the child object at the given screen coordinates.
         /// </summary>
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!_owningToolStrip.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
 
-            Point clientHit = _owningToolStrip.PointToClient(new Point(x, y));
-            ToolStripItem? item = _owningToolStrip.GetItemAt(clientHit);
+            Point clientHit = owner.PointToClient(new Point(x, y));
+            ToolStripItem? item = owner.GetItemAt(clientHit);
             return ((item is not null) && (item.AccessibilityObject is not null))
                 ? item.AccessibilityObject
                 : base.HitTest(x, y);
@@ -44,33 +41,33 @@ public partial class ToolStrip
         /// </summary>
         public override AccessibleObject? GetChild(int index)
         {
-            if ((_owningToolStrip is null) || (_owningToolStrip.Items is null))
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || owner.Items is null)
             {
                 return null;
             }
 
-            if (index == 0 && _owningToolStrip.Grip.Visible)
+            if (index == 0 && owner.Grip.Visible)
             {
-                return _owningToolStrip.Grip.AccessibilityObject;
+                return owner.Grip.AccessibilityObject;
             }
-            else if (_owningToolStrip.Grip.Visible && index > 0)
+            else if (owner.Grip.Visible && index > 0)
             {
                 index--;
             }
 
-            if (index < _owningToolStrip.Items.Count)
+            if (index < owner.Items.Count)
             {
                 ToolStripItem? item = null;
                 int myIndex = 0;
 
                 // First we walk through the head aligned items.
-                for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
+                for (int i = 0; i < owner.Items.Count; ++i)
                 {
-                    if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Left)
+                    if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Left)
                     {
                         if (myIndex == index)
                         {
-                            item = _owningToolStrip.Items[i];
+                            item = owner.Items[i];
                             break;
                         }
 
@@ -81,13 +78,13 @@ public partial class ToolStrip
                 // If we didn't find it, then we walk through the tail aligned items.
                 if (item is null)
                 {
-                    for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
+                    for (int i = 0; i < owner.Items.Count; ++i)
                     {
-                        if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Right)
+                        if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Right)
                         {
                             if (myIndex == index)
                             {
-                                item = _owningToolStrip.Items[i];
+                                item = owner.Items[i];
                                 break;
                             }
 
@@ -110,9 +107,9 @@ public partial class ToolStrip
                 return item.AccessibilityObject;
             }
 
-            if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && index == _owningToolStrip.Items.Count)
+            if (owner.CanOverflow && owner.OverflowButton.Visible && index == owner.Items.Count)
             {
-                return _owningToolStrip.OverflowButton.AccessibilityObject;
+                return owner.OverflowButton.AccessibilityObject;
             }
 
             return null;
@@ -124,26 +121,26 @@ public partial class ToolStrip
         /// </summary>
         public override int GetChildCount()
         {
-            if ((_owningToolStrip is null) || (_owningToolStrip.Items is null))
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || owner.Items is null)
             {
                 return -1;
             }
 
             int count = 0;
-            for (int i = 0; i < _owningToolStrip.Items.Count; i++)
+            for (int i = 0; i < owner.Items.Count; i++)
             {
-                if (_owningToolStrip.Items[i].Available)
+                if (owner.Items[i].Available)
                 {
                     count++;
                 }
             }
 
-            if (_owningToolStrip.Grip.Visible)
+            if (owner.Grip.Visible)
             {
                 count++;
             }
 
-            if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible)
+            if (owner.CanOverflow && owner.OverflowButton.Visible)
             {
                 count++;
             }
@@ -153,21 +150,21 @@ public partial class ToolStrip
 
         internal AccessibleObject? GetChildFragment(int fragmentIndex, UiaCore.NavigateDirection direction, bool getOverflowItem = false)
         {
-            if (fragmentIndex < 0)
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || fragmentIndex < 0)
             {
                 return null;
             }
 
             ToolStripItemCollection items = getOverflowItem
-                ? _owningToolStrip.OverflowItems
-                : _owningToolStrip.DisplayedItems;
+                ? owner.OverflowItems
+                : owner.DisplayedItems;
 
             if (!getOverflowItem
-                && _owningToolStrip.CanOverflow
-                && _owningToolStrip.OverflowButton.Visible
+                && owner.CanOverflow
+                && owner.OverflowButton.Visible
                 && fragmentIndex == items.Count - 1)
             {
-                return _owningToolStrip.OverflowButton.AccessibilityObject;
+                return owner.OverflowButton.AccessibilityObject;
             }
 
             if (fragmentIndex < items.Count)
@@ -260,32 +257,32 @@ public partial class ToolStrip
 
         internal int GetChildOverflowFragmentCount()
         {
-            if (_owningToolStrip is null || _owningToolStrip.OverflowItems is null)
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || owner.OverflowItems is null)
             {
                 return -1;
             }
 
-            return _owningToolStrip.OverflowItems.Count;
+            return owner.OverflowItems.Count;
         }
 
         internal int GetChildFragmentCount()
         {
-            if (_owningToolStrip is null || _owningToolStrip.DisplayedItems is null)
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || owner.DisplayedItems is null)
             {
                 return -1;
             }
 
-            return _owningToolStrip.DisplayedItems.Count;
+            return owner.DisplayedItems.Count;
         }
 
         internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child)
         {
-            if (_owningToolStrip is null || _owningToolStrip.Items is null)
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || owner.Items is null)
             {
                 return -1;
             }
 
-            if (child.Owner == _owningToolStrip.Grip)
+            if (child.Owner == owner.Grip)
             {
                 return 0;
             }
@@ -293,22 +290,22 @@ public partial class ToolStrip
             ToolStripItemCollection items;
             ToolStripItemPlacement placement = child.Owner.Placement;
 
-            if (_owningToolStrip is ToolStripOverflow overflow)
+            if (owner is ToolStripOverflow overflow)
             {
                 // Overflow items in ToolStripOverflow host are in DisplayedItems collection.
                 items = overflow.DisplayedItems;
             }
             else
             {
-                if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && child.Owner == _owningToolStrip.OverflowButton)
+                if (owner.CanOverflow && owner.OverflowButton.Visible && child.Owner == owner.OverflowButton)
                 {
                     return GetChildFragmentCount() - 1;
                 }
 
                 // Items can be either in DisplayedItems or in OverflowItems (if overflow)
                 items = placement == ToolStripItemPlacement.Main || child.Owner is ToolStripScrollButton
-                    ? _owningToolStrip.DisplayedItems
-                    : _owningToolStrip.OverflowItems;
+                    ? owner.DisplayedItems
+                    : owner.OverflowItems;
             }
 
             for (int index = 0; index < items.Count; index++)
@@ -325,15 +322,15 @@ public partial class ToolStrip
 
         internal int GetChildIndex(ToolStripItem.ToolStripItemAccessibleObject child)
         {
-            if ((_owningToolStrip is null) || (_owningToolStrip.Items is null))
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || owner.Items is null)
             {
                 return -1;
             }
 
             int index = 0;
-            if (_owningToolStrip.Grip.Visible)
+            if (owner.Grip.Visible)
             {
-                if (child.Owner == _owningToolStrip.Grip)
+                if (child.Owner == owner.Grip)
                 {
                     return 0;
                 }
@@ -341,17 +338,17 @@ public partial class ToolStrip
                 index = 1;
             }
 
-            if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && child.Owner == _owningToolStrip.OverflowButton)
+            if (owner.CanOverflow && owner.OverflowButton.Visible && child.Owner == owner.OverflowButton)
             {
-                return _owningToolStrip.Items.Count + index;
+                return owner.Items.Count + index;
             }
 
             // First we walk through the head aligned items.
-            for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
+            for (int i = 0; i < owner.Items.Count; ++i)
             {
-                if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Left)
+                if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Left)
                 {
-                    if (child.Owner == _owningToolStrip.Items[i])
+                    if (child.Owner == owner.Items[i])
                     {
                         return index;
                     }
@@ -361,11 +358,11 @@ public partial class ToolStrip
             }
 
             // If we didn't find it, then we walk through the tail aligned items.
-            for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
+            for (int i = 0; i < owner.Items.Count; ++i)
             {
-                if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Right)
+                if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Right)
                 {
-                    if (child.Owner == _owningToolStrip.Items[i])
+                    if (child.Owner == owner.Items[i])
                     {
                         return index;
                     }
@@ -377,26 +374,13 @@ public partial class ToolStrip
             return -1;
         }
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = Owner.AccessibleRole;
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.ToolBar);
 
-                return AccessibleRole.ToolBar;
-            }
-        }
-
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => this;
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!_owningToolStrip.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out ToolStrip? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }

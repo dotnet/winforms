@@ -13,7 +13,7 @@ internal partial class PropertyGridToolStrip
     /// </summary>
     internal class PropertyGridToolStripAccessibleObject : ToolStripAccessibleObject
     {
-        private readonly PropertyGrid _parentPropertyGrid;
+        private readonly WeakReference<PropertyGrid> _parentPropertyGrid;
 
         /// <summary>
         ///  Constructs new instance of PropertyGridToolStripAccessibleObject
@@ -22,7 +22,7 @@ internal partial class PropertyGridToolStrip
         /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
         public PropertyGridToolStripAccessibleObject(PropertyGridToolStrip owningPropertyGridToolStrip, PropertyGrid parentPropertyGrid) : base(owningPropertyGridToolStrip)
         {
-            _parentPropertyGrid = parentPropertyGrid;
+            _parentPropertyGrid = new(parentPropertyGrid);
         }
 
         /// <summary>
@@ -32,8 +32,9 @@ internal partial class PropertyGridToolStrip
         /// <returns>Returns the element in the specified direction.</returns>
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (_parentPropertyGrid.IsHandleCreated &&
-                _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
+            if (_parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
+                && target.IsHandleCreated
+                && target.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
                 UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget is not null)
@@ -57,6 +58,18 @@ internal partial class PropertyGridToolStrip
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        public override string? Name => Owner?.AccessibleName ?? _parentPropertyGrid?.AccessibilityObject.Name;
+        public override string? Name
+        {
+            get
+            {
+                if (this.TryGetOwnerAs(out PropertyGridToolStrip? owner) && owner.AccessibleName is { } name)
+                {
+                    return name;
+                }
+
+                _parentPropertyGrid.TryGetTarget(out PropertyGrid? target);
+                return target?.AccessibilityObject.Name;
+            }
+        }
     }
 }

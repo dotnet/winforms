@@ -8,24 +8,22 @@ public partial class ButtonBase
 {
     public class ButtonBaseAccessibleObject : ControlAccessibleObject
     {
-        private readonly ButtonBase _owningButtonBase;
-
-        public ButtonBaseAccessibleObject(Control owner)
-            : base((owner is ButtonBase owningButtonBase) ? owner : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(Owner), typeof(ButtonBase))))
+        public ButtonBaseAccessibleObject(Control owner) : base((owner is ButtonBase owningButtonBase)
+            ? owner
+            : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(owner), typeof(ButtonBase))))
         {
-            _owningButtonBase = owningButtonBase;
         }
 
         public override AccessibleStates State
-            => _owningButtonBase.IsHandleCreated && _owningButtonBase.OwnerDraw && _owningButtonBase.MouseIsDown
+            => this.TryGetOwnerAs(out ButtonBase? owner) && owner.IsHandleCreated && owner.OwnerDraw && owner.MouseIsDown
                 ? base.State | AccessibleStates.Pressed
                 : base.State;
 
         public override void DoDefaultAction()
         {
-            if (_owningButtonBase.IsHandleCreated)
+            if (this.TryGetOwnerAs(out ButtonBase? owner) && owner.IsHandleCreated)
             {
-                _owningButtonBase.OnClick(EventArgs.Empty);
+                owner.OnClick(EventArgs.Empty);
             }
         }
     }

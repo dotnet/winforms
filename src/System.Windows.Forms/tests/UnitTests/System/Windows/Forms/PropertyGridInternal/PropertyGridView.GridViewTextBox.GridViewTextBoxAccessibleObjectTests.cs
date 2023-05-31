@@ -45,10 +45,11 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     [WinFormsFact]
     public void GridViewTextBoxAccessibleObject_FragmentNavigate_navigates_correctly()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid
+        using PropertyGrid propertyGrid = new()
         {
             SelectedObject = Point.Empty
         };
+
         propertyGrid.CreateControl();
         PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
 

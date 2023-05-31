@@ -13,7 +13,7 @@ internal partial class CommandsPane
     /// </summary>
     internal class CommandsPaneAccessibleObject : ControlAccessibleObject
     {
-        private readonly PropertyGrid _parentPropertyGrid;
+        private readonly WeakReference<PropertyGrid> _parentPropertyGrid;
 
         /// <summary>
         ///  Initializes new instance of <see cref="CommandsPaneAccessibleObject"/>.
@@ -22,13 +22,13 @@ internal partial class CommandsPane
         /// <param name="parentPropertyGrid">The parent <see cref="PropertyGrid"/> control.</param>
         public CommandsPaneAccessibleObject(CommandsPane owningCommandsPane, PropertyGrid parentPropertyGrid) : base(owningCommandsPane)
         {
-            _parentPropertyGrid = parentPropertyGrid;
+            _parentPropertyGrid = new(parentPropertyGrid);
         }
 
-        /// <inheritdoc />
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (_parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
+            if (_parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
+                && target.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
                 UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget is not null)
@@ -40,7 +40,6 @@ internal partial class CommandsPane
             return base.FragmentNavigate(direction);
         }
 
-        /// <inheritdoc />
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {
@@ -48,6 +47,11 @@ internal partial class CommandsPane
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        public override string? Name => Owner?.AccessibleName ?? _parentPropertyGrid?.AccessibilityObject.Name;
+        public override string? Name
+            => this.TryGetOwnerAs(out CommandsPane? owner)
+                ? owner.AccessibleName ?? (_parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
+                    ? target.AccessibilityObject.Name
+                    : null)
+                : null;
     }
 }

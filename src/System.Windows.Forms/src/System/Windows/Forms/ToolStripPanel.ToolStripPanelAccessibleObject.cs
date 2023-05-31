@@ -9,33 +9,16 @@ public partial class ToolStripPanel
 {
     internal class ToolStripPanelAccessibleObject : ControlAccessibleObject
     {
-        private readonly ToolStripPanel _owningLabel;
-
         public ToolStripPanelAccessibleObject(ToolStripPanel owner) : base(owner)
         {
-            _owningLabel = owner;
         }
 
-        public override AccessibleRole Role
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.Client);
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyId) => propertyId switch
         {
-            get
-            {
-                AccessibleRole role = _owningLabel.AccessibleRole;
-
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
-
-                return AccessibleRole.Client;
-            }
-        }
-
-        internal override object? GetPropertyValue(UiaCore.UIA propertyId)
-            => propertyId switch
-            {
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => Owner.CanFocus,
-                _ => base.GetPropertyValue(propertyId)
-            };
+            UiaCore.UIA.IsKeyboardFocusablePropertyId => this.TryGetOwnerAs(out ToolStripPanel? owner) && owner.CanFocus,
+            _ => base.GetPropertyValue(propertyId)
+        };
     }
 }

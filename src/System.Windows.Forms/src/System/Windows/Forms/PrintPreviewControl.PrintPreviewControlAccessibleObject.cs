@@ -11,25 +11,22 @@ public partial class PrintPreviewControl
 {
     internal class PrintPreviewControlAccessibleObject : ControlAccessibleObject
     {
-        private readonly PrintPreviewControl _owningPrintPreviewControl;
-
         public PrintPreviewControlAccessibleObject(PrintPreviewControl owner) : base(owner)
         {
-            _owningPrintPreviewControl = owner;
         }
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            => propertyID switch
+            => !this.TryGetOwnerAs(out PrintPreviewControl? owner) ? null : propertyID switch
             {
-                UiaCore.UIA.AutomationIdPropertyId => Owner.Name,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => _owningPrintPreviewControl.Focused,
+                UiaCore.UIA.AutomationIdPropertyId => owner.Name,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => owner.Focused,
                 UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyID)
             };
 
         internal override Rectangle BoundingRectangle
-            => _owningPrintPreviewControl.IsHandleCreated
-                ? _owningPrintPreviewControl.GetToolNativeScreenRectangle()
+            => this.TryGetOwnerAs(out PrintPreviewControl? owner) && owner.IsHandleCreated && owner.Parent is not null
+                ? owner.GetToolNativeScreenRectangle()
                 : Rectangle.Empty;
     }
 }
