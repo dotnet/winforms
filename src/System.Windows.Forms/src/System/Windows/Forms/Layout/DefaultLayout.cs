@@ -1020,10 +1020,10 @@ internal partial class DefaultLayout : LayoutEngine
             {
                 Rectangle displayRect = element.Container.DisplayRectangle;
 
-                // AutoScaleFactor is not alligned with Window's SuggestedRectangle applied on top-level window/Form.
+                // AutoScaleFactor is not aligned with Window's SuggestedRectangle applied on top-level window/Form.
                 // So, compute factor with respect to the change in DisplayRectangle and apply it to scale anchors.
                 // See https://github.com/dotnet/winforms/issues/8266 for more information.
-                if (element is ContainerControl container && container.WindowsSuggestedRectangle is not null)
+                if (element.Container is ContainerControl container && container.WindowsSuggestedRectangle is not null)
                 {
                     displayRect = container.WindowsSuggestedRectangle.Value;
                 }
