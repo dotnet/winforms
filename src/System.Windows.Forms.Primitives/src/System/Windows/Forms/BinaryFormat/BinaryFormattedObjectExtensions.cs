@@ -395,7 +395,7 @@ internal static class BinaryFormattedObjectExtensions
 
             if (format.RecordCount < 5
                 || format[1] is not SystemClassWithMembersAndTypes classInfo
-                || !classInfo.Name.SequenceEqual("System.Collections.Hashtable")
+                || classInfo.Name != TypeInfo.HashtableType
                 || format[2] is not ArraySingleObject keys
                 || format[3] is not ArraySingleObject values
                 || keys.Length != values.Length)
@@ -458,6 +458,31 @@ internal static class BinaryFormattedObjectExtensions
     }
 
     /// <summary>
+    ///  Trys to get this object as a binary formatted <see cref="NotSupportedException"/>.
+    /// </summary>
+    public static bool TryGetNotSupportedException(
+        this BinaryFormattedObject format,
+        out object? exception)
+    {
+        return TryGet(Get, format, out exception);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? exception)
+        {
+            exception = null;
+
+            if (format.RecordCount < 3
+                || format[1] is not SystemClassWithMembersAndTypes classInfo
+                || classInfo.Name != TypeInfo.NotSupportedExceptionType)
+            {
+                return false;
+            }
+
+            exception = new NotSupportedException(classInfo["Message"].ToString());
+            return true;
+        }
+    }
+
+    /// <summary>
     ///  Try to get a supported .NET type object (not WinForms).
     /// </summary>
     public static bool TryGetFrameworkObject(
@@ -469,7 +494,8 @@ internal static class BinaryFormattedObjectExtensions
             || format.TryGetPrimitiveArrayList(out value)
             || format.TryGetPrimitiveHashtable(out value)
             || format.TryGetRectangleF(out value)
-            || format.TryGetPointF(out value);
+            || format.TryGetPointF(out value)
+            || format.TryGetNotSupportedException(out value);
 
     /// <summary>
     ///  Dereferences <see cref="MemberReference"/> records.

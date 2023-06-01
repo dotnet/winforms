@@ -25,6 +25,11 @@ internal static class TypeInfo
     public const string IntPtrType = "System.IntPtr";
     public const string UIntPtrType = "System.UIntPtr";
 
+    public const string HashtableType = "System.Collections.Hashtable";
+    public const string IDictionaryType = "System.Collections.IDictionary";
+    public const string ExceptionType = "System.Exception";
+    public const string NotSupportedExceptionType = "System.NotSupportedException";
+
     public const string MscorlibAssemblyName
         = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
     public const string SystemDrawingAssemblyName
@@ -33,8 +38,6 @@ internal static class TypeInfo
     /// <summary>
     ///  Returns the <see cref="PrimitiveType"/> for the given <paramref name="typeName"/>.
     /// </summary>
-    /// <param name="typeName"></param>
-    /// <returns></returns>
     internal static PrimitiveType GetPrimitiveType(ReadOnlySpan<char> typeName) => typeName switch
     {
         BooleanType => PrimitiveType.Boolean,
@@ -59,7 +62,6 @@ internal static class TypeInfo
     /// <summary>
     ///  Returns the <see cref="PrimitiveType"/> for the given <paramref name="type"/>.
     /// </summary>
-    /// <param name="type"></param>
     /// <returns><see cref="PrimitiveType"/> or <see langword="default"/> if not a <see cref="PrimitiveType"/>.</returns>
     internal static PrimitiveType GetPrimitiveType(Type type) => Type.GetTypeCode(type) switch
     {
@@ -78,9 +80,9 @@ internal static class TypeInfo
         TypeCode.Decimal => PrimitiveType.Decimal,
         TypeCode.DateTime => PrimitiveType.DateTime,
         TypeCode.String => PrimitiveType.String,
-        //TypeCode.Empty => 0,
-        //TypeCode.Object => 0,
-        //TypeCode.DBNull => 0,
+        // TypeCode.Empty => 0,
+        // TypeCode.Object => 0,
+        // TypeCode.DBNull => 0,
         _ => type == typeof(TimeSpan) ? PrimitiveType.TimeSpan : default,
     };
 }

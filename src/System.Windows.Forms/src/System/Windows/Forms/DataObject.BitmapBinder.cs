@@ -12,9 +12,15 @@ public partial class DataObject
 {
     /// <summary>
     ///  Binder that restricts deserialization to Bitmap type and serialization to strings and Bitmaps.
-    ///  Deserialization of known safe types(strings and arrays of primitives) does not invoke the binder.
+    ///  Deserialization of known safe types (strings and arrays of primitives) does not invoke the binder.
     /// </summary>
-    private class BitmapBinder : SerializationBinder
+    /// <remarks>
+    ///  <para>
+    ///   This gets skipped when our <see cref="BinaryFormat.BinaryFormattedObject"/> code handles its known types.
+    ///   While there are more types allowed (such as <see cref="List{String}"/>, they are all safe.
+    ///  </para>
+    /// </remarks>
+    private sealed class BitmapBinder : SerializationBinder
     {
         // Bitmap type lives in different assemblies in the .NET Framework and in .NET Core. To support serialization
         // between both runtimes the .NET Framework identities are used.
