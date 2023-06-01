@@ -45,7 +45,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// Top-level window is scaled by suggested rectangle received from windows WM_DPICHANGED message event.
     /// We use this flag to indicate it is top-level window and is already scaled.
     /// </summary>
-    private bool _isScaledByDpiChangedEvent;
+    internal Rectangle? WindowsSuggestedRectangle { get; private set; }
 
     private BitVector32 _state;
 
@@ -1161,7 +1161,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 }
 
                 // Top-level window may be already scaled by WM_DPICHANGE message. So, we skip it in such case.
-                if (!_isScaledByDpiChangedEvent)
+                if (WindowsSuggestedRectangle is null)
                 {
                     ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
                 }
@@ -1454,7 +1454,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
             // Bounds are being scaled for the top-level window via SuggestedRectangle. We would need to skip scaling of
             // this control further by the 'OnFontChanged' event.
-            _isScaledByDpiChangedEvent = true;
+            WindowsSuggestedRectangle = suggestedRectangle;
 
             Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
             ScaledControlFont = fontForDpi;
@@ -1486,7 +1486,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
             ResumeAllLayout(this, true);
-            _isScaledByDpiChangedEvent = false;
+            WindowsSuggestedRectangle = null;
         }
     }
 
