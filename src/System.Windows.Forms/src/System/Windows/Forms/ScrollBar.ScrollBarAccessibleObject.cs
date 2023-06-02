@@ -141,14 +141,22 @@ public partial class ScrollBar
                     _owningScrollBar.AccessibleRole == AccessibleRole.Default
                     => UiaCore.UIA.ScrollBarControlTypeId,
                 UiaCore.UIA.HasKeyboardFocusPropertyId => _owningScrollBar.Focused,
+                UiaCore.UIA.RangeValueValuePropertyId => true,
                 _ => base.GetPropertyValue(propertyID)
             };
 
         internal override bool IsIAccessibleExSupported() => true;
 
+        internal override double RangeValue => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Value : 0;
+
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
             if (patternId == UiaCore.UIA.ValuePatternId)
+            {
+                return true;
+            }
+
+            if (patternId == UiaCore.UIA.RangeValuePatternId)
             {
                 return true;
             }
