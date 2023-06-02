@@ -1588,6 +1588,25 @@ public class Control_ControlAccessibleObjectTests
         }
     }
 
+    [WinFormsTheory]
+    [MemberData(nameof(ControlAccessibleObject_TestData))]
+    public void ControlAccessibleObject_DoesNotRootControls_AllPublicControl(Type type)
+    {
+        Control.ControlAccessibleObject accessibleObject = CreateAndDisposeControl(type);
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        Assert.False(accessibleObject.TryGetOwnerAs(out Control _));
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static Control.ControlAccessibleObject CreateAndDisposeControl(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            var accessibleObject = (Control.ControlAccessibleObject)control.AccessibilityObject;
+            Assert.NotNull(accessibleObject);
+            Assert.True(accessibleObject.TryGetOwnerAs(out Control _));
+            return accessibleObject;
+        }
+    }
+
     // ContextMenuStrip, From, ToolStripDropDown, ToolStripDropDownMenu
     // are Top level controls that can't be added to a ToolStrip.
     // A TabPage can be added to a TabControl only (see TabPage.AssignParent method).
