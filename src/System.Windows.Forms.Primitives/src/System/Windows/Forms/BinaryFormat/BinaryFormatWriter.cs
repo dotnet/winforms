@@ -20,6 +20,13 @@ internal static class BinaryFormatWriter
         "LoadFactor", "Version", "Comparer", "HashCodeProvider", "HashSize", "Keys", "Values"
     };
 
+    private static string[]? s_notSupportedExceptionMemberNames;
+    private static string[] NotSupportedExceptionMemberNames => s_notSupportedExceptionMemberNames ??= new[]
+    {
+        "ClassName", "Message", "Data", "InnerException", "HelpURL", "StackTraceString", "RemoteStackTraceString",
+        "RemoteStackIndex", "ExceptionMethod", "HResult", "Source", "WatsonBuckets"
+    };
+
     private static string[]? s_listMemberNames;
     private static string[] ListMemberNames => s_listMemberNames ??= new[] { "_items", "_size", "_version" };
 
@@ -445,7 +452,7 @@ internal static class BinaryFormatWriter
         using var writer = new BinaryFormatWriterScope(stream);
 
         new SystemClassWithMembersAndTypes(
-            new ClassInfo(1, "System.Collections.Hashtable", HashtableMemberNames),
+            new ClassInfo(1, TypeInfo.HashtableType, HashtableMemberNames),
             new MemberTypeInfo(
                 (BinaryType.Primitive, PrimitiveType.Single),
                 (BinaryType.Primitive, PrimitiveType.Int32),
@@ -473,6 +480,43 @@ internal static class BinaryFormatWriter
         new ArraySingleObject(
             new ArrayInfo(3, values.Length),
             ListConverter.GetPrimitiveConverter(values, strings)).Write(writer);
+    }
+
+    /// <summary>
+    ///  Writes a <see cref="NotSupportedException"/> in binary format.
+    /// </summary>
+    public static void WriteNotSupportedException(Stream stream, NotSupportedException exception)
+    {
+        using var writer = new BinaryFormatWriterScope(stream);
+
+        // We only serialize the message to avoid binary serialization risks.
+        new SystemClassWithMembersAndTypes(
+            new ClassInfo(1, TypeInfo.NotSupportedExceptionType, NotSupportedExceptionMemberNames),
+            new MemberTypeInfo(
+                (BinaryType.String, null),
+                (BinaryType.String, null),
+                (BinaryType.SystemClass, TypeInfo.IDictionaryType),
+                (BinaryType.SystemClass, TypeInfo.ExceptionType),
+                (BinaryType.String, null),
+                (BinaryType.String, null),
+                (BinaryType.String, null),
+                (BinaryType.Primitive, PrimitiveType.Int32),
+                (BinaryType.String, null),
+                (BinaryType.Primitive, PrimitiveType.Int32),
+                (BinaryType.String, null),
+                (BinaryType.PrimitiveArray, PrimitiveType.Byte)),
+            new BinaryObjectString(2, TypeInfo.NotSupportedExceptionType),
+            new BinaryObjectString(3, exception.Message),
+            ObjectNull.Instance,
+            ObjectNull.Instance,
+            ObjectNull.Instance,
+            ObjectNull.Instance,
+            ObjectNull.Instance,
+            0,
+            ObjectNull.Instance,
+            exception.HResult,
+            ObjectNull.Instance,
+            ObjectNull.Instance).Write(writer);
     }
 
     /// <summary>
@@ -517,6 +561,9 @@ internal static class BinaryFormatWriter
                     return TryWriteHashtable(stream, hashtable);
                 case ArrayList arrayList:
                     return TryWriteArrayList(stream, arrayList);
+                case NotSupportedException exception:
+                    WriteNotSupportedException(stream, exception);
+                    return true;
             }
 
             return type.IsGenericType

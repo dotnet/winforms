@@ -217,7 +217,6 @@ public partial class DataObject
 
             static object? TryGetBitmapData(IComDataObject dataObject, string format)
             {
-                // Currently this only supports Bitmap.
                 if (format != DataFormats.BitmapConstant)
                 {
                     return null;
