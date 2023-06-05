@@ -36,14 +36,6 @@ internal unsafe ref struct ThemingScope
         }
     }
 
-    /// <summary>
-    ///  Use this to deactivate a context activated by calling ExplicitActivate.
-    /// </summary>
-    public static nuint Deactivate(nuint userCookie)
-    {
-        return userCookie == 0 || PInvoke.DeactivateActCtx(0, userCookie) ? 0 : userCookie;
-    }
-
     public void Dispose()
     {
         if (_cookie != 0)
