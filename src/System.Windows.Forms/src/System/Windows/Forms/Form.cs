@@ -4359,7 +4359,7 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual bool OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref Size desiredSize)
     {
-        // Compute font for the current DPI and cache it. DPI specific fonts cache is available only in PermonitorV2 mode applications.
+        // Compute font for the current DPI and cache it. DPI specific fonts cache is available only in PerMonitorV2 mode applications.
         Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
 
         // If AutoScaleMode=AutoScaleMode.Dpi then we continue with the linear size we get from Windows for the top-level window.
@@ -4368,11 +4368,11 @@ public partial class Form : ContainerControl
             return false;
         }
 
-        // Calculate AutoscaleFactor for AutoScaleMode.Font. We will be using this factor to scale child controls
+        // Calculate AutoScaleFactor for AutoScaleMode.Font. We will be using this factor to scale child controls
         // and use same factor to compute desired size for top-level windows for the current DPI.
         // This desired size is then used to notify Windows that we need non-linear size for top-level window.
-        FontHandleWrapper fontwrapper = new FontHandleWrapper(fontForDpi);
-        SizeF currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(fontwrapper.Handle);
+        FontHandleWrapper fontWrapper = new(fontForDpi);
+        SizeF currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(fontWrapper.Handle);
         SizeF autoScaleFactor = GetCurrentAutoScaleFactor(currentAutoScaleDimensions, AutoScaleDimensions);
 
         desiredSize.Width = (int)(Size.Width * autoScaleFactor.Width);
@@ -4385,7 +4385,7 @@ public partial class Form : ContainerControl
 
     /// <summary>
     ///  Handles the WM_GETDPISCALEDSIZE message, this is a chance for the application to
-    ///  scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
+    ///  scale window size non-linear. If this message is not processed, the size is scaled linearly by Windows.
     ///  This message is sent to top level windows before WM_DPICHANGED.
     ///  If the application responds to this message, the resulting size will be the candidate rectangle
     ///  sent to WM_DPICHANGED. The WPARAM contains a Dpi value. The size needs to be computed if

@@ -43,9 +43,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     /// <summary>
     /// Top-level window is scaled by suggested rectangle received from windows WM_DPICHANGED message event.
-    /// We use this flag to indicate it is top-level window and is already scaled.
+    /// We use this property to indicate it is top-level window and is being scaled by Windows OS.
     /// </summary>
-    internal Rectangle? WindowsSuggestedRectangle { get; private set; }
+    internal Rectangle? WindowsSuggestedClientRectangle { get; private set; }
 
     private BitVector32 _state;
 
@@ -1161,7 +1161,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 }
 
                 // Top-level window may be already scaled by WM_DPICHANGE message. So, we skip it in such case.
-                if (WindowsSuggestedRectangle is null)
+                if (WindowsSuggestedClientRectangle is null)
                 {
                     ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
                 }
@@ -1438,9 +1438,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
             {
-                // AutoscaleFactor is not updated until after the OnFontChanged event is raised. Hence, computing
-                // factor based on the change in bounds of the Form, which aligns with AutoscaleFactor for both
-                // AutoscaleMode is Font and/or Dpi. Especially after adding support for non-linear Form size in PMv2.
+                // AutoScaleFactor is not updated until after the OnFontChanged event is raised. Hence, computing
+                // factor based on the change in bounds of the Form, which aligns with AutoScaleFactor for both
+                // AutoScaleMode is Font and/or Dpi. Especially after adding support for non-linear Form size in PMv2.
                 float xScaleFactor = (float)suggestedRectangle.Width / Width;
                 float yScaleFactor = (float)suggestedRectangle.Height / Height;
                 ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);
@@ -1453,8 +1453,25 @@ public class ContainerControl : ScrollableControl, IContainerControl
             // events on the control.
 
             // Bounds are being scaled for the top-level window via SuggestedRectangle. We would need to skip scaling of
-            // this control further by the 'OnFontChanged' event.
-            WindowsSuggestedRectangle = suggestedRectangle;
+            // this control further by the 'OnFontChanged' event. WindowsSuggestedClientRectangle property will help in that.
+            WindowsSuggestedClientRectangle = suggestedRectangle;
+
+            // Windows suggested rectangle includes adornments.Compute new client rectangle by subtracting adornments.
+            RECT adornerRect = default;
+            CreateParams cp = CreateParams;
+#pragma warning disable CA1416 // Validate platform compatibility
+            PInvoke.AdjustWindowRectExForDpi(
+                ref adornerRect,
+                (WINDOW_STYLE)cp.Style,
+                bMenu: PInvoke.GetMenu(this) == HMENU.Null ? false : true,
+                (WINDOW_EX_STYLE)cp.ExStyle,
+                (uint)deviceDpiNew);
+#pragma warning restore CA1416 // Validate platform compatibility
+            WindowsSuggestedClientRectangle = new Rectangle(
+                WindowsSuggestedClientRectangle.Value.X,
+                WindowsSuggestedClientRectangle.Value.Y,
+                WindowsSuggestedClientRectangle.Value.Width - adornerRect.Width,
+                WindowsSuggestedClientRectangle.Value.Height - adornerRect.Height);
 
             Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
             ScaledControlFont = fontForDpi;
@@ -1486,7 +1503,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
             ResumeAllLayout(this, true);
-            WindowsSuggestedRectangle = null;
+            WindowsSuggestedClientRectangle = null;
         }
     }
 

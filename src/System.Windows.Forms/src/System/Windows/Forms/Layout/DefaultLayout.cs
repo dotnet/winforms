@@ -1018,15 +1018,12 @@ internal partial class DefaultLayout : LayoutEngine
 
             if (UseAnchorLayoutV2(element))
             {
-                Rectangle displayRect = element.Container.DisplayRectangle;
-
-                // AutoScaleFactor is not aligned with Window's SuggestedRectangle applied on top-level window/Form.
+                // AutoScaleFactor is not aligned with Window's SuggestedClientRectangle applied on top-level Window/Form.
                 // So, compute factor with respect to the change in DisplayRectangle and apply it to scale anchors.
                 // See https://github.com/dotnet/winforms/issues/8266 for more information.
-                if (element.Container is ContainerControl container && container.WindowsSuggestedRectangle is not null)
-                {
-                    displayRect = container.WindowsSuggestedRectangle.Value;
-                }
+                Rectangle displayRect = element.Container is ContainerControl container && container.WindowsSuggestedClientRectangle is not null
+                    ? container.WindowsSuggestedClientRectangle.Value
+                    : element.Container.DisplayRectangle;
 
                 heightFactor = ((double)displayRect.Height) / anchorInfo.DisplayRectangle.Height;
                 widthFactor = ((double)displayRect.Width) / anchorInfo.DisplayRectangle.Width;
