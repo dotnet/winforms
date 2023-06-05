@@ -156,9 +156,9 @@ public partial class ScrollBar
 
         internal override double RangeValue => _owningScrollBar.Value;
 
-        internal override double LargeChange => double.NaN;
+        internal override double LargeChange => _owningScrollBar.LargeChange;
 
-        internal override double SmallChange => double.NaN;
+        internal override double SmallChange => _owningScrollBar.SmallChange;
 
         internal override double Maximum => _owningScrollBar.Maximum;
 
@@ -167,18 +167,11 @@ public partial class ScrollBar
         internal override bool IsReadOnly => true;
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
-        {
-            if (patternId == UiaCore.UIA.ValuePatternId)
+            => patternId switch
             {
-                return true;
-            }
-
-            if (patternId == UiaCore.UIA.RangeValuePatternId)
-            {
-                return true;
-            }
-
-            return base.IsPatternSupported(patternId);
-        }
+                UiaCore.UIA.ValuePatternId => true,
+                UiaCore.UIA.RangeValuePatternId => true,
+                _ => base.IsPatternSupported(patternId)
+            };
     }
 }
