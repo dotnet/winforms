@@ -141,13 +141,30 @@ public partial class ScrollBar
                     _owningScrollBar.AccessibleRole == AccessibleRole.Default
                     => UiaCore.UIA.ScrollBarControlTypeId,
                 UiaCore.UIA.HasKeyboardFocusPropertyId => _owningScrollBar.Focused,
-                UiaCore.UIA.RangeValueValuePropertyId => true,
+                UiaCore.UIA.RangeValueValuePropertyId => RangeValue,
+                UiaCore.UIA.RangeValueIsReadOnlyPropertyId => true,
+                UiaCore.UIA.RangeValueLargeChangePropertyId => LargeChange,
+                UiaCore.UIA.RangeValueSmallChangePropertyId => SmallChange,
+                UiaCore.UIA.RangeValueMaximumPropertyId => Maximum,
+                UiaCore.UIA.RangeValueMinimumPropertyId =>Minimum,
+                UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
+                UiaCore.UIA.IsRangeValuePatternAvailablePropertyId => true,
                 _ => base.GetPropertyValue(propertyID)
             };
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override double RangeValue => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Value : 0;
+        internal override double RangeValue => _owningScrollBar.Value;
+
+        internal override double LargeChange => double.NaN;
+
+        internal override double SmallChange => double.NaN;
+
+        internal override double Maximum => _owningScrollBar.Maximum;
+
+        internal override double Minimum => _owningScrollBar.Minimum;
+
+        internal override bool IsReadOnly => true;
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
