@@ -5,26 +5,18 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Displays a
-///  message box that can contain text, buttons, and symbols that
-///  inform and instruct the
-///  user.
+///  Displays a message box that can contain text, buttons, and symbols that inform and instruct the user.
 /// </summary>
 public class MessageBox
 {
     [ThreadStatic]
-    private static HelpInfo[]? helpInfoTable;
+    private static HelpInfo[]? t_helpInfoTable;
 
-    /// <summary>
-    ///  This constructor is private so people aren't tempted to try and create
-    ///  instances of these -- they should just use the static show
-    ///  methods.
-    /// </summary>
+    // This is meant to be a static class, but predates that feature.
     private MessageBox()
     {
     }
@@ -33,20 +25,20 @@ public class MessageBox
     {
         get
         {
-            // unfortunately, there's no easy way to obtain handle of a message box.
-            // we'll have to rely on the fact that modal message loops have to pop off in an orderly way.
+            // Unfortunately, there's no easy way to obtain handle of a message box.
+            // We'll have to rely on the fact that modal message loops have to pop off in an orderly way.
 
-            if (helpInfoTable is not null && helpInfoTable.Length > 0)
+            if (t_helpInfoTable is not null && t_helpInfoTable.Length > 0)
             {
-                // the top of the stack is actually at the end of the array.
-                return helpInfoTable[helpInfoTable.Length - 1];
+                // The top of the stack is actually at the end of the array.
+                return t_helpInfoTable[^1];
             }
 
             return null;
         }
     }
 
-    private static MB GetMessageBoxStyle(
+    private static MESSAGEBOX_STYLE GetMessageBoxStyle(
         IWin32Window? owner,
         MessageBoxButtons buttons,
         MessageBoxIcon icon,
@@ -75,8 +67,8 @@ public class MessageBox
             throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));
         }
 
-        MB style = (showHelp) ? MB.HELP : 0;
-        style |= (MB)buttons | (MB)icon | (MB)defaultButton | (MB)options;
+        MESSAGEBOX_STYLE style = (showHelp) ? MESSAGEBOX_STYLE.MB_HELP : 0;
+        style |= (MESSAGEBOX_STYLE)buttons | (MESSAGEBOX_STYLE)icon | (MESSAGEBOX_STYLE)defaultButton | (MESSAGEBOX_STYLE)options;
         return style;
     }
 
@@ -86,22 +78,22 @@ public class MessageBox
         // usually there's only going to be one message box shown at a time.  But if
         // someone shows two message boxes (say by launching them via a WM_TIMER message)
         // we've got to gracefully handle the current help info.
-        if (helpInfoTable is null)
+        if (t_helpInfoTable is null)
         {
             Debug.Fail("Why are we being called when there's nothing to pop?");
         }
         else
         {
-            if (helpInfoTable.Length == 1)
+            if (t_helpInfoTable.Length == 1)
             {
-                helpInfoTable = null;
+                t_helpInfoTable = null;
             }
             else
             {
-                int newCount = helpInfoTable.Length - 1;
+                int newCount = t_helpInfoTable.Length - 1;
                 HelpInfo[] newTable = new HelpInfo[newCount];
-                Array.Copy(helpInfoTable, newTable, newCount);
-                helpInfoTable = newTable;
+                Array.Copy(t_helpInfoTable, newTable, newCount);
+                t_helpInfoTable = newTable;
             }
         }
     }
@@ -116,25 +108,22 @@ public class MessageBox
         int lastCount = 0;
         HelpInfo[] newTable;
 
-        if (helpInfoTable is null)
+        if (t_helpInfoTable is null)
         {
             newTable = new HelpInfo[lastCount + 1];
         }
         else
         {
             // if we already have a table - allocate a new slot
-            lastCount = helpInfoTable.Length;
+            lastCount = t_helpInfoTable.Length;
             newTable = new HelpInfo[lastCount + 1];
-            Array.Copy(helpInfoTable, newTable, lastCount);
+            Array.Copy(t_helpInfoTable, newTable, lastCount);
         }
 
         newTable[lastCount] = hpi;
-        helpInfoTable = newTable;
+        t_helpInfoTable = newTable;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //START WHIDBEY ADDS                                                                                           //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// <summary>
     ///  Displays a message box with specified text, caption, and style with Help Button.
     /// </summary>
@@ -292,9 +281,6 @@ public class MessageBox
         return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //END ADD                                                                                                      //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// <summary>
     ///  Displays a message box with specified text, caption, and style.
     /// </summary>
@@ -462,55 +448,44 @@ public class MessageBox
         MessageBoxOptions options,
         bool showHelp)
     {
-        MB style = GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
+        MESSAGEBOX_STYLE style = GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
 
         HandleRef<HWND> handle = default;
         if (showHelp || ((options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0))
         {
-            if (owner is null)
-            {
-                handle = Control.GetHandleRef(PInvoke.GetActiveWindow());
-            }
-            else
-            {
-                handle = Control.GetSafeHandle(owner);
-            }
+            handle = owner is null ? Control.GetHandleRef(PInvoke.GetActiveWindow()) : Control.GetSafeHandle(owner);
         }
-
-        IntPtr userCookie = IntPtr.Zero;
 
         if (Application.UseVisualStyles)
         {
             // CLR4.0 or later, shell32.dll needs to be loaded explicitly.
             if (PInvoke.GetModuleHandle(Libraries.Shell32) == 0)
             {
-                if (PInvoke.LoadLibraryFromSystemPathIfAvailable(Libraries.Shell32) == IntPtr.Zero)
+                if (PInvoke.LoadLibraryFromSystemPathIfAvailable(Libraries.Shell32) == HINSTANCE.Null)
                 {
                     int lastWin32Error = Marshal.GetLastWin32Error();
                     throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Libraries.Shell32));
                 }
             }
-
-            // Activate theming scope to get theming for controls at design time and when hosted in browser.
-            // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
-            userCookie = ThemingScope.Activate(Application.UseVisualStyles);
         }
+
+        // Activate theming scope to get theming for controls at design time and when hosted in browser.
+        // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
+        using ThemingScope scope = new(Application.UseVisualStyles);
 
         Application.BeginModalMessageLoop();
         try
         {
-            return (DialogResult)MessageBoxW(handle.Handle, text, caption, style);
+            return (DialogResult)PInvoke.MessageBox(handle.Handle, text, caption, style);
         }
         finally
         {
             Application.EndModalMessageLoop();
-            ThemingScope.Deactivate(userCookie);
 
             // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
             // but since we have disabled this thread main window the message is lost. So we have to send it again after
             // we enable the main window.
-            PInvoke.SendMessage(handle.Handle, User32.WM.SETFOCUS);
-            GC.KeepAlive(handle.Wrapper);
+            PInvoke.SendMessage(handle, User32.WM.SETFOCUS);
         }
     }
 }

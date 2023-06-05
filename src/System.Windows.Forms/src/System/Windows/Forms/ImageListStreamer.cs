@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
+#nullable enable
 
 using System.Runtime.Serialization;
 using static Interop;
@@ -12,59 +12,52 @@ namespace System.Windows.Forms;
 [Serializable] // This type is participating in resx serialization scenarios.
 public sealed class ImageListStreamer : ISerializable, IDisposable
 {
-    // compressed magic header.  If we see this, the image stream is compressed.
-    // (unicode for MSFT).
-    private static readonly byte[] HEADER_MAGIC = new byte[] { 0x4D, 0x53, 0x46, 0X74 };
+    // Compressed magic header. If we see this, the image stream is compressed.
+    private static ReadOnlySpan<byte> HeaderMagic => "MSFt"u8;
     private static readonly object s_syncObject = new object();
 
-    private readonly ImageList _imageList;
-    private ImageList.NativeImageList _nativeImageList;
+    private readonly ImageList? _imageList;
+    private ImageList.NativeImageList? _nativeImageList;
 
-    internal ImageListStreamer(ImageList il)
-    {
-        _imageList = il;
-    }
+    internal ImageListStreamer(ImageList il) => _imageList = il;
 
     private ImageListStreamer(SerializationInfo info, StreamingContext context)
     {
-        SerializationInfoEnumerator sie = info.GetEnumerator();
-        if (sie is null)
+        if (info.GetEnumerator() is not { } enumerator)
         {
             return;
         }
 
-        while (sie.MoveNext())
+        while (enumerator.MoveNext())
         {
-            if (string.Equals(sie.Name, "Data", StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(enumerator.Name, "Data", StringComparison.OrdinalIgnoreCase))
             {
-#if DEBUG
-                try
+                continue;
+            }
+
+            try
+            {
+                if (enumerator.Value is byte[] data)
                 {
-#endif
-                    byte[] data = (byte[])sie.Value;
-                    if (data is not null)
-                    {
-                        Deserialize(data);
-                    }
-#if DEBUG
+                    Deserialize(data);
                 }
-                catch (Exception e)
-                {
-                    Debug.Fail($"ImageList serialization failure: {e}");
-                    throw;
-                }
-#endif
+            }
+            catch (Exception e)
+            {
+                Debug.Fail($"ImageList serialization failure: {e}");
+                throw;
             }
         }
     }
 
     internal ImageListStreamer(Stream stream)
     {
-        if (stream is MemoryStream ms
-            && ms.TryGetBuffer(out ArraySegment<byte> buffer)
-            && buffer.Offset == 0)
+        if (stream is MemoryStream memoryStream
+            && memoryStream.TryGetBuffer(out ArraySegment<byte> buffer)
+            && buffer.Offset == 0
+            && buffer.Array is { } array)
         {
-            Deserialize(buffer.Array);
+            Deserialize(array);
         }
         else
         {
@@ -76,10 +69,9 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
     }
 
     /// <summary>
-    ///  Compresses the given input, returning a new array that represents
-    ///  the compressed data.
+    ///  Compresses the given input, returning a new array that represents the compressed data.
     /// </summary>
-    private static byte[] Compress(byte[] input)
+    private static byte[] Compress(ReadOnlySpan<byte>input)
     {
         int finalLength = 0;
         int idx = 0;
@@ -99,10 +91,10 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
             finalLength += 2;
         }
 
-        byte[] output = new byte[finalLength + HEADER_MAGIC.Length];
+        byte[] output = new byte[finalLength + HeaderMagic.Length];
 
-        Buffer.BlockCopy(HEADER_MAGIC, 0, output, 0, HEADER_MAGIC.Length);
-        int idxOffset = HEADER_MAGIC.Length;
+        HeaderMagic.CopyTo(output);
+        int idxOffset = HeaderMagic.Length;
         idx = 0;
 
         while (idx < input.Length)
@@ -135,14 +127,13 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
                 break;
             }
         }
-#endif // DEBUG
+#endif
 
         return output;
     }
 
     /// <summary>
-    ///  Decompresses the given input, returning a new array that represents
-    ///  the uncompressed data.
+    ///  Decompresses the given input, returning a new array that represents the uncompressed data.
     /// </summary>
     private static byte[] Decompress(byte[] input)
     {
@@ -150,33 +141,22 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
         int idx = 0;
         int outputIdx = 0;
 
-        // Check for our header. If we don't have one,
-        // we're not actually decompressed, so just return
-        // the original.
-        //
-        if (input.Length < HEADER_MAGIC.Length)
+        // Check for our header. If we don't have one, we're not actually compressed, so just return the original.
+        if (!input.AsSpan().StartsWith(HeaderMagic))
         {
             return input;
         }
 
-        for (idx = 0; idx < HEADER_MAGIC.Length; idx++)
-        {
-            if (input[idx] != HEADER_MAGIC[idx])
-            {
-                return input;
-            }
-        }
-
         // Ok, we passed the magic header test.
 
-        for (idx = HEADER_MAGIC.Length; idx < input.Length; idx += 2)
+        for (idx = HeaderMagic.Length; idx < input.Length; idx += 2)
         {
             finalLength += input[idx];
         }
 
         byte[] output = new byte[finalLength];
 
-        idx = HEADER_MAGIC.Length;
+        idx = HeaderMagic.Length;
 
         while (idx < input.Length)
         {
@@ -200,20 +180,13 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
     private void Deserialize(byte[] data)
     {
         // We enclose this imagelist handle create in a theming scope.
-        IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
+        using ThemingScope scope = new(Application.UseVisualStyles);
+        using MemoryStream memoryStream = new(Decompress(data));
 
-        try
+        lock (s_syncObject)
         {
-            using MemoryStream ms = new MemoryStream(Decompress(data));
-            lock (s_syncObject)
-            {
-                ComCtl32.InitCommonControls();
-                _nativeImageList = new ImageList.NativeImageList(new Ole32.GPStream(ms));
-            }
-        }
-        finally
-        {
-            ThemingScope.Deactivate(userCookie);
+            ComCtl32.InitCommonControls();
+            _nativeImageList = new ImageList.NativeImageList(new Ole32.GPStream(memoryStream));
         }
 
         if (_nativeImageList.HIMAGELIST.IsNull)
@@ -222,15 +195,17 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
         }
     }
 
+#pragma warning disable CA1725 // Parameter names should match base declaration (previously shipped public API)
     public void GetObjectData(SerializationInfo si, StreamingContext context)
+#pragma warning restore CA1725
     {
-        using MemoryStream stream = new MemoryStream();
+        using MemoryStream stream = new();
         if (!WriteImageList(stream))
         {
             throw new InvalidOperationException(SR.ImageListStreamerSaveFailed);
         }
 
-        si.AddValue("Data", Compress(stream.ToArray()));
+        si.AddValue("Data", Compress(stream.GetBuffer().AsSpan(0, (int)stream.Length)));
     }
 
     internal void GetObjectData(Stream stream)
@@ -241,10 +216,7 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
         }
     }
 
-    internal ImageList.NativeImageList GetNativeImageList()
-    {
-        return _nativeImageList;
-    }
+    internal ImageList.NativeImageList? GetNativeImageList() => _nativeImageList;
 
     private bool WriteImageList(Stream stream)
     {
@@ -295,11 +267,8 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
     {
         if (disposing)
         {
-            if (_nativeImageList is not null)
-            {
-                _nativeImageList.Dispose();
-                _nativeImageList = null;
-            }
+            _nativeImageList?.Dispose();
+            _nativeImageList = null;
         }
     }
 }

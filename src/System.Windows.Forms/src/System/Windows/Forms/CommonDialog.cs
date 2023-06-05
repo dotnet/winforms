@@ -201,7 +201,6 @@ public abstract class CommonDialog : Component
             nint hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerWindowProcedure);
             Debug.Assert(_priorWindowProcedure == 0, "The previous subclass wasn't properly cleaned up");
 
-            nint userCookie = 0;
             try
             {
                 _priorWindowProcedure = PInvoke.SetWindowLong(
@@ -209,11 +208,7 @@ public abstract class CommonDialog : Component
                     WINDOW_LONG_PTR_INDEX.GWL_WNDPROC,
                     hookedWndProc);
 
-                if (Application.UseVisualStyles)
-                {
-                    userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-                }
-
+                using ThemingScope scope = new(Application.UseVisualStyles);
                 Application.BeginModalMessageLoop();
                 try
                 {
@@ -231,8 +226,6 @@ public abstract class CommonDialog : Component
                 {
                     PInvoke.SetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _priorWindowProcedure);
                 }
-
-                ThemingScope.Deactivate(userCookie);
 
                 _priorWindowProcedure = 0;
 

@@ -708,21 +708,20 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
     /// <summary>
     ///  Creates the handle for the control.
     /// </summary>
-    private void CreateHandle()
+    private unsafe void CreateHandle()
     {
         if (GetHandleCreated())
         {
             return;
         }
 
-        IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-        try
+        using (ThemingScope scope = new(Application.UseVisualStyles))
         {
-            var icc = new INITCOMMONCONTROLSEX
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
             {
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
                 dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
-            };
-            InitCommonControlsEx(ref icc);
+            });
 
             // Avoid reentrant call to CreateHandle.
             CreateParams cp = CreateParams;
@@ -738,17 +737,13 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
                 PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
             }
         }
-        finally
-        {
-            ThemingScope.Deactivate(userCookie);
-        }
 
         // If in OwnerDraw mode, we don't want the default border.
         if (OwnerDraw)
         {
             int style = unchecked((int)((long)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)));
             style &= ~(int)WINDOW_STYLE.WS_BORDER;
-            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (IntPtr)style);
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
         }
 
         // Setting the max width has the added benefit of enabling multiline tool tips.
