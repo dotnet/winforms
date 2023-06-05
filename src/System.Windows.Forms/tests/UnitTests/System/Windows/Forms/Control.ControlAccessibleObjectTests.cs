@@ -1212,6 +1212,22 @@ public class Control_ControlAccessibleObjectTests
         return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type });
     }
 
+    // The weak reference is still not referenced by the accessible object of the control below, thus preventing GC collect.
+    // After all _owningLabel field were removed, this method will be deprecated.
+    public static IEnumerable<object[]> ControlAccessibleObject_UsingWeakReference_TestData()
+    {
+        var typesToIgnore = new[]
+        {
+           typeof(Label), typeof(CheckedListBox), typeof(ComboBox), typeof(DataGridView), typeof(DataGridViewComboBoxEditingControl), typeof(DataGridViewTextBoxEditingControl),
+           typeof(FlowLayoutPanel), typeof(HScrollBar), typeof(LinkLabel), typeof(ListBox),typeof(ListView), typeof(MaskedTextBox), typeof(MonthCalendar), typeof(Panel),
+           typeof(PropertyGrid), typeof(TableLayoutPanel), typeof(TabPage), typeof(TextBox), typeof(ToolStripContentPanel), typeof(TreeView), typeof(VScrollBar)
+        };
+
+        return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
+           .Where(t => !typesToIgnore.Contains(t))
+           .Select(type => new object[] { type });
+    }
+
     [WinFormsTheory]
     [MemberData(nameof(ControlAccessibleObject_TestData))]
     public void ControlAccessibleObject_Custom_Role_ReturnsExpected(Type type)
@@ -1589,7 +1605,7 @@ public class Control_ControlAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(ControlAccessibleObject_TestData))]
+    [MemberData(nameof(ControlAccessibleObject_UsingWeakReference_TestData))]
     public void ControlAccessibleObject_DoesNotRootControls_AllPublicControl(Type type)
     {
         Control.ControlAccessibleObject accessibleObject = CreateAndDisposeControl(type);
