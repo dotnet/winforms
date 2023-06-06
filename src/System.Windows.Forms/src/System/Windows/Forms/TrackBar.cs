@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 
@@ -746,23 +745,16 @@ public partial class TrackBar : Control, ISupportInitialize
 
     protected override AccessibleObject CreateAccessibilityInstance() => new TrackBarAccessibleObject(this);
 
-    protected override void CreateHandle()
+    protected override unsafe void CreateHandle()
     {
         if (!RecreatingHandle)
         {
-            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-            try
+            using ThemingScope scope = new(Application.UseVisualStyles);
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
             {
-                var icc = new INITCOMMONCONTROLSEX
-                {
-                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_BAR_CLASSES
-                };
-                InitCommonControlsEx(ref icc);
-            }
-            finally
-            {
-                ThemingScope.Deactivate(userCookie);
-            }
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                dwICC = INITCOMMONCONTROLSEX_ICC.ICC_BAR_CLASSES
+            });
         }
 
         base.CreateHandle();

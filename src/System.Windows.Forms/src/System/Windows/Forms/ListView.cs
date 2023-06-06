@@ -2582,29 +2582,20 @@ public partial class ListView : Control
         return 0;
     }
 
-    protected override void CreateHandle()
+    protected override unsafe void CreateHandle()
     {
         if (!RecreatingHandle)
         {
-            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-
-            try
+            using ThemingScope scope = new(Application.UseVisualStyles);
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
             {
-                var icc = new INITCOMMONCONTROLSEX
-                {
-                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_LISTVIEW_CLASSES
-                };
-                InitCommonControlsEx(ref icc);
-            }
-            finally
-            {
-                ThemingScope.Deactivate(userCookie);
-            }
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                dwICC = INITCOMMONCONTROLSEX_ICC.ICC_LISTVIEW_CLASSES
+            });
         }
 
         base.CreateHandle();
 
-        // image location
         if (BackgroundImage is not null)
         {
             SetBackgroundImage();
@@ -2613,10 +2604,13 @@ public partial class ListView : Control
 
     /// <summary>
     ///  Handles custom drawing of list items - for individual item font/color changes.
-    ///
-    ///  If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view)
-    ///  events and let the user do the drawing.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///    If OwnerDraw is true, we fire the OnDrawItem and OnDrawSubItem (in Details view)
+    ///    events and let the user do the drawing.
+    ///  </para>
+    /// </remarks>
     private unsafe void CustomDraw(ref Message m)
     {
         bool dontmess = false;

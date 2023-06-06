@@ -744,7 +744,7 @@ override System.Windows.Forms.ListViewItem.ToString() -> string!
 ~System.Windows.Forms.HtmlWindow.StatusBarText.set -> void
 ~System.Windows.Forms.HtmlWindow.Url.get -> System.Uri
 ~System.Windows.Forms.HtmlWindow.WindowFrameElement.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
+System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo! si, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.ListViewItem.FindNearestItem(System.Windows.Forms.SearchDirectionHint searchDirection) -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.ListViewItem.GetSubItemAt(int x, int y) -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 System.Windows.Forms.ListViewItem.SubItems.get -> System.Windows.Forms.ListViewItem.ListViewSubItemCollection!

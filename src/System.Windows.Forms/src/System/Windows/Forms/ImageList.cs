@@ -209,38 +209,39 @@ public sealed partial class ImageList : Component, IHandle, IHandle<HIMAGELIST>
                 return;
             }
 
-            NativeImageList himl = value.GetNativeImageList();
-            if (himl is not null && himl != _nativeImageList)
+            if (value.GetNativeImageList() is not { } himl || himl == _nativeImageList)
             {
-                bool recreatingHandle = HandleCreated; // We only need to fire RecreateHandle if there was a previous handle
-                DestroyHandle();
-                _originals = null;
-                _nativeImageList = himl.Duplicate();
-                if (PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), out int x, out int y))
-                {
-                    _imageSize = new Size(x, y);
-                }
+                return;
+            }
 
-                // need to get the image bpp
-                if (PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo))
-                {
-                    PInvoke.GetObject(imageInfo.hbmImage, out BITMAP bmp);
-                    _colorDepth = bmp.bmBitsPixel switch
-                    {
-                        4 => ColorDepth.Depth4Bit,
-                        8 => ColorDepth.Depth8Bit,
-                        16 => ColorDepth.Depth16Bit,
-                        24 => ColorDepth.Depth24Bit,
-                        32 => ColorDepth.Depth32Bit,
-                        _ => _colorDepth
-                    };
-                }
+            bool recreatingHandle = HandleCreated; // We only need to fire RecreateHandle if there was a previous handle
+            DestroyHandle();
+            _originals = null;
+            _nativeImageList = himl.Duplicate();
+            if (PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), out int x, out int y))
+            {
+                _imageSize = new Size(x, y);
+            }
 
-                Images.ResetKeys();
-                if (recreatingHandle)
+            // need to get the image bpp
+            if (PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo))
+            {
+                PInvoke.GetObject(imageInfo.hbmImage, out BITMAP bmp);
+                _colorDepth = bmp.bmBitsPixel switch
                 {
-                    OnRecreateHandle(EventArgs.Empty);
-                }
+                    4 => ColorDepth.Depth4Bit,
+                    8 => ColorDepth.Depth8Bit,
+                    16 => ColorDepth.Depth16Bit,
+                    24 => ColorDepth.Depth24Bit,
+                    32 => ColorDepth.Depth32Bit,
+                    _ => _colorDepth
+                };
+            }
+
+            Images.ResetKeys();
+            if (recreatingHandle)
+            {
+                OnRecreateHandle(EventArgs.Empty);
             }
         }
     }
@@ -438,24 +439,12 @@ public sealed partial class ImageList : Component, IHandle, IHandle<HIMAGELIST>
                 break;
         }
 
-        // We enclose the imagelist handle create in a theming scope.
-        IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-
-        try
+        using (ThemingScope scope = new(Application.UseVisualStyles))
         {
             ComCtl32.InitCommonControls();
 
-            if (_nativeImageList is not null)
-            {
-                _nativeImageList.Dispose();
-                _nativeImageList = null;
-            }
-
+            _nativeImageList?.Dispose();
             _nativeImageList = new NativeImageList(_imageSize, flags);
-        }
-        finally
-        {
-            ThemingScope.Deactivate(userCookie);
         }
 
         PInvoke.ImageList.SetBkColor(this, Color.FromArgb(PInvoke.CLR_NONE));

@@ -458,16 +458,16 @@ public partial class TaskDialog : IWin32Window
                 // Tick event, the application will crash with an
                 // AccessViolationException as soon as you close the MessageBox.
 
-                // Activate a theming scope so that the task dialog works without
-                // having to use an application manifest that enables common controls
-                // v6 (provided that Application.EnableVisualStyles() was called
-                // earlier). Otherwise, the "TaskDialogIndirect" entry point will
-                // not be available in comctl32.dll.
-                IntPtr themingCookie = ThemingScope.Activate(Application.UseVisualStyles);
                 HRESULT returnValue;
                 int resultButtonID;
                 try
                 {
+                    // Activate a theming scope so that the task dialog works without having to use an application
+                    // manifest that enables common controls v6 (provided that Application.EnableVisualStyles()
+                    // was called earlier). Otherwise, the "TaskDialogIndirect" entry point will not be available in
+                    // comctl32.dll.
+
+                    using ThemingScope scope = new(Application.UseVisualStyles);
                     returnValue = ComCtl32.TaskDialogIndirect(
                         ptrTaskDialogConfig,
                         out resultButtonID,
@@ -480,11 +480,6 @@ public partial class TaskDialog : IWin32Window
                         SR.TaskDialogVisualStylesNotEnabled,
                         $"{nameof(Application)}.{nameof(Application.EnableVisualStyles)}"),
                         ex);
-                }
-                finally
-                {
-                    // Revert the theming scope.
-                    ThemingScope.Deactivate(themingCookie);
                 }
 
                 // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
