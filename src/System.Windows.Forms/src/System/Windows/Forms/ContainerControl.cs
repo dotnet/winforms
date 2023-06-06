@@ -43,9 +43,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     /// <summary>
     /// Top-level window is scaled by suggested rectangle received from windows WM_DPICHANGED message event.
-    /// We use this property to indicate it is top-level window and is being scaled by Windows OS.
+    /// We use this flag to indicate it is top-level window and is being scaled by Windows OS.
     /// </summary>
-    internal Rectangle? WindowsSuggestedClientRectangle { get; private set; }
+    private bool _isScaledByDpiChangedEvent;
 
     private BitVector32 _state;
 
@@ -1161,7 +1161,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 }
 
                 // Top-level window may be already scaled by WM_DPICHANGE message. So, we skip it in such case.
-                if (WindowsSuggestedClientRectangle is null)
+                if (!_isScaledByDpiChangedEvent)
                 {
                     ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
                 }
@@ -1453,39 +1453,13 @@ public class ContainerControl : ScrollableControl, IContainerControl
             // events on the control.
 
             // Bounds are being scaled for the top-level window via SuggestedRectangle. We would need to skip scaling of
-            // this control further by the 'OnFontChanged' event. WindowsSuggestedClientRectangle property will help in that.
-            WindowsSuggestedClientRectangle = suggestedRectangle;
+            // this control further by the 'OnFontChanged' event.
+            _isScaledByDpiChangedEvent = true;
 
-            // Windows suggested rectangle includes adornments.Compute new client rectangle by subtracting adornments.
-            RECT adornerRect = default;
-            CreateParams cp = CreateParams;
-#pragma warning disable CA1416 // Validate platform compatibility
-            PInvoke.AdjustWindowRectExForDpi(
-                ref adornerRect,
-                (WINDOW_STYLE)cp.Style,
-                bMenu: PInvoke.GetMenu(this) == HMENU.Null ? false : true,
-                (WINDOW_EX_STYLE)cp.ExStyle,
-                (uint)deviceDpiNew);
-#pragma warning restore CA1416 // Validate platform compatibility
-            WindowsSuggestedClientRectangle = new Rectangle(
-                WindowsSuggestedClientRectangle.Value.X,
-                WindowsSuggestedClientRectangle.Value.Y,
-                WindowsSuggestedClientRectangle.Value.Width - adornerRect.Width,
-                WindowsSuggestedClientRectangle.Value.Height - adornerRect.Height);
-
+            // Font needs to be updated prior to updating top-level window bounds update. Otherwise, it may trigger another DPI_CHNAGED
+            // event that may result in incorrect Font for the DPI.
             Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
             ScaledControlFont = fontForDpi;
-            if (IsFontSet())
-            {
-                SetScaledFont(fontForDpi);
-            }
-            else
-            {
-                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
-                {
-                    OnFontChanged(EventArgs.Empty);
-                }
-            }
 
             if (IsHandleCreated)
             {
@@ -1498,12 +1472,24 @@ public class ContainerControl : ScrollableControl, IContainerControl
                     suggestedRectangle.Height,
                     SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
+
+            if (IsFontSet())
+            {
+                SetScaledFont(fontForDpi);
+            }
+            else
+            {
+                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                {
+                    OnFontChanged(EventArgs.Empty);
+                }
+            }
         }
         finally
         {
             // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
             ResumeAllLayout(this, true);
-            WindowsSuggestedClientRectangle = null;
+            _isScaledByDpiChangedEvent = false;
         }
     }
 
