@@ -174,8 +174,7 @@ namespace System.Windows.Forms.Design.Behavior
                             try
                             {
                                 _processingMessage = true;
-                                var pt = new Point(x, y);
-                                adornerWindow.PointToClient(pt);
+                                Point pt = adornerWindow.PointToClient(new Point(x, y));
                                 Message m = Message.Create(hWnd, msg, 0, PARAM.FromLowHigh(pt.Y, pt.X));
 
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
