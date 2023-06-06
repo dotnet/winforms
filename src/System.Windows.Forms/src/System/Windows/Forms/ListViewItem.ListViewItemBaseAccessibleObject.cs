@@ -53,7 +53,8 @@ public partial class ListViewItem
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => _owningListView.AccessibilityObject;
 
-        protected bool HasImage => _owningItem.ImageIndex != ImageList.Indexer.DefaultIndex;
+        internal bool HasImage => _owningItem.ImageList is not null && _owningItem.ImageList.Images.Count > 0
+            && _owningItem.ImageIndex != ImageList.Indexer.DefaultIndex;
 
         internal override bool IsItemSelected
             => (State & AccessibleStates.Selected) != 0;
