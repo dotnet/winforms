@@ -1600,6 +1600,7 @@ public class Control_ControlAccessibleObjectTests
             var accessibleObject = (Control.ControlAccessibleObject)control.AccessibilityObject;
             Assert.NotNull(accessibleObject);
             Assert.True(accessibleObject.TryGetOwnerAs(out Control _));
+
             return accessibleObject;
         }
     }
@@ -1619,6 +1620,7 @@ public class Control_ControlAccessibleObjectTests
             var accessibleObject = (Control.ControlAccessibleObject)control.AccessibilityObject;
             Assert.NotNull(accessibleObject);
             Assert.True(accessibleObject.TryGetOwnerAs(out Control _));
+
             return accessibleObject;
         }
     }
