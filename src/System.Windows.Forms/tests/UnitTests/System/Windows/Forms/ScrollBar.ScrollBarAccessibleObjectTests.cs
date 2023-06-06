@@ -51,6 +51,11 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
     [InlineData((int)UIA.IsValuePatternAvailablePropertyId, true)]
     [InlineData((int)UIA.AutomationIdPropertyId, "AutomId")]
+    [InlineData((double)UIA.RangeValueMaximumPropertyId, (double)100)]
+    [InlineData((double)UIA.RangeValueMinimumPropertyId, (double)0)]
+    [InlineData((double)UIA.RangeValueValuePropertyId, (double)0)]
+    [InlineData((double)UIA.RangeValueLargeChangePropertyId, (double)10)]
+    [InlineData((double)UIA.RangeValueSmallChangePropertyId, (double)1)]
     public void ScrollBarAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using var scrollBar = new SubScrollBar
@@ -139,11 +144,13 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     [InlineData(false, ((int)UIA.IsTextPatternAvailablePropertyId))]
     [InlineData(false, ((int)UIA.IsTogglePatternAvailablePropertyId))]
     [InlineData(true, ((int)UIA.IsValuePatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA.RangeValueIsReadOnlyPropertyId))]
+    [InlineData(true, ((int)UIA.IsRangeValuePatternAvailablePropertyId))]
     public void ScrollBarAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
     {
         using SubScrollBar scrollBar = new() { Enabled = true };
         ScrollBar.ScrollBarAccessibleObject accessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
-
+        var a= accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId);
         Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
         Assert.False(scrollBar.IsHandleCreated);
     }
