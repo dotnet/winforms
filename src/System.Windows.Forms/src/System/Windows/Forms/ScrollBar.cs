@@ -371,7 +371,7 @@ public abstract partial class ScrollBar : Control
                 OnValueChanged(EventArgs.Empty);
                 if (IsAccessibilityObjectCreated)
                 {
-                    AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.RangeValueValuePropertyId, oldValue, _value);
+                    AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.RangeValueValuePropertyId, (double)oldValue, (double)_value);
                 }
             }
         }
