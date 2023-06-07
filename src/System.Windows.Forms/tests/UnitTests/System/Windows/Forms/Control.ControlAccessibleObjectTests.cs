@@ -1212,6 +1212,23 @@ public class Control_ControlAccessibleObjectTests
         return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type });
     }
 
+    // The weak reference is still not referenced by the accessible object of the control below, thus preventing GC collect.
+    // After all field referencing owning control are removed, this method will be deprecated.
+    // See: https://github.com/dotnet/winforms/issues/9224.
+    public static IEnumerable<object[]> ControlAccessibleObject_UsingWeakReference_TestData()
+    {
+        var typesToIgnore = new[]
+        {
+           typeof(Label), typeof(CheckedListBox), typeof(ComboBox), typeof(DataGridView), typeof(DataGridViewComboBoxEditingControl), typeof(DataGridViewTextBoxEditingControl),
+           typeof(FlowLayoutPanel), typeof(HScrollBar), typeof(LinkLabel), typeof(ListBox),typeof(ListView), typeof(MaskedTextBox), typeof(MonthCalendar), typeof(Panel),
+           typeof(PropertyGrid), typeof(TableLayoutPanel), typeof(TabPage), typeof(TextBox), typeof(ToolStripContentPanel), typeof(TreeView), typeof(VScrollBar)
+        };
+
+        return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
+           .Where(t => !typesToIgnore.Contains(t))
+           .Select(type => new object[] { type });
+    }
+
     [WinFormsTheory]
     [MemberData(nameof(ControlAccessibleObject_TestData))]
     public void ControlAccessibleObject_Custom_Role_ReturnsExpected(Type type)
@@ -1584,6 +1601,27 @@ public class Control_ControlAccessibleObjectTests
             var accessibleObject = (Control.ControlAccessibleObject)control.AccessibilityObject;
             Assert.NotNull(accessibleObject);
             Assert.True(accessibleObject.TryGetOwnerAs(out Control _));
+
+            return accessibleObject;
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ControlAccessibleObject_UsingWeakReference_TestData))]
+    public void ControlAccessibleObject_DoesNotRootControls_AllPublicControl(Type type)
+    {
+        Control.ControlAccessibleObject accessibleObject = CreateAndDisposeControl(type);
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        Assert.False(accessibleObject.TryGetOwnerAs(out Control _));
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static Control.ControlAccessibleObject CreateAndDisposeControl(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            var accessibleObject = (Control.ControlAccessibleObject)control.AccessibilityObject;
+            Assert.NotNull(accessibleObject);
+            Assert.True(accessibleObject.TryGetOwnerAs(out Control _));
+
             return accessibleObject;
         }
     }
