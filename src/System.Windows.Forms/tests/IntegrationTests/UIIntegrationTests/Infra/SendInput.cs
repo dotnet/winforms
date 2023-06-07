@@ -77,9 +77,13 @@ public class SendInput
         }
 
         SetForegroundWindow(window);
-        await Task.Run(() => actions(new InputSimulator()));
+        actions(new InputSimulator());
 
         await _waitForIdleAsync();
+        await Task.Run(() =>
+        {
+            Thread.Sleep(100);
+        });
     }
 
     private static HWND GetForegroundWindow()
