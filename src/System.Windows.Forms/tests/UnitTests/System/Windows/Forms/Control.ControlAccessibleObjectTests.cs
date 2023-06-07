@@ -1213,7 +1213,8 @@ public class Control_ControlAccessibleObjectTests
     }
 
     // The weak reference is still not referenced by the accessible object of the control below, thus preventing GC collect.
-    // After all _owningLabel field were removed, this method will be deprecated.
+    // After all field referencing owning control are removed, this method will be deprecated.
+    // See: https://github.com/dotnet/winforms/issues/9224.
     public static IEnumerable<object[]> ControlAccessibleObject_UsingWeakReference_TestData()
     {
         var typesToIgnore = new[]
