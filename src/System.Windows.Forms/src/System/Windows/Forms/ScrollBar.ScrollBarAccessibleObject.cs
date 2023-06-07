@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -142,13 +143,12 @@ public partial class ScrollBar
                     => UiaCore.UIA.ScrollBarControlTypeId,
                 UiaCore.UIA.HasKeyboardFocusPropertyId => _owningScrollBar.Focused,
                 UiaCore.UIA.RangeValueValuePropertyId => RangeValue,
-                UiaCore.UIA.RangeValueIsReadOnlyPropertyId => true,
+                UiaCore.UIA.RangeValueIsReadOnlyPropertyId => IsReadOnly,
                 UiaCore.UIA.RangeValueLargeChangePropertyId => LargeChange,
                 UiaCore.UIA.RangeValueSmallChangePropertyId => SmallChange,
                 UiaCore.UIA.RangeValueMaximumPropertyId => Maximum,
-                UiaCore.UIA.RangeValueMinimumPropertyId =>Minimum,
-                UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
-                UiaCore.UIA.IsRangeValuePatternAvailablePropertyId => true,
+                UiaCore.UIA.RangeValueMinimumPropertyId => Minimum,
+                UiaCore.UIA.IsRangeValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.RangeValuePatternId),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -164,7 +164,18 @@ public partial class ScrollBar
 
         internal override double Minimum => _owningScrollBar.Minimum;
 
-        internal override bool IsReadOnly => true;
+        internal override bool IsReadOnly => false;
+
+        internal override void SetValue(double newValue)
+        {
+            if (!_owningScrollBar.IsHandleCreated)
+            {
+                return;
+            }
+
+            _owningScrollBar.Value = (int)newValue;
+            base.SetValue(newValue);
+        }
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
             => patternId switch
