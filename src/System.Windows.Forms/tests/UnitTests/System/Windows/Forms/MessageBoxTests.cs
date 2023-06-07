@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Reflection;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -37,14 +36,20 @@ public class MessageBoxTests
     [MemberData(nameof(MessageBoxButtons_Set_TestData))]
     public void MessageBox_MessageBoxButtons_Valid(MessageBoxButtons value)
     {
-        MB style = GetMessageBoxStyle(
+        MESSAGEBOX_STYLE style = GetMessageBoxStyle(
             null,
             value,
             MessageBoxIcon.None,
             MessageBoxDefaultButton.Button1,
             MessageBoxOptions.DefaultDesktopOnly,
             false);
-        Assert.Equal(style, (MB)value | (MB)MessageBoxIcon.None | (MB)MessageBoxDefaultButton.Button1 | (MB)MessageBoxOptions.DefaultDesktopOnly);
+
+        Assert.Equal(
+            style,
+            (MESSAGEBOX_STYLE)value
+                | (MESSAGEBOX_STYLE)MessageBoxIcon.None
+                | (MESSAGEBOX_STYLE)MessageBoxDefaultButton.Button1
+                | (MESSAGEBOX_STYLE)MessageBoxOptions.DefaultDesktopOnly);
     }
 
     [WinFormsTheory]
@@ -74,14 +79,19 @@ public class MessageBoxTests
     [MemberData(nameof(MessageBoxIcon_Set_TestData))]
     public void MessageBox_MessageBoxIcon_Valid(MessageBoxIcon value)
     {
-        MB style = GetMessageBoxStyle(
+        MESSAGEBOX_STYLE style = GetMessageBoxStyle(
             null,
             MessageBoxButtons.OK,
             value,
             MessageBoxDefaultButton.Button1,
             MessageBoxOptions.DefaultDesktopOnly,
             false);
-        Assert.Equal(style, (MB)MessageBoxButtons.OK | (MB)value | (MB)MessageBoxDefaultButton.Button1 | (MB)MessageBoxOptions.DefaultDesktopOnly);
+        Assert.Equal(
+            style,
+            (MESSAGEBOX_STYLE)MessageBoxButtons.OK
+                | (MESSAGEBOX_STYLE)value
+                | (MESSAGEBOX_STYLE)MessageBoxDefaultButton.Button1
+                | (MESSAGEBOX_STYLE)MessageBoxOptions.DefaultDesktopOnly);
     }
 
     [WinFormsTheory]
@@ -111,17 +121,28 @@ public class MessageBoxTests
     [MemberData(nameof(MessageBoxDefaultButton_Set_TestData))]
     public void MessageBox_MessageBoxDefaultButton_Valid(MessageBoxDefaultButton value)
     {
-        MB style = GetMessageBoxStyle(
+        MESSAGEBOX_STYLE style = GetMessageBoxStyle(
             null,
             MessageBoxButtons.OK,
             MessageBoxIcon.None,
             value,
             MessageBoxOptions.DefaultDesktopOnly,
             false);
-        Assert.Equal(style, (MB)MessageBoxButtons.OK | (MB)MessageBoxIcon.None | (MB)value | (MB)MessageBoxOptions.DefaultDesktopOnly);
+        Assert.Equal(
+            style,
+            (MESSAGEBOX_STYLE)MessageBoxButtons.OK
+                | (MESSAGEBOX_STYLE)MessageBoxIcon.None
+                | (MESSAGEBOX_STYLE)value
+                | (MESSAGEBOX_STYLE)MessageBoxOptions.DefaultDesktopOnly);
     }
 
-    private static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
+    private static MESSAGEBOX_STYLE GetMessageBoxStyle(
+        IWin32Window owner,
+        MessageBoxButtons buttons,
+        MessageBoxIcon icon,
+        MessageBoxDefaultButton defaultButton,
+        MessageBoxOptions options,
+        bool showHelp)
     {
         try
         {

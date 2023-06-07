@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -16,16 +14,17 @@ namespace System.Windows.Forms.Design;
 internal class MaskedTextBoxDesignerActionList : DesignerActionList
 {
     private readonly MaskedTextBox _maskedTextBox;
-    private readonly ITypeDiscoveryService _discoverySvc;
-    private readonly IUIService _uiSvc;
-    private readonly IHelpService _helpService;
+    private readonly ITypeDiscoveryService? _discoverySvc;
+    private readonly IUIService? _uiSvc;
+    private readonly IHelpService? _helpService;
 
     /// <summary>
     /// Constructor receiving a MaskedTextBox control the action list applies to.  The ITypeDiscoveryService
     /// service provider is used to populate the canned mask list control in the MaskDesignerDialog dialog and
     /// the IUIService provider is used to display the MaskDesignerDialog within VS.
     /// </summary>
-    public MaskedTextBoxDesignerActionList(MaskedTextBoxDesigner designer) : base(designer.Component)
+    public MaskedTextBoxDesignerActionList(MaskedTextBoxDesigner designer)
+        : base(designer.Component)
     {
         _maskedTextBox = (MaskedTextBox)designer.Component;
         _discoverySvc = GetService(typeof(ITypeDiscoveryService)) as ITypeDiscoveryService;
@@ -50,7 +49,7 @@ internal class MaskedTextBoxDesignerActionList : DesignerActionList
             return;
         }
 
-        PropertyDescriptor maskProperty = TypeDescriptor.GetProperties(_maskedTextBox)["Mask"];
+        PropertyDescriptor? maskProperty = TypeDescriptor.GetProperties(_maskedTextBox)["Mask"];
         maskProperty?.SetValue(_maskedTextBox, mask);
     }
 

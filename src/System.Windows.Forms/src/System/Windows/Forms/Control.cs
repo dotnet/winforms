@@ -4856,12 +4856,9 @@ public unsafe partial class Control :
 
             originalBounds = Bounds;
 
-            if (Application.UseVisualStyles)
-            {
-                // Activate theming scope to get theming for controls at design time and when hosted in browser.
-                // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
-                userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-            }
+            // Activate theming scope to get theming for controls at design time and when hosted in browser.
+            // NOTE: If a theming context is already active, this call is very fast, so shouldn't be a perf issue.
+            using ThemingScope scope = new(Application.UseVisualStyles);
 
             CreateParams cp = CreateParams;
             SetState(States.Mirrored, (cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL) != 0);
@@ -4899,7 +4896,6 @@ public unsafe partial class Control :
         finally
         {
             SetState(States.CreatingHandle, false);
-            ThemingScope.Deactivate(userCookie);
         }
 
         // For certain controls (e.g., ComboBox) CreateWindowEx

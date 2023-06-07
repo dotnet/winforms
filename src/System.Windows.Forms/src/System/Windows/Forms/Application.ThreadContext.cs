@@ -951,23 +951,9 @@ public sealed partial class Application
         /// </summary>
         internal void RunMessageLoop(msoloop reason, ApplicationContext? context)
         {
-            // Ensure that we attempt to apply theming before doing anything
-            // that might create a window.
-
-            IntPtr userCookie = IntPtr.Zero;
-            if (UseVisualStyles)
-            {
-                userCookie = ThemingScope.Activate(UseVisualStyles);
-            }
-
-            try
-            {
-                RunMessageLoopInner(reason, context);
-            }
-            finally
-            {
-                ThemingScope.Deactivate(userCookie);
-            }
+            // Ensure that we attempt to apply theming before doing anything that might create a window.
+            using ThemingScope scope = new(UseVisualStyles);
+            RunMessageLoopInner(reason, context);
         }
 
         private unsafe void RunMessageLoopInner(msoloop reason, ApplicationContext? context)

@@ -10,7 +10,8 @@ internal class RichTextBoxActionList : DesignerActionList
 {
     private readonly RichTextBoxDesigner _designer;
 
-    public RichTextBoxActionList(RichTextBoxDesigner designer) : base(designer.Component)
+    public RichTextBoxActionList(RichTextBoxDesigner designer)
+        : base(designer.Component)
     {
         _designer = designer;
     }

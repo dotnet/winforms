@@ -10,7 +10,8 @@ internal class ListControlUnboundActionList : DesignerActionList
 {
     private readonly ComponentDesigner _designer;
 
-    public ListControlUnboundActionList(ComponentDesigner designer) : base(designer.Component)
+    public ListControlUnboundActionList(ComponentDesigner designer)
+        : base(designer.Component)
     {
         _designer = designer;
     }

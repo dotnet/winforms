@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.Tests;
 
@@ -485,16 +486,31 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void ClipBoard_SetData_CustomFormat_Color_BinaryFormatterDisabled_Throws()
+    public void ClipBoard_SetData_CustomFormat_Color_BinaryFormatterDisabled_SerializesException()
     {
         using BinaryFormatterScope scope = new(enable: false);
         string format = nameof(ClipBoard_SetData_CustomFormat_Color);
 
-        // This will "succeed", but fail under the covers. Windows doesn't return any errors when setting data.
+        // This will fail and NotSupportedException will be put on the Clipboard instead.
         Clipboard.SetData(format, Color.Black);
         Assert.True(Clipboard.ContainsData(format));
 
-        // The data is invalid, which surfaces as CLIPBRD_E_BAD_DATA which we swallow and return null for.
-        Assert.Null(Clipboard.GetData(format));
+        NotSupportedException value = (NotSupportedException)Clipboard.GetData(format);
+
+        using MemoryStream stream = new();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+        BinaryFormatter formatter = new();
+#pragma warning restore SYSLIB0011
+        try
+        {
+            formatter.Serialize(stream, new object());
+        }
+        catch (NotSupportedException ex)
+        {
+            Assert.Equal(ex.Message, value.Message);
+            return;
+        }
+
+        Assert.Fail("Formatting should have failed.");
     }
 }

@@ -49,4 +49,5 @@ internal sealed class BinaryObjectString : IRecord<BinaryObjectString>
             || (obj is BinaryObjectString bos && bos.ObjectId == ObjectId && bos.Value == Value);
 
     public override int GetHashCode() => HashCode.Combine(ObjectId, Value);
+    public override string ToString() => Value;
 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.ComponentModel;
 
@@ -12,20 +10,24 @@ namespace System.Windows.Forms.Design;
 internal class PictureBoxActionList : DesignerActionList
 {
     private readonly PictureBoxDesigner _designer;
-    public PictureBoxActionList(PictureBoxDesigner designer) : base(designer.Component)
+    private readonly PictureBox _pictureBox;
+
+    public PictureBoxActionList(PictureBoxDesigner designer)
+        : base(designer.Component)
     {
         _designer = designer;
+        _pictureBox = (PictureBox)designer.Component;
     }
 
     public PictureBoxSizeMode SizeMode
     {
         get
         {
-            return ((PictureBox)Component).SizeMode;
+            return _pictureBox.SizeMode;
         }
         set
         {
-            TypeDescriptor.GetProperties(Component)["SizeMode"].SetValue(Component, value);
+            TypeDescriptor.GetProperties(_pictureBox)["SizeMode"]!.SetValue(Component, value);
         }
     }
 

@@ -472,7 +472,18 @@ public unsafe partial class DataObject :
 
         if (formatetc.tymed.HasFlag(TYMED.TYMED_HGLOBAL))
         {
-            SaveDataToHGLOBAL(data!, format, ref medium).ThrowOnFailure();
+            try
+            {
+                SaveDataToHGLOBAL(data!, format, ref medium).ThrowOnFailure();
+            }
+            catch (NotSupportedException ex)
+            {
+                // BinaryFormatter is disabled. As all errors get swallowed by Windows, put the exception on the
+                // clipboard so consumers can get some indication as to what is wrong. (We handle the binary formatting
+                // of this exception, so it will always work.)
+                SaveDataToHGLOBAL(ex, format, ref medium).ThrowOnFailure();
+            }
+
             return;
         }
 

@@ -8,7 +8,8 @@ internal class DesignerActionVerbList : DesignerActionList
 {
     private readonly DesignerVerb[] _verbs;
 
-    public DesignerActionVerbList(DesignerVerb[] verbs) : base(null)
+    public DesignerActionVerbList(DesignerVerb[] verbs)
+        : base(null)
     {
         _verbs = verbs;
     }

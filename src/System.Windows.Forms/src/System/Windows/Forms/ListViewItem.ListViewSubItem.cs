@@ -39,13 +39,13 @@ public partial class ListViewItem
         {
         }
 
-        public ListViewSubItem(ListViewItem owner, string? text)
+        public ListViewSubItem(ListViewItem? owner, string? text)
         {
             _owner = owner;
             this.text = text;
         }
 
-        public ListViewSubItem(ListViewItem owner, string? text, Color foreColor, Color backColor, Font font)
+        public ListViewSubItem(ListViewItem? owner, string? text, Color foreColor, Color backColor, Font font)
         {
             _owner = owner;
             this.text = text;

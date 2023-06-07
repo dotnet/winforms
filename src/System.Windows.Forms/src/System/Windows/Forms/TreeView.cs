@@ -1613,23 +1613,16 @@ public partial class TreeView : Control
     protected override AccessibleObject CreateAccessibilityInstance()
         => new TreeViewAccessibleObject(this);
 
-    protected override void CreateHandle()
+    protected override unsafe void CreateHandle()
     {
         if (!RecreatingHandle)
         {
-            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-            try
+            using ThemingScope scope = new(Application.UseVisualStyles);
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
             {
-                var icc = new INITCOMMONCONTROLSEX
-                {
-                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TREEVIEW_CLASSES
-                };
-                InitCommonControlsEx(ref icc);
-            }
-            finally
-            {
-                ThemingScope.Deactivate(userCookie);
-            }
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TREEVIEW_CLASSES
+            });
         }
 
         base.CreateHandle();
