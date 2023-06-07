@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal delegate void GetNameItemEventHandler(Com2PropertyDescriptor sender, GetNameItemEvent gnievent);
+internal delegate void GetNameItemEventHandler(Com2PropertyDescriptor sender, GetNameItemEvent e);
 
 internal class GetNameItemEvent : EventArgs
 {

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal delegate void GetAttributesEventHandler(Com2PropertyDescriptor sender, GetAttributesEvent gaevent);
+internal delegate void GetAttributesEventHandler(Com2PropertyDescriptor sender, GetAttributesEvent e);
 
 internal class GetAttributesEvent : EventArgs
 {

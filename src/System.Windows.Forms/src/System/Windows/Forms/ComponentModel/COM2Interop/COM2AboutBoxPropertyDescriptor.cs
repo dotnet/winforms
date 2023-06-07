@@ -5,11 +5,10 @@
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescriptor
+internal sealed partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescriptor
 {
     private TypeConverter? _converter;
     private UITypeEditor? _editor;
@@ -31,8 +30,6 @@ internal partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescriptor
               hrHidden: false)
     {
     }
-
-    public override Type ComponentType => typeof(IDispatch.Interface);
 
     public override TypeConverter Converter
     {

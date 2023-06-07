@@ -2,29 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
-using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
-using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
 /// <summary>
-///  This class is responsible for managing a set or properties for a native object.  It determines
+///  This class is responsible for managing a set of properties for a native object. It determines
 ///  when the properties need to be refreshed, and owns the extended handlers for those properties.
 /// </summary>
-internal class Com2Properties
+internal sealed class Com2Properties
 {
 #if DEBUG
-    private static readonly TraceSwitch DbgCom2PropertiesSwitch = new TraceSwitch("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
+    private static readonly TraceSwitch DbgCom2PropertiesSwitch
+        = new("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
 #endif
 
     // This is the interval that we'll hold properties for. If someone doesn't touch an object for this amount of time,
     // we'll dump the properties from our cache. 5 minutes -- ticks are 1/10,000,000th of a second
     private const long AgeThreshold = 10000000L * 60L * 5L;
 
-    // This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
-    private WeakReference _weakObjectReference;
+    // This is the object that gave us the properties. To avoid rooting the object we only hold the original object
+    // here and always query for whatever interface we need.
+    private WeakReference<object> _weakObjectReference;
 
     private Com2PropertyDescriptor[] _properties;
 
@@ -37,27 +36,7 @@ internal class Com2Properties
     // If this changes, we know we need to dump the cache.
     private (ushort FunctionCount, ushort VariableCount, ushort MajorVersion, ushort MinorVersion)[] _typeInfoVersions;
 
-    private int alwaysValid;
-
-    // The interfaces we recognize for extended browsing.
-    private static readonly Type[] s_extendedInterfaces = new Type[]
-    {
-        typeof(ICategorizeProperties.Interface),
-        typeof(IProvidePropertyBuilder.Interface),
-        typeof(IPerPropertyBrowsing.Interface),
-        typeof(IVsPerPropertyBrowsing.Interface),
-        typeof(IVSMDPerPropertyBrowsing.Interface)
-    };
-
-    // The handler classes corresponding to the extended interfaces above.
-    private static readonly Type[] s_extendedInterfaceHandlerTypes = new Type[]
-    {
-        typeof(Com2ICategorizePropertiesHandler),
-        typeof(Com2IProvidePropertyBuilderHandler),
-        typeof(Com2IPerPropertyBrowsingHandler),
-        typeof(Com2IVsPerPropertyBrowsingHandler),
-        typeof(Com2IManagedPerPropertyBrowsingHandler)
-    };
+    private int _alwaysValid;
 
     public event EventHandler? Disposed;
 
@@ -80,7 +59,7 @@ internal class Com2Properties
             _properties[i].PropertyManager = this;
         }
 
-        _weakObjectReference = new WeakReference(comObject);
+        _weakObjectReference = new(comObject);
         _defaultPropertyIndex = defaultIndex;
         _typeInfoVersions = GetTypeInfoVersions(comObject);
         _touchedTime = DateTime.Now.Ticks;
@@ -88,23 +67,23 @@ internal class Com2Properties
 
     internal bool AlwaysValid
     {
-        get => alwaysValid > 0;
+        get => _alwaysValid > 0;
         set
         {
             if (value)
             {
-                if (alwaysValid == 0 && !CheckValidity())
+                if (_alwaysValid == 0 && CheckAndGetTarget(checkVersions: false, callDispose: true) is null)
                 {
                     return;
                 }
 
-                alwaysValid++;
+                _alwaysValid++;
             }
             else
             {
-                if (alwaysValid > 0)
+                if (_alwaysValid > 0)
                 {
-                    alwaysValid--;
+                    _alwaysValid--;
                 }
             }
         }
@@ -114,7 +93,7 @@ internal class Com2Properties
     {
         get
         {
-            if (!CheckValidity(true))
+            if (CheckAndGetTarget(checkVersions: true, callDispose: true) is null)
             {
                 return null;
             }
@@ -137,7 +116,7 @@ internal class Com2Properties
     {
         get
         {
-            if (!CheckValidity(false) || _touchedTime == 0)
+            if (CheckAndGetTarget(checkVersions: false, callDispose: true) is not { } target || _touchedTime == 0)
             {
 #if DEBUG
                 if (DbgCom2PropertiesSwitch.TraceVerbose)
@@ -148,7 +127,7 @@ internal class Com2Properties
                 return null;
             }
 
-            return _weakObjectReference.Target;
+            return target;
         }
     }
 
@@ -161,7 +140,7 @@ internal class Com2Properties
     {
         get
         {
-            CheckValidity(true);
+            CheckAndGetTarget(checkVersions: true, callDispose: true);
             if (_touchedTime == 0 || _properties is null)
             {
                 return null;
@@ -193,7 +172,7 @@ internal class Com2Properties
         get
         {
             // Check if the property is valid but don't dispose it if it's not.
-            CheckValidity(checkVersions: false, callDispose: false);
+            CheckAndGetTarget(checkVersions: false, callDispose: false);
             return _touchedTime == 0 ? false : TicksSinceTouched > AgeThreshold;
         }
     }
@@ -201,51 +180,19 @@ internal class Com2Properties
     /// <summary>
     ///  Checks the source object for each supported extended browsing inteface and adds the relevant handlers.
     /// </summary>
-    public void AddExtendedBrowsingHandlers(Hashtable handlers)
+    public void RegisterPropertyEvents(IReadOnlyList<ICom2ExtendedBrowsingHandler> handlers)
     {
-        object? target = TargetObject;
-        if (target is null)
+        if (TargetObject is not { } target)
         {
             return;
         }
 
-        // Process all our registered types.
-        Type type;
-        for (int i = 0; i < s_extendedInterfaces.Length; i++)
+        foreach (var handler in handlers)
         {
-            type = s_extendedInterfaces[i];
-
-            // Is this object an implementor of the interface?
-            if (!type.IsInstanceOfType(target))
+            if (handler.ObjectSupportsInterface(target))
             {
-                continue;
-            }
-
-            // Since handlers must be stateless, check to see if we've already created one of this type
-            Com2ExtendedBrowsingHandler? handler = (Com2ExtendedBrowsingHandler?)handlers[type];
-            if (handler is null)
-            {
-                handler = (Com2ExtendedBrowsingHandler)Activator.CreateInstance(s_extendedInterfaceHandlerTypes[i])!;
-                Debug.Assert(handler is not null, $"Could not construct {s_extendedInterfaceHandlerTypes[i]}");
-
-                handlers[type] = handler;
-            }
-
-            // Make sure we got the right one.
-            if (type.IsAssignableFrom(handler.Interface))
-            {
-#if DEBUG
-                if (DbgCom2PropertiesSwitch.TraceVerbose)
-                {
-                    Debug.WriteLine($"Adding browsing handler type {handler.Interface.Name} to object.");
-                }
-#endif
-                // Allow the handler to attach itself to the appropriate properties.
-                handler.SetupPropertyHandlers(_properties);
-            }
-            else
-            {
-                throw new ArgumentException(string.Format(SR.COM2BadHandlerType, type.Name, handler.Interface.Name));
+                Debug.WriteLine($"Adding browsing handler type {handler.GetType().Name} to object.");
+                handler.RegisterEvents(_properties);
             }
         }
     }
@@ -298,18 +245,19 @@ internal class Com2Properties
     }
 
     /// <summary>
-    ///  Make sure this property list is still valid. (The reference is still alive and we haven't passed the
-    ///  timeout.)
+    ///  Make sure this property list is still valid. (The reference is still alive and we haven't passed the timeout.)
     /// </summary>
-    internal bool CheckValidity(bool checkVersions = false, bool callDispose = true)
+    /// <returns>
+    ///  The object if it is still valid.
+    /// </returns>
+    internal object? CheckAndGetTarget(bool checkVersions, bool callDispose)
     {
         if (AlwaysValid)
         {
             return true;
         }
 
-        object? target = _weakObjectReference.Target;
-        bool valid = target is not null;
+        bool valid = _weakObjectReference.TryGetTarget(out object? target);
 
         // Check the version information for each ITypeInfo the object exposes.
         if (target is not null && checkVersions)
@@ -336,6 +284,7 @@ internal class Com2Properties
             {
                 // Update to the new version list we have.
                 _typeInfoVersions = newTypeInfoVersions;
+                target = null;
             }
         }
 
@@ -352,6 +301,6 @@ internal class Com2Properties
             Dispose();
         }
 
-        return valid;
+        return target;
     }
 }

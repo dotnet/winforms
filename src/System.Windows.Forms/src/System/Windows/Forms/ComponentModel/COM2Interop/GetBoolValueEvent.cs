@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal delegate void GetBoolValueEventHandler(Com2PropertyDescriptor sender, GetBoolValueEvent gbeevent);
+internal delegate void GetBoolValueEventHandler(Com2PropertyDescriptor sender, GetBoolValueEvent e);
 
 internal class GetBoolValueEvent : EventArgs
 {
