@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Data;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
@@ -115,7 +114,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         Assert.Equal(createControl, checkBox.IsHandleCreated);
     }
 
-    private static IEnumerable<object[]> CheckBoxAccessibleObject_DoDefaultAction_Success_Data()
+    public static IEnumerable<object[]> CheckBoxAccessibleObject_DoDefaultAction_Success_Data()
     {
         yield return new object[] { true, false, CheckState.Checked, (int)ToggleState.Off };
         yield return new object[] { true, false, CheckState.Indeterminate, (int)ToggleState.Off };
