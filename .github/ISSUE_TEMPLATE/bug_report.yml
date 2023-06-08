@@ -25,7 +25,7 @@ body:
       options:
         - 'Yes'
         - 'No'
-        - 'N/A'
+        - 'Not tested/verified'
     validations:
       required: true
   - type: textarea
