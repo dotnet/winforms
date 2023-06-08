@@ -141,16 +141,16 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected async Task WaitForIdleAsync()
     {
+        // Queue an event to make sure we don't stall if the application was already idle
+        await JoinableTaskFactory.SwitchToMainThreadAsync();
+        await Task.Yield();
+
         TaskCompletionSource<VoidResult> idleCompletionSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
         Application.Idle += HandleApplicationIdle;
         Application.LeaveThreadModal += HandleApplicationIdle;
 
         try
         {
-            // Queue an event to make sure we don't stall if the application was already idle
-            await JoinableTaskFactory.SwitchToMainThreadAsync();
-            await Task.Yield();
-
             if (Application.OpenForms.Count > 0)
             {
                 await idleCompletionSource.Task;
