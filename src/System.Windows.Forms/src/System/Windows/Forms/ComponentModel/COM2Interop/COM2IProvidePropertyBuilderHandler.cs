@@ -62,7 +62,7 @@ internal sealed unsafe class Com2IProvidePropertyBuilderHandler : Com2ExtendedBr
         CTLBLDTYPE builderType = 0;
         bool builderValid = GetBuilderGuidString(propertyBuilder, sender.DISPID, ref builderGuid, &builderType);
 
-        // We hide IDispatch props by default, we we need to force showing them here.
+        // We hide IDispatch props by default, we need to force showing them here.
         if (sender.CanShow && builderValid)
         {
             e.Add(BrowsableAttribute.Yes);

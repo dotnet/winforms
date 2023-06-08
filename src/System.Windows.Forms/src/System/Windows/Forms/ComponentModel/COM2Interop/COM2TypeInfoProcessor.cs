@@ -96,7 +96,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
     ///  Given an object, this attempts to locate its type info. If it implements IProvideMultipleClassInfo
     ///  all available type infos will be returned, otherwise the primary one will be called.
     /// </summary>
-    public static unsafe ITypeInfo*[] FindTypeInfos(object comObject, bool preferIProvideClassInfo)
+    public static unsafe ITypeInfo*[] FindTypeInfos(object comObject)
     {
         using var classInfo = ComHelpers.TryGetComScope<IProvideMultipleClassInfo>(comObject, out HRESULT hr);
         if (hr.Succeeded)
@@ -118,10 +118,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
                         piidSource: null).Succeeded
                         && typeInfo is not null)
                     {
-                        continue;
+                        handles.Add((nint)typeInfo);
                     }
-
-                    handles.Add((nint)typeInfo);
                 }
 
                 if (handles.Count > 0)
@@ -137,7 +135,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
             }
         }
 
-        ITypeInfo* temp = FindTypeInfo(comObject, preferIProvideClassInfo);
+        ITypeInfo* temp = FindTypeInfo(comObject, preferIProvideClassInfo: false);
         return temp is not null ? (new ITypeInfo*[] { temp }) : new ITypeInfo*[0];
     }
 
@@ -211,7 +209,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
             return null;
         }
 
-        ITypeInfo*[] typeInfos = FindTypeInfos(comObject, preferIProvideClassInfo: false);
+        ITypeInfo*[] typeInfos = FindTypeInfos(comObject);
 
         if (typeInfos.Length == 0)
         {

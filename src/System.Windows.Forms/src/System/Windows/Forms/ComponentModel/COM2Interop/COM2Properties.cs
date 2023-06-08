@@ -222,7 +222,7 @@ internal sealed class Com2Properties
     /// </summary>
     private unsafe (ushort FunctionCount, ushort VariableCount, ushort MajorVersion, ushort MinorVersion)[] GetTypeInfoVersions(object comObject)
     {
-        ITypeInfo*[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject, preferIProvideClassInfo: false);
+        ITypeInfo*[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject);
         var versions = new (ushort, ushort, ushort, ushort)[pTypeInfos.Length];
         for (int i = 0; i < pTypeInfos.Length; i++)
         {
