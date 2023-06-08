@@ -4,106 +4,99 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
+/// <summary>
+///  Browsing handler for <see cref="IPerPropertyBrowsing"/>.
+/// </summary>
+internal sealed unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler<IPerPropertyBrowsing>
 {
-    public override Type Interface => typeof(IPerPropertyBrowsing.Interface);
-
-    public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
+    public override void RegisterEvents(Com2PropertyDescriptor[]? properties)
     {
-        if (propDesc is null)
+        if (properties is null)
         {
             return;
         }
 
-        for (int i = 0; i < propDesc.Length; i++)
+        for (int i = 0; i < properties.Length; i++)
         {
-            propDesc[i].QueryGetBaseAttributes += OnGetBaseAttributes;
-            propDesc[i].QueryGetDisplayValue += OnGetDisplayValue;
-            propDesc[i].QueryGetTypeConverterAndTypeEditor += OnGetTypeConverterAndTypeEditor;
+            properties[i].QueryGetBaseAttributes += OnGetBaseAttributes;
+            properties[i].QueryGetDisplayValue += OnGetDisplayValue;
+            properties[i].QueryGetTypeConverterAndTypeEditor += OnGetTypeConverterAndTypeEditor;
         }
     }
 
-    private static Guid GetPropertyPageGuid(IPerPropertyBrowsing.Interface target, int dispid)
+    private static Guid GetPropertyPageGuid(IPerPropertyBrowsing* propertyBrowsing, int dispid)
     {
         // Check for a property page
         Guid guid = Guid.Empty;
-        HRESULT hr = target.MapPropertyToPage(dispid, &guid);
+        HRESULT hr = propertyBrowsing->MapPropertyToPage(dispid, &guid);
         return hr.Succeeded ? guid : Guid.Empty;
     }
 
     internal static bool TryGetDisplayString(
-        IPerPropertyBrowsing.Interface ppb,
+        IPerPropertyBrowsing* propertyBrowsing,
         int dispid,
-        [NotNullWhen(true)] out string? value)
+        [NotNullWhen(true)] out string? displayString)
     {
-        using BSTR strVal = default;
-        if (ppb.GetDisplayString(dispid, &strVal).Failed)
+        using BSTR value = default;
+        if (propertyBrowsing->GetDisplayString(dispid, &value).Failed)
         {
-            value = null;
+            displayString = null;
             return false;
         }
 
-        value = strVal.ToString();
-        return value is not null;
+        displayString = value.ToString();
+        return displayString is not null;
     }
 
     /// <summary>
     ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing. We
     ///  hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
     /// </summary>
-    private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
+    private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent e)
     {
-        if (sender.TargetObject is IPerPropertyBrowsing.Interface target)
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Succeeded)
         {
             // We hide IDispatch props by default, we we need to force showing them here.
 
-            bool validPropPage = !Guid.Empty.Equals(GetPropertyPageGuid(target, sender.DISPID));
+            bool validPropPage = !Guid.Empty.Equals(GetPropertyPageGuid(propertyBrowsing, sender.DISPID));
 
             if (sender.CanShow && validPropPage)
             {
-                if (typeof(IDispatch.Interface).IsAssignableFrom(sender.PropertyType))
-                {
-                    attrEvent.Add(BrowsableAttribute.Yes);
-                }
+                e.Add(BrowsableAttribute.Yes);
             }
         }
     }
 
-    private void OnGetDisplayValue(Com2PropertyDescriptor sender, GetNameItemEvent gnievent)
+    private void OnGetDisplayValue(Com2PropertyDescriptor sender, GetNameItemEvent e)
     {
-        try
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
         {
-            if (sender.TargetObject is not IPerPropertyBrowsing.Interface browsing)
-            {
-                return;
-            }
-
-            // If we are using the dropdown, don't convert the value or the values will change when we select them
-            // and call back for the display value.
-            if (sender.Converter is Com2IPerPropertyEnumConverter || sender.ConvertingNativeType)
-            {
-                return;
-            }
-
-            if (TryGetDisplayString(browsing, sender.DISPID, out string? displayString))
-            {
-                gnievent.Name = displayString;
-            }
+            return;
         }
-        catch
+
+        // If we are using the dropdown, don't convert the value or the values will change when we select them
+        // and call back for the display value.
+        if (sender.Converter is Com2IPerPropertyEnumConverter || sender.ConvertingNativeType)
         {
+            return;
+        }
+
+        if (TryGetDisplayString(propertyBrowsing, sender.DISPID, out string? displayString))
+        {
+            e.Name = displayString;
         }
     }
 
-    private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
+    private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent e)
     {
-        if (sender.TargetObject is not IPerPropertyBrowsing.Interface ppb)
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
         {
             return;
         }
@@ -112,22 +105,18 @@ internal unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrow
         CALPOLESTR caStrings = default;
         CADWORD caCookies = default;
 
-        HRESULT hr;
-        try
+        hr = propertyBrowsing.Value->GetPredefinedStrings(sender.DISPID, &caStrings, &caCookies);
+
+        if (hr.Failed)
         {
-            hr = ppb.GetPredefinedStrings((int)sender.DISPID, &caStrings, &caCookies);
-        }
-        catch (ExternalException ex)
-        {
-            hr = (HRESULT)ex.ErrorCode;
-            Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={sender.DISPID}), object type={ComNativeDescriptor.GetClassName(ppb)}");
+            Debug.Fail($"IPerPropertyBrowsing::GetPredefinedStrings(dispid={sender.DISPID}) failed.");
         }
 
         // Terminate the existing editor if we created the current one so if the items have disappeared,
         // we don't hold onto the old items.
-        if (gveevent.TypeConverter is Com2IPerPropertyEnumConverter)
+        if (e.TypeConverter is Com2IPerPropertyEnumConverter)
         {
-            gveevent.TypeConverter = null;
+            e.TypeConverter = null;
         }
 
         if (hr == HRESULT.S_OK)
@@ -137,7 +126,7 @@ internal unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrow
 
             if (names.Length > 0 && cookies.Length > 0)
             {
-                gveevent.TypeConverter = new Com2IPerPropertyEnumConverter(new Com2IPerPropertyBrowsingEnum(sender, names, cookies));
+                e.TypeConverter = new Com2IPerPropertyEnumConverter(new Com2IPerPropertyBrowsingEnum(sender, names, cookies));
             }
         }
         else
@@ -153,11 +142,11 @@ internal unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrow
                 return;
             }
 
-            Guid guid = GetPropertyPageGuid(ppb, sender.DISPID);
+            Guid guid = GetPropertyPageGuid(propertyBrowsing, sender.DISPID);
 
             if (!Guid.Empty.Equals(guid))
             {
-                gveevent.TypeEditor = new Com2PropertyPageUITypeEditor(sender, guid, (UITypeEditor?)gveevent.TypeEditor);
+                e.TypeEditor = new Com2PropertyPageUITypeEditor(sender, guid, (UITypeEditor?)e.TypeEditor);
             }
         }
     }

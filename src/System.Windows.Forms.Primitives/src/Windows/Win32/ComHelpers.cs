@@ -14,70 +14,79 @@ internal static unsafe partial class ComHelpers
     //  using var stream = GetComScope<IStream>(obj, out bool success);
 
     /// <summary>
-    ///  Gets a pointer for the specified <typeparamref name="T"/> for the given <paramref name="obj"/>. Throws if
+    ///  Gets a pointer for the specified <typeparamref name="T"/> for the given <paramref name="object"/>. Throws if
     ///  the desired pointer can not be obtained.
     /// </summary>
-    internal static ComScope<T> GetComScope<T>(object obj) where T : unmanaged, IComIID
-        => new(GetComPointer<T>(obj));
+    internal static ComScope<T> GetComScope<T>(object? @object) where T : unmanaged, IComIID
+        => new(GetComPointer<T>(@object));
 
     /// <summary>
-    ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="obj"/>.
+    ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="object"/>.
     /// </summary>
-    internal static ComScope<T> TryGetComScope<T>(object obj) where T : unmanaged, IComIID
-        => TryGetComScope<T>(obj, out _);
+    internal static ComScope<T> TryGetComScope<T>(object? @object) where T : unmanaged, IComIID
+        => TryGetComScope<T>(@object, out _);
 
     /// <summary>
-    ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="obj"/>.
+    ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="object"/>.
     /// </summary>
-    internal static ComScope<T> TryGetComScope<T>(object obj, out HRESULT hr) where T : unmanaged, IComIID
-        => new(TryGetComPointer<T>(obj, out hr));
+    internal static ComScope<T> TryGetComScope<T>(object? @object, out HRESULT hr) where T : unmanaged, IComIID
+        => new(TryGetComPointer<T>(@object, out hr));
 
     /// <summary>
-    ///  Gets the specified <typeparamref name="T"/> interface for the given <paramref name="obj"/>. Throws if
+    ///  Gets the specified <typeparamref name="T"/> interface for the given <paramref name="object"/>. Throws if
     ///  the desired pointer can not be obtained.
     /// </summary>
-    internal static T* GetComPointer<T>(object? obj) where T : unmanaged, IComIID
+    internal static T* GetComPointer<T>(object? @object) where T : unmanaged, IComIID
     {
-        T* result = TryGetComPointer<T>(obj, out HRESULT hr);
+        T* result = TryGetComPointer<T>(@object, out HRESULT hr);
         hr.ThrowOnFailure();
         return result;
     }
 
     /// <summary>
-    ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="obj"/>.
+    ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="object"/>.
     /// </summary>
     /// <returns>The requested pointer or <see langword="null"/> if unsuccessful.</returns>
-    internal static T* TryGetComPointer<T>(object? obj) where T : unmanaged, IComIID
-        => TryGetComPointer<T>(obj, out _);
+    internal static T* TryGetComPointer<T>(object? @object) where T : unmanaged, IComIID
+        => TryGetComPointer<T>(@object, out _);
 
     /// <summary>
-    ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="obj"/>.
+    ///  Queries for the given interface and releases it.
+    /// </summary>
+    internal static bool SupportsInterface<T>(object? @object) where T : unmanaged, IComIID
+    {
+        using var scope = TryGetComScope<T>(@object, out HRESULT hr);
+        return hr.Succeeded;
+    }
+
+    /// <summary>
+    ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="object"/>.
     /// </summary>
     /// <param name="result">
     ///  Typically either <see cref="HRESULT.S_OK"/> or <see cref="HRESULT.E_POINTER"/>. Check for success, not
     ///  specific results.
     /// </param>
     /// <returns>The requested pointer or <see langword="null"/> if unsuccessful.</returns>
-    internal static T* TryGetComPointer<T>(object? obj, out HRESULT result) where T : unmanaged, IComIID
+    internal static T* TryGetComPointer<T>(object? @object, out HRESULT result) where T : unmanaged, IComIID
     {
-        if (obj is null)
+        if (@object is null)
         {
             result = HRESULT.E_POINTER;
             return null;
         }
 
         IUnknown* ccw = null;
-        if (obj is IManagedWrapper)
+        if (@object is IManagedWrapper)
         {
             // One of our classes that we can generate a CCW for.
-            ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
+            ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(@object, CreateComInterfaceFlags.None);
 
-            if (ccw is not null && obj is IWrapperInitialize initialize)
+            if (ccw is not null && @object is IWrapperInitialize initialize)
             {
                 initialize.OnInitialized(ccw);
             }
         }
-        else if (ComWrappers.TryGetComInstance(obj, out nint unknown))
+        else if (ComWrappers.TryGetComInstance(@object, out nint unknown))
         {
             // A ComWrappers generated RCW.
             ccw = (IUnknown*)unknown;
@@ -88,11 +97,11 @@ internal static unsafe partial class ComHelpers
             // if that exists (so it won't always fall into legacy COM interop).
             try
             {
-                ccw = (IUnknown*)Marshal.GetIUnknownForObject(obj);
+                ccw = (IUnknown*)Marshal.GetIUnknownForObject(@object);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Did not find IUnknown for {obj.GetType().Name}. {ex.Message}");
+                Debug.WriteLine($"Did not find IUnknown for {@object.GetType().Name}. {ex.Message}");
             }
         }
 

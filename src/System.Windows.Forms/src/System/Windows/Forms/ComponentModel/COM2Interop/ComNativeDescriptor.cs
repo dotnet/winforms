@@ -11,7 +11,7 @@ using Windows.Win32.System.Com;
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
 /// <summary>
-///  Top level mapping layer between COM Object and TypeDescriptor.
+///  Top level mapping layer between COM objects and TypeDescriptor.
 /// </summary>
 /// <remarks>
 ///  <para>
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///   <see cref="TypeDescriptor.ComObjectType"/>.
 ///  </para>
 /// </remarks>
-internal partial class ComNativeDescriptor : TypeDescriptionProvider
+internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvider
 {
     private readonly AttributeCollection _staticAttributes = new(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
 
@@ -31,7 +31,20 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
     private readonly WeakHashtable _nativeProperties = new();
 
     // Our collection of browsing handlers, which are stateless and shared across objects.
-    private readonly Hashtable extendedBrowsingHandlers = new();
+    //
+    // These used to be created as needed for each type descriptor and shared among the properties that supported them.
+    // Lazily creating a single instance of these for each ComNativeDescriptor was needlessly complex and used reflection.
+    // These objects have no state so the memory impact of always creating all of them is trivial.
+    //
+    // Making these static isn't really a good option as they register callbacks that we currently don't unhook.
+    private readonly ICom2ExtendedBrowsingHandler[] _extendedBrowsingHandlers = new ICom2ExtendedBrowsingHandler[]
+    {
+        new Com2ICategorizePropertiesHandler(),
+        new Com2IProvidePropertyBuilderHandler(),
+        new Com2IPerPropertyBrowsingHandler(),
+        new Com2IVsPerPropertyBrowsingHandler(),
+        new Com2IManagedPerPropertyBrowsingHandler()
+    };
 
     // We increment this every time we look at an Object, then at specified intervals, we run through the
     // properties list to see if we should delete any.
@@ -47,7 +60,7 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
         object? instance)
         => new ComTypeDescriptor(this, instance);
 
-    internal static unsafe string GetClassName(object component)
+    internal static string GetClassName(object component)
     {
         // Check IVsPerPropertyBrowsing for a name.
         if (component is IVsPerPropertyBrowsing.Interface browsing)
@@ -102,7 +115,7 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
         return string.Empty;
     }
 
-    internal static unsafe object? GetPropertyValue(object component, string propertyName, ref bool succeeded)
+    internal static object? GetPropertyValue(object component, string propertyName, ref bool succeeded)
     {
         if (component is not IDispatch.Interface dispatch)
         {
@@ -146,7 +159,7 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
         }
     }
 
-    internal static unsafe HRESULT GetPropertyValue(object component, int dispid, out object? retval)
+    internal static HRESULT GetPropertyValue(object component, int dispid, out object? retval)
     {
         retval = null;
 
@@ -198,7 +211,7 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
             && dispid == Com2TypeInfoProcessor.GetNameDispId((IDispatch.Interface)obj);
 
     /// <summary>
-    ///  Checks all our property manages to see if any have become invalid.
+    ///  Checks all our property managers to see if any have become invalid.
     /// </summary>
     private void CheckClear()
     {
@@ -222,7 +235,7 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
 
                 if (entry is not null && entry.NeedsRefreshed)
                 {
-                    disposeList ??= new List<object>(3);
+                    disposeList ??= new List<object>();
                     disposeList.Add(de.Key);
                 }
             }
@@ -239,7 +252,7 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
 
                     if (entry is not null)
                     {
-                        entry.Disposed -= new EventHandler(OnPropsInfoDisposed);
+                        entry.Disposed -= OnPropsInfoDisposed;
                         entry.Dispose();
                         _nativeProperties.Remove(oldKey);
                     }
@@ -260,14 +273,14 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
         Com2Properties? properties = (Com2Properties?)_nativeProperties[component];
 
         // If we don't have one, create one and set it up.
-        if (properties is null || !properties.CheckValidity())
+        if (properties is null || properties.CheckAndGetTarget(checkVersions: false, callDispose: true) is null)
         {
             properties = Com2TypeInfoProcessor.GetProperties(component);
             if (properties is not null)
             {
                 properties.Disposed += OnPropsInfoDisposed;
                 _nativeProperties.SetWeak(component, properties);
-                properties.AddExtendedBrowsingHandlers(extendedBrowsingHandlers);
+                properties.RegisterPropertyEvents(_extendedBrowsingHandlers);
             }
         }
 
@@ -283,7 +296,8 @@ internal partial class ComNativeDescriptor : TypeDescriptionProvider
 
         List<Attribute> attributes = new();
 
-        if (component is IVSMDPerPropertyBrowsing.Interface browsing)
+        using var browsing = ComHelpers.TryGetComScope<IVSMDPerPropertyBrowsing>(component, out HRESULT hr);
+        if (hr.Succeeded)
         {
             attributes.AddRange(Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes(browsing, PInvoke.MEMBERID_NIL));
         }

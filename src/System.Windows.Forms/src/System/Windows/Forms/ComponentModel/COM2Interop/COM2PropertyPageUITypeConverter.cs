@@ -10,7 +10,7 @@ using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
+internal sealed unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
 {
     private readonly Com2PropertyDescriptor _propertyDescriptor;
     private readonly Guid _guid;
@@ -26,7 +26,7 @@ internal unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, I
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        HWND hWndParent = PInvoke.GetFocus();
+        HWND parentHandle = PInvoke.GetFocus();
 
         try
         {
@@ -47,7 +47,7 @@ internal unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, I
             }
 
             Debug.Assert(instance is not null);
-            propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, _propertyDescriptor.DISPID, _guid, hWndParent);
+            propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, _propertyDescriptor.DISPID, _guid, parentHandle);
         }
         catch (Exception ex)
         {
@@ -64,24 +64,24 @@ internal unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, I
 
     public void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, nint parentHandle)
     {
-        object[] objs = component.GetType().IsArray ? (object[])component : new object[] { component };
-        nint[] objAddrs = new nint[objs.Length];
+        object[] objects = component.GetType().IsArray ? (object[])component : new object[] { component };
+        nint[] addresses = new nint[objects.Length];
 
         try
         {
-            for (int i = 0; i < objAddrs.Length; i++)
+            for (int i = 0; i < addresses.Length; i++)
             {
-                objAddrs[i] = (nint)ComHelpers.GetComPointer<IUnknown>(objs[i]);
+                addresses[i] = (nint)ComHelpers.GetComPointer<IUnknown>(objects[i]);
             }
 
-            fixed (void* pObjAddrs = objAddrs)
+            fixed (void* pObjAddrs = addresses)
             {
                 PInvoke.OleCreatePropertyFrame(
                     (HWND)parentHandle,
                     0,
                     0,
                     title,
-                    (uint)objAddrs.Length,
+                    (uint)addresses.Length,
                     (IUnknown**)pObjAddrs,
                     1,
                     pageGuid,
@@ -92,11 +92,11 @@ internal unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, I
         }
         finally
         {
-            for (int i = 0; i < objAddrs.Length; i++)
+            for (int i = 0; i < addresses.Length; i++)
             {
-                if (objAddrs[i] != 0)
+                if (addresses[i] != 0)
                 {
-                    Marshal.Release(objAddrs[i]);
+                    Marshal.Release(addresses[i]);
                 }
             }
         }
