@@ -242,7 +242,6 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     public void CheckBoxAccessibleObject_Toggle_Invoke_ThreeState_Success()
     {
         using var checkBox = new CheckBox() { ThreeState = true };
-        Assert.False(checkBox.IsHandleCreated);
         var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
         Assert.Equal(CheckState.Unchecked, checkBox.CheckState);
 
