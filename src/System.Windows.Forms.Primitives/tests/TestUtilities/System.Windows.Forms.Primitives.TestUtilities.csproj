@@ -3,15 +3,28 @@
     <AssemblyName>System.Windows.Forms.Primitives.TestUtilities</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>System</RootNamespace>
+
+    <!--To suppress the build warning for test binaries caused by the mismatch in the version of WindowsBase.dll
+    brought in by the xunit.stafact package and the version included in the Microsoft.Netcore.App package
+    referenced by these test binaries.-->
+    <MSBuildWarningsAsMessages>
+      $(MSBuildWarningsAsMessages);MSB3277
+    </MSBuildWarningsAsMessages>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- xunit.stafact target TFM is contains "-windows" while our test binaris don't.
+    So, we had to use this work around to load correct binary from NuGet-->
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" ExcludeAssets="all"/>
+    <Reference Include="$(PkgXunit_StaFact)\lib\net6.0-windows7.0\xunit.stafact.dll" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Windows.Forms.Common.TestUtilities.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />

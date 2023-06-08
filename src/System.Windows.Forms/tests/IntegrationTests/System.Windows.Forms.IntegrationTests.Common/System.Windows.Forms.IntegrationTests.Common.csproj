@@ -2,13 +2,26 @@
  
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+
+    <!--To suppress the build warning for test binaries caused by the mismatch in the version of WindowsBase.dll
+    brought in by the xunit.stafact package and the version included in the Microsoft.Netcore.App package
+    referenced by these test binaries.-->
+    <MSBuildWarningsAsMessages>
+      $(MSBuildWarningsAsMessages);MSB3277
+    </MSBuildWarningsAsMessages>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="$(MoqPackage)" Version="$(MoqPackageVersion)" />
-    <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- xunit.stafact target TFM is contains "-windows" while our test binaris don't.
+    So, we had to use this work around to load correct binary from NuGet-->
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" ExcludeAssets="all"/>
+    <Reference Include="$(PkgXunit_StaFact)\lib\net6.0-windows7.0\xunit.stafact.dll" />
   </ItemGroup>
 
   <ItemGroup>

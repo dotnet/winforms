@@ -14,6 +14,7 @@ using Xunit.Abstractions;
 namespace System.Windows.Forms.UITests;
 
 [UseDefaultXunitCulture]
+[UISettings(MaxAttempts = 3)]
 public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 {
     private const int SPIF_SENDCHANGE = 0x0002;
