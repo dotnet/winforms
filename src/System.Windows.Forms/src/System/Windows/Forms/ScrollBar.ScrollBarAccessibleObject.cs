@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -174,7 +173,6 @@ public partial class ScrollBar
             }
 
             _owningScrollBar.Value = (int)newValue;
-            base.SetValue(newValue);
         }
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)

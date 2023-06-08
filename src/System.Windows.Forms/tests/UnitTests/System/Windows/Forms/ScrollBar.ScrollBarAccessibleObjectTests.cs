@@ -155,6 +155,45 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
         Assert.False(scrollBar.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [InlineData(100, 100d)]
+    [InlineData(1, 1d)]
+    [InlineData(0, 0d)]
+    [InlineData(50d, 50d)]
+    public void ScrollBarAccessibleObject_SetValue_Invoke_ReturnsExpected(int newValue, object expected)
+    {
+        using var scrollBar = new SubScrollBar();
+        scrollBar.CreateControl();
+        AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
+
+        accessibleObject.SetValue(newValue);
+        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.RangeValueValuePropertyId);
+
+        Assert.Equal(expected, actual);
+        Assert.True(scrollBar.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(101)]
+    [InlineData(-1)]
+    public void ScrollBarAccessibleObject_SetValue_OutOfRangeValue_ThrowExceptionExpected(int newValue)
+    {
+        using var scrollBar = new SubScrollBar();
+        scrollBar.CreateControl();
+        AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
+
+        try
+        {
+            accessibleObject.SetValue(newValue);
+        }
+        catch (Exception ex)
+        {
+            Assert.Equal(ex.Message, $"Value of '{newValue}' is not valid for 'Value'. 'Value' should be between 'Minimum' and 'Maximum'. (Parameter 'value')");
+        }
+
+        Assert.True(scrollBar.IsHandleCreated);
+    }
+
     private class SubScrollBar : ScrollBar
     {
         public SubScrollBar() : base()
