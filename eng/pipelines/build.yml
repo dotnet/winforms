@@ -76,7 +76,7 @@ jobs:
     # https://github.com/tonerdo/coverlet/issues/363.
     - script: eng\cibuild.cmd
         -restore
-        -build
+        -rebuild
         -configuration $(_BuildConfig)
         /p:Platform=${{ parameters.targetArchitecture }}
         /p:TargetArchitecture=${{ parameters.targetArchitecture }}

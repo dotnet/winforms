@@ -28,6 +28,6 @@ stages:
 
         - script: eng\cibuild.cmd
             -restore
-            -build
+            -rebuild
             -configuration Debug
           displayName: Build
