@@ -8,26 +8,10 @@ public partial class Label
 {
     internal class LabelAccessibleObject : ControlAccessibleObject
     {
-        private readonly Label _owningLabel;
-
         public LabelAccessibleObject(Label owner) : base(owner)
         {
-            _owningLabel = owner;
         }
 
-        public override AccessibleRole Role
-        {
-            get
-            {
-                AccessibleRole role = _owningLabel.AccessibleRole;
-
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
-
-                return AccessibleRole.StaticText;
-            }
-        }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.StaticText);
     }
 }
