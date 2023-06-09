@@ -170,6 +170,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
         object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.RangeValueValuePropertyId);
 
         Assert.Equal(expected, actual);
+        Assert.Equal(expected, (double)scrollBar.Value);
         Assert.True(scrollBar.IsHandleCreated);
     }
 
@@ -182,15 +183,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
         scrollBar.CreateControl();
         AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
 
-        try
-        {
-            accessibleObject.SetValue(newValue);
-        }
-        catch (Exception ex)
-        {
-            Assert.Equal(ex.Message, $"Value of '{newValue}' is not valid for 'Value'. 'Value' should be between 'Minimum' and 'Maximum'. (Parameter 'value')");
-        }
-
+        Assert.Throws<ArgumentOutOfRangeException>("value", () => accessibleObject.SetValue(newValue));
         Assert.True(scrollBar.IsHandleCreated);
     }
 
