@@ -365,9 +365,14 @@ public abstract partial class ScrollBar : Control
                     throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                 }
 
+                int oldValue = _value;
                 _value = value;
                 UpdateScrollInfo();
                 OnValueChanged(EventArgs.Empty);
+                if (IsAccessibilityObjectCreated)
+                {
+                    AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.RangeValueValuePropertyId, (double)oldValue, (double)_value);
+                }
             }
         }
     }
