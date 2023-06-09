@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Concurrent;
 
 namespace System;
@@ -21,11 +23,13 @@ public sealed class NoAssertContext : IDisposable
 
     private static readonly object s_lock = new object();
     private static bool s_hooked;
+    private static bool s_hasDefaultListener;
+    private static bool s_hasThrowingListener;
 
     private static readonly ConcurrentDictionary<int, int> s_suppressedThreads = new ConcurrentDictionary<int, int>();
 
     // "Default" is the listener that terminates the process when debug assertions fail.
-    private static readonly TraceListener s_defaultListener = Trace.Listeners["Default"];
+    private static readonly TraceListener? s_defaultListener = Trace.Listeners["Default"];
     private static readonly NoAssertListener s_noAssertListener = new NoAssertListener();
 
     public NoAssertContext()
@@ -40,7 +44,18 @@ public sealed class NoAssertContext : IDisposable
                 // Hook our custom listener first so we don't lose assertions from other threads when
                 // we disconnect the default listener.
                 Trace.Listeners.Add(s_noAssertListener);
-                Trace.Listeners.Remove(s_defaultListener);
+                if (s_defaultListener is not null && Trace.Listeners.Contains(s_defaultListener))
+                {
+                    s_hasDefaultListener = true;
+                    Trace.Listeners.Remove(s_defaultListener);
+                }
+
+                if (Trace.Listeners.OfType<ThrowingTraceListener>().FirstOrDefault() is { } throwingTraceListener)
+                {
+                    s_hasThrowingListener = true;
+                    Trace.Listeners.Remove(throwingTraceListener);
+                }
+
                 s_hooked = true;
             }
         }
@@ -68,7 +83,16 @@ public sealed class NoAssertContext : IDisposable
             {
                 // We're the first to hit the need to unhook. Add the default listener back first to
                 // ensure we don't lose any asserts from other threads.
-                Trace.Listeners.Add(s_defaultListener);
+                if (s_hasDefaultListener)
+                {
+                    Trace.Listeners.Add(s_defaultListener!);
+                }
+
+                if (s_hasThrowingListener)
+                {
+                    Trace.Listeners.Add(ThrowingTraceListener.Instance);
+                }
+
                 Trace.Listeners.Remove(s_noAssertListener);
                 s_hooked = false;
             }
@@ -88,37 +112,50 @@ public sealed class NoAssertContext : IDisposable
         {
         }
 
-        public override void Fail(string message)
+        private TraceListener? DefaultListener
         {
-            if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
+            get
             {
-                s_defaultListener.Fail(message);
+                if (s_hasThrowingListener)
+                    return ThrowingTraceListener.Instance;
+                else if (s_hasDefaultListener)
+                    return s_defaultListener;
+                else
+                    return null;
             }
         }
 
-        public override void Fail(string message, string detailMessage)
+        public override void Fail(string? message)
         {
             if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
             {
-                s_defaultListener.Fail(message, detailMessage);
+                DefaultListener?.Fail(message);
+            }
+        }
+
+        public override void Fail(string? message, string? detailMessage)
+        {
+            if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
+            {
+                DefaultListener?.Fail(message, detailMessage);
             }
         }
 
         // Write and WriteLine are virtual
 
-        public override void Write(string message)
+        public override void Write(string? message)
         {
             if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
             {
-                s_defaultListener.Write(message);
+                DefaultListener?.Write(message);
             }
         }
 
-        public override void WriteLine(string message)
+        public override void WriteLine(string? message)
         {
             if (!s_suppressedThreads.TryGetValue(Environment.CurrentManagedThreadId, out _))
             {
-                s_defaultListener.WriteLine(message);
+                DefaultListener?.WriteLine(message);
             }
         }
     }
