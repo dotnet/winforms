@@ -1,5 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AssemblyName>System.Windows.Forms.Design.Tests</AssemblyName>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <NoWarn>$(NoWarn);SYSLIB0050;SYSLIB0051;SYSLIB0011</NoWarn>
@@ -25,7 +28,7 @@
 
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Design.Facade\$(Configuration)\$(TargetFramework)\System.Design.dll" />
+    <Reference Include="$(BaseOutputPath)..\System.Design.Facade\$(Configuration)\$(SourceTargetFramework)\System.Design.dll" />
   </ItemGroup>
 
   <ItemGroup>
