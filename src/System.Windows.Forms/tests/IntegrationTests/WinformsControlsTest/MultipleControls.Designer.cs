@@ -44,6 +44,7 @@ partial class MultipleControls
         this.comboBox1 = new System.Windows.Forms.ComboBox();
         this.tabPage2 = new System.Windows.Forms.TabPage();
         this.checkBox1 = new System.Windows.Forms.CheckBox();
+        this.checkBox2 = new System.Windows.Forms.CheckBox();
         this.radioButton2 = new System.Windows.Forms.RadioButton();
         this.radioButton1 = new System.Windows.Forms.RadioButton();
         this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -156,6 +157,7 @@ partial class MultipleControls
         // tabPage2
         // 
         this.tabPage2.Controls.Add(this.checkBox1);
+        this.tabPage2.Controls.Add(this.checkBox2);
         this.tabPage2.Location = new System.Drawing.Point(4, 24);
         this.tabPage2.Name = "tabPage2";
         this.tabPage2.Size = new System.Drawing.Size(225, 87);
@@ -173,6 +175,17 @@ partial class MultipleControls
         this.checkBox1.TabIndex = 0;
         this.checkBox1.Text = "checkBox1";
         this.checkBox1.UseVisualStyleBackColor = true;
+        // 
+        // checkBox2
+        // 
+        this.checkBox2.AutoSize = true;
+        this.checkBox2.Location = new System.Drawing.Point(8, 50);
+        this.checkBox2.Name = "checkBox2";
+        this.checkBox2.Size = new System.Drawing.Size(153, 19);
+        this.checkBox2.TabIndex = 0;
+        this.checkBox2.Text = "Three state CheckBox";
+        this.checkBox2.ThreeState = true;
+        this.checkBox2.UseVisualStyleBackColor = true;
         // 
         // radioButton2
         // 
@@ -325,6 +338,7 @@ partial class MultipleControls
     private System.Windows.Forms.ComboBox comboBox1;
     private System.Windows.Forms.TabPage tabPage2;
     private System.Windows.Forms.CheckBox checkBox1;
+    private System.Windows.Forms.CheckBox checkBox2;
     private System.Windows.Forms.RadioButton radioButton2;
     private System.Windows.Forms.RadioButton radioButton1;
     private System.Windows.Forms.GroupBox groupBox1;
