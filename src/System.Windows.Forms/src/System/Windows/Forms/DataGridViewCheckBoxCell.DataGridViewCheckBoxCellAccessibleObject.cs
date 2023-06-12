@@ -162,6 +162,11 @@ public partial class DataGridViewCheckBoxCell
                 switch (Owner.FormattedValue)
                 {
                     case CheckState checkState:
+                        if (checkState == CheckState.Indeterminate)
+                        {
+                            return UiaCore.ToggleState.Indeterminate;
+                        }
+
                         toggledState = checkState == CheckState.Checked;
                         break;
                     case bool boolState:

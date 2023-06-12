@@ -2332,6 +2332,11 @@
         <target state="translated">已选中 {0} 复选框</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellIndeterminateStateDescription">
+        <source>{0} check box indeterminate</source>
+        <target state="new">{0} check box indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
         <source>{0} check box unchecked</source>
         <target state="translated">未选中 {0} 复选框</target>

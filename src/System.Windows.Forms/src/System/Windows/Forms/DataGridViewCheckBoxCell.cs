@@ -1015,29 +1015,47 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void NotifyUiaClient()
     {
-        bool isCheckboxChecked = false;
+        CheckState checkState = CheckState.Indeterminate;
         switch (EditingCellFormattedValue)
         {
             case string stringValue:
-                isCheckboxChecked = stringValue == SR.DataGridViewCheckBoxCell_ClipboardChecked;
+                if (stringValue == SR.DataGridViewCheckBoxCell_ClipboardChecked)
+                {
+                    checkState = CheckState.Checked;
+                }
+                else
+                {
+                    checkState = stringValue == SR.DataGridViewCheckBoxCell_ClipboardUnchecked ? CheckState.Unchecked : CheckState.Indeterminate;
+                }
+
                 break;
             case CheckState checkStateValue:
-                isCheckboxChecked = checkStateValue == CheckState.Checked;
+                checkState = checkStateValue;
                 break;
             case bool boolValue:
-                isCheckboxChecked = boolValue;
+                checkState = boolValue ? CheckState.Checked : CheckState.Unchecked;
                 break;
         }
 
         if (IsParentAccessibilityObjectCreated)
         {
             var cellName = AccessibilityObject.Name ?? string.Empty;
+            string notificationText = string.Empty;
+            if (checkState == CheckState.Checked)
+            {
+                notificationText = string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName);
+            }
+            else
+            {
+                notificationText = checkState == CheckState.Unchecked
+                    ? string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName)
+                    : string.Format(SR.DataGridViewCheckBoxCellIndeterminateStateDescription, cellName);
+            }
+
             AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.Other,
                 Automation.AutomationNotificationProcessing.MostRecent,
-                isCheckboxChecked
-                    ? string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName)
-                    : string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName));
+                notificationText);
         }
     }
 
