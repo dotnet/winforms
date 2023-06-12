@@ -161,7 +161,7 @@ internal partial class Com2IPerPropertyBrowsingHandler
             // If the value is the object's current value, then ask GetDisplay string first. This is a perf
             // improvement because this way we don't populate the arrays when an object is selected, only
             // when the dropdown is actually opened.
-            if (Target.IsCurrentValue(v))
+            if (Target.IsLastKnownValue(v))
             {
                 using var propertyBrowsing = ComHelpers.TryGetComScope<IPerPropertyBrowsing>(Target.TargetObject, out HRESULT hr);
                 if (hr.Succeeded && TryGetDisplayString(propertyBrowsing, Target.DISPID, out string? displayString))

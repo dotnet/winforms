@@ -4,16 +4,12 @@
 
 using System.ComponentModel;
 using System.Globalization;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal class Com2IDispatchConverter : Com2ExtendedTypeConverter
+internal unsafe class Com2IDispatchConverter : Com2ExtendedTypeConverter
 {
-    /// <summary>
-    ///  What we return textually for null.
-    /// </summary>
-    protected static readonly string s_none = SR.toStringNone;
-
     private readonly bool _allowExpand;
 
     public Com2IDispatchConverter(bool allowExpand, TypeConverter? baseConverter)
@@ -43,10 +39,15 @@ internal class Com2IDispatchConverter : Com2ExtendedTypeConverter
 
         if (value is null)
         {
-            return s_none;
+            return SR.toStringNone;
         }
 
-        string text = ComNativeDescriptor.GetName(value);
+        string? text = null;
+        using var dispatch = ComHelpers.TryGetComScope<IDispatch>(value, out HRESULT hr);
+        if (hr.Succeeded)
+        {
+            text = ComNativeDescriptor.GetName(dispatch);
+        }
 
         if (string.IsNullOrEmpty(text))
         {

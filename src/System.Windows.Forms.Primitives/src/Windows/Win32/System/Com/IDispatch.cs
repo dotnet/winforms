@@ -12,21 +12,53 @@ internal unsafe partial struct IDispatch
     internal HRESULT TryGetProperty(
         uint dispId,
         VARIANT* pVar,
+        uint lcid = 0) => TryGetProperty((int)dispId, pVar, lcid);
+
+    /// <summary>
+    ///  Get the specified <paramref name="dispId"/> property.
+    /// </summary>
+    internal HRESULT TryGetProperty(
+        int dispId,
+        VARIANT* pVar,
         uint lcid = 0)
     {
         fixed (IDispatch* dispatch = &this)
         {
             Guid riid = Guid.Empty;
             DISPPARAMS disparams = default;
-            return dispatch->Invoke(
-                (int)dispId,
+            EXCEPINFO pExcepInfo = default;
+            HRESULT hr = dispatch->Invoke(
+                dispId,
                 &riid,
                 lcid,
                 DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                 &disparams,
                 pVar,
-                pExcepInfo: null,
+                &pExcepInfo,
                 puArgErr: null);
+
+            if (hr == HRESULT.DISP_E_EXCEPTION)
+            {
+                if (pExcepInfo.scode != 0)
+                {
+                    hr = (HRESULT)pExcepInfo.scode;
+                }
+
+#if DEBUG
+                Debug.WriteLine($"""
+                    Exception on get property.
+                      Description: {pExcepInfo.bstrDescription.ToStringAndFree()}
+                      Source: {pExcepInfo.bstrSource.ToStringAndFree()}
+                      Help file: {pExcepInfo.bstrHelpFile.ToStringAndFree()}
+                    """);
+#else
+                pExcepInfo.bstrDescription.Dispose();
+                pExcepInfo.bstrSource.Dispose();
+                pExcepInfo.bstrHelpFile.Dispose();
+#endif
+            }
+
+            return hr;
         }
     }
 
@@ -35,6 +67,13 @@ internal unsafe partial struct IDispatch
     /// </summary>
     internal VARIANT GetProperty(
         uint dispId,
+        uint lcid = 0) => GetProperty((int)dispId, lcid);
+
+    /// <summary>
+    ///  Get the specified <paramref name="dispId"/> property.
+    /// </summary>
+    internal VARIANT GetProperty(
+        int dispId,
         uint lcid = 0)
     {
         VARIANT variant = default;
@@ -42,12 +81,12 @@ internal unsafe partial struct IDispatch
         return variant;
     }
 
-    public HRESULT SetPropertyValue(int dispatchId, VARIANT value)
+    public HRESULT SetPropertyValue(int dispatchId, VARIANT value, out string? errorText)
     {
         Guid guid = Guid.Empty;
         EXCEPINFO pExcepInfo = default;
-        VARIANT* arg = &value;
         int putDispatchID = PInvoke.DISPID_PROPERTYPUT;
+        errorText = null;
 
         DISPPARAMS dispParams = new()
         {
@@ -55,7 +94,7 @@ internal unsafe partial struct IDispatch
             cNamedArgs = 1,
             // You HAVE to name the put argument or you'll get DISP_E_PARAMNOTFOUND
             rgdispidNamedArgs = &putDispatchID,
-            rgvarg = arg
+            rgvarg = &value
         };
 
         uint argumentError;
@@ -69,6 +108,29 @@ internal unsafe partial struct IDispatch
             null,
             &pExcepInfo,
             &argumentError);
+
+        if (hr == HRESULT.DISP_E_EXCEPTION)
+        {
+            if (pExcepInfo.scode != 0)
+            {
+                hr = (HRESULT)pExcepInfo.scode;
+            }
+
+            errorText = pExcepInfo.bstrDescription.ToString();
+
+#if DEBUG
+            Debug.WriteLine($"""
+                    Exception on set property.
+                      Description: {pExcepInfo.bstrDescription.ToStringAndFree()}
+                      Source: {pExcepInfo.bstrSource.ToStringAndFree()}
+                      Help file: {pExcepInfo.bstrHelpFile.ToStringAndFree()}
+                    """);
+#else
+                pExcepInfo.bstrDescription.Dispose();
+                pExcepInfo.bstrSource.Dispose();
+                pExcepInfo.bstrHelpFile.Dispose();
+#endif
+        }
 
         return hr;
     }

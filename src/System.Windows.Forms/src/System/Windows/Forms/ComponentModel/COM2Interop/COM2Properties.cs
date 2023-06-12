@@ -13,7 +13,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 internal sealed class Com2Properties
 {
 #if DEBUG
-    private static readonly TraceSwitch DbgCom2PropertiesSwitch
+    private static readonly TraceSwitch s_dbgCom2PropertiesSwitch
         = new("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
 #endif
 
@@ -46,9 +46,9 @@ internal sealed class Com2Properties
         ArgumentNullException.ThrowIfNull(properties);
 
 #if DEBUG
-        if (DbgCom2PropertiesSwitch.TraceVerbose)
+        if (s_dbgCom2PropertiesSwitch.TraceVerbose)
         {
-            Debug.WriteLine($"Creating Com2Properties for object {ComNativeDescriptor.GetName(comObject) ?? "(null)"}, class={ComNativeDescriptor.GetClassName(comObject) ?? "(null)"}");
+            Debug.WriteLine($"Creating Com2Properties for object {comObject.GetType().FullName ?? "(null)"}.");
         }
 #endif
 
@@ -119,7 +119,7 @@ internal sealed class Com2Properties
             if (CheckAndGetTarget(checkVersions: false, callDispose: true) is not { } target || _touchedTime == 0)
             {
 #if DEBUG
-                if (DbgCom2PropertiesSwitch.TraceVerbose)
+                if (s_dbgCom2PropertiesSwitch.TraceVerbose)
                 {
                     Debug.WriteLine("CheckValid called on dead object!");
                 }
@@ -155,7 +155,7 @@ internal sealed class Com2Properties
             }
 
 #if DEBUG
-            if (DbgCom2PropertiesSwitch.TraceVerbose)
+            if (s_dbgCom2PropertiesSwitch.TraceVerbose)
             {
                 Debug.WriteLine("Returning property array for object.");
             }
@@ -200,7 +200,7 @@ internal sealed class Com2Properties
     public void Dispose()
     {
 #if DEBUG
-        if (DbgCom2PropertiesSwitch.TraceVerbose)
+        if (s_dbgCom2PropertiesSwitch.TraceVerbose)
         {
             Debug.WriteLine("Disposing property manager.");
         }
@@ -292,7 +292,7 @@ internal sealed class Com2Properties
         {
             // Weak reference has died, so remove this from the hash table
 #if DEBUG
-            if (DbgCom2PropertiesSwitch.TraceVerbose)
+            if (s_dbgCom2PropertiesSwitch.TraceVerbose)
             {
                 Debug.WriteLine($"Disposing reference to object (weakRef {(_weakObjectReference is null ? "null" : "dead")})");
             }

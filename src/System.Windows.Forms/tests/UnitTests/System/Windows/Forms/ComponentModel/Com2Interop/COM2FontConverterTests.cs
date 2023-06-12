@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
@@ -38,10 +37,10 @@ public unsafe class COM2FontConverterTests
 
             using ComScope<IFont> iFont = new(null);
             PInvoke.OleCreateFontIndirect(&fontDesc, IID.Get<IFont>(), iFont).ThrowOnFailure();
-            object wrapper = Marshal.GetObjectForIUnknown((nint)(void*)iFont.Value);
 
             Com2FontConverter converter = new();
-            using Font font = (Font)converter.ConvertNativeToManaged(wrapper, s_stubDescriptor);
+            using Font? font = (Font?)converter.ConvertNativeToManaged((VARIANT)(IUnknown*)iFont, s_stubDescriptor);
+            Assert.NotNull(font);
 
             // Converter might have failed and returned DefaultFont.
             Assert.NotEqual(font, Control.DefaultFont);
@@ -50,8 +49,8 @@ public unsafe class COM2FontConverterTests
             Assert.Equal(12, font.Size);
 
             bool cancelSet = false;
-            object? native = converter.ConvertManagedToNative(font, s_stubDescriptor, ref cancelSet);
-            Assert.Null(native);
+            using VARIANT result = converter.ConvertManagedToNative(font, s_stubDescriptor, ref cancelSet);
+            Assert.True(result.IsEmpty);
             Assert.True(cancelSet);
         }
     }
@@ -70,27 +69,21 @@ public unsafe class COM2FontConverterTests
 
             using ComScope<IFont> iFont = new(null);
             PInvoke.OleCreateFontIndirect(&fontDesc, IID.Get<IFont>(), iFont).ThrowOnFailure();
-            object wrapper = Marshal.GetObjectForIUnknown((nint)(void*)iFont.Value);
 
             Com2FontConverter converter = new();
-            using Font font = (Font)converter.ConvertNativeToManaged(wrapper, s_stubDescriptor);
+            using Font? font = (Font?)converter.ConvertNativeToManaged((VARIANT)(IUnknown*)iFont, s_stubDescriptor);
+            Assert.NotNull(font);
+
             using Font newFont = new(font.Name, 20.0f);
 
             bool cancelSet = false;
-            object? native = (IFont.Interface)converter.ConvertManagedToNative(
+            using VARIANT result = converter.ConvertManagedToNative(
                 newFont,
-                new CustomGetNativeValueDescriptor(new VARIANT()
-                {
-                    vt = VARENUM.VT_UNKNOWN,
-                    data = new()
-                    {
-                        punkVal = (IUnknown*)iFont.Value
-                    }
-                }),
-                ref cancelSet)!;
+                new CustomGetNativeValueDescriptor((VARIANT)(IUnknown*)iFont.Value),
+                ref cancelSet);
 
             Assert.True(cancelSet);
-            Assert.Null(native);
+            Assert.True(result.IsEmpty);
             Assert.Equal("Arial", iFont.Value->Name.ToStringAndFree());
             Assert.Equal(20.0f, (float)iFont.Value->Size, precision: 0);
         }
@@ -138,7 +131,7 @@ public unsafe class COM2FontConverterTests
 
             public object? GetPropertyOwner(PropertyDescriptor? pd) => _propertyOwner;
 
-            private class DispatchStub : IDispatch.Interface
+            private class DispatchStub : IDispatch.Interface, IManagedWrapper<IDispatch>
             {
                 private readonly VARIANT _variant;
                 public DispatchStub(VARIANT variant) => _variant = variant;

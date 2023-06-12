@@ -96,7 +96,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
     ///  Given an object, this attempts to locate its type info. If it implements IProvideMultipleClassInfo
     ///  all available type infos will be returned, otherwise the primary one will be called.
     /// </summary>
-    public static unsafe ITypeInfo*[] FindTypeInfos(object comObject)
+    public static ITypeInfo*[] FindTypeInfos(object comObject)
     {
         using var classInfo = ComHelpers.TryGetComScope<IProvideMultipleClassInfo>(comObject, out HRESULT hr);
         if (hr.Succeeded)
@@ -140,34 +140,31 @@ internal static unsafe partial class Com2TypeInfoProcessor
     }
 
     /// <summary>
-    ///  Retrieve the dispid of the property that we are to use as the name
-    ///  member. In this case, the grid will put parens around the name.
+    ///  Retrieve the dispatch id of the property that we are to use as the name member.
     /// </summary>
-    public static unsafe int GetNameDispId(IDispatch.Interface obj)
+    public static int GetNameDispId(IDispatch* dispatch)
     {
         int dispid = PInvoke.DISPID_UNKNOWN;
         string? name = null;
 
-        bool succeeded = false;
-
         // First try to find one with a valid value.
-        ComNativeDescriptor.GetPropertyValue(obj, "__id", ref succeeded);
+        HRESULT hr = ComNativeDescriptor.GetPropertyValue(dispatch, "__id", out _);
 
-        if (succeeded)
+        if (hr.Succeeded)
         {
             name = "__id";
         }
         else
         {
-            ComNativeDescriptor.GetPropertyValue(obj, PInvoke.DISPID_Name, ref succeeded);
-            if (succeeded)
+            hr = ComNativeDescriptor.GetPropertyValue(dispatch, PInvoke.DISPID_Name, out _);
+            if (hr.Succeeded)
             {
                 dispid = PInvoke.DISPID_Name;
             }
             else
             {
-                ComNativeDescriptor.GetPropertyValue(obj, "Name", ref succeeded);
-                if (succeeded)
+                hr = ComNativeDescriptor.GetPropertyValue(dispatch, "Name", out _);
+                if (hr.Succeeded)
                 {
                     name = "Name";
                 }
@@ -182,7 +179,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
             fixed (char* n = name)
             {
-                HRESULT hr = obj.GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &pDispid);
+                hr = dispatch->GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &pDispid);
                 if (hr.Succeeded)
                 {
                     dispid = pDispid;
@@ -193,18 +190,14 @@ internal static unsafe partial class Com2TypeInfoProcessor
         return dispid;
     }
 
-    /// <summary>
-    ///  Gets the properties for a given Com2 Object.  The returned Com2Properties
-    ///  Object contains the properties and relevant data about them.
-    /// </summary>
     public static Com2Properties? GetProperties(object comObject)
     {
         DbgTypeInfoProcessorSwitch.TraceVerbose("Com2TypeInfoProcessor.GetProperties");
 
-        if (comObject is null || !Marshal.IsComObject(comObject))
+        if (!ComHelpers.SupportsInterface<IDispatch>(comObject))
         {
             DbgTypeInfoProcessorSwitch.TraceVerbose(
-                "Com2TypeInfoProcessor.GetProperties returning null: Object is not a COM object");
+                "Com2TypeInfoProcessor.GetProperties returning null: Object is not a supported COM object");
 
             return null;
         }
@@ -269,7 +262,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
             if (!wasProcessed)
             {
-                properties = InternalGetProperties(comObject, typeInfo, PInvoke.MEMBERID_NIL);
+                using var dispatch = ComHelpers.GetComScope<IDispatch>(comObject);
+                properties = InternalGetProperties(dispatch, typeInfo, PInvoke.MEMBERID_NIL);
 
                 // Only save the default property from the first type Info.
                 if (i == 0)
@@ -414,13 +408,13 @@ internal static unsafe partial class Com2TypeInfoProcessor
     }
 
     private static Com2PropertyDescriptor[] InternalGetProperties(
-        object comObject,
+        IDispatch* dispatch,
         ITypeInfo* typeInfo,
         int dispidToGet)
     {
         Dictionary<string, PropertyInfo> propertyInfo = new();
 
-        int nameDispID = GetNameDispId((IDispatch.Interface)comObject);
+        int nameDispID = GetNameDispId(dispatch);
         bool addAboutBox = false;
 
         // Properties can live as functions with get_ and put_ or as variables, so we do two steps here.
@@ -466,15 +460,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 // Finally, for each property, make sure we can get the value
                 // if we can't then we should mark it non-browsable.
 
-                try
-                {
-                    hr = ComNativeDescriptor.GetPropertyValue(comObject, info.DispId, out pvar);
-                }
-                catch (ExternalException ex)
-                {
-                    hr = (HRESULT)ex.ErrorCode;
-                    DbgTypeInfoProcessorSwitch.TraceVerbose($"IDispatch::Invoke(PROPGET, {info.Name}) threw an exception :{ex}");
-                }
+                hr = ComNativeDescriptor.GetPropertyValue(dispatch, info.DispId, out pvar);
 
                 if (!hr.Succeeded)
                 {
@@ -863,8 +849,9 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 enumTypeInfo->ReleaseTypeAttr(pTypeAttr);
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.Fail($"Failed to process type info enum. {ex.Message}");
         }
 
         return null;

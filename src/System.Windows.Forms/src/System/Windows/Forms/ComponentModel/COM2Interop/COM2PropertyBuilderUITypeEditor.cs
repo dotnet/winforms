@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
@@ -45,38 +44,34 @@ internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
         VARIANT_BOOL useValue = VARIANT_BOOL.VARIANT_FALSE;
         VARIANT variantValue = default;
 
-        try
+        object? target = _propDesc.TargetObject;
+        if (target is ICustomTypeDescriptor customTypeDescriptor)
         {
-            object? obj = _propDesc.TargetObject;
-            if (obj is ICustomTypeDescriptor customTypeDescriptor)
-            {
-                obj = customTypeDescriptor.GetPropertyOwner(_propDesc);
-            }
-
-            Debug.Assert(obj is IProvidePropertyBuilder.Interface, "object is not IProvidePropertyBuilder");
-            IProvidePropertyBuilder.Interface propBuilder = (IProvidePropertyBuilder.Interface)obj;
-
-            // Is it actually necessary to pass the value in?
-            Marshal.GetNativeVariantForObject(value, (nint)(void*)&variantValue);
-
-            using BSTR guidString = new(_guidString);
-            if (!propBuilder.ExecuteBuilder(
-                _propDesc.DISPID,
-                &guidString,
-                null,
-                parentHandle,
-                &variantValue,
-                &useValue).Succeeded)
-            {
-                useValue = VARIANT_BOOL.VARIANT_FALSE;
-            }
-        }
-        catch (ExternalException ex)
-        {
-            Debug.Fail($"Failed to show property frame: {ex.ErrorCode}");
+            target = customTypeDescriptor.GetPropertyOwner(_propDesc);
         }
 
-        return useValue == VARIANT_BOOL.VARIANT_TRUE && (_bldrType & CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJIDRECTLY) == 0
+        using var propertyBuilder = ComHelpers.TryGetComScope<IProvidePropertyBuilder>(target, out HRESULT hr);
+        Debug.Assert(hr.Succeeded, $"Failed to get IProvidePropertyBuilder: {hr}");
+
+        // Is it actually necessary to pass the value in?
+        variantValue = VARIANT.FromObject(value);
+
+        using BSTR guidString = new(_guidString);
+        hr = propertyBuilder.Value->ExecuteBuilder(
+            _propDesc.DISPID,
+            &guidString,
+            null,
+            parentHandle,
+            &variantValue,
+            &useValue);
+
+        if (hr.Failed)
+        {
+            useValue = VARIANT_BOOL.VARIANT_FALSE;
+            Debug.Fail($"Failed to show property frame: {hr}");
+        }
+
+        return useValue == VARIANT_BOOL.VARIANT_TRUE && !_bldrType.HasFlag(CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJIDRECTLY)
             ? variantValue.ToObject()
             : value;
     }

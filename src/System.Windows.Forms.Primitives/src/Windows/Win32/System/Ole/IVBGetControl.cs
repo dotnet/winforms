@@ -4,6 +4,6 @@
 
 namespace Windows.Win32.System.Ole;
 
-internal unsafe partial struct IDropSource : IVTable<IDropSource, IDropSource.Vtbl>
+internal unsafe partial struct IVBGetControl : IVTable<IVBGetControl, IVBGetControl.Vtbl>
 {
 }

@@ -24,10 +24,7 @@ public partial class Control
 
         public void CleanUpNativeData(IntPtr pObj) => Marshal.Release(pObj);
 
-        internal static ICustomMarshaler GetInstance(string cookie)
-        {
-            return s_instance ??= new ActiveXFontMarshaler();
-        }
+        internal static ICustomMarshaler GetInstance(string cookie) => s_instance ??= new ActiveXFontMarshaler();
 
         public int GetNativeDataSize() => -1; // not a value type, so use -1
 
@@ -61,15 +58,8 @@ public partial class Control
 
         public object MarshalNativeToManaged(nint pObj)
         {
-            IFont.Interface nativeFont = (IFont.Interface)Marshal.GetObjectForIUnknown(pObj);
-            try
-            {
-                return Font.FromHfont(nativeFont.hFont);
-            }
-            catch (Exception e) when (!e.IsCriticalException())
-            {
-                return DefaultFont;
-            }
+            using var nativeFont = ComScope<IFont>.TryQueryFrom((IUnknown*)pObj, out HRESULT hr);
+            return hr.Failed ? DefaultFont : Font.FromHfont(nativeFont.Value->hFont);
         }
     }
 }

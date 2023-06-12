@@ -45,9 +45,9 @@ internal unsafe partial struct IDispatch : IVTable<IDispatch, IDispatch.Vtbl>
             @this,
             o => o.Invoke(dispIdMember, riid, lcid, dwFlags, pDispParams, pVarResult, pExcepInfo, pArgErr));
 
-    [ComImport]
+    // Marking this as [ComImport] does not work with legacy COM interop. When asking for IDispatch explicitly it
+    // will not look for this interface if it is applied.
     [Guid("00020400-0000-0000-C000-000000000046")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public unsafe interface Interface
     {
         [PreserveSig]

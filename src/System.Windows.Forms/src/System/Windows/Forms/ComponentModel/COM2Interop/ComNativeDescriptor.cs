@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
 
@@ -25,7 +24,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// </remarks>
 internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvider
 {
-    private readonly AttributeCollection _staticAttributes = new(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
+    private static readonly Attribute[] s_staticAttributes = new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No };
 
     // Our collection of Object managers (Com2Properties) for native properties
     private readonly WeakHashtable _nativeProperties = new();
@@ -53,22 +52,28 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
 
     // Called via reflection for AutomationExtender stuff. Don't delete!
     public static object? GetNativePropertyValue(object component, string propertyName, ref bool succeeded)
-        => GetPropertyValue(component, propertyName, ref succeeded);
+    {
+        using var dispatch = ComHelpers.TryGetComScope<IDispatch>(component, out HRESULT hr);
+        object? value = null;
+        succeeded = hr.Succeeded && GetPropertyValue(dispatch, propertyName, out value).Succeeded;
+        return value;
+    }
 
     public override ICustomTypeDescriptor? GetTypeDescriptor(
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type objectType,
         object? instance)
-        => new ComTypeDescriptor(this, instance);
+        => instance is null ? new NullTypeDescriptor() : new ComTypeDescriptor(this, instance);
 
     internal static string GetClassName(object component)
     {
-        // Check IVsPerPropertyBrowsing for a name.
-        if (component is IVsPerPropertyBrowsing.Interface browsing)
+        // Check IVsPerPropertyBrowsing for a name first.
+        using var propertyBrowsing = ComHelpers.TryGetComScope<IVsPerPropertyBrowsing>(component, out HRESULT hr);
+        if (hr.Succeeded)
         {
-            using BSTR name = default;
-            if (browsing.GetClassName(&name).Succeeded && !name.IsNull)
+            using BSTR className = default;
+            if (propertyBrowsing.Value->GetClassName(&className).Succeeded && !className.IsNull)
             {
-                return name.ToString();
+                return className.ToString();
             }
         }
 
@@ -78,35 +83,29 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
             return string.Empty;
         }
 
-        using BSTR nameBstr = default;
+        using BSTR typeInfoName = default;
         typeInfo.Value->GetDocumentation(
             PInvoke.MEMBERID_NIL,
-            &nameBstr,
+            &typeInfoName,
             pBstrDocString: null,
             pdwHelpContext: null,
             pBstrHelpFile: null);
-        return nameBstr.AsSpan().TrimStart('_').ToString();
+        return typeInfoName.AsSpan().TrimStart('_').ToString();
     }
 
-    internal static TypeConverter GetConverter() => TypeDescriptor.GetConverter(typeof(IComponent));
+    internal static TypeConverter GetIComponentConverter() => TypeDescriptor.GetConverter(typeof(IComponent));
 
     internal static object? GetEditor(object component, Type baseEditorType)
         => TypeDescriptor.GetEditor(component.GetType(), baseEditorType);
 
-    internal static string GetName(object component)
+    internal static string GetName(IDispatch* dispatch)
     {
-        if (component is not IDispatch.Interface dispatch)
-        {
-            return string.Empty;
-        }
-
         int dispid = Com2TypeInfoProcessor.GetNameDispId(dispatch);
         if (dispid != PInvoke.DISPID_UNKNOWN)
         {
-            bool success = false;
-            object? value = GetPropertyValue(component, dispid, ref success);
+            HRESULT hr = GetPropertyValue(dispatch, dispid, out object? value);
 
-            if (success && value is not null)
+            if (hr.Succeeded && value is not null)
             {
                 return value.ToString() ?? string.Empty;
             }
@@ -115,100 +114,59 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         return string.Empty;
     }
 
-    internal static object? GetPropertyValue(object component, string propertyName, ref bool succeeded)
+    internal static HRESULT GetPropertyValue(IDispatch* dispatch, string propertyName, out object? value)
     {
-        if (component is not IDispatch.Interface dispatch)
-        {
-            return null;
-        }
+        value = null;
 
-        int dispid = PInvoke.DISPID_UNKNOWN;
-        Guid guid = Guid.Empty;
-        try
-        {
-            fixed (char* n = propertyName)
-            {
-                HRESULT result = dispatch.GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
-                return result.Failed || dispid == PInvoke.DISPID_UNKNOWN
-                    ? null
-                    : GetPropertyValue(component, dispid, ref succeeded);
-            }
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    internal static object? GetPropertyValue(object component, int dispid, ref bool succeeded)
-    {
-        if (component is not IDispatch.Interface dispatch)
-        {
-            return null;
-        }
-
-        if (GetPropertyValue(component, dispid, out object? pVarResult) == HRESULT.S_OK)
-        {
-            succeeded = true;
-            return pVarResult;
-        }
-        else
-        {
-            succeeded = false;
-            return null;
-        }
-    }
-
-    internal static HRESULT GetPropertyValue(object component, int dispid, out object? retval)
-    {
-        retval = null;
-
-        if (component is not IDispatch.Interface dispatch)
-        {
-            return HRESULT.E_NOINTERFACE;
-        }
-
-        try
+        fixed (char* n = propertyName)
         {
             Guid guid = Guid.Empty;
-            EXCEPINFO pExcepInfo = default;
-            DISPPARAMS dispParams = default;
-            VARIANT result;
+            int dispid = PInvoke.DISPID_UNKNOWN;
+
+            HRESULT hr = dispatch->GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
+            if (hr.Failed)
+            {
+                return hr;
+            }
+
+            return dispid == PInvoke.DISPID_UNKNOWN
+                ? HRESULT.DISP_E_MEMBERNOTFOUND
+                : GetPropertyValue(dispatch, dispid, out value);
+        }
+    }
+
+    internal static HRESULT GetPropertyValue(IDispatch* dispatch, int dispid, out object? value)
+    {
+        value = null;
+
+        using VARIANT result = default;
+        HRESULT hr = dispatch->TryGetProperty(dispid, &result, PInvoke.GetThreadLocale());
+
+        if (hr.Succeeded)
+        {
             try
             {
-                HRESULT hr = dispatch.Invoke(
-                    dispid,
-                    &guid,
-                    PInvoke.GetThreadLocale(),
-                    DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
-                    &dispParams,
-                    &result,
-                    &pExcepInfo,
-                    null);
-
-                retval = Marshal.GetObjectForNativeVariant((nint)(void*)&result);
-                return hr == HRESULT.DISP_E_EXCEPTION ? (HRESULT)pExcepInfo.scode : hr;
+                value = result.ToObject();
             }
-            catch (ExternalException ex)
+            catch (Exception ex)
             {
-                return (HRESULT)ex.ErrorCode;
+                Debug.Fail(ex.Message);
+                hr = (HRESULT)ex.HResult;
             }
         }
-        catch
-        {
-        }
 
-        return HRESULT.E_FAIL;
+        return hr;
     }
 
     /// <summary>
     ///  Checks if the given dispid matches the dispid that the Object would like to specify
     ///  as its identification property (Name, ID, etc).
     /// </summary>
-    internal static bool IsNameDispId(object obj, int dispid)
-        => obj is not null
-            && obj.GetType().IsCOMObject
-            && dispid == Com2TypeInfoProcessor.GetNameDispId((IDispatch.Interface)obj);
+    internal static bool IsNameDispId(object @object, int dispid)
+    {
+        using var dispatch = ComHelpers.TryGetComScope<IDispatch>(@object, out HRESULT hr);
+        return hr.Failed ? false : dispid == Com2TypeInfoProcessor.GetNameDispId(dispatch);
+    }
 
     /// <summary>
     ///  Checks all our property managers to see if any have become invalid.
@@ -225,37 +183,26 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         {
             _clearCount = 0;
 
-            List<object>? disposeList = null;
-            Com2Properties? entry;
+            List<object> disposeKeys = new();
 
             // First walk the list looking for items that need to be cleaned out.
-            foreach (DictionaryEntry de in _nativeProperties)
+            foreach (DictionaryEntry entry in _nativeProperties)
             {
-                entry = de.Value as Com2Properties;
-
-                if (entry is not null && entry.NeedsRefreshed)
+                if (entry.Value is Com2Properties { NeedsRefreshed: true })
                 {
-                    disposeList ??= new List<object>();
-                    disposeList.Add(de.Key);
+                    disposeKeys.Add(entry.Key);
                 }
             }
 
             // Now run through the ones that are dead and dispose them.
             // There's going to be a very small number of these.
-            if (disposeList is not null)
+            foreach (object key in disposeKeys)
             {
-                object oldKey;
-                for (int i = disposeList.Count - 1; i >= 0; i--)
+                if (_nativeProperties[key] is Com2Properties properties)
                 {
-                    oldKey = disposeList[i];
-                    entry = _nativeProperties[oldKey] as Com2Properties;
-
-                    if (entry is not null)
-                    {
-                        entry.Disposed -= OnPropsInfoDisposed;
-                        entry.Dispose();
-                        _nativeProperties.Remove(oldKey);
-                    }
+                    properties.Disposed -= OnPropsInfoDisposed;
+                    properties.Dispose();
+                    _nativeProperties.Remove(key);
                 }
             }
         }
@@ -287,13 +234,8 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         return properties;
     }
 
-    internal AttributeCollection GetAttributes(object? component)
+    internal static AttributeCollection GetAttributes(object component)
     {
-        if (component is null)
-        {
-            return _staticAttributes;
-        }
-
         List<Attribute> attributes = new();
 
         using var browsing = ComHelpers.TryGetComScope<IVSMDPerPropertyBrowsing>(component, out HRESULT hr);
@@ -307,7 +249,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
             attributes.Add(new EditorAttribute(typeof(Com2ComponentEditor), typeof(ComponentEditor)));
         }
 
-        return attributes.Count == 0 ? _staticAttributes : new(attributes.ToArray());
+        return attributes.Count == 0 ? new(s_staticAttributes) : new(attributes.ToArray());
     }
 
     internal PropertyDescriptor? GetDefaultProperty(object component)
@@ -315,10 +257,6 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         CheckClear();
         return GetPropertiesInfo(component)?.DefaultProperty;
     }
-
-    internal static EventDescriptorCollection GetEvents() => new EventDescriptorCollection(null);
-
-    internal static EventDescriptor? GetDefaultEvent() => null;
 
     internal PropertyDescriptorCollection GetProperties(object component)
     {
@@ -361,11 +299,11 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
             {
                 // Need to find it - the target object has probably been cleaned out of the Com2Properties object
                 // already, so we run through the hashtable looking for the value, so we know what key to remove.
-                foreach (DictionaryEntry de in _nativeProperties)
+                foreach (DictionaryEntry entry in _nativeProperties)
                 {
-                    if (de.Value == propsInfo)
+                    if (entry.Value == propsInfo)
                     {
-                        key = de.Key;
+                        key = entry.Key;
                         break;
                     }
                 }
@@ -385,7 +323,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     }
 
     /// <summary>
-    ///  Looks at at value's type and creates an editor based on that.  We use this to decide which editor to use
+    ///  Looks at at value's type and creates an editor based on that. We use this to decide which editor to use
     ///  for a generic variant.
     /// </summary>
     internal static void ResolveVariantTypeConverterAndTypeEditor(

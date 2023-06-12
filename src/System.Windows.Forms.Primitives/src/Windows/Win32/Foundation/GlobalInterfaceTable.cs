@@ -36,10 +36,11 @@ internal static unsafe class GlobalInterfaceTable
         where TInterface : unmanaged, IComIID
     {
         uint cookie;
-        s_globalInterfaceTable->RegisterInterfaceInGlobal(
+        HRESULT hr = s_globalInterfaceTable->RegisterInterfaceInGlobal(
             (IUnknown*)@interface,
             IID.Get<TInterface>(),
             &cookie);
+        hr.ThrowOnFailure();
         return cookie;
     }
 

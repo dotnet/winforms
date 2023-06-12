@@ -10,7 +10,7 @@ using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal class Com2ComponentEditor : WindowsFormsComponentEditor
+internal sealed class Com2ComponentEditor : WindowsFormsComponentEditor
 {
     public static unsafe bool NeedsComponentEditor(object comObject)
     {
@@ -52,11 +52,12 @@ internal class Com2ComponentEditor : WindowsFormsComponentEditor
         HWND handle = parent is null ? HWND.Null : (HWND)parent.Handle;
 
         // Try to get the page guid
-        if (obj is IPerPropertyBrowsing.Interface perPropertyBrowsing)
+        using var propertyBrowsing = ComHelpers.TryGetComScope<IPerPropertyBrowsing>(obj, out HRESULT hr);
+        if (hr.Succeeded)
         {
             // Check for a property page.
             Guid guid = Guid.Empty;
-            HRESULT hr = perPropertyBrowsing.MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
+            hr = propertyBrowsing.Value->MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
             if (hr.Succeeded & !guid.Equals(Guid.Empty))
             {
                 using var unknown = ComHelpers.GetComScope<IUnknown>(obj);
@@ -81,12 +82,13 @@ internal class Com2ComponentEditor : WindowsFormsComponentEditor
             }
         }
 
-        if (obj is ISpecifyPropertyPages.Interface ispp)
+        using var propertyPages = ComHelpers.TryGetComScope<ISpecifyPropertyPages>(obj, out hr);
+        if (hr.Succeeded)
         {
             try
             {
-                var uuids = default(CAUUID);
-                HRESULT hr = ispp.GetPages(&uuids);
+                CAUUID uuids = default;
+                hr = propertyPages.Value->GetPages(&uuids);
                 if (!hr.Succeeded || uuids.cElems == 0)
                 {
                     return false;
@@ -117,21 +119,17 @@ internal class Com2ComponentEditor : WindowsFormsComponentEditor
                 {
                     if (uuids.pElems is not null)
                     {
-                        Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                        Marshal.FreeCoTaskMem((nint)uuids.pElems);
                     }
                 }
             }
             catch (Exception ex)
             {
-                string errString = SR.ErrorPropertyPageFailed;
-
-                IUIService? uiSvc = (IUIService?)context?.GetService(typeof(IUIService));
-
-                if (uiSvc is null)
+                if (!context.TryGetService(out IUIService? uiService))
                 {
                     RTLAwareMessageBox.Show(
                         null,
-                        errString,
+                        SR.ErrorPropertyPageFailed,
                         SR.PropertyGridTitle,
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error,
@@ -140,11 +138,11 @@ internal class Com2ComponentEditor : WindowsFormsComponentEditor
                 }
                 else if (ex is not null)
                 {
-                    uiSvc.ShowError(ex, errString);
+                    uiService.ShowError(ex, SR.ErrorPropertyPageFailed);
                 }
                 else
                 {
-                    uiSvc.ShowError(errString);
+                    uiService.ShowError(SR.ErrorPropertyPageFailed);
                 }
             }
         }

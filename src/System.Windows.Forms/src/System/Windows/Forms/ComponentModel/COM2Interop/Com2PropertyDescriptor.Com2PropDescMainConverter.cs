@@ -37,7 +37,7 @@ internal partial class Com2PropertyDescriptor
             // If this is our current value, ask if it should be changed for display,
             // otherwise we'll ask for our enum drop downs, which we don't want to do.
             if (destinationType == typeof(string)
-                && _propertyDescriptor.IsCurrentValue(value)
+                && _propertyDescriptor.IsLastKnownValue(value)
                 && !(_propertyDescriptor.PropertyType?.IsEnum ?? false))
             {
                 return GetWrappedConverter(typeof(Com2EnumConverter)) is Com2EnumConverter baseConverter
