@@ -860,6 +860,8 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
             return;
         }
 
+        HRESULT setError = hr;
+
         using var iSupportErrorInfo = dispatch.TryQuery<ISupportErrorInfo>(out hr);
         if (hr.Succeeded)
         {
@@ -894,12 +896,12 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
                     null);
 
                 errorText = result == 0
-                    ? string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr)
+                    ? string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", setError)
                     : buffer[..(int)result].TrimEnd(CharacterConstants.NewLine).ToString();
             }
         }
 
-        throw new ExternalException(errorText, (int)hr);
+        throw new ExternalException(errorText, (int)setError);
     }
 
     public override bool ShouldSerializeValue(object component)
