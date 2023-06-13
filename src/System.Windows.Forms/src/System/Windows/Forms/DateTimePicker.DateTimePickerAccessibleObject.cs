@@ -63,12 +63,7 @@ public partial class DateTimePicker
                 }
 
                 string? baseText = (Owner as DateTimePicker)?.GetBaseText();
-                if (!string.IsNullOrEmpty(baseText))
-                {
-                    return baseText;
-                }
-
-                return "";
+                return !string.IsNullOrEmpty(baseText) ? baseText : string.Empty;
             }
         }
 

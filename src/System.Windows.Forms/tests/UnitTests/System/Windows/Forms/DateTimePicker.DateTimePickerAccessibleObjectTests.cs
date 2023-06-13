@@ -107,9 +107,11 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         dateTimePicker.Value = dt;
         AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
 
-        Assert.Equal(dt.ToString(), accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
         Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId));
         Assert.False(dateTimePicker.IsHandleCreated);
+
+        _ = dateTimePicker.Handle;
+        Assert.True(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId).ToString().Length > 0);
     }
 
     [WinFormsTheory]

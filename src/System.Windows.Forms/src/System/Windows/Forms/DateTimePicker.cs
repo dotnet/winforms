@@ -819,7 +819,7 @@ public partial class DateTimePicker : Control
 
     internal override bool SupportsUiaProviders => true;
 
-    internal string GetBaseText()
+    private string GetBaseText()
     {
         return base.Text;
     }
