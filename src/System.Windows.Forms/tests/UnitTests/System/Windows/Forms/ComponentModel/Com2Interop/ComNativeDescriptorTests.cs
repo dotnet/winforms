@@ -31,7 +31,7 @@ public class ComNativeDescriptorTests
         Assert.True(handleProperty.IsReadOnly);
         Assert.Equal("Misc", handleProperty.Category);
         Assert.False(handleProperty.IsLocalizable);
-        Assert.Equal("Interop+Oleaut32+IDispatch", handleProperty.ComponentType.FullName);
+        Assert.Equal("Windows.Win32.System.Com.IDispatch+Interface", handleProperty.ComponentType.FullName);
 
         // OLE_HANDLE
         Assert.Equal("System.Int32", handleProperty.PropertyType.FullName);
@@ -49,7 +49,7 @@ public class ComNativeDescriptorTests
         Assert.True(typeProperty.IsReadOnly);
         Assert.Equal("Misc", typeProperty.Category);
         Assert.False(typeProperty.IsLocalizable);
-        Assert.Equal("Interop+Oleaut32+IDispatch", typeProperty.ComponentType.FullName);
+        Assert.Equal("Windows.Win32.System.Com.IDispatch+Interface", typeProperty.ComponentType.FullName);
 
         Assert.Equal("System.Int16", typeProperty.PropertyType.FullName);
         Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)(short)typeProperty.GetValue(iPictureDisp));
@@ -90,7 +90,7 @@ public class ComNativeDescriptorTests
         Assert.False(urlProperty.IsReadOnly);
         Assert.Equal("Misc", urlProperty.Category);
         Assert.False(urlProperty.IsLocalizable);
-        Assert.Equal("Interop+Oleaut32+IDispatch", urlProperty.ComponentType.FullName);
+        Assert.Equal("Windows.Win32.System.Com.IDispatch+Interface", urlProperty.ComponentType.FullName);
 
         Assert.Equal("System.String", urlProperty.PropertyType.FullName);
 

@@ -22,7 +22,7 @@ internal partial class Com2PropertyDescriptor
             Debug.Assert(properties is not null);
             if (Properties is not null)
             {
-                Properties.AlwaysValid = Properties.CheckValidity();
+                Properties.AlwaysValid = Properties.CheckAndGetTarget(checkVersions: false, callDispose: true) is not null;
             }
         }
 

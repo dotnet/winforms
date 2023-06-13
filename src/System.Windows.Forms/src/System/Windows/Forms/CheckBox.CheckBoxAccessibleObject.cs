@@ -33,8 +33,13 @@ public partial class CheckBox
             };
 
         internal override UiaCore.ToggleState ToggleState
-            => this.TryGetOwnerAs(out CheckBox? owner) && owner.Checked
-                ? UiaCore.ToggleState.On
+            => this.TryGetOwnerAs(out CheckBox? owner)
+                ? owner.CheckState switch
+                {
+                    CheckState.Checked => UiaCore.ToggleState.On,
+                    CheckState.Unchecked => UiaCore.ToggleState.Off,
+                    _ => UiaCore.ToggleState.Indeterminate,
+                }
                 : UiaCore.ToggleState.Off;
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
@@ -79,7 +84,19 @@ public partial class CheckBox
         {
             if (this.TryGetOwnerAs(out CheckBox? owner))
             {
-                owner.Checked = !owner.Checked;
+                if (owner.ThreeState)
+                {
+                    owner.CheckState = owner.CheckState switch
+                    {
+                        CheckState.Unchecked => CheckState.Checked,
+                        CheckState.Checked => CheckState.Indeterminate,
+                        _ => CheckState.Unchecked
+                    };
+                }
+                else
+                {
+                    owner.Checked = !owner.Checked;
+                }
             }
         }
     }

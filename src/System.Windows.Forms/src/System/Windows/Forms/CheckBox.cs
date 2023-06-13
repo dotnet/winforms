@@ -36,6 +36,10 @@ public partial class CheckBox : ButtonBase
     internal int _flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
     internal int _flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
+    // A flag indicating if UIA StateChanged event needs to be triggered,
+    // to avoid double-triggering when Checked value changes.
+    private bool _notifyAccessibilityStateChangedNeeded;
+
     /// <summary>
     ///  Initializes a new instance of the <see cref="CheckBox"/> class.
     /// </summary>
@@ -214,12 +218,16 @@ public partial class CheckBox : ButtonBase
                     PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(int)_checkState);
                 }
 
-                if (oldChecked != Checked)
+                bool checkedChanged = oldChecked != Checked;
+
+                if (checkedChanged)
                 {
                     OnCheckedChanged(EventArgs.Empty);
                 }
 
+                _notifyAccessibilityStateChangedNeeded = !checkedChanged;
                 OnCheckStateChanged(EventArgs.Empty);
+                _notifyAccessibilityStateChangedNeeded = false;
             }
         }
     }
@@ -439,6 +447,31 @@ public partial class CheckBox : ButtonBase
     protected virtual void OnCheckedChanged(EventArgs e)
     {
         // accessibility stuff
+        NotifyAccessibilityStateChanged();
+
+        ((EventHandler?)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="CheckStateChanged"/> event.
+    /// </summary>
+    protected virtual void OnCheckStateChanged(EventArgs e)
+    {
+        if (OwnerDraw)
+        {
+            Refresh();
+        }
+
+        if (_notifyAccessibilityStateChangedNeeded)
+        {
+            NotifyAccessibilityStateChanged();
+        }
+
+        ((EventHandler?)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
+    }
+
+    private void NotifyAccessibilityStateChanged()
+    {
         if (FlatStyle == FlatStyle.System)
         {
             AccessibilityNotifyClients(AccessibleEvents.SystemCaptureStart, -1);
@@ -459,21 +492,6 @@ public partial class CheckBox : ButtonBase
         {
             AccessibilityNotifyClients(AccessibleEvents.SystemCaptureEnd, -1);
         }
-
-        ((EventHandler?)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
-    }
-
-    /// <summary>
-    ///  Raises the <see cref="CheckStateChanged"/> event.
-    /// </summary>
-    protected virtual void OnCheckStateChanged(EventArgs e)
-    {
-        if (OwnerDraw)
-        {
-            Refresh();
-        }
-
-        ((EventHandler?)Events[EVENT_CHECKSTATECHANGED])?.Invoke(this, e);
     }
 
     /// <summary>

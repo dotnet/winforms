@@ -7,19 +7,21 @@ using Microsoft.VisualStudio.Shell;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHandler
+/// <summary>
+///  Browsing handler for <see cref="ICategorizeProperties"/>.
+/// </summary>
+internal sealed class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHandler<ICategorizeProperties>
 {
-    public override Type Interface => typeof(ICategorizeProperties.Interface);
-
-    private static unsafe string? GetCategoryFromObject(object? obj, int dispid)
+    private static unsafe string? GetCategoryFromObject(object? @object, int dispid)
     {
-        if (obj is not ICategorizeProperties.Interface categorizeProperties)
+        using var categorizeProperties = TryGetComScope(@object, out HRESULT hr);
+        if (hr.Failed)
         {
             return null;
         }
 
         PROPCAT categoryId = 0;
-        if (categorizeProperties.MapPropertyToCategory(dispid, &categoryId).Failed)
+        if (categorizeProperties.Value->MapPropertyToCategory(dispid, &categoryId).Failed)
         {
             return null;
         }
@@ -46,31 +48,29 @@ internal class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHandler
         }
 
         using BSTR categoryName = default;
-        return categorizeProperties.GetCategoryName(categoryId, (int)PInvoke.GetThreadLocale(), &categoryName).Succeeded
+        return categorizeProperties.Value->GetCategoryName(categoryId, (int)PInvoke.GetThreadLocale(), &categoryName).Succeeded
             ? categoryName.ToString()
             : null;
     }
 
-    public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
+    public override void RegisterEvents(Com2PropertyDescriptor[]? properties)
     {
-        if (propDesc is null)
+        if (properties is null)
         {
             return;
         }
 
-        for (int i = 0; i < propDesc.Length; i++)
+        for (int i = 0; i < properties.Length; i++)
         {
-            propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetAttributes);
+            properties[i].QueryGetBaseAttributes += OnGetAttributes;
         }
     }
 
-    private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
+    private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent e)
     {
-        string? category = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
-
-        if (category?.Length > 0)
+        if (GetCategoryFromObject(sender.TargetObject, sender.DISPID) is string category && category.Length > 0)
         {
-            attrEvent.Add(new CategoryAttribute(category));
+            e.Add(new CategoryAttribute(category));
         }
     }
 }

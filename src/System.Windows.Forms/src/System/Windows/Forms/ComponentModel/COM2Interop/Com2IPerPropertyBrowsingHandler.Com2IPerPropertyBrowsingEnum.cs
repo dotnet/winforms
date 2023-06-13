@@ -11,7 +11,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 internal partial class Com2IPerPropertyBrowsingHandler
 {
     // This exists for perf reasons. We delay doing this until we are actually asked for the array of values.
-    private class Com2IPerPropertyBrowsingEnum : Com2Enum
+    private unsafe class Com2IPerPropertyBrowsingEnum : Com2Enum
     {
         private readonly string?[] _names;
         private readonly uint[] _cookies;
@@ -100,7 +100,7 @@ internal partial class Com2IPerPropertyBrowsingHandler
                     }
 
                     using VARIANT variant = default;
-                    HRESULT hr = ppb.GetPredefinedValue((int)Target.DISPID, cookie, &variant);
+                    HRESULT hr = ppb.GetPredefinedValue(Target.DISPID, cookie, &variant);
                     if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
                     {
                         valueItems[i] = variant.ToObject()!;
@@ -161,11 +161,13 @@ internal partial class Com2IPerPropertyBrowsingHandler
             // If the value is the object's current value, then ask GetDisplay string first. This is a perf
             // improvement because this way we don't populate the arrays when an object is selected, only
             // when the dropdown is actually opened.
-            if (Target.IsCurrentValue(v)
-                && Target.TargetObject is IPerPropertyBrowsing.Interface propertyBrowsing
-                && TryGetDisplayString(propertyBrowsing, Target.DISPID, out string? displayString))
+            if (Target.IsCurrentValue(v))
             {
-                return displayString;
+                using var propertyBrowsing = ComHelpers.TryGetComScope<IPerPropertyBrowsing>(Target.TargetObject, out HRESULT hr);
+                if (hr.Succeeded && TryGetDisplayString(propertyBrowsing, Target.DISPID, out string? displayString))
+                {
+                    return displayString;
+                }
             }
 
             EnsureArrays();

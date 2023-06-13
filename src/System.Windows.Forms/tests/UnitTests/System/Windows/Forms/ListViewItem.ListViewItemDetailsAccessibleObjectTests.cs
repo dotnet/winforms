@@ -127,4 +127,32 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         Assert.Empty(item.AccessibilityObject.TestAccessor().Dynamic._listViewSubItemAccessibleObjects);
         Assert.False(control.IsHandleCreated);
     }
+
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ListViewItemDetailsAccessibleObject_HasImage_ReturnsExpected(bool addImages)
+    {
+        using ListView listView = new()
+        {
+            View = View.Details
+        };
+
+        listView.Columns.Add(new ColumnHeader());
+
+        using ImageList imageList = new();
+        imageList.Images.Add(Form.DefaultIcon);
+
+        if (addImages)
+        {
+            listView.SmallImageList = imageList;
+        }
+
+        ListViewItem listViewItem = new ListViewItem("1", 0);
+        listView.Items.Add(listViewItem);
+
+        var accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
+        Assert.Equal(addImages, accessibleObject.HasImage);
+        Assert.False(listView.IsHandleCreated);
+    }
 }

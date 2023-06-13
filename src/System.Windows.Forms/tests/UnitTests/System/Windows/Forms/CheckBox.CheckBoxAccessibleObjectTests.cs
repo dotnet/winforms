@@ -93,11 +93,15 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (int)ToggleState.On)]
-    [InlineData(false, (int)ToggleState.Off)]
-    public void CheckBoxAccessibleObject_ToggleState_ReturnsExpected(bool createControl, int toggleState)
+    [InlineData(true, CheckState.Checked, (int)ToggleState.On)]
+    [InlineData(true, CheckState.Unchecked, (int)ToggleState.Off)]
+    [InlineData(true, CheckState.Indeterminate, (int)ToggleState.Indeterminate)]
+    [InlineData(false, CheckState.Checked, (int)ToggleState.On)]
+    [InlineData(false, CheckState.Unchecked, (int)ToggleState.Off)]
+    [InlineData(false, CheckState.Indeterminate, (int)ToggleState.Indeterminate)]
+    public void CheckBoxAccessibleObject_ToggleState_ReturnsExpected(bool createControl, CheckState checkState, int toggleState)
     {
-        using var checkBox = new CheckBox();
+        using var checkBox = new CheckBox() { CheckState = checkState };
 
         if (createControl)
         {
@@ -105,7 +109,46 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         }
 
         var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
-        Assert.Equal(ToggleState.Off, checkBoxAccessibleObject.ToggleState);
+        Assert.Equal((ToggleState)toggleState, checkBoxAccessibleObject.ToggleState);
+
+        Assert.Equal(createControl, checkBox.IsHandleCreated);
+    }
+
+    public static IEnumerable<object[]> CheckBoxAccessibleObject_DoDefaultAction_Success_Data()
+    {
+        yield return new object[] { true, false, CheckState.Checked, (int)ToggleState.Off };
+        yield return new object[] { true, false, CheckState.Indeterminate, (int)ToggleState.Off };
+        yield return new object[] { true, false, CheckState.Unchecked, (int)ToggleState.On };
+
+        yield return new object[] { true, true, CheckState.Checked, (int)ToggleState.Indeterminate };
+        yield return new object[] { true, true, CheckState.Indeterminate, (int)ToggleState.Off };
+        yield return new object[] { true, true, CheckState.Unchecked, (int)ToggleState.On };
+
+        yield return new object[] { false, true, CheckState.Checked, (int)ToggleState.On };
+        yield return new object[] { false, true, CheckState.Indeterminate, (int)ToggleState.Indeterminate };
+        yield return new object[] { false, true, CheckState.Unchecked, (int)ToggleState.Off };
+
+        yield return new object[] { false, false, CheckState.Checked, (int)ToggleState.On };
+        yield return new object[] { false, false, CheckState.Indeterminate, (int)ToggleState.Indeterminate };
+        yield return new object[] { false, false, CheckState.Unchecked, (int)ToggleState.Off };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(CheckBoxAccessibleObject_DoDefaultAction_Success_Data))]
+    public void CheckBoxAccessibleObject_DoDefaultAction_Success(bool createControl, bool threeState, CheckState checkState, int toggleState)
+    {
+        using var checkBox = new CheckBox()
+        {
+            ThreeState = threeState,
+            CheckState = checkState
+        };
+
+        if (createControl)
+        {
+            checkBox.CreateControl();
+        }
+
+        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
         checkBoxAccessibleObject.DoDefaultAction();
 
         Assert.Equal((ToggleState)toggleState, checkBoxAccessibleObject.ToggleState);
@@ -192,6 +235,27 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         checkBoxAccessibleObject.Toggle();
 
         Assert.False(checkBox.Checked);
+        Assert.False(checkBox.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void CheckBoxAccessibleObject_Toggle_Invoke_ThreeState_Success()
+    {
+        using var checkBox = new CheckBox() { ThreeState = true };
+        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        Assert.Equal(CheckState.Unchecked, checkBox.CheckState);
+
+        checkBoxAccessibleObject.Toggle();
+        Assert.Equal(CheckState.Checked, checkBox.CheckState);
+
+        // toggle again
+        checkBoxAccessibleObject.Toggle();
+        Assert.Equal(CheckState.Indeterminate, checkBox.CheckState);
+
+        // toggle again
+        checkBoxAccessibleObject.Toggle();
+        Assert.Equal(CheckState.Unchecked, checkBox.CheckState);
+
         Assert.False(checkBox.IsHandleCreated);
     }
 

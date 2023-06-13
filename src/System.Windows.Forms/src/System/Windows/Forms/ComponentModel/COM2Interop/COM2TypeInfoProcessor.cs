@@ -63,25 +63,28 @@ internal static unsafe partial class Com2TypeInfoProcessor
     {
         ITypeInfo* typeInfo = null;
 
-        // This is kind of odd.  What's going on here is that if we want the CoClass (e.g. for
-        // the interface name), we need to look for IProvideClassInfo first, then look for the
-        // typeinfo from the IDispatch. In the case of many Oleaut32 operations, the CoClass
-        // doesn't have the interface members on it, although in the shell it usually does, so
+        // What's going on here is that if we want the CoClass (e.g. for the interface name), we need to look for
+        // IProvideClassInfo first, then look for the typeinfo from the IDispatch. In the case of many Oleaut32
+        // operations, the CoClass doesn't have the interface members on it, although in the shell it usually does, so
         // we need to re-order the lookup if we *actually* want the CoClass if it's available.
         for (int i = 0; typeInfo is null && i < 2; i++)
         {
             if (preferIProvideClassInfo == (i == 0))
             {
-                if (comObject is IProvideClassInfo.Interface pProvideClassInfo)
+                using var provideClassInfo = ComHelpers.TryGetComScope<IProvideClassInfo>(comObject, out HRESULT hr);
+                if (hr.Succeeded)
                 {
-                    pProvideClassInfo.GetClassInfo(&typeInfo);
+                    // If this fails typeInfo will be null and we'll loop again if we haven't already.
+                    provideClassInfo.Value->GetClassInfo(&typeInfo);
                 }
             }
             else
             {
-                if (comObject is IDispatch.Interface iDispatch)
+                using var dispatch = ComHelpers.TryGetComScope<IDispatch>(comObject, out HRESULT hr);
+                if (hr.Succeeded)
                 {
-                    iDispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), &typeInfo);
+                    // If this fails typeInfo will be null and we'll loop again if we haven't already.
+                    dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), &typeInfo);
                 }
             }
         }
@@ -90,44 +93,49 @@ internal static unsafe partial class Com2TypeInfoProcessor
     }
 
     /// <summary>
-    ///  Given an Object, this attempts to locate its type info. If it implements IProvideMultipleClassInfo
+    ///  Given an object, this attempts to locate its type info. If it implements IProvideMultipleClassInfo
     ///  all available type infos will be returned, otherwise the primary one will be called.
     /// </summary>
-    public static unsafe ITypeInfo*[] FindTypeInfos(object comObject, bool preferIProvideClassInfo)
+    public static unsafe ITypeInfo*[] FindTypeInfos(object comObject)
     {
-        if (comObject is IProvideMultipleClassInfo.Interface classInfo)
+        using var classInfo = ComHelpers.TryGetComScope<IProvideMultipleClassInfo>(comObject, out HRESULT hr);
+        if (hr.Succeeded)
         {
             uint count = 0;
-            if (classInfo.GetMultiTypeInfoCount(&count).Succeeded && count > 0)
+            if (classInfo.Value->GetMultiTypeInfoCount(&count).Succeeded && count > 0)
             {
-                var typeInfos = new ITypeInfo*[count];
+                List<nint> handles = new((int)count);
                 for (uint i = 0; i < count; i++)
                 {
                     ITypeInfo* typeInfo;
-                    if (classInfo.GetInfoOfIndex(
+                    if (classInfo.Value->GetInfoOfIndex(
                         i,
                         MULTICLASSINFO_FLAGS.MULTICLASSINFO_GETTYPEINFO,
                         &typeInfo,
                         pdwTIFlags: null,
                         pcdispidReserved: null,
                         piidPrimary: null,
-                        piidSource: null).Failed)
+                        piidSource: null).Succeeded
+                        && typeInfo is not null)
                     {
-                        continue;
-                    }
-
-                    Debug.Assert(typeInfo is not null);
-                    if (typeInfo is not null)
-                    {
-                        typeInfos[i] = typeInfo;
+                        handles.Add((nint)typeInfo);
                     }
                 }
 
-                return typeInfos;
+                if (handles.Count > 0)
+                {
+                    ITypeInfo*[] typeInfos = new ITypeInfo*[handles.Count];
+                    for (int i = 0; i < handles.Count; i++)
+                    {
+                        typeInfos[i] = (ITypeInfo*)handles[i];
+                    }
+
+                    return typeInfos;
+                }
             }
         }
 
-        ITypeInfo* temp = FindTypeInfo(comObject, preferIProvideClassInfo);
+        ITypeInfo* temp = FindTypeInfo(comObject, preferIProvideClassInfo: false);
         return temp is not null ? (new ITypeInfo*[] { temp }) : new ITypeInfo*[0];
     }
 
@@ -201,7 +209,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
             return null;
         }
 
-        ITypeInfo*[] typeInfos = FindTypeInfos(comObject, preferIProvideClassInfo: false);
+        ITypeInfo*[] typeInfos = FindTypeInfos(comObject);
 
         if (typeInfos.Length == 0)
         {

@@ -97,56 +97,59 @@ public partial class ErrorProvider
         /// <summary>
         ///  Make sure the error window is created, and the tooltip window is created.
         /// </summary>
-        private bool EnsureCreated()
+        private unsafe bool EnsureCreated()
         {
-            if (Handle == IntPtr.Zero)
+            if (Handle != 0)
             {
-                if (!_parent.IsHandleCreated)
-                {
-                    return false;
-                }
-
-                CreateParams cparams = new CreateParams
-                {
-                    Caption = string.Empty,
-                    Style = (int)(WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD),
-                    ClassStyle = (int)WNDCLASS_STYLES.CS_DBLCLKS,
-                    X = 0,
-                    Y = 0,
-                    Width = 0,
-                    Height = 0,
-                    Parent = _parent.Handle
-                };
-
-                CreateHandle(cparams);
-
-                var icc = new ComCtl32.INITCOMMONCONTROLSEX
-                {
-                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
-                };
-                ComCtl32.InitCommonControlsEx(ref icc);
-
-                cparams = new CreateParams
-                {
-                    Parent = Handle,
-                    ClassName = PInvoke.TOOLTIPS_CLASS,
-                    Style = (int)PInvoke.TTS_ALWAYSTIP
-                };
-                _tipWindow = new NativeWindow();
-                _tipWindow.CreateHandle(cparams);
-
-                PInvoke.SendMessage(
-                    _tipWindow,
-                    (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH,
-                    (WPARAM)0,
-                    (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
-                PInvoke.SetWindowPos(
-                    _tipWindow,
-                    HWND.HWND_TOP,
-                    0, 0, 0, 0,
-                    SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
-                PInvoke.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETDELAYTIME, (WPARAM)(uint)PInvoke.TTDT_INITIAL);
+                return true;
             }
+
+            if (!_parent.IsHandleCreated)
+            {
+                return false;
+            }
+
+            CreateParams cparams = new()
+            {
+                Caption = string.Empty,
+                Style = (int)(WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD),
+                ClassStyle = (int)WNDCLASS_STYLES.CS_DBLCLKS,
+                X = 0,
+                Y = 0,
+                Width = 0,
+                Height = 0,
+                Parent = _parent.Handle
+            };
+
+            CreateHandle(cparams);
+
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
+            {
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
+            });
+
+            cparams = new()
+            {
+                Parent = Handle,
+                ClassName = PInvoke.TOOLTIPS_CLASS,
+                Style = (int)PInvoke.TTS_ALWAYSTIP
+            };
+
+            _tipWindow = new NativeWindow();
+            _tipWindow.CreateHandle(cparams);
+
+            PInvoke.SendMessage(
+                _tipWindow,
+                (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH,
+                (WPARAM)0,
+                (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
+            PInvoke.SetWindowPos(
+                _tipWindow,
+                HWND.HWND_TOP,
+                0, 0, 0, 0,
+                SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+            PInvoke.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETDELAYTIME, (WPARAM)PInvoke.TTDT_INITIAL);
 
             return true;
         }

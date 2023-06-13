@@ -273,14 +273,9 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     /// </summary>
     public bool CanShow { get; }
 
-    /// <summary>
-    ///  Retrieves the type of the component this PropertyDescriptor is bound to.
-    /// </summary>
-    public override Type ComponentType => typeof(Oleaut32.IDispatch);
+    // Historically this was always an internal interface
+    public sealed override Type ComponentType => typeof(IDispatch.Interface);
 
-    /// <summary>
-    ///  Retrieves the type converter for this property.
-    /// </summary>
     public override TypeConverter Converter
     {
         [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
@@ -323,9 +318,6 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     /// </summary>
     public int DISPID { get; }
 
-    /// <summary>
-    ///  Gets the friendly name that should be displayed to the user in a window like the Property Browser.
-    /// </summary>
     public override string DisplayName
     {
         get
@@ -378,7 +370,6 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     // what the repercussions would be of not creating the descriptor so we'll continue to create them this way
     // and mark as nullable here and try to guard where we can.
 
-    /// <inheritdoc/>
     public override Type? PropertyType
          // Replace the type with the mapped converter type
          => _valueConverter is not null ? _valueConverter.ManagedType : _propertyType;
@@ -457,14 +448,6 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         remove => Events.RemoveHandler(EventShouldSerializeValue, value);
     }
 
-    /// <summary>
-    ///  Indicates whether reset will change the value of the component.  If there
-    ///  is a DefaultValueAttribute, then this will return true if getValue returns
-    ///  something different than the default value.  If there is a reset method and
-    ///  a shouldPersist method, this will return what shouldPersist returns.
-    ///  If there is just a reset method, this always returns true.  If none of these
-    ///  cases apply, this returns false.
-    /// </summary>
     public override bool CanResetValue(object component)
     {
         if (component is ICustomTypeDescriptor descriptor)
@@ -796,7 +779,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     /// </summary>
     public bool IsCurrentValue(object? value) => value == _lastValue || (_lastValue is not null && _lastValue.Equals(value));
 
-    protected void OnCanResetValue(GetBoolValueEvent gvbe) => RaiseGetBoolValueEvent(EventCanResetValue, gvbe);
+    protected void OnCanResetValue(GetBoolValueEvent e) => RaiseGetBoolValueEvent(EventCanResetValue, e);
 
     protected void OnGetBaseAttributes(GetAttributesEvent e)
     {
@@ -804,9 +787,9 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         ((GetAttributesEventHandler?)Events[EventGetBaseAttributes])?.Invoke(this, e);
     }
 
-    protected void OnGetDisplayName(GetNameItemEvent gnie) => RaiseGetNameItemEvent(EventGetDisplayName, gnie);
+    protected void OnGetDisplayName(GetNameItemEvent e) => RaiseGetNameItemEvent(EventGetDisplayName, e);
 
-    protected void OnGetDisplayValue(GetNameItemEvent gnie) => RaiseGetNameItemEvent(EventGetDisplayValue, gnie);
+    protected void OnGetDisplayValue(GetNameItemEvent e) => RaiseGetNameItemEvent(EventGetDisplayValue, e);
 
     protected void OnGetDynamicAttributes(GetAttributesEvent e)
     {
@@ -814,7 +797,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         ((GetAttributesEventHandler?)Events[EventGetDynamicAttributes])?.Invoke(this, e);
     }
 
-    protected void OnGetIsReadOnly(GetBoolValueEvent gvbe) => RaiseGetBoolValueEvent(EventGetIsReadOnly, gvbe);
+    protected void OnGetIsReadOnly(GetBoolValueEvent e) => RaiseGetBoolValueEvent(EventGetIsReadOnly, e);
 
     protected void OnGetTypeConverterAndTypeEditor(GetTypeConverterAndTypeEditorEvent e)
     {
@@ -824,9 +807,9 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
 
     protected void OnResetValue(EventArgs e) => RaiseCom2Event(EventResetValue, e);
 
-    protected void OnShouldSerializeValue(GetBoolValueEvent gvbe) => RaiseGetBoolValueEvent(EventShouldSerializeValue, gvbe);
+    protected void OnShouldSerializeValue(GetBoolValueEvent e) => RaiseGetBoolValueEvent(EventShouldSerializeValue, e);
 
-    protected void OnShouldRefresh(GetRefreshStateEvent gvbe) => RaiseGetBoolValueEvent(EventShouldRefresh, gvbe);
+    protected void OnShouldRefresh(GetRefreshStateEvent e) => RaiseGetBoolValueEvent(EventShouldRefresh, e);
 
     private void RaiseGetBoolValueEvent(object key, GetBoolValueEvent e)
     {
@@ -911,7 +894,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         {
             cArgs = 1,
             cNamedArgs = 1,
-            rgdispidNamedArgs = (int*)&namedArg
+            rgdispidNamedArgs = &namedArg
         };
 
         using VARIANT variant = default;
