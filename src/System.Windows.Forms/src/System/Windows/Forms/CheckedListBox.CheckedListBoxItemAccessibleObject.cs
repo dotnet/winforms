@@ -120,8 +120,6 @@ public partial class CheckedListBox
                     case CheckState.Indeterminate:
                         toggleState = UiaCore.ToggleState.Indeterminate;
                         break;
-                    case CheckState.Unchecked:
-                        break;
                 }
 
                 return toggleState;
