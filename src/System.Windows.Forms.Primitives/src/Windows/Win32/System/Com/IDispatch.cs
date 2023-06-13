@@ -44,22 +44,27 @@ internal unsafe partial struct IDispatch
                     hr = (HRESULT)pExcepInfo.scode;
                 }
 
-#if DEBUG
-                Debug.WriteLine($"""
-                    Exception on get property.
-                      Description: {pExcepInfo.bstrDescription.ToStringAndFree()}
-                      Source: {pExcepInfo.bstrSource.ToStringAndFree()}
-                      Help file: {pExcepInfo.bstrHelpFile.ToStringAndFree()}
-                    """);
-#else
-                pExcepInfo.bstrDescription.Dispose();
-                pExcepInfo.bstrSource.Dispose();
-                pExcepInfo.bstrHelpFile.Dispose();
-#endif
+                ClearStrings(ref pExcepInfo);
             }
 
             return hr;
         }
+    }
+
+    private static void ClearStrings(ref EXCEPINFO exceptionInfo)
+    {
+#if DEBUG
+        Debug.WriteLine($"""
+            Exception on property access.
+                Description: {exceptionInfo.bstrDescription.ToStringAndFree()}
+                Source: {exceptionInfo.bstrSource.ToStringAndFree()}
+                Help file: {exceptionInfo.bstrHelpFile.ToStringAndFree()}
+            """);
+#else
+        exceptionInfo.bstrDescription.Dispose();
+        exceptionInfo.bstrSource.Dispose();
+        exceptionInfo.bstrHelpFile.Dispose();
+#endif
     }
 
     /// <summary>
@@ -117,19 +122,7 @@ internal unsafe partial struct IDispatch
             }
 
             errorText = pExcepInfo.bstrDescription.ToString();
-
-#if DEBUG
-            Debug.WriteLine($"""
-                    Exception on set property.
-                      Description: {pExcepInfo.bstrDescription.ToStringAndFree()}
-                      Source: {pExcepInfo.bstrSource.ToStringAndFree()}
-                      Help file: {pExcepInfo.bstrHelpFile.ToStringAndFree()}
-                    """);
-#else
-                pExcepInfo.bstrDescription.Dispose();
-                pExcepInfo.bstrSource.Dispose();
-                pExcepInfo.bstrHelpFile.Dispose();
-#endif
+            ClearStrings(ref pExcepInfo);
         }
 
         return hr;

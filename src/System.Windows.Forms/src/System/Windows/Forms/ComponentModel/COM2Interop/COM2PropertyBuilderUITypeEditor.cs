@@ -41,9 +41,6 @@ internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
             }
         }
 
-        VARIANT_BOOL useValue = VARIANT_BOOL.VARIANT_FALSE;
-        VARIANT variantValue = default;
-
         object? target = _propDesc.TargetObject;
         if (target is ICustomTypeDescriptor customTypeDescriptor)
         {
@@ -53,8 +50,10 @@ internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
         using var propertyBuilder = ComHelpers.TryGetComScope<IProvidePropertyBuilder>(target, out HRESULT hr);
         Debug.Assert(hr.Succeeded, $"Failed to get IProvidePropertyBuilder: {hr}");
 
+        VARIANT_BOOL useValue = VARIANT_BOOL.VARIANT_FALSE;
+
         // Is it actually necessary to pass the value in?
-        variantValue = VARIANT.FromObject(value);
+        VARIANT variantValue = VARIANT.FromObject(value);
 
         using BSTR guidString = new(_guidString);
         hr = propertyBuilder.Value->ExecuteBuilder(

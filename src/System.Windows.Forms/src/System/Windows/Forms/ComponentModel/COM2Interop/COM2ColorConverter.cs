@@ -22,7 +22,7 @@ internal sealed class Com2ColorConverter : Com2DataTypeToManagedDataTypeConverte
             _ => 0
         });
 
-    public override VARIANT ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor propert, ref bool cancelSet)
+    public override VARIANT ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor property, ref bool cancelSet)
     {
         // Don't cancel the set.
         cancelSet = false;

@@ -323,7 +323,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     }
 
     /// <summary>
-    ///  Looks at at value's type and creates an editor based on that. We use this to decide which editor to use
+    ///  Looks at value's type and creates an editor based on that. We use this to decide which editor to use
     ///  for a generic variant.
     /// </summary>
     internal static void ResolveVariantTypeConverterAndTypeEditor(
