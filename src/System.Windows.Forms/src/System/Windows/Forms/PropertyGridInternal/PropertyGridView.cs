@@ -247,14 +247,19 @@ internal sealed partial class PropertyGridView :
             {
                 OwnerGrid.CheckInCreate();
 
-                Bitmap bitmap = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight);
+                Bitmap bmp = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight);
+
+                if (ControlPaint.IsDark(BackColor))
+                {
+                    bmp = ControlPaint.CreateBitmapWithInvertedForeColor(bmp, BackColor);
+                }
 
                 _dialogButton = new DropDownButton
                 {
                     BackColor = SystemColors.Control,
                     ForeColor = SystemColors.ControlText,
                     TabIndex = 3,
-                    Image = ControlPaint.IsDark(BackColor) ? ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, BackColor) : bitmap
+                    Image = bmp
                 };
 
                 _dialogButton.Click += OnButtonClick;
@@ -5327,8 +5332,17 @@ internal sealed partial class PropertyGridView :
                     DialogButton.Size = DropDownButton.Size;
                     if (isScalingRequirementMet)
                     {
-                        Bitmap bitmap = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight);
-                        _dialogButton.Image = ControlPaint.IsDark(BackColor) ? ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, BackColor) : bitmap;
+                        Bitmap bmp = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight);
+
+                        if (ControlPaint.IsDark(BackColor))
+                        {
+                            Bitmap invertedBitmap = ControlPaint.CreateBitmapWithInvertedForeColor(bmp, BackColor);
+                            _dialogButton.Image = invertedBitmap;
+                        }
+                        else
+                        {
+                            _dialogButton.Image = bmp;
+                        }
                     }
                 }
 
