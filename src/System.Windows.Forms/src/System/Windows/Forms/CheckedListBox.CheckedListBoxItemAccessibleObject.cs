@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static System.Windows.Forms.AxHost;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -48,8 +49,6 @@ public partial class CheckedListBox
             };
 
         private bool IsItemChecked => _owningCheckedListBox.GetItemChecked(CurrentIndex);
-
-        private CheckState _checkstate => _owningCheckedListBox.GetItemCheckState(CurrentIndex);
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
             => patternId switch
@@ -110,9 +109,25 @@ public partial class CheckedListBox
         internal override void Toggle() => DoDefaultAction();
 
         internal override UiaCore.ToggleState ToggleState
-            => (_checkstate == CheckState.Unchecked)
-                ? UiaCore.ToggleState.Off : (_checkstate != CheckState.Checked)
-                ? UiaCore.ToggleState.Indeterminate : UiaCore.ToggleState.On;
+        {
+            get
+            {
+                UiaCore.ToggleState toggleState= UiaCore.ToggleState.Off;
+                switch (_owningCheckedListBox.GetItemCheckState(CurrentIndex))
+                {
+                    case CheckState.Checked:
+                        toggleState = UiaCore.ToggleState.On;
+                        break;
+                    case CheckState.Indeterminate:
+                        toggleState = UiaCore.ToggleState.Indeterminate;
+                        break;
+                    case CheckState.Unchecked:
+                        break;
+                }
+
+                return toggleState;
+            }
+        }
 
         public override string Value => IsItemChecked.ToString();
     }
