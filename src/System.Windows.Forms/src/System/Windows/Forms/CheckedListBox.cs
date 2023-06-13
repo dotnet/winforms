@@ -454,10 +454,9 @@ public partial class CheckedListBox : ListBox
         if (!_killnextselect && (index == _lastSelected || CheckOnClick))
         {
             CheckState currentValue = CheckedItems.GetCheckedState(index);
-            CheckState newValue =
-                currentValue != CheckState.Unchecked
-                ? currentValue != CheckState.Checked ? CheckState.Indeterminate : CheckState.Checked
-                : CheckState.Unchecked;
+            CheckState newValue = (currentValue != CheckState.Unchecked)
+                                  ? CheckState.Unchecked
+                                  : CheckState.Checked;
 
             ItemCheckEventArgs itemCheckEvent = new ItemCheckEventArgs(index, newValue, currentValue);
             OnItemCheck(itemCheckEvent);
