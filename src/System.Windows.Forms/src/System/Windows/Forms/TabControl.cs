@@ -955,32 +955,22 @@ public partial class TabControl : Control
         return new ControlCollection(this);
     }
 
-    protected override void CreateHandle()
+    protected override unsafe void CreateHandle()
     {
         if (!RecreatingHandle)
         {
-            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-            try
+            using ThemingScope scope = new(Application.UseVisualStyles);
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX()
             {
-                var icc = new ComCtl32.INITCOMMONCONTROLSEX
-                {
-                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
-                };
-                ComCtl32.InitCommonControlsEx(ref icc);
-            }
-            finally
-            {
-                ThemingScope.Deactivate(userCookie);
-            }
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
+            });
         }
 
         base.CreateHandle();
     }
 
-    private void DetachImageList(object? sender, EventArgs e)
-    {
-        ImageList = null;
-    }
+    private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
 
     /// <summary>
     ///  Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be hidden.

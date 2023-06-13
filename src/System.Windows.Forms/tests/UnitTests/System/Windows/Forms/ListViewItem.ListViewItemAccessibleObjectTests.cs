@@ -1618,6 +1618,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
             View = View.Details,
             SmallImageList = imageCollection
         };
+
         listView.Columns.Add(new ColumnHeader());
         var listViewItem = new ListViewItem("Item 1", imageIndex: hasImage ? 0 : -1);
         listView.Items.Add(listViewItem);

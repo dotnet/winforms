@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.User32;
-
 namespace System.Windows.Forms;
 
 [Flags]
@@ -12,20 +10,20 @@ public enum MessageBoxOptions
     /// <summary>
     ///  Specifies that the message box is displayed on the active desktop.
     /// </summary>
-    ServiceNotification = (int)MB.SERVICE_NOTIFICATION,
+    ServiceNotification = (int)MESSAGEBOX_STYLE.MB_SERVICE_NOTIFICATION,
 
     /// <summary>
     ///  Specifies that the message box is displayed on the active desktop.
     /// </summary>
-    DefaultDesktopOnly = (int)MB.DEFAULT_DESKTOP_ONLY,
+    DefaultDesktopOnly = (int)MESSAGEBOX_STYLE.MB_DEFAULT_DESKTOP_ONLY,
 
     /// <summary>
     ///  Specifies that the message box text is right-aligned.
     /// </summary>
-    RightAlign = (int)MB.RIGHT,
+    RightAlign = (int)MESSAGEBOX_STYLE.MB_RIGHT,
 
     /// <summary>
     ///  Specifies that the message box text is displayed with Rtl reading order.
     /// </summary>
-    RtlReading = (int)MB.RTLREADING,
+    RtlReading = (int)MESSAGEBOX_STYLE.MB_RTLREADING,
 }

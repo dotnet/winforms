@@ -141,19 +141,46 @@ public partial class ScrollBar
                     _owningScrollBar.AccessibleRole == AccessibleRole.Default
                     => UiaCore.UIA.ScrollBarControlTypeId,
                 UiaCore.UIA.HasKeyboardFocusPropertyId => _owningScrollBar.Focused,
+                UiaCore.UIA.RangeValueValuePropertyId => RangeValue,
+                UiaCore.UIA.RangeValueIsReadOnlyPropertyId => IsReadOnly,
+                UiaCore.UIA.RangeValueLargeChangePropertyId => LargeChange,
+                UiaCore.UIA.RangeValueSmallChangePropertyId => SmallChange,
+                UiaCore.UIA.RangeValueMaximumPropertyId => Maximum,
+                UiaCore.UIA.RangeValueMinimumPropertyId => Minimum,
+                UiaCore.UIA.IsRangeValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.RangeValuePatternId),
                 _ => base.GetPropertyValue(propertyID)
             };
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override double RangeValue => _owningScrollBar.Value;
+
+        internal override double LargeChange => _owningScrollBar.LargeChange;
+
+        internal override double SmallChange => _owningScrollBar.SmallChange;
+
+        internal override double Maximum => _owningScrollBar.Maximum;
+
+        internal override double Minimum => _owningScrollBar.Minimum;
+
+        internal override bool IsReadOnly => false;
+
+        internal override void SetValue(double newValue)
         {
-            if (patternId == UiaCore.UIA.ValuePatternId)
+            if (!_owningScrollBar.IsHandleCreated)
             {
-                return true;
+                return;
             }
 
-            return base.IsPatternSupported(patternId);
+            _owningScrollBar.Value = (int)newValue;
         }
+
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            => patternId switch
+            {
+                UiaCore.UIA.ValuePatternId => true,
+                UiaCore.UIA.RangeValuePatternId => true,
+                _ => base.IsPatternSupported(patternId)
+            };
     }
 }

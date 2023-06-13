@@ -1186,23 +1186,16 @@ public partial class MonthCalendar : Control
     private static bool CompareDayAndMonth(DateTime t1, DateTime t2)
         => (t1.Day == t2.Day && t1.Month == t2.Month);
 
-    protected override void CreateHandle()
+    protected override unsafe void CreateHandle()
     {
         if (!RecreatingHandle)
         {
-            IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-            try
+            using ThemingScope scope = new(Application.UseVisualStyles);
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX()
             {
-                var icc = new INITCOMMONCONTROLSEX
-                {
-                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_DATE_CLASSES
-                };
-                InitCommonControlsEx(ref icc);
-            }
-            finally
-            {
-                ThemingScope.Deactivate(userCookie);
-            }
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                dwICC = INITCOMMONCONTROLSEX_ICC.ICC_DATE_CLASSES
+            });
         }
 
         base.CreateHandle();
@@ -1212,8 +1205,7 @@ public partial class MonthCalendar : Control
     ///  Return a localized string representation of the given DateTime value.
     ///  Used for throwing exceptions, etc.
     /// </summary>
-    private static string FormatDate(DateTime value)
-        => value.ToString("d", CultureInfo.CurrentCulture);
+    private static string FormatDate(DateTime value) => value.ToString("d", CultureInfo.CurrentCulture);
 
     /// <summary>
     ///  Retrieves date information that represents the low and high limits of the

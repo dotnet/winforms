@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.User32;
-
 namespace System.Windows.Forms;
 
 public enum MessageBoxIcon
@@ -16,26 +14,25 @@ public enum MessageBoxIcon
     /// <summary>
     ///  Specifies that the message box contains a hand symbol.
     /// </summary>
-    Hand = (int)MB.ICONHAND,
+    Hand = (int)MESSAGEBOX_STYLE.MB_ICONHAND,
 
     /// <summary>
     ///  Specifies that the message box contains a question mark symbol.
     /// </summary>
-    Question = (int)MB.ICONQUESTION,
+    Question = (int)MESSAGEBOX_STYLE.MB_ICONQUESTION,
 
     /// <summary>
     ///  Specifies that the message box contains an exclamation symbol.
     /// </summary>
-    Exclamation = (int)MB.ICONEXCLAMATION,
+    Exclamation = (int)MESSAGEBOX_STYLE.MB_ICONEXCLAMATION,
 
     /// <summary>
     ///  Specifies that the message box contains an asterisk symbol.
     /// </summary>
-    Asterisk = (int)MB.ICONASTERISK,
+    Asterisk = (int)MESSAGEBOX_STYLE.MB_ICONASTERISK,
 
     /// <summary>
-    ///  Specifies that the message box contains a hand icon. This field is
-    ///  constant.
+    ///  Specifies that the message box contains a hand icon. This field is constant.
     /// </summary>
     Stop = Hand,
 

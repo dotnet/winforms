@@ -75,30 +75,24 @@ internal class GridToolTip : Control
         }
     }
 
-    /// <summary>
-    ///  The createParams to create the window.
-    /// </summary>
-    protected override CreateParams CreateParams
+    protected override unsafe CreateParams CreateParams
     {
         get
         {
-            var icc = new ComCtl32.INITCOMMONCONTROLSEX
+            PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
             {
+                dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
                 dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
-            };
+            });
 
-            ComCtl32.InitCommonControlsEx(ref icc);
-
-            var cp = new CreateParams
+            return new CreateParams()
             {
                 Parent = IntPtr.Zero,
-                ClassName = PInvoke.TOOLTIPS_CLASS
+                ClassName = PInvoke.TOOLTIPS_CLASS,
+                Style = (int)(PInvoke.TTS_ALWAYSTIP | PInvoke.TTS_NOPREFIX),
+                ExStyle = 0,
+                Caption = ToolTip,
             };
-
-            cp.Style |= (int)(PInvoke.TTS_ALWAYSTIP | PInvoke.TTS_NOPREFIX);
-            cp.ExStyle = 0;
-            cp.Caption = ToolTip;
-            return cp;
         }
     }
 

@@ -14,23 +14,25 @@ internal class Com2ComponentEditor : WindowsFormsComponentEditor
 {
     public static unsafe bool NeedsComponentEditor(object comObject)
     {
-        if (comObject is IPerPropertyBrowsing.Interface perPropertyBrowsing)
+        using var propertyBrowsing = ComHelpers.TryGetComScope<IPerPropertyBrowsing>(comObject, out HRESULT hr);
+        if (hr.Succeeded)
         {
             // Check for a property page.
             Guid guid = Guid.Empty;
-            HRESULT hr = perPropertyBrowsing.MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
+            hr = propertyBrowsing.Value->MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
             if (hr.Succeeded && !guid.Equals(Guid.Empty))
             {
                 return true;
             }
         }
 
-        if (comObject is ISpecifyPropertyPages.Interface ispp)
+        using var propertyPages = ComHelpers.TryGetComScope<ISpecifyPropertyPages>(comObject, out hr);
+        if (hr.Succeeded)
         {
             CAUUID uuids = default;
             try
             {
-                HRESULT hr = ispp.GetPages(&uuids);
+                hr = propertyPages.Value->GetPages(&uuids);
                 return hr.Succeeded && uuids.cElems > 0;
             }
             finally
