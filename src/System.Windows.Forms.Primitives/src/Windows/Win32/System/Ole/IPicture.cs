@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32.System.Ole;
 
-internal unsafe partial struct IPicture
+internal unsafe partial struct IPicture : IVTable<IPicture, IPicture.Vtbl>
 {
     public static object CreateObjectFromImage(Image image)
     {

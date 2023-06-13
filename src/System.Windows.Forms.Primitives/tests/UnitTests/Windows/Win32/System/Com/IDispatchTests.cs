@@ -6,7 +6,7 @@ using System.Drawing;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 
-namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32;
+namespace System.Windows.Forms.Primitives.Tests.Windows.Win32.System.Com;
 
 [Collection("Sequential")]
 public partial class IDispatchTests
@@ -29,7 +29,7 @@ public partial class IDispatchTests
             {
                 picture.Value->GetIDsOfNames(&riid, pRgszNames, (uint)rgszNames.Length, PInvoke.GetThreadLocale(), pRgDispId);
                 Assert.Equal(new PWSTR[] { width, other }, rgszNames);
-                
+
                 Assert.Equal(new int[] { (int)PInvoke.DISPID_PICT_WIDTH, PInvoke.DISPID_UNKNOWN }, rgDispId);
             }
         }

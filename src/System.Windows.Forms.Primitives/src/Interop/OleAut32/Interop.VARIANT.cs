@@ -927,12 +927,16 @@ internal unsafe partial struct VARIANT : IDisposable
     };
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static explicit operator VARIANT(IUnknown* unknown)
+    public static explicit operator VARIANT(IUnknown* value)
         => new VARIANT()
         {
             vt = VT_UNKNOWN,
-            data = new() { punkVal = unknown }
+            data = new() { punkVal = value }
         };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator IUnknown*(VARIANT value)
+        => value.vt == VT_UNKNOWN ? value.data.punkVal : throw new InvalidCastException();
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static T ThrowInvalidCast<T>() => throw new InvalidCastException();

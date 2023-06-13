@@ -611,7 +611,7 @@ public partial class Control
             Debug.Indent();
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-            hr = dispatch.Value->TryGetProperty((uint)dispid, &property, PInvoke.LCID.USER_DEFAULT.RawValue);
+            hr = dispatch.Value->TryGetProperty(dispid, &property, PInvoke.LCID.USER_DEFAULT.RawValue);
 
             if (hr.Succeeded)
             {

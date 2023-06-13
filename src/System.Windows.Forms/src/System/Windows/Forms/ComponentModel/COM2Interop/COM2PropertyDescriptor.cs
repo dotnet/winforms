@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Diagnostics.Debug;
@@ -26,7 +24,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 ///   of <see cref="TypeConverter"/>s.
 ///  </para>
 /// </summary>
-internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
+internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
 {
     private EventHandlerList? _events;
 
@@ -73,16 +71,6 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
 
     private static readonly Guid GUID_COLOR = new("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
 
-    // Our map of native types that we can map to managed types for editors
-    private static readonly IDictionary s_oleConverters = new SortedList
-    {
-        [GUID_COLOR] = typeof(Com2ColorConverter),
-        [IID.GetRef<IFontDisp>()] = typeof(Com2FontConverter),
-        [IID.GetRef<IFont>()] = typeof(Com2FontConverter),
-        [IID.GetRef<IPictureDisp>()] = typeof(Com2PictureConverter),
-        [IID.GetRef<IPicture>()] = typeof(Com2PictureConverter)
-    };
-
     private readonly Com2DataTypeToManagedDataTypeConverter? _valueConverter;
 
     public Com2PropertyDescriptor(
@@ -119,7 +107,18 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
             }
             else if (typeData is Guid guid)
             {
-                _valueConverter = CreateOleTypeConverter((Type?)s_oleConverters[guid]);
+                if (guid.Equals(GUID_COLOR))
+                {
+                    _valueConverter = new Com2ColorConverter();
+                }
+                else if (guid.Equals(IID.GetRef<IFontDisp>()) || guid.Equals(IID.GetRef<IFont>()))
+                {
+                    _valueConverter = new Com2FontConverter();
+                }
+                else if (guid.Equals(IID.GetRef<IPictureDisp>()) || guid.Equals(IID.GetRef<IPicture>()))
+                {
+                    _valueConverter = new Com2PictureConverter(this);
+                }
             }
         }
 
@@ -208,10 +207,10 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
             else if (_hrHidden)
             {
                 // Check to see if the get still fails.
-                object? target = TargetObject;
-                if (target is not null)
+                using var dispatch = ComHelpers.TryGetComScope<IDispatch>(TargetObject, out HRESULT hr);
+                if (hr.Succeeded)
                 {
-                    HRESULT hr = ComNativeDescriptor.GetPropertyValue(target, DISPID, out _);
+                    hr = ComNativeDescriptor.GetPropertyValue(dispatch, DISPID, out _);
 
                     // If not, go ahead and make this a browsable item.
                     if (hr.Succeeded)
@@ -322,7 +321,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     {
         get
         {
-            if (!DisplayNameValid)
+            if (_displayName is null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName))
             {
                 GetNameItemEvent getNameEvent = new(base.DisplayName);
                 OnGetDisplayName(getNameEvent);
@@ -334,13 +333,6 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         }
     }
 
-    /// <summary>
-    ///  Checks if the property display name is valid.
-    /// </summary>
-    [MemberNotNullWhen(true, nameof(_displayName))]
-    protected bool DisplayNameValid
-        => _displayName is not null && !GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName);
-
     protected EventHandlerList Events => _events ??= new EventHandlerList();
 
     protected bool InAttributeQuery { get; private set; }
@@ -349,7 +341,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     {
         get
         {
-            if (!ReadOnlyValid)
+            if (!_baseReadOnly && GetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly))
             {
                 _readOnly |= Attributes[typeof(ReadOnlyAttribute)]?.Equals(ReadOnlyAttribute.Yes) ?? false;
                 GetBoolValueEvent getBoolEvent = new(_readOnly);
@@ -374,11 +366,6 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
          // Replace the type with the mapped converter type
          => _valueConverter is not null ? _valueConverter.ManagedType : _propertyType;
 #pragma warning restore CS8764
-
-    /// <summary>
-    ///  Checks if the read only state is valid. Asks clients if they would like read-only required.
-    /// </summary>
-    protected bool ReadOnlyValid => _baseReadOnly || !GetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly);
 
     /// <summary>
     ///  Gets the Object that this descriptor was created for.
@@ -481,30 +468,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
             _typeData,
             _hrHidden);
 
-    /// <summary>
-    ///  Creates a converter Object, first by looking for a ctor with a Com2PropertyDescriptor
-    ///  parameter, then using the default ctor if it is not found.
-    /// </summary>
-    private Com2DataTypeToManagedDataTypeConverter? CreateOleTypeConverter(Type? type)
-    {
-        if (type is null)
-        {
-            return null;
-        }
-
-        ConstructorInfo? constructor = type.GetConstructor(new Type[] { typeof(Com2PropertyDescriptor) });
-        Com2DataTypeToManagedDataTypeConverter? converter = constructor is not null
-            ? (Com2DataTypeToManagedDataTypeConverter)constructor.Invoke(new object[] { this })
-            : (Com2DataTypeToManagedDataTypeConverter?)Activator.CreateInstance(type);
-
-        return converter;
-    }
-
-    /// <summary>
-    ///  Creates an instance of the member attribute collection. This can
-    ///  be overriden by subclasses to return a subclass of AttributeCollection.
-    /// </summary>
-    protected override AttributeCollection CreateAttributeCollection() => new AttributeCollection(AttributeArray);
+    protected sealed override AttributeCollection CreateAttributeCollection() => new(AttributeArray);
 
     private TypeConverter GetBaseTypeConverter()
     {
@@ -539,7 +503,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
 
         // If we didn't get one from the attribute, ask the type descriptor. We don't want to create the value
         // editor for the IDispatch properties because that will create the reference editor.
-        localConverter ??= typeof(Oleaut32.IDispatch).IsAssignableFrom(PropertyType)
+        localConverter ??= typeof(IDispatch).IsAssignableFrom(PropertyType)
             ? new Com2IDispatchConverter(this, allowExpand: false)
             : base.Converter;
 
@@ -583,7 +547,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     /// <summary>
     ///  Gets the value that should be displayed to the user, such as in the Property Browser.
     /// </summary>
-    public virtual string? GetDisplayValue(string? defaultValue)
+    public string? GetDisplayValue(string? defaultValue)
     {
         GetNameItemEvent name = new(defaultValue);
         OnGetDisplayValue(name);
@@ -591,9 +555,6 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         return name.Name?.ToString();
     }
 
-    /// <summary>
-    ///  Retrieves an editor of the requested type.
-    /// </summary>
     [RequiresUnreferencedCode($"{TrimmingConstants.EditorRequiresUnreferencedCode} {TrimmingConstants.PropertyDescriptorPropertyTypeMessage}")]
     public override object? GetEditor(Type editorBaseType)
     {
@@ -629,14 +590,14 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     }
 
     /// <summary>
-    ///  Retrieves the current native value of the property on component, invoking the getXXX method.
-    ///  An exception in the getXXX method will pass through.
+    ///  Retrieves the current native value of the property on the given component. You must dispose of the
+    ///  returned <see cref="VARIANT"/> after using it.
     /// </summary>
-    public unsafe object? GetNativeValue(object? component)
+    internal unsafe VARIANT GetNativeValue(object? component)
     {
         if (component is null)
         {
-            return null;
+            return VARIANT.Empty;
         }
 
         if (component is ICustomTypeDescriptor descriptor)
@@ -644,37 +605,22 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
             component = descriptor.GetPropertyOwner(this);
         }
 
-        if (component is null || component is not IDispatch.Interface dispatch)
+        using var dispatch = ComHelpers.TryGetComScope<IDispatch>(component, out HRESULT hr);
+        if (hr.Failed)
         {
-            return null;
+            return VARIANT.Empty;
         }
 
-        VARIANT result = default;
-        EXCEPINFO pExcepInfo = default;
-        DISPPARAMS dispParams = default;
-        Guid guid = Guid.Empty;
+        VARIANT nativeValue = default;
+        hr = dispatch.Value->TryGetProperty(DISPID, &nativeValue, PInvoke.GetThreadLocale());
 
-        HRESULT hr = dispatch.Invoke(
-            (int)DISPID,
-            &guid,
-            PInvoke.GetThreadLocale(),
-            DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
-            &dispParams,
-            &result,
-            &pExcepInfo,
-            null);
+        if (hr != HRESULT.S_OK && hr != HRESULT.S_FALSE)
+        {
+            Debug.Fail($"Failed to get property: {hr}");
+            return VARIANT.Empty;
+        }
 
-        if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
-        {
-            _lastValue = result.ToObject();
-            return _lastValue;
-        }
-        else
-        {
-            return hr == HRESULT.DISP_E_EXCEPTION
-                ? null
-                : throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
-        }
+        return nativeValue;
     }
 
     /// <summary>
@@ -682,20 +628,26 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     /// </summary>
     private bool GetNeedsRefresh(int mask) => (_refreshState & mask) != 0;
 
-    /// <summary>
-    ///  Retrieves the current value of the property on component, invoking the getXXX method. An exception in
-    ///  the getXXX method will pass through.
-    /// </summary>
     public override object? GetValue(object? component)
     {
-        _lastValue = GetNativeValue(component);
+        using VARIANT nativeValue = GetNativeValue(component);
 
         // Do we need to convert the type?
-        if (ConvertingNativeType && _lastValue is not null)
+        if (ConvertingNativeType && !nativeValue.IsEmpty)
         {
-            _lastValue = _valueConverter.ConvertNativeToManaged(_lastValue, this);
+            return _valueConverter.ConvertNativeToManaged(nativeValue, this);
         }
-        else if (_lastValue is not null && _propertyType is not null && _propertyType.IsEnum && _lastValue.GetType().IsPrimitive)
+
+        try
+        {
+            _lastValue = nativeValue.ToObject();
+        }
+        catch (Exception ex)
+        {
+            Debug.Fail($"Could not convert the native value to a .NET object: {ex.Message}");
+        }
+
+        if (_lastValue is not null && _propertyType is not null && _propertyType.IsEnum && _lastValue.GetType().IsPrimitive)
         {
             // We've got to convert the value here. We built the enum but the native object returns values as integers.
             try
@@ -777,7 +729,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
     /// <summary>
     ///  Is the given value equal to the last known value for this object?
     /// </summary>
-    public bool IsCurrentValue(object? value) => value == _lastValue || (_lastValue is not null && _lastValue.Equals(value));
+    internal bool IsLastKnownValue(object? value) => value == _lastValue;
 
     protected void OnCanResetValue(GetBoolValueEvent e) => RaiseGetBoolValueEvent(EventCanResetValue, e);
 
@@ -870,61 +822,35 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
             owner = descriptor.GetPropertyOwner(this);
         }
 
-        if (owner is null || !Marshal.IsComObject(owner) || owner is not IDispatch.Interface)
+        using var dispatch = ComHelpers.TryGetComScope<IDispatch>(owner, out HRESULT hr);
+        if (hr.Failed)
         {
             return;
         }
+
+        VARIANT nativeValue = default;
 
         // Do we need to convert the type?
         if (_valueConverter is not null)
         {
             bool cancel = false;
-            value = _valueConverter.ConvertManagedToNative(value, this, ref cancel);
+            nativeValue = _valueConverter.ConvertManagedToNative(value, this, ref cancel);
             if (cancel)
             {
                 return;
             }
         }
-
-        IDispatch.Interface dispatch = (IDispatch.Interface)owner;
-
-        EXCEPINFO excepInfo = default;
-        int namedArg = PInvoke.DISPID_PROPERTYPUT;
-        DISPPARAMS dispParams = new()
+        else
         {
-            cArgs = 1,
-            cNamedArgs = 1,
-            rgdispidNamedArgs = &namedArg
-        };
-
-        using VARIANT variant = default;
-        Marshal.GetNativeVariantForObject(value, (IntPtr)(&variant));
-        dispParams.rgvarg = &variant;
-        Guid guid = Guid.Empty;
-        HRESULT hr = dispatch.Invoke(
-            DISPID,
-            &guid,
-            PInvoke.GetThreadLocale(),
-            DISPATCH_FLAGS.DISPATCH_PROPERTYPUT,
-            &dispParams,
-            null,
-            &excepInfo,
-            null);
-
-        string? errorText = null;
-        if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
-        {
-            hr = (HRESULT)excepInfo.scode;
-            if (!excepInfo.bstrDescription.IsNull)
-            {
-                errorText = excepInfo.bstrDescription.ToString();
-            }
+            nativeValue = VARIANT.FromObject(value);
         }
+
+        hr = dispatch.Value->SetPropertyValue(DISPID, nativeValue, out string? errorText);
 
         if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
         {
             OnValueChanged(component, EventArgs.Empty);
-            _lastValue = value;
+            _lastValue = nativeValue;
             return;
         }
 
@@ -934,10 +860,12 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
             return;
         }
 
-        if (dispatch is ISupportErrorInfo.Interface iSupportErrorInfo)
+        HRESULT setError = hr;
+
+        using var iSupportErrorInfo = dispatch.TryQuery<ISupportErrorInfo>(out hr);
+        if (hr.Succeeded)
         {
-            guid = typeof(Oleaut32.IDispatch).GUID;
-            if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&guid) == HRESULT.S_OK)
+            if (iSupportErrorInfo.Value->InterfaceSupportsErrorInfo(IID.Get<IDispatch>()).Succeeded)
             {
                 Oleaut32.GetErrorInfo(out WinFormsComWrappers.ErrorInfoWrapper? errorInfo);
 
@@ -952,7 +880,7 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
                 }
             }
         }
-        else if (errorText is null)
+        else if (string.IsNullOrEmpty(errorText))
         {
             using BufferScope<char> buffer = new(256 + 1);
 
@@ -968,29 +896,18 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
                     null);
 
                 errorText = result == 0
-                    ? string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr)
+                    ? string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", setError)
                     : buffer[..(int)result].TrimEnd(CharacterConstants.NewLine).ToString();
             }
         }
 
-        throw new ExternalException(errorText, (int)hr);
+        throw new ExternalException(errorText, (int)setError);
     }
 
-    /// <summary>
-    ///  Indicates whether the value of this property needs to be persisted. In
-    ///  other words, it indicates whether the state of the property is distinct
-    ///  from when the component is first instantiated. If there is a default
-    ///  value specified in this PropertyDescriptor, it will be compared against the
-    ///  property's current value to determine this.  If there isn't, the
-    ///  shouldPersistXXX method is looked for and invoked if found.  If both
-    ///  these routes fail, true will be returned.
-    ///
-    ///  If this returns false, a tool should not persist this property's value.
-    /// </summary>
     public override bool ShouldSerializeValue(object component)
     {
-        GetBoolValueEvent gbv = new GetBoolValueEvent(false);
-        OnShouldSerializeValue(gbv);
-        return gbv.Value;
+        GetBoolValueEvent e = new(defaultValue: false);
+        OnShouldSerializeValue(e);
+        return e.Value;
     }
 }

@@ -4,38 +4,35 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
-using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
 internal partial class Com2AboutBoxPropertyDescriptor
 {
-    public class AboutBoxUITypeEditor : UITypeEditor
+    public unsafe class AboutBoxUITypeEditor : UITypeEditor
     {
-        public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             ArgumentNullException.ThrowIfNull(context);
             object? component = context.Instance;
 
-            if (component is not null
-                && Marshal.IsComObject(component)
-                && component is Oleaut32.IDispatch pDisp)
+            using var dispatch = ComHelpers.TryGetComScope<IDispatch>(context.Instance, out HRESULT hr);
+
+            if (hr.Succeeded)
             {
                 EXCEPINFO pExcepInfo = default;
                 DISPPARAMS dispParams = default;
-                Guid g = Guid.Empty;
-                HRESULT hr = pDisp.Invoke(
+                hr = dispatch.Value->Invoke(
                     PInvoke.DISPID_ABOUTBOX,
-                    &g,
+                    IID.NULL(),
                     PInvoke.GetThreadLocale(),
                     DISPATCH_FLAGS.DISPATCH_METHOD,
                     &dispParams,
                     null,
                     &pExcepInfo,
                     null);
-                Debug.Assert(hr.Succeeded, "Failed to launch about box.");
+                Debug.Assert(hr.Succeeded, $"Failed to launch about box. {hr}");
             }
 
             return value;

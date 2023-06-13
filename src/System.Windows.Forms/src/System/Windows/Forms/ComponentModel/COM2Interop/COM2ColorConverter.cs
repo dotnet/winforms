@@ -3,34 +3,26 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
 /// <summary>
 ///  This class maps an OLE_COLOR to a managed Color editor.
 /// </summary>
-internal class Com2ColorConverter : Com2DataTypeToManagedDataTypeConverter
+internal sealed class Com2ColorConverter : Com2DataTypeToManagedDataTypeConverter
 {
     public override Type ManagedType => typeof(Color);
 
-    public override object ConvertNativeToManaged(object? nativeValue, Com2PropertyDescriptor pd)
-    {
-        int intVal = 0;
-
-        // Get the integer value.
-        if (nativeValue is uint nativeValueAsUint)
+    public override object ConvertNativeToManaged(VARIANT nativeValue, Com2PropertyDescriptor property)
+        => ColorTranslator.FromOle(nativeValue.Type switch
         {
-            intVal = (int)nativeValueAsUint;
-        }
-        else if (nativeValue is int nativeValueAsInt)
-        {
-            intVal = nativeValueAsInt;
-        }
+            VARENUM.VT_UI4 or VARENUM.VT_UINT => (int)(uint)nativeValue,
+            VARENUM.VT_I4 or VARENUM.VT_INT => (int)nativeValue,
+            _ => 0
+        });
 
-        return ColorTranslator.FromOle(intVal);
-    }
-
-    public override object ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
+    public override VARIANT ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor property, ref bool cancelSet)
     {
         // Don't cancel the set.
         cancelSet = false;
@@ -40,10 +32,10 @@ internal class Com2ColorConverter : Com2DataTypeToManagedDataTypeConverter
 
         if (managedValue is Color managedValueAsColor)
         {
-            return ColorTranslator.ToOle(managedValueAsColor);
+            return (VARIANT)ColorTranslator.ToOle(managedValueAsColor);
         }
 
-        Debug.Fail($"Don't know how to set type:{managedValue.GetType().Name}");
-        return 0;
+        Debug.Fail($"Don't know how to set type: {managedValue.GetType().Name}");
+        return (VARIANT)0;
     }
 }

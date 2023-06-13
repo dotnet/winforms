@@ -15,8 +15,11 @@ internal readonly unsafe partial struct BSTR : IDisposable
 
     public void Dispose()
     {
-        Marshal.FreeBSTR((nint)Value);
-        Unsafe.AsRef(this) = default;
+        if (Value is not null)
+        {
+            Marshal.FreeBSTR((nint)Value);
+            Unsafe.AsRef(this) = default;
+        }
     }
 
     /// <summary>
@@ -24,7 +27,7 @@ internal readonly unsafe partial struct BSTR : IDisposable
     /// </summary>
     public readonly string ToStringAndFree()
     {
-        string result = ToString();
+        string result = ToString() ?? string.Empty;
         Dispose();
         return result;
     }
