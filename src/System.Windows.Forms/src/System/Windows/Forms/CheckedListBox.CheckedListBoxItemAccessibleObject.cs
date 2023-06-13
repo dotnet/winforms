@@ -114,6 +114,6 @@ public partial class CheckedListBox
                 ? UiaCore.ToggleState.Off : (_checkstate != CheckState.Checked)
                 ? UiaCore.ToggleState.Indeterminate : UiaCore.ToggleState.On;
 
-        public override string Value => _checkstate.ToString();
+        public override string Value => IsItemChecked.ToString();
     }
 }
