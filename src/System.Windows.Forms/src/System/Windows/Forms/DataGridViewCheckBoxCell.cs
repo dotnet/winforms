@@ -1018,16 +1018,14 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         CheckState checkState = CheckState.Indeterminate;
         switch (EditingCellFormattedValue)
         {
+            case string stringValue when string.Equals(stringValue, SR.DataGridViewCheckBoxCell_ClipboardChecked, StringComparison.CurrentCulture):
+                checkState = CheckState.Checked;
+                break;
+            case string stringValue when string.Equals(stringValue, SR.DataGridViewCheckBoxCell_ClipboardUnchecked, StringComparison.CurrentCulture):
+                checkState = CheckState.Unchecked;
+                break;
             case string stringValue:
-                if (stringValue == SR.DataGridViewCheckBoxCell_ClipboardChecked)
-                {
-                    checkState = CheckState.Checked;
-                }
-                else
-                {
-                    checkState = stringValue == SR.DataGridViewCheckBoxCell_ClipboardUnchecked ? CheckState.Unchecked : CheckState.Indeterminate;
-                }
-
+                checkState = CheckState.Indeterminate;
                 break;
             case CheckState checkStateValue:
                 checkState = checkStateValue;
@@ -1041,17 +1039,13 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         {
             var cellName = AccessibilityObject.Name ?? string.Empty;
             string notificationText = string.Empty;
-            if (checkState == CheckState.Checked)
+            notificationText = checkState switch
             {
-                notificationText = string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName);
-            }
-            else
-            {
-                notificationText = checkState == CheckState.Unchecked
-                    ? string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName)
-                    : string.Format(SR.DataGridViewCheckBoxCellIndeterminateStateDescription, cellName);
-            }
-
+                CheckState.Checked => string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName),
+                _ => checkState == CheckState.Unchecked
+                                        ? string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName)
+                                        : string.Format(SR.DataGridViewCheckBoxCellIndeterminateStateDescription, cellName),
+            };
             AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.Other,
                 Automation.AutomationNotificationProcessing.MostRecent,
