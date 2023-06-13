@@ -22,6 +22,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     private bool _clientAreaAnimation;
     private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
     private JoinableTaskCollection _joinableTaskCollection = null!;
+    private static string s_previousRunTestName = "This is the first test to run.";
 
     private Point? _mousePosition;
 
@@ -34,6 +35,8 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         TestOutputHelper = testOutputHelper;
         DataCollectionService.CurrentTest = GetTest();
+        testOutputHelper.WriteLine($" Previous run test: {s_previousRunTestName}");
+        s_previousRunTestName = DataCollectionService.CurrentTest.DisplayName;
 
         Application.EnableVisualStyles();
 
