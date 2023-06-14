@@ -26,7 +26,7 @@ public partial class CheckedListBox
                     return string.Empty;
                 }
 
-                 return IsItemChecked ?  SR.AccessibleActionUncheck : SR.AccessibleActionCheck;
+                return IsItemChecked ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck;
             }
         }
 
@@ -108,7 +108,23 @@ public partial class CheckedListBox
         internal override void Toggle() => DoDefaultAction();
 
         internal override UiaCore.ToggleState ToggleState
-            => IsItemChecked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        {
+            get
+            {
+                UiaCore.ToggleState toggleState= UiaCore.ToggleState.Off;
+                switch (_owningCheckedListBox.GetItemCheckState(CurrentIndex))
+                {
+                    case CheckState.Checked:
+                        toggleState = UiaCore.ToggleState.On;
+                        break;
+                    case CheckState.Indeterminate:
+                        toggleState = UiaCore.ToggleState.Indeterminate;
+                        break;
+                }
+
+                return toggleState;
+            }
+        }
 
         public override string Value => IsItemChecked.ToString();
     }
