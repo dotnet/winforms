@@ -89,7 +89,7 @@ internal sealed partial class DropDownButton : Button
         {
             if (SystemInformation.HighContrast && image is Bitmap bitmap)
             {
-                Image invertedImage = (Control.MouseIsOver && SystemColors.WindowText.GetBrightness() > 0.5) ||
+                Image invertedImage = (Control.MouseIsOver && SystemColors.WindowText.GetBrightness() <= 0.5) ||
                                  (!Control.MouseIsOver && ControlPaint.IsDark(SystemColors.Window))
                     ? ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Control.BackColor)
                     : image;
