@@ -95,8 +95,8 @@ public class InputLanguageTests
     [Fact]
     public void InputLanguage_FromCulture_NoSuchCulture_ReturnsNull()
     {
-        var unknownCulture = new UnknownKeyboardCultureInfo();
-        Assert.Null(InputLanguage.FromCulture(unknownCulture));
+        var invariantCulture = CultureInfo.InvariantCulture;
+        Assert.Null(InputLanguage.FromCulture(invariantCulture));
     }
 
     [Fact]
@@ -126,11 +126,36 @@ public class InputLanguageTests
     [MemberData(nameof(InputLanguageLayoutId_TestData))]
     public void InputLanguage_InputLanguageLayoutId_Expected(int langId, int device, string languageTag, string layoutId, string layoutName)
     {
-        var language = new InputLanguage(PARAM.FromLowHigh(langId, device));
-        Assert.Equal(languageTag, language.Culture.Name);
-        Assert.Equal(layoutId, language.LayoutId);
-        Assert.Equal(layoutName, language.LayoutName);
-        VerifyInputLanguage(language);
+        InputLanguage language = new(PARAM.FromLowHigh(langId, device));
+        VerifyInputLanguage(language, languageTag, layoutId, layoutName);
+    }
+
+    public static IEnumerable<object[]> SupplementalInputLanguages_TestData()
+    {
+        yield return new object[] { "got-Goth", "000C0C00", "Gothic" };
+        yield return new object[] { "jv-Java", "00110C00", "Javanese" };
+        yield return new object[] { "nqo", "00090C00", "N’Ko" };
+        yield return new object[] { "zgh-Tfng", "0000105F", "Tifinagh (Basic)" };
+    }
+
+    [Theory]
+    [MemberData(nameof(SupplementalInputLanguages_TestData))]
+    public void InputLanguage_FromCulture_SupplementalInputLanguages_Expected(string languageTag, string layoutId, string layoutName)
+    {
+        // Also installs default keyboard layout for this language
+        // https://learn.microsoft.com/windows-hardware/manufacture/desktop/default-input-locales-for-windows-language-packs
+        InstallUserLanguage(languageTag);
+
+        try
+        {
+            CultureInfo culture = new(languageTag);
+            InputLanguage language = InputLanguage.FromCulture(culture);
+            VerifyInputLanguage(language, languageTag, layoutId, layoutName);
+        }
+        finally
+        {
+            UninstallUserLanguage(languageTag);
+        }
     }
 
     [Theory]
@@ -138,7 +163,7 @@ public class InputLanguageTests
     [InlineData(0xffff, 0x0409)]
     public void InputLanguage_Culture_ThrowsArgumentException(int langId, int device)
     {
-        var language = new InputLanguage(PARAM.FromLowHigh(langId, device));
+        InputLanguage language = new(PARAM.FromLowHigh(langId, device));
         Assert.ThrowsAny<ArgumentException>(() => language.Culture);
     }
 
@@ -147,8 +172,17 @@ public class InputLanguageTests
     [InlineData(0x0409, 0xffff)]
     public void InputLanguage_LayoutName_UnknownExpected(int langId, int device)
     {
-        var language = new InputLanguage(PARAM.FromLowHigh(langId, device));
+        InputLanguage language = new(PARAM.FromLowHigh(langId, device));
         Assert.Equal(SR.UnknownInputLanguageLayout, language.LayoutName);
+    }
+
+    private static void VerifyInputLanguage(InputLanguage language, string languageTag, string layoutId, string layoutName)
+    {
+        Assert.NotNull(language);
+        Assert.NotEqual(IntPtr.Zero, language.Handle);
+        Assert.Equal(languageTag, language.Culture.Name);
+        Assert.Equal(layoutId, language.LayoutId);
+        Assert.Equal(layoutName, language.LayoutName);
     }
 
     private static void VerifyInputLanguage(InputLanguage language)
@@ -161,12 +195,41 @@ public class InputLanguageTests
         Assert.DoesNotContain('\0', language.LayoutName);
     }
 
-    private class UnknownKeyboardCultureInfo : CultureInfo
+    private static void RunPowerShellScript(string path)
     {
-        public UnknownKeyboardCultureInfo() : base("en-US")
-        {
-        }
+        using Process process = new();
 
-        public override int KeyboardLayoutId => int.MaxValue;
+        process.StartInfo.FileName = "powershell.exe";
+        process.StartInfo.Arguments = $"-NoProfile -ExecutionPolicy ByPass -File \"{path}\"";
+
+        process.Start();
+        process.WaitForExit();
+    }
+
+    private static void InstallUserLanguage(string languageTag)
+    {
+        string file = Path.Combine(Path.GetTempPath(), $"install-language-{languageTag}.ps1");
+        string script = $$"""
+            $list = Get-WinUserLanguageList
+            $list.Add("{{languageTag}}")
+            Set-WinUserLanguageList $list -force
+            """;
+
+        using TempFile tempFile = new(file, script);
+        RunPowerShellScript(tempFile.Path);
+    }
+
+    private static void UninstallUserLanguage(string languageTag)
+    {
+        string file = Path.Combine(Path.GetTempPath(), $"uninstall-language-{languageTag}.ps1");
+        string script = $$"""
+            $list = Get-WinUserLanguageList
+            $item = $list | Where-Object {$_.LanguageTag -like "{{languageTag}}"}
+            $list.Remove($item)
+            Set-WinUserLanguageList $list -force
+            """;
+
+        using TempFile tempFile = new(file, script);
+        RunPowerShellScript(tempFile.Path);
     }
 }
