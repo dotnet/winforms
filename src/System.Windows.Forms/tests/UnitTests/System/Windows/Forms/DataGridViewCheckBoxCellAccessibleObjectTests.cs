@@ -242,4 +242,26 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         Assert.Equal((UiaCore.ToggleState)expected, accessibleObject.ToggleState);
         Assert.Equal(createControl, control.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void DataGridViewCheckBoxCellAccessibleObject_ToggleStateIndeterminate_ReturnsExpected()
+    {
+        using DataGridView control = new();
+        var checkBoxColumn = new DataGridViewCheckBoxColumn();
+        checkBoxColumn.ThreeState = true;
+        control.Columns.Add(checkBoxColumn);
+        control.Rows.Add(new DataGridViewRow());
+        DataGridViewCell cell = control.Rows[0].Cells[0];
+
+        control.CreateControl();
+
+        var checkBoxAccessibleObject = cell.AccessibilityObject;
+
+        Assert.True(checkBoxAccessibleObject.ToggleState == UiaCore.ToggleState.Indeterminate);
+        checkBoxAccessibleObject.DoDefaultAction();
+        Assert.True(checkBoxAccessibleObject.ToggleState == UiaCore.ToggleState.Off);
+        checkBoxAccessibleObject.DoDefaultAction();
+        Assert.True(checkBoxAccessibleObject.ToggleState == UiaCore.ToggleState.On);
+    }
+
 }

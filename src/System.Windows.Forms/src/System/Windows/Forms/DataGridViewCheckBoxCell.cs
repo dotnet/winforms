@@ -1015,31 +1015,24 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void NotifyUiaClient()
     {
-        CheckState checkState = CheckState.Indeterminate;
-        switch (EditingCellFormattedValue)
+        CheckState checkState;
+        if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
         {
-            case string stringValue when string.Equals(stringValue, SR.DataGridViewCheckBoxCell_ClipboardChecked, StringComparison.CurrentCulture):
-                checkState = CheckState.Checked;
-                break;
-            case string stringValue when string.Equals(stringValue, SR.DataGridViewCheckBoxCell_ClipboardUnchecked, StringComparison.CurrentCulture):
-                checkState = CheckState.Unchecked;
-                break;
-            case string stringValue:
-                checkState = CheckState.Indeterminate;
-                break;
-            case CheckState checkStateValue:
-                checkState = checkStateValue;
-                break;
-            case bool boolValue:
-                checkState = boolValue ? CheckState.Checked : CheckState.Unchecked;
-                break;
+            checkState = CheckState.Checked;
+        }
+        else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
+        {
+            checkState = CheckState.Indeterminate;
+        }
+        else
+        {
+            checkState = CheckState.Unchecked;
         }
 
         if (IsParentAccessibilityObjectCreated)
         {
             var cellName = AccessibilityObject.Name ?? string.Empty;
-            string notificationText = string.Empty;
-            notificationText = checkState switch
+            string notificationText = checkState switch
             {
                 CheckState.Checked => string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName),
                 _ => checkState == CheckState.Unchecked
