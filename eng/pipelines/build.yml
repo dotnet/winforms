@@ -118,7 +118,7 @@ jobs:
       env:
         XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
       displayName: Run Integration Tests
-      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'), ne(contains(variables['Build.SourceBranch'], 'release'), 'true'))
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'), contains(variables['System.PullRequest.TargetBranch'], 'main'))
       retryCountOnTaskFailure: 3
 
     # Create Nuget package, sign, and publish
