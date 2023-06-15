@@ -398,6 +398,23 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
     }
 
+    internal CheckState CheckState
+    {
+        get
+        {
+            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
+            {
+                return CheckState.Checked;
+            }
+            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
+            {
+                return CheckState.Indeterminate;
+            }
+
+            return CheckState.Unchecked;
+        }
+    }
+
     [DefaultValue(null)]
     public object TrueValue
     {
@@ -1015,29 +1032,14 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void NotifyUiaClient()
     {
-        CheckState checkState;
-        if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
-        {
-            checkState = CheckState.Checked;
-        }
-        else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
-        {
-            checkState = CheckState.Indeterminate;
-        }
-        else
-        {
-            checkState = CheckState.Unchecked;
-        }
-
         if (IsParentAccessibilityObjectCreated)
         {
             var cellName = AccessibilityObject.Name ?? string.Empty;
-            string notificationText = checkState switch
+            string notificationText = CheckState switch
             {
                 CheckState.Checked => string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName),
-                _ => checkState == CheckState.Unchecked
-                                        ? string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName)
-                                        : string.Format(SR.DataGridViewCheckBoxCellIndeterminateStateDescription, cellName),
+                CheckState.Unchecked => string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName),
+                _ => string.Format(SR.DataGridViewCheckBoxCellIndeterminateStateDescription, cellName),
             };
             AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.Other,

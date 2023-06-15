@@ -158,11 +158,10 @@ public partial class DataGridViewCheckBoxCell
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
-                return Owner.FormattedValue switch
+                return ((Owner as DataGridViewCheckBoxCell)?.CheckState) switch
                 {
-                    CheckState checkState when checkState == CheckState.Checked => UiaCore.ToggleState.On,
-                    CheckState checkState when checkState == CheckState.Unchecked => UiaCore.ToggleState.Off,
-                    bool boolState => boolState ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off,
+                    CheckState.Checked => UiaCore.ToggleState.On,
+                    CheckState.Unchecked => UiaCore.ToggleState.Off,
                     _ => UiaCore.ToggleState.Indeterminate,
                 };
             }
