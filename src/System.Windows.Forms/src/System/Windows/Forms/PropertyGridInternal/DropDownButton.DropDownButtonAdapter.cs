@@ -87,12 +87,11 @@ internal sealed partial class DropDownButton : Button
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
         {
-            if (SystemInformation.HighContrast && image is Bitmap bitmap)
+            bool isHighContrastHighlighted = !Control.MouseIsDown && IsHighContrastHighlighted();
+            Color backgroundColor = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
+            if (ControlPaint.IsDark(backgroundColor) && image is Bitmap bitmap)
             {
-                Image invertedImage = (Control.MouseIsOver && SystemColors.WindowText.GetBrightness() <= 0.5) ||
-                                 (!Control.MouseIsOver && ControlPaint.IsDark(SystemColors.Window))
-                    ? ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Control.BackColor)
-                    : image;
+                using Image invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Control.BackColor);
                 graphics.DrawImage(invertedImage, imageBounds, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, new ImageAttributes());
             }
             else
