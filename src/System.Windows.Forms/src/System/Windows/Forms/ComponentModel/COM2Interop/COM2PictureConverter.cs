@@ -5,6 +5,7 @@
 using System.Drawing;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
@@ -57,8 +58,7 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
             // GDI handles are sign extended 32 bit values.
             // We need to first cast to int so sign extension happens correctly.
             nint extendedHandle = (int)handle.Value;
-            short type = picture.Value->Type;
-            switch ((PICTYPE)type)
+            switch (picture.Value->Type)
             {
                 case PICTYPE.PICTYPE_ICON:
                     _pictureType = typeof(Icon);

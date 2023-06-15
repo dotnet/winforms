@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop;
 

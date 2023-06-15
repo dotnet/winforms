@@ -413,7 +413,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
             using var pStream = ComHelpers.GetComScope<IStream>(stream);
             persist.Value->Load(pStream);
 
-            if (picture.Value->Type == (short)PICTYPE.PICTYPE_ICON)
+            if (picture.Value->Type == PICTYPE.PICTYPE_ICON)
             {
                 HICON cursorHandle = (HICON)picture.Value->Handle;
                 Size picSize = GetIconSize(cursorHandle);

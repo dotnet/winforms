@@ -133,7 +133,7 @@ public abstract partial class AxHost
         private unsafe void CreateStorage()
         {
             Debug.Assert(_storage is null, "but we already have a storage!");
-            nint hglobal = 0;
+            HGLOBAL hglobal = default;
             if (_buffer is not null)
             {
                 hglobal = PInvoke.GlobalAlloc(GMEM_MOVEABLE, (uint)_length);
@@ -263,10 +263,11 @@ public abstract partial class AxHost
                 _buffer = null;
                 _memoryStream = null;
                 using var lockBytes = _lockBytes.GetInterface();
-                lockBytes.Value->Stat(out STATSTG stat, STATFLAG.STATFLAG_NONAME);
+                lockBytes.Value->Stat(out STATSTG stat, (uint)STATFLAG.STATFLAG_NONAME);
                 _length = (int)stat.cbSize;
                 _buffer = new byte[_length];
-                PInvoke.GetHGlobalFromILockBytes(lockBytes, out nint hglobal).ThrowOnFailure();
+                HGLOBAL hglobal;
+                PInvoke.GetHGlobalFromILockBytes(lockBytes, &hglobal).ThrowOnFailure();
                 void* pointer = PInvoke.GlobalLock(hglobal);
 
                 if (pointer is not null)

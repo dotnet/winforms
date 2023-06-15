@@ -425,8 +425,8 @@ public sealed class PrintDialog : CommonDialog
         finally
         {
             GC.KeepAlive(wndproc);
-            PInvoke.GlobalFree(data.hDevMode);
-            PInvoke.GlobalFree(data.hDevNames);
+            PInvoke.GlobalFree((HGLOBAL)data.hDevMode);
+            PInvoke.GlobalFree((HGLOBAL)data.hDevNames);
         }
     }
 
@@ -536,17 +536,17 @@ public sealed class PrintDialog : CommonDialog
         {
             if (data.hDevMode != IntPtr.Zero)
             {
-                PInvoke.GlobalFree(data.hDevMode);
+                PInvoke.GlobalFree((HGLOBAL)data.hDevMode);
             }
 
             if (data.hDevNames != IntPtr.Zero)
             {
-                PInvoke.GlobalFree(data.hDevNames);
+                PInvoke.GlobalFree((HGLOBAL)data.hDevNames);
             }
 
             if (data.pageRanges != IntPtr.Zero)
             {
-                PInvoke.GlobalFree(data.pageRanges);
+                PInvoke.GlobalFree((HGLOBAL)data.pageRanges);
             }
         }
     }

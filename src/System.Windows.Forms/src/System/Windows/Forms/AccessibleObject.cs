@@ -10,10 +10,11 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using UIA = Windows.Win32.UI.Accessibility;
 using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
 using static Interop;
-using Windows.Win32.System.Com;
-using UIA = Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 

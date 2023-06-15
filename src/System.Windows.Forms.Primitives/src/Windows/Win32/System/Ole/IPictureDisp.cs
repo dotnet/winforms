@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 
 namespace Windows.Win32.System.Ole;
 

@@ -4,7 +4,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Windows.Win32.System.Com;
+namespace Windows.Win32.System.Variant;
 
 internal unsafe ref struct VARIANTVector
 {

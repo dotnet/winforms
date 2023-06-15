@@ -1187,7 +1187,7 @@ public unsafe partial class WebBrowserBase : Control
         ((IOleControlSite.Interface)ActiveXSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER));
         sz.Width = (int)pcont.X;
         sz.Height = (int)pcont.Y;
     }
@@ -1199,7 +1199,7 @@ public unsafe partial class WebBrowserBase : Control
         ((IOleControlSite.Interface)ActiveXSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC));
         sz.Width = phm.X;
         sz.Height = phm.Y;
     }

@@ -9,6 +9,8 @@ namespace Windows.Win32.Foundation;
 
 internal readonly unsafe partial struct BSTR : IDisposable
 {
+    // Use Marshal here to allocate/free as that is cross-plat which can come into play with our ComNativeDescriptor.
+
     public BSTR(string value) : this((char*)Marshal.StringToBSTR(value))
     {
     }

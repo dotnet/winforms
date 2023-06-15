@@ -85,9 +85,7 @@ internal sealed unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEd
                     (IUnknown**)pObjAddrs,
                     1,
                     pageGuid,
-                    PInvoke.GetThreadLocale(),
-                    0,
-                    null);
+                    PInvoke.GetThreadLocale());
             }
         }
         finally

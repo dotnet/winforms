@@ -5,8 +5,10 @@ AdjustWindowRectEx
 AdjustWindowRectExForDpi
 AreDpiAwarenessContextsEqual
 AUTOCOMPLETEOPTIONS
+ADVF
 BeginPaint
 BFFM_*
+BI_COMPRESSION
 BIF_*
 BitBlt
 BITMAP
@@ -297,7 +299,6 @@ ICM_MODE
 ICON_*
 IDC_*
 IDI_*
-IDispatch
 IDispatchEx
 IConnectionPoint
 IConnectionPointContainer
@@ -395,7 +396,6 @@ IsWindowEnabled
 IsWindowUnicode
 IsWindowVisible
 IsZoomed
-IUnknown
 IVBFormat
 IVBGetControl
 IViewObject
@@ -440,7 +440,6 @@ LVSIL_*
 LVTILEVIEWINFO_FLAGS
 LVTILEVIEWINFO_MASK
 MapVirtualKey
-MAPVK_*
 MapWindowPoints
 MEMBERID_NIL
 MessageBeep
@@ -478,9 +477,11 @@ OLE_E_ADVISENOTSUPPORTED
 OLE_E_INVALIDRECT
 OLE_E_NOCONNECTION
 OLE_E_PROMPTSAVECANCELLED
+OLECLOSE
 OLECMDEXECOPT
 OLECMDF
 OLECMDID
+OLECONTF
 OleCreateFontIndirect
 OleCreatePictureIndirect
 OleCreatePropertyFrame
@@ -520,6 +521,7 @@ RevokeDragDrop
 REGDB_E_CLASSNOTREG
 RoundRect
 RPC_E_CHANGED_MODE
+SAFEARRAY
 SafeArrayGetRecordInfo
 S_FALSE
 S_OK
@@ -590,6 +592,7 @@ ShowWindow
 SHParseDisplayName
 SIATTRIBFLAGS
 SIGDN
+STATFLAG
 STATUS_PENDING
 STATUS_SUCCESS
 STATUSCLASSNAME
@@ -599,7 +602,9 @@ STG_E_INVALIDFLAG
 STG_E_INVALIDFUNCTION
 STG_E_INVALIDPOINTER
 StgCreateDocfileOnILockBytes
+STGMEDIUM
 StgOpenStorageOnILockBytes
+STGC
 STGTY
 StretchDIBits
 SystemParametersInfo
@@ -635,12 +640,15 @@ TYPEATTR
 TYPEDESC
 TYPEKIND
 UpdateWindow
+USERCLASSTYPE
 USEROBJECTFLAGS
 ValidateRect
 VARDESC
+VARENUM
 VARFLAGS
 VarFormat
 VARIANT
+VARIANT_*
 VARKIND
 VIEW_E_DRAW
 VIRTUAL_KEY
@@ -662,3 +670,4 @@ WindowFromDC
 WindowFromPoint
 WINDOWPOS
 WSF_VISIBLE
+XFORMCOORDS

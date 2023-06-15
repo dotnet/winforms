@@ -201,20 +201,20 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
-    HRESULT IOleObject.Interface.Close(OLECLOSE dwSaveOption)
+    HRESULT IOleObject.Interface.Close(uint dwSaveOption)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:Close. Save option: {dwSaveOption}");
-        ActiveXInstance.Close(dwSaveOption);
+        ActiveXInstance.Close((OLECLOSE)dwSaveOption);
         return HRESULT.S_OK;
     }
 
-    unsafe HRESULT IOleObject.Interface.SetMoniker(OLEWHICHMK dwWhichMoniker, IMoniker* pmk)
+    unsafe HRESULT IOleObject.Interface.SetMoniker(uint dwWhichMoniker, IMoniker* pmk)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
         return HRESULT.E_NOTIMPL;
     }
 
-    HRESULT IOleObject.Interface.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IMoniker** ppmk)
+    HRESULT IOleObject.Interface.GetMoniker(uint dwAssign, uint dwWhichMoniker, IMoniker** ppmk)
     {
         if (ppmk is null)
         {
@@ -317,7 +317,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
-    HRESULT IOleObject.Interface.GetUserType(USERCLASSTYPE dwFormOfType, PWSTR* pszUserType)
+    HRESULT IOleObject.Interface.GetUserType(uint dwFormOfType, PWSTR* pszUserType)
     {
         if (pszUserType is null)
         {
@@ -326,7 +326,7 @@ public unsafe partial class Control :
 
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
         *pszUserType = (char*)Marshal.StringToCoTaskMemUni(
-            dwFormOfType == USERCLASSTYPE.USERCLASSTYPE_FULL ? GetType().FullName : GetType().Name);
+            (USERCLASSTYPE)dwFormOfType == USERCLASSTYPE.USERCLASSTYPE_FULL ? GetType().FullName : GetType().Name);
 
         return HRESULT.S_OK;
     }
@@ -696,10 +696,10 @@ public unsafe partial class Control :
         return HRESULT.E_NOTIMPL;
     }
 
-    HRESULT IViewObject.Interface.SetAdvise(DVASPECT aspects, ADVF advf, IAdviseSink* pAdvSink)
+    HRESULT IViewObject.Interface.SetAdvise(DVASPECT aspects, uint advf, IAdviseSink* pAdvSink)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
-        return ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
+        return ActiveXInstance.SetAdvise(aspects, (ADVF)advf, pAdvSink);
     }
 
     HRESULT IViewObject.Interface.GetAdvise(uint* pAspects, uint* pAdvf, IAdviseSink** ppAdvSink)
@@ -746,7 +746,7 @@ public unsafe partial class Control :
     HRESULT IViewObject2.Interface.Unfreeze(uint dwFreeze)
         => ((IViewObject.Interface)this).Unfreeze(dwFreeze);
 
-    HRESULT IViewObject2.Interface.SetAdvise(DVASPECT aspects, ADVF advf, IAdviseSink* pAdvSink)
+    HRESULT IViewObject2.Interface.SetAdvise(DVASPECT aspects, uint advf, IAdviseSink* pAdvSink)
         => ((IViewObject.Interface)this).SetAdvise(aspects, advf, pAdvSink);
 
     HRESULT IViewObject2.Interface.GetAdvise(uint* pAspects, uint* pAdvf, IAdviseSink** ppAdvSink)

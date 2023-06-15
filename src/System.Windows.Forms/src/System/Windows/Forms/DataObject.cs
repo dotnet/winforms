@@ -5,6 +5,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -441,7 +442,7 @@ public unsafe partial class DataObject :
         }
         catch
         {
-            PInvoke.GlobalFree(medium.unionmember);
+            PInvoke.GlobalFree((HGLOBAL)medium.unionmember);
             medium.unionmember = 0;
             throw;
         }
@@ -620,19 +621,19 @@ public unsafe partial class DataObject :
     private HRESULT SaveDataToHGLOBAL(object data, string format, ref STGMEDIUM medium) => format switch
     {
         _ when data is Stream dataStream
-            => SaveStreamToHGLOBAL(ref medium.unionmember, dataStream),
+            => SaveStreamToHGLOBAL(ref Unsafe.As<nint, HGLOBAL>(ref medium.unionmember), dataStream),
         DataFormats.TextConstant or DataFormats.RtfConstant or DataFormats.OemTextConstant
-            => SaveStringToHGLOBAL(medium.unionmember, data.ToString()!, unicode: false),
+            => SaveStringToHGLOBAL((HGLOBAL)medium.unionmember, data.ToString()!, unicode: false),
         DataFormats.HtmlConstant
-            => SaveHtmlToHGLOBAL(medium.unionmember, data.ToString()!),
+            => SaveHtmlToHGLOBAL((HGLOBAL)medium.unionmember, data.ToString()!),
         DataFormats.UnicodeTextConstant
-            => SaveStringToHGLOBAL(medium.unionmember, data.ToString()!, unicode: true),
+            => SaveStringToHGLOBAL((HGLOBAL)medium.unionmember, data.ToString()!, unicode: true),
         DataFormats.FileDropConstant
-            => SaveFileListToHGLOBAL(medium.unionmember, (string[])data),
+            => SaveFileListToHGLOBAL((HGLOBAL)medium.unionmember, (string[])data),
         CF_DEPRECATED_FILENAME
-            => SaveStringToHGLOBAL(medium.unionmember, ((string[])data)[0], unicode: false),
+            => SaveStringToHGLOBAL((HGLOBAL)medium.unionmember, ((string[])data)[0], unicode: false),
         CF_DEPRECATED_FILENAMEW
-            => SaveStringToHGLOBAL(medium.unionmember, ((string[])data)[0], unicode: true),
+            => SaveStringToHGLOBAL((HGLOBAL)medium.unionmember, ((string[])data)[0], unicode: true),
         DataFormats.DibConstant when data is Image
             // GDI+ does not properly handle saving to DIB images. Since the clipboard will take
             // an HBITMAP and publish a Dib, we don't need to support this.
@@ -640,11 +641,11 @@ public unsafe partial class DataObject :
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
         _ when format == DataFormats.SerializableConstant || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
-            => SaveObjectToHGLOBAL(ref medium.unionmember, data, RestrictDeserializationToSafeTypes(format)),
+            => SaveObjectToHGLOBAL(ref Unsafe.As<nint, HGLOBAL>(ref medium.unionmember), data, RestrictDeserializationToSafeTypes(format)),
         _ => HRESULT.E_FAIL
     };
 
-    private static HRESULT SaveObjectToHGLOBAL(ref nint hglobal, object data, bool restrictSerialization)
+    private static HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, bool restrictSerialization)
     {
         using MemoryStream stream = new();
         stream.Write(s_serializedObjectID);
@@ -674,7 +675,7 @@ public unsafe partial class DataObject :
         return SaveStreamToHGLOBAL(ref hglobal, stream);
     }
 
-    private static HRESULT SaveStreamToHGLOBAL(ref nint hglobal, Stream stream)
+    private static HRESULT SaveStreamToHGLOBAL(ref HGLOBAL hglobal, Stream stream)
     {
         if (hglobal != 0)
         {
@@ -711,7 +712,7 @@ public unsafe partial class DataObject :
     /// <summary>
     ///  Saves a list of files out to the handle in HDROP format.
     /// </summary>
-    private HRESULT SaveFileListToHGLOBAL(nint hglobal, string[] files)
+    private HRESULT SaveFileListToHGLOBAL(HGLOBAL hglobal, string[] files)
     {
         if (files is null || files.Length == 0)
         {
@@ -739,7 +740,7 @@ public unsafe partial class DataObject :
         sizeInBytes += sizeof(char);
 
         // Allocate the Win32 memory
-        nint newHandle = PInvoke.GlobalReAlloc(hglobal, sizeInBytes, (uint)GMEM_MOVEABLE);
+        HGLOBAL newHandle = PInvoke.GlobalReAlloc(hglobal, sizeInBytes, (uint)GMEM_MOVEABLE);
         if (newHandle == 0)
         {
             return HRESULT.E_OUTOFMEMORY;
@@ -782,14 +783,14 @@ public unsafe partial class DataObject :
     /// <summary>
     ///  Save string to handle. If unicode is set to true then the string is saved as Unicode, else it is saves as DBCS.
     /// </summary>
-    private HRESULT SaveStringToHGLOBAL(nint hglobal, string value, bool unicode)
+    private HRESULT SaveStringToHGLOBAL(HGLOBAL hglobal, string value, bool unicode)
     {
         if (hglobal == 0)
         {
             return HRESULT.E_INVALIDARG;
         }
 
-        nint newHandle = 0;
+        HGLOBAL newHandle = default;
         if (unicode)
         {
             uint byteSize = (uint)value.Length * sizeof(char) + sizeof(char);
@@ -839,7 +840,7 @@ public unsafe partial class DataObject :
         return HRESULT.S_OK;
     }
 
-    private static HRESULT SaveHtmlToHGLOBAL(nint hglobal, string value)
+    private static HRESULT SaveHtmlToHGLOBAL(HGLOBAL hglobal, string value)
     {
         if (hglobal == 0)
         {
@@ -847,7 +848,7 @@ public unsafe partial class DataObject :
         }
 
         int byteLength = Encoding.UTF8.GetByteCount(value);
-        nint newHandle = PInvoke.GlobalReAlloc(hglobal, (uint)byteLength + 1, (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
+        HGLOBAL newHandle = PInvoke.GlobalReAlloc(hglobal, (uint)byteLength + 1, (uint)(GMEM_MOVEABLE | GMEM_ZEROINIT));
         if (newHandle == 0)
         {
             return HRESULT.E_OUTOFMEMORY;

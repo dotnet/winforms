@@ -18,7 +18,7 @@ internal static class InputBuilder
                 ki = new KEYBDINPUT
                 {
                     wVk = keyCode,
-                    wScan = (ushort)(PInvoke.MapVirtualKey((uint)keyCode, PInvoke.MAPVK_VK_TO_VSC) & 0xFFU),
+                    wScan = (ushort)(PInvoke.MapVirtualKey((uint)keyCode, MAP_VIRTUAL_KEY_TYPE.MAPVK_VK_TO_VSC) & 0xFFU),
                     dwFlags = IsExtendedKey(keyCode) ? KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY : 0,
                     time = 0,
                     dwExtraInfo = 0,

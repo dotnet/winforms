@@ -4,6 +4,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Variant;
 using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Com;

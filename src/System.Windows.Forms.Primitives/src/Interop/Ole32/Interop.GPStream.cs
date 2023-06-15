@@ -49,7 +49,7 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT IStream.Interface.Commit(Windows.Win32.System.Com.STGC grfCommitFlags)
+            HRESULT IStream.Interface.Commit(uint grfCommitFlags)
             {
                 _dataStream.Flush();
 
@@ -180,7 +180,7 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT IStream.Interface.Stat(STATSTG* pstatstg, Windows.Win32.System.Com.STATFLAG grfStatFlag)
+            HRESULT IStream.Interface.Stat(STATSTG* pstatstg, uint grfStatFlag)
             {
                 if (pstatstg is null)
                 {
@@ -200,7 +200,7 @@ internal static partial class Interop
                         : STGM.STGM_READ
                 };
 
-                if (grfStatFlag == STATFLAG.STATFLAG_DEFAULT)
+                if ((STATFLAG)grfStatFlag == STATFLAG.STATFLAG_DEFAULT)
                 {
                     // Caller wants a name
                     pstatstg->pwcsName = (char*)Marshal.StringToCoTaskMemUni(_dataStream is FileStream fs ? fs.Name : _dataStream.ToString());
@@ -210,7 +210,7 @@ internal static partial class Interop
             }
 
             /// Returns HRESULT.STG_E_INVALIDFUNCTION as a documented way to say we don't support locking
-            HRESULT IStream.Interface.LockRegion(ulong libOffset, ulong cb, LOCKTYPE dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
+            HRESULT IStream.Interface.LockRegion(ulong libOffset, ulong cb, uint dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
 
             // We never report ourselves as Transacted, so we can just ignore this.
             HRESULT IStream.Interface.Revert() => HRESULT.S_OK;
