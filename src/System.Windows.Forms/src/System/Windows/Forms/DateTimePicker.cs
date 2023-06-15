@@ -819,11 +819,6 @@ public partial class DateTimePicker : Control
 
     internal override bool SupportsUiaProviders => true;
 
-    private string GetBaseText()
-    {
-        return base.Text;
-    }
-
     /// <summary>
     ///  Overrides Text to allow for setting of the value via a string.  Also, returns
     ///  a formatted Value when getting the text.  The DateTime class will throw
@@ -835,7 +830,7 @@ public partial class DateTimePicker : Control
     [AllowNull]
     public override string Text
     {
-        get => Value.ToString(CustomFormat);
+        get => base.Text;
         set
         {
             // Clause to check length

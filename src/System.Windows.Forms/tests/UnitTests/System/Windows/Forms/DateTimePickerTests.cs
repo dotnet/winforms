@@ -220,9 +220,10 @@ public class DateTimePickerTests
         using DateTimePicker dateTimePicker = new();
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
+        dateTimePicker.CreateControl();
 
         Assert.Null(dateTimePicker.CustomFormat);
-        Assert.Equal(dt.ToString(), dateTimePicker.Text);
+        Assert.Equal(dt.ToLongDateString(), dateTimePicker.Text);
     }
 
     [WinFormsFact]
@@ -232,7 +233,9 @@ public class DateTimePickerTests
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
         Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.LongDatePattern;
+        dateTimePicker.CreateControl();
 
         Assert.Equal(dt.ToLongDateString(), dateTimePicker.Text);
     }
@@ -244,7 +247,9 @@ public class DateTimePickerTests
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
         Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.ShortDatePattern;
+        dateTimePicker.CreateControl();
 
         Assert.Equal(dt.ToShortDateString(), dateTimePicker.Text);
     }
@@ -256,7 +261,9 @@ public class DateTimePickerTests
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
         Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.LongTimePattern;
+        dateTimePicker.CreateControl();
 
         Assert.Equal(dt.ToLongTimeString(), dateTimePicker.Text);
     }
@@ -268,7 +275,9 @@ public class DateTimePickerTests
         DateTime dt = new(2000, 1, 2, 3, 4, 5);
         dateTimePicker.Value = dt;
         Globalization.DateTimeFormatInfo dateTimeFormat = Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+        dateTimePicker.Format = DateTimePickerFormat.Custom;
         dateTimePicker.CustomFormat = dateTimeFormat.ShortTimePattern;
+        dateTimePicker.CreateControl();
 
         Assert.Equal(dt.ToShortTimeString(), dateTimePicker.Text);
     }
