@@ -10,8 +10,4 @@ internal readonly partial struct HDC : IHandle<HDC>
     object? IHandle<HDC>.Wrapper => null;
 
     public bool IsNull => Value == 0;
-
-    //public static implicit operator HDC(CreatedHDC hdc) => new(hdc.Value);
-    //public static implicit operator CreatedHDC(HDC hdc) => new(hdc.Value);
-    //public static implicit operator HDC(HdcMetdataEnhFileHandle hdc) => new(hdc.Value);
 }
