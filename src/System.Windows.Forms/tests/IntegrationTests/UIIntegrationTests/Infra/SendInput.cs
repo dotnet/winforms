@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
@@ -69,24 +70,27 @@ public class SendInput
         });
     }
 
-    internal async Task SendAsync(Form window, Action<InputSimulator> actions)
+    internal async Task SendAsync(Form? window, Action<InputSimulator> actions)
     {
         if (actions is null)
         {
             throw new ArgumentNullException(nameof(actions));
         }
 
-        IHandle<HWND> handle = window;
-        if (!TrySetForegroundWindow(handle.Handle))
+        if (window is not null)
         {
-            throw new InvalidOperationException("Failed to set the foreground window.");
+            IHandle<HWND> handle = window;
+            if (!await TrySetForegroundWindowAsync(window, handle.Handle))
+            {
+                throw new InvalidOperationException("Failed to set the foreground window.");
+            }
+
+            // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
+            PInvoke.SetActiveWindow(window);
+
+            // Give the window the keyboard focus as it may not have been achieved by 'SetActiveWindow'
+            PInvoke.SetFocus(window);
         }
-
-        // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
-        PInvoke.SetActiveWindow(window);
-
-        // Give the window the keyboard focus as it may not have been achieved by 'SetActiveWindow'
-        PInvoke.SetFocus(window);
 
         await Task.Run(() => actions(new InputSimulator()));
 
@@ -110,48 +114,73 @@ public class SendInput
         return foregroundWindow;
     }
 
-    private static bool TrySetForegroundWindow(HWND window)
+    private async Task<bool> TrySetForegroundWindowAsync(Form? form, HWND window)
     {
         var activeWindow = PInvoke.GetLastActivePopup(window);
         activeWindow = PInvoke.IsWindowVisible(activeWindow) ? activeWindow : window;
         // 'fUnknown: true' indicates that the window is being switched to using the Alt/Ctl+Tab key sequence
         PInvoke.SwitchToThisWindow(activeWindow, fUnknown: true);
 
-        if (!PInvoke.SetForegroundWindow(activeWindow))
+        if (PInvoke.SetForegroundWindow(activeWindow))
+            return true;
+
+        if (form is not null && await TrySetForegroundWindowViaMouseAsync(form, activeWindow))
+            return true;
+
+        if (TrySetForegroundWindowViaConsole(activeWindow))
+            return true;
+
+        return false;
+    }
+
+    private async Task<bool> TrySetForegroundWindowViaMouseAsync(Form form, HWND activeWindow)
+    {
+        // If that fails, try setting focus by clicking the title bar of the form
+        var rect = form.DisplayRectangle;
+        var positionOnTitleBar = new Point(GetMiddle(rect.Right, rect.Left), rect.Top + 5);
+        var positionOnScreen = form.PointToScreen(positionOnTitleBar);
+
+        // Pass 'window: null' to avoid recursively trying to set the foreground window
+        await ControlTestBase.MoveMouseAsync(null, this, window: null, positionOnScreen);
+
+        await SendAsync(window: null, inputSimulator => inputSimulator.Mouse.LeftButtonClick());
+        return PInvoke.SetForegroundWindow(activeWindow);
+
+        static int GetMiddle(int a, int b) => a + ((b - a) / 2);
+    }
+
+    private static bool TrySetForegroundWindowViaConsole(HWND activeWindow)
+    {
+        bool allocatedConsole = PInvoke.AllocConsole();
+        int? allocationError = !allocatedConsole ? Marshal.GetHRForLastWin32Error() : null;
+
+        try
         {
-            if (!PInvoke.AllocConsole())
+            var consoleWindow = PInvoke.GetConsoleWindow();
+            if (consoleWindow == IntPtr.Zero)
+            {
+                if (allocationError is { } hr)
+                {
+                    Marshal.ThrowExceptionForHR(hr);
+                }
+
+                throw new InvalidOperationException("Failed to obtain the console window.");
+            }
+
+            if (!PInvoke.SetWindowPos(consoleWindow, hWndInsertAfter: (HWND)0, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOZORDER))
             {
                 Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
             }
-
-            try
+        }
+        finally
+        {
+            if (allocatedConsole && !PInvoke.FreeConsole())
             {
-                var consoleWindow = PInvoke.GetConsoleWindow();
-                if (consoleWindow == IntPtr.Zero)
-                {
-                    throw new InvalidOperationException("Failed to obtain the console window.");
-                }
-
-                if (!PInvoke.SetWindowPos(consoleWindow, hWndInsertAfter: (HWND)0, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOZORDER))
-                {
-                    Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
-                }
-            }
-            finally
-            {
-                if (!PInvoke.FreeConsole())
-                {
-                    Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
-                }
-            }
-
-            if (!PInvoke.SetForegroundWindow(activeWindow))
-            {
-                return false;
+                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
             }
         }
 
-        return true;
+        return PInvoke.SetForegroundWindow(activeWindow);
     }
 
     private static void SetForegroundWindow(Form window)

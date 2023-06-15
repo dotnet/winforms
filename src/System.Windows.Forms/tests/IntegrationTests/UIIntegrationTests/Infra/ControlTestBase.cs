@@ -187,14 +187,19 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             (int)Math.Ceiling((65535.0 / (primaryMonitor.Height - 1)) * point.Y));
     }
 
-    protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)
+    protected Task MoveMouseAsync(Form? window, Point point, bool assertCorrectLocation = true)
     {
-        TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
+        return MoveMouseAsync(TestOutputHelper, InputSimulator, window, point, assertCorrectLocation);
+    }
+
+    protected internal static async Task MoveMouseAsync(ITestOutputHelper? testOutputHelper, SendInput sendInput, Form? window, Point point, bool assertCorrectLocation = true)
+    {
+        testOutputHelper?.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
         Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
         var virtualPoint = ToVirtualPoint(point);
-        TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
+        testOutputHelper?.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
 
-        await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X, virtualPoint.Y));
+        await sendInput.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X, virtualPoint.Y));
 
         // ⚠ The call to GetCursorPos is required for correct behavior.
         if (!PInvoke.GetCursorPos(out Point actualPoint))
