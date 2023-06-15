@@ -2146,18 +2146,21 @@ public class DataObjectTests
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = cfFormat
         };
-        var stgMedium = new STGMEDIUM
+
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
-        nint handle = PInvoke.GlobalAlloc(
+
+        HGLOBAL handle = PInvoke.GlobalAlloc(
             GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
             1);
+
         try
         {
             stgMedium.unionmember = handle;
@@ -2186,18 +2189,21 @@ public class DataObjectTests
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = cfFormat
         };
-        var stgMedium = new STGMEDIUM
+
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
-        nint handle = PInvoke.GlobalAlloc(
+
+        HGLOBAL handle = PInvoke.GlobalAlloc(
             GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
             1);
+
         try
         {
             stgMedium.unionmember = handle;
@@ -2220,15 +2226,17 @@ public class DataObjectTests
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = cfFormat
         };
-        var stgMedium = new STGMEDIUM
+
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
+
         Assert.Throws<ArgumentException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
     }
 
@@ -2240,15 +2248,17 @@ public class DataObjectTests
         dataObject.SetText("text", textDataFormat);
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = cfFormat
         };
-        var stgMedium = new STGMEDIUM
+
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
+
         Assert.Throws<ArgumentException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
     }
 
@@ -2259,18 +2269,21 @@ public class DataObjectTests
         dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = (short)CF.HDROP
         };
-        var stgMedium = new STGMEDIUM
+
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
-        nint handle = PInvoke.GlobalAlloc(
+
+        HGLOBAL handle = PInvoke.GlobalAlloc(
             GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
             1);
+
         try
         {
             stgMedium.unionmember = handle;
@@ -2297,18 +2310,21 @@ public class DataObjectTests
         dataObject.SetFileDropList(new StringCollection());
         IComDataObject iComDataObject = dataObject;
 
-        var formatetc = new FORMATETC
+        FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
             cfFormat = (short)CF.HDROP
         };
-        var stgMedium = new STGMEDIUM
+
+        STGMEDIUM stgMedium = new()
         {
             tymed = TYMED.TYMED_HGLOBAL
         };
-        nint handle = PInvoke.GlobalAlloc(
+
+        HGLOBAL handle = PInvoke.GlobalAlloc(
            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
-            (uint)sizeof(DROPFILES));
+           (uint)sizeof(DROPFILES));
+
         try
         {
             stgMedium.unionmember = handle;

@@ -25,7 +25,7 @@ internal unsafe class ComClassFactory : IDisposable
     {
         _filePath = filePath;
         ClassId = classId;
-        _instance = PInvoke.LoadLibraryEx(filePath, HANDLE.Null, default);
+        _instance = PInvoke.LoadLibraryEx(filePath, default);
         if (_instance.IsNull)
         {
             throw new Win32Exception();

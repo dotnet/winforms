@@ -181,7 +181,7 @@ public static partial class ControlPaint
                 biHeight = bitmap.Height,
                 biPlanes = 1,
                 biBitCount = 16,
-                biCompression = BI_COMPRESSION.BI_RGB
+                biCompression = (uint)BI_COMPRESSION.BI_RGB
             };
 
             Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);

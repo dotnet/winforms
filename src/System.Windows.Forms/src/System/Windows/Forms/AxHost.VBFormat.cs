@@ -4,6 +4,7 @@
 
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms;
 

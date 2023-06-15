@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Tests.TestResources;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using WMPLib;
 using static Interop;

@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms;
 
@@ -88,7 +89,7 @@ public abstract partial class AxHost
         // IVBGetControl methods:
 
         HRESULT IVBGetControl.Interface.EnumControls(
-            OLECONTF dwOleContF,
+            uint dwOleContF,
             ENUM_CONTROLS_WHICH_FLAGS dwWhich,
             IEnumUnknown** ppenum)
         {
@@ -170,7 +171,7 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleControlSite.Interface.TransformCoords(POINTL* pPtlHimetric, PointF* pPtfContainer, XFORMCOORDS dwFlags)
+        HRESULT IOleControlSite.Interface.TransformCoords(POINTL* pPtlHimetric, PointF* pPtfContainer, uint dwFlags)
         {
             if (pPtlHimetric is null || pPtfContainer is null)
             {
@@ -183,14 +184,15 @@ public abstract partial class AxHost
                 return hr;
             }
 
-            if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER))
+            XFORMCOORDS coordinates = (XFORMCOORDS)dwFlags;
+            if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER))
             {
-                if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
+                if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
                 {
                     pPtfContainer->X = HM2Pix(pPtlHimetric->x, s_logPixelsX);
                     pPtfContainer->Y = HM2Pix(pPtlHimetric->y, s_logPixelsY);
                 }
-                else if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
+                else if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
                 {
                     pPtfContainer->X = HM2Pix(pPtlHimetric->x, s_logPixelsX);
                     pPtfContainer->Y = HM2Pix(pPtlHimetric->y, s_logPixelsY);
@@ -201,14 +203,14 @@ public abstract partial class AxHost
                     return HRESULT.E_INVALIDARG;
                 }
             }
-            else if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC))
+            else if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC))
             {
-                if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
+                if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
                 {
                     pPtlHimetric->x = Pix2HM((int)pPtfContainer->X, s_logPixelsX);
                     pPtlHimetric->y = Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
                 }
-                else if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
+                else if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
                 {
                     pPtlHimetric->x = Pix2HM((int)pPtfContainer->X, s_logPixelsX);
                     pPtlHimetric->y = Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
@@ -270,7 +272,7 @@ public abstract partial class AxHost
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleClientSite.Interface.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IMoniker** ppmk)
+        unsafe HRESULT IOleClientSite.Interface.GetMoniker(uint dwAssign, uint dwWhichMoniker, IMoniker** ppmk)
         {
             if (ppmk is null)
             {

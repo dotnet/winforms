@@ -22,7 +22,7 @@ internal static partial class PInvoke
             if (Path.IsPathFullyQualified(customPath))
             {
                 // OS will validate the path for us
-                HINSTANCE result = LoadLibraryEx(customPath, HANDLE.Null, 0);
+                HINSTANCE result = LoadLibraryEx(customPath, 0);
                 if (!result.IsNull)
                 {
                     return result;
@@ -49,7 +49,7 @@ internal static partial class PInvoke
 
         // LOAD_LIBRARY_SEARCH_SYSTEM32 was introduced in KB2533623. Check for its presence
         // to preserve compat with Windows 7 SP1 without this patch.
-        HINSTANCE result = LoadLibraryEx(libraryName, HANDLE.Null, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_SEARCH_SYSTEM32);
+        HINSTANCE result = LoadLibraryEx(libraryName, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_SEARCH_SYSTEM32);
         if (!result.IsNull)
         {
             return result;
@@ -61,6 +61,6 @@ internal static partial class PInvoke
             return HINSTANCE.Null;
         }
 
-        return LoadLibraryEx(libraryName, HANDLE.Null, 0);
+        return LoadLibraryEx(libraryName, 0);
     }
 }

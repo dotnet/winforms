@@ -58,7 +58,7 @@ public partial class FolderNameEditor
             HWND hWndOwner = owner is not null ? (HWND)owner.Handle : PInvoke.GetActiveWindow();
 
             // Get the IDL for the specific start location.
-            PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out ITEMIDLIST* listHandle);
+            PInvoke.SHGetSpecialFolderLocation((int)StartLocation, out ITEMIDLIST* listHandle);
             if (listHandle is null)
             {
                 return DialogResult.Cancel;

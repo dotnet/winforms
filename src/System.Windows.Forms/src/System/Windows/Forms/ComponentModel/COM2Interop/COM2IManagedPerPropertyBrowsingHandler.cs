@@ -4,7 +4,7 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Microsoft.VisualStudio.Shell;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;

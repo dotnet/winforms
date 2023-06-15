@@ -41,14 +41,14 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         return HRESULT.E_NOTIMPL;
     }
 
-    HRESULT IOleContainer.Interface.EnumObjects(OLECONTF grfFlags, IEnumUnknown** ppenum)
+    HRESULT IOleContainer.Interface.EnumObjects(uint grfFlags, IEnumUnknown** ppenum)
     {
         if (ppenum is null)
         {
             return HRESULT.E_POINTER;
         }
 
-        if (grfFlags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
+        if (((OLECONTF)grfFlags).HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
         {
             Debug.Assert(parent is not null);
             List<object> list = new();

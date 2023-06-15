@@ -389,10 +389,10 @@ public sealed class FolderBrowserDialog : CommonDialog
 
     private unsafe bool RunDialogOld(HWND hWndOwner)
     {
-        PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out ITEMIDLIST* listHandle);
+        PInvoke.SHGetSpecialFolderLocation((int)_rootFolder, out ITEMIDLIST* listHandle);
         if (listHandle is null)
         {
-            PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
+            PInvoke.SHGetSpecialFolderLocation((int)Environment.SpecialFolder.Desktop, out listHandle);
             if (listHandle is null)
             {
                 throw new InvalidOperationException(SR.FolderBrowserDialogNoRootFolder);

@@ -7,8 +7,9 @@
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
-using static Windows.Win32.System.Com.VARENUM;
+using static Windows.Win32.System.Variant.VARENUM;
 
 namespace System.Windows.Forms.Tests.Interop.SafeArrayTests;
 
@@ -150,9 +151,9 @@ public unsafe class SAFEARRAYTests
 
         public HRESULT GetFieldNoCopy(void* pvData, PCWSTR szFieldName, VARIANT* pvarField, void** ppvDataCArray) => throw new NotImplementedException();
 
-        public HRESULT PutField(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+        public HRESULT PutField(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
 
-        public HRESULT PutFieldNoCopy(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+        public HRESULT PutFieldNoCopy(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
 
         public HRESULT GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => throw new NotImplementedException();
 

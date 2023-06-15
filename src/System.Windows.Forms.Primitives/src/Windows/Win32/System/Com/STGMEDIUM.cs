@@ -10,7 +10,7 @@ namespace Windows.Win32.System.Com;
 internal unsafe partial struct STGMEDIUM
 {
     [UnscopedRef]
-    public ref nint hGlobal => ref Anonymous.hGlobal;
+    public ref HGLOBAL hGlobal => ref u.hGlobal;
 
     public static explicit operator STGMEDIUM(ComType.STGMEDIUM comTypeStg)
     {
@@ -20,9 +20,9 @@ internal unsafe partial struct STGMEDIUM
         {
             pUnkForRelease = pUnkForRelease,
             tymed = (TYMED)comTypeStg.tymed,
-            Anonymous = new()
+            u = new()
             {
-                hGlobal = comTypeStg.unionmember
+                hGlobal = (HGLOBAL)comTypeStg.unionmember
             }
         };
     }
@@ -33,6 +33,6 @@ internal unsafe partial struct STGMEDIUM
             ? null
             : Marshal.GetObjectForIUnknown((nint)stg.pUnkForRelease),
         tymed = (ComType.TYMED)stg.tymed,
-        unionmember = stg.Anonymous.hGlobal
+        unionmember = stg.u.hGlobal
     };
 }

@@ -5,11 +5,12 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
-using static Windows.Win32.System.Com.VARENUM;
+using static Windows.Win32.System.Variant.VARENUM;
 
-namespace Windows.Win32.System.Com;
+namespace Windows.Win32.System.Variant;
 
 internal unsafe partial struct VARIANT : IDisposable
 {
@@ -242,7 +243,24 @@ internal unsafe partial struct VARIANT : IDisposable
         }
 
         VARENUM arrayType = vt & ~VT_ARRAY;
+
+        if (arrayType == VT_RECORD)
+        {
+            // Exit early so we don't have to consider this in the helper methods.
+            throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
+        }
+
         Array array = CreateArrayFromSafeArray(psa, arrayType);
+
+        GCHandle pin = default;
+
+        try
+        {
+            pin = GCHandle.Alloc(array, GCHandleType.Pinned);
+        }
+        catch (ArgumentException)
+        {
+        }
 
         HRESULT hr = PInvoke.SafeArrayLock(psa);
         Debug.Assert(hr == HRESULT.S_OK);
@@ -381,8 +399,6 @@ internal unsafe partial struct VARIANT : IDisposable
                             break;
                         }
 
-                    case VT_RECORD:
-                        throw new NotImplementedException();
                     default:
                         throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
                 }
@@ -399,6 +415,11 @@ internal unsafe partial struct VARIANT : IDisposable
         }
         finally
         {
+            if (pin.IsAllocated)
+            {
+                pin.Free();
+            }
+
             hr = PInvoke.SafeArrayUnlock(psa);
             Debug.Assert(hr == HRESULT.S_OK);
         }
@@ -583,8 +604,6 @@ internal unsafe partial struct VARIANT : IDisposable
                     break;
                 }
 
-            case VT_RECORD:
-                throw new NotImplementedException();
             default:
                 throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
         }
@@ -596,13 +615,6 @@ internal unsafe partial struct VARIANT : IDisposable
         if (vt == VT_EMPTY)
         {
             throw new InvalidOleVariantTypeException();
-        }
-
-        if (vt == VT_RECORD)
-        {
-            using ComScope<IRecordInfo> record = new(null);
-            PInvoke.SafeArrayGetRecordInfo(psa, record).ThrowOnFailure();
-            elementType = GetRecordElementType(record);
         }
 
         VARENUM arrayVarType = psa->VarType;
@@ -656,8 +668,8 @@ internal unsafe partial struct VARIANT : IDisposable
         var lengths = new int[psa->cDims];
         var bounds = new int[psa->cDims];
         int counter = 0;
-        // Copy the lower bounds and count of elements for the dimensions. These
-        // need to copied in reverse order.
+
+        // Copy the lower bounds and count of elements for the dimensions. These need to copied in reverse order.
         for (int i = psa->cDims - 1; i >= 0; i--)
         {
             lengths[counter] = (int)psa->Bounds[i].cElements;

@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Globalization;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 

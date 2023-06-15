@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 

@@ -15,6 +15,7 @@ using System.Windows.Forms.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 
@@ -1051,7 +1052,6 @@ public partial class Control
             using ComScope<IStream> stream = new(null);
             HRESULT hr = stg->OpenStream(
                 GetStreamName(),
-                null,
                 STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                 0,
                 stream);
@@ -1062,7 +1062,6 @@ public partial class Control
                 // as the stream name in v1. Lets see if a stream by that name exists.
                 hr = stg->OpenStream(
                     GetType().FullName!,
-                    null,
                     STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                     0,
                     stream);

@@ -39,7 +39,7 @@ public partial class DataObject
         /// <summary>
         ///  Retrieves the specified format from the specified hglobal.
         /// </summary>
-        private static object? GetDataFromHGLOBAL(nint hglobal, string format)
+        private static object? GetDataFromHGLOBAL(HGLOBAL hglobal, string format)
         {
             if (hglobal == 0)
             {
@@ -52,13 +52,13 @@ public partial class DataObject
                     => ReadStringFromHGLOBAL(hglobal, unicode: false),
                 DataFormats.HtmlConstant => ReadUtf8StringFromHGLOBAL(hglobal),
                 DataFormats.UnicodeTextConstant => ReadStringFromHGLOBAL(hglobal, unicode: true),
-                DataFormats.FileDropConstant => ReadFileListFromHDROP((HDROP)hglobal),
+                DataFormats.FileDropConstant => ReadFileListFromHDROP((HDROP)(nint)hglobal),
                 CF_DEPRECATED_FILENAME => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: false) },
                 CF_DEPRECATED_FILENAMEW => new string[] { ReadStringFromHGLOBAL(hglobal, unicode: true) },
                 _ => ReadObjectFromHGLOBAL(hglobal, RestrictDeserializationToSafeTypes(format))
             };
 
-            static unsafe string ReadStringFromHGLOBAL(nint hglobal, bool unicode)
+            static unsafe string ReadStringFromHGLOBAL(HGLOBAL hglobal, bool unicode)
             {
                 string? stringData = null;
 
@@ -75,7 +75,7 @@ public partial class DataObject
                 return stringData;
             }
 
-            static unsafe string ReadUtf8StringFromHGLOBAL(nint hglobal)
+            static unsafe string ReadUtf8StringFromHGLOBAL(HGLOBAL hglobal)
             {
                 void* buffer = PInvoke.GlobalLock(hglobal);
                 try
@@ -118,7 +118,7 @@ public partial class DataObject
                 return files;
             }
 
-            static object ReadObjectFromHGLOBAL(nint hglobal, bool restrictDeserialization)
+            static object ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
             {
                 Stream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
                 return !isSerializedObject ? stream : ReadObjectFromHandleDeserializer(stream, restrictDeserialization);
@@ -151,7 +151,7 @@ public partial class DataObject
 #pragma warning restore SYSLIB0011
                 }
 
-                static unsafe Stream ReadByteStreamFromHGLOBAL(nint hglobal, out bool isSerializedObject)
+                static unsafe Stream ReadByteStreamFromHGLOBAL(HGLOBAL hglobal, out bool isSerializedObject)
                 {
                     void* buffer = PInvoke.GlobalLock(hglobal);
                     if (buffer is null)
@@ -292,7 +292,7 @@ public partial class DataObject
 
                     if (medium.tymed == TYMED.TYMED_HGLOBAL && medium.unionmember != 0)
                     {
-                        data = GetDataFromHGLOBAL(medium.unionmember, format);
+                        data = GetDataFromHGLOBAL((HGLOBAL)medium.unionmember, format);
                     }
                 }
                 catch (RestrictedTypeDeserializationException)
@@ -345,7 +345,7 @@ public partial class DataObject
                     return null;
                 }
 
-                nint hglobal = 0;
+                HGLOBAL hglobal = default;
                 try
                 {
                     if (medium.tymed != TYMED.TYMED_ISTREAM || medium.unionmember == 0)
@@ -354,7 +354,7 @@ public partial class DataObject
                     }
 
                     using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.unionmember);
-                    pStream.Value->Stat(out Com.STATSTG sstg, Com.STATFLAG.STATFLAG_DEFAULT);
+                    pStream.Value->Stat(out Com.STATSTG sstg, (uint)Com.STATFLAG.STATFLAG_DEFAULT);
 
                     hglobal = PInvoke.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (uint)sstg.cbSize);
 

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using static Interop;
 using static Interop.Mshtml;
 

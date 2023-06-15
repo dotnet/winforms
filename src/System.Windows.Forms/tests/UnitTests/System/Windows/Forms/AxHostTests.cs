@@ -11,6 +11,7 @@ using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -1574,14 +1575,14 @@ public class AxHostTests
         Assert.NotNull(iPicture);
 
         OLE_HANDLE handle = iPicture.Handle;
-        short type = iPicture.Type;
+        PICTYPE type = iPicture.Type;
         int width = iPicture.Width;
         int height = iPicture.Height;
         uint attributes = iPicture.Attributes;
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
-        Assert.Equal(3, type);
+        Assert.Equal(PICTYPE.PICTYPE_ICON, type);
         Assert.Equal(847, width);
         Assert.Equal(847, height);
         Assert.Throws<COMException>(() => iPicture.CurDC);
@@ -1660,7 +1661,7 @@ public class AxHostTests
 
         OLE_HANDLE handle = iPicture.Handle;
         iPicture.get_hPal(out OLE_HANDLE hPal).ThrowOnFailure();
-        short type = iPicture.Type;
+        PICTYPE type = iPicture.Type;
         int width = iPicture.Width;
         int height = iPicture.Height;
         uint attributes = iPicture.Attributes;
@@ -1668,10 +1669,10 @@ public class AxHostTests
 
         Assert.NotEqual(0u, handle);
         Assert.Equal(0u, hPal);
-        Assert.Equal(1, type);
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, type);
         Assert.Equal(265, width);
         Assert.Equal(291, height);
-        Assert.Equal(HDC.Null, curDc);
+        Assert.Equal(default, curDc);
         Assert.Equal(0u, attributes);
 
         var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1688,14 +1689,14 @@ public class AxHostTests
         Assert.NotNull(iPicture);
 
         OLE_HANDLE handle = iPicture.Handle;
-        short type = iPicture.Type;
+        PICTYPE type = iPicture.Type;
         int width = iPicture.Width;
         int height = iPicture.Height;
         uint attributes = iPicture.Attributes;
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
-        Assert.Equal(4, type);
+        Assert.Equal(PICTYPE.PICTYPE_ENHMETAFILE, type);
         Assert.Equal(19972, width);
         Assert.Equal(28332, height);
         Assert.Throws<COMException>(() => iPicture.CurDC);

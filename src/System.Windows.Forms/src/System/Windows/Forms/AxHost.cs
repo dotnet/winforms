@@ -1125,7 +1125,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         ((IOleControlSite.Interface)_oleSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER));
 
         sz.Width = (int)pcont.X;
         sz.Height = (int)pcont.Y;
@@ -1138,7 +1138,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         ((IOleControlSite.Interface)_oleSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC));
 
         sz.Width = phm.X;
         sz.Height = phm.Y;

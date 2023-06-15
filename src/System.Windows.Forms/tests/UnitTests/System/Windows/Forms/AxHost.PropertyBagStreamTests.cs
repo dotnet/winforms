@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Windows.Win32.System.Com.StructuredStorage;
 
 namespace System.Windows.Forms.Tests;

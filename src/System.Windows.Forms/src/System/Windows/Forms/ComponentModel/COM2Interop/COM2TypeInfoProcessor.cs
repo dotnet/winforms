@@ -9,8 +9,9 @@ using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using static Windows.Win32.System.Com.TYPEKIND;
-using static Windows.Win32.System.Com.VARENUM;
+using static Windows.Win32.System.Variant.VARENUM;
 using static Windows.Win32.System.Com.VARFLAGS;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;

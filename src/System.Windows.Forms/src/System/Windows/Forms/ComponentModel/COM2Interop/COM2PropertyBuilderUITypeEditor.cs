@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 using Microsoft.VisualStudio.Shell;
-using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
