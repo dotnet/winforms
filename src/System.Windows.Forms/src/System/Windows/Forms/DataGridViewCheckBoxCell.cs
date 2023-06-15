@@ -118,7 +118,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            return ((flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0x00);
+            return ((flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0);
         }
         set
         {
@@ -142,7 +142,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
         if (FormattedValueType.IsAssignableFrom(defaultCheckStateType))
         {
-            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
+            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
             {
                 if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                 {
@@ -151,7 +151,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
                 return System.Windows.Forms.CheckState.Checked;
             }
-            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
+            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
             {
                 if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                 {
@@ -172,7 +172,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
         else if (FormattedValueType.IsAssignableFrom(defaultBooleanType))
         {
-            bool ret = (bool)((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00);
+            bool ret = (bool)((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0);
             if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
             {
                 return ret ? SR.DataGridViewCheckBoxCell_ClipboardTrue : SR.DataGridViewCheckBoxCell_ClipboardFalse;
@@ -358,7 +358,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            return ((flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0x00);
+            return ((flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0);
         }
         set
         {
@@ -402,11 +402,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
+            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
             {
                 return CheckState.Checked;
             }
-            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
+            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
             {
                 return CheckState.Indeterminate;
             }
@@ -1741,11 +1741,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         IDataGridViewEditingCell editingCell = (IDataGridViewEditingCell)this;
         if (FormattedValueType.IsAssignableFrom(typeof(CheckState)))
         {
-            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
+            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
             {
                 editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Indeterminate;
             }
-            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
+            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
             {
                 editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Unchecked;
             }
