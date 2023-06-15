@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
@@ -75,7 +76,12 @@ public class SendInput
             throw new ArgumentNullException(nameof(actions));
         }
 
-        SetForegroundWindow(window);
+        IHandle<HWND> handle = window;
+        if (!TrySetForegroundWindow(handle.Handle))
+        {
+            throw new InvalidOperationException("Failed to set the foreground window.");
+        }
+
         await Task.Run(() => actions(new InputSimulator()));
 
         await _waitForIdleAsync();
@@ -96,6 +102,50 @@ public class SendInput
             && DateTime.Now - startTime < TimeSpan.FromMilliseconds(500));
 
         return foregroundWindow;
+    }
+
+    private static bool TrySetForegroundWindow(HWND window)
+    {
+        var activeWindow = PInvoke.GetLastActivePopup(window);
+        activeWindow = PInvoke.IsWindowVisible(activeWindow) ? activeWindow : window;
+        // 'fUnknown: true' indicates that the window is being switched to using the Alt/Ctl+Tab key sequence
+        PInvoke.SwitchToThisWindow(activeWindow, fUnknown: true);
+
+        if (!PInvoke.SetForegroundWindow(activeWindow))
+        {
+            if (!PInvoke.AllocConsole())
+            {
+                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+            }
+
+            try
+            {
+                var consoleWindow = PInvoke.GetConsoleWindow();
+                if (consoleWindow == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("Failed to obtain the console window.");
+                }
+
+                if (!PInvoke.SetWindowPos(consoleWindow, hWndInsertAfter: (HWND)0, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOZORDER))
+                {
+                    Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                }
+            }
+            finally
+            {
+                if (!PInvoke.FreeConsole())
+                {
+                    Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                }
+            }
+
+            if (!PInvoke.SetForegroundWindow(activeWindow))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static void SetForegroundWindow(Form window)
