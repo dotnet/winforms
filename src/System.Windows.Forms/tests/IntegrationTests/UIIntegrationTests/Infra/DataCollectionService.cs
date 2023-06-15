@@ -5,6 +5,7 @@
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -164,7 +165,12 @@ internal static class DataCollectionService
 
             Directory.CreateDirectory(logDir);
 
-            File.WriteAllText(CreateLogFileName(logDir, timestamp, testName, errorId, logId: string.Empty, "log"), ex.ToString());
+            var exceptionDetails = new StringBuilder();
+            exceptionDetails.AppendLine(ex.ToString());
+            exceptionDetails.AppendLine("---------------------------------");
+            exceptionDetails.AppendLine("Stack Trace at Log Time:");
+            exceptionDetails.AppendLine(new StackTrace(true).ToString());
+            File.WriteAllText(CreateLogFileName(logDir, timestamp, testName, errorId, logId: string.Empty, "log"), exceptionDetails.ToString());
             foreach (var (callback, logId, extension) in _customInProcessLoggers)
             {
                 callback(CreateLogFileName(logDir, timestamp, testName, errorId, logId, extension));
