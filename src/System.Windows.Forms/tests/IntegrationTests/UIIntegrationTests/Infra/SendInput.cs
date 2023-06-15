@@ -82,6 +82,12 @@ public class SendInput
             throw new InvalidOperationException("Failed to set the foreground window.");
         }
 
+        // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
+        PInvoke.SetActiveWindow(window);
+
+        // Give the window the keyboard focus as it may not have been achieved by 'SetActiveWindow'
+        PInvoke.SetFocus(window);
+
         await Task.Run(() => actions(new InputSimulator()));
 
         await _waitForIdleAsync();

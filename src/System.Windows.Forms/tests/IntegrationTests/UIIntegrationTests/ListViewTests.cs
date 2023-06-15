@@ -52,7 +52,6 @@ public class ListViewTests : ControlTestBase
 
             listView.Groups.Add(group);
             listView.Items.AddRange(new[] { item1, item2, item3 });
-            listView.Focus();
 
             bool collapsedStateChangedFired = false;
             listView.GroupCollapsedStateChanged += (sender, e) => collapsedStateChangedFired = true;
