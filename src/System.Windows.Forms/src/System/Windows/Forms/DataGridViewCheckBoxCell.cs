@@ -398,20 +398,17 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
     }
 
-    internal CheckState CheckState
+    private CheckState CheckState
     {
         get
         {
-            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
-            {
-                return CheckState.Checked;
-            }
-            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
+            if ((!EditingCellValueChanged && FormattedValue is CheckState checkState && checkState == CheckState.Indeterminate) ||
+                (flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
             {
                 return CheckState.Indeterminate;
             }
 
-            return CheckState.Unchecked;
+            return (flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0 ? CheckState.Checked : CheckState.Unchecked;
         }
     }
 
