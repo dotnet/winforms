@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms.ButtonInternal;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -86,12 +87,17 @@ internal sealed partial class DropDownButton : Button
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
         {
-            ControlPaint.DrawImageReplaceColor(
-                graphics,
-                image,
-                imageBounds,
-                Color.Black,
-                IsHighContrastHighlighted() && !Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
+            bool isHighContrastHighlighted = !Control.MouseIsDown && IsHighContrastHighlighted();
+            Color backgroundColor = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
+            if (ControlPaint.IsDark(backgroundColor) && image is Bitmap bitmap)
+            {
+                using Image invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Control.BackColor);
+                graphics.DrawImage(invertedImage, imageBounds, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, new ImageAttributes());
+            }
+            else
+            {
+                graphics.DrawImage(image, imageBounds, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, new ImageAttributes());
+            }
         }
     }
 }
