@@ -106,15 +106,17 @@ public class DateTimePickerTests
         Assert.Equal(new Size(200, control.PreferredHeight), control.Size);
         Assert.Equal(0, control.TabIndex);
         Assert.True(control.TabStop);
-        Assert.Equal(control.TestAccessor().Dynamic._creationTime.ToString(), control.Text);
         Assert.Equal(0, control.Top);
         Assert.Null(control.TopLevelControl);
         Assert.False(control.UseWaitCursor);
         Assert.True(control.Value > DateTime.MinValue);
         Assert.True(control.Visible);
         Assert.Equal(200, control.Width);
-
         Assert.False(control.IsHandleCreated);
+
+        control.CreateControl();
+
+        Assert.Equal(((DateTime)control.TestAccessor().Dynamic._creationTime).ToLongDateString(), control.Text);
     }
 
     [WinFormsFact]
