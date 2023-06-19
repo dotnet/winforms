@@ -349,13 +349,7 @@ internal class DataGridViewCellStyleBuilder : Form
             {
             }
 
-            private string? _name = string.Empty;
-
-            public override string? Name
-            {
-                get => _name;
-                set => _name = value;
-            }
+            public override string? Name { get; set; } = string.Empty;
         }
     }
 }
