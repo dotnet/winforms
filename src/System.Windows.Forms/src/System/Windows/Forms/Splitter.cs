@@ -710,7 +710,7 @@ public partial class Splitter : Control
         }
 
         Rectangle r = CalcSplitLine(_splitTarget, splitSize, 3);
-        using User32.GetDcScope dc = new(ParentInternal.Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+        using User32.GetDcScope dc = new(ParentInternal.HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
         using PInvoke.ObjectScope halftoneScope = new(halftone);
         using PInvoke.SelectObjectScope selection = new(dc, halftone);

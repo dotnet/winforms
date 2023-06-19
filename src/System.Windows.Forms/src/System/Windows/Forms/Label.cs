@@ -1142,7 +1142,7 @@ public partial class Label : Control, IAutomationLiveRegion
         }
 
         using var hfont = GdiCache.GetHFONT(Font);
-        User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
+        DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
 
         // This is actually leading margin.
         return dtParams.iLeftMargin;

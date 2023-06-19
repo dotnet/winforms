@@ -114,7 +114,7 @@ public abstract class CommonDialog : Component
     /// <summary>
     ///  Defines the owner window procedure that is overridden to add specific functionality to a common dialog box.
     /// </summary>
-    protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
+    protected virtual unsafe IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
     {
         if (msg == (int)s_helpMessage)
         {
@@ -137,7 +137,7 @@ public abstract class CommonDialog : Component
             return IntPtr.Zero;
         }
 
-        return User32.CallWindowProcW(_priorWindowProcedure, hWnd, (User32.WM)msg, wparam, lparam);
+        return PInvoke.CallWindowProc((void*)_priorWindowProcedure, (HWND)hWnd, (uint)msg, (nuint)wparam, lparam);
     }
 
     /// <summary>

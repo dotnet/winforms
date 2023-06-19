@@ -134,11 +134,11 @@ internal partial class MdiControlStrip : MenuStrip
         _close.SetNativeTargetWindow(_target);
         _restore.SetNativeTargetWindow(_target);
 
-        HMENU hMenu = PInvoke.GetSystemMenu(Control.GetSafeHandle(_target), bRevert: false);
-        _system.SetNativeTargetMenu(hMenu);
-        _minimize.SetNativeTargetMenu(hMenu);
-        _close.SetNativeTargetMenu(hMenu);
-        _restore.SetNativeTargetMenu(hMenu);
+        HMENU hmenu = PInvoke.GetSystemMenu(GetSafeHandle(_target), bRevert: false);
+        _system.SetNativeTargetMenu(hmenu);
+        _minimize.SetNativeTargetMenu(hmenu);
+        _close.SetNativeTargetMenu(hmenu);
+        _restore.SetNativeTargetMenu(hmenu);
 
         // clear off the System DropDown.
         if (_system.HasDropDownItems)

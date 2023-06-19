@@ -1488,7 +1488,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     private void DrawSplitHelper(int splitSize)
     {
         Rectangle r = CalcSplitLine(splitSize, 3);
-        using User32.GetDcScope dc = new(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+        using User32.GetDcScope dc = new(HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
         using PInvoke.ObjectScope objectScope = new(halftone);
         using PInvoke.SelectObjectScope selectBrush = new(dc, halftone);

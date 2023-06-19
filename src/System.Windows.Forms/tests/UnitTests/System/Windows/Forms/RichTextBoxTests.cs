@@ -1067,7 +1067,7 @@ public class RichTextBoxTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.CANUNDO)
+            if (m.Msg == (int)PInvoke.EM_CANUNDO)
             {
                 m.Result = Result;
                 return;
@@ -1930,7 +1930,7 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_LIMITTEXT.
-        PInvoke.SendMessage(control, (WM)User32.EM.LIMITTEXT, 0, 1);
+        PInvoke.SendMessage(control, (WM)PInvoke.EM_LIMITTEXT, 0, 1);
         Assert.Equal(0x7FFFFFFF, control.MaxLength);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -2047,7 +2047,7 @@ public class RichTextBoxTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.MaxLength = value;
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)User32.EM.GETLIMITTEXT));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)PInvoke.EM_GETLIMITTEXT));
     }
 
     [WinFormsFact]
@@ -5549,7 +5549,7 @@ public class RichTextBoxTests
         control.SelectionLength = value;
         int selectionStart = 0;
         int selectionEnd = 0;
-        IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETSEL, (WPARAM)(&selectionStart), (LPARAM)(&selectionEnd));
+        IntPtr result = PInvoke.SendMessage(control, (WM)PInvoke.EM_GETSEL, (WPARAM)(&selectionStart), (LPARAM)(&selectionEnd));
         Assert.Equal(1, PARAM.LOWORD(result));
         Assert.Equal(expected, PARAM.HIWORD(result));
         Assert.Equal(1, selectionStart);
@@ -6139,7 +6139,7 @@ public class RichTextBoxTests
         control.SelectionStart = value;
         int selectionStart = 0;
         int selectionEnd = 0;
-        IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETSEL, (WPARAM)(&selectionStart), (LPARAM)(&selectionEnd));
+        IntPtr result = PInvoke.SendMessage(control, (WM)PInvoke.EM_GETSEL, (WPARAM)(&selectionStart), (LPARAM)(&selectionEnd));
         Assert.Equal(expectedSelectionStart, PARAM.LOWORD(result));
         Assert.Equal(expectedEnd, PARAM.HIWORD(result));
         Assert.Equal(expectedSelectionStart, selectionStart);
@@ -7678,7 +7678,7 @@ public class RichTextBoxTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.CANUNDO)
+            if (m.Msg == (int)PInvoke.EM_CANUNDO)
             {
                 m.Result = CanUndoResult;
                 return;
@@ -8921,7 +8921,7 @@ public class RichTextBoxTests
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.LINEFROMCHAR)
+            if (m.Msg == (int)PInvoke.EM_LINEFROMCHAR)
             {
                 Assert.Equal((IntPtr)1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
@@ -9927,11 +9927,11 @@ public class RichTextBoxTests
         foreach (IntPtr lParam in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
         {
             yield return new object[] { IntPtr.Zero, lParam, 0 };
-            yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.CHANGE), lParam, 1 };
-            yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.UPDATE), lParam, 0 };
-            yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.CHANGE), lParam, 1 };
-            yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.HSCROLL), lParam, 0 };
-            yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.VSCROLL), lParam, 0 };
+            yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_CHANGE), lParam, 1 };
+            yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_UPDATE), lParam, 0 };
+            yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_CHANGE), lParam, 1 };
+            yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_HSCROLL), lParam, 0 };
+            yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_VSCROLL), lParam, 0 };
             yield return new object[] { PARAM.FromLowHigh(123, 456), lParam, 0 };
         }
     }
@@ -10019,11 +10019,11 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> WndProc_ReflectCommandWithLParam_TestData()
     {
         yield return new object[] { IntPtr.Zero, 0, 0, 0 };
-        yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.CHANGE), 1, 0, 0 };
-        yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.UPDATE), 0, 0, 0 };
-        yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.CHANGE), 1, 0, 0 };
-        yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.HSCROLL), 0, 1, 0 };
-        yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.VSCROLL), 0, 0, 1 };
+        yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_CHANGE), 1, 0, 0 };
+        yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_UPDATE), 0, 0, 0 };
+        yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_CHANGE), 1, 0, 0 };
+        yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_HSCROLL), 0, 1, 0 };
+        yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_VSCROLL), 0, 0, 1 };
         yield return new object[] { PARAM.FromLowHigh(123, 456), 0, 0, 0 };
     }
 
@@ -10512,7 +10512,7 @@ public class RichTextBoxTests
             Assert.Equal(IntPtr.Zero, m.Result);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, textChangedCallCount);
-            IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETMARGINS);
+            IntPtr result = PInvoke.SendMessage(control, (WM)PInvoke.EM_GETMARGINS);
             Assert.Equal(expectedMargin, PARAM.HIWORD(result));
             Assert.Equal(expectedMargin, PARAM.LOWORD(result));
         }
@@ -10534,7 +10534,7 @@ public class RichTextBoxTests
         control.StyleChanged += (sender, e) => styleChangedCallCount++;
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
-        PInvoke.SendMessage(control, (WM)User32.EM.SETMARGINS, (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN), LPARAM.MAKELPARAM(1, 2));
+        PInvoke.SendMessage(control, (WM)PInvoke.EM_SETMARGINS, (WPARAM)(uint)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN), LPARAM.MAKELPARAM(1, 2));
         int textChangedCallCount = 0;
         control.TextChanged += (sender, e) => textChangedCallCount++;
 
@@ -10546,7 +10546,7 @@ public class RichTextBoxTests
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
         Assert.Equal(0, textChangedCallCount);
-        IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETMARGINS);
+        IntPtr result = PInvoke.SendMessage(control, (WM)PInvoke.EM_GETMARGINS);
         Assert.Equal(expectedLeft, PARAM.LOWORD(result));
         Assert.Equal(expectedRight, PARAM.HIWORD(result));
         Assert.True(control.IsHandleCreated);

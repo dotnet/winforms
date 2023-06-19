@@ -8,7 +8,6 @@ using System.Windows.Forms.Automation;
 using Moq;
 using static Interop;
 using static Interop.UiaCore;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation;
 
@@ -507,7 +506,7 @@ this is the third line.";
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
         using Font font = new Font("Segoe UI", 9, FontStyle.Regular);
         providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
-        providerMock.Setup(m => m.EditStyle).Returns(User32.ES.LEFT);
+        providerMock.Setup(m => m.WindowStyle).Returns(PInvoke.ES_LEFT);
         providerMock.Setup(m => m.IsReadOnly).Returns(false);
         UiaTextProvider provider = providerMock.Object;
         UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 28);
@@ -1009,30 +1008,30 @@ This is the line 3";
     }
 
     [StaTheory]
-    [InlineData((int)ES.CENTER, (int)HorizontalTextAlignment.Centered)]
-    [InlineData((int)ES.LEFT, (int)HorizontalTextAlignment.Left)]
-    [InlineData((int)ES.RIGHT, (int)HorizontalTextAlignment.Right)]
+    [InlineData(PInvoke.ES_CENTER, (int)HorizontalTextAlignment.Centered)]
+    [InlineData(PInvoke.ES_LEFT, (int)HorizontalTextAlignment.Left)]
+    [InlineData(PInvoke.ES_RIGHT, (int)HorizontalTextAlignment.Right)]
     public void UiaTextRange_private_GetHorizontalTextAlignment_ReturnsCorrectValue(int style, int expected)
     {
         IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 0, 0);
 
-        HorizontalTextAlignment actual = textRange.TestAccessor().GetHorizontalTextAlignment((ES)style);
+        HorizontalTextAlignment actual = textRange.TestAccessor().GetHorizontalTextAlignment((WINDOW_STYLE)style);
 
         Assert.Equal((HorizontalTextAlignment)expected, actual);
     }
 
     [StaTheory]
-    [InlineData((int)(ES.UPPERCASE | ES.LEFT | ES.MULTILINE | ES.READONLY | ES.AUTOHSCROLL), (int)CapStyle.AllCap)]
-    [InlineData((int)(ES.LOWERCASE | ES.LEFT | ES.MULTILINE | ES.READONLY | ES.AUTOHSCROLL), (int)CapStyle.None)]
+    [InlineData((PInvoke.ES_UPPERCASE | PInvoke.ES_LEFT | PInvoke.ES_MULTILINE | PInvoke.ES_READONLY | PInvoke.ES_AUTOHSCROLL), (int)CapStyle.AllCap)]
+    [InlineData((PInvoke.ES_LOWERCASE | PInvoke.ES_LEFT | PInvoke.ES_MULTILINE | PInvoke.ES_READONLY | PInvoke.ES_AUTOHSCROLL), (int)CapStyle.None)]
     public void UiaTextRange_private_GetCapStyle_ReturnsExpectedValue(int editStyle, int expected)
     {
         IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
         UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 0, 0);
 
-        CapStyle actual = textRange.TestAccessor().GetCapStyle((ES)editStyle);
+        CapStyle actual = textRange.TestAccessor().GetCapStyle((WINDOW_STYLE)editStyle);
 
         Assert.Equal((CapStyle)expected, actual);
     }

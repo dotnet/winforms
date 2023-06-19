@@ -315,7 +315,7 @@ public static partial class ControlPaint
         Size size = bitmap.Size;
 
         HBITMAP colorMask = (HBITMAP)bitmap.GetHbitmap();
-        using User32.GetDcScope screenDC = new(IntPtr.Zero);
+        using User32.GetDcScope screenDC = new(HWND.Null);
         using PInvoke.CreateDcScope sourceDC = new(screenDC);
         using PInvoke.CreateDcScope targetDC = new(screenDC);
         using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
@@ -1851,8 +1851,8 @@ public static partial class ControlPaint
 
         using User32.GetDcScope desktopDC = new(
             PInvoke.GetDesktopWindow(),
-            IntPtr.Zero,
-            User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            HRGN.Null,
+            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
         using PInvoke.ObjectScope pen = new(style switch
         {
@@ -1878,8 +1878,8 @@ public static partial class ControlPaint
 
         using User32.GetDcScope desktopDC = new(
             PInvoke.GetDesktopWindow(),
-            IntPtr.Zero,
-            User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            HRGN.Null,
+            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
         using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
         using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
@@ -2093,8 +2093,9 @@ public static partial class ControlPaint
 
         using var desktopDC = new User32.GetDcScope(
             PInvoke.GetDesktopWindow(),
-            IntPtr.Zero,
-            User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            HRGN.Null,
+            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
+
         using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
         using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
         using PInvoke.SelectObjectScope brushSelection = new(desktopDC, brush);

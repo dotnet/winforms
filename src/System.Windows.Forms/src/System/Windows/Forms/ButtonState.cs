@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -16,17 +14,17 @@ public enum ButtonState
     ///  The button has a checked or latched appearance. Use this appearance to
     ///  show that a toggle button has been pressed.
     /// </summary>
-    Checked = (int)User32.DFCS.CHECKED,
+    Checked = (int)DFCS_STATE.DFCS_CHECKED,
 
     /// <summary>
     ///  The button has a flat, two-dimensional appearance.
     /// </summary>
-    Flat = (int)User32.DFCS.FLAT,
+    Flat = (int)DFCS_STATE.DFCS_FLAT,
 
     /// <summary>
     ///  The button is inactive (grayed).
     /// </summary>
-    Inactive = (int)User32.DFCS.INACTIVE,
+    Inactive = (int)DFCS_STATE.DFCS_INACTIVE,
 
     /// <summary>
     ///  The button has its normal appearance (three-dimensional and not pressed).
@@ -36,7 +34,7 @@ public enum ButtonState
     /// <summary>
     ///  The button is currently pressed.
     /// </summary>
-    Pushed = (int)User32.DFCS.PUSHED,
+    Pushed = (int)DFCS_STATE.DFCS_PUSHED,
 
     /// <summary>
     ///  All viable flags in the bit mask are used.

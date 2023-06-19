@@ -557,7 +557,7 @@ public partial class LinkLabel : Label, IButtonControl
             }
 
             using var hfont = GdiCache.GetHFONT(Font);
-            User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
+            DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
 
             iLeftMargin = dtParams.iLeftMargin;
             iRightMargin = dtParams.iRightMargin;

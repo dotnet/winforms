@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using static System.Windows.Forms.TextBoxBase;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -585,10 +584,10 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        ES actual = provider.EditStyle;
-        Assert.True(actual.HasFlag(ES.LEFT));
-        Assert.True(actual.HasFlag(ES.AUTOVSCROLL));
-        Assert.True(actual.HasFlag(ES.AUTOHSCROLL));
+        WINDOW_STYLE actual = provider.WindowStyle;
+        Assert.False(((int)actual & PInvoke.ES_RIGHT) != 0);
+        Assert.True(((int)actual & PInvoke.ES_AUTOVSCROLL) != 0);
+        Assert.True(((int)actual & PInvoke.ES_AUTOHSCROLL) != 0);
         Assert.True(textBoxBase.IsHandleCreated);
     }
 
@@ -597,8 +596,8 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        ES actual = provider.EditStyle;
-        Assert.Equal(ES.LEFT, actual);
+        WINDOW_STYLE actual = provider.WindowStyle;
+        Assert.Equal(PInvoke.ES_LEFT, (int)actual);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 

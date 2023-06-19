@@ -448,7 +448,7 @@ internal partial class OleDragDropHandler
                     }
 
                     newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
-                    DrawReversibleFrame(parentControl.Handle, newRect, backColor);
+                    DrawReversibleFrame((HWND)parentControl.Handle, newRect, backColor);
                 }
             }
 
@@ -469,7 +469,7 @@ internal partial class OleDragDropHandler
                     }
 
                     newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
-                    DrawReversibleFrame(parentControl.Handle, newRect, backColor);
+                    DrawReversibleFrame((HWND)parentControl.Handle, newRect, backColor);
                 }
             }
         }
@@ -477,7 +477,7 @@ internal partial class OleDragDropHandler
         return newOffset;
     }
 
-    private static void DrawReversibleFrame(IntPtr handle, Rectangle rectangle, Color backColor)
+    private static void DrawReversibleFrame(HWND handle, Rectangle rectangle, Color backColor)
     {
         //Bug # 71547 <subhag> to make drag rect visible if any the dimensions of the control are 0
         if (rectangle.Width == 0)

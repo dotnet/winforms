@@ -203,7 +203,7 @@ public abstract partial class ObjectSelectorEditor
             switch (m.MsgInternal)
             {
                 case User32.WM.GETDLGCODE:
-                    m.ResultInternal = (LRESULT)(m.ResultInternal | (int)User32.DLGC.WANTALLKEYS);
+                    m.ResultInternal = (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTALLKEYS);
                     return;
                 case User32.WM.MOUSEMOVE:
                     if (clickSeen)

@@ -1943,14 +1943,14 @@ public partial class TabControl : Control
 
     private unsafe void WmReflectDrawItem(ref Message m)
     {
-        User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)(nint)m.LParamInternal;
+        DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
         using var e = new DrawItemEventArgs(
-            dis->hDC,
+            dis->hDC.CreateGraphics(),
             Font,
             dis->rcItem,
-            dis->itemID,
-            dis->itemState);
+            (int)dis->itemID,
+            (DrawItemState)(int)dis->itemState);
 
         OnDrawItem(e);
 

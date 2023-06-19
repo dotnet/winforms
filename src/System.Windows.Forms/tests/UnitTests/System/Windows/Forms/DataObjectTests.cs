@@ -8,8 +8,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
+using Windows.Win32.System.Ole;
 using Moq;
-using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Point = System.Drawing.Point;
 
@@ -1634,7 +1634,7 @@ public class DataObjectTests
         {
             // do not check the requested storage medium, we always return a metafile handle, thats what Office does
 
-            if (format.cfFormat != (short)CF.ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
+            if (format.cfFormat != (short)CLIPBOARD_FORMAT.CF_ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
                 return (int)HRESULT.DV_E_FORMATETC;
 
             return 0;
@@ -2177,8 +2177,8 @@ public class DataObjectTests
 
     public static IEnumerable<object[]> GetDataHere_UnicodeText_TestData()
     {
-        yield return new object[] { TextDataFormat.Text, (short)CF.UNICODETEXT };
-        yield return new object[] { TextDataFormat.UnicodeText, (short)CF.UNICODETEXT };
+        yield return new object[] { TextDataFormat.Text, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT };
+        yield return new object[] { TextDataFormat.UnicodeText, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT };
     }
 
     [WinFormsTheory]
@@ -2272,7 +2272,7 @@ public class DataObjectTests
         FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
-            cfFormat = (short)CF.HDROP
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
         };
 
         STGMEDIUM stgMedium = new()
@@ -2313,7 +2313,7 @@ public class DataObjectTests
         FORMATETC formatetc = new()
         {
             tymed = TYMED.TYMED_HGLOBAL,
-            cfFormat = (short)CF.HDROP
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
         };
 
         STGMEDIUM stgMedium = new()
@@ -2352,7 +2352,7 @@ public class DataObjectTests
         var formatetc = new FORMATETC
         {
             tymed = TYMED.TYMED_HGLOBAL,
-            cfFormat = (short)CF.HDROP
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
         };
         var stgMedium = new STGMEDIUM
         {
@@ -2371,7 +2371,7 @@ public class DataObjectTests
         var formatetc = new FORMATETC
         {
             tymed = TYMED.TYMED_HGLOBAL,
-            cfFormat = (short)CF.HDROP
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
         };
         var stgMedium = new STGMEDIUM
         {
@@ -2404,12 +2404,12 @@ public class DataObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CF.UNICODETEXT)]
-    [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CF.HDROP)]
-    [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CF.UNICODETEXT)]
-    [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CF.HDROP)]
-    [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CF.UNICODETEXT)]
-    [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CF.HDROP)]
+    [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT)]
+    [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CLIPBOARD_FORMAT.CF_HDROP)]
+    [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT)]
+    [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CLIPBOARD_FORMAT.CF_HDROP)]
+    [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT)]
+    [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CLIPBOARD_FORMAT.CF_HDROP)]
     public void IComDataObjectGetDataHere_NoDataPresentNoData_ThrowsCOMException(TYMED formatetcTymed, TYMED stgMediumTymed, short cfFormat)
     {
         var dataObject = new DataObject();
