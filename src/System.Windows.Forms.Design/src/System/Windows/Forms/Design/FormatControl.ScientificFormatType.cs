@@ -72,9 +72,8 @@ internal partial class FormatControl
 
         public override void PushFormatStringIntoFormatType(string formatString)
         {
-#if DEBUG
             Debug.Assert(Parse(formatString), "we only push valid strings");
-#endif // DEBUG
+
             if (formatString.Equals("E0"))
             {
                 _owner.decimalPlacesUpDown.Value = 0;

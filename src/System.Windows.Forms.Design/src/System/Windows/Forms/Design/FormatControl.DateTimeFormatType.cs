@@ -65,9 +65,8 @@ internal partial class FormatControl
 
         public override void PushFormatStringIntoFormatType(string formatString)
         {
-#if DEBUG
             Debug.Assert(Parse(formatString), "we only push valid strings");
-#endif // DEBUG
+
             int selectedIndex = -1;
 
             if (formatString.Equals("d"))
