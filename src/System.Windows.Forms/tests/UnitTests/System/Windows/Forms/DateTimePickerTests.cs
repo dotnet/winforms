@@ -106,17 +106,15 @@ public class DateTimePickerTests
         Assert.Equal(new Size(200, control.PreferredHeight), control.Size);
         Assert.Equal(0, control.TabIndex);
         Assert.True(control.TabStop);
+        Assert.Equal(string.Empty, control.Text);
         Assert.Equal(0, control.Top);
         Assert.Null(control.TopLevelControl);
         Assert.False(control.UseWaitCursor);
         Assert.True(control.Value > DateTime.MinValue);
         Assert.True(control.Visible);
         Assert.Equal(200, control.Width);
+
         Assert.False(control.IsHandleCreated);
-
-        control.CreateControl();
-
-        Assert.Equal(((DateTime)control.TestAccessor().Dynamic._creationTime).ToLongDateString(), control.Text);
     }
 
     [WinFormsFact]
@@ -226,6 +224,32 @@ public class DateTimePickerTests
 
         Assert.Null(dateTimePicker.CustomFormat);
         Assert.Equal(dt.ToLongDateString(), dateTimePicker.Text);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CustomFormat_Null_Format_Short_Text_ReturnsExpected()
+    {
+        using DateTimePicker dateTimePicker = new();
+        DateTime dt = new(2000, 1, 2, 3, 4, 5);
+        dateTimePicker.Value = dt;
+        dateTimePicker.Format = DateTimePickerFormat.Short;
+        dateTimePicker.CreateControl();
+
+        Assert.Null(dateTimePicker.CustomFormat);
+        Assert.Equal(dt.ToShortDateString(), dateTimePicker.Text);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_CustomFormat_Null_Format_Time_Text_ReturnsExpected()
+    {
+        using DateTimePicker dateTimePicker = new();
+        DateTime dt = new(2000, 1, 2, 3, 4, 5);
+        dateTimePicker.Value = dt;
+        dateTimePicker.Format = DateTimePickerFormat.Time;
+        dateTimePicker.CreateControl();
+
+        Assert.Null(dateTimePicker.CustomFormat);
+        Assert.Equal(dt.ToLongTimeString(), dateTimePicker.Text);
     }
 
     [WinFormsFact]

@@ -47,7 +47,8 @@ partial class DateTimePicker
         this.dateTimePicker1.Margin = new Padding(4, 3, 4, 3);
         this.dateTimePicker1.Name = "dateTimePicker1";
         this.dateTimePicker1.Size = new Size(233, 23);
-        this.dateTimePicker1.TabIndex = 6;
+        this.dateTimePicker1.TabIndex = 1;
+        this.dateTimePicker1.ShowCheckBox = true;
         // 
         // dateTimePicker2
         // 
@@ -56,7 +57,9 @@ partial class DateTimePicker
         this.dateTimePicker2.Margin = new Padding(4, 3, 4, 3);
         this.dateTimePicker2.Name = "dateTimePicker2";
         this.dateTimePicker2.Size = new Size(233, 23);
-        this.dateTimePicker2.TabIndex = 6;
+        this.dateTimePicker2.TabIndex = 2;
+        this.dateTimePicker2.ShowCheckBox = true;
+        this.dateTimePicker2.ShowUpDown = true;
         // 
         // dateTimePicker3
         // 
@@ -65,7 +68,8 @@ partial class DateTimePicker
         this.dateTimePicker3.Margin = new Padding(4, 3, 4, 3);
         this.dateTimePicker3.Name = "dateTimePicker3";
         this.dateTimePicker3.Size = new Size(233, 23);
-        this.dateTimePicker3.TabIndex = 6;
+        this.dateTimePicker3.TabIndex = 3;
+        this.dateTimePicker3.ShowCheckBox = true;
         // 
         // dateTimePicker4
         // 
@@ -74,7 +78,8 @@ partial class DateTimePicker
         this.dateTimePicker4.Margin = new Padding(4, 3, 4, 3);
         this.dateTimePicker4.Name = "dateTimePicker4";
         this.dateTimePicker4.Size = new Size(233, 23);
-        this.dateTimePicker4.TabIndex = 6;
+        this.dateTimePicker4.TabIndex = 4;
+        this.dateTimePicker4.ShowCheckBox = true;
         // 
         // dateTimePicker5
         // 
@@ -83,7 +88,8 @@ partial class DateTimePicker
         this.dateTimePicker5.Margin = new Padding(4, 3, 4, 3);
         this.dateTimePicker5.Name = "dateTimePicker5";
         this.dateTimePicker5.Size = new Size(233, 23);
-        this.dateTimePicker5.TabIndex = 6;
+        this.dateTimePicker5.TabIndex = 5;
+        this.dateTimePicker5.ShowCheckBox = true;
         // 
         // DateTimePicker
         // 
