@@ -3,7 +3,7 @@
 The Windows Forms out-of-process designer is currently available as a preview Visual Studio feature in [Visual Studio 2019 or later](https://visualstudio.microsoft.com/vs/preview/). It can be enabled in **Tools -> Options -> Environment -> Preview Features** dialog by checking the **Use the preview Windows Forms out-of-process designer for .NET apps** checkbox.
  Releases of .NET Windows Forms Designer are tied to Visual Studio Preview releases, so update to the latest Visual Studio Preview version to get the newest designer features.
 
-:heavy_exclamation_mark: The latest designer feature shipped in `Visual Studio 2022 v17.5 Preview 3` is [Modernization of code-behind generation](./modernization-of-code-behind-in-oop-designer/modernization-of-code-behind-in-oop-designer.md).
+:heavy_exclamation_mark: The latest designer feature shipped in `Visual Studio 2022 v17.5 Preview 3` is [Modernization of code-behind generation](./modernization-of-code-behind-in-OOP-designer/modernization-of-code-behind-in-oop-designer.md).
 
 For the latest news on the designer please refer to [the series of blogs](https://devblogs.microsoft.com/search?query=winforms&blog=%2Fdotnet%2F):
 
