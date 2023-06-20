@@ -23,7 +23,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     private IDesignerHost? _designerHost;
     private SplitContainer? _splitContainer;
     private SplitterPanel? _selectedPanel;
-    private static readonly int s_numberOfSplitterPanels = 2;
+    private const int NumberOfSplitterPanels = 2;
     private SplitterPanel? _splitterPanel1, _splitterPanel2;
 
     // The Container Should not Show any GRIDs in the Splitter Region.
@@ -68,7 +68,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     ///  Returns the number of internal control designers in the <see cref="SplitContainerDesigner"/>. An internal control is a control that is not in the
     ///  IDesignerHost.Container.Components collection. We use this to get SnapLines for the internal control designers.
     /// </summary>
-    public override int NumberOfInternalControlDesigners() => s_numberOfSplitterPanels;
+    public override int NumberOfInternalControlDesigners() => NumberOfSplitterPanels;
 
     /// <summary>
     ///  Returns the internal control designer with the specified index in the <see cref="ControlDesigner"/>. InternalControlIndex is zero-based.

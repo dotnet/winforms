@@ -30,7 +30,7 @@ internal partial class SplitContainerDesigner
                 if (orientationProp is not null)
                 {
                     bool needsVertical = ((Orientation)orientationProp.GetValue(_ownerComponent)!) == Orientation.Horizontal;
-                    _actionName = needsVertical ? SR.DesignerShortcutVerticalOrientation) : SR.DesignerShortcutHorizontalOrientation);
+                    _actionName = needsVertical ? SR.DesignerShortcutVerticalOrientation : SR.DesignerShortcutHorizontalOrientation;
                 }
             }
         }
@@ -45,7 +45,7 @@ internal partial class SplitContainerDesigner
             Orientation orientation = verb.Text.Equals(SR.DesignerShortcutHorizontalOrientation) ? Orientation.Horizontal : Orientation.Vertical;
 
             //switch the text of the orientation action from vertical to horizontal or visa-versa
-            _actionName = (orientation == Orientation.Horizontal) ? SR.DesignerShortcutVerticalOrientation) : SR.DesignerShortcutHorizontalOrientation);
+            _actionName = (orientation == Orientation.Horizontal) ? SR.DesignerShortcutVerticalOrientation : SR.DesignerShortcutHorizontalOrientation;
 
             //get the prop and actually modify the orientation
             PropertyDescriptor? orientationProp = TypeDescriptor.GetProperties(_ownerComponent!)["Orientation"];
