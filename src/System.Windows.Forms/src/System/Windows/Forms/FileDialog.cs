@@ -154,7 +154,7 @@ public abstract partial class FileDialog : CommonDialog
         set => SetOption(OFN_NODEREFERENCELINKS, !value);
     }
 
-    private protected string DialogCaption => User32.GetWindowText(_dialogHWnd);
+    private protected string DialogCaption => PInvoke.GetWindowText(_dialogHWnd);
 
     /// <summary>
     ///  Gets or sets a string containing the file name selected in the file dialog box.

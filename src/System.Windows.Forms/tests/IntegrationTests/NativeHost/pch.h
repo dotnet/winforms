@@ -16,6 +16,7 @@
 #include <afx.h>
 #include <afxwin.h>
 #include <afxdtctl.h>
+#include <MsHTML.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

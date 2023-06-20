@@ -175,7 +175,7 @@ public sealed partial class MultilineStringEditor
             ClientSize = new Size(ClientSize.Width + requestedDelta, MinimumSize.Height);
         }
 
-        private Size ContentSize
+        private unsafe Size ContentSize
         {
             get
             {
@@ -183,8 +183,12 @@ public sealed partial class MultilineStringEditor
                 using PInvoke.ObjectScope font = new(Font.ToHFONT());
                 using PInvoke.SelectObjectScope fontSelection = new(hdc, font);
 
-                RECT rect = default(RECT);
-                User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);
+                RECT rect = default;
+                fixed (char* t = Text)
+                {
+                    PInvoke.DrawText(hdc, t, Text.Length, ref rect, DRAW_TEXT_FORMAT.DT_CALCRECT);
+                }
+
                 return new Size(rect.Width + CaretPadding, rect.Height);
             }
         }
@@ -330,14 +334,14 @@ public sealed partial class MultilineStringEditor
                     return string.Empty;
                 }
 
-                string windowText = User32.GetWindowText(this);
+                string windowText = PInvoke.GetWindowText(this);
                 if (!_ctrlEnterPressed)
                 {
                     return windowText;
                 }
                 else
                 {
-                    int index = windowText.LastIndexOf("\r\n");
+                    int index = windowText.LastIndexOf("\r\n", StringComparison.Ordinal);
                     Debug.Assert(index != -1, "We should have found a Ctrl+Enter in the string");
                     return windowText.Remove(index, 2);
                 }

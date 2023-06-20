@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -32,7 +31,7 @@ public partial class ComboBox
 
             // Look for a popped up dropdown
             _shouldSubClass = subclass;
-            EnumThreadWindows(
+            PInvoke.EnumThreadWindows(
                 PInvoke.GetCurrentThreadId(),
                 Callback);
         }

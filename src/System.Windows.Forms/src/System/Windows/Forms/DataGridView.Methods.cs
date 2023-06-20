@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
@@ -5838,7 +5837,7 @@ public partial class DataGridView
     {
         const byte DATAGRIDVIEW_shadowEdgeThickness = 3;
 
-        using User32.GetDcScope dc = new(Handle, default, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+        using User32.GetDcScope dc = new(HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
         HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
 
@@ -5857,13 +5856,13 @@ public partial class DataGridView
     /// </summary>
     private void DrawSplitBar(Rectangle r)
     {
-        HDC dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+        using User32.GetDcScope dc = new(HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
         HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
         PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
         PInvoke.SelectObject(dc, saveBrush);
         PInvoke.DeleteObject(halftone);
-        User32.ReleaseDC(new HandleRef(this, Handle), dc);
+        GC.KeepAlive(this);
     }
 
     private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
@@ -30351,12 +30350,12 @@ public partial class DataGridView
     /// </summary>
     private void WmGetDlgCode(ref Message m)
     {
-        m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)User32.DLGC.WANTARROWS | (nint)User32.DLGC.WANTCHARS);
+        m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)PInvoke.DLGC_WANTARROWS | (nint)PInvoke.DLGC_WANTCHARS);
 
         Keys modifierKeys = ModifierKeys;
         if (GetTabKeyEffective((modifierKeys & Keys.Shift) == Keys.Shift, (modifierKeys & Keys.Control) == Keys.Control))
         {
-            m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)User32.DLGC.WANTTAB);
+            m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)PInvoke.DLGC_WANTTAB);
         }
     }
 

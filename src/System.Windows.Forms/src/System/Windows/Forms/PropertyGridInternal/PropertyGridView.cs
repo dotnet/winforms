@@ -185,7 +185,7 @@ internal sealed partial class PropertyGridView :
                 return false;
             }
 
-            return PInvoke.SendMessage(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
+            return PInvoke.SendMessage(EditTextBox, (User32.WM)PInvoke.EM_CANUNDO) != 0;
         }
     }
 
@@ -2436,7 +2436,7 @@ internal sealed partial class PropertyGridView :
             }
             else
             {
-                using User32.GetDcScope hdc = new(Handle);
+                using User32.GetDcScope hdc = new(HWND);
                 using PInvoke.CreateBrushScope hbrush = new(color);
                 hdc.FillRectangle(hbrush, clearRect);
             }
@@ -3793,7 +3793,7 @@ internal sealed partial class PropertyGridView :
 
             // The listbox draws with GDI, not GDI+.  So we use a normal DC here.
 
-            using var hdc = new User32.GetDcScope(DropDownListBox.Handle);
+            using var hdc = new User32.GetDcScope(DropDownListBox.HWND);
 
             TEXTMETRICW tm = default;
             int selectionIndex = -1;
@@ -5507,7 +5507,7 @@ internal sealed partial class PropertyGridView :
 
             case (int)User32.WM.GETDLGCODE:
 
-                User32.DLGC flags = User32.DLGC.WANTCHARS | User32.DLGC.WANTARROWS;
+                uint flags = PInvoke.DLGC_WANTCHARS | PInvoke.DLGC_WANTARROWS;
 
                 if (_selectedGridEntry is not null && (ModifierKeys & Keys.Shift) == 0)
                 {
@@ -5515,7 +5515,7 @@ internal sealed partial class PropertyGridView :
                     // Otherwise we only want it if we have an edit.
                     if (_editTextBox.Visible)
                     {
-                        flags |= User32.DLGC.WANTTAB;
+                        flags |= PInvoke.DLGC_WANTTAB;
                     }
                 }
 

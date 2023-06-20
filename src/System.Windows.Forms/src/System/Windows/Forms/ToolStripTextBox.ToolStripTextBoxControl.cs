@@ -29,7 +29,7 @@ public partial class ToolStripTextBox
         {
             get
             {
-                RECT rect = default(RECT);
+                RECT rect = default;
                 CreateParams cp = CreateParams;
 
                 AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
@@ -233,7 +233,7 @@ public partial class ToolStripTextBox
 
             // Note that GetWindowDC just calls GetDCEx with DCX_WINDOW | DCX_USESTYLE.
 
-            using var hdc = new User32.GetDcScope(m.HWnd, IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.USESTYLE);
+            using var hdc = new User32.GetDcScope(m.HWND, HRGN.Null, GET_DCX_FLAGS.DCX_WINDOW | (GET_DCX_FLAGS)0x00010000 /* DCX_USESTYLE */);
             if (hdc.IsNull)
             {
                 throw new Win32Exception();

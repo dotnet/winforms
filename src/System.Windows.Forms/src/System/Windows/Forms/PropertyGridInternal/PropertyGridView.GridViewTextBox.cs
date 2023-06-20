@@ -354,10 +354,10 @@ internal partial class PropertyGridView
 
                 case User32.WM.GETDLGCODE:
 
-                    m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)(User32.DLGC.WANTARROWS | User32.DLGC.WANTCHARS));
+                    m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)(PInvoke.DLGC_WANTARROWS | PInvoke.DLGC_WANTCHARS));
                     if (PropertyGridView.EditTextBoxNeedsCommit || PropertyGridView.WantsTab(forward: (ModifierKeys & Keys.Shift) == 0))
                     {
-                        m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)(User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB));
+                        m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)(PInvoke.DLGC_WANTALLKEYS | PInvoke.DLGC_WANTTAB));
                     }
 
                     return;

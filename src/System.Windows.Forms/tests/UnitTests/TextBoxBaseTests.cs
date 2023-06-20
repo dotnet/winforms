@@ -734,7 +734,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.CANUNDO)
+            if (m.Msg == (int)PInvoke.EM_CANUNDO)
             {
                 m.Result = Result;
                 return;
@@ -1268,7 +1268,7 @@ public partial class TextBoxBaseTests
             Multiline = multiline
         };
         control.CreateControl();
-        IntPtr result = PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMARGINS);
+        IntPtr result = PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_GETMARGINS);
         Assert.Equal(expected, PARAM.LOWORD(result));
         Assert.Equal(expected, PARAM.HIWORD(result));
     }
@@ -1286,7 +1286,7 @@ public partial class TextBoxBaseTests
         };
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        IntPtr result = PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMARGINS);
+        IntPtr result = PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_GETMARGINS);
         Assert.Equal(expected, PARAM.LOWORD(result));
         Assert.Equal(expected, PARAM.HIWORD(result));
     }
@@ -1302,7 +1302,7 @@ public partial class TextBoxBaseTests
         };
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMODIFY));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_GETMODIFY));
     }
 
     [WinFormsTheory]
@@ -1672,7 +1672,7 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_LIMITTEXT.
-        PInvoke.SendMessage(control, (User32.WM)User32.EM.LIMITTEXT, 0, 1);
+        PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_LIMITTEXT, 0, 1);
         Assert.Equal(0x7FFF, control.MaxLength);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -1781,7 +1781,7 @@ public partial class TextBoxBaseTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.MaxLength = value;
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)User32.EM.GETLIMITTEXT));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_GETLIMITTEXT));
     }
 
     [WinFormsFact]
@@ -1819,7 +1819,7 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETMODIFY.
-        PInvoke.SendMessage(control, (User32.WM)User32.EM.SETMODIFY, (WPARAM)(BOOL)true);
+        PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_SETMODIFY, (WPARAM)(BOOL)true);
         Assert.Equal(0, modifiedChangedCallCount);
 
         Assert.True(control.Modified);
@@ -1897,7 +1897,7 @@ public partial class TextBoxBaseTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.Modified = value;
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMODIFY));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_GETMODIFY));
     }
 
     [WinFormsFact]
@@ -2321,7 +2321,7 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETREADONLY.
-        PInvoke.SendMessage(control, (User32.WM)User32.EM.SETREADONLY, (WPARAM)(BOOL)true);
+        PInvoke.SendMessage(control, (User32.WM)PInvoke.EM_SETREADONLY, (WPARAM)(BOOL)true);
         Assert.Equal(0, readOnlyChangedCallCount);
 
         Assert.False(control.ReadOnly);
@@ -2399,13 +2399,13 @@ public partial class TextBoxBaseTests
     [BoolData]
     public void TextBoxBase_ReadOnly_GetModify_Success(bool value)
     {
-        using var control = new TextBox();
+        using TextBox control = new();
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.ReadOnly = value;
 
-        User32.ES style = (User32.ES)PInvoke.GetWindowLong(control, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-        Assert.Equal(value, style.HasFlag(User32.ES.READONLY));
+        WINDOW_STYLE style = (WINDOW_STYLE)PInvoke.GetWindowLong(control, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        Assert.Equal(value, ((int)style & PInvoke.ES_READONLY) != 0);
     }
 
     [WinFormsFact]
@@ -2916,7 +2916,7 @@ public partial class TextBoxBaseTests
         int selectionEnd = 0;
         LRESULT result = PInvoke.SendMessage(
             control,
-            (User32.WM)User32.EM.GETSEL,
+            (User32.WM)PInvoke.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(1, result.LOWORD);
@@ -3093,7 +3093,7 @@ public partial class TextBoxBaseTests
         int selectionEnd = 0;
         LRESULT result = PInvoke.SendMessage(
             control,
-            (User32.WM)User32.EM.GETSEL,
+            (User32.WM)PInvoke.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(expectedSelectionStart, result.LOWORD);
@@ -4280,7 +4280,7 @@ public partial class TextBoxBaseTests
         int selectionEnd = 0;
         LRESULT result = PInvoke.SendMessage(
             control,
-            (User32.WM)User32.EM.GETSEL,
+            (User32.WM)PInvoke.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(1, PARAM.LOWORD(result));
@@ -4688,7 +4688,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.CHARFROMPOS)
+            if (m.Msg == (int)PInvoke.EM_CHARFROMPOS)
             {
                 Assert.Equal(IntPtr.Zero, m.WParam);
                 Assert.Equal(2, PARAM.SignedHIWORD(m.LParam));
@@ -4883,7 +4883,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.LINEINDEX)
+            if (m.Msg == (int)PInvoke.EM_LINEINDEX)
             {
                 Assert.Equal(ExpectedWParam, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
@@ -5000,7 +5000,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.LINEFROMCHAR)
+            if (m.Msg == (int)PInvoke.EM_LINEFROMCHAR)
             {
                 Assert.Equal((IntPtr)1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
@@ -5157,7 +5157,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.EM.POSFROMCHAR)
+            if (m.Msg == (int)PInvoke.EM_POSFROMCHAR)
             {
                 Assert.Equal((IntPtr)1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
@@ -6538,7 +6538,7 @@ public partial class TextBoxBaseTests
         int selectionEnd = 0;
         LRESULT result = PInvoke.SendMessage(
             control,
-            (User32.WM)User32.EM.GETSEL,
+            (User32.WM)PInvoke.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(expectedSelectionStart, result.LOWORD);
@@ -6674,7 +6674,7 @@ public partial class TextBoxBaseTests
         int selectionEnd = 0;
         LRESULT result = PInvoke.SendMessage(
             control,
-            (User32.WM)User32.EM.GETSEL,
+            (User32.WM)PInvoke.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(0, result.LOWORD);
@@ -7779,11 +7779,11 @@ public partial class TextBoxBaseTests
         foreach (IntPtr lParam in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
         {
             yield return new object[] { IntPtr.Zero, lParam, 0 };
-            yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.CHANGE), lParam, 1 };
-            yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.UPDATE), lParam, 0 };
-            yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.CHANGE), lParam, 1 };
-            yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.HSCROLL), lParam, 0 };
-            yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.VSCROLL), lParam, 0 };
+            yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_CHANGE), lParam, 1 };
+            yield return new object[] { PARAM.FromLowHigh(0, (int)PInvoke.EN_UPDATE), lParam, 0 };
+            yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_CHANGE), lParam, 1 };
+            yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_HSCROLL), lParam, 0 };
+            yield return new object[] { PARAM.FromLowHigh(123, (int)PInvoke.EN_VSCROLL), lParam, 0 };
             yield return new object[] { PARAM.FromLowHigh(123, 456), lParam, 0 };
         }
     }
@@ -7863,15 +7863,17 @@ public partial class TextBoxBaseTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubTextBox
+            using SubTextBox control = new()
             {
                 Multiline = multiline
             };
-            var m = new Message
+
+            Message m = new()
             {
                 Msg = (int)WM.SETFONT,
-                Result = (IntPtr)250
+                Result = 250
             };
+
             int textChangedCallCount = 0;
             control.TextChanged += (sender, e) => textChangedCallCount++;
             control.WndProc(ref m);
@@ -7879,7 +7881,7 @@ public partial class TextBoxBaseTests
             Assert.Equal(!multiline, control.IsHandleCreated);
             Assert.Equal(0, textChangedCallCount);
             control.CreateControl();
-            nint result = PInvoke.SendMessage(control, (WM)EM.GETMARGINS);
+            nint result = PInvoke.SendMessage(control, (WM)PInvoke.EM_GETMARGINS);
             Assert.Equal(expectedMargin, PARAM.HIWORD(result));
             Assert.Equal(expectedMargin, PARAM.LOWORD(result));
         }
@@ -7890,10 +7892,11 @@ public partial class TextBoxBaseTests
     [InlineData(false, 0, 0)]
     public void TextBoxBase_WndProc_InvokeSetFontWithHandle_ReturnsExpected(bool multiline, int expectedLeft, int expectedRight)
     {
-        using var control = new SubTextBox
+        using SubTextBox control = new()
         {
             Multiline = multiline
         };
+
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -7903,21 +7906,22 @@ public partial class TextBoxBaseTests
         control.HandleCreated += (sender, e) => createdCallCount++;
         PInvoke.SendMessage(
             control,
-            (WM)EM.SETMARGINS,
-            (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN),
+            (WM)PInvoke.EM_SETMARGINS,
+            (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
             LPARAM.MAKELPARAM(1, 2));
         int textChangedCallCount = 0;
         control.TextChanged += (sender, e) => textChangedCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
             Msg = (int)WM.SETFONT,
-            Result = (IntPtr)250
+            Result = 250
         };
+
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
         Assert.Equal(0, textChangedCallCount);
-        IntPtr result = PInvoke.SendMessage(control, (WM)EM.GETMARGINS);
+        IntPtr result = PInvoke.SendMessage(control, (WM)PInvoke.EM_GETMARGINS);
         Assert.Equal(expectedLeft, PARAM.LOWORD(result));
         Assert.Equal(expectedRight, PARAM.HIWORD(result));
         Assert.True(control.IsHandleCreated);

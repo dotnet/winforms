@@ -3941,7 +3941,7 @@ public unsafe partial class Control :
             }
 
             using var scope = MultithreadSafeCallScope.Create();
-            return User32.GetWindowText(this);
+            return PInvoke.GetWindowText(this);
         }
         set
         {
@@ -5042,7 +5042,7 @@ public unsafe partial class Control :
         if (((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_window, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE))
             .HasFlag(WINDOW_EX_STYLE.WS_EX_MDICHILD))
         {
-            User32.DefMDIChildProcW(InternalHandle, User32.WM.CLOSE, IntPtr.Zero, IntPtr.Zero);
+            PInvoke.DefMDIChildProc(InternalHandle, (uint)User32.WM.CLOSE, default, default);
         }
         else
         {
@@ -6694,11 +6694,11 @@ public unsafe partial class Control :
         int mask;
         if (charCode == (char)(int)Keys.Tab)
         {
-            mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB);
+            mask = (int)(PInvoke.DLGC_WANTCHARS | PInvoke.DLGC_WANTALLKEYS | PInvoke.DLGC_WANTTAB);
         }
         else
         {
-            mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS);
+            mask = (int)(PInvoke.DLGC_WANTCHARS | PInvoke.DLGC_WANTALLKEYS);
         }
 
         return ((int)PInvoke.SendMessage(this, User32.WM.GETDLGCODE) & mask) != 0;
@@ -6726,22 +6726,22 @@ public unsafe partial class Control :
             return false;
         }
 
-        User32.DLGC mask = User32.DLGC.WANTALLKEYS;
+        uint mask = PInvoke.DLGC_WANTALLKEYS;
         switch (keyData & Keys.KeyCode)
         {
             case Keys.Tab:
-                mask = User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB;
+                mask = PInvoke.DLGC_WANTALLKEYS | PInvoke.DLGC_WANTTAB;
                 break;
             case Keys.Left:
             case Keys.Right:
             case Keys.Up:
             case Keys.Down:
-                mask = User32.DLGC.WANTALLKEYS | User32.DLGC.WANTARROWS;
+                mask = PInvoke.DLGC_WANTALLKEYS | PInvoke.DLGC_WANTARROWS;
                 break;
         }
 
         return IsHandleCreated
-            && ((User32.DLGC)(int)PInvoke.SendMessage(this, User32.WM.GETDLGCODE) & mask) != 0;
+            && ((uint)PInvoke.SendMessage(this, User32.WM.GETDLGCODE) & mask) != 0;
     }
 
     /// <summary>
@@ -12610,7 +12610,7 @@ public unsafe partial class Control :
     {
         s_paletteTracing.TraceVerbose($"{Handle}: WM_QUERYNEWPALETTE");
 
-        using var dc = new User32.GetDcScope(Handle);
+        using var dc = new User32.GetDcScope(HWND);
 
         // We don't want to unset the palette in this case so we don't do this in a using
         var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(

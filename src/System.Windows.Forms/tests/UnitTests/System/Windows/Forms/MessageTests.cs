@@ -415,10 +415,10 @@ public class MessageTests
         yield return new object[] { User32.WM.CTLCOLOR, " (WM_CTLCOLOR)" };
 
         // RichEdit messages
-        yield return new object[] { User32.EM.GETLIMITTEXT, " (EM_GETLIMITTEXT)" };
-        yield return new object[] { User32.EM.POSFROMCHAR, " (EM_POSFROMCHAR)" };
-        yield return new object[] { User32.EM.CHARFROMPOS, " (EM_CHARFROMPOS)" };
-        yield return new object[] { User32.EM.SCROLLCARET, " (EM_SCROLLCARET)" };
+        yield return new object[] { PInvoke.EM_GETLIMITTEXT, " (EM_GETLIMITTEXT)" };
+        yield return new object[] { PInvoke.EM_POSFROMCHAR, " (EM_POSFROMCHAR)" };
+        yield return new object[] { PInvoke.EM_CHARFROMPOS, " (EM_CHARFROMPOS)" };
+        yield return new object[] { PInvoke.EM_SCROLLCARET, " (EM_SCROLLCARET)" };
         yield return new object[] { Richedit.EM.CANPASTE, " (EM_CANPASTE)" };
         yield return new object[] { Richedit.EM.DISPLAYBAND, " (EM_DISPLAYBAND)" };
         yield return new object[] { Richedit.EM.EXGETSEL, " (EM_EXGETSEL)" };

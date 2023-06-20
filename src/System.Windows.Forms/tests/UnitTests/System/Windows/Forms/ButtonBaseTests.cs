@@ -5708,7 +5708,7 @@ public class ButtonBaseTests
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.OnKeyDown(new KeyEventArgs(key));
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)PInvoke.BM_GETSTATE));
     }
 
     [WinFormsTheory]
@@ -5733,7 +5733,7 @@ public class ButtonBaseTests
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
         control.OnKeyDown(new KeyEventArgs(key));
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)PInvoke.BM_GETSTATE));
     }
 
     [WinFormsFact]
@@ -5987,7 +5987,7 @@ public class ButtonBaseTests
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.OnKeyUp(new KeyEventArgs(key));
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)PInvoke.BM_GETSTATE));
     }
 
     [WinFormsTheory]
@@ -6012,7 +6012,7 @@ public class ButtonBaseTests
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
         control.OnKeyUp(new KeyEventArgs(key));
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)PInvoke.BM_GETSTATE));
     }
 
     [WinFormsFact]
@@ -8288,7 +8288,7 @@ public class ButtonBaseTests
     [EnumData<FlatStyle>]
     public void ButtonBase_WndProc_InvokeClick_Success(FlatStyle flatStyle)
     {
-        using var control = new SubButtonBase
+        using SubButtonBase control = new()
         {
             FlatStyle = flatStyle
         };
@@ -8300,13 +8300,15 @@ public class ButtonBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+
+        Message m = new()
         {
-            Msg = (int)BM.CLICK,
-            Result = (IntPtr)250
+            Msg = (int)PInvoke.BM_CLICK,
+            Result = 250
         };
+
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(1, callCount);
         Assert.False(control.IsHandleCreated);
     }
@@ -8315,7 +8317,7 @@ public class ButtonBaseTests
     [EnumData<FlatStyle>]
     public void ButtonBase_WndProc_InvokeClickButtonButtonBase_Success(FlatStyle flatStyle)
     {
-        using var control = new ButtonControl
+        using ButtonControl control = new()
         {
             FlatStyle = flatStyle
         };
@@ -8327,15 +8329,18 @@ public class ButtonBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
+
         int performCallCount = 0;
         control.PerformClickAction = () => performCallCount++;
-        var m = new Message
+
+        Message m = new()
         {
-            Msg = (int)BM.CLICK,
-            Result = (IntPtr)250
+            Msg = (int)PInvoke.BM_CLICK,
+            Result = 250
         };
+
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(0, callCount);
         Assert.Equal(1, performCallCount);
         Assert.False(control.IsHandleCreated);
@@ -8345,10 +8350,11 @@ public class ButtonBaseTests
     [EnumData<FlatStyle>]
     public void ButtonBase_WndProc_InvokeClickWithHandle_Success(FlatStyle flatStyle)
     {
-        using var control = new SubButtonBase
+        using SubButtonBase control = new()
         {
             FlatStyle = flatStyle
         };
+
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -8364,13 +8370,15 @@ public class ButtonBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
-        var m = new Message
+
+        Message m = new()
         {
-            Msg = (int)BM.CLICK,
-            Result = (IntPtr)250
+            Msg = (int)PInvoke.BM_CLICK,
+            Result = 250
         };
+
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(1, callCount);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -8382,10 +8390,11 @@ public class ButtonBaseTests
     [EnumData<FlatStyle>]
     public void ButtonBase_WndProc_InvokeClickButtonControlWithHandle_Success(FlatStyle flatStyle)
     {
-        using var control = new ButtonControl
+        using ButtonControl control = new()
         {
             FlatStyle = flatStyle
         };
+
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -8401,15 +8410,17 @@ public class ButtonBaseTests
             Assert.Same(EventArgs.Empty, e);
             callCount++;
         };
+
         int performCallCount = 0;
         control.PerformClickAction = () => performCallCount++;
-        var m = new Message
+        Message m = new()
         {
-            Msg = (int)BM.CLICK,
-            Result = (IntPtr)250
+            Msg = (int)PInvoke.BM_CLICK,
+            Result = 250
         };
+
         control.WndProc(ref m);
-        Assert.Equal((IntPtr)250, m.Result);
+        Assert.Equal(250, m.Result);
         Assert.Equal(0, callCount);
         Assert.Equal(1, performCallCount);
         Assert.True(control.IsHandleCreated);
@@ -9087,23 +9098,23 @@ public class ButtonBaseTests
     public static IEnumerable<object[]> WndProc_ReflectCommandWithoutHandle_TestData()
     {
         yield return new object[] { FlatStyle.Flat, IntPtr.Zero, IntPtr.Zero, 0 };
-        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(0, (int)BN.CLICKED), IntPtr.Zero, 0 };
-        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(123, (int)BN.CLICKED), IntPtr.Zero, 0 };
+        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), IntPtr.Zero, 0 };
+        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), IntPtr.Zero, 0 };
         yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(123, 456), IntPtr.Zero, 0 };
 
         yield return new object[] { FlatStyle.Popup, IntPtr.Zero, IntPtr.Zero, 0 };
-        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(0, (int)BN.CLICKED), IntPtr.Zero, 0 };
-        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(123, (int)BN.CLICKED), IntPtr.Zero, 0 };
+        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), IntPtr.Zero, 0 };
+        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), IntPtr.Zero, 0 };
         yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(123, 456), IntPtr.Zero, 0 };
 
         yield return new object[] { FlatStyle.Standard, IntPtr.Zero, IntPtr.Zero, 0 };
-        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(0, (int)BN.CLICKED), IntPtr.Zero, 0 };
-        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(123, (int)BN.CLICKED), IntPtr.Zero, 0 };
+        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), IntPtr.Zero, 0 };
+        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), IntPtr.Zero, 0 };
         yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(123, 456), IntPtr.Zero, 0 };
 
         yield return new object[] { FlatStyle.System, IntPtr.Zero, (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(0, (int)BN.CLICKED), (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, (int)BN.CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, 456), (IntPtr)250, 0 };
     }
 
@@ -9190,16 +9201,17 @@ public class ButtonBaseTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubButtonBase
+            using SubButtonBase control = new()
             {
                 FlatStyle = flatStyle
             };
 
-            var m = new Message
+            Message m = new()
             {
-                Msg = (int)BM.SETSTATE,
-                Result = (IntPtr)250
+                Msg = (int)PInvoke.BM_SETSTATE,
+                Result = 250
             };
+
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
             Assert.False(control.IsHandleCreated);
@@ -9210,10 +9222,11 @@ public class ButtonBaseTests
     [MemberData(nameof(WndProc_SetState_TestData))]
     public void ButtonBase_WndProc_InvokeSetStateWithHandle_Success(FlatStyle flatStyle, IntPtr expectedResult)
     {
-        using var control = new SubButtonBase
+        using SubButtonBase control = new()
         {
             FlatStyle = flatStyle
         };
+
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -9222,11 +9235,12 @@ public class ButtonBaseTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        var m = new Message
+        Message m = new()
         {
-            Msg = (int)BM.SETSTATE,
-            Result = (IntPtr)250
+            Msg = (int)PInvoke.BM_SETSTATE,
+            Result = 250
         };
+
         control.WndProc(ref m);
         Assert.Equal(expectedResult, m.Result);
         Assert.True(control.IsHandleCreated);

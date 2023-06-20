@@ -404,9 +404,10 @@ public partial class PrintPreviewControl : Control
             return;
         }
 
-        using User32.GetDcScope hdc = new(Handle);
-        screendpi = new Point(PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
-                              PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
+        using User32.GetDcScope hdc = new(HWND);
+        screendpi = new Point(
+            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
+            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
 
         Size pageSize = pageInfo[StartPage].PhysicalSize;
         Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));

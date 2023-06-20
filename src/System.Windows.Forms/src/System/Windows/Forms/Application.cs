@@ -565,7 +565,7 @@ public sealed partial class Application
 
                 // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
                 // We do it this way to ensure that we get all top level windows -- whether we created them or not.
-                User32.EnumWindows(SendThemeChanged);
+                PInvoke.EnumWindows(SendThemeChanged);
             }
         }
     }
@@ -600,10 +600,10 @@ public sealed partial class Application
     /// </summary>
     private static BOOL SendThemeChangedRecursive(HWND handle)
     {
-        // First send to all children...
-        User32.EnumChildWindows(handle, SendThemeChangedRecursive);
+        // First send to all children.
+        PInvoke.EnumChildWindows(handle, SendThemeChangedRecursive);
 
-        // Then do myself.
+        // Then send to ourself.
         PInvoke.SendMessage(handle, User32.WM.THEMECHANGED);
 
         return true;

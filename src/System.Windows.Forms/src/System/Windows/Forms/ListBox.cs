@@ -2410,11 +2410,11 @@ public partial class ListBox : ListControl
         }
 
         using var e = new DrawItemEventArgs(
-            dis->hDC,
+            dis->hDC.CreateGraphics(),
             Font,
             bounds,
-            dis->itemID,
-            dis->itemState,
+            (int)dis->itemID,
+            (DrawItemState)(int)dis->itemState,
             ForeColor,
             BackColor);
 
@@ -2431,7 +2431,7 @@ public partial class ListBox : ListControl
         if (_drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
+            MeasureItemEventArgs mie = new(graphics, (int)mis->itemID, ItemHeight);
             OnMeasureItem(mie);
             mis->itemHeight = (uint)mie.ItemHeight;
         }

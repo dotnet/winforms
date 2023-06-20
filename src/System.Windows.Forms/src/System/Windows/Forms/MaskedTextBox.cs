@@ -321,13 +321,13 @@ public partial class MaskedTextBox : TextBoxBase
             switch (align)
             {
                 case HorizontalAlignment.Left:
-                    cp.Style |= (int)ES.LEFT;
+                    cp.Style |= PInvoke.ES_LEFT;
                     break;
                 case HorizontalAlignment.Center:
-                    cp.Style |= (int)ES.CENTER;
+                    cp.Style |= PInvoke.ES_CENTER;
                     break;
                 case HorizontalAlignment.Right:
-                    cp.Style |= (int)ES.RIGHT;
+                    cp.Style |= PInvoke.ES_RIGHT;
                     break;
             }
 
@@ -1101,7 +1101,7 @@ public partial class MaskedTextBox : TextBoxBase
         if (IsHandleCreated)
         {
             // This message does not return a value.
-            PInvoke.SendMessage(this, (User32.WM)EM.SETPASSWORDCHAR, (WPARAM)pwdChar);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_SETPASSWORDCHAR, (WPARAM)pwdChar);
             Invalidate();
         }
     }
@@ -2933,14 +2933,14 @@ public partial class MaskedTextBox : TextBoxBase
                 WmPrint(ref m);
                 return;
             case (int)WM.CONTEXTMENU:
-            case (int)EM.CANUNDO:
+            case (int)PInvoke.EM_CANUNDO:
                 base.ClearUndo(); // resets undo buffer.
                 base.WndProc(ref m);
                 return;
 
-            case (int)EM.SCROLLCARET:  // No scroll for single-line control.
-            case (int)EM.LIMITTEXT:    // Max/Min text is defined by the mask.
-            case (int)EM.UNDO:
+            case (int)PInvoke.EM_SCROLLCARET:  // No scroll for single-line control.
+            case (int)PInvoke.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
+            case (int)PInvoke.EM_UNDO:
             case (int)WM.UNDO:
                 return;
 

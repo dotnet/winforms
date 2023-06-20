@@ -74,7 +74,7 @@ internal sealed partial class DesignerActionPanel
                 int maxWidth = 0;
 
                 // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
-                using (var hdc = new User32.GetDcScope(listBox.Handle))
+                using (var hdc = new User32.GetDcScope((HWND)listBox.Handle))
                 {
                     using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
                     using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);

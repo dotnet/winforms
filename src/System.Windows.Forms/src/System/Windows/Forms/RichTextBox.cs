@@ -323,7 +323,7 @@ public partial class RichTextBox : TextBoxBase
                     cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                     {
-                        cp.Style |= (int)ES.DISABLENOSCROLL;
+                        cp.Style |= (int)PInvoke.ES_DISABLENOSCROLL;
                     }
                 }
 
@@ -332,7 +332,7 @@ public partial class RichTextBox : TextBoxBase
                     cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                     {
-                        cp.Style |= (int)ES.DISABLENOSCROLL;
+                        cp.Style |= (int)PInvoke.ES_DISABLENOSCROLL;
                     }
                 }
             }
@@ -432,44 +432,34 @@ public partial class RichTextBox : TextBoxBase
         get => base.Font;
         set
         {
-            if (IsHandleCreated)
-            {
-                if (User32.GetWindowTextLengthW(new HandleRef(this, Handle)) > 0)
-                {
-                    if (value is null)
-                    {
-                        base.Font = null;
-                        SetCharFormatFont(false, Font);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            Font f = GetCharFormatFont(false);
-                            if (f is null || !f.Equals(value))
-                            {
-                                SetCharFormatFont(false, value);
-                                // update controlfont from "resolved" font from the attempt
-                                // to set the document font...
-                                //
-                                CallOnContentsResized = true;
-                                base.Font = GetCharFormatFont(false);
-                            }
-                        }
-                        finally
-                        {
-                            CallOnContentsResized = false;
-                        }
-                    }
-                }
-                else
-                {
-                    base.Font = value;
-                }
-            }
-            else
+            if (!IsHandleCreated || PInvoke.GetWindowTextLength(this) <= 0)
             {
                 base.Font = value;
+                return;
+            }
+
+            if (value is null)
+            {
+                base.Font = null;
+                SetCharFormatFont(selectionOnly: false, Font);
+                return;
+            }
+
+            try
+            {
+                Font font = GetCharFormatFont(selectionOnly: false);
+                if (font is null || !font.Equals(value))
+                {
+                    SetCharFormatFont(selectionOnly: false, value);
+
+                    // Update controlfont from "resolved" font from the attempt to set the document font.
+                    CallOnContentsResized = true;
+                    base.Font = GetCharFormatFont(selectionOnly: false);
+                }
+            }
+            finally
+            {
+                CallOnContentsResized = false;
             }
         }
     }
@@ -1433,7 +1423,7 @@ public partial class RichTextBox : TextBoxBase
 
                     StreamIn(value, SF.TEXT | SF.UNICODE);
                     // reset Modified
-                    PInvoke.SendMessage(this, (User32.WM)User32.EM.SETMODIFY);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_SETMODIFY);
                 }
             }
         }
@@ -1985,7 +1975,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             PInvoke.SendMessage(this, (User32.WM)EM.EXSETSEL, 0, ref chrg);
-            PInvoke.SendMessage(this, (User32.WM)User32.EM.SCROLLCARET);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_SCROLLCARET);
         }
 
         return position;
@@ -2038,24 +2028,24 @@ public partial class RichTextBox : TextBoxBase
             return -1;
         }
 
-        int textLen = User32.GetWindowTextLengthW(new HandleRef(this, Handle));
+        textLength = PInvoke.GetWindowTextLength(this);
         if (start == end)
         {
             start = 0;
-            end = textLen;
+            end = textLength;
         }
 
         if (end == -1)
         {
-            end = textLen;
+            end = textLength;
         }
 
-        var chrg = default(CHARRANGE); // The range of characters we have searched
+        CHARRANGE chrg = default; // The range of characters we have searched
         chrg.cpMax = chrg.cpMin = start;
 
         // Use the TEXTRANGE to move our text buffer forward
         // or backwards within the main text
-        var txrg = new Richedit.TEXTRANGE
+        TEXTRANGE txrg = new()
         {
             chrg = new CHARRANGE
             {
@@ -2289,7 +2279,7 @@ public partial class RichTextBox : TextBoxBase
     public override int GetCharIndexFromPosition(Point pt)
     {
         var wpt = new Point(pt.X, pt.Y);
-        int index = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.CHARFROMPOS, 0, ref wpt);
+        int index = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_CHARFROMPOS, 0, ref wpt);
 
         string t = Text;
         // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
@@ -2344,7 +2334,7 @@ public partial class RichTextBox : TextBoxBase
         }
 
         var pt = default(Point);
-        PInvoke.SendMessage(this, (User32.WM)User32.EM.POSFROMCHAR, (WPARAM)(&pt), index);
+        PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_POSFROMCHAR, (WPARAM)(&pt), index);
         return pt;
     }
 
@@ -3013,10 +3003,10 @@ public partial class RichTextBox : TextBoxBase
             }
 
             // set the modify tag on the control
-            PInvoke.SendMessage(this, (User32.WM)User32.EM.SETMODIFY, (WPARAM)(-1));
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_SETMODIFY, (WPARAM)(-1));
 
             // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
-            PInvoke.SendMessage(this, (User32.WM)User32.EM.GETLINECOUNT);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_GETLINECOUNT);
         }
         finally
         {
@@ -3136,7 +3126,7 @@ public partial class RichTextBox : TextBoxBase
         }
 
         GETTEXTLENGTHEX* pGtl = &gtl;
-        int expectedLength = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.GETTEXTLENGTHEX, (WPARAM)pGtl);
+        int expectedLength = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_GETTEXTLENGTHEX, (WPARAM)pGtl);
         if (expectedLength == (int)HRESULT.E_INVALIDARG)
             throw new Win32Exception(expectedLength);
 
@@ -3156,7 +3146,7 @@ public partial class RichTextBox : TextBoxBase
         GETTEXTEX* pGt = &gt;
         fixed (char* b = buffer)
         {
-            int actualLength = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
+            int actualLength = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.EM_GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
 
             // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
             // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
@@ -3315,12 +3305,12 @@ public partial class RichTextBox : TextBoxBase
         // the rich edit control fires spurious events during this time.
         if (m.LParamInternal == Handle && !GetState(States.CreatingHandle))
         {
-            switch ((User32.EN)m.WParamInternal.HIWORD)
+            switch ((uint)m.WParamInternal.HIWORD)
             {
-                case User32.EN.HSCROLL:
+                case PInvoke.EN_HSCROLL:
                     OnHScroll(EventArgs.Empty);
                     break;
-                case User32.EN.VSCROLL:
+                case PInvoke.EN_VSCROLL:
                     OnVScroll(EventArgs.Empty);
                     break;
                 default:
@@ -3426,7 +3416,7 @@ public partial class RichTextBox : TextBoxBase
                         // Throw an exception for the following
                         //
                         case (int)EM.SETPARAFORMAT:
-                        case (int)User32.EM.REPLACESEL:
+                        case (int)PInvoke.EM_REPLACESEL:
                             break;
 
                         case (int)EM.STREAMIN:
@@ -3490,12 +3480,12 @@ public partial class RichTextBox : TextBoxBase
             ICM compMode = (ICM)(int)PInvoke.SendMessage(this, (User32.WM)EM.GETIMECOMPMODE);
             if (compMode != ICM.NOTOPEN)
             {
-                int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));
+                int textLength = PInvoke.GetWindowTextLength(this);
                 if (selStart == selEnd && textLength == MaxLength)
                 {
                     PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
                     PInvoke.SendMessage(this, User32.WM.SETFOCUS);
-                    User32.PostMessageW(this, (User32.WM)User32.EM.SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
+                    User32.PostMessageW(this, (User32.WM)PInvoke.EM_SETSEL, (selEnd - 1), selEnd);
                 }
             }
         }
@@ -3573,7 +3563,7 @@ public partial class RichTextBox : TextBoxBase
 
             case User32.WM.GETDLGCODE:
                 base.WndProc(ref m);
-                m.ResultInternal = (LRESULT)(AcceptsTab ? m.ResultInternal | (nint)User32.DLGC.WANTTAB : m.ResultInternal & ~(nint)User32.DLGC.WANTTAB);
+                m.ResultInternal = (LRESULT)(AcceptsTab ? m.ResultInternal | (nint)PInvoke.DLGC_WANTTAB : m.ResultInternal & ~(nint)PInvoke.DLGC_WANTTAB);
                 break;
 
             case User32.WM.GETOBJECT:

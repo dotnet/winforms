@@ -131,12 +131,16 @@ public partial class ComponentEditorForm
             rc2.bottom = rc2.top + size.Height;
             rc2.right = rc.right;
             PInvoke.SetTextColor(dc, textColor);
-            User32.DrawTextW(
-                dc,
-                itemText,
-                itemText.Length,
-                ref rc2,
-                User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
+
+            fixed (char* t = itemText)
+            {
+                PInvoke.DrawText(
+                    dc,
+                    t,
+                    itemText.Length,
+                    ref rc2,
+                    DRAW_TEXT_FORMAT.DT_LEFT | DRAW_TEXT_FORMAT.DT_VCENTER | DRAW_TEXT_FORMAT.DT_END_ELLIPSIS | DRAW_TEXT_FORMAT.DT_NOPREFIX);
+            }
 
             PInvoke.ImageList.Draw(
                 imagelist,

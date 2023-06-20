@@ -5,7 +5,6 @@
 using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
-using static Interop;
 
 namespace System.Windows.Forms.UITests;
 
@@ -107,7 +106,7 @@ public class SendInput
         // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
         if (!PInvoke.SetForegroundWindow(window))
         {
-            string windowTitle = User32.GetWindowText(window);
+            string windowTitle = PInvoke.GetWindowText(window);
             if (PInvoke.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
             {
                 string message = $"ForegroundWindow doesn't belong the test process! The current window HWND: {window}, title:{windowTitle}.";

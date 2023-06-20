@@ -211,11 +211,12 @@ internal static class MessageDecoder
             User32.WM.APP => "WM_APP",
             User32.WM.USER => "WM_USER",
             User32.WM.CTLCOLOR => "WM_CTLCOLOR",
+
             // RichEdit messages
-            (User32.WM)User32.EM.GETLIMITTEXT => "EM_GETLIMITTEXT",
-            (User32.WM)User32.EM.POSFROMCHAR => "EM_POSFROMCHAR",
-            (User32.WM)User32.EM.CHARFROMPOS => "EM_CHARFROMPOS",
-            (User32.WM)User32.EM.SCROLLCARET => "EM_SCROLLCARET",
+            (User32.WM)PInvoke.EM_GETLIMITTEXT => "EM_GETLIMITTEXT",
+            (User32.WM)PInvoke.EM_POSFROMCHAR => "EM_POSFROMCHAR",
+            (User32.WM)PInvoke.EM_CHARFROMPOS => "EM_CHARFROMPOS",
+            (User32.WM)PInvoke.EM_SCROLLCARET => "EM_SCROLLCARET",
             (User32.WM)Richedit.EM.CANPASTE => "EM_CANPASTE",
             (User32.WM)Richedit.EM.DISPLAYBAND => "EM_DISPLAYBAND",
             (User32.WM)Richedit.EM.EXGETSEL => "EM_EXGETSEL",
@@ -248,6 +249,7 @@ internal static class MessageDecoder
             (User32.WM)Richedit.EM.FINDTEXTEX => "EM_FINDTEXTEX",
             (User32.WM)Richedit.EM.GETWORDBREAKPROCEX => "EM_GETWORDBREAKPROCEX",
             (User32.WM)Richedit.EM.SETWORDBREAKPROCEX => "EM_SETWORDBREAKPROCEX",
+
             // Richedit v2.0 messages
             (User32.WM)Richedit.EM.SETUNDOLIMIT => "EM_SETUNDOLIMIT",
             (User32.WM)Richedit.EM.REDO => "EM_REDO",
@@ -262,6 +264,7 @@ internal static class MessageDecoder
             (User32.WM)Richedit.EM.SETPALETTE => "EM_SETPALETTE",
             (User32.WM)Richedit.EM.GETTEXTEX => "EM_GETTEXTEX",
             (User32.WM)Richedit.EM.GETTEXTLENGTHEX => "EM_GETTEXTLENGTHEX",
+
             // Asia specific messages
             (User32.WM)Richedit.EM.SETPUNCTUATION => "EM_SETPUNCTUATION",
             (User32.WM)Richedit.EM.GETPUNCTUATION => "EM_GETPUNCTUATION",
@@ -277,15 +280,18 @@ internal static class MessageDecoder
             (User32.WM)Richedit.EM.GETIMECOMPMODE => "EM_GETIMECOMPMODE",
             (User32.WM)Richedit.EM.FINDTEXTW => "EM_FINDTEXTW",
             (User32.WM)Richedit.EM.FINDTEXTEXW => "EM_FINDTEXTEXW",
+
             // Rich Edit 3.0 Asia msgs
             (User32.WM)Richedit.EM.RECONVERSION => "EM_RECONVERSION",
             (User32.WM)Richedit.EM.SETIMEMODEBIAS => "EM_SETIMEMODEBIAS",
             (User32.WM)Richedit.EM.GETIMEMODEBIAS => "EM_GETIMEMODEBIAS",
+
             // BiDi Specific messages
             (User32.WM)Richedit.EM.SETBIDIOPTIONS => "EM_SETBIDIOPTIONS",
             (User32.WM)Richedit.EM.GETBIDIOPTIONS => "EM_GETBIDIOPTIONS",
             (User32.WM)Richedit.EM.SETTYPOGRAPHYOPTIONS => "EM_SETTYPOGRAPHYOPTIONS",
             (User32.WM)Richedit.EM.GETTYPOGRAPHYOPTIONS => "EM_GETTYPOGRAPHYOPTIONS",
+
             // Extended Edit style specific messages
             (User32.WM)Richedit.EM.SETEDITSTYLE => "EM_SETEDITSTYLE",
             (User32.WM)Richedit.EM.GETEDITSTYLE => "EM_GETEDITSTYLE",

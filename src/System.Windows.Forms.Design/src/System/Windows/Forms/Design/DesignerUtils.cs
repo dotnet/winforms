@@ -418,7 +418,7 @@ internal static class DesignerUtils
     public static void GenerateSnapShotWithBitBlt(Control control, ref Image image)
     {
         // Get the DC's and create our image
-        using User32.GetDcScope controlDC = new(control.Handle);
+        using User32.GetDcScope controlDC = new((HWND)control.Handle);
         image = new Bitmap(
             Math.Max(control.Width, MINCONTROLBITMAPSIZE),
             Math.Max(control.Height, MINCONTROLBITMAPSIZE),

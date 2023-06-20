@@ -1321,11 +1321,11 @@ public sealed partial class Application
                     // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
 
                     // First, get the first top-level window in the hierarchy.
-                    HWND hwndRoot = PInvoke.GetAncestor((HWND)msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    HWND hwndRoot = PInvoke.GetAncestor(msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
                     // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
                     // so we should return true to prevent Translate/Dispatch from being called.
-                    if (!hwndRoot.IsNull && User32.IsDialogMessageW(hwndRoot, ref msg))
+                    if (!hwndRoot.IsNull && PInvoke.IsDialogMessage(hwndRoot, in msg))
                     {
                         return true;
                     }

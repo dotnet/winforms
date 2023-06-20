@@ -4717,7 +4717,7 @@ public partial class Form : ContainerControl
         {
             // First put all the owned windows into a list
             callback = new EnumThreadWindowsCallback(HWND);
-            User32.EnumThreadWindows(PInvoke.GetCurrentThreadId(), callback.Callback);
+            PInvoke.EnumThreadWindows(PInvoke.GetCurrentThreadId(), callback.Callback);
 
             // Reset the owner of the windows in the list
             callback.ResetOwners();
@@ -6358,7 +6358,7 @@ public partial class Form : ContainerControl
 
     private unsafe void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds)
     {
-        User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)(nint)m.LParamInternal;
+        MINMAXINFO* mmi = (MINMAXINFO*)(nint)m.LParamInternal;
         if (!minTrack.IsEmpty)
         {
             mmi->ptMinTrackSize.X = minTrack.Width;

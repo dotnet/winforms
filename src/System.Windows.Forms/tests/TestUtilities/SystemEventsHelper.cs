@@ -13,7 +13,7 @@ namespace System;
 
 public static class SystemEventsHelper
 {
-    private static IntPtr GetHWnd()
+    private static HWND GetHWnd()
     {
         // Locate the hwnd used by SystemEvents in this domain.
         FieldInfo windowClassNameField =
@@ -24,13 +24,13 @@ public static class SystemEventsHelper
         string windowClassName = windowClassNameField.GetValue(null) as string;
         Assert.NotNull(windowClassName);
 
-        IntPtr window = FindWindowW(windowClassName, null);
+        HWND window = PInvoke.FindWindow(windowClassName, null);
         return window;
     }
 
     public static void SendMessageOnUserPreferenceChanged(UserPreferenceCategory category)
     {
-        HWND window = (HWND)GetHWnd();
+        HWND window = GetHWnd();
 
         WM msg;
         WPARAM wParam;

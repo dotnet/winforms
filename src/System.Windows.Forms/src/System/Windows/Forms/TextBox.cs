@@ -277,10 +277,10 @@ public partial class TextBox : TextBoxBase
             switch (_characterCasing)
             {
                 case CharacterCasing.Lower:
-                    cp.Style |= (int)ES.LOWERCASE;
+                    cp.Style |= PInvoke.ES_LOWERCASE;
                     break;
                 case CharacterCasing.Upper:
-                    cp.Style |= (int)ES.UPPERCASE;
+                    cp.Style |= PInvoke.ES_UPPERCASE;
                     break;
             }
 
@@ -293,13 +293,13 @@ public partial class TextBox : TextBoxBase
             switch (align)
             {
                 case HorizontalAlignment.Left:
-                    cp.Style |= (int)ES.LEFT;
+                    cp.Style |= PInvoke.ES_LEFT;
                     break;
                 case HorizontalAlignment.Center:
-                    cp.Style |= (int)ES.CENTER;
+                    cp.Style |= PInvoke.ES_CENTER;
                     break;
                 case HorizontalAlignment.Right:
-                    cp.Style |= (int)ES.RIGHT;
+                    cp.Style |= PInvoke.ES_RIGHT;
                     break;
             }
 
@@ -321,7 +321,7 @@ public partial class TextBox : TextBoxBase
 
             if (_useSystemPasswordChar)
             {
-                cp.Style |= (int)ES.PASSWORD;
+                cp.Style |= PInvoke.ES_PASSWORD;
             }
 
             return cp;
@@ -346,7 +346,7 @@ public partial class TextBox : TextBoxBase
                 CreateHandle();
             }
 
-            return (char)PInvoke.SendMessage(this, (WM)EM.GETPASSWORDCHAR);
+            return (char)PInvoke.SendMessage(this, (WM)PInvoke.EM_GETPASSWORDCHAR);
         }
         set
         {
@@ -358,7 +358,7 @@ public partial class TextBox : TextBoxBase
                     if (PasswordChar != value)
                     {
                         // Set the password mode.
-                        PInvoke.SendMessage(this, (WM)EM.SETPASSWORDCHAR, (WPARAM)value);
+                        PInvoke.SendMessage(this, (WM)PInvoke.EM_SETPASSWORDCHAR, (WPARAM)value);
 
                         // Disable IME if setting the control to password mode.
                         VerifyImeRestrictedModeChanged();
@@ -618,7 +618,7 @@ public partial class TextBox : TextBoxBase
         {
             if (!_useSystemPasswordChar)
             {
-                PInvoke.SendMessage(this, (WM)EM.SETPASSWORDCHAR, (WPARAM)_passwordChar);
+                PInvoke.SendMessage(this, (WM)PInvoke.EM_SETPASSWORDCHAR, (WPARAM)_passwordChar);
             }
         }
 
