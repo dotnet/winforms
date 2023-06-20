@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -34,7 +34,7 @@ public abstract partial class TextBoxBase
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETSEL, ref start, ref end);
+            PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETSEL, ref start, ref end);
 
             return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
         }
@@ -143,7 +143,7 @@ public abstract partial class TextBoxBase
 
         public override int FirstVisibleLine
             => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
+                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETFIRSTVISIBLELINE)
                 : -1;
 
         public override bool IsMultiline => _owningTextBoxBase.Multiline;
@@ -162,14 +162,13 @@ public abstract partial class TextBoxBase
                     return false;
                 }
 
-                ES extendedStyle = (ES)PInvoke.GetWindowLong(_owningTextBoxBase, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-                return extendedStyle.HasFlag(ES.AUTOHSCROLL) || extendedStyle.HasFlag(ES.AUTOVSCROLL);
+                return ((int)GetWindowStyle(_owningTextBoxBase) & PInvoke.ES_AUTOHSCROLL) != 0;
             }
         }
 
         public override int LinesCount
             => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
+                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETLINECOUNT)
                 : -1;
 
         public override int LinesPerPage
@@ -219,11 +218,6 @@ public abstract partial class TextBoxBase
                 ? GetWindowStyle(_owningTextBoxBase)
                 : WINDOW_STYLE.WS_OVERLAPPED;
 
-        public override ES EditStyle
-            => _owningTextBoxBase.IsHandleCreated
-                ? GetEditStyle(_owningTextBoxBase)
-                : ES.LEFT;
-
         public override int GetLineFromCharIndex(int charIndex)
             => _owningTextBoxBase.IsHandleCreated
                 ? _owningTextBoxBase.GetLineFromCharIndex(charIndex)
@@ -231,7 +225,7 @@ public abstract partial class TextBoxBase
 
         public override int GetLineIndex(int line)
             => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.LINEINDEX, (WPARAM)line)
+                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_LINEINDEX, (WPARAM)line)
                 : -1;
 
         public override Point GetPositionFromChar(int charIndex)
@@ -334,7 +328,7 @@ public abstract partial class TextBoxBase
             => _owningTextBoxBase.IsHandleCreated
                 && PInvoke.SendMessage(
                     _owningTextBoxBase,
-                    (WM)EM.LINESCROLL,
+                    (WM)PInvoke.EM_LINESCROLL,
                     (WPARAM)charactersHorizontal,
                     (LPARAM)linesVertical) != 0;
 
@@ -357,7 +351,7 @@ public abstract partial class TextBoxBase
                 return;
             }
 
-            PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.SETSEL, (WPARAM)start, (LPARAM)end);
+            PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
         }
 
         private RECT GetFormattingRectangle()
@@ -365,8 +359,8 @@ public abstract partial class TextBoxBase
             Debug.Assert(_owningTextBoxBase.IsHandleCreated);
 
             // Send an EM_GETRECT message to find out the bounding rectangle.
-            RECT rectangle = default(RECT);
-            PInvoke.SendMessage(_owningTextBoxBase, (WM)EM.GETRECT, (WPARAM)0, ref rectangle);
+            RECT rectangle = default;
+            PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETRECT, (WPARAM)0, ref rectangle);
             return rectangle;
         }
 
@@ -376,7 +370,7 @@ public abstract partial class TextBoxBase
 
             size = default;
 
-            using GetDcScope hdc = new(_owningTextBoxBase.Handle);
+            using GetDcScope hdc = new(_owningTextBoxBase.HWND);
             if (hdc.IsNull)
             {
                 return false;

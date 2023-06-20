@@ -830,7 +830,7 @@ public partial class DateTimePicker : Control
     [AllowNull]
     public override string Text
     {
-        get => Value.ToString(CustomFormat);
+        get => base.Text;
         set
         {
             // Clause to check length
@@ -1454,7 +1454,7 @@ public partial class DateTimePicker : Control
         if (ShowUpDown)
         {
             EnumChildren c = new EnumChildren();
-            User32.EnumChildWindows(this, c.enumChildren);
+            PInvoke.EnumChildWindows(this, c.enumChildren);
             if (!c.hwndFound.IsNull)
             {
                 PInvoke.InvalidateRect(c.hwndFound, lpRect: (RECT*)null, bErase: true);

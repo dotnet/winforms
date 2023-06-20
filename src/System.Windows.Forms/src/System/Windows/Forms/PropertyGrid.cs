@@ -16,6 +16,7 @@ using System.Windows.Forms.ComponentModel.Com2Interop;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.PropertyGridInternal;
 using Microsoft.Win32;
+using Windows.Win32.System.DataExchange;
 using Windows.Win32.System.Ole;
 using static Interop;
 
@@ -4264,11 +4265,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 return;
 
             case User32.WM.COPYDATA:
-                var cds = (User32.COPYDATASTRUCT*)(nint)m.LParamInternal;
+                var cds = (COPYDATASTRUCT*)(nint)m.LParamInternal;
 
-                if (cds is not null && cds->lpData != IntPtr.Zero)
+                if (cds is not null && cds->lpData is not null)
                 {
-                    _propertyName = Marshal.PtrToStringAuto(cds->lpData);
+                    _propertyName = Marshal.PtrToStringAuto((nint)cds->lpData);
                     _copyDataMessage = (int)cds->dwData;
                 }
 

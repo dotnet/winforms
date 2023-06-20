@@ -404,7 +404,7 @@ public partial class ErrorProvider
                 _provider._showIcon = !_provider._showIcon;
             }
 
-            using User32.GetDcScope hdc = new(Handle);
+            using User32.GetDcScope hdc = new(HWND);
             using PInvoke.SaveDcScope save = new(hdc);
             MirrorDcIfNeeded(hdc);
 

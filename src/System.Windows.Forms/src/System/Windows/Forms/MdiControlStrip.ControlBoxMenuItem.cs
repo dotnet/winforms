@@ -11,7 +11,7 @@ internal partial class MdiControlStrip
     // when the system menu item shortcut is evaluated - pop the dropdown
     internal class ControlBoxMenuItem : ToolStripMenuItem
     {
-        internal ControlBoxMenuItem(IntPtr hMenu, User32.SC nativeMenuCommandId, IWin32Window targetWindow)
+        internal ControlBoxMenuItem(HMENU hMenu, User32.SC nativeMenuCommandId, IWin32Window targetWindow)
             : base(hMenu, (int)nativeMenuCommandId, targetWindow)
         {
         }

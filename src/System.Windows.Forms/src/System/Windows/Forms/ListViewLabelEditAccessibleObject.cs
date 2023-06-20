@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -13,16 +12,16 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
     private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
 
     private readonly ListView _owningListView;
-    private readonly IntPtr _handle;
+    private readonly WeakReference<ListViewLabelEditNativeWindow> _labelEdit;
     private readonly ListViewLabelEditUiaTextProvider _textProvider;
     private int[]? _runtimeId;
 
-    public ListViewLabelEditAccessibleObject(ListView owningListView, IHandle<HWND> handle)
+    public ListViewLabelEditAccessibleObject(ListView owningListView, ListViewLabelEditNativeWindow labelEdit)
     {
         _owningListView = owningListView.OrThrowIfNull();
-        _handle = handle.Handle;
-        UseStdAccessibleObjects(_handle);
-        _textProvider = new ListViewLabelEditUiaTextProvider(owningListView, handle, this);
+        _labelEdit = new(labelEdit);
+        UseStdAccessibleObjects(labelEdit.Handle);
+        _textProvider = new ListViewLabelEditUiaTextProvider(owningListView, labelEdit, this);
     }
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
@@ -52,7 +51,7 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
             UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
             UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
             UiaCore.UIA.IsContentElementPropertyId => true,
-            UiaCore.UIA.NativeWindowHandlePropertyId => _handle,
+            UiaCore.UIA.NativeWindowHandlePropertyId => _labelEdit.TryGetTarget(out var target) ? (nint)target.HWND : 0,
             _ => base.GetPropertyValue(propertyID),
         };
 
@@ -60,8 +59,13 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
     {
         get
         {
-            UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out UiaCore.IRawElementProviderSimple provider);
-            return provider;
+            if (_labelEdit.TryGetTarget(out var target))
+            {
+                UiaCore.UiaHostProviderFromHwnd(target.HWND, out UiaCore.IRawElementProviderSimple provider);
+                return provider;
+            }
+
+            return null;
         }
     }
 
@@ -74,9 +78,15 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
         _ => base.IsPatternSupported(patternId),
     };
 
-    public override string Name => User32.GetWindowText(_handle);
+    public override string? Name => _labelEdit.TryGetTarget(out var target)
+        ? PInvoke.GetWindowText(target)
+        : null;
 
-    internal override int[] RuntimeId => _runtimeId ??= new int[] { RuntimeIDFirstItem, PARAM.ToInt(_handle) };
+    internal override int[] RuntimeId => _runtimeId ??= new int[]
+    {
+        RuntimeIDFirstItem,
+        _labelEdit.TryGetTarget(out var target) ? (int)target.HWND : (int)HWND.Null
+    };
 
     internal override UiaCore.ITextRangeProvider DocumentRangeInternal
         => _textProvider.DocumentRange;

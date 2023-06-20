@@ -337,37 +337,31 @@ public partial class ComboBox : ListControl
 
     internal void ClearChildListAccessibleObject() => _childListAccessibleObject = null;
 
-    /// <summary>
-    ///  Returns the parameters needed to create the handle.  Inheriting classes
-    ///  can override this to provide extra functionality.  They should not,
-    ///  however, forget to call base.CreateParams() first to get the struct
-    ///  filled up with the basic info.
-    /// </summary>
     protected override CreateParams CreateParams
     {
         get
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_COMBOBOX;
-            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
+            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | PInvoke.CBS_HASSTRINGS | PInvoke.CBS_AUTOHSCROLL;
             cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
             if (!_integralHeight)
             {
-                cp.Style |= (int)CBS.NOINTEGRALHEIGHT;
+                cp.Style |= PInvoke.CBS_NOINTEGRALHEIGHT;
             }
 
             switch (DropDownStyle)
             {
                 case ComboBoxStyle.Simple:
-                    cp.Style |= (int)CBS.SIMPLE;
+                    cp.Style |= PInvoke.CBS_SIMPLE;
                     break;
                 case ComboBoxStyle.DropDown:
-                    cp.Style |= (int)CBS.DROPDOWN;
+                    cp.Style |= PInvoke.CBS_DROPDOWN;
                     // Make sure we put the height back or we won't be able to size the dropdown!
                     cp.Height = PreferredHeight;
                     break;
                 case ComboBoxStyle.DropDownList:
-                    cp.Style |= (int)CBS.DROPDOWNLIST;
+                    cp.Style |= PInvoke.CBS_DROPDOWNLIST;
                     // Comment above...
                     cp.Height = PreferredHeight;
                     break;
@@ -376,10 +370,10 @@ public partial class ComboBox : ListControl
             switch (DrawMode)
             {
                 case DrawMode.OwnerDrawFixed:
-                    cp.Style |= (int)CBS.OWNERDRAWFIXED;
+                    cp.Style |= PInvoke.CBS_OWNERDRAWFIXED;
                     break;
                 case DrawMode.OwnerDrawVariable:
-                    cp.Style |= (int)CBS.OWNERDRAWVARIABLE;
+                    cp.Style |= PInvoke.CBS_OWNERDRAWVARIABLE;
                     break;
             }
 
@@ -1090,7 +1084,7 @@ public partial class ComboBox : ListControl
                 CreateControl();
                 if (IsHandleCreated && _childEdit is not null)
                 {
-                    PInvoke.SendMessage(_childEdit, (WM)EM.REPLACESEL, (WPARAM)(-1), value ?? string.Empty);
+                    PInvoke.SendMessage(_childEdit, (WM)PInvoke.EM_REPLACESEL, (WPARAM)(-1), value ?? string.Empty);
                 }
             }
         }
@@ -1724,7 +1718,10 @@ public partial class ComboBox : ListControl
                 DefChildWndProc(ref m);
                 if (_childEdit is not null && m.HWnd == _childEdit.Handle)
                 {
-                    PInvoke.SendMessage(_childEdit, (WM)EM.SETMARGINS, (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                    PInvoke.SendMessage(
+                        _childEdit,
+                        (WM)PInvoke.EM_SETMARGINS,
+                        (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
                 }
 
                 break;
@@ -2465,7 +2462,7 @@ public partial class ComboBox : ListControl
                 _childEdit.AssignHandle(hwnd);
 
                 // Set the initial margin for combobox to be zero (this is also done whenever the font is changed).
-                PInvoke.SendMessage(_childEdit, (WM)EM.SETMARGINS, (WPARAM)(int)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                PInvoke.SendMessage(_childEdit, (WM)PInvoke.EM_SETMARGINS, (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
             }
         }
 
@@ -3708,14 +3705,14 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void WmReflectCommand(ref Message m)
     {
-        switch ((CBN)m.WParamInternal.SIGNEDHIWORD)
+        switch ((uint)m.WParamInternal.SIGNEDHIWORD)
         {
-            case CBN.DBLCLK:
+            case PInvoke.CBN_DBLCLK:
                 break;
-            case CBN.EDITUPDATE:
+            case PInvoke.CBN_EDITUPDATE:
                 OnTextUpdate(EventArgs.Empty);
                 break;
-            case CBN.CLOSEUP:
+            case PInvoke.CBN_CLOSEUP:
 
                 OnDropDownClosed(EventArgs.Empty);
                 if (FormattingEnabled && Text != _currentText && _dropDown)
@@ -3725,21 +3722,21 @@ public partial class ComboBox : ListControl
 
                 _dropDown = false;
                 break;
-            case CBN.DROPDOWN:
+            case PInvoke.CBN_DROPDOWN:
                 _currentText = Text;
                 _dropDown = true;
                 OnDropDown(EventArgs.Empty);
                 UpdateDropDownHeight();
 
                 break;
-            case CBN.EDITCHANGE:
+            case PInvoke.CBN_EDITCHANGE:
                 OnTextChanged(EventArgs.Empty);
                 break;
-            case CBN.SELCHANGE:
+            case PInvoke.CBN_SELCHANGE:
                 UpdateText();
                 OnSelectedIndexChanged(EventArgs.Empty);
                 break;
-            case CBN.SELENDOK:
+            case PInvoke.CBN_SELENDOK:
                 OnSelectionChangeCommittedInternal(EventArgs.Empty);
                 break;
         }
@@ -3750,11 +3747,11 @@ public partial class ComboBox : ListControl
         DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
         using var e = new DrawItemEventArgs(
-            dis->hDC,
+            dis->hDC.CreateGraphics(),
             Font,
             dis->rcItem,
-            dis->itemID,
-            dis->itemState,
+            (int)dis->itemID,
+            (DrawItemState)(int)dis->itemState,
             ForeColor,
             BackColor);
 
@@ -3772,7 +3769,7 @@ public partial class ComboBox : ListControl
         if (DrawMode == DrawMode.OwnerDrawVariable && itemID >= 0)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            var mie = new MeasureItemEventArgs(graphics, itemID, ItemHeight);
+            MeasureItemEventArgs mie = new(graphics, itemID, ItemHeight);
             OnMeasureItem(mie);
             mis->itemHeight = unchecked((uint)mie.ItemHeight);
         }

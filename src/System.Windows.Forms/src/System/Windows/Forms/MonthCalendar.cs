@@ -2273,7 +2273,7 @@ public partial class MonthCalendar : Control
     private static void WmGetDlgCode(ref Message m)
     {
         // The MonthCalendar does its own handling of arrow keys.
-        m.ResultInternal = (LRESULT)(nint)User32.DLGC.WANTARROWS;
+        m.ResultInternal = (LRESULT)(nint)PInvoke.DLGC_WANTARROWS;
     }
 
     /// <summary>

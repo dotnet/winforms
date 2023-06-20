@@ -3,17 +3,15 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using static Interop;
 
 namespace System.Windows.Forms;
 
 public sealed partial class Application
 {
     /// <summary>
-    ///  This class enables or disables all windows in the current thread.  We use this to
-    ///  disable other windows on the thread when a modal dialog is to be shown.  It can also
-    ///  be used to dispose all windows in a thread, which we do before returning from a message
-    ///  loop.
+    ///  This class enables or disables all windows in the current thread. We use this to disable other windows on the
+    ///  thread when a modal dialog is to be shown. It can also be used to dispose all windows in a thread, which we do
+    ///  before returning from a message loop.
     /// </summary>
     private sealed class ThreadWindows
     {
@@ -28,7 +26,7 @@ public sealed partial class Application
         {
             _windows = new HWND[16];
             _onlyWinForms = onlyWinForms;
-            User32.EnumThreadWindows(
+            PInvoke.EnumThreadWindows(
                 PInvoke.GetCurrentThreadId(),
                 Callback);
         }

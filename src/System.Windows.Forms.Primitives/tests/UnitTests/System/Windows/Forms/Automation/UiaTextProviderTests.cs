@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation;
 
@@ -17,12 +16,13 @@ public class UiaTextProviderTests
     {
         // EditControl Multiline is true when EditControl has ES_MULTILINE style
         using EditControl textBox = new EditControl(
-            editStyle: ES.MULTILINE | ES.LEFT | ES.AUTOHSCROLL | ES.AUTOVSCROLL,
-            style: WINDOW_STYLE.WS_OVERLAPPED | WINDOW_STYLE.WS_VISIBLE);
+            style: WINDOW_STYLE.WS_OVERLAPPED
+                | WINDOW_STYLE.WS_VISIBLE
+                | (WINDOW_STYLE)(PInvoke.ES_MULTILINE | PInvoke.ES_LEFT | PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL));
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-        ES actual = UiaTextProvider.GetEditStyle(textBox);
-        Assert.True(actual.HasFlag(ES.MULTILINE));
+        WINDOW_STYLE actual = UiaTextProvider.GetWindowStyle(textBox);
+        Assert.True(((int)actual & PInvoke.ES_MULTILINE) != 0);
     }
 
     [StaFact]
@@ -30,20 +30,22 @@ public class UiaTextProviderTests
     {
         // EditControl Multiline is false when EditControl doesn't have ES_MULTILINE style
         using EditControl textBox = new EditControl(
-            editStyle: ES.LEFT | ES.AUTOHSCROLL | ES.AUTOVSCROLL,
-            style: WINDOW_STYLE.WS_OVERLAPPED | WINDOW_STYLE.WS_VISIBLE);
+            style: WINDOW_STYLE.WS_OVERLAPPED
+                | WINDOW_STYLE.WS_VISIBLE
+                | (WINDOW_STYLE)(PInvoke.ES_LEFT | PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL));
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-        ES actual = UiaTextProvider.GetEditStyle(textBox);
-        Assert.False(actual.HasFlag(ES.MULTILINE));
+        WINDOW_STYLE actual = UiaTextProvider.GetWindowStyle(textBox);
+        Assert.False(((int)actual & PInvoke.ES_MULTILINE) != 0);
     }
 
     [StaFact]
     public void UiaTextProvider_GetWindowStyle_ContainsVisible()
     {
         using EditControl textBox = new EditControl(
-            editStyle: ES.MULTILINE | ES.LEFT | ES.AUTOHSCROLL | ES.AUTOVSCROLL,
-            style: WINDOW_STYLE.WS_OVERLAPPED | WINDOW_STYLE.WS_VISIBLE);
+            style: WINDOW_STYLE.WS_OVERLAPPED
+                | WINDOW_STYLE.WS_VISIBLE
+                | (WINDOW_STYLE)(PInvoke.ES_MULTILINE | PInvoke.ES_LEFT | PInvoke.ES_AUTOHSCROLL | PInvoke.ES_AUTOVSCROLL));
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
         WINDOW_STYLE actual = UiaTextProvider.GetWindowStyle(textBox);

@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Internal;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -18,21 +17,21 @@ internal static class TextExtensions
     internal const int GdiUnsupportedFlagMask = unchecked((int)0xFF000000);
 
     [Conditional("DEBUG")]
-    private static void ValidateFlags(User32.DT flags)
+    private static void ValidateFlags(DRAW_TEXT_FORMAT flags)
     {
         Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0,
             "Some custom flags were left over and are not GDI compliant!");
     }
 
-    private static (User32.DT Flags, TextPaddingOptions Padding) SplitTextFormatFlags(TextFormatFlags flags)
+    private static (DRAW_TEXT_FORMAT Flags, TextPaddingOptions Padding) SplitTextFormatFlags(TextFormatFlags flags)
     {
         if (((uint)flags & GdiUnsupportedFlagMask) == 0)
         {
-            return ((User32.DT)flags, TextPaddingOptions.GlyphOverhangPadding);
+            return ((DRAW_TEXT_FORMAT)flags, TextPaddingOptions.GlyphOverhangPadding);
         }
 
         // Clear TextRenderer custom flags.
-        User32.DT windowsGraphicsSupportedFlags = (User32.DT)((uint)flags & ~GdiUnsupportedFlagMask);
+        DRAW_TEXT_FORMAT windowsGraphicsSupportedFlags = (DRAW_TEXT_FORMAT)((uint)flags & ~GdiUnsupportedFlagMask);
 
         TextPaddingOptions padding = flags.HasFlag(TextFormatFlags.LeftAndRightPadding)
             ? TextPaddingOptions.LeftAndRightPadding
@@ -48,7 +47,7 @@ internal static class TextExtensions
     /// </summary>
     /// <param name="backColor">If <see cref="Color.Empty"/>, the hdc current background color is used.</param>
     /// <param name="foreColor">If <see cref="Color.Empty"/>, the hdc current foreground color is used.</param>
-    public static void DrawText(
+    public static unsafe void DrawText(
         this HDC hdc,
         ReadOnlySpan<char> text,
         FontCache.Scope font,
@@ -62,7 +61,7 @@ internal static class TextExtensions
             return;
         }
 
-        (User32.DT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
+        (DRAW_TEXT_FORMAT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
 
         // DrawText requires default text alignment.
         using PInvoke.SetTextAlignmentScope alignment = new(hdc, default);
@@ -80,9 +79,9 @@ internal static class TextExtensions
             ? new PInvoke.SetBackgroundColorScope(hdc, backColor)
             : default;
 
-        User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
+        DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
 
-        bounds = AdjustForVerticalAlignment(hdc, text, bounds, dt, ref dtparams);
+        bounds = AdjustForVerticalAlignment(hdc, text, bounds, dt, &dtparams);
 
         // Adjust unbounded rect to avoid overflow.
         if (bounds.Width == int.MaxValue)
@@ -96,13 +95,13 @@ internal static class TextExtensions
         }
 
         RECT rect = bounds;
-        User32.DrawTextExW(hdc, text, ref rect, dt, ref dtparams);
+        PInvoke.DrawTextEx(hdc, text, &rect, dt, &dtparams);
     }
 
     /// <summary>
     ///  Get the bounding box internal text padding to be used when drawing text.
     /// </summary>
-    public static User32.DRAWTEXTPARAMS GetTextMargins(
+    public static DRAWTEXTPARAMS GetTextMargins(
         this FontCache.Scope font,
         TextPaddingOptions padding = default)
     {
@@ -134,7 +133,7 @@ internal static class TextExtensions
                 break;
         }
 
-        return new User32.DRAWTEXTPARAMS
+        return new DRAWTEXTPARAMS
         {
             iLeftMargin = leftMargin,
             iRightMargin = rightMargin
@@ -150,18 +149,18 @@ internal static class TextExtensions
     ///   adjustment is to workaround that limitation.
     ///  </para>
     /// </remarks>
-    public static Rectangle AdjustForVerticalAlignment(
+    public static unsafe Rectangle AdjustForVerticalAlignment(
         this HDC hdc,
         ReadOnlySpan<char> text,
         Rectangle bounds,
-        User32.DT flags,
-        ref User32.DRAWTEXTPARAMS dtparams)
+        DRAW_TEXT_FORMAT flags,
+        DRAWTEXTPARAMS* dtparams)
     {
         ValidateFlags(flags);
 
         // No need to do anything if TOP (Cannot test DT_TOP because it is 0), single line text or measuring text.
-        bool isTop = !flags.HasFlag(User32.DT.BOTTOM) && !flags.HasFlag(User32.DT.VCENTER);
-        if (isTop || flags.HasFlag(User32.DT.SINGLELINE) || flags.HasFlag(User32.DT.CALCRECT))
+        bool isTop = !flags.HasFlag(DRAW_TEXT_FORMAT.DT_BOTTOM) && !flags.HasFlag(DRAW_TEXT_FORMAT.DT_VCENTER);
+        if (isTop || flags.HasFlag(DRAW_TEXT_FORMAT.DT_SINGLELINE) || flags.HasFlag(DRAW_TEXT_FORMAT.DT_CALCRECT))
         {
             return bounds;
         }
@@ -169,8 +168,8 @@ internal static class TextExtensions
         RECT rect = bounds;
 
         // Get the text bounds.
-        flags |= User32.DT.CALCRECT;
-        int textHeight = User32.DrawTextExW(hdc, text, ref rect, flags, ref dtparams);
+        flags |= DRAW_TEXT_FORMAT.DT_CALCRECT;
+        int textHeight = PInvoke.DrawTextEx(hdc, text, &rect, flags, dtparams);
 
         // If the text does not fit inside the bounds then return the bounds that were passed in.
         // This way we paint the top of the text at the top of the bounds passed in.
@@ -181,7 +180,7 @@ internal static class TextExtensions
 
         Rectangle adjustedBounds = bounds;
 
-        if (flags.HasFlag(User32.DT.VCENTER))
+        if (flags.HasFlag(DRAW_TEXT_FORMAT.DT_VCENTER))
         {
             // Middle
             adjustedBounds.Y = adjustedBounds.Top + adjustedBounds.Height / 2 - textHeight / 2;
@@ -209,14 +208,14 @@ internal static class TextExtensions
     ///   <item><description>The width is extended to fit a single line of text.</description></item>
     ///  </list>
     /// </param>
-    public static Size MeasureText(
+    public static unsafe Size MeasureText(
         this HDC hdc,
         ReadOnlySpan<char> text,
         FontCache.Scope font,
         Size proposedSize,
         TextFormatFlags flags)
     {
-        (User32.DT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
+        (DRAW_TEXT_FORMAT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
 
         if (text.IsEmpty)
         {
@@ -227,7 +226,7 @@ internal static class TextExtensions
         // pixels (its not a FitBlackBox, if the text is italicized, it will overhang on the right.)
         // So we need to account for this.
 
-        User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
+        DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
 
         // If Width / Height are < 0, we need to make them larger or DrawText will return
         // an unbounded measurement when we actually trying to make it very narrow.
@@ -251,20 +250,20 @@ internal static class TextExtensions
         // VCENTER or BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
         // it assumes the text is to be vertically aligned; we need to clear the VCENTER and BOTTOM flags to
         // get the actual text bounds.
-        if (proposedSize.Height == int.MaxValue && dt.HasFlag(User32.DT.SINGLELINE))
+        if (proposedSize.Height == int.MaxValue && dt.HasFlag(DRAW_TEXT_FORMAT.DT_SINGLELINE))
         {
             // Clear vertical-alignment flags.
-            dt &= ~(User32.DT.BOTTOM | User32.DT.VCENTER);
+            dt &= ~(DRAW_TEXT_FORMAT.DT_BOTTOM | DRAW_TEXT_FORMAT.DT_VCENTER);
         }
 
         if (proposedSize.Width == int.MaxValue)
         {
             // If there is no constraining width, there should be no need to calculate word breaks.
-            dt &= ~(User32.DT.WORDBREAK);
+            dt &= ~(DRAW_TEXT_FORMAT.DT_WORDBREAK);
         }
 
-        dt |= User32.DT.CALCRECT;
-        User32.DrawTextExW(hdc, text, ref rect, dt, ref dtparams);
+        dt |= DRAW_TEXT_FORMAT.DT_CALCRECT;
+        PInvoke.DrawTextEx(hdc, text, &rect, dt, &dtparams);
 
         return rect.Size;
     }

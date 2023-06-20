@@ -726,7 +726,13 @@ public class GroupBoxTests
     [InlineData(FlatStyle.Popup, true, true, true, 1, 0)]
     [InlineData(FlatStyle.Standard, false, true, false, 0, 0)]
     [InlineData(FlatStyle.System, true, false, false, 1, 1)]
-    public void GroupBox_FlatStyle_VisualStyles_on_SetWithHandle_GetReturnsExpected(FlatStyle value, bool containerControl, bool ownerDraw, bool userMouse, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
+    public void GroupBox_FlatStyle_VisualStyles_on_SetWithHandle_GetReturnsExpected(
+        FlatStyle value,
+        bool containerControl,
+        bool ownerDraw,
+        bool userMouse,
+        int expectedInvalidatedCallCount,
+        int expectedCreatedCallCount)
     {
         if (!Application.UseVisualStyles)
         {

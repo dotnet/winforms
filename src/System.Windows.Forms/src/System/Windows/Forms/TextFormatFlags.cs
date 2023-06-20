@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -12,40 +10,40 @@ namespace System.Windows.Forms;
 [Flags]
 public enum TextFormatFlags
 {
-    Bottom                              = (int)User32.DT.BOTTOM,
-    EndEllipsis                         = (int)User32.DT.END_ELLIPSIS,
-    ExpandTabs                          = (int)User32.DT.EXPANDTABS,
-    ExternalLeading                     = (int)User32.DT.EXTERNALLEADING,
-    Default                             = (int)User32.DT.DEFAULT,
-    HidePrefix                          = (int)User32.DT.HIDEPREFIX,
-    HorizontalCenter                    = (int)User32.DT.CENTER,
-    Internal                            = (int)User32.DT.INTERNAL,
+    Bottom                              = (int)DRAW_TEXT_FORMAT.DT_BOTTOM,
+    EndEllipsis                         = (int)DRAW_TEXT_FORMAT.DT_END_ELLIPSIS,
+    ExpandTabs                          = (int)DRAW_TEXT_FORMAT.DT_EXPANDTABS,
+    ExternalLeading                     = (int)DRAW_TEXT_FORMAT.DT_EXTERNALLEADING,
+    Default                             = default,
+    HidePrefix                          = (int)DRAW_TEXT_FORMAT.DT_HIDEPREFIX,
+    HorizontalCenter                    = (int)DRAW_TEXT_FORMAT.DT_CENTER,
+    Internal                            = (int)DRAW_TEXT_FORMAT.DT_INTERNAL,
 
     /// <remarks>
     ///  This is the default.
     /// </remarks>
-    Left                                = (int)User32.DT.LEFT,
+    Left                                = (int)DRAW_TEXT_FORMAT.DT_LEFT,
 
     [Obsolete("ModifyString mutates strings and should be avoided. It will be blocked in a future release.")]
-    ModifyString                        = (int)User32.DT.MODIFYSTRING,
-    NoClipping                          = (int)User32.DT.NOCLIP,
-    NoPrefix                            = (int)User32.DT.NOPREFIX,
-    NoFullWidthCharacterBreak           = (int)User32.DT.NOFULLWIDTHCHARBREAK,
-    PathEllipsis                        = (int)User32.DT.PATH_ELLIPSIS,
-    PrefixOnly                          = (int)User32.DT.PREFIXONLY,
-    Right                               = (int)User32.DT.RIGHT,
-    RightToLeft                         = (int)User32.DT.RTLREADING,
-    SingleLine                          = (int)User32.DT.SINGLELINE,
-    TextBoxControl                      = (int)User32.DT.EDITCONTROL,
+    ModifyString                        = (int)DRAW_TEXT_FORMAT.DT_MODIFYSTRING,
+    NoClipping                          = (int)DRAW_TEXT_FORMAT.DT_NOCLIP,
+    NoPrefix                            = (int)DRAW_TEXT_FORMAT.DT_NOPREFIX,
+    NoFullWidthCharacterBreak           = (int)DRAW_TEXT_FORMAT.DT_NOFULLWIDTHCHARBREAK,
+    PathEllipsis                        = (int)DRAW_TEXT_FORMAT.DT_PATH_ELLIPSIS,
+    PrefixOnly                          = (int)DRAW_TEXT_FORMAT.DT_PREFIXONLY,
+    Right                               = (int)DRAW_TEXT_FORMAT.DT_RIGHT,
+    RightToLeft                         = (int)DRAW_TEXT_FORMAT.DT_RTLREADING,
+    SingleLine                          = (int)DRAW_TEXT_FORMAT.DT_SINGLELINE,
+    TextBoxControl                      = (int)DRAW_TEXT_FORMAT.DT_EDITCONTROL,
 
     /// <remarks>
     ///  This is the default.
     /// </remarks>
-    Top                                 = (int)User32.DT.TOP,
+    Top                                 = (int)DRAW_TEXT_FORMAT.DT_TOP,
 
-    VerticalCenter                      = (int)User32.DT.VCENTER,
-    WordBreak                           = (int)User32.DT.WORDBREAK,
-    WordEllipsis                        = (int)User32.DT.WORD_ELLIPSIS,
+    VerticalCenter                      = (int)DRAW_TEXT_FORMAT.DT_VCENTER,
+    WordBreak                           = (int)DRAW_TEXT_FORMAT.DT_WORDBREAK,
+    WordEllipsis                        = (int)DRAW_TEXT_FORMAT.DT_WORD_ELLIPSIS,
 
     ///  The following flags are exclusive of TextRenderer (no Windows native flags)
     ///  and apply to methods receiving a Graphics as the IDeviceContext object, and

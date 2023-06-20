@@ -2003,14 +2003,14 @@ public partial class Control
                             // otherwise the host may never send the key to our wndproc.
 
                             // Someone returned true from IsInputKey or IsInputChar
-                            PInvoke.TranslateMessage(*lpmsg);
+                            PInvoke.TranslateMessage(lpmsg);
                             if (PInvoke.IsWindowUnicode(lpmsg->hwnd))
                             {
-                                User32.DispatchMessageW(ref *lpmsg);
+                                PInvoke.DispatchMessage(lpmsg);
                             }
                             else
                             {
-                                User32.DispatchMessageA(ref *lpmsg);
+                                PInvoke.DispatchMessageA(lpmsg);
                             }
 
                             return HRESULT.S_OK;

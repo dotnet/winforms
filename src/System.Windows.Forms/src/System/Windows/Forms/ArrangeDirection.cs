@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -15,20 +13,20 @@ public enum ArrangeDirection
     /// <summary>
     ///  Arranges vertically, from top to bottom.
     /// </summary>
-    Down = User32.ARW.DOWN,
+    Down = PInvoke.ARW_DOWN,
 
     /// <summary>
     ///  Arranges horizontally, from left to right.
     /// </summary>
-    Left = User32.ARW.LEFT,
+    Left = PInvoke.ARW_LEFT,
 
     /// <summary>
     ///  Arranges horizontally, from right to left.
     /// </summary>
-    Right = User32.ARW.RIGHT,
+    Right = PInvoke.ARW_RIGHT,
 
     /// <summary>
     ///  Arranges vertically, from bottom to top.
     /// </summary>
-    Up = User32.ARW.UP,
+    Up = PInvoke.ARW_UP,
 }

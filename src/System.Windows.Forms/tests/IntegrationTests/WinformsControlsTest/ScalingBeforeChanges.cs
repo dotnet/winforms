@@ -29,28 +29,28 @@ public partial class ScalingBeforeChanges : Form
     internal const int LOGPIXELSX = 88;
     internal const int LOGPIXELSY = 90;
 
-    internal static void GetDevicePixels(HandleRef handleRef, out double x, out double y)
+    internal static void GetDevicePixels(HWND hwnd, out double x, out double y)
     {
         x = LogicalDpi;
         y = LogicalDpi;
-        HDC hDC = User32.GetDC(handleRef);
-        if (!hDC.IsNull)
-        {
-            x = PInvoke.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
-            y = PInvoke.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
 
-            User32.ReleaseDC(handleRef, hDC);
+        using User32.GetDcScope dc = new(hwnd);
+        if (!dc.IsNull)
+        {
+            x = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
         }
     }
 
-    private double deviceDpiX, deviceDpiY;
+    private double _deviceDpiX, _deviceDpiY;
 
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        GetDevicePixels(new HandleRef(this, this.Handle), out deviceDpiX, out deviceDpiY);
+        GetDevicePixels((HWND)Handle, out _deviceDpiX, out _deviceDpiY);
         EnableNonClientDpiScaling(new HandleRef(this, Handle));
         EnableChildWindowDpiMessage(new HandleRef(this, Handle), true);
+        GC.KeepAlive(this);
     }
 
     internal static int LOWORD(IntPtr param)
@@ -80,7 +80,7 @@ public partial class ScalingBeforeChanges : Form
             case User32.WM.DPICHANGED:
                 int x = LOWORD(m.WParam);
                 int y = HIWORD(m.WParam);
-                if (x != deviceDpiX || y != deviceDpiY)
+                if (x != _deviceDpiX || y != _deviceDpiY)
                 {
                     RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
 
@@ -93,10 +93,10 @@ public partial class ScalingBeforeChanges : Form
                         suggestedRect.bottom - suggestedRect.top,
                         SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
-                    float factorX = (float)(x / deviceDpiX);
-                    float factorY = (float)(y / deviceDpiY);
-                    deviceDpiY = y;
-                    deviceDpiX = x;
+                    float factorX = (float)(x / _deviceDpiX);
+                    float factorY = (float)(y / _deviceDpiY);
+                    _deviceDpiY = y;
+                    _deviceDpiX = x;
 
                     Font = new Font(this.Font.FontFamily, this.Font.Size * factorY, this.Font.Style);
 

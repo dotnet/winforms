@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -60,7 +59,7 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
         Font? font,
         Rectangle rect,
         uint index,
-        User32.ODS state)
+        ODS_FLAGS state)
         : this(hdc, font, rect, index, state, SystemColors.WindowText, SystemColors.Window)
     { }
 
@@ -69,7 +68,7 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
         Font? font,
         Rectangle rect,
         uint index,
-        User32.ODS state,
+        ODS_FLAGS state,
         Color foreColor,
         Color backColor)
     {

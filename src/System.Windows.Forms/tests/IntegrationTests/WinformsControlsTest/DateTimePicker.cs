@@ -9,5 +9,6 @@ public partial class DateTimePicker : Form
     public DateTimePicker()
     {
         InitializeComponent();
+        this.dateTimePicker5.CustomFormat = "yyyy-MM-dd HH:mm:ss";
     }
 }

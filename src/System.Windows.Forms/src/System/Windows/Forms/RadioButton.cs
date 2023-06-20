@@ -191,7 +191,7 @@ public partial class RadioButton : ButtonBase
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(BOOL)value);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.BM_SETCHECK, (WPARAM)(BOOL)value);
                 }
 
                 Invalidate();
@@ -228,21 +228,21 @@ public partial class RadioButton : ButtonBase
             cp.ClassName = PInvoke.WC_BUTTON;
             if (OwnerDraw)
             {
-                cp.Style |= (int)User32.BS.OWNERDRAW;
+                cp.Style |= PInvoke.BS_OWNERDRAW;
             }
             else
             {
-                cp.Style |= (int)User32.BS.RADIOBUTTON;
+                cp.Style |= PInvoke.BS_RADIOBUTTON;
                 if (Appearance == Appearance.Button)
                 {
-                    cp.Style |= (int)User32.BS.PUSHLIKE;
+                    cp.Style |= PInvoke.BS_PUSHLIKE;
                 }
 
                 // Determine the alignment of the radio button
                 ContentAlignment align = RtlTranslateContent(CheckAlign);
-                if ((int)(align & AnyRight) != 0)
+                if ((align & AnyRight) != 0)
                 {
-                    cp.Style |= (int)User32.BS.RIGHTBUTTON;
+                    cp.Style |= PInvoke.BS_RIGHTBUTTON;
                 }
             }
 
@@ -250,17 +250,7 @@ public partial class RadioButton : ButtonBase
         }
     }
 
-    /// <summary>
-    ///  Deriving classes can override this to configure a default size for their control.
-    ///  This is more efficient than setting the size in the control's constructor.
-    /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(104, 24);
-        }
-    }
+    protected override Size DefaultSize => new Size(104, 24);
 
     /// <summary>
     ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
@@ -383,7 +373,7 @@ public partial class RadioButton : ButtonBase
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(BOOL)_isChecked);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.BM_SETCHECK, (WPARAM)(BOOL)_isChecked);
         }
     }
 
