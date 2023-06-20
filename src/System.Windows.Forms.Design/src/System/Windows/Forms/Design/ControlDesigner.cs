@@ -11,6 +11,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
+using Windows.Win32.System.SystemServices;
 using static Interop;
 
 namespace System.Windows.Forms.Design;
@@ -1810,7 +1811,7 @@ public partial class ControlDesigner : ComponentDesigner
                 break;
 
             case User32.WM.GETOBJECT:
-                if (m.LParamInternal == User32.OBJID.CLIENT)
+                if (m.LParamInternal == (int)OBJECT_IDENTIFIER.OBJID_CLIENT)
                 {
                     m.ResultInternal = AccessibilityObject?.GetLRESULT(m.WParamInternal) ?? default;
                 }
@@ -1956,11 +1957,11 @@ public partial class ControlDesigner : ComponentDesigner
 
             case User32.WM.NCMOUSEMOVE:
             case User32.WM.MOUSEMOVE:
-                if (((User32.MK)(nint)m.WParamInternal).HasFlag(User32.MK.LBUTTON))
+                if (((MODIFIERKEYS_FLAGS)(nint)m.WParamInternal).HasFlag(MODIFIERKEYS_FLAGS.MK_LBUTTON))
                 {
                     button = MouseButtons.Left;
                 }
-                else if (((User32.MK)(nint)m.WParamInternal).HasFlag(User32.MK.RBUTTON))
+                else if (((MODIFIERKEYS_FLAGS)(nint)m.WParamInternal).HasFlag(MODIFIERKEYS_FLAGS.MK_RBUTTON))
                 {
                     button = MouseButtons.Right;
                     _toolPassThrough = false;

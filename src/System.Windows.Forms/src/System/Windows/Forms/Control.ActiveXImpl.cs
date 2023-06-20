@@ -475,7 +475,7 @@ public partial class Control
             // Now do the actual drawing.  We must ask all of our children to draw as well.
             try
             {
-                nint flags = (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
+                nint flags = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT;
                 if (hdcType != OBJ_TYPE.OBJ_ENHMETADC)
                 {
                     PInvoke.SendMessage(_control, User32.WM.PRINT, (WPARAM)hdcDraw, (LPARAM)flags);

@@ -297,7 +297,7 @@ public sealed class PrintDialog : CommonDialog
         data.lpPrintTemplateName = null;
         data.nPropertyPages = 0;
         data.lphPropertyPages = IntPtr.Zero;
-        data.nStartPage = NativeMethods.START_PAGE_GENERAL;
+        data.nStartPage = unchecked((int)PInvoke.START_PAGE_GENERAL);
         data.dwResultAction = 0;
         return data;
     }

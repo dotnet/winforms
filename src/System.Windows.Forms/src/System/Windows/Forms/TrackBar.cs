@@ -924,12 +924,12 @@ public partial class TrackBar : Control, ISupportInitialize
             return;
         }
 
-        Debug.Assert(_cumulativeWheelData > -NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too small");
-        Debug.Assert(_cumulativeWheelData < NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too big");
+        Debug.Assert(_cumulativeWheelData > -PInvoke.WHEEL_DELTA, "cumulativeWheelData is too small");
+        Debug.Assert(_cumulativeWheelData < PInvoke.WHEEL_DELTA, "cumulativeWheelData is too big");
         _cumulativeWheelData += e.Delta;
 
         float partialNotches;
-        partialNotches = (float)_cumulativeWheelData / (float)NativeMethods.WHEEL_DELTA;
+        partialNotches = (float)_cumulativeWheelData / (float)PInvoke.WHEEL_DELTA;
 
         if (wheelScrollLines == -1)
         {
@@ -946,13 +946,13 @@ public partial class TrackBar : Control, ISupportInitialize
             {
                 absScrollBands = scrollBands;
                 Value = Math.Min(absScrollBands + Value, Maximum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
             else
             {
                 absScrollBands = -scrollBands;
                 Value = Math.Max(Value - absScrollBands, Minimum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
         }
 
@@ -1157,16 +1157,16 @@ public partial class TrackBar : Control, ISupportInitialize
         {
             case User32.WM.REFLECT_HSCROLL:
             case User32.WM.REFLECT_VSCROLL:
-                switch (m.WParamInternal.LOWORD)
+                switch ((uint)m.WParamInternal.LOWORD)
                 {
-                    case NativeMethods.TB_LINEUP:
-                    case NativeMethods.TB_LINEDOWN:
-                    case NativeMethods.TB_PAGEUP:
-                    case NativeMethods.TB_PAGEDOWN:
-                    case NativeMethods.TB_THUMBTRACK:
-                    case NativeMethods.TB_TOP:
-                    case NativeMethods.TB_BOTTOM:
-                    case NativeMethods.TB_ENDTRACK:
+                    case PInvoke.TB_LINEUP:
+                    case PInvoke.TB_LINEDOWN:
+                    case PInvoke.TB_PAGEUP:
+                    case PInvoke.TB_PAGEDOWN:
+                    case PInvoke.TB_THUMBTRACK:
+                    case PInvoke.TB_TOP:
+                    case PInvoke.TB_BOTTOM:
+                    case PInvoke.TB_ENDTRACK:
                         if (_value != Value)
                         {
                             OnScroll(EventArgs.Empty);

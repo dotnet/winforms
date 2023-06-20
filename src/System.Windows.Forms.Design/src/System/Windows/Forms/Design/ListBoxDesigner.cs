@@ -196,8 +196,8 @@ internal class ListBoxDesigner : ControlDesigner
         ListBox lb = (ListBox)Control;
         if (lb.IsHandleCreated && lb.Items.Count == 0)
         {
-            PInvoke.SendMessage(lb, (User32.WM)User32.LB.RESETCONTENT);
-            PInvoke.SendMessage(lb, (User32.WM)User32.LB.ADDSTRING, 0, name);
+            PInvoke.SendMessage(lb, (User32.WM)PInvoke.LB_RESETCONTENT);
+            PInvoke.SendMessage(lb, (User32.WM)PInvoke.LB_ADDSTRING, 0, name);
         }
     }
 

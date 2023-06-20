@@ -11,7 +11,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
 using static Interop;
@@ -251,7 +250,11 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 if (c is not null)
                 {
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, traycontrol = {c}");
-                    User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
+                    PInvoke.NotifyWinEvent(
+                        (uint)AccessibleEvents.SelectionAdd,
+                        c,
+                        (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                        (int)PInvoke.CHILDID_SELF);
                 }
             }
         }
@@ -262,7 +265,11 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             if (c is not null && IsHandleCreated)
             {
                 ScrollControlIntoView(c);
-                User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
+                PInvoke.NotifyWinEvent(
+                    (uint)AccessibleEvents.Focus,
+                    c,
+                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                    (int)PInvoke.CHILDID_SELF);
             }
 
             if (glyphManager is not null)

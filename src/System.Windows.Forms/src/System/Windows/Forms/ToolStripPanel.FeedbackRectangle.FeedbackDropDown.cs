@@ -104,7 +104,7 @@ public partial class ToolStripPanel
             {
                 if (m.MsgInternal == User32.WM.NCHITTEST)
                 {
-                    m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.HTTRANSPARENT;
                 }
 
                 base.WndProc(ref m);

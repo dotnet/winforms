@@ -4844,13 +4844,11 @@ Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
-        <target state="translated">{0}
-    Versión del ensamblado: {1}
-    Versión Win32: {2}
-    Código base: {3}
+        <target state="new">{0}
+    Assembly Version: {1}
+    Location: {2}
 </target>
         <note />
       </trans-unit>

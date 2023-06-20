@@ -324,7 +324,12 @@ public sealed partial class Application
                             // wait up to 100ms. We don't want someone to attach to idle, forget to detach, and then
                             // cause CPU to end up in race condition. For Windows Forms this generally isn't an issue
                             // because our component always returns false from its idle request
-                            User32.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 100, User32.QS.ALLINPUT, User32.MWMO.INPUTAVAILABLE);
+                            PInvoke.MsgWaitForMultipleObjectsEx(
+                                0,
+                                null,
+                                100,
+                                QUEUE_STATUS_FLAGS.QS_ALLINPUT,
+                                MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
                         }
                         else
                         {

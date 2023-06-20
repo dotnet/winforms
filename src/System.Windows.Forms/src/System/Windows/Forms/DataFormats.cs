@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -184,7 +183,7 @@ public static partial class DataFormats
             }
 
             // Need to add this format string
-            uint formatId = User32.RegisterClipboardFormatW(format);
+            uint formatId = PInvoke.RegisterClipboardFormat(format);
             if (formatId == 0)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error(), SR.RegisterCFFailed);

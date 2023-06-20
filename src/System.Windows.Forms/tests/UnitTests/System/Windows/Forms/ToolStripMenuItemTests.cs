@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -101,9 +100,9 @@ public class ToolStripMenuItemTests
 
     public static IEnumerable<object[]> GetNativeMenuItemImage_TestData()
     {
-        yield return new object[] { User32.SC.MINIMIZE };
-        yield return new object[] { User32.SC.CLOSE };
-        yield return new object[] { User32.SC.RESTORE };
+        yield return new object[] { PInvoke.SC_MINIMIZE };
+        yield return new object[] { PInvoke.SC_CLOSE };
+        yield return new object[] { PInvoke.SC_RESTORE };
     }
 
     [WinFormsTheory]

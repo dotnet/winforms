@@ -987,7 +987,7 @@ public class FormTests
         form.Location = new Point(10, 11);
         form.Size = new Size(200, 210);
 
-        PInvoke.SendMessage(form, User32.WM.SYSCOMMAND, (WPARAM)(uint)User32.SC.MAXIMIZE);
+        PInvoke.SendMessage(form, User32.WM.SYSCOMMAND, (WPARAM)PInvoke.SC_MAXIMIZE);
 
         form.Location = new Point(20, 21);
         form.Size = new Size(300, 310);
@@ -996,7 +996,7 @@ public class FormTests
         Assert.NotEqual(new Point(20, 21), form.Location);
         Assert.NotEqual(new Size(300, 310), form.Size);
 
-        PInvoke.SendMessage(form, User32.WM.SYSCOMMAND, (WPARAM)(uint)User32.SC.RESTORE);
+        PInvoke.SendMessage(form, User32.WM.SYSCOMMAND, (WPARAM)PInvoke.SC_RESTORE);
 
         Assert.Equal(new Point(20, 21), form.Location);
         Assert.Equal(new Size(300, 310), form.Size);

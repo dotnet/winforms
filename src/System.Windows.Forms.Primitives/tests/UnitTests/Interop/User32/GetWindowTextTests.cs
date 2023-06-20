@@ -65,7 +65,7 @@ public class GetWindowTextTests
                     string? text = BeforeGetTextLengthCallback?.Invoke();
                     if (text is not null)
                     {
-                        SetWindowTextW(hWnd, text);
+                        PInvoke.SetWindowText(hWnd, text);
                     }
 
                     break;
@@ -73,7 +73,7 @@ public class GetWindowTextTests
                     text = BeforeGetTextCallback?.Invoke();
                     if (text is not null)
                     {
-                        SetWindowTextW(hWnd, text);
+                        PInvoke.SetWindowText(hWnd, text);
                     }
 
                     break;

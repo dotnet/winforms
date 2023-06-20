@@ -105,7 +105,7 @@ public partial class ColorEditor
                         HWND.HWND_TOP,
                         0, 0, 0, 0,
                         SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW);
-                    hwndCtl = PInvoke.GetDlgItem((HWND)hwnd, (int)User32.ID.OK);
+                    hwndCtl = PInvoke.GetDlgItem((HWND)hwnd, (int)MESSAGEBOX_RESULT.IDOK);
                     PInvoke.EnableWindow(hwndCtl, false);
                     PInvoke.SetWindowPos(
                         hwndCtl,
@@ -129,11 +129,11 @@ public partial class ColorEditor
                         Debug.Assert(!success, "Couldn't find dialog member COLOR_BLUE");
 
                         Color = Color.FromArgb(red, green, blue);
-                        User32.PostMessageW(
-                            hwnd,
+                        PInvoke.PostMessage(
+                            (HWND)hwnd,
                             User32.WM.COMMAND,
-                            PARAM.FromLowHigh((int)User32.ID.OK, 0),
-                            PInvoke.GetDlgItem((HWND)hwnd, (int)User32.ID.OK));
+                            (WPARAM)PARAM.FromLowHigh((int)MESSAGEBOX_RESULT.IDOK, 0),
+                            (LPARAM)PInvoke.GetDlgItem((HWND)hwnd, (int)MESSAGEBOX_RESULT.IDOK));
                         break;
                     }
 

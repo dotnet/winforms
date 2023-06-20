@@ -6,13 +6,18 @@ namespace System.Windows.Forms;
 
 internal class HelpInfo
 {
+    public const int HelpFileOption = 1;
+    public const int HelpKeywordOption = 2;
+    public const int HelpNavigatorOption = 3;
+    public const int HelpObjectOption = 4;
+
     public HelpInfo(string helpfilepath)
     {
         HelpFilePath = helpfilepath;
         Keyword = string.Empty;
         Navigator = HelpNavigator.TableOfContents;
         Param = null;
-        Option = NativeMethods.HLP_FILE;
+        Option = HelpFileOption;
     }
 
     public HelpInfo(string helpfilepath, string keyword)
@@ -21,7 +26,7 @@ internal class HelpInfo
         Keyword = keyword;
         Navigator = HelpNavigator.TableOfContents;
         Param = null;
-        Option = NativeMethods.HLP_KEYWORD;
+        Option = HelpKeywordOption;
     }
 
     public HelpInfo(string helpfilepath, HelpNavigator navigator)
@@ -30,7 +35,7 @@ internal class HelpInfo
         Keyword = string.Empty;
         Navigator = navigator;
         Param = null;
-        Option = NativeMethods.HLP_NAVIGATOR;
+        Option = HelpNavigatorOption;
     }
 
     public HelpInfo(string helpfilepath, HelpNavigator navigator, object? param)
@@ -39,7 +44,7 @@ internal class HelpInfo
         Keyword = string.Empty;
         Navigator = navigator;
         Param = param;
-        Option = NativeMethods.HLP_OBJECT;
+        Option = HelpObjectOption;
     }
 
     public int Option { get; }

@@ -775,7 +775,7 @@ public partial class TaskDialog : IWin32Window
             caption = Path.GetFileName(PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null));
         }
 
-        User32.SetWindowTextW(_handle, caption);
+        PInvoke.SetWindowText(_handle, caption);
     }
 
     private HRESULT HandleTaskDialogCallback(
@@ -912,9 +912,7 @@ public partial class TaskDialog : IWin32Window
 
                         // Post the message, and then set the flag to ignore further
                         // notifications until we receive the posted message.
-                        if (User32.PostMessageW(
-                            hWnd,
-                            ContinueButtonClickHandlingMessage))
+                        if (PInvoke.PostMessage(hWnd, ContinueButtonClickHandlingMessage))
                         {
                             _ignoreButtonClickedNotifications = true;
                         }

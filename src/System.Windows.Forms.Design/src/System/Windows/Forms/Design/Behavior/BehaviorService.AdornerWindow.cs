@@ -339,11 +339,11 @@ public sealed partial class BehaviorService
 
                     if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                     {
-                        m.ResultInternal = (LRESULT)(int)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
                     }
                     else
                     {
-                        m.ResultInternal = (LRESULT)(int)User32.HT.CLIENT;
+                        m.ResultInternal = (LRESULT)(int)PInvoke.HTCLIENT;
                     }
 
                     break;

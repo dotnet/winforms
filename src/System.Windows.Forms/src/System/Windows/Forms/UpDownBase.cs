@@ -743,12 +743,12 @@ public abstract partial class UpDownBase : ContainerControl
             return;
         }
 
-        Debug.Assert(_wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too small");
-        Debug.Assert(_wheelDelta < NativeMethods.WHEEL_DELTA, "wheelDelta is too big");
+        Debug.Assert(_wheelDelta > -PInvoke.WHEEL_DELTA, "wheelDelta is too small");
+        Debug.Assert(_wheelDelta < PInvoke.WHEEL_DELTA, "wheelDelta is too big");
         _wheelDelta += e.Delta;
 
         float partialNotches;
-        partialNotches = _wheelDelta / (float)NativeMethods.WHEEL_DELTA;
+        partialNotches = _wheelDelta / (float)PInvoke.WHEEL_DELTA;
 
         if (wheelScrollLines == -1)
         {
@@ -769,7 +769,7 @@ public abstract partial class UpDownBase : ContainerControl
                     absScrollBands--;
                 }
 
-                _wheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                _wheelDelta -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
             else
             {
@@ -780,7 +780,7 @@ public abstract partial class UpDownBase : ContainerControl
                     absScrollBands--;
                 }
 
-                _wheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                _wheelDelta -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
         }
     }

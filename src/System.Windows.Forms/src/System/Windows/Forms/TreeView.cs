@@ -3215,7 +3215,7 @@ public partial class TreeView : Control
             ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
             // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-            User32.PostMessageW(this, (User32.WM)PInvoke.TVM_SELECTITEM, (nint)PInvoke.TVGN_DROPHILITE, treeNode.Handle);
+            PInvoke.PostMessage(this, (User32.WM)PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE, (LPARAM)treeNode.Handle);
             menu.ShowInternal(this, PointToClient(MousePosition), /*keyboardActivated*/false);
             menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
         }
@@ -3245,7 +3245,8 @@ public partial class TreeView : Control
     {
         base.WndProc(ref m);
 
-        if (((User32.PRF)(nint)m.LParamInternal & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+        if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0
+            && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
             Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);

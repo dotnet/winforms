@@ -556,12 +556,17 @@ internal sealed partial class DesignerActionPanel
             }
 
             // Lifted directly from PropertyGridView.DropDownHolder. Less destructive than using ShowDialog().
-            public void DoModalLoop()
+            public unsafe void DoModalLoop()
             {
                 while (Visible)
                 {
                     Application.DoEvents();
-                    User32.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, User32.QS.ALLINPUT, User32.MWMO.INPUTAVAILABLE);
+                    PInvoke.MsgWaitForMultipleObjectsEx(
+                        0,
+                        null,
+                        250,
+                        QUEUE_STATUS_FLAGS.QS_ALLINPUT,
+                        MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
                 }
             }
 
@@ -635,7 +640,7 @@ internal sealed partial class DesignerActionPanel
             {
                 if (m.MsgInternal == User32.WM.ACTIVATE
                     && Visible
-                    && (User32.WA)m.WParamInternal.LOWORD == User32.WA.INACTIVE
+                    && m.WParamInternal.LOWORD == PInvoke.WA_INACTIVE
                     && !OwnsWindow((HWND)m.LParamInternal))
                 {
                     Visible = false;

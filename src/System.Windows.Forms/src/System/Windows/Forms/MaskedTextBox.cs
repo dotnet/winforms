@@ -2908,7 +2908,7 @@ public partial class MaskedTextBox : TextBoxBase
     private void WmPrint(ref Message m)
     {
         base.WndProc(ref m);
-        if (((User32.PRF)(nint)m.LParamInternal & User32.PRF.NONCLIENT) != 0
+        if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0
             && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);

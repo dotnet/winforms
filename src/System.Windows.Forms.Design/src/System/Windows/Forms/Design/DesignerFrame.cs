@@ -8,7 +8,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
 using static Interop;
@@ -140,7 +139,11 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         {
             if (selSvc.PrimarySelection is Control ctrl && !ctrl.IsDisposed)
             {
-                User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
+                PInvoke.NotifyWinEvent(
+                    (uint)AccessibleEvents.Focus,
+                    ctrl,
+                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                    (int)PInvoke.CHILDID_SELF);
             }
         }
     }
@@ -214,41 +217,41 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 break;
             // Provide keyboard access for scrolling
             case User32.WM.KEYDOWN:
-                User32.SBV wScrollNotify = 0;
+                SCROLLBAR_COMMAND wScrollNotify = 0;
                 User32.WM msg = User32.WM.NULL;
                 Keys keycode = (Keys)(m.WParamInternal & 0xFFFF);
                 switch (keycode)
                 {
                     case Keys.Up:
-                        wScrollNotify = User32.SBV.LINEUP;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEUP;
                         msg = User32.WM.VSCROLL;
                         break;
                     case Keys.Down:
-                        wScrollNotify = User32.SBV.LINEDOWN;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEDOWN;
                         msg = User32.WM.VSCROLL;
                         break;
                     case Keys.PageUp:
-                        wScrollNotify = User32.SBV.PAGEUP;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_PAGEUP;
                         msg = User32.WM.VSCROLL;
                         break;
                     case Keys.PageDown:
-                        wScrollNotify = User32.SBV.PAGEDOWN;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_PAGEDOWN;
                         msg = User32.WM.VSCROLL;
                         break;
                     case Keys.Home:
-                        wScrollNotify = User32.SBV.TOP;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_TOP;
                         msg = User32.WM.VSCROLL;
                         break;
                     case Keys.End:
-                        wScrollNotify = User32.SBV.BOTTOM;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_BOTTOM;
                         msg = User32.WM.VSCROLL;
                         break;
                     case Keys.Left:
-                        wScrollNotify = User32.SBV.LINEUP;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEUP;
                         msg = User32.WM.HSCROLL;
                         break;
                     case Keys.Right:
-                        wScrollNotify = User32.SBV.LINEDOWN;
+                        wScrollNotify = SCROLLBAR_COMMAND.SB_LINEDOWN;
                         msg = User32.WM.HSCROLL;
                         break;
                 }

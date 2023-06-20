@@ -19,8 +19,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Displays a list of items in one of four
-///  views. Each item displays a caption and optionally an image.
+///  Displays a list of items in one of four views. Each item displays a caption and optionally an image.
 /// </summary>
 [Docking(DockingBehavior.Ask)]
 [Designer($"System.Windows.Forms.Design.ListViewDesigner, {AssemblyRef.SystemDesign}")]
@@ -29,7 +28,6 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionListView))]
 public partial class ListView : Control
 {
-    //members
     private const int MASK_HITTESTFLAG = 0x00F7;
 
     private static readonly object EVENT_CACHEVIRTUALITEMS = new object();
@@ -2286,7 +2284,7 @@ public partial class ListView : Control
             case (ListViewAlignment)PInvoke.LVA_SNAPTOGRID:
                 if (IsHandleCreated)
                 {
-                    User32.PostMessageW(this, (User32.WM)PInvoke.LVM_ARRANGE, (IntPtr)value, IntPtr.Zero);
+                    PInvoke.PostMessage(this, (User32.WM)PInvoke.LVM_ARRANGE, (WPARAM)(int)value);
                 }
 
                 break;
@@ -4966,7 +4964,7 @@ public partial class ListView : Control
         {
             WINDOWPOS position = default;
             PInvoke.GetClientRect(this, out RECT clientRect);
-            var hd = new User32.HDLAYOUT
+            HDLAYOUT hd = new()
             {
                 prc = &clientRect,
                 pwpos = &position
@@ -6967,7 +6965,7 @@ public partial class ListView : Control
     private void WmPrint(ref Message m)
     {
         base.WndProc(ref m);
-        if (((User32.PRF)(nint)m.LParamInternal & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+        if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
             Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);

@@ -63,7 +63,7 @@ public partial class TabControl : Control
     ///  display rectangle.  When the message is received, the control calls
     ///  updateTabSelection() to layout the TabPages correctly.
     /// </summary>
-    private readonly User32.WM _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
+    private readonly User32.WM _tabBaseReLayoutMessage = (User32.WM)PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}{TabBaseReLayoutMessageName}");
 
     // State
     private readonly List<TabPage> _tabPages = new();
@@ -929,7 +929,7 @@ public partial class TabControl : Control
     private int AddNativeTabPage(TabPage tabPage)
     {
         int index = SendMessage(PInvoke.TCM_INSERTITEMW, TabCount + 1, tabPage);
-        User32.PostMessageW(this, _tabBaseReLayoutMessage);
+        PInvoke.PostMessage(this, _tabBaseReLayoutMessage);
         return index;
     }
 

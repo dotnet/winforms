@@ -3149,7 +3149,7 @@ public class ScrollBarTests
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= (int)User32.SBS.VERT;
+                cp.Style |= (int)SCROLLBAR_CONSTANTS.SB_VERT;
                 return cp;
             }
         }

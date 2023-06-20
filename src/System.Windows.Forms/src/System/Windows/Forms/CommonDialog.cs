@@ -68,7 +68,7 @@ public abstract class CommonDialog : Component
         }
         else if (msg == (int)User32.WM.SETFOCUS)
         {
-            User32.PostMessageW(hWnd, (User32.WM)CDM_SETDEFAULTFOCUS);
+            PInvoke.PostMessage((HWND)hWnd, (User32.WM)CDM_SETDEFAULTFOCUS);
         }
         else if (msg == CDM_SETDEFAULTFOCUS)
         {
@@ -194,7 +194,7 @@ public abstract class CommonDialog : Component
 
             if (s_helpMessage == User32.WM.NULL)
             {
-                s_helpMessage = User32.RegisterWindowMessageW("commdlg_help");
+                s_helpMessage = (User32.WM)PInvoke.RegisterWindowMessage("commdlg_help");
             }
 
             WNDPROC ownerWindowProcedure = OwnerWndProcInternal;

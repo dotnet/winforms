@@ -10,7 +10,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -1896,7 +1895,7 @@ public partial class ComboBox : ListControl
 
             case WM.SETCURSOR:
                 if (Cursor != DefaultCursor && _childEdit is not null
-                    && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParamInternal) == (int)HT.CLIENT)
+                    && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParamInternal) == (int)PInvoke.HTCLIENT)
                 {
                     Cursor.Current = Cursor;
                 }
@@ -2350,7 +2349,7 @@ public partial class ComboBox : ListControl
     private unsafe string NativeGetItemText(int index)
     {
         int maxLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXTLEN, (WPARAM)index);
-        if (maxLength == LB_ERR)
+        if (maxLength == PInvoke.LB_ERR)
         {
             return string.Empty;
         }
@@ -2359,8 +2358,8 @@ public partial class ComboBox : ListControl
         fixed (char* b = buffer)
         {
             int actualLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXT, (WPARAM)index, (LPARAM)b);
-            Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
-            return actualLength == LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
+            Debug.Assert(actualLength != PInvoke.LB_ERR, "Should have validated the index above");
+            return actualLength == PInvoke.LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
         }
     }
 
@@ -3055,8 +3054,11 @@ public partial class ComboBox : ListControl
             else if (_childEdit is not null && _childEdit.Handle != 0)
             {
                 // Focus on edit field so that its changes are announced, e.g. when selecting items by arrows.
-                NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(_childEdit, _childEdit.Handle),
-                    objType: OBJID.CLIENT, objID: (int)PInvoke.CHILDID_SELF);
+                PInvoke.NotifyWinEvent(
+                    (uint)AccessibleEvents.Focus,
+                    _childEdit,
+                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                    (int)PInvoke.CHILDID_SELF);
             }
 
             // Notify Collapsed/expanded property change.
@@ -3822,9 +3824,11 @@ public partial class ComboBox : ListControl
                     // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                     // as with Theming on.
 
-                    if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
+                    if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false
+                        && DropDownStyle == ComboBoxStyle.DropDownList
+                        && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
-                        PostMessageW(this, WM.MOUSELEAVE);
+                        PInvoke.PostMessage(this, WM.MOUSELEAVE);
                     }
                 }
 
@@ -3941,7 +3945,7 @@ public partial class ComboBox : ListControl
                 {
                     DefWndProc(ref m);
 
-                    if (((PRF)(nint)m.LParamInternal & PRF.CLIENT) == PRF.CLIENT)
+                    if (((nint)m.LParamInternal & PInvoke.PRF_CLIENT) == PInvoke.PRF_CLIENT)
                     {
                         if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                         {

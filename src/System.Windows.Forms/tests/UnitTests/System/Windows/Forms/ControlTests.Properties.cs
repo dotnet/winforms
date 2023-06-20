@@ -10492,18 +10492,18 @@ public partial class ControlTests
     {
         return new TheoryData<int, bool>()
         {
-            { (int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), true },
-            { (int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true },
-            { (int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false },
-            { (int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false },
-            { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
+            { (int)PInvoke.UIS_CLEAR | ((int)PInvoke.UISF_ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_CLEAR | ((int)PInvoke.UISF_HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_CLEAR | ((int)PInvoke.UISF_HIDEFOCUS << 16), true },
+            { (int)PInvoke.UIS_CLEAR | ((int)(PInvoke.UISF_HIDEACCEL | PInvoke.UISF_HIDEFOCUS) << 16), true },
+            { (int)PInvoke.UIS_SET | ((int)PInvoke.UISF_ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_SET | ((int)PInvoke.UISF_HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_SET | ((int)PInvoke.UISF_HIDEFOCUS << 16), false },
+            { (int)PInvoke.UIS_SET | ((int)(PInvoke.UISF_HIDEACCEL | PInvoke.UISF_HIDEFOCUS) << 16), false },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)PInvoke.UISF_ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)PInvoke.UISF_HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)PInvoke.UISF_HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)(PInvoke.UISF_HIDEACCEL | PInvoke.UISF_HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
         };
     }
 
@@ -10551,18 +10551,18 @@ public partial class ControlTests
     {
         return new TheoryData<int, bool>()
         {
-            { (int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), true },
-            { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true },
-            { (int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false },
-            { (int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false },
-            { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
-            { (int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
+            { (int)PInvoke.UIS_CLEAR | ((int)PInvoke.UISF_ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_CLEAR | ((int)PInvoke.UISF_HIDEACCEL << 16), true },
+            { (int)PInvoke.UIS_CLEAR | ((int)PInvoke.UISF_HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_CLEAR | ((int)(PInvoke.UISF_HIDEACCEL | PInvoke.UISF_HIDEFOCUS) << 16), true },
+            { (int)PInvoke.UIS_SET | ((int)PInvoke.UISF_ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_SET | ((int)PInvoke.UISF_HIDEACCEL << 16), false },
+            { (int)PInvoke.UIS_SET | ((int)PInvoke.UISF_HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_SET | ((int)(PInvoke.UISF_HIDEACCEL | PInvoke.UISF_HIDEFOCUS) << 16), false },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)PInvoke.UISF_ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)PInvoke.UISF_HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)PInvoke.UISF_HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+            { (int)PInvoke.UIS_INITIALIZE | ((int)(PInvoke.UISF_HIDEACCEL | PInvoke.UISF_HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
         };
     }
 

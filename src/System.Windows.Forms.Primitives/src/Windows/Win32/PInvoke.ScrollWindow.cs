@@ -6,11 +6,11 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
-    public static BOOL EnableMenuItem<T>(T hMenu, uint uIDEnableItem, MENU_ITEM_FLAGS uEnable)
-        where T : IHandle<HMENU>
+    public static unsafe BOOL ScrollWindow<T>(T hWnd, int XAmount, int YAmount, RECT* lpRect, RECT* rectClip)
+        where T : IHandle<HWND>
     {
-        BOOL result = EnableMenuItem(hMenu.Handle, uIDEnableItem, uEnable);
-        GC.KeepAlive(hMenu.Wrapper);
+        BOOL result = ScrollWindow(hWnd.Handle, XAmount, YAmount, lpRect, rectClip);
+        GC.KeepAlive(hWnd.Wrapper);
         return result;
     }
 }

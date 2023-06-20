@@ -1166,7 +1166,7 @@ public abstract partial class TextBoxBase : Control
         {
             if (IsHandleCreated)
             {
-                SetWindowTextW(this, value);
+                PInvoke.SetWindowText(this, value);
             }
             else
             {

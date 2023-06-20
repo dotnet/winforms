@@ -17,7 +17,7 @@ internal static partial class Interop
                 {
                     if (s_wmMouseEnterMessage == 0)
                     {
-                        s_wmMouseEnterMessage = (uint)RegisterWindowMessageW("WinFormsMouseEnter");
+                        s_wmMouseEnterMessage = PInvoke.RegisterWindowMessage("WinFormsMouseEnter");
                     }
 
                     return (WM)s_wmMouseEnterMessage;
@@ -30,7 +30,7 @@ internal static partial class Interop
                 {
                     if (s_wmUnSubclass == 0)
                     {
-                        s_wmUnSubclass = (uint)RegisterWindowMessageW("WinFormsUnSubclass");
+                        s_wmUnSubclass = PInvoke.RegisterWindowMessage("WinFormsUnSubclass");
                     }
 
                     return (WM)s_wmUnSubclass;

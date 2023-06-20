@@ -746,7 +746,7 @@ internal class CommandSet : IDisposable
                 HWND hwnd = PInvoke.WindowFromPoint(p);
                 if (!hwnd.IsNull)
                 {
-                    PInvoke.SendMessage(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);
+                    PInvoke.SendMessage(hwnd, User32.WM.SETCURSOR, hwnd, (nint)PInvoke.HTCLIENT);
                 }
                 else
                 {

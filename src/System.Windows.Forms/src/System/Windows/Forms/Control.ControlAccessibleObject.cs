@@ -20,7 +20,7 @@ public partial class Control
         /// <summary>
         ///  Associated window handle (if any).
         /// </summary>
-        private IntPtr _handle = IntPtr.Zero;
+        private HWND _handle = HWND.Null;
 
         /// <summary>
         ///  Used to lazily grab the owner control handle, if it hasn't been created yet.
@@ -30,7 +30,7 @@ public partial class Control
         private readonly WeakReference<Control> _ownerControl;
 
         public ControlAccessibleObject(Control ownerControl)
-            : this(ownerControl, User32.OBJID.CLIENT)
+            : this(ownerControl, (int)OBJECT_IDENTIFIER.OBJID_CLIENT)
         {
         }
 
@@ -229,7 +229,7 @@ public partial class Control
                     // We haven't gotten the associated Control handle yet, grab it now (this will create the
                     // Control's handle if it hasn't been created yet).
                     _getOwnerControlHandle = false;
-                    _handle = Owner?.Handle ?? default;
+                    _handle = Owner?.HWND ?? default;
                 }
 
                 return _handle;
@@ -241,10 +241,10 @@ public partial class Control
                     return;
                 }
 
-                _handle = value;
+                _handle = (HWND)value;
                 _getOwnerControlHandle = false;
 
-                if (_handle == IntPtr.Zero)
+                if (_handle.IsNull)
                 {
                     return;
                 }
@@ -254,7 +254,7 @@ public partial class Control
             }
         }
 
-        internal IntPtr HandleInternal => _handle;
+        internal HWND HandleInternal => _handle;
 
         public override string? Help
         {
@@ -430,34 +430,14 @@ public partial class Control
         }
 
         public void NotifyClients(AccessibleEvents accEvent)
-        {
-            if (HandleInternal == IntPtr.Zero || !CanNotifyClients)
-            {
-                return;
-            }
-
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
-                $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = self");
-
-            User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, HandleInternal), User32.OBJID.CLIENT, 0);
-        }
+            => NotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, (int)PInvoke.CHILDID_SELF);
 
         public void NotifyClients(AccessibleEvents accEvent, int childID)
-        {
-            if (HandleInternal == IntPtr.Zero || !CanNotifyClients)
-            {
-                return;
-            }
-
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
-                $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
-
-            User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, HandleInternal), User32.OBJID.CLIENT, childID + 1);
-        }
+            => NotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, childID);
 
         public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID)
         {
-            if (HandleInternal == IntPtr.Zero || !CanNotifyClients)
+            if (HandleInternal.IsNull || !CanNotifyClients)
             {
                 return;
             }
@@ -465,7 +445,11 @@ public partial class Control
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                 $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
-            User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, HandleInternal), objectID, childID + 1);
+            PInvoke.NotifyWinEvent(
+                (uint)accEvent,
+                new HandleRef<HWND>(Owner, HandleInternal),
+                objectID,
+                childID + 1);
         }
 
         /// <summary>

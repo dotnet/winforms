@@ -31,9 +31,9 @@ internal partial class MdiControlStrip : MenuStrip
         _target = target;
 
         // The menu item itself takes care of enabledness and sending WM_SYSCOMMAND messages to the target.
-        _minimize = new ControlBoxMenuItem(hMenu, User32.SC.MINIMIZE, target);
-        _close = new ControlBoxMenuItem(hMenu, User32.SC.CLOSE, target);
-        _restore = new ControlBoxMenuItem(hMenu, User32.SC.RESTORE, target);
+        _minimize = new ControlBoxMenuItem(hMenu, PInvoke.SC_MINIMIZE, target);
+        _close = new ControlBoxMenuItem(hMenu, PInvoke.SC_CLOSE, target);
+        _restore = new ControlBoxMenuItem(hMenu, PInvoke.SC_RESTORE, target);
 
         // The dropDown of the system menu is the one that talks to native.
         _system = new SystemMenuItem();

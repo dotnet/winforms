@@ -277,7 +277,7 @@ public class Timer : Component
             // Fire a message across threads to destroy the timer and HWND on the thread that created it.
             if (GetInvokeRequired(hwnd))
             {
-                User32.PostMessageW(hwnd, User32.WM.CLOSE);
+                PInvoke.PostMessage(hwnd, User32.WM.CLOSE);
                 return;
             }
 

@@ -17,7 +17,7 @@ public static class ControlExtensions
     internal static void PrintToMetafile(
         this Control control,
         EmfScope emf,
-        User32.PRF prf = User32.PRF.CHILDREN | User32.PRF.CLIENT)
+        int prf = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT)
     {
         PInvoke.SendMessage(control, User32.WM.PRINT, (WPARAM)emf.HDC, (LPARAM)(uint)prf);
     }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -152,8 +151,8 @@ public class DataFormatsTests
         yield return new object[] { -1, "Format65535" };
         yield return new object[] { 1234, "Format1234" };
 
-        uint manuallyRegisteredFormatId = User32.RegisterClipboardFormatW("ManuallyRegisteredFormat");
-        uint longManuallyRegisteredFormatId = User32.RegisterClipboardFormatW(new string('a', 255));
+        uint manuallyRegisteredFormatId = PInvoke.RegisterClipboardFormat("ManuallyRegisteredFormat");
+        uint longManuallyRegisteredFormatId = PInvoke.RegisterClipboardFormat(new string('a', 255));
         yield return new object[] { (int)manuallyRegisteredFormatId, "ManuallyRegisteredFormat" };
         yield return new object[] { (int)longManuallyRegisteredFormatId, new string('a', 255) };
     }
