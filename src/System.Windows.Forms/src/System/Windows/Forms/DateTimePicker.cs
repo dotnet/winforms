@@ -830,7 +830,7 @@ public partial class DateTimePicker : Control
     [AllowNull]
     public override string Text
     {
-        get => Value.ToString(CustomFormat);
+        get => base.Text;
         set
         {
             // Clause to check length
