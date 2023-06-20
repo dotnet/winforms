@@ -1317,4 +1317,10 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="ExceptionCollectionInvalidArgument" xml:space="preserve">
     <value>Argument must only contain objects of type '{0}'.</value>
   </data>
+    <data name="DesignerShortcutVerticalOrientation" xml:space="preserve">
+    <value>Vertical Splitter Orientation.</value>
+  </data>
+    <data name="DesignerShortcutHorizontalOrientation" xml:space="preserve">
+    <value>Horizontal Splitter Orientation.</value>
+  </data>
 </root>
