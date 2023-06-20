@@ -73,9 +73,9 @@ partial class ContainerControls2
         this.label8.Location = new System.Drawing.Point(13, 21);
         this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label8.Name = "label8";
-        this.label8.Size = new System.Drawing.Size(298, 15);
-        this.label8.TabIndex = 18;
-        this.label8.Text = "SplitContainer_SetBackColor_Panel1_Green_Panel2_Red";
+        this.label8.Size = new System.Drawing.Size(295, 15);
+        this.label8.TabIndex = 0;
+        this.label8.Text = "SplitContainer_SetBackColor_Panel1_Silver_Panel2_Red";
         // 
         // splitContainer1
         // 
@@ -85,7 +85,7 @@ partial class ContainerControls2
         // 
         // splitContainer1.Panel1
         // 
-        this.splitContainer1.Panel1.BackColor = System.Drawing.Color.Green;
+        this.splitContainer1.Panel1.BackColor = System.Drawing.Color.Silver;
         this.splitContainer1.Panel1.Controls.Add(this.button15);
         this.splitContainer1.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
         // 
@@ -96,16 +96,16 @@ partial class ContainerControls2
         this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
         this.splitContainer1.RightToLeft = System.Windows.Forms.RightToLeft.No;
         this.splitContainer1.Size = new System.Drawing.Size(273, 142);
-        this.splitContainer1.SplitterDistance = 88;
+        this.splitContainer1.SplitterDistance = 98;
         this.splitContainer1.SplitterWidth = 5;
-        this.splitContainer1.TabIndex = 19;
+        this.splitContainer1.TabIndex = 1;
         // 
         // button15
         // 
         this.button15.Location = new System.Drawing.Point(10, 57);
         this.button15.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.button15.Name = "button15";
-        this.button15.Size = new System.Drawing.Size(88, 27);
+        this.button15.Size = new System.Drawing.Size(74, 27);
         this.button15.TabIndex = 0;
         this.button15.Text = "button15";
         this.button15.UseVisualStyleBackColor = true;
@@ -116,7 +116,7 @@ partial class ContainerControls2
         this.button16.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.button16.Name = "button16";
         this.button16.Size = new System.Drawing.Size(88, 27);
-        this.button16.TabIndex = 1;
+        this.button16.TabIndex = 0;
         this.button16.Text = "button16";
         this.button16.UseVisualStyleBackColor = true;
         // 
@@ -127,7 +127,7 @@ partial class ContainerControls2
         this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label9.Name = "label9";
         this.label9.Size = new System.Drawing.Size(199, 15);
-        this.label9.TabIndex = 22;
+        this.label9.TabIndex = 10;
         this.label9.Text = "TableLayoutPanel_SetBackColor_Red";
         // 
         // tableLayoutPanel1
@@ -149,7 +149,7 @@ partial class ContainerControls2
         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
         this.tableLayoutPanel1.Size = new System.Drawing.Size(259, 103);
-        this.tableLayoutPanel1.TabIndex = 23;
+        this.tableLayoutPanel1.TabIndex = 11;
         // 
         // radioButton6
         // 
@@ -260,7 +260,7 @@ partial class ContainerControls2
         this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label13.Name = "label13";
         this.label13.Size = new System.Drawing.Size(218, 15);
-        this.label13.TabIndex = 24;
+        this.label13.TabIndex = 2;
         this.label13.Text = "Empty_FlowLayout_SetBackColor_Green";
         // 
         // flowLayoutPanel4
@@ -270,7 +270,7 @@ partial class ContainerControls2
         this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.flowLayoutPanel4.Name = "flowLayoutPanel4";
         this.flowLayoutPanel4.Size = new System.Drawing.Size(153, 84);
-        this.flowLayoutPanel4.TabIndex = 25;
+        this.flowLayoutPanel4.TabIndex = 3;
         // 
         // label14
         // 
@@ -279,7 +279,7 @@ partial class ContainerControls2
         this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label14.Name = "label14";
         this.label14.Size = new System.Drawing.Size(210, 15);
-        this.label14.TabIndex = 26;
+        this.label14.TabIndex = 6;
         this.label14.Text = "Empty_GroupBox_SetBackColor_Green";
         // 
         // groupBox5
@@ -290,7 +290,7 @@ partial class ContainerControls2
         this.groupBox5.Name = "groupBox5";
         this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.groupBox5.Size = new System.Drawing.Size(153, 88);
-        this.groupBox5.TabIndex = 27;
+        this.groupBox5.TabIndex = 7;
         this.groupBox5.TabStop = false;
         this.groupBox5.Text = "groupBox5";
         // 
@@ -301,7 +301,7 @@ partial class ContainerControls2
         this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label15.Name = "label15";
         this.label15.Size = new System.Drawing.Size(186, 15);
-        this.label15.TabIndex = 28;
+        this.label15.TabIndex = 12;
         this.label15.Text = "Empty_Panel_SetBackColor_Green";
         // 
         // panel4
@@ -311,7 +311,7 @@ partial class ContainerControls2
         this.panel4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.panel4.Name = "panel4";
         this.panel4.Size = new System.Drawing.Size(164, 103);
-        this.panel4.TabIndex = 29;
+        this.panel4.TabIndex = 13;
         // 
         // label16
         // 
@@ -320,7 +320,7 @@ partial class ContainerControls2
         this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label16.Name = "label16";
         this.label16.Size = new System.Drawing.Size(337, 15);
-        this.label16.TabIndex = 30;
+        this.label16.TabIndex = 4;
         this.label16.Text = "Empty_SplitContainer_SetBackColor_Panel1_Green_Panel2_Red";
         // 
         // splitContainer2
@@ -339,7 +339,7 @@ partial class ContainerControls2
         this.splitContainer2.Size = new System.Drawing.Size(262, 90);
         this.splitContainer2.SplitterDistance = 83;
         this.splitContainer2.SplitterWidth = 5;
-        this.splitContainer2.TabIndex = 31;
+        this.splitContainer2.TabIndex = 5;
         // 
         // label17
         // 
@@ -348,7 +348,7 @@ partial class ContainerControls2
         this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label17.Name = "label17";
         this.label17.Size = new System.Drawing.Size(350, 15);
-        this.label17.TabIndex = 32;
+        this.label17.TabIndex = 8;
         this.label17.Text = "Empty_TabControl_SetBackColor_TabPage7_Green_TabPage8_Red";
         // 
         // tabControl4
@@ -360,7 +360,7 @@ partial class ContainerControls2
         this.tabControl4.Name = "tabControl4";
         this.tabControl4.SelectedIndex = 0;
         this.tabControl4.Size = new System.Drawing.Size(262, 88);
-        this.tabControl4.TabIndex = 33;
+        this.tabControl4.TabIndex = 9;
         // 
         // tabPage7
         // 
@@ -391,7 +391,7 @@ partial class ContainerControls2
         this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
         this.label18.Name = "label18";
         this.label18.Size = new System.Drawing.Size(211, 15);
-        this.label18.TabIndex = 34;
+        this.label18.TabIndex = 14;
         this.label18.Text = "Empty_TabLayout_SetBackColor_Green";
         // 
         // tableLayoutPanel2
@@ -407,7 +407,7 @@ partial class ContainerControls2
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
         this.tableLayoutPanel2.Size = new System.Drawing.Size(258, 103);
-        this.tableLayoutPanel2.TabIndex = 35;
+        this.tableLayoutPanel2.TabIndex = 15;
         // 
         // ContainerControls2
         // 
