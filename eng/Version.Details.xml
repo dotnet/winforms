@@ -21,7 +21,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="Microsoft.Windows.Compatibility" Version="7.0.3">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>f39e05a73c5b5394caf493ee1205af9b64024a47</Sha>
+      <Sha>5b20af47d99620150c53eaf5db8636fdf730b126</Sha>
     </Dependency>
     <Dependency Name="System.CodeDom" Version="7.0.0">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
@@ -93,7 +93,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Security.Cryptography.Pkcs" Version="7.0.2">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>8f4c2eb362230b4a9872395cbebf9676be8e3ee2</Sha>
+      <Sha>5b20af47d99620150c53eaf5db8636fdf730b126</Sha>
     </Dependency>
     <Dependency Name="System.Security.Cryptography.ProtectedData" Version="7.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
@@ -105,7 +105,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Text.Json" Version="7.0.3">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>f39e05a73c5b5394caf493ee1205af9b64024a47</Sha>
+      <Sha>5b20af47d99620150c53eaf5db8636fdf730b126</Sha>
     </Dependency>
     <Dependency Name="System.Threading.AccessControl" Version="7.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
