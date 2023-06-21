@@ -819,7 +819,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 yDelta,
                 null,
                 &rcClip,
-                0,
+                HRGN.Null,
                 &rcUpdate,
                 SCROLL_WINDOW_FLAGS.SW_INVALIDATE | SCROLL_WINDOW_FLAGS.SW_ERASE | SCROLL_WINDOW_FLAGS.SW_SCROLLCHILDREN);
         }

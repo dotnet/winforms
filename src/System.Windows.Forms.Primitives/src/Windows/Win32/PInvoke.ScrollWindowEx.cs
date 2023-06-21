@@ -12,7 +12,7 @@ internal static partial class PInvoke
         int dy,
         RECT* prcScroll,
         RECT* prcClip,
-        IntPtr hrgnUpdate,
+        HRGN hrgnUpdate,
         RECT* prcUpdate,
         SCROLL_WINDOW_FLAGS flags) where T : IHandle<HWND>
     {
