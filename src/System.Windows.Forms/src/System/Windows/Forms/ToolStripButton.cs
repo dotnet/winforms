@@ -233,4 +233,19 @@ public partial class ToolStripButton : ToolStripItem
 
         base.OnClick(e);
     }
+
+    protected internal override bool ProcessDialogKey(Keys keyData)
+    {
+        // If this button is top-level checkable button and Space key is pressed,
+        // then handle it as a click, but do not unselect the button or switch focus
+        // as base implementation of this method does,
+        // to allow user to toggle this button again (imitate checkbox behavior)
+        if (keyData == Keys.Space && SupportsSpaceKey && CheckOnClick && Enabled && !IsOnDropDown)
+        {
+            FireEvent(ToolStripItemEventType.Click);
+            return true;
+        }
+
+        return base.ProcessDialogKey(keyData);
+    }
 }
