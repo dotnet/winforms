@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior;
@@ -42,7 +43,7 @@ public sealed partial class BehaviorService : IDisposable
     private BehaviorDragDropEventHandler _beginDragHandler;         // fired directly before we call .DoDragDrop()
     private BehaviorDragDropEventHandler _endDragHandler;           // fired directly after we call .DoDragDrop()
     private EventHandler _synchronizeEventHandler;                  // fired when we want to synchronize the selection
-    private User32.TRACKMOUSEEVENT _trackMouseEvent;                // demand created (once) used to track the mouse hover event
+    private TRACKMOUSEEVENT _trackMouseEvent;                       // demand created (once) used to track the mouse hover event
     private bool _trackingMouseEvent;                               // state identifying current mouse tracking
     private string[] _testHook_RecentSnapLines;                     // we keep track of the last snaplines we found - for testing purposes
     private readonly MenuCommandHandler _menuCommandHandler;        // private object that handles all menu commands
@@ -95,8 +96,8 @@ public sealed partial class BehaviorService : IDisposable
         _queriedSnapLines = false;
 
         // Test hooks
-        WM_GETALLSNAPLINES = User32.RegisterWindowMessageW("WM_GETALLSNAPLINES");
-        WM_GETRECENTSNAPLINES = User32.RegisterWindowMessageW("WM_GETRECENTSNAPLINES");
+        WM_GETALLSNAPLINES = (User32.WM)PInvoke.RegisterWindowMessage("WM_GETALLSNAPLINES");
+        WM_GETRECENTSNAPLINES = (User32.WM)PInvoke.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
         SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
@@ -731,23 +732,20 @@ public sealed partial class BehaviorService : IDisposable
         return GetAppropriateBehavior(_hitTestedGlyph)?.OnMouseUp(_hitTestedGlyph, button) ?? false;
     }
 
-    private void HookMouseEvent()
+    private unsafe void HookMouseEvent()
     {
         if (!_trackingMouseEvent)
         {
             _trackingMouseEvent = true;
-            if (_trackMouseEvent.IsDefault())
+            _trackMouseEvent = new()
             {
-                _trackMouseEvent = new User32.TRACKMOUSEEVENT
-                {
-                    cbSize = (uint)Marshal.SizeOf<User32.TRACKMOUSEEVENT>(),
-                    dwFlags = User32.TME.HOVER,
-                    hwndTrack = _adornerWindow.Handle,
-                    dwHoverTime = 100
-                };
-            }
+                cbSize = (uint)sizeof(TRACKMOUSEEVENT),
+                dwFlags = TRACKMOUSEEVENT_FLAGS.TME_HOVER,
+                hwndTrack = (HWND)_adornerWindow.Handle,
+                dwHoverTime = 100
+            };
 
-            User32.TrackMouseEvent(ref _trackMouseEvent);
+            PInvoke.TrackMouseEvent(ref _trackMouseEvent);
         }
     }
 

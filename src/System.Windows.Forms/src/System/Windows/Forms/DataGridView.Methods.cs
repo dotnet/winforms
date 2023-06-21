@@ -17005,22 +17005,22 @@ public partial class DataGridView
             return; // Do not scroll when the user system setting is 0 lines per notch
         }
 
-        Debug.Assert(_cumulativeVerticalWheelDelta > -NativeMethods.WHEEL_DELTA);
-        Debug.Assert(_cumulativeVerticalWheelDelta < NativeMethods.WHEEL_DELTA);
-        Debug.Assert(_cumulativeHorizontalWheelDelta > -NativeMethods.WHEEL_DELTA);
-        Debug.Assert(_cumulativeHorizontalWheelDelta < NativeMethods.WHEEL_DELTA);
+        Debug.Assert(_cumulativeVerticalWheelDelta > -PInvoke.WHEEL_DELTA);
+        Debug.Assert(_cumulativeVerticalWheelDelta < PInvoke.WHEEL_DELTA);
+        Debug.Assert(_cumulativeHorizontalWheelDelta > -PInvoke.WHEEL_DELTA);
+        Debug.Assert(_cumulativeHorizontalWheelDelta < PInvoke.WHEEL_DELTA);
 
         float partialNotches;
 
         if (verticalScroll)
         {
             _cumulativeVerticalWheelDelta += e.Delta;
-            partialNotches = (float)_cumulativeVerticalWheelDelta / (float)NativeMethods.WHEEL_DELTA;
+            partialNotches = (float)_cumulativeVerticalWheelDelta / (float)PInvoke.WHEEL_DELTA;
         }
         else
         {
             _cumulativeHorizontalWheelDelta += e.Delta;
-            partialNotches = (float)_cumulativeHorizontalWheelDelta / (float)NativeMethods.WHEEL_DELTA;
+            partialNotches = (float)_cumulativeHorizontalWheelDelta / (float)PInvoke.WHEEL_DELTA;
         }
 
         int fullNotches = (int)partialNotches;
@@ -17044,7 +17044,7 @@ public partial class DataGridView
                     VerticalOffset -= fullNotches * _vertScrollBar.LargeChange;
                     if (Math.Abs(VerticalOffset - originalVerticalOffset) >= Math.Abs(fullNotches * _vertScrollBar.LargeChange))
                     {
-                        _cumulativeVerticalWheelDelta -= fullNotches * NativeMethods.WHEEL_DELTA;
+                        _cumulativeVerticalWheelDelta -= fullNotches * (int)PInvoke.WHEEL_DELTA;
                     }
                     else
                     {
@@ -17057,7 +17057,7 @@ public partial class DataGridView
                     HorizontalOffset -= fullNotches * _horizScrollBar.LargeChange;
                     if (Math.Abs(HorizontalOffset - originalHorizontalOffset) >= Math.Abs(fullNotches * _horizScrollBar.LargeChange))
                     {
-                        _cumulativeHorizontalWheelDelta -= fullNotches * NativeMethods.WHEEL_DELTA;
+                        _cumulativeHorizontalWheelDelta -= fullNotches * (int)PInvoke.WHEEL_DELTA;
                     }
                     else
                     {
@@ -17098,7 +17098,7 @@ public partial class DataGridView
                         }
                         else
                         {
-                            _cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                            _cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
                     else
@@ -17124,7 +17124,7 @@ public partial class DataGridView
                         }
                         else
                         {
-                            _cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                            _cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
                 }
@@ -17155,7 +17155,7 @@ public partial class DataGridView
                     }
                     else
                     {
-                        _cumulativeHorizontalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                        _cumulativeHorizontalWheelDelta -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                     }
                 }
             }
@@ -26721,7 +26721,7 @@ public partial class DataGridView
         return ScrollRowIntoView(columnIndex, rowIndex, committed, forCurrentCellChange);
     }
 
-    private void ScrollRectangles(RECT[] rects, int change)
+    private unsafe void ScrollRectangles(RECT[] rects, int change)
     {
         if (rects is not null)
         {
@@ -26734,12 +26734,12 @@ public partial class DataGridView
             for (int r = 0; r < rects.Length; r++)
             {
                 scroll = rects[r];
-                User32.ScrollWindow(
+                PInvoke.ScrollWindow(
                     this,
                     change,
                     0,
-                    ref scroll,
-                    ref scroll);
+                    &scroll,
+                    &scroll);
             }
         }
     }
@@ -26799,7 +26799,7 @@ public partial class DataGridView
         return true;
     }
 
-    private void ScrollRows(int rowCount, int deltaY, ScrollEventType scrollEventType)
+    private unsafe void ScrollRows(int rowCount, int deltaY, ScrollEventType scrollEventType)
     {
         bool invalidateTopOfRowHeaders = false;
         Debug.Assert(rowCount != 0);
@@ -26851,7 +26851,7 @@ public partial class DataGridView
         UpdateMouseEnteredCell(hti: null, e: null);
 
         RECT scrollArea = rowsRect;
-        User32.ScrollWindow(this, 0, deltaY, ref scrollArea, ref scrollArea);
+        PInvoke.ScrollWindow(this, 0, deltaY, &scrollArea, &scrollArea);
         if (invalidateTopOfRowHeaders)
         {
             rowsRect.X = _layout.Inside.X;
@@ -28795,7 +28795,7 @@ public partial class DataGridView
         OnSorted(EventArgs.Empty);
 
         // RS4 narrator does not catch this event even though event is indeed raised.
-        AccessibilityNotifyClients(AccessibleEvents.Reorder, User32.OBJID.CLIENT, 0);
+        AccessibilityNotifyClients(AccessibleEvents.Reorder, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, (int)PInvoke.CHILDID_SELF);
     }
 
     internal void SwapSortedRows(int rowIndex1, int rowIndex2)

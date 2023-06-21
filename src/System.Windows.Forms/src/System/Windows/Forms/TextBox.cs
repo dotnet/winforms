@@ -832,7 +832,7 @@ public partial class TextBox : TextBoxBase
     private void WmPrint(ref Message m)
     {
         base.WndProc(ref m);
-        if (((PRF)(nint)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
+        if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles
             && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);

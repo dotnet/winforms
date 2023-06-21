@@ -10,7 +10,6 @@ using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
 using static Interop;
@@ -1209,10 +1208,19 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         Control ctrl = e.Component as Control;
         if (ctrl is not null && ctrl.IsHandleCreated)
         {
-            User32.NotifyWinEvent((int)AccessibleEvents.LocationChange, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
+            PInvoke.NotifyWinEvent(
+                (uint)AccessibleEvents.LocationChange,
+                ctrl,
+                (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                (int)PInvoke.CHILDID_SELF);
+
             if (frame.Focused)
             {
-                User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
+                PInvoke.NotifyWinEvent(
+                    (uint)AccessibleEvents.Focus,
+                    ctrl,
+                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                    (int)PInvoke.CHILDID_SELF);
             }
         }
     }
@@ -1229,26 +1237,32 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             ICollection selComponents = svc.GetSelectedComponents();
 
             // Setup the correct active accessibility selection / focus data
-            //
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionChanged");
             foreach (object selObj in selComponents)
             {
                 if (selObj is Control c)
                 {
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, control = {c}");
-                    User32.NotifyWinEvent((int)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
+                    PInvoke.NotifyWinEvent(
+                        (uint)AccessibleEvents.SelectionAdd,
+                        c,
+                        (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                        (int)PInvoke.CHILDID_SELF);
                 }
             }
 
             if (svc.PrimarySelection is Control primary)
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: Focus, control = {primary}");
-                User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(primary, primary.Handle), User32.OBJID.CLIENT, 0);
+                PInvoke.NotifyWinEvent(
+                    (uint)AccessibleEvents.Focus,
+                    primary,
+                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                    (int)PInvoke.CHILDID_SELF);
             }
 
-            // see if there are visual controls selected.  If so, we add a context attribute.
+            // See if there are visual controls selected.  If so, we add a context attribute.
             // Otherwise, we remove the attribute.  We do not count the form.
-            //
             IHelpService hs = (IHelpService)GetService(typeof(IHelpService));
 
             if (hs is not null)

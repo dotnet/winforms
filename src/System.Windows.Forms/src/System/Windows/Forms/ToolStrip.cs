@@ -2815,7 +2815,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             this,
             User32.WM.PRINT,
             (WPARAM)imageHdc,
-            (LPARAM)(uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+            (LPARAM)(uint)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
 
         // Now BLT the result to the destination bitmap.
         PInvoke.BitBlt(
@@ -4849,7 +4849,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             if (hwndClicked == HWND)
             {
                 _lastMouseDownedItem = null;
-                m.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;
+                m.ResultInternal = (LRESULT)(nint)PInvoke.MA_NOACTIVATE;
 
                 if (!IsDropDown && !IsInDesignMode)
                 {
@@ -4863,7 +4863,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                         {
                             // Activate the window, and discard the mouse message.
                             // this appears to be the same behavior as office.
-                            m.ResultInternal = (LRESULT)(nint)User32.MA.ACTIVATEANDEAT;
+                            m.ResultInternal = (LRESULT)(nint)PInvoke.MA_ACTIVATEANDEAT;
                         }
                     }
                 }
@@ -4872,14 +4872,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             }
             else
             {
-                // we're setting focus to a child control - remember who gave it to us
-                // so we can restore it on ESC.
+                // We're setting focus to a child control - remember who gave it to us so we can restore it on ESC.
                 SnapFocus(PInvoke.GetFocus());
                 if (!IsDropDown && !TabStop)
                 {
                     s_snapFocusDebug.TraceVerbose("Installing restoreFocusFilter");
-                    // PERF,
-
+                    // PERF
                     Application.ThreadContext.FromCurrent().AddMessageFilter(RestoreFocusFilter);
                 }
             }

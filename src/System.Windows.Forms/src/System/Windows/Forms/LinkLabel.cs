@@ -299,7 +299,7 @@ public partial class LinkLabel : Label, IButtonControl
                 PInvoke.GetWindowRect(this, out var r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
+                    PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
                 }
             }
         }
@@ -1748,7 +1748,7 @@ public partial class LinkLabel : Label, IButtonControl
     private void WmSetCursor(ref Message m)
     {
         // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-        if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
+        if ((HWND)m.WParamInternal == InternalHandle && m.LParamInternal.LOWORD == PInvoke.HTCLIENT)
         {
             Cursor.Current = OverrideCursor ?? Cursor;
         }

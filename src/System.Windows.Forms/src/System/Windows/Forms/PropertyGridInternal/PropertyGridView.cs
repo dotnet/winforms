@@ -3215,8 +3215,8 @@ internal sealed partial class PropertyGridView :
             return; // Do not scroll when the user system setting is 0 lines per notch
         }
 
-        Debug.Assert(_cumulativeVerticalWheelDelta > -NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too small");
-        Debug.Assert(_cumulativeVerticalWheelDelta < NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too big");
+        Debug.Assert(_cumulativeVerticalWheelDelta > -PInvoke.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too small");
+        Debug.Assert(_cumulativeVerticalWheelDelta < PInvoke.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too big");
 
         // Should this only work if the Edit has focus?
         // We use the mouse wheel to change the values in the dropdown if it's an enumerable value.
@@ -3250,7 +3250,7 @@ internal sealed partial class PropertyGridView :
 
         int initialOffset = GetScrollOffset();
         _cumulativeVerticalWheelDelta += e.Delta;
-        float partialNotches = _cumulativeVerticalWheelDelta / (float)NativeMethods.WHEEL_DELTA;
+        float partialNotches = _cumulativeVerticalWheelDelta / (float)PInvoke.WHEEL_DELTA;
         int fullNotches = (int)partialNotches;
 
         if (wheelScrollLines == -1)
@@ -3266,7 +3266,7 @@ internal sealed partial class PropertyGridView :
                 initialOffset -= fullNotches * _scrollBar.LargeChange;
                 if (Math.Abs(initialOffset - originalOffset) >= Math.Abs(fullNotches * _scrollBar.LargeChange))
                 {
-                    _cumulativeVerticalWheelDelta -= fullNotches * NativeMethods.WHEEL_DELTA;
+                    _cumulativeVerticalWheelDelta -= fullNotches * (int)PInvoke.WHEEL_DELTA;
                 }
                 else
                 {
@@ -3304,7 +3304,7 @@ internal sealed partial class PropertyGridView :
                     }
                     else
                     {
-                        _cumulativeVerticalWheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                        _cumulativeVerticalWheelDelta -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                     }
                 }
                 else
@@ -3315,7 +3315,7 @@ internal sealed partial class PropertyGridView :
                     }
                     else
                     {
-                        _cumulativeVerticalWheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                        _cumulativeVerticalWheelDelta -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
                     }
                 }
 

@@ -127,7 +127,7 @@ public partial class ComboBox
 
         private unsafe void WmGetObject(ref Message m)
         {
-            if (m.LParamInternal != NativeMethods.UiaRootObjectId && (int)m.LParamInternal != OBJID.CLIENT)
+            if (m.LParamInternal != PInvoke.UiaRootObjectId && (int)m.LParamInternal != (int)OBJECT_IDENTIFIER.OBJID_CLIENT)
             {
                 // Do default message processing.
                 DefWndProc(ref m);
@@ -136,7 +136,7 @@ public partial class ComboBox
 
             AccessibleObject accessibilityObject = GetChildAccessibleObject();
 
-            if (m.LParamInternal == NativeMethods.UiaRootObjectId)
+            if (m.LParamInternal == PInvoke.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.

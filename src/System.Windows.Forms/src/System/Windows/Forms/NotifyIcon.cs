@@ -33,7 +33,7 @@ public sealed partial class NotifyIcon : Component
     private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
     private const int WM_TRAYMOUSEMESSAGE = (int)User32.WM.USER + 1024;
-    private static readonly User32.WM WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
+    private static readonly User32.WM WM_TASKBARCREATED = (User32.WM)PInvoke.RegisterWindowMessage("TaskbarCreated");
 
     private readonly object _syncObj = new object();
 
@@ -395,7 +395,7 @@ public sealed partial class NotifyIcon : Component
             {
                 _icon = null;
                 Text = string.Empty;
-                UpdateIcon(false);
+                UpdateIcon(showIconInTray: false);
                 _window.DestroyHandle();
                 _window = null!;
                 _contextMenuStrip = null;
@@ -405,9 +405,9 @@ public sealed partial class NotifyIcon : Component
         {
             // This same post is done in ControlNativeWindow's finalize method, so if you change
             // it, change it there too.
-            if (_window is not null && _window.Handle != IntPtr.Zero)
+            if (_window is not null && _window.Handle != 0)
             {
-                User32.PostMessageW(_window, User32.WM.CLOSE);
+                PInvoke.PostMessage(_window, User32.WM.CLOSE);
                 _window.ReleaseHandle();
             }
         }

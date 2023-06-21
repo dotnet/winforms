@@ -14,6 +14,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 using Windows.Win32.System.Ole;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
@@ -123,8 +124,8 @@ public unsafe partial class Control :
         "Makes double buffered controls non-double buffered");
 #endif
 
-    private static readonly User32.WM WM_GETCONTROLNAME = User32.RegisterWindowMessageW("WM_GETCONTROLNAME");
-    private static readonly User32.WM WM_GETCONTROLTYPE = User32.RegisterWindowMessageW("WM_GETCONTROLTYPE");
+    private static readonly User32.WM WM_GETCONTROLNAME = (User32.WM)PInvoke.RegisterWindowMessage("WM_GETCONTROLNAME");
+    private static readonly User32.WM WM_GETCONTROLTYPE = (User32.WM)PInvoke.RegisterWindowMessage("WM_GETCONTROLTYPE");
 
     private static readonly object s_autoSizeChangedEvent = new object();
     private static readonly object s_keyDownEvent = new object();
@@ -308,7 +309,7 @@ public unsafe partial class Control :
     private int _tabIndex;
     private string? _text;                       // See ControlStyles.CacheText for usage notes
     private byte _requiredScaling;              // bits 0-4: BoundsSpecified stored in RequiredScaling property.  Bit 5: RequiredScalingEnabled property.
-    private User32.TRACKMOUSEEVENT _trackMouseEvent;
+    private TRACKMOUSEEVENT _trackMouseEvent;
     private short _updateCount;
     private LayoutEventArgs? _cachedLayoutEventArgs;
     private Queue<ThreadMethodEntry>? _threadCallbackList;
@@ -510,7 +511,7 @@ public unsafe partial class Control :
             AccessibleObject? ncAccessibleObject = (AccessibleObject?)Properties.GetObject(s_ncAccessibilityProperty);
             if (ncAccessibleObject is null)
             {
-                ncAccessibleObject = new ControlAccessibleObject(this, User32.OBJID.WINDOW);
+                ncAccessibleObject = new ControlAccessibleObject(this, (int)OBJECT_IDENTIFIER.OBJID_WINDOW);
                 Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
             }
 
@@ -527,12 +528,12 @@ public unsafe partial class Control :
     {
         AccessibleObject? accessibleObject;
 
-        switch (accObjId)
+        switch ((OBJECT_IDENTIFIER)accObjId)
         {
-            case User32.OBJID.CLIENT:
+            case OBJECT_IDENTIFIER.OBJID_CLIENT:
                 accessibleObject = AccessibilityObject;
                 break;
-            case User32.OBJID.WINDOW:
+            case OBJECT_IDENTIFIER.OBJID_WINDOW:
                 accessibleObject = NcAccessibilityObject;
                 break;
             default:
@@ -1722,7 +1723,7 @@ public unsafe partial class Control :
                 PInvoke.GetWindowRect(this, out RECT r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
+                    PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
                 }
             }
 
@@ -3634,7 +3635,7 @@ public unsafe partial class Control :
                 else
                 {
                     // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
-                    uint actionMask = (uint)User32.UISF.HIDEACCEL << 16;
+                    uint actionMask = (uint)PInvoke.UISF_HIDEACCEL << 16;
                     _uiCuesState |= UICuesStates.KeyboardHidden;
 
                     // The side effect of this initial state is that adding new controls may clear the accelerator
@@ -3642,7 +3643,7 @@ public unsafe partial class Control :
                     PInvoke.SendMessage(
                         TopMostParent,
                         User32.WM.CHANGEUISTATE,
-                        (WPARAM)(actionMask | (uint)User32.UIS.SET));
+                        (WPARAM)(actionMask | (uint)PInvoke.UIS_SET));
                 }
             }
 
@@ -3682,13 +3683,13 @@ public unsafe partial class Control :
                     _uiCuesState |= UICuesStates.FocusHidden;
 
                     // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
-                    int actionMask = (int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16;
+                    int actionMask = (int)(PInvoke.UISF_HIDEACCEL | PInvoke.UISF_HIDEFOCUS) << 16;
 
                     // The side effect of this initial state is that adding new controls may clear the focus cue state
                     // state (has been this way forever)
                     PInvoke.SendMessage(TopMostParent,
                         User32.WM.CHANGEUISTATE,
-                        (WPARAM)(actionMask | (int)User32.UIS.SET));
+                        (WPARAM)(actionMask | (int)PInvoke.UIS_SET));
                 }
             }
 
@@ -3848,7 +3849,7 @@ public unsafe partial class Control :
 
             //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
             //if we don't know, we shouldn't throw.
-            if ((returnValue && exitCode != NativeMethods.STILL_ACTIVE) ||
+            if ((returnValue && exitCode != NTSTATUS.STILL_ACTIVE) ||
                 (returnValue == false && Marshal.GetLastWin32Error() == ERROR.INVALID_HANDLE) ||
                 AppDomain.CurrentDomain.IsFinalizingForUnload())
             {
@@ -3951,7 +3952,7 @@ public unsafe partial class Control :
             {
                 if (IsHandleCreated)
                 {
-                    User32.SetWindowTextW(this, value);
+                    PInvoke.SetWindowText(this, value);
                 }
                 else
                 {
@@ -4485,7 +4486,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected internal void AccessibilityNotifyClients(AccessibleEvents accEvent, int childID)
     {
-        AccessibilityNotifyClients(accEvent, User32.OBJID.CLIENT, childID);
+        AccessibilityNotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, childID);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4493,7 +4494,7 @@ public unsafe partial class Control :
     {
         if (IsHandleCreated && AccessibleObject.CanNotifyClients)
         {
-            User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
+            PInvoke.NotifyWinEvent((uint)accEvent, this, objectID, childID + 1);
         }
     }
 
@@ -4863,19 +4864,19 @@ public unsafe partial class Control :
             CreateParams cp = CreateParams;
             SetState(States.Mirrored, (cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL) != 0);
 
-            // Adjust for scrolling of parent...
+            // Adjust for scrolling of parent.
             if (_parent is not null)
             {
                 Rectangle parentClient = _parent.ClientRectangle;
 
                 if (!parentClient.IsEmpty)
                 {
-                    if (cp.X != NativeMethods.CW_USEDEFAULT)
+                    if (cp.X != PInvoke.CW_USEDEFAULT)
                     {
                         cp.X -= parentClient.X;
                     }
 
-                    if (cp.Y != NativeMethods.CW_USEDEFAULT)
+                    if (cp.Y != PInvoke.CW_USEDEFAULT)
                     {
                         cp.Y -= parentClient.Y;
                     }
@@ -5274,7 +5275,7 @@ public unsafe partial class Control :
             this,
             User32.WM.PRINT,
             (WPARAM)hDc,
-            (LPARAM)(int)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+            (LPARAM)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
 
         // Now BLT the result to the destination bitmap.
         using Graphics destGraphics = Graphics.FromImage(bitmap);
@@ -5735,18 +5736,12 @@ public unsafe partial class Control :
         return new Rectangle(sx, sy, sw, sh);
     }
 
-    private static MouseButtons GetXButton(int wparam)
+    private static MouseButtons GetXButton(int wparam) => wparam switch
     {
-        switch (wparam)
-        {
-            case NativeMethods.XBUTTON1:
-                return MouseButtons.XButton1;
-            case NativeMethods.XBUTTON2:
-                return MouseButtons.XButton2;
-        }
-
-        return MouseButtons.None;
-    }
+        PInvoke.XBUTTON1 => MouseButtons.XButton1,
+        PInvoke.XBUTTON2 => MouseButtons.XButton2,
+        _ => MouseButtons.None,
+    };
 
     internal bool DesiredVisibility => GetState(States.Visible);
 
@@ -6160,7 +6155,7 @@ public unsafe partial class Control :
     protected bool GetStyle(ControlStyles flag) => (_controlStyle & flag) == flag;
 
     /// <summary>
-    ///  Hides the control by setting the visible property to false;
+    ///  Hides the control by setting the visible property to false.
     /// </summary>
     public void Hide()
     {
@@ -6176,18 +6171,15 @@ public unsafe partial class Control :
         {
             SetState(States.TrackingMouseEvent, true);
 
-            if (_trackMouseEvent.IsDefault())
+            _trackMouseEvent = new()
             {
-                _trackMouseEvent = new User32.TRACKMOUSEEVENT
-                {
-                    cbSize = (uint)Marshal.SizeOf<User32.TRACKMOUSEEVENT>(),
-                    dwFlags = User32.TME.LEAVE | User32.TME.HOVER,
-                    hwndTrack = Handle,
-                    dwHoverTime = 100
-                };
-            }
+                cbSize = (uint)sizeof(TRACKMOUSEEVENT),
+                dwFlags = TRACKMOUSEEVENT_FLAGS.TME_LEAVE | TRACKMOUSEEVENT_FLAGS.TME_HOVER,
+                hwndTrack = HWND,
+                dwHoverTime = 100
+            };
 
-            User32.TrackMouseEvent(ref _trackMouseEvent);
+            PInvoke.TrackMouseEvent(ref _trackMouseEvent);
         }
     }
 
@@ -6201,8 +6193,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  This method initializes the scaling bits for this control based on
-    ///  the bounds.
+    ///  This method initializes the scaling bits for this control based on the bounds.
     /// </summary>
     private void InitScaling(BoundsSpecified specified)
     {
@@ -6916,7 +6907,7 @@ public unsafe partial class Control :
         {
             if (s_threadCallbackMessage == User32.WM.NULL)
             {
-                s_threadCallbackMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + "_ThreadCallbackMessage");
+                s_threadCallbackMessage = (User32.WM)PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_ThreadCallbackMessage");
             }
 
             _threadCallbackList.Enqueue(tme);
@@ -6928,7 +6919,7 @@ public unsafe partial class Control :
         }
         else
         {
-            User32.PostMessageW(this, s_threadCallbackMessage);
+            PInvoke.PostMessage(this, s_threadCallbackMessage);
         }
 
         if (synchronous)
@@ -7599,7 +7590,7 @@ public unsafe partial class Control :
         {
             if (e is not PrintPaintEventArgs ppev)
             {
-                uint flags = (uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
+                uint flags = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT;
 
                 using var hdc = new DeviceContextHdcScope(e);
                 Message m = Message.Create(HWND, (uint)User32.WM.PRINTCLIENT, (WPARAM)hdc, (LPARAM)flags);
@@ -7851,7 +7842,7 @@ public unsafe partial class Control :
             // Set the window text from the Text property.
             if (_text is not null && _text.Length != 0)
             {
-                User32.SetWindowTextW(this, _text);
+                PInvoke.SetWindowText(this, _text);
             }
 
             if (this is not ScrollableControl
@@ -7875,12 +7866,11 @@ public unsafe partial class Control :
 
         if (IsHandleCreated)
         {
-            // Now, repost the thread callback message if we found it.  We should do
-            // this last, so we're as close to the same state as when the message
-            // was placed.
+            // Now, repost the thread callback message if we found it. We should do this last, so we're as close
+            // to the same state as when the message was placed.
             if (GetState(States.ThreadMarshalPending))
             {
-                User32.PostMessageW(this, s_threadCallbackMessage);
+                PInvoke.PostMessage(this, s_threadCallbackMessage);
                 SetState(States.ThreadMarshalPending, false);
             }
         }
@@ -7905,7 +7895,7 @@ public unsafe partial class Control :
             if (PInvoke.GetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref si))
             {
                 si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                PInvoke.SendMessage(this, User32.WM.HSCROLL, WPARAM.MAKEWPARAM((int)User32.SBH.THUMBPOSITION, si.nPos));
+                PInvoke.SendMessage(this, User32.WM.HSCROLL, WPARAM.MAKEWPARAM((int)SCROLLBAR_COMMAND.SB_THUMBPOSITION, si.nPos));
             }
         }
     }
@@ -9248,11 +9238,11 @@ public unsafe partial class Control :
     {
         Debug.Assert((OBJ_TYPE)PInvoke.GetObjectType(hDC) == OBJ_TYPE.OBJ_ENHMETADC,
             "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
-        Debug.Assert(((long)lParam & (long)User32.PRF.CHILDREN) != 0,
+        Debug.Assert((lParam & (long)PInvoke.PRF_CHILDREN) != 0,
             "PrintToMetaFile() called without PRF_CHILDREN.");
 
         // Strip the PRF_CHILDREN flag.  We will manually walk our children and print them.
-        lParam = (IntPtr)((long)lParam & (long)~User32.PRF.CHILDREN);
+        lParam = (IntPtr)(lParam & (long)~PInvoke.PRF_CHILDREN);
 
         // We're the root control, so we need to set up our clipping region.  Retrieve the
         // x-coordinates and y-coordinates of the viewport origin for the specified device context.
@@ -9284,7 +9274,7 @@ public unsafe partial class Control :
         using DCMapping mapping = new(hDC, bounds);
 
         // Print the non-client area.
-        PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.CLIENT));
+        PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)(lParam & (long)~PInvoke.PRF_CLIENT));
 
         // Figure out mapping for the client area.
         bool success = PInvoke.GetWindowRect(this, out var windowRect);
@@ -9296,7 +9286,7 @@ public unsafe partial class Control :
         using DCMapping clientMapping = new(hDC, clientBounds);
 
         // Print the client area.
-        PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)((long)lParam & (long)~User32.PRF.NONCLIENT));
+        PrintToMetaFile_SendPrintMessage(hDC, (IntPtr)(lParam & (long)~PInvoke.PRF_NONCLIENT));
 
         // Paint children in reverse Z-Order.
         int count = Controls.Count;
@@ -9325,7 +9315,7 @@ public unsafe partial class Control :
             // good example.
             if (Controls.Count == 0)
             {
-                lParam |= (nint)User32.PRF.CHILDREN;
+                lParam |= PInvoke.PRF_CHILDREN;
             }
 
             // System controls must be painted into a temporary bitmap
@@ -9563,17 +9553,17 @@ public unsafe partial class Control :
         }
 
         Control? topMostParent = null;
-        User32.UISF current = (User32.UISF)(uint)PInvoke.SendMessage(this, User32.WM.QUERYUISTATE);
+        uint current = (uint)PInvoke.SendMessage(this, User32.WM.QUERYUISTATE);
 
         // don't trust when a control says the accelerators are showing.
         // make sure the topmost parent agrees with this as we could be in a mismatched state.
         if (current == 0 /*accelerator and focus cues are showing*/)
         {
             topMostParent = TopMostParent;
-            current = (User32.UISF)(uint)PInvoke.SendMessage(topMostParent, User32.WM.QUERYUISTATE);
+            current = (uint)PInvoke.SendMessage(topMostParent, User32.WM.QUERYUISTATE);
         }
 
-        User32.UISF toClear = 0;
+        uint toClear = 0;
 
         // if we are here, a key or tab has been pressed on this control.
         // now that we know the state of accelerators, check to see if we need
@@ -9583,19 +9573,19 @@ public unsafe partial class Control :
 
         if (keyCode == Keys.F10 || keyCode == Keys.Menu)
         {
-            if ((current & User32.UISF.HIDEACCEL) != 0)
+            if ((current & PInvoke.UISF_HIDEACCEL) != 0)
             {
                 // Keyboard accelerators are hidden, they need to be shown
-                toClear |= User32.UISF.HIDEACCEL;
+                toClear |= PInvoke.UISF_HIDEACCEL;
             }
         }
 
         if (keyCode == Keys.Tab)
         {
-            if ((current & User32.UISF.HIDEFOCUS) != 0)
+            if ((current & PInvoke.UISF_HIDEFOCUS) != 0)
             {
                 // Focus indicators are hidden, they need to be shown
-                toClear |= User32.UISF.HIDEFOCUS;
+                toClear |= PInvoke.UISF_HIDEFOCUS;
             }
         }
 
@@ -9617,7 +9607,7 @@ public unsafe partial class Control :
             PInvoke.SendMessage(
                 topMostParent,
                 PInvoke.GetParent(topMostParent).IsNull ? User32.WM.CHANGEUISTATE : User32.WM.UPDATEUISTATE,
-                (WPARAM)((int)User32.UIS.CLEAR | ((int)toClear << 16)));
+                (WPARAM)((int)PInvoke.UIS_CLEAR | ((int)toClear << 16)));
         }
     }
 
@@ -10505,12 +10495,12 @@ public unsafe partial class Control :
         Size size = startSize;
         if (!GetStyle(ControlStyles.FixedWidth))
         {
-            size.Width = (int)Math.Round((float)size.Width * x);
+            size.Width = (int)Math.Round(size.Width * x);
         }
 
         if (!GetStyle(ControlStyles.FixedHeight))
         {
-            size.Height = (int)Math.Round((float)size.Height * y);
+            size.Height = (int)Math.Round(size.Height * y);
         }
 
         return size;
@@ -11788,7 +11778,7 @@ public unsafe partial class Control :
 
             if (!lastParentHandle.IsNull)
             {
-                User32.PostMessageW(lastParentHandle, User32.WM.CLOSE);
+                PInvoke.PostMessage(lastParentHandle, User32.WM.CLOSE);
             }
         }
 
@@ -11967,7 +11957,7 @@ public unsafe partial class Control :
     {
         Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
 
-        if (m.LParamInternal == NativeMethods.UiaRootObjectId && SupportsUiaProviders)
+        if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders)
         {
             // If the requested object identifier is UiaRootObjectId,
             // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
@@ -12008,30 +11998,30 @@ public unsafe partial class Control :
     /// </summary>
     private unsafe void WmHelp(ref Message m)
     {
-        // if there's currently a message box open - grab the help info from it.
+        // If there's currently a message box open - grab the help info from it.
         HelpInfo? hpi = MessageBox.HelpInfo;
         if (hpi is not null)
         {
             switch (hpi.Option)
             {
-                case NativeMethods.HLP_FILE:
+                case HelpInfo.HelpFileOption:
                     Help.ShowHelp(this, hpi.HelpFilePath);
                     break;
-                case NativeMethods.HLP_KEYWORD:
+                case HelpInfo.HelpKeywordOption:
                     Help.ShowHelp(this, hpi.HelpFilePath, hpi.Keyword);
                     break;
-                case NativeMethods.HLP_NAVIGATOR:
+                case HelpInfo.HelpNavigatorOption:
                     Help.ShowHelp(this, hpi.HelpFilePath, hpi.Navigator);
                     break;
-                case NativeMethods.HLP_OBJECT:
+                case HelpInfo.HelpObjectOption:
                     Help.ShowHelp(this, hpi.HelpFilePath, hpi.Navigator, hpi.Param);
                     break;
             }
         }
 
         // Note: info.hItemHandle is the handle of the window that sent the help message.
-        User32.HELPINFO* info = (User32.HELPINFO*)(nint)m.LParamInternal;
-        var hevent = new HelpEventArgs(info->MousePos);
+        HELPINFO* info = (HELPINFO*)(nint)m.LParamInternal;
+        HelpEventArgs hevent = new(info->MousePos);
         OnHelpRequested(hevent);
         if (!hevent.Handled)
         {
@@ -12629,7 +12619,7 @@ public unsafe partial class Control :
     private void WmSetCursor(ref Message m)
     {
         // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-        if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
+        if ((HWND)m.WParamInternal == InternalHandle && m.LParamInternal.LOWORD == PInvoke.HTCLIENT)
         {
             Cursor.Current = Cursor;
         }
@@ -12823,11 +12813,11 @@ public unsafe partial class Control :
 
         DefWndProc(ref m);
 
-        User32.UIS cmd = (User32.UIS)m.WParamInternal.LOWORD;
+        uint cmd = m.WParamInternal.LOWORD;
 
         // if we're initializing, don't bother updating the uiCuesState/Firing the event.
 
-        if (cmd == User32.UIS.INITIALIZE)
+        if (cmd == PInvoke.UIS_INITIALIZE)
         {
             return;
         }
@@ -12841,10 +12831,10 @@ public unsafe partial class Control :
         // When we're called here with a UIS_CLEAR and the hidden state is set
         // that means we want to show the accelerator.
         UICues UIcues = UICues.None;
-        if (((User32.UISF)m.WParamInternal.HIWORD & User32.UISF.HIDEACCEL) != 0)
+        if ((m.WParamInternal.HIWORD & PInvoke.UISF_HIDEACCEL) != 0)
         {
             // yes, clear means show.  nice api, guys.
-            bool showKeyboard = (cmd == User32.UIS.CLEAR);
+            bool showKeyboard = (cmd == PInvoke.UIS_CLEAR);
 
             if (showKeyboard != keyboard || !keyboardInitialized)
             {
@@ -12862,10 +12852,10 @@ public unsafe partial class Control :
         }
 
         // Same deal for the Focus cues as the keyboard cues.
-        if (((User32.UISF)m.WParamInternal.HIWORD & User32.UISF.HIDEFOCUS) != 0)
+        if ((m.WParamInternal.HIWORD & PInvoke.UISF_HIDEFOCUS) != 0)
         {
             // Yes, clear means show.
-            bool showFocus = cmd == User32.UIS.CLEAR;
+            bool showFocus = cmd == PInvoke.UIS_CLEAR;
 
             if (showFocus != focus || !focusInitialized)
             {
@@ -12997,7 +12987,7 @@ public unsafe partial class Control :
                 break;
 
             case User32.WM.SYSCOMMAND:
-                if ((User32.SC)(m.WParamInternal & 0xFFF0) == User32.SC.KEYMENU)
+                if ((m.WParamInternal & 0xFFF0) == PInvoke.SC_KEYMENU)
                 {
                     s_controlKeyboardRouting.TraceVerbose($"Control.WndProc processing {m}");
 
@@ -13196,7 +13186,7 @@ public unsafe partial class Control :
                 break;
 
             case User32.WM.REFLECT_NOTIFYFORMAT:
-                m.ResultInternal = (LRESULT)(nint)User32.NFR.UNICODE;
+                m.ResultInternal = (LRESULT)(nint)PInvoke.NFR_UNICODE;
                 break;
 
             case User32.WM.SHOWWINDOW:

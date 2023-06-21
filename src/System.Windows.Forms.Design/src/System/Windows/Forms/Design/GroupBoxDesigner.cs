@@ -112,9 +112,9 @@ internal class GroupBoxDesigner : ParentControlDesigner
                 // the group box's designer to get these messages, however, so change this.
                 base.WndProc(ref m);
 
-                if (m.ResultInternal == (int)User32.HT.TRANSPARENT)
+                if (m.ResultInternal == PInvoke.HTTRANSPARENT)
                 {
-                    m.ResultInternal = (LRESULT)(nint)User32.HT.CLIENT;
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.HTCLIENT;
                 }
 
                 break;

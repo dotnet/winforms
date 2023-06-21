@@ -331,10 +331,10 @@ public partial class PrintPreviewControl : Control
 
     private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
     {
-        switch ((User32.SBH)m.WParamInternal.LOWORD)
+        switch ((SCROLLBAR_COMMAND)m.WParamInternal.LOWORD)
         {
-            case User32.SBH.THUMBPOSITION:
-            case User32.SBH.THUMBTRACK:
+            case SCROLLBAR_COMMAND.SB_THUMBPOSITION:
+            case SCROLLBAR_COMMAND.SB_THUMBTRACK:
                 SCROLLINFO si = new()
                 {
                     cbSize = (uint)sizeof(SCROLLINFO),
@@ -344,7 +344,7 @@ public partial class PrintPreviewControl : Control
                 SCROLLBAR_CONSTANTS direction = horizontal ? SCROLLBAR_CONSTANTS.SB_HORZ : SCROLLBAR_CONSTANTS.SB_VERT;
                 pos = PInvoke.GetScrollInfo(m.HWND, direction, ref si) ? si.nTrackPos : m.WParamInternal.HIWORD;
                 break;
-            case User32.SBH.LINELEFT:
+            case SCROLLBAR_COMMAND.SB_LINELEFT:
                 if (pos > SCROLL_LINE)
                 {
                     pos -= SCROLL_LINE;
@@ -355,7 +355,7 @@ public partial class PrintPreviewControl : Control
                 }
 
                 break;
-            case User32.SBH.LINERIGHT:
+            case SCROLLBAR_COMMAND.SB_LINERIGHT:
                 if (pos < maxPos - SCROLL_LINE)
                 {
                     pos += SCROLL_LINE;
@@ -366,7 +366,7 @@ public partial class PrintPreviewControl : Control
                 }
 
                 break;
-            case User32.SBH.PAGELEFT:
+            case SCROLLBAR_COMMAND.SB_PAGELEFT:
                 if (pos > SCROLL_PAGE)
                 {
                     pos -= SCROLL_PAGE;
@@ -377,7 +377,7 @@ public partial class PrintPreviewControl : Control
                 }
 
                 break;
-            case User32.SBH.PAGERIGHT:
+            case SCROLLBAR_COMMAND.SB_PAGERIGHT:
                 if (pos < maxPos - SCROLL_PAGE)
                 {
                     pos += SCROLL_PAGE;
@@ -731,7 +731,7 @@ public partial class PrintPreviewControl : Control
         Position = locPos;
     }
 
-    private void SetPositionNoInvalidate(Point value)
+    private unsafe void SetPositionNoInvalidate(Point value)
     {
         Point current = position;
 
@@ -749,12 +749,12 @@ public partial class PrintPreviewControl : Control
         }
 
         RECT scroll = ClientRectangle;
-        User32.ScrollWindow(
+        PInvoke.ScrollWindow(
             this,
             current.X - position.X,
             current.Y - position.Y,
-            ref scroll,
-            ref scroll);
+            &scroll,
+            &scroll);
 
         PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_HORZ, position.X, true);
         PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_VERT, position.Y, true);

@@ -2548,17 +2548,17 @@ public partial class RichTextBox : TextBoxBase
 
         // Since we can't send EM_SETSEL until RTF has been set,
         // we can't rely on base to do it for us.
-        base.SetSelectionOnHandle();
+        SetSelectionOnHandle();
 
         if (ShowSelectionMargin)
         {
             // If you call SendMessage instead of PostMessage, the control
             // will resize itself to the size of the parent's client area.  Don't know why...
-            User32.PostMessageW(
+            PInvoke.PostMessage(
                 this,
                 (User32.WM)EM.SETOPTIONS,
-                (IntPtr)ECOOP.OR,
-                (IntPtr)ECO.SELECTIONBAR);
+                (WPARAM)(int)ECOOP.OR,
+                (LPARAM)(int)ECO.SELECTIONBAR);
         }
 
         if (languageOption != LanguageOption)
@@ -3485,7 +3485,7 @@ public partial class RichTextBox : TextBoxBase
                 {
                     PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
                     PInvoke.SendMessage(this, User32.WM.SETFOCUS);
-                    User32.PostMessageW(this, (User32.WM)PInvoke.EM_SETSEL, (selEnd - 1), selEnd);
+                    PInvoke.PostMessage(this, (User32.WM)PInvoke.EM_SETSEL, (WPARAM)(selEnd - 1), (LPARAM)selEnd);
                 }
             }
         }
@@ -3573,7 +3573,7 @@ public partial class RichTextBox : TextBoxBase
                 // classes. Usually this doesn't matter, because system controls always identify their window class explicitly through
                 // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                 // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.
-                if ((int)m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
+                if ((int)m.LParamInternal == (int)OBJECT_IDENTIFIER.OBJID_QUERYCLASSNAMEIDX)
                 {
                     m.ResultInternal = (LRESULT)(65536 + 30);
                 }
@@ -3594,12 +3594,12 @@ public partial class RichTextBox : TextBoxBase
             case User32.WM.VSCROLL:
                 {
                     base.WndProc(ref m);
-                    User32.SBV loWord = (User32.SBV)m.WParamInternal.LOWORD;
-                    if (loWord == User32.SBV.THUMBTRACK)
+                    SCROLLBAR_COMMAND loWord = (SCROLLBAR_COMMAND)m.WParamInternal.LOWORD;
+                    if (loWord == SCROLLBAR_COMMAND.SB_THUMBTRACK)
                     {
                         OnVScroll(EventArgs.Empty);
                     }
-                    else if (loWord == User32.SBV.THUMBPOSITION)
+                    else if (loWord == SCROLLBAR_COMMAND.SB_THUMBPOSITION)
                     {
                         OnVScroll(EventArgs.Empty);
                     }
@@ -3610,12 +3610,12 @@ public partial class RichTextBox : TextBoxBase
             case User32.WM.HSCROLL:
                 {
                     base.WndProc(ref m);
-                    User32.SBH loWord = (User32.SBH)m.WParamInternal.LOWORD;
-                    if (loWord == User32.SBH.THUMBTRACK)
+                    SCROLLBAR_COMMAND loWord = (SCROLLBAR_COMMAND)m.WParamInternal.LOWORD;
+                    if (loWord == SCROLLBAR_COMMAND.SB_THUMBTRACK)
                     {
                         OnHScroll(EventArgs.Empty);
                     }
-                    else if (loWord == User32.SBH.THUMBPOSITION)
+                    else if (loWord == SCROLLBAR_COMMAND.SB_THUMBPOSITION)
                     {
                         OnHScroll(EventArgs.Empty);
                     }

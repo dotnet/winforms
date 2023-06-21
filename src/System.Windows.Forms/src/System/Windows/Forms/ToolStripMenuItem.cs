@@ -778,9 +778,9 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     private unsafe Image? GetNativeMenuItemImage()
     {
-        if (_nativeMenuCommandID == -1 || _nativeMenuHandle == IntPtr.Zero)
+        if (_nativeMenuCommandID == -1 || _nativeMenuHandle.IsNull)
         {
-            Debug.Fail("why were we called to fetch native menu item info with nothing assigned?");
+            Debug.Fail("Why were we called to fetch native menu item info with nothing assigned?");
             return null;
         }
 
@@ -793,57 +793,51 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
         PInvoke.GetMenuItemInfo(_nativeMenuHandle, (uint)_nativeMenuCommandID, fByPosition: false, ref info);
 
-        if (info.hbmpItem != IntPtr.Zero && PARAM.ToInt(info.hbmpItem) > (int)User32.HBMMENU.POPUP_MINIMIZE)
+        if (!info.hbmpItem.IsNull && (int)info.hbmpItem > (int)HBITMAP.HBMMENU_POPUP_MINIMIZE)
         {
             return Image.FromHbitmap(info.hbmpItem);
         }
 
-        // its a system defined bitmap
+        // Its a system defined bitmap.
         int buttonToUse = -1;
 
-        switch (PARAM.ToInt(info.hbmpItem))
+        if (info.hbmpItem == HBITMAP.HBMMENU_MBAR_CLOSE
+            || info.hbmpItem == HBITMAP.HBMMENU_MBAR_CLOSE_D
+            || info.hbmpItem == HBITMAP.HBMMENU_POPUP_CLOSE)
         {
-            case (int)User32.HBMMENU.MBAR_CLOSE:
-            case (int)User32.HBMMENU.MBAR_CLOSE_D:
-            case (int)User32.HBMMENU.POPUP_CLOSE:
-                buttonToUse = (int)CaptionButton.Close;
-                break;
-            case (int)User32.HBMMENU.MBAR_MINIMIZE:
-            case (int)User32.HBMMENU.MBAR_MINIMIZE_D:
-            case (int)User32.HBMMENU.POPUP_MINIMIZE:
-                buttonToUse = (int)CaptionButton.Minimize;
-                break;
-            case (int)User32.HBMMENU.MBAR_RESTORE:
-            case (int)User32.HBMMENU.POPUP_RESTORE:
-                buttonToUse = (int)CaptionButton.Restore;
-                break;
-            case (int)User32.HBMMENU.POPUP_MAXIMIZE:
-                buttonToUse = (int)CaptionButton.Maximize;
-                break;
-            case (int)User32.HBMMENU.SYSTEM:
-            //
-            case (int)User32.HBMMENU.CALLBACK:
-            // owner draw not supported
-            default:
-                break;
+            buttonToUse = (int)CaptionButton.Close;
+        }
+        else if (info.hbmpItem == HBITMAP.HBMMENU_MBAR_MINIMIZE
+            || info.hbmpItem == HBITMAP.HBMMENU_MBAR_MINIMIZE_D
+            || info.hbmpItem == HBITMAP.HBMMENU_POPUP_MINIMIZE)
+        {
+            buttonToUse = (int)CaptionButton.Minimize;
+        }
+        else if (info.hbmpItem == HBITMAP.HBMMENU_MBAR_RESTORE
+            || info.hbmpItem == HBITMAP.HBMMENU_POPUP_RESTORE)
+        {
+            buttonToUse = (int)CaptionButton.Restore;
+        }
+        else if (info.hbmpItem == HBITMAP.HBMMENU_POPUP_MAXIMIZE)
+        {
+            buttonToUse = (int)CaptionButton.Maximize;
+        }
+        else
+        {
+            return null;
         }
 
-        if (buttonToUse > -1)
+        // Ee've mapped to a system defined bitmap we know how to draw.
+        Bitmap image = new(16, 16);
+
+        using (Graphics g = Graphics.FromImage(image))
         {
-            // we've mapped to a system defined bitmap we know how to draw
-            Bitmap image = new Bitmap(16, 16);
-
-            using (Graphics g = Graphics.FromImage(image))
-            {
-                ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
-                g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
-            }
-
-            image.MakeTransparent(SystemColors.Control);
-            return image;
+            ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
+            g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
         }
 
-        return null;
+        image.MakeTransparent(SystemColors.Control);
+        return image;
     }
 
     internal Size GetShortcutTextSize()

@@ -172,18 +172,15 @@ internal partial class PbrsForward : IWindowTarget
             case (int)User32.WM.KILLFOCUS:
                 if (postCharMessage)
                 {
-                    // see ASURT 45313
-                    // now that we've actually lost focus, post this message to the queue.  This allows
-                    // any activity that's in the queue to settle down before our characters are posted.
-                    // to the queue.
+                    // Now that we've actually lost focus, post this message to the queue. This allows any activity
+                    // that's in the queue to settle down before our characters are posted to the queue.
                     //
-                    // we post because we need to allow the focus to actually happen before we send
-                    // our strokes so we know where to send them
+                    // We post because we need to allow the focus to actually happen before we send our strokes so we
+                    // know where to send them.
                     //
-                    // we can't use the wParam here because it may not be the actual window that needs
-                    // to pick up the strokes.
-                    //
-                    User32.PostMessageW(target.Handle, (User32.WM)WM_PRIVATE_POSTCHAR, IntPtr.Zero, IntPtr.Zero);
+                    // We can't use the wParam here because it may not be the actual window that needs to pick up
+                    // the strokes.
+                    PInvoke.PostMessage(target, (User32.WM)WM_PRIVATE_POSTCHAR);
                     postCharMessage = false;
                 }
 

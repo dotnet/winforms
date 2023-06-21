@@ -2085,9 +2085,9 @@ public partial class ToolStripDropDown : ToolStrip
                 // we had focus, then the Chrome panel was activated and we never went away
                 // when we get focus again, we should reactivate our message filter.
                 s_snapFocusDebug.TraceVerbose(
-                    $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
+                    $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((nint)m.WParamInternal == PInvoke.WA_ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
 
-                if ((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE)
+                if ((nint)m.WParamInternal == PInvoke.WA_ACTIVE)
                 {
                     if (Visible)
                     {

@@ -380,7 +380,7 @@ public partial class Form : ContainerControl
                 {
                     if (Properties.ContainsObject(PropOpacity))
                     {
-                        Properties.SetObject(PropOpacity, (object)1.0f);
+                        Properties.SetObject(PropOpacity, 1.0f);
                     }
 
                     if (Properties.ContainsObject(PropTransparencyKey))
@@ -2139,7 +2139,7 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (!value && ((Form)this).IsMdiContainer && !DesignMode)
+            if (!value && this.IsMdiContainer && !DesignMode)
             {
                 throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
             }
@@ -2762,47 +2762,47 @@ public partial class Form : ContainerControl
 
         if (!showMin)
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
         }
         else
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
         }
 
         if (!showMax)
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
         }
         else
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
         }
 
         if (!showClose)
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
         }
         else
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
         }
 
         if (!showRestore)
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
         }
         else
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
         }
 
         if (!showSize)
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
         }
         else
         {
-            PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+            PInvoke.EnableMenuItem(hmenu, PInvoke.SC_SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
         }
 
         // Prevent the finalizer running to avoid closing the handle.
@@ -2853,8 +2853,8 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            float percY = AdjustScale(((float)newVar.Height) / ((float)baseVar.Height));
-            float percX = AdjustScale(((float)newVar.Width) / ((float)baseVar.Width));
+            float percY = AdjustScale(newVar.Height / ((float)baseVar.Height));
+            float percX = AdjustScale(newVar.Width / ((float)baseVar.Width));
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"scale={percX}, {percY}");
             Scale(percX, percY);
             // This would ensure that we use the new
@@ -3497,8 +3497,7 @@ public partial class Form : ContainerControl
     {
         if (_formState[FormStateSetClientSize] != 0)
         {
-            // When computing the client window size, don't tell them that
-            // we are going to be maximized!
+            // When computing the client window size, don't tell them that we are going to be maximized.
             int maskedStyle = cp.Style & ~(int)(WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE);
             Size correct = ComputeWindowSize(ClientSize, (WINDOW_STYLE)maskedStyle, (WINDOW_EX_STYLE)cp.ExStyle);
             cp.Width = correct.Width;
@@ -3508,8 +3507,8 @@ public partial class Form : ContainerControl
         switch ((FormStartPosition)_formState[FormStateStartPos])
         {
             case FormStartPosition.WindowsDefaultBounds:
-                cp.Width = NativeMethods.CW_USEDEFAULT;
-                cp.Height = NativeMethods.CW_USEDEFAULT;
+                cp.Width = PInvoke.CW_USEDEFAULT;
+                cp.Height = PInvoke.CW_USEDEFAULT;
                 // no break, fall through to set the location to default...
                 goto case FormStartPosition.WindowsDefaultLocation;
             case FormStartPosition.WindowsDefaultLocation:
@@ -3523,8 +3522,8 @@ public partial class Form : ContainerControl
                     break;
                 }
 
-                cp.X = NativeMethods.CW_USEDEFAULT;
-                cp.Y = NativeMethods.CW_USEDEFAULT;
+                cp.X = PInvoke.CW_USEDEFAULT;
+                cp.Y = PInvoke.CW_USEDEFAULT;
                 break;
             case FormStartPosition.CenterScreen:
                 if (IsMdiChild)
@@ -6108,7 +6107,7 @@ public partial class Form : ContainerControl
     private void WmActivate(ref Message m)
     {
         Application.FormActivated(Modal, true);
-        Active = (User32.WA)m.WParamInternal.LOWORD != User32.WA.INACTIVE;
+        Active = m.WParamInternal.LOWORD != PInvoke.WA_INACTIVE;
         Application.FormActivated(Modal, Active);
     }
 
@@ -6497,7 +6496,7 @@ public partial class Form : ContainerControl
                 point.Y >= (clientSize.Height - SizeGripSize) &&
                 clientSize.Height >= SizeGripSize)
             {
-                m.ResultInternal = (LRESULT)(nint)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
+                m.ResultInternal = (LRESULT)(nint)(IsMirrored ? PInvoke.HTBOTTOMLEFT : PInvoke.HTBOTTOMRIGHT);
                 return;
             }
         }
@@ -6510,9 +6509,9 @@ public partial class Form : ContainerControl
         if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
         {
             int result = (int)m.ResultInternal;
-            if (result >= (int)User32.HT.LEFT && result <= (int)User32.HT.BOTTOMRIGHT)
+            if (result >= (int)PInvoke.HTLEFT && result <= (int)PInvoke.HTBOTTOMRIGHT)
             {
-                m.ResultInternal = (LRESULT)(nint)User32.HT.BORDER;
+                m.ResultInternal = (LRESULT)(nint)PInvoke.HTBORDER;
             }
         }
     }
@@ -6533,10 +6532,10 @@ public partial class Form : ContainerControl
     {
         bool callDefault = true;
 
-        User32.SC sc = (User32.SC)(m.WParamInternal.LOWORD & 0xFFF0);
+        uint sc = (uint)(m.WParamInternal.LOWORD & 0xFFF0);
         switch (sc)
         {
-            case User32.SC.CLOSE:
+            case PInvoke.SC_CLOSE:
                 CloseReason = CloseReason.UserClosing;
                 if (IsMdiChild && !ControlBox)
                 {
@@ -6544,19 +6543,19 @@ public partial class Form : ContainerControl
                 }
 
                 break;
-            case User32.SC.KEYMENU:
+            case PInvoke.SC_KEYMENU:
                 if (IsMdiChild && !ControlBox)
                 {
                     callDefault = false;
                 }
 
                 break;
-            case User32.SC.SIZE:
-            case User32.SC.MOVE:
+            case PInvoke.SC_SIZE:
+            case PInvoke.SC_MOVE:
                 // Set this before WM_ENTERSIZELOOP because WM_GETMINMAXINFO can be called before WM_ENTERSIZELOOP.
                 _formStateEx[FormStateExInModalSizingLoop] = 1;
                 break;
-            case User32.SC.CONTEXTHELP:
+            case PInvoke.SC_CONTEXTHELP:
                 CancelEventArgs e = new CancelEventArgs(false);
                 OnHelpButtonClicked(e);
                 if (e.Cancel)
@@ -6590,7 +6589,7 @@ public partial class Form : ContainerControl
             base.WndProc(ref m);
             if (MdiControlStrip is null && MdiParentInternal is not null && MdiParentInternal.ActiveMdiChildInternal == this)
             {
-                MdiParentInternal.UpdateMdiControlStrip((User32.WINDOW_SIZE)(nint)m.WParamInternal == User32.WINDOW_SIZE.MAXIMIZED);
+                MdiParentInternal.UpdateMdiControlStrip((nint)m.WParamInternal == PInvoke.SIZE_MAXIMIZED);
             }
         }
     }

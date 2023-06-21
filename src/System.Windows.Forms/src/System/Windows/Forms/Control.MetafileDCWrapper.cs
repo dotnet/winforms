@@ -204,7 +204,7 @@ public partial class Control
                         DIB_USAGE.DIB_RGB_COLORS,
                         ROP_CODE.SRCCOPY);
 
-                    if (iRet == NativeMethods.GDI_ERROR)
+                    if (iRet == PInvoke.GDI_ERROR)
                     {
                         return false;
                     }

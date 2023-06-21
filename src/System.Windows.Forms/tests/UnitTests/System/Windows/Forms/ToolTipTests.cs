@@ -852,7 +852,7 @@ public class ToolTipTests
 
         // Post MOUSEMOVE to the tooltip queue and then just remove it from the queue without handling.
         // This will update the point returned by GetMessagePos which is used by PInvoke.TTM_POPUP to determine the tool to display.
-        Assert.True(User32.PostMessageW(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
+        Assert.True(PInvoke.PostMessage(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
         MSG msg = default;
         Assert.True(PInvoke.PeekMessage(&msg, toolTip, (uint)User32.WM.MOUSEMOVE, (uint)User32.WM.MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
 

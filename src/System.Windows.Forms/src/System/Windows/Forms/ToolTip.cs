@@ -2044,7 +2044,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
         if (cursorLocation.X >= r.left && cursorLocation.X <= r.right &&
             cursorLocation.Y >= r.top && cursorLocation.Y <= r.bottom)
         {
-            message.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;
+            message.ResultInternal = (LRESULT)(nint)PInvoke.MA_NOACTIVATE;
         }
     }
 

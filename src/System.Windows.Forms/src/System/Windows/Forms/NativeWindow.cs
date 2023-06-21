@@ -116,14 +116,14 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     PInvoke.GetExitCodeThread((HANDLE)threadHandle, &exitCode);
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload() && (NTSTATUS)exitCode == NTSTATUS.STATUS_PENDING)
                     {
-                        User32.SendMessageTimeoutW(
+                        PInvoke.SendMessageTimeout(
                             handle,
-                            User32.RegisteredMessage.WM_UIUNSUBCLASS,
-                            IntPtr.Zero,
-                            IntPtr.Zero,
-                            User32.SMTO.ABORTIFHUNG,
+                            (uint)User32.RegisteredMessage.WM_UIUNSUBCLASS,
+                            default,
+                            default,
+                            SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_ABORTIFHUNG,
                             100,
-                            out _);
+                            null);
                     }
                 }
             }
@@ -138,7 +138,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         if (!handle.IsNull && ownedHandle)
         {
             // If we owned the handle, post a WM_CLOSE to get rid of it.
-            User32.PostMessageW(handle, User32.WM.CLOSE);
+            PInvoke.PostMessage(handle, User32.WM.CLOSE);
         }
     }
 
@@ -555,7 +555,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     UnSubclass();
 
                     // Now post a close and let it do whatever it needs to do on its own.
-                    User32.PostMessageW(this, User32.WM.CLOSE);
+                    PInvoke.PostMessage(this, User32.WM.CLOSE);
                 }
 
                 HWND = HWND.Null;
@@ -641,7 +641,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     {
                         PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
                         PInvoke.SetClassLong(handle, GET_CLASS_LONG_INDEX.GCL_WNDPROC, DefaultWindowProc);
-                        User32.PostMessageW(handle, User32.WM.CLOSE);
+                        PInvoke.PostMessage(handle, User32.WM.CLOSE);
 
                         // Fish out the Window object, if it is valid, and NULL the handle pointer.  This
                         // way the rest of WinForms won't think the handle is still valid here.

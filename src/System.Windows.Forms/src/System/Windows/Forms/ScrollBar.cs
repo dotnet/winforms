@@ -37,7 +37,7 @@ public abstract partial class ScrollBar : Control
 
         TabStop = false;
 
-        if ((CreateParams.Style & (int)User32.SBS.VERT) != 0)
+        if ((CreateParams.Style & (int)SCROLLBAR_CONSTANTS.SB_VERT) != 0)
         {
             _scrollOrientation = ScrollOrientation.VerticalScroll;
         }
@@ -540,17 +540,17 @@ public abstract partial class ScrollBar : Control
 
             bool scrolled = false;
 
-            while (Math.Abs(_wheelDelta) >= NativeMethods.WHEEL_DELTA)
+            while (Math.Abs(_wheelDelta) >= PInvoke.WHEEL_DELTA)
             {
                 if (_wheelDelta > 0)
                 {
-                    _wheelDelta -= NativeMethods.WHEEL_DELTA;
+                    _wheelDelta -= (int)PInvoke.WHEEL_DELTA;
                     DoScroll(ScrollEventType.SmallDecrement);
                     scrolled = true;
                 }
                 else
                 {
-                    _wheelDelta += NativeMethods.WHEEL_DELTA;
+                    _wheelDelta += (int)PInvoke.WHEEL_DELTA;
                     DoScroll(ScrollEventType.SmallIncrement);
                     scrolled = true;
                 }

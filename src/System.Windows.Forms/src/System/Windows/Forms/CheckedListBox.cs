@@ -50,8 +50,8 @@ public partial class CheckedListBox : ListBox
     private CheckedItemCollection? _checkedItemCollection;
     private CheckedIndexCollection? _checkedIndexCollection;
 
-    private static readonly User32.WM LBC_GETCHECKSTATE = User32.RegisterWindowMessageW("LBC_GETCHECKSTATE");
-    private static readonly User32.WM LBC_SETCHECKSTATE = User32.RegisterWindowMessageW("LBC_SETCHECKSTATE");
+    private static readonly User32.WM LBC_GETCHECKSTATE = (User32.WM)PInvoke.RegisterWindowMessage("LBC_GETCHECKSTATE");
+    private static readonly User32.WM LBC_SETCHECKSTATE = (User32.WM)PInvoke.RegisterWindowMessage("LBC_SETCHECKSTATE");
 
     /// <summary>
     ///  Creates a new CheckedListBox for the user.
@@ -83,43 +83,21 @@ public partial class CheckedListBox : ListBox
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public CheckedIndexCollection CheckedIndices
-    {
-        get
-        {
-            _checkedIndexCollection ??= new CheckedIndexCollection(this);
-
-            return _checkedIndexCollection;
-        }
-    }
+    public CheckedIndexCollection CheckedIndices => _checkedIndexCollection ??= new CheckedIndexCollection(this);
 
     /// <summary>
     ///  Collection of checked items in this CheckedListBox.
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public CheckedItemCollection CheckedItems
-    {
-        get
-        {
-            _checkedItemCollection ??= new CheckedItemCollection(this);
+    public CheckedItemCollection CheckedItems => _checkedItemCollection ??= new CheckedItemCollection(this);
 
-            return _checkedItemCollection;
-        }
-    }
-
-    /// <summary>
-    ///  This is called when creating a window.  Inheriting classes can override
-    ///  this to add extra functionality, but should not forget to first call
-    ///  base.CreateParams() to make sure the control continues to work
-    ///  correctly.
-    /// </summary>
     protected override CreateParams CreateParams
     {
         get
         {
             CreateParams cp = base.CreateParams;
-            cp.Style |= (int)(User32.LBS.OWNERDRAWFIXED | User32.LBS.WANTKEYBOARDINPUT);
+            cp.Style |= PInvoke.LBS_OWNERDRAWFIXED | PInvoke.LBS_WANTKEYBOARDINPUT;
             return cp;
         }
     }
@@ -417,7 +395,7 @@ public partial class CheckedListBox : ListBox
         if (IsHandleCreated)
         {
             var rect = default(RECT);
-            PInvoke.SendMessage(this, (User32.WM)User32.LB.GETITEMRECT, (WPARAM)index, ref rect);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.LB_GETITEMRECT, (WPARAM)index, ref rect);
             PInvoke.InvalidateRect(this, &rect, bErase: false);
         }
     }
@@ -489,7 +467,7 @@ public partial class CheckedListBox : ListBox
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        PInvoke.SendMessage(this, (User32.WM)User32.LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
+        PInvoke.SendMessage(this, (User32.WM)PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
     }
 
     /// <summary>
@@ -790,7 +768,7 @@ public partial class CheckedListBox : ListBox
         // Update the item height
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, (User32.WM)User32.LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
         }
 
         // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
@@ -922,14 +900,14 @@ public partial class CheckedListBox : ListBox
     /// </summary>
     protected override void WmReflectCommand(ref Message m)
     {
-        switch ((User32.LBN)m.WParamInternal.SIGNEDHIWORD)
+        switch ((uint)m.WParamInternal.SIGNEDHIWORD)
         {
-            case User32.LBN.SELCHANGE:
+            case PInvoke.LBN_SELCHANGE:
                 LbnSelChange();
                 base.WmReflectCommand(ref m);
                 break;
 
-            case User32.LBN.DBLCLK:
+            case PInvoke.LBN_DBLCLK:
                 // We want double-clicks to change the checkstate on each click - just like the CheckBox control
                 LbnSelChange();
                 base.WmReflectCommand(ref m);
@@ -989,7 +967,7 @@ public partial class CheckedListBox : ListBox
                     int item = (int)m.WParamInternal;
                     if (item < 0 || item >= Items.Count)
                     {
-                        m.ResultInternal = (LRESULT)User32.LB_ERR;
+                        m.ResultInternal = (LRESULT)PInvoke.LB_ERR;
                     }
                     else
                     {

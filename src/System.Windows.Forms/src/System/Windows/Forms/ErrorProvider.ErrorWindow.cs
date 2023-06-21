@@ -435,7 +435,7 @@ public partial class ErrorProvider
         {
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
 
-            if (m.Msg == (int)User32.WM.GETOBJECT && m.LParamInternal == NativeMethods.UiaRootObjectId)
+            if (m.Msg == (int)User32.WM.GETOBJECT && m.LParamInternal == PInvoke.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.

@@ -1964,7 +1964,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             if (editing)
             {
-                User32.PostMessageW(tv, (User32.WM)PInvoke.TVM_EDITLABELW, 0, _handle);
+                PInvoke.PostMessage(tv, (User32.WM)PInvoke.TVM_EDITLABELW, default, _handle);
             }
 
             PInvoke.InvalidateRect(tv, lpRect: null, bErase: false);

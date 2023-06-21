@@ -147,10 +147,10 @@ public sealed partial class MdiClient : Control
                 PInvoke.SendMessage(this, User32.WM.MDICASCADE);
                 break;
             case MdiLayout.TileVertical:
-                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.VERTICAL);
+                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_VERTICAL);
                 break;
             case MdiLayout.TileHorizontal:
-                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.HORIZONTAL);
+                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_HORIZONTAL);
                 break;
             case MdiLayout.ArrangeIcons:
                 PInvoke.SendMessage(this, User32.WM.MDIICONARRANGE);

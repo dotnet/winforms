@@ -605,7 +605,7 @@ public partial class StatusStrip : ToolStrip
                     {
                         if ((deltaRightEdge + deltaBottomEdge) < 2)
                         {
-                            m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMRIGHT;
+                            m.ResultInternal = (LRESULT)(nint)PInvoke.HTBOTTOMRIGHT;
                             return;
                         }
                     }
@@ -641,7 +641,7 @@ public partial class StatusStrip : ToolStrip
             {
                 if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                 {
-                    m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMLEFT;
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.HTBOTTOMLEFT;
                     return;
                 }
             }

@@ -11,6 +11,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
+using Windows.Win32.System.SystemServices;
 using static Interop;
 
 namespace System.Windows.Forms.Design;
@@ -993,7 +994,7 @@ internal partial class OleDragDropHandler
             dragOk = true;
 
             // this means it's not us doing the drag
-            if ((de.KeyState & (int)User32.MK.CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != 0)
+            if ((de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != 0)
             {
                 de.Effect = DragDropEffects.Copy;
             }
@@ -1010,7 +1011,7 @@ internal partial class OleDragDropHandler
         else if (localDrag && de.AllowedEffect != DragDropEffects.None)
         {
             localDragInside = true;
-            if ((de.KeyState & (int)User32.MK.CONTROL) != 0
+            if ((de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0
                 && (de.AllowedEffect & DragDropEffects.Copy) != 0
                 && client.CanModifyComponents)
             {
@@ -1064,7 +1065,7 @@ internal partial class OleDragDropHandler
             return;
         }
 
-        bool copy = (de.KeyState & (int)User32.MK.CONTROL) != 0
+        bool copy = (de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0
             && (de.AllowedEffect & DragDropEffects.Copy) != 0
             && client.CanModifyComponents;
 

@@ -2915,8 +2915,7 @@ just-in-time (JIT) debugging instead of this dialog box.
   <data name="ExDlgMsgLoadedAssembliesEntry" xml:space="preserve">
     <value>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </value>
   </data>
   <data name="ExDlgMsgLoadedAssembliesSection" xml:space="preserve">

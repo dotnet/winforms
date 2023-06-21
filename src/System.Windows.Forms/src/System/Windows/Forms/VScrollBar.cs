@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -21,7 +20,7 @@ public partial class VScrollBar : ScrollBar
         get
         {
             CreateParams cp = base.CreateParams;
-            cp.Style |= (int)User32.SBS.VERT;
+            cp.Style |= (int)SCROLLBAR_CONSTANTS.SB_VERT;
             return cp;
         }
     }

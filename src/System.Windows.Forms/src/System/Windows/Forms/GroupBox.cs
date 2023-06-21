@@ -694,7 +694,7 @@ public partial class GroupBox : Control
                 // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                 // "Button" window class to get OS group box rendering; but the OS does not expose the children
                 // of buttons to MSAA (because it assumes buttons won't have children).
-                if (m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
+                if (m.LParamInternal == (int)OBJECT_IDENTIFIER.OBJID_QUERYCLASSNAMEIDX)
                 {
                     m.ResultInternal = (LRESULT)0;
                 }

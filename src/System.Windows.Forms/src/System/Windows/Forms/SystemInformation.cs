@@ -727,7 +727,7 @@ public static class SystemInformation
     /// </summary>
     public static int CaretWidth => PInvoke.SystemParametersInfoInt(SPI_GETCARETWIDTH);
 
-    public static int MouseWheelScrollDelta => NativeMethods.WHEEL_DELTA;
+    public static int MouseWheelScrollDelta => (int)PInvoke.WHEEL_DELTA;
 
     /// <summary>
     ///  The width of the left and right edges of the focus rectangle.

@@ -35,7 +35,7 @@ public class ScrollableControlDesigner : ParentControlDesigner
         if (f.IsHandleCreated && f.AutoScroll)
         {
             int hitTest = (int)PInvoke.SendMessage(f, User32.WM.NCHITTEST, 0, PARAM.FromLowHigh(pt.X, pt.Y));
-            if (hitTest == (int)User32.HT.VSCROLL || hitTest == (int)User32.HT.HSCROLL)
+            if (hitTest == (int)PInvoke.HTVSCROLL || hitTest == (int)PInvoke.HTHSCROLL)
             {
                 return true;
             }

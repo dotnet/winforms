@@ -329,7 +329,7 @@ internal partial class DesignerActionUI
 
         private void WmActivate(ref Message m)
         {
-            if ((User32.WA)(nint)m.WParamInternal == User32.WA.INACTIVE)
+            if ((nint)m.WParamInternal == PInvoke.WA_INACTIVE)
             {
                 HWND hwndActivating = (HWND)m.LParamInternal;
                 if (WindowOwnsWindow((HWND)Handle, hwndActivating))

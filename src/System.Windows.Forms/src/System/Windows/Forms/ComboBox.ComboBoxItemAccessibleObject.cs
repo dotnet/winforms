@@ -39,11 +39,11 @@ public partial class ComboBox
 
                 int result = (int)PInvoke.SendMessage(
                     listHandle,
-                    (User32.WM)User32.LB.GETITEMRECT,
+                    (User32.WM)PInvoke.LB_GETITEMRECT,
                     (WPARAM)currentIndex,
                     ref itemRect);
 
-                if (result == User32.LB_ERR)
+                if (result == PInvoke.LB_ERR)
                 {
                     return Rectangle.Empty;
                 }

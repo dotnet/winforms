@@ -914,15 +914,14 @@ public sealed partial class Application
         {
             Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Attempting to terminate message loop");
 
-            // Per KB 183116 (contents no longer available)
+            // Per KB 183116: https://web.archive.org/web/20070510025823/http://support.microsoft.com/kb/183116
             //
             // WM_QUIT may be consumed by another message pump under very specific circumstances.
             // When that occurs, we rely on the STATE_POSTEDQUIT to be caught in the next
             // idle, at which point we can tear down.
             //
-            // We can't follow the KB article exactly, because we don't have an HWND to PostMessage
-            // to.
-            User32.PostThreadMessageW(_id, User32.WM.QUIT, IntPtr.Zero, IntPtr.Zero);
+            // We can't follow the KB article exactly, because we don't have an HWND to PostMessage to.
+            PInvoke.PostThreadMessage(_id, (uint)User32.WM.QUIT, default, default);
             SetState(STATE_POSTEDQUIT, true);
         }
 

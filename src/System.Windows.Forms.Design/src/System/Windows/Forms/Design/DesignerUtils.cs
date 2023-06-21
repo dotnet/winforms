@@ -476,7 +476,7 @@ internal static class DesignerUtils
                 control,
                 User32.WM.PRINT,
                 (WPARAM)hDc,
-                (LPARAM)(uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                (LPARAM)(uint)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
             g.ReleaseHdc(hDc);
         }
 

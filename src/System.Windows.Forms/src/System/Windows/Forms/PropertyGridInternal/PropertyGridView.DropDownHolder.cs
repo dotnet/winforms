@@ -159,14 +159,19 @@ internal partial class PropertyGridView
             base.Dispose(disposing);
         }
 
-        public void DoModalLoop()
+        public unsafe void DoModalLoop()
         {
             // Push a modal loop. This seems expensive, but it is a better user model than
             // returning from DropDownControl immediately.
             while (Visible)
             {
                 Application.DoEventsModal();
-                User32.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, User32.QS.ALLINPUT, User32.MWMO.INPUTAVAILABLE);
+                PInvoke.MsgWaitForMultipleObjectsEx(
+                    0,
+                    null,
+                    250,
+                    QUEUE_STATUS_FLAGS.QS_ALLINPUT,
+                    MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
             }
         }
 
@@ -672,7 +677,7 @@ internal partial class PropertyGridView
                 SetState(States.Modal, true);
                 CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:WM_ACTIVATE()");
                 HWND activatedWindow = (HWND)m.LParamInternal;
-                if (Visible && (User32.WA)m.WParamInternal.LOWORD == User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
+                if (Visible && m.WParamInternal.LOWORD == PInvoke.WA_INACTIVE && !OwnsWindow(activatedWindow))
                 {
                     _gridView.CloseDropDownInternal(false);
                     return;

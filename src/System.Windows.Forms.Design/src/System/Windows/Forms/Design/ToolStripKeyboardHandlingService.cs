@@ -8,9 +8,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -170,8 +168,16 @@ internal class ToolStripKeyboardHandlingService
                                 focusIndex = owner.Items.IndexOf(curDesignerNode);
                             }
 
-                            User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
-                            User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
+                            PInvoke.NotifyWinEvent(
+                                (uint)AccessibleEvents.SelectionAdd,
+                                owner,
+                                (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                                focusIndex + 1);
+                            PInvoke.NotifyWinEvent(
+                                (uint)AccessibleEvents.Focus,
+                                owner,
+                                (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                                focusIndex + 1);
                         }
                     }
                 }

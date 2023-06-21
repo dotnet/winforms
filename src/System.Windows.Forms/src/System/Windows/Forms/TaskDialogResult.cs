@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -19,55 +17,55 @@ internal enum TaskDialogResult : int
     /// <summary>
     ///  The <c>OK</c> button was selected.
     /// </summary>
-    OK = User32.ID.OK,
+    OK = MESSAGEBOX_RESULT.IDOK,
 
     /// <summary>
     ///  The <c>Cancel</c> button was selected.
     /// </summary>
-    Cancel = User32.ID.CANCEL,
+    Cancel = MESSAGEBOX_RESULT.IDCANCEL,
 
     /// <summary>
     ///  The <c>Abort</c> button was selected.
     /// </summary>
-    Abort = User32.ID.ABORT,
+    Abort = MESSAGEBOX_RESULT.IDABORT,
 
     /// <summary>
     ///  The <c>Retry</c> button was selected.
     /// </summary>
-    Retry = User32.ID.RETRY,
+    Retry = MESSAGEBOX_RESULT.IDRETRY,
 
     /// <summary>
     ///  The <c>Ignore</c> button was selected.
     /// </summary>
-    Ignore = User32.ID.IGNORE,
+    Ignore = MESSAGEBOX_RESULT.IDIGNORE,
 
     /// <summary>
     ///  The <c>Yes</c> button was selected.
     /// </summary>
-    Yes = User32.ID.YES,
+    Yes = MESSAGEBOX_RESULT.IDYES,
 
     /// <summary>
     ///  The <c>No</c> button was selected.
     /// </summary>
-    No = User32.ID.NO,
+    No = MESSAGEBOX_RESULT.IDNO,
 
     /// <summary>
     ///  The <c>Close</c> button was selected.
     /// </summary>
-    Close = User32.ID.CLOSE,
+    Close = MESSAGEBOX_RESULT.IDCLOSE,
 
     /// <summary>
     ///  The <c>Help</c> button was selected.
     /// </summary>
-    Help = User32.ID.HELP,
+    Help = MESSAGEBOX_RESULT.IDHELP,
 
     /// <summary>
     ///  The <c>Try Again</c> button was selected.
     /// </summary>
-    TryAgain = User32.ID.TRYAGAIN,
+    TryAgain = MESSAGEBOX_RESULT.IDTRYAGAIN,
 
     /// <summary>
     ///  The <c>Continue</c> button was selected.
     /// </summary>
-    Continue = User32.ID.CONTINUE
+    Continue = MESSAGEBOX_RESULT.IDCONTINUE
 }

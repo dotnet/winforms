@@ -95,7 +95,7 @@ internal partial class PropertyGridView
             {
                 Focus();
                 SelectAll();
-                User32.PostMessageW(this, User32.WM.CHAR, (IntPtr)keyChar);
+                PInvoke.PostMessage(this, User32.WM.CHAR, (WPARAM)keyChar);
             }
         }
 

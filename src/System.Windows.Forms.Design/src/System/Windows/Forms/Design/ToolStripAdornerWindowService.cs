@@ -279,7 +279,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
             switch (m.MsgInternal)
             {
                 case User32.WM.NCHITTEST:
-                    m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
+                    m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
                     break;
                 default:
                     base.WndProc(ref m);

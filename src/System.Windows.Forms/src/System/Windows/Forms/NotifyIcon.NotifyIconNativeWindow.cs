@@ -27,15 +27,13 @@ public sealed partial class NotifyIcon
 
         ~NotifyIconNativeWindow()
         {
-            // This same post is done in Control's Dispose method, so if you change
-            // it, change it there too.
-            if (Handle != IntPtr.Zero)
+            // This same post is done in Control's Dispose method, so if you change it, change it there too.
+            if (Handle != 0)
             {
-                User32.PostMessageW(this, User32.WM.CLOSE);
+                PInvoke.PostMessage(this, User32.WM.CLOSE);
             }
 
-            // This releases the handle from our window proc, re-routing it back to
-            // the system.
+            // This releases the handle from our window proc, re-routing it back to the system.
         }
 
         public void LockReference(bool locked)

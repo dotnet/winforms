@@ -66,7 +66,7 @@ internal static partial class Interop
             {
                 if (!HDC.IsNull)
                 {
-                    ReleaseDC(HWND, HDC);
+                    PInvoke.ReleaseDC(HWND, HDC);
                 }
             }
         }
