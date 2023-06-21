@@ -430,7 +430,7 @@ public partial class Control
         }
 
         public void NotifyClients(AccessibleEvents accEvent)
-            => NotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, (int)PInvoke.CHILDID_SELF);
+            => NotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, 0);
 
         public void NotifyClients(AccessibleEvents accEvent, int childID)
             => NotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, childID);
