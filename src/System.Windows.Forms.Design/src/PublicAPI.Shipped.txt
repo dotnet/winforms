@@ -158,9 +158,6 @@
 ~static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor) -> bool
 ~static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor, out string validationErrorDescription) -> bool
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
-System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.ActiveDesignSurfaceChangedEventArgs(System.ComponentModel.Design.DesignSurface? oldSurface, System.ComponentModel.Design.DesignSurface? newSurface) -> void
-System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.NewSurface.get -> System.ComponentModel.Design.DesignSurface?
-System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get -> System.ComponentModel.Design.DesignSurface?
 ~System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type type) -> void
 ~System.ComponentModel.Design.CollectionEditor.CollectionEditor(System.Type type) -> void
 ~System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object value) -> bool
@@ -210,29 +207,6 @@ System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get 
 ~System.ComponentModel.Design.DesignerActionUIService.ShowUI(System.ComponentModel.IComponent component) -> void
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.DesignerActionUIStateChangeEventArgs(object relatedObject, System.ComponentModel.Design.DesignerActionUIStateChangeType changeType) -> void
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.get -> object
-System.ComponentModel.Design.DesignSurface.BeginLoad(System.ComponentModel.Design.Serialization.DesignerLoader! loader) -> void
-System.ComponentModel.Design.DesignSurface.BeginLoad(System.Type! rootComponentType) -> void
-System.ComponentModel.Design.DesignSurface.ComponentContainer.get -> System.ComponentModel.IContainer!
-System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent! owningComponent) -> System.ComponentModel.INestedContainer!
-System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent! owningComponent, string? containerName) -> System.ComponentModel.INestedContainer!
-System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider? parentProvider) -> void
-System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider? parentProvider, System.Type! rootComponentType) -> void
-System.ComponentModel.Design.DesignSurface.DesignSurface(System.Type! rootComponentType) -> void
-System.ComponentModel.Design.DesignSurface.GetService(System.Type! serviceType) -> object?
-System.ComponentModel.Design.DesignSurface.LoadErrors.get -> System.Collections.ICollection!
-System.ComponentModel.Design.DesignSurface.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer!
-System.ComponentModel.Design.DesignSurface.View.get -> object!
-System.ComponentModel.Design.DesignSurfaceCollection.CopyTo(System.ComponentModel.Design.DesignSurface![]! array, int index) -> void
-System.ComponentModel.Design.DesignSurfaceCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.ComponentModel.Design.DesignSurfaceCollection.this[int index].get -> System.ComponentModel.Design.DesignSurface!
-System.ComponentModel.Design.DesignSurfaceEventArgs.DesignSurfaceEventArgs(System.ComponentModel.Design.DesignSurface! surface) -> void
-System.ComponentModel.Design.DesignSurfaceEventArgs.Surface.get -> System.ComponentModel.Design.DesignSurface!
-System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface() -> System.ComponentModel.Design.DesignSurface!
-System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface(System.IServiceProvider! parentProvider) -> System.ComponentModel.Design.DesignSurface!
-System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager(System.IServiceProvider? parentProvider) -> void
-System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaces.get -> System.ComponentModel.Design.DesignSurfaceCollection!
-System.ComponentModel.Design.DesignSurfaceManager.GetService(System.Type! serviceType) -> object?
-System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer!
 ~System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.ComponentModel.IComponent component, System.ComponentModel.IContainer container) -> void
@@ -459,17 +433,6 @@ System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer.get -> System
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentServiceActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
-virtual System.ComponentModel.Design.DesignSurface.CreateComponent(System.Type! componentType) -> System.ComponentModel.IComponent?
-virtual System.ComponentModel.Design.DesignSurface.CreateDesigner(System.ComponentModel.IComponent! component, bool rootDesigner) -> System.ComponentModel.Design.IDesigner?
-virtual System.ComponentModel.Design.DesignSurface.CreateInstance(System.Type! type) -> object?
-virtual System.ComponentModel.Design.DesignSurface.OnLoaded(System.ComponentModel.Design.LoadedEventArgs! e) -> void
-virtual System.ComponentModel.Design.DesignSurface.OnLoading(System.EventArgs! e) -> void
-virtual System.ComponentModel.Design.DesignSurface.OnUnloaded(System.EventArgs! e) -> void
-virtual System.ComponentModel.Design.DesignSurface.OnUnloading(System.EventArgs! e) -> void
-virtual System.ComponentModel.Design.DesignSurface.OnViewActivate(System.EventArgs! e) -> void
-virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.get -> System.ComponentModel.Design.DesignSurface?
-virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.set -> void
-virtual System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore(System.IServiceProvider! parentProvider) -> System.ComponentModel.Design.DesignSurface!
 ~virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string methodName) -> void
@@ -640,6 +603,9 @@ static System.Drawing.Design.ImageEditor.CreateExtensionsString(string?[]? exten
 static System.Drawing.Design.ImageEditor.CreateFilterEntry(System.Drawing.Design.ImageEditor! e) -> string!
 static System.Windows.Forms.Design.Behavior.SnapLine.ShouldSnap(System.Windows.Forms.Design.Behavior.SnapLine! line1, System.Windows.Forms.Design.Behavior.SnapLine! line2) -> bool
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.ActiveDesignSurfaceChangedEventArgs(System.ComponentModel.Design.DesignSurface? oldSurface, System.ComponentModel.Design.DesignSurface? newSurface) -> void
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.NewSurface.get -> System.ComponentModel.Design.DesignSurface?
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get -> System.ComponentModel.Design.DesignSurface?
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
 System.ComponentModel.Design.ArrayEditor
 System.ComponentModel.Design.BinaryEditor
@@ -730,30 +696,53 @@ System.ComponentModel.Design.DesignerCommandSet.ActionLists.get -> System.Compon
 System.ComponentModel.Design.DesignerCommandSet.DesignerCommandSet() -> void
 System.ComponentModel.Design.DesignerCommandSet.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection?
 System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.DesignSurface.BeginLoad(System.ComponentModel.Design.Serialization.DesignerLoader! loader) -> void
+System.ComponentModel.Design.DesignSurface.BeginLoad(System.Type! rootComponentType) -> void
+System.ComponentModel.Design.DesignSurface.ComponentContainer.get -> System.ComponentModel.IContainer!
+System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent! owningComponent) -> System.ComponentModel.INestedContainer!
+System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent! owningComponent, string? containerName) -> System.ComponentModel.INestedContainer!
 System.ComponentModel.Design.DesignSurface.DesignSurface() -> void
+System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider? parentProvider) -> void
+System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider? parentProvider, System.Type! rootComponentType) -> void
+System.ComponentModel.Design.DesignSurface.DesignSurface(System.Type! rootComponentType) -> void
 System.ComponentModel.Design.DesignSurface.Dispose() -> void
 System.ComponentModel.Design.DesignSurface.Disposed -> System.EventHandler?
 System.ComponentModel.Design.DesignSurface.DtelLoading.get -> bool
 System.ComponentModel.Design.DesignSurface.DtelLoading.set -> void
 System.ComponentModel.Design.DesignSurface.Flush() -> void
 System.ComponentModel.Design.DesignSurface.Flushed -> System.EventHandler?
+System.ComponentModel.Design.DesignSurface.GetService(System.Type! serviceType) -> object?
 System.ComponentModel.Design.DesignSurface.IsLoaded.get -> bool
 System.ComponentModel.Design.DesignSurface.Loaded -> System.ComponentModel.Design.LoadedEventHandler?
+System.ComponentModel.Design.DesignSurface.LoadErrors.get -> System.Collections.ICollection!
 System.ComponentModel.Design.DesignSurface.Loading -> System.EventHandler?
+System.ComponentModel.Design.DesignSurface.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer!
 System.ComponentModel.Design.DesignSurface.Unloaded -> System.EventHandler?
 System.ComponentModel.Design.DesignSurface.Unloading -> System.EventHandler?
+System.ComponentModel.Design.DesignSurface.View.get -> object!
 System.ComponentModel.Design.DesignSurface.ViewActivated -> System.EventHandler?
 System.ComponentModel.Design.DesignSurfaceCollection
+System.ComponentModel.Design.DesignSurfaceCollection.CopyTo(System.ComponentModel.Design.DesignSurface![]! array, int index) -> void
 System.ComponentModel.Design.DesignSurfaceCollection.Count.get -> int
+System.ComponentModel.Design.DesignSurfaceCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.ComponentModel.Design.DesignSurfaceCollection.this[int index].get -> System.ComponentModel.Design.DesignSurface!
 System.ComponentModel.Design.DesignSurfaceEventArgs
+System.ComponentModel.Design.DesignSurfaceEventArgs.DesignSurfaceEventArgs(System.ComponentModel.Design.DesignSurface! surface) -> void
+System.ComponentModel.Design.DesignSurfaceEventArgs.Surface.get -> System.ComponentModel.Design.DesignSurface!
 System.ComponentModel.Design.DesignSurfaceEventHandler
 System.ComponentModel.Design.DesignSurfaceManager
 System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurfaceChanged -> System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler?
+System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface() -> System.ComponentModel.Design.DesignSurface!
+System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface(System.IServiceProvider! parentProvider) -> System.ComponentModel.Design.DesignSurface!
 System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceCreated -> System.ComponentModel.Design.DesignSurfaceEventHandler?
 System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceDisposed -> System.ComponentModel.Design.DesignSurfaceEventHandler?
 System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager() -> void
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager(System.IServiceProvider? parentProvider) -> void
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaces.get -> System.ComponentModel.Design.DesignSurfaceCollection!
 System.ComponentModel.Design.DesignSurfaceManager.Dispose() -> void
+System.ComponentModel.Design.DesignSurfaceManager.GetService(System.Type! serviceType) -> object?
 System.ComponentModel.Design.DesignSurfaceManager.SelectionChanged -> System.EventHandler?
+System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer!
 System.ComponentModel.Design.DisplayMode
 System.ComponentModel.Design.DisplayMode.Ansi = 2 -> System.ComponentModel.Design.DisplayMode
 System.ComponentModel.Design.DisplayMode.Auto = 4 -> System.ComponentModel.Design.DisplayMode
@@ -1145,7 +1134,18 @@ virtual System.ComponentModel.Design.DesignerActionMethodItem.IncludeAsDesignerV
 virtual System.ComponentModel.Design.DesignerActionMethodItem.Invoke() -> void
 virtual System.ComponentModel.Design.DesignerActionService.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.DesignerCommandSet.GetCommands(string! name) -> System.Collections.ICollection?
+virtual System.ComponentModel.Design.DesignSurface.CreateComponent(System.Type! componentType) -> System.ComponentModel.IComponent?
+virtual System.ComponentModel.Design.DesignSurface.CreateDesigner(System.ComponentModel.IComponent! component, bool rootDesigner) -> System.ComponentModel.Design.IDesigner?
+virtual System.ComponentModel.Design.DesignSurface.CreateInstance(System.Type! type) -> object?
 virtual System.ComponentModel.Design.DesignSurface.Dispose(bool disposing) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnLoaded(System.ComponentModel.Design.LoadedEventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnLoading(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnUnloaded(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnUnloading(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnViewActivate(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.get -> System.ComponentModel.Design.DesignSurface?
+virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.set -> void
+virtual System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore(System.IServiceProvider! parentProvider) -> System.ComponentModel.Design.DesignSurface!
 virtual System.ComponentModel.Design.DesignSurfaceManager.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.InheritanceService.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.MenuCommandService.Dispose(bool disposing) -> void

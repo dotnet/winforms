@@ -1,3 +1,0 @@
-override System.Windows.Forms.ContextMenuStrip.OnClosed(System.Windows.Forms.ToolStripDropDownClosedEventArgs! e) -> void
-override System.Windows.Forms.ContextMenuStrip.OnOpened(System.EventArgs! e) -> void
-System.Windows.Forms.Control.ControlAccessibleObject.Owner.get -> System.Windows.Forms.Control?
