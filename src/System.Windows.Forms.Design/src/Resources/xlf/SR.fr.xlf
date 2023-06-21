@@ -910,9 +910,19 @@
         <target state="translated">Ancrer dans le conteneur parent</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutHorizontalOrientation">
+        <source>Horizontal Splitter Orientation.</source>
+        <target state="new">Horizontal Splitter Orientation.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
         <target state="translated">Annuler l'ancrage dans le conteneur parent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutVerticalOrientation">
+        <source>Vertical Splitter Orientation.</source>
+        <target state="new">Vertical Splitter Orientation.</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">
