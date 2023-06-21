@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 /// <summary>
@@ -19,10 +17,10 @@ internal sealed class DesignerEventService : IDesignerEventService
     private static readonly object s_eventDesignerDisposed = new object();
     private static readonly object s_eventSelectionChanged = new object();
 
-    private List<IDesignerHost> _designerList;          // read write list used as data for the collection
-    private DesignerCollection _designerCollection;     // public read only view of the above list
-    private IDesignerHost _activeDesigner;              // the currently active designer.  Can be null
-    private EventHandlerList _events;                   // list of events.  Can be null
+    private List<IDesignerHost>? _designerList;          // read write list used as data for the collection
+    private DesignerCollection? _designerCollection;     // public read only view of the above list
+    private IDesignerHost? _activeDesigner;              // the currently active designer.  Can be null
+    private EventHandlerList? _events;                   // list of events.  Can be null
     private bool _inTransaction;                        // true if we are in a transaction
     private bool _deferredSelChange;                    // true if we have a deferred selection change notification pending
 
@@ -38,19 +36,19 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  a designer is activated.  The passed in designer can
     ///  be null to signify no designer is currently active.
     /// </summary>
-    internal void OnActivateDesigner(DesignSurface surface)
+    internal void OnActivateDesigner(DesignSurface? surface)
     {
-        IDesignerHost host = null;
+        IDesignerHost? host = null;
         if (surface is not null)
         {
             host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
             Debug.Assert(host is not null, "Design surface did not provide us with a designer host");
-        }
 
-        // If the designer host is not in our collection, add it.
-        if (host is not null && (_designerList is null || !_designerList.Contains(host)))
-        {
-            OnCreateDesigner(surface);
+            // If the designer host is not in our collection, add it.
+            if (host is not null && (_designerList is null || !_designerList.Contains(host)))
+            {
+                OnCreateDesigner(surface);
+            }
         }
 
         if (_activeDesigner == host)
@@ -58,7 +56,7 @@ internal sealed class DesignerEventService : IDesignerEventService
             return;
         }
 
-        IDesignerHost oldDesigner = _activeDesigner;
+        IDesignerHost? oldDesigner = _activeDesigner;
         _activeDesigner = host;
 
         if (oldDesigner is not null)
@@ -71,10 +69,7 @@ internal sealed class DesignerEventService : IDesignerEventService
             SinkChangeEvents(_activeDesigner, true);
         }
 
-        if (_events is not null)
-        {
-            (_events[s_eventActiveDesignerChanged] as ActiveDesignerEventHandler)?.Invoke(this, new ActiveDesignerEventArgs(oldDesigner, host));
-        }
+        (_events?[s_eventActiveDesignerChanged] as ActiveDesignerEventHandler)?.Invoke(this, new ActiveDesignerEventArgs(oldDesigner, host));
 
         // Activating a new designer automatically pushes a new selection.
         //
@@ -85,19 +80,12 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  Called when a component is added or removed from the active designer.
     ///  We raise a selection change event here.
     /// </summary>
-    private void OnComponentAddedRemoved(object sender, ComponentEventArgs ce)
+    private void OnComponentAddedRemoved(object? sender, ComponentEventArgs ce)
     {
-        if (ce.Component is IComponent comp)
+        if (ce.Component?.Site?.Container is IDesignerHost { Loading: true })
         {
-            ISite site = comp.Site;
-            if (site is not null)
-            {
-                if (site.Container is IDesignerHost host && host.Loading)
-                {
-                    _deferredSelChange = true;
-                    return;
-                }
-            }
+            _deferredSelChange = true;
+            return;
         }
 
         OnSelectionChanged(this, EventArgs.Empty);
@@ -109,20 +97,14 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  has changed is also selected.  If it is, then we raise a global
     ///  selection changed event.
     /// </summary>
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs ce)
+    private void OnComponentChanged(object? sender, ComponentChangedEventArgs ce)
     {
-        if (!(ce.Component is IComponent comp))
+        if (ce.Component is not IComponent comp)
         {
             return;
         }
 
-        ISite site = comp.Site;
-        if (site is null)
-        {
-            return;
-        }
-
-        if (site.GetService(typeof(ISelectionService)) is ISelectionService ss && ss.GetComponentSelected(comp))
+        if (comp.Site.TryGetService(out ISelectionService? ss) && ss.GetComponentSelected(comp))
         {
             OnSelectionChanged(this, EventArgs.Empty);
         }
@@ -132,10 +114,11 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  This is called by the DesignerApplication class when
     ///  a designer is created.  Activation generally follows.
     /// </summary>
+    [MemberNotNull(nameof(_designerList))]
     internal void OnCreateDesigner(DesignSurface surface)
     {
         Debug.Assert(surface is not null, "DesignerApplication should not pass null here");
-        IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        IDesignerHost? host = surface.GetService<IDesignerHost>();
         Debug.Assert(host is not null, "Design surface did not provide us with a designer host");
 
         _designerList ??= new();
@@ -144,12 +127,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         // Hookup an object disposed handler on the design surface so we know when it's gone.
         surface.Disposed += new EventHandler(OnDesignerDisposed);
 
-        if (_events is null)
-        {
-            return;
-        }
-
-        if (_events[s_eventDesignerCreated] is DesignerEventHandler eh)
+        if (_events?[s_eventDesignerCreated] is DesignerEventHandler eh)
         {
             eh(this, new DesignerEventArgs(host));
         }
@@ -158,27 +136,24 @@ internal sealed class DesignerEventService : IDesignerEventService
     /// <summary>
     ///  Called by DesignSurface when it is about to be disposed.
     /// </summary>
-    private void OnDesignerDisposed(object sender, EventArgs e)
+    private void OnDesignerDisposed(object? sender, EventArgs e)
     {
-        DesignSurface surface = (DesignSurface)sender;
+        DesignSurface surface = (DesignSurface)sender!;
         surface.Disposed -= new EventHandler(OnDesignerDisposed);
 
         // Detach the selection change and add/remove events, if we were monitoring such events
         SinkChangeEvents(surface, false);
 
-        IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        IDesignerHost? host = surface.GetService<IDesignerHost>();
         Debug.Assert(host is not null, "Design surface removed host too early in dispose");
         if (host is null)
         {
             return;
         }
 
-        if (_events is not null)
+        if (_events?[s_eventDesignerDisposed] is DesignerEventHandler eh)
         {
-            if (_events[s_eventDesignerDisposed] is DesignerEventHandler eh)
-            {
-                eh(this, new DesignerEventArgs(host));
-            }
+            eh(this, new DesignerEventArgs(host));
         }
 
         _designerList?.Remove(host);
@@ -189,7 +164,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  Also called directly by us when the active designer changes, as this is
     ///  also a change to the global selection context.
     /// </summary>
-    private void OnSelectionChanged(object sender, EventArgs e)
+    private void OnSelectionChanged(object? sender, EventArgs e)
     {
         if (_inTransaction)
         {
@@ -197,12 +172,7 @@ internal sealed class DesignerEventService : IDesignerEventService
             return;
         }
 
-        if (_events is null)
-        {
-            return;
-        }
-
-        if (_events[s_eventSelectionChanged] is EventHandler eh)
+        if (_events?[s_eventSelectionChanged] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -212,7 +182,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  Called by the designer host when it is done loading
     ///  Here we queue up selection notification.
     /// </summary>
-    private void OnLoadComplete(object sender, EventArgs e)
+    private void OnLoadComplete(object? sender, EventArgs e)
     {
         if (!_deferredSelChange)
         {
@@ -228,7 +198,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  operation.  Here we queue up selection notification and we turn off
     ///  our UI.
     /// </summary>
-    private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
+    private void OnTransactionClosed(object? sender, DesignerTransactionCloseEventArgs e)
     {
         if (!e.LastTransaction)
         {
@@ -250,7 +220,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  operation.  Here we queue up selection notification and we turn off
     ///  our UI.
     /// </summary>
-    private void OnTransactionOpened(object sender, EventArgs e)
+    private void OnTransactionOpened(object? sender, EventArgs e)
     {
         _inTransaction = true;
     }
@@ -265,9 +235,9 @@ internal sealed class DesignerEventService : IDesignerEventService
     /// </summary>
     private void SinkChangeEvents(IServiceProvider provider, bool sink)
     {
-        ISelectionService ss = provider.GetService(typeof(ISelectionService)) as ISelectionService;
-        IComponentChangeService cs = provider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-        IDesignerHost host = provider.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        ISelectionService? ss = provider.GetService<ISelectionService>();
+        IComponentChangeService? cs = provider.GetService<IComponentChangeService>();
+        IDesignerHost? host = provider.GetService<IDesignerHost>();
 
         if (sink)
         {
@@ -326,12 +296,14 @@ internal sealed class DesignerEventService : IDesignerEventService
     /// <summary>
     ///  Gets the currently active designer.
     /// </summary>
-    IDesignerHost IDesignerEventService.ActiveDesigner => _activeDesigner;
+    IDesignerHost? IDesignerEventService.ActiveDesigner => _activeDesigner;
 
     /// <summary>
     ///  Gets or
     ///  sets a collection of running design documents in the development environment.
     /// </summary>
+    [MemberNotNull(nameof(_designerList))]
+    [MemberNotNull(nameof(_designerCollection))]
     DesignerCollection IDesignerEventService.Designers
     {
         get
@@ -346,8 +318,9 @@ internal sealed class DesignerEventService : IDesignerEventService
     ///  Adds an event that will be raised when the currently active designer
     ///  changes.
     /// </summary>
-    event ActiveDesignerEventHandler IDesignerEventService.ActiveDesignerChanged
+    event ActiveDesignerEventHandler? IDesignerEventService.ActiveDesignerChanged
     {
+        [MemberNotNull(nameof(_events))]
         add
         {
             _events ??= new EventHandlerList();
@@ -368,8 +341,9 @@ internal sealed class DesignerEventService : IDesignerEventService
     /// <summary>
     ///  Adds an event that will be raised when a designer is created.
     /// </summary>
-    event DesignerEventHandler IDesignerEventService.DesignerCreated
+    event DesignerEventHandler? IDesignerEventService.DesignerCreated
     {
+        [MemberNotNull(nameof(_events))]
         add
         {
             _events ??= new EventHandlerList();
@@ -390,8 +364,9 @@ internal sealed class DesignerEventService : IDesignerEventService
     /// <summary>
     ///  Adds an event that will be raised when a designer is disposed.
     /// </summary>
-    event DesignerEventHandler IDesignerEventService.DesignerDisposed
+    event DesignerEventHandler? IDesignerEventService.DesignerDisposed
     {
+        [MemberNotNull(nameof(_events))]
         add
         {
             _events ??= new EventHandlerList();
@@ -412,8 +387,9 @@ internal sealed class DesignerEventService : IDesignerEventService
     /// <summary>
     ///  Adds an event that will be raised when the global selection changes.
     /// </summary>
-    event EventHandler IDesignerEventService.SelectionChanged
+    event EventHandler? IDesignerEventService.SelectionChanged
     {
+        [MemberNotNull(nameof(_events))]
         add
         {
             _events ??= new EventHandlerList();

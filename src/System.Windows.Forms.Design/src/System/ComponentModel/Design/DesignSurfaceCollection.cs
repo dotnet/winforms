@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.ComponentModel.Design;
@@ -18,7 +16,7 @@ public sealed class DesignSurfaceCollection : ICollection
     /// <summary>
     ///  Initializes a new instance of the DesignSurfaceCollection class
     /// </summary>
-    internal DesignSurfaceCollection(DesignerCollection designers)
+    internal DesignSurfaceCollection(DesignerCollection? designers)
     {
         _designers = designers ?? new DesignerCollection(null);
     }
@@ -35,7 +33,7 @@ public sealed class DesignSurfaceCollection : ICollection
     {
         get
         {
-            IDesignerHost host = _designers[index];
+            IDesignerHost host = _designers[index]!;
             if (host.GetService(typeof(DesignSurface)) is DesignSurface surface)
             {
                 return surface;
@@ -54,7 +52,7 @@ public sealed class DesignSurfaceCollection : ICollection
 
     bool ICollection.IsSynchronized => false;
 
-    object ICollection.SyncRoot => null;
+    object ICollection.SyncRoot => null!;
 
     void ICollection.CopyTo(Array array, int index)
     {
@@ -85,7 +83,7 @@ public sealed class DesignSurfaceCollection : ICollection
         {
             get
             {
-                IDesignerHost host = (IDesignerHost)_designerEnumerator.Current;
+                IDesignerHost host = (IDesignerHost)_designerEnumerator.Current!;
                 if (host.GetService(typeof(DesignSurface)) is DesignSurface surface)
                 {
                     return surface;

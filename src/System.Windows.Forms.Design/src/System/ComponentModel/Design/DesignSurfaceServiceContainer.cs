@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 /// <summary>
@@ -16,7 +14,7 @@ internal sealed class DesignSurfaceServiceContainer : ServiceContainer
     /// <summary>
     ///  We always add ourselves as a service.
     /// </summary>
-    internal DesignSurfaceServiceContainer(IServiceProvider parentProvider) : base(parentProvider)
+    internal DesignSurfaceServiceContainer(IServiceProvider? parentProvider) : base(parentProvider)
     {
         AddFixedService(typeof(DesignSurfaceServiceContainer), this);
     }
@@ -49,6 +47,6 @@ internal sealed class DesignSurfaceServiceContainer : ServiceContainer
             throw new InvalidOperationException(string.Format(SR.DesignSurfaceServiceIsFixed, serviceType.Name));
         }
 
-        base.RemoveService(serviceType, promote);
+        base.RemoveService(serviceType!, promote);
     }
 }
