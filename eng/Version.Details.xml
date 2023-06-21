@@ -89,7 +89,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Security.Cryptography.Pkcs" Version="6.0.3">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>e2176dfe59cc071eb14362fb0c9cfea329d7b72e</Sha>
+      <Sha>c76ac565499f3e7c657126d46c00b67a0d74832c</Sha>
     </Dependency>
     <Dependency Name="System.Security.Cryptography.ProtectedData" Version="6.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -101,7 +101,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Text.Json" Version="6.0.8">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>61d7c70aaf511967552702f22c27a41649c5ffe8</Sha>
+      <Sha>c76ac565499f3e7c657126d46c00b67a0d74832c</Sha>
     </Dependency>
     <Dependency Name="System.Threading.AccessControl" Version="6.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
