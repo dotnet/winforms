@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -18,7 +17,7 @@ public sealed partial class Application
         // In .NET 2.0 we now aggressively tear down the parking window
         //   when the last control has been removed off of it.
 
-        private const int WM_CHECKDESTROY = (int)User32.WM.USER + 0x01;
+        private const int WM_CHECKDESTROY = (int)PInvoke.WM_USER + 0x01;
 
         private int _childCount;
 
@@ -79,7 +78,7 @@ public sealed partial class Application
             // We only do this if the ThreadContext tells us that we are currently handling a window message.
             if (context is null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
             {
-                PInvoke.PostMessage(HWNDInternal, (User32.WM)WM_CHECKDESTROY);
+                PInvoke.PostMessage(HWNDInternal, WM_CHECKDESTROY);
             }
             else
             {
@@ -141,20 +140,20 @@ public sealed partial class Application
 
         protected override void WndProc(ref Message m)
         {
-            if (m.MsgInternal == User32.WM.SHOWWINDOW)
+            if (m.MsgInternal == PInvoke.WM_SHOWWINDOW)
                 return;
 
             base.WndProc(ref m);
             switch (m.MsgInternal)
             {
-                case User32.WM.PARENTNOTIFY:
-                    if ((User32.WM)m.WParamInternal.LOWORD == User32.WM.DESTROY)
+                case PInvoke.WM_PARENTNOTIFY:
+                    if (m.WParamInternal.LOWORD == PInvoke.WM_DESTROY)
                     {
-                        PInvoke.PostMessage(this, (User32.WM)WM_CHECKDESTROY);
+                        PInvoke.PostMessage(this, WM_CHECKDESTROY);
                     }
 
                     break;
-                case (User32.WM)WM_CHECKDESTROY:
+                case WM_CHECKDESTROY:
                     CheckDestroy();
                     break;
             }

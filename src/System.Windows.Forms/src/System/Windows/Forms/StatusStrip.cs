@@ -567,7 +567,7 @@ public partial class StatusStrip : ToolStrip
 
     protected override void WndProc(ref Message m)
     {
-        if ((m.Msg == (int)User32.WM.NCHITTEST) && SizingGrip)
+        if ((m.Msg == (int)PInvoke.WM_NCHITTEST) && SizingGrip)
         {
             // if we're within the grip bounds tell windows
             // that we're the bottom right of the window.
@@ -637,7 +637,7 @@ public partial class StatusStrip : ToolStrip
 
         protected override void WndProc(ref Message m)
         {
-            if (m.MsgInternal == User32.WM.NCHITTEST)
+            if (m.MsgInternal == PInvoke.WM_NCHITTEST)
             {
                 if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                 {

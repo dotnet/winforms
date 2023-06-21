@@ -1447,9 +1447,9 @@ public partial class Label : Control, IAutomationLiveRegion
 
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.NCHITTEST:
+            case PInvoke.WM_NCHITTEST:
                 // Label returns HT_TRANSPARENT for everything, so all messages get routed to the parent.  Change
                 // this so we can tell what's going on.
 

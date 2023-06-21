@@ -533,7 +533,7 @@ public static partial class ToolStripManager
             {
                 return true;
             }
-            else if (m.Msg >= (int)User32.WM.NCLBUTTONDOWN && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
+            else if (m.Msg >= (int)PInvoke.WM_NCLBUTTONDOWN && m.Msg <= (int)PInvoke.WM_NCMBUTTONDBLCLK)
             {
                 return true;
             }
@@ -609,10 +609,10 @@ public static partial class ToolStripManager
 
             using (DpiHelper.EnterDpiAwarenessScope(context))
             {
-                switch ((User32.WM)m.Msg)
+                switch (m.MsgInternal)
                 {
-                    case User32.WM.MOUSEMOVE:
-                    case User32.WM.NCMOUSEMOVE:
+                    case PInvoke.WM_MOUSEMOVE:
+                    case PInvoke.WM_NCMOUSEMOVE:
                         // Mouse move messages should be eaten if they aren't for a dropdown.
                         // this prevents things like ToolTips and mouse over highlights from
                         // being processed.
@@ -651,29 +651,29 @@ public static partial class ToolStripManager
                         }
 
                         break;
-                    case User32.WM.LBUTTONDOWN:
-                    case User32.WM.RBUTTONDOWN:
-                    case User32.WM.MBUTTONDOWN:
+                    case PInvoke.WM_LBUTTONDOWN:
+                    case PInvoke.WM_RBUTTONDOWN:
+                    case PInvoke.WM_MBUTTONDOWN:
                         // When a mouse button is pressed, we should determine if it is within the client coordinates
                         // of the active dropdown. If not, we should dismiss it.
                         ProcessMouseButtonPressed(m.HWND, PARAM.ToPoint(m.LParamInternal));
                         break;
-                    case User32.WM.NCLBUTTONDOWN:
-                    case User32.WM.NCRBUTTONDOWN:
-                    case User32.WM.NCMBUTTONDOWN:
+                    case PInvoke.WM_NCLBUTTONDOWN:
+                    case PInvoke.WM_NCRBUTTONDOWN:
+                    case PInvoke.WM_NCMBUTTONDOWN:
                         // When a mouse button is pressed, we should determine if it is within the client coordinates
                         // of the active dropdown. If not, we should dismiss it.
                         ProcessMouseButtonPressed((HWND)default, PARAM.ToPoint(m.LParamInternal));
                         break;
 
-                    case User32.WM.KEYDOWN:
-                    case User32.WM.KEYUP:
-                    case User32.WM.CHAR:
-                    case User32.WM.DEADCHAR:
-                    case User32.WM.SYSKEYDOWN:
-                    case User32.WM.SYSKEYUP:
-                    case User32.WM.SYSCHAR:
-                    case User32.WM.SYSDEADCHAR:
+                    case PInvoke.WM_KEYDOWN:
+                    case PInvoke.WM_KEYUP:
+                    case PInvoke.WM_CHAR:
+                    case PInvoke.WM_DEADCHAR:
+                    case PInvoke.WM_SYSKEYDOWN:
+                    case PInvoke.WM_SYSKEYUP:
+                    case PInvoke.WM_SYSCHAR:
+                    case PInvoke.WM_SYSDEADCHAR:
 
                         if (!activeToolStrip.ContainsFocus)
                         {

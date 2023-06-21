@@ -118,7 +118,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     {
                         PInvoke.SendMessageTimeout(
                             handle,
-                            (uint)User32.RegisteredMessage.WM_UIUNSUBCLASS,
+                            (uint)RegisteredMessage.WM_UIUNSUBCLASS,
                             default,
                             default,
                             SEND_MESSAGE_TIMEOUT_FLAGS.SMTO_ABORTIFHUNG,
@@ -138,7 +138,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         if (!handle.IsNull && ownedHandle)
         {
             // If we owned the handle, post a WM_CLOSE to get rid of it.
-            PInvoke.PostMessage(handle, User32.WM.CLOSE);
+            PInvoke.PostMessage(handle, PInvoke.WM_CLOSE);
         }
     }
 
@@ -359,7 +359,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     ///  in a Message object and invokes the wndProc() method. A WM_NCDESTROY
     ///  message automatically causes the releaseHandle() method to be called.
     /// </summary>
-    private LRESULT Callback(HWND hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam)
+    private LRESULT Callback(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
     {
         // Note: if you change this code be sure to change the
         // corresponding code in DebuggableCallback below!
@@ -388,12 +388,12 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         }
         finally
         {
-            if (msg == User32.WM.NCDESTROY)
+            if (msg == PInvoke.WM_NCDESTROY)
             {
                 ReleaseHandle(handleValid: false);
             }
 
-            if (msg == User32.RegisteredMessage.WM_UIUNSUBCLASS)
+            if (msg == RegisteredMessage.WM_UIUNSUBCLASS)
             {
                 ReleaseHandle(handleValid: true);
             }
@@ -555,7 +555,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     UnSubclass();
 
                     // Now post a close and let it do whatever it needs to do on its own.
-                    PInvoke.PostMessage(this, User32.WM.CLOSE);
+                    PInvoke.PostMessage(this, PInvoke.WM_CLOSE);
                 }
 
                 HWND = HWND.Null;
@@ -641,7 +641,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     {
                         PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
                         PInvoke.SetClassLong(handle, GET_CLASS_LONG_INDEX.GCL_WNDPROC, DefaultWindowProc);
-                        PInvoke.PostMessage(handle, User32.WM.CLOSE);
+                        PInvoke.PostMessage(handle, PInvoke.WM_CLOSE);
 
                         // Fish out the Window object, if it is valid, and NULL the handle pointer.  This
                         // way the rest of WinForms won't think the handle is still valid here.
@@ -927,12 +927,12 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.DPICHANGED_BEFOREPARENT:
+            case PInvoke.WM_DPICHANGED_BEFOREPARENT:
                 WmDpiChangedBeforeParent(ref m);
                 m.ResultInternal = (LRESULT)0;
                 break;
 
-            case User32.WM.DPICHANGED_AFTERPARENT:
+            case PInvoke.WM_DPICHANGED_AFTERPARENT:
                 WmDpiChangedAfterParent(ref m);
                 m.ResultInternal = (LRESULT)0;
                 break;

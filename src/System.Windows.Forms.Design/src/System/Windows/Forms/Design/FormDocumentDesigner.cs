@@ -10,7 +10,6 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -395,7 +394,7 @@ internal class FormDocumentDesigner : DocumentDesigner
         // Paint the form's title bar UI-active
         if (Control is { } control && control.IsHandleCreated)
         {
-            PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)true);
+            PInvoke.SendMessage(control, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)true);
             PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }
@@ -407,7 +406,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     {
         if (Control is { } control && control.IsHandleCreated)
         {
-            PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)false);
+            PInvoke.SendMessage(control, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)false);
             PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }

@@ -271,7 +271,7 @@ public partial class Control
                 if (s_logPixels.IsEmpty)
                 {
                     s_logPixels = default;
-                    using var dc = User32.GetDcScope.ScreenDC;
+                    using var dc = GetDcScope.ScreenDC;
                     s_logPixels.X = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
                     s_logPixels.Y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                 }
@@ -374,13 +374,13 @@ public partial class Control
                     }
 #endif
 
-                    if (lpmsg->message == (uint)User32.WM.KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
+                    if (lpmsg->message == PInvoke.WM_KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
                     {
                         target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
                     }
                     else
                     {
-                        PInvoke.SendMessage(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
+                        PInvoke.SendMessage(target, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                     }
 
                     break;
@@ -478,7 +478,7 @@ public partial class Control
                 nint flags = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT;
                 if (hdcType != OBJ_TYPE.OBJ_ENHMETADC)
                 {
-                    PInvoke.SendMessage(_control, User32.WM.PRINT, (WPARAM)hdcDraw, (LPARAM)flags);
+                    PInvoke.SendMessage(_control, PInvoke.WM_PRINT, (WPARAM)hdcDraw, (LPARAM)flags);
                 }
                 else
                 {
@@ -1972,12 +1972,12 @@ public partial class Control
 #endif // DEBUG
 
             bool needPreProcess = false;
-            switch ((User32.WM)lpmsg->message)
+            switch (lpmsg->message)
             {
-                case User32.WM.KEYDOWN:
-                case User32.WM.SYSKEYDOWN:
-                case User32.WM.CHAR:
-                case User32.WM.SYSCHAR:
+                case PInvoke.WM_KEYDOWN:
+                case PInvoke.WM_SYSKEYDOWN:
+                case PInvoke.WM_CHAR:
+                case PInvoke.WM_SYSCHAR:
                     needPreProcess = true;
                     break;
             }
@@ -2244,7 +2244,7 @@ public partial class Control
                     return;
                 }
 
-                if (m.Msg is >= ((int)User32.WM.NCLBUTTONDOWN) and <= ((int)User32.WM.NCMBUTTONDBLCLK))
+                if (m.Msg is >= ((int)PInvoke.WM_NCLBUTTONDOWN) and <= ((int)PInvoke.WM_NCMBUTTONDBLCLK))
                 {
                     return;
                 }

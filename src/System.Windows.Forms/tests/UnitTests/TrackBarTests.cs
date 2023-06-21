@@ -779,7 +779,7 @@ public class TrackBarTests
             Maximum = 11
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(11, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
     }
 
     [WinFormsFact]
@@ -790,7 +790,7 @@ public class TrackBarTests
             Minimum = 11
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(11, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
     }
 
     [WinFormsTheory]
@@ -809,7 +809,7 @@ public class TrackBarTests
             RightToLeftLayout = rightToLeftLayout
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(expected, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
     }
 
     [WinFormsFact]
@@ -821,7 +821,7 @@ public class TrackBarTests
             Value = 5
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(5, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
     }
 
     [WinFormsFact]
@@ -832,7 +832,7 @@ public class TrackBarTests
             LargeChange = 11
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPAGESIZE));
+        Assert.Equal(11, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPAGESIZE));
     }
 
     [WinFormsFact]
@@ -843,7 +843,7 @@ public class TrackBarTests
             SmallChange = 11
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETLINESIZE));
+        Assert.Equal(11, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETLINESIZE));
     }
 
     public static IEnumerable<object[]> Handle_GetSize_TestData()
@@ -1012,7 +1012,7 @@ public class TrackBarTests
 
         control.LargeChange = value;
         Assert.Equal(value, control.LargeChange);
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPAGESIZE));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPAGESIZE));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1021,7 +1021,7 @@ public class TrackBarTests
         // Set same.
         control.LargeChange = value;
         Assert.Equal(value, control.LargeChange);
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPAGESIZE));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPAGESIZE));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1086,9 +1086,9 @@ public class TrackBarTests
         Assert.Equal(0, control.Value);
         Assert.Equal(5, control.LargeChange);
         Assert.Equal(1, control.SmallChange);
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1101,9 +1101,9 @@ public class TrackBarTests
         Assert.Equal(0, control.Value);
         Assert.Equal(5, control.LargeChange);
         Assert.Equal(1, control.SmallChange);
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1149,9 +1149,9 @@ public class TrackBarTests
         Assert.Equal(5, control.Value);
         Assert.Equal(5, control.LargeChange);
         Assert.Equal(1, control.SmallChange);
-        Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
-        Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
-        Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(5, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(5, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(5, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1225,9 +1225,9 @@ public class TrackBarTests
         Assert.Equal(5, control.Value);
         Assert.Equal(5, control.LargeChange);
         Assert.Equal(1, control.SmallChange);
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
-        Assert.Equal(10, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
-        Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(10, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(5, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1239,9 +1239,9 @@ public class TrackBarTests
         Assert.Equal(value, control.Minimum);
         Assert.Equal(5, control.Value);
         Assert.Equal(5, control.LargeChange);
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
-        Assert.Equal(10, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
-        Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(10, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(5, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1287,9 +1287,9 @@ public class TrackBarTests
         Assert.Equal(12, control.Value);
         Assert.Equal(5, control.LargeChange);
         Assert.Equal(1, control.SmallChange);
-        Assert.Equal(12, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
-        Assert.Equal(12, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
-        Assert.Equal(12, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(12, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(12, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(12, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1746,7 +1746,7 @@ public class TrackBarTests
 
         control.SmallChange = value;
         Assert.Equal(value, control.SmallChange);
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETLINESIZE));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETLINESIZE));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1755,7 +1755,7 @@ public class TrackBarTests
         // Set same.
         control.SmallChange = value;
         Assert.Equal(value, control.SmallChange);
-        Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETLINESIZE));
+        Assert.Equal(value, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETLINESIZE));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -2131,7 +2131,7 @@ public class TrackBarTests
         Assert.Equal(value, control.Value);
         Assert.Equal(5, control.LargeChange);
         Assert.Equal(1, control.SmallChange);
-        Assert.Equal(expectedPos, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(expectedPos, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -2144,7 +2144,7 @@ public class TrackBarTests
         Assert.Equal(value, control.Value);
         Assert.Equal(5, control.LargeChange);
         Assert.Equal(1, control.SmallChange);
-        Assert.Equal(expectedPos, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(expectedPos, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3098,9 +3098,9 @@ public class TrackBarTests
         Assert.Equal(expectedMinimum, control.Minimum);
         Assert.Equal(expectedMaximum, control.Maximum);
         Assert.Equal(expectedValue, control.Value);
-        Assert.Equal(expectedMinimum, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMIN));
-        Assert.Equal(expectedMaximum, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETRANGEMAX));
-        Assert.Equal(expectedValue, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TBM_GETPOS));
+        Assert.Equal(expectedMinimum, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMIN));
+        Assert.Equal(expectedMaximum, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETRANGEMAX));
+        Assert.Equal(expectedValue, (int)PInvoke.SendMessage(control, PInvoke.TBM_GETPOS));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -3135,7 +3135,7 @@ public class TrackBarTests
         };
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -3149,31 +3149,31 @@ public class TrackBarTests
 
     public static IEnumerable<object[]> WndProc_Scroll_TestData()
     {
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, IntPtr.Zero };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, IntPtr.Zero };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
 
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, IntPtr.Zero };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
-        yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, IntPtr.Zero };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
+        yield return new object[] { MessageId.WM_REFLECT | PInvoke.WM_VSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
     }
 
     [WinFormsTheory]

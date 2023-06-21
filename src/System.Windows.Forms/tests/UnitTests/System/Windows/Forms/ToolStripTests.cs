@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using Windows.Win32.System.Ole;
@@ -7108,7 +7107,7 @@ public partial class ToolStripTests
         using var control = new SubToolStrip();
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEACTIVATE,
+            Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -7130,7 +7129,7 @@ public partial class ToolStripTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEACTIVATE,
+            Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -7162,7 +7161,7 @@ public partial class ToolStripTests
         };
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);

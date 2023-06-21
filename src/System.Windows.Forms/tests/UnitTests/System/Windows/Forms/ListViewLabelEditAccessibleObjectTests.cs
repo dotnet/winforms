@@ -166,7 +166,7 @@ public class ListViewLabelEditAccessibleObjectTests
 
         PInvoke.SetFocus(listView);
 
-        PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_EDITLABELW, wParam: 0);
+        PInvoke.SendMessage(listView, PInvoke.LVM_EDITLABELW, wParam: 0);
 
         return listView;
     }
@@ -178,7 +178,7 @@ public class ListViewLabelEditAccessibleObjectTests
             if (disposing)
             {
                 // End the label edit because ListView cannot be correctly disposed with an active label edit when AccessibilityObject is created for the ListView
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.LVM_CANCELEDITLABEL);
+                PInvoke.SendMessage(this, PInvoke.LVM_CANCELEDITLABEL);
             }
 
             base.Dispose(disposing);

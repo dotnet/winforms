@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.ComponentModel.Design;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -20,7 +19,7 @@ internal partial class PbrsForward : IWindowTarget
     private Message lastKeyDown;
     private List<BufferedKey> bufferedChars;
 
-    private const int WM_PRIVATE_POSTCHAR = (int)User32.WM.USER + 0x1598;
+    private const int WM_PRIVATE_POSTCHAR = (int)PInvoke.WM_USER + 0x1598;
     private bool postCharMessage;
 
     private IMenuCommandService menuCommandSvc;
@@ -74,8 +73,8 @@ internal partial class PbrsForward : IWindowTarget
         // Here lets query for the ISupportInSituService.
         // If we find the service then ask if it has a designer which is interested
         // in getting the keychars by querying the IgnoreMessages.
-        if ((m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
-           || (m.Msg >= (int)User32.WM.IME_STARTCOMPOSITION && m.Msg <= (int)User32.WM.IME_COMPOSITION))
+        if ((m.Msg >= (int)PInvoke.WM_KEYFIRST && m.Msg <= (int)PInvoke.WM_KEYLAST)
+           || (m.Msg >= (int)PInvoke.WM_IME_STARTCOMPOSITION && m.Msg <= (int)PInvoke.WM_IME_COMPOSITION))
         {
             if (InSituSupportService is not null)
             {
@@ -102,17 +101,17 @@ internal partial class PbrsForward : IWindowTarget
                 {
                     foreach (BufferedKey bk in bufferedChars)
                     {
-                        if (bk.KeyChar.MsgInternal == User32.WM.CHAR)
+                        if (bk.KeyChar.MsgInternal == PInvoke.WM_CHAR)
                         {
                             if (bk.KeyDown.MsgInternal != 0)
                             {
-                                PInvoke.SendMessage(hwnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
+                                PInvoke.SendMessage(hwnd, PInvoke.WM_KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
                             }
 
-                            PInvoke.SendMessage(hwnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                            PInvoke.SendMessage(hwnd, PInvoke.WM_CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                             if (bk.KeyUp.MsgInternal != 0)
                             {
-                                PInvoke.SendMessage(hwnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
+                                PInvoke.SendMessage(hwnd, PInvoke.WM_KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
                             }
                         }
                         else
@@ -125,18 +124,18 @@ internal partial class PbrsForward : IWindowTarget
                 bufferedChars.Clear();
                 return;
 
-            case (int)User32.WM.KEYDOWN:
+            case (int)PInvoke.WM_KEYDOWN:
                 lastKeyDown = m;
                 break;
 
-            case (int)User32.WM.IME_ENDCOMPOSITION:
-            case (int)User32.WM.KEYUP:
+            case (int)PInvoke.WM_IME_ENDCOMPOSITION:
+            case (int)PInvoke.WM_KEYUP:
                 lastKeyDown.Msg = 0;
                 break;
 
-            case (int)User32.WM.CHAR:
-            case (int)User32.WM.IME_STARTCOMPOSITION:
-            case (int)User32.WM.IME_COMPOSITION:
+            case (int)PInvoke.WM_CHAR:
+            case (int)PInvoke.WM_IME_STARTCOMPOSITION:
+            case (int)PInvoke.WM_IME_COMPOSITION:
                 if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                 {
                     break;
@@ -152,7 +151,7 @@ internal partial class PbrsForward : IWindowTarget
                     postCharMessage = true;
                     MenuCommandService.GlobalInvoke(StandardCommands.PropertiesWindow);
                 }
-                else if (ignoreMessages && m.Msg != (int)User32.WM.IME_COMPOSITION)
+                else if (ignoreMessages && m.Msg != (int)PInvoke.WM_IME_COMPOSITION)
                 {
                     if (InSituSupportService is not null)
                     {
@@ -169,7 +168,7 @@ internal partial class PbrsForward : IWindowTarget
 
                 break;
 
-            case (int)User32.WM.KILLFOCUS:
+            case (int)PInvoke.WM_KILLFOCUS:
                 if (postCharMessage)
                 {
                     // Now that we've actually lost focus, post this message to the queue. This allows any activity
@@ -180,7 +179,7 @@ internal partial class PbrsForward : IWindowTarget
                     //
                     // We can't use the wParam here because it may not be the actual window that needs to pick up
                     // the strokes.
-                    PInvoke.PostMessage(target, (User32.WM)WM_PRIVATE_POSTCHAR);
+                    PInvoke.PostMessage(target, (MessageId)WM_PRIVATE_POSTCHAR);
                     postCharMessage = false;
                 }
 

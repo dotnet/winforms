@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -34,7 +33,7 @@ public abstract partial class TextBoxBase
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETSEL, ref start, ref end);
+            PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETSEL, ref start, ref end);
 
             return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
         }
@@ -143,7 +142,7 @@ public abstract partial class TextBoxBase
 
         public override int FirstVisibleLine
             => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETFIRSTVISIBLELINE)
+                ? (int)PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETFIRSTVISIBLELINE)
                 : -1;
 
         public override bool IsMultiline => _owningTextBoxBase.Multiline;
@@ -168,7 +167,7 @@ public abstract partial class TextBoxBase
 
         public override int LinesCount
             => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETLINECOUNT)
+                ? (int)PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETLINECOUNT)
                 : -1;
 
         public override int LinesPerPage
@@ -225,7 +224,7 @@ public abstract partial class TextBoxBase
 
         public override int GetLineIndex(int line)
             => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_LINEINDEX, (WPARAM)line)
+                ? (int)PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_LINEINDEX, (WPARAM)line)
                 : -1;
 
         public override Point GetPositionFromChar(int charIndex)
@@ -328,7 +327,7 @@ public abstract partial class TextBoxBase
             => _owningTextBoxBase.IsHandleCreated
                 && PInvoke.SendMessage(
                     _owningTextBoxBase,
-                    (WM)PInvoke.EM_LINESCROLL,
+                    PInvoke.EM_LINESCROLL,
                     (WPARAM)charactersHorizontal,
                     (LPARAM)linesVertical) != 0;
 
@@ -351,7 +350,7 @@ public abstract partial class TextBoxBase
                 return;
             }
 
-            PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
+            PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
         }
 
         private RECT GetFormattingRectangle()
@@ -360,7 +359,7 @@ public abstract partial class TextBoxBase
 
             // Send an EM_GETRECT message to find out the bounding rectangle.
             RECT rectangle = default;
-            PInvoke.SendMessage(_owningTextBoxBase, (WM)PInvoke.EM_GETRECT, (WPARAM)0, ref rectangle);
+            PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETRECT, (WPARAM)0, ref rectangle);
             return rectangle;
         }
 

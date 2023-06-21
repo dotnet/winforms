@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -1263,7 +1262,7 @@ public partial class ScrollableControl : Control, IArrangedElement
         {
             PInvoke.SendMessage(
                 this,
-                User32.WM.HSCROLL,
+                PInvoke.WM_HSCROLL,
                 (WPARAM)(RightToLeft == RightToLeft.Yes ? (int)SCROLLBAR_COMMAND.SB_RIGHT : (int)SCROLLBAR_COMMAND.SB_LEFT),
                 0);
         }
@@ -1493,15 +1492,15 @@ public partial class ScrollableControl : Control, IArrangedElement
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.VSCROLL:
+            case PInvoke.WM_VSCROLL:
                 WmVScroll(ref m);
                 break;
-            case User32.WM.HSCROLL:
+            case PInvoke.WM_HSCROLL:
                 WmHScroll(ref m);
                 break;
-            case User32.WM.SETTINGCHANGE:
+            case PInvoke.WM_SETTINGCHANGE:
                 WmSettingChange(ref m);
                 break;
             default:

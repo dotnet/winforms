@@ -8,7 +8,6 @@ using System.Drawing.Imaging;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
 using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests;
@@ -10513,7 +10512,7 @@ public partial class ControlTests
     {
         using var control = new SubControl();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
+        PInvoke.SendMessage(control, PInvoke.WM_UPDATEUISTATE, (WPARAM)wParam);
         Assert.Equal(expected, control.ShowFocusCues);
     }
 
@@ -10572,7 +10571,7 @@ public partial class ControlTests
     {
         using var control = new SubControl();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
+        PInvoke.SendMessage(control, PInvoke.WM_UPDATEUISTATE, (WPARAM)wParam);
         Assert.Equal(expected, control.ShowKeyboardCues);
     }
 

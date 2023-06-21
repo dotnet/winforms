@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -404,7 +403,7 @@ public partial class PrintPreviewControl : Control
             return;
         }
 
-        using User32.GetDcScope hdc = new(HWND);
+        using GetDcScope hdc = new(HWND);
         screendpi = new Point(
             PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
             PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
@@ -944,13 +943,13 @@ public partial class PrintPreviewControl : Control
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.VSCROLL:
+            case PInvoke.WM_VSCROLL:
                 WmVScroll(ref m);
                 break;
-            case User32.WM.HSCROLL:
+            case PInvoke.WM_HSCROLL:
                 WmHScroll(ref m);
                 break;
-            case User32.WM.KEYDOWN:
+            case PInvoke.WM_KEYDOWN:
                 WmKeyDown(ref m);
                 break;
             default:

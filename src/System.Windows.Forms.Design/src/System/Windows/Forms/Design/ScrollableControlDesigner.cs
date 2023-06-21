@@ -34,7 +34,7 @@ public class ScrollableControlDesigner : ParentControlDesigner
         ScrollableControl f = (ScrollableControl)Control;
         if (f.IsHandleCreated && f.AutoScroll)
         {
-            int hitTest = (int)PInvoke.SendMessage(f, User32.WM.NCHITTEST, 0, PARAM.FromLowHigh(pt.X, pt.Y));
+            int hitTest = (int)PInvoke.SendMessage(f, PInvoke.WM_NCHITTEST, 0, PARAM.FromLowHigh(pt.X, pt.Y));
             if (hitTest == (int)PInvoke.HTVSCROLL || hitTest == (int)PInvoke.HTHSCROLL)
             {
                 return true;
@@ -53,8 +53,8 @@ public class ScrollableControlDesigner : ParentControlDesigner
 
         switch (m.Msg)
         {
-            case (int)User32.WM.HSCROLL:
-            case (int)User32.WM.VSCROLL:
+            case (int)PInvoke.WM_HSCROLL:
+            case (int)PInvoke.WM_VSCROLL:
 
                 // When we scroll, we reposition a control without causing a
                 // property change event.  Therefore, we must tell the

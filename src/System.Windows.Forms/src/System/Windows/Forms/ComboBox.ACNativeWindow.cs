@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.User32;
-
 namespace System.Windows.Forms;
 
 public partial class ComboBox
@@ -71,7 +69,7 @@ public partial class ComboBox
                 s_inWndProcCnt--;
             }
 
-            if (m.Msg == (int)WM.NCDESTROY)
+            if (m.MsgInternal == PInvoke.WM_NCDESTROY)
             {
                 Debug.Assert(s_ACWindows.ContainsKey(HWND));
                 s_ACWindows.Remove(HWND);   //so we do not leak ac windows.

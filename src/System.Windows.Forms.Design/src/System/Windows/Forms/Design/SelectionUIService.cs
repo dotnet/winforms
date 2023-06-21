@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -823,17 +822,17 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// </summary>
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.LBUTTONUP:
-            case User32.WM.RBUTTONUP:
+            case PInvoke.WM_LBUTTONUP:
+            case PInvoke.WM_RBUTTONUP:
                 if (_mouseDragAnchor != s_invalidPoint)
                 {
                     _ignoreCaptureChanged = true;
                 }
 
                 break;
-            case User32.WM.CAPTURECHANGED:
+            case PInvoke.WM_CAPTURECHANGED:
                 if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
                 {
                     EndMouseDrag(MousePosition);

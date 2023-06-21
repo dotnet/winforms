@@ -62,7 +62,7 @@ public partial class TaskDialog : IWin32Window
     ///   that should be unlikely.
     /// </para>
     /// </remarks>
-    private const User32.WM ContinueButtonClickHandlingMessage = User32.WM.APP + 0x3FFF;
+    private const uint ContinueButtonClickHandlingMessage = PInvoke.WM_APP + 0x3FFF;
 
     private TaskDialogPage? _boundPage;
 
@@ -1539,7 +1539,7 @@ public partial class TaskDialog : IWin32Window
 
         PInvoke.SendMessage(
             _handle,
-            (User32.WM)message,
+            (uint)message,
             wParam,
             lParam);
     }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -26,9 +25,9 @@ public partial class WebBrowserBase
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.WINDOWPOSCHANGING:
+                case PInvoke.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
                 default:

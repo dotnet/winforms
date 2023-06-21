@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 public partial class ToolStrip
@@ -26,14 +24,14 @@ public partial class ToolStrip
 
             // if the app has changed activation, restore focus
 
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.LBUTTONDOWN:
-                case User32.WM.RBUTTONDOWN:
-                case User32.WM.MBUTTONDOWN:
-                case User32.WM.NCLBUTTONDOWN:
-                case User32.WM.NCRBUTTONDOWN:
-                case User32.WM.NCMBUTTONDOWN:
+                case PInvoke.WM_LBUTTONDOWN:
+                case PInvoke.WM_RBUTTONDOWN:
+                case PInvoke.WM_MBUTTONDOWN:
+                case PInvoke.WM_NCLBUTTONDOWN:
+                case PInvoke.WM_NCRBUTTONDOWN:
+                case PInvoke.WM_NCMBUTTONDOWN:
                     if (_ownerToolStrip.ContainsFocus)
                     {
                         // If we've clicked on something that's not a child of the toolstrip and we currently have focus, restore it.

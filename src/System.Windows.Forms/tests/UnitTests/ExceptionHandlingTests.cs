@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms.Tests;
 
 public class ExceptionHandlingTests
@@ -15,7 +13,7 @@ public class ExceptionHandlingTests
         control.CreateControl();
         Action action = () =>
         {
-            PInvoke.PostMessage(control, (User32.WM)9876);
+            PInvoke.PostMessage(control, 9876);
             Application.DoEvents();
         };
 

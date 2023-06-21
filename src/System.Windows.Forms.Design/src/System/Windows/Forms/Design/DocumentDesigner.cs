@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -1173,7 +1172,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         Control control = Control;
         if (control is not null && control.IsHandleCreated)
         {
-            PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)false);
+            PInvoke.SendMessage(control, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)false);
             PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }

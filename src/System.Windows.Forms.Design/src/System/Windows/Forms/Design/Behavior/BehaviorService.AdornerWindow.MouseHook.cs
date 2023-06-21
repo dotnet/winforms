@@ -97,7 +97,7 @@ public sealed partial class BehaviorService
 
                     try
                     {
-                        if (ProcessMouseMessage(mhs->hwnd, (User32.WM)(nuint)wparam, mhs->pt.X, mhs->pt.Y))
+                        if (ProcessMouseMessage(mhs->hwnd, (MessageId)(nuint)wparam, mhs->pt.X, mhs->pt.Y))
                         {
                             return (LRESULT)1;
                         }
@@ -143,7 +143,7 @@ public sealed partial class BehaviorService
                 }
             }
 
-            private bool ProcessMouseMessage(HWND hwnd, User32.WM msg, int x, int y)
+            private bool ProcessMouseMessage(HWND hwnd, MessageId msg, int x, int y)
             {
                 if (_processingMessage)
                 {
@@ -181,11 +181,11 @@ public sealed partial class BehaviorService
                             Message m = Message.Create(hwnd, msg, 0u, PARAM.FromLowHigh(pt.Y, pt.X));
 
                             // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
-                            if (m.Msg == (int)User32.WM.LBUTTONDOWN)
+                            if (m.Msg == (int)PInvoke.WM_LBUTTONDOWN)
                             {
                                 _lastLButtonDownTimeStamp = PInvoke.GetMessageTime();
                             }
-                            else if (m.Msg == (int)User32.WM.LBUTTONDBLCLK)
+                            else if (m.Msg == (int)PInvoke.WM_LBUTTONDBLCLK)
                             {
                                 int lButtonDoubleClickTimeStamp = PInvoke.GetMessageTime();
                                 if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)

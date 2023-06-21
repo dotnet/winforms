@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -2115,9 +2114,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 WmSetFocus(ref m);
                 break;
             default:

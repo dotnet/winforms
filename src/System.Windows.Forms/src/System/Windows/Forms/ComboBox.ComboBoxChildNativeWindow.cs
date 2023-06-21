@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -22,12 +21,12 @@ public partial class ComboBox
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch ((uint)m.MsgInternal)
             {
-                case WM.GETOBJECT:
+                case PInvoke.WM_GETOBJECT:
                     WmGetObject(ref m);
                     return;
-                case WM.MOUSEMOVE:
+                case PInvoke.WM_MOUSEMOVE:
                     if (_childWindowType == ChildWindowType.DropDownList)
                     {
                         // Need to track the selection change via mouse over to
@@ -54,7 +53,7 @@ public partial class ComboBox
                     }
 
                     break;
-                case WM.DESTROY:
+                case PInvoke.WM_DESTROY:
                     AccessibleObject? accessibilityObject = GetChildAccessibleObjectIfCreated();
 
                     if (accessibilityObject is not null)

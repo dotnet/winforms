@@ -7,7 +7,6 @@
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -196,8 +195,8 @@ internal class ListBoxDesigner : ControlDesigner
         ListBox lb = (ListBox)Control;
         if (lb.IsHandleCreated && lb.Items.Count == 0)
         {
-            PInvoke.SendMessage(lb, (User32.WM)PInvoke.LB_RESETCONTENT);
-            PInvoke.SendMessage(lb, (User32.WM)PInvoke.LB_ADDSTRING, 0, name);
+            PInvoke.SendMessage(lb, PInvoke.LB_RESETCONTENT);
+            PInvoke.SendMessage(lb, PInvoke.LB_ADDSTRING, 0, name);
         }
     }
 

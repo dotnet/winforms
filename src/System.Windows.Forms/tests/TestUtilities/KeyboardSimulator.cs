@@ -14,14 +14,14 @@ public static class KeyboardSimulator
     public static void KeyDown(Control control, Keys key)
     {
         (nint keyCode, nint lParam) = GetKeyParameters(key);
-        PInvoke.SendMessage(control, User32.WM.KEYDOWN, (WPARAM)keyCode, lParam);
+        PInvoke.SendMessage(control, PInvoke.WM_KEYDOWN, (WPARAM)keyCode, lParam);
     }
 
     public static void KeyPress(Control control, Keys key)
     {
         (nint keyCode, nint lParam) = GetKeyParameters(key);
-        PInvoke.SendMessage(control, User32.WM.KEYDOWN, (WPARAM)keyCode, lParam);
-        PInvoke.SendMessage(control, User32.WM.KEYUP, (WPARAM)keyCode, lParam);
+        PInvoke.SendMessage(control, PInvoke.WM_KEYDOWN, (WPARAM)keyCode, lParam);
+        PInvoke.SendMessage(control, PInvoke.WM_KEYUP, (WPARAM)keyCode, lParam);
     }
 
     private static (nint keyCode, nint lParam) GetKeyParameters(Keys key)

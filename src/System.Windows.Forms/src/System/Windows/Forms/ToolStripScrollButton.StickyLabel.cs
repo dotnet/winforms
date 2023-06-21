@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 internal partial class ToolStripScrollButton
@@ -40,7 +38,7 @@ internal partial class ToolStripScrollButton
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
+            if (m.Msg >= (int)PInvoke.WM_KEYFIRST && m.Msg <= (int)PInvoke.WM_KEYLAST)
             {
                 DefWndProc(ref m);
                 return;

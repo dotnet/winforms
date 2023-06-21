@@ -307,7 +307,7 @@ public partial class Form : ContainerControl
                 // If this.MdiClient is not null it means this.IsMdiContainer == true.
                 if (_ctlClient is not null && _ctlClient.IsHandleCreated)
                 {
-                    IntPtr hwnd = PInvoke.SendMessage(_ctlClient, User32.WM.MDIGETACTIVE);
+                    IntPtr hwnd = PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDIGETACTIVE);
                     mdiChild = FromHandle(hwnd) as Form;
                 }
             }
@@ -2292,7 +2292,7 @@ public partial class Form : ContainerControl
             //
             if (_formState[FormStateSWCalled] == 0)
             {
-                PInvoke.SendMessage(this, User32.WM.SHOWWINDOW, (WPARAM)(BOOL)value);
+                PInvoke.SendMessage(this, PInvoke.WM_SHOWWINDOW, (WPARAM)(BOOL)value);
             }
         }
         else
@@ -2601,7 +2601,7 @@ public partial class Form : ContainerControl
             {
                 if (MdiParentInternal.MdiClient is not null)
                 {
-                    PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, (WPARAM)HWND);
+                    PInvoke.SendMessage(MdiParentInternal.MdiClient, PInvoke.WM_MDIACTIVATE, (WPARAM)HWND);
                 }
             }
             else
@@ -3055,7 +3055,7 @@ public partial class Form : ContainerControl
         if (IsHandleCreated)
         {
             _closeReason = CloseReason.UserClosing;
-            PInvoke.SendMessage(this, User32.WM.CLOSE);
+            PInvoke.SendMessage(this, PInvoke.WM_CLOSE);
         }
         else
         {
@@ -3219,7 +3219,7 @@ public partial class Form : ContainerControl
                 Icon? icon = Icon;
                 if (icon is not null && !TaskbarOwner.Handle.IsNull)
                 {
-                    PInvoke.SendMessage(TaskbarOwner, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
+                    PInvoke.SendMessage(TaskbarOwner, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
                 }
             }
 
@@ -3592,7 +3592,7 @@ public partial class Form : ContainerControl
         {
             if (MdiParentInternal.MdiClient is not null)
             {
-                PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, this);
+                PInvoke.SendMessage(MdiParentInternal.MdiClient, PInvoke.WM_MDIACTIVATE, this);
             }
 
             return Focused;
@@ -4499,7 +4499,7 @@ public partial class Form : ContainerControl
             retValue = true;
         }
 
-        msg.MsgInternal = (User32.WM)win32Message.message;
+        msg.MsgInternal = (MessageId)win32Message.message;
         msg.WParamInternal = win32Message.wParam;
         msg.LParamInternal = win32Message.lParam;
         msg.HWnd = win32Message.hwnd;
@@ -4919,7 +4919,7 @@ public partial class Form : ContainerControl
             PInvoke.SetActiveWindow(MdiParentInternal);
             if (MdiParentInternal.MdiClient is not null)
             {
-                PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, (WPARAM)HWND);
+                PInvoke.SendMessage(MdiParentInternal.MdiClient, PInvoke.WM_MDIACTIVATE, (WPARAM)HWND);
             }
         }
         else
@@ -5318,7 +5318,7 @@ public partial class Form : ContainerControl
         HWND captureHwnd = PInvoke.GetCapture();
         if (!captureHwnd.IsNull)
         {
-            PInvoke.SendMessage(captureHwnd, User32.WM.CANCELMODE);
+            PInvoke.SendMessage(captureHwnd, PInvoke.WM_CANCELMODE);
             PInvoke.ReleaseCapture();
         }
 
@@ -5684,7 +5684,7 @@ public partial class Form : ContainerControl
                     Properties.SetObject(PropDummyMdiMenu, dummyMenu);
                 }
 
-                PInvoke.SendMessage(_ctlClient, User32.WM.MDISETMENU, (WPARAM)dummyMenu.Value);
+                PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Value);
             }
 
             // (New fix: Only destroy Win32 Menu if using a MenuStrip)
@@ -5953,15 +5953,15 @@ public partial class Form : ContainerControl
 
                 if (_smallIcon is not null)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
                 }
 
-                PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
+                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
             }
             else
             {
-                PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_SMALL);
-                PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG);
+                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL);
+                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG);
             }
 
             if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip is not null)
@@ -6162,7 +6162,7 @@ public partial class Form : ContainerControl
         FormClosingEventArgs e = new FormClosingEventArgs(CloseReason, false);
 
         // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
-        if (m.Msg != (int)User32.WM.ENDSESSION)
+        if (m.Msg != (int)PInvoke.WM_ENDSESSION)
         {
             if (Modal)
             {
@@ -6237,7 +6237,7 @@ public partial class Form : ContainerControl
                 OnFormClosing(e);
             }
 
-            if (m.MsgInternal == User32.WM.QUERYENDSESSION)
+            if (m.MsgInternal == PInvoke.WM_QUERYENDSESSION)
             {
                 m.ResultInternal = (LRESULT)(nint)(BOOL)e.Cancel;
             }
@@ -6259,7 +6259,7 @@ public partial class Form : ContainerControl
 
         // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
         // event on all mdi children and ourselves
-        if (m.Msg != (int)User32.WM.QUERYENDSESSION)
+        if (m.Msg != (int)PInvoke.WM_QUERYENDSESSION)
         {
             FormClosedEventArgs fc;
             if (!e.Cancel)
@@ -6612,24 +6612,24 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.NCACTIVATE:
+            case PInvoke.WM_NCACTIVATE:
                 base.WndProc(ref m);
                 break;
-            case User32.WM.NCLBUTTONDOWN:
-            case User32.WM.NCRBUTTONDOWN:
-            case User32.WM.NCMBUTTONDOWN:
-            case User32.WM.NCXBUTTONDOWN:
+            case PInvoke.WM_NCLBUTTONDOWN:
+            case PInvoke.WM_NCRBUTTONDOWN:
+            case PInvoke.WM_NCMBUTTONDOWN:
+            case PInvoke.WM_NCXBUTTONDOWN:
                 WmNcButtonDown(ref m);
                 break;
-            case User32.WM.ACTIVATE:
+            case PInvoke.WM_ACTIVATE:
                 WmActivate(ref m);
                 break;
-            case User32.WM.MDIACTIVATE:
+            case PInvoke.WM_MDIACTIVATE:
                 WmMdiActivate(ref m);
                 break;
-            case User32.WM.CLOSE:
+            case PInvoke.WM_CLOSE:
                 if (CloseReason == CloseReason.None)
                 {
                     CloseReason = CloseReason.TaskManagerClosing;
@@ -6638,57 +6638,57 @@ public partial class Form : ContainerControl
                 WmClose(ref m);
                 break;
 
-            case User32.WM.QUERYENDSESSION:
-            case User32.WM.ENDSESSION:
+            case PInvoke.WM_QUERYENDSESSION:
+            case PInvoke.WM_ENDSESSION:
                 CloseReason = CloseReason.WindowsShutDown;
                 WmClose(ref m);
                 break;
-            case User32.WM.ENTERSIZEMOVE:
+            case PInvoke.WM_ENTERSIZEMOVE:
                 WmEnterSizeMove();
                 DefWndProc(ref m);
                 break;
-            case User32.WM.EXITSIZEMOVE:
+            case PInvoke.WM_EXITSIZEMOVE:
                 WmExitSizeMove();
                 DefWndProc(ref m);
                 break;
-            case User32.WM.CREATE:
+            case PInvoke.WM_CREATE:
                 WmCreate(ref m);
                 break;
-            case User32.WM.ERASEBKGND:
+            case PInvoke.WM_ERASEBKGND:
                 WmEraseBkgnd(ref m);
                 break;
 
-            case User32.WM.NCDESTROY:
+            case PInvoke.WM_NCDESTROY:
                 WmNCDestroy(ref m);
                 break;
-            case User32.WM.NCHITTEST:
+            case PInvoke.WM_NCHITTEST:
                 WmNCHitTest(ref m);
                 break;
-            case User32.WM.SHOWWINDOW:
+            case PInvoke.WM_SHOWWINDOW:
                 WmShowWindow(ref m);
                 break;
-            case User32.WM.SIZE:
+            case PInvoke.WM_SIZE:
                 WmSize(ref m);
                 break;
-            case User32.WM.SYSCOMMAND:
+            case PInvoke.WM_SYSCOMMAND:
                 WmSysCommand(ref m);
                 break;
-            case User32.WM.GETMINMAXINFO:
+            case PInvoke.WM_GETMINMAXINFO:
                 WmGetMinMaxInfo(ref m);
                 break;
-            case User32.WM.WINDOWPOSCHANGED:
+            case PInvoke.WM_WINDOWPOSCHANGED:
                 WmWindowPosChanged(ref m);
                 break;
-            //case User32.WM.WINDOWPOSCHANGING:
+            //case PInvoke.WM_WINDOWPOSCHANGING:
             //    WmWindowPosChanging(ref m);
             //    break;
-            case User32.WM.ENTERMENULOOP:
+            case PInvoke.WM_ENTERMENULOOP:
                 WmEnterMenuLoop(ref m);
                 break;
-            case User32.WM.EXITMENULOOP:
+            case PInvoke.WM_EXITMENULOOP:
                 WmExitMenuLoop(ref m);
                 break;
-            case User32.WM.CAPTURECHANGED:
+            case PInvoke.WM_CAPTURECHANGED:
                 base.WndProc(ref m);
 
                 // This is a work-around for the Win32 scroll bar; it doesn't release
@@ -6701,10 +6701,10 @@ public partial class Form : ContainerControl
                 }
 
                 break;
-            case User32.WM.GETDPISCALEDSIZE:
+            case PInvoke.WM_GETDPISCALEDSIZE:
                 WmGetDpiScaledSize(ref m);
                 break;
-            case User32.WM.DPICHANGED:
+            case PInvoke.WM_DPICHANGED:
                 WmDpiChanged(ref m);
                 break;
             default:

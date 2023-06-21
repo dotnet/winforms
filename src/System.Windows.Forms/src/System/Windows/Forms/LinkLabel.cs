@@ -299,7 +299,7 @@ public partial class LinkLabel : Label, IButtonControl
                 PInvoke.GetWindowRect(this, out var r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
                 }
             }
         }
@@ -1760,9 +1760,9 @@ public partial class LinkLabel : Label, IButtonControl
 
     protected override void WndProc(ref Message msg)
     {
-        switch ((User32.WM)msg.Msg)
+        switch (msg.MsgInternal)
         {
-            case User32.WM.SETCURSOR:
+            case PInvoke.WM_SETCURSOR:
                 WmSetCursor(ref msg);
                 break;
             default:

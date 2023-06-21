@@ -1709,7 +1709,7 @@ public partial class ControlDesigner : ComponentDesigner
         IMouseHandler mouseHandler = null;
 
         // We look at WM_NCHITTEST to determine if the mouse is in a live region of the control
-        if (m.MsgInternal == User32.WM.NCHITTEST && !_inHitTest)
+        if (m.MsgInternal == PInvoke.WM_NCHITTEST && !_inHitTest)
         {
             _inHitTest = true;
             Point pt = PARAM.ToPoint(m.LParamInternal);
@@ -1730,14 +1730,14 @@ public partial class ControlDesigner : ComponentDesigner
         }
 
         // Check to see if the mouse is in a live region of the control and that the context key is not being fired
-        bool isContextKey = m.MsgInternal == User32.WM.CONTEXTMENU;
+        bool isContextKey = m.MsgInternal == PInvoke.WM_CONTEXTMENU;
         if (_liveRegion && (IsMouseMessage(m.MsgInternal) || isContextKey))
         {
             // The ActiveX DataGrid control brings up a context menu on right mouse down when it is in edit mode.
             // And, when we generate a WM_CONTEXTMENU message later, it calls DefWndProc() which by default calls
             // the parent (formdesigner). The FormDesigner then brings up the AxHost context menu. This code
             // causes recursive WM_CONTEXTMENU messages to be ignored till we return from the live region message.
-            if (m.MsgInternal == User32.WM.CONTEXTMENU)
+            if (m.MsgInternal == PInvoke.WM_CONTEXTMENU)
             {
                 Debug.Assert(!s_inContextMenu, "Recursively hitting live region for context menu!!!");
                 s_inContextMenu = true;
@@ -1749,12 +1749,12 @@ public partial class ControlDesigner : ComponentDesigner
             }
             finally
             {
-                if (m.MsgInternal == User32.WM.CONTEXTMENU)
+                if (m.MsgInternal == PInvoke.WM_CONTEXTMENU)
                 {
                     s_inContextMenu = false;
                 }
 
-                if (m.MsgInternal == User32.WM.LBUTTONUP)
+                if (m.MsgInternal == PInvoke.WM_LBUTTONUP)
                 {
                     // terminate the drag. TabControl loses shortcut menu options after adding ActiveX control.
                     OnMouseDragEnd(true);
@@ -1771,9 +1771,9 @@ public partial class ControlDesigner : ComponentDesigner
         // CONSIDER - I really don't like this one bit. We need a
         //          : centralized handler so we can do a global override for the tab order
         //          : UI, but the designer is a natural fit for an object oriented UI.
-        if ((m.MsgInternal >= User32.WM.MOUSEFIRST && m.MsgInternal <= User32.WM.MOUSELAST)
-            || (m.MsgInternal >= User32.WM.NCMOUSEMOVE && m.MsgInternal <= User32.WM.NCMBUTTONDBLCLK)
-            || m.MsgInternal == User32.WM.SETCURSOR)
+        if ((m.MsgInternal >= PInvoke.WM_MOUSEFIRST && m.MsgInternal <= PInvoke.WM_MOUSELAST)
+            || (m.MsgInternal >= PInvoke.WM_NCMOUSEMOVE && m.MsgInternal <= PInvoke.WM_NCMBUTTONDBLCLK)
+            || m.MsgInternal == PInvoke.WM_SETCURSOR)
         {
             _eventService ??= GetService<IEventHandlerService>();
 
@@ -1783,12 +1783,12 @@ public partial class ControlDesigner : ComponentDesigner
             }
         }
 
-        if (m.MsgInternal >= User32.WM.MOUSEFIRST && m.MsgInternal <= User32.WM.MOUSELAST)
+        if (m.MsgInternal >= PInvoke.WM_MOUSEFIRST && m.MsgInternal <= PInvoke.WM_MOUSELAST)
         {
             location = PARAM.ToPoint(m.LParamInternal);
             PInvoke.MapWindowPoints(m, (HWND)default, ref location);
         }
-        else if (m.MsgInternal >= User32.WM.NCMOUSEMOVE && m.MsgInternal <= User32.WM.NCMBUTTONDBLCLK)
+        else if (m.MsgInternal >= PInvoke.WM_NCMOUSEMOVE && m.MsgInternal <= PInvoke.WM_NCMBUTTONDBLCLK)
         {
             location = PARAM.ToPoint(m.LParamInternal);
         }
@@ -1798,7 +1798,7 @@ public partial class ControlDesigner : ComponentDesigner
         MouseButtons button = MouseButtons.None;
         switch (m.MsgInternal)
         {
-            case User32.WM.CREATE:
+            case PInvoke.WM_CREATE:
                 DefWndProc(ref m);
 
                 // Only call OnCreateHandle if this is our OWN window handle -- the designer window procs are
@@ -1810,7 +1810,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                 break;
 
-            case User32.WM.GETOBJECT:
+            case PInvoke.WM_GETOBJECT:
                 if (m.LParamInternal == (int)OBJECT_IDENTIFIER.OBJID_CLIENT)
                 {
                     m.ResultInternal = AccessibilityObject?.GetLRESULT(m.WParamInternal) ?? default;
@@ -1823,18 +1823,18 @@ public partial class ControlDesigner : ComponentDesigner
 
                 break;
 
-            case User32.WM.MBUTTONDOWN:
-            case User32.WM.MBUTTONUP:
-            case User32.WM.MBUTTONDBLCLK:
-            case User32.WM.NCMOUSEHOVER:
-            case User32.WM.NCMOUSELEAVE:
-            case User32.WM.MOUSEWHEEL:
-            case User32.WM.NCMBUTTONDOWN:
-            case User32.WM.NCMBUTTONUP:
-            case User32.WM.NCMBUTTONDBLCLK:
+            case PInvoke.WM_MBUTTONDOWN:
+            case PInvoke.WM_MBUTTONUP:
+            case PInvoke.WM_MBUTTONDBLCLK:
+            case PInvoke.WM_NCMOUSEHOVER:
+            case PInvoke.WM_NCMOUSELEAVE:
+            case PInvoke.WM_MOUSEWHEEL:
+            case PInvoke.WM_NCMBUTTONDOWN:
+            case PInvoke.WM_NCMBUTTONUP:
+            case PInvoke.WM_NCMBUTTONDBLCLK:
                 // We intentionally eat these messages.
                 break;
-            case User32.WM.MOUSEHOVER:
+            case PInvoke.WM_MOUSEHOVER:
                 if (mouseHandler is not null)
                 {
                     mouseHandler.OnMouseHover(Component);
@@ -1845,15 +1845,15 @@ public partial class ControlDesigner : ComponentDesigner
                 }
 
                 break;
-            case User32.WM.MOUSELEAVE:
+            case PInvoke.WM_MOUSELEAVE:
                 OnMouseLeave();
                 BaseWndProc(ref m);
                 break;
-            case User32.WM.NCLBUTTONDBLCLK:
-            case User32.WM.LBUTTONDBLCLK:
-            case User32.WM.NCRBUTTONDBLCLK:
-            case User32.WM.RBUTTONDBLCLK:
-                if (m.MsgInternal == User32.WM.NCRBUTTONDBLCLK || m.MsgInternal == User32.WM.RBUTTONDBLCLK)
+            case PInvoke.WM_NCLBUTTONDBLCLK:
+            case PInvoke.WM_LBUTTONDBLCLK:
+            case PInvoke.WM_NCRBUTTONDBLCLK:
+            case PInvoke.WM_RBUTTONDBLCLK:
+                if (m.MsgInternal == PInvoke.WM_NCRBUTTONDBLCLK || m.MsgInternal == PInvoke.WM_RBUTTONDBLCLK)
                 {
                     button = MouseButtons.Right;
                 }
@@ -1877,11 +1877,11 @@ public partial class ControlDesigner : ComponentDesigner
                 }
 
                 break;
-            case User32.WM.NCLBUTTONDOWN:
-            case User32.WM.LBUTTONDOWN:
-            case User32.WM.NCRBUTTONDOWN:
-            case User32.WM.RBUTTONDOWN:
-                if (m.MsgInternal == User32.WM.NCRBUTTONDOWN || m.MsgInternal == User32.WM.RBUTTONDOWN)
+            case PInvoke.WM_NCLBUTTONDOWN:
+            case PInvoke.WM_LBUTTONDOWN:
+            case PInvoke.WM_NCRBUTTONDOWN:
+            case PInvoke.WM_RBUTTONDOWN:
+                if (m.MsgInternal == PInvoke.WM_NCRBUTTONDOWN || m.MsgInternal == PInvoke.WM_RBUTTONDOWN)
                 {
                     button = MouseButtons.Right;
                 }
@@ -1892,7 +1892,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                 // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS
                 // and do the right thing.
-                PInvoke.SendMessage(Control, User32.WM.SETFOCUS);
+                PInvoke.SendMessage(Control, PInvoke.WM_SETFOCUS);
 
                 // We simulate doubleclick for things that don't...
                 if (button == MouseButtons.Left && IsDoubleClick(location.X, location.Y))
@@ -1955,8 +1955,8 @@ public partial class ControlDesigner : ComponentDesigner
 
                 break;
 
-            case User32.WM.NCMOUSEMOVE:
-            case User32.WM.MOUSEMOVE:
+            case PInvoke.WM_NCMOUSEMOVE:
+            case PInvoke.WM_MOUSEMOVE:
                 if (((MODIFIERKEYS_FLAGS)(nint)m.WParamInternal).HasFlag(MODIFIERKEYS_FLAGS.MK_LBUTTON))
                 {
                     button = MouseButtons.Left;
@@ -1998,18 +1998,18 @@ public partial class ControlDesigner : ComponentDesigner
 
                 // We eat WM_NCMOUSEMOVE messages, since we don't want the non-client area/ of design time
                 // controls to repaint on mouse move.
-                if (m.MsgInternal == User32.WM.MOUSEMOVE)
+                if (m.MsgInternal == PInvoke.WM_MOUSEMOVE)
                 {
                     BaseWndProc(ref m);
                 }
 
                 break;
-            case User32.WM.NCLBUTTONUP:
-            case User32.WM.LBUTTONUP:
-            case User32.WM.NCRBUTTONUP:
-            case User32.WM.RBUTTONUP:
+            case PInvoke.WM_NCLBUTTONUP:
+            case PInvoke.WM_LBUTTONUP:
+            case PInvoke.WM_NCRBUTTONUP:
+            case PInvoke.WM_RBUTTONUP:
                 // This is implemented on the base designer for UI activation support.
-                button = m.MsgInternal == User32.WM.NCRBUTTONUP || m.MsgInternal == User32.WM.RBUTTONUP
+                button = m.MsgInternal == PInvoke.WM_NCRBUTTONUP || m.MsgInternal == PInvoke.WM_RBUTTONUP
                     ? MouseButtons.Right
                     : MouseButtons.Left;
 
@@ -2041,7 +2041,7 @@ public partial class ControlDesigner : ComponentDesigner
                 _toolPassThrough = false;
                 BaseWndProc(ref m);
                 break;
-            case User32.WM.PRINTCLIENT:
+            case PInvoke.WM_PRINTCLIENT:
                 {
                     using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
                     using PaintEventArgs e = new PaintEventArgs(g, Control.ClientRectangle);
@@ -2050,7 +2050,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
 
                 break;
-            case User32.WM.PAINT:
+            case PInvoke.WM_PAINT:
                 {
 #if FEATURE_OLEDRAGDROPHANDLER
                     if (OleDragDropHandler.FreezePainting)
@@ -2115,9 +2115,9 @@ public partial class ControlDesigner : ComponentDesigner
                     break;
                 }
 
-            case User32.WM.NCPAINT:
-            case User32.WM.NCACTIVATE:
-                if (m.Msg == (int)User32.WM.NCACTIVATE)
+            case PInvoke.WM_NCPAINT:
+            case PInvoke.WM_NCACTIVATE:
+                if (m.Msg == (int)PInvoke.WM_NCACTIVATE)
                 {
                     DefWndProc(ref m);
                 }
@@ -2146,7 +2146,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                 break;
 
-            case User32.WM.SETCURSOR:
+            case PInvoke.WM_SETCURSOR:
                 // We always handle setting the cursor ourselves.
 
                 if (_liveRegion)
@@ -2165,7 +2165,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
 
                 break;
-            case User32.WM.SIZE:
+            case PInvoke.WM_SIZE:
                 if (_thrownException is not null)
                 {
                     Control.Invalidate();
@@ -2173,13 +2173,13 @@ public partial class ControlDesigner : ComponentDesigner
 
                 DefWndProc(ref m);
                 break;
-            case User32.WM.CANCELMODE:
+            case PInvoke.WM_CANCELMODE:
                 // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel any
                 // pending drag operation!
                 OnMouseDragEnd(true);
                 DefWndProc(ref m);
                 break;
-            case User32.WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 // We eat the focus unless the target is a ToolStrip edit node (TransparentToolStrip). If we eat
                 // the focus in that case, the Windows Narrator won't follow navigation via the keyboard.
                 // NB:  "ToolStrip" is a bit of a misnomer here, because the ToolStripTemplateNode is also used
@@ -2202,7 +2202,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
 
                 break;
-            case User32.WM.CONTEXTMENU:
+            case PInvoke.WM_CONTEXTMENU:
                 if (s_inContextMenu)
                 {
                     break;
@@ -2228,12 +2228,12 @@ public partial class ControlDesigner : ComponentDesigner
 
                 break;
             default:
-                if (m.MsgInternal == User32.RegisteredMessage.WM_MOUSEENTER)
+                if (m.MsgInternal == RegisteredMessage.WM_MOUSEENTER)
                 {
                     OnMouseEnter();
                     BaseWndProc(ref m);
                 }
-                else if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
+                else if (m.MsgInternal < PInvoke.WM_KEYFIRST || m.MsgInternal > PInvoke.WM_KEYLAST)
                 {
                     // We eat all key handling to the control.  Controls generally should not be getting focus
                     // anyway, so this shouldn't happen. However, we want to prevent this as much as possible.
@@ -2322,9 +2322,9 @@ public partial class ControlDesigner : ComponentDesigner
 
     private IOverlayService OverlayService => _overlayService ??= GetService<IOverlayService>();
 
-    private static bool IsMouseMessage(User32.WM msg)
+    private static bool IsMouseMessage(MessageId msg)
     {
-        if (msg >= User32.WM.MOUSEFIRST && msg <= User32.WM.MOUSELAST)
+        if (msg >= PInvoke.WM_MOUSEFIRST && msg <= PInvoke.WM_MOUSELAST)
         {
             return true;
         }
@@ -2332,24 +2332,24 @@ public partial class ControlDesigner : ComponentDesigner
         switch (msg)
         {
             // WM messages not covered by the above block
-            case User32.WM.MOUSEHOVER:
-            case User32.WM.MOUSELEAVE:
+            case PInvoke.WM_MOUSEHOVER:
+            case PInvoke.WM_MOUSELEAVE:
             // WM_NC messages
-            case User32.WM.NCMOUSEMOVE:
-            case User32.WM.NCLBUTTONDOWN:
-            case User32.WM.NCLBUTTONUP:
-            case User32.WM.NCLBUTTONDBLCLK:
-            case User32.WM.NCRBUTTONDOWN:
-            case User32.WM.NCRBUTTONUP:
-            case User32.WM.NCRBUTTONDBLCLK:
-            case User32.WM.NCMBUTTONDOWN:
-            case User32.WM.NCMBUTTONUP:
-            case User32.WM.NCMBUTTONDBLCLK:
-            case User32.WM.NCMOUSEHOVER:
-            case User32.WM.NCMOUSELEAVE:
-            case User32.WM.NCXBUTTONDOWN:
-            case User32.WM.NCXBUTTONUP:
-            case User32.WM.NCXBUTTONDBLCLK:
+            case PInvoke.WM_NCMOUSEMOVE:
+            case PInvoke.WM_NCLBUTTONDOWN:
+            case PInvoke.WM_NCLBUTTONUP:
+            case PInvoke.WM_NCLBUTTONDBLCLK:
+            case PInvoke.WM_NCRBUTTONDOWN:
+            case PInvoke.WM_NCRBUTTONUP:
+            case PInvoke.WM_NCRBUTTONDBLCLK:
+            case PInvoke.WM_NCMBUTTONDOWN:
+            case PInvoke.WM_NCMBUTTONUP:
+            case PInvoke.WM_NCMBUTTONDBLCLK:
+            case PInvoke.WM_NCMOUSEHOVER:
+            case PInvoke.WM_NCMOUSELEAVE:
+            case PInvoke.WM_NCXBUTTONDOWN:
+            case PInvoke.WM_NCXBUTTONUP:
+            case PInvoke.WM_NCXBUTTONDBLCLK:
                 return true;
             default:
                 return false;

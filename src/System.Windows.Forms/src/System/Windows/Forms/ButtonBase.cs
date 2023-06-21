@@ -1221,7 +1221,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 // not paint the button as "un-depressed".
                 if (!OwnerDraw)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.BM_SETSTATE, (WPARAM)(BOOL)true);
+                    PInvoke.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)true);
                 }
 
                 Invalidate(DownChangeRectangle);
@@ -1250,7 +1250,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 SetFlag(FlagMousePressed, false);
                 SetFlag(FlagMouseDown, false);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.BM_SETSTATE, (WPARAM)(BOOL)false);
+                PInvoke.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)false);
             }
 
             // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
@@ -1418,7 +1418,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         {
             // We don't respect this because the code below eats BM_SETSTATE.
             // So we just invoke the click.
-            case (User32.WM)PInvoke.BM_CLICK:
+            case PInvoke.BM_CLICK:
                 if (this is IButtonControl control)
                 {
                     control.PerformClick();
@@ -1435,14 +1435,14 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         {
             switch (m.MsgInternal)
             {
-                case (User32.WM)PInvoke.BM_SETSTATE:
+                case PInvoke.BM_SETSTATE:
                     // Ignore BM_SETSTATE - Windows gets confused and paints things,
                     // even though we are ownerdraw.
                     break;
 
-                case User32.WM.KILLFOCUS:
-                case User32.WM.CANCELMODE:
-                case User32.WM.CAPTURECHANGED:
+                case PInvoke.WM_KILLFOCUS:
+                case PInvoke.WM_CANCELMODE:
+                case PInvoke.WM_CAPTURECHANGED:
                     if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                     {
                         SetFlag(FlagMousePressed, false);
@@ -1457,9 +1457,9 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                     base.WndProc(ref m);
                     break;
 
-                case User32.WM.LBUTTONUP:
-                case User32.WM.MBUTTONUP:
-                case User32.WM.RBUTTONUP:
+                case PInvoke.WM_LBUTTONUP:
+                case PInvoke.WM_MBUTTONUP:
+                case PInvoke.WM_RBUTTONUP:
                     try
                     {
                         SetFlag(FlagInButtonUp, true);
@@ -1481,7 +1481,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         {
             switch (m.MsgInternal)
             {
-                case User32.WM.REFLECT_COMMAND:
+                case MessageId.WM_REFLECT_COMMAND:
                     if (m.WParamInternal.HIWORD == PInvoke.BN_CLICKED && !ValidationCancelled)
                     {
                         OnClick(EventArgs.Empty);

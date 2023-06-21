@@ -12,7 +12,6 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms.BinaryFormat;
-using static Interop;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -503,7 +502,7 @@ public unsafe partial class DataObject :
 
         static HBITMAP GetCompatibleBitmap(Bitmap bitmap)
         {
-            using var screenDC = User32.GetDcScope.ScreenDC;
+            using var screenDC = GetDcScope.ScreenDC;
 
             // GDI+ returns a DIBSECTION based HBITMAP. The clipboard only deals well with bitmaps created using
             // CreateCompatibleBitmap(). So, we convert the DIBSECTION into a compatible bitmap.

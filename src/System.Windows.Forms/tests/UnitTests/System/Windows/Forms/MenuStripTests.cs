@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -750,7 +749,7 @@ public class MenuStripTests
         using var control = new SubMenuStrip();
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEACTIVATE,
+            Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -772,7 +771,7 @@ public class MenuStripTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEACTIVATE,
+            Msg = (int)PInvoke.WM_MOUSEACTIVATE,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -804,7 +803,7 @@ public class MenuStripTests
         };
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);

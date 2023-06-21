@@ -185,9 +185,9 @@ public partial class ComponentEditorForm
         {
             base.OnHandleCreated(e);
 
-            int itemHeight = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMHEIGHT);
+            int itemHeight = (int)PInvoke.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT);
             itemHeight += 2 * PADDING_VERT;
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
+            PInvoke.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
 
             if (_hbrushDither.IsNull)
             {
@@ -273,7 +273,7 @@ public partial class ComponentEditorForm
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.MsgInternal == User32.WM.REFLECT_NOTIFY)
+            if (m.MsgInternal == MessageId.WM_REFLECT_NOTIFY)
             {
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 if ((int)nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
@@ -57,7 +56,7 @@ public sealed class ListViewInsertionMark
         get
         {
             var rect = default(RECT);
-            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref rect);
+            PInvoke.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref rect);
             return rect;
         }
     }
@@ -71,7 +70,7 @@ public sealed class ListViewInsertionMark
         {
             if (_color.IsEmpty)
             {
-                _color = new COLORREF((uint)PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_GETINSERTMARKCOLOR));
+                _color = new COLORREF((uint)PInvoke.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKCOLOR));
             }
 
             return _color;
@@ -83,7 +82,7 @@ public sealed class ListViewInsertionMark
                 _color = value;
                 if (_listView.IsHandleCreated)
                 {
-                    PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
+                    PInvoke.SendMessage(_listView, PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
                 }
             }
         }
@@ -121,7 +120,7 @@ public sealed class ListViewInsertionMark
             cbSize = (uint)sizeof(LVINSERTMARK)
         };
 
-        PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_INSERTMARKHITTEST, (WPARAM)(&pt), ref lvInsertMark);
+        PInvoke.SendMessage(_listView, PInvoke.LVM_INSERTMARKHITTEST, (WPARAM)(&pt), ref lvInsertMark);
 
         return lvInsertMark.iItem;
     }
@@ -136,11 +135,11 @@ public sealed class ListViewInsertionMark
             iItem = _index
         };
 
-        PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARK, 0, ref lvInsertMark);
+        PInvoke.SendMessage(_listView, PInvoke.LVM_SETINSERTMARK, 0, ref lvInsertMark);
 
         if (!_color.IsEmpty)
         {
-            PInvoke.SendMessage(_listView, (User32.WM)PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
+            PInvoke.SendMessage(_listView, PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
         }
     }
 }

@@ -39,7 +39,7 @@ public partial class ComboBox
 
                 int result = (int)PInvoke.SendMessage(
                     listHandle,
-                    (User32.WM)PInvoke.LB_GETITEMRECT,
+                    PInvoke.LB_GETITEMRECT,
                     (WPARAM)currentIndex,
                     ref itemRect);
 
@@ -181,7 +181,7 @@ public partial class ComboBox
                 return;
             }
 
-            PInvoke.SendMessage(_owningComboBox, (User32.WM)PInvoke.CB_SETTOPINDEX, (WPARAM)GetCurrentIndex());
+            PInvoke.SendMessage(_owningComboBox, PInvoke.CB_SETTOPINDEX, (WPARAM)GetCurrentIndex());
         }
 
         internal override void SetFocus()

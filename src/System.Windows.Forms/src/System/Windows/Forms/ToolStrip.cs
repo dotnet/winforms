@@ -10,7 +10,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -2813,7 +2812,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         // Send the actual wm_print message
         PInvoke.SendMessage(
             this,
-            User32.WM.PRINT,
+            PInvoke.WM_PRINT,
             (WPARAM)imageHdc,
             (LPARAM)(uint)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
 
@@ -4828,12 +4827,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     protected override void WndProc(ref Message m)
     {
-        if (m.MsgInternal == User32.WM.SETFOCUS)
+        if (m.MsgInternal == PInvoke.WM_SETFOCUS)
         {
             SnapFocus((HWND)(nint)m.WParamInternal);
         }
 
-        if (m.MsgInternal == User32.WM.MOUSEACTIVATE)
+        if (m.MsgInternal == PInvoke.WM_MOUSEACTIVATE)
         {
             // We want to prevent taking focus if someone clicks on the toolstrip dropdown itself. The mouse message
             // will still go through, but focus won't be taken. If someone clicks on a child control (combobox,
@@ -4885,7 +4884,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         base.WndProc(ref m);
 
-        if (m.Msg == (int)User32.WM.NCDESTROY)
+        if (m.Msg == (int)PInvoke.WM_NCDESTROY)
         {
             // Destroy the owner window, if we created one.  We
             // cannot do this in OnHandleDestroyed, because at

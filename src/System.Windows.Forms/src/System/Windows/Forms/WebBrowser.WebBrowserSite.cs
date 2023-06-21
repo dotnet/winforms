@@ -6,7 +6,6 @@
 
 using System.Drawing;
 using Windows.Win32.System.Ole;
-using static Interop;
 using static Interop.Mshtml;
 using Ole = Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -165,7 +164,7 @@ public partial class WebBrowser
             if (!wb.WebBrowserShortcutsEnabled)
             {
                 int keyCode = (int)(uint)lpMsg->wParam | (int)ModifierKeys;
-                if (lpMsg->message != (uint)User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                if (lpMsg->message != (uint)PInvoke.WM_CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                 {
                     return HRESULT.S_OK;
                 }

@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -710,7 +709,7 @@ public partial class Splitter : Control
         }
 
         Rectangle r = CalcSplitLine(_splitTarget, splitSize, 3);
-        using User32.GetDcScope dc = new(ParentInternal.HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
+        using GetDcScope dc = new(ParentInternal.HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
         using PInvoke.ObjectScope halftoneScope = new(halftone);
         using PInvoke.SelectObjectScope selection = new(dc, halftone);

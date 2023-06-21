@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 public partial class SplitContainer
@@ -19,13 +17,13 @@ public partial class SplitContainer
 
         bool IMessageFilter.PreFilterMessage(ref Message m)
         {
-            if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
+            if (m.MsgInternal < PInvoke.WM_KEYFIRST || m.MsgInternal > PInvoke.WM_KEYLAST)
             {
                 return false;
             }
 
-            if ((m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
-                || (m.MsgInternal == User32.WM.SYSKEYDOWN))
+            if ((m.MsgInternal == PInvoke.WM_KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
+                || (m.MsgInternal == PInvoke.WM_SYSKEYDOWN))
             {
                 // Notify that splitMOVE was reverted. This is used in ONKEYUP.
                 _owner._splitBegin = false;
