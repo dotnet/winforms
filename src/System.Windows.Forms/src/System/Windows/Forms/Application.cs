@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using Microsoft.Office;
 using static Interop;
 using Directory = System.IO.Directory;
 
@@ -789,10 +790,10 @@ public sealed partial class Application
     ///  Processes all Windows messages currently in the message queue.
     /// </summary>
     public static void DoEvents()
-        => ThreadContext.FromCurrent().RunMessageLoop(Mso.msoloop.DoEvents, null);
+        => ThreadContext.FromCurrent().RunMessageLoop(msoloop.DoEvents, null);
 
     internal static void DoEventsModal()
-        => ThreadContext.FromCurrent().RunMessageLoop(Mso.msoloop.DoEventsModal, null);
+        => ThreadContext.FromCurrent().RunMessageLoop(msoloop.DoEventsModal, null);
 
     /// <summary>
     ///  Enables visual styles for all subsequent <see cref="Run()"/> and <see cref="Control.CreateHandle"/> calls.
@@ -1150,21 +1151,21 @@ public sealed partial class Application
     ///  without a form.
     /// </summary>
     public static void Run()
-        => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.Main, new ApplicationContext());
+        => ThreadContext.FromCurrent().RunMessageLoop(msoloop.Main, new ApplicationContext());
 
     /// <summary>
     ///  Begins running a standard application message loop on the current
     ///  thread, and makes the specified form visible.
     /// </summary>
     public static void Run(Form mainForm)
-        => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.Main, new ApplicationContext(mainForm));
+        => ThreadContext.FromCurrent().RunMessageLoop(msoloop.Main, new ApplicationContext(mainForm));
 
     /// <summary>
     ///  Begins running a standard application message loop on the current thread,
     ///  without a form.
     /// </summary>
     public static void Run(ApplicationContext context)
-        => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.Main, context);
+        => ThreadContext.FromCurrent().RunMessageLoop(msoloop.Main, context);
 
     /// <summary>
     ///  Runs a modal dialog.  This starts a special type of message loop that runs until
@@ -1172,7 +1173,7 @@ public sealed partial class Application
     ///  when an application calls System.Windows.Forms.Form.ShowDialog().
     /// </summary>
     internal static void RunDialog(Form form)
-        => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.ModalForm, new ModalApplicationContext(form));
+        => ThreadContext.FromCurrent().RunMessageLoop(msoloop.ModalForm, new ModalApplicationContext(form));
 
     /// <summary>
     /// Scale the default font (if it is set) as per the Settings display text scale settings.
