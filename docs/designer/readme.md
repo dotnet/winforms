@@ -7,9 +7,10 @@ The Windows Forms out-of-process designer is currently available as a preview Vi
 
 For the latest news on the designer please refer to [the series of blogs](https://devblogs.microsoft.com/search?query=winforms&blog=%2Fdotnet%2F):
 
-* [State of the Windows Forms Designer for .NET Applications as of 01/13/2022](https://devblogs.microsoft.com/dotnet/state-of-the-windows-forms-designer-for-net-applications/)
+* [Custom Controls for WinForms' Out-Of-Process Designer](https://devblogs.microsoft.com/dotnet/custom-controls-for-winforms-out-of-process-designer/)
 * [Visual Basic WinForms Apps in .NET 5 and Visual Studio 16.8](https://devblogs.microsoft.com/dotnet/visual-basic-winforms-apps-in-net-5-and-visual-studio-16-8/)
 * [Databinding with the OOP Windows Forms Designer](https://devblogs.microsoft.com/dotnet/databinding-with-the-oop-windows-forms-designer/)
+* [State of the Windows Forms Designer for .NET Applications as of 01/13/2022](https://devblogs.microsoft.com/dotnet/state-of-the-windows-forms-designer-for-net-applications/)
 
 ## Table of Content
 
