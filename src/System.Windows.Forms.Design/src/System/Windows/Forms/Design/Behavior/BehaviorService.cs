@@ -84,7 +84,7 @@ public sealed partial class BehaviorService : IDisposable
         IDesignerHost? host = serviceProvider.GetService<IDesignerHost>();
         if (menuCommandService is not null && host is not null)
         {
-            MenuCommandHandler menuCommandHandler = new MenuCommandHandler(this, menuCommandService);
+            MenuCommandHandler menuCommandHandler = new(this, menuCommandService);
             host.RemoveService(typeof(IMenuCommandService));
             host.AddService(typeof(IMenuCommandService), menuCommandHandler);
         }
@@ -194,7 +194,7 @@ public sealed partial class BehaviorService : IDisposable
         DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
         DropSource.GiveFeedback += new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
 
-        DragDropEffects res;
+        DragDropEffects res = DragDropEffects.None;
 
         // Build up the eventargs for firing our dragbegin/end events
         ICollection dragComponents = ((DropSourceBehavior.BehaviorDataObject)dropSourceBehavior.DataObject).DragComponents;
@@ -459,10 +459,9 @@ public sealed partial class BehaviorService : IDisposable
         // which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window,
         // let's activate it here.
         IUIService? uiService = _serviceProvider.GetService<IUIService>();
-        IWin32Window? hwnd = uiService?.GetDialogOwnerWindow();
-        if (hwnd is not null && hwnd.Handle != 0 && hwnd.Handle != PInvoke.GetActiveWindow())
+        if (uiService?.GetDialogOwnerWindow() is { } hWnd && hWnd.Handle != 0 && hWnd.Handle != PInvoke.GetActiveWindow())
         {
-            PInvoke.SetActiveWindow(new HandleRef<HWND>(hwnd, (HWND)hwnd.Handle));
+            PInvoke.SetActiveWindow(new HandleRef<HWND>(hWnd, (HWND)hWnd.Handle));
         }
     }
 
@@ -579,8 +578,7 @@ public sealed partial class BehaviorService : IDisposable
 
     private void ShowError(Exception ex)
     {
-        IUIService? uis = _serviceProvider.GetService<IUIService>();
-        uis?.ShowError(ex);
+        _serviceProvider.GetService<IUIService>()?.ShowError(ex);
     }
 
     private void SetAppropriateCursor(Cursor cursor)
