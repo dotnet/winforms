@@ -61,14 +61,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 		docs\debugging.md = docs\debugging.md
 		docs\developer-guide.md = docs\developer-guide.md
 		docs\getting-started.md = docs\getting-started.md
-		docs\intellisense.md = docs\intellisense.md
 		docs\issue-guide.md = docs\issue-guide.md
 		docs\porting-guidelines.md = docs\porting-guidelines.md
 		README.md = README.md
-		roadmap.md = roadmap.md
+		docs\roadmap.md = docs\roadmap.md
 		docs\testing.md = docs\testing.md
 		THIRD-PARTY-NOTICES.TXT = THIRD-PARTY-NOTICES.TXT
-		docs\winforms-designer.md = docs\winforms-designer.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accessibility", "Accessibility", "{D390F7D2-1E11-4DEE-B7F1-4FD0681A81F0}"
