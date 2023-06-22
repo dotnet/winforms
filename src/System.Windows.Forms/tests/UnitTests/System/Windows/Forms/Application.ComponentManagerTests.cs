@@ -4,7 +4,7 @@
 
 using System.Runtime.InteropServices;
 using Moq;
-using static Interop.Mso;
+using Microsoft.Office;
 
 namespace System.Windows.Forms.Tests.Interop_Mso;
 
@@ -19,7 +19,7 @@ public unsafe class IMsoComponentManagerTests
     public void FDebugMessage_ReturnsTrue()
     {
         var manager = CreateComponentManager();
-        Assert.True(manager.FDebugMessage(IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero));
+        Assert.True(manager.FDebugMessage(0, 0, default, default));
     }
 
     [Fact]

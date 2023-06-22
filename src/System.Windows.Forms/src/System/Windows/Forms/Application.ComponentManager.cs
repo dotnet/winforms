@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using static Interop.Mso;
+using Microsoft.Office;
 
 namespace System.Windows.Forms;
 
@@ -30,14 +30,13 @@ public sealed partial class Application
             public MSOCRINFO componentInfo;
         }
 
-        private Dictionary<UIntPtr, ComponentHashtableEntry>? _oleComponents;
+        private Dictionary<nuint, ComponentHashtableEntry>? _oleComponents;
         private UIntPtr _cookieCounter = UIntPtr.Zero;
         private IMsoComponent? _activeComponent;
         private IMsoComponent? _trackingComponent;
         private msocstate _currentState;
 
-        private Dictionary<UIntPtr, ComponentHashtableEntry> OleComponents
-            => _oleComponents ??= new Dictionary<UIntPtr, ComponentHashtableEntry>();
+        private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= new();
 
         unsafe HRESULT IMsoComponentManager.QueryService(
             Guid* guidService,
@@ -53,10 +52,10 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FDebugMessage(
-            IntPtr dwReserved,
+            nint dwReserved,
             uint msg,
-            IntPtr wParam,
-            IntPtr lParam)
+            WPARAM wParam,
+            LPARAM lParam)
         {
             return true;
         }
@@ -64,7 +63,7 @@ public sealed partial class Application
         BOOL IMsoComponentManager.FRegisterComponent(
             IMsoComponent component,
             MSOCRINFO* pcrinfo,
-            UIntPtr* pdwComponentID)
+            nuint* pdwComponentID)
         {
             if (pcrinfo is null || pdwComponentID is null
                 || pcrinfo->cbSize < sizeof(MSOCRINFO))
@@ -88,7 +87,7 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FRevokeComponent(UIntPtr dwComponentID)
+        BOOL IMsoComponentManager.FRevokeComponent(nuint dwComponentID)
         {
             Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Revoking component {dwComponentID}.");
 
@@ -113,7 +112,7 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FUpdateComponentRegistration(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             MSOCRINFO* pcrinfo)
         {
             // Update the registration info
@@ -128,7 +127,7 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FOnComponentActivate(UIntPtr dwComponentID)
+        BOOL IMsoComponentManager.FOnComponentActivate(nuint dwComponentID)
         {
             Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Component activated.  ID: {dwComponentID}");
 
@@ -143,7 +142,7 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FSetTrackingComponent(UIntPtr dwComponentID, BOOL fTrack)
+        BOOL IMsoComponentManager.FSetTrackingComponent(nuint dwComponentID, BOOL fTrack)
         {
             if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
                 || !((entry.component == _trackingComponent) ^ fTrack))
@@ -157,7 +156,7 @@ public sealed partial class Application
         }
 
         void IMsoComponentManager.OnComponentEnterState(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             msocstate uStateID,
             msoccontext uContext,
             uint cpicmExclude,
@@ -186,7 +185,7 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FOnComponentExitState(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             msocstate uStateID,
             msoccontext uContext,
             uint cpicmExclude,
@@ -225,7 +224,7 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FPushMessageLoop(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             msoloop uReason,
             void* pvLoopData)
         {
