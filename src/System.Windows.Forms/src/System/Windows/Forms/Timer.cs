@@ -174,7 +174,7 @@ public class Timer : Component
 
     public override string ToString() => $"{base.ToString()}, Interval: {Interval}";
 
-    private class TimerNativeWindow : NativeWindow, IHandle
+    private class TimerNativeWindow : NativeWindow
     {
         // The timer that owns the window
         private readonly Timer _owner;

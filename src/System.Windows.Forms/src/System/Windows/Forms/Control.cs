@@ -46,7 +46,6 @@ public unsafe partial class Control :
     IArrangedElement,
     IBindableComponent,
     IKeyboardToolTip,
-    IHandle,
     IHandle<HWND>
 {
 #if DEBUG

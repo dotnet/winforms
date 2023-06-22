@@ -482,7 +482,7 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal class FlyoutDialog : Form, IHandle
+        internal class FlyoutDialog : Form
         {
             private readonly Control _hostedControl;
             private readonly Control _parentControl;

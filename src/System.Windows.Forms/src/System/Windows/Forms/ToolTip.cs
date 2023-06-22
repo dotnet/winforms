@@ -18,7 +18,7 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(Popup))]
 [ToolboxItemFilter("System.Windows.Forms")]
 [SRDescription(nameof(SR.DescriptionToolTip))]
-public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HWND>
+public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 {
     // The actual delay values are based on the user-set double click time.
     // These values are initialized using the default double-click time value.
@@ -263,8 +263,6 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HW
             }
         }
     }
-
-    IntPtr IHandle.Handle => Handle;
 
     HWND IHandle<HWND>.Handle => HWND;
 
