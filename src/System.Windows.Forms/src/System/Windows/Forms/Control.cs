@@ -4641,7 +4641,7 @@ public unsafe partial class Control :
     {
         using var scope = MultithreadSafeCallScope.Create();
         Control marshaler = FindMarshalingControl();
-        return (IAsyncResult)marshaler.MarshaledInvoke(this, method, args, false);
+        return (IAsyncResult)marshaler.MarshaledInvoke(this, method, args, synchronous: false);
     }
 
     internal void BeginUpdateInternal()
@@ -6397,7 +6397,7 @@ public unsafe partial class Control :
     {
         using var scope = MultithreadSafeCallScope.Create();
         Control marshaler = FindMarshalingControl();
-        return marshaler.MarshaledInvoke(this, method, args, true);
+        return marshaler.MarshaledInvoke(this, method, args, synchronous: true);
     }
 
     /// <summary>
@@ -6492,7 +6492,7 @@ public unsafe partial class Control :
             }
             else
             {
-                handler(tme._args[0], (EventArgs)tme._args[1]);
+                handler(tme._args[0], (EventArgs)tme._args[1]!);
             }
         }
         else if (tme._method is MethodInvoker invoker)
@@ -6831,7 +6831,7 @@ public unsafe partial class Control :
     {
         return DpiHelper.LogicalToDeviceUnits(value, DeviceDpi);
     }
-#nullable disable
+
     /// <summary>
     ///  Create a new bitmap scaled for the device units. When displayed on the device,
     ///  the scaled image will have same size as the original image would have when
@@ -6860,7 +6860,7 @@ public unsafe partial class Control :
         }
     }
 
-    private object MarshaledInvoke(Control caller, Delegate method, object[] args, bool synchronous)
+    private object MarshaledInvoke(Control caller, Delegate method, object?[]? args, bool synchronous)
     {
         // Marshaling an invoke occurs in three steps:
         //
@@ -6889,13 +6889,19 @@ public unsafe partial class Control :
         // Store the compressed stack information from the thread that is calling the Invoke()
         // so we can assign the same security context to the thread that will actually execute
         // the delegate being passed.
-        ExecutionContext executionContext = null;
+        ExecutionContext? executionContext = null;
         if (!syncSameThread)
         {
             executionContext = ExecutionContext.Capture();
         }
 
-        ThreadMethodEntry tme = new ThreadMethodEntry(caller, this, method, args, synchronous, executionContext);
+        ThreadMethodEntry tme = new ThreadMethodEntry(
+            caller,
+            this,
+            method,
+            args,
+            synchronous,
+            executionContext);
 
         lock (this)
         {
@@ -6933,7 +6939,7 @@ public unsafe partial class Control :
                 ExceptionDispatchInfo.Throw(tme._exception);
             }
 
-            return tme._retVal;
+            return tme._retVal!;
         }
         else
         {
@@ -6975,7 +6981,7 @@ public unsafe partial class Control :
 
         m.ResultInternal = (LRESULT)((bytes.Length + nullBytes.Length) / sizeof(char));
     }
-#nullable enable
+
     // Used by form to notify the control that it has been "entered"
     internal void NotifyEnter()
     {
@@ -11945,7 +11951,7 @@ public unsafe partial class Control :
     /// </summary>
     private void WmGetControlType(ref Message m)
     {
-        string? type = GetType().AssemblyQualifiedName;
+        string type = GetType().AssemblyQualifiedName!;
         MarshalStringToMessage(type, ref m);
     }
 
