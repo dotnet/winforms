@@ -44,7 +44,7 @@ internal sealed class SiteNestedContainer : NestedContainer
     /// </summary>
     public override void Add(IComponent? component, string? name)
     {
-        if (!_host.AddToContainerPreProcess(component!, name, this))
+        if (component is null || !_host.AddToContainerPreProcess(component, name, this))
         {
             return;
         }
@@ -53,7 +53,7 @@ internal sealed class SiteNestedContainer : NestedContainer
         base.Add(component, name);
         try
         {
-            _host.AddToContainerPostProcess(component!, this);
+            _host.AddToContainerPostProcess(component, this);
         }
         catch (Exception t)
         {
@@ -81,13 +81,13 @@ internal sealed class SiteNestedContainer : NestedContainer
     /// </summary>
     public override void Remove(IComponent? component)
     {
-        if (!_host.RemoveFromContainerPreProcess(component!, this))
+        if (!_host.RemoveFromContainerPreProcess(component, this))
         {
             return;
         }
 
         RemoveWithoutUnsiting(component);
-        _host.RemoveFromContainerPostProcess(component!, this);
+        _host.RemoveFromContainerPostProcess(component, this);
     }
 
     protected override object? GetService(Type serviceType)

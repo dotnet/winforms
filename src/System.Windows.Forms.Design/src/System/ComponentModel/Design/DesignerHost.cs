@@ -110,22 +110,27 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             _typeServiceChecked = true;
         }
 
+        if (component is null)
+        {
+            return;
+        }
+
         // TypeDescriptionProviderService is attached at design time only
         if (_typeService is not null)
         {
             // Check for the attribute that VsTargetFrameworkProvider injects on reflection types to see if VsTargetFrameworkProvider is already attached.
-            Type type = TypeDescriptor.GetProvider(component!).GetReflectionType(typeof(object));
+            Type type = TypeDescriptor.GetProvider(component).GetReflectionType(typeof(object));
             if (!type.IsDefined(typeof(ProjectTargetFrameworkAttribute), false))
             {
-                TypeDescriptionProvider typeProvider = _typeService.GetProvider(component!);
+                TypeDescriptionProvider typeProvider = _typeService.GetProvider(component);
                 if (typeProvider is not null)
                 {
-                    TypeDescriptor.AddProvider(typeProvider, component!);
+                    TypeDescriptor.AddProvider(typeProvider, component);
                 }
             }
         }
 
-        PerformAdd(component!, name);
+        PerformAdd(component, name);
     }
 
     private void PerformAdd(IComponent component, string? name)
@@ -583,9 +588,9 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// </summary>
     public override void Remove(IComponent? component)
     {
-        if (RemoveFromContainerPreProcess(component!, this))
+        if (RemoveFromContainerPreProcess(component, this))
         {
-            Site? site = component!.Site as Site;
+            Site? site = component.Site as Site;
             RemoveWithoutUnsiting(component);
             RemoveFromContainerPostProcess(component, this);
             if (site is not null)
@@ -595,9 +600,12 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
     }
 
-    internal bool RemoveFromContainerPreProcess(IComponent component, IContainer container)
+    internal bool RemoveFromContainerPreProcess([NotNullWhen(true)] IComponent? component, IContainer container)
     {
-        ArgumentNullException.ThrowIfNull(component);
+        if (component is null)
+        {
+            return false;
+        }
 
         ISite? site = component.Site;
         if (site is null || site.Container != container)
