@@ -81,8 +81,7 @@ public abstract partial class CodeDomSerializerBase
             //create the MyGeneric`2[ part
             if (!typeref.BaseType.Contains('`'))
             {
-                typeName.Append('`');
-                typeName.Append(typeref.TypeArguments.Count);
+                typeName.Append($"`{typeref.TypeArguments.Count}");
             }
 
             typeName.Append('[');
@@ -92,8 +91,7 @@ public abstract partial class CodeDomSerializerBase
             {
                 typeName.Append('[');
                 GetTypeNameFromCodeTypeReferenceHelper(manager, childref, typeName);
-                typeName.Append(']');
-                typeName.Append(',');
+                typeName.Append("],");
             }
 
             typeName[^1] = ']';
@@ -114,6 +112,32 @@ public abstract partial class CodeDomSerializerBase
         return null;
     }
 
+    private static bool TryGetTargetFrameworkProviderAndCheckType(IDesignerSerializationManager manager, object instance, [NotNullWhen(true)] out TypeDescriptionProvider? targetProvider)
+    {
+        Type type = instance.GetType();
+        if (!type.IsValueType)
+        {
+            targetProvider = null;
+            return false;
+        }
+
+        targetProvider = GetTargetFrameworkProvider(manager, instance);
+
+        if (targetProvider is null)
+        {
+            return false;
+        }
+
+        if (targetProvider.IsSupportedType(type))
+        {
+            return true;
+        }
+
+        Error(manager, string.Format(SR.TypeNotFoundInTargetFramework, instance.GetType().FullName), SR.SerializerUndeclaredName);
+        targetProvider = null;
+        return false;
+    }
+
     /// <summary>
     ///  Get a faux type which is generated from the metadata, which is
     ///  looked up on the target framework assembly. Be careful to not use mix
@@ -127,8 +151,7 @@ public abstract partial class CodeDomSerializerBase
             return null;
         }
 
-        TypeDescriptionProvider? targetProvider = GetTargetFrameworkProviderForType(manager, type);
-        if (targetProvider is not null)
+        if (TryGetTargetFrameworkProviderForType(manager, type, out TypeDescriptionProvider? targetProvider))
         {
             if (targetProvider.IsSupportedType(type))
             {
@@ -157,10 +180,11 @@ public abstract partial class CodeDomSerializerBase
         throw exception;
     }
 
-    private static TypeDescriptionProvider? GetTargetFrameworkProviderForType(IServiceProvider provider, Type type)
+    private static bool TryGetTargetFrameworkProviderForType(IServiceProvider provider, Type type, [NotNullWhen(true)] out TypeDescriptionProvider? targetProvider)
     {
         // service will be null outside the VisualStudio
-        return provider.GetService<TypeDescriptionProviderService>()?.GetProvider(type);
+        targetProvider = provider.GetService<TypeDescriptionProviderService>()?.GetProvider(type);
+        return targetProvider is not null;
     }
 
     /// <summary>
@@ -177,19 +201,9 @@ public abstract partial class CodeDomSerializerBase
             return null;
         }
 
-        Type type = instance.GetType();
-        if (type.IsValueType)
+        if (TryGetTargetFrameworkProviderAndCheckType(manager, instance, out TypeDescriptionProvider? targetProvider))
         {
-            TypeDescriptionProvider? targetProvider = GetTargetFrameworkProvider(manager, instance);
-            if (targetProvider is not null)
-            {
-                if (targetProvider.IsSupportedType(type))
-                {
-                    return targetProvider.GetReflectionType(instance);
-                }
-
-                Error(manager, string.Format(SR.TypeNotFoundInTargetFramework, instance.GetType().FullName), SR.SerializerUndeclaredName);
-            }
+            return targetProvider.GetReflectionType(instance);
         }
 
         return TypeDescriptor.GetReflectionType(instance);
@@ -206,29 +220,16 @@ public abstract partial class CodeDomSerializerBase
             return null;
         }
 
-        if (instance.GetType().IsValueType)
+        if (TryGetTargetFrameworkProviderAndCheckType(manager, instance, out TypeDescriptionProvider? targetProvider))
         {
-            TypeDescriptionProvider? targetProvider = GetTargetFrameworkProvider(manager, instance);
-            if (targetProvider is not null)
+            if (targetProvider.GetTypeDescriptor(instance) is { } targetAwareDescriptor)
             {
-                // target framework provider is null at runtime
-                if (targetProvider.IsSupportedType(instance.GetType()))
+                if (attributes is null)
                 {
-                    ICustomTypeDescriptor? targetAwareDescriptor = targetProvider.GetTypeDescriptor(instance);
-                    if (targetAwareDescriptor is not null)
-                    {
-                        if (attributes is null)
-                        {
-                            return targetAwareDescriptor.GetProperties();
-                        }
+                    return targetAwareDescriptor.GetProperties();
+                }
 
-                        return targetAwareDescriptor.GetProperties(attributes);
-                    }
-                }
-                else
-                {
-                    Error(manager, string.Format(SR.TypeNotFoundInTargetFramework, instance.GetType().FullName), SR.SerializerUndeclaredName);
-                }
+                return targetAwareDescriptor.GetProperties(attributes);
             }
         }
 
@@ -251,28 +252,16 @@ public abstract partial class CodeDomSerializerBase
             return null;
         }
 
-        if (instance.GetType().IsValueType)
+        if (TryGetTargetFrameworkProviderAndCheckType(manager, instance, out TypeDescriptionProvider? targetProvider))
         {
-            TypeDescriptionProvider? targetProvider = GetTargetFrameworkProvider(manager, instance);
-            if (targetProvider is not null)
+            if (targetProvider.GetTypeDescriptor(instance) is { } targetAwareDescriptor)
             {
-                if (targetProvider.IsSupportedType(instance.GetType()))
+                if (attributes is null)
                 {
-                    ICustomTypeDescriptor? targetAwareDescriptor = targetProvider.GetTypeDescriptor(instance);
-                    if (targetAwareDescriptor is not null)
-                    {
-                        if (attributes is null)
-                        {
-                            return targetAwareDescriptor.GetEvents();
-                        }
+                    return targetAwareDescriptor.GetEvents();
+                }
 
-                        return targetAwareDescriptor.GetEvents(attributes);
-                    }
-                }
-                else
-                {
-                    Error(manager, string.Format(SR.TypeNotFoundInTargetFramework, instance.GetType().FullName), SR.SerializerUndeclaredName);
-                }
+                return targetAwareDescriptor.GetEvents(attributes);
             }
         }
 
@@ -295,23 +284,11 @@ public abstract partial class CodeDomSerializerBase
             return null;
         }
 
-        if (instance.GetType().IsValueType)
+        if (TryGetTargetFrameworkProviderAndCheckType(manager, instance, out TypeDescriptionProvider? targetProvider))
         {
-            TypeDescriptionProvider? targetProvider = GetTargetFrameworkProvider(manager, instance);
-            if (targetProvider is not null)
+            if (targetProvider.GetTypeDescriptor(instance) is { } targetAwareDescriptor)
             {
-                if (targetProvider.IsSupportedType(instance.GetType()))
-                {
-                    ICustomTypeDescriptor? targetAwareDescriptor = targetProvider.GetTypeDescriptor(instance);
-                    if (targetAwareDescriptor is not null)
-                    {
-                        return targetAwareDescriptor.GetAttributes();
-                    }
-                }
-                else
-                {
-                    Error(manager, string.Format(SR.TypeNotFoundInTargetFramework, instance.GetType().FullName), SR.SerializerUndeclaredName);
-                }
+                return targetAwareDescriptor.GetAttributes();
             }
         }
 
@@ -331,13 +308,11 @@ public abstract partial class CodeDomSerializerBase
 
         if (type.IsValueType)
         {
-            TypeDescriptionProvider? targetProvider = GetTargetFrameworkProviderForType(manager, type);
-            if (targetProvider is not null)
+            if (TryGetTargetFrameworkProviderForType(manager, type, out TypeDescriptionProvider? targetProvider))
             {
                 if (targetProvider.IsSupportedType(type))
                 {
-                    ICustomTypeDescriptor? targetAwareDescriptor = targetProvider.GetTypeDescriptor(type);
-                    if (targetAwareDescriptor is not null)
+                    if (targetProvider.GetTypeDescriptor(type) is { } targetAwareDescriptor)
                     {
                         return targetAwareDescriptor.GetAttributes();
                     }
@@ -661,8 +636,7 @@ public abstract partial class CodeDomSerializerBase
                                 // they need to be converted to the same universe for comparison to work.
                                 // If TargetFrameworkProvider is not available, then we are working with runtime types.
                                 Type fieldType = f.FieldType;
-                                TypeDescriptionProvider? tdp = GetTargetFrameworkProviderForType(manager, fieldType);
-                                if (tdp is not null)
+                                if (TryGetTargetFrameworkProviderForType(manager, fieldType, out TypeDescriptionProvider? tdp))
                                 {
                                     fieldType = tdp.GetRuntimeType(fieldType);
                                 }
@@ -1411,40 +1385,40 @@ public abstract partial class CodeDomSerializerBase
         }
     }
 
-        private static object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+    private static object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+    {
+        // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
+
+        // Figure out what kind of expression we have.
+        switch (op)
         {
-            // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
+            case CodeBinaryOperatorType.BitwiseOr:
+            case CodeBinaryOperatorType.BitwiseAnd:
+                return ExecuteBinaryOperator(left, right, op);
 
-            // Figure out what kind of expression we have.
-            switch (op)
-            {
-                case CodeBinaryOperatorType.BitwiseOr:
-                case CodeBinaryOperatorType.BitwiseAnd:
-                    return ExecuteBinaryOperator(left, right, op);
+            case CodeBinaryOperatorType.Add:
+            case CodeBinaryOperatorType.Subtract:
+            case CodeBinaryOperatorType.Multiply:
+            case CodeBinaryOperatorType.Divide:
+            case CodeBinaryOperatorType.Modulus:
+                return ExecuteMathOperator(left, right, op);
 
-                case CodeBinaryOperatorType.Add:
-                case CodeBinaryOperatorType.Subtract:
-                case CodeBinaryOperatorType.Multiply:
-                case CodeBinaryOperatorType.Divide:
-                case CodeBinaryOperatorType.Modulus:
-                    return ExecuteMathOperator(left, right, op);
+            case CodeBinaryOperatorType.IdentityInequality:
+            case CodeBinaryOperatorType.IdentityEquality:
+            case CodeBinaryOperatorType.ValueEquality:
+            case CodeBinaryOperatorType.BooleanOr:
+            case CodeBinaryOperatorType.BooleanAnd:
+            case CodeBinaryOperatorType.LessThan:
+            case CodeBinaryOperatorType.LessThanOrEqual:
+            case CodeBinaryOperatorType.GreaterThan:
+            case CodeBinaryOperatorType.GreaterThanOrEqual:
+                return ExecuteBooleanOperator(left, right, op);
 
-                case CodeBinaryOperatorType.IdentityInequality:
-                case CodeBinaryOperatorType.IdentityEquality:
-                case CodeBinaryOperatorType.ValueEquality:
-                case CodeBinaryOperatorType.BooleanOr:
-                case CodeBinaryOperatorType.BooleanAnd:
-                case CodeBinaryOperatorType.LessThan:
-                case CodeBinaryOperatorType.LessThanOrEqual:
-                case CodeBinaryOperatorType.GreaterThan:
-                case CodeBinaryOperatorType.GreaterThanOrEqual:
-                    return ExecuteBooleanOperator(left, right, op);
-
-                default:
-                    Debug.Fail($"Unsupported binary operator type: {op}");
-                    return left;
-            }
+            default:
+                Debug.Fail($"Unsupported binary operator type: {op}");
+                return left;
         }
+    }
 
     private static object ExecuteBinaryOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
     {
@@ -1566,7 +1540,7 @@ public abstract partial class CodeDomSerializerBase
                     result = ExecuteBinaryOperator(leftValue, rightValue, op);
                     break;
                 }
-            }
+        }
 
         if (result != left && left is Enum)
         {
@@ -2010,7 +1984,7 @@ public abstract partial class CodeDomSerializerBase
                     }
                 }
 
-                    // If we got a value serializer, we've got to do the same thing here for the type serializer.  We only care if the two are different
+                // If we got a value serializer, we've got to do the same thing here for the type serializer.  We only care if the two are different
                 if (valueSerializerTypeName is not null)
                 {
                     foreach (Attribute a in typeAttributes)
@@ -2221,54 +2195,54 @@ public abstract partial class CodeDomSerializerBase
                 }
             }
 
-                Type expressionType = descriptor.MemberInfo!.DeclaringType!;
-                CodeTypeReference typeRef = new CodeTypeReference(expressionType);
+            Type expressionType = descriptor.MemberInfo!.DeclaringType!;
+            CodeTypeReference typeRef = new CodeTypeReference(expressionType);
 
-                if (descriptor.MemberInfo is ConstructorInfo)
-                {
-                    expression = new CodeObjectCreateExpression(typeRef, arguments);
-                }
-                else if (descriptor.MemberInfo is MethodInfo methodInfo)
-                {
-                    CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
-                    CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(typeRefExp, methodInfo.Name);
-                    expression = new CodeMethodInvokeExpression(methodRef, arguments);
-                    expressionType = methodInfo.ReturnType;
-                }
-                else if (descriptor.MemberInfo is PropertyInfo propertyInfo)
-                {
-                    CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
-                    CodePropertyReferenceExpression propertyRef = new CodePropertyReferenceExpression(typeRefExp, propertyInfo.Name);
-                    Debug.Assert(arguments.Length == 0, "Property serialization does not support arguments");
-                    expression = propertyRef;
-                    expressionType = propertyInfo.PropertyType;
-                }
-                else if (descriptor.MemberInfo is FieldInfo fieldInfo)
-                {
-                    Debug.Assert(arguments.Length == 0, "Field serialization does not support arguments");
-                    CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
-                    expression = new CodeFieldReferenceExpression(typeRefExp, fieldInfo.Name);
-                    expressionType = fieldInfo.FieldType;
-                }
-                else
-                {
-                    Debug.Fail($"Unrecognized reflection type in instance descriptor: {descriptor.MemberInfo.GetType().Name}");
-                    return null;
-                }
-
-                // Finally, check to see if our value is assignable from the expression type.  If not,  then supply a cast.  The value may be an internal or protected type; if it is, then walk up its hierarchy until we find one that is public.
-                Type targetType = value.GetType();
-                while (!targetType.IsPublic)
-                {
-                    targetType = targetType.BaseType!;
-                }
-
-                if (!targetType.IsAssignableFrom(expressionType))
-                {
-                    Trace(TraceLevel.Verbose, $"Supplying cast from {expressionType.Name} to {targetType.Name}.");
-                    expression = new CodeCastExpression(targetType, expression);
-                }
+            if (descriptor.MemberInfo is ConstructorInfo)
+            {
+                expression = new CodeObjectCreateExpression(typeRef, arguments);
             }
+            else if (descriptor.MemberInfo is MethodInfo methodInfo)
+            {
+                CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
+                CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(typeRefExp, methodInfo.Name);
+                expression = new CodeMethodInvokeExpression(methodRef, arguments);
+                expressionType = methodInfo.ReturnType;
+            }
+            else if (descriptor.MemberInfo is PropertyInfo propertyInfo)
+            {
+                CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
+                CodePropertyReferenceExpression propertyRef = new CodePropertyReferenceExpression(typeRefExp, propertyInfo.Name);
+                Debug.Assert(arguments.Length == 0, "Property serialization does not support arguments");
+                expression = propertyRef;
+                expressionType = propertyInfo.PropertyType;
+            }
+            else if (descriptor.MemberInfo is FieldInfo fieldInfo)
+            {
+                Debug.Assert(arguments.Length == 0, "Field serialization does not support arguments");
+                CodeTypeReferenceExpression typeRefExp = new CodeTypeReferenceExpression(typeRef);
+                expression = new CodeFieldReferenceExpression(typeRefExp, fieldInfo.Name);
+                expressionType = fieldInfo.FieldType;
+            }
+            else
+            {
+                Debug.Fail($"Unrecognized reflection type in instance descriptor: {descriptor.MemberInfo.GetType().Name}");
+                return null;
+            }
+
+            // Finally, check to see if our value is assignable from the expression type.  If not,  then supply a cast.  The value may be an internal or protected type; if it is, then walk up its hierarchy until we find one that is public.
+            Type targetType = value.GetType();
+            while (!targetType.IsPublic)
+            {
+                targetType = targetType.BaseType!;
+            }
+
+            if (!targetType.IsAssignableFrom(expressionType))
+            {
+                Trace(TraceLevel.Verbose, $"Supplying cast from {expressionType.Name} to {targetType.Name}.");
+                expression = new CodeCastExpression(targetType, expression);
+            }
+        }
 
         return expression;
     }
@@ -2413,12 +2387,9 @@ public abstract partial class CodeDomSerializerBase
             }
 
             PropertyDescriptor? filterProp = manager.Properties["FilteredProperties"];
-            if (filterProp is not null)
+            if (filterProp?.GetValue(manager) is ITypeDescriptorFilterService filterSvc)
             {
-                if (filterProp.GetValue(manager) is ITypeDescriptorFilterService filterSvc)
-                {
-                    filterSvc.FilterProperties(comp, props);
-                }
+                filterSvc.FilterProperties(comp, props);
             }
         }
 

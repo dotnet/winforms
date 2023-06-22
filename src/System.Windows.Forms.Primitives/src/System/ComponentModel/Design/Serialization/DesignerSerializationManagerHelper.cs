@@ -6,7 +6,8 @@ namespace System.ComponentModel.Design.Serialization
 {
     internal static class DesignerSerializationManagerHelper
     {
-        public static bool TryGetContext<T>(this IDesignerSerializationManager manager,
+        public static bool TryGetContext<T>(
+            this IDesignerSerializationManager manager,
             [NotNullWhen(true)] out T? context) where T : class
         {
             context = manager.GetContext<T>();
