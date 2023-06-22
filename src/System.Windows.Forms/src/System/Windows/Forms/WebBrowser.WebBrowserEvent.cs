@@ -36,7 +36,14 @@ public partial class WebBrowser
             }
         }
 
-        public void BeforeNavigate2(object pDisp, ref object urlObject, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel)
+        public void BeforeNavigate2(
+            object pDisp,
+            ref object? urlObject,
+            ref object flags,
+            ref object? targetFrameName,
+            ref object postData,
+            ref object? headers,
+            ref bool cancel)
         {
             Debug.Assert(_parent is not null, "Parent should have been set");
             //Note: we want to allow navigation if we haven't already navigated.
@@ -65,7 +72,7 @@ public partial class WebBrowser
             }
         }
 
-        public unsafe void DocumentComplete(object pDisp, ref object urlObject)
+        public unsafe void DocumentComplete(object pDisp, ref object? urlObject)
         {
             Debug.Assert(urlObject is null || urlObject is string, "invalid url");
             _haveNavigated = true;
@@ -103,7 +110,7 @@ public partial class WebBrowser
             _parent.OnEncryptionLevelChanged(EventArgs.Empty);
         }
 
-        public void NavigateComplete2(object pDisp, ref object urlObject)
+        public void NavigateComplete2(object pDisp, ref object? urlObject)
         {
             Debug.Assert(urlObject is null || urlObject is string, "invalid url type");
             string urlString = urlObject is null ? string.Empty : (string)urlObject;

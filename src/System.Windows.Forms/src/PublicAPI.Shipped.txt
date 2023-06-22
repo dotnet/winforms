@@ -874,7 +874,7 @@
 ~System.Windows.Forms.WebBrowser.Url.get -> System.Uri
 ~System.Windows.Forms.WebBrowser.Url.set -> void
 ~System.Windows.Forms.WebBrowser.Version.get -> System.Version
-~System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser host) -> void
+System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser! host) -> void
 ~System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object
 ~System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
