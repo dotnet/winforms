@@ -188,7 +188,7 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.GETOBJECT:
+            case PInvoke.WM_GETOBJECT:
                 WmGetObject(ref m);
                 return;
             default:

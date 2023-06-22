@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -43,7 +42,7 @@ internal static partial class WebBrowserHelper
     internal static Guid maskEdit_Clsid = new Guid("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
     // Window message to check if we have already sub-classed
-    internal static readonly User32.WM REGMSG_MSG = (User32.WM)PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
+    internal static readonly MessageId REGMSG_MSG = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
     internal const int REGMSG_RETVAL = 123;
 
     //
@@ -67,7 +66,7 @@ internal static partial class WebBrowserHelper
         {
             if (logPixelsX == -1)
             {
-                using var dc = User32.GetDcScope.ScreenDC;
+                using var dc = GetDcScope.ScreenDC;
                 logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
             }
 
@@ -82,7 +81,7 @@ internal static partial class WebBrowserHelper
         {
             if (logPixelsY == -1)
             {
-                using var dc = User32.GetDcScope.ScreenDC;
+                using var dc = GetDcScope.ScreenDC;
                 logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
             }
 

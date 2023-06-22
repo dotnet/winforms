@@ -57,7 +57,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
     public override string Text => PInvoke.GetWindowText(_owningChildEdit);
 
-    public override int TextLength => (int)PInvoke.SendMessage(_owningChildEdit, User32.WM.GETTEXTLENGTH);
+    public override int TextLength => (int)PInvoke.SendMessage(_owningChildEdit, PInvoke.WM_GETTEXTLENGTH);
 
     public override WINDOW_EX_STYLE WindowExStyle => GetWindowExStyle(_owningChildEdit);
 
@@ -80,7 +80,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
         // Returns info about the selected text range.
         // If there is no selection, start and end parameters are the position of the caret.
-        PInvoke.SendMessage(_owningChildEdit, (User32.WM)PInvoke.EM_GETSEL, ref start, ref end);
+        PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
         return new UiaTextRange(_owningChildEditAccessibilityObject, this, start, start);
     }
@@ -144,7 +144,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
         // Returns info about the selected text range.
         // If there is no selection, start and end parameters are the position of the caret.
-        PInvoke.SendMessage(_owningChildEdit, (User32.WM)PInvoke.EM_GETSEL, ref start, ref end);
+        PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
         return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end) };
     }
@@ -271,12 +271,12 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
             return;
         }
 
-        PInvoke.SendMessage(_owningChildEdit, (User32.WM)PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
+        PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
     }
 
     private int GetCharIndexFromPosition(Point pt)
     {
-        int index = PARAM.LOWORD(PInvoke.SendMessage(_owningChildEdit, (User32.WM)PInvoke.EM_CHARFROMPOS, 0, PARAM.FromPoint(pt)));
+        int index = PARAM.LOWORD(PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_CHARFROMPOS, 0, PARAM.FromPoint(pt)));
 
         if (index < 0)
         {
@@ -300,7 +300,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
     {
         // Send an EM_GETRECT message to find out the bounding rectangle.
         RECT rectangle = default(RECT);
-        PInvoke.SendMessage(_owningChildEdit, (User32.WM)PInvoke.EM_GETRECT, 0, ref rectangle);
+        PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETRECT, 0, ref rectangle);
 
         return rectangle;
     }
@@ -312,7 +312,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
             return Point.Empty;
         }
 
-        int i = (int)PInvoke.SendMessage(_owningChildEdit, (User32.WM)PInvoke.EM_POSFROMCHAR, (WPARAM)index);
+        int i = (int)PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_POSFROMCHAR, (WPARAM)index);
 
         return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
     }
@@ -321,7 +321,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
     {
         size = default(Size);
 
-        using var hdc = new User32.GetDcScope(_owningChildEdit.Handle);
+        using var hdc = new GetDcScope(_owningChildEdit.Handle);
         if (hdc.IsNull)
         {
             return false;

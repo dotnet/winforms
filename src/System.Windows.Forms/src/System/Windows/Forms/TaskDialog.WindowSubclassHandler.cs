@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 public partial class TaskDialog
@@ -20,7 +18,7 @@ public partial class TaskDialog
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
                 case ContinueButtonClickHandlingMessage:
                     // We received the message which we posted earlier when

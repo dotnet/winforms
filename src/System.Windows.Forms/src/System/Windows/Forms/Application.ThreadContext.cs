@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using ComIMessageFilter = Windows.Win32.Media.Audio.IMessageFilter;
 using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
-using static Interop;
 using static Interop.Mso;
 using System.Windows.Forms.Primitives;
 using System.Runtime.ExceptionServices;
@@ -921,7 +920,7 @@ public sealed partial class Application
             // idle, at which point we can tear down.
             //
             // We can't follow the KB article exactly, because we don't have an HWND to PostMessage to.
-            PInvoke.PostThreadMessage(_id, (uint)User32.WM.QUIT, default, default);
+            PInvoke.PostThreadMessage(_id, (uint)PInvoke.WM_QUIT, default, default);
             SetState(STATE_POSTEDQUIT, true);
         }
 
@@ -1268,7 +1267,7 @@ public sealed partial class Application
 
             if (msg.IsKeyMessage())
             {
-                if (msg.message == (uint)User32.WM.CHAR)
+                if (msg.message == (uint)PInvoke.WM_CHAR)
                 {
                     int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                     if (unchecked((int)(uint)msg.wParam) == 3 && (unchecked((int)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk

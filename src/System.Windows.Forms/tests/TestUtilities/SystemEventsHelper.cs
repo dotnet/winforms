@@ -7,7 +7,6 @@ using Microsoft.Win32;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using static Windows.Win32.UI.WindowsAndMessaging.SYSTEM_PARAMETERS_INFO_ACTION;
-using static Interop.User32;
 
 namespace System;
 
@@ -32,16 +31,16 @@ public static class SystemEventsHelper
     {
         HWND window = GetHWnd();
 
-        WM msg;
+        MessageId msg;
         WPARAM wParam;
         if (category == UserPreferenceCategory.Color)
         {
-            msg = WM.SYSCOLORCHANGE;
+            msg = PInvoke.WM_SYSCOLORCHANGE;
             wParam = 0;
         }
         else
         {
-            msg = WM.SETTINGCHANGE;
+            msg = PInvoke.WM_SETTINGCHANGE;
 
             if (category == UserPreferenceCategory.Accessibility)
             {
@@ -86,6 +85,6 @@ public static class SystemEventsHelper
         }
 
         // Call with reflect to immediately send the message.
-        PInvoke.SendMessage(window, msg | WM.REFLECT, wParam);
+        PInvoke.SendMessage(window, msg | MessageId.WM_REFLECT, wParam);
     }
 }

@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
 using Moq;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -71,10 +70,10 @@ public class CommonDialogTests
 
     public static IEnumerable<object[]> HookProc_TestData()
     {
-        yield return new object[] { User32.WM.INITDIALOG };
-        yield return new object[] { User32.WM.SETFOCUS };
+        yield return new object[] { PInvoke.WM_INITDIALOG };
+        yield return new object[] { PInvoke.WM_SETFOCUS };
 
-        const int CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
+        const int CDM_SETDEFAULTFOCUS = (int)PInvoke.WM_USER + 0x51;
         yield return new object[] { CDM_SETDEFAULTFOCUS };
 
         yield return new object[] { 0 };
@@ -242,7 +241,7 @@ public class CommonDialogTests
         };
 
         dialog.HelpRequest += handler;
-        Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WM)field.GetValue(null), IntPtr.Zero, IntPtr.Zero));
+        Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(MessageId)field.GetValue(null), IntPtr.Zero, IntPtr.Zero));
         Assert.Equal(1, callCount);
     }
 
@@ -262,7 +261,7 @@ public class CommonDialogTests
         };
 
         dialog.HelpRequest += handler;
-        Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(User32.WM)field.GetValue(null) + 1, IntPtr.Zero, IntPtr.Zero));
+        Assert.Equal(IntPtr.Zero, dialog.OwnerWndProc(IntPtr.Zero, (int)(MessageId)field.GetValue(null) + 1, IntPtr.Zero, IntPtr.Zero));
         Assert.Equal(0, callCount);
     }
 

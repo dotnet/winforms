@@ -9,13 +9,12 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using Windows.Win32;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.TestUtilities;
 
 public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 {
-    private static readonly User32.WM WM_DELAYEDEXECUTION = (User32.WM)PInvoke.RegisterWindowMessage("WinFormsSubPropertyGridDelayedExecution");
+    private static readonly MessageId WM_DELAYEDEXECUTION = PInvoke.RegisterWindowMessage("WinFormsSubPropertyGridDelayedExecution");
 
     internal PropertyGridView GridView => this.TestAccessor().Dynamic._gridView;
 

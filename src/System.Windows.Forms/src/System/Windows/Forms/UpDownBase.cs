@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -942,9 +941,9 @@ public abstract partial class UpDownBase : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 if (!HostedInWin32DialogManager)
                 {
                     if (ActiveControl is null)
@@ -967,7 +966,7 @@ public abstract partial class UpDownBase : ContainerControl
                 }
 
                 break;
-            case User32.WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 DefWndProc(ref m);
                 break;
             default:

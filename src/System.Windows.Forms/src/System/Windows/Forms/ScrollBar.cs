@@ -498,7 +498,7 @@ public abstract partial class ScrollBar : Control
         return base.GetScaledBounds(bounds, factor, specified);
     }
 
-    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg) => default;
+    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg) => default;
 
     protected override void OnEnabledChanged(EventArgs e)
     {
@@ -726,23 +726,23 @@ public abstract partial class ScrollBar : Control
 
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.REFLECT_HSCROLL:
-            case User32.WM.REFLECT_VSCROLL:
+            case MessageId.WM_REFLECT_HSCROLL:
+            case MessageId.WM_REFLECT_VSCROLL:
                 WmReflectScroll(ref m);
                 break;
 
-            case User32.WM.ERASEBKGND:
+            case PInvoke.WM_ERASEBKGND:
                 break;
 
-            case User32.WM.SIZE:
+            case PInvoke.WM_SIZE:
                 // Fixes the scrollbar focus rect
                 if (PInvoke.GetFocus() == HWND)
                 {
                     DefWndProc(ref m);
-                    PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
-                    PInvoke.SendMessage(this, User32.WM.SETFOCUS);
+                    PInvoke.SendMessage(this, PInvoke.WM_KILLFOCUS);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETFOCUS);
                 }
 
                 break;

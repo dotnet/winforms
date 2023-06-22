@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -315,7 +314,7 @@ public static partial class ControlPaint
         Size size = bitmap.Size;
 
         HBITMAP colorMask = (HBITMAP)bitmap.GetHbitmap();
-        using User32.GetDcScope screenDC = new(HWND.Null);
+        using GetDcScope screenDC = new(HWND.Null);
         using PInvoke.CreateDcScope sourceDC = new(screenDC);
         using PInvoke.CreateDcScope targetDC = new(screenDC);
         using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
@@ -1849,7 +1848,7 @@ public static partial class ControlPaint
             graphicsColor = Color.Black;
         }
 
-        using User32.GetDcScope desktopDC = new(
+        using GetDcScope desktopDC = new(
             PInvoke.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
@@ -1876,7 +1875,7 @@ public static partial class ControlPaint
     {
         R2_MODE rop2 = (R2_MODE)GetColorRop(backColor, (int)R2_MODE.R2_NOTXORPEN, (int)R2_MODE.R2_XORPEN);
 
-        using User32.GetDcScope desktopDC = new(
+        using GetDcScope desktopDC = new(
             PInvoke.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
@@ -2091,7 +2090,7 @@ public static partial class ControlPaint
             0x5a0049);  // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
         R2_MODE rop2 = R2_MODE.R2_NOT;
 
-        using var desktopDC = new User32.GetDcScope(
+        using var desktopDC = new GetDcScope(
             PInvoke.GetDesktopWindow(),
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);

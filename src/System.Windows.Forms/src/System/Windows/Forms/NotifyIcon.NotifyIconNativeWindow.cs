@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -30,7 +29,7 @@ public sealed partial class NotifyIcon
             // This same post is done in Control's Dispose method, so if you change it, change it there too.
             if (Handle != 0)
             {
-                PInvoke.PostMessage(this, User32.WM.CLOSE);
+                PInvoke.PostMessage(this, PInvoke.WM_CLOSE);
             }
 
             // This releases the handle from our window proc, re-routing it back to the system.

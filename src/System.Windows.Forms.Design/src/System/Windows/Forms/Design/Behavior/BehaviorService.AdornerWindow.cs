@@ -302,9 +302,9 @@ public sealed partial class BehaviorService
                 _behaviorService.TestHook_GetRecentSnapLines(ref m);
             }
 
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.PAINT:
+                case PInvoke.WM_PAINT:
                     {
                         // Stash off the region we have to update.
                         using PInvoke.RegionScope hrgn = new(0, 0, 0, 0);
@@ -330,7 +330,7 @@ public sealed partial class BehaviorService
                         break;
                     }
 
-                case User32.WM.NCHITTEST:
+                case PInvoke.WM_NCHITTEST:
                     Point pt = PARAM.ToPoint(m.LParamInternal);
 
                     var pt1 = default(Point);
@@ -348,7 +348,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.CAPTURECHANGED:
+                case PInvoke.WM_CAPTURECHANGED:
                     base.WndProc(ref m);
                     _behaviorService.OnLoseCapture();
                     break;
@@ -367,9 +367,9 @@ public sealed partial class BehaviorService
         {
             Point mouseLoc = new Point(x, y);
             _behaviorService.PropagateHitTest(mouseLoc);
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.LBUTTONDOWN:
+                case PInvoke.WM_LBUTTONDOWN:
                     if (_behaviorService.OnMouseDown(MouseButtons.Left, mouseLoc))
                     {
                         return false;
@@ -377,7 +377,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.RBUTTONDOWN:
+                case PInvoke.WM_RBUTTONDOWN:
                     if (_behaviorService.OnMouseDown(MouseButtons.Right, mouseLoc))
                     {
                         return false;
@@ -385,7 +385,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.MOUSEMOVE:
+                case PInvoke.WM_MOUSEMOVE:
                     if (_behaviorService.OnMouseMove(MouseButtons, mouseLoc))
                     {
                         return false;
@@ -393,7 +393,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.LBUTTONUP:
+                case PInvoke.WM_LBUTTONUP:
                     if (_behaviorService.OnMouseUp(MouseButtons.Left))
                     {
                         return false;
@@ -401,7 +401,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.RBUTTONUP:
+                case PInvoke.WM_RBUTTONUP:
                     if (_behaviorService.OnMouseUp(MouseButtons.Right))
                     {
                         return false;
@@ -409,7 +409,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.MOUSEHOVER:
+                case PInvoke.WM_MOUSEHOVER:
                     if (_behaviorService.OnMouseHover(mouseLoc))
                     {
                         return false;
@@ -417,7 +417,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.LBUTTONDBLCLK:
+                case PInvoke.WM_LBUTTONDBLCLK:
                     if (_behaviorService.OnMouseDoubleClick(MouseButtons.Left, mouseLoc))
                     {
                         return false;
@@ -425,7 +425,7 @@ public sealed partial class BehaviorService
 
                     break;
 
-                case User32.WM.RBUTTONDBLCLK:
+                case PInvoke.WM_RBUTTONDBLCLK:
                     if (_behaviorService.OnMouseDoubleClick(MouseButtons.Right, mouseLoc))
                     {
                         return false;

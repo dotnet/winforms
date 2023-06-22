@@ -9,7 +9,6 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.ComponentModel.Design;
 
@@ -74,7 +73,7 @@ internal sealed partial class DesignerActionPanel
                 int maxWidth = 0;
 
                 // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
-                using (var hdc = new User32.GetDcScope((HWND)listBox.Handle))
+                using (var hdc = new GetDcScope((HWND)listBox.Handle))
                 {
                     using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
                     using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
@@ -616,7 +615,7 @@ internal sealed partial class DesignerActionPanel
                     HWND hWndCapture = PInvoke.GetCapture();
                     if (!hWndCapture.IsNull)
                     {
-                        PInvoke.SendMessage(hWndCapture, User32.WM.CANCELMODE);
+                        PInvoke.SendMessage(hWndCapture, PInvoke.WM_CANCELMODE);
                         PInvoke.ReleaseCapture();
                     }
 
@@ -638,7 +637,7 @@ internal sealed partial class DesignerActionPanel
 
             protected override void WndProc(ref Message m)
             {
-                if (m.MsgInternal == User32.WM.ACTIVATE
+                if (m.MsgInternal == PInvoke.WM_ACTIVATE
                     && Visible
                     && m.WParamInternal.LOWORD == PInvoke.WA_INACTIVE
                     && !OwnsWindow((HWND)m.LParamInternal))

@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -277,7 +276,7 @@ public class Timer : Component
             // Fire a message across threads to destroy the timer and HWND on the thread that created it.
             if (GetInvokeRequired(hwnd))
             {
-                PInvoke.PostMessage(hwnd, User32.WM.CLOSE);
+                PInvoke.PostMessage(hwnd, PInvoke.WM_CLOSE);
                 return;
             }
 
@@ -341,7 +340,7 @@ public class Timer : Component
             Debug.Assert(m.HWND == HWND && !HWND.IsNull, "Timer getting messages for other windows?");
 
             // For timer messages call the timer event.
-            if (m.MsgInternal == User32.WM.TIMER)
+            if (m.MsgInternal == PInvoke.WM_TIMER)
             {
                 if (m.WParamInternal == _timerID)
                 {
@@ -349,7 +348,7 @@ public class Timer : Component
                     return;
                 }
             }
-            else if (m.MsgInternal == User32.WM.CLOSE)
+            else if (m.MsgInternal == PInvoke.WM_CLOSE)
             {
                 // This is a posted method from another thread that tells us we need
                 // to kill the timer. The handle may already be gone, so we specify it here.

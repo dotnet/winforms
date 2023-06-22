@@ -10,7 +10,6 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -106,7 +105,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     {
         if (_designer is not null && _designer.IsHandleCreated)
         {
-            PInvoke.SendMessage(_designer, User32.WM.NCACTIVATE, (WPARAM)(BOOL)focus);
+            PInvoke.SendMessage(_designer, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)focus);
             PInvoke.RedrawWindow(_designer, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }
@@ -202,61 +201,61 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     /// </summary>
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
             // Provide MouseWheel access for scrolling
-            case User32.WM.MOUSEWHEEL:
+            case PInvoke.WM_MOUSEWHEEL:
                 // Send a message to ourselves to scroll
                 if (!_designerRegion._messageMouseWheelProcessed)
                 {
                     _designerRegion._messageMouseWheelProcessed = true;
-                    PInvoke.SendMessage(_designerRegion, User32.WM.MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
+                    PInvoke.SendMessage(_designerRegion, PInvoke.WM_MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
                     return;
                 }
 
                 break;
             // Provide keyboard access for scrolling
-            case User32.WM.KEYDOWN:
+            case PInvoke.WM_KEYDOWN:
                 SCROLLBAR_COMMAND wScrollNotify = 0;
-                User32.WM msg = User32.WM.NULL;
+                MessageId msg = PInvoke.WM_NULL;
                 Keys keycode = (Keys)(m.WParamInternal & 0xFFFF);
                 switch (keycode)
                 {
                     case Keys.Up:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_LINEUP;
-                        msg = User32.WM.VSCROLL;
+                        msg = PInvoke.WM_VSCROLL;
                         break;
                     case Keys.Down:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_LINEDOWN;
-                        msg = User32.WM.VSCROLL;
+                        msg = PInvoke.WM_VSCROLL;
                         break;
                     case Keys.PageUp:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_PAGEUP;
-                        msg = User32.WM.VSCROLL;
+                        msg = PInvoke.WM_VSCROLL;
                         break;
                     case Keys.PageDown:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_PAGEDOWN;
-                        msg = User32.WM.VSCROLL;
+                        msg = PInvoke.WM_VSCROLL;
                         break;
                     case Keys.Home:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_TOP;
-                        msg = User32.WM.VSCROLL;
+                        msg = PInvoke.WM_VSCROLL;
                         break;
                     case Keys.End:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_BOTTOM;
-                        msg = User32.WM.VSCROLL;
+                        msg = PInvoke.WM_VSCROLL;
                         break;
                     case Keys.Left:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_LINEUP;
-                        msg = User32.WM.HSCROLL;
+                        msg = PInvoke.WM_HSCROLL;
                         break;
                     case Keys.Right:
                         wScrollNotify = SCROLLBAR_COMMAND.SB_LINEDOWN;
-                        msg = User32.WM.HSCROLL;
+                        msg = PInvoke.WM_HSCROLL;
                         break;
                 }
 
-                if ((msg == User32.WM.VSCROLL) || (msg == User32.WM.HSCROLL))
+                if ((msg == PInvoke.WM_VSCROLL) || (msg == PInvoke.WM_HSCROLL))
                 {
                     // Send a message to ourselves to scroll
                     PInvoke.SendMessage(_designerRegion, msg, (WPARAM)(int)wScrollNotify);
@@ -264,7 +263,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 }
 
                 break;
-            case User32.WM.CONTEXTMENU:
+            case PInvoke.WM_CONTEXTMENU:
                 PInvoke.SendMessage(_designer, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 return;
         }
@@ -570,7 +569,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
-            if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)m.WParamInternal.LOWORD == User32.WM.CREATE)
+            if (m.MsgInternal == PInvoke.WM_PARENTNOTIFY && m.WParamInternal.LOWORD == PInvoke.WM_CREATE)
             {
                 if (_overlayList is not null)
                 {
@@ -597,11 +596,11 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                     }
                 }
             }
-            else if ((m.Msg == (int)User32.WM.VSCROLL || m.Msg == (int)User32.WM.HSCROLL) && BehaviorService is not null)
+            else if ((m.Msg == (int)PInvoke.WM_VSCROLL || m.Msg == (int)PInvoke.WM_HSCROLL) && BehaviorService is not null)
             {
                 BehaviorService.SyncSelection();
             }
-            else if ((m.Msg == (int)User32.WM.MOUSEWHEEL))
+            else if ((m.Msg == (int)PInvoke.WM_MOUSEWHEEL))
             {
                 _messageMouseWheelProcessed = false;
                 BehaviorService?.SyncSelection();

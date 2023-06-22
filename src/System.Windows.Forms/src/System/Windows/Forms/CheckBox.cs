@@ -215,7 +215,7 @@ public partial class CheckBox : ButtonBase
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.BM_SETCHECK, (WPARAM)(int)_checkState);
+                    PInvoke.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(int)_checkState);
                 }
 
                 bool checkedChanged = oldChecked != Checked;
@@ -531,7 +531,7 @@ public partial class CheckBox : ButtonBase
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.BM_SETCHECK, (WPARAM)(int)_checkState);
+            PInvoke.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(int)_checkState);
         }
     }
 

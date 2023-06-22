@@ -144,16 +144,16 @@ public sealed partial class MdiClient : Control
         switch (value)
         {
             case MdiLayout.Cascade:
-                PInvoke.SendMessage(this, User32.WM.MDICASCADE);
+                PInvoke.SendMessage(this, PInvoke.WM_MDICASCADE);
                 break;
             case MdiLayout.TileVertical:
-                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_VERTICAL);
+                PInvoke.SendMessage(this, PInvoke.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_VERTICAL);
                 break;
             case MdiLayout.TileHorizontal:
-                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_HORIZONTAL);
+                PInvoke.SendMessage(this, PInvoke.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_HORIZONTAL);
                 break;
             case MdiLayout.ArrangeIcons:
-                PInvoke.SendMessage(this, User32.WM.MDIICONARRANGE);
+                PInvoke.SendMessage(this, PInvoke.WM_MDIICONARRANGE);
                 break;
         }
     }
@@ -331,9 +331,9 @@ public sealed partial class MdiClient : Control
     /// <param name="m">The Windows <see cref="Message" /> to process.</param>
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.CREATE:
+            case PInvoke.WM_CREATE:
                 if (ParentInternal is not null && ParentInternal.Site is not null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                 {
                     SetWindowRgn();
@@ -341,7 +341,7 @@ public sealed partial class MdiClient : Control
 
                 break;
 
-            case User32.WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 InvokeGotFocus(ParentInternal, EventArgs.Empty);
                 Form? childForm = null;
                 if (ParentInternal is Form parentInternalAsForm)
@@ -365,7 +365,7 @@ public sealed partial class MdiClient : Control
                 DefWndProc(ref m);
                 InvokeGotFocus(this, EventArgs.Empty);
                 return;
-            case User32.WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 InvokeLostFocus(ParentInternal, EventArgs.Empty);
                 break;
         }

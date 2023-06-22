@@ -185,7 +185,7 @@ internal sealed partial class PropertyGridView :
                 return false;
             }
 
-            return PInvoke.SendMessage(EditTextBox, (User32.WM)PInvoke.EM_CANUNDO) != 0;
+            return PInvoke.SendMessage(EditTextBox, PInvoke.EM_CANUNDO) != 0;
         }
     }
 
@@ -1119,7 +1119,7 @@ internal sealed partial class PropertyGridView :
     {
         if (CanUndo && EditTextBox.Visible)
         {
-            PInvoke.SendMessage(EditTextBox, User32.WM.UNDO);
+            PInvoke.SendMessage(EditTextBox, PInvoke.WM_UNDO);
         }
     }
 
@@ -1548,7 +1548,7 @@ internal sealed partial class PropertyGridView :
     private bool FilterEditWndProc(ref Message m)
     {
         // If it's the TAB key, we keep it since we'll give them focus with it.
-        if (_dropDownHolder?.Visible == true && m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal != Keys.Tab)
+        if (_dropDownHolder?.Visible == true && m.MsgInternal == PInvoke.WM_KEYDOWN && (Keys)(nint)m.WParamInternal != Keys.Tab)
         {
             Control control = _dropDownHolder.Component;
             if (control is not null)
@@ -2436,7 +2436,7 @@ internal sealed partial class PropertyGridView :
             }
             else
             {
-                using User32.GetDcScope hdc = new(HWND);
+                using GetDcScope hdc = new(HWND);
                 using PInvoke.CreateBrushScope hbrush = new(color);
                 hdc.FillRectangle(hbrush, clearRect);
             }
@@ -2679,7 +2679,7 @@ internal sealed partial class PropertyGridView :
                 Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
             {
                 DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-                PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONUP, (WPARAM)0, (LPARAM)e.Location);
+                PInvoke.SendMessage(EditTextBox, PInvoke.WM_LBUTTONUP, (WPARAM)0, (LPARAM)e.Location);
                 EditTextBox.SelectAll();
             }
 
@@ -3538,8 +3538,8 @@ internal sealed partial class PropertyGridView :
 
             Point editPoint = PointToScreen(_lastMouseDown);
             editPoint = EditTextBox.PointToClient(editPoint);
-            PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromPoint(editPoint));
-            PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONUP, (WPARAM)0, (LPARAM)editPoint);
+            PInvoke.SendMessage(EditTextBox, PInvoke.WM_LBUTTONDOWN, 0, PARAM.FromPoint(editPoint));
+            PInvoke.SendMessage(EditTextBox, PInvoke.WM_LBUTTONUP, (WPARAM)0, (LPARAM)editPoint);
         }
 
         if (setSelectTime)
@@ -3793,7 +3793,7 @@ internal sealed partial class PropertyGridView :
 
             // The listbox draws with GDI, not GDI+.  So we use a normal DC here.
 
-            using var hdc = new User32.GetDcScope(DropDownListBox.HWND);
+            using var hdc = new GetDcScope(DropDownListBox.HWND);
 
             TEXTMETRICW tm = default;
             int selectionIndex = -1;
@@ -3888,7 +3888,7 @@ internal sealed partial class PropertyGridView :
 
         RECT rect = itemRect;
 
-        PInvoke.SendMessage(toolTip, (User32.WM)PInvoke.TTM_ADJUSTRECT, (WPARAM)1, ref rect);
+        PInvoke.SendMessage(toolTip, PInvoke.TTM_ADJUSTRECT, (WPARAM)1, ref rect);
 
         // Now offset it back to screen coords.
         Point location = parent.PointToScreen(new(rect.left, rect.top));
@@ -5085,8 +5085,8 @@ internal sealed partial class PropertyGridView :
         while (PInvoke.PeekMessage(
             &mouseMessage,
             HWND.Null,
-            (uint)User32.WM.MOUSEFIRST,
-            (uint)User32.WM.MOUSELAST,
+            (uint)PInvoke.WM_MOUSEFIRST,
+            (uint)PInvoke.WM_MOUSELAST,
             PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             // No-op.
@@ -5162,8 +5162,8 @@ internal sealed partial class PropertyGridView :
         while (PInvoke.PeekMessage(
             &mouseMsg,
             HWND.Null,
-            (uint)User32.WM.MOUSEFIRST,
-            (uint)User32.WM.MOUSELAST,
+            (uint)PInvoke.WM_MOUSEFIRST,
+            (uint)PInvoke.WM_MOUSELAST,
             PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             // No-op.
@@ -5478,13 +5478,13 @@ internal sealed partial class PropertyGridView :
     {
         switch (m.Msg)
         {
-            case (int)User32.WM.SYSCOLORCHANGE:
+            case (int)PInvoke.WM_SYSCOLORCHANGE:
                 Invalidate();
                 break;
 
             // If we get focus in the error state, make sure we push it back to the
             // Edit or bad bad things can happen with our state.
-            case (int)User32.WM.SETFOCUS:
+            case (int)PInvoke.WM_SETFOCUS:
                 if (!InPropertySet && EditTextBox.Visible && (_errorState != ErrorState.None || !CommitEditTextBox()))
                 {
                     base.WndProc(ref m);
@@ -5494,18 +5494,18 @@ internal sealed partial class PropertyGridView :
 
                 break;
 
-            case (int)User32.WM.IME_STARTCOMPOSITION:
+            case (int)PInvoke.WM_IME_STARTCOMPOSITION:
                 EditTextBox.Focus();
                 EditTextBox.Clear();
-                PInvoke.PostMessage(EditTextBox, User32.WM.IME_STARTCOMPOSITION);
+                PInvoke.PostMessage(EditTextBox, PInvoke.WM_IME_STARTCOMPOSITION);
                 return;
 
-            case (int)User32.WM.IME_COMPOSITION:
+            case (int)PInvoke.WM_IME_COMPOSITION:
                 EditTextBox.Focus();
-                PInvoke.PostMessage(EditTextBox, User32.WM.IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
+                PInvoke.PostMessage(EditTextBox, PInvoke.WM_IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
                 return;
 
-            case (int)User32.WM.GETDLGCODE:
+            case (int)PInvoke.WM_GETDLGCODE:
 
                 uint flags = PInvoke.DLGC_WANTCHARS | PInvoke.DLGC_WANTARROWS;
 
@@ -5522,7 +5522,7 @@ internal sealed partial class PropertyGridView :
                 m.ResultInternal = (LRESULT)(nint)flags;
                 return;
 
-            case (int)User32.WM.MOUSEMOVE:
+            case (int)PInvoke.WM_MOUSEMOVE:
 
                 // Check if it's the same position, of so eat the message.
                 if (m.LParamInternal == _lastMouseMove)
@@ -5533,7 +5533,7 @@ internal sealed partial class PropertyGridView :
                 _lastMouseMove = (int)m.LParamInternal;
                 break;
 
-            case (int)User32.WM.NOTIFY:
+            case (int)PInvoke.WM_NOTIFY:
                 if (WmNotify(ref m))
                 {
                     return;

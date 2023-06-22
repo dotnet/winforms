@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -260,7 +259,7 @@ internal class WindowSubclassHandler : IDisposable
 
     private LRESULT NativeWndProc(
         HWND hWnd,
-        User32.WM msg,
+        MessageId msg,
         WPARAM wParam,
         LPARAM lParam)
     {

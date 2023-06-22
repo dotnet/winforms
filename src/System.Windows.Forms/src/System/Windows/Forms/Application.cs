@@ -604,7 +604,7 @@ public sealed partial class Application
         PInvoke.EnumChildWindows(handle, SendThemeChangedRecursive);
 
         // Then send to ourself.
-        PInvoke.SendMessage(handle, User32.WM.THEMECHANGED);
+        PInvoke.SendMessage(handle, PInvoke.WM_THEMECHANGED);
 
         return true;
     }
@@ -660,7 +660,7 @@ public sealed partial class Application
         if (modified)
         {
             message.HWnd = msg.hwnd;
-            message.MsgInternal = (User32.WM)msg.message;
+            message.MsgInternal = (MessageId)msg.message;
             message.WParamInternal = msg.wParam;
             message.LParamInternal = msg.lParam;
         }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -89,7 +88,7 @@ public static partial class ToolStripManager
                         // Call pretranslate on the message to execute the message filters and preprocess message.
                         if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                         {
-                            msg->message = (uint)User32.WM.NULL;
+                            msg->message = (uint)PInvoke.WM_NULL;
                         }
                     }
                 }

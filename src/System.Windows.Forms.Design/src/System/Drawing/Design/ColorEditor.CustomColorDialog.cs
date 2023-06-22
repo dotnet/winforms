@@ -59,9 +59,9 @@ public partial class ColorEditor
 
         protected override unsafe IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
         {
-            switch ((User32.WM)msg)
+            switch ((MessageId)msg)
             {
-                case User32.WM.INITDIALOG:
+                case PInvoke.WM_INITDIALOG:
                     PInvoke.SendDlgItemMessage(
                         (HWND)hwnd,
                         (int)PInvoke.COLOR_HUE,
@@ -115,7 +115,7 @@ public partial class ColorEditor
                     Color = Color.Empty;
                     break;
 
-                case User32.WM.COMMAND:
+                case PInvoke.WM_COMMAND:
                     if (PARAM.LOWORD(wParam) == (int)PInvoke.COLOR_ADD)
                     {
                         BOOL success = false;
@@ -131,7 +131,7 @@ public partial class ColorEditor
                         Color = Color.FromArgb(red, green, blue);
                         PInvoke.PostMessage(
                             (HWND)hwnd,
-                            User32.WM.COMMAND,
+                            PInvoke.WM_COMMAND,
                             (WPARAM)PARAM.FromLowHigh((int)MESSAGEBOX_RESULT.IDOK, 0),
                             (LPARAM)PInvoke.GetDlgItem((HWND)hwnd, (int)MESSAGEBOX_RESULT.IDOK));
                         break;

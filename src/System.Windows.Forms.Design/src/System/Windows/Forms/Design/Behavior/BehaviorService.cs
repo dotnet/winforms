@@ -12,7 +12,6 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior;
 
@@ -54,8 +53,8 @@ public sealed partial class BehaviorService : IDisposable
         = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
 
     //test hooks for SnapLines
-    private static User32.WM WM_GETALLSNAPLINES;
-    private static User32.WM WM_GETRECENTSNAPLINES;
+    private static MessageId WM_GETALLSNAPLINES;
+    private static MessageId WM_GETRECENTSNAPLINES;
     private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
 
     internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
@@ -96,8 +95,8 @@ public sealed partial class BehaviorService : IDisposable
         _queriedSnapLines = false;
 
         // Test hooks
-        WM_GETALLSNAPLINES = (User32.WM)PInvoke.RegisterWindowMessage("WM_GETALLSNAPLINES");
-        WM_GETRECENTSNAPLINES = (User32.WM)PInvoke.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
+        WM_GETALLSNAPLINES = PInvoke.RegisterWindowMessage("WM_GETALLSNAPLINES");
+        WM_GETRECENTSNAPLINES = PInvoke.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
         SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);

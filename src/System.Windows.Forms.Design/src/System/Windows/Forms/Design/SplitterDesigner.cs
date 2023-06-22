@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Design;
 
@@ -37,7 +36,7 @@ internal class SplitterDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///   Here we check to see if there is no border on the panel. If not, we draw one so that the panel shape is visible at design time.
+    ///  Here we check to see if there is no border on the panel. If not, we draw one so that the panel shape is visible at design time.
     /// </summary>
     protected override void OnPaintAdornments(PaintEventArgs pe)
     {
@@ -51,9 +50,9 @@ internal class SplitterDesigner : ControlDesigner
 
     protected override void WndProc(ref Message m)
     {
-        switch ((WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case WM.WINDOWPOSCHANGED:
+            case PInvoke.WM_WINDOWPOSCHANGED:
                 // Really only care about window size changing
                 Control.Invalidate();
                 break;

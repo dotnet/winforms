@@ -72,7 +72,7 @@ public partial class ErrorProvider
             if (_tipWindow is not null)
             {
                 var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, TOOLTIP_FLAGS.TTF_SUBCLASS, item.Error);
-                toolInfo.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_ADDTOOLW);
+                toolInfo.SendMessage(_tipWindow, PInvoke.TTM_ADDTOOLW);
             }
 
             Update(timerCaused: false);
@@ -141,7 +141,7 @@ public partial class ErrorProvider
 
             PInvoke.SendMessage(
                 _tipWindow,
-                (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH,
+                PInvoke.TTM_SETMAXTIPWIDTH,
                 (WPARAM)0,
                 (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
             PInvoke.SetWindowPos(
@@ -149,7 +149,7 @@ public partial class ErrorProvider
                 HWND.HWND_TOP,
                 0, 0, 0, 0,
                 SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
-            PInvoke.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETDELAYTIME, (WPARAM)PInvoke.TTDT_INITIAL);
+            PInvoke.SendMessage(_tipWindow, PInvoke.TTM_SETDELAYTIME, (WPARAM)PInvoke.TTDT_INITIAL);
 
             return true;
         }
@@ -288,7 +288,7 @@ public partial class ErrorProvider
             if (_tipWindow is not null)
             {
                 var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
-                info.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_DELTOOLW);
+                info.SendMessage(_tipWindow, PInvoke.TTM_DELTOOLW);
             }
 
             if (_items.Count == 0)
@@ -390,7 +390,7 @@ public partial class ErrorProvider
                     }
 
                     var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
-                    toolInfo.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETTOOLINFOW);
+                    toolInfo.SendMessage(_tipWindow, PInvoke.TTM_SETTOOLINFOW);
                 }
 
                 if (timerCaused && item.BlinkPhase > 0)
@@ -404,7 +404,7 @@ public partial class ErrorProvider
                 _provider._showIcon = !_provider._showIcon;
             }
 
-            using User32.GetDcScope hdc = new(HWND);
+            using GetDcScope hdc = new(HWND);
             using PInvoke.SaveDcScope save = new(hdc);
             MirrorDcIfNeeded(hdc);
 
@@ -435,7 +435,7 @@ public partial class ErrorProvider
         {
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
 
-            if (m.Msg == (int)User32.WM.GETOBJECT && m.LParamInternal == PInvoke.UiaRootObjectId)
+            if (m.Msg == (int)PInvoke.WM_GETOBJECT && m.LParamInternal == PInvoke.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
@@ -459,10 +459,10 @@ public partial class ErrorProvider
         {
             switch (m.MsgInternal)
             {
-                case User32.WM.GETOBJECT:
+                case PInvoke.WM_GETOBJECT:
                     WmGetObject(ref m);
                     break;
-                case User32.WM.NOTIFY:
+                case PInvoke.WM_NOTIFY:
                     NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                     if ((int)nmhdr->code == (int)ComCtl32.TTN.SHOW || (int)nmhdr->code == (int)ComCtl32.TTN.POP)
                     {
@@ -470,9 +470,9 @@ public partial class ErrorProvider
                     }
 
                     break;
-                case User32.WM.ERASEBKGND:
+                case PInvoke.WM_ERASEBKGND:
                     break;
-                case User32.WM.PAINT:
+                case PInvoke.WM_PAINT:
                     OnPaint();
                     break;
                 default:

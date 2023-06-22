@@ -50,8 +50,8 @@ public partial class CheckedListBox : ListBox
     private CheckedItemCollection? _checkedItemCollection;
     private CheckedIndexCollection? _checkedIndexCollection;
 
-    private static readonly User32.WM LBC_GETCHECKSTATE = (User32.WM)PInvoke.RegisterWindowMessage("LBC_GETCHECKSTATE");
-    private static readonly User32.WM LBC_SETCHECKSTATE = (User32.WM)PInvoke.RegisterWindowMessage("LBC_SETCHECKSTATE");
+    private static readonly MessageId LBC_GETCHECKSTATE = PInvoke.RegisterWindowMessage("LBC_GETCHECKSTATE");
+    private static readonly MessageId LBC_SETCHECKSTATE = PInvoke.RegisterWindowMessage("LBC_SETCHECKSTATE");
 
     /// <summary>
     ///  Creates a new CheckedListBox for the user.
@@ -395,7 +395,7 @@ public partial class CheckedListBox : ListBox
         if (IsHandleCreated)
         {
             var rect = default(RECT);
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.LB_GETITEMRECT, (WPARAM)index, ref rect);
+            PInvoke.SendMessage(this, PInvoke.LB_GETITEMRECT, (WPARAM)index, ref rect);
             PInvoke.InvalidateRect(this, &rect, bErase: false);
         }
     }
@@ -467,7 +467,7 @@ public partial class CheckedListBox : ListBox
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
+        PInvoke.SendMessage(this, PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
     }
 
     /// <summary>
@@ -768,7 +768,7 @@ public partial class CheckedListBox : ListBox
         // Update the item height
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
+            PInvoke.SendMessage(this, PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
         }
 
         // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
@@ -955,10 +955,10 @@ public partial class CheckedListBox : ListBox
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.REFLECT_CHARTOITEM:
+            case MessageId.WM_REFLECT_CHARTOITEM:
                 m.ResultInternal = (LRESULT)(-1);
                 break;
-            case User32.WM.REFLECT_VKEYTOITEM:
+            case MessageId.WM_REFLECT_VKEYTOITEM:
                 WmReflectVKeyToItem(ref m);
                 break;
             default:

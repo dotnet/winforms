@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using static Interop;
-
 namespace System.Windows.Forms.Design;
 
 public partial class ControlDesigner
@@ -40,12 +38,12 @@ public partial class ControlDesigner
                 return;
             }
 
-            if (m.MsgInternal == User32.WM.DESTROY)
+            if (m.MsgInternal == PInvoke.WM_DESTROY)
             {
                 _designer.RemoveSubclassedWindow(m.HWnd);
             }
 
-            if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)m.WParamInternal.LOWORD == User32.WM.CREATE)
+            if (m.MsgInternal == PInvoke.WM_PARENTNOTIFY && m.WParamInternal.LOWORD == PInvoke.WM_CREATE)
             {
                 _designer.HookChildHandles((HWND)(nint)m.LParamInternal); // they will get removed from the collection just above
             }

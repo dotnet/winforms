@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.Mso;
 
 namespace System.Windows.Forms;
@@ -267,7 +266,7 @@ public sealed partial class Application
                         // If the component wants us to process the message, do it.
                         PInvoke.GetMessage(&msg, HWND.Null, 0, 0);
 
-                        if (msg.message == (uint)User32.WM.QUIT)
+                        if (msg.message == PInvoke.WM_QUIT)
                         {
                             Debug.WriteLineIf(
                                 CompModSwitches.MSOComponentManager.TraceInfo,

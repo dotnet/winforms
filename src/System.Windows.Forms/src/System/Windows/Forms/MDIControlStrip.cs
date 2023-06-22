@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -94,7 +93,7 @@ internal partial class MdiControlStrip : MenuStrip
 
     private Image GetTargetWindowIcon()
     {
-        HICON hIcon = (HICON)PInvoke.SendMessage(GetSafeHandle(_target), User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        HICON hIcon = (HICON)PInvoke.SendMessage(GetSafeHandle(_target), PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Icon icon = !hIcon.IsNull ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
         Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 

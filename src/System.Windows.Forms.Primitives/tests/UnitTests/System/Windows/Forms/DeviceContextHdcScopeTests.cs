@@ -92,7 +92,7 @@ public class DeviceContextHdcScopeTests
     [Fact]
     public unsafe void CreateWithGraphicsBasedOnHdcAppliesRequestedParameters()
     {
-        using var hdc = User32.GetDcScope.ScreenDC;
+        using var hdc = GetDcScope.ScreenDC;
         RECT originalClipRect = default;
         RegionType originalRegionType = (RegionType)PInvoke.GetClipBox(hdc, &originalClipRect);
         Point originalOrigin = default;
@@ -215,7 +215,7 @@ public class DeviceContextHdcScopeTests
     [InlineData((int)ApplyGraphicsProperties.None)]
     public void CreateFromCleanIGraphicsHdcProviderDoesNotCreateGraphics(int apply)
     {
-        using var hdc = User32.GetDcScope.ScreenDC;
+        using var hdc = GetDcScope.ScreenDC;
         var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
         var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
         mockHdcProvider
@@ -287,7 +287,7 @@ public class DeviceContextHdcScopeTests
     {
         // If we don't request to apply properties, there is no need to get the graphics.
 
-        using var hdc = User32.GetDcScope.ScreenDC;
+        using var hdc = GetDcScope.ScreenDC;
         var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
         var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
         mockHdcProvider
@@ -320,7 +320,7 @@ public class DeviceContextHdcScopeTests
     [InlineData((int)ApplyGraphicsProperties.None)]
     public void CreateFromIDeviceContext(int apply)
     {
-        using var hdc = User32.GetDcScope.ScreenDC;
+        using var hdc = GetDcScope.ScreenDC;
         var mockIDeviceContext = new Mock<IDeviceContext>();
         mockIDeviceContext
             .Setup(p => p.GetHdc())

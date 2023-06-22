@@ -9,7 +9,6 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using static Interop;
 using static Interop.UiaCore;
-using static Interop.User32;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -3385,7 +3384,7 @@ public class ButtonTests
 
             var m = new Message
             {
-                Msg = (int)User32.WM.ERASEBKGND,
+                Msg = (int)PInvoke.WM_ERASEBKGND,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -3429,7 +3428,7 @@ public class ButtonTests
             {
                 var m = new Message
                 {
-                    Msg = (int)User32.WM.ERASEBKGND,
+                    Msg = (int)PInvoke.WM_ERASEBKGND,
                     WParam = hdc,
                     Result = (IntPtr)250
                 };
@@ -3465,7 +3464,7 @@ public class ButtonTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.ERASEBKGND,
+            Msg = (int)PInvoke.WM_ERASEBKGND,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -3502,7 +3501,7 @@ public class ButtonTests
         {
             var m = new Message
             {
-                Msg = (int)User32.WM.ERASEBKGND,
+                Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
                 Result = (IntPtr)250
             };
@@ -3545,7 +3544,7 @@ public class ButtonTests
         };
         var m = new Message
         {
-            Msg = (int)WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -3601,7 +3600,7 @@ public class ButtonTests
 
             Message m = new()
             {
-                Msg = (int)(WM.REFLECT | WM.COMMAND),
+                Msg = (int)(MessageId.WM_REFLECT_COMMAND),
                 WParam = wParam,
                 Result = 250
             };
@@ -3638,7 +3637,7 @@ public class ButtonTests
 
         var m = new Message
         {
-            Msg = (int)(WM.REFLECT | WM.COMMAND),
+            Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
             Result = (IntPtr)250
         };

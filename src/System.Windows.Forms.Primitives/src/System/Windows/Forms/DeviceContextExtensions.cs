@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -125,7 +124,7 @@ internal static class DeviceContextExtensions
 
     internal static Graphics CreateGraphics(this HDC hdc) => Graphics.FromHdcInternal(hdc);
     internal static Graphics CreateGraphics(this PInvoke.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC);
-    internal static Graphics CreateGraphics(this User32.GetDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC);
+    internal static Graphics CreateGraphics(this GetDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC);
 
     internal static void DrawAndFillEllipse(
         this DeviceContextHdcScope hdc,
@@ -149,7 +148,7 @@ internal static class DeviceContextExtensions
         PInvoke.Ellipse(hdc, left, top, right, bottom);
     }
 
-    internal static void FillRectangle(this User32.GetDcScope hdc, HBRUSH hbrush, Rectangle rectangle)
+    internal static void FillRectangle(this GetDcScope hdc, HBRUSH hbrush, Rectangle rectangle)
         => FillRectangle(hdc.HDC, hbrush, rectangle);
 
     internal static void FillRectangle(this HDC hdc, HBRUSH hbrush, Rectangle rectangle)

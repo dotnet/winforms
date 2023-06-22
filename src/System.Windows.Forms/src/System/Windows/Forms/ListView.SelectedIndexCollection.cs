@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -31,7 +30,7 @@ public partial class ListView
             {
                 if (_owner.IsHandleCreated)
                 {
-                    return (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETSELECTEDCOUNT);
+                    return (int)PInvoke.SendMessage(_owner, PInvoke.LVM_GETSELECTEDCOUNT);
                 }
                 else
                 {
@@ -59,7 +58,7 @@ public partial class ListView
                     {
                         int fidx = (int)PInvoke.SendMessage(
                             _owner,
-                            (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                            PInvoke.LVM_GETNEXTITEM,
                             (WPARAM)displayIndex,
                             (LPARAM)(uint)PInvoke.LVNI_SELECTED);
                         if (fidx > -1)
@@ -109,7 +108,7 @@ public partial class ListView
                     {
                         fidx = (int)PInvoke.SendMessage(
                             _owner,
-                            (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                            PInvoke.LVM_GETNEXTITEM,
                             (WPARAM)fidx,
                             (LPARAM)(uint)PInvoke.LVNI_SELECTED);
                         Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");

@@ -1403,7 +1403,7 @@ public partial class WebBrowser : WebBrowserBase
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.CONTEXTMENU:
+            case PInvoke.WM_CONTEXTMENU:
                 if (!ShowContextMenu(PARAM.ToPoint(m.LParamInternal)))
                 {
                     DefWndProc(ref m);

@@ -342,13 +342,13 @@ public class FontDialog : CommonDialog
     /// </summary>
     protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
     {
-        switch ((User32.WM)msg)
+        switch ((uint)msg)
         {
-            case User32.WM.COMMAND:
+            case PInvoke.WM_COMMAND:
                 if (PARAM.ToInt(wparam) == 0x402)
                 {
                     LOGFONT logFont = default;
-                    PInvoke.SendMessage((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
+                    PInvoke.SendMessage((HWND)hWnd, PInvoke.WM_CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                     UpdateFont(ref logFont);
                     int index = (int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETCURSEL, 0, 0);
                     if (index != PInvoke.CB_ERR)
@@ -374,7 +374,7 @@ public class FontDialog : CommonDialog
                 }
 
                 break;
-            case User32.WM.INITDIALOG:
+            case PInvoke.WM_INITDIALOG:
                 if (!showColor)
                 {
                     HWND hWndCtl = PInvoke.GetDlgItem((HWND)hWnd, (int)PInvoke.cmb4);
@@ -426,7 +426,7 @@ public class FontDialog : CommonDialog
     {
         WNDPROC hookProc = HookProcInternal;
         void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
-        using var dc = User32.GetDcScope.ScreenDC;
+        using var dc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(dc);
         LOGFONTW logFont = LOGFONTW.FromFont(Font, graphics);
 
@@ -523,7 +523,7 @@ public class FontDialog : CommonDialog
 
     private void UpdateFont(ref LOGFONT lf)
     {
-        using var dc = User32.GetDcScope.ScreenDC;
+        using var dc = GetDcScope.ScreenDC;
         using Font fontInWorldUnits = Font.FromLogFont(in lf, dc);
 
         // The dialog claims its working in points (a device-independent unit),

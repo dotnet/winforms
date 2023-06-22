@@ -12,7 +12,6 @@ using System.Windows.Forms.Design.Behavior;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Collections;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -746,7 +745,7 @@ internal class CommandSet : IDisposable
                 HWND hwnd = PInvoke.WindowFromPoint(p);
                 if (!hwnd.IsNull)
                 {
-                    PInvoke.SendMessage(hwnd, User32.WM.SETCURSOR, hwnd, (nint)PInvoke.HTCLIENT);
+                    PInvoke.SendMessage(hwnd, PInvoke.WM_SETCURSOR, hwnd, (nint)PInvoke.HTCLIENT);
                 }
                 else
                 {

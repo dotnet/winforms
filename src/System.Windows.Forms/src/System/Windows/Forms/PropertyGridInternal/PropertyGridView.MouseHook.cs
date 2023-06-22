@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -114,15 +113,15 @@ internal partial class PropertyGridView
                 var mhs = (MOUSEHOOKSTRUCT*)(nint)lparam;
                 if (mhs is not null)
                 {
-                    switch ((User32.WM)(uint)wparam)
+                    switch ((uint)wparam)
                     {
-                        case User32.WM.LBUTTONDOWN:
-                        case User32.WM.MBUTTONDOWN:
-                        case User32.WM.RBUTTONDOWN:
-                        case User32.WM.NCLBUTTONDOWN:
-                        case User32.WM.NCMBUTTONDOWN:
-                        case User32.WM.NCRBUTTONDOWN:
-                        case User32.WM.MOUSEACTIVATE:
+                        case PInvoke.WM_LBUTTONDOWN:
+                        case PInvoke.WM_MBUTTONDOWN:
+                        case PInvoke.WM_RBUTTONDOWN:
+                        case PInvoke.WM_NCLBUTTONDOWN:
+                        case PInvoke.WM_NCMBUTTONDOWN:
+                        case PInvoke.WM_NCRBUTTONDOWN:
+                        case PInvoke.WM_MOUSEACTIVATE:
                             if (ProcessMouseDown(mhs->hwnd))
                             {
                                 return (LRESULT)1;

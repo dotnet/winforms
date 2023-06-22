@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -41,7 +40,7 @@ public partial class NativeWindow
             RegisterClass();
         }
 
-        public LRESULT Callback(HWND hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam)
+        public LRESULT Callback(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
         {
             Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
 

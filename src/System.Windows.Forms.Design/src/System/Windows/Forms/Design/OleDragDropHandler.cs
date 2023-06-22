@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 using Windows.Win32.System.SystemServices;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -505,7 +504,7 @@ internal partial class OleDragDropHandler
             graphicsColor = Color.Black;
         }
 
-        using User32.GetDcScope dc = new(handle);
+        using GetDcScope dc = new(handle);
         using PInvoke.ObjectScope pen =
             new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
 
@@ -560,7 +559,7 @@ internal partial class OleDragDropHandler
         // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
         // but that causes a horrible flashing because GDI+ uses direct draw.
         MSG msg = default;
-        while (PInvoke.PeekMessage(&msg, HWND.Null, (uint)User32.WM.PAINT, (uint)User32.WM.PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+        while (PInvoke.PeekMessage(&msg, HWND.Null, (uint)PInvoke.WM_PAINT, (uint)PInvoke.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             PInvoke.TranslateMessage(msg);
             PInvoke.DispatchMessage(&msg);
@@ -863,7 +862,7 @@ internal partial class OleDragDropHandler
                                 if (updateLocation)
                                 {
                                     oldDesignerControl = client.GetDesignerControl();
-                                    PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
+                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
                                 }
 
                                 Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -912,7 +911,7 @@ internal partial class OleDragDropHandler
                                 if (oldDesignerControl is not null)
                                 {
                                     //((ComponentDataObject)dataObj).ShowControls();
-                                    PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
+                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                                     oldDesignerControl.Invalidate(true);
                                 }
 
