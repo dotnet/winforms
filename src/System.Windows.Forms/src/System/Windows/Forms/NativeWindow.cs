@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 ///  Provides a low-level encapsulation of a window handle and a window procedure. The class automatically
 ///  manages window class creation and registration.
 /// </summary>
-public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle, IHandle<HWND>
+public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle<HWND>
 {
 #if DEBUG
     private static readonly BooleanSwitch AlwaysUseNormalWndProc
