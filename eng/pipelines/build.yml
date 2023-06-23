@@ -118,8 +118,7 @@ jobs:
       env:
         XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
       displayName: Run Integration Tests
-      # UI tests are blocked from execution until we find solution for https://github.com/dotnet/winforms/issues/9318.
-      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'), contains(variables['System.PullRequest.TargetBranch'], 'main'), false)
+      condition: eq(variables['System.TeamProject'], 'public')
       retryCountOnTaskFailure: 3
 
     # Create Nuget package, sign, and publish
