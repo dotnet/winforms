@@ -112,12 +112,6 @@ internal abstract class UiaTextProvider : ITextProvider
         keyboardInput.Anonymous.ki.wVk = vk;
         keyboardInput.Anonymous.ki.wScan = 0;
         keyboardInput.Anonymous.ki.dwFlags = press ? 0 : KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
-
-        if (VirtualKeyUtilities.IsExtendedKey(vk))
-        {
-            keyboardInput.Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;
-        }
-
         keyboardInput.Anonymous.ki.time = 0;
         keyboardInput.Anonymous.ki.dwExtraInfo = UIntPtr.Zero;
 

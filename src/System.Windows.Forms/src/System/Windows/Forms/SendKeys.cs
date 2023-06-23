@@ -703,12 +703,6 @@ public partial class SendKeys
                             currentInput[0].Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
                         }
 
-                        // Sets KEYEVENTF_EXTENDEDKEY flag if necessary.
-                        if (IsExtendedKey(skEvent))
-                        {
-                            currentInput[0].Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;
-                        }
-
                         currentInput[0].Anonymous.ki.wVk = (VIRTUAL_KEY)skEvent.ParamL;
 
                         // Send only currentInput[0].
@@ -805,20 +799,6 @@ public partial class SendKeys
         {
             AddEvent(new SKEvent(PInvoke.WM_SYSKEYUP, (int)Keys.Menu, false, default));
         }
-    }
-
-    private static bool IsExtendedKey(SKEvent skEvent)
-    {
-        return (VIRTUAL_KEY)skEvent.ParamL is VIRTUAL_KEY.VK_UP
-            or VIRTUAL_KEY.VK_DOWN
-            or VIRTUAL_KEY.VK_LEFT
-            or VIRTUAL_KEY.VK_RIGHT
-            or VIRTUAL_KEY.VK_PRIOR
-            or VIRTUAL_KEY.VK_NEXT
-            or VIRTUAL_KEY.VK_HOME
-            or VIRTUAL_KEY.VK_END
-            or VIRTUAL_KEY.VK_INSERT
-            or VIRTUAL_KEY.VK_DELETE;
     }
 
     private static void ClearGlobalKeys()

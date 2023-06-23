@@ -10,6 +10,8 @@ internal static class InputBuilder
 {
     public static INPUT KeyDown(VIRTUAL_KEY keyCode)
     {
+        uint scanCode = PInvoke.MapVirtualKey((uint)keyCode, MAP_VIRTUAL_KEY_TYPE.MAPVK_VK_TO_VSC_EX);
+
         return new INPUT
         {
             type = INPUT_TYPE.INPUT_KEYBOARD,
@@ -18,8 +20,8 @@ internal static class InputBuilder
                 ki = new KEYBDINPUT
                 {
                     wVk = keyCode,
-                    wScan = (ushort)(PInvoke.MapVirtualKey((uint)keyCode, MAP_VIRTUAL_KEY_TYPE.MAPVK_VK_TO_VSC) & 0xFFU),
-                    dwFlags = IsExtendedKey(keyCode) ? KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY : 0,
+                    wScan = (ushort)(scanCode & 0xFF),
+                    dwFlags = (scanCode & 0xFF00) == 0xE000 ? KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY : 0,
                     time = 0,
                     dwExtraInfo = 0,
                 },
@@ -36,8 +38,7 @@ internal static class InputBuilder
 
     public static INPUT CharacterDown(char character)
     {
-        ushort scanCode = character;
-        var input = new INPUT
+        return new INPUT
         {
             type = INPUT_TYPE.INPUT_KEYBOARD,
             Anonymous =
@@ -45,23 +46,13 @@ internal static class InputBuilder
                 ki = new KEYBDINPUT
                 {
                     wVk = 0,
-                    wScan = scanCode,
+                    wScan = character,
                     dwFlags = KEYBD_EVENT_FLAGS.KEYEVENTF_UNICODE,
                     time = 0,
                     dwExtraInfo = 0,
                 },
             },
         };
-
-        // Handle extended keys:
-        // If the scan code is preceded by a prefix byte that has the value 0xE0 (224),
-        // we need to include the KEYEVENTF_EXTENDEDKEY flag in the Flags property. 
-        if ((scanCode & 0xFF00) == 0xE000)
-        {
-            input.Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;
-        }
-
-        return input;
     }
 
     public static INPUT CharacterUp(char character)
@@ -164,24 +155,5 @@ internal static class InputBuilder
                 }
             },
         };
-    }
-
-    private static bool IsExtendedKey(VIRTUAL_KEY keyCode)
-    {
-        // Pass through to VirtualKeyUtilities. Note that there are differences between InputSimulatorPlus and
-        // VirtualKeyUtilities for this method.
-        //
-        // Keys considered expended by VirtualKeyUtilities but not by InputSimulatorPlus:
-        //   VK_APPS
-        //   VK_RWIN
-        //   VK_LWIN
-        //
-        // Keys considered extended by InputSimulatorPlus but not by VirtualKeyUtilities:
-        //   VK_MENU
-        //   VK_CONTROL
-        //   VK_CANCEL
-        //   VK_SNAPSHOT
-        //   VK_DIVIDE
-        return VirtualKeyUtilities.IsExtendedKey(keyCode);
     }
 }
