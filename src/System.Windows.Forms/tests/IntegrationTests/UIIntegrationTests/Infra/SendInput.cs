@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
@@ -127,9 +126,6 @@ public class SendInput
         if (form is not null && await TrySetForegroundWindowViaMouseAsync(form, activeWindow))
             return true;
 
-        if (TrySetForegroundWindowViaConsole(activeWindow))
-            return true;
-
         return false;
     }
 
@@ -147,40 +143,6 @@ public class SendInput
         return PInvoke.SetForegroundWindow(activeWindow);
 
         static int GetMiddle(int a, int b) => a + ((b - a) / 2);
-    }
-
-    private static bool TrySetForegroundWindowViaConsole(HWND activeWindow)
-    {
-        bool allocatedConsole = PInvoke.AllocConsole();
-        int? allocationError = !allocatedConsole ? Marshal.GetHRForLastWin32Error() : null;
-
-        try
-        {
-            var consoleWindow = PInvoke.GetConsoleWindow();
-            if (consoleWindow == IntPtr.Zero)
-            {
-                if (allocationError is { } hr)
-                {
-                    Marshal.ThrowExceptionForHR(hr);
-                }
-
-                throw new InvalidOperationException("Failed to obtain the console window.");
-            }
-
-            if (!PInvoke.SetWindowPos(consoleWindow, hWndInsertAfter: (HWND)0, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOZORDER))
-            {
-                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
-            }
-        }
-        finally
-        {
-            if (allocatedConsole && !PInvoke.FreeConsole())
-            {
-                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
-            }
-        }
-
-        return PInvoke.SetForegroundWindow(activeWindow);
     }
 
     private static void SetForegroundWindow(Form window)

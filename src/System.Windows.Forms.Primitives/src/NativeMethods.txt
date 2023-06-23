@@ -3,7 +3,6 @@ ActivateActCtx
 ActivateKeyboardLayout
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
-AllocConsole
 AreDpiAwarenessContextsEqual
 ARW_*
 AUTOCOMPLETEOPTIONS
@@ -175,7 +174,6 @@ FillRect
 FindWindow
 FONTDESC
 FormatMessage
-FreeConsole
 FUNCDESC
 FUNCFLAGS
 FUNCKIND
@@ -201,7 +199,6 @@ GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
-GetConsoleWindow
 GetCurrentActCtx
 GetCurrentObject
 GetCurrentProcess
