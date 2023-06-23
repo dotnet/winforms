@@ -52,11 +52,11 @@ public class SerializableTypesTests
             Assert.Equal(1, result.Type);
             Assert.Equal(1, state.Type);
 
-            Assert.True(result._GetManualUpdate());
-            Assert.True(state._GetManualUpdate());
+            Assert.True(result.ManualUpdate);
+            Assert.True(state.ManualUpdate);
 
-            Assert.Equal(licenseKey, result._GetLicenseKey());
-            Assert.Equal(licenseKey, state._GetLicenseKey());
+            Assert.Equal(licenseKey, result.LicenseKey);
+            Assert.Equal(licenseKey, state.LicenseKey);
 
             var streamOut = result.GetStream() as Ole32.GPStream;
             Assert.NotNull(streamOut);
