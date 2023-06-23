@@ -281,6 +281,14 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         set => base.AutoScrollPosition = value;
     }
 
+    [Browsable(true)]
+    [DefaultValue(false)]
+    [SRDescription(nameof(SR.ToolStripAllowClickThrough))]
+    [SRCategory(nameof(SR.CatBehavior))]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+    public bool AllowClickThrough { get; set; }
+
     public override bool AllowDrop
     {
         get => base.AllowDrop;
@@ -4857,6 +4865,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
 
         base.WndProc(ref m);
+
+        if (AllowClickThrough && m.MsgInternal == PInvoke.WM_MOUSEACTIVATE && m.ResultInternal == PInvoke.MA_ACTIVATEANDEAT)
+        {
+            m.ResultInternal = (LRESULT)(nint)PInvoke.MA_ACTIVATE;
+        }
 
         if (m.Msg == (int)PInvoke.WM_NCDESTROY)
         {
