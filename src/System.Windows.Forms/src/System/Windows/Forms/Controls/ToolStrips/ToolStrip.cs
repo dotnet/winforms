@@ -4691,7 +4691,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             SnapFocus((HWND)(nint)m.WParamInternal);
         }
 
-        if (m.MsgInternal == PInvoke.WM_MOUSEACTIVATE)
+        if (!AllowClickThrough && m.MsgInternal == PInvoke.WM_MOUSEACTIVATE)
         {
             // We want to prevent taking focus if someone clicks on the toolstrip dropdown itself. The mouse message
             // will still go through, but focus won't be taken. If someone clicks on a child control (combobox,
