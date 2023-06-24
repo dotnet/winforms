@@ -433,6 +433,7 @@ IVBFormat
 IVBGetControl
 IViewObject
 IViewObject2
+KF_*
 KillTimer
 LB_*
 LBN_*

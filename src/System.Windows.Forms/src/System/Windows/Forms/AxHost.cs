@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms;
 
@@ -1812,7 +1813,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             hwnd = (ContainingControl is null) ? HWND.Null : ContainingControl.HWND,
             message = PInvoke.WM_SYSKEYDOWN,
             wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-            lParam = 0x20180001,
+            // 0x20180001
+            lParam = LPARAM.MAKELPARAM(
+                1, // Repeat count
+                (int)(PInvoke.KF_ALTDOWN | 0x18)), // 0x18 => O key scan code
             time = PInvoke.GetTickCount(),
             pt = point
         };
