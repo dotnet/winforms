@@ -16,7 +16,6 @@ using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
-using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms;
 
