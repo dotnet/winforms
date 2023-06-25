@@ -221,7 +221,7 @@ internal sealed class DesignerActionGlyph : Glyph
                 return;
             }
 
-            IComponent panelComponent = behavior.ParentUI.LastPanelComponent;
+            IComponent? panelComponent = behavior.ParentUI.LastPanelComponent;
             IComponent relatedComponent = behavior.RelatedComponent;
             if (panelComponent is not null && panelComponent == relatedComponent)
             {
