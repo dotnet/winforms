@@ -4846,9 +4846,9 @@ juste-à-temps (JIT) à la place de cette boîte de dialogue.
     Assembly Version: {1}
     Location: {2}
 </source>
-        <target state="new">{0}
-    Assembly Version: {1}
-    Location: {2}
+        <target state="translated">{0}
+    Version de l’assembly : {1}
+    Emplacement : {2}
 </target>
         <note />
       </trans-unit>
