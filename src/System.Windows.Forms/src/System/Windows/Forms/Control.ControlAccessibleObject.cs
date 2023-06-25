@@ -272,14 +272,36 @@ public partial class Control
             }
         }
 
+        private bool GetOwnerUseMnemonic(Control control)
+        {
+            Reflection.PropertyInfo? propertyInfo = control.GetType().GetProperty(nameof(ButtonBase.UseMnemonic));
+            if (propertyInfo is not null && propertyInfo.GetValue(control) is bool useMnemonic)
+            {
+                return useMnemonic;
+            }
+
+            if (PreviousLabel is not null)
+            {
+                return PreviousLabel.UseMnemonic;
+            }
+
+            return true;
+        }
+
         public override string? KeyboardShortcut
         {
             get
             {
                 // For controls, the default keyboard shortcut comes directly from the accessible
                 // name property. This matches the default behavior of OLEACC.DLL exactly.
+                bool useMnemonic = true;
+                if (this.TryGetOwnerAs(out Control? owner))
+                {
+                    useMnemonic = GetOwnerUseMnemonic(owner);
+                }
+
                 char mnemonic = WindowsFormsUtils.GetMnemonic(TextLabel, false);
-                return (mnemonic == (char)0) ? null : $"Alt+{mnemonic}";
+                return (mnemonic == (char)0) || !useMnemonic ? null : $"Alt+{mnemonic}";
             }
         }
 
@@ -296,7 +318,13 @@ public partial class Control
                 }
 
                 // Otherwise just return the default label string, minus any mnemonics
-                return WindowsFormsUtils.TextWithoutMnemonics(TextLabel);
+                bool useMnemonic = true;
+                if (owner is not null)
+                {
+                    useMnemonic = GetOwnerUseMnemonic(owner);
+                }
+
+                return useMnemonic ? WindowsFormsUtils.TextWithoutMnemonics(TextLabel) : TextLabel;
             }
             set
             {
