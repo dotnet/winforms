@@ -194,8 +194,8 @@ override System.Windows.Forms.Design.FolderNameEditor.GetEditStyle(System.Compon
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.get -> object
 ~System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.ComponentModel.IComponent component, System.ComponentModel.IContainer container) -> void
-~System.ComponentModel.Design.InheritanceService.GetInheritanceAttribute(System.ComponentModel.IComponent component) -> System.ComponentModel.InheritanceAttribute
+System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.ComponentModel.IComponent! component, System.ComponentModel.IContainer! container) -> void
+System.ComponentModel.Design.InheritanceService.GetInheritanceAttribute(System.ComponentModel.IComponent! component) -> System.ComponentModel.InheritanceAttribute!
 ~System.ComponentModel.Design.LoadedEventArgs.Errors.get -> System.Collections.ICollection
 ~System.ComponentModel.Design.LoadedEventArgs.LoadedEventArgs(bool succeeded, System.Collections.ICollection errors) -> void
 ~System.ComponentModel.Design.MenuCommandService.FindCommand(System.ComponentModel.Design.CommandID commandID) -> System.ComponentModel.Design.MenuCommand
@@ -404,8 +404,8 @@ System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.ShowDialog(System.Win
 ~virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string methodName) -> void
-~virtual System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.Type type, System.ComponentModel.IComponent component, System.ComponentModel.IContainer container) -> void
-~virtual System.ComponentModel.Design.InheritanceService.IgnoreInheritedMember(System.Reflection.MemberInfo member, System.ComponentModel.IComponent component) -> bool
+virtual System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.Type? type, System.ComponentModel.IComponent! component, System.ComponentModel.IContainer! container) -> void
+virtual System.ComponentModel.Design.InheritanceService.IgnoreInheritedMember(System.Reflection.MemberInfo! member, System.ComponentModel.IComponent? component) -> bool
 ~virtual System.ComponentModel.Design.MenuCommandService.AddCommand(System.ComponentModel.Design.MenuCommand command) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.AddVerb(System.ComponentModel.Design.DesignerVerb verb) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.GlobalInvoke(System.ComponentModel.Design.CommandID commandID) -> bool
