@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace System.Windows.Forms;
+namespace System.Diagnostics;
 
 internal static class TraceSwitchExtensions
 {
