@@ -41,10 +41,7 @@ public partial class ListBox
                 this.TryGetOwnerAs(out ListBox? owner);
                 if (owner is null)
                 {
-                    return new int[]
-                    {
-                        RuntimeIDFirstItem
-                    };
+                    return base.RuntimeId;
                 }
 
                 return new int[]
@@ -294,8 +291,7 @@ public partial class ListBox
 
         public override AccessibleObject? GetFocused()
         {
-            this.TryGetOwnerAs(out ListBox? owner);
-            if (owner is not null)
+            if (this.TryGetOwnerAs(out ListBox? owner))
             {
                 int index = owner.FocusedIndex;
                 if (index >= 0)
@@ -309,8 +305,7 @@ public partial class ListBox
 
         public override AccessibleObject? GetSelected()
         {
-            this.TryGetOwnerAs(out ListBox? owner);
-            if (owner is not null)
+            if (this.TryGetOwnerAs(out ListBox? owner))
             {
                 int index = owner.SelectedIndex;
 
