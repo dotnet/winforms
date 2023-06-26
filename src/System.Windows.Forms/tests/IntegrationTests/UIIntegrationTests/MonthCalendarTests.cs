@@ -193,10 +193,12 @@ public class MonthCalendarTests : ControlTestBase
         await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
         await InputSimulator.SendAsync(
             form,
-            inputSimulator => inputSimulator.Mouse
-                                            .LeftButtonClick()
-                                            .Sleep(TimeSpan.FromMilliseconds(500))
-                                            .LeftButtonClick());
+            async inputSimulator =>
+            {
+                inputSimulator.Mouse.LeftButtonClick();
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
+                inputSimulator.Mouse.LeftButtonClick();
+            });
     }
 
     private async Task RunClickTestAsync(Func<Form, MonthCalendar, Task> runTest)

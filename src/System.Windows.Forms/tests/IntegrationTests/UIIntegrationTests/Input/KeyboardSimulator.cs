@@ -112,10 +112,4 @@ internal class KeyboardSimulator
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
     }
-
-    internal KeyboardSimulator Sleep(TimeSpan time)
-    {
-        Thread.Sleep(time);
-        return this;
-    }
 }

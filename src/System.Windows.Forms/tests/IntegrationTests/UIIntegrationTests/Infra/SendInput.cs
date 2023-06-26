@@ -69,7 +69,18 @@ public class SendInput
         });
     }
 
-    internal async Task SendAsync(Form? window, Action<InputSimulator> actions)
+    internal Task SendAsync(Form? window, Action<InputSimulator> actions)
+    {
+        return SendAsync(
+            window,
+            inputSimulator =>
+            {
+                actions(inputSimulator);
+                return Task.CompletedTask;
+            });
+    }
+
+    internal async Task SendAsync(Form? window, Func<InputSimulator, Task> actions)
     {
         if (actions is null)
         {
@@ -91,7 +102,7 @@ public class SendInput
             PInvoke.SetFocus(window);
         }
 
-        await Task.Run(() => actions(new InputSimulator()));
+        await actions(new InputSimulator());
 
         await _waitForIdleAsync();
     }

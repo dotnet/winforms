@@ -168,10 +168,4 @@ internal class MouseSimulator
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
     }
-
-    internal MouseSimulator Sleep(TimeSpan time)
-    {
-        Thread.Sleep(time);
-        return this;
-    }
 }
