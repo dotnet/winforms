@@ -23,6 +23,16 @@ internal static class TypeDescriptorHelper
         return attribute is not null;
     }
 
+    public static T? GetEditor<T>(object component)
+    {
+        return (T?)TypeDescriptor.GetEditor(component, typeof(T));
+    }
+
+    public static T? GetEditor<T>([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type)
+    {
+        return (T?)TypeDescriptor.GetEditor(type, typeof(T));
+    }
+
     public static bool TryGetPropertyValue<T>(
         object component,
         string name,
