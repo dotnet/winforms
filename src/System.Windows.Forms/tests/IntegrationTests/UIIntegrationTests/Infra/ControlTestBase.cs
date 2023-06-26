@@ -67,12 +67,11 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     protected SendInput InputSimulator => new(WaitForIdleAsync);
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-    private static unsafe LRESULT CallWndProcCallback(int nCode, WPARAM wparam, LPARAM lparam)
+    private static unsafe LRESULT GetMessageCallback(int nCode, WPARAM wparam, LPARAM lparam)
     {
-        if (nCode == PInvoke.HC_ACTION)
+        if (nCode == PInvoke.HC_ACTION && (PEEK_MESSAGE_REMOVE_TYPE)(uint)wparam == PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE)
         {
-            CWPSTRUCT data = *(CWPSTRUCT*)lparam;
-            s_messages.Add(Message.Create(data.hwnd, data.message, data.wParam, data.lParam).ToString());
+            s_messages.Add(Message.Create((MSG*)lparam).ToString());
         }
 
         return PInvoke.CallNextHookEx(s_wndProcHook, nCode, wparam, lparam);
@@ -95,8 +94,8 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         {
             s_messages.Clear();
             s_wndProcHook = PInvoke.SetWindowsHookEx(
-                WINDOWS_HOOK_ID.WH_CALLWNDPROC,
-                &CallWndProcCallback,
+                WINDOWS_HOOK_ID.WH_GETMESSAGE,
+                &GetMessageCallback,
                 (HINSTANCE)0,
                 PInvoke.GetCurrentThreadId());
         }

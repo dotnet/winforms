@@ -71,7 +71,6 @@ CreateStdAccessibleObject
 CreateStdDispatch
 CreateWindowEx
 CW_USEDEFAULT
-CWPSTRUCT
 DATETIMEPICK_CLASS
 DeactivateActCtx
 DefFrameProc
