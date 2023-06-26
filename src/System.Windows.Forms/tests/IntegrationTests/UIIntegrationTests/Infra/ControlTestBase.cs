@@ -71,7 +71,57 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         if (nCode == PInvoke.HC_ACTION && (PEEK_MESSAGE_REMOVE_TYPE)(uint)wparam == PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE)
         {
-            s_messages.Add(Message.Create((MSG*)lparam).ToString());
+            var message = Message.Create((MSG*)lparam);
+            switch ((uint)message.Msg)
+            {
+                case PInvoke.WM_MOUSEMOVE:
+                case PInvoke.WM_LBUTTONDOWN:
+                case PInvoke.WM_LBUTTONUP:
+                case PInvoke.WM_LBUTTONDBLCLK:
+                case PInvoke.WM_RBUTTONDOWN:
+                case PInvoke.WM_RBUTTONUP:
+                case PInvoke.WM_RBUTTONDBLCLK:
+                case PInvoke.WM_MBUTTONDOWN:
+                case PInvoke.WM_MBUTTONUP:
+                case PInvoke.WM_MBUTTONDBLCLK:
+                case PInvoke.WM_MOUSEWHEEL:
+                case PInvoke.WM_XBUTTONDOWN:
+                case PInvoke.WM_XBUTTONUP:
+                case PInvoke.WM_XBUTTONDBLCLK:
+                case PInvoke.WM_MOUSEHWHEEL:
+
+                case PInvoke.WM_KEYDOWN:
+                case PInvoke.WM_KEYUP:
+                case PInvoke.WM_CHAR:
+                case PInvoke.WM_DEADCHAR:
+                case PInvoke.WM_SYSKEYDOWN:
+                case PInvoke.WM_SYSKEYUP:
+                case PInvoke.WM_SYSCHAR:
+                case PInvoke.WM_SYSDEADCHAR:
+
+                case PInvoke.WM_MOUSEHOVER:
+                case PInvoke.WM_MOUSELEAVE:
+                    {
+                        var threadId = PInvoke.GetWindowThreadProcessId(message.HWND, out var processId);
+                        string processName;
+                        try
+                        {
+                            using var process = Process.GetProcessById((int)processId);
+                            processName = process.ProcessName;
+                        }
+                        catch (Exception ex)
+                        {
+                            processName = $"{ex.GetType().Name}?";
+                        }
+
+                        s_messages.Add($"Process={processId} ({processName}) Thread={threadId} {message}");
+                        break;
+                    }
+
+                default:
+                    s_messages.Add(Message.Create((MSG*)lparam).ToString());
+                    break;
+            }
         }
 
         return PInvoke.CallNextHookEx(s_wndProcHook, nCode, wparam, lparam);
@@ -93,11 +143,32 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         unsafe
         {
             s_messages.Clear();
-            s_wndProcHook = PInvoke.SetWindowsHookEx(
-                WINDOWS_HOOK_ID.WH_GETMESSAGE,
-                &GetMessageCallback,
-                (HINSTANCE)0,
-                PInvoke.GetCurrentThreadId());
+
+            var isCI = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY"));
+            if (isCI)
+            {
+                // Attempt to hook all process in CI
+                s_wndProcHook = PInvoke.SetWindowsHookEx(
+                    WINDOWS_HOOK_ID.WH_GETMESSAGE,
+                    &GetMessageCallback,
+                    PInvoke.GetModuleHandle((PCWSTR)null),
+                    0);
+
+                if (s_wndProcHook.IsNull)
+                {
+                    s_messages.Add("Failed to install a global GetMessage hook.");
+                }
+            }
+
+            if (s_wndProcHook.IsNull)
+            {
+                // Hook only the current process in local development
+                s_wndProcHook = PInvoke.SetWindowsHookEx(
+                    WINDOWS_HOOK_ID.WH_GETMESSAGE,
+                    &GetMessageCallback,
+                    (HINSTANCE)0,
+                    PInvoke.GetCurrentThreadId());
+            }
         }
 
         if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
@@ -119,8 +190,11 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         await _joinableTaskCollection.JoinTillEmptyAsync();
 
-        PInvoke.UnhookWindowsHookEx(s_wndProcHook);
-        s_wndProcHook = (HHOOK)0;
+        if (!s_wndProcHook.IsNull)
+        {
+            PInvoke.UnhookWindowsHookEx(s_wndProcHook);
+            s_wndProcHook = (HHOOK)0;
+        }
 
         // Verify keyboard and mouse state at the end of the test
         VerifyKeyStates(isStartOfTest: false, TestOutputHelper);
