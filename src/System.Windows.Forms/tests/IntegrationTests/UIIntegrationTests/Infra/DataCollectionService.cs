@@ -13,6 +13,7 @@ namespace System.Windows.Forms.UITests;
 internal static class DataCollectionService
 {
     private static readonly ConditionalWeakTable<Exception, StrongBox<bool>> LoggedExceptions = new();
+    private static ImmutableDictionary<(string timestampDisplay, string testName, string errorId, string logId, string extension), int> s_loggedFilenameCount = ImmutableDictionary<(string timestampDisplay, string testName, string errorId, string logId, string extension), int>.Empty;
     private static ImmutableList<CustomLoggerData> _customInProcessLoggers = ImmutableList<CustomLoggerData>.Empty;
     private static bool _firstChanceExceptionHandlerInstalled;
 
@@ -201,16 +202,23 @@ internal static class DataCollectionService
     {
         const int MaxPath = 260;
 
-        var path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
+        var timestampDisplay = $"{timestamp:HH.mm.ss}";
+        var index = ImmutableInterlocked.AddOrUpdate(
+            ref s_loggedFilenameCount,
+            (timestampDisplay, testName, errorId, logId, extension),
+            addValueFactory: _ => 0,
+            updateValueFactory: (_, x) => x + 1);
+
+        var path = CombineElements(logDirectory, timestamp, index, testName, errorId, logId, extension);
         if (path.Length > MaxPath)
         {
             testName = testName.Substring(0, Math.Max(0, testName.Length - (path.Length - MaxPath)));
-            path = CombineElements(logDirectory, timestamp, testName, errorId, logId, extension);
+            path = CombineElements(logDirectory, timestamp, index, testName, errorId, logId, extension);
         }
 
         return path;
 
-        static string CombineElements(string logDirectory, DateTimeOffset timestamp, string testName, string errorId, string logId, string extension)
+        static string CombineElements(string logDirectory, DateTimeOffset timestamp, int index, string testName, string errorId, string logId, string extension)
         {
             if (!string.IsNullOrEmpty(logId))
             {
@@ -219,8 +227,9 @@ internal static class DataCollectionService
 
             var sanitizedTestName = new string(testName.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
             var sanitizedErrorId = new string(errorId.Select(c => char.IsLetterOrDigit(c) ? c : '_').ToArray());
+            var displayIndex = index == 0 ? "" : $"_{index}";
 
-            return Path.Combine(Path.GetFullPath(logDirectory), $"{timestamp:HH.mm.ss}-{testName}-{errorId}{logId}.{extension}");
+            return Path.Combine(Path.GetFullPath(logDirectory), $"{timestamp:HH.mm.ss}-{testName}-{errorId}{logId}{displayIndex}.{extension}");
         }
     }
 
