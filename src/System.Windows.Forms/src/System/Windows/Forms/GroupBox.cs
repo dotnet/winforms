@@ -24,6 +24,11 @@ public partial class GroupBox : Control
     private FlatStyle _flatStyle = FlatStyle.Standard;
 
     /// <summary>
+    ///  The current border for this edit control.
+    /// </summary>
+    private BorderStyle _borderStyle = BorderStyle.Fixed3D;
+
+    /// <summary>
     ///  Initializes a new instance of the <see cref="GroupBox"/> class.
     /// </summary>
     public GroupBox() : base()
@@ -102,6 +107,37 @@ public partial class GroupBox : Control
                     }
 
                     LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Gets or sets the border type
+    ///  of the text box control.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [DefaultValue(BorderStyle.Fixed3D)]
+    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [SRDescription(nameof(SR.TextBoxBorderDescr))]
+    public BorderStyle BorderStyle
+    {
+        get => _borderStyle;
+        set
+        {
+            if (_borderStyle != value)
+            {
+                SourceGenerated.EnumValidator.Validate(value);
+
+                _borderStyle = value;
+                UpdateStyles();
+                RecreateHandle();
+
+                // PreferredSize depends on BorderStyle : thru CreateParams.ExStyle in User32!AdjustRectEx.
+                // So when the BorderStyle changes let the parent of this control know about it.
+                using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle))
+                {
+                    OnBorderStyleChanged(EventArgs.Empty);
                 }
             }
         }
@@ -455,6 +491,11 @@ public partial class GroupBox : Control
 
         // Max text bounding box passed to drawing methods to support RTL.
         Rectangle textRectangle = ClientRectangle;
+        if (borderStyle == BorderStyle.None)
+        {
+            textRectangle.BorderWidth = 0;
+        }
+
         textRectangle.X += TextOffset;
         textRectangle.Width -= 2 * TextOffset;
 
