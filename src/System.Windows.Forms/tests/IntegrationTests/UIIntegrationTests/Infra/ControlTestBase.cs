@@ -67,6 +67,11 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected SendInput InputSimulator => new(WaitForIdleAsync);
 
+    public static void AddLogMessage(string message)
+    {
+        s_messages.Add(message);
+    }
+
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
     private static unsafe LRESULT GlobalMouseCallback(int nCode, WPARAM wparam, LPARAM lparam)
     {
@@ -463,6 +468,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             await WaitForIdleAsync();
             try
             {
+                s_messages.Add("Invoking test driver...");
                 await testDriverAsync(dialog!, control!);
             }
             catch (Exception ex) when (DataCollectionService.LogAndPropagate(ex))
@@ -502,6 +508,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             await WaitForIdleAsync();
             try
             {
+                s_messages.Add("Invoking test driver...");
                 await testDriverAsync(dialog!);
             }
             catch (Exception ex) when (DataCollectionService.LogAndPropagate(ex))

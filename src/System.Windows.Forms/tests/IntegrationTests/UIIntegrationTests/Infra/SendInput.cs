@@ -142,6 +142,8 @@ public class SendInput
 
     private async Task<bool> TrySetForegroundWindowViaMouseAsync(Form form, HWND activeWindow)
     {
+        ControlTestBase.AddLogMessage("Attempting to set foreground window with the mouse...");
+
         // If that fails, try setting focus by clicking the title bar of the form
         var rect = form.DisplayRectangle;
         var positionOnTitleBar = new Point(GetMiddle(rect.Right, rect.Left), rect.Top + 5);

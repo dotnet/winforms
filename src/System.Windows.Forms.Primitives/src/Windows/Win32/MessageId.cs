@@ -324,6 +324,7 @@ internal readonly struct MessageId
             PInvoke.EM_SETEDITSTYLE => "EM_SETEDITSTYLE",
             PInvoke.EM_GETEDITSTYLE => "EM_GETEDITSTYLE",
 
+            0x0060 => "WM_DISPATCHNOTIFY",
             >= 0xC000 => GetRegisteredWindowMessageName(_id),
 
             _ => null,
