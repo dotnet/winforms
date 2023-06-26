@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.UITests.Input;
 using Microsoft.VisualStudio.Threading;
@@ -24,11 +25,15 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     private JoinableTaskCollection _joinableTaskCollection = null!;
     private static string s_previousRunTestName = "This is the first test to run.";
 
+    private static List<string> s_messages = new();
+    private static HHOOK s_wndProcHook;
+
     private Point? _mousePosition;
 
     static ControlTestBase()
     {
         DataCollectionService.InstallFirstChanceExceptionHandler();
+        DataCollectionService.RegisterCustomLogger(WriteMessagesToLog, logId: "WndProc", extension: "log");
     }
 
     protected ControlTestBase(ITestOutputHelper testOutputHelper)
@@ -61,6 +66,23 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     protected SendInput InputSimulator => new(WaitForIdleAsync);
 
+    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    private static unsafe LRESULT CallWndProcCallback(int nCode, WPARAM wparam, LPARAM lparam)
+    {
+        if (nCode == PInvoke.HC_ACTION)
+        {
+            CWPSTRUCT data = *(CWPSTRUCT*)lparam;
+            s_messages.Add(Message.Create(data.hwnd, data.message, data.wParam, data.lParam).ToString());
+        }
+
+        return PInvoke.CallNextHookEx(s_wndProcHook, nCode, wparam, lparam);
+    }
+
+    private static void WriteMessagesToLog(string logFileName)
+    {
+        File.WriteAllText(logFileName, string.Join(Environment.NewLine, s_messages));
+    }
+
     public virtual Task InitializeAsync()
     {
         // Verify keyboard and mouse state at the start of the test
@@ -68,6 +90,16 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         // Record the mouse position so it can be restored at the end of the test
         _mousePosition = Cursor.Position;
+
+        unsafe
+        {
+            s_messages.Clear();
+            s_wndProcHook = PInvoke.SetWindowsHookEx(
+                WINDOWS_HOOK_ID.WH_CALLWNDPROC,
+                &CallWndProcCallback,
+                (HINSTANCE)0,
+                PInvoke.GetCurrentThreadId());
+        }
 
         if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
         {
@@ -87,6 +119,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     public virtual async Task DisposeAsync()
     {
         await _joinableTaskCollection.JoinTillEmptyAsync();
+
+        PInvoke.UnhookWindowsHookEx(s_wndProcHook);
+        s_wndProcHook = (HHOOK)0;
 
         // Verify keyboard and mouse state at the end of the test
         VerifyKeyStates(isStartOfTest: false, TestOutputHelper);
