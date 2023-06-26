@@ -12,14 +12,13 @@ internal sealed partial class DesignerHost
     private sealed class DesignerHostTransaction : DesignerTransaction
     {
         private DesignerHost? _host;
-        private readonly Stack<DesignerTransaction> _transactions;
 
         public DesignerHostTransaction(DesignerHost host, string description) : base(description)
         {
             _host = host;
-            _transactions = _host._transactions ??= new Stack<DesignerTransaction>();
+            _host._transactions ??= new Stack<DesignerTransaction>();
 
-            _transactions.Push(this);
+            _host._transactions.Push(this);
             _host.OnTransactionOpening(EventArgs.Empty);
             _host.OnTransactionOpened(EventArgs.Empty);
         }
@@ -34,17 +33,19 @@ internal sealed partial class DesignerHost
                 return;
             }
 
-            if (_transactions.Peek() != this)
+            Stack<DesignerTransaction> transactions = _host._transactions!;
+
+            if (transactions.Peek() != this)
             {
-                string nestedDescription = _transactions.Peek().Description;
+                string nestedDescription = transactions.Peek().Description;
                 throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
             }
 
             _host.IsClosingTransaction = true;
             try
             {
-                _transactions.Pop();
-                DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(false, _transactions.Count == 0);
+                transactions.Pop();
+                DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(false, transactions.Count == 0);
                 _host.OnTransactionClosing(e);
                 _host.OnTransactionClosed(e);
             }
@@ -65,17 +66,19 @@ internal sealed partial class DesignerHost
                 return;
             }
 
-            if (_transactions.Peek() != this)
+            Stack<DesignerTransaction> transactions = _host._transactions!;
+
+            if (transactions.Peek() != this)
             {
-                string nestedDescription = _transactions.Peek().Description;
+                string nestedDescription = transactions.Peek().Description;
                 throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
             }
 
             _host.IsClosingTransaction = true;
             try
             {
-                _transactions.Pop();
-                DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(true, _transactions.Count == 0);
+                transactions.Pop();
+                DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(true, transactions.Count == 0);
                 _host.OnTransactionClosing(e);
                 _host.OnTransactionClosed(e);
             }

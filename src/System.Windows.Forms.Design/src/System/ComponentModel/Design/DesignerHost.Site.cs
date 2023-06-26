@@ -36,9 +36,9 @@ internal sealed partial class DesignerHost
         {
             get
             {
-                SiteNestedContainer nc = (((IServiceProvider)this).GetService(typeof(INestedContainer)) as SiteNestedContainer)!;
+                SiteNestedContainer? nc = (((IServiceProvider)this).GetService(typeof(INestedContainer)) as SiteNestedContainer);
                 Debug.Assert(nc is not null, "We failed to resolve a nested container.");
-                IServiceContainer sc = (nc.GetServiceInternal(typeof(IServiceContainer)) as IServiceContainer)!;
+                IServiceContainer? sc = (nc.GetServiceInternal(typeof(IServiceContainer)) as IServiceContainer);
                 Debug.Assert(sc is not null, "We failed to resolve a service container from the nested container.");
                 return sc;
             }
