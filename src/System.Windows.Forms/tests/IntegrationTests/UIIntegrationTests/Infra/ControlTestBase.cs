@@ -234,6 +234,13 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         await _joinableTaskCollection.JoinTillEmptyAsync();
 
+        // Write messages to test output in local testing
+        var isCI = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY"));
+        if (!isCI)
+        {
+            TestOutputHelper.WriteLine(string.Join(Environment.NewLine, s_messages));
+        }
+
         // Verify keyboard and mouse state at the end of the test
         VerifyKeyStates(isStartOfTest: false, TestOutputHelper);
 
