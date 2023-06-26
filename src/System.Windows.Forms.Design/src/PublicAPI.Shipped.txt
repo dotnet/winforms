@@ -1,7 +1,7 @@
 #nullable enable
-~abstract System.ComponentModel.Design.EventBindingService.CreateUniqueMethodName(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e) -> string
-~abstract System.ComponentModel.Design.EventBindingService.GetCompatibleMethods(System.ComponentModel.EventDescriptor e) -> System.Collections.ICollection
-~abstract System.ComponentModel.Design.EventBindingService.ShowCode(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> bool
+abstract System.ComponentModel.Design.EventBindingService.CreateUniqueMethodName(System.ComponentModel.IComponent! component, System.ComponentModel.EventDescriptor! e) -> string!
+abstract System.ComponentModel.Design.EventBindingService.GetCompatibleMethods(System.ComponentModel.EventDescriptor! e) -> System.Collections.ICollection!
+abstract System.ComponentModel.Design.EventBindingService.ShowCode(System.ComponentModel.IComponent! component, System.ComponentModel.EventDescriptor! e, string! methodName) -> bool
 abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! serializationManager) -> void
 abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! serializationManager) -> void
 abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider.get -> System.CodeDom.Compiler.CodeDomProvider?
@@ -165,8 +165,8 @@ static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.W
 ~System.ComponentModel.Design.DesignerActionUIService.ShowUI(System.ComponentModel.IComponent component) -> void
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.DesignerActionUIStateChangeEventArgs(object relatedObject, System.ComponentModel.Design.DesignerActionUIStateChangeType changeType) -> void
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.get -> object
-~System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider provider) -> void
-~System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
+System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider! provider) -> void
+System.ComponentModel.Design.EventBindingService.GetService(System.Type! serviceType) -> object?
 ~System.ComponentModel.Design.MenuCommandService.FindCommand(System.ComponentModel.Design.CommandID commandID) -> System.ComponentModel.Design.MenuCommand
 ~System.ComponentModel.Design.MenuCommandService.FindCommand(System.Guid guid, int id) -> System.ComponentModel.Design.MenuCommand
 ~System.ComponentModel.Design.MenuCommandService.GetCommandList(System.Guid guid) -> System.Collections.ICollection
@@ -339,9 +339,9 @@ System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentC
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentServiceActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
-~virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
-~virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
-~virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string methodName) -> void
+virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent! component, System.ComponentModel.EventDescriptor! e, string! methodName) -> void
+virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent! component, System.ComponentModel.EventDescriptor! e, string! methodName) -> void
+virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string! methodName) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.AddCommand(System.ComponentModel.Design.MenuCommand command) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.AddVerb(System.ComponentModel.Design.DesignerVerb verb) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.GlobalInvoke(System.ComponentModel.Design.CommandID commandID) -> bool
