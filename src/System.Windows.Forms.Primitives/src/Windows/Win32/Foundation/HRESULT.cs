@@ -15,7 +15,6 @@ internal readonly partial struct HRESULT
         return (HRESULT)ex.HResult;
     }
 
-    [Conditional("DEBUG")]
     public void AssertSuccess() => Debug.Assert(Succeeded, "Result failed: {hr}");
 
     // COR_* HRESULTs are .NET HRESULTs
