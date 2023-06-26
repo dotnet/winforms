@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.CodeDom;
 using System.Reflection;
@@ -101,10 +99,10 @@ public static partial class StronglyTypedResourceBuilder
     public static CodeCompileUnit Create(
         IDictionary resourceList,
         string baseName,
-        string generatedCodeNamespace,
+        string? generatedCodeNamespace,
         CodeDomProvider codeProvider,
         bool internalClass,
-        out string[] unmatchable)
+        out string[]? unmatchable)
         => Create(
             resourceList,
             baseName,
@@ -153,20 +151,19 @@ public static partial class StronglyTypedResourceBuilder
     public static CodeCompileUnit Create(
         IDictionary resourceList,
         string baseName,
-        string generatedCodeNamespace,
-        string resourcesNamespace,
+        string? generatedCodeNamespace,
+        string? resourcesNamespace,
         CodeDomProvider codeProvider,
         bool internalClass,
-        out string[] unmatchable)
+        out string[]? unmatchable)
     {
         ArgumentNullException.ThrowIfNull(resourceList);
 
         Dictionary<string, ResourceData> resourceTypes = new(StringComparer.InvariantCultureIgnoreCase);
         foreach (DictionaryEntry entry in resourceList)
         {
-            ResXDataNode node = entry.Value as ResXDataNode;
             ResourceData data;
-            if (node is not null)
+            if (entry.Value is ResXDataNode node)
             {
                 string keyname = (string)entry.Key;
                 if (keyname != node.Name)
@@ -174,9 +171,9 @@ public static partial class StronglyTypedResourceBuilder
                     throw new ArgumentException(string.Format(SR.MismatchedResourceName, keyname, node.Name));
                 }
 
-                string typeName = node.GetValueTypeName((AssemblyName[])null);
-                Type type = Type.GetType(typeName);
-                string valueAsString = node.GetValue((AssemblyName[])null).ToString();
+                string typeName = node.GetValueTypeName((AssemblyName[]?)null)!;
+                Type? type = Type.GetType(typeName);
+                string? valueAsString = node.GetValue((AssemblyName[]?)null)!.ToString();
                 data = new ResourceData(type, valueAsString);
             }
             else
@@ -224,10 +221,10 @@ public static partial class StronglyTypedResourceBuilder
     public static CodeCompileUnit Create(
         string resxFile,
         string baseName,
-        string generatedCodeNamespace,
+        string? generatedCodeNamespace,
         CodeDomProvider codeProvider,
         bool internalClass,
-        out string[] unmatchable)
+        out string[]? unmatchable)
         => Create(
             resxFile,
             baseName,
@@ -259,11 +256,11 @@ public static partial class StronglyTypedResourceBuilder
     public static CodeCompileUnit Create(
         string resxFile,
         string baseName,
-        string generatedCodeNamespace,
-        string resourcesNamespace,
+        string? generatedCodeNamespace,
+        string? resourcesNamespace,
         CodeDomProvider codeProvider,
         bool internalClass,
-        out string[] unmatchable)
+        out string[]? unmatchable)
     {
         ArgumentNullException.ThrowIfNull(resxFile);
 
@@ -274,10 +271,10 @@ public static partial class StronglyTypedResourceBuilder
             reader.UseResXDataNodes = true;
             foreach (DictionaryEntry entry in reader)
             {
-                ResXDataNode node = (ResXDataNode)entry.Value;
+                ResXDataNode node = (ResXDataNode)entry.Value!;
                 ResourceData data = new(
-                    Type.GetType(node.GetValueTypeName(names: null)),
-                    node.GetValue(names: null).ToString());
+                    Type.GetType(node.GetValueTypeName(names: null)!),
+                    node.GetValue(names: null)!.ToString());
                 resourceList.Add((string)entry.Key, data);
             }
         }
@@ -304,8 +301,8 @@ public static partial class StronglyTypedResourceBuilder
     private static CodeCompileUnit InternalCreate(
         Dictionary<string, ResourceData> resourceList,
         string baseName,
-        string generatedCodeNamespace,
-        string resourcesNamespace,
+        string? generatedCodeNamespace,
+        string? resourcesNamespace,
         CodeDomProvider codeProvider,
         bool internalClass,
         out string[] unmatchable)
@@ -327,7 +324,7 @@ public static partial class StronglyTypedResourceBuilder
         // Attempt to fix up class name, and throw an exception if it fails.
         if (!codeProvider.IsValidIdentifier(className))
         {
-            string fixedClassName = VerifyResourceName(className, codeProvider);
+            string? fixedClassName = VerifyResourceName(className, codeProvider);
             if (fixedClassName is not null)
             {
                 className = fixedClassName;
@@ -344,7 +341,7 @@ public static partial class StronglyTypedResourceBuilder
         {
             if (!codeProvider.IsValidIdentifier(generatedCodeNamespace))
             {
-                string fixedNamespace = VerifyResourceName(generatedCodeNamespace, codeProvider, true);
+                string? fixedNamespace = VerifyResourceName(generatedCodeNamespace, codeProvider, true);
                 if (fixedNamespace is not null)
                 {
                     generatedCodeNamespace = fixedNamespace;
@@ -361,7 +358,7 @@ public static partial class StronglyTypedResourceBuilder
         codeCompileUnit.UserData.Add("AllowLateBound", value: false);
         codeCompileUnit.UserData.Add("RequireVariableDeclaration", value: true);
 
-        CodeNamespace codeNamespace = new(generatedCodeNamespace);
+        CodeNamespace codeNamespace = new(generatedCodeNamespace!);
         codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
         codeCompileUnit.Namespaces.Add(codeNamespace);
 
@@ -415,7 +412,7 @@ public static partial class StronglyTypedResourceBuilder
         foreach ((string propertyName, ResourceData resource) in cleanedResourceList)
         {
             // The resourceName will be the original value, before fixups, if any.
-            reverseFixupTable.TryGetValue(propertyName, out string resourceName);
+            reverseFixupTable.TryGetValue(propertyName, out string? resourceName);
             resourceName ??= propertyName;
             if (!DefineResourceFetchingProperty(
                 propertyName,
@@ -441,12 +438,12 @@ public static partial class StronglyTypedResourceBuilder
     {
         CodeAttributeDeclaration generatedCodeAttrib = new(new CodeTypeReference(typeof(GeneratedCodeAttribute)));
         generatedCodeAttrib.AttributeType.Options = CodeTypeReferenceOptions.GlobalReference;
-        CodeAttributeArgument toolArg = new(new CodePrimitiveExpression(typeof(StronglyTypedResourceBuilder).FullName));
+        CodeAttributeArgument toolArg = new(new CodePrimitiveExpression(typeof(StronglyTypedResourceBuilder).FullName!));
 
         // This historically was the VS version, now pick up the .NET version
         CodeAttributeArgument versionArg =
             new(new CodePrimitiveExpression(
-                new AssemblyName(typeof(StronglyTypedResourceBuilder).Assembly.FullName).Version.ToString()));
+                new AssemblyName(typeof(StronglyTypedResourceBuilder).Assembly.FullName!).Version!.ToString()));
 
         generatedCodeAttrib.Arguments.Add(toolArg);
         generatedCodeAttrib.Arguments.Add(versionArg);
@@ -456,9 +453,9 @@ public static partial class StronglyTypedResourceBuilder
 
     private static void EmitBasicClassMembers(
         CodeTypeDeclaration classDeclaration,
-        string nameSpace,
+        string? nameSpace,
         string baseName,
-        string resourcesNamespace,
+        string? resourcesNamespace,
         bool internalClass,
         bool useStatic,
         bool useTypeInfo)
@@ -472,7 +469,7 @@ public static partial class StronglyTypedResourceBuilder
                 ? $"{resourcesNamespace}.{baseName}"
                 : baseName;
         }
-        else if ((nameSpace is not null) && (nameSpace.Length > 0))
+        else if (!string.IsNullOrEmpty(nameSpace))
         {
             resourceManagerConstructorParameter = $"{nameSpace}.{baseName}";
         }
@@ -576,14 +573,14 @@ public static partial class StronglyTypedResourceBuilder
         //
         // return resourceMan;
 
-        CodeFieldReferenceExpression resourceManagerField = new(null, ResourceManagerFieldName);
+        CodeFieldReferenceExpression resourceManagerField = new(null!, ResourceManagerFieldName);
         CodeMethodReferenceExpression objectEqualsMethod =
             new(new CodeTypeReferenceExpression(typeof(object)), "ReferenceEquals");
 
         CodeMethodInvokeExpression isResourceManagerNull = new(
             objectEqualsMethod,
             resourceManagerField,
-            new CodePrimitiveExpression(null));
+            new CodePrimitiveExpression(null!));
 
         CodePropertyReferenceExpression getAssemblyProperty;
 
@@ -627,7 +624,7 @@ public static partial class StronglyTypedResourceBuilder
         resourceManagerProperty.Comments.Add(new(DocCommentSummaryEnd, docComment: true));
 
         // Emit code for Culture property
-        CodeFieldReferenceExpression cultureInfoField = new(targetObject: null, CultureInfoFieldName);
+        CodeFieldReferenceExpression cultureInfoField = new(targetObject: null!, CultureInfoFieldName);
         culture.GetStatements.Add(new CodeMethodReturnStatement(cultureInfoField));
 
         CodePropertySetValueReferenceExpression newCulture = new();
@@ -643,7 +640,8 @@ public static partial class StronglyTypedResourceBuilder
     /// <summary>
     ///  Truncates <paramref name="commentString"/> if it is too long and ensures it is safely encoded for XML.
     /// </summary>
-    private static string TruncateAndFormatCommentStringForOutput(string commentString)
+    [return: NotNullIfNotNull(nameof(commentString))]
+    private static string? TruncateAndFormatCommentStringForOutput(string? commentString)
     {
         if (commentString is not null)
         {
@@ -682,7 +680,7 @@ public static partial class StronglyTypedResourceBuilder
         //          return (Point) obj; }
         // }
 
-        Type type = data.Type;
+        Type? type = data.Type;
 
         if (type is null)
         {
@@ -711,7 +709,7 @@ public static partial class StronglyTypedResourceBuilder
         // serialization interfaces or IDisposable.
         while (!type.IsPublic)
         {
-            type = type.BaseType;
+            type = type.BaseType!;
         }
 
         CodeTypeReference valueType = new(type);
@@ -730,14 +728,14 @@ public static partial class StronglyTypedResourceBuilder
         // For Objects, emit this:
         //    Object obj = ResourceManager.GetObject("name", _resCulture);
         //    return (MyValueType) obj;
-        CodePropertyReferenceExpression resourceManagerProperty = new(targetObject: null, "ResourceManager");
+        CodePropertyReferenceExpression resourceManagerProperty = new(targetObject: null!, "ResourceManager");
         CodeFieldReferenceExpression cultureInfoField = new(useStatic
-            ? null
+            ? null!
             : new CodeThisReferenceExpression(), CultureInfoFieldName);
 
         bool isString = type == typeof(string);
         bool isStream = type == typeof(UnmanagedMemoryStream) || type == typeof(MemoryStream);
-        string valueAsString = TruncateAndFormatCommentStringForOutput(data.ValueAsString);
+        string? valueAsString = TruncateAndFormatCommentStringForOutput(data.ValueAsString);
         string typeName = string.Empty;
 
         if (!isString)
@@ -820,11 +818,11 @@ public static partial class StronglyTypedResourceBuilder
     /// <exception cref="ArgumentNullException">
     ///  Thrown when <paramref name="key"/> or <paramref name="provider"/> are null.
     /// </exception>
-    public static string VerifyResourceName(string key, CodeDomProvider provider)
+    public static string? VerifyResourceName(string key, CodeDomProvider provider)
         => VerifyResourceName(key, provider, isNameSpace: false);
 
     // Once CodeDom provides a way to verify a namespace name, revisit this method.
-    private static string VerifyResourceName(string key, CodeDomProvider provider, bool isNameSpace)
+    private static string? VerifyResourceName(string key, CodeDomProvider provider, bool isNameSpace)
     {
         ArgumentNullException.ThrowIfNull(key);
         ArgumentNullException.ThrowIfNull(provider);
@@ -832,7 +830,7 @@ public static partial class StronglyTypedResourceBuilder
         foreach (char c in CharsToReplace)
         {
             // For namespaces, allow . and ::
-            if (!(isNameSpace && (c == '.' || c == ':')))
+            if (!(isNameSpace && c is '.' or ':'))
             {
                 key = key.Replace(c, ReplacementChar);
             }
@@ -888,7 +886,7 @@ public static partial class StronglyTypedResourceBuilder
 
             if (!codeProvider.IsValidIdentifier(key))
             {
-                string newKey = VerifyResourceName(key, codeProvider, isNameSpace: false);
+                string? newKey = VerifyResourceName(key, codeProvider, isNameSpace: false);
                 if (newKey is null)
                 {
                     errors.Add(key);
@@ -896,7 +894,7 @@ public static partial class StronglyTypedResourceBuilder
                 }
 
                 // Now see if we've already mapped another key to the same name.
-                if (reverseFixupTable.TryGetValue(newKey, out string oldDuplicateKey) && oldDuplicateKey is not null)
+                if (reverseFixupTable.TryGetValue(newKey, out string? oldDuplicateKey))
                 {
                     // We can't handle this key nor the previous one. Remove the old one.
                     if (!errors.Contains(oldDuplicateKey))
@@ -904,10 +902,7 @@ public static partial class StronglyTypedResourceBuilder
                         errors.Add(oldDuplicateKey);
                     }
 
-                    if (cleanedResourceList.ContainsKey(newKey))
-                    {
-                        cleanedResourceList.Remove(newKey);
-                    }
+                    cleanedResourceList.Remove(newKey);
 
                     errors.Add(key);
                     continue;
@@ -918,22 +913,16 @@ public static partial class StronglyTypedResourceBuilder
             }
 
             ResourceData value = entry.Value;
-            if (!cleanedResourceList.ContainsKey(key))
-            {
-                cleanedResourceList.Add(key, value);
-            }
-            else
+            if (!cleanedResourceList.TryAdd(key, value))
             {
                 // There was a case-insensitive conflict between two keys. Or possibly one key was fixed up in a
                 // way that conflicts with another key (ie, "A B" and "A_B").
-                if (reverseFixupTable.TryGetValue(key, out string fixedUp) && fixedUp is not null)
+                if (reverseFixupTable.Remove(key, out string? fixedUp))
                 {
                     if (!errors.Contains(fixedUp))
                     {
                         errors.Add(fixedUp);
                     }
-
-                    reverseFixupTable.Remove(key);
                 }
 
                 errors.Add(entry.Key);
