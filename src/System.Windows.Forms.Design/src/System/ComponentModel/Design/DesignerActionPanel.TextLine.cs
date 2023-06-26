@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,8 +11,8 @@ internal sealed partial class DesignerActionPanel
 {
     private class TextLine : Line
     {
-        private Label _label;
-        private DesignerActionTextItem _textItem;
+        private Label? _label;
+        private DesignerActionTextItem? _textItem;
 
         public TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
@@ -46,7 +44,7 @@ internal sealed partial class DesignerActionPanel
 
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
-            Size labelSize = _label.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
+            Size labelSize = _label!.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
             if (!measureOnly)
             {
                 _label.Location = new Point(LineLeftMargin, top + LineVerticalPadding / 2);
@@ -56,7 +54,7 @@ internal sealed partial class DesignerActionPanel
             return labelSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
         }
 
-        private void OnParentControlFontChanged(object sender, EventArgs e)
+        private void OnParentControlFontChanged(object? sender, EventArgs e)
         {
             if (_label is not null && _label.Font is not null)
             {
@@ -69,10 +67,10 @@ internal sealed partial class DesignerActionPanel
             return ActionPanel.Font;
         }
 
-        internal override void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex)
         {
-            _textItem = (DesignerActionTextItem)actionItem;
-            _label.Text = StripAmpersands(_textItem.DisplayName);
+            _textItem = (DesignerActionTextItem)actionItem!;
+            _label!.Text = StripAmpersands(_textItem.DisplayName);
             _label.Font = GetFont();
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, _textItem.Description);

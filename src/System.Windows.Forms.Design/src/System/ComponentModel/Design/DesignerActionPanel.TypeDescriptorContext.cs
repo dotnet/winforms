@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 internal sealed partial class DesignerActionPanel
@@ -11,31 +9,29 @@ internal sealed partial class DesignerActionPanel
     internal sealed class TypeDescriptorContext : ITypeDescriptorContext
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly PropertyDescriptor _propertyDescriptor;
-        private readonly object _instance;
 
         public TypeDescriptorContext(IServiceProvider serviceProvider, PropertyDescriptor propertyDescriptor, object instance)
         {
             _serviceProvider = serviceProvider;
-            _propertyDescriptor = propertyDescriptor;
-            _instance = instance;
+            PropertyDescriptor = propertyDescriptor;
+            Instance = instance;
         }
 
-        private IComponentChangeService ComponentChangeService => _serviceProvider.GetService<IComponentChangeService>();
+        private IComponentChangeService? ComponentChangeService => _serviceProvider.GetService<IComponentChangeService>();
 
-        public IContainer Container => _serviceProvider.GetService<IContainer>();
+        public IContainer? Container => _serviceProvider.GetService<IContainer>();
 
-        public object Instance => _instance;
+        public object Instance { get; }
 
-        public PropertyDescriptor PropertyDescriptor => _propertyDescriptor;
+        public PropertyDescriptor PropertyDescriptor { get; }
 
-        public object GetService(Type serviceType) => _serviceProvider.GetService(serviceType);
+        public object? GetService(Type serviceType) => _serviceProvider.GetService(serviceType);
 
         public bool OnComponentChanging()
         {
             try
             {
-                ComponentChangeService?.OnComponentChanging(_instance, _propertyDescriptor);
+                ComponentChangeService?.OnComponentChanging(Instance, PropertyDescriptor);
                 return true;
             }
             catch (CheckoutException ce) when (ce == CheckoutException.Canceled)
@@ -44,6 +40,6 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        public void OnComponentChanged() => ComponentChangeService?.OnComponentChanged(_instance, _propertyDescriptor);
+        public void OnComponentChanged() => ComponentChangeService?.OnComponentChanged(Instance, PropertyDescriptor);
     }
 }

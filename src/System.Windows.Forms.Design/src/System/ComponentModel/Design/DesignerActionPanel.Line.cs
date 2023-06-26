@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,30 +11,22 @@ internal sealed partial class DesignerActionPanel
 {
     private abstract class Line
     {
-        private readonly DesignerActionPanel _actionPanel;
-        private List<Control> _addedControls;
-        private readonly IServiceProvider _serviceProvider;
+        private List<Control>? _addedControls;
 
         public Line(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
         {
-            _serviceProvider = serviceProvider;
-            _actionPanel = actionPanel.OrThrowIfNull();
+            ServiceProvider = serviceProvider;
+            ActionPanel = actionPanel.OrThrowIfNull();
         }
 
-        protected DesignerActionPanel ActionPanel
-        {
-            get => _actionPanel;
-        }
+        protected DesignerActionPanel ActionPanel { get; }
 
         public abstract string FocusId
         {
             get;
         }
 
-        protected IServiceProvider ServiceProvider
-        {
-            get => _serviceProvider;
-        }
+        protected IServiceProvider ServiceProvider { get; }
 
         protected abstract void AddControls(List<Control> controls);
 
@@ -65,7 +55,7 @@ internal sealed partial class DesignerActionPanel
 
         internal void RemoveControls(ControlCollection controls)
         {
-            for (int i = 0; i < _addedControls.Count; i++)
+            for (int i = 0; i < _addedControls!.Count; i++)
             {
                 Control c = _addedControls[i];
                 c.Tag = null;
@@ -73,6 +63,6 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal abstract void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex);
+        internal abstract void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex);
     }
 }
