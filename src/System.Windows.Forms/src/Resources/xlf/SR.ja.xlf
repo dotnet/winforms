@@ -4846,9 +4846,9 @@ just-in-time (JIT) debugging instead of this dialog box.
     Assembly Version: {1}
     Location: {2}
 </source>
-        <target state="new">{0}
-    Assembly Version: {1}
-    Location: {2}
+        <target state="translated">{0}
+    アセンブリ バージョン: {1}
+    場所: {2}
 </target>
         <note />
       </trans-unit>
