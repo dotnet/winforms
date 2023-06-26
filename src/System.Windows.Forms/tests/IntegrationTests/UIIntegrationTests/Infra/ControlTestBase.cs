@@ -234,18 +234,6 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         await _joinableTaskCollection.JoinTillEmptyAsync();
 
-        if (!s_wndProcHook.IsNull)
-        {
-            PInvoke.UnhookWindowsHookEx(s_wndProcHook);
-            s_wndProcHook = HHOOK.Null;
-        }
-
-        if (!s_wndProcHook2.IsNull)
-        {
-            PInvoke.UnhookWindowsHookEx(s_wndProcHook2);
-            s_wndProcHook2 = HHOOK.Null;
-        }
-
         // Verify keyboard and mouse state at the end of the test
         VerifyKeyStates(isStartOfTest: false, TestOutputHelper);
 
@@ -266,6 +254,20 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     public virtual void Dispose()
     {
+        // Unregister hooks in Dispose instead of DisposeAsync, since DisposeAsync might not run in the face of
+        // certain test failures.
+        if (!s_wndProcHook.IsNull)
+        {
+            PInvoke.UnhookWindowsHookEx(s_wndProcHook);
+            s_wndProcHook = HHOOK.Null;
+        }
+
+        if (!s_wndProcHook2.IsNull)
+        {
+            PInvoke.UnhookWindowsHookEx(s_wndProcHook2);
+            s_wndProcHook2 = HHOOK.Null;
+        }
+
         Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
         DataCollectionService.CurrentTest = null;
     }
