@@ -321,6 +321,9 @@ internal readonly struct MessageId
             // Extended Edit style specific messages
             PInvoke.EM_SETEDITSTYLE => "EM_SETEDITSTYLE",
             PInvoke.EM_GETEDITSTYLE => "EM_GETEDITSTYLE",
+
+            >= 0xC000 => GetRegisteredWindowMessageName(_id),
+
             _ => null,
         };
 
@@ -332,5 +335,20 @@ internal readonly struct MessageId
         }
 
         return text;
+
+        static unsafe string? GetRegisteredWindowMessageName(uint id)
+        {
+            const int Capacity = 256;
+            var name = stackalloc char[Capacity];
+
+            // RegisterWindowMessage shares IDs with RegisterClipboardFormat
+            var numberOfCharacters = PInvoke.GetClipboardFormatName(id, name, Capacity);
+            if (numberOfCharacters == 0)
+            {
+                return null;
+            }
+
+            return new string(name, 0, numberOfCharacters);
+        }
     }
 }
