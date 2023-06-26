@@ -169,6 +169,11 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         {
             s_messages.Clear();
 
+            using (var currentProcess = Process.GetCurrentProcess())
+            {
+                s_messages.Add($"CURRENT Process={PInvoke.GetCurrentProcessId()} ({currentProcess.ProcessName}) Thread={PInvoke.GetCurrentThreadId()}");
+            }
+
             var isCI = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY"));
             if (isCI)
             {
