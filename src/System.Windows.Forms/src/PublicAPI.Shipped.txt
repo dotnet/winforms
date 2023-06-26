@@ -458,7 +458,7 @@ System.Windows.Forms.ComboBox.SelectedItem.get -> object?
 System.Windows.Forms.ComboBox.SelectedItem.set -> void
 System.Windows.Forms.ComboBox.SelectedText.get -> string!
 System.Windows.Forms.ComboBox.SelectedText.set -> void
-~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
+System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap! logicalBitmap) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode) -> System.Windows.Forms.Binding
