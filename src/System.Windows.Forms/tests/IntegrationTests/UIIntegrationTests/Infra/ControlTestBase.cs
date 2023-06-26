@@ -27,6 +27,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
     private static List<string> s_messages = new();
     private static HHOOK s_wndProcHook;
+    private static HHOOK s_wndProcHook2;
 
     private Point? _mousePosition;
 
@@ -65,6 +66,30 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     protected JoinableTaskFactory JoinableTaskFactory { get; private set; } = null!;
 
     protected SendInput InputSimulator => new(WaitForIdleAsync);
+
+    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+    private static unsafe LRESULT GlobalMouseCallback(int nCode, WPARAM wparam, LPARAM lparam)
+    {
+        if (nCode == PInvoke.HC_ACTION)
+        {
+            MOUSEHOOKSTRUCT mouse = *(MOUSEHOOKSTRUCT*)lparam;
+            var threadId = PInvoke.GetWindowThreadProcessId(mouse.hwnd, out var processId);
+            string processName;
+            try
+            {
+                using var process = Process.GetProcessById((int)processId);
+                processName = process.ProcessName;
+            }
+            catch (Exception ex)
+            {
+                processName = $"{ex.GetType().Name}?";
+            }
+
+            s_messages.Add($"WH_MOUSE: Process={processId} ({processName}) Thread={threadId} msg={(MessageId)(uint)wparam} pt={mouse.pt}");
+        }
+
+        return PInvoke.CallNextHookEx(s_wndProcHook2, nCode, wparam, lparam);
+    }
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
     private static unsafe LRESULT GetMessageCallback(int nCode, WPARAM wparam, LPARAM lparam)
@@ -156,7 +181,16 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
                 if (s_wndProcHook.IsNull)
                 {
-                    s_messages.Add("Failed to install a global GetMessage hook.");
+                    s_wndProcHook2 = PInvoke.SetWindowsHookEx(
+                        WINDOWS_HOOK_ID.WH_MOUSE,
+                        &GlobalMouseCallback,
+                        PInvoke.GetModuleHandle((PCWSTR)null),
+                        0);
+
+                    if (s_wndProcHook2.IsNull)
+                    {
+                        s_messages.Add("Failed to install a global GetMessage or Mouse hook.");
+                    }
                 }
             }
 
@@ -193,7 +227,13 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         if (!s_wndProcHook.IsNull)
         {
             PInvoke.UnhookWindowsHookEx(s_wndProcHook);
-            s_wndProcHook = (HHOOK)0;
+            s_wndProcHook = HHOOK.Null;
+        }
+
+        if (!s_wndProcHook2.IsNull)
+        {
+            PInvoke.UnhookWindowsHookEx(s_wndProcHook2);
+            s_wndProcHook2 = HHOOK.Null;
         }
 
         // Verify keyboard and mouse state at the end of the test

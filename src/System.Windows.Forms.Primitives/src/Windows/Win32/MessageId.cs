@@ -238,6 +238,8 @@ internal readonly struct MessageId
             PInvoke.WM_USER => "WM_USER",
             PInvoke.WM_CTLCOLOR => "WM_CTLCOLOR",
 
+            PInvoke.WM_DWMNCRENDERINGCHANGED => nameof(PInvoke.WM_DWMNCRENDERINGCHANGED),
+
             // RichEdit messages
             PInvoke.EM_GETLIMITTEXT => "EM_GETLIMITTEXT",
             PInvoke.EM_POSFROMCHAR => "EM_POSFROMCHAR",
