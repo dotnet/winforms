@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -39,10 +37,15 @@ internal partial class LinkAreaEditor
             }
         }
 
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
         public void End() => Value = null;
 
+        [MemberNotNull(nameof(_caption))]
+        [MemberNotNull(nameof(_sampleEdit))]
+        [MemberNotNull(nameof(_okButton))]
+        [MemberNotNull(nameof(_cancelButton))]
+        [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(LinkAreaEditor));
@@ -112,12 +115,12 @@ internal partial class LinkAreaEditor
             PerformLayout();
         }
 
-        private void okButton_click(object sender, EventArgs e)
+        private void okButton_click(object? sender, EventArgs e)
         {
             Value = new LinkArea(_sampleEdit.SelectionStart, _sampleEdit.SelectionLength);
         }
 
-        private void LinkAreaEditor_HelpButtonClicked(object sender, CancelEventArgs e)
+        private void LinkAreaEditor_HelpButtonClicked(object? sender, CancelEventArgs e)
         {
             e.Cancel = true;
             _helpService?.ShowHelpFromKeyword("net.ComponentModel.LinkAreaEditor");

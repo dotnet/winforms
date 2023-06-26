@@ -25,7 +25,7 @@ abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.P
 ~override System.ComponentModel.Design.ByteViewer.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 ~override System.ComponentModel.Design.ByteViewer.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~override System.ComponentModel.Design.ByteViewer.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService(System.Type serviceType) -> object
+override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService(System.Type! serviceType) -> object!
 ~override System.ComponentModel.Design.CollectionEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
@@ -160,18 +160,18 @@ abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.P
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
 ~System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type type) -> void
 ~System.ComponentModel.Design.CollectionEditor.CollectionEditor(System.Type type) -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object value) -> bool
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionForm(System.ComponentModel.Design.CollectionEditor editor) -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionItemType.get -> System.Type
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionType.get -> System.Type
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.Context.get -> System.ComponentModel.ITypeDescriptorContext
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CreateInstance(System.Type itemType) -> object
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.DestroyInstance(object instance) -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.get -> object
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.set -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.get -> object[]
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.set -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get -> System.Type[]
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object! value) -> bool
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionForm(System.ComponentModel.Design.CollectionEditor! editor) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionItemType.get -> System.Type!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionType.get -> System.Type!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Context.get -> System.ComponentModel.ITypeDescriptorContext!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CreateInstance(System.Type! itemType) -> object!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.DestroyInstance(object! instance) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.get -> object?
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.get -> object![]!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get -> System.Type![]!
 ~System.ComponentModel.Design.CollectionEditor.CollectionItemType.get -> System.Type
 ~System.ComponentModel.Design.CollectionEditor.CollectionType.get -> System.Type
 ~System.ComponentModel.Design.CollectionEditor.Context.get -> System.ComponentModel.ITypeDescriptorContext
@@ -402,8 +402,8 @@ System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Desi
 ~virtual System.ComponentModel.Design.ByteViewer.SetBytes(byte[] bytes) -> void
 ~virtual System.ComponentModel.Design.ByteViewer.SetFile(string path) -> void
 ~virtual System.ComponentModel.Design.CollectionEditor.CanRemoveInstance(object value) -> bool
-~virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.DisplayError(System.Exception e) -> void
-~virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc) -> System.Windows.Forms.DialogResult
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.DisplayError(System.Exception! e) -> void
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService! edSvc) -> System.Windows.Forms.DialogResult
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionForm() -> System.ComponentModel.Design.CollectionEditor.CollectionForm
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionItemType() -> System.Type
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateInstance(System.Type itemType) -> object
