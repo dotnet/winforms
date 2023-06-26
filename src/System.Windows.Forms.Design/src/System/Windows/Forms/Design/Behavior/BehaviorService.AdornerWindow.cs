@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -18,7 +16,7 @@ public sealed partial class BehaviorService
     private partial class AdornerWindow : Control
     {
         private readonly BehaviorService _behaviorService;
-        private static MouseHook s_mouseHook;
+        private static MouseHook? s_mouseHook;
         private static readonly List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
 
         /// <summary>
@@ -54,6 +52,7 @@ public sealed partial class BehaviorService
         /// <summary>
         ///  We'll use CreateHandle as our notification for creating our mouse attacher.
         /// </summary>
+        [MemberNotNull(nameof(s_mouseHook))]
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -85,7 +84,7 @@ public sealed partial class BehaviorService
         {
             if (disposing && DesignerFrame is not null)
             {
-                DesignerFrame = null;
+                DesignerFrame = null!;
             }
 
             base.Dispose(disposing);
@@ -104,8 +103,6 @@ public sealed partial class BehaviorService
         /// </summary>
         internal bool DesignerFrameValid
             => DesignerFrame is not null && !DesignerFrame.IsDisposed && DesignerFrame.IsHandleCreated;
-
-        public IEnumerable<Adorner> Adorners { get; private set; }
 
         /// <summary>
         ///  Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
@@ -175,16 +172,6 @@ public sealed partial class BehaviorService
             }
         }
 
-        internal void EnableAllAdorners(bool enabled)
-        {
-            foreach (Adorner adorner in Adorners)
-            {
-                adorner.EnabledInternal = enabled;
-            }
-
-            Invalidate();
-        }
-
         private static bool IsLocalDrag(DragEventArgs e)
         {
             if (e.Data is DropSourceBehavior.BehaviorDataObject)
@@ -194,12 +181,11 @@ public sealed partial class BehaviorService
             else
             {
                 // Gets all the data formats and data conversion formats in the data object.
-                string[] allFormats = e.Data.GetFormats();
+                string[] allFormats = e.Data!.GetFormats();
 
                 for (int i = 0; i < allFormats.Length; i++)
                 {
-                    if (allFormats[i].Length == ToolboxFormat.Length
-                        && string.Equals(ToolboxFormat, allFormats[i]))
+                    if (string.Equals(ToolboxFormat, allFormats[i]))
                     {
                         return true;
                     }
