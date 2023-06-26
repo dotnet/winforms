@@ -408,7 +408,13 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                 return CheckState.Indeterminate;
             }
 
-            return (flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0 ? CheckState.Checked : CheckState.Unchecked;
+            if ((!EditingCellValueChanged && FormattedValue is bool boolValue && boolValue) ||
+                (flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+            {
+                return CheckState.Checked;
+            }
+
+            return CheckState.Unchecked;
         }
     }
 

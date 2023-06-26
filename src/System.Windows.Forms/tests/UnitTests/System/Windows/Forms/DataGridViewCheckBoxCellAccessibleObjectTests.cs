@@ -243,7 +243,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         Assert.Equal(createControl, control.IsHandleCreated);
     }
 
-    //unit test for https://github.com/dotnet/winforms/issues/9256
+    // Unit test for https://github.com/dotnet/winforms/issues/9256
     [WinFormsFact]
     public void DataGridViewCheckBoxCellAccessibleObject_ToggleStateIndeterminate_ReturnsExpected()
     {
@@ -260,14 +260,14 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
 
         Assert.Equal(UiaCore.ToggleState.Indeterminate, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.Off, checkBoxAccessibleObject.ToggleState );
+        Assert.Equal(UiaCore.ToggleState.Off, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.On, checkBoxAccessibleObject.ToggleState );
+        Assert.Equal(UiaCore.ToggleState.On, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
         Assert.Equal(UiaCore.ToggleState.Indeterminate, checkBoxAccessibleObject.ToggleState );
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.Off, checkBoxAccessibleObject.ToggleState );
+        Assert.Equal(UiaCore.ToggleState.Off, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.On, checkBoxAccessibleObject.ToggleState );
+        Assert.Equal(UiaCore.ToggleState.On, checkBoxAccessibleObject.ToggleState);
     }
 }
