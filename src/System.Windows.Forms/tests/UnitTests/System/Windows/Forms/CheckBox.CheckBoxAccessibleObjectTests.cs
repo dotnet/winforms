@@ -286,4 +286,38 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         Assert.Equal(checkBox.AccessibilityObject.DefaultAction, checkBox.AccessibilityObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(checkBox.IsHandleCreated);
     }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsFact]
+    public void CheckBoxAccessibleObject_Shortcut_Invoke_ReturnsExpected()
+    {
+        using var checkBox = new CheckBox();
+        checkBox.Text = "&checkBox";
+        Assert.False(checkBox.IsHandleCreated);
+        var buttonAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+
+        Assert.Equal("Alt+c", buttonAccessibleObject.KeyboardShortcut);
+
+        checkBox.UseMnemonic = false;
+
+        Assert.Null(buttonAccessibleObject.KeyboardShortcut);
+        Assert.False(checkBox.IsHandleCreated);
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsFact]
+    public void CheckBoxAccessibleObject_Name_Invoke_ReturnsExpected()
+    {
+        using var checkBox = new CheckBox();
+        checkBox.Text = "&checkBox";
+        Assert.False(checkBox.IsHandleCreated);
+        var buttonAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+
+        Assert.Equal("checkBox", buttonAccessibleObject.Name);
+
+        checkBox.UseMnemonic = false;
+
+        Assert.Equal("&checkBox", buttonAccessibleObject.Name);
+        Assert.False(checkBox.IsHandleCreated);
+    }
 }

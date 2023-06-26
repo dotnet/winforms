@@ -141,6 +141,40 @@ public class LabelAccessibleObjectTests
         Assert.Equal(1, accessibilityObject.RaiseAutomationNotificationCallCount);
     }
 
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsFact]
+    public void LabelAccessibleObject_Shortcut_Invoke_ReturnsExpected()
+    {
+        using var label = new Label();
+        label.Text = "&label";
+        Assert.False(label.IsHandleCreated);
+        var buttonAccessibleObject = new Label.LabelAccessibleObject(label);
+
+        Assert.Equal("Alt+l", buttonAccessibleObject.KeyboardShortcut);
+
+        label.UseMnemonic = false;
+
+        Assert.Null(buttonAccessibleObject.KeyboardShortcut);
+        Assert.False(label.IsHandleCreated);
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsFact]
+    public void LabelAccessibleObject_Name_Invoke_ReturnsExpected()
+    {
+        using var label = new Label();
+        label.Text = "&label";
+        Assert.False(label.IsHandleCreated);
+        var buttonAccessibleObject = new Label.LabelAccessibleObject(label);
+
+        Assert.Equal("label", buttonAccessibleObject.Name);
+
+        label.UseMnemonic = false;
+
+        Assert.Equal("&label", buttonAccessibleObject.Name);
+        Assert.False(label.IsHandleCreated);
+    }
+
     private class LabelWithCustomAccessibleObject : Label
     {
         private readonly Func<UiaCore.UIA, object, bool> _checkRaisedEvent;

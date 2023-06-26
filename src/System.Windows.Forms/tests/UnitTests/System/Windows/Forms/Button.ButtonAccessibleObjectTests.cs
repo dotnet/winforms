@@ -124,4 +124,38 @@ public class Button_ButtonAccessibleObjectTests
         Assert.Equal(expected, actual);
         Assert.False(button.IsHandleCreated);
     }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsFact]
+    public void ButtonAccessibleObject_Shortcut_Invoke_ReturnsExpected()
+    {
+        using var button = new Button();
+        button.Text = "&btn";
+        Assert.False(button.IsHandleCreated);
+        var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
+
+        Assert.Equal("Alt+b", buttonAccessibleObject.KeyboardShortcut);
+
+        button.UseMnemonic = false;
+
+        Assert.Null(buttonAccessibleObject.KeyboardShortcut);
+        Assert.False(button.IsHandleCreated);
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsFact]
+    public void ButtonAccessibleObject_Name_Invoke_ReturnsExpected()
+    {
+        using var button = new Button();
+        button.Text = "&btn";
+        Assert.False(button.IsHandleCreated);
+        var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
+
+        Assert.Equal("btn", buttonAccessibleObject.Name);
+
+        button.UseMnemonic = false;
+
+        Assert.Equal("&btn", buttonAccessibleObject.Name);
+        Assert.False(button.IsHandleCreated);
+    }
 }
