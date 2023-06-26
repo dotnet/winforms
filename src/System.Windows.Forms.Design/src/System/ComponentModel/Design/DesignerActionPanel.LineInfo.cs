@@ -7,11 +7,11 @@ internal sealed partial class DesignerActionPanel
 {
     private class LineInfo
     {
-        public Line Line;
-        public DesignerActionItem Item;
-        public DesignerActionList List;
+        public readonly Line Line;
+        public readonly DesignerActionItem? Item;
+        public readonly DesignerActionList? List;
 
-        public LineInfo(DesignerActionList list, DesignerActionItem item, Line line)
+        public LineInfo(DesignerActionList? list, DesignerActionItem? item, Line line)
         {
             Debug.Assert(line is not null);
             Line = line;
