@@ -165,7 +165,7 @@ namespace SourceGenerated
         }
     }
 
-    private static IEnumerable<(int min, int max)> GetElementSets(SourceProductionContext context, List<int> values)
+    private static IEnumerable<(int min, int max)> GetElementSets(SourceProductionContext context, EquatableArray<int> values)
     {
         int min = 0;
         int? max = null;
@@ -226,7 +226,7 @@ namespace SourceGenerated
 
             var isFlags = enumType.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, flagsAttributeType));
 
-            var info = new EnumValidationInfo(enumType, isFlags);
+            var info = EnumValidationInfo.FromEnumType(enumType, isFlags);
 
             yield return info;
         }
