@@ -390,7 +390,7 @@ public sealed partial class BehaviorService : IDisposable
     /// <summary>
     ///  Removes the behavior from the behavior stack
     /// </summary>
-    public Behavior? PopBehavior(Behavior behavior)
+    public Behavior PopBehavior(Behavior behavior)
     {
         if (_behaviorStack.Count == 0)
         {
@@ -400,7 +400,7 @@ public sealed partial class BehaviorService : IDisposable
         int index = _behaviorStack.IndexOf(behavior);
         if (index == -1)
         {
-            Debug.Assert(false, $"Could not find the behavior to pop - did it already get popped off? {behavior}");
+            Debug.Fail($"Could not find the behavior to pop - did it already get popped off? {behavior}");
             return null;
         }
 
