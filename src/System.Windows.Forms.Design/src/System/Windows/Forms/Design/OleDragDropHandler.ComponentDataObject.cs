@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
@@ -16,19 +14,19 @@ internal partial class OleDragDropHandler
     protected class ComponentDataObject : IDataObject
     {
         private readonly IServiceProvider serviceProvider;
-        private object[] components;
+        private object[]? components;
 
-        private Stream serializationStream;
-        private object serializationData;
+        private Stream? serializationStream;
+        private object? serializationData;
         private readonly int initialX;
         private readonly int initialY;
         private readonly IOleDragClient dragClient;
-        private CfCodeToolboxItem toolboxitemdata;
+        private CfCodeToolboxItem? toolboxitemdata;
 
         public ComponentDataObject(IOleDragClient dragClient, IServiceProvider sp, object[] comps, int x, int y)
         {
             serviceProvider = sp;
-            components = GetComponentList(comps, null, -1);
+            components = GetComponentList(comps);
             initialX = x;
             initialY = y;
             this.dragClient = dragClient;
@@ -41,16 +39,16 @@ internal partial class OleDragDropHandler
             this.dragClient = dragClient;
         }
 
-        private Stream SerializationStream
+        private Stream? SerializationStream
         {
             get
             {
-                if (serializationStream is null && Components is not null)
+                if (serializationStream is null && components is not null)
                 {
-                    IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
+                    IDesignerSerializationService? ds = serviceProvider.GetService<IDesignerSerializationService>();
                     if (ds is not null)
                     {
-                        object[] comps = new object[components.Length];
+                        IComponent[] comps = new IComponent[components.Length];
                         for (int i = 0; i < components.Length; i++)
                         {
                             Debug.Assert(components[i] is IComponent, $"Item {components[i].GetType().Name} is not an IComponent");
@@ -83,37 +81,22 @@ internal partial class OleDragDropHandler
                     }
                 }
 
-                return (object[])components.Clone();
+                return (object[])components!.Clone();
             }
         }
 
         /// <summary>
         /// computes the IDataObject which constitutes this whole toolboxitem for storage in the toolbox.
         /// </summary>
-        private CfCodeToolboxItem NestedToolboxItem
-        {
-            get
-            {
-                toolboxitemdata ??= new CfCodeToolboxItem(GetData(DataFormat));
-
-                return toolboxitemdata;
-            }
-        }
+        private CfCodeToolboxItem NestedToolboxItem => toolboxitemdata ??= new CfCodeToolboxItem(GetData(DataFormat));
 
         /// <summary>
         ///  Used to retrieve the selection for a copy.  The default implementation
         ///  retrieves the current selection.
         /// </summary>
-        private object[] GetComponentList(object[] components, ArrayList list, int index)
+        private object[] GetComponentList(object[] components)
         {
-            if (serviceProvider is null)
-            {
-                return components;
-            }
-
-            ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-
-            if (selSvc is null)
+            if (!serviceProvider.TryGetService(out ISelectionService? selSvc))
             {
                 return components;
             }
@@ -122,12 +105,12 @@ internal partial class OleDragDropHandler
             if (components is null)
                 selectedComponents = selSvc.GetSelectedComponents();
             else
-                selectedComponents = new ArrayList(components);
+                selectedComponents = new List<object>(components);
 
-            IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+            IDesignerHost? host = serviceProvider.GetService<IDesignerHost>();
             if (host is not null)
             {
-                ArrayList copySelection = new ArrayList();
+                List<IComponent> copySelection = new();
                 foreach (IComponent comp in selectedComponents)
                 {
                     copySelection.Add(comp);
@@ -142,10 +125,9 @@ internal partial class OleDragDropHandler
             return comps;
         }
 
-        private static void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
+        private static void GetAssociatedComponents(IComponent component, IDesignerHost host, List<IComponent> list)
         {
-            ComponentDesigner designer = host.GetDesigner(component) as ComponentDesigner;
-            if (designer is null)
+            if (host.GetDesigner(component) is not ComponentDesigner designer)
             {
                 return;
             }
@@ -157,16 +139,16 @@ internal partial class OleDragDropHandler
             }
         }
 
-        public virtual object GetData(string format)
+        public virtual object? GetData(string format)
         {
             return GetData(format, false);
         }
 
-        public virtual object GetData(string format, bool autoConvert)
+        public virtual object? GetData(string format, bool autoConvert)
         {
             if (format.Equals(DataFormat))
             {
-                SerializationStream.Seek(0, SeekOrigin.Begin);
+                SerializationStream!.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 return new BinaryFormatter().Deserialize(SerializationStream);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
@@ -180,9 +162,9 @@ internal partial class OleDragDropHandler
             return null;
         }
 
-        public virtual object GetData(Type t)
+        public virtual object? GetData(Type t)
         {
-            return GetData(t.FullName);
+            return GetData(t.FullName!);
         }
 
         /// <summary>
@@ -209,7 +191,7 @@ internal partial class OleDragDropHandler
         /// </summary>
         public bool GetDataPresent(Type format)
         {
-            return GetDataPresent(format.FullName, false);
+            return GetDataPresent(format.FullName!, false);
         }
 
         /// <summary>
@@ -228,31 +210,27 @@ internal partial class OleDragDropHandler
             return new string[] { NestedToolboxItemFormat, DataFormat, DataFormats.Serializable, ExtraInfoFormat };
         }
 
-        public void Deserialize(IServiceProvider serviceProvider, bool removeCurrentComponents)
+        public void Deserialize(IServiceProvider? serviceProvider, bool removeCurrentComponents)
         {
             serviceProvider ??= this.serviceProvider;
 
-            IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
-            IDesignerHost host = null;
-            DesignerTransaction trans = null;
+            IDesignerSerializationService ds = serviceProvider.GetService<IDesignerSerializationService>()!;
+            IDesignerHost? host = null;
+            DesignerTransaction? trans = null;
 
             try
             {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                serializationData ??= new BinaryFormatter().Deserialize(SerializationStream);
+                serializationData ??= new BinaryFormatter().Deserialize(SerializationStream!);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
                 if (removeCurrentComponents && components is not null)
                 {
                     foreach (IComponent removeComp in components)
                     {
-                        if (host is null && removeComp.Site is not null)
+                        if (host is null && removeComp.Site.TryGetService(out host))
                         {
-                            host = (IDesignerHost)removeComp.Site.GetService(typeof(IDesignerHost));
-                            if (host is not null)
-                            {
-                                trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
-                            }
+                            trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
                         }
 
                         host?.DestroyComponent(removeComp);
@@ -262,28 +240,22 @@ internal partial class OleDragDropHandler
                 }
 
                 ICollection objects = ds.Deserialize(serializationData);
-                components = new IComponent[objects.Count];
-                IEnumerator e = objects.GetEnumerator();
-                int idx = 0;
-
-                while (e.MoveNext())
-                {
-                    components[idx++] = (IComponent)e.Current;
-                }
+                components = new object[objects.Count];
+                objects.CopyTo(components, 0);
 
                 // only do top-level components here,
                 // because other are already parented.
                 // otherwise, when we process these
                 // components it's too hard to know what we
                 // should be reparenting.
-                ArrayList topComps = new ArrayList();
+                List<object> topComps = new(components.Length);
                 for (int i = 0; i < components.Length; i++)
                 {
                     if (components[i] is Control c)
                     {
                         if (c.Parent is null)
                         {
-                            topComps.Add(components[i]);
+                            topComps.Add(c);
                         }
                     }
                     else
@@ -304,7 +276,7 @@ internal partial class OleDragDropHandler
         ///  Sets the data to be associated with the specific data format. For
         ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
         /// </summary>
-        public void SetData(string format, bool autoConvert, object data)
+        public void SetData(string format, bool autoConvert, object? data)
         {
             SetData(format, data);
         }
@@ -313,7 +285,7 @@ internal partial class OleDragDropHandler
         ///  Sets the data to be associated with the specific data format. For
         ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
         /// </summary>
-        public void SetData(string format, object data)
+        public void SetData(string format, object? data)
         {
             throw new Exception(SR.DragDropSetDataError);
         }
@@ -321,18 +293,21 @@ internal partial class OleDragDropHandler
         /// <summary>
         ///  Sets the data to be associated with the specific data format.
         /// </summary>
-        public void SetData(Type format, object data)
+        public void SetData(Type format, object? data)
         {
-            SetData(format.FullName, data);
+            SetData(format.FullName!, data);
         }
 
         /// <summary>
         ///  Stores data in the data object. The format assumed is the
         ///  class of data
         /// </summary>
-        public void SetData(object data)
+        public void SetData(object? data)
         {
-            SetData(data.GetType(), data);
+            if (data is not null)
+            {
+                SetData(data.GetType(), data);
+            }
         }
     }
 }
