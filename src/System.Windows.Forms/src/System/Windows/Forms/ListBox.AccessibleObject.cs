@@ -38,18 +38,14 @@ public partial class ListBox
         {
             get
             {
-                this.TryGetOwnerAs(out ListBox? owner);
-                if (owner is null)
-                {
-                    return base.RuntimeId;
-                }
-
-                return new int[]
+                return !this.TryGetOwnerAs(out ListBox? owner)
+                    ? base.RuntimeId
+                    : (new int[]
                 {
                     RuntimeIDFirstItem,
                     PARAM.ToInt(owner.InternalHandle),
                     owner.GetHashCode()
-                };
+                });
             }
         }
 
@@ -136,8 +132,7 @@ public partial class ListBox
                            ? UiaCore.UIA.ListControlTypeId
                            : base.GetPropertyValue(propertyID);
                 case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                    this.TryGetOwnerAs(out ListBox? owner);
-                    if (owner is not null)
+                    if (this.TryGetOwnerAs(out ListBox? owner))
                     {
                         bool result = owner.HasKeyboardFocus && owner.Focused;
                         if (GetChildCount() > 0)
@@ -204,8 +199,7 @@ public partial class ListBox
 
         internal void RemoveListItemAccessibleObjectAt(int index)
         {
-            this.TryGetOwnerAs(out ListBox? owner);
-            if (owner is null)
+            if (!this.TryGetOwnerAs(out ListBox? owner))
             {
                 return;
             }
@@ -253,8 +247,7 @@ public partial class ListBox
 
         public override AccessibleObject? GetChild(int index)
         {
-            this.TryGetOwnerAs(out ListBox? owner);
-            if (owner is null)
+            if (!this.TryGetOwnerAs(out ListBox? owner))
             {
                 return null;
             }
@@ -320,8 +313,7 @@ public partial class ListBox
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            this.TryGetOwnerAs(out ListBox? owner);
-            if (owner is null || !owner.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out ListBox? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
