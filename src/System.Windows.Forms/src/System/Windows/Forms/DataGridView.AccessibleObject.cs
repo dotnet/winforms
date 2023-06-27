@@ -65,7 +65,6 @@ public partial class DataGridView
         {
             get
             {
-
                 _topRowAccessibilityObject ??= _ownerDataGridView.TryGetTarget(out DataGridView? owner) ? new DataGridViewTopRowAccessibleObject(owner) : null;
 
                 return _topRowAccessibilityObject;
@@ -176,7 +175,7 @@ public partial class DataGridView
             }
         }
 
-        public override AccessibleObject GetSelected()
+        public override AccessibleObject? GetSelected()
         {
             return SelectedCellsAccessibilityObject;
         }
@@ -201,10 +200,10 @@ public partial class DataGridView
                     if (owner.RowHeadersVisible)
                     {
                         // increment the childIndex because the first child in the TopRowAccessibleObject is the TopLeftHeaderCellAccObj
-                        return TopRowAccessibilityObject.GetChild(actualDisplayIndex + 1);
+                        return TopRowAccessibilityObject?.GetChild(actualDisplayIndex + 1);
                     }
 
-                    return TopRowAccessibilityObject.GetChild(actualDisplayIndex);
+                    return TopRowAccessibilityObject?.GetChild(actualDisplayIndex);
 
                 case DataGridViewHitTestType.RowHeader:
                     return owner.Rows[hti.RowIndex].HeaderCell.AccessibilityObject;
