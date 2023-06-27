@@ -1810,7 +1810,7 @@ internal class ToolStripDesigner : ControlDesigner
         }
 
         string transDesc;
-        ArrayList components = data.DragComponents;
+        List<ToolStripItem> components = data.DragComponents;
         ToolStripItem primaryItem = data.PrimarySelection;
         int primaryIndex = -1;
         bool copy = (de.Effect == DragDropEffects.Copy);
@@ -1853,7 +1853,7 @@ internal class ToolStripDesigner : ControlDesigner
                     KeyboardHandlingService.CopyInProgress = true;
                 }
 
-                components = DesignerUtils.CopyDragObjects(components, Component.Site) as ArrayList;
+                components = DesignerUtils.CopyDragObjects(components, Component.Site);
                 if (KeyboardHandlingService is not null)
                 {
                     KeyboardHandlingService.CopyInProgress = false;
@@ -1861,7 +1861,7 @@ internal class ToolStripDesigner : ControlDesigner
 
                 if (primaryIndex != -1)
                 {
-                    primaryItem = components[primaryIndex] as ToolStripItem;
+                    primaryItem = components[primaryIndex];
                 }
             }
 

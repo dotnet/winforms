@@ -61,7 +61,7 @@ internal sealed class DragAssistanceManager
     /// <summary>
     ///  Internal constructor that takes the service provider and the list of dragComponents.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, List<IComponent> dragComponents) : this(serviceProvider, null, dragComponents, null, false, false)
+    internal DragAssistanceManager(IServiceProvider serviceProvider, IReadOnlyList<IComponent> dragComponents) : this(serviceProvider, null, dragComponents, null, false, false)
     {
     }
 
@@ -69,21 +69,21 @@ internal sealed class DragAssistanceManager
     ///  Internal constructor that takes the service provider, the list of dragComponents, and a boolean
     ///  indicating that we are resizing.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, List<IComponent> dragComponents, bool resizing) : this(serviceProvider, null, dragComponents, null, resizing, false)
+    internal DragAssistanceManager(IServiceProvider serviceProvider, IReadOnlyList<IComponent> dragComponents, bool resizing) : this(serviceProvider, null, dragComponents, null, resizing, false)
     {
     }
 
     /// <summary>
     ///  Internal constructor called by DragBehavior.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, List<IComponent> dragComponents, Image backgroundImage, bool ctrlDrag) : this(serviceProvider, graphics, dragComponents, backgroundImage, false, ctrlDrag)
+    internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, IReadOnlyList<IComponent> dragComponents, Image backgroundImage, bool ctrlDrag) : this(serviceProvider, graphics, dragComponents, backgroundImage, false, ctrlDrag)
     {
     }
 
     /// <summary>
     ///  Internal constructor called by DragBehavior.
     /// </summary>
-    internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, List<IComponent> dragComponents, Image backgroundImage, bool resizing, bool ctrlDrag)
+    internal DragAssistanceManager(IServiceProvider serviceProvider, Graphics graphics, IReadOnlyList<IComponent> dragComponents, Image backgroundImage, bool resizing, bool ctrlDrag)
     {
         _serviceProvider = serviceProvider;
         _behaviorService = serviceProvider.GetService(typeof(BehaviorService)) as BehaviorService;
@@ -371,7 +371,7 @@ internal sealed class DragAssistanceManager
     }
 
     // Returns true of this child component (off the root control) should add its snaplines to the collection
-    private bool AddChildCompSnaplines(IComponent comp, List<IComponent> dragComponents, Rectangle clipBounds, Control targetControl)
+    private bool AddChildCompSnaplines(IComponent comp, IReadOnlyList<IComponent> dragComponents, Rectangle clipBounds, Control targetControl)
     {
         if (!(comp is Control control) || //has to be a control to get snaplines
            (dragComponents is not null && dragComponents.Contains(comp) && !_ctrlDrag) || //cannot be something that we are dragging, unless we are in a ctrlDrag
@@ -418,7 +418,7 @@ internal sealed class DragAssistanceManager
     /// <summary>
     ///  Initializes our class - we cache all snap lines for every control we can find. This is done for perf. reasons.
     /// </summary>
-    private void Initialize(List<IComponent> dragComponents, IDesignerHost host)
+    private void Initialize(IReadOnlyList<IComponent> dragComponents, IDesignerHost host)
     {
         // our targetControl will always be the 0th component in our dragComponents array list (a.k.a. the primary selected component).
         Control targetControl = null;

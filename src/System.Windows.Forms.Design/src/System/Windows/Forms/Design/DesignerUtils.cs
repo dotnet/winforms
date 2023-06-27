@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -37,7 +35,7 @@ internal static class DesignerUtils
         PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
     //The box-like image used as the user is dragging comps from the toolbox
-    private static Bitmap s_boxImage;
+    private static Bitmap? s_boxImage;
     public static int BOXIMAGESIZE = ScaleLogicalToDeviceUnitsX(16);
 
     // selection border size
@@ -111,6 +109,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used when the user clicks and drags a toolbox item onto the documentdesigner - this is the small box that is painted beneath the mouse pointer.
     /// </summary>
+    [MemberNotNull(nameof(s_boxImage))]
     public static Image BoxImage
     {
         get
@@ -130,10 +129,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used by Designer action glyphs to render a 'mouse hover' state.
     /// </summary>
-    public static Brush HoverBrush
-    {
-        get => s_hoverBrush;
-    }
+    public static Brush HoverBrush => s_hoverBrush;
 
     /// <summary>
     ///  Demand created size used to determine how far the user needs to drag the mouse before a drag operation starts.
@@ -228,23 +224,18 @@ internal static class DesignerUtils
     /// </summary>
     public static void DrawFrame(Graphics g, Region resizeBorder, FrameStyle style, Color backColor)
     {
-        Brush brush;
         Color color = SystemColors.ControlDarkDark;
         if (backColor != Color.Empty && backColor.GetBrightness() < .5)
         {
             color = SystemColors.ControlLight;
         }
 
-        switch (style)
+        Brush brush = style switch
         {
-            case FrameStyle.Dashed:
-                brush = new HatchBrush(HatchStyle.Percent50, color, Color.Transparent);
-                break;
-            case FrameStyle.Thick:
-            default:
-                brush = new SolidBrush(color);
-                break;
-        }
+            FrameStyle.Dashed => new HatchBrush(HatchStyle.Percent50, color, Color.Transparent),
+            FrameStyle.Thick => new SolidBrush(color),
+            _ => new SolidBrush(color)
+        };
 
         g.FillRegion(brush, resizeBorder);
         brush.Dispose();
@@ -322,15 +313,15 @@ internal static class DesignerUtils
     public static void GenerateSnapShot(Control control, ref Image image, int borderSize, double opacity, Color backColor)
     {
         //GenerateSnapShot will return a boolean value indicating if the control returned an image or not...
-        if (!GenerateSnapShotWithWM_PRINT(control, ref image))
+        if (!GenerateSnapShotWithWM_PRINT(control, out image))
         {
             //here, we failed to get the image on wmprint - so try bitblt
-            GenerateSnapShotWithBitBlt(control, ref image);
+            GenerateSnapShotWithBitBlt(control, out image);
             //if we still failed - we'll just fall though, put up a border around an empty area and call it good enough
         }
 
         //set the opacity
-        if (opacity < 1.0 && opacity > 0.0)
+        if (opacity is < 1.0 and > 0.0)
         {
             // make this semi-transparent
             SetImageAlpha((Bitmap)image, opacity);
@@ -349,68 +340,48 @@ internal static class DesignerUtils
     /// </summary>
     public static Size GetAdornmentDimensions(AdornmentType adornmentType)
     {
-        switch (adornmentType)
+        return adornmentType switch
         {
-            case AdornmentType.GrabHandle:
-                return new Size(HANDLESIZE, HANDLESIZE);
-            case AdornmentType.ContainerSelector:
-            case AdornmentType.Maximum:
-                return new Size(CONTAINERGRABHANDLESIZE, CONTAINERGRABHANDLESIZE);
-        }
-
-        return new Size(0, 0);
+            AdornmentType.GrabHandle => new Size(HANDLESIZE, HANDLESIZE),
+            AdornmentType.ContainerSelector or AdornmentType.Maximum => new Size(CONTAINERGRABHANDLESIZE, CONTAINERGRABHANDLESIZE),
+            _ => new Size(0, 0)
+        };
     }
 
     public static bool UseSnapLines(IServiceProvider provider)
     {
-        bool useSnapLines = true;
-        object optionValue = null;
-        if (provider.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
-        {
-            PropertyDescriptor snaplinesProp = options.Options.Properties["UseSnapLines"];
-            if (snaplinesProp is not null)
-            {
-                optionValue = snaplinesProp.GetValue(null);
-            }
-        }
+        DesignerOptionService? options = provider.GetService<DesignerOptionService>();
+        PropertyDescriptor? snaplinesProp = options?.Options.Properties["UseSnapLines"];
+        object? optionValue = snaplinesProp?.GetValue(null);
 
-        if (optionValue is not null && optionValue is bool)
+        if (optionValue is not bool useSnapLines)
         {
-            useSnapLines = (bool)optionValue;
+            return true;
         }
 
         return useSnapLines;
     }
 
-    public static object GetOptionValue(IServiceProvider provider, string name)
+    public static object? GetOptionValue(IServiceProvider? provider, string name)
     {
-        object optionValue = null;
-        if (provider is not null)
+        if (provider.TryGetService(out DesignerOptionService? desOpts))
         {
-            if (provider.GetService(typeof(DesignerOptionService)) is DesignerOptionService desOpts)
-            {
-                PropertyDescriptor prop = desOpts.Options.Properties[name];
-                if (prop is not null)
-                {
-                    optionValue = prop.GetValue(null);
-                }
-            }
-            else
-            {
-                if (provider.GetService(typeof(IDesignerOptionService)) is IDesignerOptionService optSvc)
-                {
-                    optionValue = optSvc.GetOptionValue("WindowsFormsDesigner\\General", name);
-                }
-            }
+            PropertyDescriptor? prop = desOpts.Options.Properties[name];
+            return prop?.GetValue(null);
         }
 
-        return optionValue;
+        if (provider.TryGetService(out IDesignerOptionService? optSvc))
+        {
+            return optSvc.GetOptionValue("WindowsFormsDesigner\\General", name);
+        }
+
+        return null;
     }
 
     /// <summary>
     ///  Uses BitBlt to geta snapshot of the control
     /// </summary>
-    public static void GenerateSnapShotWithBitBlt(Control control, ref Image image)
+    public static void GenerateSnapShotWithBitBlt(Control control, out Image image)
     {
         // Get the DC's and create our image
         using GetDcScope controlDC = new((HWND)control.Handle);
@@ -444,7 +415,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Uses WM_PRINT to get a snapshot of the control.  This method will return true if the control properly responded to the wm_print message.
     /// </summary>
-    public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
+    public static bool GenerateSnapShotWithWM_PRINT(Control control, out Image image)
     {
         image = new Bitmap(
             Math.Max(control.Width, MINCONTROLBITMAPSIZE),
@@ -489,27 +460,15 @@ internal static class DesignerUtils
     /// </summary>
     public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int borderSize)
     {
-        Rectangle bounds = Rectangle.Empty;
-        switch (type)
+        return type switch
         {
-            case SelectionBorderGlyphType.Top:
-                bounds = new Rectangle(originalBounds.Left - borderSize, originalBounds.Top - borderSize, originalBounds.Width + 2 * borderSize, borderSize);
-                break;
-            case SelectionBorderGlyphType.Bottom:
-                bounds = new Rectangle(originalBounds.Left - borderSize, originalBounds.Bottom, originalBounds.Width + 2 * borderSize, borderSize);
-                break;
-            case SelectionBorderGlyphType.Left:
-                bounds = new Rectangle(originalBounds.Left - borderSize, originalBounds.Top - borderSize, borderSize, originalBounds.Height + 2 * borderSize);
-                break;
-            case SelectionBorderGlyphType.Right:
-                bounds = new Rectangle(originalBounds.Right, originalBounds.Top - borderSize, borderSize, originalBounds.Height + 2 * borderSize);
-                break;
-            case SelectionBorderGlyphType.Body:
-                bounds = originalBounds;
-                break;
-        }
-
-        return bounds;
+            SelectionBorderGlyphType.Top => new Rectangle(originalBounds.Left - borderSize, originalBounds.Top - borderSize, originalBounds.Width + 2 * borderSize, borderSize),
+            SelectionBorderGlyphType.Bottom => new Rectangle(originalBounds.Left - borderSize, originalBounds.Bottom, originalBounds.Width + 2 * borderSize, borderSize),
+            SelectionBorderGlyphType.Left => new Rectangle(originalBounds.Left - borderSize, originalBounds.Top - borderSize, borderSize, originalBounds.Height + 2 * borderSize),
+            SelectionBorderGlyphType.Right => new Rectangle(originalBounds.Right, originalBounds.Top - borderSize, borderSize, originalBounds.Height + 2 * borderSize),
+            SelectionBorderGlyphType.Body => originalBounds,
+            _ => Rectangle.Empty
+        };
     }
 
     /// <summary>
@@ -657,7 +616,7 @@ internal static class DesignerUtils
     ///  Return value should be passed into the Container.Add() method.
     ///  If null is returned, this just means "let container generate a default name based on component type".
     /// </summary>
-    public static string GetUniqueSiteName(IDesignerHost host, string name)
+    public static string? GetUniqueSiteName(IDesignerHost host, string name)
     {
         // Item has no explicit name, so let host generate a type-based name instead
         if (string.IsNullOrEmpty(name))
@@ -666,14 +625,14 @@ internal static class DesignerUtils
         }
 
         // Get the name creation service from the designer host
-        INameCreationService nameCreationService = (INameCreationService)host.GetService(typeof(INameCreationService));
+        INameCreationService? nameCreationService = host.GetService<INameCreationService>();
         if (nameCreationService is null)
         {
             return null;
         }
 
         // See if desired name is already in use
-        object existingComponent = host.Container.Components[name];
+        object? existingComponent = host.Container.Components[name];
         if (existingComponent is null)
         {
             // Name is not in use - but make sure that it contains valid characters before using it!
@@ -702,7 +661,7 @@ internal static class DesignerUtils
             return;
         }
 
-        byte[] alphaValues = new byte[256];
+        Span<byte> alphaValues = stackalloc byte[256];
         // precompute all the possible alpha values into an array so we don't do multiplications in the loop
         for (int i = 0; i < alphaValues.Length; i++)
         {
@@ -739,7 +698,8 @@ internal static class DesignerUtils
     /// <summary>
     ///  This method removes types that are generics from the input collection
     /// </summary>
-    public static ICollection FilterGenericTypes(ICollection types)
+    [return: NotNullIfNotNull(nameof(types))]
+    public static ICollection? FilterGenericTypes(ICollection? types)
     {
         if (types is null || types.Count == 0)
         {
@@ -747,7 +707,7 @@ internal static class DesignerUtils
         }
 
         //now we get each Type and add it to the destination collection if its not a generic
-        ArrayList final = new ArrayList(types.Count);
+        List<Type> final = new(types.Count);
         foreach (Type t in types)
         {
             if (!t.ContainsGenericParameters)
@@ -764,11 +724,11 @@ internal static class DesignerUtils
     ///  Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components,
     ///  since SplitContainer sites its two SplitterPanels inside a nested container.
     /// </summary>
-    public static IContainer CheckForNestedContainer(IContainer container)
+    public static IContainer? CheckForNestedContainer(IContainer? container)
     {
         if (container is NestedContainer nestedContainer)
         {
-            return nestedContainer.Owner.Site.Container;
+            return nestedContainer.Owner.Site!.Container;
         }
         else
         {
@@ -779,7 +739,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation
     /// </summary>
-    public static ICollection CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
+    public static List<T>? CopyDragObjects<T>(IReadOnlyCollection<T> objects, IServiceProvider svcProvider) where T : IComponent
     {
         if (objects is null || svcProvider is null)
         {
@@ -787,46 +747,45 @@ internal static class DesignerUtils
             return null;
         }
 
-        Cursor oldCursor = Cursor.Current;
+        Cursor? oldCursor = Cursor.Current;
         try
         {
             Cursor.Current = Cursors.WaitCursor;
-            ComponentSerializationService css = svcProvider.GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
-            IDesignerHost host = svcProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
+            ComponentSerializationService? css = svcProvider.GetService<ComponentSerializationService>();
+            IDesignerHost? host = svcProvider.GetService<IDesignerHost>();
             Debug.Assert(css is not null, "No component serialization service -- we cannot copy the objects");
             Debug.Assert(host is not null, "No host -- we cannot copy the objects");
             if (css is not null && host is not null)
             {
                 SerializationStore store = css.CreateStore();
                 // Get all the objects, meaning we want the children too
-                ICollection copyObjects = GetCopySelection(objects, host);
+                List<T> copyObjects = GetCopySelection(objects, host);
 
                 // The serialization service does not (yet) handle serializing collections
-                foreach (IComponent comp in copyObjects)
+                foreach (T comp in copyObjects)
                 {
                     css.Serialize(store, comp);
                 }
 
                 store.Close();
-                copyObjects = css.Deserialize(store);
+                ICollection deserialized = css.Deserialize(store);
 
                 // Now, copyObjects contains a flattened list of all the controls contained in the original drag objects,
                 // that's not what we want to return. We only want to return the root drag objects,
                 // so that the caller gets an identical copy - identical in terms of objects.Count
-                ArrayList newObjects = new ArrayList(objects.Count);
-                foreach (IComponent comp in copyObjects)
+                List<T> newObjects = new(objects.Count);
+                foreach (T comp in deserialized)
                 {
-                    Control c = comp as Control;
-                    if (c is not null && c.Parent is null)
-                    {
-                        newObjects.Add(comp);
-                    }
-                    else if (c is null)
+                    if (comp is not Control c)
                     { // this happens when we are dragging a toolstripitem
                         if (comp is ToolStripItem item && item.GetCurrentParent() is null)
                         {
                             newObjects.Add(comp);
                         }
+                    }
+                    else if (c.Parent is null)
+                    {
+                        newObjects.Add(comp);
                     }
                 }
 
@@ -842,15 +801,10 @@ internal static class DesignerUtils
         return null;
     }
 
-    private static ICollection GetCopySelection(ICollection objects, IDesignerHost host)
+    private static List<T> GetCopySelection<T>(IReadOnlyCollection<T> objects, IDesignerHost host) where T : IComponent
     {
-        if (objects is null || host is null)
-        {
-            return null;
-        }
-
-        ArrayList copySelection = new ArrayList();
-        foreach (IComponent comp in objects)
+        List<T> copySelection = new(objects.Count);
+        foreach (T comp in objects)
         {
             copySelection.Add(comp);
             GetAssociatedComponents(comp, host, copySelection);
@@ -859,19 +813,14 @@ internal static class DesignerUtils
         return copySelection;
     }
 
-    internal static void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
+    internal static void GetAssociatedComponents<T>(IComponent component, IDesignerHost? host, List<T> list) where T : IComponent
     {
-        if (host is null)
+        if (host?.GetDesigner(component) is not ComponentDesigner designer)
         {
             return;
         }
 
-        if (!(host.GetDesigner(component) is ComponentDesigner designer))
-        {
-            return;
-        }
-
-        foreach (IComponent childComp in designer.AssociatedComponents)
+        foreach (T childComp in designer.AssociatedComponents)
         {
             if (childComp.Site is not null)
             {

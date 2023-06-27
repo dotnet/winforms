@@ -1422,7 +1422,7 @@ public partial class ControlDesigner : ComponentDesigner
         if (BehaviorService is not null && selectionService is not null)
         {
             // create our list of controls-to-drag
-            List<IComponent> dragControls = new();
+            List<Control> dragControls = new();
             ICollection selComps = selectionService.GetSelectedComponents();
 
             // must identify a required parent to avoid dragging mixes of children
@@ -1442,7 +1442,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                     if (_host.GetDesigner(comp) is ControlDesigner des && (des.SelectionRules & SelectionRules.Moveable) != 0)
                     {
-                        dragControls.Add(comp);
+                        dragControls.Add(control);
                     }
                 }
             }

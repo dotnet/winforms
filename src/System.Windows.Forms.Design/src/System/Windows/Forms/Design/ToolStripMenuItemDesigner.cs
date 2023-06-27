@@ -2655,7 +2655,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 if (ownerItem is not null && host is not null)
                 {
                     string transDesc;
-                    ArrayList components = data.DragComponents;
+                    List<ToolStripItem> components = data.DragComponents;
                     int primaryIndex = -1;
                     bool copy = (e.Effect == DragDropEffects.Copy);
                     if (components.Count == 1)
@@ -2695,7 +2695,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                                 keyboardHandlingService.CopyInProgress = true;
                             }
 
-                            components = DesignerUtils.CopyDragObjects(components, primaryItem.Site) as ArrayList;
+                            components = DesignerUtils.CopyDragObjects(components, primaryItem.Site);
 
                             if (keyboardHandlingService is not null)
                             {
@@ -2704,7 +2704,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
                             if (primaryIndex != -1)
                             {
-                                primaryItem = components[primaryIndex] as ToolStripItem;
+                                primaryItem = components[primaryIndex];
                             }
                         }
 

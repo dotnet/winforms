@@ -567,8 +567,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 // Proceed with the drag and drop, passing in the list item.
                 try
                 {
-                    ArrayList dragItems = new ArrayList();
                     ICollection selComps = selSvc.GetSelectedComponents();
+                    List<ToolStripItem> dragItems = new(selComps.Count);
                     //create our list of controls-to-drag
                     foreach (IComponent comp in selComps)
                     {
@@ -636,7 +636,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             //Do DragDrop only if currentDropItem has changed.
             if (currentDropItem != selectedItem && designerHost is not null)
             {
-                ArrayList components = data.DragComponents;
+                List<ToolStripItem> components = data.DragComponents;
                 ToolStrip parentToolStrip = currentDropItem.GetCurrentParent();
                 int primaryIndex = -1;
                 string transDesc;
@@ -687,7 +687,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                             keyboardHandlingService.CopyInProgress = true;
                         }
 
-                        components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site) as ArrayList;
+                        components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site);
                         if (keyboardHandlingService is not null)
                         {
                             keyboardHandlingService.CopyInProgress = false;
@@ -695,7 +695,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
 
                         if (primaryIndex != -1)
                         {
-                            selectedItem = components[primaryIndex] as ToolStripItem;
+                            selectedItem = components[primaryIndex];
                         }
                     }
 

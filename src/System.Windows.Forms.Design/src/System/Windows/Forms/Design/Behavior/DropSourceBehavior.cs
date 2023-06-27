@@ -17,7 +17,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 {
     private struct DragComponent
     {
-        public IComponent dragComponent; //the dragComponent
+        public Control dragComponent; //the dragComponent
         public int zorderIndex; //the dragComponent's z-order index
         public Point originalControlLocation; //the original control of the control in AdornerWindow coordinates
         public Point draggedLocation; //the location of the component after each drag - in AdornerWindow coordinates
@@ -26,7 +26,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     }
 
     private readonly DragComponent[] dragComponents;
-    private List<IComponent> dragObjects; // used to initialize the DragAssistanceManager
+    private Control[] dragObjects; // used to initialize the DragAssistanceManager
     private readonly BehaviorDataObject data; //drag data that represents the controls we're dragging & the effect/action
     private readonly DragDropEffects allowedEffects; //initial allowed effects for the drag operation
     private DragDropEffects lastEffect; //the last effect we saw (used for determining a valid drop)
@@ -72,7 +72,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     /// <summary>
     ///  Constructor that caches all needed variables for perf reasons.
     /// </summary>
-    internal DropSourceBehavior(List<IComponent> dragComponents, Control source, Point initialMouseLocation)
+    internal DropSourceBehavior(List<Control> dragComponents, Control source, Point initialMouseLocation)
     {
         serviceProviderSource = source.Site;
         if (serviceProviderSource is null)
@@ -319,7 +319,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         }
 
         // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done. See Copy code below.
-        List<IComponent> originalControls = null;
+        List<Control> originalControls = null;
         bool performCopy = (lastEffect == DragDropEffects.Copy);
 
         Control dragSource = data.Source;
@@ -383,14 +383,14 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
                         // Get the objects to copy
-                        List<IComponent> temp = new();
+                        List<Control> temp = new();
                         for (int i = 0; i < dragComponents.Length; i++)
                         {
                             temp.Add(dragComponents[i].dragComponent);
                         }
 
                         // Create a copy of them
-                        temp = DesignerUtils.CopyDragObjects(temp, serviceProviderTarget).Cast<IComponent>().ToList();
+                        temp = DesignerUtils.CopyDragObjects(temp, serviceProviderTarget);
                         if (temp is null)
                         {
                             Debug.Fail("Couldn't create copies of the controls we are dragging.");
@@ -657,9 +657,9 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     // Build a new dragImageRegion -- but only if we are changing hosts
                     if (lastDropTarget is not null)
                     {
-                        for (int i = 0; i < dragObjects.Count; i++)
+                        for (int i = 0; i < dragObjects.Length; i++)
                         {
-                            Control dragControl = (Control)dragObjects[i];
+                            Control dragControl = dragObjects[i];
                             Rectangle controlRect = behaviorServiceSource.ControlRectInAdornerWindow(dragControl);
                             // Can't call MapPointFromSourceToTarget since we always want to do this
                             controlRect.Location = behaviorServiceSource.AdornerWindowPointToScreen(controlRect.Location);
@@ -883,11 +883,11 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     /// <summary>
     ///  Called when the ControlDesigner starts a drag operation. Here, all adorners are disabled, screen shots of all related controls are taken, and the DragAssistanceManager  (for SnapLines) is created.
     /// </summary>
-    private void InitiateDrag(Point initialMouseLocation, ICollection<IComponent> dragComps)
+    private void InitiateDrag(Point initialMouseLocation, List<Control> dragComps)
     {
-        dragObjects = dragComps.ToList();
+        dragObjects = dragComps.ToArray();
         DisableAdorners(serviceProviderSource, behaviorServiceSource, false);
-        Control primaryControl = dragObjects[0] as Control;
+        Control primaryControl = dragObjects[0];
         Control primaryParent = primaryControl?.Parent;
         Color backColor = primaryParent is not null ? primaryParent.BackColor : Color.Empty;
         dragImageRect = Rectangle.Empty;
@@ -895,11 +895,11 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         initialMouseLoc = initialMouseLocation;
 
         //loop through every control we need to drag, calculate the offsets and get a snapshot
-        for (int i = 0; i < dragObjects.Count; i++)
+        for (int i = 0; i < dragObjects.Length; i++)
         {
-            Control dragControl = (Control)dragObjects[i];
+            Control dragControl = dragObjects[i];
 
-            dragComponents[i].dragComponent = dragObjects[i];
+            dragComponents[i].dragComponent = dragControl;
             dragComponents[i].positionOffset = new Point(dragControl.Location.X - primaryControl.Location.X,
                                             dragControl.Location.Y - primaryControl.Location.Y);
             Rectangle controlRect = behaviorServiceSource.ControlRectInAdornerWindow(dragControl);
@@ -939,7 +939,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         // Now that we are sorted, set the primaryComponentIndex...
         for (int i = 0; i < dragComponents.Length; i++)
         {
-            if (primaryControl.Equals(dragComponents[i].dragComponent as Control))
+            if (primaryControl.Equals(dragComponents[i].dragComponent))
             {
                 primaryComponentIndex = i;
                 break;
