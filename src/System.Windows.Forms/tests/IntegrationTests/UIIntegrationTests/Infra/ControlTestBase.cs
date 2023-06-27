@@ -406,6 +406,8 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
                 var control = new T();
                 form.Controls.Add(control);
 
+                AddLogMessage($"{control.GetType().Name}: HWND=0x{(long)control.HWND:x}");
+
                 return (form, control);
             },
             testDriverAsync);
@@ -434,6 +436,8 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
                 form.Controls.Add(control);
 
+                AddLogMessage($"{control.GetType().Name}: HWND=0x{(long)control.HWND:x}");
+
                 return (form, control);
             },
             testDriverAsync);
@@ -458,6 +462,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
                 tableLayout.Controls.Add(control1, 0, 0);
                 tableLayout.Controls.Add(control2, 1, 0);
                 form.Controls.Add(tableLayout);
+
+                AddLogMessage($"{control1.GetType().Name} 1: HWND=0x{(long)control1.HWND:x}");
+                AddLogMessage($"{control2.GetType().Name} 2: HWND=0x{(long)control2.HWND:x}");
 
                 return (form, (control1, control2));
             },
