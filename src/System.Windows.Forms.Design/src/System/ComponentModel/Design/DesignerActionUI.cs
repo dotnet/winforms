@@ -606,7 +606,7 @@ internal partial class DesignerActionUI : IDisposable
                 Point glyphCoord = GetGlyphLocationScreenCoord(_lastPanelComponent, currentGlyph);
                 if ((new Rectangle(glyphCoord, new Size(currentGlyph.Bounds.Width, currentGlyph.Bounds.Height))).Contains(point))
                 {
-                    DesignerActionBehavior behavior = (DesignerActionBehavior)currentGlyph.Behavior;
+                    DesignerActionBehavior behavior = (DesignerActionBehavior)currentGlyph.Behavior!;
                     behavior.IgnoreNextMouseUp = true;
                 }
 
