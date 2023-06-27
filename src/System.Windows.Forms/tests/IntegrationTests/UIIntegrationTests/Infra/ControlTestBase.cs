@@ -186,6 +186,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             var isCI = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY"));
             if (isCI)
             {
+                // Require process elevation in CI to establish and maintain focus
+                Assert.True(PlatformDetection.IsWindowsAndElevated);
+
                 // Attempt to hook all process in CI
                 s_wndProcHook = PInvoke.SetWindowsHookEx(
                     WINDOWS_HOOK_ID.WH_GETMESSAGE,
