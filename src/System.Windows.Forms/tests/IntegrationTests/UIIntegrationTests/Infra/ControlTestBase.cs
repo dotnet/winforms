@@ -77,20 +77,24 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     {
         if (nCode == PInvoke.HC_ACTION)
         {
-            MOUSEHOOKSTRUCT mouse = *(MOUSEHOOKSTRUCT*)lparam;
-            var threadId = PInvoke.GetWindowThreadProcessId(mouse.hwnd, out var processId);
-            string processName;
-            try
-            {
-                using var process = Process.GetProcessById((int)processId);
-                processName = process.ProcessName;
-            }
-            catch (Exception ex)
-            {
-                processName = $"{ex.GetType().Name}?";
-            }
+            MSLLHOOKSTRUCT mouse = *(MSLLHOOKSTRUCT*)lparam;
 
-            s_messages.Add($"WH_MOUSE: Process={processId} ({processName}) Thread={threadId} msg={(MessageId)(uint)wparam} pt={mouse.pt}");
+            string threadId = "?";
+            string processId = "?";
+            string processName = "?";
+            //var threadId = PInvoke.GetWindowThreadProcessId(mouse.hwnd, out var processId);
+            //string processName;
+            //try
+            //{
+            //    using var process = Process.GetProcessById((int)processId);
+            //    processName = process.ProcessName;
+            //}
+            //catch (Exception ex)
+            //{
+            //    processName = $"{ex.GetType().Name}?";
+            //}
+
+            s_messages.Add($"WH_MOUSE_LL: Process={processId} ({processName}) Thread={threadId} msg={(MessageId)(uint)wparam} pt={mouse.pt}");
         }
 
         return PInvoke.CallNextHookEx(s_wndProcHook2, nCode, wparam, lparam);
@@ -192,7 +196,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
                 if (s_wndProcHook.IsNull)
                 {
                     s_wndProcHook2 = PInvoke.SetWindowsHookEx(
-                        WINDOWS_HOOK_ID.WH_MOUSE,
+                        WINDOWS_HOOK_ID.WH_MOUSE_LL,
                         &GlobalMouseCallback,
                         PInvoke.GetModuleHandle((PCWSTR)null),
                         0);

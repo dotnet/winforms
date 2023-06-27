@@ -504,6 +504,7 @@ MOUSEHOOKSTRUCT
 MoveToEx
 MSFTEDIT_CLASS
 MsgWaitForMultipleObjectsEx
+MSLLHOOKSTRUCT
 MultiByteToWideChar
 NIN_*
 NFR_*
