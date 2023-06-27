@@ -61,31 +61,22 @@ public partial class DataGridView
             }
         }
 
-        private AccessibleObject TopRowAccessibilityObject
+        private AccessibleObject? TopRowAccessibilityObject
         {
             get
             {
-                if (!_ownerDataGridView.TryGetTarget(out DataGridView? owner))
-                {
-                    return null;
-                }
 
-                _topRowAccessibilityObject ??= new DataGridViewTopRowAccessibleObject(owner);
+                _topRowAccessibilityObject ??= _ownerDataGridView.TryGetTarget(out DataGridView? owner) ? new DataGridViewTopRowAccessibleObject(owner) : null;
 
                 return _topRowAccessibilityObject;
             }
         }
 
-        private AccessibleObject SelectedCellsAccessibilityObject
+        private AccessibleObject? SelectedCellsAccessibilityObject
         {
             get
             {
-                if (!_ownerDataGridView.TryGetTarget(out DataGridView? owner))
-                {
-                    return null;
-                }
-
-                _selectedCellsAccessibilityObject ??= new DataGridViewSelectedCellsAccessibleObject(owner);
+                _selectedCellsAccessibilityObject ??= _ownerDataGridView.TryGetTarget(out DataGridView? owner) ? new DataGridViewSelectedCellsAccessibleObject(owner) : null;
 
                 return _selectedCellsAccessibilityObject;
             }
