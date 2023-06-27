@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.WindowsAndMessaging;
@@ -95,11 +96,16 @@ public class SendInput
                 throw new InvalidOperationException("Failed to set the foreground window.");
             }
 
+            var windowToActivate = PInvoke.GetLastActivePopup(handle.Handle);
+            windowToActivate = PInvoke.IsWindowVisible(windowToActivate) ? windowToActivate : window.HWND;
+
             // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
-            PInvoke.SetActiveWindow(window);
+            if (PInvoke.SetActiveWindow(windowToActivate).IsNull && Marshal.GetLastWin32Error() is not 0)
+                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
 
             // Give the window the keyboard focus as it may not have been achieved by 'SetActiveWindow'
-            PInvoke.SetFocus(window);
+            if (PInvoke.SetFocus(windowToActivate).IsNull && Marshal.GetLastWin32Error() is not 0)
+                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
         }
 
         await actions(new InputSimulator());
