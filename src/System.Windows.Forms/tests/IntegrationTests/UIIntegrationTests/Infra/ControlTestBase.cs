@@ -28,6 +28,7 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
     private static List<string> s_messages = new();
     private static HHOOK s_wndProcHook;
     private static HHOOK s_wndProcHook2;
+    private static ITest? s_previousTest;
 
     private Point? _mousePosition;
 
@@ -166,8 +167,14 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         File.WriteAllText(logFileName, string.Join(Environment.NewLine, s_messages));
     }
 
-    public virtual Task InitializeAsync()
+    public virtual async Task InitializeAsync()
     {
+        if (s_previousTest is not null && DataCollectionService.CurrentTest == s_previousTest)
+        {
+            // We are retrying the previous test. Add a delay to avoid repeating whatever interfered with the first try.
+            await Task.Delay(TimeSpan.FromSeconds(5));
+        }
+
         // Verify keyboard and mouse state at the start of the test
         VerifyKeyStates(isStartOfTest: true, TestOutputHelper);
 
@@ -234,7 +241,6 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
 
         _joinableTaskCollection = JoinableTaskContext.CreateCollection();
         JoinableTaskFactory = JoinableTaskContext.CreateFactory(_joinableTaskCollection);
-        return Task.CompletedTask;
     }
 
     public virtual async Task DisposeAsync()
@@ -282,8 +288,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
             s_wndProcHook2 = HHOOK.Null;
         }
 
-        Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
+        s_previousTest = DataCollectionService.CurrentTest;
         DataCollectionService.CurrentTest = null;
+        Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
     }
 
     private void VerifyKeyStates(bool isStartOfTest, ITestOutputHelper testOutputHelper)
