@@ -427,14 +427,11 @@ public partial class LinkLabel : Label, IButtonControl
     {
         base.ReleaseUiaProvider(handle);
 
-        if (_linkCollection is not null)
+        foreach (Link link in _links)
         {
-            foreach (Link link in _linkCollection)
+            if (link.IsAccessibilityObjectCreated)
             {
-                if (link.IsAccessibilityObjectCreated)
-                {
-                    UiaCore.UiaDisconnectProvider(link.AccessibleObject);
-                }
+                UiaCore.UiaDisconnectProvider(link.AccessibleObject);
             }
         }
     }
