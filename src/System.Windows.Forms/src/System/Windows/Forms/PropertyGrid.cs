@@ -3655,12 +3655,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
 
         int hashCode = ActiveDesigner.GetHashCode();
-        if (!_designerSelections.ContainsKey(hashCode))
+        if (!_designerSelections.TryGetValue(hashCode, out int value))
         {
             return false;
         }
 
-        selectedTabIndex = _designerSelections[hashCode];
+        selectedTabIndex = value;
         return true;
     }
 
@@ -4105,9 +4105,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         string tabName = $"{_selectedTab.Tab.TabName}{_propertySortValue}";
 
-        if (_viewTabProperties is not null && _viewTabProperties.ContainsKey(tabName))
+        if (_viewTabProperties is not null && _viewTabProperties.TryGetValue(tabName, out GridEntry value))
         {
-            _rootEntry = _viewTabProperties[tabName];
+            _rootEntry = value;
             _rootEntry?.Refresh();
         }
         else

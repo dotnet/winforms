@@ -1144,7 +1144,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     // Recursive function to add all the menuItems to the SerializationStore during Morphing..
-    private void SerializeDropDownItems(ToolStripDropDownItem parent, ref SerializationStore _serializedDataForDropDownItems, ComponentSerializationService _serializationService)
+    private static void SerializeDropDownItems(ToolStripDropDownItem parent, ref SerializationStore _serializedDataForDropDownItems, ComponentSerializationService _serializationService)
     {
         foreach (ToolStripItem item in parent.DropDownItems)
         {

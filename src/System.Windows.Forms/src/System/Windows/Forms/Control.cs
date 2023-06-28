@@ -2659,7 +2659,7 @@ public unsafe partial class Control :
     public bool IsAncestorSiteInDesignMode =>
         GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
 
-    private ISite? GetSitedParentSite(Control control)
+    private static ISite? GetSitedParentSite(Control control)
     {
         ArgumentNullException.ThrowIfNull(control);
         return (control.Site is not null && control.Site.DesignMode) || control.Parent is null ?

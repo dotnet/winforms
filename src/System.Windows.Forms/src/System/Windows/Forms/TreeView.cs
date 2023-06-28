@@ -1806,7 +1806,7 @@ public partial class TreeView : Control
         }
     }
 
-    private void UpdateImagesRecursive(TreeNode node)
+    private static void UpdateImagesRecursive(TreeNode node)
     {
         node.UpdateImage();
         // Iterate only through the Nodes collection rather than the
@@ -2753,7 +2753,7 @@ public partial class TreeView : Control
     /// <remarks>
     ///  Setting the PInvoke.TVS_CHECKBOXES style clears the checked state
     /// </remarks>
-    private void UpdateCheckedState(TreeNode node, bool update)
+    private static void UpdateCheckedState(TreeNode node, bool update)
     {
         // This looks funny, but CheckedInternal returns the cached isChecked value and the internal
         // setter will blindly issue TVM_SETITEM so this gets us back in sync.
