@@ -53,13 +53,7 @@ public partial class DataGridView
         }
 
         public override AccessibleRole Role
-        {
-            get
-            {
-                // the Default AccessibleRole is Table
-                return _ownerDataGridView.TryGetTarget(out DataGridView? owner) ? owner.AccessibleRole : AccessibleRole.Table;
-            }
-        }
+            => this.GetOwnerAccessibleRole(AccessibleRole.Table);
 
         private AccessibleObject? TopRowAccessibilityObject
         {

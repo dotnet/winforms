@@ -1486,7 +1486,6 @@ override System.Windows.Forms.DataGridView.CanEnableIme.get -> bool
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChildCount() -> int
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
