@@ -5,6 +5,7 @@
     <LangVersion>Preview</LangVersion>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);RS2007</NoWarn>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisAnalyzersVersion)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="$(MicrosoftCodeAnalysisVisualBasicPackageVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisCommonPackageVersion)" />
 
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
     <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
