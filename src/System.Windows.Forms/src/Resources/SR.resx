@@ -2271,6 +2271,9 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DataGridViewCellAccessibleObject_OwnerNotSet" xml:space="preserve">
     <value>The owning DataGridViewCell object has not been set.</value>
   </data>
+  <data name="DataGridViewCellAccessibleObject_OwnerWrongType" xml:space="preserve">
+    <value>The owning DataGridViewCell object is a wrong type.</value>
+  </data>
   <data name="DataGridViewCellCollection_AtLeastOneCellIsNull" xml:space="preserve">
     <value>At least one of the provided cells is null.</value>
   </data>
