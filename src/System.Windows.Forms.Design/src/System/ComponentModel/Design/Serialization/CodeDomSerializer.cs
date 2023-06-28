@@ -381,7 +381,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
         return expression;
     }
 
-    private void ResetBrowsableProperties(object instance)
+    private static void ResetBrowsableProperties(object instance)
     {
         if (instance is null)
         {

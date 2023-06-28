@@ -280,7 +280,7 @@ internal partial class ToolStripSettingsManager
         return string.Empty;
     }
 
-    private void ResumeAllLayout(Control start, bool performLayout)
+    private static void ResumeAllLayout(Control start, bool performLayout)
     {
         Control.ControlCollection controlsCollection = start.Controls;
 
@@ -292,7 +292,7 @@ internal partial class ToolStripSettingsManager
         start.ResumeLayout(performLayout);
     }
 
-    private void SuspendAllLayout(Control start)
+    private static void SuspendAllLayout(Control start)
     {
         start.SuspendLayout();
 

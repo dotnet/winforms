@@ -15,7 +15,7 @@ internal partial class PropertyGridView
         public GridPositionData(PropertyGridView gridView)
         {
             _selectedItemTree = GetGridEntryHierarchy(gridView._selectedGridEntry);
-            _expandedState = gridView.SaveHierarchyState(gridView.TopLevelGridEntries);
+            _expandedState = SaveHierarchyState(gridView.TopLevelGridEntries);
             _itemRow = gridView._selectedRow;
         }
 

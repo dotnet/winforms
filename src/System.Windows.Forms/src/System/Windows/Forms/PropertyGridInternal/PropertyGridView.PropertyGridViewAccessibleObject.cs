@@ -143,7 +143,7 @@ internal partial class PropertyGridView
         /// <param name="gridEntryCollection">The grid entry collection.</param>
         /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
         /// <returns>The previous grid entry.</returns>
-        internal AccessibleObject? GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
+        internal static AccessibleObject? GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
         {
             currentGridEntryFound = false;
 
@@ -200,7 +200,7 @@ internal partial class PropertyGridView
         /// <param name="gridEntryCollection">The grid entry collection.</param>
         /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
         /// <returns>The next grid entry.</returns>
-        internal AccessibleObject? GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
+        internal static AccessibleObject? GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection? gridEntryCollection, out bool currentGridEntryFound)
         {
             currentGridEntryFound = false;
 
@@ -259,7 +259,7 @@ internal partial class PropertyGridView
                 var targetEntries = new GridEntry[1];
                 try
                 {
-                    owner.GetGridEntriesFromOutline(subGridEntry, 0, 0, targetEntries);
+                    GetGridEntriesFromOutline(subGridEntry, 0, 0, targetEntries);
                 }
                 catch (Exception ex)
                 {
@@ -290,7 +290,7 @@ internal partial class PropertyGridView
                 var targetEntries = new GridEntry[1];
                 try
                 {
-                    owner.GetGridEntriesFromOutline(subGridEntry, 0, subGridEntry.Count - 1, targetEntries);
+                    GetGridEntriesFromOutline(subGridEntry, 0, subGridEntry.Count - 1, targetEntries);
                 }
                 catch (Exception ex)
                 {

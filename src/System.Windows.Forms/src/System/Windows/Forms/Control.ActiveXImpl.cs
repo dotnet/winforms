@@ -740,7 +740,7 @@ public partial class Control
         ///  the mnemonics for each control to mnemonicList.  Each mnemonic
         ///  is added as a char to the list.
         /// </summary>
-        private void GetMnemonicList(Control control, List<char> mnemonicList)
+        private static void GetMnemonicList(Control control, List<char> mnemonicList)
         {
             // Get the mnemonic for our control
             char mnemonic = WindowsFormsUtils.GetMnemonic(control.Text, true);
