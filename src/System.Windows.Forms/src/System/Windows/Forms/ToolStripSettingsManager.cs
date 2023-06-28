@@ -121,12 +121,13 @@ internal partial class ToolStripSettingsManager
             else
             {
                 // This toolStrip is in a ToolStripPanel. We will process it below.
-                if (!toolStripPanelDestinationHash.ContainsKey(destinationPanel))
+                if (!toolStripPanelDestinationHash.TryGetValue(destinationPanel, out List<SettingsStub>? value))
                 {
-                    toolStripPanelDestinationHash[destinationPanel] = new List<SettingsStub>();
+                    value = new List<SettingsStub>();
+                    toolStripPanelDestinationHash[destinationPanel] = value;
                 }
 
-                toolStripPanelDestinationHash[destinationPanel].Add(toolStripSettings);
+                value.Add(toolStripSettings);
             }
         }
 
