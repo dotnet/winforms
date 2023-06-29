@@ -2162,16 +2162,13 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </summary>
     public virtual ToolStripItem? GetNextItem(ToolStripItem? start, ArrowDirection direction)
     {
-        if (TabStop && start is null && _lastActiveTooltipItem is not null)
-        {
-            start = _lastActiveTooltipItem;
-        }
-
         switch (direction)
         {
             case ArrowDirection.Right:
+                start ??= _lastActiveTooltipItem;
                 return GetNextItemHorizontal(start, forward: true);
             case ArrowDirection.Left:
+                start ??= _lastActiveTooltipItem;
                 bool forward = LastKeyData == Keys.Tab || (TabStop && start is null);
                 return GetNextItemHorizontal(start, forward);
             case ArrowDirection.Down:
