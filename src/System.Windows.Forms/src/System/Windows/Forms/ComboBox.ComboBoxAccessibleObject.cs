@@ -17,24 +17,14 @@ public partial class ComboBox
         private const int COMBOBOX_ACC_ITEM_INDEX = 1;
 
         private ComboBoxChildDropDownButtonUiaProvider? _dropDownButtonUiaProvider;
-        private WeakReference<ComboBox> owningComboBox;
 
         /// <summary>
         ///  Initializes new instance of ComboBoxAccessibleObject.
         /// </summary>
         /// <param name="owningComboBox">The owning ComboBox control.</param>
-        public ComboBoxAccessibleObject(ComboBox owningComboBox): base(owningComboBox)
+        public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
         {
-            this.owningComboBox = new WeakReference<ComboBox>(owningComboBox);
             ItemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(owningComboBox);
-        }
-
-        public ComboBox? OwningComboBox
-        {
-            get
-            {
-                return owningComboBox.TryGetTarget(out ComboBox? comboBox) ? comboBox : null;
-            }
         }
 
         private void ComboBoxDefaultAction(bool expand)
@@ -187,6 +177,7 @@ public partial class ComboBox
                 if (OsVersion.IsWindows8OrGreater())
                 {
                     UiaCore.UiaDisconnectProvider(ItemAccessibleObjects[item]);
+                    ItemAccessibleObjects[item] = null;
                 }
 
                 ItemAccessibleObjects.Remove(item);
