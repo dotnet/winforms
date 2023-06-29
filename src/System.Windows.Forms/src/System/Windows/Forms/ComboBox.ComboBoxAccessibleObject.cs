@@ -24,7 +24,7 @@ public partial class ComboBox
         /// <param name="owningComboBox">The owning ComboBox control.</param>
         public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
         {
-            ItemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(owningComboBox);
+            ItemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(this);
         }
 
         private void ComboBoxDefaultAction(bool expand)

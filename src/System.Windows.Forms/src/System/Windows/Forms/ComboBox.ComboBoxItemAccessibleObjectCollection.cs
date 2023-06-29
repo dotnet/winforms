@@ -10,18 +10,18 @@ public partial class ComboBox
 {
     internal class ComboBoxItemAccessibleObjectCollection : Dictionary<Entry, ComboBoxItemAccessibleObject>
     {
-        private readonly ComboBox _owningComboBox;
+        private readonly ComboBoxAccessibleObject _owningComboBox;
 
-        public ComboBoxItemAccessibleObjectCollection(ComboBox owningComboBox)
+        public ComboBoxItemAccessibleObjectCollection(ComboBoxAccessibleObject owningComboBox)
         {
             _owningComboBox = owningComboBox;
         }
 
         public ComboBoxItemAccessibleObject GetComboBoxItemAccessibleObject(Entry key)
         {
-            if (!ContainsKey(key))
+            if (!ContainsKey(key) && _owningComboBox.TryGetOwnerAs(out ComboBox? owner))
             {
-                Add(key, new ComboBoxItemAccessibleObject(_owningComboBox, key));
+                Add(key, new ComboBoxItemAccessibleObject(owner, key));
             }
 
             return this[key];
