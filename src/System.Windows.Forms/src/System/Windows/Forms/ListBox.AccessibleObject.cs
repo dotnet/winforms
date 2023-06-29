@@ -127,7 +127,11 @@ public partial class ListBox
                            ? UiaCore.UIA.ListControlTypeId
                            : base.GetPropertyValue(propertyID);
                 case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                    bool result = GetChildCount() == 0 && _owningListBox.Focused;
+                    bool result = _owningListBox.HasKeyboardFocus && _owningListBox.Focused;
+                    if (GetChildCount() > 0)
+                    {
+                        _owningListBox.HasKeyboardFocus = false;
+                    }
 
                     return result;
                 default:
