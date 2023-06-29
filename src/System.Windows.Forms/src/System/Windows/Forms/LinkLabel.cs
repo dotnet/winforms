@@ -425,13 +425,16 @@ public partial class LinkLabel : Label, IButtonControl
 
     internal override void ReleaseUiaProvider(HWND handle)
     {
-        base.ReleaseUiaProvider(handle);
-
-        foreach (Link link in _links)
+        if (OsVersion.IsWindows8OrGreater())
         {
-            if (link.IsAccessibilityObjectCreated)
+            base.ReleaseUiaProvider(handle);
+
+            foreach (Link link in _links)
             {
-                UiaCore.UiaDisconnectProvider(link.AccessibleObject);
+                if (link.IsAccessibilityObjectCreated)
+                {
+                    UiaCore.UiaDisconnectProvider(link.AccessibleObject);
+                }
             }
         }
     }
