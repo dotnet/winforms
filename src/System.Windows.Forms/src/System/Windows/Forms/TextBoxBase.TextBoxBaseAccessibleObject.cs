@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using static System.Windows.Forms.ButtonBase;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms;
@@ -127,5 +128,18 @@ public abstract partial class TextBoxBase
 
         internal override ITextRangeProvider? GetRangeFromAnnotation(IRawElementProviderSimple annotationElement)
             => _textProvider?.RangeFromAnnotation(annotationElement);
+
+        public override string? KeyboardShortcut
+        {
+            get
+            {
+                if (!this.TryGetOwnerAs(out TextBoxBase? owner))
+                {
+                    return null;
+                }
+
+                return ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, false, PreviousLabel);
+            }
+        }
     }
 }

@@ -26,5 +26,50 @@ public partial class ButtonBase
                 owner.OnClick(EventArgs.Empty);
             }
         }
+
+        internal static string? GetKeyboardShortcut(Control control,bool useMnemonic, Label? previousLabel)
+        {
+            char mnemonic = (char)0;
+
+            if (!useMnemonic && previousLabel is not null && previousLabel.UseMnemonic)
+            {
+                string text = previousLabel.Text;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    mnemonic = WindowsFormsUtils.GetMnemonic(text, false);
+                }
+            }
+            else if (useMnemonic)
+            {
+                string text = control.Text;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    mnemonic = WindowsFormsUtils.GetMnemonic(text, false);
+                }
+            }
+
+            return (mnemonic == (char)0) ? null : $"Alt+{mnemonic}";
+        }
+
+        public override string? KeyboardShortcut
+        {
+            get
+            {
+                if (!this.TryGetOwnerAs(out ButtonBase? owner))
+                {
+                    return null;
+                }
+
+                return GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel);
+            }
+        }
+
+        public override string? Name
+        {
+            get
+            {
+                return this.TryGetOwnerAs(out ButtonBase? owner) && owner.UseMnemonic ? base.Name : TextLabel;
+            }
+        }
     }
 }
