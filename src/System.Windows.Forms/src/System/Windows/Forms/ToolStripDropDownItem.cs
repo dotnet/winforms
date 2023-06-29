@@ -501,6 +501,11 @@ public abstract class ToolStripDropDownItem : ToolStripItem
                     ? OwnerItem?.IsAccessibilityObjectCreated ?? false
                     : IsParentAccessibilityObjectCreated);
 
+        if (ParentInternal is not null)
+        {
+            ParentInternal.ResetLastActiveToolTipItem(this);
+        }
+
         if (accessibilityIsOn && AccessibilityObject is ToolStripItemAccessibleObject accessibleObject)
         {
             accessibleObject.RaiseAutomationPropertyChangedEvent(

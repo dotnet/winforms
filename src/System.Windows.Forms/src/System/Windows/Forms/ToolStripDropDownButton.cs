@@ -143,6 +143,11 @@ public partial class ToolStripDropDownButton : ToolStripDropDownItem
                 _openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                 ShowDropDown(/*mousePush =*/true);
             }
+
+            if (ParentInternal is not null)
+            {
+                ParentInternal.ResetLastActiveToolTipItem(this);
+            }
         }
 
         base.OnMouseDown(e);
