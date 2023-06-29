@@ -297,7 +297,7 @@ public class TreeNodeCollection : IList
         return foundNodes.ToArray();
     }
 
-    private List<TreeNode> FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, List<TreeNode> foundTreeNodes)
+    private static List<TreeNode> FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, List<TreeNode> foundTreeNodes)
     {
         // Perform breadth first search - as it's likely people will want tree nodes belonging
         // to the same parent close to each other.

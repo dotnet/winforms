@@ -143,7 +143,7 @@ internal partial class OleDragDropHandler
             return comps;
         }
 
-        private void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
+        private static void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
         {
             ComponentDesigner designer = host.GetDesigner(component) as ComponentDesigner;
             if (designer is null)

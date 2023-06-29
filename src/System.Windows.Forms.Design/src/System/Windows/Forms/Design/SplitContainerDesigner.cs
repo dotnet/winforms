@@ -178,7 +178,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
         var selMgr = (SelectionManager)GetService(typeof(SelectionManager));
         if (selMgr is not null)
         {
-            Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(_splitterPanel1);
+            Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(_splitterPanel1!);
             var panelDesigner = _designerHost?.GetDesigner(_splitterPanel1!) as SplitterPanelDesigner;
             OnSetCursor();
 
@@ -190,7 +190,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
                 selMgr.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
             }
 
-            translatedBounds = BehaviorService.ControlRectInAdornerWindow(_splitterPanel2);
+            translatedBounds = BehaviorService.ControlRectInAdornerWindow(_splitterPanel2!);
             panelDesigner = _designerHost?.GetDesigner(_splitterPanel2!) as SplitterPanelDesigner;
 
             if (panelDesigner is not null)

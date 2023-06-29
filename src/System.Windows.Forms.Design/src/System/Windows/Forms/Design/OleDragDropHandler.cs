@@ -366,7 +366,7 @@ internal partial class OleDragDropHandler
         return false;
     }
 
-    private void DisableDragDropChildren(ICollection controls, ArrayList allowDropCache)
+    private static void DisableDragDropChildren(ICollection controls, ArrayList allowDropCache)
     {
         foreach (Control c in controls)
         {

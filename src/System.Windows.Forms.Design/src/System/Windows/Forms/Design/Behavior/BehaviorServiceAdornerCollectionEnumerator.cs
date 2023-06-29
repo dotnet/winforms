@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms.Design.Behavior;
@@ -11,29 +9,17 @@ namespace System.Windows.Forms.Design.Behavior;
 public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
 {
     private readonly IEnumerator baseEnumerator;
-    private readonly IEnumerable temp;
 
     public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
     {
-        temp = mappings;
-        baseEnumerator = temp.GetEnumerator();
+        baseEnumerator = mappings.GetEnumerator();
     }
 
-    public Adorner Current
-    {
-        get
-        {
-            return ((Adorner)(baseEnumerator.Current));
-        }
-    }
+#nullable disable // explicitly leaving Current as "oblivious" to avoid spurious warnings in foreach over non-generic enumerables
+    public Adorner Current => (Adorner)baseEnumerator.Current;
 
-    object IEnumerator.Current
-    {
-        get
-        {
-            return baseEnumerator.Current;
-        }
-    }
+    object IEnumerator.Current => baseEnumerator.Current;
+#nullable restore
 
     public bool MoveNext()
     {

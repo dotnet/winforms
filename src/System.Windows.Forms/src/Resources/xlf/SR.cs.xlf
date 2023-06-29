@@ -4846,9 +4846,9 @@ nikoli v tomto dialogovém okně.
     Assembly Version: {1}
     Location: {2}
 </source>
-        <target state="new">{0}
-    Assembly Version: {1}
-    Location: {2}
+        <target state="translated">{0}
+    Verze sestavení: {1}
+    Umístění: {2}
 </target>
         <note />
       </trans-unit>

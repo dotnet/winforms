@@ -41,13 +41,13 @@ internal static class DisposalTracking
     /// </remarks>
     internal abstract class Tracker
     {
-        private readonly string _originatingStack;
+        private readonly StackTrace? _originatingStack;
         private readonly bool _throwIfFinalized;
 
         public Tracker(bool throwIfFinalized = true)
         {
             _throwIfFinalized = throwIfFinalized;
-            _originatingStack = _throwIfFinalized ? new StackTrace().ToString() : string.Empty;
+            _originatingStack = _throwIfFinalized ? new StackTrace() : null;
         }
 
         ~Tracker()
