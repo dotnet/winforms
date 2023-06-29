@@ -169,15 +169,14 @@ public partial class ComboBox
                 Debug.Assert(index < entries.Count);
 
                 Entry item = entries[index];
-                if (!ItemAccessibleObjects.ContainsKey(item))
+                if (!ItemAccessibleObjects.TryGetValue(item, out ComboBoxItemAccessibleObject? value))
                 {
                     return;
                 }
 
                 if (OsVersion.IsWindows8OrGreater())
                 {
-                    UiaCore.UiaDisconnectProvider(ItemAccessibleObjects[item]);
-                    ItemAccessibleObjects[item] = null;
+                    UiaCore.UiaDisconnectProvider(value);
                 }
 
                 ItemAccessibleObjects.Remove(item);
