@@ -159,7 +159,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
 
-        Assert.Equal(NativeMethods.WinFormFrameworkId, accessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId));
+        Assert.Equal("WinForm", accessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId));
         Assert.False(propertyGrid.IsHandleCreated);
     }
 

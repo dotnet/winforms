@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -14,25 +12,25 @@ public enum CaptionButton
     /// <summary>
     ///  A Close button.
     /// </summary>
-    Close = (int)User32.DFCS.CAPTIONCLOSE,
+    Close = (int)DFCS_STATE.DFCS_CAPTIONCLOSE,
 
     /// <summary>
     ///  A Help button.
     /// </summary>
-    Help = (int)User32.DFCS.CAPTIONHELP,
+    Help = (int)DFCS_STATE.DFCS_CAPTIONHELP,
 
     /// <summary>
     ///  A Maximize button.
     /// </summary>
-    Maximize = (int)User32.DFCS.CAPTIONMAX,
+    Maximize = (int)DFCS_STATE.DFCS_CAPTIONMAX,
 
     /// <summary>
     ///  A Minimize button.
     /// </summary>
-    Minimize = (int)User32.DFCS.CAPTIONMIN,
+    Minimize = (int)DFCS_STATE.DFCS_CAPTIONMIN,
 
     /// <summary>
     ///  A Restore button.
     /// </summary>
-    Restore = (int)User32.DFCS.CAPTIONRESTORE,
+    Restore = (int)DFCS_STATE.DFCS_CAPTIONRESTORE,
 }

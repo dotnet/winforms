@@ -7,7 +7,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.ComponentModel.Design;
 
@@ -230,8 +229,9 @@ internal partial class DesignerActionUI
         }
 
         /// <summary>
-        ///  General purpose method, based on Control.Contains()...
-        ///  Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
+        ///  Determines whether a given window (specified using native window handle) is a descendant of this control.
+        ///  This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles
+        ///  rather than Control objects allows it to catch un-managed windows as well.
         /// </summary>
         private static bool WindowOwnsWindow(HWND hWndOwner, HWND hWndDescendant)
         {
@@ -241,7 +241,7 @@ internal partial class DesignerActionUI
                     [WindowOwnsWindow] Testing if {hWndOwner.Value:x} is a owned by {hWndDescendant.Value:x}...
                             OWNER: {GetControlInformation(hWndOwner)}
                             OWNEE: {GetControlInformation(hWndDescendant)}
-                    OWNEE's CLAIMED OWNER: {GetControlInformation(PInvoke.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT))}
+                    OWNEE's CLAIMED OWNER: {GetControlInformation((HWND)PInvoke.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT))}
                     """);
 
             if (hWndDescendant == hWndOwner)
@@ -270,12 +270,14 @@ internal partial class DesignerActionUI
             return false;
         }
 
-        // helper function for generating infomation about a particular control use AssertControlInformation if sticking in an assert - then the work to figure out the control info will only be done when the assertion is false.
-        internal static string GetControlInformation(IntPtr hwnd)
+        /// <summary>
+        ///  Helper function for generating infomation about a particular control.
+        /// </summary>
+        internal static string GetControlInformation(HWND hwnd)
         {
-            if (hwnd == IntPtr.Zero)
+            if (hwnd.IsNull)
             {
-                return "Handle is IntPtr.Zero";
+                return "Handle is null.";
             }
 #if DEBUG
             if (!DropDownVisibilityDebug.TraceVerbose)
@@ -283,7 +285,7 @@ internal partial class DesignerActionUI
                 return string.Empty;
             }
 
-            string windowText = User32.GetWindowText(hwnd);
+            string windowText = PInvoke.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
             string nameOfControl = string.Empty;
             Control c = FromHandle(hwnd);
@@ -297,7 +299,8 @@ internal partial class DesignerActionUI
                 else
                 {
                     nameOfControl += "Unknown";
-                    // some extra debug info for toolstripdropdowns...
+
+                    // Some extra debug info for toolstripdropdowns.
                     if (c is ToolStripDropDown dd)
                     {
                         if (dd.OwnerItem is not null)
@@ -313,9 +316,8 @@ internal partial class DesignerActionUI
                             Type: [{typeOfControl}] Name: [{nameOfControl}]
                 """;
 #else
-        return string.Empty;
+         return string.Empty;
 #endif
-
         }
 
         private bool IsWindowEnabled(IntPtr handle)
@@ -326,7 +328,7 @@ internal partial class DesignerActionUI
 
         private void WmActivate(ref Message m)
         {
-            if ((User32.WA)(nint)m.WParamInternal == User32.WA.INACTIVE)
+            if ((nint)m.WParamInternal == PInvoke.WA_INACTIVE)
             {
                 HWND hwndActivating = (HWND)m.LParamInternal;
                 if (WindowOwnsWindow((HWND)Handle, hwndActivating))
@@ -350,9 +352,9 @@ internal partial class DesignerActionUI
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.ACTIVATE:
+                case PInvoke.WM_ACTIVATE:
                     WmActivate(ref m);
                     return;
             }

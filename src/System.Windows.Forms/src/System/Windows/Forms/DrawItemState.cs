@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -15,57 +13,57 @@ public enum DrawItemState
     /// <summary>
     ///  The item is checked. Only menu controls use this value.
     /// </summary>
-    Checked = (int)User32.ODS.CHECKED,
+    Checked = (int)ODS_FLAGS.ODS_CHECKED,
 
     /// <summary>
     ///  The item is the editing portion of a <see cref="ComboBox"/> .
     /// </summary>
-    ComboBoxEdit = (int)User32.ODS.COMBOBOXEDIT,
+    ComboBoxEdit = (int)ODS_FLAGS.ODS_COMBOBOXEDIT,
 
     /// <summary>
     ///  The item is the default item of the control.
     /// </summary>
-    Default = (int)User32.ODS.DEFAULT,
+    Default = (int)ODS_FLAGS.ODS_DEFAULT,
 
     /// <summary>
     ///  The item is disabled.
     /// </summary>
-    Disabled = (int)User32.ODS.DISABLED,
+    Disabled = (int)ODS_FLAGS.ODS_DISABLED,
 
     /// <summary>
     ///  The item has focus.
     /// </summary>
-    Focus = (int)User32.ODS.FOCUS,
+    Focus = (int)ODS_FLAGS.ODS_FOCUS,
 
     /// <summary>
     ///  The item is grayed. Only menu controls use this value.
     /// </summary>
-    Grayed = (int)User32.ODS.GRAYED,
+    Grayed = (int)ODS_FLAGS.ODS_GRAYED,
 
     /// <summary>
     ///  The item is being hot-tracked.
     /// </summary>
-    HotLight = (int)User32.ODS.HOTLIGHT,
+    HotLight = (int)ODS_FLAGS.ODS_HOTLIGHT,
 
     /// <summary>
     ///  The item is inactive.
     /// </summary>
-    Inactive = (int)User32.ODS.INACTIVE,
+    Inactive = (int)ODS_FLAGS.ODS_INACTIVE,
 
     /// <summary>
     ///  The item displays without a keyboard accelerator.
     /// </summary>
-    NoAccelerator = (int)User32.ODS.NOACCEL,
+    NoAccelerator = (int)ODS_FLAGS.ODS_NOACCEL,
 
     /// <summary>
     ///  The item displays without the visual cue that indicates it has the focus.
     /// </summary>
-    NoFocusRect = (int)User32.ODS.NOFOCUSRECT,
+    NoFocusRect = (int)ODS_FLAGS.ODS_NOFOCUSRECT,
 
     /// <summary>
     ///  The item is selected.
     /// </summary>
-    Selected = (int)User32.ODS.SELECTED,
+    Selected = (int)ODS_FLAGS.ODS_SELECTED,
 
     /// <summary>
     ///  The item is in its default visual state.

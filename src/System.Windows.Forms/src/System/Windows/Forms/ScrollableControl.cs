@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -813,15 +812,15 @@ public partial class ScrollableControl : Control, IArrangedElement
 
             RECT rcClip = ClientRectangle;
             RECT rcUpdate = ClientRectangle;
-            User32.ScrollWindowEx(
+            PInvoke.ScrollWindowEx(
                 this,
                 xDelta,
                 yDelta,
                 null,
                 &rcClip,
-                IntPtr.Zero,
+                HRGN.Null,
                 &rcUpdate,
-                User32.ScrollSW.INVALIDATE | User32.ScrollSW.ERASE | User32.ScrollSW.SCROLLCHILDREN);
+                SCROLL_WINDOW_FLAGS.SW_INVALIDATE | SCROLL_WINDOW_FLAGS.SW_ERASE | SCROLL_WINDOW_FLAGS.SW_SCROLLCHILDREN);
         }
 
         // Force child controls to update bounds.
@@ -1263,8 +1262,8 @@ public partial class ScrollableControl : Control, IArrangedElement
         {
             PInvoke.SendMessage(
                 this,
-                User32.WM.HSCROLL,
-                (WPARAM)(RightToLeft == RightToLeft.Yes ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT),
+                PInvoke.WM_HSCROLL,
+                (WPARAM)(RightToLeft == RightToLeft.Yes ? (int)SCROLLBAR_COMMAND.SB_RIGHT : (int)SCROLLBAR_COMMAND.SB_LEFT),
                 0);
         }
     }
@@ -1292,8 +1291,8 @@ public partial class ScrollableControl : Control, IArrangedElement
         }
 
         Rectangle client = ClientRectangle;
-        User32.SBV loWord = (User32.SBV)m.WParamInternal.LOWORD;
-        bool thumbTrack = loWord != User32.SBV.THUMBTRACK;
+        SCROLLBAR_COMMAND loWord = (SCROLLBAR_COMMAND)m.WParamInternal.LOWORD;
+        bool thumbTrack = loWord != SCROLLBAR_COMMAND.SB_THUMBTRACK;
         int pos = -_displayRect.Y;
         int oldValue = pos;
 
@@ -1305,11 +1304,11 @@ public partial class ScrollableControl : Control, IArrangedElement
 
         switch (loWord)
         {
-            case User32.SBV.THUMBPOSITION:
-            case User32.SBV.THUMBTRACK:
+            case SCROLLBAR_COMMAND.SB_THUMBPOSITION:
+            case SCROLLBAR_COMMAND.SB_THUMBTRACK:
                 pos = ScrollThumbPosition(SCROLLBAR_CONSTANTS.SB_VERT);
                 break;
-            case User32.SBV.LINEUP:
+            case SCROLLBAR_COMMAND.SB_LINEUP:
                 if (pos > 0)
                 {
                     pos -= VerticalScroll.SmallChange;
@@ -1320,7 +1319,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBV.LINEDOWN:
+            case SCROLLBAR_COMMAND.SB_LINEDOWN:
                 if (pos < maxPos - VerticalScroll.SmallChange)
                 {
                     pos += VerticalScroll.SmallChange;
@@ -1331,7 +1330,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBV.PAGEUP:
+            case SCROLLBAR_COMMAND.SB_PAGEUP:
                 if (pos > VerticalScroll.LargeChange)
                 {
                     pos -= VerticalScroll.LargeChange;
@@ -1342,7 +1341,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBV.PAGEDOWN:
+            case SCROLLBAR_COMMAND.SB_PAGEDOWN:
                 if (pos < maxPos - VerticalScroll.LargeChange)
                 {
                     pos += VerticalScroll.LargeChange;
@@ -1353,10 +1352,10 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBV.TOP:
+            case SCROLLBAR_COMMAND.SB_TOP:
                 pos = 0;
                 break;
-            case User32.SBV.BOTTOM:
+            case SCROLLBAR_COMMAND.SB_BOTTOM:
                 pos = maxPos;
                 break;
         }
@@ -1396,14 +1395,14 @@ public partial class ScrollableControl : Control, IArrangedElement
             maxPos = HorizontalScroll.Maximum;
         }
 
-        User32.SBH loWord = (User32.SBH)m.WParamInternal.LOWORD;
+        SCROLLBAR_COMMAND loWord = (SCROLLBAR_COMMAND)m.WParamInternal.LOWORD;
         switch (loWord)
         {
-            case User32.SBH.THUMBPOSITION:
-            case User32.SBH.THUMBTRACK:
+            case SCROLLBAR_COMMAND.SB_THUMBPOSITION:
+            case SCROLLBAR_COMMAND.SB_THUMBTRACK:
                 pos = ScrollThumbPosition(SCROLLBAR_CONSTANTS.SB_HORZ);
                 break;
-            case User32.SBH.LINELEFT:
+            case SCROLLBAR_COMMAND.SB_LINELEFT:
                 if (pos > HorizontalScroll.SmallChange)
                 {
                     pos -= HorizontalScroll.SmallChange;
@@ -1414,7 +1413,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBH.LINERIGHT:
+            case SCROLLBAR_COMMAND.SB_LINERIGHT:
                 if (pos < maxPos - HorizontalScroll.SmallChange)
                 {
                     pos += HorizontalScroll.SmallChange;
@@ -1425,7 +1424,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBH.PAGELEFT:
+            case SCROLLBAR_COMMAND.SB_PAGELEFT:
                 if (pos > HorizontalScroll.LargeChange)
                 {
                     pos -= HorizontalScroll.LargeChange;
@@ -1436,7 +1435,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBH.PAGERIGHT:
+            case SCROLLBAR_COMMAND.SB_PAGERIGHT:
                 if (pos < maxPos - HorizontalScroll.LargeChange)
                 {
                     pos += HorizontalScroll.LargeChange;
@@ -1447,15 +1446,15 @@ public partial class ScrollableControl : Control, IArrangedElement
                 }
 
                 break;
-            case User32.SBH.LEFT:
+            case SCROLLBAR_COMMAND.SB_LEFT:
                 pos = 0;
                 break;
-            case User32.SBH.RIGHT:
+            case SCROLLBAR_COMMAND.SB_RIGHT:
                 pos = maxPos;
                 break;
         }
 
-        if (GetScrollState(ScrollStateFullDrag) || loWord != User32.SBH.THUMBTRACK)
+        if (GetScrollState(ScrollStateFullDrag) || loWord != SCROLLBAR_COMMAND.SB_THUMBTRACK)
         {
             SetScrollState(ScrollStateUserHasScrolled, true);
             SetDisplayRectLocation(-pos, _displayRect.Y);
@@ -1493,15 +1492,15 @@ public partial class ScrollableControl : Control, IArrangedElement
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.VSCROLL:
+            case PInvoke.WM_VSCROLL:
                 WmVScroll(ref m);
                 break;
-            case User32.WM.HSCROLL:
+            case PInvoke.WM_HSCROLL:
                 WmHScroll(ref m);
                 break;
-            case User32.WM.SETTINGCHANGE:
+            case PInvoke.WM_SETTINGCHANGE:
                 WmSettingChange(ref m);
                 break;
             default:

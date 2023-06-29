@@ -4844,13 +4844,11 @@ zamiast tego okna dialogowego znajdują się na końcu tego komunikatu.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
     Wersja zestawu: {1}
-    Wersja Win32: {2}
-    CodeBase: {3}
+    Lokalizacja: {2}
 </target>
         <note />
       </trans-unit>

@@ -150,9 +150,7 @@ internal sealed partial class WindowsFormsUtils
     }
 
     /// <summary>
-    ///  helper function for generating information about a particular control
-    ///  use AssertControlInformation if sticking in an assert - then the work
-    ///  to figure out the control info will only be done when the assertion is false.
+    ///  Helper function for generating information about a particular control.
     /// </summary>
     internal static string GetControlInformation(HWND hwnd)
     {
@@ -162,7 +160,7 @@ internal sealed partial class WindowsFormsUtils
         }
 
 #if DEBUG
-        string windowText = User32.GetWindowText(hwnd);
+        string windowText = PInvoke.GetWindowText(hwnd);
         string typeOfControl = "Unknown";
         string nameOfControl = "";
         Control? c = Control.FromHandle(hwnd);

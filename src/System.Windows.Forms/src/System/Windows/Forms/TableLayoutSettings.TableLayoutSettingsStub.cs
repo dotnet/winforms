@@ -106,12 +106,7 @@ public sealed partial class TableLayoutSettings
                 return s_defaultControlInfo;
             }
 
-            if (!_controlsInfo.ContainsKey(controlName))
-            {
-                return s_defaultControlInfo;
-            }
-
-            return _controlsInfo[controlName];
+            return _controlsInfo.GetValueOrDefault(controlName, s_defaultControlInfo);
         }
 
         public int GetColumn(object controlName) => GetControlInformation(controlName).Column;

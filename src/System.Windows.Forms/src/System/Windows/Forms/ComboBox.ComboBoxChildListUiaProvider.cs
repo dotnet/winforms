@@ -4,7 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 

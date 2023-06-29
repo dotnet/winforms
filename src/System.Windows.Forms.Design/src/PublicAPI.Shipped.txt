@@ -11,8 +11,8 @@
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor, System.CodeDom.CodeStatementCollection statements) -> void
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.ShouldSerialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor) -> bool
 ~abstract System.ComponentModel.Design.UndoEngine.AddUndoUnit(System.ComponentModel.Design.UndoEngine.UndoUnit unit) -> void
-~abstract System.Windows.Forms.Design.Behavior.Glyph.GetHitTest(System.Drawing.Point p) -> System.Windows.Forms.Cursor
-~abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.PaintEventArgs pe) -> void
+abstract System.Windows.Forms.Design.Behavior.Glyph.GetHitTest(System.Drawing.Point p) -> System.Windows.Forms.Cursor?
+abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.PaintEventArgs! pe) -> void
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string
@@ -25,7 +25,7 @@
 ~override System.ComponentModel.Design.ByteViewer.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 ~override System.ComponentModel.Design.ByteViewer.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~override System.ComponentModel.Design.ByteViewer.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService(System.Type serviceType) -> object
+override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService(System.Type! serviceType) -> object!
 ~override System.ComponentModel.Design.CollectionEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
@@ -158,23 +158,20 @@
 ~static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor) -> bool
 ~static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor, out string validationErrorDescription) -> bool
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
-~System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.ActiveDesignSurfaceChangedEventArgs(System.ComponentModel.Design.DesignSurface oldSurface, System.ComponentModel.Design.DesignSurface newSurface) -> void
-~System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.NewSurface.get -> System.ComponentModel.Design.DesignSurface
-~System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get -> System.ComponentModel.Design.DesignSurface
 ~System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type type) -> void
 ~System.ComponentModel.Design.CollectionEditor.CollectionEditor(System.Type type) -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object value) -> bool
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionForm(System.ComponentModel.Design.CollectionEditor editor) -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionItemType.get -> System.Type
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionType.get -> System.Type
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.Context.get -> System.ComponentModel.ITypeDescriptorContext
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.CreateInstance(System.Type itemType) -> object
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.DestroyInstance(object instance) -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.get -> object
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.set -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.get -> object[]
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.set -> void
-~System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get -> System.Type[]
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object! value) -> bool
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionForm(System.ComponentModel.Design.CollectionEditor! editor) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionItemType.get -> System.Type!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionType.get -> System.Type!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Context.get -> System.ComponentModel.ITypeDescriptorContext!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CreateInstance(System.Type! itemType) -> object!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.DestroyInstance(object! instance) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.get -> object?
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.get -> object![]!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get -> System.Type![]!
 ~System.ComponentModel.Design.CollectionEditor.CollectionItemType.get -> System.Type
 ~System.ComponentModel.Design.CollectionEditor.CollectionType.get -> System.Type
 ~System.ComponentModel.Design.CollectionEditor.Context.get -> System.ComponentModel.ITypeDescriptorContext
@@ -210,29 +207,6 @@
 ~System.ComponentModel.Design.DesignerActionUIService.ShowUI(System.ComponentModel.IComponent component) -> void
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.DesignerActionUIStateChangeEventArgs(object relatedObject, System.ComponentModel.Design.DesignerActionUIStateChangeType changeType) -> void
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.get -> object
-~System.ComponentModel.Design.DesignSurface.BeginLoad(System.ComponentModel.Design.Serialization.DesignerLoader loader) -> void
-~System.ComponentModel.Design.DesignSurface.BeginLoad(System.Type rootComponentType) -> void
-~System.ComponentModel.Design.DesignSurface.ComponentContainer.get -> System.ComponentModel.IContainer
-~System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent owningComponent) -> System.ComponentModel.INestedContainer
-~System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent owningComponent, string containerName) -> System.ComponentModel.INestedContainer
-~System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider parentProvider) -> void
-~System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider parentProvider, System.Type rootComponentType) -> void
-~System.ComponentModel.Design.DesignSurface.DesignSurface(System.Type rootComponentType) -> void
-~System.ComponentModel.Design.DesignSurface.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.DesignSurface.LoadErrors.get -> System.Collections.ICollection
-~System.ComponentModel.Design.DesignSurface.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer
-~System.ComponentModel.Design.DesignSurface.View.get -> object
-~System.ComponentModel.Design.DesignSurfaceCollection.CopyTo(System.ComponentModel.Design.DesignSurface[] array, int index) -> void
-~System.ComponentModel.Design.DesignSurfaceCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.ComponentModel.Design.DesignSurfaceCollection.this[int index].get -> System.ComponentModel.Design.DesignSurface
-~System.ComponentModel.Design.DesignSurfaceEventArgs.DesignSurfaceEventArgs(System.ComponentModel.Design.DesignSurface surface) -> void
-~System.ComponentModel.Design.DesignSurfaceEventArgs.Surface.get -> System.ComponentModel.Design.DesignSurface
-~System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface() -> System.ComponentModel.Design.DesignSurface
-~System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface(System.IServiceProvider parentProvider) -> System.ComponentModel.Design.DesignSurface
-~System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager(System.IServiceProvider parentProvider) -> void
-~System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaces.get -> System.ComponentModel.Design.DesignSurfaceCollection
-~System.ComponentModel.Design.DesignSurfaceManager.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer
 ~System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.ComponentModel.IComponent component, System.ComponentModel.IContainer container) -> void
@@ -349,18 +323,18 @@
 ~System.Windows.Forms.Design.AxImporter.Options.outputName -> string
 ~System.Windows.Forms.Design.AxImporter.Options.publicKey -> byte[]
 ~System.Windows.Forms.Design.AxImporter.Options.references -> System.Windows.Forms.Design.AxImporter.IReferenceResolver
-~System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.BehaviorDragDropEventArgs(System.Collections.ICollection dragComponents) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.DragComponents.get -> System.Collections.ICollection
-~System.Windows.Forms.Design.Behavior.BehaviorService.Adorners.get -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection
-~System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowGraphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.Design.Behavior.BehaviorService.ControlRectInAdornerWindow(System.Windows.Forms.Control c) -> System.Drawing.Rectangle
-~System.Windows.Forms.Design.Behavior.BehaviorService.ControlToAdornerWindow(System.Windows.Forms.Control c) -> System.Drawing.Point
-~System.Windows.Forms.Design.Behavior.BehaviorService.CurrentBehavior.get -> System.Windows.Forms.Design.Behavior.Behavior
-~System.Windows.Forms.Design.Behavior.BehaviorService.GetNextBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> System.Windows.Forms.Design.Behavior.Behavior
-~System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Region r) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorService.PopBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> System.Windows.Forms.Design.Behavior.Behavior
-~System.Windows.Forms.Design.Behavior.BehaviorService.PushBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorService.PushCaptureBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
+System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.BehaviorDragDropEventArgs(System.Collections.ICollection! dragComponents) -> void
+System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.DragComponents.get -> System.Collections.ICollection!
+System.Windows.Forms.Design.Behavior.BehaviorService.Adorners.get -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection!
+System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowGraphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.Design.Behavior.BehaviorService.ControlRectInAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Rectangle
+System.Windows.Forms.Design.Behavior.BehaviorService.ControlToAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Point
+System.Windows.Forms.Design.Behavior.BehaviorService.CurrentBehavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
+System.Windows.Forms.Design.Behavior.BehaviorService.GetNextBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
+System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Region! r) -> void
+System.Windows.Forms.Design.Behavior.BehaviorService.PopBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
+System.Windows.Forms.Design.Behavior.BehaviorService.PushBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
+System.Windows.Forms.Design.Behavior.BehaviorService.PushCaptureBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add(System.Windows.Forms.Design.Behavior.Adorner value) -> int
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection value) -> void
@@ -375,10 +349,10 @@
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Remove(System.Windows.Forms.Design.Behavior.Adorner value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].get -> System.Windows.Forms.Design.Behavior.Adorner
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].set -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.BehaviorServiceAdornerCollectionEnumerator(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection mappings) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.BehaviorServiceAdornerCollectionEnumerator(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! mappings) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
-~System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
-~System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior behavior) -> void
+System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
+System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.Add(System.Windows.Forms.Design.Behavior.Glyph value) -> int
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.GlyphCollection value) -> void
@@ -428,8 +402,8 @@
 ~virtual System.ComponentModel.Design.ByteViewer.SetBytes(byte[] bytes) -> void
 ~virtual System.ComponentModel.Design.ByteViewer.SetFile(string path) -> void
 ~virtual System.ComponentModel.Design.CollectionEditor.CanRemoveInstance(object value) -> bool
-~virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.DisplayError(System.Exception e) -> void
-~virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc) -> System.Windows.Forms.DialogResult
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.DisplayError(System.Exception! e) -> void
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService! edSvc) -> System.Windows.Forms.DialogResult
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionForm() -> System.ComponentModel.Design.CollectionEditor.CollectionForm
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionItemType() -> System.Type
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateInstance(System.Type itemType) -> object
@@ -459,17 +433,6 @@
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentActions(System.ComponentModel.IComponent component, System.Windows.Forms.Design.ComponentActionsType type) -> System.ComponentModel.Design.DesignerActionListCollection
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentDesignerActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
 ~virtual System.ComponentModel.Design.DesignerActionService.GetComponentServiceActions(System.ComponentModel.IComponent component, System.ComponentModel.Design.DesignerActionListCollection actionLists) -> void
-~virtual System.ComponentModel.Design.DesignSurface.CreateComponent(System.Type componentType) -> System.ComponentModel.IComponent
-~virtual System.ComponentModel.Design.DesignSurface.CreateDesigner(System.ComponentModel.IComponent component, bool rootDesigner) -> System.ComponentModel.Design.IDesigner
-~virtual System.ComponentModel.Design.DesignSurface.CreateInstance(System.Type type) -> object
-~virtual System.ComponentModel.Design.DesignSurface.OnLoaded(System.ComponentModel.Design.LoadedEventArgs e) -> void
-~virtual System.ComponentModel.Design.DesignSurface.OnLoading(System.EventArgs e) -> void
-~virtual System.ComponentModel.Design.DesignSurface.OnUnloaded(System.EventArgs e) -> void
-~virtual System.ComponentModel.Design.DesignSurface.OnUnloading(System.EventArgs e) -> void
-~virtual System.ComponentModel.Design.DesignSurface.OnViewActivate(System.EventArgs e) -> void
-~virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.get -> System.ComponentModel.Design.DesignSurface
-~virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.set -> void
-~virtual System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore(System.IServiceProvider parentProvider) -> System.ComponentModel.Design.DesignSurface
 ~virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> void
 ~virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string methodName) -> void
@@ -523,7 +486,7 @@
 ~virtual System.Drawing.Design.ToolboxItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Drawing.Design.ToolboxItem.ValidatePropertyValue(string propertyName, object value) -> object
 ~virtual System.Drawing.Design.ToolboxItem.Version.get -> string
-~virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior
+virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
 ~virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.AddComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
@@ -640,6 +603,9 @@ static System.Drawing.Design.ImageEditor.CreateExtensionsString(string?[]? exten
 static System.Drawing.Design.ImageEditor.CreateFilterEntry(System.Drawing.Design.ImageEditor! e) -> string!
 static System.Windows.Forms.Design.Behavior.SnapLine.ShouldSnap(System.Windows.Forms.Design.Behavior.SnapLine! line1, System.Windows.Forms.Design.Behavior.SnapLine! line2) -> bool
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.ActiveDesignSurfaceChangedEventArgs(System.ComponentModel.Design.DesignSurface? oldSurface, System.ComponentModel.Design.DesignSurface? newSurface) -> void
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.NewSurface.get -> System.ComponentModel.Design.DesignSurface?
+System.ComponentModel.Design.ActiveDesignSurfaceChangedEventArgs.OldSurface.get -> System.ComponentModel.Design.DesignSurface?
 System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
 System.ComponentModel.Design.ArrayEditor
 System.ComponentModel.Design.BinaryEditor
@@ -730,30 +696,53 @@ System.ComponentModel.Design.DesignerCommandSet.ActionLists.get -> System.Compon
 System.ComponentModel.Design.DesignerCommandSet.DesignerCommandSet() -> void
 System.ComponentModel.Design.DesignerCommandSet.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection?
 System.ComponentModel.Design.DesignSurface
+System.ComponentModel.Design.DesignSurface.BeginLoad(System.ComponentModel.Design.Serialization.DesignerLoader! loader) -> void
+System.ComponentModel.Design.DesignSurface.BeginLoad(System.Type! rootComponentType) -> void
+System.ComponentModel.Design.DesignSurface.ComponentContainer.get -> System.ComponentModel.IContainer!
+System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent! owningComponent) -> System.ComponentModel.INestedContainer!
+System.ComponentModel.Design.DesignSurface.CreateNestedContainer(System.ComponentModel.IComponent! owningComponent, string? containerName) -> System.ComponentModel.INestedContainer!
 System.ComponentModel.Design.DesignSurface.DesignSurface() -> void
+System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider? parentProvider) -> void
+System.ComponentModel.Design.DesignSurface.DesignSurface(System.IServiceProvider? parentProvider, System.Type! rootComponentType) -> void
+System.ComponentModel.Design.DesignSurface.DesignSurface(System.Type! rootComponentType) -> void
 System.ComponentModel.Design.DesignSurface.Dispose() -> void
-System.ComponentModel.Design.DesignSurface.Disposed -> System.EventHandler
+System.ComponentModel.Design.DesignSurface.Disposed -> System.EventHandler?
 System.ComponentModel.Design.DesignSurface.DtelLoading.get -> bool
 System.ComponentModel.Design.DesignSurface.DtelLoading.set -> void
 System.ComponentModel.Design.DesignSurface.Flush() -> void
-System.ComponentModel.Design.DesignSurface.Flushed -> System.EventHandler
+System.ComponentModel.Design.DesignSurface.Flushed -> System.EventHandler?
+System.ComponentModel.Design.DesignSurface.GetService(System.Type! serviceType) -> object?
 System.ComponentModel.Design.DesignSurface.IsLoaded.get -> bool
-System.ComponentModel.Design.DesignSurface.Loaded -> System.ComponentModel.Design.LoadedEventHandler
-System.ComponentModel.Design.DesignSurface.Loading -> System.EventHandler
-System.ComponentModel.Design.DesignSurface.Unloaded -> System.EventHandler
-System.ComponentModel.Design.DesignSurface.Unloading -> System.EventHandler
-System.ComponentModel.Design.DesignSurface.ViewActivated -> System.EventHandler
+System.ComponentModel.Design.DesignSurface.Loaded -> System.ComponentModel.Design.LoadedEventHandler?
+System.ComponentModel.Design.DesignSurface.LoadErrors.get -> System.Collections.ICollection!
+System.ComponentModel.Design.DesignSurface.Loading -> System.EventHandler?
+System.ComponentModel.Design.DesignSurface.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer!
+System.ComponentModel.Design.DesignSurface.Unloaded -> System.EventHandler?
+System.ComponentModel.Design.DesignSurface.Unloading -> System.EventHandler?
+System.ComponentModel.Design.DesignSurface.View.get -> object!
+System.ComponentModel.Design.DesignSurface.ViewActivated -> System.EventHandler?
 System.ComponentModel.Design.DesignSurfaceCollection
+System.ComponentModel.Design.DesignSurfaceCollection.CopyTo(System.ComponentModel.Design.DesignSurface![]! array, int index) -> void
 System.ComponentModel.Design.DesignSurfaceCollection.Count.get -> int
+System.ComponentModel.Design.DesignSurfaceCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.ComponentModel.Design.DesignSurfaceCollection.this[int index].get -> System.ComponentModel.Design.DesignSurface!
 System.ComponentModel.Design.DesignSurfaceEventArgs
+System.ComponentModel.Design.DesignSurfaceEventArgs.DesignSurfaceEventArgs(System.ComponentModel.Design.DesignSurface! surface) -> void
+System.ComponentModel.Design.DesignSurfaceEventArgs.Surface.get -> System.ComponentModel.Design.DesignSurface!
 System.ComponentModel.Design.DesignSurfaceEventHandler
 System.ComponentModel.Design.DesignSurfaceManager
-System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurfaceChanged -> System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler
-System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceCreated -> System.ComponentModel.Design.DesignSurfaceEventHandler
-System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceDisposed -> System.ComponentModel.Design.DesignSurfaceEventHandler
+System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurfaceChanged -> System.ComponentModel.Design.ActiveDesignSurfaceChangedEventHandler?
+System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface() -> System.ComponentModel.Design.DesignSurface!
+System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurface(System.IServiceProvider! parentProvider) -> System.ComponentModel.Design.DesignSurface!
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceCreated -> System.ComponentModel.Design.DesignSurfaceEventHandler?
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceDisposed -> System.ComponentModel.Design.DesignSurfaceEventHandler?
 System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager() -> void
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaceManager(System.IServiceProvider? parentProvider) -> void
+System.ComponentModel.Design.DesignSurfaceManager.DesignSurfaces.get -> System.ComponentModel.Design.DesignSurfaceCollection!
 System.ComponentModel.Design.DesignSurfaceManager.Dispose() -> void
-System.ComponentModel.Design.DesignSurfaceManager.SelectionChanged -> System.EventHandler
+System.ComponentModel.Design.DesignSurfaceManager.GetService(System.Type! serviceType) -> object?
+System.ComponentModel.Design.DesignSurfaceManager.SelectionChanged -> System.EventHandler?
+System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer!
 System.ComponentModel.Design.DisplayMode
 System.ComponentModel.Design.DisplayMode.Ansi = 2 -> System.ComponentModel.Design.DisplayMode
 System.ComponentModel.Design.DisplayMode.Auto = 4 -> System.ComponentModel.Design.DisplayMode
@@ -966,14 +955,14 @@ System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
 System.Windows.Forms.Design.Behavior.BehaviorService
 System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowPointToScreen(System.Drawing.Point p) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowToScreen() -> System.Drawing.Point
-System.Windows.Forms.Design.Behavior.BehaviorService.BeginDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
+System.Windows.Forms.Design.Behavior.BehaviorService.BeginDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler?
 System.Windows.Forms.Design.Behavior.BehaviorService.Dispose() -> void
-System.Windows.Forms.Design.Behavior.BehaviorService.EndDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
+System.Windows.Forms.Design.Behavior.BehaviorService.EndDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler?
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate() -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Rectangle rect) -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.MapAdornerWindowPoint(nint handle, System.Drawing.Point pt) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.ScreenToAdornerWindow(System.Drawing.Point p) -> System.Drawing.Point
-System.Windows.Forms.Design.Behavior.BehaviorService.Synchronize -> System.EventHandler
+System.Windows.Forms.Design.Behavior.BehaviorService.Synchronize -> System.EventHandler?
 System.Windows.Forms.Design.Behavior.BehaviorService.SyncSelection() -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator
@@ -1145,7 +1134,18 @@ virtual System.ComponentModel.Design.DesignerActionMethodItem.IncludeAsDesignerV
 virtual System.ComponentModel.Design.DesignerActionMethodItem.Invoke() -> void
 virtual System.ComponentModel.Design.DesignerActionService.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.DesignerCommandSet.GetCommands(string! name) -> System.Collections.ICollection?
+virtual System.ComponentModel.Design.DesignSurface.CreateComponent(System.Type! componentType) -> System.ComponentModel.IComponent?
+virtual System.ComponentModel.Design.DesignSurface.CreateDesigner(System.ComponentModel.IComponent! component, bool rootDesigner) -> System.ComponentModel.Design.IDesigner?
+virtual System.ComponentModel.Design.DesignSurface.CreateInstance(System.Type! type) -> object?
 virtual System.ComponentModel.Design.DesignSurface.Dispose(bool disposing) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnLoaded(System.ComponentModel.Design.LoadedEventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnLoading(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnUnloaded(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnUnloading(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurface.OnViewActivate(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.get -> System.ComponentModel.Design.DesignSurface?
+virtual System.ComponentModel.Design.DesignSurfaceManager.ActiveDesignSurface.set -> void
+virtual System.ComponentModel.Design.DesignSurfaceManager.CreateDesignSurfaceCore(System.IServiceProvider! parentProvider) -> System.ComponentModel.Design.DesignSurface!
 virtual System.ComponentModel.Design.DesignSurfaceManager.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.InheritanceService.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.MenuCommandService.Dispose(bool disposing) -> void

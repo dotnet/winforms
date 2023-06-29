@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop;
 
@@ -40,7 +41,7 @@ public unsafe class COM2PictureConverterTests
 
         public override OLE_HANDLE Handle => new((uint)(int)_handle);
 
-        public override short Type => (short)_type;
+        public override PICTYPE Type => _type;
     }
 
     [Fact]
@@ -123,10 +124,9 @@ public unsafe class COM2PictureConverterTests
         using ComScope<IPicture> picture = ComScope<IPicture>.QueryFrom((IUnknown*)native);
 
         Assert.False(cancelSet);
-        short type = picture.Value->Type;
         int height = picture.Value->Height;
         int width = picture.Value->Width;
-        Assert.Equal((short)PICTYPE.PICTYPE_ICON, type);
+        Assert.Equal(PICTYPE.PICTYPE_ICON, picture.Value->Type);
         Assert.Equal(exclamationIcon.Height, GdiHelper.HimetricToPixelY(height));
         Assert.Equal(exclamationIcon.Width, GdiHelper.HimetricToPixelX(width));
 
@@ -144,10 +144,9 @@ public unsafe class COM2PictureConverterTests
         using ComScope<IPicture> picture = ComScope<IPicture>.QueryFrom((IUnknown*)native);
 
         Assert.False(cancelSet);
-        short type = picture.Value->Type;
         int height = picture.Value->Height;
         int width = picture.Value->Width;
-        Assert.Equal((short)PICTYPE.PICTYPE_BITMAP, type);
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, picture.Value->Type);
         Assert.Equal(bitmap.Height, GdiHelper.HimetricToPixelY(height));
         Assert.Equal(bitmap.Width, GdiHelper.HimetricToPixelX(width));
 
@@ -181,7 +180,7 @@ public unsafe class COM2PictureConverterTests
 
         public virtual HRESULT get_hPal(OLE_HANDLE* phPal) => HRESULT.S_OK;
 
-        public virtual short Type => default;
+        public virtual PICTYPE Type => default;
 
         public virtual int Width => default;
 

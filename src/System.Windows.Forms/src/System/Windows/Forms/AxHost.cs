@@ -57,8 +57,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private const int STG_STREAMINIT = 1;
     private const int STG_STORAGE = 2;
 
-    private readonly Interop.User32.WM _registeredMessage
-        = (Interop.User32.WM)PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
+    private readonly MessageId _registeredMessage
+        = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
     private const int REGMSG_RETVAL = 123;
 
     private static int s_logPixelsX = -1;
@@ -1104,7 +1104,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     {
         if (s_logPixelsX == -1 || force)
         {
-            using var dc = Interop.User32.GetDcScope.ScreenDC;
+            using var dc = GetDcScope.ScreenDC;
             if (dc == IntPtr.Zero)
             {
                 return HRESULT.E_FAIL;
@@ -1125,7 +1125,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         ((IOleControlSite.Interface)_oleSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER));
 
         sz.Width = (int)pcont.X;
         sz.Height = (int)pcont.Y;
@@ -1138,7 +1138,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         ((IOleControlSite.Interface)_oleSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC));
 
         sz.Width = phm.X;
         sz.Height = phm.Y;
@@ -1753,7 +1753,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
 
             HRESULT hr = activeObject.Value->TranslateAccelerator(&win32Message);
-            msg.MsgInternal = (Interop.User32.WM)win32Message.message;
+            msg.MsgInternal = (MessageId)win32Message.message;
             msg.WParamInternal = win32Message.wParam;
             msg.LParamInternal = win32Message.lParam;
             msg.HWnd = win32Message.hwnd;
@@ -1824,7 +1824,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 // We don't have a message so we must create one ourselves.
                 // The message we are creating is a WM_SYSKEYDOWN with the right alt key setting.
                 hwnd = (ContainingControl is null) ? HWND.Null : ContainingControl.HWND,
-                message = (uint)Interop.User32.WM.SYSKEYDOWN,
+                message = (uint)PInvoke.WM_SYSKEYDOWN,
                 wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                 lParam = 0x20180001,
                 time = PInvoke.GetTickCount()
@@ -3199,7 +3199,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
-    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, Interop.User32.WM msg)
+    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg)
     {
         if (_isMaskEdit)
         {
@@ -3229,31 +3229,31 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         switch (m.MsgInternal)
         {
             // Things we explicitly ignore and pass to the ocx's windproc
-            case Interop.User32.WM.ERASEBKGND:
+            case PInvoke.WM_ERASEBKGND:
 
-            case Interop.User32.WM.REFLECT_NOTIFYFORMAT:
+            case MessageId.WM_REFLECT_NOTIFYFORMAT:
 
-            case Interop.User32.WM.SETCURSOR:
-            case Interop.User32.WM.SYSCOLORCHANGE:
+            case PInvoke.WM_SETCURSOR:
+            case PInvoke.WM_SYSCOLORCHANGE:
 
             // Some of the MSComCtl controls respond to this message
             // to do some custom painting. So, we should just pass this message
             // through.
             //
-            case Interop.User32.WM.DRAWITEM:
+            case PInvoke.WM_DRAWITEM:
 
-            case Interop.User32.WM.LBUTTONDBLCLK:
-            case Interop.User32.WM.LBUTTONUP:
-            case Interop.User32.WM.MBUTTONDBLCLK:
-            case Interop.User32.WM.MBUTTONUP:
-            case Interop.User32.WM.RBUTTONDBLCLK:
-            case Interop.User32.WM.RBUTTONUP:
+            case PInvoke.WM_LBUTTONDBLCLK:
+            case PInvoke.WM_LBUTTONUP:
+            case PInvoke.WM_MBUTTONDBLCLK:
+            case PInvoke.WM_MBUTTONUP:
+            case PInvoke.WM_RBUTTONDBLCLK:
+            case PInvoke.WM_RBUTTONUP:
                 DefWndProc(ref m);
                 break;
 
-            case Interop.User32.WM.LBUTTONDOWN:
-            case Interop.User32.WM.MBUTTONDOWN:
-            case Interop.User32.WM.RBUTTONDOWN:
+            case PInvoke.WM_LBUTTONDOWN:
+            case PInvoke.WM_MBUTTONDOWN:
+            case PInvoke.WM_RBUTTONDOWN:
                 if (IsUserMode())
                 {
                     Focus();
@@ -3262,7 +3262,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 DefWndProc(ref m);
                 break;
 
-            case Interop.User32.WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 {
                     _hwndFocus = (HWND)(nint)m.WParamInternal;
                     try
@@ -3277,7 +3277,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     break;
                 }
 
-            case Interop.User32.WM.COMMAND:
+            case PInvoke.WM_COMMAND:
                 if (!ReflectMessage(m.LParamInternal, ref m))
                 {
                     DefWndProc(ref m);
@@ -3285,11 +3285,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 break;
 
-            case Interop.User32.WM.CONTEXTMENU:
+            case PInvoke.WM_CONTEXTMENU:
                 DefWndProc(ref m);
                 break;
 
-            case Interop.User32.WM.DESTROY:
+            case PInvoke.WM_DESTROY:
 #if DEBUG
                 if (!OwnWindow())
                 {
@@ -3323,13 +3323,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 }
 
                 break;
-            case Interop.User32.WM.HELP:
+            case PInvoke.WM_HELP:
                 // We want to both fire the event, and let the ocx have the message...
                 base.WndProc(ref m);
                 DefWndProc(ref m);
                 break;
 
-            case Interop.User32.WM.KEYUP:
+            case PInvoke.WM_KEYUP:
                 if (_axState[s_processingKeyUp])
                 {
                     break;
@@ -3350,7 +3350,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 break;
 
-            case Interop.User32.WM.NCDESTROY:
+            case PInvoke.WM_NCDESTROY:
 #if DEBUG
                 if (!OwnWindow())
                 {

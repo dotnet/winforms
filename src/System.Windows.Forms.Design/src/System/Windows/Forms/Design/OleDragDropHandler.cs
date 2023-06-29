@@ -11,7 +11,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
+using Windows.Win32.System.SystemServices;
 
 namespace System.Windows.Forms.Design;
 
@@ -366,7 +366,7 @@ internal partial class OleDragDropHandler
         return false;
     }
 
-    private void DisableDragDropChildren(ICollection controls, ArrayList allowDropCache)
+    private static void DisableDragDropChildren(ICollection controls, ArrayList allowDropCache)
     {
         foreach (Control c in controls)
         {
@@ -448,7 +448,7 @@ internal partial class OleDragDropHandler
                     }
 
                     newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
-                    DrawReversibleFrame(parentControl.Handle, newRect, backColor);
+                    DrawReversibleFrame((HWND)parentControl.Handle, newRect, backColor);
                 }
             }
 
@@ -469,7 +469,7 @@ internal partial class OleDragDropHandler
                     }
 
                     newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
-                    DrawReversibleFrame(parentControl.Handle, newRect, backColor);
+                    DrawReversibleFrame((HWND)parentControl.Handle, newRect, backColor);
                 }
             }
         }
@@ -477,7 +477,7 @@ internal partial class OleDragDropHandler
         return newOffset;
     }
 
-    private static void DrawReversibleFrame(IntPtr handle, Rectangle rectangle, Color backColor)
+    private static void DrawReversibleFrame(HWND handle, Rectangle rectangle, Color backColor)
     {
         //Bug # 71547 <subhag> to make drag rect visible if any the dimensions of the control are 0
         if (rectangle.Width == 0)
@@ -504,7 +504,7 @@ internal partial class OleDragDropHandler
             graphicsColor = Color.Black;
         }
 
-        using User32.GetDcScope dc = new(handle);
+        using GetDcScope dc = new(handle);
         using PInvoke.ObjectScope pen =
             new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
 
@@ -559,7 +559,7 @@ internal partial class OleDragDropHandler
         // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
         // but that causes a horrible flashing because GDI+ uses direct draw.
         MSG msg = default;
-        while (PInvoke.PeekMessage(&msg, HWND.Null, (uint)User32.WM.PAINT, (uint)User32.WM.PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+        while (PInvoke.PeekMessage(&msg, HWND.Null, (uint)PInvoke.WM_PAINT, (uint)PInvoke.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             PInvoke.TranslateMessage(msg);
             PInvoke.DispatchMessage(&msg);
@@ -862,7 +862,7 @@ internal partial class OleDragDropHandler
                                 if (updateLocation)
                                 {
                                     oldDesignerControl = client.GetDesignerControl();
-                                    PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
+                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
                                 }
 
                                 Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -911,7 +911,7 @@ internal partial class OleDragDropHandler
                                 if (oldDesignerControl is not null)
                                 {
                                     //((ComponentDataObject)dataObj).ShowControls();
-                                    PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
+                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                                     oldDesignerControl.Invalidate(true);
                                 }
 
@@ -993,7 +993,7 @@ internal partial class OleDragDropHandler
             dragOk = true;
 
             // this means it's not us doing the drag
-            if ((de.KeyState & (int)User32.MK.CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != 0)
+            if ((de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != 0)
             {
                 de.Effect = DragDropEffects.Copy;
             }
@@ -1010,7 +1010,7 @@ internal partial class OleDragDropHandler
         else if (localDrag && de.AllowedEffect != DragDropEffects.None)
         {
             localDragInside = true;
-            if ((de.KeyState & (int)User32.MK.CONTROL) != 0
+            if ((de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0
                 && (de.AllowedEffect & DragDropEffects.Copy) != 0
                 && client.CanModifyComponents)
             {
@@ -1064,7 +1064,7 @@ internal partial class OleDragDropHandler
             return;
         }
 
-        bool copy = (de.KeyState & (int)User32.MK.CONTROL) != 0
+        bool copy = (de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0
             && (de.AllowedEffect & DragDropEffects.Copy) != 0
             && client.CanModifyComponents;
 

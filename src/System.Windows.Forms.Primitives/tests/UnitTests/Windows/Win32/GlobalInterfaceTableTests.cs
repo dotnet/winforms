@@ -37,59 +37,16 @@ public unsafe class GlobalInterfaceTableTests
 
     internal class MyStream : IStream.Interface, IManagedWrapper<IStream, ISequentialStream>
     {
-        public unsafe HRESULT Read(void* pv, uint cb, [Optional] uint* pcbRead)
-        {
-            throw new NotImplementedException();
-        }
-
-        public unsafe HRESULT Write(void* pv, uint cb, [Optional] uint* pcbWritten)
-        {
-            throw new NotImplementedException();
-        }
-
-        public unsafe HRESULT Seek(long dlibMove, SeekOrigin dwOrigin, [Optional] ulong* plibNewPosition)
-        {
-            throw new NotImplementedException();
-        }
-
-        public HRESULT SetSize(ulong libNewSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public unsafe HRESULT CopyTo(IStream* pstm, ulong cb, [Optional] ulong* pcbRead, [Optional] ulong* pcbWritten)
-        {
-            throw new NotImplementedException();
-        }
-
-        public HRESULT Commit(STGC grfCommitFlags)
-        {
-            throw new NotImplementedException();
-        }
-
-        public HRESULT Revert()
-        {
-            throw new NotImplementedException();
-        }
-
-        public HRESULT LockRegion(ulong libOffset, ulong cb, LOCKTYPE dwLockType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public HRESULT UnlockRegion(ulong libOffset, ulong cb, uint dwLockType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public unsafe HRESULT Stat(STATSTG* pstatstg, STATFLAG grfStatFlag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public unsafe HRESULT Clone(IStream** ppstm)
-        {
-            throw new NotImplementedException();
-        }
+        public unsafe HRESULT Read(void* pv, uint cb, [Optional] uint* pcbRead) => throw new NotImplementedException();
+        public unsafe HRESULT Write(void* pv, uint cb, [Optional] uint* pcbWritten) => throw new NotImplementedException();
+        public unsafe HRESULT Seek(long dlibMove, SeekOrigin dwOrigin, [Optional] ulong* plibNewPosition) => throw new NotImplementedException();
+        public HRESULT SetSize(ulong libNewSize) => throw new NotImplementedException();
+        public unsafe HRESULT CopyTo(IStream* pstm, ulong cb, [Optional] ulong* pcbRead, [Optional] ulong* pcbWritten) => throw new NotImplementedException();
+        public HRESULT Commit(uint grfCommitFlags) => throw new NotImplementedException();
+        public HRESULT Revert() => throw new NotImplementedException();
+        public HRESULT LockRegion(ulong libOffset, ulong cb, uint dwLockType) => throw new NotImplementedException();
+        public HRESULT UnlockRegion(ulong libOffset, ulong cb, uint dwLockType) => throw new NotImplementedException();
+        public unsafe HRESULT Stat(STATSTG* pstatstg, uint grfStatFlag) => throw new NotImplementedException();
+        public unsafe HRESULT Clone(IStream** ppstm) => throw new NotImplementedException();
     }
 }

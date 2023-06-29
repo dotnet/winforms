@@ -5,6 +5,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 
 namespace Microsoft.VisualStudio.Shell;
 

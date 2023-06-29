@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms;
 
@@ -167,7 +168,7 @@ public abstract partial class AxHost
             }
         }
 
-        internal IEnumUnknown.Interface EnumControls(Control control, OLECONTF dwOleContF, ENUM_CONTROLS_WHICH_FLAGS dwWhich)
+        internal IEnumUnknown.Interface EnumControls(Control control, uint dwOleContF, ENUM_CONTROLS_WHICH_FLAGS dwWhich)
         {
             GetComponents();
             _lockCount++;
@@ -234,13 +235,13 @@ public abstract partial class AxHost
                     case ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_CONTAINER:
                         results = new();
                         additionalControl = null;
-                        MaybeAdd(results, control, selected, dwOleContF, allowContainingControls: false);
+                        MaybeAdd(results, control, selected, (OLECONTF)dwOleContF, allowContainingControls: false);
 
                         while (control is not null)
                         {
                             if (FindContainerForControl(control) is { } container)
                             {
-                                MaybeAdd(results, container._parent, selected, dwOleContF, allowContainingControls: true);
+                                MaybeAdd(results, container._parent, selected, (OLECONTF)dwOleContF, allowContainingControls: true);
                                 control = container._parent;
                             }
                             else
@@ -266,14 +267,14 @@ public abstract partial class AxHost
 
                     if (additionalControl is not null)
                     {
-                        MaybeAdd(results, additionalControl, selected, dwOleContF, allowContainingControls: false);
+                        MaybeAdd(results, additionalControl, selected, (OLECONTF)dwOleContF, allowContainingControls: false);
                     }
 
                     if (controls is not null)
                     {
                         for (int i = first; i < last; i++)
                         {
-                            MaybeAdd(results, controls[i], selected, dwOleContF, allowContainingControls: false);
+                            MaybeAdd(results, controls[i], selected, (OLECONTF)dwOleContF, allowContainingControls: false);
                         }
                     }
                 }
@@ -586,7 +587,7 @@ public abstract partial class AxHost
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IOleContainer.Interface.EnumObjects(OLECONTF grfFlags, IEnumUnknown** ppenum)
+        HRESULT IOleContainer.Interface.EnumObjects(uint grfFlags, IEnumUnknown** ppenum)
         {
             if (ppenum is null)
             {
@@ -595,7 +596,7 @@ public abstract partial class AxHost
 
             s_axHTraceSwitch.TraceVerbose("in EnumObjects");
 
-            if (grfFlags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
+            if (((OLECONTF)grfFlags).HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
             {
                 Debug.Assert(_parent is not null);
 

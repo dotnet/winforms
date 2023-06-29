@@ -84,21 +84,22 @@ public unsafe class WebBrowserSiteBase :
         return HRESULT.E_NOTIMPL;
     }
 
-    HRESULT IOleControlSite.Interface.TransformCoords(POINTL* pPtlHimetric, PointF* pPtfContainer, XFORMCOORDS dwFlags)
+    HRESULT IOleControlSite.Interface.TransformCoords(POINTL* pPtlHimetric, PointF* pPtfContainer, uint dwFlags)
     {
         if (pPtlHimetric is null || pPtfContainer is null)
         {
             return HRESULT.E_POINTER;
         }
 
-        if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER))
+        XFORMCOORDS coordinates = (XFORMCOORDS)dwFlags;
+        if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER))
         {
-            if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
+            if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
             {
                 pPtfContainer->X = WebBrowserHelper.HM2Pix(pPtlHimetric->x, WebBrowserHelper.LogPixelsX);
                 pPtfContainer->Y = WebBrowserHelper.HM2Pix(pPtlHimetric->y, WebBrowserHelper.LogPixelsY);
             }
-            else if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
+            else if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
             {
                 pPtfContainer->X = WebBrowserHelper.HM2Pix(pPtlHimetric->x, WebBrowserHelper.LogPixelsX);
                 pPtfContainer->Y = WebBrowserHelper.HM2Pix(pPtlHimetric->y, WebBrowserHelper.LogPixelsY);
@@ -108,14 +109,14 @@ public unsafe class WebBrowserSiteBase :
                 return HRESULT.E_INVALIDARG;
             }
         }
-        else if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC))
+        else if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC))
         {
-            if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
+            if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_SIZE))
             {
                 pPtlHimetric->x = WebBrowserHelper.Pix2HM((int)pPtfContainer->X, WebBrowserHelper.LogPixelsX);
                 pPtlHimetric->y = WebBrowserHelper.Pix2HM((int)pPtfContainer->Y, WebBrowserHelper.LogPixelsY);
             }
-            else if (dwFlags.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
+            else if (coordinates.HasFlag(XFORMCOORDS.XFORMCOORDS_POSITION))
             {
                 pPtlHimetric->x = WebBrowserHelper.Pix2HM((int)pPtfContainer->X, WebBrowserHelper.LogPixelsX);
                 pPtlHimetric->y = WebBrowserHelper.Pix2HM((int)pPtfContainer->Y, WebBrowserHelper.LogPixelsY);
@@ -162,7 +163,7 @@ public unsafe class WebBrowserSiteBase :
     // IOleClientSite methods:
     HRESULT IOleClientSite.Interface.SaveObject() => HRESULT.E_NOTIMPL;
 
-    HRESULT IOleClientSite.Interface.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IMoniker** ppmk)
+    HRESULT IOleClientSite.Interface.GetMoniker(uint dwAssign, uint dwWhichMoniker, IMoniker** ppmk)
     {
         if (ppmk is null)
         {

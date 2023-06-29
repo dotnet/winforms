@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -14,18 +12,18 @@ public enum MenuGlyph
     /// <summary>
     ///  Draws a submenu arrow.
     /// </summary>
-    Arrow = (int)User32.DFCS.MENUARROW,
+    Arrow = (int)DFCS_STATE.DFCS_MENUARROW,
 
     /// <summary>
     ///  Draws a menu checkmark.
     /// </summary>
-    Checkmark = (int)User32.DFCS.MENUCHECK,
+    Checkmark = (int)DFCS_STATE.DFCS_MENUCHECK,
 
     /// <summary>
     ///  Draws a menu bullet.
     /// </summary>
-    Bullet = (int)User32.DFCS.MENUBULLET,
+    Bullet = (int)DFCS_STATE.DFCS_MENUBULLET,
 
-    Min = (int)User32.DFCS.MENUARROW,
-    Max = (int)User32.DFCS.MENUBULLET,
+    Min = (int)DFCS_STATE.DFCS_MENUARROW,
+    Max = (int)DFCS_STATE.DFCS_MENUBULLET,
 }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -24,7 +23,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
 
     // Using prefixed variants of the property names for easier diffing.
 #pragma warning disable IDE1006 // Naming Styles
-    internal User32.WM MsgInternal;
+    internal MessageId MsgInternal;
     internal WPARAM WParamInternal;
     internal LPARAM LParamInternal;
     internal LRESULT ResultInternal;
@@ -34,9 +33,12 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
     public int Msg
     {
         get => (int)MsgInternal;
-        set => MsgInternal = (User32.WM)value;
+        set => MsgInternal = (MessageId)value;
     }
 
+    // NOTE: This behavior has changed in .NET 8. IntPtr casts are no longer "checked" by default. We still want
+    // to use LPARAM/WPARAM directly for clarity and proper casting.
+    //
     // It is particularly dangerous to cast to/from IntPtr on 64 bit platforms as casts are checked.
     // Doing so leads to hard-to-find overflow exceptions. We've mitigated this historically by trying
     // to first cast to long when casting out of IntPtr and first casting to int when casting into an
@@ -97,7 +99,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
     internal static Message Create(HWND hWnd, uint msg, WPARAM wparam, LPARAM lparam)
         => Create(hWnd, (int)msg, (nint)(nuint)wparam, (nint)lparam);
 
-    internal static Message Create(HWND hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam)
+    internal static Message Create(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
         => Create(hWnd, (int)msg, (nint)(nuint)wparam, (nint)lparam);
 
     public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -107,14 +106,14 @@ internal class GroupBoxDesigner : ParentControlDesigner
     {
         switch (m.Msg)
         {
-            case (int)User32.WM.NCHITTEST:
+            case (int)PInvoke.WM_NCHITTEST:
                 // The group box always fires HTTRANSPARENT, which causes the message to go to our parent.  We want
                 // the group box's designer to get these messages, however, so change this.
                 base.WndProc(ref m);
 
-                if (m.ResultInternal == (int)User32.HT.TRANSPARENT)
+                if (m.ResultInternal == PInvoke.HTTRANSPARENT)
                 {
-                    m.ResultInternal = (LRESULT)(nint)User32.HT.CLIENT;
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.HTCLIENT;
                 }
 
                 break;

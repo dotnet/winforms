@@ -13,7 +13,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -273,7 +272,7 @@ public unsafe partial class WebBrowserBase : Control
             else
             {
                 // win32Message may have been modified. Lets copy it back.
-                msg.MsgInternal = (User32.WM)win32Message.message;
+                msg.MsgInternal = (MessageId)win32Message.message;
                 msg.WParamInternal = win32Message.wParam;
                 msg.LParamInternal = win32Message.lParam;
                 msg.HWnd = win32Message.hwnd;
@@ -349,7 +348,7 @@ public unsafe partial class WebBrowserBase : Control
             MSG msg = new()
             {
                 hwnd = HWND.Null,
-                message = (uint)User32.WM.SYSKEYDOWN,
+                message = (uint)PInvoke.WM_SYSKEYDOWN,
                 wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                 lParam = 0x20180001,
                 time = PInvoke.GetTickCount()
@@ -378,28 +377,28 @@ public unsafe partial class WebBrowserBase : Control
     /// </remarks>
     protected override unsafe void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
             // Things we explicitly ignore and pass to the ActiveX's windproc
-            case User32.WM.ERASEBKGND:
-            case User32.WM.REFLECT_NOTIFYFORMAT:
-            case User32.WM.SETCURSOR:
-            case User32.WM.SYSCOLORCHANGE:
-            case User32.WM.LBUTTONDBLCLK:
-            case User32.WM.LBUTTONUP:
-            case User32.WM.MBUTTONDBLCLK:
-            case User32.WM.MBUTTONUP:
-            case User32.WM.RBUTTONDBLCLK:
-            case User32.WM.RBUTTONUP:
-            case User32.WM.CONTEXTMENU:
+            case PInvoke.WM_ERASEBKGND:
+            case MessageId.WM_REFLECT_NOTIFYFORMAT:
+            case PInvoke.WM_SETCURSOR:
+            case PInvoke.WM_SYSCOLORCHANGE:
+            case PInvoke.WM_LBUTTONDBLCLK:
+            case PInvoke.WM_LBUTTONUP:
+            case PInvoke.WM_MBUTTONDBLCLK:
+            case PInvoke.WM_MBUTTONUP:
+            case PInvoke.WM_RBUTTONDBLCLK:
+            case PInvoke.WM_RBUTTONUP:
+            case PInvoke.WM_CONTEXTMENU:
             //
             // Some of the MSComCtl controls respond to this message to do some
             // custom painting. So, we should just pass this message through.
-            case User32.WM.DRAWITEM:
+            case PInvoke.WM_DRAWITEM:
                 DefWndProc(ref m);
                 break;
 
-            case User32.WM.COMMAND:
+            case PInvoke.WM_COMMAND:
                 if (!ReflectMessage(m.LParamInternal, ref m))
                 {
                     DefWndProc(ref m);
@@ -407,16 +406,16 @@ public unsafe partial class WebBrowserBase : Control
 
                 break;
 
-            case User32.WM.HELP:
+            case PInvoke.WM_HELP:
                 // We want to both fire the event, and let the ActiveX have the message...
                 base.WndProc(ref m);
                 DefWndProc(ref m);
                 break;
 
-            case User32.WM.LBUTTONDOWN:
-            case User32.WM.MBUTTONDOWN:
-            case User32.WM.RBUTTONDOWN:
-            case User32.WM.MOUSEACTIVATE:
+            case PInvoke.WM_LBUTTONDOWN:
+            case PInvoke.WM_MBUTTONDOWN:
+            case PInvoke.WM_RBUTTONDOWN:
+            case PInvoke.WM_MOUSEACTIVATE:
                 if (!DesignMode)
                 {
                     if (containingControl is not null && containingControl.ActiveControl != this)
@@ -428,7 +427,7 @@ public unsafe partial class WebBrowserBase : Control
                 DefWndProc(ref m);
                 break;
 
-            case User32.WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 hwndFocus = (HWND)m.WParamInternal;
                 try
                 {
@@ -441,7 +440,7 @@ public unsafe partial class WebBrowserBase : Control
 
                 break;
 
-            case User32.WM.DESTROY:
+            case PInvoke.WM_DESTROY:
                 //
                 // If we are currently in a state of InPlaceActive or above,
                 // we should first reparent the ActiveX control to our parking
@@ -1187,7 +1186,7 @@ public unsafe partial class WebBrowserBase : Control
         ((IOleControlSite.Interface)ActiveXSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER));
         sz.Width = (int)pcont.X;
         sz.Height = (int)pcont.Y;
     }
@@ -1199,7 +1198,7 @@ public unsafe partial class WebBrowserBase : Control
         ((IOleControlSite.Interface)ActiveXSite).TransformCoords(
             (POINTL*)&phm,
             &pcont,
-            XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC);
+            (uint)(XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC));
         sz.Width = phm.X;
         sz.Height = phm.Y;
     }

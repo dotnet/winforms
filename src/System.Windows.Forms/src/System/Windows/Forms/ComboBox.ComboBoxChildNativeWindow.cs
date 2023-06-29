@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -22,21 +21,21 @@ public partial class ComboBox
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch ((uint)m.MsgInternal)
             {
-                case WM.GETOBJECT:
+                case PInvoke.WM_GETOBJECT:
                     WmGetObject(ref m);
                     return;
-                case WM.MOUSEMOVE:
+                case PInvoke.WM_MOUSEMOVE:
                     if (_childWindowType == ChildWindowType.DropDownList)
                     {
                         // Need to track the selection change via mouse over to
                         // raise focus changed event for the items. Monitoring
                         // item change in setters does not guarantee that focus
                         // is properly announced.
-                        object before = _owner.SelectedItem;
+                        object? before = _owner.SelectedItem;
                         DefWndProc(ref m);
-                        object after = _owner.SelectedItem;
+                        object? after = _owner.SelectedItem;
 
                         // Call the focus event for the new selected item accessible object provided by ComboBoxAccessibleObject.
                         // If the owning ComboBox has a custom accessible object,
@@ -54,7 +53,7 @@ public partial class ComboBox
                     }
 
                     break;
-                case WM.DESTROY:
+                case PInvoke.WM_DESTROY:
                     AccessibleObject? accessibilityObject = GetChildAccessibleObjectIfCreated();
 
                     if (accessibilityObject is not null)
@@ -127,7 +126,7 @@ public partial class ComboBox
 
         private unsafe void WmGetObject(ref Message m)
         {
-            if (m.LParamInternal != NativeMethods.UiaRootObjectId && (int)m.LParamInternal != OBJID.CLIENT)
+            if (m.LParamInternal != PInvoke.UiaRootObjectId && (int)m.LParamInternal != (int)OBJECT_IDENTIFIER.OBJID_CLIENT)
             {
                 // Do default message processing.
                 DefWndProc(ref m);
@@ -136,7 +135,7 @@ public partial class ComboBox
 
             AccessibleObject accessibilityObject = GetChildAccessibleObject();
 
-            if (m.LParamInternal == NativeMethods.UiaRootObjectId)
+            if (m.LParamInternal == PInvoke.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.

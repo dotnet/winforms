@@ -19,12 +19,6 @@ public partial class DialogControls : Form
         colorDialog.ShowDialog();
     }
 
-    private void FontDialog_Click(object sender, EventArgs e)
-    {
-        FontDialog fontDialog = new FontDialog();
-        fontDialog.ShowDialog();
-    }
-
     private void FolderBrowserDialog_Click(object sender, EventArgs e)
     {
         FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();

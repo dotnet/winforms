@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 public partial class SendKeys
@@ -13,12 +11,12 @@ public partial class SendKeys
     /// </summary>
     private readonly struct SKEvent
     {
-        public readonly User32.WM WM;
+        public readonly MessageId WM;
         public readonly uint ParamL;
         public readonly uint ParamH;
         public readonly HWND HWND;
 
-        public SKEvent(User32.WM wm, uint paramL, bool paramH, HWND hwnd)
+        public SKEvent(MessageId wm, uint paramL, bool paramH, HWND hwnd)
         {
             WM = wm;
             ParamL = paramL;
@@ -26,7 +24,7 @@ public partial class SendKeys
             HWND = hwnd;
         }
 
-        public SKEvent(User32.WM wm, uint paramL, uint paramH, HWND hwnd)
+        public SKEvent(MessageId wm, uint paramL, uint paramH, HWND hwnd)
         {
             WM = wm;
             ParamL = paramL;

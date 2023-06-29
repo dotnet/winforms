@@ -215,7 +215,7 @@ public partial class CheckBox : ButtonBase
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(int)_checkState);
+                    PInvoke.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(int)_checkState);
                 }
 
                 bool checkedChanged = oldChecked != Checked;
@@ -250,11 +250,6 @@ public partial class CheckBox : ButtonBase
         remove => base.MouseDoubleClick -= value;
     }
 
-    /// <summary>
-    ///  Gets the information used to create the handle for the
-    ///  <see cref="CheckBox"/>
-    ///  control.
-    /// </summary>
     protected override CreateParams CreateParams
     {
         get
@@ -263,22 +258,21 @@ public partial class CheckBox : ButtonBase
             cp.ClassName = PInvoke.WC_BUTTON;
             if (OwnerDraw)
             {
-                cp.Style |= (int)User32.BS.OWNERDRAW;
+                cp.Style |= PInvoke.BS_OWNERDRAW;
             }
             else
             {
-                cp.Style |= (int)User32.BS.THREE_STATE;
+                cp.Style |= PInvoke.BS_3STATE;
                 if (Appearance == Appearance.Button)
                 {
-                    cp.Style |= (int)User32.BS.PUSHLIKE;
+                    cp.Style |= PInvoke.BS_PUSHLIKE;
                 }
 
                 // Determine the alignment of the check box
-                //
                 ContentAlignment align = RtlTranslateContent(CheckAlign);
-                if ((int)(align & AnyRight) != 0)
+                if ((align & AnyRight) != 0)
                 {
-                    cp.Style |= (int)User32.BS.RIGHTBUTTON;
+                    cp.Style |= PInvoke.BS_RIGHTBUTTON;
                 }
             }
 
@@ -286,17 +280,7 @@ public partial class CheckBox : ButtonBase
         }
     }
 
-    /// <summary>
-    ///  Deriving classes can override this to configure a default size for their control.
-    ///  This is more efficient than setting the size in the control's constructor.
-    /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(104, 24);
-        }
-    }
+    protected override Size DefaultSize => new Size(104, 24);
 
     /// <summary>
     ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
@@ -547,7 +531,7 @@ public partial class CheckBox : ButtonBase
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(int)_checkState);
+            PInvoke.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(int)_checkState);
         }
     }
 

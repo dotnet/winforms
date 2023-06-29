@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.User32;
-
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32;
 
 public class GetWindowTextTests
@@ -37,7 +35,7 @@ public class GetWindowTextTests
             windowClass.BeforeGetTextLengthCallback = () => shortText;
         }
 
-        string result = GetWindowText(windowHandle);
+        string result = PInvoke.GetWindowText(windowHandle);
         PInvoke.DestroyWindow(windowHandle);
 
         Assert.Equal(longText, result);
@@ -57,23 +55,23 @@ public class GetWindowTextTests
             set;
         }
 
-        protected override LRESULT WNDPROC(HWND hWnd, WM msg, WPARAM wParam, LPARAM lParam)
+        protected override LRESULT WNDPROC(HWND hWnd, MessageId msg, WPARAM wParam, LPARAM lParam)
         {
             switch (msg)
             {
-                case WM.GETTEXTLENGTH:
+                case PInvoke.WM_GETTEXTLENGTH:
                     string? text = BeforeGetTextLengthCallback?.Invoke();
                     if (text is not null)
                     {
-                        SetWindowTextW(hWnd, text);
+                        PInvoke.SetWindowText(hWnd, text);
                     }
 
                     break;
-                case WM.GETTEXT:
+                case PInvoke.WM_GETTEXT:
                     text = BeforeGetTextCallback?.Invoke();
                     if (text is not null)
                     {
-                        SetWindowTextW(hWnd, text);
+                        PInvoke.SetWindowText(hWnd, text);
                     }
 
                     break;

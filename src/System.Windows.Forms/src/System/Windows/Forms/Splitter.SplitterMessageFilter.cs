@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 public partial class Splitter
@@ -21,12 +19,12 @@ public partial class Splitter
         /// </summary>
         public bool PreFilterMessage(ref Message m)
         {
-            if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
+            if (m.MsgInternal < PInvoke.WM_KEYFIRST || m.MsgInternal > PInvoke.WM_KEYLAST)
             {
                 return false;
             }
 
-            if (m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
+            if (m.MsgInternal == PInvoke.WM_KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
             {
                 _owner.SplitEnd(false);
             }

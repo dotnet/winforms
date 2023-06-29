@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -116,14 +115,13 @@ public partial class GroupBox : Control
             if (!OwnerDraw)
             {
                 cp.ClassName = PInvoke.WC_BUTTON;
-                cp.Style |= (int)User32.BS.GROUPBOX;
+                cp.Style |= PInvoke.BS_GROUPBOX;
             }
             else
             {
-                // if we swap back to a different flat style
-                // we need to reset these guys.
+                // If we swap back to a different flat style we need to reset these.
                 cp.ClassName = null;
-                cp.Style &= ~(int)User32.BS.GROUPBOX;
+                cp.Style &= ~PInvoke.BS_GROUPBOX;
             }
 
             cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTROLPARENT;
@@ -132,15 +130,9 @@ public partial class GroupBox : Control
         }
     }
 
-    /// <summary>
-    ///  Set the default Padding to 3 so that it is consistent with Everett
-    /// </summary>
+    // Set the default Padding to 3 so that it is consistent with Everett
     protected override Padding DefaultPadding => new Padding(3);
 
-    /// <summary>
-    ///  Deriving classes can override this to configure a default size for their control.
-    ///  This is more efficient than setting the size in the control's constructor.
-    /// </summary>
     protected override Size DefaultSize => new Size(200, 100);
 
     /// <summary>
@@ -186,7 +178,7 @@ public partial class GroupBox : Control
         }
         set
         {
-            //valid values are 0x0 to 0x3
+            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_flatStyle != value)
@@ -254,7 +246,7 @@ public partial class GroupBox : Control
             {
                 if (suspendRedraw && IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
                 }
 
                 base.Text = value;
@@ -263,7 +255,7 @@ public partial class GroupBox : Control
             {
                 if (suspendRedraw && IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 }
             }
 
@@ -500,17 +492,17 @@ public partial class GroupBox : Control
         {
             using var hdc = new DeviceContextHdcScope(e);
 
-            User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
+            DRAW_TEXT_FORMAT flags = DRAW_TEXT_FORMAT.DT_WORDBREAK | DRAW_TEXT_FORMAT.DT_EDITCONTROL;
 
             if (!ShowKeyboardCues)
             {
-                flags |= User32.DT.HIDEPREFIX;
+                flags |= DRAW_TEXT_FORMAT.DT_HIDEPREFIX;
             }
 
             if (RightToLeft == RightToLeft.Yes)
             {
-                flags |= User32.DT.RTLREADING;
-                flags |= User32.DT.RIGHT;
+                flags |= DRAW_TEXT_FORMAT.DT_RTLREADING;
+                flags |= DRAW_TEXT_FORMAT.DT_RIGHT;
             }
 
             using var hfont = GdiCache.GetHFONT(Font);
@@ -690,18 +682,18 @@ public partial class GroupBox : Control
 
         switch (m.MsgInternal)
         {
-            case User32.WM.ERASEBKGND:
-            case User32.WM.PRINTCLIENT:
+            case PInvoke.WM_ERASEBKGND:
+            case PInvoke.WM_PRINTCLIENT:
                 WmEraseBkgnd(ref m);
                 break;
-            case User32.WM.GETOBJECT:
+            case PInvoke.WM_GETOBJECT:
                 base.WndProc(ref m);
 
                 // Force MSAA to always treat a group box as a custom window. This ensures its child controls
                 // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                 // "Button" window class to get OS group box rendering; but the OS does not expose the children
                 // of buttons to MSAA (because it assumes buttons won't have children).
-                if (m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
+                if (m.LParamInternal == (int)OBJECT_IDENTIFIER.OBJID_QUERYCLASSNAMEIDX)
                 {
                     m.ResultInternal = (LRESULT)0;
                 }

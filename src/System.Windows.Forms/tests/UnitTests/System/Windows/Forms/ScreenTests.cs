@@ -34,15 +34,15 @@ public class ScreenTests
 
     public static IEnumerable<object[]> Equals_Screen_TestData()
     {
-        var screen = new Screen((IntPtr)1);
+        var screen = new Screen((HMONITOR)1);
         yield return new object[] { screen, screen, true };
-        yield return new object[] { screen, new Screen((IntPtr)1), true };
-        yield return new object[] { screen, new Screen((IntPtr)2), false };
+        yield return new object[] { screen, new Screen((HMONITOR)1), true };
+        yield return new object[] { screen, new Screen((HMONITOR)2), false };
     }
 
     public static IEnumerable<object[]> Equals_Object_TestData()
     {
-        var screen = new Screen((IntPtr)1);
+        var screen = new Screen((HMONITOR)1);
         yield return new object[] { screen, new object(), false };
         yield return new object[] { screen, null, false };
     }

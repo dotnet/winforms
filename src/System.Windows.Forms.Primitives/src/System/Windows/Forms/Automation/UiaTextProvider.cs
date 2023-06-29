@@ -5,7 +5,6 @@
 using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop.UiaCore;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Automation;
 
@@ -29,8 +28,6 @@ internal abstract class UiaTextProvider : ITextProvider
     public abstract SupportedTextSelection SupportedTextSelection { get; }
 
     public abstract Rectangle BoundingRectangle { get; }
-
-    public abstract ES EditStyle { get; }
 
     public abstract int FirstVisibleLine { get; }
 
@@ -73,8 +70,6 @@ internal abstract class UiaTextProvider : ITextProvider
     public abstract Rectangle RectangleToScreen(Rectangle rect);
 
     public abstract void SetSelection(int start, int end);
-
-    public static ES GetEditStyle(IHandle<HWND> hWnd) => (ES)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
     public static WINDOW_EX_STYLE GetWindowExStyle(IHandle<HWND> hWnd) => (WINDOW_EX_STYLE)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
 

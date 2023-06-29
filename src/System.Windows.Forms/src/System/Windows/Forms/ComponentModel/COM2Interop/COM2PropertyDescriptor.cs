@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Diagnostics.Debug;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
@@ -137,7 +138,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
             }
         }
 
-        if (CanShow && (propertyType == typeof(object) || (_valueConverter is null && propertyType == typeof(Oleaut32.IDispatch))))
+        if (CanShow && (propertyType == typeof(object) || (_valueConverter is null && propertyType == typeof(IDispatch.Interface))))
         {
             _typeHide = true;
         }

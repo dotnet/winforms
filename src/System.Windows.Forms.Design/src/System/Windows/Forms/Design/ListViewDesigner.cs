@@ -81,12 +81,12 @@ internal class ListViewDesigner : ControlDesigner
 
             if (!hwndHit.IsNull && hwndHit != listView.Handle)
             {
-                HWND headerHwnd = (HWND)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETHEADER);
+                HWND headerHwnd = (HWND)PInvoke.SendMessage(listView, PInvoke.LVM_GETHEADER);
                 if (hwndHit == headerHwnd)
                 {
                     PInvoke.MapWindowPoints(HWND.Null, headerHwnd, ref point);
                     _hdrhit.pt = point;
-                    PInvoke.SendMessage(headerHwnd, (User32.WM)PInvoke.HDM_HITTEST, 0, ref _hdrhit);
+                    PInvoke.SendMessage(headerHwnd, PInvoke.HDM_HITTEST, 0, ref _hdrhit);
                     if (_hdrhit.flags == HEADER_HITTEST_INFO_FLAGS.HHT_ONDIVIDER)
                         return true;
                 }
@@ -135,8 +135,8 @@ internal class ListViewDesigner : ControlDesigner
     {
         switch (m.Msg)
         {
-            case (int)User32.WM.NOTIFY:
-            case (int)User32.WM.REFLECT_NOTIFY:
+            case (int)PInvoke.WM_NOTIFY:
+            case (int)MessageId.WM_REFLECT_NOTIFY:
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 if ((int)nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                 {

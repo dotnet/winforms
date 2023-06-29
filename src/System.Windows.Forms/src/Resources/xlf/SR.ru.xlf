@@ -4845,13 +4845,11 @@ just-in-time (JIT) debugging instead of this dialog box.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
     Версия сборки: {1}
-    Версия Win32: {2}
-    CodeBase (база кода): {3}
+    Расположение: {2}
 </target>
         <note />
       </trans-unit>

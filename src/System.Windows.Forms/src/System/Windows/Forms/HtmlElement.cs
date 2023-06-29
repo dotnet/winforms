@@ -7,7 +7,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
-using static Interop;
+using Windows.Win32.System.Variant;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms;
@@ -446,18 +446,21 @@ public sealed partial class HtmlElement
     {
         try
         {
-            if (NativeHtmlElement is not Oleaut32.IDispatch scriptObject)
+            using var scriptObject = ComHelpers.TryGetComScope<IDispatch>(NativeHtmlElement, out HRESULT hr);
+            if (hr.Failed)
             {
                 return null;
             }
 
-            Guid g = Guid.Empty;
-            var names = new string[] { methodName };
             int dispid = PInvoke.DISPID_UNKNOWN;
-            HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
-            if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+
+            fixed (char* n = methodName)
             {
-                return null;
+                hr = scriptObject.Value->GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
+                if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+                {
+                    return null;
+                }
             }
 
             if (parameter is not null)
@@ -477,21 +480,21 @@ public sealed partial class HtmlElement
                     cNamedArgs = 0
                 };
 
-                var retVals = new object[1];
+                VARIANT result = default;
                 EXCEPINFO excepInfo = default;
-                hr = scriptObject.Invoke(
+                hr = scriptObject.Value->Invoke(
                     dispid,
-                    &g,
+                    IID.NULL(),
                     PInvoke.GetThreadLocale(),
                     DISPATCH_FLAGS.DISPATCH_METHOD,
                     &dispParams,
-                    retVals,
+                    &result,
                     &excepInfo,
                     null);
 
                 if (hr == HRESULT.S_OK)
                 {
-                    return retVals[0];
+                    return result.ToObject();
                 }
             }
 

@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -2696,7 +2695,7 @@ public class ScrollBarTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.ERASEBKGND,
+            Msg = (int)PInvoke.WM_ERASEBKGND,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -2707,7 +2706,7 @@ public class ScrollBarTests
 
     public static IEnumerable<object[]> WndProc_Scroll_TestData()
     {
-        foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL, User32.WM.REFLECT | User32.WM.VSCROLL })
+        foreach (MessageId msg in new MessageId[] { MessageId.WM_REFLECT | PInvoke.WM_HSCROLL, MessageId.WM_REFLECT | PInvoke.WM_VSCROLL })
         {
             yield return new object[] { msg, RightToLeft.No, 100, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
             yield return new object[] { msg, RightToLeft.No, 99, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
@@ -2862,7 +2861,7 @@ public class ScrollBarTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.SIZE,
+            Msg = (int)PInvoke.WM_SIZE,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -2884,7 +2883,7 @@ public class ScrollBarTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.SIZE,
+            Msg = (int)PInvoke.WM_SIZE,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -2916,7 +2915,7 @@ public class ScrollBarTests
         };
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -3149,7 +3148,7 @@ public class ScrollBarTests
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= (int)User32.SBS.VERT;
+                cp.Style |= (int)SCROLLBAR_CONSTANTS.SB_VERT;
                 return cp;
             }
         }

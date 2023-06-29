@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.Automation;
-using static Interop.User32;
 
 namespace System;
 
@@ -31,11 +30,12 @@ public static partial class TestAccessors
 
         public UiaTextProvider _provider => Dynamic._provider;
 
-        public CapStyle GetCapStyle(ES editStyle) => Dynamic.GetCapStyle(editStyle);
+        public CapStyle GetCapStyle(WINDOW_STYLE windowStyle) => Dynamic.GetCapStyle(windowStyle);
 
         public double GetFontSize(LOGFONTW logfont) => Dynamic.GetFontSize(logfont);
 
-        public HorizontalTextAlignment GetHorizontalTextAlignment(ES editStyle) => Dynamic.GetHorizontalTextAlignment(editStyle);
+        public HorizontalTextAlignment GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
+            => Dynamic.GetHorizontalTextAlignment(windowStyle);
 
         public bool GetReadOnly() => Dynamic.GetReadOnly();
 

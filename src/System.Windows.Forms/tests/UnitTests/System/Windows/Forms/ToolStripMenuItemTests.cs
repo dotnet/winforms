@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -101,9 +100,9 @@ public class ToolStripMenuItemTests
 
     public static IEnumerable<object[]> GetNativeMenuItemImage_TestData()
     {
-        yield return new object[] { User32.SC.MINIMIZE };
-        yield return new object[] { User32.SC.CLOSE };
-        yield return new object[] { User32.SC.RESTORE };
+        yield return new object[] { PInvoke.SC_MINIMIZE };
+        yield return new object[] { PInvoke.SC_CLOSE };
+        yield return new object[] { PInvoke.SC_RESTORE };
     }
 
     [WinFormsTheory]
@@ -112,8 +111,8 @@ public class ToolStripMenuItemTests
     {
         using Form form = new();
         form.CreateControl();
-        HMENU hMenu = PInvoke.GetSystemMenu(form, bRevert: false);
-        using var menuItem = new SubToolStripMenuItem(hMenu, nativeMenuCommandID, form);
+        HMENU hmenu = PInvoke.GetSystemMenu(form, bRevert: false);
+        using SubToolStripMenuItem menuItem = new(hmenu, nativeMenuCommandID, form);
 
         using Bitmap bitmap = menuItem.TestAccessor().Dynamic.GetNativeMenuItemImage();
         Assert.NotNull(bitmap);
@@ -162,7 +161,7 @@ public class ToolStripMenuItemTests
         {
         }
 
-        internal SubToolStripMenuItem(IntPtr hMenu, int nativeMenuCommandId, IWin32Window targetWindow) : base(hMenu, nativeMenuCommandId, targetWindow)
+        internal SubToolStripMenuItem(HMENU hmenu, int nativeMenuCommandId, IWin32Window targetWindow) : base(hmenu, nativeMenuCommandId, targetWindow)
         {
         }
 

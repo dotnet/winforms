@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop;
 
@@ -77,6 +78,10 @@ public unsafe class COM2FontConverterTests
             using Font newFont = new(font.Name, 20.0f);
 
             bool cancelSet = false;
+
+            // Need to addref here as ConvertManagedToNative will release the VARIANT we cast to below.
+            iFont.Value->AddRef();
+
             using VARIANT result = converter.ConvertManagedToNative(
                 newFont,
                 new CustomGetNativeValueDescriptor((VARIANT)(IUnknown*)iFont.Value),

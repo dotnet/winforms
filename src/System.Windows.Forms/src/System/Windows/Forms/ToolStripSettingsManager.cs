@@ -121,12 +121,13 @@ internal partial class ToolStripSettingsManager
             else
             {
                 // This toolStrip is in a ToolStripPanel. We will process it below.
-                if (!toolStripPanelDestinationHash.ContainsKey(destinationPanel))
+                if (!toolStripPanelDestinationHash.TryGetValue(destinationPanel, out List<SettingsStub>? value))
                 {
-                    toolStripPanelDestinationHash[destinationPanel] = new List<SettingsStub>();
+                    value = new List<SettingsStub>();
+                    toolStripPanelDestinationHash[destinationPanel] = value;
                 }
 
-                toolStripPanelDestinationHash[destinationPanel].Add(toolStripSettings);
+                value.Add(toolStripSettings);
             }
         }
 
@@ -280,7 +281,7 @@ internal partial class ToolStripSettingsManager
         return string.Empty;
     }
 
-    private void ResumeAllLayout(Control start, bool performLayout)
+    private static void ResumeAllLayout(Control start, bool performLayout)
     {
         Control.ControlCollection controlsCollection = start.Controls;
 
@@ -292,7 +293,7 @@ internal partial class ToolStripSettingsManager
         start.ResumeLayout(performLayout);
     }
 
-    private void SuspendAllLayout(Control start)
+    private static void SuspendAllLayout(Control start)
     {
         start.SuspendLayout();
 

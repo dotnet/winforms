@@ -7,8 +7,9 @@
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
-using static Windows.Win32.System.Com.VARENUM;
+using static Windows.Win32.System.Variant.VARENUM;
 using static Interop;
 
 namespace System.Windows.Forms.Tests.Interop.Oleaut32;
@@ -5644,7 +5645,7 @@ public unsafe class VARIANTTests
         VARIANT copy = variant;
         IntPtr pv = (IntPtr)(&copy);
         Assert.Throws<ArgumentException>(() => Marshal.GetObjectForNativeVariant(pv));
-        Assert.Throws<DivideByZeroException>(() => variant.ToObject());
+        Assert.Throws<ArgumentException>(() => variant.ToObject());
     }
 
     public static IEnumerable<object[]> RECORDARRAY_InvalidGuid_TestData()
@@ -5702,9 +5703,9 @@ public unsafe class VARIANTTests
 
         public HRESULT GetFieldNoCopy(void* pvData, PCWSTR szFieldName, VARIANT* pvarField, void** ppvDataCArray) => throw new NotImplementedException();
 
-        public HRESULT PutField(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+        public HRESULT PutField(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
 
-        public HRESULT PutFieldNoCopy(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+        public HRESULT PutFieldNoCopy(uint wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
 
         public HRESULT GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => throw new NotImplementedException();
 

@@ -1844,12 +1844,12 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             ? OwnerGridView.SelectedItemWithFocusBackColor
             : OwnerGridView.BackColor;
 
-        User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP
-            | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
+        DRAW_TEXT_FORMAT format = DRAW_TEXT_FORMAT.DT_EDITCONTROL | DRAW_TEXT_FORMAT.DT_EXPANDTABS | DRAW_TEXT_FORMAT.DT_NOCLIP
+            | DRAW_TEXT_FORMAT.DT_SINGLELINE | DRAW_TEXT_FORMAT.DT_NOPREFIX;
 
         if (ownerGrid.DrawValuesRightToLeft)
         {
-            format |= User32.DT.RIGHT | User32.DT.RTLREADING;
+            format |= DRAW_TEXT_FORMAT.DT_RIGHT | DRAW_TEXT_FORMAT.DT_RTLREADING;
         }
 
         // For password mode, replace the string value with a bullet.

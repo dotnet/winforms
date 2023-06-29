@@ -37,7 +37,7 @@ public sealed partial class MultilineStringEditor
             }
 
             using ComScope<ILockBytes> pLockBytes = new(null);
-            HRESULT hr = PInvoke.CreateILockBytesOnHGlobal(0, fDeleteOnRelease: true, pLockBytes);
+            HRESULT hr = PInvoke.CreateILockBytesOnHGlobal(default, fDeleteOnRelease: true, pLockBytes);
             if (hr.Failed)
             {
                 return hr;
@@ -114,7 +114,7 @@ public sealed partial class MultilineStringEditor
             return HRESULT.S_OK;
         }
 
-        public HRESULT QueryAcceptData(Com.IDataObject* lpdataobj, ushort* lpcfFormat, RECO_FLAGS reco, BOOL fReally, nint hMetaPict)
+        public HRESULT QueryAcceptData(Com.IDataObject* lpdataobj, ushort* lpcfFormat, RECO_FLAGS reco, BOOL fReally, HGLOBAL hMetaPict)
         {
             Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"IRichTextBoxOleCallback::QueryAcceptData(reco={reco})");
             if (reco == RECO_FLAGS.RECO_PASTE)

@@ -8,7 +8,6 @@ using Windows.Win32.System.Ole;
 using Windows.Win32.System.SystemServices;
 using Windows.Win32.UI.Controls.RichEdit;
 using Com = Windows.Win32.System.Com;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -45,7 +44,7 @@ public partial class RichTextBox
             }
 
             using ComScope<ILockBytes> pLockBytes = new(null);
-            HRESULT hr = PInvoke.CreateILockBytesOnHGlobal(0, fDeleteOnRelease: true, pLockBytes);
+            HRESULT hr = PInvoke.CreateILockBytesOnHGlobal(default, fDeleteOnRelease: true, pLockBytes);
             if (hr.Failed)
             {
                 return hr;
@@ -89,7 +88,7 @@ public partial class RichTextBox
             return HRESULT.S_OK;
         }
 
-        public HRESULT QueryAcceptData(Com.IDataObject* lpdataobj, ushort* lpcfFormat, RECO_FLAGS reco, BOOL fReally, nint hMetaPict)
+        public HRESULT QueryAcceptData(Com.IDataObject* lpdataobj, ushort* lpcfFormat, RECO_FLAGS reco, BOOL fReally, HGLOBAL hMetaPict)
         {
             RichTextDbg.TraceVerbose($"IRichEditOleCallback::QueryAcceptData(reco={reco})");
 
@@ -108,7 +107,7 @@ public partial class RichTextBox
             MouseButtons mouseButtons = MouseButtons;
             Keys modifierKeys = ModifierKeys;
 
-            User32.MK keyState = 0;
+            MODIFIERKEYS_FLAGS keyState = 0;
 
             // Due to the order in which we get called, we have to set up the keystate here.
             // First GetDragDropEffect is called with grfKeyState == 0, and then
@@ -117,27 +116,27 @@ public partial class RichTextBox
 
             if ((mouseButtons & MouseButtons.Left) == MouseButtons.Left)
             {
-                keyState |= User32.MK.LBUTTON;
+                keyState |= MODIFIERKEYS_FLAGS.MK_LBUTTON;
             }
 
             if ((mouseButtons & MouseButtons.Right) == MouseButtons.Right)
             {
-                keyState |= User32.MK.RBUTTON;
+                keyState |= MODIFIERKEYS_FLAGS.MK_RBUTTON;
             }
 
             if ((mouseButtons & MouseButtons.Middle) == MouseButtons.Middle)
             {
-                keyState |= User32.MK.MBUTTON;
+                keyState |= MODIFIERKEYS_FLAGS.MK_MBUTTON;
             }
 
             if ((modifierKeys & Keys.Control) == Keys.Control)
             {
-                keyState |= User32.MK.CONTROL;
+                keyState |= MODIFIERKEYS_FLAGS.MK_CONTROL;
             }
 
             if ((modifierKeys & Keys.Shift) == Keys.Shift)
             {
-                keyState |= User32.MK.SHIFT;
+                keyState |= MODIFIERKEYS_FLAGS.MK_SHIFT;
             }
 
             _lastDataObject = DataObject.FromComPointer(lpdataobj);
@@ -178,7 +177,7 @@ public partial class RichTextBox
                 // like in the local drag case. Then you drag into rtb2. rtb2 will first be called in this method,
                 // and not GetDragDropEffects. Now lastEffect is initialized to None for rtb2, so we would not allow
                 // the drag. Thus we need to set the effect here as well.
-                e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
+                e.Effect = keyState.HasFlag(MODIFIERKEYS_FLAGS.MK_CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
                 _owner.OnDragEnter(e);
 
                 if ((e.DropImageType > DropImageType.Invalid) && _owner.IsHandleCreated)

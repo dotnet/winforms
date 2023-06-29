@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
 
@@ -183,7 +183,7 @@ public static partial class DataFormats
             }
 
             // Need to add this format string
-            uint formatId = User32.RegisterClipboardFormatW(format);
+            uint formatId = PInvoke.RegisterClipboardFormat(format);
             if (formatId == 0)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error(), SR.RegisterCFFailed);
@@ -198,7 +198,7 @@ public static partial class DataFormats
     /// <summary>
     ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
     /// </summary>
-    public static Format GetFormat(int id)
+    public static unsafe Format GetFormat(int id)
     {
         // Win32 uses an unsigned 16 bit type as a format ID, thus stripping off the leading bits.
         // Registered format IDs are in the range 0xC000 through 0xFFFF, thus it's important
@@ -217,7 +217,21 @@ public static partial class DataFormats
                 }
             }
 
-            string? name = User32.GetClipboardFormatNameW(clampedId);
+            string? name = null;
+
+            // The max length of the name of clipboard formats is equal to the max length
+            // of a Win32 Atom of 255 chars. An additional null terminator character is added,
+            // giving a required capacity of 256 chars.
+            Span<char> formatName = stackalloc char[256];
+            fixed (char* pFormatName = formatName)
+            {
+                int length = PInvoke.GetClipboardFormatName(clampedId, pFormatName, 256);
+                if (length != 0)
+                {
+                    name = formatName.Slice(0, length).ToString();
+                }
+            }
+
             // This can happen if windows adds a standard format that we don't know about,
             // so we should play it safe.
             name ??= $"Format{clampedId}";
@@ -260,22 +274,22 @@ public static partial class DataFormats
             s_formatList = new Format[]
             {
                 //         Text name                  Win32 format ID
-                new Format(UnicodeTextConstant,       (int)User32.CF.UNICODETEXT),
-                new Format(TextConstant,              (int)User32.CF.TEXT),
-                new Format(BitmapConstant,            (int)User32.CF.BITMAP),
-                new Format(WmfConstant,               (int)User32.CF.METAFILEPICT),
-                new Format(EmfConstant,               (int)User32.CF.ENHMETAFILE),
-                new Format(DifConstant,               (int)User32.CF.DIF),
-                new Format(TiffConstant,              (int)User32.CF.TIFF),
-                new Format(OemTextConstant,           (int)User32.CF.OEMTEXT),
-                new Format(DibConstant,               (int)User32.CF.DIB),
-                new Format(PaletteConstant,           (int)User32.CF.PALETTE),
-                new Format(PenDataConstant,           (int)User32.CF.PENDATA),
-                new Format(RiffConstant,              (int)User32.CF.RIFF),
-                new Format(WaveAudioConstant,         (int)User32.CF.WAVE),
-                new Format(SymbolicLinkConstant,      (int)User32.CF.SYLK),
-                new Format(FileDropConstant,          (int)User32.CF.HDROP),
-                new Format(LocaleConstant,            (int)User32.CF.LOCALE)
+                new Format(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
+                new Format(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
+                new Format(BitmapConstant,            (int)CLIPBOARD_FORMAT.CF_BITMAP),
+                new Format(WmfConstant,               (int)CLIPBOARD_FORMAT.CF_METAFILEPICT),
+                new Format(EmfConstant,               (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE),
+                new Format(DifConstant,               (int)CLIPBOARD_FORMAT.CF_DIF),
+                new Format(TiffConstant,              (int)CLIPBOARD_FORMAT.CF_TIFF),
+                new Format(OemTextConstant,           (int)CLIPBOARD_FORMAT.CF_OEMTEXT),
+                new Format(DibConstant,               (int)CLIPBOARD_FORMAT.CF_DIB),
+                new Format(PaletteConstant,           (int)CLIPBOARD_FORMAT.CF_PALETTE),
+                new Format(PenDataConstant,           (int)CLIPBOARD_FORMAT.CF_PENDATA),
+                new Format(RiffConstant,              (int)CLIPBOARD_FORMAT.CF_RIFF),
+                new Format(WaveAudioConstant,         (int)CLIPBOARD_FORMAT.CF_WAVE),
+                new Format(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
+                new Format(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
+                new Format(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
             };
 
             s_formatCount = s_formatList.Length;

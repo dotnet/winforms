@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using Windows.Win32.System.Ole;
-using static Interop;
 using static Interop.Mshtml;
 using Ole = Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -24,7 +21,8 @@ public partial class WebBrowser
         /// <summary>
         ///  Creates an instance of the <see cref="WebBrowserSite"/> class.
         /// </summary>
-        public WebBrowserSite(WebBrowser host) : base(host)
+        public WebBrowserSite(WebBrowser host)
+            : base(host)
         {
         }
 
@@ -137,7 +135,7 @@ public partial class WebBrowser
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IDocHostUIHandler.GetDropTarget(Ole.IDropTarget.Interface pDropTarget, out Ole.IDropTarget.Interface ppDropTarget)
+        HRESULT IDocHostUIHandler.GetDropTarget(Ole.IDropTarget.Interface pDropTarget, out Ole.IDropTarget.Interface? ppDropTarget)
         {
             // Set to null no matter what we return, to prevent the marshaller
             // from having issues if the pointer points to random stuff.
@@ -165,7 +163,7 @@ public partial class WebBrowser
             if (!wb.WebBrowserShortcutsEnabled)
             {
                 int keyCode = (int)(uint)lpMsg->wParam | (int)ModifierKeys;
-                if (lpMsg->message != (uint)User32.WM.CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                if (lpMsg->message != (uint)PInvoke.WM_CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
                 {
                     return HRESULT.S_OK;
                 }
@@ -174,7 +172,7 @@ public partial class WebBrowser
             return HRESULT.S_FALSE;
         }
 
-        HRESULT IDocHostUIHandler.TranslateUrl(uint dwTranslate, string strUrlIn, out string pstrUrlOut)
+        HRESULT IDocHostUIHandler.TranslateUrl(uint dwTranslate, string strUrlIn, out string? pstrUrlOut)
         {
             // Set to null no matter what we return, to prevent the marshaller
             // from having issues if the pointer points to random stuff.
@@ -182,7 +180,7 @@ public partial class WebBrowser
             return HRESULT.S_FALSE;
         }
 
-        HRESULT IDocHostUIHandler.FilterDataObject(ComTypes.IDataObject pDO, out ComTypes.IDataObject ppDORet)
+        HRESULT IDocHostUIHandler.FilterDataObject(ComTypes.IDataObject pDO, out ComTypes.IDataObject? ppDORet)
         {
             // Set to null no matter what we return, to prevent the marshaller
             // from having issues if the pointer points to random stuff.

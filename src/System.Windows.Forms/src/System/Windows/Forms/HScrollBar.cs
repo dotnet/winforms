@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -18,7 +16,7 @@ public partial class HScrollBar : ScrollBar
         get
         {
             CreateParams cp = base.CreateParams;
-            cp.Style |= (int)User32.SBS.HORZ;
+            cp.Style |= (int)SCROLLBAR_CONSTANTS.SB_HORZ;
             return cp;
         }
     }

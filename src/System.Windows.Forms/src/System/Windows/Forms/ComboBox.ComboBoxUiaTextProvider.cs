@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -34,7 +33,7 @@ public partial class ComboBox
             _owningComboBox = owner.OrThrowIfNull();
             Debug.Assert(_owningComboBox.IsHandleCreated);
 
-            _owningChildEdit = owner._childEdit;
+            _owningChildEdit = owner._childEdit!;
         }
 
         public override Rectangle BoundingRectangle
@@ -43,11 +42,6 @@ public partial class ComboBox
                 : Rectangle.Empty;
 
         public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, TextLength);
-
-        public override ES EditStyle
-            => _owningComboBox.IsHandleCreated
-                ? GetEditStyle(_owningChildEdit)
-                : ES.LEFT;
 
         public override int FirstVisibleLine
             => _owningComboBox.IsHandleCreated
@@ -70,8 +64,7 @@ public partial class ComboBox
                     return false;
                 }
 
-                ES extendedStyle = (ES)PInvoke.GetWindowLong(_owningChildEdit, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-                return extendedStyle.HasFlag(ES.AUTOHSCROLL);
+                return ((int)GetWindowStyle(_owningChildEdit) & PInvoke.ES_AUTOHSCROLL) != 0;
             }
         }
 
@@ -107,12 +100,12 @@ public partial class ComboBox
 
         public override string Text
             => _owningComboBox.IsHandleCreated
-                ? User32.GetWindowText((IHandle)_owningChildEdit)
+                ? PInvoke.GetWindowText(_owningChildEdit)
                 : string.Empty;
 
         public override int TextLength
             => _owningComboBox.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningChildEdit, WM.GETTEXTLENGTH)
+                ? (int)PInvoke.SendMessage(_owningChildEdit, PInvoke.WM_GETTEXTLENGTH)
                 : -1;
 
         public override WINDOW_EX_STYLE WindowExStyle
@@ -216,7 +209,7 @@ public partial class ComboBox
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            PInvoke.SendMessage(_owningChildEdit, (WM)EM.GETSEL, ref start, ref end);
+            PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
             return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end) };
         }
@@ -353,12 +346,12 @@ public partial class ComboBox
                 return;
             }
 
-            PInvoke.SendMessage(_owningChildEdit, (WM)EM.SETSEL, (WPARAM)start, (LPARAM)end);
+            PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
         }
 
         private int GetCharIndexFromPosition(Point pt)
         {
-            int index = (int)PInvoke.SendMessage(_owningChildEdit, (WM)EM.CHARFROMPOS, (WPARAM)0, (LPARAM)pt);
+            int index = (int)PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_CHARFROMPOS, (WPARAM)0, (LPARAM)pt);
             index = PARAM.LOWORD(index);
 
             if (index < 0)
@@ -383,8 +376,8 @@ public partial class ComboBox
         private RECT GetFormattingRectangle()
         {
             // Send an EM_GETRECT message to find out the bounding rectangle.
-            RECT rectangle = default(RECT);
-            PInvoke.SendMessage(_owningChildEdit, (WM)EM.GETRECT, (WPARAM)0, ref rectangle);
+            RECT rectangle = default;
+            PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETRECT, (WPARAM)0, ref rectangle);
 
             return rectangle;
         }
@@ -396,7 +389,7 @@ public partial class ComboBox
                 return Point.Empty;
             }
 
-            int i = (int)PInvoke.SendMessage(_owningChildEdit, (WM)EM.POSFROMCHAR, (WPARAM)index);
+            int i = (int)PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_POSFROMCHAR, (WPARAM)index);
 
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }

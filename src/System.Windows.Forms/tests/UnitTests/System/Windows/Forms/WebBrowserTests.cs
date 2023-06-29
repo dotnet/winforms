@@ -4461,7 +4461,7 @@ public class WebBrowserTests
         };
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -4498,7 +4498,7 @@ public class WebBrowserTests
             };
             var m = new Message
             {
-                Msg = (int)User32.WM.CONTEXTMENU,
+                Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
                 Result = (IntPtr)250
             };
@@ -4540,7 +4540,7 @@ public class WebBrowserTests
             };
             var m = new Message
             {
-                Msg = (int)User32.WM.CONTEXTMENU,
+                Msg = (int)PInvoke.WM_CONTEXTMENU,
                 LParam = lParam,
                 Result = (IntPtr)250
             };
@@ -4570,7 +4570,7 @@ public class WebBrowserTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.CONTEXTMENU,
+            Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
             Result = (IntPtr)250
         };
@@ -4620,7 +4620,7 @@ public class WebBrowserTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.CONTEXTMENU,
+            Msg = (int)PInvoke.WM_CONTEXTMENU,
             LParam = lParam,
             Result = (IntPtr)250
         };

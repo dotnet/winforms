@@ -491,10 +491,9 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 
             error ??= string.Empty;
 
-            string outputError = string.Empty;
-            if (controlError.ContainsKey(dataBinding.Control))
+            if (!controlError.TryGetValue(dataBinding.Control, out string? outputError))
             {
-                outputError = controlError[dataBinding.Control];
+                outputError = string.Empty;
             }
 
             // Utilize the error string without including the field name.

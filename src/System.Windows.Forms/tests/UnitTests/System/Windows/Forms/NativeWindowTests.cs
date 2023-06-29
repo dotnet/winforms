@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -265,7 +264,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)User32.WM.NCDESTROY)]
+    [InlineData((int)PInvoke.WM_NCDESTROY)]
     public void NativeWindow_DefWndProc_InvokeWithCreatedHandle_Nop(int msg)
     {
         var window = new WndProcTrackingNativeWindow();
@@ -316,7 +315,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)User32.WM.NCDESTROY)]
+    [InlineData((int)PInvoke.WM_NCDESTROY)]
     public void NativeWindow_DefWndProc_InvokeWithInvalidHandle_Nop(int msg)
     {
         using (new NoAssertContext())
@@ -383,7 +382,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)User32.WM.NCDESTROY)]
+    [InlineData((int)PInvoke.WM_NCDESTROY)]
     public void NativeWindow_DefWndProc_InvokeWithoutHandle_Nop(int msg)
     {
         using (new NoAssertContext())
@@ -444,7 +443,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)User32.WM.NCDESTROY)]
+    [InlineData((int)PInvoke.WM_NCDESTROY)]
     public void NativeWindow_WndProc_InvokeWithCreatedHandle_Success(int msg)
     {
         var window = new SubNativeWindow();
@@ -495,7 +494,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)User32.WM.NCDESTROY)]
+    [InlineData((int)PInvoke.WM_NCDESTROY)]
     public void NativeWindow_WndProc_InvokeWithInvalidAssignedHandle_Nop(int msg)
     {
         using (new NoAssertContext())
@@ -516,7 +515,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)User32.WM.NCDESTROY)]
+    [InlineData((int)PInvoke.WM_NCDESTROY)]
     public void NativeWindow_WndProc_InvokeWithoutHandle_Nop(int msg)
     {
         using (new NoAssertContext())
