@@ -132,18 +132,7 @@ public partial class ListBox
                            ? UiaCore.UIA.ListControlTypeId
                            : base.GetPropertyValue(propertyID);
                 case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                    if (this.TryGetOwnerAs(out ListBox? owner))
-                    {
-                        bool result = owner.HasKeyboardFocus && owner.Focused;
-                        if (GetChildCount() > 0)
-                        {
-                            owner.HasKeyboardFocus = false;
-                        }
-
-                        return result;
-                    }
-
-                    return null;
+                    return this.TryGetOwnerAs(out ListBox? owner) ? GetChildCount() == 0 && owner.Focused : null;
                 default:
                     return base.GetPropertyValue(propertyID);
             }
@@ -252,12 +241,7 @@ public partial class ListBox
                 return null;
             }
 
-            if (index < 0 || index >= owner.Items.Count)
-            {
-                return null;
-            }
-
-            if (owner.Items.InnerArray.Count == 0)
+            if (index < 0 || index >= owner.Items.Count || owner.Items.InnerArray.Count == 0)
             {
                 return null;
             }
