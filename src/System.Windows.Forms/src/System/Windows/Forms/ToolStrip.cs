@@ -45,6 +45,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     private bool _showItemToolTips;
     private MouseHoverTimer? _mouseHoverTimer;
     private ToolStripItem? _currentlyActiveTooltipItem;
+    private ToolStripItem? _lastActiveTooltipItem;
     private NativeWindow? _dropDownOwnerWindow;
     private byte _mouseDownID;  // NEVER use this directly from another class, 0 should never be returned to another class.
     private ToolStripRenderer? _renderer;
@@ -1944,6 +1945,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 Invalidate(regionRect, true);
                 Update();
             }
+
+            _lastActiveTooltipItem = null;
         }
         finally
         {
@@ -2159,6 +2162,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </summary>
     public virtual ToolStripItem? GetNextItem(ToolStripItem? start, ArrowDirection direction)
     {
+        if (TabStop && start is null && _lastActiveTooltipItem is not null)
+        {
+            start = _lastActiveTooltipItem;
+        }
+
         switch (direction)
         {
             case ArrowDirection.Right:
@@ -4217,6 +4225,14 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         if (KeyboardActive && !Focused && !ContainsFocus)
         {
             KeyboardActive = false;
+        }
+    }
+
+    internal void ResetLastActiveToolTipItem(ToolStripItem? item)
+    {
+        if (item is not null)
+        {
+            _lastActiveTooltipItem = item;
         }
     }
 
