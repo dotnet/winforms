@@ -424,11 +424,11 @@ public partial class LinkLabel : Label, IButtonControl
     protected override AccessibleObject CreateAccessibilityInstance() => new LinkLabelAccessibleObject(this);
 
     internal override void ReleaseUiaProvider(HWND handle)
-    {
+    {       
+        base.ReleaseUiaProvider(handle);
+
         if (OsVersion.IsWindows8OrGreater())
         {
-            base.ReleaseUiaProvider(handle);
-
             foreach (Link link in _links)
             {
                 if (link.IsAccessibilityObjectCreated)
