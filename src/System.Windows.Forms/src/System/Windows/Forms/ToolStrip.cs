@@ -2243,7 +2243,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     private ToolStripItem GetStartItem(bool forward, bool isDropDown, ArrowDirection arrowDirection = ArrowDirection.Right)
     {
-
         if (forward && arrowDirection == ArrowDirection.Left)
         {
             return DisplayedItems[0];
