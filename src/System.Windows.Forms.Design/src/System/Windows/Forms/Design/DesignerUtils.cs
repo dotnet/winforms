@@ -739,7 +739,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation
     /// </summary>
-    public static List<T>? CopyDragObjects<T>(IReadOnlyCollection<T> objects, IServiceProvider svcProvider) where T : IComponent
+    public static List<IComponent> CopyDragObjects(IReadOnlyCollection<IComponent> objects, IServiceProvider svcProvider)
     {
         if (objects is null || svcProvider is null)
         {
@@ -759,10 +759,10 @@ internal static class DesignerUtils
             {
                 SerializationStore store = css.CreateStore();
                 // Get all the objects, meaning we want the children too
-                List<T> copyObjects = GetCopySelection(objects, host);
+                List<IComponent> copyObjects = GetCopySelection(objects, host);
 
                 // The serialization service does not (yet) handle serializing collections
-                foreach (T comp in copyObjects)
+                foreach (IComponent comp in copyObjects)
                 {
                     css.Serialize(store, comp);
                 }
@@ -773,8 +773,8 @@ internal static class DesignerUtils
                 // Now, copyObjects contains a flattened list of all the controls contained in the original drag objects,
                 // that's not what we want to return. We only want to return the root drag objects,
                 // so that the caller gets an identical copy - identical in terms of objects.Count
-                List<T> newObjects = new(objects.Count);
-                foreach (T comp in deserialized)
+                List<IComponent> newObjects = new(objects.Count);
+                foreach (IComponent comp in deserialized)
                 {
                     if (comp is not Control c)
                     { // this happens when we are dragging a toolstripitem
@@ -798,13 +798,13 @@ internal static class DesignerUtils
             Cursor.Current = oldCursor;
         }
 
-        return null;
+        return null!;
     }
 
-    private static List<T> GetCopySelection<T>(IReadOnlyCollection<T> objects, IDesignerHost host) where T : IComponent
+    private static List<IComponent> GetCopySelection(IReadOnlyCollection<IComponent> objects, IDesignerHost host)
     {
-        List<T> copySelection = new(objects.Count);
-        foreach (T comp in objects)
+        List<IComponent> copySelection = new(objects.Count);
+        foreach (IComponent comp in objects)
         {
             copySelection.Add(comp);
             GetAssociatedComponents(comp, host, copySelection);
@@ -813,14 +813,14 @@ internal static class DesignerUtils
         return copySelection;
     }
 
-    internal static void GetAssociatedComponents<T>(IComponent component, IDesignerHost? host, List<T> list) where T : IComponent
+    internal static void GetAssociatedComponents(IComponent component, IDesignerHost? host, List<IComponent> list)
     {
         if (host?.GetDesigner(component) is not ComponentDesigner designer)
         {
             return;
         }
 
-        foreach (T childComp in designer.AssociatedComponents)
+        foreach (IComponent childComp in designer.AssociatedComponents)
         {
             if (childComp.Site is not null)
             {

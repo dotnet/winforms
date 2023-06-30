@@ -383,7 +383,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
                         // Get the objects to copy
-                        List<Control> temp = new();
+                        List<IComponent> temp = new();
                         for (int i = 0; i < dragComponents.Length; i++)
                         {
                             temp.Add(dragComponents[i].dragComponent);
@@ -403,7 +403,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         {
                             // ... but save off the old controls first
                             originalControls.Add(dragComponents[j].dragComponent);
-                            dragComponents[j].dragComponent = temp[j];
+                            dragComponents[j].dragComponent = (Control)temp[j];
                         }
                     }
 
@@ -422,16 +422,16 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     Point initialDropPoint = behaviorServiceSource.AdornerWindowPointToScreen(dragComponents[primaryComponentIndex].draggedLocation);
 
                     // Tricky... initialDropPoint is the dropPoint in the source adornerwindow, which could be different than the target adornerwindow. But since we first convert it to screen coordinates, and then to client coordinates using the new parent, we end up dropping in the right spot. Cool, huh!
-                    initialDropPoint = ((Control)dragComponents[primaryComponentIndex].dragComponent).Parent.PointToClient(initialDropPoint);
+                    Control primaryComponent = dragComponents[primaryComponentIndex].dragComponent as Control;
+                    initialDropPoint = primaryComponent.Parent.PointToClient(initialDropPoint);
 
                     // Correct (only) the drop point for when Parent is mirrored, then use the offsets for the other controls, which were already corrected for mirroring in InitDrag
-                    if (((Control)(dragComponents[primaryComponentIndex].dragComponent)).Parent.IsMirrored)
+                    if (primaryComponent.Parent.IsMirrored)
                     {
-                        initialDropPoint.Offset(-((Control)(dragComponents[primaryComponentIndex].dragComponent)).Width, 0);
+                        initialDropPoint.Offset(-primaryComponent.Width, 0);
                     }
 
                     // check permission to do that
-                    Control primaryComponent = dragComponents[primaryComponentIndex].dragComponent as Control;
                     PropertyDescriptor propLoc = TypeDescriptor.GetProperties(primaryComponent)["Location"];
                     if (primaryComponent is not null && propLoc is not null)
                     {

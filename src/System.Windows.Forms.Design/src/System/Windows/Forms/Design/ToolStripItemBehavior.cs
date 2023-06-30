@@ -636,24 +636,24 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             //Do DragDrop only if currentDropItem has changed.
             if (currentDropItem != selectedItem && designerHost is not null)
             {
-                List<ToolStripItem> components = data.DragComponents;
+                List<ToolStripItem> items = data.DragComponents;
                 ToolStrip parentToolStrip = currentDropItem.GetCurrentParent();
                 int primaryIndex = -1;
                 string transDesc;
                 bool copy = (e.Effect == DragDropEffects.Copy);
-                if (components.Count == 1)
+                if (items.Count == 1)
                 {
-                    string name = TypeDescriptor.GetComponentName(components[0]);
+                    string name = TypeDescriptor.GetComponentName(items[0]);
                     if (name is null || name.Length == 0)
                     {
-                        name = components[0].GetType().Name;
+                        name = items[0].GetType().Name;
                     }
 
                     transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                 }
                 else
                 {
-                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, items.Count);
                 }
 
                 DesignerTransaction designerTransaction = designerHost.CreateTransaction(transDesc);
@@ -672,13 +672,15 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         }
                     }
 
+                    IReadOnlyList<IComponent> components = items;
+
                     // If we are copying, then we want to make a copy of the components we are dragging
                     if (copy)
                     {
                         // Remember the primary selection if we had one
                         if (selectedItem is not null)
                         {
-                            primaryIndex = components.IndexOf(selectedItem);
+                            primaryIndex = items.IndexOf(selectedItem);
                         }
 
                         ToolStripKeyboardHandlingService keyboardHandlingService = GetKeyBoardHandlingService(selectedItem);
@@ -695,7 +697,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
 
                         if (primaryIndex != -1)
                         {
-                            selectedItem = components[primaryIndex];
+                            selectedItem = components[primaryIndex] as ToolStripItem;
                         }
                     }
 
