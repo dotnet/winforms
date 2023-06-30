@@ -27,7 +27,7 @@ public partial class ButtonBase
             }
         }
 
-        internal static string? GetKeyboardShortcut(Control control,bool useMnemonic, Label? previousLabel)
+        internal static string? GetKeyboardShortcut(Control control, bool useMnemonic, Label? previousLabel)
         {
             char mnemonic = (char)0;
 
