@@ -45,7 +45,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     private bool _showItemToolTips;
     private MouseHoverTimer? _mouseHoverTimer;
     private ToolStripItem? _currentlyActiveTooltipItem;
-    private ToolStripItem? _lastActiveTooltipItem;
     private NativeWindow? _dropDownOwnerWindow;
     private byte _mouseDownID;  // NEVER use this directly from another class, 0 should never be returned to another class.
     private ToolStripRenderer? _renderer;
@@ -1945,8 +1944,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 Invalidate(regionRect, true);
                 Update();
             }
-
-            _lastActiveTooltipItem = null;
         }
         finally
         {
@@ -2165,12 +2162,10 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         switch (direction)
         {
             case ArrowDirection.Right:
-                start ??= _lastActiveTooltipItem;
                 return GetNextItemHorizontal(start, forward: true);
             case ArrowDirection.Left:
-                start ??= _lastActiveTooltipItem;
                 bool forward = LastKeyData == Keys.Tab || (TabStop && start is null);
-                return GetNextItemHorizontal(start, forward);
+                return GetNextItemHorizontal(start, forward, ArrowDirection.Left);
             case ArrowDirection.Down:
                 return GetNextItemVertical(start, down: true);
             case ArrowDirection.Up:
@@ -2183,7 +2178,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <remarks>
     ///  Helper function for GetNextItem - do not directly call this.
     /// </remarks>
-    private ToolStripItem? GetNextItemHorizontal(ToolStripItem? start, bool forward)
+    private ToolStripItem? GetNextItemHorizontal(ToolStripItem? start, bool forward, ArrowDirection arrowDirection = ArrowDirection.Right)
     {
         if (DisplayedItems.Count <= 0)
         {
@@ -2196,7 +2191,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         // backward direction entering the toolstrip, it means that the first
         // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
         // is pressed.
-        start ??= GetStartItem(forward, dropDown is not null);
+        start ??= GetStartItem(forward, dropDown is not null, arrowDirection);
 
         int current = DisplayedItems.IndexOf(start);
         if (current == -1)
@@ -2212,14 +2207,21 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         do
         {
-            if (forward)
+            if (forward && arrowDirection == ArrowDirection.Left)
             {
-                current = ++current % count;
+                current = (--current < 0) ? count + current : current;
             }
             else
             {
-                // Provide negative wrap if necessary.
-                current = (--current < 0) ? count + current : current;
+                if (forward)
+                {
+                    current = ++current % count;
+                }
+                else
+                {
+                    // Provide negative wrap if necessary.
+                    current = (--current < 0) ? count + current : current;
+                }
             }
 
             if (dropDown?.OwnerItem is not null && dropDown.OwnerItem.IsInDesignMode)
@@ -2239,8 +2241,14 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         return null;
     }
 
-    private ToolStripItem GetStartItem(bool forward, bool isDropDown)
+    private ToolStripItem GetStartItem(bool forward, bool isDropDown, ArrowDirection arrowDirection = ArrowDirection.Right)
     {
+
+        if (forward && arrowDirection == ArrowDirection.Left)
+        {
+            return DisplayedItems[0];
+        }
+
         if (forward)
         {
             return DisplayedItems[DisplayedItems.Count - 1];
@@ -4222,14 +4230,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         if (KeyboardActive && !Focused && !ContainsFocus)
         {
             KeyboardActive = false;
-        }
-    }
-
-    internal void ResetLastActiveToolTipItem(ToolStripItem? item)
-    {
-        if (item is not null)
-        {
-            _lastActiveTooltipItem = item;
         }
     }
 

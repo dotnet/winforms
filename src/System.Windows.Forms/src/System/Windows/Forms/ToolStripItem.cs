@@ -2611,14 +2611,8 @@ public abstract partial class ToolStripItem : BindableComponent,
                 Push(true);
             }
 
-            //
             OnMouseDown(e);
             RaiseMouseEvent(s_mouseDownEvent, e);
-        }
-
-        if (ParentInternal is not null && !ParentInternal.IsDropDown && Enabled)
-        {
-            ParentInternal.ResetLastActiveToolTipItem(this);
         }
     }
 
@@ -3130,7 +3124,6 @@ public abstract partial class ToolStripItem : BindableComponent,
             if (ParentInternal is not null && !ParentInternal.IsDropDown && Enabled)
             {
                 ParentInternal.RestoreFocusInternal();
-                ParentInternal.ResetLastActiveToolTipItem(this);
             }
 
             return true;
