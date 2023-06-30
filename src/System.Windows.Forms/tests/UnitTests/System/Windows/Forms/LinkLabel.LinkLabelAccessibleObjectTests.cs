@@ -176,4 +176,18 @@ public class LinkLabel_LinkLabelAccessibleObjectTests
         Assert.Equal(linkLabel.Links[^1].AccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
         Assert.False(linkLabel.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void LinkLabel_Releases_UiaProvider()
+    {
+        using LinkLabel linkLabel = new();
+        AccessibleObject accessibleObject = linkLabel.AccessibilityObject;
+
+        Assert.True(linkLabel.IsAccessibilityObjectCreated);
+
+        linkLabel.ReleaseUiaProvider(linkLabel.HWND);
+
+        Assert.False(linkLabel.IsAccessibilityObjectCreated);
+        Assert.True(linkLabel.IsHandleCreated);
+    }
 }
