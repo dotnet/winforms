@@ -705,8 +705,9 @@ Namespace Microsoft.VisualBasic.Logging
                 Dim caseInsensitiveKey As String = fileName.ToUpper(CultureInfo.InvariantCulture)
                 SyncLock s_streams
 
-                    If s_streams.ContainsKey(caseInsensitiveKey) Then
-                        refStream = s_streams(caseInsensitiveKey)
+                    Dim value As ReferencedStream = Nothing
+                    If s_streams.TryGetValue(caseInsensitiveKey, value) Then
+                        refStream = value
                         If Not refStream.IsInUse Then
                             ' This means that the referenced stream has somehow entered an invalid state so remove it
                             Debug.Fail("Referenced stream is in invalid state")

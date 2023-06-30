@@ -7,7 +7,6 @@
 using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.ComponentModel.Design;
 
@@ -69,9 +68,9 @@ public abstract partial class ObjectSelectorEditor : UITypeEditor
         treeView.ShowLines = false;
 
         HWND hwnd = (HWND)treeView.Handle;
-        uint exstyle = (uint)PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.TVM_GETEXTENDEDSTYLE);
+        uint exstyle = (uint)PInvoke.SendMessage(hwnd, PInvoke.TVM_GETEXTENDEDSTYLE);
         exstyle |= PInvoke.TVS_EX_DOUBLEBUFFER | PInvoke.TVS_EX_FADEINOUTEXPANDOS;
-        PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)0, (LPARAM)(uint)exstyle);
+        PInvoke.SendMessage(hwnd, PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)0, (LPARAM)(uint)exstyle);
     }
 
     public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;

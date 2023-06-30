@@ -8,7 +8,6 @@ using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.WindowsAndMessaging;
-using static Interop;
 
 namespace WinformsControlsTest;
 
@@ -34,7 +33,7 @@ public partial class ScalingBeforeChanges : Form
         x = LogicalDpi;
         y = LogicalDpi;
 
-        using User32.GetDcScope dc = new(hwnd);
+        using GetDcScope dc = new(hwnd);
         if (!dc.IsNull)
         {
             x = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
@@ -75,9 +74,9 @@ public partial class ScalingBeforeChanges : Form
     protected override void WndProc(ref Message m)
     {
         base.WndProc(ref m);
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.DPICHANGED:
+            case PInvoke.WM_DPICHANGED:
                 int x = LOWORD(m.WParam);
                 int y = HIWORD(m.WParam);
                 if (x != _deviceDpiX || y != _deviceDpiY)
@@ -118,15 +117,15 @@ public class MyCheckBox : CheckBox
     protected override void WndProc(ref Message m)
     {
         uint dpi;
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.DPICHANGED_BEFOREPARENT:
+            case PInvoke.WM_DPICHANGED_BEFOREPARENT:
                 dpi = PInvoke.GetDpiForWindow(this);
                 Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                 m.Result = (IntPtr)1;
                 break;
-            case User32.WM.DPICHANGED_AFTERPARENT:
+            case PInvoke.WM_DPICHANGED_AFTERPARENT:
                 dpi = PInvoke.GetDpiForWindow(this);
                 Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                 m.Result = (IntPtr)1;

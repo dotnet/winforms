@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -12,10 +14,19 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
 
     private readonly ListView _owningListView;
     private AccessibleObject? _accessibilityObject;
-    private User32.WINEVENTPROC? _winEventProcCallback;
-    private nint _valueChangeHook;
-    private nint _textSelectionChangedHook;
+    private WINEVENTPROC? _winEventProcCallback;
+    private HWINEVENTHOOK _valueChangeHook;
+    private HWINEVENTHOOK _textSelectionChangedHook;
     private bool _winEventHooksInstalled;
+
+    private delegate void WINEVENTPROC(
+        HWINEVENTHOOK hWinEventHook,
+        uint @event,
+        HWND hwnd,
+        int idObject,
+        int idChild,
+        uint idEventThread,
+        uint dwmsEventTime);
 
     public ListViewLabelEditNativeWindow(ListView owningListView)
     {
@@ -25,16 +36,34 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
     public AccessibleObject AccessibilityObject =>
         _accessibilityObject ??= new ListViewLabelEditAccessibleObject(_owningListView, this);
 
-    private void InstallWinEventHooks()
+    private unsafe void InstallWinEventHooks()
     {
         if (!UiaCore.UiaClientsAreListening())
         {
             return;
         }
 
-        _winEventProcCallback = new User32.WINEVENTPROC(WinEventProcCallback);
-        _valueChangeHook = User32.SetWinEventHook((uint)AccessibleEvents.ValueChange, _winEventProcCallback);
-        _textSelectionChangedHook = User32.SetWinEventHook(TextSelectionChanged, _winEventProcCallback);
+        _winEventProcCallback = WinEventProcCallback;
+        var functionPointer = (delegate* unmanaged[Stdcall]<HWINEVENTHOOK, uint, HWND, int, int, uint, uint, void>)
+            (void*)Marshal.GetFunctionPointerForDelegate(_winEventProcCallback);
+
+        _valueChangeHook = PInvoke.SetWinEventHook(
+            (uint)AccessibleEvents.ValueChange,
+            (uint)AccessibleEvents.ValueChange,
+            PInvoke.GetModuleHandle((PCWSTR)null),
+            functionPointer,
+            (uint)Environment.ProcessId,
+            PInvoke.GetCurrentThreadId(),
+            PInvoke.WINEVENT_INCONTEXT);
+
+        _textSelectionChangedHook = PInvoke.SetWinEventHook(
+            TextSelectionChanged,
+            TextSelectionChanged,
+            PInvoke.GetModuleHandle((PCWSTR)null),
+            functionPointer,
+            (uint)Environment.ProcessId,
+            PInvoke.GetCurrentThreadId(),
+            PInvoke.WINEVENT_INCONTEXT);
 
         _winEventHooksInstalled = true;
     }
@@ -67,8 +96,8 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
     {
         if (_winEventHooksInstalled)
         {
-            User32.UnhookWinEvent(_valueChangeHook);
-            User32.UnhookWinEvent(_textSelectionChangedHook);
+            PInvoke.UnhookWinEvent(_valueChangeHook);
+            PInvoke.UnhookWinEvent(_textSelectionChangedHook);
 
             _winEventHooksInstalled = false;
         }
@@ -91,9 +120,9 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
         base.ReleaseHandle();
     }
 
-    private void WinEventProcCallback(nint hWinEventHook, uint eventId, nint hwnd, int idObject, int idChild, uint idEventThread, uint dwmsEventTime)
+    private void WinEventProcCallback(HWINEVENTHOOK hWinEventHook, uint eventId, HWND hwnd, int idObject, int idChild, uint idEventThread, uint dwmsEventTime)
     {
-        if (hwnd != Handle || idObject != User32.OBJID.CLIENT || !IsAccessibilityObjectCreated)
+        if (hwnd != Handle || idObject != (int)OBJECT_IDENTIFIER.OBJID_CLIENT || !IsAccessibilityObjectCreated)
         {
             return;
         }
@@ -125,7 +154,7 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
             return accessibilityObject;
         }
 
-        if (m.LParamInternal == NativeMethods.UiaRootObjectId)
+        if (m.LParamInternal == PInvoke.UiaRootObjectId)
         {
             // If the requested object identifier is UiaRootObjectId,
             // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
@@ -138,7 +167,7 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
             return;
         }
 
-        if ((int)m.LParamInternal != User32.OBJID.CLIENT)
+        if ((int)m.LParamInternal != (int)OBJECT_IDENTIFIER.OBJID_CLIENT)
         {
             DefWndProc(ref m);
 
@@ -159,7 +188,7 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.GETOBJECT:
+            case PInvoke.WM_GETOBJECT:
                 WmGetObject(ref m);
                 return;
             default:

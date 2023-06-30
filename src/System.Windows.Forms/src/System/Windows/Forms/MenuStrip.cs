@@ -177,7 +177,7 @@ public partial class MenuStrip : ToolStrip
                 AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
             }
 
-            AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, User32.OBJID.MENU, -1);
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, (int)OBJECT_IDENTIFIER.OBJID_MENU, -1);
         }
 
         ((EventHandler?)Events[EventMenuActivate])?.Invoke(this, e);
@@ -187,7 +187,7 @@ public partial class MenuStrip : ToolStrip
     {
         if (IsHandleCreated)
         {
-            AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, User32.OBJID.MENU, -1);
+            AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, (int)OBJECT_IDENTIFIER.OBJID_MENU, -1);
 
             if (!TabStop && !DesignMode && IsAccessibilityObjectCreated)
             {
@@ -241,12 +241,12 @@ public partial class MenuStrip : ToolStrip
                 if (Focused || !ContainsFocus)
                 {
                     NotifySelectionChange(item: null);
-                    ToolStrip.s_snapFocusDebug.TraceVerbose("[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
+                    s_snapFocusDebug.TraceVerbose("[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                     ToolStripManager.ModalMenuFilter.ExitMenuMode();
 
                     // Send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
                     HWND ancestor = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
-                    User32.PostMessageW(ancestor, User32.WM.SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, (IntPtr)Keys.Space);
+                    PInvoke.PostMessage(ancestor, PInvoke.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_KEYMENU, (LPARAM)(int)Keys.Space);
                     return true;
                 }
             }
@@ -257,7 +257,7 @@ public partial class MenuStrip : ToolStrip
 
     protected override void WndProc(ref Message m)
     {
-        if (m.Msg == (int)User32.WM.MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
+        if (m.Msg == (int)PInvoke.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
         {
             // call menu activate before we actually take focus.
             Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);

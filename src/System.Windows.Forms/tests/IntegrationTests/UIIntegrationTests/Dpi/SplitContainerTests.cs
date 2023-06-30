@@ -5,7 +5,6 @@
 using System.Drawing;
 using Windows.Win32.UI.HiDpi;
 using Xunit.Abstractions;
-using static Interop;
 
 namespace System.Windows.Forms.UITests.Dpi;
 
@@ -61,8 +60,8 @@ public class SplitContainerTests : ControlTestBase
             form.Controls.Add(splitContainer);
             form.Show();
 
-            DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED_BEFOREPARENT, splitContainer, newDpi);
-            DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+            DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED_BEFOREPARENT, splitContainer, newDpi);
+            DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, newDpi);
 
             Assert.NotEqual(90, splitContainer.SplitterDistance);
             Assert.NotEqual(2, splitContainer.SplitterWidth);

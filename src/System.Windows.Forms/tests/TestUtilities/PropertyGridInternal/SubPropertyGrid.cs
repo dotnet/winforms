@@ -8,13 +8,13 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32;
 
 namespace System.Windows.Forms.PropertyGridInternal.TestUtilities;
 
 public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 {
-    private static readonly User32.WM WM_DELAYEDEXECUTION = User32.RegisterWindowMessageW("WinFormsSubPropertyGridDelayedExecution");
+    private static readonly MessageId WM_DELAYEDEXECUTION = PInvoke.RegisterWindowMessage("WinFormsSubPropertyGridDelayedExecution");
 
     internal PropertyGridView GridView => this.TestAccessor().Dynamic._gridView;
 
@@ -60,7 +60,7 @@ public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 
         try
         {
-            User32.PostMessageW(this, WM_DELAYEDEXECUTION, lParam: GCHandle.ToIntPtr(callbackHandle));
+            PInvoke.PostMessage(this, WM_DELAYEDEXECUTION, lParam: GCHandle.ToIntPtr(callbackHandle));
             GridView.PopupEditor(GridView.TestAccessor().Dynamic._selectedRow);
         }
         finally

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Windows.Forms;
-using static Interop;
 
 namespace System.ComponentModel.Design;
 
@@ -49,7 +48,7 @@ public partial class CollectionEditor
         {
             switch (m.MsgInternal)
             {
-                case User32.WM.KEYDOWN:
+                case PInvoke.WM_KEYDOWN:
                     _lastKeyDown = m;
 
                     // The first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use
@@ -70,13 +69,13 @@ public partial class CollectionEditor
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             // Recreate the keystroke to the newly activated window.
-                            PInvoke.SendMessage(PInvoke.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
+                            PInvoke.SendMessage(PInvoke.GetFocus(), PInvoke.WM_KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
                         }
                     }
 
                     break;
 
-                case User32.WM.CHAR:
+                case PInvoke.WM_CHAR:
 
                     if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                     {
@@ -98,8 +97,8 @@ public partial class CollectionEditor
                     if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                     {
                         HWND hwnd = PInvoke.GetFocus();
-                        PInvoke.SendMessage(hwnd, User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
-                        PInvoke.SendMessage(hwnd, User32.WM.CHAR, m.WParamInternal, m.LParamInternal);
+                        PInvoke.SendMessage(hwnd, PInvoke.WM_KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
+                        PInvoke.SendMessage(hwnd, PInvoke.WM_CHAR, m.WParamInternal, m.LParamInternal);
                         return;
                     }
 

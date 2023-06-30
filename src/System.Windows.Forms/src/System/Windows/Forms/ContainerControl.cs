@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -639,7 +638,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// <summary>
     ///  Recursively enables required scaling from the given control
     /// </summary>
-    private void EnableRequiredScaling(Control start, bool enable)
+    private static void EnableRequiredScaling(Control start, bool enable)
     {
         start.RequiredScalingEnabled = enable;
         foreach (Control c in start.Controls)
@@ -1059,7 +1058,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// <summary>
     ///  Recursively resumes all layout.
     /// </summary>
-    internal void ResumeAllLayout(Control start, bool performLayout)
+    internal static void ResumeAllLayout(Control start, bool performLayout)
     {
         ControlCollection controlsCollection = start.Controls;
         // This may have changed the sizes of our children.
@@ -1077,7 +1076,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// <summary>
     ///  Recursively suspends all layout.
     /// </summary>
-    internal void SuspendAllLayout(Control start)
+    internal static void SuspendAllLayout(Control start)
     {
         start.SuspendLayout();
         CommonProperties.xClearPreferredSizeCache(start);
@@ -2115,9 +2114,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 WmSetFocus(ref m);
                 break;
             default:

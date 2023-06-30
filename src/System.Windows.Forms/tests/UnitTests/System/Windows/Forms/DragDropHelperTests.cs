@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.ComponentModel;
 using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
-using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests;
@@ -83,7 +86,7 @@ public class DragDropHelperTests
     {
         FORMATETC formatEtc = new()
         {
-            cfFormat = (short)RegisterClipboardFormatW(format),
+            cfFormat = (short)PInvoke.RegisterClipboardFormat(format),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,

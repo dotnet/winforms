@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -82,19 +81,19 @@ public partial class Control
             // regardless of what window target we are using.  These
             // messages cause other messages or state transitions
             // to occur within control.
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.MOUSELEAVE:
+                case PInvoke.WM_MOUSELEAVE:
                     _control.UnhookMouseEvent();
                     break;
 
-                case User32.WM.MOUSEMOVE:
+                case PInvoke.WM_MOUSEMOVE:
                     if (!_control.GetState(States.TrackingMouseEvent))
                     {
                         _control.HookMouseEvent();
                         if (!_control.GetState(States.MouseEnterPending))
                         {
-                            PInvoke.SendMessage(_control, User32.RegisteredMessage.WM_MOUSEENTER);
+                            PInvoke.SendMessage(_control, RegisteredMessage.WM_MOUSEENTER);
                         }
                         else
                         {
@@ -104,7 +103,7 @@ public partial class Control
 
                     break;
 
-                case User32.WM.MOUSEWHEEL:
+                case PInvoke.WM_MOUSEWHEEL:
                     // TrackMouseEvent's mousehover implementation doesn't watch the wheel
                     // correctly...
                     _control.ResetMouseEventArgs();

@@ -25,21 +25,21 @@ internal static class ApplicationConfigurationInitializeBuilder
             const string qualifier = "global::System.Windows.Forms.Application.";
             if (projectConfig.EnableVisualStyles)
             {
-                code.AppendLine($"{indent}{qualifier}EnableVisualStyles();");
+                code.Append($"{indent}{qualifier}EnableVisualStyles();\r\n");
             }
 
-            code.AppendLine($"{indent}{qualifier}SetCompatibleTextRenderingDefault({projectConfig.UseCompatibleTextRendering.ToString().ToLowerInvariant()});");
+            code.Append($"{indent}{qualifier}SetCompatibleTextRenderingDefault({projectConfig.UseCompatibleTextRendering.ToString().ToLowerInvariant()});\r\n");
 
-            code.AppendLine($"{indent}{qualifier}SetHighDpiMode(HighDpiMode.{projectConfig.HighDpiMode});");
+            code.Append($"{indent}{qualifier}SetHighDpiMode(HighDpiMode.{projectConfig.HighDpiMode});\r\n");
 
             // Note: we need to set the font _after_ we set the DPI scaling, as it affects how we scale the font.
             if (!string.IsNullOrWhiteSpace(defaultFont))
             {
-                code.AppendLine($"{indent}{qualifier}SetDefaultFont({defaultFont});");
+                code.Append($"{indent}{qualifier}SetDefaultFont({defaultFont});\r\n");
             }
 
             // Don't append line as we don't need the trailing \r\n!
-            code.Remove(code.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+            code.Remove(code.Length - "\r\n".Length, "\r\n".Length);
 
             return code.ToString();
         }

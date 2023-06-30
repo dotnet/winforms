@@ -7,7 +7,6 @@
 using System.Collections;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -278,8 +277,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         {
             switch (m.MsgInternal)
             {
-                case User32.WM.NCHITTEST:
-                    m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
+                case PInvoke.WM_NCHITTEST:
+                    m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
                     break;
                 default:
                     base.WndProc(ref m);

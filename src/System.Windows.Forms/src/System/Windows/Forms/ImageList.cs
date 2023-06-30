@@ -23,7 +23,7 @@ namespace System.Windows.Forms;
 [DesignerSerializer($"System.Windows.Forms.Design.ImageListCodeDomSerializer, {AssemblyRef.SystemDesign}",
     $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
 [SRDescription(nameof(SR.DescriptionImageList))]
-public sealed partial class ImageList : Component, IHandle, IHandle<HIMAGELIST>
+public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 {
     private static readonly Color s_fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
     private static readonly Size s_defaultImageSize = new Size(16, 16);

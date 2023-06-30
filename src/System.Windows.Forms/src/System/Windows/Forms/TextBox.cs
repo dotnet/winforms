@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -346,7 +345,7 @@ public partial class TextBox : TextBoxBase
                 CreateHandle();
             }
 
-            return (char)PInvoke.SendMessage(this, (WM)PInvoke.EM_GETPASSWORDCHAR);
+            return (char)PInvoke.SendMessage(this, PInvoke.EM_GETPASSWORDCHAR);
         }
         set
         {
@@ -358,7 +357,7 @@ public partial class TextBox : TextBoxBase
                     if (PasswordChar != value)
                     {
                         // Set the password mode.
-                        PInvoke.SendMessage(this, (WM)PInvoke.EM_SETPASSWORDCHAR, (WPARAM)value);
+                        PInvoke.SendMessage(this, PInvoke.EM_SETPASSWORDCHAR, (WPARAM)value);
 
                         // Disable IME if setting the control to password mode.
                         VerifyImeRestrictedModeChanged();
@@ -618,7 +617,7 @@ public partial class TextBox : TextBoxBase
         {
             if (!_useSystemPasswordChar)
             {
-                PInvoke.SendMessage(this, (WM)PInvoke.EM_SETPASSWORDCHAR, (WPARAM)_passwordChar);
+                PInvoke.SendMessage(this, PInvoke.EM_SETPASSWORDCHAR, (WPARAM)_passwordChar);
             }
         }
 
@@ -832,7 +831,7 @@ public partial class TextBox : TextBoxBase
     private void WmPrint(ref Message m)
     {
         base.WndProc(ref m);
-        if (((PRF)(nint)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
+        if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles
             && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
@@ -925,10 +924,10 @@ public partial class TextBox : TextBoxBase
 
     protected override unsafe void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
             // Work around a very obscure Windows issue.
-            case User32.WM.LBUTTONDOWN:
+            case PInvoke.WM_LBUTTONDOWN:
                 MouseButtons realState = MouseButtons;
                 bool wasValidationCancelled = ValidationCancelled;
                 Focus();
@@ -940,7 +939,7 @@ public partial class TextBox : TextBoxBase
 
                 break;
 
-            case User32.WM.PAINT:
+            case PInvoke.WM_PAINT:
                 {
                     // The native control tracks its own state, so it is get into a state Where either the native control invalidates
                     // itself, and thus blastsover the placeholder text
@@ -977,7 +976,7 @@ public partial class TextBox : TextBoxBase
 
                 break;
 
-            case User32.WM.PRINT:
+            case PInvoke.WM_PRINT:
                 WmPrint(ref m);
                 break;
 

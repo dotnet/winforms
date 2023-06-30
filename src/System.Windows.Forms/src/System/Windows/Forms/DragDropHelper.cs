@@ -12,7 +12,6 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
 using static Interop.Shell32;
-using static Interop.User32;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms;
@@ -157,7 +156,7 @@ internal static class DragDropHelper
         {
             ComTypes.FORMATETC formatEtc = new()
             {
-                cfFormat = (short)RegisterClipboardFormatW(format),
+                cfFormat = (short)PInvoke.RegisterClipboardFormat(format),
                 dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 ptd = IntPtr.Zero,
@@ -261,7 +260,7 @@ internal static class DragDropHelper
 
         ComTypes.FORMATETC formatEtc = new()
         {
-            cfFormat = (short)RegisterClipboardFormatW(format),
+            cfFormat = (short)PInvoke.RegisterClipboardFormat(format),
             dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,
@@ -419,7 +418,7 @@ internal static class DragDropHelper
 
         ComTypes.FORMATETC formatEtc = new()
         {
-            cfFormat = (short)RegisterClipboardFormatW(CF_DROPDESCRIPTION),
+            cfFormat = (short)PInvoke.RegisterClipboardFormat(CF_DROPDESCRIPTION),
             dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,

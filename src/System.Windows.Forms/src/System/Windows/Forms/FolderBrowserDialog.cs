@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using static Windows.Win32.UI.Shell.FILEOPENDIALOGOPTIONS;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -474,13 +473,13 @@ public sealed class FolderBrowserDialog : CommonDialog
                 if (instance._initialDirectory.Length != 0)
                 {
                     // Try to expand the folder specified by initialDir
-                    PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.BFFM_SETEXPANDED, (WPARAM)(BOOL)true, instance._initialDirectory);
+                    PInvoke.SendMessage(hwnd, PInvoke.BFFM_SETEXPANDED, (WPARAM)(BOOL)true, instance._initialDirectory);
                 }
 
                 if (instance._selectedPath.Length != 0)
                 {
                     // Try to select the folder specified by selectedPath
-                    PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.BFFM_SETSELECTIONW, (WPARAM)(BOOL)true, instance._selectedPath);
+                    PInvoke.SendMessage(hwnd, PInvoke.BFFM_SETSELECTIONW, (WPARAM)(BOOL)true, instance._selectedPath);
                 }
 
                 break;
@@ -492,7 +491,7 @@ public sealed class FolderBrowserDialog : CommonDialog
                     // Try to retrieve the path from the IDList
                     char* buffer = stackalloc char[PInvoke.MAX_PATH + 1];
                     bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, (PWSTR)buffer);
-                    PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
+                    PInvoke.SendMessage(hwnd, PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                 }
 
                 break;

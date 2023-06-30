@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System;
 
@@ -216,11 +215,11 @@ internal class WindowClass
         }
     }
 
-    protected virtual LRESULT WNDPROC(HWND hWnd, User32.WM msg, WPARAM wParam, LPARAM lParam)
+    protected virtual LRESULT WNDPROC(HWND hWnd, MessageId msg, WPARAM wParam, LPARAM lParam)
     {
         switch (msg)
         {
-            case User32.WM.DESTROY:
+            case PInvoke.WM_DESTROY:
                 if (hWnd == MainWindow)
                 {
                     PInvoke.PostQuitMessage(0);

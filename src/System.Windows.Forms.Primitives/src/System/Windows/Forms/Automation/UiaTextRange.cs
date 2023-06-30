@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Automation;
@@ -778,7 +777,7 @@ internal class UiaTextRange : ITextRangeProvider
     {
         // Note: this assumes integral point sizes. violating this assumption would confuse the user
         // because they set something to 7 point but reports that it is, say 7.2 point, due to the rounding.
-        using var dc = User32.GetDcScope.ScreenDC;
+        using var dc = GetDcScope.ScreenDC;
         int lpy = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
         return Math.Round((double)(-logfont.lfHeight) * 72 / lpy);
     }

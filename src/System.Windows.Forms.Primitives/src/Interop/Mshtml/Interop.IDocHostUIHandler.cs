@@ -73,7 +73,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetDropTarget(
                 IDropTarget.Interface pDropTarget,
-                out IDropTarget.Interface ppDropTarget);
+                out IDropTarget.Interface? ppDropTarget);
 
             [PreserveSig]
             HRESULT GetExternal(
@@ -83,12 +83,12 @@ internal partial class Interop
             HRESULT TranslateUrl(
                 uint dwTranslate,
                 [MarshalAs(UnmanagedType.LPWStr)] string strURLIn,
-                [MarshalAs(UnmanagedType.LPWStr)] out string pstrURLOut);
+                [MarshalAs(UnmanagedType.LPWStr)] out string? pstrURLOut);
 
             [PreserveSig]
             HRESULT FilterDataObject(
                 IDataObject pDO,
-                out IDataObject ppDORet);
+                out IDataObject? ppDORet);
         }
     }
 }

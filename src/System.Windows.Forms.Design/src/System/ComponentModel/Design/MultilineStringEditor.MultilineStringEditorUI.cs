@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.ComponentModel.Design;
 
@@ -179,7 +178,7 @@ public sealed partial class MultilineStringEditor
         {
             get
             {
-                using var hdc = User32.GetDcScope.ScreenDC;
+                using var hdc = GetDcScope.ScreenDC;
                 using PInvoke.ObjectScope font = new(Font.ToHFONT());
                 using PInvoke.SelectObjectScope fontSelection = new(hdc, font);
 
@@ -403,9 +402,9 @@ public sealed partial class MultilineStringEditor
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.PAINT:
+                case PInvoke.WM_PAINT:
                     {
                         if (ShouldShowWatermark)
                         {

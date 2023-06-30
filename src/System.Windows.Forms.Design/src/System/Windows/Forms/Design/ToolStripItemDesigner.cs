@@ -9,9 +9,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -962,7 +960,11 @@ internal class ToolStripItemDesigner : ComponentDesigner
                 if (tool is not null)
                 {
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, tool = {tool}");
-                    User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
+                    PInvoke.NotifyWinEvent(
+                        (uint)AccessibleEvents.SelectionAdd,
+                        owner,
+                        (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                        focusIndex + 1);
                 }
 
                 if (currentSelection == ToolStripItem)
@@ -970,7 +972,11 @@ internal class ToolStripItemDesigner : ComponentDesigner
                     acc.AddState(AccessibleStates.Focused);
                     if (tool is not null)
                     {
-                        User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
+                        PInvoke.NotifyWinEvent(
+                            (uint)AccessibleEvents.Focus,
+                            owner,
+                            (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                            focusIndex + 1);
                     }
                 }
             }
@@ -1138,7 +1144,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     // Recursive function to add all the menuItems to the SerializationStore during Morphing..
-    private void SerializeDropDownItems(ToolStripDropDownItem parent, ref SerializationStore _serializedDataForDropDownItems, ComponentSerializationService _serializationService)
+    private static void SerializeDropDownItems(ToolStripDropDownItem parent, ref SerializationStore _serializedDataForDropDownItems, ComponentSerializationService _serializationService)
     {
         foreach (ToolStripItem item in parent.DropDownItems)
         {

@@ -320,7 +320,7 @@ internal partial class PropertyDescriptorGridEntry
 
             return Parent is PropertyGridView.PropertyGridViewAccessibleObject propertyGridViewAccessibleObject
                 && propertyGridViewAccessibleObject.TryGetOwnerAs(out PropertyGridView? gridViewOwner)
-                    ? (UiaCore.IRawElementProviderFragment?)propertyGridViewAccessibleObject.GetNextGridEntry(
+                    ? (UiaCore.IRawElementProviderFragment?)PropertyGridView.PropertyGridViewAccessibleObject.GetNextGridEntry(
                         owner,
                         gridViewOwner.TopLevelGridEntries,
                         out _)
@@ -341,7 +341,7 @@ internal partial class PropertyDescriptorGridEntry
 
             return Parent is PropertyGridView.PropertyGridViewAccessibleObject propertyGridViewAccessibleObject
                 && propertyGridViewAccessibleObject.TryGetOwnerAs(out PropertyGridView? gridViewOwner)
-                    ? propertyGridViewAccessibleObject.GetPreviousGridEntry(owner, gridViewOwner.TopLevelGridEntries, out _)
+                    ? PropertyGridView.PropertyGridViewAccessibleObject.GetPreviousGridEntry(owner, gridViewOwner.TopLevelGridEntries, out _)
                     : null;
         }
 

@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -2055,13 +2054,13 @@ public class GroupBoxTests
 
     public static IEnumerable<object[]> WndProc_EraseBkgnd_TestData()
     {
-        yield return new object[] { User32.WM.ERASEBKGND };
-        yield return new object[] { User32.WM.PRINTCLIENT };
+        yield return new object[] { PInvoke.WM_ERASEBKGND };
+        yield return new object[] { PInvoke.WM_PRINTCLIENT };
     }
 
     [WinFormsTheory]
-    [InlineData((int)User32.WM.ERASEBKGND)]
-    [InlineData((int)User32.WM.PRINTCLIENT)]
+    [InlineData((int)PInvoke.WM_ERASEBKGND)]
+    [InlineData((int)PInvoke.WM_PRINTCLIENT)]
     public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawWithoutHandle_Success(int msg)
     {
         using var control = new SubGroupBox
@@ -2090,8 +2089,8 @@ public class GroupBoxTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)User32.WM.ERASEBKGND)]
-    [InlineData((int)User32.WM.PRINTCLIENT)]
+    [InlineData((int)PInvoke.WM_ERASEBKGND)]
+    [InlineData((int)PInvoke.WM_PRINTCLIENT)]
     public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawWithHandle_Success(int msg)
     {
         using var control = new SubGroupBox
@@ -2131,8 +2130,8 @@ public class GroupBoxTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)User32.WM.ERASEBKGND)]
-    [InlineData((int)User32.WM.PRINTCLIENT)]
+    [InlineData((int)PInvoke.WM_ERASEBKGND)]
+    [InlineData((int)PInvoke.WM_PRINTCLIENT)]
     public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawZeroWParam_DoesNotThrow(int msg)
     {
         using var control = new SubGroupBox
@@ -2176,7 +2175,7 @@ public class GroupBoxTests
         {
             var m = new Message
             {
-                Msg = (int)User32.WM.ERASEBKGND,
+                Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
                 Result = (IntPtr)250
             };
@@ -2221,7 +2220,7 @@ public class GroupBoxTests
         {
             var m = new Message
             {
-                Msg = (int)User32.WM.PRINTCLIENT,
+                Msg = (int)PInvoke.WM_PRINTCLIENT,
                 WParam = hdc,
                 Result = (IntPtr)250
             };
@@ -2264,7 +2263,7 @@ public class GroupBoxTests
         };
         var m = new Message
         {
-            Msg = (int)User32.WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);

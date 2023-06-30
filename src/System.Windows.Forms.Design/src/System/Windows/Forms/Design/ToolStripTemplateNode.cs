@@ -9,7 +9,6 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -892,9 +891,9 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 if (_designerHost is not null)
                 {
                     baseComponent = (Control)_designerHost.RootComponent;
-                    PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
+                    PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
                     tb.Focus();
-                    PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
+                    PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 }
             }
             finally
@@ -969,9 +968,9 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             && _designerHost is not null)
         {
             Control baseComponent = (Control)_designerHost.RootComponent;
-            PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
+            PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
             designerFrame.Focus();
-            PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
+            PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
         }
     }
 
@@ -1546,7 +1545,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         {
             switch (m.MsgInternal)
             {
-                case User32.WM.KILLFOCUS:
+                case PInvoke.WM_KILLFOCUS:
                     base.WndProc(ref m);
                     HWND focusedWindow = (HWND)m.WParamInternal;
                     if (!IsParentWindow(focusedWindow))
@@ -1559,7 +1558,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
                 // 2.Select the text of the item and right click on it
                 // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph  behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no text to work with.  Thus need to block glyph behaviors while the context menu is displayed.
-                case User32.WM.CONTEXTMENU:
+                case PInvoke.WM_CONTEXTMENU:
                     owner.IsSystemContextMenuDisplayed = true;
                     base.WndProc(ref m);
                     owner.IsSystemContextMenuDisplayed = false;
@@ -1705,9 +1704,9 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.GETOBJECT:
+                case PInvoke.WM_GETOBJECT:
                     if (owner._addItemButton is null)
                     {
                         // only adding patterns to _miniToolStrip associated with MenuStrip or ContextMenu

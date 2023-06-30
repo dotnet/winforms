@@ -27,9 +27,9 @@ public static partial class CSharpIncrementalSourceGeneratorVerifier<TIncrementa
             });
         }
 
-        protected override IEnumerable<ISourceGenerator> GetSourceGenerators()
+        protected override IEnumerable<Type> GetSourceGenerators()
         {
-            yield return new TIncrementalGenerator().AsSourceGenerator();
+            yield return typeof(TIncrementalGenerator);
         }
 
         protected override ParseOptions CreateParseOptions()

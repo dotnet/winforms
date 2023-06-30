@@ -6,9 +6,7 @@ using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 using static Interop.ComCtl32;
-using static Interop.User32;
 
 namespace System.Windows.Forms.UITests;
 
@@ -77,7 +75,7 @@ public class MonthCalendarTests : ControlTestBase
                 stSelEnd = date,
             };
 
-            PInvoke.SendMessage(calendar, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
+            PInvoke.SendMessage(calendar, MessageId.WM_REFLECT_NOTIFY, 0, ref lParam);
         });
     }
 
@@ -170,7 +168,7 @@ public class MonthCalendarTests : ControlTestBase
                 dwFlags = MCGRIDINFO_FLAGS.MCGIF_RECT,
             };
 
-            Assert.NotEqual(default, PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, default, ref result));
+            Assert.NotEqual(default, PInvoke.SendMessage(control, PInvoke.MCM_GETCALENDARGRIDINFO, default, ref result));
             return result.rc;
         }
     }

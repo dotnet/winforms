@@ -7,7 +7,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.ComponentModel.Design;
 
@@ -329,7 +328,7 @@ internal partial class DesignerActionUI
 
         private void WmActivate(ref Message m)
         {
-            if ((User32.WA)(nint)m.WParamInternal == User32.WA.INACTIVE)
+            if ((nint)m.WParamInternal == PInvoke.WA_INACTIVE)
             {
                 HWND hwndActivating = (HWND)m.LParamInternal;
                 if (WindowOwnsWindow((HWND)Handle, hwndActivating))
@@ -353,9 +352,9 @@ internal partial class DesignerActionUI
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m.MsgInternal)
             {
-                case User32.WM.ACTIVATE:
+                case PInvoke.WM_ACTIVATE:
                     WmActivate(ref m);
                     return;
             }

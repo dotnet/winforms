@@ -7,7 +7,6 @@
 using System.Collections.Concurrent;
 using System.Drawing;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -799,7 +798,7 @@ public static partial class ToolStripManager
             return ToolStripManager.ProcessShortcut(ref m, keyData);
         }
 
-        if (m.Msg == (int)User32.WM.SYSKEYDOWN)
+        if (m.Msg == (int)PInvoke.WM_SYSKEYDOWN)
         {
             Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [{keyData}]");
             ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);

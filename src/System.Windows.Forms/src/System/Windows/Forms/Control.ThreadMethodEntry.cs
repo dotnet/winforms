@@ -14,7 +14,7 @@ public partial class Control
         internal Control _caller;
         internal Control _marshaler;
         internal Delegate? _method;
-        internal object[]? _args;
+        internal object?[]? _args;
         internal object? _retVal;
         internal Exception? _exception;
         internal bool _synchronous;
@@ -29,7 +29,13 @@ public partial class Control
         // This overrides the sync context in the execution context of the caller thread.
         internal SynchronizationContext? _syncContext;
 
-        internal ThreadMethodEntry(Control caller, Control marshaler, Delegate? method, object[]? args, bool synchronous, ExecutionContext? executionContext)
+        internal ThreadMethodEntry(
+            Control caller,
+            Control marshaler,
+            Delegate? method,
+            object?[]? args,
+            bool synchronous,
+            ExecutionContext? executionContext)
         {
             _caller = caller;
             _marshaler = marshaler;

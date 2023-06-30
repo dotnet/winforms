@@ -30,5 +30,13 @@ public partial class ToolStripOverflow
                     => owner.OwnerItem?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction),
             };
+
+        internal override object? GetPropertyValue(UIA propertyID)
+            => propertyID switch
+            {
+                UIA.IsControlElementPropertyId => true,
+                UIA.IsContentElementPropertyId => false,
+                _ => base.GetPropertyValue(propertyID)
+            };
     }
 }

@@ -358,7 +358,7 @@ public partial class Button : ButtonBase, IButtonControl
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.REFLECT_COMMAND:
+            case MessageId.WM_REFLECT_COMMAND:
                 if (m.WParamInternal.HIWORD == PInvoke.BN_CLICKED)
                 {
                     if (!ValidationCancelled)
@@ -368,7 +368,7 @@ public partial class Button : ButtonBase, IButtonControl
                 }
 
                 break;
-            case User32.WM.ERASEBKGND:
+            case PInvoke.WM_ERASEBKGND:
                 DefWndProc(ref m);
                 break;
             default:

@@ -18,7 +18,6 @@ using System.Windows.Forms.PropertyGridInternal;
 using Microsoft.Win32;
 using Windows.Win32.System.DataExchange;
 using Windows.Win32.System.Ole;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -606,7 +605,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             {
                 if (_paintFrozen++ == 0)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
                 }
             }
 
@@ -619,7 +618,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 if (--_paintFrozen == 0)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                     Invalidate(true);
                 }
             }
@@ -3656,12 +3655,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
 
         int hashCode = ActiveDesigner.GetHashCode();
-        if (!_designerSelections.ContainsKey(hashCode))
+        if (!_designerSelections.TryGetValue(hashCode, out int value))
         {
             return false;
         }
 
-        selectedTabIndex = _designerSelections[hashCode];
+        selectedTabIndex = value;
         return true;
     }
 
@@ -4106,9 +4105,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
         string tabName = $"{_selectedTab.Tab.TabName}{_propertySortValue}";
 
-        if (_viewTabProperties is not null && _viewTabProperties.ContainsKey(tabName))
+        if (_viewTabProperties is not null && _viewTabProperties.TryGetValue(tabName, out GridEntry value))
         {
-            _rootEntry = _viewTabProperties[tabName];
+            _rootEntry = value;
             _rootEntry?.Refresh();
         }
         else
@@ -4217,7 +4216,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.UNDO:
+            case PInvoke.WM_UNDO:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoUndoCommand();
@@ -4228,7 +4227,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 return;
-            case User32.WM.CUT:
+            case PInvoke.WM_CUT:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoCutCommand();
@@ -4240,7 +4239,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 return;
 
-            case User32.WM.COPY:
+            case PInvoke.WM_COPY:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoCopyCommand();
@@ -4252,7 +4251,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 return;
 
-            case User32.WM.PASTE:
+            case PInvoke.WM_PASTE:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoPasteCommand();
@@ -4264,7 +4263,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 return;
 
-            case User32.WM.COPYDATA:
+            case PInvoke.WM_COPYDATA:
                 var cds = (COPYDATASTRUCT*)(nint)m.LParamInternal;
 
                 if (cds is not null && cds->lpData is not null)
@@ -4275,7 +4274,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 m.ResultInternal = (LRESULT)1;
                 return;
-            case (User32.WM)AutomationMessages.PGM_GETBUTTONCOUNT:
+            case (uint)AutomationMessages.PGM_GETBUTTONCOUNT:
                 if (_toolStrip is not null)
                 {
                     m.ResultInternal = (LRESULT)_toolStrip.Items.Count;
@@ -4283,7 +4282,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 break;
-            case (User32.WM)AutomationMessages.PGM_GETBUTTONSTATE:
+            case (uint)AutomationMessages.PGM_GETBUTTONSTATE:
                 if (_toolStrip is not null)
                 {
                     int index = (int)m.WParamInternal;
@@ -4303,7 +4302,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 break;
-            case (User32.WM)AutomationMessages.PGM_SETBUTTONSTATE:
+            case (uint)AutomationMessages.PGM_SETBUTTONSTATE:
                 if (_toolStrip is not null)
                 {
                     int index = (int)m.WParamInternal;
@@ -4336,8 +4335,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 break;
 
-            case (User32.WM)AutomationMessages.PGM_GETBUTTONTEXT:
-            case (User32.WM)AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
+            case (uint)AutomationMessages.PGM_GETBUTTONTEXT:
+            case (uint)AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
                 if (_toolStrip is not null)
                 {
                     int index = (int)m.WParamInternal;
@@ -4362,7 +4361,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 break;
 
-            case (User32.WM)AutomationMessages.PGM_GETTESTINGINFO:
+            case (uint)AutomationMessages.PGM_GETTESTINGINFO:
                 {
                     // Get "testing info" string for Nth grid entry (or active entry if N < 0)
                     string testingInfo = _gridView.GetTestingInfo((int)m.WParamInternal);
@@ -4370,7 +4369,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                     return;
                 }
 
-            case (User32.WM)AutomationMessages.PGM_GETROWCOORDS:
+            case (uint)AutomationMessages.PGM_GETROWCOORDS:
                 if (m.Msg == _copyDataMessage)
                 {
                     m.ResultInternal = (LRESULT)_gridView.GetPropertyLocation(
@@ -4381,11 +4380,11 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 break;
-            case (User32.WM)AutomationMessages.PGM_GETSELECTEDROW:
-            case (User32.WM)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
+            case (uint)AutomationMessages.PGM_GETSELECTEDROW:
+            case (uint)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
                 m.ResultInternal = (LRESULT)PInvoke.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 return;
-            case (User32.WM)AutomationMessages.PGM_SETSELECTEDTAB:
+            case (uint)AutomationMessages.PGM_SETSELECTEDTAB:
                 if (m.LParamInternal != 0)
                 {
                     string tabTypeName = AutomationMessages.ReadAutomationText(m.LParamInternal);

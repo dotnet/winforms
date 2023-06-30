@@ -912,7 +912,7 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
         <source>Horizontal Splitter Orientation.</source>
-        <target state="new">Horizontal Splitter Orientation.</target>
+        <target state="translated">水平的分隔器方向。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
@@ -922,7 +922,7 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutVerticalOrientation">
         <source>Vertical Splitter Orientation.</source>
-        <target state="new">Vertical Splitter Orientation.</target>
+        <target state="translated">垂直的分隔器方向。</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">

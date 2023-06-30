@@ -8,8 +8,7 @@ using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using ComIMessageFilter = Windows.Win32.Media.Audio.IMessageFilter;
 using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
-using static Interop;
-using static Interop.Mso;
+using Microsoft.Office;
 using System.Windows.Forms.Primitives;
 using System.Runtime.ExceptionServices;
 
@@ -31,7 +30,7 @@ public sealed partial class Application
         private const int STATE_FILTERSNAPSHOTVALID = 0x00000010;
         private const int STATE_TRACKINGCOMPONENT = 0x00000020;
 
-        private static readonly UIntPtr s_invalidId = (UIntPtr)0xFFFFFFFF;
+        private static readonly nuint s_invalidId = unchecked((nuint)(-1));
 
         private static readonly Dictionary<uint, ThreadContext> s_contextHash = new();
 
@@ -63,7 +62,7 @@ public sealed partial class Application
         private int _modalCount;
 
         // Used for correct restoration of focus after modality
-        private WeakReference? _activatingControlRef;
+        private WeakReference<Control>? _activatingControlRef;
 
         // IMsoComponentManager stuff
         private IMsoComponentManager? _componentManager;
@@ -71,7 +70,7 @@ public sealed partial class Application
         private bool _fetchingComponentManager;
 
         // IMsoComponent stuff
-        private UIntPtr _componentID = s_invalidId;
+        private nuint _componentID = s_invalidId;
         private Form? _currentForm;
         private ThreadWindows? _threadWindows;
         private int _disposeCount;   // To make sure that we don't allow
@@ -198,8 +197,8 @@ public sealed partial class Application
 
                     // Check the service provider for the service that provides IMsoComponentManager
                     using ComScope<IUnknown> serviceHandle = new(null);
-                    Guid sid = new(ComponentIds.SID_SMsoComponentManager);
-                    Guid iid = new(ComponentIds.IID_IMsoComponentManager);
+                    Guid sid = new(MsoComponentIds.SID_SMsoComponentManager);
+                    Guid iid = new(MsoComponentIds.IID_IMsoComponentManager);
 
                     if (serviceProvider.Value->QueryService(&sid, &iid, serviceHandle).Failed || serviceHandle.IsNull)
                     {
@@ -226,7 +225,7 @@ public sealed partial class Application
                 void RegisterComponentManager()
                 {
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Registering MSO component with the component manager");
-                    MSOCRINFO info = new MSOCRINFO
+                    MSOCRINFO info = new()
                     {
                         cbSize = (uint)sizeof(MSOCRINFO),
                         uIdleTimeInterval = 0,
@@ -256,8 +255,7 @@ public sealed partial class Application
             }
         }
 
-        internal bool CustomThreadExceptionHandlerAttached
-            => _threadExceptionHandler is not null;
+        internal bool CustomThreadExceptionHandlerAttached => _threadExceptionHandler is not null;
 
         /// <summary>
         ///  Retrieves the actual parking form.  This will demand create the parking window
@@ -326,26 +324,8 @@ public sealed partial class Application
 
         internal Control? ActivatingControl
         {
-            get
-            {
-                if ((_activatingControlRef is not null) && (_activatingControlRef.IsAlive))
-                {
-                    return _activatingControlRef.Target as Control;
-                }
-
-                return null;
-            }
-            set
-            {
-                if (value is not null)
-                {
-                    _activatingControlRef = new WeakReference(value);
-                }
-                else
-                {
-                    _activatingControlRef = null;
-                }
-            }
+            get => _activatingControlRef?.TryGetTarget(out Control? target) ?? false ? target : null;
+            set => _activatingControlRef = value is null ? null : new(value);
         }
 
         /// <summary>
@@ -382,23 +362,22 @@ public sealed partial class Application
         ///  Allows you to setup a message filter for the application's message pump.  This
         ///  installs the filter on the current thread.
         /// </summary>
-        internal void AddMessageFilter(IMessageFilter? f)
+        internal void AddMessageFilter(IMessageFilter? filter)
         {
-            _messageFilters ??= new List<IMessageFilter>();
+            _messageFilters ??= new();
+            _messageFilterSnapshot ??= new();
 
-            _messageFilterSnapshot ??= new List<IMessageFilter>();
-
-            if (f is not null)
+            if (filter is not null)
             {
                 SetState(STATE_FILTERSNAPSHOTVALID, false);
-                if (_messageFilters.Count > 0 && f is IMessageModifyAndFilter)
+                if (_messageFilters.Count > 0 && filter is IMessageModifyAndFilter)
                 {
                     // insert the IMessageModifyAndFilter filters first
-                    _messageFilters.Insert(0, f);
+                    _messageFilters.Insert(0, filter);
                 }
                 else
                 {
-                    _messageFilters.Add(f);
+                    _messageFilters.Add(filter);
                 }
             }
         }
@@ -423,7 +402,7 @@ public sealed partial class Application
             }
 
             // This will initialize the ThreadWindows with proper flags.
-            DisableWindowsForModalLoop(false, context); // onlyWinForms = false
+            DisableWindowsForModalLoop(onlyWinForms: false, context);
 
             _modalCount++;
 
@@ -461,80 +440,81 @@ public sealed partial class Application
                 try
                 {
                     // Make sure that we are not reentrant
-                    if (_disposeCount++ == 0)
+                    if (_disposeCount++ != 0)
                     {
-                        // Unravel our message loop.  this will marshal us over to
-                        // the right thread, making the dispose() method async.
-                        if (_messageLoopCount > 0 && postQuit)
+                        return;
+                    }
+
+                    // Unravel our message loop. This will marshal us over to the right thread, making the dispose() method async.
+                    if (_messageLoopCount > 0 && postQuit)
+                    {
+                        PostQuit();
+                    }
+                    else
+                    {
+                        bool ourThread = PInvoke.GetCurrentThreadId() == _id;
+
+                        try
                         {
-                            PostQuit();
-                        }
-                        else
-                        {
-                            bool ourThread = PInvoke.GetCurrentThreadId() == _id;
+                            // We can only clean up if we're being called on our own thread.
+                            if (!ourThread)
+                            {
+                                return;
+                            }
+
+                            // If we had a component manager, detach from it.
+                            if (_componentManager is not null)
+                            {
+                                RevokeComponent();
+                            }
+
+                            DisposeThreadWindows();
 
                             try
                             {
-                                // We can only clean up if we're being called on our
-                                // own thread.
-                                if (ourThread)
+                                RaiseThreadExit();
+                            }
+                            finally
+                            {
+                                if (GetState(STATE_OLEINITIALIZED) && !GetState(STATE_EXTERNALOLEINIT))
                                 {
-                                    // If we had a component manager, detach from it.
-                                    if (_componentManager is not null)
-                                    {
-                                        RevokeComponent();
-                                    }
+                                    SetState(STATE_OLEINITIALIZED, false);
+                                    PInvoke.OleUninitialize();
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            // We can always clean up this handle though.
+                            if (!_handle.IsNull)
+                            {
+                                PInvoke.CloseHandle(this);
+                                _handle = HANDLE.Null;
+                            }
 
-                                    // DisposeAssociatedComponents();
-                                    DisposeThreadWindows();
-
-                                    try
-                                    {
-                                        RaiseThreadExit();
-                                    }
-                                    finally
-                                    {
-                                        if (GetState(STATE_OLEINITIALIZED) && !GetState(STATE_EXTERNALOLEINIT))
-                                        {
-                                            SetState(STATE_OLEINITIALIZED, false);
-                                            PInvoke.OleUninitialize();
-                                        }
-                                    }
+                            try
+                            {
+                                if (s_totalMessageLoopCount == 0)
+                                {
+                                    RaiseExit();
                                 }
                             }
                             finally
                             {
-                                // We can always clean up this handle, though
-                                if (!_handle.IsNull)
+                                lock (s_tcInternalSyncObject)
                                 {
-                                    PInvoke.CloseHandle(this);
-                                    _handle = HANDLE.Null;
+                                    s_contextHash.Remove(_id);
                                 }
 
-                                try
+                                if (t_currentThreadContext == this)
                                 {
-                                    if (s_totalMessageLoopCount == 0)
-                                    {
-                                        RaiseExit();
-                                    }
-                                }
-                                finally
-                                {
-                                    lock (s_tcInternalSyncObject)
-                                    {
-                                        s_contextHash.Remove(_id);
-                                    }
-
-                                    if (t_currentThreadContext == this)
-                                    {
-                                        t_currentThreadContext = null;
-                                    }
+                                    t_currentThreadContext = null;
                                 }
                             }
                         }
-
-                        GC.SuppressFinalize(this);
                     }
+
+                    GC.SuppressFinalize(this);
                 }
                 finally
                 {
@@ -914,15 +894,14 @@ public sealed partial class Application
         {
             Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Attempting to terminate message loop");
 
-            // Per KB 183116 (contents no longer available)
+            // Per KB 183116: https://web.archive.org/web/20070510025823/http://support.microsoft.com/kb/183116
             //
             // WM_QUIT may be consumed by another message pump under very specific circumstances.
             // When that occurs, we rely on the STATE_POSTEDQUIT to be caught in the next
             // idle, at which point we can tear down.
             //
-            // We can't follow the KB article exactly, because we don't have an HWND to PostMessage
-            // to.
-            User32.PostThreadMessageW(_id, User32.WM.QUIT, IntPtr.Zero, IntPtr.Zero);
+            // We can't follow the KB article exactly, because we don't have an HWND to PostMessage to.
+            PInvoke.PostThreadMessage(_id, (uint)PInvoke.WM_QUIT, default, default);
             SetState(STATE_POSTEDQUIT, true);
         }
 
@@ -1269,7 +1248,7 @@ public sealed partial class Application
 
             if (msg.IsKeyMessage())
             {
-                if (msg.message == (uint)User32.WM.CHAR)
+                if (msg.message == (uint)PInvoke.WM_CHAR)
                 {
                     int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                     if (unchecked((int)(uint)msg.wParam) == 3 && (unchecked((int)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk

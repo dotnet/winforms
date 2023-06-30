@@ -201,14 +201,14 @@ public partial class ListBox
 
             ItemArray.Entry? item = entries[index];
 
-            if (item is null || !_itemAccessibleObjects.ContainsKey(item))
+            if (item is null || !_itemAccessibleObjects.TryGetValue(item, out ListBoxItemAccessibleObject? value))
             {
                 return;
             }
 
             if (OsVersion.IsWindows8OrGreater())
             {
-                UiaCore.UiaDisconnectProvider(_itemAccessibleObjects[item]);
+                UiaCore.UiaDisconnectProvider(value);
             }
 
             _itemAccessibleObjects.Remove(item);
@@ -253,12 +253,13 @@ public partial class ListBox
                 return null;
             }
 
-            if (!_itemAccessibleObjects.ContainsKey(item))
+            if (!_itemAccessibleObjects.TryGetValue(item, out ListBoxItemAccessibleObject? value))
             {
-                _itemAccessibleObjects.Add(item, CreateItemAccessibleObject(owner, item));
+                value = CreateItemAccessibleObject(owner, item);
+                _itemAccessibleObjects.Add(item, value);
             }
 
-            return _itemAccessibleObjects[item];
+            return value;
         }
 
         public override int GetChildCount()

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -27,9 +25,9 @@ public sealed partial class BehaviorService
         /// </summary>
         private class MouseHook
         {
-            private AdornerWindow _currentAdornerWindow;
+            private AdornerWindow? _currentAdornerWindow;
             private uint _thisProcessID;
-            private HOOKPROC _callBack;
+            private HOOKPROC? _callBack;
             private HHOOK _mouseHookHandle;
             private bool _processingMessage;
 
@@ -97,14 +95,14 @@ public sealed partial class BehaviorService
 
                     try
                     {
-                        if (ProcessMouseMessage(mhs->hwnd, (User32.WM)(nuint)wparam, mhs->pt.X, mhs->pt.Y))
+                        if (ProcessMouseMessage(mhs->hwnd, (MessageId)(nuint)wparam, mhs->pt.X, mhs->pt.Y))
                         {
                             return (LRESULT)1;
                         }
                     }
                     catch (Exception ex)
                     {
-                        _currentAdornerWindow.Capture = false;
+                        _currentAdornerWindow!.Capture = false;
 
                         if (ex != CheckoutException.Canceled)
                         {
@@ -123,7 +121,7 @@ public sealed partial class BehaviorService
                 }
 
                 Debug.Assert(_isHooked, "How did we get here when we are disposed?");
-                return PInvoke.CallNextHookEx(_mouseHookHandle, (int)nCode, wparam, lparam);
+                return PInvoke.CallNextHookEx(_mouseHookHandle, nCode, wparam, lparam);
             }
 
             private void UnhookMouse()
@@ -143,7 +141,7 @@ public sealed partial class BehaviorService
                 }
             }
 
-            private bool ProcessMouseMessage(HWND hwnd, User32.WM msg, int x, int y)
+            private bool ProcessMouseMessage(HWND hwnd, MessageId msg, int x, int y)
             {
                 if (_processingMessage)
                 {
@@ -181,11 +179,11 @@ public sealed partial class BehaviorService
                             Message m = Message.Create(hwnd, msg, 0u, PARAM.FromLowHigh(pt.Y, pt.X));
 
                             // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
-                            if (m.Msg == (int)User32.WM.LBUTTONDOWN)
+                            if (m.Msg == (int)PInvoke.WM_LBUTTONDOWN)
                             {
                                 _lastLButtonDownTimeStamp = PInvoke.GetMessageTime();
                             }
-                            else if (m.Msg == (int)User32.WM.LBUTTONDBLCLK)
+                            else if (m.Msg == (int)PInvoke.WM_LBUTTONDBLCLK)
                             {
                                 int lButtonDoubleClickTimeStamp = PInvoke.GetMessageTime();
                                 if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)

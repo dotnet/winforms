@@ -45,7 +45,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         using MonthCalendar control = new MonthCalendar();
 
         control.CreateControl();
-        PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_SETCURRENTVIEW, 0, view);
+        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
         Assert.Equal(expected, accessibleObject.ColumnCount);
@@ -71,7 +71,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         using MonthCalendar control = new MonthCalendar();
 
         control.CreateControl();
-        PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_SETCURRENTVIEW, 0, view);
+        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
         Assert.Null(accessibleObject.GetColumnHeaders());
@@ -137,7 +137,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         control.SelectionStart = new DateTime(2021, 1, 1);
 
         control.CreateControl();
-        PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
+        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         LinkedListNode<CalendarAccessibleObject> calendarNode = controlAccessibleObject.CalendarsAccessibleObjects.First;
 

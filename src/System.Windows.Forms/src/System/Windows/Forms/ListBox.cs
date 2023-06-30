@@ -12,27 +12,11 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
 /// <summary>
-///  This is a control that presents a list of items to the user.  They may be
-///  navigated using the keyboard, or the scrollbar on the right side of the
-///  control.  One or more items may be selected as well.
-///
-///  The preferred way to add items is to set them all via an array at once,
-///  which is definitely the most efficient way.  The following is an example
-///  of this:
-/// <code>
-///  ListBox lb = new ListBox();
-///  //     set up properties on the listbox here.
-///  lb.Items.All = new String [] {
-///     "A",
-///     "B",
-///     "C",
-///     "D" };
-/// </code>
+///  Represents a Windows control to display a list of items.
 /// </summary>
 [Designer($"System.Windows.Forms.Design.ListBoxDesigner, {AssemblyRef.SystemDesign}")]
 [DefaultEvent(nameof(SelectedIndexChanged))]
@@ -44,7 +28,7 @@ public partial class ListBox : ListControl
     /// <summary>
     ///  while doing a search, if no matches are found, this is returned
     /// </summary>
-    public const int NoMatches = LB_ERR;
+    public const int NoMatches = PInvoke.LB_ERR;
 
     /// <summary>
     ///  The default item height for an owner-draw ListBox. The ListBox's non-ownerdraw
@@ -280,18 +264,12 @@ public partial class ListBox : ListControl
                 }
                 else if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (WM)LB.SETCOLUMNWIDTH, (WPARAM)_columnWidth);
+                    PInvoke.SendMessage(this, PInvoke.LB_SETCOLUMNWIDTH, (WPARAM)_columnWidth);
                 }
             }
         }
     }
 
-    /// <summary>
-    ///  Retrieves the parameters needed to create the handle.  Inheriting classes
-    ///  can override this to provide extra functionality.  They should not,
-    ///  however, forget to call base.getCreateParams() first to get the struct
-    ///  filled up with the basic info.
-    /// </summary>
     protected override CreateParams CreateParams
     {
         get
@@ -299,20 +277,20 @@ public partial class ListBox : ListControl
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_LISTBOX;
 
-            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)LBS.NOTIFY | (int)LBS.HASSTRINGS;
+            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | PInvoke.LBS_NOTIFY | PInvoke.LBS_HASSTRINGS;
             if (_scrollAlwaysVisible)
             {
-                cp.Style |= (int)LBS.DISABLENOSCROLL;
+                cp.Style |= PInvoke.LBS_DISABLENOSCROLL;
             }
 
             if (!_integralHeight)
             {
-                cp.Style |= (int)LBS.NOINTEGRALHEIGHT;
+                cp.Style |= PInvoke.LBS_NOINTEGRALHEIGHT;
             }
 
             if (_useTabStops)
             {
-                cp.Style |= (int)LBS.USETABSTOPS;
+                cp.Style |= PInvoke.LBS_USETABSTOPS;
             }
 
             switch (_borderStyle)
@@ -327,7 +305,7 @@ public partial class ListBox : ListControl
 
             if (_multiColumn)
             {
-                cp.Style |= (int)LBS.MULTICOLUMN | (int)WINDOW_STYLE.WS_HSCROLL;
+                cp.Style |= PInvoke.LBS_MULTICOLUMN | (int)WINDOW_STYLE.WS_HSCROLL;
             }
             else if (_horizontalScrollbar)
             {
@@ -337,13 +315,13 @@ public partial class ListBox : ListControl
             switch (_selectionMode)
             {
                 case SelectionMode.None:
-                    cp.Style |= (int)LBS.NOSEL;
+                    cp.Style |= PInvoke.LBS_NOSEL;
                     break;
                 case SelectionMode.MultiSimple:
-                    cp.Style |= (int)LBS.MULTIPLESEL;
+                    cp.Style |= PInvoke.LBS_MULTIPLESEL;
                     break;
                 case SelectionMode.MultiExtended:
-                    cp.Style |= (int)LBS.EXTENDEDSEL;
+                    cp.Style |= PInvoke.LBS_EXTENDEDSEL;
                     break;
                 case SelectionMode.One:
                     break;
@@ -354,10 +332,10 @@ public partial class ListBox : ListControl
                 case DrawMode.Normal:
                     break;
                 case DrawMode.OwnerDrawFixed:
-                    cp.Style |= (int)LBS.OWNERDRAWFIXED;
+                    cp.Style |= PInvoke.LBS_OWNERDRAWFIXED;
                     break;
                 case DrawMode.OwnerDrawVariable:
-                    cp.Style |= (int)LBS.OWNERDRAWVARIABLE;
+                    cp.Style |= PInvoke.LBS_OWNERDRAWVARIABLE;
                     break;
             }
 
@@ -448,7 +426,7 @@ public partial class ListBox : ListControl
         }
     }
 
-    internal int FocusedIndex => IsHandleCreated ? (int)PInvoke.SendMessage(this, (WM)LB.GETCARETINDEX) : -1;
+    internal int FocusedIndex => IsHandleCreated ? (int)PInvoke.SendMessage(this, PInvoke.LB_GETCARETINDEX) : -1;
 
     // The scroll bars don't display properly when the IntegralHeight == false
     // and the control is resized before the font size is change and the new font size causes
@@ -627,7 +605,7 @@ public partial class ListBox : ListControl
                 if (_drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
                 {
                     BeginUpdate();
-                    PInvoke.SendMessage(this, (WM)LB.SETITEMHEIGHT, 0, value);
+                    PInvoke.SendMessage(this, PInvoke.LB_SETITEMHEIGHT, 0, value);
 
                     // Changing the item height might require a resize for IntegralHeight list boxes
                     if (IntegralHeight)
@@ -868,7 +846,7 @@ public partial class ListBox : ListControl
 
             if (current == SelectionMode.One && IsHandleCreated)
             {
-                return (int)PInvoke.SendMessage(this, (WM)LB.GETCURSEL);
+                return (int)PInvoke.SendMessage(this, PInvoke.LB_GETCURSEL);
             }
 
             if (_itemsCollection is not null && SelectedItems.Count > 0)
@@ -1150,12 +1128,12 @@ public partial class ListBox : ListControl
     [SRDescription(nameof(SR.ListBoxTopIndexDescr))]
     public int TopIndex
     {
-        get => IsHandleCreated ? (int)PInvoke.SendMessage(this, (WM)LB.GETTOPINDEX) : _topIndex;
+        get => IsHandleCreated ? (int)PInvoke.SendMessage(this, PInvoke.LB_GETTOPINDEX) : _topIndex;
         set
         {
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (WM)LB.SETTOPINDEX, (WPARAM)value);
+                PInvoke.SendMessage(this, PInvoke.LB_SETTOPINDEX, (WPARAM)value);
             }
             else
             {
@@ -1461,7 +1439,7 @@ public partial class ListBox : ListControl
 
         if (IsHandleCreated)
         {
-            int height = (int)PInvoke.SendMessage(this, (WM)LB.GETITEMHEIGHT, (WPARAM)index);
+            int height = (int)PInvoke.SendMessage(this, PInvoke.LB_GETITEMHEIGHT, (WPARAM)index);
             if (height == -1)
             {
                 throw new Win32Exception();
@@ -1482,7 +1460,7 @@ public partial class ListBox : ListControl
     {
         CheckIndex(index);
         var rect = default(RECT);
-        if (PInvoke.SendMessage(this, (WM)LB.GETITEMRECT, (uint)index, ref rect) == 0)
+        if (PInvoke.SendMessage(this, PInvoke.LB_GETITEMRECT, (uint)index, ref rect) == 0)
         {
             return Rectangle.Empty;
         }
@@ -1516,7 +1494,7 @@ public partial class ListBox : ListControl
     {
         if (IsHandleCreated)
         {
-            int selection = (int)PInvoke.SendMessage(this, (WM)LB.GETSEL, (WPARAM)index);
+            int selection = (int)PInvoke.SendMessage(this, PInvoke.LB_GETSEL, (WPARAM)index);
             if (selection == -1)
             {
                 throw new Win32Exception();
@@ -1553,7 +1531,7 @@ public partial class ListBox : ListControl
         PInvoke.GetClientRect(this, out RECT r);
         if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
         {
-            int index = (int)PInvoke.SendMessage(this, (WM)LB.ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));
+            int index = (int)PInvoke.SendMessage(this, PInvoke.LB_ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));
             if (PARAM.HIWORD(index) == 0)
             {
                 // Inside ListBox client area
@@ -1570,13 +1548,13 @@ public partial class ListBox : ListControl
     private int NativeAdd(object item)
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-        int insertIndex = (int)PInvoke.SendMessage(this, (WM)LB.ADDSTRING, 0, GetItemText(item));
-        if (insertIndex == LB_ERRSPACE)
+        int insertIndex = (int)PInvoke.SendMessage(this, PInvoke.LB_ADDSTRING, 0, GetItemText(item));
+        if (insertIndex == PInvoke.LB_ERRSPACE)
         {
             throw new OutOfMemoryException();
         }
 
-        if (insertIndex == LB_ERR)
+        if (insertIndex == PInvoke.LB_ERR)
         {
             // On older platforms the ListBox control returns LB_ERR if there are a
             // large number (>32000) of items. It doesn't appear to set error codes
@@ -1594,7 +1572,7 @@ public partial class ListBox : ListControl
     private void NativeClear()
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-        PInvoke.SendMessage(this, (WM)LB.RESETCONTENT);
+        PInvoke.SendMessage(this, PInvoke.LB_RESETCONTENT);
     }
 
     /// <summary>
@@ -1603,8 +1581,8 @@ public partial class ListBox : ListControl
     [SkipLocalsInit]
     internal unsafe string NativeGetItemText(int index)
     {
-        int maxLength = (int)PInvoke.SendMessage(this, (WM)LB.GETTEXTLEN, (WPARAM)index);
-        if (maxLength == LB_ERR)
+        int maxLength = (int)PInvoke.SendMessage(this, PInvoke.LB_GETTEXTLEN, (WPARAM)index);
+        if (maxLength == PInvoke.LB_ERR)
         {
             return string.Empty;
         }
@@ -1612,9 +1590,9 @@ public partial class ListBox : ListControl
         using BufferScope<char> buffer = new(stackalloc char[128], minimumLength: maxLength + 1);
         fixed (char* b = buffer)
         {
-            int actualLength = (int)PInvoke.SendMessage(this, (WM)LB.GETTEXT, (WPARAM)index, (LPARAM)b);
-            Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
-            return actualLength == LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
+            int actualLength = (int)PInvoke.SendMessage(this, PInvoke.LB_GETTEXT, (WPARAM)index, (LPARAM)b);
+            Debug.Assert(actualLength != PInvoke.LB_ERR, "Should have validated the index above");
+            return actualLength == PInvoke.LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
         }
     }
 
@@ -1625,14 +1603,14 @@ public partial class ListBox : ListControl
     private int NativeInsert(int index, object item)
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-        int insertIndex = (int)PInvoke.SendMessage(this, (WM)LB.INSERTSTRING, (uint)index, GetItemText(item));
+        int insertIndex = (int)PInvoke.SendMessage(this, PInvoke.LB_INSERTSTRING, (uint)index, GetItemText(item));
 
-        if (insertIndex == LB_ERRSPACE)
+        if (insertIndex == PInvoke.LB_ERRSPACE)
         {
             throw new OutOfMemoryException();
         }
 
-        if (insertIndex == LB_ERR)
+        if (insertIndex == PInvoke.LB_ERR)
         {
             // On older platforms the ListBox control returns LB_ERR if there are a
             // large number (>32000) of items. It doesn't appear to set error codes
@@ -1652,8 +1630,8 @@ public partial class ListBox : ListControl
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
-        bool selected = (int)PInvoke.SendMessage(this, (WM)LB.GETSEL, (WPARAM)index) > 0;
-        PInvoke.SendMessage(this, (WM)LB.DELETESTRING, (WPARAM)index);
+        bool selected = (int)PInvoke.SendMessage(this, PInvoke.LB_GETSEL, (WPARAM)index) > 0;
+        PInvoke.SendMessage(this, PInvoke.LB_DELETESTRING, (WPARAM)index);
 
         // If the item currently selected is removed then we should fire a Selectionchanged event
         // as the next time selected index returns -1.
@@ -1675,11 +1653,11 @@ public partial class ListBox : ListControl
 
         if (_selectionMode == SelectionMode.One)
         {
-            PInvoke.SendMessage(this, (WM)LB.SETCURSEL, (WPARAM)(value ? index : -1));
+            PInvoke.SendMessage(this, PInvoke.LB_SETCURSEL, (WPARAM)(value ? index : -1));
         }
         else
         {
-            PInvoke.SendMessage(this, (WM)LB.SETSEL, (WPARAM)(BOOL)value, (LPARAM)index);
+            PInvoke.SendMessage(this, PInvoke.LB_SETSEL, (WPARAM)(BOOL)value, (LPARAM)index);
         }
     }
 
@@ -1702,7 +1680,7 @@ public partial class ListBox : ListControl
         switch (_selectionMode)
         {
             case SelectionMode.One:
-                int index = (int)PInvoke.SendMessage(this, (WM)LB.GETCURSEL);
+                int index = (int)PInvoke.SendMessage(this, PInvoke.LB_GETCURSEL);
                 if (index >= 0)
                 {
                     SelectedItems.SetSelected(index, true);
@@ -1712,13 +1690,13 @@ public partial class ListBox : ListControl
 
             case SelectionMode.MultiSimple:
             case SelectionMode.MultiExtended:
-                int count = (int)PInvoke.SendMessage(this, (WM)LB.GETSELCOUNT);
+                int count = (int)PInvoke.SendMessage(this, PInvoke.LB_GETSELCOUNT);
                 if (count > 0)
                 {
                     var result = new int[count];
                     fixed (int* pResult = result)
                     {
-                        PInvoke.SendMessage(this, (WM)LB.GETSELITEMS, (WPARAM)count, (LPARAM)pResult);
+                        PInvoke.SendMessage(this, PInvoke.LB_GETSELITEMS, (WPARAM)count, (LPARAM)pResult);
                     }
 
                     foreach (int i in result)
@@ -1787,21 +1765,21 @@ public partial class ListBox : ListControl
         base.OnHandleCreated(e);
 
         // Get the current locale to set the Scrollbars
-        PInvoke.SendMessage(this, (WM)LB.SETLOCALE, (WPARAM)PInvoke.GetThreadLocale());
+        PInvoke.SendMessage(this, PInvoke.LB_SETLOCALE, (WPARAM)PInvoke.GetThreadLocale());
 
         if (_columnWidth != 0)
         {
-            PInvoke.SendMessage(this, (WM)LB.SETCOLUMNWIDTH, (WPARAM)_columnWidth);
+            PInvoke.SendMessage(this, PInvoke.LB_SETCOLUMNWIDTH, (WPARAM)_columnWidth);
         }
 
         if (_drawMode == DrawMode.OwnerDrawFixed)
         {
-            PInvoke.SendMessage(this, (WM)LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
+            PInvoke.SendMessage(this, PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
         }
 
         if (_topIndex != 0)
         {
-            PInvoke.SendMessage(this, (WM)LB.SETTOPINDEX, (WPARAM)_topIndex);
+            PInvoke.SendMessage(this, PInvoke.LB_SETTOPINDEX, (WPARAM)_topIndex);
         }
 
         if (UseCustomTabOffsets && CustomTabOffsets is not null)
@@ -1812,7 +1790,7 @@ public partial class ListBox : ListControl
 
             fixed (int* pOffsets = offsets)
             {
-                PInvoke.SendMessage(this, (WM)LB.SETTABSTOPS, (WPARAM)wpar, (LPARAM)pOffsets);
+                PInvoke.SendMessage(this, PInvoke.LB_SETTABSTOPS, (WPARAM)wpar, (LPARAM)pOffsets);
             }
         }
 
@@ -2165,7 +2143,7 @@ public partial class ListBox : ListControl
 
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (WM)LB.SETCURSEL, (WPARAM)DataManager.Position);
+                PInvoke.SendMessage(this, PInvoke.LB_SETCURSEL, (WPARAM)DataManager.Position);
             }
 
             // if the list changed and we still did not fire the
@@ -2305,7 +2283,7 @@ public partial class ListBox : ListControl
                 width = MaxItemWidth;
             }
 
-            PInvoke.SendMessage(this, (WM)LB.SETHORIZONTALEXTENT, (WPARAM)width);
+            PInvoke.SendMessage(this, PInvoke.LB_SETHORIZONTALEXTENT, (WPARAM)width);
         }
     }
 
@@ -2362,7 +2340,7 @@ public partial class ListBox : ListControl
             CustomTabOffsets.CopyTo(offsets, 0);
             fixed (int* pOffsets = offsets)
             {
-                PInvoke.SendMessage(this, (WM)LB.SETTABSTOPS, (WPARAM)wpar, (nint)pOffsets);
+                PInvoke.SendMessage(this, PInvoke.LB_SETTABSTOPS, (WPARAM)wpar, (nint)pOffsets);
             }
 
             Invalidate();
@@ -2372,7 +2350,7 @@ public partial class ListBox : ListControl
     private void WmPrint(ref Message m)
     {
         base.WndProc(ref m);
-        if (((PRF)(nint)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+        if (((nint)m.LParamInternal & PInvoke.PRF_NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
         {
             using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
             Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
@@ -2385,14 +2363,13 @@ public partial class ListBox : ListControl
 
     protected virtual void WmReflectCommand(ref Message m)
     {
-        switch ((User32.LBN)m.WParamInternal.HIWORD)
+        switch ((uint)m.WParamInternal.HIWORD)
         {
-            case User32.LBN.SELCHANGE:
+            case PInvoke.LBN_SELCHANGE:
                 _selectedItems?.Dirty();
-
                 OnSelectedIndexChanged(EventArgs.Empty);
                 break;
-            case User32.LBN.DBLCLK:
+            case PInvoke.LBN_DBLCLK:
                 // Handle this inside WM_LBUTTONDBLCLK
                 // OnDoubleClick(EventArgs.Empty);
                 break;
@@ -2452,23 +2429,23 @@ public partial class ListBox : ListControl
     {
         switch (m.MsgInternal)
         {
-            case WM.REFLECT_COMMAND:
+            case MessageId.WM_REFLECT_COMMAND:
                 WmReflectCommand(ref m);
                 break;
-            case WM.REFLECT_DRAWITEM:
+            case MessageId.WM_REFLECT_DRAWITEM:
                 WmReflectDrawItem(ref m);
                 break;
-            case WM.REFLECT_MEASUREITEM:
+            case MessageId.WM_REFLECT_MEASUREITEM:
                 WmReflectMeasureItem(ref m);
                 break;
-            case WM.PRINT:
+            case PInvoke.WM_PRINT:
                 WmPrint(ref m);
                 break;
-            case WM.LBUTTONDOWN:
+            case PInvoke.WM_LBUTTONDOWN:
                 _selectedItems?.Dirty();
                 base.WndProc(ref m);
                 break;
-            case WM.LBUTTONUP:
+            case PInvoke.WM_LBUTTONUP:
                 Point point = PARAM.ToPoint(m.LParamInternal);
                 bool captured = Capture;
                 if (captured && PInvoke.WindowFromPoint(PointToScreen(point)) == HWND)
@@ -2510,7 +2487,7 @@ public partial class ListBox : ListControl
                 _doubleClickFired = false;
                 break;
 
-            case WM.RBUTTONUP:
+            case PInvoke.WM_RBUTTONUP:
                 if (Capture && PInvoke.WindowFromPoint(PointToScreen((Point)m.LParamInternal)) == HWND)
                 {
                     _selectedItems?.Dirty();
@@ -2519,7 +2496,7 @@ public partial class ListBox : ListControl
                 base.WndProc(ref m);
                 break;
 
-            case WM.LBUTTONDBLCLK:
+            case PInvoke.WM_LBUTTONDBLCLK:
                 // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP sequence for
                 // doubleclick. The first WM_LBUTTONUP, resets the flag for double click so its necessary for us
                 // to set it again.
@@ -2527,7 +2504,7 @@ public partial class ListBox : ListControl
                 base.WndProc(ref m);
                 break;
 
-            case WM.WINDOWPOSCHANGED:
+            case PInvoke.WM_WINDOWPOSCHANGED:
                 base.WndProc(ref m);
                 if (_integralHeight && _fontIsChanged)
                 {

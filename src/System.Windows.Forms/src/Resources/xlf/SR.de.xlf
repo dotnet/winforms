@@ -4844,13 +4844,11 @@ anstelle dieses Dialogfelds finden Sie am Ende dieser Meldung.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
-    Assembly-Version: {1}.
-    Win32-Version: {2}.
-    CodeBase: {3}.
+    Assemblyversion: {1}
+    Speicherort: {2}
 </target>
         <note />
       </trans-unit>

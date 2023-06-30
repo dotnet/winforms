@@ -4844,13 +4844,11 @@ depuração just-in-time (JIT) em vez desta caixa de diálogo.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
     Versão do Assembly: {1}
-    Versão do Win32: {2}
-    Base de Código: {3}
+    Localização: {2}
 </target>
         <note />
       </trans-unit>

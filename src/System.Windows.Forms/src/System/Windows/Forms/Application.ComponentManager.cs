@@ -4,8 +4,7 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using static Interop;
-using static Interop.Mso;
+using Microsoft.Office;
 
 namespace System.Windows.Forms;
 
@@ -31,14 +30,13 @@ public sealed partial class Application
             public MSOCRINFO componentInfo;
         }
 
-        private Dictionary<UIntPtr, ComponentHashtableEntry>? _oleComponents;
+        private Dictionary<nuint, ComponentHashtableEntry>? _oleComponents;
         private UIntPtr _cookieCounter = UIntPtr.Zero;
         private IMsoComponent? _activeComponent;
         private IMsoComponent? _trackingComponent;
         private msocstate _currentState;
 
-        private Dictionary<UIntPtr, ComponentHashtableEntry> OleComponents
-            => _oleComponents ??= new Dictionary<UIntPtr, ComponentHashtableEntry>();
+        private Dictionary<nuint, ComponentHashtableEntry> OleComponents => _oleComponents ??= new();
 
         unsafe HRESULT IMsoComponentManager.QueryService(
             Guid* guidService,
@@ -54,10 +52,10 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FDebugMessage(
-            IntPtr dwReserved,
+            nint dwReserved,
             uint msg,
-            IntPtr wParam,
-            IntPtr lParam)
+            WPARAM wParam,
+            LPARAM lParam)
         {
             return true;
         }
@@ -65,7 +63,7 @@ public sealed partial class Application
         BOOL IMsoComponentManager.FRegisterComponent(
             IMsoComponent component,
             MSOCRINFO* pcrinfo,
-            UIntPtr* pdwComponentID)
+            nuint* pdwComponentID)
         {
             if (pcrinfo is null || pdwComponentID is null
                 || pcrinfo->cbSize < sizeof(MSOCRINFO))
@@ -89,7 +87,7 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FRevokeComponent(UIntPtr dwComponentID)
+        BOOL IMsoComponentManager.FRevokeComponent(nuint dwComponentID)
         {
             Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Revoking component {dwComponentID}.");
 
@@ -114,7 +112,7 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FUpdateComponentRegistration(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             MSOCRINFO* pcrinfo)
         {
             // Update the registration info
@@ -129,7 +127,7 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FOnComponentActivate(UIntPtr dwComponentID)
+        BOOL IMsoComponentManager.FOnComponentActivate(nuint dwComponentID)
         {
             Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Component activated.  ID: {dwComponentID}");
 
@@ -144,7 +142,7 @@ public sealed partial class Application
             return true;
         }
 
-        BOOL IMsoComponentManager.FSetTrackingComponent(UIntPtr dwComponentID, BOOL fTrack)
+        BOOL IMsoComponentManager.FSetTrackingComponent(nuint dwComponentID, BOOL fTrack)
         {
             if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
                 || !((entry.component == _trackingComponent) ^ fTrack))
@@ -158,7 +156,7 @@ public sealed partial class Application
         }
 
         void IMsoComponentManager.OnComponentEnterState(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             msocstate uStateID,
             msoccontext uContext,
             uint cpicmExclude,
@@ -187,7 +185,7 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FOnComponentExitState(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             msocstate uStateID,
             msoccontext uContext,
             uint cpicmExclude,
@@ -226,7 +224,7 @@ public sealed partial class Application
         }
 
         BOOL IMsoComponentManager.FPushMessageLoop(
-            UIntPtr dwComponentID,
+            nuint dwComponentID,
             msoloop uReason,
             void* pvLoopData)
         {
@@ -267,7 +265,7 @@ public sealed partial class Application
                         // If the component wants us to process the message, do it.
                         PInvoke.GetMessage(&msg, HWND.Null, 0, 0);
 
-                        if (msg.message == (uint)User32.WM.QUIT)
+                        if (msg.message == PInvoke.WM_QUIT)
                         {
                             Debug.WriteLineIf(
                                 CompModSwitches.MSOComponentManager.TraceInfo,
@@ -324,7 +322,12 @@ public sealed partial class Application
                             // wait up to 100ms. We don't want someone to attach to idle, forget to detach, and then
                             // cause CPU to end up in race condition. For Windows Forms this generally isn't an issue
                             // because our component always returns false from its idle request
-                            User32.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 100, User32.QS.ALLINPUT, User32.MWMO.INPUTAVAILABLE);
+                            PInvoke.MsgWaitForMultipleObjectsEx(
+                                0,
+                                null,
+                                100,
+                                QUEUE_STATUS_FLAGS.QS_ALLINPUT,
+                                MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
                         }
                         else
                         {

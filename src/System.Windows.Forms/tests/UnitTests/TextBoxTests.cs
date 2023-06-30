@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -384,11 +383,11 @@ public partial class TextBoxTests
         };
 
         // Cover the Placeholder draw code path
-        PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
+        PInvoke.SendMessage(tb, PInvoke.WM_PAINT, (WPARAM)(BOOL)false);
         tb.TextAlign = HorizontalAlignment.Center;
-        PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
+        PInvoke.SendMessage(tb, PInvoke.WM_PAINT, (WPARAM)(BOOL)false);
         tb.TextAlign = HorizontalAlignment.Right;
-        PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
+        PInvoke.SendMessage(tb, PInvoke.WM_PAINT, (WPARAM)(BOOL)false);
 
         Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
     }
@@ -403,11 +402,11 @@ public partial class TextBoxTests
         };
 
         // Cover the Placeholder draw code path in RightToLeft scenario
-        PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
+        PInvoke.SendMessage(tb, PInvoke.WM_PAINT, (WPARAM)(BOOL)false);
         tb.TextAlign = HorizontalAlignment.Center;
-        PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
+        PInvoke.SendMessage(tb, PInvoke.WM_PAINT, (WPARAM)(BOOL)false);
         tb.TextAlign = HorizontalAlignment.Right;
-        PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
+        PInvoke.SendMessage(tb, PInvoke.WM_PAINT, (WPARAM)(BOOL)false);
 
         Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
     }

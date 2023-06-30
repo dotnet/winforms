@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -454,7 +453,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                 PInvoke.GetWindowRect(this, out var r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
                 }
             }
         }
@@ -1488,7 +1487,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     private void DrawSplitHelper(int splitSize)
     {
         Rectangle r = CalcSplitLine(splitSize, 3);
-        using User32.GetDcScope dc = new(HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
+        using GetDcScope dc = new(HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
         using PInvoke.ObjectScope objectScope = new(halftone);
         using PInvoke.SelectObjectScope selectBrush = new(dc, halftone);
@@ -2286,7 +2285,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     private void WmSetCursor(ref Message m)
     {
         // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-        if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
+        if ((HWND)m.WParamInternal == InternalHandle && m.LParamInternal.LOWORD == PInvoke.HTCLIENT)
         {
             Cursor.Current = OverrideCursor ?? Cursor;
         }
@@ -2429,16 +2428,16 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
 
     protected override void WndProc(ref Message msg)
     {
-        switch ((User32.WM)msg.Msg)
+        switch (msg.MsgInternal)
         {
-            case User32.WM.SETCURSOR:
+            case PInvoke.WM_SETCURSOR:
                 WmSetCursor(ref msg);
                 break;
-            case User32.WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 _splitterFocused = true;
                 base.WndProc(ref msg);
                 break;
-            case User32.WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 _splitterFocused = false;
                 base.WndProc(ref msg);
                 break;

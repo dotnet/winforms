@@ -93,7 +93,7 @@ public abstract partial class ToolStripItem
         internal override int[] RuntimeId
             => _runtimeId ??= new int[]
             {
-                NativeMethods.UiaAppendRuntimeId,
+                (int)PInvoke.UiaAppendRuntimeId,
                 _ownerItem.GetHashCode()
             };
 
