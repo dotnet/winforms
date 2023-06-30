@@ -189,7 +189,7 @@ internal readonly unsafe struct ComInterfaceTable
     private static ComInterfaceEntry GetEntry<TComInterface>() where TComInterface : unmanaged, IComIID, IVTable
         => new()
         {
-            Vtable = (nint)TComInterface.GetVTable(),
+            Vtable = (nint)TComInterface.VTable,
             IID = *IID.Get<TComInterface>()
         };
 }

@@ -141,7 +141,8 @@ partial class PrintingControls
         this.label2.Text = "View your page:";
         // 
         // printPreviewControl1
-        // 
+        //
+        this.printPreviewControl1.AccessibleName = "Image layout ready for printing";
         this.printPreviewControl1.AutoZoom = false;
         this.printPreviewControl1.Document = this.printDocument1;
         this.printPreviewControl1.Location = new System.Drawing.Point(18, 104);
@@ -149,8 +150,8 @@ partial class PrintingControls
         this.printPreviewControl1.Name = "printPreviewControl1";
         this.printPreviewControl1.Rows = 24;
         this.printPreviewControl1.Size = new System.Drawing.Size(387, 408);
-        this.printPreviewControl1.TabIndex = 0;
-        this.printPreviewControl1.TabStop = false;
+        this.printPreviewControl1.TabIndex = 8;
+        this.printPreviewControl1.TabStop = true;
         this.printPreviewControl1.Zoom = 0.36454545454545456D;
         // 
         // PrintingControls

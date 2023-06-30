@@ -2,19 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Immutable;
+
 namespace System.Windows.Forms.PrivateSourceGenerators;
 
-internal sealed class EnumValidationInfo
+internal sealed record EnumValidationInfo(EnumValidationInfo.EnumTypeInfo EnumType, EquatableArray<int> Values, bool IsFlags)
 {
-    public ITypeSymbol EnumType { get; }
-    public List<int> Values { get; }
-    public bool IsFlags { get; }
-
-    public EnumValidationInfo(ITypeSymbol enumType, bool isFlags)
+    public static EnumValidationInfo FromEnumType(ITypeSymbol enumType, bool isFlags)
     {
-        EnumType = enumType;
-        IsFlags = isFlags;
-        Values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToList();
+        var values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToImmutableArray();
+        return new EnumValidationInfo(EnumTypeInfo.FromEnumType(enumType), new EquatableArray<int>(values), isFlags);
     }
 
     private static IEnumerable<int> GetElementValues(ITypeSymbol enumType)
@@ -30,6 +27,19 @@ internal sealed class EnumValidationInfo
             {
                 yield return value;
             }
+        }
+    }
+
+    public sealed record EnumTypeInfo(string Text)
+    {
+        public static EnumTypeInfo FromEnumType(ITypeSymbol enumType)
+        {
+            return new EnumTypeInfo(enumType.ToString());
+        }
+
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }

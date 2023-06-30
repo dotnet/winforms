@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -18,7 +16,7 @@ public partial class CollectionEditor
     protected abstract class CollectionForm : Form
     {
         private readonly CollectionEditor _editor;
-        private object _value;
+        private object? _value;
         private short _editableState = EditableDynamic;
 
         private const short EditableDynamic = 0;
@@ -75,7 +73,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Gets or sets the value of the item being edited.
         /// </summary>
-        public object EditValue
+        public object? EditValue
         {
             get => _value;
             set
@@ -115,7 +113,7 @@ public partial class CollectionEditor
                         EditValue = newValue;
                     }
 
-                    Context.OnComponentChanged();
+                    Context!.OnComponentChanged();
                 }
             }
         }
@@ -162,7 +160,14 @@ public partial class CollectionEditor
                     message = e.ToString();
                 }
 
-                RTLAwareMessageBox.Show(null, message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, 0);
+                RTLAwareMessageBox.Show(
+                    owner: null,
+                    message,
+                    caption: null,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button1,
+                    0);
             }
         }
 

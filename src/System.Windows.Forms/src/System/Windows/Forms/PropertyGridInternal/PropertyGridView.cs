@@ -932,7 +932,7 @@ internal sealed partial class PropertyGridView :
         _currentEditor = control;
     }
 
-    private int CountPropertiesFromOutline(GridEntryCollection entries)
+    private static int CountPropertiesFromOutline(GridEntryCollection entries)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CountPropertiesFromOutline");
         if (entries is null)
@@ -1870,7 +1870,7 @@ internal sealed partial class PropertyGridView :
         return null;
     }
 
-    private int GetGridEntriesFromOutline(GridEntryCollection entries, int current, int target, GridEntry[] targetEntries)
+    private static int GetGridEntriesFromOutline(GridEntryCollection entries, int current, int target, GridEntry[] targetEntries)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:GetGridEntriesFromOutline");
         if (entries is null || entries.Count == 0)
@@ -4240,7 +4240,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal List<GridEntryCollection> SaveHierarchyState(GridEntryCollection entries, List<GridEntryCollection> expandedItems = null)
+    internal static List<GridEntryCollection> SaveHierarchyState(GridEntryCollection entries, List<GridEntryCollection> expandedItems = null)
     {
         if (entries is null)
         {
@@ -5279,7 +5279,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    private void UpdateHelpAttributes(IHelpService helpService, GridEntry entry, bool addAsF1)
+    private static void UpdateHelpAttributes(IHelpService helpService, GridEntry entry, bool addAsF1)
     {
         if (entry is null)
         {

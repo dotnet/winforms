@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -14,7 +12,7 @@ public sealed partial class BinaryEditor
     private class BinaryUI : Form
     {
         private readonly BinaryEditor _editor;
-        private object _value;
+        private object? _value;
 
         private RadioButton _radioAuto;
         private Button _buttonSave;
@@ -34,7 +32,7 @@ public sealed partial class BinaryEditor
             InitializeComponent();
         }
 
-        public object Value
+        public object? Value
         {
             get
             {
@@ -43,7 +41,7 @@ public sealed partial class BinaryEditor
             set
             {
                 _value = value;
-                byte[] bytes = null;
+                byte[]? bytes = null;
 
                 if (value is not null)
                 {
@@ -63,38 +61,46 @@ public sealed partial class BinaryEditor
             }
         }
 
-        private void RadioAuto_checkedChanged(object source, EventArgs e)
+        private void RadioAuto_checkedChanged(object? source, EventArgs e)
         {
             if (_radioAuto.Checked)
+            {
                 _byteViewer.SetDisplayMode(DisplayMode.Auto);
+            }
         }
 
-        private void RadioHex_checkedChanged(object source, EventArgs e)
+        private void RadioHex_checkedChanged(object? source, EventArgs e)
         {
             if (_radioHex.Checked)
+            {
                 _byteViewer.SetDisplayMode(DisplayMode.Hexdump);
+            }
         }
 
-        private void RadioAnsi_checkedChanged(object source, EventArgs e)
+        private void RadioAnsi_checkedChanged(object? source, EventArgs e)
         {
             if (_radioAnsi.Checked)
+            {
                 _byteViewer.SetDisplayMode(DisplayMode.Ansi);
+            }
         }
 
-        private void RadioUnicode_checkedChanged(object source, EventArgs e)
+        private void RadioUnicode_checkedChanged(object? source, EventArgs e)
         {
             if (_radioUnicode.Checked)
+            {
                 _byteViewer.SetDisplayMode(DisplayMode.Unicode);
+            }
         }
 
-        private void ButtonOK_click(object source, EventArgs e)
+        private void ButtonOK_click(object? source, EventArgs e)
         {
-            object localValue = _value;
+            object? localValue = _value;
             ConvertToValue(_byteViewer.GetBytes(), ref localValue);
             _value = localValue;
         }
 
-        private void ButtonSave_click(object source, EventArgs e)
+        private void ButtonSave_click(object? source, EventArgs e)
         {
             try
             {
@@ -117,17 +123,28 @@ public sealed partial class BinaryEditor
             }
         }
 
-        private void Form_HelpRequested(object sender, HelpEventArgs e)
+        private void Form_HelpRequested(object? sender, HelpEventArgs e)
         {
             _editor.ShowHelp();
         }
 
-        private void Form_HelpButtonClicked(object sender, CancelEventArgs e)
+        private void Form_HelpButtonClicked(object? sender, CancelEventArgs e)
         {
             e.Cancel = true;
             _editor.ShowHelp();
         }
 
+        [MemberNotNull(nameof(_byteViewer))]
+        [MemberNotNull(nameof(_buttonOK))]
+        [MemberNotNull(nameof(_buttonSave))]
+        [MemberNotNull(nameof(_groupBoxMode))]
+        [MemberNotNull(nameof(_radioButtonsTableLayoutPanel))]
+        [MemberNotNull(nameof(_radioUnicode))]
+        [MemberNotNull(nameof(_radioAuto))]
+        [MemberNotNull(nameof(_radioAnsi))]
+        [MemberNotNull(nameof(_radioHex))]
+        [MemberNotNull(nameof(_okSaveTableLayoutPanel))]
+        [MemberNotNull(nameof(_overarchingTableLayoutPanel))]
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(BinaryEditor));
