@@ -132,7 +132,7 @@ public partial class ListBox
                            ? UiaCore.UIA.ListControlTypeId
                            : base.GetPropertyValue(propertyID);
                 case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                    return this.TryGetOwnerAs(out ListBox? owner) ? GetChildCount() == 0 && owner.Focused : null;
+                    return this.TryGetOwnerAs(out ListBox? owner) ? GetChildCount() == 0 && owner.Focused : base.GetPropertyValue(propertyID);
                 default:
                     return base.GetPropertyValue(propertyID);
             }
@@ -311,7 +311,6 @@ public partial class ListBox
                 Debug.Assert(child is not null, $"GetChild({index}) returned null");
                 if (child is not null && child.Bounds.Contains(x, y))
                 {
-                    owner.HasKeyboardFocus = false;
                     return child;
                 }
             }
@@ -319,7 +318,6 @@ public partial class ListBox
             // Within the ListBox bounds?
             if (Bounds.Contains(x, y))
             {
-                owner.HasKeyboardFocus = true;
                 return this;
             }
 
