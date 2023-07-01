@@ -6430,7 +6430,7 @@ System.Windows.Forms.Design.IUIService.ShowToolWindow(System.Guid toolWindow) ->
 System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary!
 System.Windows.Forms.Design.IWindowsFormsEditorService
 System.Windows.Forms.Design.IWindowsFormsEditorService.CloseDropDown() -> void
-System.Windows.Forms.Design.IWindowsFormsEditorService.DropDownControl(System.Windows.Forms.Control? control) -> void
+System.Windows.Forms.Design.IWindowsFormsEditorService.DropDownControl(System.Windows.Forms.Control! control) -> void
 System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows.Forms.Form! dialog) -> System.Windows.Forms.DialogResult
 System.Windows.Forms.Design.PropertyTab
 System.Windows.Forms.Design.PropertyTab.~PropertyTab() -> void

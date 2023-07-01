@@ -51,7 +51,7 @@ public interface IWindowsFormsEditorService
     ///   no other stored reference to the control.
     ///  </para>
     /// </remarks>
-    void DropDownControl(Control? control);
+    void DropDownControl(Control control);
 
     /// <summary>
     ///  Shows the specified <see cref="Form"/> as a dialog and returns its result. You should always use this

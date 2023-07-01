@@ -418,9 +418,9 @@ internal sealed partial class DesignerActionPanel
             CloseDropDown();
         }
 
-        void IWindowsFormsEditorService.DropDownControl(Control? control)
+        void IWindowsFormsEditorService.DropDownControl(Control control)
         {
-            ShowDropDown(control!, ActionPanel.BorderColor);
+            ShowDropDown(control, ActionPanel.BorderColor);
         }
 
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
