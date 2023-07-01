@@ -713,10 +713,10 @@ System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitma
 ~System.Windows.Forms.HtmlElement.Style.get -> string
 ~System.Windows.Forms.HtmlElement.Style.set -> void
 ~System.Windows.Forms.HtmlElement.TagName.get -> string
-~System.Windows.Forms.HtmlElementCollection.GetElementsByName(string name) -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlElementCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.HtmlElementCollection.this[int index].get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElementCollection.this[string elementId].get -> System.Windows.Forms.HtmlElement
+System.Windows.Forms.HtmlElementCollection.GetElementsByName(string! name) -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlElementCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.HtmlElementCollection.this[int index].get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElementCollection.this[string! elementId].get -> System.Windows.Forms.HtmlElement?
 ~System.Windows.Forms.HtmlElementEventArgs.EventType.get -> string
 ~System.Windows.Forms.HtmlElementEventArgs.FromElement.get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.HtmlElement
