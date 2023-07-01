@@ -345,8 +345,8 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
                 return ctl.container;
             }
 
-            ScrollableControl? f = ctl.ContainingControl;
-            if (f is not null)
+            ScrollableControl? containingControl = ctl.ContainingControl;
+            if (containingControl is not null)
             {
                 WebBrowserContainer container = ctl.CreateWebBrowserContainer();
                 if (container.RegisterControl(ctl))
@@ -382,10 +382,10 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         site.AddSelectionHandler();
         Debug.Assert(siteUIActive is null, "Object did not call OnUIDeactivate");
         siteUIActive = site;
-        ContainerControl? f = site.ContainingControl;
-        if (f is not null && f.Contains(site))
+        ContainerControl? containingControl = site.ContainingControl;
+        if (containingControl is not null && containingControl.Contains(site))
         {
-            f.SetActiveControl(site);
+            containingControl.SetActiveControl(site);
         }
     }
 

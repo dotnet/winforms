@@ -1007,10 +1007,10 @@ public unsafe partial class WebBrowserBase : Control
         {
             // First, lets make sure we transfer the ContainingControl's ActiveControl
             // before we InPlaceDeactivate.
-            ContainerControl? f = ContainingControl;
-            if (f is not null && f.ActiveControl == this)
+            ContainerControl? containingControl = ContainingControl;
+            if (containingControl is not null && containingControl.ActiveControl == this)
             {
-                f.SetActiveControl(null);
+                containingControl.SetActiveControl(null);
             }
 
             // Now, InPlaceDeactivate.
