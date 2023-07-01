@@ -1,2 +1,1 @@
 override System.Windows.Forms.ToolStripButton.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
-override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject?
