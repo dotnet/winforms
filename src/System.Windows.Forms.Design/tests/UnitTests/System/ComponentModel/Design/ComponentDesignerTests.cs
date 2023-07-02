@@ -196,7 +196,7 @@ public class ComponentDesignerTests
 
     public static IEnumerable<object[]> InheritanceAttribute_GetValidService_TestData()
     {
-        yield return new object[] { null, 3, 5 };
+        yield return new object[] { null, 2, 4 };
         yield return new object[] { new InheritanceAttribute(), 1, 1 };
     }
 
