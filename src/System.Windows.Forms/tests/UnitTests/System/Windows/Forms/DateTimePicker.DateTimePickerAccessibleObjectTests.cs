@@ -342,4 +342,39 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         Assert.Equal((UiaCore.ExpandCollapseState)expected, accessibleObject.ExpandCollapseState);
         Assert.True(dateTimePicker.IsHandleCreated);
     }
+
+    // Unit Test for https://github.com/dotnet/winforms/issues/9281.
+    [WinFormsFact]
+    public void DateTimePickerAccessibleObject_KeyboardShortcut_ReturnsExpected()
+    {
+        using Form form = new Form();
+        using DateTimePicker dateTimePicker1 = new();
+        using Label label1 = new ();
+        using DateTimePicker dateTimePicker2 = new();
+
+        dateTimePicker1.CustomFormat = "'Date&Time' hh:mm dd/MM";
+        dateTimePicker1.Format = DateTimePickerFormat.Custom;
+        dateTimePicker1.Name = "dateTimePicker1";
+        dateTimePicker1.TabIndex = 0;
+
+        label1.AutoSize = true;
+        label1.Name = "label1";
+        label1.TabIndex = 1;
+        label1.Text = "&Date";
+
+        dateTimePicker2.Name = "dateTimePicker2";
+        dateTimePicker2.TabIndex = 2;
+
+        form.Controls.Add(dateTimePicker2);
+        form.Controls.Add(label1);
+        form.Controls.Add(dateTimePicker1);
+
+        string keyboardShortcut = dateTimePicker1.AccessibilityObject.KeyboardShortcut;
+
+        Assert.Null(keyboardShortcut);
+
+        keyboardShortcut = dateTimePicker2.AccessibilityObject.KeyboardShortcut;
+
+        Assert.Equal("Alt+d", keyboardShortcut);
+    }
 }

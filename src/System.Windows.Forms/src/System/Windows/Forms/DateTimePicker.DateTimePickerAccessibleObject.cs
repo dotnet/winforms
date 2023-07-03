@@ -32,18 +32,7 @@ public partial class DateTimePicker
                     }
                 }
 
-                string? baseShortcut = base.KeyboardShortcut;
-
-                if (baseShortcut is null || baseShortcut.Length == 0)
-                {
-                    char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(this.GetOwnerText(), convertToUpperCase: false);
-                    if (ownerTextMnemonic != '\0')
-                    {
-                        return $"Alt+{ownerTextMnemonic}";
-                    }
-                }
-
-                return baseShortcut;
+                return null;
             }
         }
 
