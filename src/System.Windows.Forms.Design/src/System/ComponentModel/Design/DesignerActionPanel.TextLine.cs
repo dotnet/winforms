@@ -10,31 +10,24 @@ internal sealed partial class DesignerActionPanel
 {
     private class TextLine : Line
     {
-        private Label? _label;
+        private readonly Label _label;
         private DesignerActionTextItem? _textItem;
 
-        public TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        protected TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
             actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
-        }
-
-        public sealed override string FocusId
-        {
-            get => string.Empty;
-        }
-
-        protected override void AddControls(List<Control> controls)
-        {
             _label = new Label
             {
                 BackColor = Color.Transparent,
                 ForeColor = ActionPanel.LabelForeColor,
                 TextAlign = ContentAlignment.MiddleLeft,
-                UseMnemonic = false
+                UseMnemonic = false,
             };
-            controls.Add(_label);
+            AddedControls.Add(_label);
         }
+
+        public sealed override string FocusId => string.Empty;
 
         public sealed override void Focus()
         {
@@ -43,7 +36,7 @@ internal sealed partial class DesignerActionPanel
 
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
-            Size labelSize = _label!.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
+            Size labelSize = _label.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
             if (!measureOnly)
             {
                 _label.Location = new Point(LineLeftMargin, top + LineVerticalPadding / 2);
@@ -55,7 +48,7 @@ internal sealed partial class DesignerActionPanel
 
         private void OnParentControlFontChanged(object? sender, EventArgs e)
         {
-            if (_label is not null && _label.Font is not null)
+            if (_label.Font is not null)
             {
                 _label.Font = GetFont();
             }
@@ -69,10 +62,20 @@ internal sealed partial class DesignerActionPanel
         internal override void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex)
         {
             _textItem = (DesignerActionTextItem)actionItem!;
-            _label!.Text = StripAmpersands(_textItem.DisplayName);
+            _label.Text = StripAmpersands(_textItem.DisplayName);
             _label.Font = GetFont();
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, _textItem.Description);
+        }
+
+        public sealed class Info(DesignerActionList list, DesignerActionItem item) : LineInfo(list, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new TextLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(TextLine);
         }
     }
 }

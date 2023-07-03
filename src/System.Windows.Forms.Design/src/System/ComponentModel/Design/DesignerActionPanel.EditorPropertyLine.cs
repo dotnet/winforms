@@ -13,7 +13,7 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed partial class EditorPropertyLine : TextBoxPropertyLine, IWindowsFormsEditorService, IServiceProvider
     {
-        private EditorButton? _button;
+        private readonly EditorButton _button;
         private UITypeEditor? _editor;
         private bool _hasSwatch;
         private Image? _swatch;
@@ -21,9 +21,14 @@ internal sealed partial class DesignerActionPanel
         private bool _ignoreNextSelectChange;
         private bool _ignoreDropDownValue;
 
-        public EditorPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        private EditorPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
+            _button = new EditorButton();
+            _button.Click += new EventHandler(OnButtonClick);
+            _button.GotFocus += new EventHandler(OnButtonGotFocus);
+
+            AddedControls.Add(_button);
         }
 
         private unsafe void ActivateDropDown()
@@ -120,17 +125,6 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        protected override void AddControls(List<Control> controls)
-        {
-            base.AddControls(controls);
-
-            _button = new EditorButton();
-            _button.Click += new EventHandler(OnButtonClick);
-            _button.GotFocus += new EventHandler(OnButtonGotFocus);
-
-            controls.Add(_button);
-        }
-
         private void CloseDropDown()
         {
             if (_dropDownHolder is not null)
@@ -178,7 +172,7 @@ internal sealed partial class DesignerActionPanel
             if (!measureOnly)
             {
                 int buttonHeight = EditRegionSize.Height - EditorLineButtonPadding * 2 - 1;
-                _button!.Location = new Point(EditRegionLocation.X + EditRegionSize.Width - buttonHeight - EditorLineButtonPadding, EditRegionLocation.Y + EditorLineButtonPadding + 1);
+                _button.Location = new Point(EditRegionLocation.X + EditRegionSize.Width - buttonHeight - EditorLineButtonPadding, EditRegionLocation.Y + EditorLineButtonPadding + 1);
                 _button.Size = new Size(buttonHeight, buttonHeight);
             }
 
@@ -192,7 +186,7 @@ internal sealed partial class DesignerActionPanel
 
         private void OnButtonGotFocus(object? sender, EventArgs e)
         {
-            if (!_button!.Ellipsis)
+            if (!_button.Ellipsis)
             {
                 Focus();
             }
@@ -235,12 +229,12 @@ internal sealed partial class DesignerActionPanel
 
             if (_editor is not null)
             {
-                _button!.Ellipsis = (_editor.GetEditStyle(TypeDescriptorContext) == UITypeEditorEditStyle.Modal);
+                _button.Ellipsis = (_editor.GetEditStyle(TypeDescriptorContext) == UITypeEditorEditStyle.Modal);
                 _hasSwatch = _editor.GetPaintValueSupported(TypeDescriptorContext);
             }
             else
             {
-                _button!.Ellipsis = false;
+                _button.Ellipsis = false;
             }
 
             if (_button.Ellipsis)
@@ -318,7 +312,7 @@ internal sealed partial class DesignerActionPanel
             // VS is going to eat the F4 in PreProcessMessage, preventing it from ever
             // getting to an OnKeyDown on this control. Doing it here also allow to not
             // hook up to multiple events for each button.
-            if (!_button!.Focused && !_button.Ellipsis)
+            if (_button is { Focused: false, Ellipsis: false })
             {
                 if (keyData is (Keys.Alt | Keys.Down) or (Keys.Alt | Keys.Up) or Keys.F4)
                 {
@@ -401,11 +395,11 @@ internal sealed partial class DesignerActionPanel
             ActionPanel.SetDropDownActive(true);
             try
             {
-                _dropDownHolder.ShowDropDown(_button!);
+                _dropDownHolder.ShowDropDown(_button);
             }
             finally
             {
-                _button!.ResetMouseStates();
+                _button.ResetMouseStates();
                 ActionPanel.SetDropDownActive(false);
                 ActionPanel.InMethodInvoke = false;
             }
@@ -477,6 +471,16 @@ internal sealed partial class DesignerActionPanel
 
                 return base.ProcessDialogKey(keyData);
             }
+        }
+
+        public new sealed class Info(DesignerActionList list, DesignerActionItem item) : LineInfo(list, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new EditorPropertyLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(EditorPropertyLine);
         }
     }
 }

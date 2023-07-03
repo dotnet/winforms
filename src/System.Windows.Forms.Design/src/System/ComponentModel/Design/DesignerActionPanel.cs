@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
@@ -204,20 +203,18 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         remove => Events.RemoveHandler(s_eventFormDeactivate, value);
     }
 
-    private static void AddToCategories(LineInfo lineInfo, ListDictionary categories)
+    private static void AddToCategories(LineInfo lineInfo, Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories)
     {
         string? categoryName = lineInfo.Item!.Category;
         categoryName ??= string.Empty;
 
-        ListDictionary? category = (ListDictionary?)categories[categoryName];
-        if (category is null)
+        if (!categories.TryGetValue(categoryName, out Dictionary<DesignerActionList, List<LineInfo>>? category))
         {
-            category = new ListDictionary();
+            category = new Dictionary<DesignerActionList, List<LineInfo>>();
             categories.Add(categoryName, category);
         }
 
-        List<LineInfo>? categoryList = (List<LineInfo>?)category[lineInfo.List!];
-        if (categoryList is null)
+        if (!category.TryGetValue(lineInfo.List!, out List<LineInfo>? categoryList))
         {
             categoryList = new List<LineInfo>();
             category.Add(lineInfo.List!, categoryList);
@@ -543,7 +540,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         return (SelectNextControl(ActiveControl, forward, true, true, true));
     }
 
-    private void ProcessLists(DesignerActionListCollection? lists, ListDictionary categories)
+    private void ProcessLists(DesignerActionListCollection? lists, Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories)
     {
         if (lists is null)
         {
@@ -660,10 +657,9 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
     private LineInfo? ProcessTaskItem(DesignerActionList list, DesignerActionItem item)
     {
-        Line newLine;
         if (item is DesignerActionMethodItem)
         {
-            newLine = new MethodLine(_serviceProvider, this);
+            return new MethodLine.Info(list, item);
         }
         else if (item is DesignerActionPropertyItem pti)
         {
@@ -677,37 +673,37 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
             if (pd.TryGetEditor(out UITypeEditor? _))
             {
-                newLine = new EditorPropertyLine(_serviceProvider, this);
+                return new EditorPropertyLine.Info(list, item);
             }
             else if (pd.PropertyType == typeof(bool))
             {
                 if (IsReadOnlyProperty(pd))
                 {
-                    newLine = new TextBoxPropertyLine(_serviceProvider, this);
+                    return new TextBoxPropertyLine.Info(list, item);
                 }
                 else
                 {
-                    newLine = new CheckBoxPropertyLine(_serviceProvider, this);
+                    return new CheckBoxPropertyLine.Info(list, item);
                 }
             }
             else if (standardValuesSupported)
             {
-                newLine = new EditorPropertyLine(_serviceProvider, this);
+                return new EditorPropertyLine.Info(list, item);
             }
             else
             {
-                newLine = new TextBoxPropertyLine(_serviceProvider, this);
+                return new TextBoxPropertyLine.Info(list, item);
             }
         }
         else if (item is DesignerActionTextItem)
         {
             if (item is DesignerActionHeaderItem)
             {
-                newLine = new HeaderLine(_serviceProvider, this);
+                return new HeaderLine.Info(list, item);
             }
             else
             {
-                newLine = new TextLine(_serviceProvider, this);
+                return new TextLine.Info(list, item);
             }
         }
         else
@@ -715,8 +711,6 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             // Ignore unknown items
             return null;
         }
-
-        return new LineInfo(list, item, newLine);
     }
 
     private void SetDropDownActive(bool active)
@@ -817,17 +811,17 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             }
 
             // Merge the categories from the lists and create controls for each of the items
-            ListDictionary categories = new ListDictionary();
+            Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories = new();
             ProcessLists(actionLists, categories);
             ProcessLists(serviceActionLists, categories);
             // Create a flat list of lines w/ separators
             List<LineInfo> newLines = new List<LineInfo>
             {
                 // Always add a special line for the header
-                new LineInfo(null, new DesignerActionPanelHeaderItem(title, subtitle), new PanelHeaderLine(_serviceProvider, this))
+                new PanelHeaderLine.Info(new DesignerActionPanelHeaderItem(title, subtitle))
             };
             int categoriesIndex = 0;
-            foreach (ListDictionary category in categories.Values)
+            foreach (Dictionary<DesignerActionList, List<LineInfo>> category in categories.Values)
             {
                 int categoryIndex = 0;
                 foreach (List<LineInfo> categoryList in category.Values)
@@ -841,7 +835,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                     // Add a sub-separator
                     if (categoryIndex < category.Count)
                     {
-                        newLines.Add(new LineInfo(null, null, new SeparatorLine(_serviceProvider, this, true)));
+                        newLines.Add(new SeparatorLine.Info(true));
                     }
                 }
 
@@ -849,7 +843,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                 // Add a separator
                 if (categoriesIndex < categories.Count)
                 {
-                    newLines.Add(new LineInfo(null, null, new SeparatorLine(_serviceProvider, this)));
+                    newLines.Add(new SeparatorLine.Info());
                 }
             }
 
@@ -858,14 +852,13 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             for (int i = 0; i < newLines.Count; i++)
             {
                 LineInfo newLineInfo = newLines[i];
-                Line newLine = newLineInfo.Line;
                 // See if we can update an old line
                 bool updated = false;
                 if (i < _lines.Count)
                 {
                     Line oldLine = _lines[i];
 
-                    if (oldLine.GetType() == newLine.GetType())
+                    if (oldLine.GetType() == newLineInfo.LineType)
                     {
                         oldLine.UpdateActionItem(newLineInfo.List, newLineInfo.Item, _toolTip, ref currentTabIndex);
                         updated = true;
@@ -880,9 +873,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                 if (!updated)
                 {
                     // Add the new controls
+                    Line newLine = newLineInfo.CreateLine(_serviceProvider, this);
+                    Debug.Assert(newLine.GetType() == newLineInfo.LineType);
                     List<Control> newControlList = newLine.GetControls();
-                    Control[] controls = new Control[newControlList.Count];
-                    newControlList.CopyTo(controls);
+                    Control[] controls = newControlList.ToArray();
                     Controls.AddRange(controls);
 
                     newLine.UpdateActionItem(newLineInfo.List, newLineInfo.Item, _toolTip, ref currentTabIndex);

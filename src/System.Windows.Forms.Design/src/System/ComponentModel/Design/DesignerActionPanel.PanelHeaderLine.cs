@@ -11,23 +11,15 @@ internal sealed partial class DesignerActionPanel
     private sealed class PanelHeaderLine : Line
     {
         private DesignerActionPanelHeaderItem? _panelHeaderItem;
-        private Label? _titleLabel;
-        private Label? _subtitleLabel;
+        private readonly Label _titleLabel;
+        private readonly Label _subtitleLabel;
         private bool _formActive;
 
-        public PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        private PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
             actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
-        }
 
-        public sealed override string FocusId
-        {
-            get => string.Empty;
-        }
-
-        protected override void AddControls(List<Control> controls)
-        {
             _titleLabel = new Label
             {
                 BackColor = Color.Transparent,
@@ -44,26 +36,28 @@ internal sealed partial class DesignerActionPanel
                 UseMnemonic = false
             };
 
-            controls.Add(_titleLabel);
-            controls.Add(_subtitleLabel);
+            AddedControls.Add(_titleLabel);
+            AddedControls.Add(_subtitleLabel);
 
             // TODO: Need to figure out how to unhook these events. Perhaps have Initialize() and Cleanup() methods.
             ActionPanel.FormActivated += new EventHandler(OnFormActivated);
             ActionPanel.FormDeactivate += new EventHandler(OnFormDeactivate);
         }
 
-        public sealed override void Focus()
+        public override string FocusId => string.Empty;
+
+        public override void Focus()
         {
             Debug.Fail("Should never try to focus a PanelHeaderLine");
         }
 
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
-            Size titleSize = _titleLabel!.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
+            Size titleSize = _titleLabel.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
             Size subtitleSize = Size.Empty;
             if (!string.IsNullOrEmpty(_panelHeaderItem!.Subtitle))
             {
-                subtitleSize = _subtitleLabel!.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
+                subtitleSize = _subtitleLabel.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
             }
 
             if (!measureOnly)
@@ -71,7 +65,7 @@ internal sealed partial class DesignerActionPanel
                 _titleLabel.Location = new Point(LineLeftMargin, top + PanelHeaderVerticalPadding);
                 _titleLabel.Size = titleSize;
 
-                _subtitleLabel!.Location = new Point(LineLeftMargin, top + PanelHeaderVerticalPadding * 2 + titleSize.Height);
+                _subtitleLabel.Location = new Point(LineLeftMargin, top + PanelHeaderVerticalPadding * 2 + titleSize.Height);
                 _subtitleLabel.Size = subtitleSize;
             }
 
@@ -97,11 +91,8 @@ internal sealed partial class DesignerActionPanel
 
         private void OnParentControlFontChanged(object? sender, EventArgs e)
         {
-            if (_titleLabel is not null && _subtitleLabel is not null)
-            {
-                _titleLabel.Font = new Font(ActionPanel.Font, FontStyle.Bold);
-                _subtitleLabel.Font = ActionPanel.Font;
-            }
+            _titleLabel.Font = new Font(ActionPanel.Font, FontStyle.Bold);
+            _subtitleLabel.Font = ActionPanel.Font;
         }
 
         public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
@@ -123,14 +114,24 @@ internal sealed partial class DesignerActionPanel
         {
             _panelHeaderItem = (DesignerActionPanelHeaderItem)actionItem!;
 
-            _titleLabel!.Text = _panelHeaderItem.DisplayName;
+            _titleLabel.Text = _panelHeaderItem.DisplayName;
             _titleLabel.TabIndex = currentTabIndex++;
-            _subtitleLabel!.Text = _panelHeaderItem.Subtitle;
+            _subtitleLabel.Text = _panelHeaderItem.Subtitle;
             _subtitleLabel.TabIndex = currentTabIndex++;
             _subtitleLabel.Visible = (_subtitleLabel.Text.Length != 0);
 
             // Force the font to update
             OnParentControlFontChanged(null, EventArgs.Empty);
+        }
+
+        public sealed class Info(DesignerActionItem item) : LineInfo(null, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new PanelHeaderLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(PanelHeaderLine);
         }
     }
 }

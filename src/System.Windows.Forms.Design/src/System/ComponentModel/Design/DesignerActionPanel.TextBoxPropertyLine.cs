@@ -10,34 +10,16 @@ internal sealed partial class DesignerActionPanel
 {
     private class TextBoxPropertyLine : PropertyLine
     {
-        private TextBox? _textBox;
-        private EditorLabel? _readOnlyTextBoxLabel;
-        private Label? _label;
+        private readonly TextBox _textBox;
+        private readonly EditorLabel _readOnlyTextBoxLabel;
+        private readonly Label _label;
         private int _editXPos;
         private bool _textBoxDirty;
         private Point _editRegionLocation;
         private Size _editRegionSize;
 
-        public TextBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        protected TextBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
-        {
-        }
-
-        protected Control? EditControl { get; private set; }
-
-        protected Point EditRegionLocation
-        {
-            get => _editRegionLocation;
-        }
-
-        protected Point EditRegionRelativeLocation { get; private set; }
-
-        protected Size EditRegionSize
-        {
-            get => _editRegionSize;
-        }
-
-        protected override void AddControls(List<Control> controls)
         {
             _label = new Label
             {
@@ -71,10 +53,18 @@ internal sealed partial class DesignerActionPanel
             _textBox.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
             _textBox.LostFocus += new EventHandler(OnTextBoxLostFocus);
 
-            controls.Add(_readOnlyTextBoxLabel);
-            controls.Add(_textBox);
-            controls.Add(_label);
+            AddedControls.Add(_readOnlyTextBoxLabel);
+            AddedControls.Add(_textBox);
+            AddedControls.Add(_label);
         }
+
+        protected Control? EditControl { get; private set; }
+
+        protected Point EditRegionLocation => _editRegionLocation;
+
+        protected Point EditRegionRelativeLocation { get; private set; }
+
+        protected Size EditRegionSize => _editRegionSize;
 
         public sealed override void Focus()
         {
@@ -83,7 +73,7 @@ internal sealed partial class DesignerActionPanel
 
         internal int GetEditRegionXPos()
         {
-            if (string.IsNullOrEmpty(_label!.Text))
+            if (string.IsNullOrEmpty(_label.Text))
             {
                 return LineLeftMargin;
             }
@@ -98,7 +88,7 @@ internal sealed partial class DesignerActionPanel
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
             // Figure out our minimum width, Compare to proposed width, If we are smaller, widen the textbox to fit the line based on the bonus
-            int textBoxPreferredHeight = _textBox!.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Height;
+            int textBoxPreferredHeight = _textBox.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Height;
             textBoxPreferredHeight += TextBoxHeightFixup;
             int height = textBoxPreferredHeight + LineVerticalPadding + TextBoxLineInnerPadding * 2 + 2; // 2 == border size
 
@@ -113,7 +103,7 @@ internal sealed partial class DesignerActionPanel
                 EditRegionRelativeLocation = new Point(editRegionXPos, TextBoxTopPadding);
                 _editRegionSize = new Size(EditInputWidth + textBoxWidthBonus, textBoxPreferredHeight + TextBoxLineInnerPadding * 2);
 
-                _label!.Location = new Point(LineLeftMargin, top);
+                _label.Location = new Point(LineLeftMargin, top);
                 int labelPreferredWidth = _label.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Width;
                 _label.Size = new Size(labelPreferredWidth, height);
                 int specialPadding = EditControl is TextBox ? 2 : 0;
@@ -130,25 +120,25 @@ internal sealed partial class DesignerActionPanel
 
         protected override void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex)
         {
-            _label!.Text = StripAmpersands(PropertyItem!.DisplayName);
+            _label.Text = StripAmpersands(PropertyItem!.DisplayName);
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, PropertyItem.Description);
             _textBoxDirty = false;
 
             if (IsReadOnly())
             {
-                _readOnlyTextBoxLabel!.Visible = true;
-                _textBox!.Visible = false;
+                _readOnlyTextBoxLabel.Visible = true;
+                _textBox.Visible = false;
                 // REVIEW: Setting Visible to false doesn't seem to work, so position far away
                 _textBox.Location = new Point(int.MaxValue, int.MaxValue);
                 EditControl = _readOnlyTextBoxLabel;
             }
             else
             {
-                _readOnlyTextBoxLabel!.Visible = false;
+                _readOnlyTextBoxLabel.Visible = false;
                 // REVIEW: Setting Visible to false doesn't seem to work, so position far away
                 _readOnlyTextBoxLabel.Location = new Point(int.MaxValue, int.MaxValue);
-                _textBox!.Visible = true;
+                _textBox.Visible = true;
                 EditControl = _textBox;
             }
 
@@ -168,13 +158,13 @@ internal sealed partial class DesignerActionPanel
 
         private void OnReadOnlyTextBoxLabelEnter(object? sender, EventArgs e)
         {
-            _readOnlyTextBoxLabel!.ForeColor = SystemColors.HighlightText;
+            _readOnlyTextBoxLabel.ForeColor = SystemColors.HighlightText;
             _readOnlyTextBoxLabel.BackColor = SystemColors.Highlight;
         }
 
         private void OnReadOnlyTextBoxLabelLeave(object? sender, EventArgs e)
         {
-            _readOnlyTextBoxLabel!.ForeColor = SystemColors.WindowText;
+            _readOnlyTextBoxLabel.ForeColor = SystemColors.WindowText;
             _readOnlyTextBoxLabel.BackColor = SystemColors.Window;
         }
 
@@ -301,7 +291,7 @@ internal sealed partial class DesignerActionPanel
         internal void SetEditRegionXPos(int xPos)
         {
             // Ignore the x-position if we have no text. This allows the textbox to span the entire width of the panel.
-            if (!string.IsNullOrEmpty(_label!.Text))
+            if (!string.IsNullOrEmpty(_label.Text))
             {
                 _editXPos = xPos;
             }
@@ -361,6 +351,16 @@ internal sealed partial class DesignerActionPanel
 
                 public override string Value => Owner!.Text;
             }
+        }
+
+        public sealed class Info(DesignerActionList list, DesignerActionItem item) : LineInfo(list, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new TextBoxPropertyLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(TextBoxPropertyLine);
         }
     }
 }

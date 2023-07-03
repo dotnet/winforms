@@ -16,7 +16,7 @@ internal sealed partial class DesignerActionPanel
         private PropertyDescriptor? _propDesc;
         private ITypeDescriptorContext? _typeDescriptorContext;
 
-        public PropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+        protected PropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
         {
         }
 
