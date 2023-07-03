@@ -12,7 +12,7 @@ public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
 
     public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
     {
-        baseEnumerator = mappings.GetEnumerator();
+        baseEnumerator = ((IEnumerable)mappings).GetEnumerator();
     }
 
 #nullable disable // explicitly leaving Current as "oblivious" to avoid spurious warnings in foreach over non-generic enumerables
