@@ -58,7 +58,7 @@ public partial class ComboBox
                    PARAM.ToInt(owner.InternalHandle),
                    owner.GetHashCode()
                 }
-                : new int[] { RuntimeIDFirstItem, 0, 0 };
+                : base.RuntimeId;
 
         internal override void Expand() => ComboBoxDefaultAction(true);
 
@@ -127,23 +127,23 @@ public partial class ComboBox
         {
             get
             {
-                if (this.TryGetOwnerAs(out ComboBox? owner))
+                if (!this.TryGetOwnerAs(out ComboBox? owner))
                 {
-                    string? defaultAction = owner.AccessibleDefaultActionDescription;
-                    if (defaultAction is not null)
-                    {
-                        return defaultAction;
-                    }
-
-                    if (!owner.IsHandleCreated || owner.DropDownStyle == ComboBoxStyle.Simple)
-                    {
-                        return string.Empty;
-                    }
-
-                    return owner.DroppedDown ? SR.AccessibleActionCollapse : SR.AccessibleActionExpand;
+                    return string.Empty;
                 }
 
-                return string.Empty;
+                string? defaultAction = owner.AccessibleDefaultActionDescription;
+                if (defaultAction is not null)
+                {
+                    return defaultAction;
+                }
+
+                if (!owner.IsHandleCreated || owner.DropDownStyle == ComboBoxStyle.Simple)
+                {
+                    return string.Empty;
+                }
+
+                return owner.DroppedDown ? SR.AccessibleActionCollapse : SR.AccessibleActionExpand;
             }
         }
 
@@ -161,26 +161,28 @@ public partial class ComboBox
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal void RemoveListItemAccessibleObjectAt(int index)
+        internal void RemoveComboBoxItemAccessibleObjectAt(int index)
         {
-            if (this.TryGetOwnerAs(out ComboBox? owner))
+            if (!this.TryGetOwnerAs(out ComboBox? owner))
             {
-                IReadOnlyList<Entry> entries = owner.Items.InnerList;
-                Debug.Assert(index < entries.Count);
-
-                Entry item = entries[index];
-                if (!ItemAccessibleObjects.TryGetValue(item, out ComboBoxItemAccessibleObject? value))
-                {
-                    return;
-                }
-
-                if (OsVersion.IsWindows8OrGreater())
-                {
-                    UiaCore.UiaDisconnectProvider(value);
-                }
-
-                ItemAccessibleObjects.Remove(item);
+                return;
             }
+
+            IReadOnlyList<Entry> entries = owner.Items.InnerList;
+            Debug.Assert(index < entries.Count);
+
+            Entry item = entries[index];
+            if (!ItemAccessibleObjects.TryGetValue(item, out ComboBoxItemAccessibleObject? value))
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                UiaCore.UiaDisconnectProvider(value);
+            }
+
+            ItemAccessibleObjects.Remove(item);
         }
 
         internal void ReleaseDropDownButtonUiaProvider()
@@ -240,24 +242,22 @@ public partial class ComboBox
 
         private ComboBoxItemAccessibleObject? GetSelectedComboBoxItemAccessibleObject()
         {
-            if (this.TryGetOwnerAs(out ComboBox? owner))
-            {
-                // We should use the SelectedIndex property instead of the SelectedItem to avoid the problem of getting
-                // the incorrect item when the list contains duplicate items https://github.com/dotnet/winforms/issues/3590
-                int selectedIndex = owner.SelectedIndex;
-
-                if (selectedIndex < 0 || selectedIndex > owner.Items.Count - 1)
-                {
-                    return null;
-                }
-
-                Entry selectedItem = owner.Entries[selectedIndex];
-                return ItemAccessibleObjects.GetComboBoxItemAccessibleObject(selectedItem);
-            }
-            else
+            if (!this.TryGetOwnerAs(out ComboBox? owner))
             {
                 return null;
             }
+
+            // We should use the SelectedIndex property instead of the SelectedItem to avoid the problem of getting
+            // the incorrect item when the list contains duplicate items https://github.com/dotnet/winforms/issues/3590
+            int selectedIndex = owner.SelectedIndex;
+
+            if (selectedIndex < 0 || selectedIndex > owner.Items.Count - 1)
+            {
+                return null;
+            }
+
+            Entry selectedItem = owner.Entries[selectedIndex];
+            return ItemAccessibleObjects.GetComboBoxItemAccessibleObject(selectedItem);
         }
 
         private AccessibleObject? GetFirstChild()
