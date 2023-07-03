@@ -366,7 +366,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     /// </summary>
     IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
     {
-        ArrayList windows = new ArrayList();
+        List<ThemedScrollbarWindow> windows = new(Controls.Count);
         foreach (Control c in Controls)
         {
             ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow { Handle = c.Handle };
