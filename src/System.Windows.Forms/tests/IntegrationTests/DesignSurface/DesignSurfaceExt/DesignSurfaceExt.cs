@@ -371,29 +371,30 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
     public void DoAction(string command)
     {
         if (string.IsNullOrEmpty(command))
+        {
             return;
+        }
 
         IMenuCommandService ims = GetService(typeof(IMenuCommandService)) as IMenuCommandService;
 
         try
         {
-            switch (command.ToUpper())
+            CommandID commandId = command.ToUpper() switch
             {
-                case "CUT":
-                    ims.GlobalInvoke(StandardCommands.Cut);
-                    break;
-                case "COPY":
-                    ims.GlobalInvoke(StandardCommands.Copy);
-                    break;
-                case "PASTE":
-                    ims.GlobalInvoke(StandardCommands.Paste);
-                    break;
-                case "DELETE":
-                    ims.GlobalInvoke(StandardCommands.Delete);
-                    break;
-                default:
-                    // do nothing;
-                    break;
+                "CUT" => StandardCommands.Cut,
+                "COPY" => StandardCommands.Copy,
+                "PASTE" => StandardCommands.Paste,
+                "DELETE" => StandardCommands.Delete,
+                _ => null,
+            };
+
+            if (commandId is not null)
+            {
+                MenuCommand menuCommand = ims?.FindCommand(commandId);
+                if (menuCommand?.Enabled is true)
+                {
+                    menuCommand.Invoke();
+                }
             }
         }
         catch (Exception ex)
