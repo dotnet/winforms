@@ -411,7 +411,7 @@ public unsafe class WebBrowserSiteBase :
 
         var posRect = new RECT(0, 0, lprcPosRect->right - lprcPosRect->left, lprcPosRect->bottom - lprcPosRect->top);
         var clipRect = WebBrowserHelper.GetClipRect();
-        Host.AXInPlaceObject?.SetObjectRects(&posRect, &clipRect);
+        Host.AXInPlaceObject!.SetObjectRects(&posRect, &clipRect);
         Host.MakeDirty();
         return HRESULT.S_OK;
     }

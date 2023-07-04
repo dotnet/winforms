@@ -208,7 +208,7 @@ public unsafe partial class WebBrowserBase : Control
                 _webBrowserBaseChangingSize.Height = height;
                 RECT posRect = new Rectangle(0, 0, width, height);
                 RECT clipRect = WebBrowserHelper.GetClipRect();
-                AXInPlaceObject?.SetObjectRects(&posRect, &clipRect);
+                AXInPlaceObject!.SetObjectRects(&posRect, &clipRect);
             }
             finally
             {
@@ -945,7 +945,7 @@ public unsafe partial class WebBrowserBase : Control
             {
                 // Simply setting the site to the ActiveX control should activate it.
                 // And this will take us to the Running state.
-                _axOleObject?.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
+                _axOleObject!.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
             }
 
             // We start receiving events now (but we do this only if we are not in DesignMode).
@@ -971,7 +971,7 @@ public unsafe partial class WebBrowserBase : Control
             parentContainer?.RemoveControl(this);
 
             // Now inform the ActiveX control that it's been un-sited.
-            _axOleObject?.SetClientSite(null);
+            _axOleObject!.SetClientSite(null);
 
             // We are now Loaded!
             ActiveXState = WebBrowserHelper.AXState.Loaded;
@@ -1014,7 +1014,7 @@ public unsafe partial class WebBrowserBase : Control
             }
 
             // Now, InPlaceDeactivate.
-            AXInPlaceObject?.InPlaceDeactivate();
+            AXInPlaceObject!.InPlaceDeactivate();
 
             // We are now Running!
             ActiveXState = WebBrowserHelper.AXState.Running;
@@ -1166,7 +1166,7 @@ public unsafe partial class WebBrowserBase : Control
     private unsafe Size GetExtent()
     {
         Size size = default;
-        _axOleObject?.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+        _axOleObject!.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
         HiMetric2Pixel(ref size);
         return size;
     }

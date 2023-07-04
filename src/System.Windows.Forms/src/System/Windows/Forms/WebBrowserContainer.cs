@@ -376,7 +376,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         if (siteUIActive is not null && siteUIActive != site)
         {
             WebBrowserBase tempSite = siteUIActive;
-            tempSite.AXInPlaceObject?.UIDeactivate();
+            tempSite.AXInPlaceObject!.UIDeactivate();
         }
 
         site.AddSelectionHandler();
