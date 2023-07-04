@@ -173,7 +173,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             {
                 if (fuseOcx)
                 {
-                    object ax = webBrowserBase._activeXInstance;
+                    object? ax = webBrowserBase._activeXInstance;
                     if (ax is not null)
                     {
                         list.Add(ax);
@@ -203,7 +203,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
     private IContainer? GetParentIContainer()
     {
-        ISite site = parent.Site;
+        ISite? site = parent.Site;
         return site is not null && site.DesignMode ? site.Container : null;
     }
 
@@ -345,7 +345,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
                 return ctl.container;
             }
 
-            ScrollableControl f = ctl.ContainingControl;
+            ScrollableControl? f = ctl.ContainingControl;
             if (f is not null)
             {
                 WebBrowserContainer container = ctl.CreateWebBrowserContainer();
@@ -376,13 +376,13 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         if (siteUIActive is not null && siteUIActive != site)
         {
             WebBrowserBase tempSite = siteUIActive;
-            tempSite.AXInPlaceObject.UIDeactivate();
+            tempSite.AXInPlaceObject?.UIDeactivate();
         }
 
         site.AddSelectionHandler();
         Debug.Assert(siteUIActive is null, "Object did not call OnUIDeactivate");
         siteUIActive = site;
-        ContainerControl f = site.ContainingControl;
+        ContainerControl? f = site.ContainingControl;
         if (f is not null && f.Contains(site))
         {
             f.SetActiveControl(site);
@@ -409,7 +409,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         if (siteActive == site)
         {
             siteActive = null;
-            ContainerControl parentContainer = parent.FindContainerControlInternal();
+            ContainerControl? parentContainer = parent.FindContainerControlInternal();
             parentContainer?.SetActiveControl(null);
         }
     }

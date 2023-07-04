@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -39,23 +37,23 @@ public unsafe partial class WebBrowserBase : Control
     private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;
     private BitVector32 axHostState;
     private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
-    private WebBrowserSiteBase axSite;
-    private ContainerControl containingControl;
+    private WebBrowserSiteBase? axSite;
+    private ContainerControl? containingControl;
     private HWND hwndFocus;
-    private EventHandler selectionChangeHandler;
+    private EventHandler? selectionChangeHandler;
     private readonly Guid clsid;
     // Pointers to the ActiveX object: Interface pointers are cached for perf.
-    private IOleObject.Interface axOleObject;
-    private IOleInPlaceObject.Interface axOleInPlaceObject;
-    private IOleInPlaceActiveObject.Interface axOleInPlaceActiveObject;
-    private IOleControl.Interface axOleControl;
-    private WebBrowserBaseNativeWindow axWindow;
+    private IOleObject.Interface? axOleObject;
+    private IOleInPlaceObject.Interface? axOleInPlaceObject;
+    private IOleInPlaceActiveObject.Interface? axOleInPlaceActiveObject;
+    private IOleControl.Interface? axOleControl;
+    private WebBrowserBaseNativeWindow? axWindow;
     // We need to change the size of the inner ActiveX control before the
     //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
     //is changed) for better visual effect. We use this field to know what size
     //the WebBrowserBase control is changing to.
     private Size webBrowserBaseChangingSize = Size.Empty;
-    private WebBrowserContainer wbContainer;
+    private WebBrowserContainer? wbContainer;
 
     // This flags the WebBrowser not to process dialog keys when the ActiveX control is doing it
     // and calls back into the WebBrowser for some reason.
@@ -64,8 +62,8 @@ public unsafe partial class WebBrowserBase : Control
     //
     // Internal fields:
     //
-    internal WebBrowserContainer container;
-    internal object _activeXInstance;
+    internal WebBrowserContainer? container;
+    internal object? _activeXInstance;
 
     /// <summary>
     ///  Creates a new instance of a WinForms control which wraps an ActiveX control
@@ -94,7 +92,7 @@ public unsafe partial class WebBrowserBase : Control
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public object ActiveXInstance
+    public object? ActiveXInstance
     {
         get
         {
@@ -180,7 +178,7 @@ public unsafe partial class WebBrowserBase : Control
     // component has been added to a container, and a null value indicates that
     // this component is being removed from a container.
     //
-    public override ISite Site
+    public override ISite? Site
     {
         set
         {
@@ -210,7 +208,7 @@ public unsafe partial class WebBrowserBase : Control
                 webBrowserBaseChangingSize.Height = height;
                 RECT posRect = new Rectangle(0, 0, width, height);
                 RECT clipRect = WebBrowserHelper.GetClipRect();
-                AXInPlaceObject.SetObjectRects(&posRect, &clipRect);
+                AXInPlaceObject?.SetObjectRects(&posRect, &clipRect);
             }
             finally
             {
@@ -263,7 +261,7 @@ public unsafe partial class WebBrowserBase : Control
 
             // Give the ActiveX control a chance to process this key by calling
             // IOleInPlaceActiveObject::TranslateAccelerator.
-            HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
+            HRESULT hr = axOleInPlaceActiveObject!.TranslateAccelerator(&win32Message);
             if (hr == HRESULT.S_OK)
             {
                 s_controlKeyboardRouting.TraceVerbose($"\t Message translated to {win32Message}");
@@ -338,7 +336,7 @@ public unsafe partial class WebBrowserBase : Control
                 cb = (uint)sizeof(CONTROLINFO)
             };
 
-            if (axOleControl.GetControlInfo(&controlInfo).Failed)
+            if (axOleControl!.GetControlInfo(&controlInfo).Failed)
             {
                 return processed;
             }
@@ -451,7 +449,7 @@ public unsafe partial class WebBrowserBase : Control
                 if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                 {
                     HWND hwndInPlaceObject = HWND.Null;
-                    if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded)
+                    if (AXInPlaceObject!.GetWindow(&hwndInPlaceObject).Succeeded)
                     {
                         Application.ParkHandle(new HandleRef<HWND>(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
                     }
@@ -490,7 +488,7 @@ public unsafe partial class WebBrowserBase : Control
 
     protected override void OnParentChanged(EventArgs e)
     {
-        Control parent = ParentInternal;
+        Control? parent = ParentInternal;
         if ((Visible && parent is not null && parent.Visible) || IsHandleCreated)
         {
             TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
@@ -714,7 +712,7 @@ public unsafe partial class WebBrowserBase : Control
     {
         RECT posRect = Bounds;
         using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite);
-        HRESULT hr = axOleObject.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
+        HRESULT hr = axOleObject!.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
         Debug.Assert(hr.Succeeded, $"DoVerb call failed for verb 0x{verb}");
         return hr.Succeeded;
     }
@@ -731,7 +729,7 @@ public unsafe partial class WebBrowserBase : Control
     // behaviors of ActiveX controls.
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    internal ContainerControl ContainingControl
+    internal ContainerControl? ContainingControl
     {
         get
         {
@@ -774,13 +772,13 @@ public unsafe partial class WebBrowserBase : Control
     {
         if (DesignMode)
         {
-            ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
+            ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
             this.selectionStyle = selectionStyle;
             if (iss is not null && iss.GetComponentSelected(this))
             {
                 // The ActiveX Host designer will offer an extender property
                 // called "SelectionStyle"
-                PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
+                PropertyDescriptor? prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
                 if (prop is not null && prop.PropertyType == typeof(int))
                 {
                     prop.SetValue(this, (int)selectionStyle);
@@ -795,7 +793,7 @@ public unsafe partial class WebBrowserBase : Control
         {
             SetAXHostState(WebBrowserHelper.addedSelectionHandler, true);
 
-            ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
+            ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
             if (iss is not null)
             {
                 iss.SelectionChanging += SelectionChangeHandler;
@@ -810,7 +808,7 @@ public unsafe partial class WebBrowserBase : Control
         {
             SetAXHostState(WebBrowserHelper.addedSelectionHandler, false);
 
-            ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
+            ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
             if (iss is not null)
             {
                 iss.SelectionChanging -= SelectionChangeHandler;
@@ -843,7 +841,7 @@ public unsafe partial class WebBrowserBase : Control
 
     internal void MakeDirty()
     {
-        if (Site.TryGetService(out IComponentChangeService changeService))
+        if (Site.TryGetService(out IComponentChangeService? changeService))
         {
             changeService.OnComponentChanging(this);
             changeService.OnComponentChanged(this);
@@ -947,7 +945,7 @@ public unsafe partial class WebBrowserBase : Control
             {
                 // Simply setting the site to the ActiveX control should activate it.
                 // And this will take us to the Running state.
-                axOleObject.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
+                axOleObject?.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
             }
 
             // We start receiving events now (but we do this only if we are not in DesignMode).
@@ -968,16 +966,13 @@ public unsafe partial class WebBrowserBase : Control
         {
             StopEvents();
 
-            //
             // Remove ourselves from our parent container...
             WebBrowserContainer parentContainer = GetParentContainer();
             parentContainer?.RemoveControl(this);
 
-            //
             // Now inform the ActiveX control that it's been un-sited.
-            axOleObject.SetClientSite(null);
+            axOleObject?.SetClientSite(null);
 
-            //
             // We are now Loaded!
             ActiveXState = WebBrowserHelper.AXState.Loaded;
         }
@@ -1010,20 +1005,17 @@ public unsafe partial class WebBrowserBase : Control
         Debug.Assert(ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Wrong start state to transition from");
         if (ActiveXState == WebBrowserHelper.AXState.InPlaceActive)
         {
-            //
             // First, lets make sure we transfer the ContainingControl's ActiveControl
             // before we InPlaceDeactivate.
-            ContainerControl f = ContainingControl;
+            ContainerControl? f = ContainingControl;
             if (f is not null && f.ActiveControl == this)
             {
                 f.SetActiveControl(null);
             }
 
-            //
             // Now, InPlaceDeactivate.
-            AXInPlaceObject.InPlaceDeactivate();
+            AXInPlaceObject?.InPlaceDeactivate();
 
-            //
             // We are now Running!
             ActiveXState = WebBrowserHelper.AXState.Running;
         }
@@ -1054,7 +1046,7 @@ public unsafe partial class WebBrowserBase : Control
         Debug.Assert(ActiveXState == WebBrowserHelper.AXState.UIActive, "Wrong start state to transition from");
         if (ActiveXState == WebBrowserHelper.AXState.UIActive)
         {
-            HRESULT hr = AXInPlaceObject.UIDeactivate();
+            HRESULT hr = AXInPlaceObject!.UIDeactivate();
             Debug.Assert(hr.Succeeded, "Failed to UIDeactivate");
 
             // We are now InPlaceActive
@@ -1091,7 +1083,7 @@ public unsafe partial class WebBrowserBase : Control
         axOleInPlaceObject = null;
         axOleInPlaceActiveObject = null;
         axOleControl = null;
-        //
+
         // Lets give the inheriting classes a chance to release
         // their cached interfaces of the ActiveX object.
         DetachInterfaces();
@@ -1112,11 +1104,11 @@ public unsafe partial class WebBrowserBase : Control
     //
     // We need to do special stuff (convert window messages to interface calls)
     // during design time when selection changes.
-    private void OnNewSelection(object sender, EventArgs e)
+    private void OnNewSelection(object? sender, EventArgs e)
     {
         if (DesignMode)
         {
-            ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
+            ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
             if (iss is not null)
             {
                 // We are no longer selected.
@@ -1137,10 +1129,10 @@ public unsafe partial class WebBrowserBase : Control
                 {
                     //
                     // The AX Host designer will offer an extender property called "SelectionStyle"
-                    PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
                     if (prop is not null && prop.PropertyType == typeof(int))
                     {
-                        int curSelectionStyle = (int)prop.GetValue(this);
+                        int curSelectionStyle = (int)prop.GetValue(this)!;
                         if (curSelectionStyle != (int)selectionStyle)
                         {
                             prop.SetValue(this, selectionStyle);
@@ -1156,7 +1148,7 @@ public unsafe partial class WebBrowserBase : Control
         var sz = new Size(width, height);
         bool resetExtents = DesignMode;
         Pixel2hiMetric(ref sz);
-        HRESULT hr = axOleObject.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
+        HRESULT hr = axOleObject!.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
         if (hr != HRESULT.S_OK)
         {
             resetExtents = true;
@@ -1174,7 +1166,7 @@ public unsafe partial class WebBrowserBase : Control
     private unsafe Size GetExtent()
     {
         Size size = default;
-        axOleObject.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+        axOleObject?.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
         HiMetric2Pixel(ref size);
         return size;
     }
@@ -1212,11 +1204,11 @@ public unsafe partial class WebBrowserBase : Control
     }
 
     //Find the uppermost ContainerControl that this control lives in
-    internal ContainerControl FindContainerControlInternal()
+    internal ContainerControl? FindContainerControlInternal()
     {
         if (Site is not null)
         {
-            IDesignerHost host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
+            IDesignerHost? host = (IDesignerHost?)Site.GetService(typeof(IDesignerHost));
             if (host is not null)
             {
                 IComponent comp = host.RootComponent;
@@ -1227,8 +1219,8 @@ public unsafe partial class WebBrowserBase : Control
             }
         }
 
-        ContainerControl cc = null;
-        for (Control control = this; control is not null; control = control.ParentInternal)
+        ContainerControl? cc = null;
+        for (Control? control = this; control is not null; control = control.ParentInternal)
         {
             if (control is ContainerControl tempCC)
             {
@@ -1257,12 +1249,12 @@ public unsafe partial class WebBrowserBase : Control
         if (_activeXInstance is not null)
         {
             Invalidate();
-            HRESULT result = axOleControl.OnAmbientPropertyChange(dispid);
+            HRESULT result = axOleControl!.OnAmbientPropertyChange(dispid);
             Debug.Assert(!result.Failed, $"{result}");
         }
     }
 
-    internal IOleInPlaceObject.Interface AXInPlaceObject => axOleInPlaceObject;
+    internal IOleInPlaceObject.Interface? AXInPlaceObject => axOleInPlaceObject;
 
     // ---------------------------------------------------------------
     // The following properties implemented in the Control class don't make
@@ -1339,6 +1331,7 @@ public unsafe partial class WebBrowserBase : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public override Font Font
     {
         get => base.Font;
@@ -1384,7 +1377,7 @@ public unsafe partial class WebBrowserBase : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override Image BackgroundImage
+    public override Image? BackgroundImage
     {
         get => base.BackgroundImage;
         set
@@ -1408,6 +1401,7 @@ public unsafe partial class WebBrowserBase : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public override Cursor Cursor
     {
         get => base.Cursor;
@@ -1449,11 +1443,12 @@ public unsafe partial class WebBrowserBase : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [Bindable(false)]
+    [AllowNull]
     public override string Text
     {
         get
         {
-            return "";
+            return string.Empty;
         }
         set
         {
@@ -1479,7 +1474,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler? BackgroundImageLayoutChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
         remove { }
@@ -1487,7 +1482,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler Enter
+    public new event EventHandler? Enter
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Enter"));
         remove { }
@@ -1495,7 +1490,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler Leave
+    public new event EventHandler? Leave
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Leave"));
         remove { }
@@ -1503,7 +1498,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseCaptureChanged
+    public new event EventHandler? MouseCaptureChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseCaptureChanged"));
         remove { }
@@ -1511,7 +1506,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseClick
+    public new event MouseEventHandler? MouseClick
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
         remove { }
@@ -1519,7 +1514,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseDoubleClick
+    public new event MouseEventHandler? MouseDoubleClick
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
         remove { }
@@ -1527,7 +1522,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackColorChanged
+    public new event EventHandler? BackColorChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
         remove { }
@@ -1535,7 +1530,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
+    public new event EventHandler? BackgroundImageChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
         remove { }
@@ -1543,7 +1538,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BindingContextChanged
+    public new event EventHandler? BindingContextChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
         remove { }
@@ -1551,7 +1546,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler CursorChanged
+    public new event EventHandler? CursorChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
         remove { }
@@ -1559,7 +1554,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler EnabledChanged
+    public new event EventHandler? EnabledChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
         remove { }
@@ -1567,7 +1562,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler FontChanged
+    public new event EventHandler? FontChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
         remove { }
@@ -1575,7 +1570,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ForeColorChanged
+    public new event EventHandler? ForeColorChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
         remove { }
@@ -1583,7 +1578,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler RightToLeftChanged
+    public new event EventHandler? RightToLeftChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
         remove { }
@@ -1591,7 +1586,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TextChanged
+    public new event EventHandler? TextChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
         remove { }
@@ -1599,7 +1594,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler Click
+    public new event EventHandler? Click
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
         remove { }
@@ -1607,7 +1602,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event DragEventHandler DragDrop
+    public new event DragEventHandler? DragDrop
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
         remove { }
@@ -1615,7 +1610,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event DragEventHandler DragEnter
+    public new event DragEventHandler? DragEnter
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
         remove { }
@@ -1623,7 +1618,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event DragEventHandler DragOver
+    public new event DragEventHandler? DragOver
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
         remove { }
@@ -1631,7 +1626,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler DragLeave
+    public new event EventHandler? DragLeave
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
         remove { }
@@ -1639,7 +1634,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event GiveFeedbackEventHandler GiveFeedback
+    public new event GiveFeedbackEventHandler? GiveFeedback
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
         remove { }
@@ -1648,7 +1643,7 @@ public unsafe partial class WebBrowserBase : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     //Everett
-    public new event HelpEventHandler HelpRequested
+    public new event HelpEventHandler? HelpRequested
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
         remove { }
@@ -1656,7 +1651,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event PaintEventHandler Paint
+    public new event PaintEventHandler? Paint
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
         remove { }
@@ -1664,7 +1659,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event QueryContinueDragEventHandler QueryContinueDrag
+    public new event QueryContinueDragEventHandler? QueryContinueDrag
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
         remove { }
@@ -1672,7 +1667,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+    public new event QueryAccessibilityHelpEventHandler? QueryAccessibilityHelp
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
         remove { }
@@ -1680,7 +1675,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler DoubleClick
+    public new event EventHandler? DoubleClick
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
         remove { }
@@ -1688,7 +1683,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ImeModeChanged
+    public new event EventHandler? ImeModeChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
         remove { }
@@ -1696,7 +1691,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyEventHandler KeyDown
+    public new event KeyEventHandler? KeyDown
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
         remove { }
@@ -1704,7 +1699,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyPressEventHandler KeyPress
+    public new event KeyPressEventHandler? KeyPress
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
         remove { }
@@ -1712,7 +1707,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyEventHandler KeyUp
+    public new event KeyEventHandler? KeyUp
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
         remove { }
@@ -1720,7 +1715,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event LayoutEventHandler Layout
+    public new event LayoutEventHandler? Layout
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
         remove { }
@@ -1728,7 +1723,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseDown
+    public new event MouseEventHandler? MouseDown
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
         remove { }
@@ -1736,7 +1731,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseEnter
+    public new event EventHandler? MouseEnter
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
         remove { }
@@ -1744,7 +1739,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseLeave
+    public new event EventHandler? MouseLeave
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
         remove { }
@@ -1752,7 +1747,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseHover
+    public new event EventHandler? MouseHover
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
         remove { }
@@ -1760,7 +1755,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseMove
+    public new event MouseEventHandler? MouseMove
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
         remove { }
@@ -1768,7 +1763,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseUp
+    public new event MouseEventHandler? MouseUp
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
         remove { }
@@ -1776,7 +1771,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseWheel
+    public new event MouseEventHandler? MouseWheel
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
         remove { }
@@ -1784,7 +1779,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event UICuesEventHandler ChangeUICues
+    public new event UICuesEventHandler? ChangeUICues
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
         remove { }
@@ -1792,7 +1787,7 @@ public unsafe partial class WebBrowserBase : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler StyleChanged
+    public new event EventHandler? StyleChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
         remove { }
