@@ -51,25 +51,9 @@ public partial class ButtonBase
             return (mnemonic == (char)0) ? null : $"Alt+{mnemonic}";
         }
 
-        public override string? KeyboardShortcut
-        {
-            get
-            {
-                if (!this.TryGetOwnerAs(out ButtonBase? owner))
-                {
-                    return null;
-                }
+        public override string? KeyboardShortcut => this.TryGetOwnerAs(out ButtonBase? owner)
+                                    ? GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel) : null;
 
-                return GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel);
-            }
-        }
-
-        public override string? Name
-        {
-            get
-            {
-                return this.TryGetOwnerAs(out ButtonBase? owner) && owner.UseMnemonic ? base.Name : TextLabel;
-            }
-        }
+        public override string? Name => this.TryGetOwnerAs(out ButtonBase? owner) && owner.UseMnemonic ? base.Name : TextLabel;
     }
 }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop.UiaCore;
+using CheckBoxAccessibleObject = System.Windows.Forms.CheckBox.CheckBoxAccessibleObject;
 
 namespace System.Windows.Forms.Tests;
 
@@ -11,14 +12,14 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Ctor_NullControl_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => new CheckBox.CheckBoxAccessibleObject(null));
+        Assert.Throws<ArgumentException>(() => new CheckBoxAccessibleObject(null));
     }
 
     [WinFormsFact]
     public void CheckBoxAccessibleObject_Ctor_InvalidTypeControl_ThrowsArgumentException()
     {
         using var textBox = new TextBox();
-        Assert.Throws<ArgumentException>(() => new CheckBox.CheckBoxAccessibleObject(textBox));
+        Assert.Throws<ArgumentException>(() => new CheckBoxAccessibleObject(textBox));
     }
 
     [WinFormsFact]
@@ -26,7 +27,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     {
         using var checkBox = new CheckBox();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.NotNull(checkBoxAccessibleObject.Owner);
         Assert.False(checkBox.IsHandleCreated);
@@ -42,7 +43,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.Equal("TestActionDescription", checkBoxAccessibleObject.DefaultAction);
         Assert.False(checkBox.IsHandleCreated);
@@ -53,7 +54,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     {
         using var checkBox = new CheckBox();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.Equal(AccessibleRole.CheckButton, checkBoxAccessibleObject.Role);
         Assert.False(checkBox.IsHandleCreated);
@@ -68,7 +69,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.Equal(AccessibleRole.PushButton, checkBoxAccessibleObject.Role);
         Assert.False(checkBox.IsHandleCreated);
@@ -86,7 +87,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
             checkBox.CreateControl();
         }
 
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.Equal(accessibleStates, checkBoxAccessibleObject.State);
         Assert.Equal(createControl, checkBox.IsHandleCreated);
@@ -108,7 +109,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
             checkBox.CreateControl();
         }
 
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
         Assert.Equal((ToggleState)toggleState, checkBoxAccessibleObject.ToggleState);
 
         Assert.Equal(createControl, checkBox.IsHandleCreated);
@@ -148,7 +149,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
             checkBox.CreateControl();
         }
 
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
         checkBoxAccessibleObject.DoDefaultAction();
 
         Assert.Equal((ToggleState)toggleState, checkBoxAccessibleObject.ToggleState);
@@ -164,7 +165,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.Equal("TestDescription", checkBoxAccessibleObject.Description);
         Assert.False(checkBox.IsHandleCreated);
@@ -179,7 +180,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.Equal("TestName", checkBoxAccessibleObject.Name);
         Assert.False(checkBox.IsHandleCreated);
@@ -200,7 +201,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         };
 
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
         object value = checkBoxAccessibleObject.GetPropertyValue((UIA)propertyID);
 
         Assert.Equal(expected, value);
@@ -214,7 +215,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     {
         using var checkBox = new CheckBox();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
         Assert.True(checkBoxAccessibleObject.IsPatternSupported((UIA)patternId));
         Assert.False(checkBox.IsHandleCreated);
@@ -225,7 +226,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     {
         using var checkBox = new CheckBox();
         Assert.False(checkBox.IsHandleCreated);
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
         Assert.False(checkBox.Checked);
 
         checkBoxAccessibleObject.Toggle();
@@ -242,7 +243,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     public void CheckBoxAccessibleObject_Toggle_Invoke_ThreeState_Success()
     {
         using var checkBox = new CheckBox() { ThreeState = true };
-        var checkBoxAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
         Assert.Equal(CheckState.Unchecked, checkBox.CheckState);
 
         checkBoxAccessibleObject.Toggle();
@@ -293,14 +294,14 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     {
         using var checkBox = new CheckBox();
         checkBox.Text = "&checkBox";
-        Assert.False(checkBox.IsHandleCreated);
-        var buttonAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
 
-        Assert.Equal("Alt+c", buttonAccessibleObject.KeyboardShortcut);
+        var accessibleObject = new CheckBoxAccessibleObject(checkBox);
+
+        Assert.Equal("Alt+c", accessibleObject.KeyboardShortcut);
 
         checkBox.UseMnemonic = false;
 
-        Assert.Null(buttonAccessibleObject.KeyboardShortcut);
+        Assert.Null(accessibleObject.KeyboardShortcut);
         Assert.False(checkBox.IsHandleCreated);
     }
 
@@ -310,14 +311,13 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     {
         using var checkBox = new CheckBox();
         checkBox.Text = "&checkBox";
-        Assert.False(checkBox.IsHandleCreated);
-        var buttonAccessibleObject = new CheckBox.CheckBoxAccessibleObject(checkBox);
+        var accessibleObject = new CheckBoxAccessibleObject(checkBox);
 
-        Assert.Equal("checkBox", buttonAccessibleObject.Name);
+        Assert.Equal("checkBox", accessibleObject.Name);
 
         checkBox.UseMnemonic = false;
 
-        Assert.Equal("&checkBox", buttonAccessibleObject.Name);
+        Assert.Equal("&checkBox", accessibleObject.Name);
         Assert.False(checkBox.IsHandleCreated);
     }
 }

@@ -4,6 +4,7 @@
 
 using static Interop;
 using static Interop.UiaCore;
+using RadioButtonAccessibleObject = System.Windows.Forms.RadioButton.RadioButtonAccessibleObject;
 
 namespace System.Windows.Forms.Tests;
 
@@ -12,7 +13,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
     [WinFormsFact]
     public void RadioButtonAccessibleObject_Ctor_NullControl_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new RadioButton.RadioButtonAccessibleObject(null));
+        Assert.Throws<ArgumentNullException>(() => new RadioButtonAccessibleObject(null));
     }
 
     [WinFormsFact]
@@ -20,7 +21,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
     {
         using var radioButton = new RadioButton();
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.NotNull(radioButtonAccessibleObject.Owner);
         Assert.False(radioButton.IsHandleCreated);
@@ -35,7 +36,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         };
 
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.Equal("TestActionDescription", radioButtonAccessibleObject.DefaultAction);
         Assert.False(radioButton.IsHandleCreated);
@@ -49,7 +50,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
             AccessibleDefaultActionDescription = "TestActionDescription"
         };
 
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.Equal("TestActionDescription", radioButtonAccessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(radioButton.IsHandleCreated);
@@ -64,7 +65,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         };
 
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.Equal("TestDescription", radioButtonAccessibleObject.Description);
         Assert.False(radioButton.IsHandleCreated);
@@ -79,7 +80,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         };
 
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.Equal("TestName", radioButtonAccessibleObject.Name);
         Assert.False(radioButton.IsHandleCreated);
@@ -94,7 +95,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         };
 
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.Equal(AccessibleRole.PushButton, radioButtonAccessibleObject.Role);
         Assert.False(radioButton.IsHandleCreated);
@@ -105,7 +106,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
     {
         using var radioButton = new RadioButton();
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.Equal(AccessibleRole.RadioButton, radioButtonAccessibleObject.Role);
         Assert.False(radioButton.IsHandleCreated);
@@ -123,7 +124,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
             radioButton.CreateControl();
         }
 
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
         Assert.Equal(accessibleStatesFirstStage, radioButtonAccessibleObject.State);
 
         radioButtonAccessibleObject.DoDefaultAction();
@@ -144,7 +145,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
             radioButton.CreateControl();
         }
 
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
         Assert.False(radioButtonAccessibleObject.IsItemSelected);
 
         radioButtonAccessibleObject.DoDefaultAction();
@@ -167,7 +168,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         };
 
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
         object value = radioButtonAccessibleObject.GetPropertyValue((UIA)propertyID);
 
         Assert.Equal(expected, value);
@@ -185,7 +186,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         };
 
         Assert.False(radioButton.IsHandleCreated);
-        var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
         Assert.True(radioButtonAccessibleObject.IsPatternSupported((UIA)patternId));
         Assert.False(radioButton.IsHandleCreated);
@@ -226,14 +227,13 @@ public class RadioButton_RadioButtonAccessibleObjectTests
     {
         using var radioButton = new RadioButton();
         radioButton.Text = "&radioButton";
-        Assert.False(radioButton.IsHandleCreated);
-        var buttonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var accessibleObject = new RadioButtonAccessibleObject(radioButton);
 
-        Assert.Equal("Alt+r", buttonAccessibleObject.KeyboardShortcut);
+        Assert.Equal("Alt+r", accessibleObject.KeyboardShortcut);
 
         radioButton.UseMnemonic = false;
 
-        Assert.Null(buttonAccessibleObject.KeyboardShortcut);
+        Assert.Null(accessibleObject.KeyboardShortcut);
         Assert.False(radioButton.IsHandleCreated);
     }
 
@@ -243,14 +243,13 @@ public class RadioButton_RadioButtonAccessibleObjectTests
     {
         using var radioButton = new RadioButton();
         radioButton.Text = "&radioButton";
-        Assert.False(radioButton.IsHandleCreated);
-        var buttonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
+        var accessibleObject = new RadioButtonAccessibleObject(radioButton);
 
-        Assert.Equal("radioButton", buttonAccessibleObject.Name);
+        Assert.Equal("radioButton", accessibleObject.Name);
 
         radioButton.UseMnemonic = false;
 
-        Assert.Equal("&radioButton", buttonAccessibleObject.Name);
+        Assert.Equal("&radioButton", accessibleObject.Name);
         Assert.False(radioButton.IsHandleCreated);
     }
 }

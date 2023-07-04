@@ -14,25 +14,8 @@ public partial class Label
 
         public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.StaticText);
 
-        public override string? KeyboardShortcut
-        {
-            get
-            {
-                if (!this.TryGetOwnerAs(out Label? owner) || !owner.UseMnemonic)
-                {
-                    return null;
-                }
+        public override string? KeyboardShortcut => !this.TryGetOwnerAs(out Label? owner) || !owner.UseMnemonic ? null : base.KeyboardShortcut;
 
-                return base.KeyboardShortcut;
-            }
-        }
-
-        public override string? Name
-        {
-            get
-            {
-                return this.TryGetOwnerAs(out Label? owner) && owner.UseMnemonic ? base.Name : TextLabel;
-            }
-        }
+        public override string? Name => this.TryGetOwnerAs(out Label? owner) && owner.UseMnemonic ? base.Name : TextLabel;
     }
 }

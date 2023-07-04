@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
+using LabelAccessibleObject = System.Windows.Forms.Label.LabelAccessibleObject;
 
 namespace System.Windows.Forms.Tests;
 
@@ -20,7 +21,7 @@ public class LabelAccessibleObjectTests
             AccessibleName = "Address"
         };
 
-        Label.LabelAccessibleObject accessibilityObject = (Label.LabelAccessibleObject)label.AccessibilityObject;
+        LabelAccessibleObject accessibilityObject = (LabelAccessibleObject)label.AccessibilityObject;
 
         object value = accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyID);
         Assert.Equal(expected, value);
@@ -33,7 +34,7 @@ public class LabelAccessibleObjectTests
         using var label = new Label();
         label.Name = "Label1";
         label.Text = "Some test label text";
-        var labelAccessibleObject = new Label.LabelAccessibleObject(label);
+        var labelAccessibleObject = new LabelAccessibleObject(label);
 
         Assert.False(label.IsHandleCreated);
 
@@ -48,7 +49,7 @@ public class LabelAccessibleObjectTests
         label.Name = "Label1";
         label.Text = "Some test label text";
         label.AccessibleRole = AccessibleRole.Link;
-        var labelAccessibleObject = new Label.LabelAccessibleObject(label);
+        var labelAccessibleObject = new LabelAccessibleObject(label);
 
         Assert.False(label.IsHandleCreated);
         Assert.Equal(AccessibleRole.Link, labelAccessibleObject.Role);
@@ -74,7 +75,7 @@ public class LabelAccessibleObjectTests
         label.Name = "Label1";
         label.Text = "Some test label text";
         label.AccessibleDescription = testAccDescription;
-        var labelAccessibleObject = new Label.LabelAccessibleObject(label);
+        var labelAccessibleObject = new LabelAccessibleObject(label);
 
         Assert.False(label.IsHandleCreated);
         Assert.Equal(testAccDescription, labelAccessibleObject.Description);
@@ -147,14 +148,13 @@ public class LabelAccessibleObjectTests
     {
         using var label = new Label();
         label.Text = "&label";
-        Assert.False(label.IsHandleCreated);
-        var buttonAccessibleObject = new Label.LabelAccessibleObject(label);
+        var accessibleObject = new LabelAccessibleObject(label);
 
-        Assert.Equal("Alt+l", buttonAccessibleObject.KeyboardShortcut);
+        Assert.Equal("Alt+l", accessibleObject.KeyboardShortcut);
 
         label.UseMnemonic = false;
 
-        Assert.Null(buttonAccessibleObject.KeyboardShortcut);
+        Assert.Null(accessibleObject.KeyboardShortcut);
         Assert.False(label.IsHandleCreated);
     }
 
@@ -164,14 +164,13 @@ public class LabelAccessibleObjectTests
     {
         using var label = new Label();
         label.Text = "&label";
-        Assert.False(label.IsHandleCreated);
-        var buttonAccessibleObject = new Label.LabelAccessibleObject(label);
+        var accessibleObject = new LabelAccessibleObject(label);
 
-        Assert.Equal("label", buttonAccessibleObject.Name);
+        Assert.Equal("label", accessibleObject.Name);
 
         label.UseMnemonic = false;
 
-        Assert.Equal("&label", buttonAccessibleObject.Name);
+        Assert.Equal("&label", accessibleObject.Name);
         Assert.False(label.IsHandleCreated);
     }
 

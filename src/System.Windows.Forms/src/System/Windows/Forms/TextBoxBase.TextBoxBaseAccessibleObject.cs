@@ -129,17 +129,7 @@ public abstract partial class TextBoxBase
         internal override ITextRangeProvider? GetRangeFromAnnotation(IRawElementProviderSimple annotationElement)
             => _textProvider?.RangeFromAnnotation(annotationElement);
 
-        public override string? KeyboardShortcut
-        {
-            get
-            {
-                if (!this.TryGetOwnerAs(out TextBoxBase? owner))
-                {
-                    return null;
-                }
-
-                return ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, false, PreviousLabel);
-            }
-        }
+        public override string? KeyboardShortcut => this.TryGetOwnerAs(out TextBoxBase? owner)
+                ? ButtonBaseAccessibleObject.GetKeyboardShortcut(control: owner, useMnemonic: false, previousLabel: PreviousLabel) : null;
     }
 }
