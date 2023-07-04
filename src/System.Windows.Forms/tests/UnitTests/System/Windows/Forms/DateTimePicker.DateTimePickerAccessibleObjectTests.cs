@@ -354,15 +354,11 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
 
         dateTimePicker1.CustomFormat = "'Date&Time' hh:mm dd/MM";
         dateTimePicker1.Format = DateTimePickerFormat.Custom;
-        dateTimePicker1.Name = "dateTimePicker1";
         dateTimePicker1.TabIndex = 0;
 
-        label1.AutoSize = true;
-        label1.Name = "label1";
-        label1.TabIndex = 1;
         label1.Text = "&Date";
+        label1.TabIndex = 1;
 
-        dateTimePicker2.Name = "dateTimePicker2";
         dateTimePicker2.TabIndex = 2;
 
         form.Controls.Add(dateTimePicker2);
