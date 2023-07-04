@@ -155,7 +155,7 @@ public partial class DataGridViewCheckBoxCell
             {
                 if (Owner is not DataGridViewCheckBoxCell)
                 {
-                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerWrongType);
+                    throw new InvalidOperationException(string.Format(SR.DataGridViewCellAccessibleObject_OwnerWrongType, Owner is null ? "null" : Owner.GetType().Name));
                 }
 
                 return ((Owner as DataGridViewCheckBoxCell)?.CheckState) switch

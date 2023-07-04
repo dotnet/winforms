@@ -2263,8 +2263,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCellAccessibleObject_OwnerWrongType">
-        <source>The owning DataGridViewCell object is a wrong type.</source>
-        <target state="new">The owning DataGridViewCell object is a wrong type.</target>
+        <source>DataGridViewCell of type {0} does not provide the Toggle pattern.</source>
+        <target state="new">DataGridViewCell of type {0} does not provide the Toggle pattern.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCellCollection_AtLeastOneCellIsNull">
