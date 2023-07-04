@@ -2164,8 +2164,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             case ArrowDirection.Right:
                 return GetNextItemHorizontal(start, forward: true);
             case ArrowDirection.Left:
-                bool forward = LastKeyData == Keys.Tab || (TabStop && start is null);
-                return GetNextItemHorizontal(start, forward, ArrowDirection.Left);
+                bool forward = LastKeyData == Keys.Tab || (TabStop && start is null && LastKeyData != Keys.Left);
+                return GetNextItemHorizontal(start, forward);
             case ArrowDirection.Down:
                 return GetNextItemVertical(start, down: true);
             case ArrowDirection.Up:
@@ -2178,7 +2178,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <remarks>
     ///  Helper function for GetNextItem - do not directly call this.
     /// </remarks>
-    private ToolStripItem? GetNextItemHorizontal(ToolStripItem? start, bool forward, ArrowDirection arrowDirection = ArrowDirection.Right)
+    private ToolStripItem? GetNextItemHorizontal(ToolStripItem? start, bool forward)
     {
         if (DisplayedItems.Count <= 0)
         {
@@ -2191,7 +2191,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         // backward direction entering the toolstrip, it means that the first
         // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
         // is pressed.
-        start ??= GetStartItem(forward, dropDown is not null, arrowDirection);
+        start ??= GetStartItem(forward, dropDown is not null);
 
         int current = DisplayedItems.IndexOf(start);
         if (current == -1)
@@ -2207,21 +2207,14 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         do
         {
-            if (forward && arrowDirection == ArrowDirection.Left)
+            if (forward)
             {
-                current = (--current < 0) ? count + current : current;
+                current = ++current % count;
             }
             else
             {
-                if (forward)
-                {
-                    current = ++current % count;
-                }
-                else
-                {
-                    // Provide negative wrap if necessary.
-                    current = (--current < 0) ? count + current : current;
-                }
+                // Provide negative wrap if necessary.
+                current = (--current < 0) ? count + current : current;
             }
 
             if (dropDown?.OwnerItem is not null && dropDown.OwnerItem.IsInDesignMode)
@@ -2241,13 +2234,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         return null;
     }
 
-    private ToolStripItem GetStartItem(bool forward, bool isDropDown, ArrowDirection arrowDirection = ArrowDirection.Right)
+    private ToolStripItem GetStartItem(bool forward, bool isDropDown)
     {
-        if (forward && arrowDirection == ArrowDirection.Left)
-        {
-            return DisplayedItems[0];
-        }
-
         if (forward)
         {
             return DisplayedItems[DisplayedItems.Count - 1];

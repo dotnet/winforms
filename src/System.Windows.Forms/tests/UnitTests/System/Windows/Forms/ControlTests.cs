@@ -1020,26 +1020,12 @@ public partial class ControlTests
         var result = form.SelectNextControl(toolStrip2_ComboBox2.ComboBox, forward: false, tabStopOnly: true, nested: true, wrap: true);
         Assert.True(result);
         Assert.True(toolStrip1.Focused);
-        if(form.RightToLeft == RightToLeft.No)
-        {
-            Assert.True(toolStrip1.Items[toolStrip1.Items.Count - 1].Selected);
-        }
-        else
-        {
-            Assert.True(toolStrip1.Items[0].Selected);
-        }
+        Assert.True(toolStrip1.Items[0].Selected);
 
         result = form.SelectNextControl(toolStrip2_ComboBox1.ComboBox, forward: false, tabStopOnly: true, nested: true, wrap: true);
         Assert.True(result);
         Assert.True(toolStrip1.Focused);
-        if (form.RightToLeft == RightToLeft.No)
-        {
-            Assert.True(toolStrip1.Items[toolStrip1.Items.Count - 1].Selected);
-        }
-        else
-        {
-            Assert.True(toolStrip1.Items[0].Selected);
-        }
+        Assert.True(toolStrip1.Items[0].Selected);
 
         Assert.True(form.IsHandleCreated);
         Assert.True(toolStrip1.IsHandleCreated);
