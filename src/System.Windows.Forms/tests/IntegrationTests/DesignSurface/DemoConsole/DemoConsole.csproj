@@ -15,6 +15,7 @@
     <PackageLicenseExpression>CPOL</PackageLicenseExpression>
     <PackageProjectUrl>https://www.codeproject.com/Articles/24385/Have-a-Great-DesignTime-Experience-with-a-Powerful</PackageProjectUrl>
     <SuppressLicenseValidation>true</SuppressLicenseValidation>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>

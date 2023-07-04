@@ -117,6 +117,9 @@ public class GlyphCollection : CollectionBase
     /// </summary>
     public void Remove(Glyph value)
     {
-        List.Remove(value);
+        if (List.Contains(value))
+        {
+            List.Remove(value);
+        }
     }
 }
