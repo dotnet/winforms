@@ -32,7 +32,7 @@ public partial class DateTimePicker
                     }
                 }
 
-                // WIn32 DTP does not interpret ampersand in its Text as an escape character for a mnemonic.
+                // Win32 DTP does not interpret ampersand in its Text as an escape character for a mnemonic.
                 return null;
             }
         }
