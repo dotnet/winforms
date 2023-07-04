@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using static Interop.Mshtml;
@@ -104,7 +102,7 @@ public sealed class HtmlElementEventArgs : EventArgs
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public HtmlElement FromElement
+    public HtmlElement? FromElement
     {
         get
         {
@@ -115,7 +113,7 @@ public sealed class HtmlElementEventArgs : EventArgs
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public HtmlElement ToElement
+    public HtmlElement? ToElement
     {
         get
         {
