@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel.Design.Serialization;
@@ -44,21 +42,20 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
     // Member variables
     private BitVector32 _state; // state for this host
-    private DesignSurface _surface; // the owning designer surface.
-    private string _newComponentName; // transient value indicating the name of a component that is being created
-    private Stack<DesignerTransaction> _transactions; // stack of transactions
-    private IComponent _rootComponent; // the root of our design
-    private string _rootComponentClassName; // class name of the root of our design
+    private DesignSurface? _surface; // the owning designer surface.
+    private string? _newComponentName; // transient value indicating the name of a component that is being created
+    private Stack<DesignerTransaction>? _transactions; // stack of transactions
+    private IComponent? _rootComponent; // the root of our design
+    private string? _rootComponentClassName; // class name of the root of our design
     private readonly Dictionary<IComponent, IDesigner> _designers;  // designer -> component mapping
     private readonly EventHandlerList _events; // event list
-    private DesignerLoader _loader; // the loader that loads our designers
-    private List<string> _savedSelection; // set of selected components names saved across reloads
-    private HostDesigntimeLicenseContext _licenseCtx;
-    private IDesignerEventService _designerEventService;
+    private DesignerLoader? _loader; // the loader that loads our designers
+    private List<string>? _savedSelection; // set of selected components names saved across reloads
+    private HostDesigntimeLicenseContext? _licenseCtx;
+    private IDesignerEventService? _designerEventService;
     private static readonly object s_selfLock = new object();
     private bool _ignoreErrorsDuringReload;
-    private bool _canReloadWithErrors;
-    private TypeDescriptionProviderService _typeService;
+    private TypeDescriptionProviderService? _typeService;
     private bool _typeServiceChecked;
 
     public DesignerHost(DesignSurface surface)
@@ -78,7 +75,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
         else
         {
-            IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+            IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
             Debug.Assert(sc is not null, "DesignerHost: Ctor needs a service provider that provides IServiceContainer");
             if (sc is not null)
             {
@@ -90,15 +87,8 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
     }
 
-    internal HostDesigntimeLicenseContext LicenseContext
-    {
-        get
-        {
-            _licenseCtx ??= new HostDesigntimeLicenseContext(this);
-
-            return _licenseCtx;
-        }
-    }
+    [MemberNotNull(nameof(_licenseCtx))]
+    internal HostDesigntimeLicenseContext LicenseContext => _licenseCtx ??= new HostDesigntimeLicenseContext(this);
 
     // Internal flag which is used to track when we are in the process of committing or canceling a transaction.
     internal bool IsClosingTransaction
@@ -107,20 +97,22 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         set { _state[s_stateIsClosingTransaction] = value; }
     }
 
-    bool IDesignerHostTransactionState.IsClosingTransaction
-    {
-        get { return IsClosingTransaction; }
-    }
+    bool IDesignerHostTransactionState.IsClosingTransaction => IsClosingTransaction;
 
     /// <summary>
     ///  Override of Container.Add
     /// </summary>
-    public override void Add(IComponent component, string name)
+    public override void Add(IComponent? component, string? name)
     {
         if (!_typeServiceChecked)
         {
             _typeService = GetService(typeof(TypeDescriptionProviderService)) as TypeDescriptionProviderService;
             _typeServiceChecked = true;
+        }
+
+        if (component is null)
+        {
+            return;
         }
 
         // TypeDescriptionProviderService is attached at design time only
@@ -141,7 +133,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         PerformAdd(component, name);
     }
 
-    private void PerformAdd(IComponent component, string name)
+    private void PerformAdd(IComponent component, string? name)
     {
         if (AddToContainerPreProcess(component, name, this))
         {
@@ -149,7 +141,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             base.Add(component, name);
             try
             {
-                AddToContainerPostProcess(component, name, this);
+                AddToContainerPostProcess(component, this);
             }
             catch (Exception t)
             {
@@ -167,7 +159,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     ///  We support adding to either our main IDesignerHost container or to a private per-site container for nested objects.  This code is the stock add code that creates a designer, etc.  See Add (above) for an example of how to call this correctly.
     ///  This method is called before the component is actually added.  It returns true if the component can be added to this container or false if the add should not occur (because the component may already be in this container, for example.) It may also throw if adding this component is illegal.
     /// </summary>
-    internal bool AddToContainerPreProcess(IComponent component, string name, IContainer containerToAddTo)
+    internal bool AddToContainerPreProcess(IComponent component, string? name, IContainer containerToAddTo)
     {
         ArgumentNullException.ThrowIfNull(component);
 
@@ -194,7 +186,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             }
         }
 
-        ISite existingSite = component.Site;
+        ISite? existingSite = component.Site;
         // If the component is already in our container, we just rename.
         if (existingSite is not null && existingSite.Container == this)
         {
@@ -215,24 +207,24 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  We support adding to either our main IDesignerHost container or to a private     per-site container for nested objects.  This code is the stock add code     that creates a designer, etc.  See Add (above) for an example of how to call     this correctly.
     /// </summary>
-    internal void AddToContainerPostProcess(IComponent component, string name, IContainer containerToAddTo)
+    internal void AddToContainerPostProcess(IComponent component, IContainer containerToAddTo)
     {
         // Now that we've added, check to see if this is an extender provider.  If it is, add it to our extender provider service so it is available.
-        if (component is IExtenderProvider &&
+        if (component is IExtenderProvider extenderComponent &&
             // UNDONE.  Try to get Inheritance knowledge out of this basic code.
-            !TypeDescriptor.GetAttributes(component).Contains(InheritanceAttribute.InheritedReadOnly))
+            !TypeDescriptor.GetAttributes(extenderComponent).Contains(InheritanceAttribute.InheritedReadOnly))
         {
             if (GetService(typeof(IExtenderProviderService)) is IExtenderProviderService eps)
             {
-                eps.AddExtenderProvider((IExtenderProvider)component);
+                eps.AddExtenderProvider(extenderComponent);
             }
         }
 
-        IDesigner designer;
+        IDesigner? designer;
         // Is this the first component the loader has created?  If so, then it must be the root component (by definition) so we will expect there to be a root designer associated with the component.  Otherwise, we search for a normal designer, which can be optionally provided.
         if (_rootComponent is null)
         {
-            designer = _surface.CreateDesigner(component, true) as IRootDesigner;
+            designer = _surface!.CreateDesigner(component, true) as IRootDesigner;
             if (designer is null)
             {
                 Exception ex = new Exception(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
@@ -244,11 +236,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
             _rootComponent = component;
             // Check and see if anyone has set the class name of the root component. we default to the component name.
-            _rootComponentClassName ??= component.Site.Name;
+            _rootComponentClassName ??= component.Site!.Name;
         }
         else
         {
-            designer = _surface.CreateDesigner(component, false);
+            designer = _surface!.CreateDesigner(component, false);
         }
 
         if (designer is not null)
@@ -270,11 +262,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             }
 
             // Designers can also implement IExtenderProvider.
-            if (designer is IExtenderProvider)
+            if (designer is IExtenderProvider extenderProvider)
             {
                 if (GetService(typeof(IExtenderProviderService)) is IExtenderProviderService eps)
                 {
-                    eps.AddExtenderProvider((IExtenderProvider)designer);
+                    eps.AddExtenderProvider(extenderProvider);
                 }
             }
         }
@@ -298,21 +290,19 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             throw ex;
         }
 
-        IDesignerEventService des = null;
         bool reloading = (_loader is not null);
         _loader = loader;
         if (!reloading)
         {
-            if (loader is IExtenderProvider)
+            if (loader is IExtenderProvider extenderProvider)
             {
                 if (GetService(typeof(IExtenderProviderService)) is IExtenderProviderService eps)
                 {
-                    eps.AddExtenderProvider((IExtenderProvider)loader);
+                    eps.AddExtenderProvider(extenderProvider);
                 }
             }
 
-            des = GetService(typeof(IDesignerEventService)) as IDesignerEventService;
-            if (des is not null)
+            if (GetService(typeof(IDesignerEventService)) is IDesignerEventService des)
             {
                 des.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                 _designerEventService = des;
@@ -320,7 +310,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
 
         _state[s_stateLoading] = true;
-        _surface.OnLoading();
+        _surface!.OnLoading();
 
         try
         {
@@ -330,18 +320,18 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             if (e is TargetInvocationException)
             {
-                e = e.InnerException;
+                e = e.InnerException!;
             }
 
             string message = e.Message;
             // We must handle the case of an exception with no message.
-            if (message is null || message.Length == 0)
+            if (string.IsNullOrEmpty(message))
             {
-                e = new Exception(string.Format(SR.DesignSurfaceFatalError, e.ToString()), e);
+                e = new Exception(string.Format(SR.DesignSurfaceFatalError, e), e);
             }
 
             // Loader blew up.  Add this exception to our error list.
-            ((IDesignerLoaderHost)this).EndLoad(null, false, new object[] { e });
+            ((IDesignerLoaderHost)this).EndLoad(null!, false, new object[] { e });
         }
 
         if (_designerEventService is null)
@@ -357,7 +347,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <param name="component"> The component to create the site for </param>
     /// <param name="name"> The name of the component.  If no name is provided this will fabricate a name for you. </param>
     /// <returns> The newly created site </returns>
-    protected override ISite CreateSite(IComponent component, string name)
+    protected override ISite CreateSite(IComponent component, string? name)
     {
         Debug.Assert(component is not null, "Caller should have guarded against a null component");
         // We need to handle the case where a component's ctor adds itself to the container.  We don't want to do the work of creating a name, and then immediately renaming.  So, DesignerHost's CreateComponent will set _newComponentName to the newly created name before creating the component.
@@ -367,7 +357,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             _newComponentName = null;
         }
 
-        INameCreationService nameCreate = GetService(typeof(INameCreationService)) as INameCreationService;
+        INameCreationService? nameCreate = GetService(typeof(INameCreationService)) as INameCreationService;
         // Fabricate a name if one wasn't provided.  We try to use the name creation service, but if it is not available we will just use an empty string.
         if (name is null)
         {
@@ -375,7 +365,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             {
                 // VirtualTypes and Compact framework types will need to use  reflection type in order to get their "real" name (the one  available in the compact FX, for example)
                 Type reflectType = TypeDescriptor.GetReflectionType(component);
-                if (reflectType.FullName.Equals(component.GetType().FullName))
+                if (reflectType.FullName!.Equals(component.GetType().FullName))
                 {
                     reflectType = component.GetType();
                 }
@@ -437,7 +427,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
                 }
                 else
                 {
-                    IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+                    IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
                     Debug.Assert(sc is not null, "DesignerHost: Ctor needs a service provider that provides IServiceContainer");
                     if (sc is not null)
                     {
@@ -472,25 +462,21 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// </summary>
     /// <param name="service"> The type of service to retrieve </param>
     /// <returns> An instance of the service. </returns>
-    protected override object GetService(Type service)
+    protected override object? GetService(Type service)
     {
-        object serviceInstance = null;
+        object? serviceInstance = null;
         ArgumentNullException.ThrowIfNull(service);
 
         if (service == typeof(IMultitargetHelperService))
         {
             if (_loader is IServiceProvider provider)
             {
-                serviceInstance = provider.GetService(typeof(IMultitargetHelperService));
+                serviceInstance = provider.GetService(service);
             }
         }
         else
         {
-            serviceInstance = base.GetService(service);
-            if (serviceInstance is null && _surface is not null)
-            {
-                serviceInstance = _surface.GetService(service);
-            }
+            serviceInstance = base.GetService(service) ?? _surface?.GetService(service);
         }
 
         return serviceInstance;
@@ -499,7 +485,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Called in response to a designer becoming active or inactive.
     /// </summary>
-    private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
+    private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs? e)
     {
         // NOTE: sender can be null (we call this directly in BeginLoad)
         if (e is null)
@@ -507,7 +493,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             return;
         }
 
-        object eventobj = null;
+        object eventobj;
 
         if (e.OldDesigner == this)
         {
@@ -517,10 +503,9 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             eventobj = s_eventActivated;
         }
-
-        // Not our document, so we don't fire.
-        if (eventobj is null)
+        else
         {
+            // Not our document, so we don't fire.
             return;
         }
 
@@ -537,18 +522,17 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Method is called by the site when a component is renamed.
     /// </summary>
-    private void OnComponentRename(IComponent component, string oldName, string newName)
+    private void OnComponentRename(IComponent component, string? oldName, string newName)
     {
         // If the root component is being renamed we need to update RootComponentClassName.
         if (component == _rootComponent)
         {
-            string className = _rootComponentClassName;
-            int oldNameIndex = className.LastIndexOf(oldName);
-            if (oldNameIndex + oldName.Length == className.Length // If oldName occurs at the end of className
-                && (oldNameIndex - 1 >= 0 && className[oldNameIndex - 1] == '.')) // and is preceeded by a period
+            string className = _rootComponentClassName!;
+            if (oldName is not null && className.EndsWith(oldName) // If oldName occurs at the end of className
+                && (className.Length > oldName.Length && className[className.Length - oldName.Length - 1] == '.')) // and is preceeded by a period
             {
                 // We assume the preceeding chars are the namespace and preserve it.
-                _rootComponentClassName = string.Concat(className.AsSpan(0, oldNameIndex), newName);
+                _rootComponentClassName = string.Concat(className.AsSpan(0, className.Length - oldName.Length), newName);
             }
             else
             {
@@ -602,11 +586,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Called to remove a component from its container.
     /// </summary>
-    public override void Remove(IComponent component)
+    public override void Remove(IComponent? component)
     {
         if (RemoveFromContainerPreProcess(component, this))
         {
-            Site site = component.Site as Site;
+            Site? site = component.Site as Site;
             RemoveWithoutUnsiting(component);
             RemoveFromContainerPostProcess(component, this);
             if (site is not null)
@@ -616,39 +600,41 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
     }
 
-    internal bool RemoveFromContainerPreProcess(IComponent component, IContainer container)
+    internal bool RemoveFromContainerPreProcess([NotNullWhen(true)] IComponent? component, IContainer container)
     {
-        ArgumentNullException.ThrowIfNull(component);
+        if (component is null)
+        {
+            return false;
+        }
 
-        ISite site = component.Site;
+        ISite? site = component.Site;
         if (site is null || site.Container != container)
         {
             return false;
         }
 
-        ComponentEventHandler eh;
         ComponentEventArgs ce = new ComponentEventArgs(component);
 
-        eh = _events[s_eventComponentRemoving] as ComponentEventHandler;
+        ComponentEventHandler? eh = _events[s_eventComponentRemoving] as ComponentEventHandler;
         eh?.Invoke(this, ce);
 
         // If the component is an extender provider, remove it from the extender provider service, should one exist.
-        if (component is IExtenderProvider)
+        if (component is IExtenderProvider extenderComponent)
         {
             if (GetService(typeof(IExtenderProviderService)) is IExtenderProviderService eps)
             {
-                eps.RemoveExtenderProvider((IExtenderProvider)component);
+                eps.RemoveExtenderProvider(extenderComponent);
             }
         }
 
         // Same for the component's designer
-        _designers.TryGetValue(component, out IDesigner designer);
+        _designers.TryGetValue(component, out IDesigner? designer);
 
-        if (designer is IExtenderProvider)
+        if (designer is IExtenderProvider extenderDesigner)
         {
             if (GetService(typeof(IExtenderProviderService)) is IExtenderProviderService eps)
             {
-                eps.RemoveExtenderProvider((IExtenderProvider)designer);
+                eps.RemoveExtenderProvider(extenderDesigner);
             }
         }
 
@@ -672,7 +658,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         // At one point during Whidbey, the component used to be unsited earlier in this process and it would be temporarily resited here before raising OnComponentRemoved. The problem with resiting it is that some 3rd party controls take action when a component is sited (such as displaying  a dialog a control is dropped on the form) and resiting here caused them to think they were being initialized for the first time.  To preserve compat, we shouldn't resite the component  during Remove.
         try
         {
-            ComponentEventHandler eh = _events[s_eventComponentRemoved] as ComponentEventHandler;
+            ComponentEventHandler? eh = _events[s_eventComponentRemoved] as ComponentEventHandler;
             ComponentEventArgs ce = new ComponentEventArgs(component);
             eh?.Invoke(this, ce);
         }
@@ -691,13 +677,12 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
         if (GetService(typeof(IHelpService)) is IHelpService helpService
             && _rootComponent is not null
-            && _designers.TryGetValue(_rootComponent, out IDesigner designer)
-            && designer is not null)
+            && _designers.TryGetValue(_rootComponent, out IDesigner? designer))
         {
             helpService.RemoveContextAttribute("Keyword", $"Designer_{designer.GetType().FullName}");
         }
 
-        ISelectionService selectionService = (ISelectionService)GetService(typeof(ISelectionService));
+        ISelectionService? selectionService = (ISelectionService?)GetService(typeof(ISelectionService));
         selectionService?.SetSelectedComponents(null, SelectionTypes.Replace);
 
         // Now remove all the designers and their components.  We save the root for last.  Note that we eat any exceptions that components or their designers generate.  A bad component or designer should not prevent an unload from happening.  We do all of this in a transaction to help reduce the number of events we generate.
@@ -713,7 +698,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             {
                 if (!ReferenceEquals(comp, _rootComponent))
                 {
-                    if (_designers.Remove(comp, out IDesigner compDesigner))
+                    if (_designers.Remove(comp, out IDesigner? compDesigner))
                     {
                         try
                         {
@@ -738,7 +723,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
             if (_rootComponent is not null)
             {
-                if (_designers.Remove(_rootComponent, out IDesigner rootComponentDesigner))
+                if (_designers.Remove(_rootComponent, out IDesigner? rootComponentDesigner))
                 {
                     try
                     {
@@ -856,7 +841,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Announces to the component change service that a particular component has changed.
     /// </summary>
-    void IComponentChangeService.OnComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
+    void IComponentChangeService.OnComponentChanged(object component, MemberDescriptor? member, object? oldValue, object? newValue)
     {
         if (!((IDesignerHost)this).Loading)
         {
@@ -867,7 +852,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Announces to the component change service that a particular component is changing.
     /// </summary>
-    void IComponentChangeService.OnComponentChanging(object component, MemberDescriptor member)
+    void IComponentChangeService.OnComponentChanging(object component, MemberDescriptor? member)
     {
         if (!((IDesignerHost)this).Loading)
         {
@@ -886,42 +871,30 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Gets a value indicating whether the designer host is currently in a transaction.
     /// </summary>
-    bool IDesignerHost.InTransaction
-    {
-        get => (_transactions is not null && _transactions.Count > 0) || IsClosingTransaction;
-    }
+    bool IDesignerHost.InTransaction => (_transactions is not null && _transactions.Count > 0) || IsClosingTransaction;
 
     /// <summary>
     ///  Gets the container for this designer host.
     /// </summary>
-    IContainer IDesignerHost.Container
-    {
-        get => this;
-    }
+    IContainer IDesignerHost.Container => this;
 
     /// <summary>
     ///  Gets the instance of the base class used as the base class for the current design.
     /// </summary>
-    IComponent IDesignerHost.RootComponent
-    {
-        get => _rootComponent;
-    }
+    IComponent IDesignerHost.RootComponent => _rootComponent!;
 
     /// <summary>
     ///  Gets the fully qualified name of the class that is being designed.
     /// </summary>
-    string IDesignerHost.RootComponentClassName
-    {
-        get => _rootComponentClassName;
-    }
+    string IDesignerHost.RootComponentClassName => _rootComponentClassName!;
 
     /// <summary>
     ///  Gets the description of the current transaction.
     /// </summary>
     string IDesignerHost.TransactionDescription =>
-        _transactions is not null && _transactions.TryPeek(out DesignerTransaction transaction)
+        _transactions is not null && _transactions.TryPeek(out DesignerTransaction? transaction)
             ? transaction.Description
-            : null;
+            : null!;
 
     /// <summary>
     ///  Adds an event handler for the <see cref="IDesignerHost.Activated"/> event.
@@ -999,7 +972,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// </summary>
     IComponent IDesignerHost.CreateComponent(Type componentType)
     {
-        return ((IDesignerHost)this).CreateComponent(componentType, null);
+        return ((IDesignerHost)this).CreateComponent(componentType, null!);
     }
 
     /// <summary>
@@ -1009,7 +982,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     {
         ArgumentNullException.ThrowIfNull(componentType);
 
-        IComponent component;
+        IComponent? component;
         LicenseContext oldContext = LicenseManager.CurrentContext;
         bool changingContext = false; // we don't want if there is a recursivity (creating a component create another one) to change the context again. we already have the one we want and that would create a locking problem.
         if (oldContext != LicenseContext)
@@ -1024,7 +997,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             try
             {
                 _newComponentName = name;
-                component = _surface.CreateInstance(componentType) as IComponent;
+                component = _surface!.CreateInstance(componentType) as IComponent;
             }
             finally
             {
@@ -1064,7 +1037,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// </summary>
     DesignerTransaction IDesignerHost.CreateTransaction()
     {
-        return ((IDesignerHost)this).CreateTransaction(null);
+        return ((IDesignerHost)this).CreateTransaction(null!);
     }
 
     /// <summary>
@@ -1082,22 +1055,13 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// </summary>
     void IDesignerHost.DestroyComponent(IComponent component)
     {
-        string name;
         ArgumentNullException.ThrowIfNull(component);
 
-        if (component.Site is not null && component.Site.Name is not null)
-        {
-            name = component.Site.Name;
-        }
-        else
-        {
-            name = component.GetType().Name;
-        }
+        string name = component.Site?.Name ?? component.GetType().Name;
 
         // Make sure the component is not being inherited -- we can't delete these!
         // UNDONE.  Try to get Inheritance knowledge out of this basic code.
-        InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
-        if (ia is not null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
+        if (TypeDescriptorHelper.TryGetAttribute(component, out InheritanceAttribute? ia) && ia.InheritanceLevel != InheritanceLevel.NotInherited)
         {
             Exception ex = new InvalidOperationException(string.Format(SR.DesignerHostCantDestroyInheritedComponent, name))
             {
@@ -1127,11 +1091,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Gets the designer instance for the specified component.
     /// </summary>
-    IDesigner IDesignerHost.GetDesigner(IComponent component)
+    IDesigner? IDesignerHost.GetDesigner(IComponent component)
     {
         ArgumentNullException.ThrowIfNull(component);
 
-        _designers.TryGetValue(component, out IDesigner designer);
+        _designers.TryGetValue(component, out IDesigner? designer);
 
         return designer;
     }
@@ -1139,7 +1103,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  Gets the type instance for the specified fully qualified type name <paramref name="typeName"/>.
     /// </summary>
-    Type IDesignerHost.GetType(string typeName)
+    Type? IDesignerHost.GetType(string typeName)
     {
         ArgumentNullException.ThrowIfNull(typeName);
 
@@ -1157,7 +1121,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     ///  (if they are not exceptions the designer loader host may just call ToString on them).
     ///  If the load was successful then errorCollection should either be null or contain an empty collection.
     /// </summary>
-    void IDesignerLoaderHost.EndLoad(string rootClassName, bool successful, ICollection errorCollection)
+    void IDesignerLoaderHost.EndLoad(string? rootClassName, bool successful, ICollection? errorCollection)
     {
         bool wasLoading = _state[s_stateLoading];
         _state[s_stateLoading] = false;
@@ -1166,7 +1130,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         {
             _rootComponentClassName = rootClassName;
         }
-        else if (_rootComponent is not null && _rootComponent.Site is not null)
+        else if (_rootComponent?.Site is not null)
         {
             _rootComponentClassName = _rootComponent.Site.Name;
         }
@@ -1190,9 +1154,9 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             Unload();
         }
 
-        if (wasLoading && _surface is not null)
+        if (wasLoading)
         {
-            _surface.OnLoaded(successful, errorCollection);
+            _surface?.OnLoaded(successful, errorCollection);
         }
 
         if (successful)
@@ -1200,7 +1164,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             // We may be invoked to do an EndLoad when we are already loaded.  This can happen if the user called AddLoadDependency, essentially putting us in a loading state while we are already loaded.  This is OK, and is used as a hint that the user is going to monkey with settings but doesn't want the code engine to report it.
             if (wasLoading)
             {
-                IRootDesigner rootDesigner = ((IDesignerHost)this).GetDesigner(_rootComponent) as IRootDesigner;
+                IRootDesigner rootDesigner = (((IDesignerHost)this).GetDesigner(_rootComponent!) as IRootDesigner)!;
                 // Offer up our base help attribute
                 if (GetService(typeof(IHelpService)) is IHelpService helpService)
                 {
@@ -1219,11 +1183,10 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
                     _state[s_stateLoading] = true;
                     Unload();
 
-                    errorCollection = errorCollection is null ? new List<object>() : errorCollection.Cast<object>().ToList();
-                    if (errorCollection is List<object> errorList)
-                    {
-                        errorList.Insert(0, ex);
-                    }
+                    List<object> errorList = errorCollection is null ? new() : errorCollection.Cast<object>().ToList();
+                    errorList.Insert(0, ex);
+
+                    errorCollection = errorList;
 
                     successful = false;
 
@@ -1241,7 +1204,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
                         List<IComponent> selectedComponents = new(_savedSelection.Count);
                         foreach (string name in _savedSelection)
                         {
-                            IComponent comp = Components[name];
+                            IComponent? comp = Components[name];
                             if (comp is not null)
                             {
                                 selectedComponents.Add(comp);
@@ -1266,14 +1229,14 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         if (_loader is not null)
         {
             // Flush the loader to make sure there aren't any pending  changes.  We always route through the design surface so it can correctly raise its Flushed event.
-            _surface.Flush();
+            _surface!.Flush();
             // Next, stash off the set of selected objects by name.  After the reload we will attempt to re-select them.
             if (GetService(typeof(ISelectionService)) is ISelectionService ss)
             {
                 List<string> list = new(ss.SelectionCount);
                 foreach (object item in ss.GetSelectedComponents())
                 {
-                    if (item is IComponent component && component.Site is not null && component.Site.Name is not null)
+                    if (item is IComponent component && component.Site?.Name is not null)
                     {
                         list.Add(component.Site.Name);
                     }
@@ -1300,16 +1263,12 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         }
     }
 
-    bool IDesignerLoaderHost2.CanReloadWithErrors
-    {
-        get => _canReloadWithErrors;
-        set => _canReloadWithErrors = value;
-    }
+    bool IDesignerLoaderHost2.CanReloadWithErrors { get; set; }
 
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
-    MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+    MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
     {
         return typeof(IDesignerHost).GetMethod(name, bindingAttr, binder, types, modifiers);
     }
@@ -1317,7 +1276,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
-    MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
+    MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetMethod(name, bindingAttr);
     }
@@ -1333,7 +1292,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
-    FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
+    FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetField(name, bindingAttr);
     }
@@ -1349,7 +1308,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
-    PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
+    PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
     {
         return typeof(IDesignerHost).GetProperty(name, bindingAttr);
     }
@@ -1357,7 +1316,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
-    PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
+    PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder? binder, Type? returnType, Type[] types, ParameterModifier[]? modifiers)
     {
         return typeof(IDesignerHost).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
     }
@@ -1389,7 +1348,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IReflect implementation to map DesignerHost to IDesignerHost.  This helps keep us private.
     /// </summary>
-    object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
+    object? IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder? binder, object? target, object?[]? args, ParameterModifier[]? modifiers, CultureInfo? culture, string[]? namedParameters)
     {
         return typeof(IDesignerHost).InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
     }
@@ -1408,7 +1367,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     void IServiceContainer.AddService(Type serviceType, object serviceInstance)
     {
         // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-        IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+        IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
         ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
         sc.AddService(serviceType, serviceInstance);
     }
@@ -1419,7 +1378,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     void IServiceContainer.AddService(Type serviceType, object serviceInstance, bool promote)
     {
         // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-        IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+        IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
         ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
         sc.AddService(serviceType, serviceInstance, promote);
     }
@@ -1430,7 +1389,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback)
     {
         // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-        IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+        IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
         ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
         sc.AddService(serviceType, callback);
     }
@@ -1441,7 +1400,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback, bool promote)
     {
         // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-        IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+        IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
         ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
         sc.AddService(serviceType, callback, promote);
     }
@@ -1452,7 +1411,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     void IServiceContainer.RemoveService(Type serviceType)
     {
         // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-        IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+        IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
         ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
         sc.RemoveService(serviceType);
     }
@@ -1463,7 +1422,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     void IServiceContainer.RemoveService(Type serviceType, bool promote)
     {
         // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-        IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+        IServiceContainer? sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
         ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
         sc.RemoveService(serviceType, promote);
     }
@@ -1471,7 +1430,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     /// <summary>
     ///  IServiceProvider implementation.  We just delegate to the  protected GetService method we are inheriting from our container.
     /// </summary>
-    object IServiceProvider.GetService(Type serviceType)
+    object? IServiceProvider.GetService(Type serviceType)
     {
         return GetService(serviceType);
     }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms;
 
 public partial class DataGridView
@@ -29,7 +27,6 @@ public partial class DataGridView
         {
             _type = DataGridViewHitTestType.None;
             _typeInternal = DataGridViewHitTestTypeInternal.None;
-            //this.edge = DataGridViewHitTestTypeCloseEdge.None;
             _row = _col = -1;
             _rowStart = _colStart = -1;
             _adjacentRow = _adjacentCol = -1;
@@ -95,7 +92,7 @@ public partial class DataGridView
         /// <summary>
         ///  Indicates whether two objects are identical.
         /// </summary>
-        public override bool Equals(object value)
+        public override bool Equals(object? value)
         {
             if (value is HitTestInfo hti)
             {

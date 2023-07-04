@@ -44,6 +44,8 @@ public partial class LinkLabel
         internal LinkAccessibleObject? AccessibleObject
             => _accessibleObject ??= Owner is not null ? new(this, Owner) : null;
 
+        internal bool IsAccessibilityObjectCreated => _accessibleObject is not null;
+
         /// <summary>
         ///  Description for accessibility
         /// </summary>
