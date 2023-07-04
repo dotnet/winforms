@@ -32,32 +32,32 @@ namespace System.Windows.Forms;
 [Designer($"System.Windows.Forms.Design.AxDesigner, {AssemblyRef.SystemDesign}")]
 public unsafe partial class WebBrowserBase : Control
 {
-    private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;
-    private WebBrowserHelper.AXState axReloadingState = WebBrowserHelper.AXState.Passive;
-    private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;
-    private BitVector32 axHostState;
-    private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
-    private WebBrowserSiteBase? axSite;
-    private ContainerControl? containingControl;
-    private HWND hwndFocus;
-    private EventHandler? selectionChangeHandler;
-    private readonly Guid clsid;
+    private WebBrowserHelper.AXState _axState = WebBrowserHelper.AXState.Passive;
+    private WebBrowserHelper.AXState _axReloadingState = WebBrowserHelper.AXState.Passive;
+    private WebBrowserHelper.AXEditMode _axEditMode = WebBrowserHelper.AXEditMode.None;
+    private BitVector32 _axHostState;
+    private WebBrowserHelper.SelectionStyle _selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
+    private WebBrowserSiteBase? _axSite;
+    private ContainerControl? _containingControl;
+    private HWND _hwndFocus;
+    private EventHandler? _selectionChangeHandler;
+    private readonly Guid _clsid;
     // Pointers to the ActiveX object: Interface pointers are cached for perf.
-    private IOleObject.Interface? axOleObject;
-    private IOleInPlaceObject.Interface? axOleInPlaceObject;
-    private IOleInPlaceActiveObject.Interface? axOleInPlaceActiveObject;
-    private IOleControl.Interface? axOleControl;
-    private WebBrowserBaseNativeWindow? axWindow;
+    private IOleObject.Interface? _axOleObject;
+    private IOleInPlaceObject.Interface? _axOleInPlaceObject;
+    private IOleInPlaceActiveObject.Interface? _axOleInPlaceActiveObject;
+    private IOleControl.Interface? _axOleControl;
+    private WebBrowserBaseNativeWindow? _axWindow;
     // We need to change the size of the inner ActiveX control before the
     //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
     //is changed) for better visual effect. We use this field to know what size
     //the WebBrowserBase control is changing to.
-    private Size webBrowserBaseChangingSize = Size.Empty;
-    private WebBrowserContainer? wbContainer;
+    private Size _webBrowserBaseChangingSize = Size.Empty;
+    private WebBrowserContainer? _wbContainer;
 
     // This flags the WebBrowser not to process dialog keys when the ActiveX control is doing it
     // and calls back into the WebBrowser for some reason.
-    private bool ignoreDialogKeys;
+    private bool _ignoreDialogKeys;
 
     //
     // Internal fields:
@@ -78,9 +78,9 @@ public unsafe partial class WebBrowserBase : Control
 
         SetStyle(ControlStyles.UserPaint, false);
 
-        clsid = new Guid(clsidString);
-        webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
-        SetAXHostState(WebBrowserHelper.isMaskEdit, clsid.Equals(WebBrowserHelper.maskEdit_Clsid));
+        _clsid = new Guid(clsidString);
+        _webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
+        SetAXHostState(WebBrowserHelper.isMaskEdit, _clsid.Equals(WebBrowserHelper.maskEdit_Clsid));
     }
 
     //
@@ -204,15 +204,15 @@ public unsafe partial class WebBrowserBase : Control
         {
             try
             {
-                webBrowserBaseChangingSize.Width = width;
-                webBrowserBaseChangingSize.Height = height;
+                _webBrowserBaseChangingSize.Width = width;
+                _webBrowserBaseChangingSize.Height = height;
                 RECT posRect = new Rectangle(0, 0, width, height);
                 RECT clipRect = WebBrowserHelper.GetClipRect();
                 AXInPlaceObject?.SetObjectRects(&posRect, &clipRect);
             }
             finally
             {
-                webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
+                _webBrowserBaseChangingSize.Width = -1;  // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
             }
         }
 
@@ -221,7 +221,7 @@ public unsafe partial class WebBrowserBase : Control
 
     protected override bool ProcessDialogKey(Keys keyData)
     {
-        return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
+        return _ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
     }
 
     public override unsafe bool PreProcessMessage(ref Message msg)
@@ -254,14 +254,14 @@ public unsafe partial class WebBrowserBase : Control
         SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
         try
         {
-            if (axOleInPlaceObject is null)
+            if (_axOleInPlaceObject is null)
             {
                 return false;
             }
 
             // Give the ActiveX control a chance to process this key by calling
             // IOleInPlaceActiveObject::TranslateAccelerator.
-            HRESULT hr = axOleInPlaceActiveObject!.TranslateAccelerator(&win32Message);
+            HRESULT hr = _axOleInPlaceActiveObject!.TranslateAccelerator(&win32Message);
             if (hr == HRESULT.S_OK)
             {
                 s_controlKeyboardRouting.TraceVerbose($"\t Message translated to {win32Message}");
@@ -281,14 +281,14 @@ public unsafe partial class WebBrowserBase : Control
                     // We have the same problem here.
                     bool ret = false;
 
-                    ignoreDialogKeys = true;
+                    _ignoreDialogKeys = true;
                     try
                     {
                         ret = base.PreProcessMessage(ref msg);
                     }
                     finally
                     {
-                        ignoreDialogKeys = false;
+                        _ignoreDialogKeys = false;
                     }
 
                     return ret;
@@ -336,7 +336,7 @@ public unsafe partial class WebBrowserBase : Control
                 cb = (uint)sizeof(CONTROLINFO)
             };
 
-            if (axOleControl!.GetControlInfo(&controlInfo).Failed)
+            if (_axOleControl!.GetControlInfo(&controlInfo).Failed)
             {
                 return processed;
             }
@@ -356,7 +356,7 @@ public unsafe partial class WebBrowserBase : Control
             msg.pt = p;
             if (!PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, controlInfo.hAccel), controlInfo.cAccel, &msg, lpwCmd: null))
             {
-                axOleControl.OnMnemonic(&msg);
+                _axOleControl.OnMnemonic(&msg);
                 Focus();
                 processed = true;
             }
@@ -416,7 +416,7 @@ public unsafe partial class WebBrowserBase : Control
             case PInvoke.WM_MOUSEACTIVATE:
                 if (!DesignMode)
                 {
-                    if (containingControl is not null && containingControl.ActiveControl != this)
+                    if (_containingControl is not null && _containingControl.ActiveControl != this)
                     {
                         Focus();
                     }
@@ -426,14 +426,14 @@ public unsafe partial class WebBrowserBase : Control
                 break;
 
             case PInvoke.WM_KILLFOCUS:
-                hwndFocus = (HWND)m.WParamInternal;
+                _hwndFocus = (HWND)m.WParamInternal;
                 try
                 {
                     base.WndProc(ref m);
                 }
                 finally
                 {
-                    hwndFocus = HWND.Null;
+                    _hwndFocus = HWND.Null;
                 }
 
                 break;
@@ -457,7 +457,7 @@ public unsafe partial class WebBrowserBase : Control
 
                 if (RecreatingHandle)
                 {
-                    axReloadingState = axState;
+                    _axReloadingState = _axState;
                 }
 
                 //
@@ -467,7 +467,7 @@ public unsafe partial class WebBrowserBase : Control
                 // up to InPlaceActivate that the ActiveX control grabs our handle).
                 TransitionDownTo(WebBrowserHelper.AXState.Running);
 
-                axWindow?.ReleaseHandle();
+                _axWindow?.ReleaseHandle();
 
                 OnHandleDestroyed(EventArgs.Empty);
                 break;
@@ -599,22 +599,22 @@ public unsafe partial class WebBrowserBase : Control
     {
         get
         {
-            return axState;
+            return _axState;
         }
         set
         {
-            axState = value;
+            _axState = value;
         }
     }
 
     internal bool GetAXHostState(int mask)
     {
-        return axHostState[mask];
+        return _axHostState[mask];
     }
 
     internal void SetAXHostState(int mask, bool value)
     {
-        axHostState[mask] = value;
+        _axHostState[mask] = value;
     }
 
     internal IntPtr GetHandleNoCreate()
@@ -712,7 +712,7 @@ public unsafe partial class WebBrowserBase : Control
     {
         RECT posRect = Bounds;
         using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite);
-        HRESULT hr = axOleObject!.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
+        HRESULT hr = _axOleObject!.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
         Debug.Assert(hr.Succeeded, $"DoVerb call failed for verb 0x{verb}");
         return hr.Succeeded;
     }
@@ -733,21 +733,21 @@ public unsafe partial class WebBrowserBase : Control
     {
         get
         {
-            if (containingControl is null ||
+            if (_containingControl is null ||
                 GetAXHostState(WebBrowserHelper.recomputeContainingControl))
             {
-                containingControl = FindContainerControlInternal();
+                _containingControl = FindContainerControlInternal();
             }
 
-            return containingControl;
+            return _containingControl;
         }
     }
 
     internal WebBrowserContainer CreateWebBrowserContainer()
     {
-        wbContainer ??= new WebBrowserContainer(this);
+        _wbContainer ??= new WebBrowserContainer(this);
 
-        return wbContainer;
+        return _wbContainer;
     }
 
     internal WebBrowserContainer GetParentContainer()
@@ -765,7 +765,7 @@ public unsafe partial class WebBrowserBase : Control
 
     internal void SetEditMode(WebBrowserHelper.AXEditMode em)
     {
-        axEditMode = em;
+        _axEditMode = em;
     }
 
     internal void SetSelectionStyle(WebBrowserHelper.SelectionStyle selectionStyle)
@@ -773,7 +773,7 @@ public unsafe partial class WebBrowserBase : Control
         if (DesignMode)
         {
             ISelectionService? iss = WebBrowserHelper.GetSelectionService(this);
-            this.selectionStyle = selectionStyle;
+            this._selectionStyle = selectionStyle;
             if (iss is not null && iss.GetComponentSelected(this))
             {
                 // The ActiveX Host designer will offer an extender property
@@ -822,10 +822,10 @@ public unsafe partial class WebBrowserBase : Control
     {
         PInvoke.SetParent(hwnd, this);
 
-        axWindow?.ReleaseHandle();
+        _axWindow?.ReleaseHandle();
 
-        axWindow = new WebBrowserBaseNativeWindow(this);
-        axWindow.AssignHandle(hwnd, false);
+        _axWindow = new WebBrowserBaseNativeWindow(this);
+        _axWindow.AssignHandle(hwnd, false);
 
         UpdateZOrder();
         UpdateBounds();
@@ -885,7 +885,7 @@ public unsafe partial class WebBrowserBase : Control
             Debug.Assert(_activeXInstance is null, "activeXInstance must be null");
 
             HRESULT hr = PInvoke.CoCreateInstance(
-                in clsid,
+                in _clsid,
                 null,
                 CLSCTX.CLSCTX_INPROC_SERVER,
                 IID.GetRef<IUnknown>(),
@@ -940,12 +940,12 @@ public unsafe partial class WebBrowserBase : Control
         if (ActiveXState == WebBrowserHelper.AXState.Loaded)
         {
             // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
-            HRESULT hr = axOleObject.GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
+            HRESULT hr = _axOleObject.GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
             if (hr.Succeeded && bits.HasFlag(OLEMISC.OLEMISC_SETCLIENTSITEFIRST))
             {
                 // Simply setting the site to the ActiveX control should activate it.
                 // And this will take us to the Running state.
-                axOleObject?.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
+                _axOleObject?.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
             }
 
             // We start receiving events now (but we do this only if we are not in DesignMode).
@@ -971,7 +971,7 @@ public unsafe partial class WebBrowserBase : Control
             parentContainer?.RemoveControl(this);
 
             // Now inform the ActiveX control that it's been un-sited.
-            axOleObject?.SetClientSite(null);
+            _axOleObject?.SetClientSite(null);
 
             // We are now Loaded!
             ActiveXState = WebBrowserHelper.AXState.Loaded;
@@ -1058,19 +1058,19 @@ public unsafe partial class WebBrowserBase : Control
     {
         get
         {
-            axSite ??= CreateWebBrowserSiteBase();
+            _axSite ??= CreateWebBrowserSiteBase();
 
-            return axSite;
+            return _axSite;
         }
     }
 
     private void AttachInterfacesInternal()
     {
         Debug.Assert(_activeXInstance is not null, "The native control is null");
-        axOleObject = (IOleObject.Interface)_activeXInstance;
-        axOleInPlaceObject = (IOleInPlaceObject.Interface)_activeXInstance;
-        axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)_activeXInstance;
-        axOleControl = (IOleControl.Interface)_activeXInstance;
+        _axOleObject = (IOleObject.Interface)_activeXInstance;
+        _axOleInPlaceObject = (IOleInPlaceObject.Interface)_activeXInstance;
+        _axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)_activeXInstance;
+        _axOleControl = (IOleControl.Interface)_activeXInstance;
 
         // Give the inheriting classes a chance to cast the ActiveX object to the
         // appropriate interfaces.
@@ -1079,10 +1079,10 @@ public unsafe partial class WebBrowserBase : Control
 
     private void DetachInterfacesInternal()
     {
-        axOleObject = null;
-        axOleInPlaceObject = null;
-        axOleInPlaceActiveObject = null;
-        axOleControl = null;
+        _axOleObject = null;
+        _axOleInPlaceObject = null;
+        _axOleInPlaceActiveObject = null;
+        _axOleControl = null;
 
         // Lets give the inheriting classes a chance to release
         // their cached interfaces of the ActiveX object.
@@ -1095,9 +1095,9 @@ public unsafe partial class WebBrowserBase : Control
     {
         get
         {
-            selectionChangeHandler ??= new EventHandler(OnNewSelection);
+            _selectionChangeHandler ??= new EventHandler(OnNewSelection);
 
-            return selectionChangeHandler;
+            return _selectionChangeHandler;
         }
     }
 
@@ -1133,9 +1133,9 @@ public unsafe partial class WebBrowserBase : Control
                     if (prop is not null && prop.PropertyType == typeof(int))
                     {
                         int curSelectionStyle = (int)prop.GetValue(this)!;
-                        if (curSelectionStyle != (int)selectionStyle)
+                        if (curSelectionStyle != (int)_selectionStyle)
                         {
-                            prop.SetValue(this, selectionStyle);
+                            prop.SetValue(this, _selectionStyle);
                         }
                     }
                 }
@@ -1148,7 +1148,7 @@ public unsafe partial class WebBrowserBase : Control
         var sz = new Size(width, height);
         bool resetExtents = DesignMode;
         Pixel2hiMetric(ref sz);
-        HRESULT hr = axOleObject!.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
+        HRESULT hr = _axOleObject!.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
         if (hr != HRESULT.S_OK)
         {
             resetExtents = true;
@@ -1156,8 +1156,8 @@ public unsafe partial class WebBrowserBase : Control
 
         if (resetExtents)
         {
-            axOleObject.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
-            axOleObject.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
+            _axOleObject.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
+            _axOleObject.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
         }
 
         return GetExtent();
@@ -1166,7 +1166,7 @@ public unsafe partial class WebBrowserBase : Control
     private unsafe Size GetExtent()
     {
         Size size = default;
-        axOleObject?.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+        _axOleObject?.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
         HiMetric2Pixel(ref size);
         return size;
     }
@@ -1199,7 +1199,7 @@ public unsafe partial class WebBrowserBase : Control
     {
         get
         {
-            return axEditMode != WebBrowserHelper.AXEditMode.None;
+            return _axEditMode != WebBrowserHelper.AXEditMode.None;
         }
     }
 
@@ -1249,12 +1249,12 @@ public unsafe partial class WebBrowserBase : Control
         if (_activeXInstance is not null)
         {
             Invalidate();
-            HRESULT result = axOleControl!.OnAmbientPropertyChange(dispid);
+            HRESULT result = _axOleControl!.OnAmbientPropertyChange(dispid);
             Debug.Assert(!result.Failed, $"{result}");
         }
     }
 
-    internal IOleInPlaceObject.Interface? AXInPlaceObject => axOleInPlaceObject;
+    internal IOleInPlaceObject.Interface? AXInPlaceObject => _axOleInPlaceObject;
 
     // ---------------------------------------------------------------
     // The following properties implemented in the Control class don't make
@@ -1304,18 +1304,18 @@ public unsafe partial class WebBrowserBase : Control
 
         // make sure we restore whatever running state we had prior to the handle recreate.
         //
-        if (axReloadingState != WebBrowserHelper.AXState.Passive && axReloadingState != axState)
+        if (_axReloadingState != WebBrowserHelper.AXState.Passive && _axReloadingState != _axState)
         {
-            if (axState < axReloadingState)
+            if (_axState < _axReloadingState)
             {
-                TransitionUpTo(axReloadingState);
+                TransitionUpTo(_axReloadingState);
             }
             else
             {
-                TransitionDownTo(axReloadingState);
+                TransitionDownTo(_axReloadingState);
             }
 
-            axReloadingState = WebBrowserHelper.AXState.Passive;
+            _axReloadingState = WebBrowserHelper.AXState.Passive;
         }
     }
 
