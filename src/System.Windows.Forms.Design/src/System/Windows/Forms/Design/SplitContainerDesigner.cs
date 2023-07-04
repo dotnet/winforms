@@ -126,7 +126,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
             List<Control> components = new();
             foreach (SplitterPanel panel in _splitContainer!.Controls)
             {
-                components.AddRange((IEnumerable<Control>)panel.Controls);
+                components.AddRange(panel.Controls.Cast<Control>());
             }
 
             return components;
