@@ -7234,6 +7234,26 @@ public partial class ToolStripTests
         }
     }
 
+    [WinFormsFact]
+    public void ToolStrip_GetNextItem_ItemsBackwardExpected()
+    {
+        using ToolStrip toolStrip = new() { TabStop = true, Width = 300 };
+        using ToolStripMenuItem toolStripMenuItem1 = new();
+        using ToolStripMenuItem toolStripMenuItem2 = new();
+        using ToolStripMenuItem toolStripMenuItem3 = new();
+        toolStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
+
+        toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Left;
+        ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(null, ArrowDirection.Left);
+        Assert.Equal(toolStrip.Items[2], previousToolStripItem1);
+
+        toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Right;
+        ToolStripItem previousToolStripItem2 = toolStrip.GetNextItem(null, ArrowDirection.Right);
+        Assert.Equal(toolStrip.Items[0], previousToolStripItem2);
+
+        Assert.False(toolStrip.IsHandleCreated);
+    }
+
     private class SubAxHost : AxHost
     {
         public SubAxHost(string clsid) : base(clsid)
