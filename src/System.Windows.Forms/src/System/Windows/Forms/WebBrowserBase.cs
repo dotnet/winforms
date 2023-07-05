@@ -92,13 +92,7 @@ public unsafe partial class WebBrowserBase : Control
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public object? ActiveXInstance
-    {
-        get
-        {
-            return _activeXInstance;
-        }
-    }
+    public object? ActiveXInstance => _activeXInstance;
 
     //
     // Virtual methods:
@@ -597,14 +591,8 @@ public unsafe partial class WebBrowserBase : Control
 
     internal WebBrowserHelper.AXState ActiveXState
     {
-        get
-        {
-            return _axState;
-        }
-        set
-        {
-            _axState = value;
-        }
+        get => _axState;
+        set => _axState = value;
     }
 
     internal bool GetAXHostState(int mask)
@@ -1054,15 +1042,8 @@ public unsafe partial class WebBrowserBase : Control
         }
     }
 
-    internal WebBrowserSiteBase ActiveXSite
-    {
-        get
-        {
-            _axSite ??= CreateWebBrowserSiteBase();
-
-            return _axSite;
-        }
-    }
+    internal WebBrowserSiteBase ActiveXSite =>
+        _axSite ??= CreateWebBrowserSiteBase();
 
     private void AttachInterfacesInternal()
     {
@@ -1091,15 +1072,8 @@ public unsafe partial class WebBrowserBase : Control
 
     //
     // We need to change the ActiveX control's state when selection changes.
-    private EventHandler SelectionChangeHandler
-    {
-        get
-        {
-            _selectionChangeHandler ??= new EventHandler(OnNewSelection);
-
-            return _selectionChangeHandler;
-        }
-    }
+    private EventHandler SelectionChangeHandler =>
+        _selectionChangeHandler ??= new EventHandler(OnNewSelection);
 
     //
     // We need to do special stuff (convert window messages to interface calls)
@@ -1195,13 +1169,8 @@ public unsafe partial class WebBrowserBase : Control
         sz.Height = phm.Y;
     }
 
-    private bool EditMode
-    {
-        get
-        {
-            return _axEditMode != WebBrowserHelper.AXEditMode.None;
-        }
-    }
+    private bool EditMode =>
+        _axEditMode != WebBrowserHelper.AXEditMode.None;
 
     //Find the uppermost ContainerControl that this control lives in
     internal ContainerControl? FindContainerControlInternal()
@@ -1265,13 +1234,7 @@ public unsafe partial class WebBrowserBase : Control
     // Overridden properties:
     //
 
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(75, 23);
-        }
-    }
+    protected override Size DefaultSize => new Size(75, 23);
 
     //
     // Overridden methods:
@@ -1428,10 +1391,7 @@ public unsafe partial class WebBrowserBase : Control
     [Localizable(false)]
     public override RightToLeft RightToLeft
     {
-        get
-        {
-            return RightToLeft.No;
-        }
+        get => RightToLeft.No;
         set
         {
             throw new NotSupportedException(SR.WebBrowserRightToLeftNotSupported);
@@ -1446,14 +1406,8 @@ public unsafe partial class WebBrowserBase : Control
     [AllowNull]
     public override string Text
     {
-        get
-        {
-            return string.Empty;
-        }
-        set
-        {
-            throw new NotSupportedException(SR.WebBrowserTextNotSupported);
-        }
+        get => string.Empty;
+        set => throw new NotSupportedException(SR.WebBrowserTextNotSupported);
     }
 
     [Browsable(false)]
