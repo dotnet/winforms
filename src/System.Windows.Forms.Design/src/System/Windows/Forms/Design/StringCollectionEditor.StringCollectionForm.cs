@@ -155,7 +155,7 @@ internal partial class StringCollectionEditor
                 int i;
                 for (i = 0; i < nItems; ++i)
                 {
-                    if (!strings[i].Equals((string)curItems[i]))
+                    if (!strings[i].Equals(curItems[i].ToString()))
                     {
                         break;
                     }
