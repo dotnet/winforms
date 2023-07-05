@@ -173,10 +173,10 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             {
                 if (fuseOcx)
                 {
-                    object? ax = webBrowserBase._activeXInstance;
-                    if (ax is not null)
+                    object? activeX = webBrowserBase._activeXInstance;
+                    if (activeX is not null)
                     {
-                        list.Add(ax);
+                        list.Add(activeX);
                     }
                 }
                 else
