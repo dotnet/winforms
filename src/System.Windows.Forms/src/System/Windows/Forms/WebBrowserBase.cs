@@ -1188,29 +1188,29 @@ public unsafe partial class WebBrowserBase : Control
             }
         }
 
-        ContainerControl? cc = null;
+        ContainerControl? containerControl = null;
         for (Control? control = this; control is not null; control = control.ParentInternal)
         {
             if (control is ContainerControl tempCC)
             {
-                cc = tempCC;
+                containerControl = tempCC;
             }
         }
 
-        if (cc is null && IsHandleCreated)
+        if (containerControl is null && IsHandleCreated)
         {
-            cc = Control.FromHandle(PInvoke.GetParent(this)) as ContainerControl;
+            containerControl = Control.FromHandle(PInvoke.GetParent(this)) as ContainerControl;
         }
 
         // Never use the parking window for this: its hwnd can be destroyed at any time.
-        if (cc is Application.ParkingWindow)
+        if (containerControl is Application.ParkingWindow)
         {
-            cc = null;
+            containerControl = null;
         }
 
-        SetAXHostState(WebBrowserHelper.recomputeContainingControl, cc is null);
+        SetAXHostState(WebBrowserHelper.recomputeContainingControl, containerControl is null);
 
-        return cc;
+        return containerControl;
     }
 
     private void AmbientChanged(int dispid)
