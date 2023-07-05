@@ -128,6 +128,33 @@ public class ListBoxAccessibleObjectTests
         Assert.False(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
     }
 
+    [WinFormsFact]
+    public void ListBoxItemAccessibleObject_GetPropertyValue_HasKeyboardFocusPropertyId_ReturnsExpected()
+    {
+        using Form form = new();
+        using ListBox listBox = new();
+
+        form.Controls.Add(listBox);
+
+        ListBox.ListBoxAccessibleObject accessibleObject = new(listBox);
+        form.Show();
+
+        Assert.True(listBox.Focused);
+
+        bool actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+        Assert.True(actual);
+
+        listBox.Items.Add(item: "testItem");
+        actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+
+        Assert.False(actual);
+
+        listBox.Items.Clear();
+        actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+
+        Assert.True(actual);
+    }
+
     private ListBox CreateListBoxWithItems()
     {
         ListBox listBox = new();

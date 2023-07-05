@@ -246,7 +246,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     ///  Searches for Items by their Name property, builds up a list
     ///  of all the items that match.
     /// </summary>
-    private void FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, List<ToolStripItem> foundItems)
+    private static void FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, List<ToolStripItem> foundItems)
     {
         try
         {

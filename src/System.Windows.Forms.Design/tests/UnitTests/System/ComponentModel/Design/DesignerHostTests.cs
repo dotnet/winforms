@@ -1641,15 +1641,6 @@ public class DesignerHostTests
         Assert.Equal(1, componentAddedCallCount);
     }
 
-    [WinFormsFact]
-    public void DesignerHost_Add_NullComponent_ThrowsArgumentNullException()
-    {
-        var surface = new SubDesignSurface();
-        IDesignerLoaderHost2 host = surface.Host;
-        Assert.Throws<ArgumentNullException>("component", () => host.Container.Add(null));
-        Assert.Throws<ArgumentNullException>("component", () => host.Container.Add(null, "name"));
-    }
-
     public static IEnumerable<object[]> Add_NoRootDesigner_TestData()
     {
         yield return new object[] { new Component() };
@@ -2888,14 +2879,6 @@ public class DesignerHostTests
 
         host.Container.Remove(component);
         Assert.Null(service.GetValue("key"));
-    }
-
-    [WinFormsFact]
-    public void DesignerHost_Remove_NullComponent_ThrowsArgumentNullException()
-    {
-        var surface = new SubDesignSurface();
-        IDesignerLoaderHost2 host = surface.Host;
-        Assert.Throws<ArgumentNullException>("component", () => host.Container.Remove(null));
     }
 
     [WinFormsFact]

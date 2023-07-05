@@ -213,4 +213,10 @@ internal static unsafe partial class ComHelpers
         using ComScope<IUnknown> ccw = new((IUnknown*)(void*)Marshal.GetIUnknownForObject(@object));
         return ccw.Value == unknown;
     }
+
+    static partial void PopulateIUnknownImpl<TComInterface>(IUnknown.Vtbl* vtable)
+        where TComInterface : unmanaged
+    {
+        Interop.WinFormsComWrappers.PopulateIUnknownVTable(vtable);
+    }
 }

@@ -303,13 +303,13 @@ namespace Paint
 
         CSharpCompilation compilation = CSharpCompilation.Create("original", new SyntaxTree[] { syntaxTree }, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-        ISourceGenerator generator = new EnumValidationGenerator();
+        ISourceGenerator generator = new EnumValidationGenerator().AsSourceGenerator();
 
         CSharpGeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
         driver.RunGeneratorsAndUpdateCompilation(compilation, out Compilation outputCompilation, out ImmutableArray<Diagnostic> diagnostics);
         Assert.False(diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error), $"Failed: {diagnostics.FirstOrDefault()?.GetMessage()}");
 
-        string output = outputCompilation.SyntaxTrees.Skip(1).First().ToString();
+        string output = outputCompilation.SyntaxTrees.Skip(2).First().ToString();
 
         List<string> lines = output.Split("\r\n").ToList();
 

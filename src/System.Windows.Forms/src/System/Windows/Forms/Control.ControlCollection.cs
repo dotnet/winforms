@@ -206,7 +206,7 @@ public partial class Control
         ///  Searches for Controls by their Name property, builds up a list
         ///  of all the controls that match.
         /// </summary>
-        private void FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, List<Control> foundControls)
+        private static void FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, List<Control> foundControls)
         {
             try
             {

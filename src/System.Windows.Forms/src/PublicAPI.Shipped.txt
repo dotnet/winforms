@@ -55,8 +55,8 @@ override System.Windows.Forms.ComboBox.ToString() -> string!
 ~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.DataGridView.Font.set -> void
 ~override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.HitTestInfo.Equals(object value) -> bool
-~override System.Windows.Forms.DataGridView.HitTestInfo.ToString() -> string
+override System.Windows.Forms.DataGridView.HitTestInfo.Equals(object? value) -> bool
+override System.Windows.Forms.DataGridView.HitTestInfo.ToString() -> string!
 ~override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnCursorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnDoubleClick(System.EventArgs e) -> void
@@ -366,7 +366,7 @@ override System.Windows.Forms.ComboBox.ToString() -> string!
 ~override System.Windows.Forms.WebBrowserBase.Site.set -> void
 ~override System.Windows.Forms.WebBrowserBase.Text.get -> string
 ~override System.Windows.Forms.WebBrowserBase.Text.set -> void
-~static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo
+static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo!
 ~static System.Windows.Forms.AxHost.GetFontFromIFont(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetFontFromIFontDisp(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetIFontDispFromFont(System.Drawing.Font font) -> object
@@ -713,10 +713,10 @@ System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitma
 ~System.Windows.Forms.HtmlElement.Style.get -> string
 ~System.Windows.Forms.HtmlElement.Style.set -> void
 ~System.Windows.Forms.HtmlElement.TagName.get -> string
-~System.Windows.Forms.HtmlElementCollection.GetElementsByName(string name) -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlElementCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.HtmlElementCollection.this[int index].get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElementCollection.this[string elementId].get -> System.Windows.Forms.HtmlElement
+System.Windows.Forms.HtmlElementCollection.GetElementsByName(string! name) -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlElementCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.HtmlElementCollection.this[int index].get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElementCollection.this[string! elementId].get -> System.Windows.Forms.HtmlElement?
 ~System.Windows.Forms.HtmlElementEventArgs.EventType.get -> string
 ~System.Windows.Forms.HtmlElementEventArgs.FromElement.get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.HtmlElement
@@ -4654,6 +4654,7 @@ System.Windows.Forms.BindingManagerDataErrorEventHandler
 System.Windows.Forms.BindingMemberInfo
 System.Windows.Forms.BindingMemberInfo.BindingField.get -> string!
 System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string!
+System.Windows.Forms.BindingMemberInfo.BindingMemberInfo() -> void
 System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string? dataMember) -> void
 System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string!
 System.Windows.Forms.BindingMemberInfo.Equals(System.Windows.Forms.BindingMemberInfo other) -> bool
@@ -7794,6 +7795,7 @@ System.Windows.Forms.LinkArea.Equals(System.Windows.Forms.LinkArea other) -> boo
 System.Windows.Forms.LinkArea.IsEmpty.get -> bool
 System.Windows.Forms.LinkArea.Length.get -> int
 System.Windows.Forms.LinkArea.Length.set -> void
+System.Windows.Forms.LinkArea.LinkArea() -> void
 System.Windows.Forms.LinkArea.LinkArea(int start, int length) -> void
 System.Windows.Forms.LinkArea.LinkAreaConverter
 System.Windows.Forms.LinkArea.LinkAreaConverter.LinkAreaConverter() -> void
@@ -10123,6 +10125,7 @@ System.Windows.Forms.TableLayoutPanelCellPosition.Column.set -> void
 System.Windows.Forms.TableLayoutPanelCellPosition.Equals(System.Windows.Forms.TableLayoutPanelCellPosition other) -> bool
 System.Windows.Forms.TableLayoutPanelCellPosition.Row.get -> int
 System.Windows.Forms.TableLayoutPanelCellPosition.Row.set -> void
+System.Windows.Forms.TableLayoutPanelCellPosition.TableLayoutPanelCellPosition() -> void
 System.Windows.Forms.TableLayoutPanelCellPosition.TableLayoutPanelCellPosition(int column, int row) -> void
 System.Windows.Forms.TableLayoutPanelGrowStyle
 System.Windows.Forms.TableLayoutPanelGrowStyle.AddColumns = 2 -> System.Windows.Forms.TableLayoutPanelGrowStyle

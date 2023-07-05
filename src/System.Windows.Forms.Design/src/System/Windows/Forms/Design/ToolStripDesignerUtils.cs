@@ -106,20 +106,15 @@ internal sealed class ToolStripDesignerUtils
 
     private static ToolboxItem GetCachedToolboxItem(Type itemType)
     {
-        ToolboxItem tbxItem = null;
-        if (s_cachedToolboxItems is null)
+        s_cachedToolboxItems ??= new Dictionary<Type, ToolboxItem>();
+        if (s_cachedToolboxItems.TryGetValue(itemType, out ToolboxItem tbxItem))
         {
-            s_cachedToolboxItems = new Dictionary<Type, ToolboxItem>();
-        }
-        else if (s_cachedToolboxItems.ContainsKey(itemType))
-        {
-            tbxItem = s_cachedToolboxItems[itemType];
             return tbxItem;
         }
 
         // no cache hit - load the item.
         // create a toolbox item to match
-        tbxItem ??= new ToolboxItem(itemType);
+        tbxItem = new ToolboxItem(itemType);
 
         s_cachedToolboxItems[itemType] = tbxItem;
         if (s_customToolStripItemCount > 0 && (s_customToolStripItemCount * 2 < s_cachedToolboxItems.Count))
@@ -136,14 +131,15 @@ internal sealed class ToolStripDesignerUtils
     {
         s_cachedWinformsImages ??= new Dictionary<Type, Bitmap>();
 
-        if (!s_cachedWinformsImages.ContainsKey(itemType))
+        if (!s_cachedWinformsImages.TryGetValue(itemType, out Bitmap value))
         {
             Bitmap knownImage = ToolboxBitmapAttribute.GetImageFromResource(itemType, null, false) as Bitmap;
-            s_cachedWinformsImages[itemType] = knownImage;
+            value = knownImage;
+            s_cachedWinformsImages[itemType] = value;
             return knownImage;
         }
 
-        return s_cachedWinformsImages[itemType];
+        return value;
     }
 
     public static Bitmap GetToolboxBitmap(Type itemType)

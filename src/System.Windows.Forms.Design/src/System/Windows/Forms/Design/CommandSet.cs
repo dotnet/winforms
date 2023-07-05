@@ -577,7 +577,7 @@ internal class CommandSet : IDisposable
         return selectedComponents;
     }
 
-    private void GetAssociatedComponents(IComponent component, IDesignerHost host, List<IComponent> list)
+    private static void GetAssociatedComponents(IComponent component, IDesignerHost host, List<IComponent> list)
     {
         if (host.GetDesigner(component) is not ComponentDesigner designer)
         {

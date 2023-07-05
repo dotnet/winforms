@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using static Interop.Mshtml;
 
@@ -11,8 +9,8 @@ namespace System.Windows.Forms;
 
 public sealed class HtmlElementCollection : ICollection
 {
-    private readonly IHTMLElementCollection htmlElementCollection;
-    private readonly HtmlElement[] elementsArray;
+    private readonly IHTMLElementCollection? htmlElementCollection;
+    private readonly HtmlElement[]? elementsArray;
     private readonly HtmlShimManager shimManager;
 
     internal HtmlElementCollection(HtmlShimManager shimManager)
@@ -38,15 +36,9 @@ public sealed class HtmlElementCollection : ICollection
         this.shimManager = shimManager;
     }
 
-    private IHTMLElementCollection NativeHtmlElementCollection
-    {
-        get
-        {
-            return htmlElementCollection;
-        }
-    }
+    private IHTMLElementCollection? NativeHtmlElementCollection => htmlElementCollection;
 
-    public HtmlElement this[int index]
+    public HtmlElement? this[int index]
     {
         get
         {
@@ -71,7 +63,7 @@ public sealed class HtmlElementCollection : ICollection
         }
     }
 
-    public HtmlElement this[string elementId]
+    public HtmlElement? this[string elementId]
     {
         get
         {
@@ -108,7 +100,7 @@ public sealed class HtmlElementCollection : ICollection
 
         for (int i = 0; i < count; i++)
         {
-            HtmlElement element = this[i];
+            HtmlElement element = this[i]!;
             if (element.GetAttribute("name") == name)
             {
                 temp[tempIndex] = element;
@@ -154,21 +146,9 @@ public sealed class HtmlElementCollection : ICollection
         }
     }
 
-    bool ICollection.IsSynchronized
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool ICollection.IsSynchronized => false;
 
-    object ICollection.SyncRoot
-    {
-        get
-        {
-            return this;
-        }
-    }
+    object ICollection.SyncRoot => this;
 
     void ICollection.CopyTo(Array dest, int index)
     {

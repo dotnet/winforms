@@ -78,9 +78,9 @@ public partial class ComboBox
 
         internal static void RegisterACWindow(HWND acHandle, bool subclass)
         {
-            if (subclass && s_ACWindows.ContainsKey(acHandle))
+            if (subclass && s_ACWindows.TryGetValue(acHandle, out ACNativeWindow? value))
             {
-                if (s_ACWindows[acHandle] is null)
+                if (value is null)
                 {
                     s_ACWindows.Remove(acHandle); //if an external handle got destroyed, don't let it stop us.
                 }
