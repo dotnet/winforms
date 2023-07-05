@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design.Behavior;
 internal sealed class ContainerSelectorGlyph : Glyph
 {
     private Rectangle _glyphBounds;
-    private Bitmap? _glyph;
+    private Icon? _glyph;
     private readonly ContainerSelectorBehavior? _relatedBehavior;
 
     /// <summary>
@@ -44,20 +44,14 @@ internal sealed class ContainerSelectorGlyph : Glyph
     /// </summary>
     public override Cursor? GetHitTest(Point p)
     {
-        if (_glyphBounds.Contains(p) || _relatedBehavior?.OkToMove == true)
-        {
-            return Cursors.SizeAll;
-        }
-
-        return null;
+        return _glyphBounds.Contains(p) || _relatedBehavior?.OkToMove == true ? Cursors.SizeAll : null;
     }
 
-    private Bitmap MoveGlyph
+    private Icon MoveGlyph
     {
         get
         {
-            _glyph ??= new Bitmap(typeof(ContainerSelectorGlyph), "MoverGlyph");
-
+            _glyph ??= new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph");
             return _glyph;
         }
     }
@@ -67,6 +61,6 @@ internal sealed class ContainerSelectorGlyph : Glyph
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        pe.Graphics.DrawImage(MoveGlyph, _glyphBounds);
+        pe.Graphics.DrawIcon(MoveGlyph, _glyphBounds);
     }
 }
