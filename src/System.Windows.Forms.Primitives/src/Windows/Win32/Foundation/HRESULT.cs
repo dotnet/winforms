@@ -15,7 +15,7 @@ internal readonly partial struct HRESULT
         return (HRESULT)ex.HResult;
     }
 
-    public void AssertSuccess() => Debug.Assert(Succeeded, "Result failed: {hr}");
+    public void AssertSuccess() => Debug.Assert(Succeeded, $"Result failed: {hr}");
 
     // COR_* HRESULTs are .NET HRESULTs
     public static readonly HRESULT COR_E_ARGUMENT               = (HRESULT)unchecked((int)0x80070057);
