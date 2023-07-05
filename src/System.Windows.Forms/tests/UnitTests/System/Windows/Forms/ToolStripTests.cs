@@ -7237,6 +7237,10 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_GetNextItem_ItemsBackwardExpected()
     {
+        // Regression test for https://github.com/dotnet/winforms/issues/9181, and it verifies that setting TabStop=true,
+        // When typing Right keyboard, the next focus position is first item on the left,
+        // When typing Left keyboard, the next focus position is first item on the Right.
+
         using ToolStrip toolStrip = new() { TabStop = true, Width = 300 };
         using ToolStripMenuItem toolStripMenuItem1 = new();
         using ToolStripMenuItem toolStripMenuItem2 = new();
