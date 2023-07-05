@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Design.Behavior;
 internal sealed class ContainerSelectorGlyph : Glyph
 {
     private readonly Rectangle _glyphBounds;
-    private Icon? _glyph;
+    private readonly Icon _glyph;
     private readonly ContainerSelectorBehavior? _relatedBehavior;
 
     /// <summary>
@@ -25,6 +25,7 @@ internal sealed class ContainerSelectorGlyph : Glyph
     {
         _relatedBehavior = behavior;
         _glyphBounds = new Rectangle(containerBounds.X + glyphOffset, containerBounds.Y - (int)(glyphSize * .5), glyphSize, glyphSize);
+        _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph");
     }
 
     /// <summary>
@@ -40,17 +41,8 @@ internal sealed class ContainerSelectorGlyph : Glyph
     public override Cursor? GetHitTest(Point p)
         => _glyphBounds.Contains(p) || _relatedBehavior?.OkToMove == true ? Cursors.SizeAll : null;
 
-    private Icon MoveGlyph
-    {
-        get
-        {
-            _glyph ??= new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph");
-            return _glyph;
-        }
-    }
-
     /// <summary>
     ///  Very simple paint logic.
     /// </summary>
-    public override void Paint(PaintEventArgs pe) => pe.Graphics.DrawIcon(MoveGlyph, _glyphBounds);
+    public override void Paint(PaintEventArgs pe) => pe.Graphics.DrawIcon(_glyph, _glyphBounds);
 }
