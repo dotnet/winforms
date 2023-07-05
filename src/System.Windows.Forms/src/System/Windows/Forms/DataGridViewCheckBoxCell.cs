@@ -402,15 +402,20 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            // when the CheckBoxCell has not been focused, the flags is not update to date
-            // so in this case, we use EditingCellValueChanged && FormattedValue to determine CheckState
-            // when users use mouse to change the CheckBoxCell's CheckState but don't commit the value
-            // FormattedValue is not updated, but flag is updated
-            // so in this case, we use flags to determine CheckState.
+            // When the CheckBoxCell has not been focused, the flags variable is not up to date,
+            // so in this case, we use EditingCellValueChanged && FormattedValue to determine CheckState.
+            // When users change the CheckBoxCell's CheckState but don't commit the value,
+            // FormattedValue is not updated, but flags are, so in this case, we use flags to determine CheckState.
             if ((!EditingCellValueChanged && FormattedValue is CheckState checkState && checkState == CheckState.Indeterminate) ||
                 (flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
             {
                 return CheckState.Indeterminate;
+            }
+
+            if ((!EditingCellValueChanged && FormattedValue is CheckState checkState2 && checkState2 == CheckState.Checked) ||
+                (flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+            {
+                return CheckState.Checked;
             }
 
             if ((!EditingCellValueChanged && FormattedValue is bool boolValue && boolValue) ||
