@@ -197,13 +197,10 @@ internal partial class StringCollectionEditor
 
             for (int i = 0; i < items.Length; i++)
             {
-                if (items[i] is string)
+                text += items[i].ToString();
+                if (i != items.Length - 1)
                 {
-                    text += (string)items[i];
-                    if (i != items.Length - 1)
-                    {
-                        text += "\r\n";
-                    }
+                    text += "\r\n";
                 }
             }
 
