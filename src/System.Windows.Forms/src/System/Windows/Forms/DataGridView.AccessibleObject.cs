@@ -246,27 +246,29 @@ public partial class DataGridView
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (!this.TryGetOwnerAs(out DataGridView? owner))
-            {
-                return null;
-            }
+            DataGridView? owner;
 
             switch (propertyID)
             {
                 case UiaCore.UIA.ControlTypePropertyId:
-                    return owner.AccessibleRole == AccessibleRole.Default
+                    return (this.TryGetOwnerAs(out owner) && owner.AccessibleRole == AccessibleRole.Default)
                         ? UiaCore.UIA.DataGridControlTypeId
                         : base.GetPropertyValue(propertyID);
                 case UiaCore.UIA.HasKeyboardFocusPropertyId:
                     // If no inner cell entire DGV should be announced as focused by Narrator.
                     // Else only inner cell should be announced as focused by Narrator but not entire DGV.
-                    return (IsModal || RowCount == 0) && owner.Focused;
+                    return this.TryGetOwnerAs(out owner) && (IsModal || RowCount == 0) && owner.Focused;
                 case UiaCore.UIA.IsControlElementPropertyId:
                     return true;
                 case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                    return owner.CanFocus;
+                    return this.TryGetOwnerAs(out owner) && owner.CanFocus;
                 case UiaCore.UIA.ItemStatusPropertyId:
                     var canSort = false;
+                    if(!this.TryGetOwnerAs(out owner))
+                    {
+                        return base.GetPropertyValue(propertyID);
+                    }
+
                     for (int i = 0; i < ColumnCount; i++)
                     {
                         int columnIndex = owner.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
