@@ -171,6 +171,14 @@ public class LabelAccessibleObjectTests
         label.UseMnemonic = false;
 
         Assert.Equal("&label", accessibleObject.Name);
+
+        accessibleObject.Name = "CustomName";
+
+        Assert.Equal("CustomName", accessibleObject.Name);
+
+        label.UseMnemonic = true;
+
+        Assert.Equal("CustomName", accessibleObject.Name);
         Assert.False(label.IsHandleCreated);
     }
 

@@ -250,6 +250,14 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         radioButton.UseMnemonic = false;
 
         Assert.Equal("&radioButton", accessibleObject.Name);
+
+        accessibleObject.Name = "CustomName";
+
+        Assert.Equal("CustomName", accessibleObject.Name);
+
+        radioButton.UseMnemonic = true;
+
+        Assert.Equal("CustomName", accessibleObject.Name);
         Assert.False(radioButton.IsHandleCreated);
     }
 }

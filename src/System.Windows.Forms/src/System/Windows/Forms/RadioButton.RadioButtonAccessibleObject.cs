@@ -59,6 +59,17 @@ public partial class RadioButton
         public override string? KeyboardShortcut => this.TryGetOwnerAs(out RadioButton? owner) ?
             ButtonBaseAccessibleObject.GetKeyboardShortcut(control: owner, useMnemonic: owner.UseMnemonic, previousLabel: PreviousLabel) : null;
 
-        public override string? Name => this.TryGetOwnerAs(out RadioButton? owner) && owner.UseMnemonic ? base.Name : TextLabel;
+        public override string? Name
+        {
+            get
+            {
+                if (this.TryGetOwnerAs(out RadioButton? owner) && owner.AccessibleName is { } name)
+                {
+                    return name;
+                }
+
+                return owner is not null && owner.UseMnemonic ? base.Name : TextLabel;
+            }
+        }
     }
 }

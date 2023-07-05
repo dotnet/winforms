@@ -155,6 +155,14 @@ public class Button_ButtonAccessibleObjectTests
         button.UseMnemonic = false;
 
         Assert.Equal("&btn", buttonAccessibleObject.Name);
+
+        buttonAccessibleObject.Name = "CustomName";
+
+        Assert.Equal("CustomName", buttonAccessibleObject.Name);
+
+        button.UseMnemonic = true;
+
+        Assert.Equal("CustomName", buttonAccessibleObject.Name);
         Assert.False(button.IsHandleCreated);
     }
 }

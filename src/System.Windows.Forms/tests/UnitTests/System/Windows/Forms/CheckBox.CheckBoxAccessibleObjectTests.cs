@@ -318,6 +318,14 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         checkBox.UseMnemonic = false;
 
         Assert.Equal("&checkBox", accessibleObject.Name);
+
+        accessibleObject.Name = "CustomName";
+
+        Assert.Equal("CustomName", accessibleObject.Name);
+
+        checkBox.UseMnemonic = true;
+
+        Assert.Equal("CustomName", accessibleObject.Name);
         Assert.False(checkBox.IsHandleCreated);
     }
 }
