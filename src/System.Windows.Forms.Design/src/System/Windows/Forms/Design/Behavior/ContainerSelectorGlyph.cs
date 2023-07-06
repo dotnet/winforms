@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Design.Behavior;
 internal sealed class ContainerSelectorGlyph : Glyph
 {
     private readonly Rectangle _glyphBounds;
-    private Icon? _glyph;
+    private Bitmap? _glyph;
     private readonly ContainerSelectorBehavior? _relatedBehavior;
 
     /// <summary>
@@ -44,5 +44,15 @@ internal sealed class ContainerSelectorGlyph : Glyph
     ///  Very simple paint logic.
     /// </summary>
     public override void Paint(PaintEventArgs pe)
-        => pe.Graphics.DrawIcon(_glyph ??= new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph"), _glyphBounds);
+    {
+        // Initialize the glyph
+        if (_glyph is null)
+        {
+            _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
+            _glyph.MakeTransparent();
+        }
+
+        // Draw the transparent Bitmap
+        pe.Graphics.DrawImage(_glyph, _glyphBounds);
+    }
 }
