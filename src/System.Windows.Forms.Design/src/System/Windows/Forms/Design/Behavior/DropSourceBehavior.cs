@@ -26,7 +26,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     }
 
     private readonly DragComponent[] _dragComponents;
-    private Control[] _dragObjects; // used to initialize the DragAssistanceManager
+    private List<Control> _dragObjects; // used to initialize the DragAssistanceManager
     private readonly BehaviorDataObject _data; //drag data that represents the controls we're dragging & the effect/action
     private readonly DragDropEffects _allowedEffects; //initial allowed effects for the drag operation
     private DragDropEffects _lastEffect; //the last effect we saw (used for determining a valid drop)
@@ -657,7 +657,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     // Build a new dragImageRegion -- but only if we are changing hosts
                     if (_lastDropTarget is not null)
                     {
-                        for (int i = 0; i < _dragObjects.Length; i++)
+                        for (int i = 0; i < _dragObjects.Count; i++)
                         {
                             Control dragControl = _dragObjects[i];
                             Rectangle controlRect = _behaviorServiceSource.ControlRectInAdornerWindow(dragControl);
@@ -885,7 +885,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     /// </summary>
     private void InitiateDrag(Point initialMouseLocation, List<Control> dragComps)
     {
-        _dragObjects = dragComps.ToArray();
+        _dragObjects = dragComps.ToList();
         DisableAdorners(_serviceProviderSource, _behaviorServiceSource, false);
         Control primaryControl = _dragObjects[0];
         Control primaryParent = primaryControl?.Parent;
@@ -895,7 +895,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         _initialMouseLoc = initialMouseLocation;
 
         //loop through every control we need to drag, calculate the offsets and get a snapshot
-        for (int i = 0; i < _dragObjects.Length; i++)
+        for (int i = 0; i < _dragObjects.Count; i++)
         {
             Control dragControl = _dragObjects[i];
 
