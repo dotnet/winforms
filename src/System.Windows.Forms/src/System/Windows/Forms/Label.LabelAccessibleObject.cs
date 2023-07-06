@@ -20,12 +20,17 @@ public partial class Label
         {
             get
             {
-                if (this.TryGetOwnerAs(out Label? owner) && owner.AccessibleName is { } name)
+                if (!this.TryGetOwnerAs(out Label? owner))
+                {
+                    return null;
+                }
+
+                if (owner.AccessibleName is { } name)
                 {
                     return name;
                 }
 
-                return owner is not null && owner.UseMnemonic ? base.Name : TextLabel;
+                return owner.UseMnemonic ? WindowsFormsUtils.TextWithoutMnemonics(TextLabel) : TextLabel;
             }
         }
     }

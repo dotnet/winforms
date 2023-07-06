@@ -52,18 +52,24 @@ public partial class ButtonBase
         }
 
         public override string? KeyboardShortcut => this.TryGetOwnerAs(out ButtonBase? owner)
-                                    ? GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel) : null;
+            ? GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel)
+            : null;
 
         public override string? Name
         {
             get
             {
-                if (this.TryGetOwnerAs(out ButtonBase? owner) && owner.AccessibleName is { } name)
+                if (!this.TryGetOwnerAs(out ButtonBase? owner))
+                {
+                    return null;
+                }
+
+                if (owner.AccessibleName is { } name)
                 {
                     return name;
                 }
 
-                return owner is not null && owner.UseMnemonic ? base.Name : TextLabel;
+                return owner.UseMnemonic ? WindowsFormsUtils.TextWithoutMnemonics(TextLabel) : TextLabel;
             }
         }
     }
