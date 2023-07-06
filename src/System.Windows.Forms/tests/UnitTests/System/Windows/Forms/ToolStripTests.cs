@@ -7251,7 +7251,6 @@ public partial class ToolStripTests
         ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(start: null, ArrowDirection.Left);
         Assert.Equal(toolStrip.Items[2], previousToolStripItem1);
 
-        toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Right;
         ToolStripItem previousToolStripItem2 = toolStrip.GetNextItem(start: null, ArrowDirection.Right);
         Assert.Equal(toolStrip.Items[0], previousToolStripItem2);
 
