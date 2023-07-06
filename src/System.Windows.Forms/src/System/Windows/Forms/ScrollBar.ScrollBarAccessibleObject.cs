@@ -44,10 +44,12 @@ public partial class ScrollBar
         internal int UIMaximum => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Maximum - owner.LargeChange + 1 : 0;
 
         private bool ArePageButtonsDisplayed
-            => FirstPageButtonAccessibleObject.IsDisplayed && LastPageButtonAccessibleObject.IsDisplayed;
+            => (FirstPageButtonAccessibleObject?.IsDisplayed ?? false)
+               && (LastPageButtonAccessibleObject?.IsDisplayed ?? false);
 
         private bool ArePageButtonsHidden
-            => !FirstPageButtonAccessibleObject.IsDisplayed && !LastPageButtonAccessibleObject.IsDisplayed;
+            => !(FirstPageButtonAccessibleObject?.IsDisplayed ?? true)
+               && !(LastPageButtonAccessibleObject?.IsDisplayed ?? true);
 
         public override AccessibleObject? GetChild(int index)
         {
@@ -59,8 +61,8 @@ public partial class ScrollBar
             return index switch
             {
                 0 => FirstLineButtonAccessibleObject,
-                1 => FirstPageButtonAccessibleObject.IsDisplayed ? FirstPageButtonAccessibleObject : ThumbAccessibleObject,
-                2 => FirstPageButtonAccessibleObject.IsDisplayed
+                1 => (FirstPageButtonAccessibleObject?.IsDisplayed ?? false) ? FirstPageButtonAccessibleObject : ThumbAccessibleObject,
+                2 => (FirstPageButtonAccessibleObject?.IsDisplayed ?? false)
                     ? ThumbAccessibleObject
                     : ArePageButtonsHidden ? LastLineButtonAccessibleObject : LastPageButtonAccessibleObject,
                 3 => ArePageButtonsDisplayed
@@ -86,27 +88,33 @@ public partial class ScrollBar
             }
 
             Point point = new(x, y);
-            if (ThumbAccessibleObject.Bounds.Contains(point))
+
+            if (ThumbAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return ThumbAccessibleObject;
             }
 
-            if (FirstLineButtonAccessibleObject.Bounds.Contains(point))
+            if (FirstLineButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return FirstLineButtonAccessibleObject;
             }
 
-            if (FirstPageButtonAccessibleObject.Bounds.Contains(point))
+            if (FirstLineButtonAccessibleObject?.Bounds.Contains(point) == true)
+            {
+                return FirstLineButtonAccessibleObject;
+            }
+
+            if (FirstPageButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return FirstPageButtonAccessibleObject;
             }
 
-            if (LastPageButtonAccessibleObject.Bounds.Contains(point))
+            if (LastPageButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return LastPageButtonAccessibleObject;
             }
 
-            if (LastLineButtonAccessibleObject.Bounds.Contains(point))
+            if (LastLineButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return LastLineButtonAccessibleObject;
             }
