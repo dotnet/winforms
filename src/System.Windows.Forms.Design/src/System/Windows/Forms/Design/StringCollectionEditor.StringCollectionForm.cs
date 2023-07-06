@@ -140,53 +140,44 @@ internal partial class StringCollectionEditor
         /// </summary>
         private void OKButton_click(object? sender, EventArgs e)
         {
-            char[] delims = new char[] { '\n' };
-            char[] trims = new char[] { '\r' };
+            // Split the text into array of lines.
+            string[] lines = _textEntry.Text.Split('\n');
 
-            string[] strings = _textEntry.Text.Split(delims);
-            object[] curItems = Items;
-
-            int nItems = strings.Length;
-            for (int i = 0; i < nItems; i++)
+            // Remove trailing carriage return characters.
+            for (int i = 0; i < lines.Length; i++)
             {
-                strings[i] = strings[i].Trim(trims);
+                lines[i] = lines[i].TrimEnd('\r');
             }
 
-            bool dirty = true;
-            if (nItems == curItems.Length)
+            // Check if the content has changed.
+            if (lines.Length != Items.Length)
             {
-                int i;
-                for (i = 0; i < nItems; ++i)
-                {
-                    if (!strings[i].Equals(curItems[i].ToString()))
-                    {
-                        break;
-                    }
-                }
-
-                if (i == nItems)
-                    dirty = false;
-            }
-
-            if (!dirty)
-            {
-                DialogResult = DialogResult.Cancel;
+                UpdateItems(lines);
                 return;
             }
 
-            // If the final line is blank, we don't want to create an item from it
-            if (strings.Length > 0 && strings[^1].Length == 0)
+            for (int i = 0; i < lines.Length; ++i)
             {
-                nItems--;
+                if (!lines[i].Equals(Items[i]?.ToString()))
+                {
+                    UpdateItems(lines);
+                    return;
+                }
             }
 
-            object[] values = new object[nItems];
-            for (int i = 0; i < nItems; i++)
-            {
-                values[i] = strings[i];
-            }
+            DialogResult = DialogResult.Cancel;
 
-            Items = values;
+            void UpdateItems(string[] newLines)
+            {
+                // If the last line is empty, we don't want to create an item from it.
+                if (newLines[^1].Length == 0)
+                {
+                    Array.Resize(ref newLines, newLines.Length - 1);
+                }
+
+                // Assign newLines to Items.
+                Items = newLines;
+            }
         }
 
         /// <summary>
