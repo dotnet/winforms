@@ -36,7 +36,7 @@ public partial class ComboBox
         }
 
         internal override bool IsIAccessibleExSupported()
-            => this.TryGetOwnerAs(out ComboBox? owner) || base.IsIAccessibleExSupported();
+            => this.TryGetOwnerAs(out ComboBox? _) || base.IsIAccessibleExSupported();
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
