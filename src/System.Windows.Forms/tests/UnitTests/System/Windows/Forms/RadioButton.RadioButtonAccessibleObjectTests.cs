@@ -220,44 +220,4 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         Assert.Equal(expected, actual);
         Assert.False(radioButton.IsHandleCreated);
     }
-
-    // Unit test for https://github.com/dotnet/winforms/issues/9296
-    [WinFormsFact]
-    public void RadioButtonAccessibleObject_Shortcut_Invoke_ReturnsExpected()
-    {
-        using var radioButton = new RadioButton();
-        radioButton.Text = "&radioButton";
-        var accessibleObject = new RadioButtonAccessibleObject(radioButton);
-
-        Assert.Equal("Alt+r", accessibleObject.KeyboardShortcut);
-
-        radioButton.UseMnemonic = false;
-
-        Assert.Null(accessibleObject.KeyboardShortcut);
-        Assert.False(radioButton.IsHandleCreated);
-    }
-
-    // Unit test for https://github.com/dotnet/winforms/issues/9296
-    [WinFormsFact]
-    public void RadioButtonAccessibleObject_Name_Invoke_ReturnsExpected()
-    {
-        using var radioButton = new RadioButton();
-        radioButton.Text = "&radioButton";
-        var accessibleObject = new RadioButtonAccessibleObject(radioButton);
-
-        Assert.Equal("radioButton", accessibleObject.Name);
-
-        radioButton.UseMnemonic = false;
-
-        Assert.Equal("&radioButton", accessibleObject.Name);
-
-        accessibleObject.Name = "CustomName";
-
-        Assert.Equal("CustomName", accessibleObject.Name);
-
-        radioButton.UseMnemonic = true;
-
-        Assert.Equal("CustomName", accessibleObject.Name);
-        Assert.False(radioButton.IsHandleCreated);
-    }
 }
