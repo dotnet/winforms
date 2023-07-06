@@ -98,8 +98,9 @@ public abstract partial class TextBoxBase
 
         public override Rectangle RectangleToScreen(Rectangle rect) => Owner is not null ? Owner.RectangleToScreen(rect) : Rectangle.Empty;
 
-        public override UiaCore.ITextRangeProvider? DocumentRange => Owner is not null ?
-                                    new UiaTextRange(Owner.AccessibilityObject, this, start: 0, TextLength) : null;
+        public override UiaCore.ITextRangeProvider? DocumentRange => Owner is not null
+            ? new UiaTextRange(Owner.AccessibilityObject, this, start: 0, TextLength)
+            : null;
 
         public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 
