@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 internal sealed partial class DesignerHost
@@ -13,7 +11,7 @@ internal sealed partial class DesignerHost
     /// </summary>
     private sealed class DesignerHostTransaction : DesignerTransaction
     {
-        private DesignerHost _host;
+        private DesignerHost? _host;
 
         public DesignerHostTransaction(DesignerHost host, string description) : base(description)
         {
@@ -30,27 +28,31 @@ internal sealed partial class DesignerHost
         /// </summary>
         protected override void OnCancel()
         {
-            if (_host is not null)
+            if (_host is null)
             {
-                if (_host._transactions.Peek() != this)
-                {
-                    string nestedDescription = _host._transactions.Peek().Description;
-                    throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
-                }
+                return;
+            }
 
-                _host.IsClosingTransaction = true;
-                try
-                {
-                    _host._transactions.Pop();
-                    DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(false, _host._transactions.Count == 0);
-                    _host.OnTransactionClosing(e);
-                    _host.OnTransactionClosed(e);
-                }
-                finally
-                {
-                    _host.IsClosingTransaction = false;
-                    _host = null;
-                }
+            Stack<DesignerTransaction> transactions = _host._transactions!;
+
+            if (transactions.Peek() != this)
+            {
+                string nestedDescription = transactions.Peek().Description;
+                throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
+            }
+
+            _host.IsClosingTransaction = true;
+            try
+            {
+                transactions.Pop();
+                DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(false, transactions.Count == 0);
+                _host.OnTransactionClosing(e);
+                _host.OnTransactionClosed(e);
+            }
+            finally
+            {
+                _host.IsClosingTransaction = false;
+                _host = null;
             }
         }
 
@@ -59,27 +61,31 @@ internal sealed partial class DesignerHost
         /// </summary>
         protected override void OnCommit()
         {
-            if (_host is not null)
+            if (_host is null)
             {
-                if (_host._transactions.Peek() != this)
-                {
-                    string nestedDescription = _host._transactions.Peek().Description;
-                    throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
-                }
+                return;
+            }
 
-                _host.IsClosingTransaction = true;
-                try
-                {
-                    _host._transactions.Pop();
-                    DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(true, _host._transactions.Count == 0);
-                    _host.OnTransactionClosing(e);
-                    _host.OnTransactionClosed(e);
-                }
-                finally
-                {
-                    _host.IsClosingTransaction = false;
-                    _host = null;
-                }
+            Stack<DesignerTransaction> transactions = _host._transactions!;
+
+            if (transactions.Peek() != this)
+            {
+                string nestedDescription = transactions.Peek().Description;
+                throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
+            }
+
+            _host.IsClosingTransaction = true;
+            try
+            {
+                transactions.Pop();
+                DesignerTransactionCloseEventArgs e = new DesignerTransactionCloseEventArgs(true, transactions.Count == 0);
+                _host.OnTransactionClosing(e);
+                _host.OnTransactionClosed(e);
+            }
+            finally
+            {
+                _host.IsClosingTransaction = false;
+                _host = null;
             }
         }
     }

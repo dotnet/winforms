@@ -57,8 +57,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private const int STG_STREAMINIT = 1;
     private const int STG_STORAGE = 2;
 
-    private readonly MessageId _registeredMessage
+    private readonly uint _subclassCheckMessage
         = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
+
     private const int REGMSG_RETVAL = 123;
 
     private static int s_logPixelsX = -1;
@@ -80,10 +81,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private static readonly int s_listeningToIdle = BitVector32.CreateMask(s_editorRefresh);
     private static readonly int s_refreshProperties = BitVector32.CreateMask(s_listeningToIdle);
 
-    private static readonly int s_checkedIppb = BitVector32.CreateMask(s_refreshProperties);
-
     /// <summary>True if a window needs created when <see cref="CreateHandle"/> is called.</summary>
-    private static readonly int s_fNeedOwnWindow = BitVector32.CreateMask(s_checkedIppb);
+    private static readonly int s_fNeedOwnWindow = BitVector32.CreateMask(s_refreshProperties);
 
     /// <summary>True if the OCX is design time only and we're in user mode.</summary>
     private static readonly int s_fOwnWindow = BitVector32.CreateMask(s_fNeedOwnWindow);
@@ -144,12 +143,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     // Interface pointers to the ocx
 
     private object _instance;
-    private IOleInPlaceObject.Interface _iOleInPlaceObject;
-    private IOleObject.Interface _iOleObject;
-    private IOleControl.Interface _iOleControl;
-    private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObject;
     private AgileComPointer<IOleInPlaceActiveObject> _iOleInPlaceActiveObjectExternal;
-    private IPerPropertyBrowsing.Interface _iPerPropertyBrowsing;
     private IPersistPropertyBag.Interface _iPersistPropBag;
     private IPersistStream.Interface _iPersistStream;
     private IPersistStreamInit.Interface _iPersistStreamInit;
@@ -275,7 +269,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private unsafe void RealizeStyles()
     {
         SetStyle(ControlStyles.UserPaint, false);
-        HRESULT hr = GetOleObject().GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
+        using var oleObject = GetComScope<IOleObject>();
+        HRESULT hr = oleObject.Value->GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
         if (hr.Succeeded)
         {
             _miscStatusBits = bits;
@@ -839,25 +834,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (GetOcx() is not null)
         {
             Invalidate();
-            HRESULT result = GetOleControl().OnAmbientPropertyChange(dispid);
-            Debug.Assert(!result.Failed, $"{result}");
+            using var oleControl = GetComScope<IOleControl>();
+            oleControl.Value->OnAmbientPropertyChange(dispid).AssertSuccess();
         }
     }
 
-    private bool OwnWindow()
-    {
-        return _axState[s_fOwnWindow] || _axState[s_fFakingWindow];
-    }
+    private bool OwnWindow() => _axState[s_fOwnWindow] || _axState[s_fFakingWindow];
 
     private HWND GetHandleNoCreate() => IsHandleCreated ? (HWND)Handle : default;
-
-    private ISelectionService GetSelectionService()
-    {
-        return GetSelectionService(this);
-    }
-
-    private static ISelectionService GetSelectionService(Control ctl)
-        => ctl.Site?.GetService(typeof(ISelectionService)) as ISelectionService;
 
     private void AddSelectionHandler()
     {
@@ -866,10 +850,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return;
         }
 
-        ISelectionService iss = GetSelectionService();
-        if (iss is not null)
+        if (Site.TryGetService(out ISelectionService selectionService))
         {
-            iss.SelectionChanging += _selectionChangeHandler;
+            selectionService.SelectionChanging += _selectionChangeHandler;
         }
 
         _axState[s_addedSelectionHandler] = true;
@@ -895,10 +878,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return false;
         }
 
-        ISelectionService iss = GetSelectionService();
-        if (iss is not null)
+        if (Site.TryGetService(out ISelectionService selectionService))
         {
-            iss.SelectionChanging -= _selectionChangeHandler;
+            selectionService.SelectionChanging -= _selectionChangeHandler;
         }
 
         _axState[s_addedSelectionHandler] = false;
@@ -1011,7 +993,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private void OnNewSelection(object sender, EventArgs e)
     {
-        if (IsUserMode() || GetSelectionService() is not { } selectionService)
+        if (IsUserMode() || !Site.TryGetService(out ISelectionService selectionService))
         {
             return;
         }
@@ -1171,7 +1153,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         Size size = new(width, height);
         bool resetExtents = !IsUserMode();
         Pixel2hiMetric(ref size);
-        HRESULT hr = GetOleObject().SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+        using var oleObject = GetComScope<IOleObject>();
+        HRESULT hr = oleObject.Value->SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
         if (hr != HRESULT.S_OK)
         {
             resetExtents = true;
@@ -1179,8 +1162,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         if (resetExtents)
         {
-            GetOleObject().GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
-            GetOleObject().SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+            oleObject.Value->GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size).AssertSuccess();
+            oleObject.Value->SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size).AssertSuccess();
         }
 
         return GetExtent();
@@ -1189,20 +1172,17 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private unsafe Size GetExtent()
     {
         Size size = default;
-        GetOleObject().GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+        using var oleObject = GetComScope<IOleObject>();
+        oleObject.Value->GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size).AssertSuccess();
         HiMetric2Pixel(ref size);
         return size;
     }
 
     /// <summary>
-    ///  ActiveX controls scale themselves, so GetScaledBounds simply returns their
-    ///  original unscaled bounds.
+    ///  ActiveX controls scale themselves, so GetScaledBounds simply returns their original unscaled bounds.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified)
-    {
-        return bounds;
-    }
+    protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => bounds;
 
     private unsafe void SetObjectRects(Rectangle bounds)
     {
@@ -1213,7 +1193,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         RECT posRect = bounds;
         RECT clipRect = WebBrowserHelper.GetClipRect();
-        GetInPlaceObject().SetObjectRects(&posRect, &clipRect);
+        using var inPlaceObject = GetComScope<IOleInPlaceObject>();
+        inPlaceObject.Value->SetObjectRects(&posRect, &clipRect).ThrowOnFailure();
     }
 
     /// <summary>
@@ -1303,7 +1284,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return true;
         }
 
-        if ((int)PInvoke.SendMessage(this, _registeredMessage) == REGMSG_RETVAL)
+        if ((int)PInvoke.SendMessage(this, _subclassCheckMessage) == REGMSG_RETVAL)
         {
             _wndprocAddr = currentWndproc;
             return true;
@@ -1533,7 +1514,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
         }
 
-        return GetInPlaceObject().InPlaceDeactivate();
+        using var inPlaceObject = GetComScope<IOleInPlaceObject>();
+        return inPlaceObject.Value->InPlaceDeactivate();
     }
 
     private void UiActivate()
@@ -1746,13 +1728,17 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _axState[s_siteProcessedInputKey] = false;
         try
         {
-            using var activeObject = GetInPlaceActiveObject();
+            // If our AxContainer was set an external active object then use it.
+            using var activeObject = _iOleInPlaceActiveObjectExternal is { } external
+                ? external.GetInterface()
+                : TryGetComScope<IOleInPlaceActiveObject>(out HRESULT hr);
+
             if (activeObject.IsNull)
             {
                 return false;
             }
 
-            HRESULT hr = activeObject.Value->TranslateAccelerator(&win32Message);
+            hr = activeObject.Value->TranslateAccelerator(&win32Message);
             msg.MsgInternal = (MessageId)win32Message.message;
             msg.WParamInternal = win32Message.wParam;
             msg.LParamInternal = win32Message.lParam;
@@ -1806,47 +1792,52 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return false;
         }
 
-        bool processed = false;
-        try
+        CONTROLINFO ctlInfo = new()
         {
-            CONTROLINFO ctlInfo = new()
-            {
-                cb = (uint)sizeof(CONTROLINFO)
-            };
+            cb = (uint)sizeof(CONTROLINFO)
+        };
 
-            if (GetOleControl().GetControlInfo(&ctlInfo).Failed)
-            {
-                return processed;
-            }
+        using var oleControl = GetComScope<IOleControl>();
+        if (oleControl.Value->GetControlInfo(&ctlInfo).Failed)
+        {
+            return false;
+        }
 
-            MSG msg = new()
-            {
-                // We don't have a message so we must create one ourselves.
-                // The message we are creating is a WM_SYSKEYDOWN with the right alt key setting.
-                hwnd = (ContainingControl is null) ? HWND.Null : ContainingControl.HWND,
-                message = (uint)PInvoke.WM_SYSKEYDOWN,
-                wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                lParam = 0x20180001,
-                time = PInvoke.GetTickCount()
-            };
+        PInvoke.GetCursorPos(out Point point);
 
-            PInvoke.GetCursorPos(out Point p);
-            msg.pt = p;
+        MSG msg = new()
+        {
+            // We don't have a message so we must create one ourselves.
+            // The message we are creating is a WM_SYSKEYDOWN with the right alt key setting.
+            hwnd = (ContainingControl is null) ? HWND.Null : ContainingControl.HWND,
+            message = PInvoke.WM_SYSKEYDOWN,
+            wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+            // 0x20180001
+            lParam = LPARAM.MAKELPARAM(
+                1, // Repeat count
+                (int)(PInvoke.KF_ALTDOWN | 0x18)), // 0x18 => O key scan code
+            time = PInvoke.GetTickCount(),
+            pt = point
+        };
 
-            if (PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, ctlInfo.hAccel), ctlInfo.cAccel, &msg, lpwCmd: null))
+        if (PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, ctlInfo.hAccel), ctlInfo.cAccel, &msg, lpwCmd: null))
+        {
+            oleControl.Value->OnMnemonic(&msg).AssertSuccess();
+            s_controlKeyboardRouting.TraceVerbose($"\t Processed mnemonic {msg}");
+
+            try
             {
-                GetOleControl().OnMnemonic(&msg);
-                s_controlKeyboardRouting.TraceVerbose($"\t Processed mnemonic {msg}");
                 Focus();
-                processed = true;
             }
-        }
-        catch (Exception t)
-        {
-            Debug.Fail($"error in processMnemonic: {t}");
+            catch (Exception t)
+            {
+                Debug.Fail($"error in processMnemonic: {t}");
+            }
+
+            return true;
         }
 
-        return processed;
+        return false;
     }
 
     // misc methods:
@@ -1861,16 +1852,19 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Sets the persisted state of the control.
-    ///  This should either be null, obtained from getOcxState, or
-    ///  read from a resource.  The value of this property will
-    ///  be used after the control is created but before it is
-    ///  shown.
-    ///  Computes the persisted state of the underlying ActiveX control and
-    ///  returns it in the encapsulated State object.
-    ///  If the control has been modified since it was last saved to a
-    ///  persisted state, it will be asked to save itself.
+    ///  Gets or sets the persisted state of the ActiveX control.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Computes the persisted state of the underlying ActiveX control and returns it in the encapsulated
+    ///   <see cref="State"/> object. If the control has been modified since it was last saved to a persisted
+    ///   state, it will be asked to save itself.
+    ///  </para>
+    ///  <para>
+    ///   This should either be null, obtained from the getter, or read from a resource. The value of this property
+    ///   will be used after the control is created but before it is shown.
+    ///  </para>
+    /// </remarks>
     [DefaultValue(null)]
     [RefreshProperties(RefreshProperties.All)]
     [Browsable(false)]
@@ -1911,8 +1905,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
             if (_ocxState is not null)
             {
-                _axState[s_manualUpdate] = _ocxState._GetManualUpdate();
-                _licenseKey = _ocxState._GetLicenseKey();
+                _axState[s_manualUpdate] = _ocxState.ManualUpdate;
+                _licenseKey = _ocxState.LicenseKey;
             }
             else
             {
@@ -2220,7 +2214,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         RECT posRect = Bounds;
         using var pClientSite = ComHelpers.TryGetComScope<IOleClientSite>(_oleSite, out HRESULT hr);
         Debug.Assert(hr.Succeeded);
-        GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
+        using var oleObject = GetComScope<IOleObject>();
+        oleObject.Value->DoVerb(
+            verb,
+            lpmsg: null,
+            pClientSite,
+            -1,
+            parent is null ? HWND.Null : parent.HWND,
+            &posRect).AssertSuccess();
     }
 
     private bool AwaitingDefreezing() => _freezeCount > 0;
@@ -2228,14 +2229,17 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private void FreezeEvents(bool freeze)
     {
         s_axHTraceSwitch.TraceVerbose($"freezing {freeze}");
+
+        using var oleControl = GetComScope<IOleControl>();
+
         if (freeze)
         {
-            GetOleControl().FreezeEvents(true);
+            oleControl.Value->FreezeEvents(true).AssertSuccess();
             _freezeCount++;
         }
         else
         {
-            GetOleControl().FreezeEvents(false);
+            oleControl.Value->FreezeEvents(false).AssertSuccess();
             _freezeCount--;
         }
 
@@ -2249,7 +2253,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _axState[s_ownDisposing] = true;
         try
         {
-            return GetInPlaceObject().UIDeactivate();
+            using var inPlaceObject = GetComScope<IOleInPlaceObject>();
+            return inPlaceObject.Value->UIDeactivate();
         }
         finally
         {
@@ -2456,7 +2461,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         Debug.Assert(selectionStyle is >= 0 and <= 2, "Invalid selection style");
         _selectionStyle = selectionStyle;
 
-        if (GetSelectionService() is { } selectionService && selectionService.GetComponentSelected(this))
+        if (Site.TryGetService(out ISelectionService selectionService) && selectionService.GetComponentSelected(this))
         {
             // The AX Host designer will offer an extender property called "SelectionStyle"
             if (TypeDescriptor.GetProperties(this)["SelectionStyle"] is { } property && property.PropertyType == typeof(int))
@@ -3211,35 +3216,20 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
-    /// <summary>
-    ///  AxHost wndProc. All messages are sent to wndProc after getting filtered
-    ///  through the preProcessMessage function.
-    ///  Certain messages are forwarder directly to the ActiveX control,
-    ///  others are first processed by the wndProc of Control
-    /// </summary>
     protected override unsafe void WndProc(ref Message m)
     {
-        // Ignore the warnings generated by the following code (unreachable code, and unreachable expression)
-        if (false && (_axState[s_manualUpdate] && IsUserMode()))
-        {
-            DefWndProc(ref m);
-            return;
-        }
+        // Route input related messages directly to the ActiveX control where appropriate and do other special logic.
 
         switch (m.MsgInternal)
         {
-            // Things we explicitly ignore and pass to the ocx's windproc
+            // Things we explicitly ignore and pass to the ActiveX Control's windproc
             case PInvoke.WM_ERASEBKGND:
-
             case MessageId.WM_REFLECT_NOTIFYFORMAT:
-
             case PInvoke.WM_SETCURSOR:
             case PInvoke.WM_SYSCOLORCHANGE:
 
-            // Some of the MSComCtl controls respond to this message
-            // to do some custom painting. So, we should just pass this message
-            // through.
-            //
+            // Some of the common controls respond to this message to do some custom painting.
+            // So, we should just pass this message through.
             case PInvoke.WM_DRAWITEM:
 
             case PInvoke.WM_LBUTTONDBLCLK:
@@ -3294,19 +3284,17 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 if (!OwnWindow())
                 {
                     s_axHTraceSwitch.TraceVerbose(
-                        $"WM_DESTROY control is destroying the window from under us...{GetType()}");
+                        $"WM_DESTROY control is destroying the window from under us... {GetType()}");
                 }
 #endif
-                // If we are currently in a state of InPlaceActive or above,
-                // we should first reparent the ActiveX control to our parking
-                // window before we transition to a state below InPlaceActive.
-                // Otherwise we face all sorts of problems when we try to
-                // transition back to a state >= InPlaceActive.
+                // If we are currently in a state of InPlaceActive or above, we should first reparent the ActiveX
+                // control to our parking window before we transition to a state below InPlaceActive. Otherwise we
+                // face all sorts of problems when we try to transition back to a state >= InPlaceActive.
                 if (GetOcState() >= OC_INPLACE)
                 {
-                    IOleInPlaceObject.Interface ipo = GetInPlaceObject();
+                    using var inPlaceObject = GetComScope<IOleInPlaceObject>();
                     HWND hwnd = HWND.Null;
-                    if (ipo.GetWindow(&hwnd).Succeeded)
+                    if (inPlaceObject.Value->GetWindow(&hwnd).Succeeded)
                     {
                         Application.ParkHandle(new HandleRef<HWND>(this, hwnd), DpiAwarenessContext);
                     }
@@ -3324,12 +3312,15 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 break;
             case PInvoke.WM_HELP:
-                // We want to both fire the event, and let the ocx have the message...
+                // We want to both fire the event, and let the ActiveX Control have the message.
                 base.WndProc(ref m);
                 DefWndProc(ref m);
                 break;
 
             case PInvoke.WM_KEYUP:
+                // Pass WM_KEYUP messages to PreProcessControlMessage, which comes back to our PreProcessMessage
+                // to give the ActiveX control a chance to handle accelerator keys (command shortcuts).
+
                 if (_axState[s_processingKeyUp])
                 {
                     break;
@@ -3363,13 +3354,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 break;
 
             default:
-                if (m.MsgInternal == _registeredMessage)
+                if (m.MsgInternal == _subclassCheckMessage)
                 {
                     m.ResultInternal = (LRESULT)REGMSG_RETVAL;
                     return;
                 }
 
-                // Other things we may care about and we will pass them to the Control's wndProc
+                // Pass all other messages to Control's WndProc.
                 base.WndProc(ref m);
                 break;
         }
@@ -3583,10 +3574,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         base.Dispose(disposing);
     }
 
-    private bool GetSiteOwnsDeactivation()
-    {
-        return _axState[s_ownDisposing];
-    }
+    private bool GetSiteOwnsDeactivation() => _axState[s_ownDisposing];
 
     private void DisposeAxControl()
     {
@@ -3595,26 +3583,19 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         TransitionDownTo(OC_RUNNING);
         if (GetOcState() == OC_RUNNING)
         {
-            GetOleObject().SetClientSite(null);
+            using var oleObject = GetComScope<IOleObject>();
+            oleObject.Value->SetClientSite(null).AssertSuccess();
             SetOcState(OC_LOADED);
         }
     }
 
     private void ReleaseAxControl()
     {
-        // This line is like a bit of magic...
-        // sometimes, we crash with it on,
-        // sometimes, with it off...
-        // Lately, I have decided to leave it on...
-        // (oh, yes, and the crashes seemed to disappear...)
-        //cpr: ComLib.Release(instance);
-
         NoComponentChangeEvents++;
 
-        ContainerControl f = ContainingControl;
-        if (f is not null)
+        if (ContainingControl is { } container)
         {
-            f.VisibleChanged -= _onContainerVisibleChanged;
+            container.VisibleChanged -= _onContainerVisibleChanged;
         }
 
         try
@@ -3623,18 +3604,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 Marshal.ReleaseComObject(_instance);
                 _instance = null;
-                _iOleInPlaceObject = null;
-                _iOleObject = null;
-                _iOleControl = null;
-                _iOleInPlaceActiveObject = null;
                 _iOleInPlaceActiveObjectExternal = null;
-                _iPerPropertyBrowsing = null;
                 _iPersistStream = null;
                 _iPersistStreamInit = null;
                 _iPersistStorage = null;
             }
 
-            _axState[s_checkedIppb] = false;
             _axState[s_disposed] = true;
 
             _freezeCount = 0;
@@ -3661,11 +3636,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private void SlowActivate()
     {
         bool setClientSite = false;
+        using var oleObject = GetComScope<IOleObject>();
 
         if (_miscStatusBits.HasFlag(OLEMISC.OLEMISC_SETCLIENTSITEFIRST))
         {
             using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite);
-            GetOleObject().SetClientSite(clientSite);
+            oleObject.Value->SetClientSite(clientSite).AssertSuccess();
             setClientSite = true;
         }
 
@@ -3674,7 +3650,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (!setClientSite)
         {
             using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite);
-            GetOleObject().SetClientSite(clientSite);
+            oleObject.Value->SetClientSite(clientSite).AssertSuccess();
         }
     }
 
@@ -3682,95 +3658,40 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     {
         _container ??= AxContainer.FindContainerForControl(this);
 
-        if (_container is null)
+        if (_container is not null)
         {
-            ContainerControl f = ContainingControl;
-            if (f is null)
-            {
-                // ContainingControl can be null if the AxHost is still not parented to a containerControl
-                // In everett we used to return a parking window.
-                // now we just set the containingControl to a dummyValue.
-                if (_newParent is null)
-                {
-                    _newParent = new ContainerControl();
-                    _axContainer = _newParent.CreateAxContainer();
-                    _axContainer.AddControl(this);
-                }
+            return _container;
+        }
 
-                return _axContainer;
-            }
-            else
+        if (ContainingControl is not { } container)
+        {
+            // ContainingControl can be null if the AxHost is still not parented to a ContainerControl.
+            // Use a temporary container until one gets created.
+            if (_newParent is null)
             {
-                s_axHTraceSwitch.TraceVerbose($"calling upon {f} to create a container");
-                _container = f.CreateAxContainer();
-                _container.AddControl(this);
-                _containingControl = f;
+                _newParent = new ContainerControl();
+                _axContainer = _newParent.CreateAxContainer();
+                _axContainer.AddControl(this);
             }
+
+            return _axContainer;
+        }
+        else
+        {
+            s_axHTraceSwitch.TraceVerbose($"calling upon {container} to create a container");
+            _container = container.CreateAxContainer();
+            _container.AddControl(this);
+            _containingControl = container;
         }
 
         return _container;
     }
 
-    private IOleControl.Interface GetOleControl() => _iOleControl ??= (IOleControl.Interface)_instance;
+    private ComScope<T> GetComScope<T>() where T : unmanaged, IComIID
+        => ComHelpers.GetComScope<T>(_instance);
 
-    private ComScope<IOleInPlaceActiveObject> GetInPlaceActiveObject()
-    {
-        // If our AxContainer was set an external active object then use it.
-        if (_iOleInPlaceActiveObjectExternal is not null)
-        {
-            return _iOleInPlaceActiveObjectExternal.GetInterface();
-        }
-
-        // Otherwise use our instance.
-        if (_iOleInPlaceActiveObject is null)
-        {
-            Debug.Assert(_instance is not null, "must have the ocx");
-            try
-            {
-                _iOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)_instance;
-            }
-            catch (InvalidCastException e)
-            {
-                Debug.Fail($"Invalid cast in GetInPlaceActiveObject: {e}");
-            }
-        }
-
-        return ComHelpers.GetComScope<IOleInPlaceActiveObject>(_iOleInPlaceActiveObject);
-    }
-
-    private IOleObject.Interface GetOleObject() => _iOleObject ??= (IOleObject.Interface)_instance;
-
-    private IOleInPlaceObject.Interface GetInPlaceObject()
-    {
-        if (_iOleInPlaceObject is null)
-        {
-            Debug.Assert(_instance is not null, "must have the ocx");
-            _iOleInPlaceObject = (IOleInPlaceObject.Interface)_instance;
-
-#if DEBUG
-            if (_iOleInPlaceObject is IOleInPlaceObjectWindowless.Interface)
-            {
-                s_axHTraceSwitch.TraceVerbose($"{GetType().FullName} Can also be a Windowless control.");
-            }
-#endif //DEBUG
-        }
-
-        return _iOleInPlaceObject;
-    }
-
-    private IPerPropertyBrowsing.Interface GetPerPropertyBrowsing()
-    {
-        if (_iPerPropertyBrowsing is null && !_axState[s_checkedIppb] && _instance is not null)
-        {
-            _axState[s_checkedIppb] = true;
-            if (_instance is IPerPropertyBrowsing.Interface browsing)
-            {
-                _iPerPropertyBrowsing = browsing;
-            }
-        }
-
-        return _iPerPropertyBrowsing;
-    }
+    private ComScope<T> TryGetComScope<T>(out HRESULT hr) where T : unmanaged, IComIID
+        => ComHelpers.TryGetComScope<T>(_instance, out hr);
 
     // Mapping functions:
 
