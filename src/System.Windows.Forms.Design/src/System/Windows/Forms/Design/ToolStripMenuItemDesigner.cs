@@ -19,16 +19,16 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 {
     private const int GLYPHINSET = 2;
     // This is the typeHereNode that appears to the bottom and right  of each commited ToolStripDropDownItem
-    private DesignerToolStripControlHost typeHereNode;
-    private ToolStripTemplateNode typeHereTemplateNode;
+    private DesignerToolStripControlHost _typeHereNode;
+    private ToolStripTemplateNode _typeHereTemplateNode;
     // This is the TemplateNode.EditorToolStrip. The editor ToolStrip is encapsulated in a ToolStripControlHost and then added as a  ToolStripDropDownItem on the current ToolStripDropDownItems DropDown.
-    private DesignerToolStripControlHost commitedEditorNode;
+    private DesignerToolStripControlHost _commitedEditorNode;
     // Actual InSitu Editor. This is created for every selected  ToolStripDropDownItem and is DISPOSED immediately after the item comes out of InSitu edit Mode.
-    private ToolStripTemplateNode commitedTemplateNode;
+    private ToolStripTemplateNode _commitedTemplateNode;
 
     // DesignerHost for current Component
     private IDesignerHost _designerHost;
-    private ToolStripItem parentItem;
+    private ToolStripItem _parentItem;
     private ToolStripAdornerWindowService _toolStripAdornerWindowService;
     private ToolStripKeyboardHandlingService _keyboardHandlingService;
 
@@ -37,36 +37,36 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
     // DesignerTransaction used for removing Items
     private DesignerTransaction _pendingTransaction;
-    private bool fireComponentChanged;
+    private bool _fireComponentChanged;
     //indicates that we are adding new MenuItem ..
-    private bool componentAddingFired;
+    private bool _componentAddingFired;
     //new item index
-    private int indexToInsertNewItem = -1;
+    private int _indexToInsertNewItem = -1;
     //only used by DropDownMenu, DropDown or ContextMenuStrip.
-    private DesignerTransaction insertMenuItemTransaction;
+    private DesignerTransaction _insertMenuItemTransaction;
 
     // We want one parent transaction when the item is added by InSitu editing which is now supported only for MenuItems. This parent transaction would include
     // - Adding the DummyItem
     // - Swapping the DummyItem with the InsItu
     // - Committing the new Item with the text entered in the Insitu.
-    private DesignerTransaction newMenuItemTransaction;
+    private DesignerTransaction _newMenuItemTransaction;
     //DropDownToInvalidate
-    private Rectangle dropDownSizeToInvalidate = Rectangle.Empty;
+    private Rectangle _dropDownSizeToInvalidate = Rectangle.Empty;
     //DropDownToInvalidate while ComponentRemove
-    private Rectangle boundsToInvalidateOnRemove = Rectangle.Empty;
-    private ToolStripDropDownGlyph rootControlGlyph;
-    private bool initialized;
+    private Rectangle _boundsToInvalidateOnRemove = Rectangle.Empty;
+    private ToolStripDropDownGlyph _rootControlGlyph;
+    private bool _initialized;
 
     // Hook on the Undoing and Undone Events...
     private UndoEngine _undoEngine;
-    private bool undoingCalled;
-    private bool addingDummyItem;
+    private bool _undoingCalled;
+    private bool _addingDummyItem;
 
     //custom DropDown
-    private ToolStripDropDown customDropDown;
-    private bool dropDownSet;
-    private SerializationStore serializedDataForDropDownItems;
-    private bool dropDownSetFailed;
+    private ToolStripDropDown _customDropDown;
+    private bool _dropDownSet;
+    private SerializationStore _serializedDataForDropDownItems;
+    private bool _dropDownSetFailed;
 
     /// <summary>
     ///  The ToolStripDropDownItems are the associated components.
@@ -110,13 +110,13 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
     private ToolStripDropDown DropDown
     {
-        get => customDropDown;
+        get => _customDropDown;
         set
         {
-            dropDownSetFailed = false;
+            _dropDownSetFailed = false;
             if (IsParentDropDown(value))
             {
-                dropDownSetFailed = true;
+                _dropDownSetFailed = true;
                 throw new ArgumentException(string.Format(SR.InvalidArgument, "DropDown", value.ToString()));
             }
 
@@ -131,18 +131,18 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     // Serialize all the DropDownItems for this Item....
                     if (TryGetService(out ComponentSerializationService serializationService))
                     {
-                        serializedDataForDropDownItems = serializationService.CreateStore();
+                        _serializedDataForDropDownItems = serializationService.CreateStore();
                         foreach (ToolStripItem item in MenuItem.DropDownItems)
                         {
                             // Don't Serialize the DesignerToolStripControlHost...
                             if (!(item is DesignerToolStripControlHost))
                             {
-                                serializationService.Serialize(serializedDataForDropDownItems, item);
+                                serializationService.Serialize(_serializedDataForDropDownItems, item);
                             }
                         }
 
                         //close the SerializationStore to Serialize Items..
-                        serializedDataForDropDownItems.Close();
+                        _serializedDataForDropDownItems.Close();
                     }
 
                     ToolStripItem[] items = new ToolStripItem[MenuItem.DropDownItems.Count];
@@ -160,9 +160,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             // Set The DropDown
             MenuItem.DropDown = value;
             //Set the Shadow Property
-            customDropDown = value;
+            _customDropDown = value;
             // If DropDown is Set to null and we have valid serializedData, then use it to recreate Items.
-            if (value is null && !dropDownSet && serializedDataForDropDownItems is not null)
+            if (value is null && !_dropDownSet && _serializedDataForDropDownItems is not null)
             {
                 try
                 {
@@ -171,8 +171,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     CreatetypeHereNode();
                     if (TryGetService(out ComponentSerializationService serializationService))
                     {
-                        serializationService.Deserialize(serializedDataForDropDownItems);
-                        serializedDataForDropDownItems = null;
+                        serializationService.Deserialize(_serializedDataForDropDownItems);
+                        _serializedDataForDropDownItems = null;
                     }
                 }
                 finally
@@ -207,14 +207,14 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 return base.Editor;
             }
 
-            if (commitedTemplateNode is not null)
+            if (_commitedTemplateNode is not null)
             {
-                return commitedTemplateNode;
+                return _commitedTemplateNode;
             }
 
-            return typeHereTemplateNode;
+            return _typeHereTemplateNode;
         }
-        set => commitedTemplateNode = value;
+        set => _commitedTemplateNode = value;
     }
 
     /// <summary>
@@ -350,23 +350,23 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         {
             if (currentItem is DesignerToolStripControlHost)
             {
-                typeHereNode = (DesignerToolStripControlHost)currentItem;
+                _typeHereNode = (DesignerToolStripControlHost)currentItem;
             }
         }
 
-        if (typeHereNode is not null)
+        if (_typeHereNode is not null)
         {
-            dropDown.Items.Remove(typeHereNode);
+            dropDown.Items.Remove(_typeHereNode);
         }
 
         // setup the MINIToolStrip host...
-        typeHereTemplateNode = new ToolStripTemplateNode(Component, SR.ToolStripDesignerTemplateNodeEnterText, null);
-        int width = typeHereTemplateNode.EditorToolStrip.Width;
-        typeHereNode = new DesignerToolStripControlHost(typeHereTemplateNode.EditorToolStrip);
-        typeHereTemplateNode.ControlHost = typeHereNode;
-        typeHereNode.AutoSize = false;
-        typeHereNode.Width = width;
-        dropDown.Items.Add(typeHereNode);
+        _typeHereTemplateNode = new ToolStripTemplateNode(Component, SR.ToolStripDesignerTemplateNodeEnterText, null);
+        int width = _typeHereTemplateNode.EditorToolStrip.Width;
+        _typeHereNode = new DesignerToolStripControlHost(_typeHereTemplateNode.EditorToolStrip);
+        _typeHereTemplateNode.ControlHost = _typeHereNode;
+        _typeHereNode.AutoSize = false;
+        _typeHereNode.Width = width;
+        dropDown.Items.Add(_typeHereNode);
     }
 
     // used by morphing in ToolStripItemDesigner ... hence internal method.
@@ -421,24 +421,24 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             dummyItemAdded = false;
             MenuItem.DropDown.SuspendLayout();
             int index;
-            if (commitedEditorNode is not null)
+            if (_commitedEditorNode is not null)
             {
                 // This means we have a valid node and we just changed some properties.
-                index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
+                index = MenuItem.DropDownItems.IndexOf(_commitedEditorNode);
                 ToolStripItem editedItem = MenuItem.DropDownItems[index + 1];
                 // Remove TemplateNode
-                MenuItem.DropDown.Items.Remove(commitedEditorNode);
+                MenuItem.DropDown.Items.Remove(_commitedEditorNode);
                 // Get rid of the templateNode...
-                if (commitedTemplateNode is not null)
+                if (_commitedTemplateNode is not null)
                 {
-                    commitedTemplateNode.CloseEditor();
-                    commitedTemplateNode = null;
+                    _commitedTemplateNode.CloseEditor();
+                    _commitedTemplateNode = null;
                 }
 
-                if (commitedEditorNode is not null)
+                if (_commitedEditorNode is not null)
                 {
-                    commitedEditorNode.Dispose();
-                    commitedEditorNode = null;
+                    _commitedEditorNode.Dispose();
+                    _commitedEditorNode = null;
                 }
 
                 // If we have type "-" this means the user wants to add a Separator.
@@ -454,25 +454,25 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                         }
                         catch
                         {
-                            if (newMenuItemTransaction is not null)
+                            if (_newMenuItemTransaction is not null)
                             {
                                 try
                                 {
-                                    newMenuItemTransaction.Cancel();
+                                    _newMenuItemTransaction.Cancel();
                                 }
                                 catch //This will cause ROLLBACK and hence throw if the project is already in DEBUG and instuEdit was Active.
                                 {
                                 }
 
-                                newMenuItemTransaction = null;
+                                _newMenuItemTransaction = null;
                             }
                         }
                         finally
                         {
-                            if (newMenuItemTransaction is not null)
+                            if (_newMenuItemTransaction is not null)
                             {
-                                newMenuItemTransaction.Commit();
-                                newMenuItemTransaction = null;
+                                _newMenuItemTransaction.Commit();
+                                _newMenuItemTransaction = null;
                             }
                         }
                     }
@@ -490,30 +490,30 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                             // One place where we need to call this explicitly since the selection doesnt change.
                             if (enterKeyPressed)
                             {
-                                typeHereNode.SelectControl();
+                                _typeHereNode.SelectControl();
                             }
                         }
                         catch
                         {
-                            if (newMenuItemTransaction is not null)
+                            if (_newMenuItemTransaction is not null)
                             {
                                 try
                                 {
-                                    newMenuItemTransaction.Cancel();
+                                    _newMenuItemTransaction.Cancel();
                                 }
                                 catch //This will cause ROLLBACK and hence throw if the project is already in DEBUG and instuEdit was Active.
                                 {
                                 }
 
-                                newMenuItemTransaction = null;
+                                _newMenuItemTransaction = null;
                             }
                         }
                         finally
                         {
-                            if (newMenuItemTransaction is not null)
+                            if (_newMenuItemTransaction is not null)
                             {
-                                newMenuItemTransaction.Commit();
-                                newMenuItemTransaction = null;
+                                _newMenuItemTransaction.Commit();
+                                _newMenuItemTransaction = null;
                             }
 
                             dummyItemAdded = false;
@@ -554,7 +554,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             else //if commitedEditorNode is null and we are in commitEdit then just add the new Item, since this item is added through dropDown.
             {
                 //if no editorNode then we are committing a NEW NODE...
-                index = MenuItem.DropDownItems.IndexOf(typeHereNode);
+                index = MenuItem.DropDownItems.IndexOf(_typeHereNode);
                 try
                 {
                     dummyItemAdded = true;
@@ -566,7 +566,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 }
 
                 // One place where we need to call this explicitly since the selection doesnt change.
-                typeHereNode.SelectControl();
+                _typeHereNode.SelectControl();
             }
 
             //Invalidate DropDown..
@@ -600,7 +600,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                             }
                         }
 
-                        if (nextItem == typeHereNode)
+                        if (nextItem == _typeHereNode)
                         {
                             // Put Selection on the TypeHereNode.
                             KeyboardHandlingService.SelectedDesignerControl = nextItem;
@@ -622,27 +622,27 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         else
         {
             // We come here if we have not committed so revert our state.
-            if (commitedEditorNode is not null)
+            if (_commitedEditorNode is not null)
             {
                 // We just changed some properties which we want to revert.
                 MenuItem.DropDown.SuspendLayout();
                 bool dummyItem = dummyItemAdded;
                 dummyItemAdded = false;
-                int index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
+                int index = MenuItem.DropDownItems.IndexOf(_commitedEditorNode);
                 ToolStripItem editedItem = MenuItem.DropDownItems[index + 1];
-                MenuItem.DropDown.Items.Remove(commitedEditorNode);
+                MenuItem.DropDown.Items.Remove(_commitedEditorNode);
                 // put the item back...
                 editedItem.Visible = true;
-                if (commitedTemplateNode is not null)
+                if (_commitedTemplateNode is not null)
                 {
-                    commitedTemplateNode.CloseEditor();
-                    commitedTemplateNode = null;
+                    _commitedTemplateNode.CloseEditor();
+                    _commitedTemplateNode = null;
                 }
 
-                if (commitedEditorNode is not null)
+                if (_commitedEditorNode is not null)
                 {
-                    commitedEditorNode.Dispose();
-                    commitedEditorNode = null;
+                    _commitedEditorNode.Dispose();
+                    _commitedEditorNode = null;
                 }
 
                 if (dummyItem)
@@ -654,17 +654,17 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     }
                     catch
                     {
-                        if (newMenuItemTransaction is not null)
+                        if (_newMenuItemTransaction is not null)
                         {
                             try
                             {
-                                newMenuItemTransaction.Cancel();
+                                _newMenuItemTransaction.Cancel();
                             }
                             catch //This will cause ROLLBACK and hence throw if the project is already in DEBUG and instuEdit was Active.
                             {
                             }
 
-                            newMenuItemTransaction = null;
+                            _newMenuItemTransaction = null;
                         }
                     }
 
@@ -686,13 +686,13 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     // set SelectionManager.NeedRefresh to false so that it doesnt refresh,
                     // when the transaction is cancelled.
                     GetService<SelectionManager>().NeedRefresh = false;
-                    if (newMenuItemTransaction is not null)
+                    if (_newMenuItemTransaction is not null)
                     {
                         try
                         {
                             dummyItemAdded = true;
-                            newMenuItemTransaction.Cancel();
-                            newMenuItemTransaction = null;
+                            _newMenuItemTransaction.Cancel();
+                            _newMenuItemTransaction = null;
                             if (MenuItem.DropDownItems.Count == 0)
                             {
                                 CreatetypeHereNode();
@@ -716,7 +716,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// </summary>
     private void CreatetypeHereNode()
     {
-        if (typeHereNode is null)
+        if (_typeHereNode is null)
         {
             AddNewTemplateNode(MenuItem.DropDown);
             //Add Text for Debugging Non Sited DropDown..
@@ -725,10 +725,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 MenuItem.DropDown.Text = $"{MenuItem.Name}.DropDown";
             }
         }
-        else if (typeHereNode is not null && MenuItem.DropDownItems.IndexOf(typeHereNode) == -1)
+        else if (_typeHereNode is not null && MenuItem.DropDownItems.IndexOf(_typeHereNode) == -1)
         {
-            MenuItem.DropDown.Items.Add(typeHereNode);
-            typeHereNode.Visible = true;
+            MenuItem.DropDown.Items.Add(_typeHereNode);
+            _typeHereNode.Visible = true;
         }
 
         //Invalidate DropDown..
@@ -740,12 +740,12 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// </summary>
     private void CreateDummyMenuItem(ToolStripItem item, string text, Image image)
     {
-        commitedTemplateNode = new ToolStripTemplateNode(Component, text, image)
+        _commitedTemplateNode = new ToolStripTemplateNode(Component, text, image)
         {
             ActiveItem = item
         };
-        int width = commitedTemplateNode.EditorToolStrip.Width;
-        commitedEditorNode = new DesignerToolStripControlHost(commitedTemplateNode.EditorToolStrip)
+        int width = _commitedTemplateNode.EditorToolStrip.Width;
+        _commitedEditorNode = new DesignerToolStripControlHost(_commitedTemplateNode.EditorToolStrip)
         {
             AutoSize = false,
             Width = width
@@ -776,19 +776,19 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             ToolStripDesigner.s_autoAddNewItems = false;
 
             //Store the index into a class level member so that the componentChanged can access it
-            indexToInsertNewItem = dummyIndex;
+            _indexToInsertNewItem = dummyIndex;
 
             try
             {
                 //create our transaction
-                newMenuItemTransaction ??= _designerHost.CreateTransaction(SR.ToolStripCreatingNewItemTransaction);
+                _newMenuItemTransaction ??= _designerHost.CreateTransaction(SR.ToolStripCreatingNewItemTransaction);
 
-                fireComponentChanged = true;
+                _fireComponentChanged = true;
                 newItem = (ToolStripItem)_designerHost.CreateComponent(t);
             }
             finally
             {
-                fireComponentChanged = false;
+                _fireComponentChanged = false;
             }
 
             ToolStripItemDesigner designer = _designerHost.GetDesigner(newItem) as ToolStripItemDesigner;
@@ -810,10 +810,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         {
             CommitInsertTransaction(commit: false);
 
-            if (newMenuItemTransaction is not null)
+            if (_newMenuItemTransaction is not null)
             {
-                newMenuItemTransaction.Cancel();
-                newMenuItemTransaction = null;
+                _newMenuItemTransaction.Cancel();
+                _newMenuItemTransaction = null;
             }
 
             GetService<IUIService>().ShowError(ex.Message);
@@ -823,7 +823,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             // turn on Adding/Added events listened to by the ToolStripDesigner...
             ToolStripDesigner.s_autoAddNewItems = true;
             // Reset the index
-            indexToInsertNewItem = -1;
+            _indexToInsertNewItem = -1;
         }
 
         return newItem;
@@ -854,22 +854,22 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             // turn off Adding/Added events listened to by the ToolStripDesigner...
             ToolStripDesigner.s_autoAddNewItems = false;
             //Store the index into a class level member so that the componentChanged can access it
-            indexToInsertNewItem = dummyIndex;
+            _indexToInsertNewItem = dummyIndex;
             try
             {
-                fireComponentChanged = true;
+                _fireComponentChanged = true;
                 newItem = (ToolStripItem)_designerHost.CreateComponent(t, ToolStripDesigner.NameFromText(newText, t, MenuItem.Site));
             }
             finally
             {
-                fireComponentChanged = false;
+                _fireComponentChanged = false;
             }
 
             ToolStripItemDesigner designer = _designerHost.GetDesigner(newItem) as ToolStripItemDesigner;
             try
             {
                 // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldn't do this.
-                if (!string.IsNullOrEmpty(newText) || addingDummyItem)
+                if (!string.IsNullOrEmpty(newText) || _addingDummyItem)
                 {
                     designer.InternalCreate = true;
                 }
@@ -912,7 +912,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             // turn on Adding/Added events listened to by the ToolStripDesigner...
             ToolStripDesigner.s_autoAddNewItems = true;
             // Reset the index
-            indexToInsertNewItem = -1;
+            _indexToInsertNewItem = -1;
         }
 
         return newItem;
@@ -939,11 +939,11 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     // internal method to commit any node.
     internal void Commit()
     {
-        if (commitedTemplateNode is not null && commitedTemplateNode.Active)
+        if (_commitedTemplateNode is not null && _commitedTemplateNode.Active)
         {
             //Get Index of the CommitedItem..
-            int index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
-            commitedTemplateNode.Commit(false, false);
+            int index = MenuItem.DropDownItems.IndexOf(_commitedEditorNode);
+            _commitedTemplateNode.Commit(false, false);
             if (index != -1 && MenuItem.DropDownItems.Count > index)
             {
                 if (MenuItem.DropDownItems[index] is ToolStripDropDownItem newItem)
@@ -952,9 +952,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 }
             }
         }
-        else if (typeHereTemplateNode is not null && typeHereTemplateNode.Active)
+        else if (_typeHereTemplateNode is not null && _typeHereTemplateNode.Active)
         {
-            typeHereTemplateNode.Commit(false, false);
+            _typeHereTemplateNode.Commit(false, false);
         }
 
         // COMMIT ALL THE THE PARENT CHAIN ....
@@ -1001,35 +1001,35 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 _toolStripAdornerWindowService = null;
             }
 
-            if (typeHereTemplateNode is not null)
+            if (_typeHereTemplateNode is not null)
             {
-                typeHereTemplateNode.RollBack();
-                typeHereTemplateNode.CloseEditor();
-                typeHereTemplateNode = null;
+                _typeHereTemplateNode.RollBack();
+                _typeHereTemplateNode.CloseEditor();
+                _typeHereTemplateNode = null;
             }
 
-            if (typeHereNode is not null)
+            if (_typeHereNode is not null)
             {
-                typeHereNode.Dispose();
-                typeHereNode = null;
+                _typeHereNode.Dispose();
+                _typeHereNode = null;
             }
 
-            if (commitedTemplateNode is not null)
+            if (_commitedTemplateNode is not null)
             {
-                commitedTemplateNode.RollBack();
-                commitedTemplateNode.CloseEditor();
-                commitedTemplateNode = null;
+                _commitedTemplateNode.RollBack();
+                _commitedTemplateNode.CloseEditor();
+                _commitedTemplateNode = null;
             }
 
-            if (commitedEditorNode is not null)
+            if (_commitedEditorNode is not null)
             {
-                commitedEditorNode.Dispose();
-                commitedEditorNode = null;
+                _commitedEditorNode.Dispose();
+                _commitedEditorNode = null;
             }
 
-            if (parentItem is not null)
+            if (_parentItem is not null)
             {
-                parentItem = null;
+                _parentItem = null;
             }
         }
 
@@ -1115,10 +1115,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         {
             if (_designerHost.GetDesigner(_designerHost.RootComponent) is ControlDesigner designer)
             {
-                rootControlGlyph = new ToolStripDropDownGlyph(rootControl.Bounds, new DropDownBehavior(designer, this));
+                _rootControlGlyph = new ToolStripDropDownGlyph(rootControl.Bounds, new DropDownBehavior(designer, this));
             }
 
-            _toolStripAdornerWindowService?.DropDownAdorner.Glyphs.Add(rootControlGlyph);
+            _toolStripAdornerWindowService?.DropDownAdorner.Glyphs.Add(_rootControlGlyph);
         }
     }
 
@@ -1130,16 +1130,16 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             //Invalidate the ToolStripWindow.... for clearing the dropDowns
             if (_toolStripAdornerWindowService is not null)
             {
-                if (rootControlGlyph is not null && _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(rootControlGlyph))
+                if (_rootControlGlyph is not null && _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(_rootControlGlyph))
                 {
-                    _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(rootControlGlyph);
+                    _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(_rootControlGlyph);
                 }
             }
 
             //Remove body Glyphs...
             InitializeBodyGlyphsForItems(false /*remove*/, ddi);
             //Unhook all the Events
-            initialized = false;
+            _initialized = false;
             UnHookEvents();
             // Check if this is a Sited-DropDown
             if (ddi.DropDown.Site is not null || ddi.DropDownItems.Count == 1)
@@ -1160,9 +1160,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             if (dropDown is not null && dropDown.Visible)
             {
                 // Invalidate only if new Size is LESS than old Size...
-                if (_toolStripAdornerWindowService is not null && (dropDown.Width < dropDownSizeToInvalidate.Width || dropDown.Size.Height < dropDownSizeToInvalidate.Height))
+                if (_toolStripAdornerWindowService is not null && (dropDown.Width < _dropDownSizeToInvalidate.Width || dropDown.Size.Height < _dropDownSizeToInvalidate.Height))
                 {
-                    using Region invalidatingRegion = new Region(dropDownSizeToInvalidate);
+                    using Region invalidatingRegion = new Region(_dropDownSizeToInvalidate);
                     invalidatingRegion.Exclude(dropDown.Bounds);
                     _toolStripAdornerWindowService.Invalidate(invalidatingRegion);
 
@@ -1173,21 +1173,21 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
             if (_toolStripAdornerWindowService is not null)
             {
-                if (rootControlGlyph is not null && _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(rootControlGlyph))
+                if (_rootControlGlyph is not null && _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(_rootControlGlyph))
                 {
-                    _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(rootControlGlyph);
+                    _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(_rootControlGlyph);
                 }
 
                 if (_designerHost.GetDesigner(_designerHost.RootComponent) is ControlDesigner designer)
                 {
-                    rootControlGlyph = new ToolStripDropDownGlyph(dropDown.Bounds, new DropDownBehavior(designer, this));
+                    _rootControlGlyph = new ToolStripDropDownGlyph(dropDown.Bounds, new DropDownBehavior(designer, this));
                 }
 
-                _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Add(rootControlGlyph);
+                _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Add(_rootControlGlyph);
             }
         }
 
-        dropDownSizeToInvalidate = dropDown.Bounds;
+        _dropDownSizeToInvalidate = dropDown.Bounds;
     }
 
     /// <summary>
@@ -1196,13 +1196,13 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     internal void EditTemplateNode(bool clicked)
     {
         // If the parent has a window which is too small, there won't be any space  to draw the entry box and typeHereNode will be null
-        if (typeHereNode is null)
+        if (_typeHereNode is null)
         {
             return;
         }
 
         // Refresh the state of the 'TypeHere' node to NotSelected state
-        typeHereNode.RefreshSelectionGlyph();
+        _typeHereNode.RefreshSelectionGlyph();
         // Commit any InsituEdit Node.
         if (KeyboardHandlingService is not null && KeyboardHandlingService.TemplateNodeActive)
         {
@@ -1253,11 +1253,11 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
         MenuItem.DropDown.SuspendLayout();
         dummyItemAdded = true;
-        int index = MenuItem.DropDownItems.IndexOf(typeHereNode);
+        int index = MenuItem.DropDownItems.IndexOf(_typeHereNode);
         ToolStripItem newDummyItem = null;
         try
         {
-            addingDummyItem = true;
+            _addingDummyItem = true;
             newDummyItem = CreateDummyItem(typeof(ToolStripMenuItem), index);
         }
         catch (CheckoutException checkoutException)
@@ -1266,10 +1266,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             {
                 CommitInsertTransaction(/*commit=*/ false);
 
-                if (newMenuItemTransaction is not null)
+                if (_newMenuItemTransaction is not null)
                 {
-                    newMenuItemTransaction.Cancel();
-                    newMenuItemTransaction = null;
+                    _newMenuItemTransaction.Cancel();
+                    _newMenuItemTransaction = null;
                 }
             }
             else
@@ -1280,7 +1280,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         finally
         {
             dummyItemAdded = (newDummyItem is not null);
-            addingDummyItem = false;
+            _addingDummyItem = false;
         }
 
         MenuItem.DropDown.ResumeLayout();
@@ -1340,7 +1340,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         CreateDummyMenuItem(toolItem, toolItem.Text, toolItem.Image);
         int index = MenuItem.DropDownItems.IndexOf(toolItem);
         //swap in our insitu ToolStrip
-        MenuItem.DropDownItems.Insert(index, commitedEditorNode);
+        MenuItem.DropDownItems.Insert(index, _commitedEditorNode);
         if (toolItem is ToolStripControlHost)
         {
             ((ToolStripControlHost)toolItem).Control.Visible = false;
@@ -1349,13 +1349,13 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         toolItem.Visible = false;
         MenuItem.DropDown.ResumeLayout();
         // Try Focusing the TextBox....
-        commitedTemplateNode?.FocusEditor(toolItem);
+        _commitedTemplateNode?.FocusEditor(toolItem);
 
         ToolStripDropDownItem dropDownItem = toolItem as ToolStripDropDownItem;
-        if (!(dropDownItem.Owner is ToolStripDropDownMenu) && dropDownItem is not null && dropDownItem.Bounds.Width < commitedEditorNode.Bounds.Width)
+        if (!(dropDownItem.Owner is ToolStripDropDownMenu) && dropDownItem is not null && dropDownItem.Bounds.Width < _commitedEditorNode.Bounds.Width)
         {
-            dropDownItem.Width = commitedEditorNode.Width;
-            dropDownItem.DropDown.Location = new Point(dropDownItem.DropDown.Location.X + commitedEditorNode.Bounds.Width - dropDownItem.Bounds.Width, dropDownItem.DropDown.Location.Y);
+            dropDownItem.Width = _commitedEditorNode.Width;
+            dropDownItem.DropDown.Location = new Point(dropDownItem.DropDown.Location.X + _commitedEditorNode.Bounds.Width - dropDownItem.Bounds.Width, dropDownItem.DropDown.Location.Y);
         }
 
         IsEditorActive = true;
@@ -1540,9 +1540,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             }
         }
 
-        if (!initialized)
+        if (!_initialized)
         {
-            initialized = true;
+            _initialized = true;
             // When the DropDown is Shared the ownerItem need not be the current MenuItem. In Such a case hide the dropDown for current owner ... this will bring everything  to a sane state..
             if (MenuItem.DropDown.OwnerItem is ToolStripDropDownItem currentOwner && currentOwner != MenuItem)
             {
@@ -1642,9 +1642,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         IComponentChangeService changeService = GetService<IComponentChangeService>();
 
         // make sure it's one of ours and on DropDown.
-        if (e.Component is ToolStripItem newItem && componentAddingFired && (MenuItemSelected || fireComponentChanged))
+        if (e.Component is ToolStripItem newItem && _componentAddingFired && (MenuItemSelected || _fireComponentChanged))
         {
-            componentAddingFired = false;
+            _componentAddingFired = false;
             try
             {
                 if (IsOnContextMenu && MenuItem.DropDown.Site is not null)
@@ -1664,15 +1664,15 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 int count = MenuItem.DropDownItems.Count;
 
                 // In Cut / Copy and Paste the 'indexToInsertNewItem' is not Set and hence is -1... so check for that value...
-                if (indexToInsertNewItem != -1)
+                if (_indexToInsertNewItem != -1)
                 {
                     if (IsOnContextMenu && MenuItem.DropDown.Site is not null)
                     {
-                        MenuItem.DropDown.Items.Insert(indexToInsertNewItem, newItem);
+                        MenuItem.DropDown.Items.Insert(_indexToInsertNewItem, newItem);
                     }
                     else
                     {
-                        MenuItem.DropDownItems.Insert(indexToInsertNewItem, newItem);
+                        MenuItem.DropDownItems.Insert(_indexToInsertNewItem, newItem);
                     }
                 }
                 else
@@ -1737,7 +1737,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 }
 
                 // If the Item is added through Undo/Redo ONLY then select the item
-                if (undoingCalled)
+                if (_undoingCalled)
                 {
                     _selectionService?.SetSelectedComponents(new IComponent[] { newItem }, SelectionTypes.Replace);
                 }
@@ -1789,18 +1789,18 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
         else
         {
-            if (insertMenuItemTransaction is not null)
+            if (_insertMenuItemTransaction is not null)
             {
                 if (commit)
                 {
-                    insertMenuItemTransaction.Commit();
+                    _insertMenuItemTransaction.Commit();
                 }
                 else
                 {
-                    insertMenuItemTransaction.Cancel();
+                    _insertMenuItemTransaction.Cancel();
                 }
 
-                insertMenuItemTransaction = null;
+                _insertMenuItemTransaction = null;
             }
         }
     }
@@ -1816,14 +1816,14 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             return;
         }
 
-        if (e.Component is ToolStripItem && (MenuItemSelected || fireComponentChanged))
+        if (e.Component is ToolStripItem && (MenuItemSelected || _fireComponentChanged))
         {
             if (!IsOnContextMenu)
             {
                 ToolStrip mainStrip = GetMainToolStrip();
                 if (_designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && !mainStripDesigner.EditingCollection && mainStripDesigner.InsertTransaction is null)
                 {
-                    componentAddingFired = true;
+                    _componentAddingFired = true;
                     Debug.Assert(_designerHost is not null, "Why didn't we get a designer host?");
                     mainStripDesigner.InsertTransaction = _designerHost.CreateTransaction(SR.ToolStripInsertingIntoDropDownTransaction);
                 }
@@ -1832,9 +1832,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             {
                 if (e.Component is ToolStripItem itemAdding && itemAdding.Owner is null)
                 {
-                    componentAddingFired = true;
+                    _componentAddingFired = true;
                     Debug.Assert(_designerHost is not null, "Why didn't we get a designer host?");
-                    insertMenuItemTransaction = _designerHost.CreateTransaction(SR.ToolStripInsertingIntoDropDownTransaction);
+                    _insertMenuItemTransaction = _designerHost.CreateTransaction(SR.ToolStripInsertingIntoDropDownTransaction);
                 }
             }
         }
@@ -1886,12 +1886,12 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     }
 
                     // Looks like we need to invalidate the entire
-                    if (_toolStripAdornerWindowService is not null && boundsToInvalidateOnRemove != Rectangle.Empty)
+                    if (_toolStripAdornerWindowService is not null && _boundsToInvalidateOnRemove != Rectangle.Empty)
                     {
-                        using Region regionToInvalidate = new Region(boundsToInvalidateOnRemove);
+                        using Region regionToInvalidate = new Region(_boundsToInvalidateOnRemove);
                         regionToInvalidate.Exclude(MenuItem.DropDown.Bounds);
                         _toolStripAdornerWindowService.Invalidate(regionToInvalidate);
-                        boundsToInvalidateOnRemove = Rectangle.Empty;
+                        _boundsToInvalidateOnRemove = Rectangle.Empty;
                     }
 
                     // Select the item only if Cut/Delete is pressed.
@@ -1938,11 +1938,11 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 {
                     RemoveItemBodyGlyph(itemToBeDeleted);
                     InitializeBodyGlyphsForItems(false, ownerItem);
-                    boundsToInvalidateOnRemove = ownerItem.DropDown.Bounds;
+                    _boundsToInvalidateOnRemove = ownerItem.DropDown.Bounds;
                     //Check if the deleted item is a dropDownItem and its DropDown is Visible.
                     if (itemToBeDeleted is ToolStripDropDownItem dropDownItem)
                     {
-                        boundsToInvalidateOnRemove = Rectangle.Union(boundsToInvalidateOnRemove, dropDownItem.DropDown.Bounds);
+                        _boundsToInvalidateOnRemove = Rectangle.Union(_boundsToInvalidateOnRemove, dropDownItem.DropDown.Bounds);
                     }
 
                     Debug.Assert(_designerHost is not null, "Why didn't we get a designer host?");
@@ -1999,16 +1999,16 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         // Reshuffle the TemplateNode only for "Downward" dropdowns...
         if (MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveLeft && MenuItem.DropDownDirection != ToolStripDropDownDirection.AboveRight)
         {
-            if (typeHereNode is not null && (e.Item != typeHereNode))
+            if (_typeHereNode is not null && (e.Item != _typeHereNode))
             {
-                int currentIndexOfEditor = MenuItem.DropDown.Items.IndexOf(typeHereNode);
+                int currentIndexOfEditor = MenuItem.DropDown.Items.IndexOf(_typeHereNode);
                 if (currentIndexOfEditor >= 0 && currentIndexOfEditor < MenuItem.DropDown.Items.Count - 1)
                 {
                     // we now know the editor is there, but isn't currently at the end of the line. lets add it.
                     MenuItem.DropDown.ItemAdded -= new ToolStripItemEventHandler(OnItemAdded);
                     MenuItem.DropDown.SuspendLayout();
-                    MenuItem.DropDown.Items.Remove(typeHereNode);
-                    MenuItem.DropDown.Items.Add(typeHereNode);
+                    MenuItem.DropDown.Items.Remove(_typeHereNode);
+                    MenuItem.DropDown.Items.Add(_typeHereNode);
                     MenuItem.DropDown.ResumeLayout();
                     MenuItem.DropDown.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
                 }
@@ -2025,10 +2025,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// </summary>
     private void OnUndone(object source, EventArgs e)
     {
-        if (undoingCalled)
+        if (_undoingCalled)
         {
             // If we have Undone the SETTING of DropDown Revert back to Original state.
-            if (dropDownSet && MenuItem.DropDown.IsAutoGenerated)
+            if (_dropDownSet && MenuItem.DropDown.IsAutoGenerated)
             {
                 ToolStrip mainStrip = GetMainToolStrip();
                 if (_designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && mainStripDesigner.CacheItems)
@@ -2051,12 +2051,12 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 MenuItem.DropDown.PerformLayout();
             }
 
-            undoingCalled = false;
-            dropDownSet = false;
+            _undoingCalled = false;
+            _dropDownSet = false;
         }
 
         // After Redo-Undo Glyphs are broken.
-        if (_selectionService.GetComponentSelected(MenuItem) && !dropDownSetFailed)
+        if (_selectionService.GetComponentSelected(MenuItem) && !_dropDownSetFailed)
         {
             InitializeDropDown();
         }
@@ -2078,7 +2078,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
             if (!MenuItem.DropDown.IsAutoGenerated)
             {
-                dropDownSet = true;
+                _dropDownSet = true;
                 ToolStrip mainStrip = GetMainToolStrip();
                 if (_designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner)
                 {
@@ -2087,7 +2087,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 }
             }
 
-            undoingCalled = true;
+            _undoingCalled = true;
         }
     }
 
@@ -2110,13 +2110,13 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
 
         //ALWAYS COMMIT!!!
-        if (commitedTemplateNode is not null && commitedTemplateNode.Active)
+        if (_commitedTemplateNode is not null && _commitedTemplateNode.Active)
         {
-            commitedTemplateNode.Commit(false, false);
+            _commitedTemplateNode.Commit(false, false);
         }
-        else if (typeHereTemplateNode is not null && typeHereTemplateNode.Active)
+        else if (_typeHereTemplateNode is not null && _typeHereTemplateNode.Active)
         {
-            typeHereTemplateNode.Commit(false, false);
+            _typeHereTemplateNode.Commit(false, false);
         }
 
         if (MenuItem.Equals(selectionSvc.PrimarySelection))
@@ -2284,17 +2284,17 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             ownerItem.DropDownItems.RemoveAt(0);
         }
 
-        if (typeHereTemplateNode is not null && typeHereTemplateNode.Active)
+        if (_typeHereTemplateNode is not null && _typeHereTemplateNode.Active)
         {
-            typeHereTemplateNode.RollBack();
-            typeHereTemplateNode.CloseEditor();
-            typeHereTemplateNode = null;
+            _typeHereTemplateNode.RollBack();
+            _typeHereTemplateNode.CloseEditor();
+            _typeHereTemplateNode = null;
         }
 
-        if (typeHereNode is not null)
+        if (_typeHereNode is not null)
         {
-            typeHereNode.Dispose();
-            typeHereNode = null;
+            _typeHereNode.Dispose();
+            _typeHereNode = null;
         }
 
         _toolStripAdornerWindowService?.Invalidate(bounds);
@@ -2305,9 +2305,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// </summary>
     private void RollBack()
     {
-        if (commitedEditorNode is not null)
+        if (_commitedEditorNode is not null)
         {
-            int index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
+            int index = MenuItem.DropDownItems.IndexOf(_commitedEditorNode);
             Debug.Assert(index != -1, "Invalid Index");
             ToolStripDropDownItem editedItem = (ToolStripDropDownItem)MenuItem.DropDownItems[index + 1];
             if (editedItem is not null)
@@ -2315,18 +2315,18 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 editedItem.Visible = true;
             }
 
-            MenuItem.DropDown.Items.Remove(commitedEditorNode);
-            if (commitedTemplateNode is not null)
+            MenuItem.DropDown.Items.Remove(_commitedEditorNode);
+            if (_commitedTemplateNode is not null)
             {
-                commitedTemplateNode.RollBack();
-                commitedTemplateNode.CloseEditor();
-                commitedTemplateNode = null;
+                _commitedTemplateNode.RollBack();
+                _commitedTemplateNode.CloseEditor();
+                _commitedTemplateNode = null;
             }
 
-            if (commitedEditorNode is not null)
+            if (_commitedEditorNode is not null)
             {
-                commitedEditorNode.Dispose();
-                commitedEditorNode = null;
+                _commitedEditorNode.Dispose();
+                _commitedEditorNode = null;
             }
         }
     }
@@ -2394,7 +2394,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     {
         if (enterKeyPressed)
         {
-            if (!initialized)
+            if (!_initialized)
             {
                 InitializeDropDown();
             }
@@ -2440,7 +2440,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// <summary>
     ///  Returns true if the CheckOnClick property should be persisted in code gen.
     /// </summary>
-    private bool ShouldSerializeDropDown() => (customDropDown is not null);
+    private bool ShouldSerializeDropDown() => (_customDropDown is not null);
 
     /// <summary>
     ///  Returns true if the visible property should be persisted in code gen.
@@ -2461,11 +2461,11 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         {
             if (MenuItem.Owner is ToolStripDropDown)
             {
-                parentItem = ((ToolStripDropDown)(MenuItem.Owner)).OwnerItem;
+                _parentItem = ((ToolStripDropDown)(MenuItem.Owner)).OwnerItem;
                 //need to inform the owner tha we want to enter insitu mode
                 if (_designerHost is not null)
                 {
-                    IDesigner designer = _designerHost.GetDesigner(parentItem);
+                    IDesigner designer = _designerHost.GetDesigner(_parentItem);
                     if (designer is ToolStripMenuItemDesigner)
                     {
                         ((ToolStripMenuItemDesigner)designer).EnterInSituEdit(MenuItem);
@@ -2598,11 +2598,11 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         /// <summary>
         ///  Constructor that accepts the related ControlDesigner.
         /// </summary>
-        private readonly ToolStripMenuItemDesigner menuItemDesigner;
+        private readonly ToolStripMenuItemDesigner _menuItemDesigner;
 
         internal DropDownBehavior(ControlDesigner designer, ToolStripMenuItemDesigner menuItemDesigner) : base(designer)
         {
-            this.menuItemDesigner = menuItemDesigner;
+            this._menuItemDesigner = menuItemDesigner;
         }
 
         /// <summary>
@@ -2732,7 +2732,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                             }
 
                             //Set the Selection ..
-                            menuItemDesigner._selectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
+                            _menuItemDesigner._selectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
                         }
 
                         changeService?.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
