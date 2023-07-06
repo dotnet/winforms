@@ -264,7 +264,7 @@ public partial class DataGridView
                     return this.TryGetOwnerAs(out owner) && owner.CanFocus;
                 case UiaCore.UIA.ItemStatusPropertyId:
                     var canSort = false;
-                    if(!this.TryGetOwnerAs(out owner))
+                    if (!this.TryGetOwnerAs(out owner))
                     {
                         return base.GetPropertyValue(propertyID);
                     }
