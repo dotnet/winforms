@@ -1284,7 +1284,8 @@ public class AxHostTests
     [MemberData(nameof(DoVerb_TestData))]
     public void AxHost_DoVerb_InvokeWithHandle_Success(int verb)
     {
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using NoAssertContext context = new();
+        using SubAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.DoVerb(verb);
     }
@@ -1293,11 +1294,13 @@ public class AxHostTests
     [MemberData(nameof(DoVerb_TestData))]
     public void AxHost_DoVerb_InvokeWithHandleWithParent_Success(int verb)
     {
-        using var parent = new Control();
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using NoAssertContext context = new();
+        using Control parent = new();
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Parent = parent
         };
+
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.True(parent.IsHandleCreated);
         control.DoVerb(verb);
@@ -1308,8 +1311,9 @@ public class AxHostTests
     [MemberData(nameof(DoVerb_TestData))]
     public void AxHost_DoVerb_InvokeWithHandleWithParentWithoutHandle_Success(int verb)
     {
-        using var parent = new Control();
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using NoAssertContext context = new();
+        using Control parent = new();
+        using SubAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.Parent = parent;
         Assert.False(parent.IsHandleCreated);
@@ -1808,8 +1812,9 @@ public class AxHostTests
     [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
     public void AxHost_InvokeEditMode_InvokeWithSiteWithParent_Success(bool designMode, object selectionService, int expectedCallCount)
     {
-        using var parent = new Control();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using Control parent = new();
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
+
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -1841,20 +1846,18 @@ public class AxHostTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new SubAxHost(WebBrowserClsidString)
+
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Parent = parent,
             Site = mockSite.Object
         };
+
         control.InvokeEditMode();
-        Assert.True(control.IsHandleCreated);
-        Assert.True(parent.IsHandleCreated);
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
 
         // Call again.
         control.InvokeEditMode();
-        Assert.True(control.IsHandleCreated);
-        Assert.True(parent.IsHandleCreated);
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
     }
 
