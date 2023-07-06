@@ -7238,8 +7238,8 @@ public partial class ToolStripTests
     public void ToolStrip_GetNextItem_ItemsBackwardExpected()
     {
         // Regression test for https://github.com/dotnet/winforms/issues/9181, and it verifies that setting TabStop=true,
-        // When typing Right keyboard, the next focus position is first item on the left,
-        // When typing Left keyboard, the next focus position is first item on the Right.
+        // When typing Right arrow keyboard, the next focus position is first item on the left,
+        // When typing Left arrow keyboard, the next focus position is first item on the Right.
 
         using ToolStrip toolStrip = new() { TabStop = true, Width = 300 };
         using ToolStripMenuItem toolStripMenuItem1 = new();
@@ -7248,11 +7248,11 @@ public partial class ToolStripTests
         toolStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
 
         toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Left;
-        ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(null, ArrowDirection.Left);
+        ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(start: null, ArrowDirection.Left);
         Assert.Equal(toolStrip.Items[2], previousToolStripItem1);
 
         toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Right;
-        ToolStripItem previousToolStripItem2 = toolStrip.GetNextItem(null, ArrowDirection.Right);
+        ToolStripItem previousToolStripItem2 = toolStrip.GetNextItem(start: null, ArrowDirection.Right);
         Assert.Equal(toolStrip.Items[0], previousToolStripItem2);
 
         Assert.False(toolStrip.IsHandleCreated);
