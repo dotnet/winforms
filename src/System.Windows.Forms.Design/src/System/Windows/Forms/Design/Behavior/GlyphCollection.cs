@@ -117,6 +117,7 @@ public class GlyphCollection : CollectionBase
     /// </summary>
     public void Remove(Glyph value)
     {
+        // Its possible that the value doesn't exist in the list.
         if (List.Contains(value))
         {
             List.Remove(value);
