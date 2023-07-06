@@ -8624,11 +8624,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Kaynak yazıcısı kaydedildi. Düzenleyemezsiniz.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ResourceValueNotFound">
-        <source>The resource value '{0}' was not found.</source>
-        <target state="new">The resource value '{0}' was not found.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RestartNotSupported">
         <source>Restart method is not supported for this application type.</source>
         <target state="translated">Bu uygulama türü için yeniden başlatma metodu desteklenmiyor.</target>

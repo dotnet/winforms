@@ -8624,11 +8624,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">리소스 작성기가 저장되었으므로 편집할 수 없습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ResourceValueNotFound">
-        <source>The resource value '{0}' was not found.</source>
-        <target state="new">The resource value '{0}' was not found.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="RestartNotSupported">
         <source>Restart method is not supported for this application type.</source>
         <target state="translated">Restart 메서드는 이 애플리케이션 종류에서 지원되지 않습니다.</target>
