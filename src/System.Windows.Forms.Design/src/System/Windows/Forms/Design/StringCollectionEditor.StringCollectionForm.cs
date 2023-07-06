@@ -194,23 +194,6 @@ internal partial class StringCollectionEditor
         ///  In it you should update your user interface to reflect the current value.
         /// </summary>
         protected override void OnEditValueChanged()
-        {
-            object[] items = Items;
-            string text = string.Empty;
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i].ToString() is string itemString)
-                {
-                    text += itemString;
-                    if (i != items.Length - 1)
-                    {
-                        text += "\r\n";
-                    }
-                }
-            }
-
-            _textEntry.Text = text;
-        }
+            => _textEntry.Text = string.Join(Environment.NewLine, Items);
     }
 }
