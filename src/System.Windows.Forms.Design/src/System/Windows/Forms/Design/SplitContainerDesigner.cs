@@ -112,9 +112,11 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
 
             if (value is not null)
             {
-                SplitterPanelDesigner panelDesigner = (SplitterPanelDesigner)_designerHost!.GetDesigner(value)!;
                 _selectedPanel = value;
-                panelDesigner.Selected = true;
+                if (_designerHost!.GetDesigner(value) is SplitterPanelDesigner panelDesigner)
+                {
+                    panelDesigner.Selected = true;
+                }
             }
         }
     }

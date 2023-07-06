@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -36,7 +34,7 @@ internal partial class StringCollectionEditor
             HookEvents();
         }
 
-        private void Edit1_keyDown(object sender, KeyEventArgs e)
+        private void Edit1_keyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Escape)
             {
@@ -47,13 +45,13 @@ internal partial class StringCollectionEditor
             e.Handled = true;
         }
 
-        private void StringCollectionEditor_HelpButtonClicked(object sender, CancelEventArgs e)
+        private void StringCollectionEditor_HelpButtonClicked(object? sender, CancelEventArgs e)
         {
             e.Cancel = true;
             _editor.ShowHelp();
         }
 
-        private void Form_HelpRequested(object sender, HelpEventArgs e)
+        private void Form_HelpRequested(object? sender, HelpEventArgs e)
         {
             _editor.ShowHelp();
         }
@@ -69,6 +67,11 @@ internal partial class StringCollectionEditor
         ///  NOTE: The following code is required by the form designer.
         ///  It can be modified using the form editor.  Do not modify it using the code editor.
         /// </summary>
+        [MemberNotNull(nameof(_instruction))]
+        [MemberNotNull(nameof(_textEntry))]
+        [MemberNotNull(nameof(_okButton))]
+        [MemberNotNull(nameof(_cancelButton))]
+        [MemberNotNull(nameof(_overarchingLayoutPanel))]
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(StringCollectionEditor));
@@ -135,7 +138,7 @@ internal partial class StringCollectionEditor
         /// <summary>
         ///  Commits the changes to the editor.
         /// </summary>
-        private void OKButton_click(object sender, EventArgs e)
+        private void OKButton_click(object? sender, EventArgs e)
         {
             char[] delims = new char[] { '\n' };
             char[] trims = new char[] { '\r' };
@@ -172,7 +175,7 @@ internal partial class StringCollectionEditor
             }
 
             // If the final line is blank, we don't want to create an item from it
-            if (strings.Length > 0 && strings[strings.Length - 1].Length == 0)
+            if (strings.Length > 0 && strings[^1].Length == 0)
             {
                 nItems--;
             }
@@ -197,10 +200,13 @@ internal partial class StringCollectionEditor
 
             for (int i = 0; i < items.Length; i++)
             {
-                text += items[i].ToString();
-                if (i != items.Length - 1)
+                if (items[i].ToString() is string itemString)
                 {
-                    text += "\r\n";
+                    text += itemString;
+                    if (i != items.Length - 1)
+                    {
+                        text += "\r\n";
+                    }
                 }
             }
 
