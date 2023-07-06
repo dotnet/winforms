@@ -73,7 +73,7 @@ public partial class CollectionEditor
 
         protected override bool IsInputKey(Keys keyData)
         {
-            if (keyData.Equals(Keys.Down) && _showSplit)
+            if (keyData is Keys.Down && _showSplit)
             {
                 return true;
             }
@@ -89,7 +89,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
                 State = PushButtonState.Default;
             }
@@ -97,7 +97,7 @@ public partial class CollectionEditor
 
         protected override void OnKeyDown(KeyEventArgs kevent)
         {
-            if (kevent.KeyCode.Equals(Keys.Down) && _showSplit)
+            if (kevent.KeyCode is Keys.Down && _showSplit)
             {
                 ShowContextMenuStrip();
             }
@@ -117,7 +117,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
                 State = PushButtonState.Normal;
             }
@@ -149,7 +149,7 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
                 State = PushButtonState.Hot;
             }
@@ -163,16 +163,9 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
+            if (State is not (PushButtonState.Pressed or PushButtonState.Disabled))
             {
-                if (Focused)
-                {
-                    State = PushButtonState.Default;
-                }
-                else
-                {
-                    State = PushButtonState.Normal;
-                }
+                State = Focused ? PushButtonState.Default : PushButtonState.Normal;
             }
         }
 
@@ -184,12 +177,12 @@ public partial class CollectionEditor
                 return;
             }
 
-            if (ContextMenuStrip is null || !ContextMenuStrip.Visible)
+            if (ContextMenuStrip is not {Visible: true})
             {
                 SetButtonDrawState();
                 if (Parent is not null && Bounds.Contains(Parent.PointToClient(Cursor.Position)) && !_dropDownRectangle.Contains(mevent.Location))
                 {
-                    OnClick(new EventArgs());
+                    OnClick(EventArgs.Empty);
                 }
             }
         }
