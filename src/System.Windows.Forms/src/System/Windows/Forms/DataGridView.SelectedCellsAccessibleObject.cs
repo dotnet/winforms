@@ -8,11 +8,11 @@ public partial class DataGridView
 {
     private class DataGridViewSelectedCellsAccessibleObject : AccessibleObject
     {
-        private readonly DataGridViewAccessibleObject _ownerDataGridViewAccessibleObject;
+        private readonly DataGridViewAccessibleObject _parentAccessibleObject;
 
-        public DataGridViewSelectedCellsAccessibleObject(DataGridViewAccessibleObject owner)
+        public DataGridViewSelectedCellsAccessibleObject(DataGridViewAccessibleObject parentAccessibleObject)
         {
-            _ownerDataGridViewAccessibleObject = owner;
+            _parentAccessibleObject = parentAccessibleObject;
         }
 
         public override string Name
@@ -27,7 +27,7 @@ public partial class DataGridView
         {
             get
             {
-                return _ownerDataGridViewAccessibleObject;
+                return _parentAccessibleObject;
             }
         }
 
@@ -59,7 +59,7 @@ public partial class DataGridView
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (_ownerDataGridViewAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && index >= 0 && index < owner.GetCellCount(DataGridViewElementStates.Selected))
+            if (_parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && index >= 0 && index < owner.GetCellCount(DataGridViewElementStates.Selected))
             {
                 return owner.SelectedCell(index).AccessibilityObject;
             }
@@ -71,7 +71,7 @@ public partial class DataGridView
 
         public override int GetChildCount()
         {
-            return _ownerDataGridViewAccessibleObject.TryGetOwnerAs(out DataGridView? owner) ? owner.GetCellCount(DataGridViewElementStates.Selected) : base.GetChildCount();
+            return _parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) ? owner.GetCellCount(DataGridViewElementStates.Selected) : base.GetChildCount();
         }
 
         public override AccessibleObject GetSelected()
@@ -81,7 +81,7 @@ public partial class DataGridView
 
         public override AccessibleObject? GetFocused()
         {
-            if (_ownerDataGridViewAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && owner.CurrentCell is not null && owner.CurrentCell.Selected)
+            if (_parentAccessibleObject.TryGetOwnerAs(out DataGridView? owner) && owner.CurrentCell is not null && owner.CurrentCell.Selected)
             {
                 return owner.CurrentCell.AccessibilityObject;
             }
@@ -98,7 +98,7 @@ public partial class DataGridView
             switch (navigationDirection)
             {
                 case AccessibleNavigation.FirstChild:
-                    if (_ownerDataGridViewAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
+                    if (_parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
                     {
                         return owner.SelectedCell(0).AccessibilityObject;
                     }
@@ -108,7 +108,7 @@ public partial class DataGridView
                     }
 
                 case AccessibleNavigation.LastChild:
-                    if (_ownerDataGridViewAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
+                    if (_parentAccessibleObject.TryGetOwnerAs(out owner) && owner.GetCellCount(DataGridViewElementStates.Selected) > 0)
                     {
                         return owner.SelectedCell(owner.GetCellCount(DataGridViewElementStates.Selected) - 1).AccessibilityObject;
                     }
