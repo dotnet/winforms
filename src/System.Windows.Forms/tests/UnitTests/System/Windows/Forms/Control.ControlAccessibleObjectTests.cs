@@ -1642,6 +1642,7 @@ public class Control_ControlAccessibleObjectTests
     {
         using var control = ReflectionHelper.InvokePublicConstructor<Control>(type);
         control.Text = "&control";
+        control.TabIndex = 1;
         var accessibleObject = control.AccessibilityObject;
 
         Assert.Equal("Alt+c", accessibleObject.KeyboardShortcut);
@@ -1649,7 +1650,33 @@ public class Control_ControlAccessibleObjectTests
         control.GetType().GetProperty(nameof(Label.UseMnemonic)).SetValue(control, false);
 
         Assert.Null(accessibleObject.KeyboardShortcut);
-        Assert.False(control.IsHandleCreated);
+
+        if (control is not Label)
+        {
+            using var form = new Form();
+            using var label = new Label();
+            label.Text = "&label";
+            label.TabIndex = 0;
+
+            form.Controls.Add(label);
+            form.Controls.Add(control);
+            form.Show();
+
+            Assert.Equal("Alt+l", accessibleObject.KeyboardShortcut);
+
+            label.UseMnemonic = false;
+
+            Assert.Null(accessibleObject.KeyboardShortcut);
+
+            control.GetType().GetProperty(nameof(Label.UseMnemonic)).SetValue(control, true);
+
+            Assert.Equal("Alt+c", accessibleObject.KeyboardShortcut);
+
+            control.Text = "control";
+            label.UseMnemonic = true;
+
+            Assert.Equal("Alt+l", accessibleObject.KeyboardShortcut);
+        }
     }
 
     // Unit test for https://github.com/dotnet/winforms/issues/9296

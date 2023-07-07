@@ -27,28 +27,25 @@ public partial class ButtonBase
             }
         }
 
+        private static bool ControlTextContainsAmpersand(Control control)
+        {
+            return control is not null && control.Text is not null && control.Text.Contains('&');
+        }
+
         internal static string? GetKeyboardShortcut(Control control, bool useMnemonic, Label? previousLabel)
         {
-            char mnemonic = (char)0;
+            char mnemonic = '\0';
 
-            if (!useMnemonic && previousLabel is not null && previousLabel.UseMnemonic)
+            if ((!useMnemonic || !ControlTextContainsAmpersand(control)) && previousLabel is not null && previousLabel.UseMnemonic)
             {
-                string text = previousLabel.Text;
-                if (!string.IsNullOrEmpty(text))
-                {
-                    mnemonic = WindowsFormsUtils.GetMnemonic(text, false);
-                }
+                mnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, false);
             }
             else if (useMnemonic)
             {
-                string text = control.Text;
-                if (!string.IsNullOrEmpty(text))
-                {
-                    mnemonic = WindowsFormsUtils.GetMnemonic(text, false);
-                }
+                mnemonic = WindowsFormsUtils.GetMnemonic(control.Text, false);
             }
 
-            return (mnemonic == (char)0) ? null : $"Alt+{mnemonic}";
+            return (mnemonic == '\0') ? null : $"Alt+{mnemonic}";
         }
 
         public override string? KeyboardShortcut => this.TryGetOwnerAs(out ButtonBase? owner)
