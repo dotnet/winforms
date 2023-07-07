@@ -1219,7 +1219,7 @@ public class Control_ControlAccessibleObjectTests
     {
         var typesToIgnore = new[]
         {
-           typeof(DataGridView), typeof(DataGridViewComboBoxEditingControl), typeof(DataGridViewTextBoxEditingControl),
+           typeof(DataGridViewComboBoxEditingControl), typeof(DataGridViewTextBoxEditingControl),
            typeof(FlowLayoutPanel), typeof(HScrollBar), typeof(LinkLabel), typeof(ListBox),typeof(ListView), typeof(MonthCalendar),
            typeof(PropertyGrid), typeof(TableLayoutPanel), typeof(TabPage), typeof(ToolStripContentPanel), typeof(TreeView), typeof(VScrollBar)
         };
