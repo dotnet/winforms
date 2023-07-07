@@ -2245,7 +2245,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             // For the drop-down up-directed loop should be preserved.
             // So if the current item is topmost, then the bottom item should be selected on up-key press.
-            return DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
+            return (DisplayedItems.Count > 1 && DisplayedItems[0].CanKeyboardSelect) ? DisplayedItems[0] : DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
         }
 
         return DisplayedItems[0];
