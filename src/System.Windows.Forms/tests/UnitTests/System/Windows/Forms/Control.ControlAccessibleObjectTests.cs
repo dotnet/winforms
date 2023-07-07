@@ -1219,9 +1219,9 @@ public class Control_ControlAccessibleObjectTests
     {
         var typesToIgnore = new[]
         {
-           typeof(DataGridView), typeof(DataGridViewComboBoxEditingControl), typeof(DataGridViewTextBoxEditingControl),
-           typeof(FlowLayoutPanel), typeof(LinkLabel), typeof(ListBox), typeof(ListView), typeof(MaskedTextBox), typeof(MonthCalendar),
-           typeof(PropertyGrid), typeof(TableLayoutPanel), typeof(TabPage), typeof(TextBox), typeof(ToolStripContentPanel), typeof(TreeView)
+           typeof(DataGridViewComboBoxEditingControl), typeof(DataGridViewTextBoxEditingControl),
+           typeof(FlowLayoutPanel), typeof(LinkLabel), typeof(ListBox), typeof(ListView), typeof(MonthCalendar),
+           typeof(PropertyGrid), typeof(TableLayoutPanel), typeof(TabPage), typeof(ToolStripContentPanel), typeof(TreeView)
         };
 
         return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
