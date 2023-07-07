@@ -361,7 +361,7 @@ public abstract partial class TextBoxBase
         {
             if (Owner is null)
             {
-                return new RECT(0, 0, 0, 0);
+                return default;
             }
 
             Debug.Assert(Owner.IsHandleCreated);

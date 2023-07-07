@@ -44,9 +44,9 @@ public abstract partial class TextBoxBase
 
         internal override object? GetPropertyValue(UIA propertyID)
         {
-            if (propertyID == UIA.IsPasswordPropertyId && this.TryGetOwnerAs(out TextBoxBase? owningTextBoxBase))
+            if (propertyID == UIA.IsPasswordPropertyId && this.TryGetOwnerAs(out TextBoxBase? owner))
             {
-                return owningTextBoxBase.PasswordProtect;
+                return owner.PasswordProtect;
             }
 
             return base.GetPropertyValue(propertyID);
@@ -63,7 +63,7 @@ public abstract partial class TextBoxBase
                 _ => base.IsPatternSupported(patternId)
             };
 
-        internal override bool IsReadOnly => this.TryGetOwnerAs(out TextBoxBase? owningTextBoxBase) && owningTextBoxBase.ReadOnly;
+        internal override bool IsReadOnly => this.TryGetOwnerAs(out TextBoxBase? owner) && owner.ReadOnly;
 
         public override string? Name
         {
@@ -71,12 +71,12 @@ public abstract partial class TextBoxBase
             {
                 var name = base.Name;
                 return name is not null ||
-                    (this.TryGetOwnerAs(out TextBoxBase? owningTextBoxBase) && !owningTextBoxBase.PasswordProtect) ? name : string.Empty;
+                    (this.TryGetOwnerAs(out TextBoxBase? owner) && !owner.PasswordProtect) ? name : string.Empty;
             }
             set => base.Name = value;
         }
 
-        public override string? Value => this.TryGetOwnerAs(out TextBoxBase? owningTextBoxBase) && !owningTextBoxBase.PasswordProtect ? ValueInternal : SR.AccessDenied;
+        public override string? Value => this.TryGetOwnerAs(out TextBoxBase? owner) && !owner.PasswordProtect ? ValueInternal : SR.AccessDenied;
 
         protected virtual string ValueInternal
             => this.TryGetOwnerAs(out Control? owner) && owner.Text is { } text ? text : string.Empty;
