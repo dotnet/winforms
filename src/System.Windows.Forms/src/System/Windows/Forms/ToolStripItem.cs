@@ -2611,7 +2611,6 @@ public abstract partial class ToolStripItem : BindableComponent,
                 Push(true);
             }
 
-            //
             OnMouseDown(e);
             RaiseMouseEvent(s_mouseDownEvent, e);
         }
