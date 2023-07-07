@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.CodeDom;
 using System.Collections;
 using System.Globalization;
@@ -20,15 +18,15 @@ internal partial class ResourceCodeDomSerializer
     {
         private readonly IDesignerSerializationManager _manager;
         private bool _checkedLocalizationLanguage;
-        private CultureInfo _localizationLanguage;
-        private IResourceWriter _writer;
-        private CultureInfo _readCulture;
+        private CultureInfo? _localizationLanguage;
+        private IResourceWriter? _writer;
+        private CultureInfo? _readCulture;
         private readonly Dictionary<string, int> _nameTable;
-        private Dictionary<CultureInfo, Dictionary<string, object>> _resourceSets;
-        private Dictionary<string, object> _metadata;
-        private Dictionary<string, object> _mergedMetadata;
-        private object _rootComponent;
-        private HashSet<object> _propertyFillAdded;
+        private Dictionary<CultureInfo, Dictionary<string, object?>?>? _resourceSets;
+        private Dictionary<string, object?>? _metadata;
+        private Dictionary<string, object?>? _mergedMetadata;
+        private object? _rootComponent;
+        private HashSet<object>? _propertyFillAdded;
         private bool _invariantCultureResourcesDirty;
         private bool _metadataResourcesDirty;
 
@@ -53,7 +51,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  The language we should be localizing into.
         /// </summary>
-        private CultureInfo LocalizationLanguage
+        private CultureInfo? LocalizationLanguage
         {
             get
             {
@@ -63,13 +61,12 @@ internal partial class ResourceCodeDomSerializer
                 }
 
                 // Check to see if our base component's localizable prop is true
-                if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
+                if (_manager.TryGetContext(out RootContext? rootCtx))
                 {
                     object comp = rootCtx.Value;
-                    PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
-                    if (prop is not null && prop.PropertyType == typeof(CultureInfo))
+                    if (TypeDescriptorHelper.TryGetPropertyValue(comp, "LoadLanguage", out CultureInfo? cultureInfo))
                     {
-                        _localizationLanguage = (CultureInfo)prop.GetValue(comp);
+                        _localizationLanguage = cultureInfo;
                     }
                 }
 
@@ -81,47 +78,18 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  This is the culture info we should use to read and write resources. We always write using the same culture we read with so we don't stomp on data.
         /// </summary>
-        private CultureInfo ReadCulture
-        {
-            get
-            {
-                if (_readCulture is not null)
-                {
-                    return _readCulture;
-                }
-
-                CultureInfo locCulture = LocalizationLanguage;
-                _readCulture = locCulture is not null ? locCulture : CultureInfo.InvariantCulture;
-                return _readCulture;
-            }
-        }
+        private CultureInfo ReadCulture => _readCulture ??= LocalizationLanguage ?? CultureInfo.InvariantCulture;
 
         /// <summary>
         ///  Returns a hash table where we shove resource sets.
         /// </summary>
-        private Dictionary<CultureInfo, Dictionary<string, object>> ResourceTable
+        private Dictionary<CultureInfo, Dictionary<string, object?>?> ResourceTable
             => _resourceSets ??= new();
 
         /// <summary>
         ///  Retrieves the root component we're designing.
         /// </summary>
-        private object RootComponent
-        {
-            get
-            {
-                if (_rootComponent is not null)
-                {
-                    return _rootComponent;
-                }
-
-                if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
-                {
-                    _rootComponent = rootCtx.Value;
-                }
-
-                return _rootComponent;
-            }
-        }
+        private object? RootComponent => _rootComponent ??= _manager.GetContext<RootContext>()?.Value;
 
         /// <summary>
         ///  Retrieves a resource writer we should write into.
@@ -132,9 +100,7 @@ internal partial class ResourceCodeDomSerializer
             {
                 if (_writer is null)
                 {
-                    IResourceService rs = (IResourceService)_manager.GetService(typeof(IResourceService));
-
-                    if (rs is not null)
+                    if (_manager.TryGetService(out IResourceService? rs))
                     {
                         // We always write with the culture we read with.  In the event of a language change during localization, we will write the new language to the source code and then perform a reload.
                         _writer = rs.GetResourceWriter(ReadCulture);
@@ -154,20 +120,17 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  The component serializer supports caching serialized outputs for speed.  It holds both a collection of statements as well as an opaque blob for resources.  This function adds data to that blob. The parameters to this function are the same as those to SetValue, or SetMetadata (when isMetadata is true).
         /// </summary>
-        private static void AddCacheEntry(IDesignerSerializationManager manager, string name, object value, bool isMetadata, bool forceInvariant, bool shouldSerializeValue, bool ensureInvariant)
+        private static void AddCacheEntry(IDesignerSerializationManager manager, string name, object? value, bool isMetadata, bool forceInvariant, bool shouldSerializeValue, bool ensureInvariant)
         {
-            if (manager.Context[typeof(ComponentCache.Entry)] is ComponentCache.Entry entry)
+            if (manager.TryGetContext(out ComponentCache.Entry? entry))
             {
-                ComponentCache.ResourceEntry re = new ComponentCache.ResourceEntry
-                {
-                    Name = name,
-                    Value = value,
-                    ForceInvariant = forceInvariant,
-                    ShouldSerializeValue = shouldSerializeValue,
-                    EnsureInvariant = ensureInvariant,
-                    PropertyDescriptor = (PropertyDescriptor)manager.Context[typeof(PropertyDescriptor)],
-                    ExpressionContext = (ExpressionContext)manager.Context[typeof(ExpressionContext)]
-                };
+                ComponentCache.ResourceEntry re = new ComponentCache.ResourceEntry(name,
+                    value,
+                    forceInvariant,
+                    shouldSerializeValue,
+                    ensureInvariant,
+                    manager.GetContext<PropertyDescriptor>()!,
+                    manager.GetContext<ExpressionContext>()!);
 
                 if (isMetadata)
                 {
@@ -192,12 +155,12 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  This method examines all the resources for the provided culture. When it finds a resource with a key in the format of  "[objectName].[property name]"; it will apply that resources value to the corresponding property on the object.
         /// </summary>
-        public override void ApplyResources(object value, string objectName, CultureInfo culture)
+        public override void ApplyResources(object value, string objectName, CultureInfo? culture)
         {
             culture ??= ReadCulture;
 
             // .NET Framework 4.0 (Dev10 #425129): Control location moves due to incorrect anchor info when resource files are reloaded.
-            Windows.Forms.Control control = value as Windows.Forms.Control;
+            Windows.Forms.Control? control = value as Windows.Forms.Control;
             control?.SuspendLayout();
 
             base.ApplyResources(value, objectName, culture);
@@ -209,7 +172,7 @@ internal partial class ResourceCodeDomSerializer
         ///  This determines if the given resource name/value pair can be retrieved from a parent culture.
         ///  We don't want to write duplicate resources for each language, so we do a check of the parent culture.
         /// </summary>
-        private CompareValue CompareWithParentValue(string name, object value)
+        private CompareValue CompareWithParentValue(string name, object? value)
         {
             Debug.Assert(name is not null, "name is null");
             // If there is no parent culture, treat that as being different from the parent's resource.
@@ -219,12 +182,12 @@ internal partial class ResourceCodeDomSerializer
                 : CompareWithParentValue(ReadCulture, name, value);
         }
 
-        private CompareValue CompareWithParentValue(CultureInfo culture, string name, object value)
+        private CompareValue CompareWithParentValue(CultureInfo culture, string name, object? value)
         {
             Debug.Assert(culture.Parent != culture, "should have returned when culture = InvariantCulture");
             CultureInfo parent = culture.Parent;
-            Dictionary<string, object> resourceSet = GetResourceSet(culture);
-            if (resourceSet is not null && resourceSet.TryGetValue(name, out object parentValue))
+            Dictionary<string, object?>? resourceSet = GetResourceSet(culture);
+            if (resourceSet is not null && resourceSet.TryGetValue(name, out object? parentValue))
             {
                 return parentValue is null || !parentValue.Equals(value) ? CompareValue.Different : CompareValue.Same;
             }
@@ -239,9 +202,9 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Creates a resource set dictionary for the given resource reader.
         /// </summary>
-        private Dictionary<string, object> CreateResourceSet(IResourceReader reader, CultureInfo culture)
+        private Dictionary<string, object?> CreateResourceSet(IResourceReader reader, CultureInfo culture)
         {
-            Dictionary<string, object> result = new();
+            Dictionary<string, object?> result = new();
 
             // We need to guard against bad or unloadable resources.  We warn the user in the task list here, but we will still load the designer.
             try
@@ -250,14 +213,14 @@ internal partial class ResourceCodeDomSerializer
                 while (resEnum.MoveNext())
                 {
                     string name = (string)resEnum.Key;
-                    object value = resEnum.Value;
+                    object? value = resEnum.Value;
                     result[name] = value;
                 }
             }
             catch (Exception e)
             {
                 string message = e.Message;
-                if (message is null || message.Length == 0)
+                if (string.IsNullOrEmpty(message))
                 {
                     message = e.GetType().Name;
                 }
@@ -276,21 +239,21 @@ internal partial class ResourceCodeDomSerializer
         ///  This returns a dictionary enumerator for metadata on the invariant culture.
         ///  If no metadata can be found this will return null.
         /// </summary>
-        public IDictionaryEnumerator GetMetadataEnumerator()
+        public IDictionaryEnumerator? GetMetadataEnumerator()
         {
             if (_mergedMetadata is not null)
             {
                 return _mergedMetadata.GetEnumerator();
             }
 
-            Dictionary<string, object> metaData = GetMetadata();
+            Dictionary<string, object?>? metaData = GetMetadata();
             if (metaData is not null)
             {
                 // This is for backwards compatibility and also for the case when our reader/writer don't support metadata.  We must merge the original enumeration data in here or  else existing design time properties won't show up.  That would be really bad for things like Localizable.
-                Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                Dictionary<string, object?>? resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                 if (resourceSet is not null)
                 {
-                    foreach (KeyValuePair<string, object> item in resourceSet)
+                    foreach (KeyValuePair<string, object?> item in resourceSet)
                     {
                         metaData.TryAdd(item.Key, item.Value);
                     }
@@ -305,44 +268,41 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  This returns a dictionary enumerator for the given culture.  If no such resource file exists for the culture this  will return null.
         /// </summary>
-        public IDictionaryEnumerator GetEnumerator(CultureInfo culture)
+        public IDictionaryEnumerator? GetEnumerator(CultureInfo culture)
         {
-            Dictionary<string, object> ht = GetResourceSet(culture);
+            Dictionary<string, object?>? ht = GetResourceSet(culture);
             return ht?.GetEnumerator();
         }
 
         /// <summary>
         ///  Loads the metadata table
         /// </summary>
-        private Dictionary<string, object> GetMetadata()
+        private Dictionary<string, object?>? GetMetadata()
         {
             if (_metadata is not null)
             {
                 return _metadata;
             }
 
-            IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
-            if (resSvc is not null)
+            IResourceService? resSvc = _manager.GetService<IResourceService>();
+            IResourceReader? reader = resSvc?.GetResourceReader(CultureInfo.InvariantCulture);
+            if (reader is not null)
             {
-                IResourceReader reader = resSvc.GetResourceReader(CultureInfo.InvariantCulture);
-                if (reader is not null)
+                try
                 {
-                    try
+                    if (reader is ResXResourceReader resxReader)
                     {
-                        if (reader is ResXResourceReader resxReader)
+                        _metadata = new();
+                        IDictionaryEnumerator de = resxReader.GetMetadataEnumerator();
+                        while (de.MoveNext())
                         {
-                            _metadata = new();
-                            IDictionaryEnumerator de = resxReader.GetMetadataEnumerator();
-                            while (de.MoveNext())
-                            {
-                                _metadata[(string)de.Key] = de.Value;
-                            }
+                            _metadata[(string)de.Key] = de.Value;
                         }
                     }
-                    finally
-                    {
-                        reader.Close();
-                    }
+                }
+                finally
+                {
+                    reader.Close();
                 }
             }
 
@@ -352,7 +312,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Overrides ResourceManager.GetObject to return the requested object.  Returns null if the object couldn't be found.
         /// </summary>
-        public override object GetObject(string resourceName)
+        public override object? GetObject(string resourceName)
         {
             return GetObject(resourceName, false);
         }
@@ -360,25 +320,23 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Retrieves the object of the given name from our resource bundle. If forceInvariant is true, this will always use the invariant resource, rather than using the current language. Returns null if the object couldn't be found.
         /// </summary>
-        public object GetObject(string resourceName, bool forceInvariant)
+        public object? GetObject(string resourceName, bool forceInvariant)
         {
             Debug.Assert(_manager is not null, "This resource manager object has been destroyed.");
             // We fetch the read culture if someone asks for a culture-sensitive string.  If forceInvariant is set, we always use the invariant culture.
             CultureInfo culture = forceInvariant ? CultureInfo.InvariantCulture : ReadCulture;
+            CultureInfo lastCulture;
 
-            object value = null;
-            while (value is null)
+            object? value = null;
+            do
             {
-                Dictionary<string, object> rs = GetResourceSet(culture);
+                Dictionary<string, object?>? rs = GetResourceSet(culture);
                 rs?.TryGetValue(resourceName, out value);
 
-                CultureInfo lastCulture = culture;
+                lastCulture = culture;
                 culture = culture.Parent;
-                if (lastCulture.Equals(culture))
-                {
-                    break;
-                }
             }
+            while (value is null && !lastCulture.Equals(culture));
 
             return value;
         }
@@ -386,16 +344,14 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Looks up the resource set in the resourceSets hash table, loading the set if it hasn't been loaded already. Returns null if no resource that exists for that culture.
         /// </summary>
-        private Dictionary<string, object> GetResourceSet(CultureInfo culture)
+        private Dictionary<string, object?>? GetResourceSet(CultureInfo culture)
         {
             Debug.Assert(culture is not null, "null parameter");
-            if (!ResourceTable.TryGetValue(culture, out Dictionary<string, object> resourceSet))
+            if (!ResourceTable.TryGetValue(culture, out Dictionary<string, object?>? resourceSet))
             {
-                IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
-                TraceIf(TraceLevel.Error, resSvc is null, "IResourceService is not available.  We will not be able to load resources.");
-                if (resSvc is not null)
+                if (_manager.TryGetService(out IResourceService? resSvc))
                 {
-                    IResourceReader reader = resSvc.GetResourceReader(culture);
+                    IResourceReader? reader = resSvc.GetResourceReader(culture);
                     if (reader is not null)
                     {
                         try
@@ -410,11 +366,15 @@ internal partial class ResourceCodeDomSerializer
                     else if (culture.Equals(CultureInfo.InvariantCulture))
                     {
                         // If this is the invariant culture, always provide a resource set.
-                        resourceSet = new Dictionary<string, object>();
+                        resourceSet = new Dictionary<string, object?>();
                     }
 
                     // resourceSet may be null here. We add it to the cache anyway as a sentinel so we don't repeatedly ask for the same resource.
                     ResourceTable[culture] = resourceSet;
+                }
+                else
+                {
+                    Trace(TraceLevel.Error, "IResourceService is not available.  We will not be able to load resources.");
                 }
             }
 
@@ -424,7 +384,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Override of GetResourceSet from ResourceManager.
         /// </summary>
-        public override ResourceSet GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
+        public override ResourceSet? GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
         {
             ArgumentNullException.ThrowIfNull(culture);
 
@@ -442,7 +402,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Overrides ResourceManager.GetString to return the requested string. Returns null if the string couldn't be found.
         /// </summary>
-        public override string GetString(string resourceName)
+        public override string? GetString(string resourceName)
         {
             return GetObject(resourceName, false) as string;
         }
@@ -450,7 +410,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Event handler that gets called when serialization or deserialization is complete. Here we need to write any resources to disk.  Sine we open resources for write on demand, this code handles the case of reading resources as well.
         /// </summary>
-        private void OnSerializationComplete(object sender, EventArgs e)
+        private void OnSerializationComplete(object? sender, EventArgs e)
         {
             // Commit any changes we have made.
             if (_writer is not null)
@@ -461,8 +421,7 @@ internal partial class ResourceCodeDomSerializer
 
             if (_invariantCultureResourcesDirty || _metadataResourcesDirty)
             {
-                IResourceService service = (IResourceService)_manager.GetService(typeof(IResourceService));
-                if (service is not null)
+                if (_manager.TryGetService(out IResourceService? service))
                 {
                     IResourceWriter invariantWriter = service.GetResourceWriter(CultureInfo.InvariantCulture);
                     Debug.Assert(invariantWriter is not null, "GetResourceWriter returned null for the InvariantCulture");
@@ -471,15 +430,12 @@ internal partial class ResourceCodeDomSerializer
                     {
                         // Do the invariant resources first
                         Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
-                        ResourceTable.TryGetValue(CultureInfo.InvariantCulture, out Dictionary<string, object> resourceSet);
-                        Debug.Assert(resourceSet is not null and Dictionary<string, object>, "ResourceSet for the InvariantCulture not loaded, but it's considered dirty?");
+                        ResourceTable.TryGetValue(CultureInfo.InvariantCulture, out Dictionary<string, object?>? resourceSet);
+                        Debug.Assert(resourceSet is not null, "ResourceSet for the InvariantCulture not loaded, but it's considered dirty?");
 
                         // Dump the hash table to the resource writer
-                        IDictionaryEnumerator resEnum = resourceSet.GetEnumerator();
-                        while (resEnum.MoveNext())
+                        foreach ((string name, object? value) in resourceSet)
                         {
-                            string name = (string)resEnum.Key;
-                            object value = resEnum.Value;
                             invariantWriter.AddResource(name, value);
                         }
 
@@ -489,7 +445,7 @@ internal partial class ResourceCodeDomSerializer
                         Debug.Assert(_metadata is not null, "No metadata, but it's dirty?");
                         if (invariantWriter is ResXResourceWriter resxWriter)
                         {
-                            foreach (KeyValuePair<string, object> de in _metadata)
+                            foreach (KeyValuePair<string, object?> de in _metadata)
                             {
                                 resxWriter.AddMetadata(de.Key, de.Value);
                             }
@@ -518,7 +474,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Writes a metadata tag to the resource, or writes a normal tag if the resource writer doesn't support metadata.
         /// </summary>
-        public void SetMetadata(IDesignerSerializationManager manager, string resourceName, object value, bool shouldSerializeValue, bool applyingCachedResources)
+        public void SetMetadata(IDesignerSerializationManager manager, string resourceName, object? value, bool shouldSerializeValue, bool applyingCachedResources)
         {
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is not null && (!value.GetType().IsSerializable))
@@ -546,15 +502,11 @@ internal partial class ResourceCodeDomSerializer
             else
             {
                 // Check if the invariant writer supports metadata. If not, we need to push metadata as regular data.
-                IResourceWriter invariantWriter = null;
-                IResourceService service = (IResourceService)manager.GetService(typeof(IResourceService));
-                if (service is not null)
-                {
-                    invariantWriter = service.GetResourceWriter(CultureInfo.InvariantCulture);
-                }
+                IResourceService? service = manager.GetService<IResourceService>();
+                IResourceWriter? invariantWriter = service?.GetResourceWriter(CultureInfo.InvariantCulture);
 
-                Dictionary<string, object> invariant = GetResourceSet(CultureInfo.InvariantCulture);
-                Dictionary<string, object> t;
+                Dictionary<string, object?>? invariant = GetResourceSet(CultureInfo.InvariantCulture);
+                Dictionary<string, object?>? t;
                 if (invariantWriter is null or ResXResourceWriter)
                 {
                     t = GetMetadata();
@@ -565,7 +517,7 @@ internal partial class ResourceCodeDomSerializer
                     }
 
                     // Note that when we read metadata, for backwards compatibility, we also merge in regular data from the invariant resource. We need to clear that data here, since we are going to write out metadata separately.
-                    invariant.Remove(resourceName);
+                    invariant!.Remove(resourceName);
                     _metadataResourcesDirty = true;
                 }
                 else
@@ -600,7 +552,7 @@ internal partial class ResourceCodeDomSerializer
         /// <summary>
         ///  Writes the given resource value under the given name. This checks the parent resource to see if the values are the same.  If they are, the resource is not written.  If not, then the resource is written. We always write using the resource language we read in with, so we don't stomp on the wrong resource data in the event that someone changes the language.
         /// </summary>
-        public void SetValue(IDesignerSerializationManager manager, string resourceName, object value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
+        public void SetValue(IDesignerSerializationManager manager, string resourceName, object? value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
         {
             // Values we are going to serialize must be serializable or else the resource writer will fail when we close it.
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
@@ -622,7 +574,7 @@ internal partial class ResourceCodeDomSerializer
                 }
                 else
                 {
-                    Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                    Dictionary<string, object?>? resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                     Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                     if (shouldSerializeInvariant)
                     {
@@ -652,7 +604,7 @@ internal partial class ResourceCodeDomSerializer
                         {
                             // Add resource to InvariantCulture
                             Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
-                            Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                            Dictionary<string, object?>? resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                             Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                             resourceSet[resourceName] = value;
                             _invariantCultureResourcesDirty = true;
@@ -664,11 +616,9 @@ internal partial class ResourceCodeDomSerializer
                             // In addition, we need to handle the case of the user adding a new component to the non-invariant language.  This would be bad, because when he/she moved back to the invariant language the component's properties would all be defaults.  In order to minimize this problem, but still allow holes in the invariant resx, we also check to see if the property can be reset.  If it cannot be reset, that means that it has no meaningful default. Therefore, it should have appeared in the invariant resx and its absence indicates a new component.
                             bool writeValue = true;
                             bool writeInvariant = false;
-                            PropertyDescriptor prop = (PropertyDescriptor)manager.Context[typeof(PropertyDescriptor)];
-                            if (prop is not null)
+                            if (manager.TryGetContext(out PropertyDescriptor? prop))
                             {
-                                ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
-                                if (tree is not null && tree.Expression is CodePropertyReferenceExpression)
+                                if (manager.TryGetContext(out ExpressionContext? tree) && tree.Expression is CodePropertyReferenceExpression)
                                 {
                                     writeValue = prop.ShouldSerializeValue(tree.Owner);
                                     writeInvariant = !prop.CanResetValue(tree.Owner);
@@ -682,7 +632,7 @@ internal partial class ResourceCodeDomSerializer
                                 {
                                     // Add resource to InvariantCulture
                                     Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
-                                    Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                                    Dictionary<string, object?>? resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                                     Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                                     resourceSet[resourceName] = value;
                                     _invariantCultureResourcesDirty = true;
@@ -711,9 +661,9 @@ internal partial class ResourceCodeDomSerializer
         ///  We always write using the resource language we read in with,
         ///  so we don't stomp on the wrong resource data in the event that someone changes the language.
         /// </summary>
-        public string SetValue(IDesignerSerializationManager manager, ExpressionContext tree, object value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
+        public string SetValue(IDesignerSerializationManager manager, ExpressionContext? tree, object? value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
         {
-            string nameBase;
+            string? nameBase;
             bool appendCount = false;
             if (tree is not null)
             {
@@ -724,18 +674,14 @@ internal partial class ResourceCodeDomSerializer
                 else
                 {
                     nameBase = manager.GetName(tree.Owner);
-                    if (nameBase is null)
+                    if (nameBase is null && manager.TryGetService(out IReferenceService? referenceService))
                     {
-                        IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
-                        if (referenceService is not null)
-                        {
-                            nameBase = referenceService.GetName(tree.Owner);
-                        }
+                        nameBase = referenceService.GetName(tree.Owner);
                     }
                 }
 
                 CodeExpression expression = tree.Expression;
-                string expressionName;
+                string? expressionName;
                 if (expression is CodePropertyReferenceExpression codeProperty)
                 {
                     expressionName = codeProperty.PropertyName;
