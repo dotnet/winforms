@@ -29,8 +29,6 @@ public abstract partial class AxHost
         private MemoryStream? _memoryStream;
         private AgileComPointer<IStorage>? _storage;
         private AgileComPointer<ILockBytes>? _lockBytes;
-        private bool _manualUpdate;
-        private string? _licenseKey;
         private readonly PropertyBagStream? _propertyBag;
         private const string PropertyBagSerializationName = "PropertyBagBinary";
         private const string DataSerializationName = "Data";
@@ -40,11 +38,10 @@ public abstract partial class AxHost
         {
             Type = storageType;
             _propertyBag = propertyBag;
-            // dangerous?
-            _length = (int)memoryStream.Length;
+            _length = checked((int)memoryStream.Length);
             _memoryStream = memoryStream;
-            _manualUpdate = control.GetAxState(s_manualUpdate);
-            _licenseKey = control.GetLicenseKey();
+            ManualUpdate = control.GetAxState(s_manualUpdate);
+            LicenseKey = control.GetLicenseKey();
         }
 
         internal State(PropertyBagStream propertyBag) => _propertyBag = propertyBag;
@@ -59,18 +56,17 @@ public abstract partial class AxHost
         internal State(AxHost control)
         {
             CreateStorage();
-            _manualUpdate = control.GetAxState(s_manualUpdate);
-            _licenseKey = control.GetLicenseKey();
+            ManualUpdate = control.GetAxState(s_manualUpdate);
+            LicenseKey = control.GetLicenseKey();
             Type = STG_STORAGE;
         }
 
         public State(Stream ms, int storageType, bool manualUpdate, string? licKey)
         {
             Type = storageType;
-            // dangerous?
-            _length = (int)ms.Length;
-            _manualUpdate = manualUpdate;
-            _licenseKey = licKey;
+            _length = checked((int)ms.Length);
+            ManualUpdate = manualUpdate;
+            LicenseKey = licKey;
 
             InitializeFromStream(ms, initializeBufferOnly: true);
         }
@@ -126,9 +122,9 @@ public abstract partial class AxHost
 
         internal int Type { get; set; }
 
-        internal bool _GetManualUpdate() => _manualUpdate;
+        internal bool ManualUpdate { get; private set; }
 
-        internal string? _GetLicenseKey() => _licenseKey;
+        internal string? LicenseKey { get; private set; }
 
         private unsafe void CreateStorage()
         {
@@ -200,7 +196,7 @@ public abstract partial class AxHost
         {
             if (_memoryStream is null)
             {
-                Debug.Assert(_buffer is not null, "gotta have the buffer already...");
+                Debug.Assert(_buffer is not null);
                 if (_buffer is null)
                 {
                     return null;
@@ -224,11 +220,11 @@ public abstract partial class AxHost
             {
                 Type = binaryReader.ReadInt32();
                 int version = binaryReader.ReadInt32();
-                _manualUpdate = binaryReader.ReadBoolean();
+                ManualUpdate = binaryReader.ReadBoolean();
                 int cc = binaryReader.ReadInt32();
                 if (cc != 0)
                 {
-                    _licenseKey = new string(binaryReader.ReadChars(cc));
+                    LicenseKey = new string(binaryReader.ReadChars(cc));
                 }
 
                 for (int skipUnits = binaryReader.ReadInt32(); skipUnits > 0; skipUnits--)
@@ -301,11 +297,11 @@ public abstract partial class AxHost
 
             binaryWriter.Write(Type);
             binaryWriter.Write(VERSION);
-            binaryWriter.Write(_manualUpdate);
-            if (_licenseKey is not null)
+            binaryWriter.Write(ManualUpdate);
+            if (LicenseKey is { } licenseKey)
             {
-                binaryWriter.Write(_licenseKey.Length);
-                binaryWriter.Write(_licenseKey.ToCharArray());
+                binaryWriter.Write(licenseKey.Length);
+                binaryWriter.Write(licenseKey.ToCharArray());
             }
             else
             {
@@ -329,9 +325,6 @@ public abstract partial class AxHost
             }
         }
 
-        /// <summary>
-        ///  ISerializable private implementation
-        /// </summary>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             using MemoryStream stream = new();

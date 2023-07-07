@@ -86,6 +86,29 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
         return scope;
     }
 
+    /// <summary>
+    ///  Simple helper for checking if a given interface is supported. Only use this if you don't intend to
+    ///  use the interface, otherwise use <see cref="TryQuery{TTo}(out HRESULT)"/>.
+    /// </summary>
+    public bool SupportsInterface<TInterface>() where TInterface : unmanaged, IComIID
+    {
+        if (typeof(TInterface) == typeof(T))
+        {
+            return true;
+        }
+
+        IUnknown* unknown;
+        HRESULT hr = AsUnknown->QueryInterface(IID.Get<TInterface>(), (void**)&unknown);
+
+        if (hr.Succeeded)
+        {
+            unknown->Release();
+            return true;
+        }
+
+        return false;
+    }
+
     public void Dispose()
     {
         IUnknown* unknown = (IUnknown*)_value;

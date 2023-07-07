@@ -2164,7 +2164,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             case ArrowDirection.Right:
                 return GetNextItemHorizontal(start, forward: true);
             case ArrowDirection.Left:
-                bool forward = LastKeyData == Keys.Tab || (TabStop && start is null);
+                bool forward = LastKeyData == Keys.Tab || (TabStop && start is null && LastKeyData != Keys.Left);
                 return GetNextItemHorizontal(start, forward);
             case ArrowDirection.Down:
                 return GetNextItemVertical(start, down: true);
