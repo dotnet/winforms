@@ -9,8 +9,8 @@ namespace System.Windows.Forms;
 
 internal class RelatedPropertyManager : PropertyManager
 {
-    private BindingManagerBase parentManager;
-    private PropertyDescriptor fieldInfo;
+    private BindingManagerBase _parentManager;
+    private PropertyDescriptor _fieldInfo;
 
     internal RelatedPropertyManager(BindingManagerBase parentManager, string dataField)
         : base(GetCurrentOrNull(parentManager), dataField)
@@ -18,14 +18,14 @@ internal class RelatedPropertyManager : PropertyManager
         Bind(parentManager, dataField);
     }
 
-    [MemberNotNull(nameof(parentManager))]
-    [MemberNotNull(nameof(fieldInfo))]
+    [MemberNotNull(nameof(_parentManager))]
+    [MemberNotNull(nameof(_fieldInfo))]
     private void Bind(BindingManagerBase parentManager, string dataField)
     {
         Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
-        this.parentManager = parentManager;
-        fieldInfo = parentManager.GetItemProperties().Find(dataField, true)!;
-        if (fieldInfo is null)
+        _parentManager = parentManager;
+        _fieldInfo = parentManager.GetItemProperties().Find(dataField, true)!;
+        if (_fieldInfo is null)
         {
             throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
         }
@@ -47,8 +47,8 @@ internal class RelatedPropertyManager : PropertyManager
 
     protected internal override string GetListName(ArrayList? listAccessors)
     {
-        listAccessors!.Insert(0, fieldInfo);
-        return parentManager.GetListName(listAccessors);
+        listAccessors!.Insert(0, _fieldInfo);
+        return _parentManager.GetListName(listAccessors);
     }
 
     internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
@@ -66,10 +66,10 @@ internal class RelatedPropertyManager : PropertyManager
         }
 
         // Set this accessor (add to the beginning)
-        accessors[0] = fieldInfo;
+        accessors[0] = _fieldInfo;
 
         // Get props
-        return parentManager.GetItemProperties(accessors);
+        return _parentManager.GetItemProperties(accessors);
     }
 
     private void ParentManager_CurrentItemChanged(object? sender, EventArgs e)
@@ -80,13 +80,13 @@ internal class RelatedPropertyManager : PropertyManager
     private void Refresh()
     {
         EndCurrentEdit();
-        SetDataSource(GetCurrentOrNull(parentManager));
+        SetDataSource(GetCurrentOrNull(_parentManager));
         OnCurrentChanged(EventArgs.Empty);
     }
 
-    internal override Type BindType => fieldInfo.PropertyType;
+    internal override Type BindType => _fieldInfo.PropertyType;
 
-    public override object? Current => (DataSource is not null) ? fieldInfo.GetValue(DataSource) : null;
+    public override object? Current => (DataSource is not null) ? _fieldInfo.GetValue(DataSource) : null;
 
     private static object? GetCurrentOrNull(BindingManagerBase parentManager)
     {
