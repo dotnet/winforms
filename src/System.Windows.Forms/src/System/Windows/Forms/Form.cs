@@ -5564,26 +5564,26 @@ public partial class Form : ContainerControl
 
     protected override void UpdateDefaultButton()
     {
-        ContainerControl? cc = this;
+        ContainerControl? containerControl = this;
 
-        while (cc.ActiveControl is ContainerControl)
+        while (containerControl.ActiveControl is ContainerControl)
         {
-            cc = cc.ActiveControl as ContainerControl;
-            Debug.Assert(cc is not null);
+            containerControl = containerControl.ActiveControl as ContainerControl;
+            Debug.Assert(containerControl is not null);
 
-            if (cc is Form)
+            if (containerControl is Form)
             {
                 // Don't allow a parent form to get its default button from a child form,
                 // otherwise the two forms will 'compete' for the Enter key and produce unpredictable results.
                 // This is aimed primarily at fixing the behavior of MDI container forms.
-                cc = this;
+                containerControl = this;
                 break;
             }
         }
 
-        if (cc.ActiveControl is IButtonControl)
+        if (containerControl.ActiveControl is IButtonControl)
         {
-            SetDefaultButton((IButtonControl)cc.ActiveControl);
+            SetDefaultButton((IButtonControl)containerControl.ActiveControl);
         }
         else
         {
