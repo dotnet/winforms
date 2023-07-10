@@ -168,4 +168,15 @@ public class ControlDesignerTests
         };
         designer.TestAccessor().Dynamic.WndProc(ref m);
     }
+
+    [WinFormsFact]
+    public void ControlDesigner_Ctor_Default()
+    {
+        using var designer = new ControlDesigner();
+        Assert.Null(designer.Control);
+        Assert.Null(designer.Component);
+        Assert.Equal(SelectionRules.Visible, designer.SelectionRules);
+        Assert.True(designer.ParticipatesWithSnapLines);
+        Assert.False(designer.AutoResizeHandles);
+    }
 }
