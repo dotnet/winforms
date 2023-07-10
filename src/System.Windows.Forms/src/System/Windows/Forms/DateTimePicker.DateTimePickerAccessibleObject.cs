@@ -32,18 +32,8 @@ public partial class DateTimePicker
                     }
                 }
 
-                string? baseShortcut = base.KeyboardShortcut;
-
-                if (baseShortcut is null || baseShortcut.Length == 0)
-                {
-                    char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(this.GetOwnerText(), convertToUpperCase: false);
-                    if (ownerTextMnemonic != '\0')
-                    {
-                        return $"Alt+{ownerTextMnemonic}";
-                    }
-                }
-
-                return baseShortcut;
+                // Win32 DTP does not interpret ampersand in its Text as an escape character for a mnemonic.
+                return null;
             }
         }
 

@@ -15,34 +15,38 @@ namespace System.Windows.Forms;
 /// </summary>
 public class KeysConverter : TypeConverter, IComparer
 {
-    private IDictionary<string, Keys>? _keyNames;
-    private List<string>? _displayOrder;
+    private Dictionary<CultureInfo, List<string>>? _cultureToDisplayOrder;
+    private Dictionary<CultureInfo, Dictionary<string, Keys>>? _cultureToKeyName;
     private StandardValuesCollection? _values;
 
-    [MemberNotNull(nameof(_keyNames))]
-    [MemberNotNull(nameof(_displayOrder))]
+    [MemberNotNull(nameof(_cultureToDisplayOrder))]
+    [MemberNotNull(nameof(_cultureToKeyName))]
     private void Initialize()
     {
-        if (_keyNames is not null && _displayOrder is not null)
+        _cultureToDisplayOrder = new();
+        _cultureToKeyName = new();
+        AddLocalizedKeyNames(CultureInfo.InvariantCulture);
+    }
+
+    private void AddLocalizedKeyNames(CultureInfo cultureInfo)
+    {
+        if (CultureToDisplayOrder.ContainsKey(cultureInfo) && CultureToDisplayOrder.ContainsKey(cultureInfo))
         {
             return;
         }
 
-        Debug.Assert(_displayOrder is null);
-        Debug.Assert(_keyNames is null);
+        var localizedOrder = new List<string>(34);
+        var localizedNames = new Dictionary<string, Keys>(34);
 
-        _keyNames = new Dictionary<string, Keys>(34);
-        _displayOrder = new List<string>(34);
-
-        AddKey(SR.toStringEnter, Keys.Return);
+        AddLocalizedKey(nameof(SR.toStringEnter), Keys.Return);
         AddKey("F12", Keys.F12);
         AddKey("F11", Keys.F11);
         AddKey("F10", Keys.F10);
-        AddKey(SR.toStringEnd, Keys.End);
-        AddKey(SR.toStringControl, Keys.Control);
+        AddLocalizedKey(nameof(SR.toStringEnd), Keys.End);
+        AddLocalizedKey(nameof(SR.toStringControl), Keys.Control);
         AddKey("F8", Keys.F8);
         AddKey("F9", Keys.F9);
-        AddKey(SR.toStringAlt, Keys.Alt);
+        AddLocalizedKey(nameof(SR.toStringAlt), Keys.Alt);
         AddKey("F4", Keys.F4);
         AddKey("F5", Keys.F5);
         AddKey("F6", Keys.F6);
@@ -50,15 +54,16 @@ public class KeysConverter : TypeConverter, IComparer
         AddKey("F1", Keys.F1);
         AddKey("F2", Keys.F2);
         AddKey("F3", Keys.F3);
-        AddKey(SR.toStringPageDown, Keys.Next);
-        AddKey(SR.toStringInsert, Keys.Insert);
-        AddKey(SR.toStringHome, Keys.Home);
-        AddKey(SR.toStringDelete, Keys.Delete);
-        AddKey(SR.toStringShift, Keys.Shift);
-        AddKey(SR.toStringPageUp, Keys.Prior);
-        AddKey(SR.toStringBack, Keys.Back);
+        AddLocalizedKey(nameof(SR.toStringPageDown), Keys.Next);
+        AddLocalizedKey(nameof(SR.toStringInsert), Keys.Insert);
+        AddLocalizedKey(nameof(SR.toStringHome), Keys.Home);
+        AddLocalizedKey(nameof(SR.toStringDelete), Keys.Delete);
+        AddLocalizedKey(nameof(SR.toStringShift), Keys.Shift);
+        AddLocalizedKey(nameof(SR.toStringPageUp), Keys.Prior);
+        AddLocalizedKey(nameof(SR.toStringBack), Keys.Back);
+        AddLocalizedKey(nameof(SR.toStringNone), Keys.None);
 
-        //new whidbey keys follow here...
+        // new whidbey keys follow here...
         // Add string mappings for these values (numbers 0-9) so that the keyboard shortcuts
         // will be displayed properly in menus.
         AddKey("0", Keys.D0);
@@ -72,10 +77,20 @@ public class KeysConverter : TypeConverter, IComparer
         AddKey("8", Keys.D8);
         AddKey("9", Keys.D9);
 
+        CultureToKeyName.Add(cultureInfo, localizedNames);
+        CultureToDisplayOrder.Add(cultureInfo, localizedOrder);
+
         void AddKey(string key, Keys value)
         {
-            _keyNames[key] = value;
-            _displayOrder.Add(key);
+            localizedNames[key] = value;
+            localizedOrder.Add(key);
+        }
+
+        void AddLocalizedKey(string keyName, Keys value)
+        {
+            var key = SR.ResourceManager.GetString(keyName, cultureInfo)
+                      ?? throw new InvalidOperationException(string.Format(SR.ResourceValueNotFound, keyName));
+            AddKey(key, value);
         }
     }
 
@@ -83,25 +98,29 @@ public class KeysConverter : TypeConverter, IComparer
     ///  Access to a lookup table of name/value pairs for keys.  These are localized
     ///  names.
     /// </summary>
-    [MemberNotNull(nameof(_keyNames))]
-    [MemberNotNull(nameof(_displayOrder))]
-    private IDictionary<string, Keys> KeyNames
+    private Dictionary<CultureInfo, Dictionary<string, Keys>> CultureToKeyName
     {
         get
         {
-            Initialize();
-            return _keyNames;
+            if (_cultureToKeyName is null)
+            {
+                Initialize();
+            }
+
+            return _cultureToKeyName;
         }
     }
 
-    [MemberNotNull(nameof(_keyNames))]
-    [MemberNotNull(nameof(_displayOrder))]
-    private List<string> DisplayOrder
+    private Dictionary<CultureInfo, List<string>> CultureToDisplayOrder
     {
         get
         {
-            Initialize();
-            return _displayOrder;
+            if (_cultureToDisplayOrder is null)
+            {
+                Initialize();
+            }
+
+            return _cultureToDisplayOrder;
         }
     }
 
@@ -110,18 +129,14 @@ public class KeysConverter : TypeConverter, IComparer
     ///  type to the native type of the converter.
     /// </summary>
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-    {
-        return sourceType == typeof(string) || sourceType == typeof(Enum[]) ? true : base.CanConvertFrom(context, sourceType);
-    }
+        => sourceType == typeof(string) || sourceType == typeof(Enum[]) || base.CanConvertFrom(context, sourceType);
 
     /// <summary>
     ///  Gets a value indicating whether this converter can
     ///  convert an object to the given destination type using the context.
     /// </summary>
     public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
-    {
-        return destinationType == typeof(Enum[]) ? true : base.CanConvertTo(context, destinationType);
-    }
+        => destinationType == typeof(Enum[]) || base.CanConvertTo(context, destinationType);
 
     /// <summary>
     ///  Compares two key values for equivalence.
@@ -144,50 +159,51 @@ public class KeysConverter : TypeConverter, IComparer
             {
                 return null;
             }
-            else
+
+            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
+
+            // Parse an array of key tokens.
+            string[] tokens = text.Split(new char[] { '+' });
+            for (int i = 0; i < tokens.Length; i++)
             {
-                // Parse an array of key tokens.
-                string[] tokens = text.Split(new char[] { '+' });
-                for (int i = 0; i < tokens.Length; i++)
-                {
-                    tokens[i] = tokens[i].Trim();
-                }
-
-                // Now lookup each key token in our key hashtable.
-                Keys key = (Keys)0;
-                bool foundKeyCode = false;
-
-                for (int i = 0; i < tokens.Length; i++)
-                {
-                    if (!KeyNames.TryGetValue(tokens[i], out Keys currentKey))
-                    {
-                        // Key was not found in our dictionary.  See if it is a valid value in
-                        // the Keys enum.
-                        currentKey = (Keys)Enum.Parse(typeof(Keys), tokens[i]);
-                    }
-
-                    if ((currentKey & Keys.KeyCode) != 0)
-                    {
-                        // We found a match.  If we have previously found a
-                        // key code, then check to see that this guy
-                        // isn't a key code (it is illegal to have, say,
-                        // "A + B"
-                        if (foundKeyCode)
-                        {
-                            throw new FormatException(SR.KeysConverterInvalidKeyCombination);
-                        }
-
-                        foundKeyCode = true;
-                    }
-
-                    // Now OR the key into our current key
-                    key |= currentKey;
-                }
-
-                return (object)key;
+                tokens[i] = tokens[i].Trim();
             }
+
+            // Now lookup each key token in our key hashtable.
+            Keys key = 0;
+            bool foundKeyCode = false;
+
+            foreach (string token in tokens)
+            {
+                if (!keyNames.TryGetValue(token, out Keys currentKey))
+                {
+                    // Key was not found in our dictionary.  See if it is a valid value in
+                    // the Keys enum.
+                    currentKey = (Keys)Enum.Parse(typeof(Keys), token);
+                }
+
+                if ((currentKey & Keys.KeyCode) != 0)
+                {
+                    // We found a match.  If we have previously found a
+                    // key code, then check to see that this guy
+                    // isn't a key code (it is illegal to have, say,
+                    // "A + B"
+                    if (foundKeyCode)
+                    {
+                        throw new FormatException(SR.KeysConverterInvalidKeyCombination);
+                    }
+
+                    foundKeyCode = true;
+                }
+
+                // Now OR the key into our current key
+                key |= currentKey;
+            }
+
+            return key;
         }
-        else if (value is Enum[] valueAsEnumArray)
+
+        if (value is Enum[] valueAsEnumArray)
         {
             long finalValue = 0;
             foreach (Enum e in valueAsEnumArray)
@@ -217,30 +233,30 @@ public class KeysConverter : TypeConverter, IComparer
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        bool asString = destinationType == typeof(string);
-        bool asEnum = !asString && destinationType == typeof(Enum[]);
-        if (asString || asEnum)
-        {
-            Keys key = (Keys)value;
-            return asString ? GetTermsString(key) : GetTermKeys(key);
-        }
-
-        return base.ConvertTo(context, culture, value, destinationType);
+        return destinationType == typeof(string)
+            ? GetTermsString((Keys)value)
+            : destinationType == typeof(Enum[])
+                ? GetTermKeys((Keys)value)
+                : base.ConvertTo(context, culture, value, destinationType);
 
         Enum[] GetTermKeys(Keys key)
         {
             List<Enum> termKeys = new();
-            Keys modifiers = (key & Keys.Modifiers);
+            Keys modifiers = key & Keys.Modifiers;
+            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
+            IList<string> displayOrder = GetDisplayOrder(culture);
 
-            // First, iterate through and do the modifiers. These are
-            // additive, so we support things like Ctrl + Alt
-            for (int i = 0; i < DisplayOrder.Count; i++)
+            if (key != Keys.None)
             {
-                string keyString = DisplayOrder[i];
-                Keys keyValue = _keyNames[keyString];
-                if (modifiers.HasFlag(keyValue))
+                // First, iterate through and do the modifiers. These are
+                // additive, so we support things like Ctrl + Alt
+                foreach (var keyString in displayOrder)
                 {
-                    termKeys.Add(keyValue);
+                    Keys keyValue = keyNames[keyString];
+                    if (keyValue != Keys.None && modifiers.HasFlag(keyValue))
+                    {
+                        termKeys.Add(keyValue);
+                    }
                 }
             }
 
@@ -249,10 +265,9 @@ public class KeysConverter : TypeConverter, IComparer
             Keys keyOnly = key & Keys.KeyCode;
             bool foundKey = false;
 
-            for (int i = 0; i < DisplayOrder.Count; i++)
+            foreach (var keyString in displayOrder)
             {
-                string keyString = DisplayOrder[i];
-                Keys keyValue = _keyNames[keyString];
+                Keys keyValue = keyNames[keyString];
                 if (keyValue.Equals(keyOnly))
                 {
                     termKeys.Add(keyValue);
@@ -275,17 +290,21 @@ public class KeysConverter : TypeConverter, IComparer
         string GetTermsString(Keys key)
         {
             StringBuilder termStrings = new(32);
-            Keys modifiers = (key & Keys.Modifiers);
+            Keys modifiers = key & Keys.Modifiers;
+            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
+            IList<string> displayOrder = GetDisplayOrder(culture);
 
-            // First, iterate through and do the modifiers. These are
-            // additive, so we support things like Ctrl + Alt
-            for (int i = 0; i < DisplayOrder.Count; i++)
+            if (key != Keys.None)
             {
-                string keyString = DisplayOrder[i];
-                Keys keyValue = _keyNames[keyString];
-                if (modifiers.HasFlag(keyValue))
+                // First, iterate through and do the modifiers. These are
+                // additive, so we support things like Ctrl + Alt
+                foreach (var keyString in displayOrder)
                 {
-                    termStrings.Append(keyString).Append('+');
+                    Keys keyValue = keyNames[keyString];
+                    if (keyValue != Keys.None && modifiers.HasFlag(keyValue))
+                    {
+                        termStrings.Append(keyString).Append('+');
+                    }
                 }
             }
 
@@ -294,10 +313,9 @@ public class KeysConverter : TypeConverter, IComparer
             Keys keyOnly = key & Keys.KeyCode;
             bool foundKey = false;
 
-            for (int i = 0; i < DisplayOrder.Count; i++)
+            foreach (var keyString in displayOrder)
             {
-                string keyString = DisplayOrder[i];
-                Keys keyValue = _keyNames[keyString];
+                Keys keyValue = keyNames[keyString];
                 if (keyValue.Equals(keyOnly))
                 {
                     termStrings.Append(keyString);
@@ -318,6 +336,30 @@ public class KeysConverter : TypeConverter, IComparer
         }
     }
 
+    private IList<string> GetDisplayOrder(CultureInfo? culture)
+    {
+        // Use CurrentCulture as default to match other TypeConverters.
+        culture ??= CultureInfo.CurrentCulture;
+        if (!CultureToDisplayOrder.ContainsKey(culture))
+        {
+            AddLocalizedKeyNames(culture);
+        }
+
+        return CultureToDisplayOrder[culture];
+    }
+
+    private IDictionary<string, Keys> GetKeyNames(CultureInfo? culture)
+    {
+        // Use CurrentCulture as default to match other TypeConverters.
+        culture ??= CultureInfo.CurrentCulture;
+        if (!CultureToKeyName.ContainsKey(culture))
+        {
+            AddLocalizedKeyNames(culture);
+        }
+
+        return CultureToKeyName[culture];
+    }
+
     /// <summary>
     ///  Retrieves a collection containing a set of standard values
     ///  for the data type this validator is designed for.  This
@@ -328,7 +370,7 @@ public class KeysConverter : TypeConverter, IComparer
     {
         if (_values is null)
         {
-            Keys[] list = KeyNames.Values.ToArray();
+            Keys[] list = CultureToKeyName[CultureInfo.CurrentCulture].Values.ToArray();
             Array.Sort(list, this);
             _values = new StandardValuesCollection(list);
         }

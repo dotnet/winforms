@@ -133,14 +133,14 @@ public abstract partial class AxHost
         {
             try
             {
-                IPerPropertyBrowsing.Interface ippb = _owner.GetPerPropertyBrowsing();
-                if (ippb is null)
+                using var propertyBrowsing = _owner.TryGetComScope<IPerPropertyBrowsing>(out HRESULT hr);
+                if (hr.Failed)
                 {
                     return Guid.Empty;
                 }
 
                 Guid rval = Guid.Empty;
-                if (ippb.MapPropertyToPage(dispid, &rval).Succeeded)
+                if (propertyBrowsing.Value->MapPropertyToPage(dispid, &rval).Succeeded)
                 {
                     return rval;
                 }
@@ -289,9 +289,8 @@ public abstract partial class AxHost
 
             try
             {
-                IPerPropertyBrowsing.Interface ppb = _owner.GetPerPropertyBrowsing();
-
-                if (ppb is null)
+                using var propertyBrowsing = _owner.TryGetComScope<IPerPropertyBrowsing>(out HRESULT hr);
+                if (hr.Failed)
                 {
                     return;
                 }
@@ -300,7 +299,7 @@ public abstract partial class AxHost
                 CALPOLESTR caStrings = default;
                 CADWORD caCookies = default;
 
-                HRESULT hr = ppb.GetPredefinedStrings(dispid, &caStrings, &caCookies);
+                hr = propertyBrowsing.Value->GetPredefinedStrings(dispid, &caStrings, &caCookies);
 
                 if (hr.Failed)
                 {
