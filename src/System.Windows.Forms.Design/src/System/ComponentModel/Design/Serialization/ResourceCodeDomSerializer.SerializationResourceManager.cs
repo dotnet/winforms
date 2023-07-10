@@ -19,7 +19,6 @@ internal partial class ResourceCodeDomSerializer
     /// </summary>
     internal class SerializationResourceManager : ComponentResourceManager
     {
-        private static readonly Dictionary<string, object> s_resourceSetSentinel = new();
         private readonly IDesignerSerializationManager _manager;
         private bool _checkedLocalizationLanguage;
         private CultureInfo _localizationLanguage;
@@ -391,8 +390,7 @@ internal partial class ResourceCodeDomSerializer
         private Dictionary<string, object> GetResourceSet(CultureInfo culture)
         {
             Debug.Assert(culture is not null, "null parameter");
-            Dictionary<string, object> resourceSet = null;
-            if (!ResourceTable.TryGetValue(culture, out Dictionary<string, object> objRs))
+            if (!ResourceTable.TryGetValue(culture, out Dictionary<string, object> resourceSet))
             {
                 IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
                 TraceIf(TraceLevel.Error, resSvc is null, "IResourceService is not available.  We will not be able to load resources.");
@@ -409,24 +407,15 @@ internal partial class ResourceCodeDomSerializer
                         {
                             reader.Close();
                         }
-
-                        ResourceTable[culture] = resourceSet;
                     }
-                    else
+                    else if (culture.Equals(CultureInfo.InvariantCulture))
                     {
-                        // Provide a sentinel so we don't repeatedly ask for the same resource.  If this is the invariant culture, always provide one.
-                        ResourceTable[culture] = culture.Equals(CultureInfo.InvariantCulture)
-                            ? new Dictionary<string, object>() : s_resourceSetSentinel;
+                        // If this is the invariant culture, always provide a resource set.
+                        resourceSet = new Dictionary<string, object>();
                     }
-                }
-            }
-            else
-            {
-                resourceSet = objRs;
-                if (resourceSet is null)
-                {
-                    // the resourceSets hash table may contain our "this" pointer as a sentinel value
-                    Debug.Assert(objRs == s_resourceSetSentinel, $"unknown object in resourceSets: {objRs}");
+
+                    // resourceSet may be null here. We add it to the cache anyway as a sentinel so we don't repeatedly ask for the same resource.
+                    ResourceTable[culture] = resourceSet;
                 }
             }
 
