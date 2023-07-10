@@ -1219,7 +1219,7 @@ public class Control_ControlAccessibleObjectTests
     {
         var typesToIgnore = new[]
         {
-           typeof(HScrollBar), typeof(ListView), typeof(MonthCalendar),
+           typeof(HScrollBar),  typeof(MonthCalendar),
            typeof(PropertyGrid), typeof(TabPage), typeof(TreeView), typeof(VScrollBar)
         };
 
