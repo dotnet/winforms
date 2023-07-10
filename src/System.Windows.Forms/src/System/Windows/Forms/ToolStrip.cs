@@ -2191,7 +2191,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         // backward direction entering the toolstrip, it means that the first
         // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
         // is pressed.
-        start ??= GetStartItem(forward);
+        start ??= forward ? DisplayedItems[DisplayedItems.Count - 1] : DisplayedItems[0];
 
         int current = DisplayedItems.IndexOf(start);
         if (current == -1)
@@ -2233,8 +2233,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         return null;
     }
-
-    private ToolStripItem GetStartItem(bool forward) => forward ? DisplayedItems[DisplayedItems.Count - 1] : DisplayedItems[0];
 
     /// <remarks>
     ///  Helper function for GetNextItem - do not directly call this.
