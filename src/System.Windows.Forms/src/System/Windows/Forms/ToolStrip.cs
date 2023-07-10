@@ -2191,7 +2191,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         // backward direction entering the toolstrip, it means that the first
         // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
         // is pressed.
-        start ??= GetStartItem(forward, dropDown is not null);
+        start ??= GetStartItem(forward);
 
         int current = DisplayedItems.IndexOf(start);
         if (current == -1)
@@ -2234,22 +2234,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         return null;
     }
 
-    private ToolStripItem GetStartItem(bool forward, bool isDropDown)
-    {
-        if (forward)
-        {
-            return DisplayedItems[DisplayedItems.Count - 1];
-        }
-
-        if (!isDropDown)
-        {
-            // For the drop-down up-directed loop should be preserved.
-            // So if the current item is topmost, then the bottom item should be selected on up-key press.
-            return (DisplayedItems.Count > 1 && DisplayedItems[0].CanKeyboardSelect) ? DisplayedItems[0] : DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
-        }
-
-        return DisplayedItems[0];
-    }
+    private ToolStripItem GetStartItem(bool forward) => forward ? DisplayedItems[DisplayedItems.Count - 1] : DisplayedItems[0];
 
     /// <remarks>
     ///  Helper function for GetNextItem - do not directly call this.
@@ -2394,7 +2379,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         return prefSize + newPadding.Size;
     }
 
-#region GetPreferredSizeHelpers
+    #region GetPreferredSizeHelpers
 
     //
     // These are here so they can be shared between splitstack layout and StatusStrip
@@ -2529,7 +2514,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         return item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
     }
-#endregion
+    #endregion
 
     internal ToolStripItem? GetSelectedItem()
     {
@@ -4918,7 +4903,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     protected override ControlCollection CreateControlsInstance()
     {
-        return new ReadOnlyControlCollection(this,  isReadOnly: !DesignMode);
+        return new ReadOnlyControlCollection(this, isReadOnly: !DesignMode);
     }
 
     internal void OnItemAddedInternal(ToolStripItem item)
