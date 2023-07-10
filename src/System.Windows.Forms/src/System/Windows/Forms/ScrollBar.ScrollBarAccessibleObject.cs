@@ -99,11 +99,6 @@ public partial class ScrollBar
                 return FirstLineButtonAccessibleObject;
             }
 
-            if (FirstLineButtonAccessibleObject?.Bounds.Contains(point) == true)
-            {
-                return FirstLineButtonAccessibleObject;
-            }
-
             if (FirstPageButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return FirstPageButtonAccessibleObject;
@@ -144,7 +139,7 @@ public partial class ScrollBar
                 // it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UiaCore.UIA.ControlTypePropertyId when
-                this.GetOwnerAccessibleRole() == AccessibleRole.Default
+                    this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     => UiaCore.UIA.ScrollBarControlTypeId,
                 UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Focused : false,
                 UiaCore.UIA.RangeValueValuePropertyId => RangeValue,
