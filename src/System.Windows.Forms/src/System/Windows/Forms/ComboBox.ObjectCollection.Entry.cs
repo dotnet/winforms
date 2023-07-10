@@ -19,6 +19,11 @@ public partial class ComboBox
             }
 
             public object Item { get; set; }
+
+            public override string? ToString()
+            {
+                return Item.ToString();
+            }
         }
     }
 }
