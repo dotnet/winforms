@@ -24,11 +24,8 @@ internal class RelatedPropertyManager : PropertyManager
     {
         Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
         _parentManager = parentManager;
-        _fieldInfo = parentManager.GetItemProperties().Find(dataField, true)!;
-        if (_fieldInfo is null)
-        {
+        _fieldInfo = parentManager.GetItemProperties().Find(dataField, true) ??
             throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
-        }
 
         parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
         Refresh();
@@ -47,7 +44,13 @@ internal class RelatedPropertyManager : PropertyManager
 
     protected internal override string GetListName(ArrayList? listAccessors)
     {
-        listAccessors!.Insert(0, _fieldInfo);
+        if (listAccessors is null)
+        {
+            return string.Empty;
+        }
+
+        listAccessors.Insert(0, _fieldInfo);
+
         return _parentManager.GetListName(listAccessors);
     }
 
