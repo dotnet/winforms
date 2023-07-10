@@ -29,7 +29,7 @@ public partial class ButtonBase
 
         private static bool ControlTextContainsAmpersand(Control control)
         {
-            return control is not null && control.Text is not null && control.Text.Contains('&');
+            return WindowsFormsUtils.ContainsMnemonic(control?.Text);
         }
 
         internal static string? GetKeyboardShortcut(Control control, bool useMnemonic, Label? previousLabel)

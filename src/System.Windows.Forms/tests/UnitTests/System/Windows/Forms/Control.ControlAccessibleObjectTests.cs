@@ -1630,6 +1630,7 @@ public class Control_ControlAccessibleObjectTests
     {
         // Controls that have UseMnemonic property.
         yield return new object[] { typeof(Label) };
+        yield return new object[] { typeof(LinkLabel) };
         yield return new object[] { typeof(Button) };
         yield return new object[] { typeof(RadioButton) };
         yield return new object[] { typeof(CheckBox) };
