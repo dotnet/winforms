@@ -213,10 +213,8 @@ public unsafe partial class WebBrowserBase : Control
         base.OnBoundsUpdate(x, y, width, height);
     }
 
-    protected override bool ProcessDialogKey(Keys keyData)
-    {
-        return _ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
-    }
+    protected override bool ProcessDialogKey(Keys keyData) =>
+        _ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
 
     public override unsafe bool PreProcessMessage(ref Message msg)
     {
@@ -595,20 +593,11 @@ public unsafe partial class WebBrowserBase : Control
         set => _axState = value;
     }
 
-    internal bool GetAXHostState(int mask)
-    {
-        return _axHostState[mask];
-    }
+    internal bool GetAXHostState(int mask) => _axHostState[mask];
 
-    internal void SetAXHostState(int mask, bool value)
-    {
-        _axHostState[mask] = value;
-    }
+    internal void SetAXHostState(int mask, bool value) => _axHostState[mask] = value;
 
-    internal IntPtr GetHandleNoCreate()
-    {
-        return IsHandleCreated ? Handle : IntPtr.Zero;
-    }
+    internal IntPtr GetHandleNoCreate() => IsHandleCreated ? Handle : IntPtr.Zero;
 
     internal void TransitionUpTo(WebBrowserHelper.AXState state)
     {
@@ -731,12 +720,8 @@ public unsafe partial class WebBrowserBase : Control
         }
     }
 
-    internal WebBrowserContainer CreateWebBrowserContainer()
-    {
+    internal WebBrowserContainer CreateWebBrowserContainer() =>
         _wbContainer ??= new WebBrowserContainer(this);
-
-        return _wbContainer;
-    }
 
     internal WebBrowserContainer GetParentContainer()
     {
