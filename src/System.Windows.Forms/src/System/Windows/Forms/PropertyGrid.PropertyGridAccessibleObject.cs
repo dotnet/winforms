@@ -15,16 +15,11 @@ public partial class PropertyGrid
     /// </summary>
     internal class PropertyGridAccessibleObject : ControlAccessibleObject
     {
-        private readonly PropertyGrid _owningPropertyGrid;
-
         /// <summary>
         ///  Initializes new instance of PropertyGridAccessibleObject
         /// </summary>
         /// <param name="owningPropertyGrid">The PropertyGrid owning control.</param>
-        public PropertyGridAccessibleObject(PropertyGrid owningPropertyGrid) : base(owningPropertyGrid)
-        {
-            _owningPropertyGrid = owningPropertyGrid;
-        }
+        public PropertyGridAccessibleObject(PropertyGrid owningPropertyGrid) : base(owningPropertyGrid) { }
 
         /// <summary>
         ///  Return the child element at the specified point, if one exists,
@@ -39,14 +34,14 @@ public partial class PropertyGrid
         /// </returns>
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
         {
-            if (!_owningPropertyGrid.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out PropertyGrid? owningPropertyGrid) || !owningPropertyGrid.IsHandleCreated)
             {
                 return null;
             }
 
-            Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
+            Point clientPoint = owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
 
-            Control? element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
+            Control? element = owningPropertyGrid.GetElementFromPoint(clientPoint);
             if (element is not null)
             {
                 return element.AccessibilityObject;
@@ -127,46 +122,46 @@ public partial class PropertyGrid
         /// <returns>The accessible child.</returns>
         internal AccessibleObject? GetChildFragment(int index)
         {
-            if (index < 0)
+            if (!this.TryGetOwnerAs(out PropertyGrid? owningPropertyGrid) || index < 0)
             {
                 return null;
             }
 
-            if (_owningPropertyGrid.ToolbarVisible)
+            if (owningPropertyGrid.ToolbarVisible)
             {
                 if (index == 0)
                 {
-                    return _owningPropertyGrid.ToolbarAccessibleObject;
+                    return owningPropertyGrid.ToolbarAccessibleObject;
                 }
 
                 index--;
             }
 
-            if (_owningPropertyGrid.GridViewVisible)
+            if (owningPropertyGrid.GridViewVisible)
             {
                 if (index == 0)
                 {
-                    return _owningPropertyGrid.GridViewAccessibleObject;
+                    return owningPropertyGrid.GridViewAccessibleObject;
                 }
 
                 index--;
             }
 
-            if (_owningPropertyGrid.CommandsVisible)
+            if (owningPropertyGrid.CommandsVisible)
             {
                 if (index == 0)
                 {
-                    return _owningPropertyGrid.CommandsPaneAccessibleObject;
+                    return owningPropertyGrid.CommandsPaneAccessibleObject;
                 }
 
                 index--;
             }
 
-            if (_owningPropertyGrid.HelpVisible)
+            if (owningPropertyGrid.HelpVisible)
             {
                 if (index == 0)
                 {
-                    return _owningPropertyGrid.HelpPaneAccessibleObject;
+                    return owningPropertyGrid.HelpPaneAccessibleObject;
                 }
             }
 
@@ -181,22 +176,27 @@ public partial class PropertyGrid
         {
             int childCount = 0;
 
-            if (_owningPropertyGrid.ToolbarVisible)
+            if (!this.TryGetOwnerAs(out PropertyGrid? owningPropertyGrid))
+            {
+                return childCount;
+            }
+
+            if (owningPropertyGrid.ToolbarVisible)
             {
                 childCount++;
             }
 
-            if (_owningPropertyGrid.GridViewVisible)
+            if (owningPropertyGrid.GridViewVisible)
             {
                 childCount++;
             }
 
-            if (_owningPropertyGrid.CommandsVisible)
+            if (owningPropertyGrid.CommandsVisible)
             {
                 childCount++;
             }
 
-            if (_owningPropertyGrid.HelpVisible)
+            if (owningPropertyGrid.HelpVisible)
             {
                 childCount++;
             }
