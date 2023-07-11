@@ -27,22 +27,17 @@ public partial class ButtonBase
             }
         }
 
-        private static bool ControlTextContainsAmpersand(Control control)
-        {
-            return WindowsFormsUtils.ContainsMnemonic(control?.Text);
-        }
-
         internal static string? GetKeyboardShortcut(Control control, bool useMnemonic, Label? previousLabel)
         {
             char mnemonic = '\0';
 
-            if ((!useMnemonic || !ControlTextContainsAmpersand(control)) && previousLabel is not null && previousLabel.UseMnemonic)
+            if ((!useMnemonic || !WindowsFormsUtils.ContainsMnemonic(control?.Text)) && previousLabel is not null && previousLabel.UseMnemonic)
             {
                 mnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, false);
             }
             else if (useMnemonic)
             {
-                mnemonic = WindowsFormsUtils.GetMnemonic(control.Text, false);
+                mnemonic = WindowsFormsUtils.GetMnemonic(control?.Text, false);
             }
 
             return (mnemonic == '\0') ? null : $"Alt+{mnemonic}";

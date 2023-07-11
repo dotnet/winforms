@@ -130,7 +130,7 @@ public abstract partial class TextBoxBase
             => _textProvider?.RangeFromAnnotation(annotationElement);
 
         public override string? KeyboardShortcut => this.TryGetOwnerAs(out TextBoxBase? owner)
-            ? ButtonBaseAccessibleObject.GetKeyboardShortcut(control: owner, useMnemonic: false, previousLabel: PreviousLabel)
+            ? ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, useMnemonic: false, PreviousLabel)
             : null;
     }
 }
