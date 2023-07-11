@@ -8,6 +8,17 @@ namespace System.Windows.Forms.Design.Tests;
 
 public class ControlDesignerTests
 {
+    [WinFormsFact]
+    public void ControlDesigner_Ctor_Default()
+    {
+        using var designer = new ControlDesigner();
+        Assert.Null(designer.Control);
+        Assert.Null(designer.Component);
+        Assert.Equal(SelectionRules.Visible, designer.SelectionRules);
+        Assert.True(designer.ParticipatesWithSnapLines);
+        Assert.False(designer.AutoResizeHandles);
+    }
+
     [Fact]
     public void AccessibleObjectField()
     {
@@ -167,16 +178,5 @@ public class ControlDesignerTests
             Msg = (int)PInvoke.WM_PAINT
         };
         designer.TestAccessor().Dynamic.WndProc(ref m);
-    }
-
-    [WinFormsFact]
-    public void ControlDesigner_Ctor_Default()
-    {
-        using var designer = new ControlDesigner();
-        Assert.Null(designer.Control);
-        Assert.Null(designer.Component);
-        Assert.Equal(SelectionRules.Visible, designer.SelectionRules);
-        Assert.True(designer.ParticipatesWithSnapLines);
-        Assert.False(designer.AutoResizeHandles);
     }
 }
