@@ -8626,7 +8626,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ResourceValueNotFound">
         <source>The resource value '{0}' was not found.</source>
-        <target state="new">The resource value '{0}' was not found.</target>
+        <target state="translated">リソース値 '{0}' が見つかりませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="RestartNotSupported">
