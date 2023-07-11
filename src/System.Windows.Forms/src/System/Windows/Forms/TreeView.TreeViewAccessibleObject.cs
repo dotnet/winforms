@@ -94,7 +94,7 @@ public partial class TreeView
 
                 if (!this.TryGetOwnerAs(out TreeView? owningTreeView))
                 {
-                    return state;
+                    return AccessibleStates.None;
                 }
 
                 if (owningTreeView.Focused)
