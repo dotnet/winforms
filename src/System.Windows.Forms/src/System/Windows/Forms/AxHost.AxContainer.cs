@@ -499,7 +499,8 @@ public abstract partial class AxHost
                 try
                 {
                     tempSite.SetAxState(s_ownDisposing, true);
-                    tempSite.GetInPlaceObject().UIDeactivate();
+                    using var inPlaceObject = tempSite.GetComScope<IOleInPlaceObject>();
+                    inPlaceObject.Value->UIDeactivate().AssertSuccess();
                 }
                 finally
                 {

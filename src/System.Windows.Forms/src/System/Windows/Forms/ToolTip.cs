@@ -828,7 +828,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         }
     }
 
-    private void SetToolInfo(Control control, string caption)
+    private void SetToolInfo(Control control, string? caption)
     {
         // Don't add a tool for the TabControl itself. It's not needed because:
         // 1. TabControl already relays all mouse events to its tooltip:
@@ -857,7 +857,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
     private void CreateRegion(Control control)
     {
-        string caption = GetToolTip(control);
+        string? caption = GetToolTip(control);
         bool handlesCreated = control.IsHandleCreated
                               && TopLevelControl is not null
                               && TopLevelControl.IsHandleCreated;
@@ -930,7 +930,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             control.RemoveToolTip(this);
         }
     }
-#nullable disable
+
     /// <summary>
     ///  Disposes of the <see cref="ToolTip"/> component.
     /// </summary>
@@ -948,7 +948,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
                 DestroyHandle();
                 RemoveAll();
 
-                _window = null;
+                _window = null!;
 
                 // Unhook the DeactivateEvent. Find the Form for associated Control and hook
                 // up to the Deactivated event to Hide the Shown tooltip
@@ -984,7 +984,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     /// <summary>
     ///  Returns a detailed TOOLINFO_TOOLTIP structure that represents the specified region.
     /// </summary>
-    private unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
+    private unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string? caption)
     {
         TOOLTIP_FLAGS flags = TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS;
 
@@ -1024,14 +1024,16 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     [Localizable(true)]
     [SRDescription(nameof(SR.ToolTipToolTipDescr))]
     [Editor($"System.ComponentModel.Design.MultilineStringEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
-    public string GetToolTip(Control control)
+    public string? GetToolTip(Control? control)
     {
         if (control is null)
         {
             return string.Empty;
         }
 
-        return _tools.TryGetValue(control, out TipInfo tipInfo) ? tipInfo.Caption : string.Empty;
+        return _tools.TryGetValue(control, out TipInfo? tipInfo)
+            ? tipInfo.Caption
+            : string.Empty;
     }
 
     /// <summary>
@@ -1040,7 +1042,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     /// </summary>
     private HWND GetWindowFromPoint(Point screenCoords, ref bool success)
     {
-        Control current = TopLevelControl;
+        Control? current = TopLevelControl;
 
         // Special case ActiveX Controls.
         if (current is not null && current.IsActiveX)
@@ -1049,7 +1051,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             HWND hwndControl = PInvoke.WindowFromPoint(screenCoords);
             if (!hwndControl.IsNull)
             {
-                Control currentControl = Control.FromHandle(hwndControl);
+                Control? currentControl = Control.FromHandle(hwndControl);
                 if (currentControl is not null &&
                     _tools.ContainsKey(currentControl))
                 {
@@ -1103,7 +1105,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         if (!hwnd.IsNull)
         {
-            Control control = Control.FromHandle(hwnd);
+            Control? control = Control.FromHandle(hwnd);
             if (control is not null)
             {
                 current = control;
@@ -1124,7 +1126,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         return hwnd;
     }
 
-    private void OnTopLevelPropertyChanged(object s, EventArgs e)
+    private void OnTopLevelPropertyChanged(object? s, EventArgs e)
     {
         ClearTopLevelControlEvents();
         _topLevelControl = null;
@@ -1179,7 +1181,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
     }
-#nullable enable
+
     /// <summary>
     ///  Sets the delay time of TTDT_* values.
     /// </summary>

@@ -25,7 +25,7 @@ public partial class ScrollBar
             {
                 NavigateDirection.NextSibling => null,
                 NavigateDirection.PreviousSibling
-                    => ParentInternal.LastPageButtonAccessibleObject.IsDisplayed
+                    => ParentInternal.LastPageButtonAccessibleObject?.IsDisplayed == true
                         ? ParentInternal.LastPageButtonAccessibleObject
                         : ParentInternal.ThumbAccessibleObject,
                 _ => base.FragmentNavigate(direction)

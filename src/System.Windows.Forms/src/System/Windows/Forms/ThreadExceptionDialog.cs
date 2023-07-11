@@ -332,6 +332,9 @@ public class ThreadExceptionDialog : Form
         _details.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop + _scaledButtonTopPadding, width - _scaledDetailsWidthPadding, _scaledDetailsHeight);
         _details.Visible = _detailsVisible;
         Controls.Add(_details);
+
+        AutoScaleMode = AutoScaleMode.Dpi;
+
         if (DpiHelper.IsScalingRequirementMet)
         {
             DpiChanged += ThreadExceptionDialog_DpiChanged;

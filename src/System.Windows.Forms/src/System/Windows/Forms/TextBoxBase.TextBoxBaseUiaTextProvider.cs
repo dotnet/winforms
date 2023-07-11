@@ -12,16 +12,18 @@ public abstract partial class TextBoxBase
 {
     internal class TextBoxBaseUiaTextProvider : UiaTextProvider2
     {
-        private readonly TextBoxBase _owningTextBoxBase;
+        private readonly WeakReference<TextBoxBase> _owner;
 
         public TextBoxBaseUiaTextProvider(TextBoxBase owner)
         {
-            _owningTextBoxBase = owner.OrThrowIfNull();
+            _owner = new(owner.OrThrowIfNull());
         }
+
+        private TextBoxBase? Owner => _owner.TryGetTarget(out TextBoxBase? owner) ? owner : null;
 
         public override UiaCore.ITextRangeProvider[]? GetSelection()
         {
-            if (!_owningTextBoxBase.IsHandleCreated)
+            if (Owner is null || !Owner.IsHandleCreated)
             {
                 return null;
             }
@@ -33,21 +35,21 @@ public abstract partial class TextBoxBase
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETSEL, ref start, ref end);
+            PInvoke.SendMessage(Owner, PInvoke.EM_GETSEL, ref start, ref end);
 
-            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
+            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(Owner.AccessibilityObject, this, start, end) };
         }
 
         public override UiaCore.ITextRangeProvider[]? GetVisibleRanges()
         {
-            if (!_owningTextBoxBase.IsHandleCreated)
+            if (Owner is null || !Owner.IsHandleCreated)
             {
                 return null;
             }
 
             GetVisibleRangePoints(out int start, out int end);
 
-            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
+            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(Owner.AccessibilityObject, this, start, end) };
         }
 
         public override UiaCore.ITextRangeProvider? RangeFromChild(UiaCore.IRawElementProviderSimple childElement)
@@ -64,7 +66,7 @@ public abstract partial class TextBoxBase
         /// <returns>A degenerate range nearest the specified location. Null is never returned.</returns>
         public override UiaCore.ITextRangeProvider? RangeFromPoint(Point screenLocation)
         {
-            if (!_owningTextBoxBase.IsHandleCreated)
+            if (Owner is null || !Owner.IsHandleCreated)
             {
                 return null;
             }
@@ -73,15 +75,15 @@ public abstract partial class TextBoxBase
 
             // Convert screen to client coordinates.
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-            if (PInvoke.MapWindowPoints((HWND)default, _owningTextBoxBase, ref clientLocation) == 0)
+            if (PInvoke.MapWindowPoints((HWND)default, Owner, ref clientLocation) == 0)
             {
-                return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0);
+                return new UiaTextRange(Owner.AccessibilityObject, this, start: 0, end: 0);
             }
 
             // We have to deal with the possibility that the coordinate is inside the window rect
             // but outside the client rect. In that case we just scoot it over so it is at the nearest
             // point in the client rect.
-            RECT clientRectangle = _owningTextBoxBase.ClientRectangle;
+            RECT clientRectangle = Owner.ClientRectangle;
 
             clientLocation.X = Math.Max(clientLocation.X, clientRectangle.left);
             clientLocation.X = Math.Min(clientLocation.X, clientRectangle.right);
@@ -89,14 +91,16 @@ public abstract partial class TextBoxBase
             clientLocation.Y = Math.Min(clientLocation.Y, clientRectangle.bottom);
 
             // Get the character at those client coordinates.
-            int start = _owningTextBoxBase.GetCharIndexFromPosition(clientLocation);
+            int start = Owner.GetCharIndexFromPosition(clientLocation);
 
-            return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, start);
+            return new UiaTextRange(Owner.AccessibilityObject, this, start, start);
         }
 
-        public override Rectangle RectangleToScreen(Rectangle rect) => _owningTextBoxBase.RectangleToScreen(rect);
+        public override Rectangle RectangleToScreen(Rectangle rect) => Owner is not null ? Owner.RectangleToScreen(rect) : Rectangle.Empty;
 
-        public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, TextLength);
+        public override UiaCore.ITextRangeProvider? DocumentRange => Owner is not null
+            ? new UiaTextRange(Owner.AccessibilityObject, this, start: 0, TextLength)
+            : null;
 
         public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 
@@ -104,21 +108,21 @@ public abstract partial class TextBoxBase
         {
             isActive = false;
 
-            if (!_owningTextBoxBase.IsHandleCreated)
+            if (Owner is null || !Owner.IsHandleCreated)
             {
                 return null;
             }
 
-            var hasKeyboardFocus = _owningTextBoxBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+            var hasKeyboardFocus = Owner.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
             if (hasKeyboardFocus is bool && (bool)hasKeyboardFocus)
             {
                 isActive = true;
             }
 
-            return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, _owningTextBoxBase.SelectionStart, _owningTextBoxBase.SelectionStart);
+            return new UiaTextRange(Owner.AccessibilityObject, this, Owner.SelectionStart, Owner.SelectionStart);
         }
 
-        public override Point PointToScreen(Point pt) => _owningTextBoxBase.PointToScreen(pt);
+        public override Point PointToScreen(Point pt) => Owner is not null ? Owner.PointToScreen(pt) : Point.Empty;
 
         /// <summary>
         ///  Exposes a text range that contains the text that is the target of the annotation associated with the specified annotation element.
@@ -130,112 +134,112 @@ public abstract partial class TextBoxBase
         /// <returns>
         ///  A text range that contains the annotation target text.
         /// </returns>
-        public override UiaCore.ITextRangeProvider RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+        public override UiaCore.ITextRangeProvider? RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
         {
-            return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0);
+            return Owner is not null ? new UiaTextRange(Owner.AccessibilityObject, this, start: 0, end: 0) : null;
         }
 
         public override Rectangle BoundingRectangle
-            => _owningTextBoxBase.IsHandleCreated
+            => Owner is not null && Owner.IsHandleCreated
                 ? GetFormattingRectangle()
                 : Rectangle.Empty;
 
         public override int FirstVisibleLine
-            => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETFIRSTVISIBLELINE)
+            => Owner is not null && Owner.IsHandleCreated
+                ? (int)PInvoke.SendMessage(Owner, PInvoke.EM_GETFIRSTVISIBLELINE)
                 : -1;
 
-        public override bool IsMultiline => _owningTextBoxBase.Multiline;
+        public override bool IsMultiline => Owner is not null ? Owner.Multiline : false;
 
         public override bool IsReadingRTL
-            => _owningTextBoxBase.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
+            => Owner is not null ? Owner.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING) : false;
 
-        public override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
+        public override bool IsReadOnly => Owner is not null ? Owner.ReadOnly : false;
 
         public override bool IsScrollable
         {
             get
             {
-                if (!_owningTextBoxBase.IsHandleCreated)
+                if (Owner is null || !Owner.IsHandleCreated)
                 {
                     return false;
                 }
 
-                return ((int)GetWindowStyle(_owningTextBoxBase) & PInvoke.ES_AUTOHSCROLL) != 0;
+                return ((int)GetWindowStyle(Owner) & PInvoke.ES_AUTOHSCROLL) != 0;
             }
         }
 
         public override int LinesCount
-            => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETLINECOUNT)
+            => Owner is not null && Owner.IsHandleCreated
+                ? (int)PInvoke.SendMessage(Owner, PInvoke.EM_GETLINECOUNT)
                 : -1;
 
         public override int LinesPerPage
         {
             get
             {
-                if (!_owningTextBoxBase.IsHandleCreated)
+                if (Owner is null || !Owner.IsHandleCreated)
                 {
                     return -1;
                 }
 
-                Rectangle rect = _owningTextBoxBase.ClientRectangle;
+                Rectangle rect = Owner.ClientRectangle;
                 if (rect.IsEmpty)
                 {
                     return 0;
                 }
 
-                if (!_owningTextBoxBase.Multiline)
+                if (!Owner.Multiline)
                 {
                     return 1;
                 }
 
-                int fontHeight = _owningTextBoxBase.Font.Height;
+                int fontHeight = Owner.Font.Height;
                 return fontHeight != 0 ? (int)Math.Ceiling(((double)rect.Height) / fontHeight) : 0;
             }
         }
 
         public override LOGFONTW Logfont
-            => _owningTextBoxBase.IsHandleCreated
-                ? LOGFONTW.FromFont(_owningTextBoxBase.Font)
+            => Owner is not null && Owner.IsHandleCreated
+                ? LOGFONTW.FromFont(Owner.Font)
                 : default;
 
         public override string Text
-            => _owningTextBoxBase.IsHandleCreated
-                ? _owningTextBoxBase.Text
+            => Owner is not null && Owner.IsHandleCreated
+                ? Owner.Text
                 : string.Empty;
 
         public override int TextLength => Text.Length;
 
         public override WINDOW_EX_STYLE WindowExStyle
-            => _owningTextBoxBase.IsHandleCreated
-                ? GetWindowExStyle(_owningTextBoxBase)
+            => Owner is not null && Owner.IsHandleCreated
+                ? GetWindowExStyle(Owner)
                 : WINDOW_EX_STYLE.WS_EX_LEFT;
 
         public override WINDOW_STYLE WindowStyle
-            => _owningTextBoxBase.IsHandleCreated
-                ? GetWindowStyle(_owningTextBoxBase)
+            => Owner is not null && Owner.IsHandleCreated
+                ? GetWindowStyle(Owner)
                 : WINDOW_STYLE.WS_OVERLAPPED;
 
         public override int GetLineFromCharIndex(int charIndex)
-            => _owningTextBoxBase.IsHandleCreated
-                ? _owningTextBoxBase.GetLineFromCharIndex(charIndex)
+            => Owner is not null && Owner.IsHandleCreated
+                ? Owner.GetLineFromCharIndex(charIndex)
                 : -1;
 
         public override int GetLineIndex(int line)
-            => _owningTextBoxBase.IsHandleCreated
-                ? (int)PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_LINEINDEX, (WPARAM)line)
+            => Owner is not null && Owner.IsHandleCreated
+                ? (int)PInvoke.SendMessage(Owner, PInvoke.EM_LINEINDEX, (WPARAM)line)
                 : -1;
 
         public override Point GetPositionFromChar(int charIndex)
-            => _owningTextBoxBase.IsHandleCreated
-                ? _owningTextBoxBase.GetPositionFromCharIndex(charIndex)
+            => Owner is not null && Owner.IsHandleCreated
+                ? Owner.GetPositionFromCharIndex(charIndex)
                 : Point.Empty;
 
         // A variation on EM_POSFROMCHAR that returns the upper-right corner instead of upper-left.
         public override Point GetPositionFromCharForUpperRightCorner(int startCharIndex, string text)
         {
-            if (!_owningTextBoxBase.IsHandleCreated || startCharIndex < 0 || startCharIndex >= text.Length)
+            if (Owner is null || !Owner.IsHandleCreated || startCharIndex < 0 || startCharIndex >= text.Length)
             {
                 return Point.Empty;
             }
@@ -250,10 +254,10 @@ public abstract partial class TextBoxBase
                     // for tabs the calculated width of the character is no help so we use the
                     // UL corner of the following character if it is on the same line.
                     bool useNext = startCharIndex < TextLength - 1 && GetLineFromCharIndex(startCharIndex + 1) == GetLineFromCharIndex(startCharIndex);
-                    return _owningTextBoxBase.GetPositionFromCharIndex(useNext ? startCharIndex + 1 : startCharIndex);
+                    return Owner.GetPositionFromCharIndex(useNext ? startCharIndex + 1 : startCharIndex);
                 }
 
-                pt = _owningTextBoxBase.GetPositionFromCharIndex(startCharIndex);
+                pt = Owner.GetPositionFromCharIndex(startCharIndex);
 
                 if (ch == '\r' || ch == '\n')
                 {
@@ -265,7 +269,7 @@ public abstract partial class TextBoxBase
             }
 
             // get the UL corner of the character
-            pt = _owningTextBoxBase.GetPositionFromCharIndex(startCharIndex);
+            pt = Owner.GetPositionFromCharIndex(startCharIndex);
 
             // add the width of the character at that position.
             if (GetTextExtentPoint32(ch, out Size size))
@@ -281,7 +285,7 @@ public abstract partial class TextBoxBase
             visibleStart = 0;
             visibleEnd = 0;
 
-            if (!_owningTextBoxBase.IsHandleCreated || IsDegenerate(_owningTextBoxBase.ClientRectangle))
+            if (Owner is null || !Owner.IsHandleCreated || IsDegenerate(Owner.ClientRectangle))
             {
                 return;
             }
@@ -309,11 +313,11 @@ public abstract partial class TextBoxBase
                     visibleEnd = Text.Length;
                 }
             }
-            else
+            else if (Owner is not null)
             {
-                visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
+                visibleStart = Owner.GetCharIndexFromPosition(ptStart);
                 // Add 1 to get a caret position after received character.
-                visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1;
+                visibleEnd = Owner.GetCharIndexFromPosition(ptEnd) + 1;
             }
 
             return;
@@ -324,16 +328,16 @@ public abstract partial class TextBoxBase
 
         public override bool LineScroll(int charactersHorizontal, int linesVertical)
             // Sends an EM_LINESCROLL message to scroll it horizontally and/or vertically.
-            => _owningTextBoxBase.IsHandleCreated
+            => Owner is not null && Owner.IsHandleCreated
                 && PInvoke.SendMessage(
-                    _owningTextBoxBase,
+                    Owner,
                     PInvoke.EM_LINESCROLL,
                     (WPARAM)charactersHorizontal,
                     (LPARAM)linesVertical) != 0;
 
         public override void SetSelection(int start, int end)
         {
-            if (!_owningTextBoxBase.IsHandleCreated)
+            if (Owner is null || !Owner.IsHandleCreated)
             {
                 return;
             }
@@ -350,26 +354,37 @@ public abstract partial class TextBoxBase
                 return;
             }
 
-            PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
+            PInvoke.SendMessage(Owner, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
         }
 
         private RECT GetFormattingRectangle()
         {
-            Debug.Assert(_owningTextBoxBase.IsHandleCreated);
+            if (Owner is null)
+            {
+                return default;
+            }
+
+            Debug.Assert(Owner.IsHandleCreated);
 
             // Send an EM_GETRECT message to find out the bounding rectangle.
             RECT rectangle = default;
-            PInvoke.SendMessage(_owningTextBoxBase, PInvoke.EM_GETRECT, (WPARAM)0, ref rectangle);
+            PInvoke.SendMessage(Owner, PInvoke.EM_GETRECT, (WPARAM)0, ref rectangle);
             return rectangle;
         }
 
         private unsafe bool GetTextExtentPoint32(char item, out Size size)
         {
-            Debug.Assert(_owningTextBoxBase.IsHandleCreated);
+            if (Owner is null)
+            {
+                size = Size.Empty;
+                return false;
+            }
+
+            Debug.Assert(Owner.IsHandleCreated);
 
             size = default;
 
-            using GetDcScope hdc = new(_owningTextBoxBase.HWND);
+            using GetDcScope hdc = new(Owner.HWND);
             if (hdc.IsNull)
             {
                 return false;

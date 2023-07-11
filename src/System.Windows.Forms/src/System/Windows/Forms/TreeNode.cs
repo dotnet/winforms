@@ -1260,7 +1260,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             }
             else
             {
-                childNodes.Sort((x, y) => parentTreeView.TreeViewNodeSorter.Compare(x.Text, y.Text));
+                childNodes.Sort(parentTreeView.TreeViewNodeSorter.Compare);
             }
 
             for (int i = 0; i < childNodes.Count; i++)

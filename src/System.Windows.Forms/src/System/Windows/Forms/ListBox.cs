@@ -1720,8 +1720,6 @@ public partial class ListBox : ListControl
         base.OnChangeUICues(e);
     }
 
-    internal bool HasKeyboardFocus { get; set; }
-
     protected override void OnGotFocus(EventArgs e)
     {
         if (IsHandleCreated && IsAccessibilityObjectCreated)
@@ -1730,12 +1728,10 @@ public partial class ListBox : ListControl
 
             if (item is not null)
             {
-                HasKeyboardFocus = false;
                 item.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
             else
             {
-                HasKeyboardFocus = true;
                 AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
         }

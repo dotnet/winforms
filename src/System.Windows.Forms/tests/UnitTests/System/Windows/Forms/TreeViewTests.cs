@@ -7089,6 +7089,32 @@ public class TreeViewTests
         Assert.Equal(0, treeView.Nodes.Count);
     }
 
+    [WinFormsFact]
+    public void TreeView_TreeViewNodeSorter_ComparesTreeNodes()
+    {
+        using TreeView treeView = new();
+
+        treeView.Nodes.Add("Root 1");
+        treeView.Nodes[0].Nodes.Add("Child 1");
+        treeView.Nodes[0].Nodes.Add("Child 2");
+
+        treeView.Nodes.Add("Root 2");
+        treeView.Nodes[1].Nodes.Add("Child 3");
+        treeView.Nodes[1].Nodes.Add("Child 4");
+
+        IComparer treeSorter = Comparer<object>.Create(
+            (object x, object y) =>
+            {
+                Assert.True(x is TreeNode);
+                Assert.True(y is TreeNode);
+
+                return 0;
+            });
+
+        // Setting TreeViewNodeSorter invokes sorting automatically
+        treeView.TreeViewNodeSorter = treeSorter;
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;

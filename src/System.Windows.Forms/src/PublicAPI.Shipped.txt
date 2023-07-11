@@ -55,8 +55,8 @@ override System.Windows.Forms.ComboBox.ToString() -> string!
 ~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.DataGridView.Font.set -> void
 ~override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.HitTestInfo.Equals(object value) -> bool
-~override System.Windows.Forms.DataGridView.HitTestInfo.ToString() -> string
+override System.Windows.Forms.DataGridView.HitTestInfo.Equals(object? value) -> bool
+override System.Windows.Forms.DataGridView.HitTestInfo.ToString() -> string!
 ~override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnCursorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnDoubleClick(System.EventArgs e) -> void
@@ -357,16 +357,16 @@ override System.Windows.Forms.ComboBox.ToString() -> string!
 ~override System.Windows.Forms.WebBrowser.AttachInterfaces(object nativeActiveXObject) -> void
 ~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.WebBrowser.CreateWebBrowserSiteBase() -> System.Windows.Forms.WebBrowserSiteBase
-~override System.Windows.Forms.WebBrowserBase.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.WebBrowserBase.BackgroundImage.set -> void
-~override System.Windows.Forms.WebBrowserBase.Cursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.WebBrowserBase.Cursor.set -> void
-~override System.Windows.Forms.WebBrowserBase.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.WebBrowserBase.Font.set -> void
-~override System.Windows.Forms.WebBrowserBase.Site.set -> void
-~override System.Windows.Forms.WebBrowserBase.Text.get -> string
-~override System.Windows.Forms.WebBrowserBase.Text.set -> void
-~static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo
+override System.Windows.Forms.WebBrowserBase.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.WebBrowserBase.BackgroundImage.set -> void
+override System.Windows.Forms.WebBrowserBase.Cursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.WebBrowserBase.Cursor.set -> void
+override System.Windows.Forms.WebBrowserBase.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.WebBrowserBase.Font.set -> void
+override System.Windows.Forms.WebBrowserBase.Site.set -> void
+override System.Windows.Forms.WebBrowserBase.Text.get -> string!
+override System.Windows.Forms.WebBrowserBase.Text.set -> void
+static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo!
 ~static System.Windows.Forms.AxHost.GetFontFromIFont(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetFontFromIFontDisp(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetIFontDispFromFont(System.Drawing.Font font) -> object
@@ -713,13 +713,13 @@ System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitma
 ~System.Windows.Forms.HtmlElement.Style.get -> string
 ~System.Windows.Forms.HtmlElement.Style.set -> void
 ~System.Windows.Forms.HtmlElement.TagName.get -> string
-~System.Windows.Forms.HtmlElementCollection.GetElementsByName(string name) -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlElementCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.HtmlElementCollection.this[int index].get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElementCollection.this[string elementId].get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElementEventArgs.EventType.get -> string
-~System.Windows.Forms.HtmlElementEventArgs.FromElement.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.HtmlElement
+System.Windows.Forms.HtmlElementCollection.GetElementsByName(string! name) -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlElementCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.HtmlElementCollection.this[int index].get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElementCollection.this[string! elementId].get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElementEventArgs.EventType.get -> string!
+System.Windows.Forms.HtmlElementEventArgs.FromElement.get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.HtmlElement?
 ~System.Windows.Forms.HtmlWindow.Alert(string message) -> void
 ~System.Windows.Forms.HtmlWindow.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
 ~System.Windows.Forms.HtmlWindow.Confirm(string message) -> bool
@@ -794,7 +794,7 @@ System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitma
 ~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
 ~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
-~System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control control) -> string
+System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control? control) -> string?
 ~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeNode.FullPath.get -> string
 ~System.Windows.Forms.TreeNode.ImageKey.get -> string
@@ -875,8 +875,8 @@ System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitma
 ~System.Windows.Forms.WebBrowser.Url.set -> void
 ~System.Windows.Forms.WebBrowser.Version.get -> System.Version
 System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser! host) -> void
-~System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object
-~System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
+System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object?
+System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap! bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
@@ -12410,50 +12410,50 @@ System.Windows.Forms.WebBrowser.WebBrowserShortcutsEnabled.get -> bool
 System.Windows.Forms.WebBrowser.WebBrowserShortcutsEnabled.set -> void
 System.Windows.Forms.WebBrowser.WebBrowserSite
 System.Windows.Forms.WebBrowserBase
-System.Windows.Forms.WebBrowserBase.BackColorChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.BackgroundImageLayoutChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.BindingContextChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.ChangeUICues -> System.Windows.Forms.UICuesEventHandler
-System.Windows.Forms.WebBrowserBase.Click -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.CursorChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.DoubleClick -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.DragDrop -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.WebBrowserBase.DragEnter -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.WebBrowserBase.DragLeave -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.DragOver -> System.Windows.Forms.DragEventHandler
+System.Windows.Forms.WebBrowserBase.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.BackgroundImageLayoutChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.BindingContextChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.ChangeUICues -> System.Windows.Forms.UICuesEventHandler?
+System.Windows.Forms.WebBrowserBase.Click -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.CursorChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.DoubleClick -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.DragDrop -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.WebBrowserBase.DragEnter -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.WebBrowserBase.DragLeave -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.DragOver -> System.Windows.Forms.DragEventHandler?
 System.Windows.Forms.WebBrowserBase.Enabled.get -> bool
 System.Windows.Forms.WebBrowserBase.Enabled.set -> void
-System.Windows.Forms.WebBrowserBase.EnabledChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.Enter -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.FontChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.ForeColorChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler
-System.Windows.Forms.WebBrowserBase.HelpRequested -> System.Windows.Forms.HelpEventHandler
+System.Windows.Forms.WebBrowserBase.EnabledChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.Enter -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.FontChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.ForeColorChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
+System.Windows.Forms.WebBrowserBase.HelpRequested -> System.Windows.Forms.HelpEventHandler?
 System.Windows.Forms.WebBrowserBase.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.WebBrowserBase.ImeMode.set -> void
-System.Windows.Forms.WebBrowserBase.ImeModeChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.WebBrowserBase.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.WebBrowserBase.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.WebBrowserBase.Layout -> System.Windows.Forms.LayoutEventHandler
-System.Windows.Forms.WebBrowserBase.Leave -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.MouseCaptureChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.WebBrowserBase.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.WebBrowserBase.MouseDown -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.WebBrowserBase.MouseEnter -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.MouseHover -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.MouseLeave -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.MouseMove -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.WebBrowserBase.MouseUp -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.WebBrowserBase.MouseWheel -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.WebBrowserBase.Paint -> System.Windows.Forms.PaintEventHandler
-System.Windows.Forms.WebBrowserBase.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler
-System.Windows.Forms.WebBrowserBase.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler
-System.Windows.Forms.WebBrowserBase.RightToLeftChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.StyleChanged -> System.EventHandler
-System.Windows.Forms.WebBrowserBase.TextChanged -> System.EventHandler
+System.Windows.Forms.WebBrowserBase.ImeModeChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.WebBrowserBase.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.WebBrowserBase.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.WebBrowserBase.Layout -> System.Windows.Forms.LayoutEventHandler?
+System.Windows.Forms.WebBrowserBase.Leave -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.MouseCaptureChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.WebBrowserBase.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.WebBrowserBase.MouseDown -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.WebBrowserBase.MouseEnter -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.MouseHover -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.MouseLeave -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.MouseMove -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.WebBrowserBase.MouseUp -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.WebBrowserBase.MouseWheel -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.WebBrowserBase.Paint -> System.Windows.Forms.PaintEventHandler?
+System.Windows.Forms.WebBrowserBase.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler?
+System.Windows.Forms.WebBrowserBase.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler?
+System.Windows.Forms.WebBrowserBase.RightToLeftChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.StyleChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowserBase.TextChanged -> System.EventHandler?
 System.Windows.Forms.WebBrowserBase.UseWaitCursor.get -> bool
 System.Windows.Forms.WebBrowserBase.UseWaitCursor.set -> void
 System.Windows.Forms.WebBrowserDocumentCompletedEventArgs

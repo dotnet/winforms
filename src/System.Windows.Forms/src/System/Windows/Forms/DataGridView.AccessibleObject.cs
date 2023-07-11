@@ -14,20 +14,21 @@ public partial class DataGridView
         private int[]? runtimeId; // Used by UIAutomation
         private bool? _isModal;
 
-        private readonly DataGridView _ownerDataGridView;
         private DataGridViewTopRowAccessibleObject? _topRowAccessibilityObject;
         private DataGridViewSelectedCellsAccessibleObject? _selectedCellsAccessibilityObject;
 
         public DataGridViewAccessibleObject(DataGridView owner)
-            : base(owner) => _ownerDataGridView = owner;
+            : base(owner)
+        {
+        }
 
-        internal override bool IsReadOnly => _ownerDataGridView.ReadOnly;
+        internal override bool IsReadOnly => this.TryGetOwnerAs(out DataGridView? owner) ? owner.ReadOnly : base.IsReadOnly;
 
         private bool IsModal
         {
             get
             {
-                _isModal ??= _ownerDataGridView.TopMostParent is Form { Modal: true };
+                _isModal ??= this.TryGetOwnerAs(out DataGridView? owner) && owner.TopMostParent is Form { Modal: true };
                 return _isModal.Value;
             }
         }
@@ -53,25 +54,13 @@ public partial class DataGridView
         }
 
         public override AccessibleRole Role
+            => this.GetOwnerAccessibleRole(AccessibleRole.Table);
+
+        private AccessibleObject? TopRowAccessibilityObject
         {
             get
             {
-                AccessibleRole role = _ownerDataGridView.AccessibleRole;
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
-
-                // the Default AccessibleRole is Table
-                return AccessibleRole.Table;
-            }
-        }
-
-        private AccessibleObject TopRowAccessibilityObject
-        {
-            get
-            {
-                _topRowAccessibilityObject ??= new DataGridViewTopRowAccessibleObject(_ownerDataGridView);
+                _topRowAccessibilityObject ??= this.TryGetOwnerAs(out DataGridView? owner) ? new DataGridViewTopRowAccessibleObject(owner) : null;
 
                 return _topRowAccessibilityObject;
             }
@@ -81,7 +70,7 @@ public partial class DataGridView
         {
             get
             {
-                _selectedCellsAccessibilityObject ??= new DataGridViewSelectedCellsAccessibleObject(_ownerDataGridView);
+                _selectedCellsAccessibilityObject ??= new DataGridViewSelectedCellsAccessibleObject(this);
 
                 return _selectedCellsAccessibilityObject;
             }
@@ -89,40 +78,40 @@ public partial class DataGridView
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (index < 0)
+            if (index < 0 || !this.TryGetOwnerAs(out DataGridView? owner))
             {
                 return null;
             }
 
-            if (_ownerDataGridView.Columns.Count == 0)
+            if (owner.Columns.Count == 0)
             {
                 Diagnostics.Debug.Assert(GetChildCount() == 0);
                 return null;
             }
 
-            if (index < 1 && _ownerDataGridView.ColumnHeadersVisible)
+            if (index < 1 && owner.ColumnHeadersVisible)
             {
                 return TopRowAccessibilityObject;
             }
 
-            if (_ownerDataGridView.ColumnHeadersVisible)
+            if (owner.ColumnHeadersVisible)
             {
                 index--;
             }
 
-            if (index < _ownerDataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible))
+            if (index < owner.Rows.GetRowCount(DataGridViewElementStates.Visible))
             {
-                int actualRowIndex = _ownerDataGridView.Rows.DisplayIndexToRowIndex(index);
-                return _ownerDataGridView.Rows[actualRowIndex].AccessibilityObject;
+                int actualRowIndex = owner.Rows.DisplayIndexToRowIndex(index);
+                return owner.Rows[actualRowIndex].AccessibilityObject;
             }
 
-            index -= _ownerDataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible);
+            index -= owner.Rows.GetRowCount(DataGridViewElementStates.Visible);
 
-            if (_ownerDataGridView._horizScrollBar.Visible)
+            if (owner._horizScrollBar.Visible)
             {
                 if (index == 0)
                 {
-                    return _ownerDataGridView._horizScrollBar.AccessibilityObject;
+                    return owner._horizScrollBar.AccessibilityObject;
                 }
                 else
                 {
@@ -130,11 +119,11 @@ public partial class DataGridView
                 }
             }
 
-            if (_ownerDataGridView._vertScrollBar.Visible)
+            if (owner._vertScrollBar.Visible)
             {
                 if (index == 0)
                 {
-                    return _ownerDataGridView._vertScrollBar.AccessibilityObject;
+                    return owner._vertScrollBar.AccessibilityObject;
                 }
             }
 
@@ -143,25 +132,25 @@ public partial class DataGridView
 
         public override int GetChildCount()
         {
-            if (_ownerDataGridView.Columns.Count == 0)
+            if (!this.TryGetOwnerAs(out DataGridView? owner) || owner.Columns.Count == 0)
             {
                 return 0;
             }
 
-            int childCount = _ownerDataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible);
+            int childCount = owner.Rows.GetRowCount(DataGridViewElementStates.Visible);
 
             // the column header collection Accessible Object
-            if (_ownerDataGridView.ColumnHeadersVisible)
+            if (owner.ColumnHeadersVisible)
             {
                 childCount++;
             }
 
-            if (_ownerDataGridView._horizScrollBar.Visible)
+            if (owner._horizScrollBar.Visible)
             {
                 childCount++;
             }
 
-            if (_ownerDataGridView._vertScrollBar.Visible)
+            if (owner._vertScrollBar.Visible)
             {
                 childCount++;
             }
@@ -171,9 +160,9 @@ public partial class DataGridView
 
         public override AccessibleObject? GetFocused()
         {
-            if (_ownerDataGridView.Focused && _ownerDataGridView.CurrentCell is not null)
+            if (this.TryGetOwnerAs(out DataGridView? owner) && owner.Focused && owner.CurrentCell is not null)
             {
-                return _ownerDataGridView.CurrentCell.AccessibilityObject;
+                return owner.CurrentCell.AccessibilityObject;
             }
             else
             {
@@ -188,37 +177,37 @@ public partial class DataGridView
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!_ownerDataGridView.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out DataGridView? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
 
-            Point pt = _ownerDataGridView.PointToClient(new Point(x, y));
-            HitTestInfo hti = _ownerDataGridView.HitTest(pt.X, pt.Y);
+            Point pt = owner.PointToClient(new Point(x, y));
+            HitTestInfo hti = owner.HitTest(pt.X, pt.Y);
 
             switch (hti.Type)
             {
                 case DataGridViewHitTestType.Cell:
-                    return _ownerDataGridView.Rows[hti.RowIndex].Cells[hti.ColumnIndex].AccessibilityObject;
+                    return owner.Rows[hti.RowIndex].Cells[hti.ColumnIndex].AccessibilityObject;
                 case DataGridViewHitTestType.ColumnHeader:
                     // map the column index to the actual display index
-                    int actualDisplayIndex = _ownerDataGridView.Columns.ColumnIndexToActualDisplayIndex(hti.ColumnIndex, DataGridViewElementStates.Visible);
-                    if (_ownerDataGridView.RowHeadersVisible)
+                    int actualDisplayIndex = owner.Columns.ColumnIndexToActualDisplayIndex(hti.ColumnIndex, DataGridViewElementStates.Visible);
+                    if (owner.RowHeadersVisible)
                     {
                         // increment the childIndex because the first child in the TopRowAccessibleObject is the TopLeftHeaderCellAccObj
-                        return TopRowAccessibilityObject.GetChild(actualDisplayIndex + 1);
+                        return TopRowAccessibilityObject?.GetChild(actualDisplayIndex + 1);
                     }
 
-                    return TopRowAccessibilityObject.GetChild(actualDisplayIndex);
+                    return TopRowAccessibilityObject?.GetChild(actualDisplayIndex);
 
                 case DataGridViewHitTestType.RowHeader:
-                    return _ownerDataGridView.Rows[hti.RowIndex].HeaderCell.AccessibilityObject;
+                    return owner.Rows[hti.RowIndex].HeaderCell.AccessibilityObject;
                 case DataGridViewHitTestType.TopLeftHeader:
-                    return _ownerDataGridView.TopLeftHeaderCell.AccessibilityObject;
+                    return owner.TopLeftHeaderCell.AccessibilityObject;
                 case DataGridViewHitTestType.VerticalScrollBar:
-                    return _ownerDataGridView.VerticalScrollBar.AccessibilityObject;
+                    return owner.VerticalScrollBar.AccessibilityObject;
                 case DataGridViewHitTestType.HorizontalScrollBar:
-                    return _ownerDataGridView.HorizontalScrollBar.AccessibilityObject;
+                    return owner.HorizontalScrollBar.AccessibilityObject;
                 default:
                     return null;
             }
@@ -257,26 +246,33 @@ public partial class DataGridView
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
         {
+            DataGridView? owner;
+
             switch (propertyID)
             {
                 case UiaCore.UIA.ControlTypePropertyId:
-                    return _ownerDataGridView.AccessibleRole == AccessibleRole.Default
+                    return (this.TryGetOwnerAs(out owner) && owner.AccessibleRole == AccessibleRole.Default)
                         ? UiaCore.UIA.DataGridControlTypeId
                         : base.GetPropertyValue(propertyID);
                 case UiaCore.UIA.HasKeyboardFocusPropertyId:
                     // If no inner cell entire DGV should be announced as focused by Narrator.
                     // Else only inner cell should be announced as focused by Narrator but not entire DGV.
-                    return (IsModal || RowCount == 0) && _ownerDataGridView.Focused;
+                    return this.TryGetOwnerAs(out owner) && (IsModal || RowCount == 0) && owner.Focused;
                 case UiaCore.UIA.IsControlElementPropertyId:
                     return true;
                 case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                    return _ownerDataGridView.CanFocus;
+                    return this.TryGetOwnerAs(out owner) && owner.CanFocus;
                 case UiaCore.UIA.ItemStatusPropertyId:
                     var canSort = false;
+                    if (!this.TryGetOwnerAs(out owner))
+                    {
+                        return base.GetPropertyValue(propertyID);
+                    }
+
                     for (int i = 0; i < ColumnCount; i++)
                     {
-                        int columnIndex = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
-                        if (_ownerDataGridView.IsSortable(_ownerDataGridView.Columns[columnIndex]))
+                        int columnIndex = owner.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
+                        if (owner.IsSortable(owner.Columns[columnIndex]))
                         {
                             canSort = true;
                             break;
@@ -285,14 +281,14 @@ public partial class DataGridView
 
                     if (canSort)
                     {
-                        switch (_ownerDataGridView.SortOrder)
+                        switch (owner.SortOrder)
                         {
                             case SortOrder.None:
                                 return SR.NotSortedAccessibleStatus;
                             case SortOrder.Ascending:
-                                return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, _ownerDataGridView.SortedColumn?.HeaderText);
+                                return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                             case SortOrder.Descending:
-                                return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, _ownerDataGridView.SortedColumn?.HeaderText);
+                                return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                         }
                     }
 
@@ -316,7 +312,7 @@ public partial class DataGridView
 
         internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders()
         {
-            if (!_ownerDataGridView.RowHeadersVisible)
+            if (!this.TryGetOwnerAs(out DataGridView? owner) || !owner.RowHeadersVisible)
             {
                 return null;
             }
@@ -324,8 +320,8 @@ public partial class DataGridView
             UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[RowCount];
             for (int i = 0; i < RowCount; i++)
             {
-                int rowIndex = _ownerDataGridView.Rows.DisplayIndexToRowIndex(i);
-                result[i] = _ownerDataGridView.Rows[rowIndex].HeaderCell.AccessibilityObject;
+                int rowIndex = owner.Rows.DisplayIndexToRowIndex(i);
+                result[i] = owner.Rows[rowIndex].HeaderCell.AccessibilityObject;
             }
 
             return result;
@@ -333,7 +329,7 @@ public partial class DataGridView
 
         internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders()
         {
-            if (!_ownerDataGridView.ColumnHeadersVisible)
+            if (!this.TryGetOwnerAs(out DataGridView? owner) || !owner.ColumnHeadersVisible)
             {
                 return null;
             }
@@ -341,8 +337,8 @@ public partial class DataGridView
             UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[ColumnCount];
             for (int i = 0; i < ColumnCount; i++)
             {
-                int columnIndex = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
-                result[i] = _ownerDataGridView.Columns[columnIndex].HeaderCell.AccessibilityObject;
+                int columnIndex = owner.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
+                result[i] = owner.Columns[columnIndex].HeaderCell.AccessibilityObject;
             }
 
             return result;
@@ -358,12 +354,17 @@ public partial class DataGridView
 
         internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
         {
+            if (!this.TryGetOwnerAs(out DataGridView? owner))
+            {
+                return null;
+            }
+
             if (row >= 0 && row < RowCount &&
                 column >= 0 && column < ColumnCount)
             {
-                row = _ownerDataGridView.Rows.DisplayIndexToRowIndex(row);
-                column = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(column, DataGridViewElementStates.Visible);
-                return _ownerDataGridView.Rows[row].Cells[column].AccessibilityObject;
+                row = owner.Rows.DisplayIndexToRowIndex(row);
+                column = owner.Columns.ActualDisplayIndexToColumnIndex(column, DataGridViewElementStates.Visible);
+                return owner.Rows[row].Cells[column].AccessibilityObject;
             }
 
             return null;
@@ -373,7 +374,7 @@ public partial class DataGridView
         {
             get
             {
-                return _ownerDataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible);
+                return this.TryGetOwnerAs(out DataGridView? owner) ? owner.Rows.GetRowCount(DataGridViewElementStates.Visible) : base.RowCount;
             }
         }
 
@@ -381,7 +382,7 @@ public partial class DataGridView
         {
             get
             {
-                return _ownerDataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
+                return this.TryGetOwnerAs(out DataGridView? owner) ? owner.Columns.GetColumnCount(DataGridViewElementStates.Visible) : base.ColumnCount;
             }
         }
 
@@ -423,9 +424,9 @@ public partial class DataGridView
 
         internal override void SetFocus()
         {
-            if (_ownerDataGridView.IsHandleCreated && _ownerDataGridView.CanFocus)
+            if (this.TryGetOwnerAs(out DataGridView? owner) && owner.IsHandleCreated && owner.CanFocus)
             {
-                _ownerDataGridView.Focus();
+                owner.Focus();
             }
         }
 
@@ -434,7 +435,7 @@ public partial class DataGridView
         #region IRawElementProviderFragmentRoot Implementation
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => _ownerDataGridView.IsHandleCreated ? HitTest((int)x, (int)y) : null;
+            => this.TryGetOwnerAs(out DataGridView? owner) && owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
         internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
 

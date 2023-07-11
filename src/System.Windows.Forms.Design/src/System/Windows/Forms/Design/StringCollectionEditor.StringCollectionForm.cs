@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -36,7 +34,7 @@ internal partial class StringCollectionEditor
             HookEvents();
         }
 
-        private void Edit1_keyDown(object sender, KeyEventArgs e)
+        private void Edit1_keyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Escape)
             {
@@ -47,13 +45,13 @@ internal partial class StringCollectionEditor
             e.Handled = true;
         }
 
-        private void StringCollectionEditor_HelpButtonClicked(object sender, CancelEventArgs e)
+        private void StringCollectionEditor_HelpButtonClicked(object? sender, CancelEventArgs e)
         {
             e.Cancel = true;
             _editor.ShowHelp();
         }
 
-        private void Form_HelpRequested(object sender, HelpEventArgs e)
+        private void Form_HelpRequested(object? sender, HelpEventArgs e)
         {
             _editor.ShowHelp();
         }
@@ -69,6 +67,11 @@ internal partial class StringCollectionEditor
         ///  NOTE: The following code is required by the form designer.
         ///  It can be modified using the form editor.  Do not modify it using the code editor.
         /// </summary>
+        [MemberNotNull(nameof(_instruction))]
+        [MemberNotNull(nameof(_textEntry))]
+        [MemberNotNull(nameof(_okButton))]
+        [MemberNotNull(nameof(_cancelButton))]
+        [MemberNotNull(nameof(_overarchingLayoutPanel))]
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(StringCollectionEditor));
@@ -135,55 +138,46 @@ internal partial class StringCollectionEditor
         /// <summary>
         ///  Commits the changes to the editor.
         /// </summary>
-        private void OKButton_click(object sender, EventArgs e)
+        private void OKButton_click(object? sender, EventArgs e)
         {
-            char[] delims = new char[] { '\n' };
-            char[] trims = new char[] { '\r' };
+            // Split the text into array of lines.
+            string[] lines = _textEntry.Text.Split('\n');
 
-            string[] strings = _textEntry.Text.Split(delims);
-            object[] curItems = Items;
-
-            int nItems = strings.Length;
-            for (int i = 0; i < nItems; i++)
+            // Remove trailing carriage return characters.
+            for (int i = 0; i < lines.Length; i++)
             {
-                strings[i] = strings[i].Trim(trims);
+                lines[i] = lines[i].TrimEnd('\r');
             }
 
-            bool dirty = true;
-            if (nItems == curItems.Length)
+            // Check if the content has changed.
+            if (lines.Length != Items.Length)
             {
-                int i;
-                for (i = 0; i < nItems; ++i)
-                {
-                    if (!strings[i].Equals((string)curItems[i]))
-                    {
-                        break;
-                    }
-                }
-
-                if (i == nItems)
-                    dirty = false;
-            }
-
-            if (!dirty)
-            {
-                DialogResult = DialogResult.Cancel;
+                UpdateItems(lines);
                 return;
             }
 
-            // If the final line is blank, we don't want to create an item from it
-            if (strings.Length > 0 && strings[strings.Length - 1].Length == 0)
+            for (int i = 0; i < lines.Length; ++i)
             {
-                nItems--;
+                if (!lines[i].Equals(Items[i]?.ToString()))
+                {
+                    UpdateItems(lines);
+                    return;
+                }
             }
 
-            object[] values = new object[nItems];
-            for (int i = 0; i < nItems; i++)
-            {
-                values[i] = strings[i];
-            }
+            DialogResult = DialogResult.Cancel;
 
-            Items = values;
+            void UpdateItems(string[] newLines)
+            {
+                // If the last line is empty, we don't want to create an item from it.
+                if (newLines[^1].Length == 0)
+                {
+                    Array.Resize(ref newLines, newLines.Length - 1);
+                }
+
+                // Assign newLines to Items.
+                Items = newLines;
+            }
         }
 
         /// <summary>
@@ -191,23 +185,6 @@ internal partial class StringCollectionEditor
         ///  In it you should update your user interface to reflect the current value.
         /// </summary>
         protected override void OnEditValueChanged()
-        {
-            object[] items = Items;
-            string text = string.Empty;
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i] is string)
-                {
-                    text += (string)items[i];
-                    if (i != items.Length - 1)
-                    {
-                        text += "\r\n";
-                    }
-                }
-            }
-
-            _textEntry.Text = text;
-        }
+            => _textEntry.Text = string.Join(Environment.NewLine, Items);
     }
 }

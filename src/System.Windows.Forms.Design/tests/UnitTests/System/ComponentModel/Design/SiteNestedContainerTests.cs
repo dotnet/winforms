@@ -554,15 +554,6 @@ public class SiteNestedContainerTests
         Assert.Equal(2, componentAddedCallCount);
     }
 
-    [WinFormsFact]
-    public void SiteNestedContainer_Add_NullComponent_ThrowsArgumentNullException()
-    {
-        using var surface = new DesignSurface();
-        using var owningComponent = new Component();
-        using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        Assert.Throws<ArgumentNullException>("component", () => container.Add(null, "name"));
-    }
-
     public static IEnumerable<object[]> Add_NoRootDesigner_TestData()
     {
         yield return new object[] { new Component() };
@@ -1022,15 +1013,6 @@ public class SiteNestedContainerTests
 
         container.Remove(component);
         Assert.Equal("value", service.GetValue("key"));
-    }
-
-    [WinFormsFact]
-    public void SiteNestedContainer_Remove_NullComponent_ThrowsArgumentNullException()
-    {
-        using var surface = new DesignSurface();
-        using var owningComponent = new Component();
-        using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        Assert.Throws<ArgumentNullException>("component", () => container.Remove(null));
     }
 
     private class SubDesignSurface : DesignSurface
