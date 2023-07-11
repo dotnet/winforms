@@ -59,8 +59,7 @@ public static partial class ToolStripManager
             {
                 int dpi = CurrentDpi;
 
-                Font? retFont = null;
-                if (s_defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont is null)
+                if (!s_defaultFontCache.TryGetValue(dpi, out Font? retFont))
                 {
                     // Default to menu font
                     sysFont = SystemInformation.GetMenuFontForDpi(dpi);
