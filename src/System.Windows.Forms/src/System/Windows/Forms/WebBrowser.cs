@@ -26,14 +26,14 @@ public partial class WebBrowser : WebBrowserBase
     // Reference to the native ActiveX control's IWebBrowser2
     // Do not reference this directly. Use the AxIWebBrowser2
     // property instead.
-    private Mshtml.IWebBrowser2? axIWebBrowser2;
+    private Mshtml.IWebBrowser2? _axIWebBrowser2;
 
     private AxHost.ConnectionPointCookie? _cookie;   // To hook up events from the native WebBrowser
-    private Stream? documentStreamToSetOnLoad;
-    private WebBrowserEncryptionLevel encryptionLevel = WebBrowserEncryptionLevel.Insecure;
-    private object? objectForScripting;
-    private WebBrowserEvent? webBrowserEvent;
-    internal string statusText = string.Empty;
+    private Stream? _documentStreamToSetOnLoad;
+    private WebBrowserEncryptionLevel _encryptionLevel = WebBrowserEncryptionLevel.Insecure;
+    private object? _objectForScripting;
+    private WebBrowserEvent? _webBrowserEvent;
+    internal string _statusText = string.Empty;
 
     private const int WEBBROWSERSTATE_webBrowserShortcutsEnabled = 0x00000001;
     private const int WEBBROWSERSTATE_documentStreamJustSet = 0x00000002;
@@ -44,7 +44,7 @@ public partial class WebBrowser : WebBrowserBase
     private const int WEBBROWSERSTATE_allowNavigation = 0x00000040;
 
     // PERF: take all the bools and put them into a state variable
-    private Collections.Specialized.BitVector32 webBrowserState;          // see TREEVIEWSTATE_ consts above
+    private Collections.Specialized.BitVector32 _webBrowserState;          // see TREEVIEWSTATE_ consts above
 
     //
     // 8856f961-340a-11d0-a96b-00c04fd705a2 is the clsid for the native webbrowser control
@@ -54,7 +54,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2")
     {
-        webBrowserState = new Collections.Specialized.BitVector32(WEBBROWSERSTATE_isWebBrowserContextMenuEnabled |
+        _webBrowserState = new Collections.Specialized.BitVector32(WEBBROWSERSTATE_isWebBrowserContextMenuEnabled |
                 WEBBROWSERSTATE_webBrowserShortcutsEnabled | WEBBROWSERSTATE_scrollbarsEnabled);
         AllowNavigation = true;
     }
@@ -75,14 +75,14 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            return webBrowserState[WEBBROWSERSTATE_allowNavigation];
+            return _webBrowserState[WEBBROWSERSTATE_allowNavigation];
         }
         set
         {
-            webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
-            if (webBrowserEvent is not null)
+            _webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
+            if (_webBrowserEvent is not null)
             {
-                webBrowserEvent.AllowNavigation = value;
+                _webBrowserEvent.AllowNavigation = value;
             }
         }
     }
@@ -150,11 +150,11 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            return webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
+            return _webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
         }
         set
         {
-            webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled] = value;
+            _webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled] = value;
         }
     }
 
@@ -181,13 +181,13 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            return webBrowserState[WEBBROWSERSTATE_canGoBack];
+            return _webBrowserState[WEBBROWSERSTATE_canGoBack];
         }
         set
         {
             if (value != CanGoBackInternal)
             {
-                webBrowserState[WEBBROWSERSTATE_canGoBack] = value;
+                _webBrowserState[WEBBROWSERSTATE_canGoBack] = value;
                 OnCanGoBackChanged(EventArgs.Empty);
             }
         }
@@ -216,13 +216,13 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            return webBrowserState[WEBBROWSERSTATE_canGoForward];
+            return _webBrowserState[WEBBROWSERSTATE_canGoForward];
         }
         set
         {
             if (value != CanGoForwardInternal)
             {
-                webBrowserState[WEBBROWSERSTATE_canGoForward] = value;
+                _webBrowserState[WEBBROWSERSTATE_canGoForward] = value;
                 OnCanGoForwardChanged(EventArgs.Empty);
             }
         }
@@ -304,16 +304,16 @@ public partial class WebBrowser : WebBrowserBase
         }
         set
         {
-            documentStreamToSetOnLoad = value;
+            _documentStreamToSetOnLoad = value;
             try
             {
-                webBrowserState[WEBBROWSERSTATE_documentStreamJustSet] = true;
+                _webBrowserState[WEBBROWSERSTATE_documentStreamJustSet] = true;
                 // Lets navigate to "about:blank" so that we get a "clean" document
                 Url = new Uri("about:blank");
             }
             finally
             {
-                webBrowserState[WEBBROWSERSTATE_documentStreamJustSet] = false;
+                _webBrowserState[WEBBROWSERSTATE_documentStreamJustSet] = false;
             }
         }
     }
@@ -430,10 +430,10 @@ public partial class WebBrowser : WebBrowserBase
         {
             if (Document is null)
             {
-                encryptionLevel = WebBrowserEncryptionLevel.Unknown;
+                _encryptionLevel = WebBrowserEncryptionLevel.Unknown;
             }
 
-            return encryptionLevel;
+            return _encryptionLevel;
         }
     }
 
@@ -485,11 +485,11 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            return webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
+            return _webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
         }
         set
         {
-            webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled] = value;
+            _webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled] = value;
         }
     }
 
@@ -505,7 +505,7 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            return objectForScripting;
+            return _objectForScripting;
         }
         set
         {
@@ -517,7 +517,7 @@ public partial class WebBrowser : WebBrowserBase
                 }
             }
 
-            objectForScripting = value;
+            _objectForScripting = value;
         }
     }
 
@@ -576,10 +576,10 @@ public partial class WebBrowser : WebBrowserBase
         {
             if (Document is null)
             {
-                statusText = string.Empty;
+                _statusText = string.Empty;
             }
 
-            return statusText;
+            return _statusText;
         }
     }
 
@@ -903,13 +903,13 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            return webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled];
+            return _webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled];
         }
         set
         {
-            if (value != webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled])
+            if (value != _webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled])
             {
-                webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled] = value;
+                _webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled] = value;
                 Refresh();
             }
         }
@@ -1151,7 +1151,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     protected override void AttachInterfaces(object nativeActiveXObject)
     {
-        axIWebBrowser2 = (Mshtml.IWebBrowser2)nativeActiveXObject;
+        _axIWebBrowser2 = (Mshtml.IWebBrowser2)nativeActiveXObject;
     }
 
     /// <summary>
@@ -1159,7 +1159,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     protected override void DetachInterfaces()
     {
-        axIWebBrowser2 = null;
+        _axIWebBrowser2 = null;
     }
 
     protected override AccessibleObject CreateAccessibilityInstance() => new WebBrowserAccessibleObject(this);
@@ -1173,12 +1173,12 @@ public partial class WebBrowser : WebBrowserBase
         {
             _cookie?.Disconnect();
 
-            webBrowserEvent = new WebBrowserEvent(this)
+            _webBrowserEvent = new WebBrowserEvent(this)
             {
                 AllowNavigation = AllowNavigation
             };
 
-            _cookie = new AxHost.ConnectionPointCookie(ax, webBrowserEvent, typeof(SHDocVw.DWebBrowserEvents2));
+            _cookie = new AxHost.ConnectionPointCookie(ax, _webBrowserEvent, typeof(SHDocVw.DWebBrowserEvents2));
         }
     }
 
@@ -1327,9 +1327,9 @@ public partial class WebBrowser : WebBrowserBase
 
         //
         // Nullify any calls to set_DocumentStream which may still be pending
-        if (!webBrowserState[WEBBROWSERSTATE_documentStreamJustSet])
+        if (!_webBrowserState[WEBBROWSERSTATE_documentStreamJustSet])
         {
-            documentStreamToSetOnLoad = null;
+            _documentStreamToSetOnLoad = null;
         }
 
         return urlString;
@@ -1480,7 +1480,7 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            if (axIWebBrowser2 is null)
+            if (_axIWebBrowser2 is null)
             {
                 ObjectDisposedException.ThrowIf(IsDisposed, this);
 
@@ -1489,7 +1489,7 @@ public partial class WebBrowser : WebBrowserBase
             }
 
             // We still don't have this.axIWebBrowser2. Throw an exception.
-            return axIWebBrowser2 ?? throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
+            return _axIWebBrowser2 ?? throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
         }
     }
 }
