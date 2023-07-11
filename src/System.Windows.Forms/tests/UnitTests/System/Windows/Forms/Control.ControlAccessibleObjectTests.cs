@@ -1219,8 +1219,7 @@ public class Control_ControlAccessibleObjectTests
     {
         var typesToIgnore = new[]
         {
-           typeof(HScrollBar), typeof(ListView), typeof(MonthCalendar),
-           typeof(PropertyGrid), typeof(TabPage), typeof(VScrollBar)
+           typeof(ListView), typeof(MonthCalendar), typeof(PropertyGrid), typeof(TabPage)
         };
 
         return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
