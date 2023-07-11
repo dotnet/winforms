@@ -202,17 +202,17 @@ public abstract partial class ObjectSelectorEditor
         {
             switch (m.MsgInternal)
             {
-                case User32.WM.GETDLGCODE:
-                    m.ResultInternal = (LRESULT)(m.ResultInternal | (int)User32.DLGC.WANTALLKEYS);
+                case PInvoke.WM_GETDLGCODE:
+                    m.ResultInternal = (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTALLKEYS);
                     return;
-                case User32.WM.MOUSEMOVE:
+                case PInvoke.WM_MOUSEMOVE:
                     if (clickSeen)
                     {
                         clickSeen = false;
                     }
 
                     break;
-                case User32.WM.REFLECT_NOTIFY:
+                case MessageId.WM_REFLECT_NOTIFY:
                     NMHDR* nmtv = (NMHDR*)(nint)m.LParamInternal;
                     if ((int)nmtv->code == (int)ComCtl32.NM.CLICK)
                     {

@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -181,7 +180,7 @@ public static partial class ControlPaint
                 biHeight = bitmap.Height,
                 biPlanes = 1,
                 biBitCount = 16,
-                biCompression = BI_COMPRESSION.BI_RGB
+                biCompression = (uint)BI_COMPRESSION.BI_RGB
             };
 
             Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
@@ -315,7 +314,7 @@ public static partial class ControlPaint
         Size size = bitmap.Size;
 
         HBITMAP colorMask = (HBITMAP)bitmap.GetHbitmap();
-        using User32.GetDcScope screenDC = new(IntPtr.Zero);
+        using GetDcScope screenDC = new(HWND.Null);
         using PInvoke.CreateDcScope sourceDC = new(screenDC);
         using PInvoke.CreateDcScope targetDC = new(screenDC);
         using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
@@ -1849,10 +1848,10 @@ public static partial class ControlPaint
             graphicsColor = Color.Black;
         }
 
-        using User32.GetDcScope desktopDC = new(
+        using GetDcScope desktopDC = new(
             PInvoke.GetDesktopWindow(),
-            IntPtr.Zero,
-            User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            HRGN.Null,
+            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
         using PInvoke.ObjectScope pen = new(style switch
         {
@@ -1876,10 +1875,10 @@ public static partial class ControlPaint
     {
         R2_MODE rop2 = (R2_MODE)GetColorRop(backColor, (int)R2_MODE.R2_NOTXORPEN, (int)R2_MODE.R2_XORPEN);
 
-        using User32.GetDcScope desktopDC = new(
+        using GetDcScope desktopDC = new(
             PInvoke.GetDesktopWindow(),
-            IntPtr.Zero,
-            User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            HRGN.Null,
+            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
         using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
         using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
@@ -2091,10 +2090,11 @@ public static partial class ControlPaint
             0x5a0049);  // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
         R2_MODE rop2 = R2_MODE.R2_NOT;
 
-        using var desktopDC = new User32.GetDcScope(
+        using var desktopDC = new GetDcScope(
             PInvoke.GetDesktopWindow(),
-            IntPtr.Zero,
-            User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            HRGN.Null,
+            GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
+
         using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
         using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
         using PInvoke.SelectObjectScope brushSelection = new(desktopDC, brush);

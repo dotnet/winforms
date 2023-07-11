@@ -6,10 +6,10 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
-    public static BOOL EnableMenuItem<T>(T hMenu, Interop.User32.SC uIDEnableItem, MENU_ITEM_FLAGS uEnable)
+    public static BOOL EnableMenuItem<T>(T hMenu, uint uIDEnableItem, MENU_ITEM_FLAGS uEnable)
         where T : IHandle<HMENU>
     {
-        BOOL result = EnableMenuItem(hMenu.Handle, (uint)uIDEnableItem, uEnable);
+        BOOL result = EnableMenuItem(hMenu.Handle, uIDEnableItem, uEnable);
         GC.KeepAlive(hMenu.Wrapper);
         return result;
     }

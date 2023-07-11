@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.ComponentModel.Com2Interop;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms;
 
@@ -74,45 +74,48 @@ public abstract partial class AxHost
             try
             {
                 // Marshal the items.
-                IPerPropertyBrowsing.Interface ppb = _owner.GetPerPropertyBrowsing();
                 int itemCount = 0;
 
                 Debug.Assert(_cookies is not null && _names is not null, "An item array is null");
 
-                if (_names.Length > 0)
+                if (_names.Length == 0)
                 {
-                    object[] values = new object[_cookies.Length];
-                    uint cookie;
+                    return;
+                }
 
-                    Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
+                object[] values = new object[_cookies.Length];
+                uint cookie;
 
-                    // For each name item, we ask the object for it's corresponding value.
-                    for (int i = 0; i < _names.Length; i++)
+                Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
+
+                using var propertyBrowsing = _owner.GetComScope<IPerPropertyBrowsing>();
+
+                // For each name item, we ask the object for it's corresponding value.
+                for (int i = 0; i < _names.Length; i++)
+                {
+                    cookie = _cookies[i];
+                    if (_names[i] is null)
                     {
-                        cookie = _cookies[i];
-                        if (_names[i] is null)
-                        {
-                            Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
-                            continue;
-                        }
-
-                        using VARIANT var = default(VARIANT);
-                        HRESULT hr = ppb.GetPredefinedValue((int)_target.Dispid, cookie, &var);
-                        if (hr.Succeeded && var.Type != VARENUM.VT_EMPTY)
-                        {
-                            values[i] = var.ToObject()!;
-                        }
-
-                        itemCount++;
+                        Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
+                        continue;
                     }
 
-                    // Pass the data to the base Com2Enum object.
-                    if (itemCount > 0)
+                    using VARIANT var = default;
+                    HRESULT hr = propertyBrowsing.Value->GetPredefinedValue(_target.Dispid, cookie, &var);
+                    if (hr.Succeeded && var.Type != VARENUM.VT_EMPTY)
                     {
-                        string[] strings = new string[itemCount];
-                        Array.Copy(_names, 0, strings, 0, itemCount);
-                        PopulateArrays(strings, values);
+                        values[i] = var.ToObject()!;
                     }
+
+                    itemCount++;
+                }
+
+                // Pass the data to the base Com2Enum object.
+                if (itemCount > 0)
+                {
+                    string[] strings = new string[itemCount];
+                    Array.Copy(_names, 0, strings, 0, itemCount);
+                    PopulateArrays(strings, values);
                 }
             }
             catch (Exception ex)

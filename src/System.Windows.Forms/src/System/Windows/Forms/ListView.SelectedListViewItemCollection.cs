@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -32,7 +31,7 @@ public partial class ListView
             {
                 if (_owner.IsHandleCreated)
                 {
-                    int cnt = (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETSELECTEDCOUNT);
+                    int cnt = (int)PInvoke.SendMessage(_owner, PInvoke.LVM_GETSELECTEDCOUNT);
 
                     ListViewItem[] lvitems = new ListViewItem[cnt];
 
@@ -42,7 +41,7 @@ public partial class ListView
                     {
                         int fidx = (int)PInvoke.SendMessage(
                             _owner,
-                            (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                            PInvoke.LVM_GETNEXTITEM,
                             (WPARAM)displayIndex,
                             (LPARAM)(uint)PInvoke.LVNI_SELECTED);
 
@@ -94,7 +93,7 @@ public partial class ListView
 
                 if (_owner.IsHandleCreated)
                 {
-                    return (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETSELECTEDCOUNT);
+                    return (int)PInvoke.SendMessage(_owner, PInvoke.LVM_GETSELECTEDCOUNT);
                 }
                 else
                 {
@@ -133,7 +132,7 @@ public partial class ListView
                     {
                         fidx = (int)PInvoke.SendMessage(
                             _owner,
-                            (User32.WM)PInvoke.LVM_GETNEXTITEM,
+                            PInvoke.LVM_GETNEXTITEM,
                             (WPARAM)fidx,
                             (LPARAM)(uint)PInvoke.LVNI_SELECTED);
 

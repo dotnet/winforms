@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -340,12 +339,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -357,12 +356,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -374,12 +373,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -391,12 +390,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 
@@ -429,12 +428,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -446,12 +445,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -463,12 +462,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -480,12 +479,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 #endif
@@ -516,12 +515,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -533,12 +532,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -550,12 +549,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -567,12 +566,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 
@@ -605,12 +604,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -622,12 +621,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -639,12 +638,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -656,12 +655,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 
@@ -1482,8 +1481,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -1495,10 +1494,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add same.
@@ -1510,12 +1509,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add another.
@@ -1527,14 +1526,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -1561,8 +1560,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -1574,10 +1573,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add same.
@@ -1589,12 +1588,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add another.
@@ -1606,14 +1605,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -1643,8 +1642,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -1656,10 +1655,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add same.
@@ -1671,12 +1670,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -1688,14 +1687,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -1725,8 +1724,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -1738,10 +1737,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add same.
@@ -1753,12 +1752,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -1770,14 +1769,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -2145,7 +2144,7 @@ public class ListBoxObjectCollectionTests
         collection.Add(3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -2159,14 +2158,14 @@ public class ListBoxObjectCollectionTests
         collection.Add(3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -2330,14 +2329,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -2349,14 +2348,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -2382,14 +2381,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -2401,14 +2400,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -2437,14 +2436,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -2456,14 +2455,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -2492,14 +2491,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -2511,14 +2510,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -2838,7 +2837,7 @@ public class ListBoxObjectCollectionTests
         collection.AddRange(new object[] { 2, 1, 1, 3 });
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -2849,14 +2848,14 @@ public class ListBoxObjectCollectionTests
         collection.AddRange(new object[] { 2, 1, 1, 3 });
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -3007,14 +3006,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -3028,14 +3027,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -3064,14 +3063,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -3085,14 +3084,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -3124,14 +3123,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -3145,14 +3144,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -3184,14 +3183,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Add empty.
@@ -3205,14 +3204,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -3575,7 +3574,7 @@ public class ListBoxObjectCollectionTests
         collection.AddRange(otherCollection);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -3589,14 +3588,14 @@ public class ListBoxObjectCollectionTests
         collection.AddRange(otherCollection);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -3793,7 +3792,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -3805,7 +3804,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -3830,7 +3829,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -3842,7 +3841,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -3868,7 +3867,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -3880,7 +3879,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -3906,7 +3905,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -3918,7 +3917,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -4287,8 +4286,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -4300,10 +4299,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert same.
@@ -4315,12 +4314,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -4332,14 +4331,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -4366,8 +4365,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -4379,10 +4378,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert same.
@@ -4394,12 +4393,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -4411,14 +4410,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -4448,8 +4447,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -4461,10 +4460,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert same.
@@ -4476,12 +4475,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert end.
@@ -4493,14 +4492,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -4530,8 +4529,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -4543,10 +4542,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert same.
@@ -4558,12 +4557,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert end.
@@ -4575,14 +4574,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -4942,7 +4941,7 @@ public class ListBoxObjectCollectionTests
         collection.Insert(3, 3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -4956,14 +4955,14 @@ public class ListBoxObjectCollectionTests
         collection.Insert(3, 3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -5228,10 +5227,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -5243,10 +5242,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -5258,8 +5257,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -5271,7 +5270,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -5303,10 +5302,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -5319,10 +5318,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -5335,8 +5334,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -5348,7 +5347,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -5380,10 +5379,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -5395,10 +5394,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -5410,8 +5409,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -5423,7 +5422,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -5458,10 +5457,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -5474,10 +5473,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -5490,8 +5489,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -5503,7 +5502,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -6141,10 +6140,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -6156,8 +6155,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -6169,7 +6168,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -6201,10 +6200,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -6217,8 +6216,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -6230,7 +6229,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -6262,10 +6261,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -6277,8 +6276,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -6290,7 +6289,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -6325,10 +6324,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -6341,8 +6340,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -6354,7 +6353,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -7095,12 +7094,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -7112,12 +7111,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -7129,12 +7128,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -7146,12 +7145,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 
@@ -7186,12 +7185,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -7203,12 +7202,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -7220,12 +7219,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -7237,12 +7236,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 #endif
@@ -7275,12 +7274,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -7292,12 +7291,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -7309,12 +7308,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -7326,12 +7325,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 
@@ -7366,12 +7365,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set middle.
@@ -7383,12 +7382,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Set last.
@@ -7400,12 +7399,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
 
         // Set same.
@@ -7417,12 +7416,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("4", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("5", new string(textBuffer));
     }
 
@@ -8243,8 +8242,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -8256,10 +8255,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add same.
@@ -8271,12 +8270,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add another.
@@ -8288,14 +8287,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -8322,8 +8321,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -8335,10 +8334,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add same.
@@ -8350,12 +8349,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Add another.
@@ -8367,14 +8366,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -8404,8 +8403,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -8417,10 +8416,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add same.
@@ -8432,12 +8431,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -8449,14 +8448,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -8486,8 +8485,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -8499,10 +8498,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add same.
@@ -8514,12 +8513,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Add another.
@@ -8531,14 +8530,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -8906,7 +8905,7 @@ public class ListBoxObjectCollectionTests
         collection.Add(3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -8920,14 +8919,14 @@ public class ListBoxObjectCollectionTests
         collection.Add(3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -9077,7 +9076,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -9089,7 +9088,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -9114,7 +9113,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -9126,7 +9125,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -9152,7 +9151,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -9164,7 +9163,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -9190,7 +9189,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
 
         // Call again.
         collection.Clear();
@@ -9202,7 +9201,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -9571,8 +9570,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -9584,10 +9583,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert same.
@@ -9599,12 +9598,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -9616,14 +9615,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -9650,8 +9649,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -9663,10 +9662,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert same.
@@ -9678,12 +9677,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -9695,14 +9694,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -9732,8 +9731,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -9745,10 +9744,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert same.
@@ -9760,12 +9759,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert end.
@@ -9777,14 +9776,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -9814,8 +9813,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Insert end.
@@ -9827,10 +9826,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert same.
@@ -9842,12 +9841,12 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(3, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Insert end.
@@ -9859,14 +9858,14 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -10226,7 +10225,7 @@ public class ListBoxObjectCollectionTests
         collection.Insert(3, 3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -10240,14 +10239,14 @@ public class ListBoxObjectCollectionTests
         collection.Insert(3, 3);
         char* textBuffer = stackalloc char[256];
 
-        Assert.Equal(4, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(4, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 2, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 2, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 3, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 3, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
     }
 
@@ -10512,10 +10511,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -10527,10 +10526,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -10542,8 +10541,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -10555,7 +10554,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -10587,10 +10586,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -10603,10 +10602,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -10619,8 +10618,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -10632,7 +10631,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -10664,10 +10663,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -10679,10 +10678,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -10694,8 +10693,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -10707,7 +10706,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -10742,10 +10741,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove again.
@@ -10758,10 +10757,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -10774,8 +10773,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -10787,7 +10786,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -11425,10 +11424,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -11440,8 +11439,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -11453,7 +11452,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -11485,10 +11484,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -11501,8 +11500,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("2", new string(textBuffer));
 
         // Remove first.
@@ -11514,7 +11513,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -11546,10 +11545,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -11561,8 +11560,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -11574,7 +11573,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -11609,10 +11608,10 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(2, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 1, (nint)textBuffer);
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 1, (nint)textBuffer);
         Assert.Equal("3", new string(textBuffer));
 
         // Remove last.
@@ -11625,8 +11624,8 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(1, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
-        PInvoke.SendMessage(owner, (WM)LB.GETTEXT, 0, (nint)textBuffer);
+        Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
+        PInvoke.SendMessage(owner, PInvoke.LB_GETTEXT, 0, (nint)textBuffer);
         Assert.Equal("1", new string(textBuffer));
 
         // Remove first.
@@ -11638,7 +11637,7 @@ public class ListBoxObjectCollectionTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
-        Assert.Equal(0, (int)PInvoke.SendMessage(owner, (WM)LB.GETCOUNT));
+        Assert.Equal(0, (int)PInvoke.SendMessage(owner, PInvoke.LB_GETCOUNT));
     }
 
     [WinFormsFact]
@@ -12132,7 +12131,7 @@ public class ListBoxObjectCollectionTests
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == (int)LB.ADDSTRING)
+            if (m.Msg == (int)PInvoke.LB_ADDSTRING)
             {
                 m.Result = AddStringResult;
                 return;
@@ -12148,7 +12147,7 @@ public class ListBoxObjectCollectionTests
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == (int)LB.INSERTSTRING)
+            if (m.Msg == (int)PInvoke.LB_INSERTSTRING)
             {
                 m.Result = InsertStringResult;
                 return;

@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -54,8 +53,8 @@ public partial class ToolStripPanel
                     while (PInvoke.PeekMessage(
                         &msg,
                         HWND.Null,
-                        (uint)User32.WM.PAINT,
-                        (uint)User32.WM.PAINT,
+                        (uint)PInvoke.WM_PAINT,
+                        (uint)PInvoke.WM_PAINT,
                         PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
                     {
                         PInvoke.UpdateWindow(msg.hwnd);
@@ -102,9 +101,9 @@ public partial class ToolStripPanel
 
             protected override void WndProc(ref Message m)
             {
-                if (m.MsgInternal == User32.WM.NCHITTEST)
+                if (m.MsgInternal == PInvoke.WM_NCHITTEST)
                 {
-                    m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.HTTRANSPARENT;
                 }
 
                 base.WndProc(ref m);

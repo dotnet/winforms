@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System;
 
 /// <summary>
@@ -13,7 +11,7 @@ public static class GdiHelper
 {
     static GdiHelper()
     {
-        using var dc = User32.GetDcScope.ScreenDC;
+        using var dc = GetDcScope.ScreenDC;
         LogicalPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
         LogicalPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
     }

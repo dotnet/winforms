@@ -299,7 +299,7 @@ public partial class LinkLabel : Label, IButtonControl
                 PInvoke.GetWindowRect(this, out var r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
-                    PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
                 }
             }
         }
@@ -422,6 +422,22 @@ public partial class LinkLabel : Label, IButtonControl
     }
 
     protected override AccessibleObject CreateAccessibilityInstance() => new LinkLabelAccessibleObject(this);
+
+    internal override void ReleaseUiaProvider(HWND handle)
+    {
+        base.ReleaseUiaProvider(handle);
+
+        if (OsVersion.IsWindows8OrGreater())
+        {
+            foreach (Link link in _links)
+            {
+                if (link.IsAccessibilityObjectCreated)
+                {
+                    UiaCore.UiaDisconnectProvider(link.AccessibleObject);
+                }
+            }
+        }
+    }
 
     protected override void CreateHandle()
     {
@@ -557,7 +573,7 @@ public partial class LinkLabel : Label, IButtonControl
             }
 
             using var hfont = GdiCache.GetHFONT(Font);
-            User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
+            DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
 
             iLeftMargin = dtParams.iLeftMargin;
             iRightMargin = dtParams.iRightMargin;
@@ -1748,7 +1764,7 @@ public partial class LinkLabel : Label, IButtonControl
     private void WmSetCursor(ref Message m)
     {
         // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-        if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
+        if ((HWND)m.WParamInternal == InternalHandle && m.LParamInternal.LOWORD == PInvoke.HTCLIENT)
         {
             Cursor.Current = OverrideCursor ?? Cursor;
         }
@@ -1760,9 +1776,9 @@ public partial class LinkLabel : Label, IButtonControl
 
     protected override void WndProc(ref Message msg)
     {
-        switch ((User32.WM)msg.Msg)
+        switch (msg.MsgInternal)
         {
-            case User32.WM.SETCURSOR:
+            case PInvoke.WM_SETCURSOR:
                 WmSetCursor(ref msg);
                 break;
             default:

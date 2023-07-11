@@ -2479,9 +2479,9 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.CONTEXTMENU:
+            case PInvoke.WM_CONTEXTMENU:
                 if (GetHitTest(PARAM.ToPoint(m.LParamInternal)))
                 {
                     return;
@@ -2489,8 +2489,8 @@ internal class ToolStripDesigner : ControlDesigner
 
                 base.WndProc(ref m);
                 break;
-            case User32.WM.LBUTTONDOWN:
-            case User32.WM.RBUTTONDOWN:
+            case PInvoke.WM_LBUTTONDOWN:
+            case PInvoke.WM_RBUTTONDOWN:
                 // commit any insitu if any...
                 Commit();
                 base.WndProc(ref m);

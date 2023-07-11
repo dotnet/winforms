@@ -117,6 +117,10 @@ public class GlyphCollection : CollectionBase
     /// </summary>
     public void Remove(Glyph value)
     {
-        List.Remove(value);
+        // Its possible that the value doesn't exist in the list in case of an `Undo` operation
+        if (List.Contains(value))
+        {
+            List.Remove(value);
+        }
     }
 }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -31,9 +30,9 @@ internal partial class MdiControlStrip : MenuStrip
         _target = target;
 
         // The menu item itself takes care of enabledness and sending WM_SYSCOMMAND messages to the target.
-        _minimize = new ControlBoxMenuItem(hMenu, User32.SC.MINIMIZE, target);
-        _close = new ControlBoxMenuItem(hMenu, User32.SC.CLOSE, target);
-        _restore = new ControlBoxMenuItem(hMenu, User32.SC.RESTORE, target);
+        _minimize = new ControlBoxMenuItem(hMenu, PInvoke.SC_MINIMIZE, target);
+        _close = new ControlBoxMenuItem(hMenu, PInvoke.SC_CLOSE, target);
+        _restore = new ControlBoxMenuItem(hMenu, PInvoke.SC_RESTORE, target);
 
         // The dropDown of the system menu is the one that talks to native.
         _system = new SystemMenuItem();
@@ -94,7 +93,7 @@ internal partial class MdiControlStrip : MenuStrip
 
     private Image GetTargetWindowIcon()
     {
-        HICON hIcon = (HICON)PInvoke.SendMessage(GetSafeHandle(_target), User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        HICON hIcon = (HICON)PInvoke.SendMessage(GetSafeHandle(_target), PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Icon icon = !hIcon.IsNull ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
         Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
@@ -134,11 +133,11 @@ internal partial class MdiControlStrip : MenuStrip
         _close.SetNativeTargetWindow(_target);
         _restore.SetNativeTargetWindow(_target);
 
-        HMENU hMenu = PInvoke.GetSystemMenu(Control.GetSafeHandle(_target), bRevert: false);
-        _system.SetNativeTargetMenu(hMenu);
-        _minimize.SetNativeTargetMenu(hMenu);
-        _close.SetNativeTargetMenu(hMenu);
-        _restore.SetNativeTargetMenu(hMenu);
+        HMENU hmenu = PInvoke.GetSystemMenu(GetSafeHandle(_target), bRevert: false);
+        _system.SetNativeTargetMenu(hmenu);
+        _minimize.SetNativeTargetMenu(hmenu);
+        _close.SetNativeTargetMenu(hmenu);
+        _restore.SetNativeTargetMenu(hmenu);
 
         // clear off the System DropDown.
         if (_system.HasDropDownItems)

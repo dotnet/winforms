@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32;
 
@@ -19,8 +20,7 @@ public unsafe class IPictureTests
 
         using var picture = IPicture.CreateFromIcon(Icon.FromHandle(arrow.Handle), copy: true);
         Assert.False(picture.IsNull);
-        short type = picture.Value->Type;
-        Assert.Equal((short)PICTYPE.PICTYPE_ICON, type);
+        Assert.Equal(PICTYPE.PICTYPE_ICON, picture.Value->Type);
 
         int height = picture.Value->Height;
         Assert.Equal(arrow.Size.Height, GdiHelper.HimetricToPixelY(height));
@@ -36,8 +36,7 @@ public unsafe class IPictureTests
         using Bitmap bitmap = icon.ToBitmap();
         using var picture = IPicture.CreateFromImage(bitmap);
         Assert.False(picture.IsNull);
-        short type = picture.Value->Type;
-        Assert.Equal((short)PICTYPE.PICTYPE_BITMAP, type);
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, picture.Value->Type);
 
         int height = picture.Value->Height;
         Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY(height));

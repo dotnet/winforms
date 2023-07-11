@@ -125,12 +125,6 @@ public partial class Button : ButtonBase, IButtonControl
         return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
     }
 
-    /// <summary>
-    ///  This is called when creating a window. Inheriting classes can override
-    ///  this to add extra functionality, but should not forget to first call
-    ///  base.CreateParams() to make sure the control continues to work
-    ///  correctly.
-    /// </summary>
     protected override CreateParams CreateParams
     {
         get
@@ -139,14 +133,14 @@ public partial class Button : ButtonBase, IButtonControl
             cp.ClassName = PInvoke.WC_BUTTON;
             if (GetStyle(ControlStyles.UserPaint))
             {
-                cp.Style |= (int)User32.BS.OWNERDRAW;
+                cp.Style |= PInvoke.BS_OWNERDRAW;
             }
             else
             {
-                cp.Style |= (int)User32.BS.PUSHBUTTON;
+                cp.Style |= PInvoke.BS_PUSHBUTTON;
                 if (IsDefault)
                 {
-                    cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
+                    cp.Style |= PInvoke.BS_DEFPUSHBUTTON;
                 }
             }
 
@@ -364,8 +358,8 @@ public partial class Button : ButtonBase, IButtonControl
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.REFLECT_COMMAND:
-                if ((User32.BN)m.WParamInternal.HIWORD == User32.BN.CLICKED)
+            case MessageId.WM_REFLECT_COMMAND:
+                if (m.WParamInternal.HIWORD == PInvoke.BN_CLICKED)
                 {
                     if (!ValidationCancelled)
                     {
@@ -374,7 +368,7 @@ public partial class Button : ButtonBase, IButtonControl
                 }
 
                 break;
-            case User32.WM.ERASEBKGND:
+            case PInvoke.WM_ERASEBKGND:
                 DefWndProc(ref m);
                 break;
             default:

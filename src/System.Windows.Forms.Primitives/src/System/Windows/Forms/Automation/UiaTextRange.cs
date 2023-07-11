@@ -5,9 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
 using static Interop.UiaCore;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Automation;
 
@@ -577,12 +575,12 @@ internal class UiaTextRange : ITextRangeProvider
         return textAttributeIdentifier switch
         {
             TextAttributeIdentifier.BackgroundColorAttributeId => GetBackgroundColor(),
-            TextAttributeIdentifier.CapStyleAttributeId => GetCapStyle(_provider.EditStyle),
+            TextAttributeIdentifier.CapStyleAttributeId => GetCapStyle(_provider.WindowStyle),
             TextAttributeIdentifier.FontNameAttributeId => GetFontName(_provider.Logfont),
             TextAttributeIdentifier.FontSizeAttributeId => GetFontSize(_provider.Logfont),
             TextAttributeIdentifier.FontWeightAttributeId => GetFontWeight(_provider.Logfont),
             TextAttributeIdentifier.ForegroundColorAttributeId => GetForegroundColor(),
-            TextAttributeIdentifier.HorizontalTextAlignmentAttributeId => GetHorizontalTextAlignment(_provider.EditStyle),
+            TextAttributeIdentifier.HorizontalTextAlignmentAttributeId => GetHorizontalTextAlignment(_provider.WindowStyle),
             TextAttributeIdentifier.IsItalicAttributeId => GetItalic(_provider.Logfont),
             TextAttributeIdentifier.IsReadOnlyAttributeId => GetReadOnly(),
             TextAttributeIdentifier.StrikethroughStyleAttributeId => GetStrikethroughStyle(_provider.Logfont),
@@ -751,14 +749,14 @@ internal class UiaTextRange : ITextRangeProvider
         }
     }
 
-    private static HorizontalTextAlignment GetHorizontalTextAlignment(ES editStyle)
+    private static HorizontalTextAlignment GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
     {
-        if (editStyle.HasFlag(ES.CENTER))
+        if (((int)windowStyle & PInvoke.ES_CENTER) != 0)
         {
             return HorizontalTextAlignment.Centered;
         }
 
-        if (editStyle.HasFlag(ES.RIGHT))
+        if (((int)windowStyle & PInvoke.ES_RIGHT) != 0)
         {
             return HorizontalTextAlignment.Right;
         }
@@ -766,7 +764,8 @@ internal class UiaTextRange : ITextRangeProvider
         return HorizontalTextAlignment.Left;
     }
 
-    private static CapStyle GetCapStyle(ES editStyle) => editStyle.HasFlag(ES.UPPERCASE) ? CapStyle.AllCap : CapStyle.None;
+    private static CapStyle GetCapStyle(WINDOW_STYLE windowStyle)
+        => ((int)windowStyle & PInvoke.ES_UPPERCASE) != 0 ? CapStyle.AllCap : CapStyle.None;
 
     private bool GetReadOnly() => _provider.IsReadOnly;
 
@@ -778,7 +777,7 @@ internal class UiaTextRange : ITextRangeProvider
     {
         // Note: this assumes integral point sizes. violating this assumption would confuse the user
         // because they set something to 7 point but reports that it is, say 7.2 point, due to the rounding.
-        using var dc = User32.GetDcScope.ScreenDC;
+        using var dc = GetDcScope.ScreenDC;
         int lpy = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
         return Math.Round((double)(-logfont.lfHeight) * 72 / lpy);
     }

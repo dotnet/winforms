@@ -910,9 +910,19 @@
         <target state="translated">Zadokuj w kontenerze nadrzędnym</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutHorizontalOrientation">
+        <source>Horizontal Splitter Orientation.</source>
+        <target state="translated">Pozioma orientacja rozdzielacza.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
         <target state="translated">Oddokuj w kontenerze nadrzędnym</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutVerticalOrientation">
+        <source>Vertical Splitter Orientation.</source>
+        <target state="translated">Pionowa orientacja rozdzielacza.</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">

@@ -910,9 +910,19 @@
         <target state="translated">在父容器中停靠</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutHorizontalOrientation">
+        <source>Horizontal Splitter Orientation.</source>
+        <target state="translated">水平拆分器方向。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
         <target state="translated">取消在父容器中停靠</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutVerticalOrientation">
+        <source>Vertical Splitter Orientation.</source>
+        <target state="translated">垂直拆分器方向。</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">

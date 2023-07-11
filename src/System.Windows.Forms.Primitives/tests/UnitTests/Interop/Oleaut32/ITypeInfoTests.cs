@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32;
 
@@ -190,9 +191,9 @@ public class ITypeInfoTests
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
 
-        int implTypeFlags = -1;
+        IMPLTYPEFLAGS implTypeFlags = (IMPLTYPEFLAGS)(-1);
         typeInfo.Value->GetImplTypeFlags(0, &implTypeFlags);
-        Assert.NotEqual((int)IMPLTYPEFLAGS.IMPLTYPEFLAG_FDEFAULT, implTypeFlags);
+        Assert.NotEqual(IMPLTYPEFLAGS.IMPLTYPEFLAG_FDEFAULT, implTypeFlags);
     }
 
     [StaFact]

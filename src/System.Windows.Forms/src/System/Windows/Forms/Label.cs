@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.SystemServices;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -250,7 +251,7 @@ public partial class Label : Control, IAutomationLiveRegion
                 // An unfortunate side effect of this style is Windows sends us WM_DRAWITEM
                 // messages instead of WM_PAINT, but since Windows insists on repainting
                 // *without* a WM_PAINT after SetWindowText, I don't see much choice.
-                cp.Style |= (int)User32.SS.OWNERDRAW;
+                cp.Style |= (int)STATIC_STYLES.SS_OWNERDRAW;
 
                 // Since we're owner draw, I don't see any point in setting the
                 // SS_CENTER/SS_RIGHT styles.
@@ -264,23 +265,23 @@ public partial class Label : Control, IAutomationLiveRegion
                     case ContentAlignment.TopLeft:
                     case ContentAlignment.MiddleLeft:
                     case ContentAlignment.BottomLeft:
-                        cp.Style |= (int)User32.SS.LEFT;
+                        cp.Style |= (int)STATIC_STYLES.SS_LEFT;
                         break;
                     case ContentAlignment.TopRight:
                     case ContentAlignment.MiddleRight:
                     case ContentAlignment.BottomRight:
-                        cp.Style |= (int)User32.SS.RIGHT;
+                        cp.Style |= (int)STATIC_STYLES.SS_RIGHT;
                         break;
                     case ContentAlignment.TopCenter:
                     case ContentAlignment.MiddleCenter:
                     case ContentAlignment.BottomCenter:
-                        cp.Style |= (int)User32.SS.CENTER;
+                        cp.Style |= (int)STATIC_STYLES.SS_CENTER;
                         break;
                 }
             }
             else
             {
-                cp.Style |= (int)User32.SS.LEFT;
+                cp.Style |= (int)STATIC_STYLES.SS_LEFT;
             }
 
             switch (BorderStyle)
@@ -289,13 +290,13 @@ public partial class Label : Control, IAutomationLiveRegion
                     cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                     break;
                 case BorderStyle.Fixed3D:
-                    cp.Style |= (int)User32.SS.SUNKEN;
+                    cp.Style |= (int)STATIC_STYLES.SS_SUNKEN;
                     break;
             }
 
             if (!UseMnemonic)
             {
-                cp.Style |= (int)User32.SS.NOPREFIX;
+                cp.Style |= (int)STATIC_STYLES.SS_NOPREFIX;
             }
 
             return cp;
@@ -805,11 +806,11 @@ public partial class Label : Control, IAutomationLiveRegion
                 WINDOW_STYLE style = WindowStyle;
                 if (!UseMnemonic)
                 {
-                    style |= (WINDOW_STYLE)User32.SS.NOPREFIX;
+                    style |= (WINDOW_STYLE)STATIC_STYLES.SS_NOPREFIX;
                 }
                 else
                 {
-                    style &= ~(WINDOW_STYLE)User32.SS.NOPREFIX;
+                    style &= ~(WINDOW_STYLE)STATIC_STYLES.SS_NOPREFIX;
                 }
 
                 WindowStyle = style;
@@ -1142,7 +1143,7 @@ public partial class Label : Control, IAutomationLiveRegion
         }
 
         using var hfont = GdiCache.GetHFONT(Font);
-        User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
+        DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
 
         // This is actually leading margin.
         return dtParams.iLeftMargin;
@@ -1446,15 +1447,15 @@ public partial class Label : Control, IAutomationLiveRegion
 
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.NCHITTEST:
+            case PInvoke.WM_NCHITTEST:
                 // Label returns HT_TRANSPARENT for everything, so all messages get routed to the parent.  Change
                 // this so we can tell what's going on.
 
                 Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
                 Point pt = new Point((int)m.LParamInternal);
-                m.ResultInternal = (LRESULT)(nint)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
+                m.ResultInternal = (LRESULT)(nint)(rectInScreen.Contains(pt) ? PInvoke.HTCLIENT : PInvoke.HTNOWHERE);
                 break;
 
             default:

@@ -2,19 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -66,12 +62,12 @@ public partial class ComboBox : ListControl
     // style is non-simple, the height of the control is determined by the OS.
     private int _requestedHeight;
 
-    private ComboBoxChildNativeWindow _childDropDown;
-    private ComboBoxChildNativeWindow _childEdit;
-    private ComboBoxChildNativeWindow _childListBox;
+    private ComboBoxChildNativeWindow? _childDropDown;
+    private ComboBoxChildNativeWindow? _childEdit;
+    private ComboBoxChildNativeWindow? _childListBox;
 
     private HWND _dropDownHandle;
-    private ObjectCollection _itemsCollection;
+    private ObjectCollection? _itemsCollection;
     private short _prefHeightCache = -1;
     private short _maxDropDownItems = 8;
     private bool _integralHeight = true;
@@ -90,7 +86,7 @@ public partial class ComboBox : ListControl
     // selects the item in the edit thus changing the windowText. Hence we should Fire the TextChanged event in
     // such a scenario. The string below is used for checking the window Text before and after the dropdown.
     private string _currentText = string.Empty;
-    private string _lastTextChangedValue;
+    private string? _lastTextChangedValue;
     private bool _dropDown;
     private readonly AutoCompleteDropDownFinder _finder = new AutoCompleteDropDownFinder();
 
@@ -101,13 +97,13 @@ public partial class ComboBox : ListControl
     /// <summary>
     ///  This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
     /// </summary>
-    private AutoCompleteStringCollection _autoCompleteCustomSource;
-    private StringSource _stringSource;
+    private AutoCompleteStringCollection? _autoCompleteCustomSource;
+    private StringSource? _stringSource;
     private bool _fromHandleCreate;
 
-    private ComboBoxChildListUiaProvider _childListAccessibleObject;
-    private ComboBoxChildEditUiaProvider _childEditAccessibleObject;
-    private ComboBoxChildTextUiaProvider _childTextAccessibleObject;
+    private ComboBoxChildListUiaProvider? _childListAccessibleObject;
+    private ComboBoxChildEditUiaProvider? _childEditAccessibleObject;
+    private ComboBoxChildTextUiaProvider? _childTextAccessibleObject;
 
     // Indicates whether the dropdown list will be closed after selection (on getting CBN_SELENDOK notification)
     // to prevent focusing on the list item after hiding the list.
@@ -216,6 +212,7 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxAutoCompleteCustomSourceDescr))]
     [Editor($"System.Windows.Forms.Design.ListControlStringCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [Browsable(true)]
+    [AllowNull]
     [EditorBrowsable(EditorBrowsableState.Always)]
     public AutoCompleteStringCollection AutoCompleteCustomSource
     {
@@ -272,7 +269,7 @@ public partial class ComboBox : ListControl
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
+    public override Image? BackgroundImage
     {
         get => base.BackgroundImage;
         set => base.BackgroundImage = value;
@@ -288,7 +285,7 @@ public partial class ComboBox : ListControl
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
+    public new event EventHandler? BackgroundImageChanged
     {
         add => base.BackgroundImageChanged += value;
         remove => base.BackgroundImageChanged -= value;
@@ -296,7 +293,7 @@ public partial class ComboBox : ListControl
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler? BackgroundImageLayoutChanged
     {
         add => base.BackgroundImageLayoutChanged += value;
         remove => base.BackgroundImageLayoutChanged -= value;
@@ -306,7 +303,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            _childEditAccessibleObject ??= new ComboBoxChildEditUiaProvider(this, _childEdit.Handle);
+            _childEditAccessibleObject ??= new ComboBoxChildEditUiaProvider(this, _childEdit!.Handle);
 
             return _childEditAccessibleObject;
         }
@@ -317,7 +314,7 @@ public partial class ComboBox : ListControl
         get
         {
             _childListAccessibleObject ??=
-                    new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle);
+                    new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox!.Handle : _dropDownHandle);
 
             return _childListAccessibleObject;
         }
@@ -337,37 +334,31 @@ public partial class ComboBox : ListControl
 
     internal void ClearChildListAccessibleObject() => _childListAccessibleObject = null;
 
-    /// <summary>
-    ///  Returns the parameters needed to create the handle.  Inheriting classes
-    ///  can override this to provide extra functionality.  They should not,
-    ///  however, forget to call base.CreateParams() first to get the struct
-    ///  filled up with the basic info.
-    /// </summary>
     protected override CreateParams CreateParams
     {
         get
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_COMBOBOX;
-            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
+            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | PInvoke.CBS_HASSTRINGS | PInvoke.CBS_AUTOHSCROLL;
             cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
             if (!_integralHeight)
             {
-                cp.Style |= (int)CBS.NOINTEGRALHEIGHT;
+                cp.Style |= PInvoke.CBS_NOINTEGRALHEIGHT;
             }
 
             switch (DropDownStyle)
             {
                 case ComboBoxStyle.Simple:
-                    cp.Style |= (int)CBS.SIMPLE;
+                    cp.Style |= PInvoke.CBS_SIMPLE;
                     break;
                 case ComboBoxStyle.DropDown:
-                    cp.Style |= (int)CBS.DROPDOWN;
+                    cp.Style |= PInvoke.CBS_DROPDOWN;
                     // Make sure we put the height back or we won't be able to size the dropdown!
                     cp.Height = PreferredHeight;
                     break;
                 case ComboBoxStyle.DropDownList:
-                    cp.Style |= (int)CBS.DROPDOWNLIST;
+                    cp.Style |= PInvoke.CBS_DROPDOWNLIST;
                     // Comment above...
                     cp.Height = PreferredHeight;
                     break;
@@ -376,10 +367,10 @@ public partial class ComboBox : ListControl
             switch (DrawMode)
             {
                 case DrawMode.OwnerDrawFixed:
-                    cp.Style |= (int)CBS.OWNERDRAWFIXED;
+                    cp.Style |= PInvoke.CBS_OWNERDRAWFIXED;
                     break;
                 case DrawMode.OwnerDrawVariable:
-                    cp.Style |= (int)CBS.OWNERDRAWVARIABLE;
+                    cp.Style |= PInvoke.CBS_OWNERDRAWVARIABLE;
                     break;
             }
 
@@ -408,7 +399,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint),
     AttributeProvider(typeof(IListSource))]
     [SRDescription(nameof(SR.ListControlDataSourceDescr))]
-    public new object DataSource
+    public new object? DataSource
     {
         get => base.DataSource;
         set => base.DataSource = value;
@@ -474,7 +465,7 @@ public partial class ComboBox : ListControl
                 Properties.SetInteger(PropDropDownWidth, value);
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
+                    PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
                 }
             }
         }
@@ -535,7 +526,7 @@ public partial class ComboBox : ListControl
         {
             if (IsHandleCreated)
             {
-                return (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETDROPPEDSTATE) != 0;
+                return (int)PInvoke.SendMessage(this, PInvoke.CB_GETDROPPEDSTATE) != 0;
             }
 
             return false;
@@ -547,7 +538,7 @@ public partial class ComboBox : ListControl
                 CreateHandle();
             }
 
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_SHOWDROPDOWN, (WPARAM)(value ? -1 : 0));
+            PInvoke.SendMessage(this, PInvoke.CB_SHOWDROPDOWN, (WPARAM)(value ? -1 : 0));
         }
     }
 
@@ -663,14 +654,14 @@ public partial class ComboBox : ListControl
                 }
                 else
                 {
-                    return FontHeight + 2;   //
+                    return FontHeight + 2;
                 }
             }
 
             // Note that the above if clause deals with the case when the handle has not yet been created
             Debug.Assert(IsHandleCreated, "Handle should be created at this point");
 
-            int h = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT);
+            int h = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT);
             if (h == -1)
             {
                 throw new Win32Exception();
@@ -724,7 +715,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            string matchingText = (string)Properties.GetObject(PropMatchingText);
+            string? matchingText = (string?)Properties.GetObject(PropMatchingText);
             return matchingText ?? string.Empty;
         }
         set
@@ -799,7 +790,7 @@ public partial class ComboBox : ListControl
                 Properties.SetInteger(PropMaxLength, value);
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (WM)PInvoke.CB_LIMITTEXT, (WPARAM)value);
+                    PInvoke.SendMessage(this, PInvoke.CB_LIMITTEXT, (WPARAM)value);
                 }
             }
         }
@@ -839,7 +830,7 @@ public partial class ComboBox : ListControl
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler PaddingChanged
+    public new event EventHandler? PaddingChanged
     {
         add => base.PaddingChanged += value;
         remove => base.PaddingChanged -= value;
@@ -955,12 +946,12 @@ public partial class ComboBox : ListControl
 
             return strings;
         }
-        else if (collection is ObjectCollection)
+        else if (collection is ObjectCollection && _itemsCollection is not null)
         {
             string[] strings = new string[_itemsCollection.Count];
             for (int i = 0; i < _itemsCollection.Count; i++)
             {
-                strings[i] = GetItemText(_itemsCollection[i]);
+                strings[i] = GetItemText(_itemsCollection[i])!;
             }
 
             return strings;
@@ -983,7 +974,7 @@ public partial class ComboBox : ListControl
         {
             if (IsHandleCreated)
             {
-                return (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETCURSEL);
+                return (int)PInvoke.SendMessage(this, PInvoke.CB_GETCURSEL);
             }
 
             return _selectedIndex;
@@ -1005,7 +996,7 @@ public partial class ComboBox : ListControl
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)value);
+                    PInvoke.SendMessage(this, PInvoke.CB_SETCURSEL, (WPARAM)value);
                 }
                 else
                 {
@@ -1033,7 +1024,7 @@ public partial class ComboBox : ListControl
     [Bindable(true)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.ComboBoxSelectedItemDescr))]
-    public object SelectedItem
+    public object? SelectedItem
     {
         get
         {
@@ -1046,7 +1037,6 @@ public partial class ComboBox : ListControl
 
             if (_itemsCollection is not null)
             {
-                //
                 if (value is not null)
                 {
                     x = _itemsCollection.IndexOf(value);
@@ -1070,6 +1060,7 @@ public partial class ComboBox : ListControl
     ///  string ("").
     /// </summary>
     [Browsable(false)]
+    [AllowNull]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.ComboBoxSelectedTextDescr))]
     public string SelectedText
@@ -1078,7 +1069,7 @@ public partial class ComboBox : ListControl
         {
             if (DropDownStyle == ComboBoxStyle.DropDownList)
             {
-                return "";
+                return string.Empty;
             }
 
             return Text.Substring(SelectionStart, SelectionLength);
@@ -1090,7 +1081,7 @@ public partial class ComboBox : ListControl
                 CreateControl();
                 if (IsHandleCreated && _childEdit is not null)
                 {
-                    PInvoke.SendMessage(_childEdit, (WM)EM.REPLACESEL, (WPARAM)(-1), value ?? string.Empty);
+                    PInvoke.SendMessage(_childEdit, PInvoke.EM_REPLACESEL, (WPARAM)(-1), value ?? string.Empty);
                 }
             }
         }
@@ -1108,7 +1099,7 @@ public partial class ComboBox : ListControl
         {
             int end = 0;
             int start = 0;
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_GETEDITSEL, (WPARAM)(&start), (LPARAM)(&end));
+            PInvoke.SendMessage(this, PInvoke.CB_GETEDITSEL, (WPARAM)(&start), (LPARAM)(&end));
             return end - start;
         }
         set
@@ -1129,7 +1120,7 @@ public partial class ComboBox : ListControl
         get
         {
             int value = 0;
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_GETEDITSEL, (WPARAM)(&value));
+            PInvoke.SendMessage(this, PInvoke.CB_GETEDITSEL, (WPARAM)(&value));
             return value;
         }
         set
@@ -1226,6 +1217,7 @@ public partial class ComboBox : ListControl
 
     [Localizable(true)]
     [Bindable(true)]
+    [AllowNull]
     public override string Text
     {
         get
@@ -1235,7 +1227,7 @@ public partial class ComboBox : ListControl
                 //preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
                 if (FormattingEnabled)
                 {
-                    string candidate = GetItemText(SelectedItem);
+                    string? candidate = GetItemText(SelectedItem);
                     if (!string.IsNullOrEmpty(candidate))
                     {
                         if (string.Compare(candidate, base.Text, true, CultureInfo.CurrentCulture) == 0)
@@ -1246,7 +1238,7 @@ public partial class ComboBox : ListControl
                 }
                 else
                 {
-                    return FilterItemOnProperty(SelectedItem).ToString();       //heinous.
+                    return FilterItemOnProperty(SelectedItem)!.ToString()!;       //heinous.
                 }
             }
 
@@ -1260,14 +1252,12 @@ public partial class ComboBox : ListControl
             }
 
             base.Text = value;
-            object selectedItem = null;
+            object? selectedItem = null;
 
             selectedItem = SelectedItem;
 
             if (!DesignMode)
             {
-                //
-
                 if (value is null)
                 {
                     SelectedIndex = -1;
@@ -1363,7 +1353,7 @@ public partial class ComboBox : ListControl
     // Prevent this event from being displayed in the Property Grid.
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler DoubleClick
+    public new event EventHandler? DoubleClick
     {
         add => base.DoubleClick += value;
         remove => base.DoubleClick -= value;
@@ -1371,7 +1361,7 @@ public partial class ComboBox : ListControl
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.drawItemEventDescr))]
-    public event DrawItemEventHandler DrawItem
+    public event DrawItemEventHandler? DrawItem
     {
         add => Events.AddHandler(EVENT_DRAWITEM, value);
         remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
@@ -1379,7 +1369,7 @@ public partial class ComboBox : ListControl
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
-    public event EventHandler DropDown
+    public event EventHandler? DropDown
     {
         add => Events.AddHandler(EVENT_DROPDOWN, value);
         remove => Events.RemoveHandler(EVENT_DROPDOWN, value);
@@ -1387,7 +1377,7 @@ public partial class ComboBox : ListControl
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.measureItemEventDescr))]
-    public event MeasureItemEventHandler MeasureItem
+    public event MeasureItemEventHandler? MeasureItem
     {
         add
         {
@@ -1403,7 +1393,7 @@ public partial class ComboBox : ListControl
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
-    public event EventHandler SelectedIndexChanged
+    public event EventHandler? SelectedIndexChanged
     {
         add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
         remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -1411,7 +1401,7 @@ public partial class ComboBox : ListControl
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.selectionChangeCommittedEventDescr))]
-    public event EventHandler SelectionChangeCommitted
+    public event EventHandler? SelectionChangeCommitted
     {
         add => Events.AddHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
         remove => Events.RemoveHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
@@ -1419,7 +1409,7 @@ public partial class ComboBox : ListControl
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
-    public event EventHandler DropDownStyleChanged
+    public event EventHandler? DropDownStyleChanged
     {
         add => Events.AddHandler(EVENT_DROPDOWNSTYLE, value);
         remove => Events.RemoveHandler(EVENT_DROPDOWNSTYLE, value);
@@ -1431,7 +1421,7 @@ public partial class ComboBox : ListControl
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event PaintEventHandler Paint
+    public new event PaintEventHandler? Paint
     {
         add => base.Paint += value;
         remove => base.Paint -= value;
@@ -1443,7 +1433,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
-    public event EventHandler TextUpdate
+    public event EventHandler? TextUpdate
     {
         add => Events.AddHandler(EVENT_TEXTUPDATE, value);
         remove => Events.RemoveHandler(EVENT_TEXTUPDATE, value);
@@ -1455,7 +1445,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
-    public event EventHandler DropDownClosed
+    public event EventHandler? DropDownClosed
     {
         add => Events.AddHandler(EVENT_DROPDOWNCLOSED, value);
         remove => Events.RemoveHandler(EVENT_DROPDOWNCLOSED, value);
@@ -1465,10 +1455,9 @@ public partial class ComboBox : ListControl
     ///  Performs the work of adding the specified items to the combobox
     /// </summary>
     [Obsolete("This method has been deprecated.  There is no replacement.  https://go.microsoft.com/fwlink/?linkid=14202")]
-    protected virtual void AddItemsCore(object[] value)
+    protected virtual void AddItemsCore(object[]? value)
     {
-        int count = value is null ? 0 : value.Length;
-        if (count == 0)
+        if (value is null || value.Length == 0)
         {
             return;
         }
@@ -1511,7 +1500,7 @@ public partial class ComboBox : ListControl
 
     internal bool UpdateNeeded()
     {
-        return (_updateCount == 0);
+        return _updateCount == 0;
     }
 
     /// <summary>
@@ -1545,8 +1534,8 @@ public partial class ComboBox : ListControl
     {
         switch (m.MsgInternal)
         {
-            case WM.CHAR:
-                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
+            case PInvoke.WM_CHAR:
+                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox!.Handle)
                 {
                     DefChildWndProc(ref m);
                 }
@@ -1564,8 +1553,8 @@ public partial class ComboBox : ListControl
                 }
 
                 break;
-            case WM.SYSCHAR:
-                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
+            case PInvoke.WM_SYSCHAR:
+                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox!.Handle)
                 {
                     DefChildWndProc(ref m);
                 }
@@ -1583,8 +1572,8 @@ public partial class ComboBox : ListControl
                 }
 
                 break;
-            case WM.KEYDOWN:
-            case WM.SYSKEYDOWN:
+            case PInvoke.WM_KEYDOWN:
+            case PInvoke.WM_SYSKEYDOWN:
                 if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive)
                 {
                     _finder.FindDropDowns(false);
@@ -1605,7 +1594,7 @@ public partial class ComboBox : ListControl
                     }
                 }
 
-                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
+                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox!.Handle)
                 {
                     DefChildWndProc(ref m);
                 }
@@ -1624,13 +1613,13 @@ public partial class ComboBox : ListControl
 
                 break;
 
-            case WM.INPUTLANGCHANGE:
+            case PInvoke.WM_INPUTLANGCHANGE:
                 DefChildWndProc(ref m);
                 break;
 
-            case WM.KEYUP:
-            case WM.SYSKEYUP:
-                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
+            case PInvoke.WM_KEYUP:
+            case PInvoke.WM_SYSKEYUP:
+                if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox!.Handle)
                 {
                     DefChildWndProc(ref m);
                 }
@@ -1653,7 +1642,7 @@ public partial class ComboBox : ListControl
                 }
 
                 break;
-            case WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 // Consider - If we don't have a childwndproc, then we don't get here, so we don't
                 // update the cache. Do we need to? This happens when we have a DropDownList.
                 if (!DesignMode)
@@ -1675,7 +1664,7 @@ public partial class ComboBox : ListControl
                 }
 
                 break;
-            case WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
 
                 // Consider - If we don't have a childwndproc, then we don't get here, so we don't
                 // set the status. Do we need to? This happens when we have a DropDownList.
@@ -1686,7 +1675,7 @@ public partial class ComboBox : ListControl
 
                 if (!HostedInWin32DialogManager)
                 {
-                    IContainerControl c = GetContainerControl();
+                    IContainerControl? c = GetContainerControl();
                     if (c is not null)
                     {
                         if (c is ContainerControl container)
@@ -1720,15 +1709,18 @@ public partial class ComboBox : ListControl
 
                 break;
 
-            case WM.SETFONT:
+            case PInvoke.WM_SETFONT:
                 DefChildWndProc(ref m);
                 if (_childEdit is not null && m.HWnd == _childEdit.Handle)
                 {
-                    PInvoke.SendMessage(_childEdit, (WM)EM.SETMARGINS, (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                    PInvoke.SendMessage(
+                        _childEdit,
+                        PInvoke.EM_SETMARGINS,
+                        (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
                 }
 
                 break;
-            case WM.LBUTTONDBLCLK:
+            case PInvoke.WM_LBUTTONDBLCLK:
                 // The Listbox gets WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
                 // sequence for doubleclick.
 
@@ -1745,7 +1737,7 @@ public partial class ComboBox : ListControl
                 OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptlc.X, Ptlc.Y, 0));
                 break;
 
-            case WM.MBUTTONDBLCLK:
+            case PInvoke.WM_MBUTTONDBLCLK:
                 // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
                 // sequence for doubleclick
 
@@ -1762,7 +1754,7 @@ public partial class ComboBox : ListControl
                 OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, Ptmc.X, Ptmc.Y, 0));
                 break;
 
-            case WM.RBUTTONDBLCLK:
+            case PInvoke.WM_RBUTTONDBLCLK:
                 // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
                 // sequence for doubleclick
 
@@ -1779,7 +1771,7 @@ public partial class ComboBox : ListControl
                 OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Ptrc.X, Ptrc.Y, 0));
                 break;
 
-            case WM.LBUTTONDOWN:
+            case PInvoke.WM_LBUTTONDOWN:
                 _mousePressed = true;
                 _mouseEvents = true;
 
@@ -1792,7 +1784,7 @@ public partial class ComboBox : ListControl
 
                 OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                 break;
-            case WM.LBUTTONUP:
+            case PInvoke.WM_LBUTTONUP:
 
                 // Combobox gets a WM_LBUTTONUP for focus change- check MouseEvents.
                 if (_mouseEvents && !ValidationCancelled)
@@ -1824,7 +1816,7 @@ public partial class ComboBox : ListControl
                 // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates.
                 OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, EditToComboboxMapping(m)));
                 break;
-            case WM.MBUTTONDOWN:
+            case PInvoke.WM_MBUTTONDOWN:
                 _mousePressed = true;
                 _mouseEvents = true;
 
@@ -1837,7 +1829,7 @@ public partial class ComboBox : ListControl
 
                 OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
                 break;
-            case WM.RBUTTONDOWN:
+            case PInvoke.WM_RBUTTONDOWN:
                 _mousePressed = true;
                 _mouseEvents = true;
 
@@ -1854,7 +1846,7 @@ public partial class ComboBox : ListControl
 
                 OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
                 break;
-            case WM.MBUTTONUP:
+            case PInvoke.WM_MBUTTONUP:
                 _mousePressed = false;
                 _mouseEvents = false;
 
@@ -1863,7 +1855,7 @@ public partial class ComboBox : ListControl
                 DefChildWndProc(ref m);
                 OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, PARAM.ToPoint(m.LParamInternal)));
                 break;
-            case WM.RBUTTONUP:
+            case PInvoke.WM_RBUTTONUP:
                 _mousePressed = false;
                 _mouseEvents = false;
 
@@ -1875,11 +1867,11 @@ public partial class ComboBox : ListControl
                 OnMouseUp(new MouseEventArgs(MouseButtons.Right, 1, ptRBtnUp.X, ptRBtnUp.Y, 0));
                 break;
 
-            case WM.CONTEXTMENU:
+            case PInvoke.WM_CONTEXTMENU:
                 // Forward context menu messages to the parent control
                 if (ContextMenuStrip is not null)
                 {
-                    PInvoke.SendMessage(this, WM.CONTEXTMENU, m.WParamInternal, m.LParamInternal);
+                    PInvoke.SendMessage(this, PInvoke.WM_CONTEXTMENU, m.WParamInternal, m.LParamInternal);
                 }
                 else
                 {
@@ -1888,7 +1880,7 @@ public partial class ComboBox : ListControl
 
                 break;
 
-            case WM.MOUSEMOVE:
+            case PInvoke.WM_MOUSEMOVE:
                 Point point = EditToComboboxMapping(m);
 
                 // Call the DefWndProc() so that mousemove messages get to the windows edit control
@@ -1897,9 +1889,9 @@ public partial class ComboBox : ListControl
                 OnMouseMove(new MouseEventArgs(MouseButtons, 0, point.X, point.Y, 0));
                 break;
 
-            case WM.SETCURSOR:
+            case PInvoke.WM_SETCURSOR:
                 if (Cursor != DefaultCursor && _childEdit is not null
-                    && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParamInternal) == (int)HT.CLIENT)
+                    && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParamInternal) == (int)PInvoke.HTCLIENT)
                 {
                     Cursor.Current = Cursor;
                 }
@@ -1910,7 +1902,7 @@ public partial class ComboBox : ListControl
 
                 break;
 
-            case WM.MOUSELEAVE:
+            case PInvoke.WM_MOUSELEAVE:
                 DefChildWndProc(ref m);
                 OnMouseLeaveInternal(EventArgs.Empty);
                 break;
@@ -1962,7 +1954,7 @@ public partial class ComboBox : ListControl
     {
         if (_childEdit is not null)
         {
-            NativeWindow childWindow;
+            NativeWindow? childWindow;
             if (m.HWnd == _childEdit.Handle)
             {
                 childWindow = _childEdit;
@@ -2023,7 +2015,7 @@ public partial class ComboBox : ListControl
                 PInvoke.InvalidateRect(_childEdit, lpRect: null, bErase: false);
             }
 
-            if (_childListBox is not null && !_childEdit.HWND.IsNull)
+            if (_childListBox is not null && !_childListBox.HWND.IsNull)
             {
                 PInvoke.InvalidateRect(_childListBox, lpRect: null, bErase: false);
             }
@@ -2034,13 +2026,13 @@ public partial class ComboBox : ListControl
     ///  Finds the first item in the combo box that starts with the given string.
     ///  The search is not case sensitive.
     /// </summary>
-    public int FindString(string s) => FindString(s, startIndex: -1);
+    public int FindString(string? s) => FindString(s, startIndex: -1);
 
     /// <summary>
     ///  Finds the first item after the given index which starts with the given string.
     ///  The search is not case sensitive.
     /// </summary>
-    public int FindString(string s, int startIndex)
+    public int FindString(string? s, int startIndex)
     {
         return FindStringInternal(s, _itemsCollection, startIndex, exact: false, ignoreCase: true);
     }
@@ -2049,7 +2041,7 @@ public partial class ComboBox : ListControl
     ///  Finds the first item in the combo box that matches the given string.
     ///  The strings must match exactly, except for differences in casing.
     /// </summary>
-    public int FindStringExact(string s)
+    public int FindStringExact(string? s)
     {
         return FindStringExact(s, startIndex: -1, ignoreCase: true);
     }
@@ -2058,7 +2050,7 @@ public partial class ComboBox : ListControl
     ///  Finds the first item after the given index that matches the given string.
     ///  The strings must match exactly, except for differences in casing.
     /// </summary>
-    public int FindStringExact(string s, int startIndex)
+    public int FindStringExact(string? s, int startIndex)
     {
         return FindStringExact(s, startIndex, ignoreCase: true);
     }
@@ -2067,7 +2059,7 @@ public partial class ComboBox : ListControl
     ///  Finds the first item after the given index that matches the given string.
     ///  The strings must match exactly, except for differences in casing.
     /// </summary>
-    internal int FindStringExact(string s, int startIndex, bool ignoreCase)
+    internal int FindStringExact(string? s, int startIndex, bool ignoreCase)
     {
         return FindStringInternal(s, _itemsCollection, startIndex, exact: true, ignoreCase);
     }
@@ -2120,7 +2112,7 @@ public partial class ComboBox : ListControl
 
         if (IsHandleCreated)
         {
-            int h = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT, (WPARAM)index);
+            int h = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT, (WPARAM)index);
             if (h == -1)
             {
                 throw new Win32Exception();
@@ -2139,7 +2131,7 @@ public partial class ComboBox : ListControl
 
     internal NativeWindow GetListNativeWindow()
     {
-        return DropDownStyle == ComboBoxStyle.Simple ? _childListBox : _childDropDown;
+        return DropDownStyle == ComboBoxStyle.Simple ? _childListBox! : _childDropDown!;
     }
 
     internal int GetListNativeWindowRuntimeIdPart()
@@ -2148,16 +2140,16 @@ public partial class ComboBox : ListControl
         return listNativeWindow is not null ? listNativeWindow.GetHashCode() : 0;
     }
 
-    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
+    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg)
     {
-        if (msg == WM.CTLCOLORSTATIC && !ShouldSerializeBackColor())
+        if (msg == PInvoke.WM_CTLCOLORSTATIC && !ShouldSerializeBackColor())
         {
             // Let the Win32 Edit control handle background colors itself.
             // This is necessary because a disabled edit control will display a different
             // BackColor than when enabled.
             return default;
         }
-        else if (msg == WM.CTLCOLORLISTBOX && GetStyle(ControlStyles.UserPaint))
+        else if (msg == PInvoke.WM_CTLCOLORLISTBOX && GetStyle(ControlStyles.UserPaint))
         {
             // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
             // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
@@ -2176,7 +2168,7 @@ public partial class ComboBox : ListControl
     // auto-completion in DropDownList style.
     private bool InterceptAutoCompleteKeystroke(Message m)
     {
-        if (m.MsgInternal == WM.KEYDOWN)
+        if (m.MsgInternal == PInvoke.WM_KEYDOWN)
         {
             Debug.Assert((ModifierKeys & Keys.Alt) == 0);
 
@@ -2194,7 +2186,7 @@ public partial class ComboBox : ListControl
                 return false;
             }
         }
-        else if (m.Msg == (int)WM.CHAR)
+        else if (m.MsgInternal == PInvoke.WM_CHAR)
         {
             Debug.Assert((ModifierKeys & Keys.Alt) == 0);
             char keyChar = (char)(nuint)m.WParamInternal;
@@ -2318,7 +2310,7 @@ public partial class ComboBox : ListControl
     private int NativeAdd(object item)
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-        int insertIndex = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_ADDSTRING, (WPARAM)0, GetItemText(item));
+        int insertIndex = (int)PInvoke.SendMessage(this, PInvoke.CB_ADDSTRING, (WPARAM)0, GetItemText(item));
         if (insertIndex < 0)
         {
             throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2333,13 +2325,13 @@ public partial class ComboBox : ListControl
     private void NativeClear()
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-        string saved = null;
+        string? saved = null;
         if (DropDownStyle != ComboBoxStyle.DropDownList)
         {
             saved = WindowText;
         }
 
-        PInvoke.SendMessage(this, (WM)PInvoke.CB_RESETCONTENT);
+        PInvoke.SendMessage(this, PInvoke.CB_RESETCONTENT);
         if (saved is not null)
         {
             WindowText = saved;
@@ -2352,8 +2344,8 @@ public partial class ComboBox : ListControl
     [SkipLocalsInit]
     private unsafe string NativeGetItemText(int index)
     {
-        int maxLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXTLEN, (WPARAM)index);
-        if (maxLength == LB_ERR)
+        int maxLength = (int)PInvoke.SendMessage(this, PInvoke.CB_GETLBTEXTLEN, (WPARAM)index);
+        if (maxLength == PInvoke.LB_ERR)
         {
             return string.Empty;
         }
@@ -2361,9 +2353,9 @@ public partial class ComboBox : ListControl
         using BufferScope<char> buffer = new(stackalloc char[128], minimumLength: maxLength);
         fixed (char* b = buffer)
         {
-            int actualLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXT, (WPARAM)index, (LPARAM)b);
-            Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
-            return actualLength == LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
+            int actualLength = (int)PInvoke.SendMessage(this, PInvoke.CB_GETLBTEXT, (WPARAM)index, (LPARAM)b);
+            Debug.Assert(actualLength != PInvoke.LB_ERR, "Should have validated the index above");
+            return actualLength == PInvoke.LB_ERR ? string.Empty : buffer[..Math.Min(maxLength, actualLength)].ToString();
         }
     }
 
@@ -2374,7 +2366,7 @@ public partial class ComboBox : ListControl
     private int NativeInsert(int index, object item)
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-        int insertIndex = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_INSERTSTRING, (WPARAM)index, GetItemText(item));
+        int insertIndex = (int)PInvoke.SendMessage(this, PInvoke.CB_INSERTSTRING, (WPARAM)index, GetItemText(item));
         if (insertIndex < 0)
         {
             throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2401,7 +2393,7 @@ public partial class ComboBox : ListControl
             Invalidate();
         }
 
-        PInvoke.SendMessage(this, (WM)PInvoke.CB_DELETESTRING, (WPARAM)index);
+        PInvoke.SendMessage(this, PInvoke.CB_DELETESTRING, (WPARAM)index);
     }
 
     internal override void RecreateHandleCore()
@@ -2436,7 +2428,7 @@ public partial class ComboBox : ListControl
 
         if (MaxLength > 0)
         {
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_LIMITTEXT, (WPARAM)MaxLength);
+            PInvoke.SendMessage(this, PInvoke.CB_LIMITTEXT, (WPARAM)MaxLength);
         }
 
         // Get the handles and wndprocs of the ComboBox's child windows
@@ -2465,14 +2457,14 @@ public partial class ComboBox : ListControl
                 _childEdit.AssignHandle(hwnd);
 
                 // Set the initial margin for combobox to be zero (this is also done whenever the font is changed).
-                PInvoke.SendMessage(_childEdit, (WM)EM.SETMARGINS, (WPARAM)(int)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                PInvoke.SendMessage(_childEdit, PInvoke.EM_SETMARGINS, (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN));
             }
         }
 
         int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
         if (found)
         {
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
+            PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
         }
 
         found = false;
@@ -2513,7 +2505,7 @@ public partial class ComboBox : ListControl
             // Now update the current selection.
             if (_selectedIndex >= 0)
             {
-                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)_selectedIndex);
+                PInvoke.SendMessage(this, PInvoke.CB_SETCURSEL, (WPARAM)_selectedIndex);
                 UpdateText();
                 _selectedIndex = -1;
             }
@@ -2555,7 +2547,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDrawItem(DrawItemEventArgs e)
     {
-        ((DrawItemEventHandler)Events[EVENT_DRAWITEM])?.Invoke(this, e);
+        ((DrawItemEventHandler?)Events[EVENT_DRAWITEM])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2565,7 +2557,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDropDown(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_DROPDOWN])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_DROPDOWN])?.Invoke(this, e);
 
         if (!IsHandleCreated)
         {
@@ -2670,7 +2662,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnMeasureItem(MeasureItemEventArgs e)
     {
-        ((MeasureItemEventHandler)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
+        ((MeasureItemEventHandler?)Events[EVENT_MEASUREITEM])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2719,7 +2711,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnSelectionChangeCommitted(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_SELECTIONCHANGECOMMITTED])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_SELECTIONCHANGECOMMITTED])?.Invoke(this, e);
 
         // The user selects a list item or selects an item and then closes the list.
         // It indicates that the user's selection is to be processed but should not
@@ -2738,7 +2730,7 @@ public partial class ComboBox : ListControl
     protected override void OnSelectedIndexChanged(EventArgs e)
     {
         base.OnSelectedIndexChanged(e);
-        ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
 
         if (!IsHandleCreated)
         {
@@ -2805,7 +2797,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnSelectedItemChanged(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_SELECTEDITEMCHANGED])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_SELECTEDITEMCHANGED])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2813,7 +2805,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDropDownStyleChanged(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_DROPDOWNSTYLE])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_DROPDOWNSTYLE])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2852,17 +2844,17 @@ public partial class ComboBox : ListControl
         CommonProperties.xClearPreferredSizeCache(this);
     }
 
-    private void OnAutoCompleteCustomSourceChanged(object sender, CollectionChangeEventArgs e)
+    private void OnAutoCompleteCustomSourceChanged(object? sender, CollectionChangeEventArgs e)
     {
         if (AutoCompleteSource == AutoCompleteSource.CustomSource)
         {
             if (AutoCompleteCustomSource.Count == 0)
             {
-                SetAutoComplete(true, true /*recreate handle*/);
+                SetAutoComplete(reset: true, recreate: true);
             }
             else
             {
-                SetAutoComplete(true, false);
+                SetAutoComplete(reset: true, recreate: false);
             }
         }
     }
@@ -3030,7 +3022,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnDropDownClosed(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_DROPDOWNCLOSED])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_DROPDOWNCLOSED])?.Invoke(this, e);
 
         if (!IsHandleCreated)
         {
@@ -3058,8 +3050,11 @@ public partial class ComboBox : ListControl
             else if (_childEdit is not null && _childEdit.Handle != 0)
             {
                 // Focus on edit field so that its changes are announced, e.g. when selecting items by arrows.
-                NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(_childEdit, _childEdit.Handle),
-                    objType: OBJID.CLIENT, objID: (int)PInvoke.CHILDID_SELF);
+                PInvoke.NotifyWinEvent(
+                    (uint)AccessibleEvents.Focus,
+                    _childEdit,
+                    (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                    (int)PInvoke.CHILDID_SELF);
             }
 
             // Notify Collapsed/expanded property change.
@@ -3079,7 +3074,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected virtual void OnTextUpdate(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_TEXTUPDATE])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_TEXTUPDATE])?.Invoke(this, e);
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -3136,17 +3131,15 @@ public partial class ComboBox : ListControl
     protected override void RefreshItems()
     {
         // Save off the selection and the current collection.
-        //
         int selectedIndex = SelectedIndex;
-        ObjectCollection savedItems = _itemsCollection;
+        ObjectCollection? savedItems = _itemsCollection;
 
         _itemsCollection = null;
 
-        object[] newItems = null;
+        object[]? newItems = null;
 
         // if we have a dataSource and a DisplayMember, then use it
         // to populate the Items collection
-        //
         if (DataManager is not null && DataManager.Count != -1)
         {
             newItems = new object[DataManager.Count];
@@ -3165,14 +3158,12 @@ public partial class ComboBox : ListControl
         try
         {
             // Clear the items.
-            //
             if (IsHandleCreated)
             {
                 NativeClear();
             }
 
             // Store the current list of items
-            //
             if (newItems is not null)
             {
                 Items.AddRangeInternal(newItems);
@@ -3199,7 +3190,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected override void RefreshItem(int index)
     {
-        Items.SetItemInternal(index, Items[index]);
+        Items.SetItemInternal(index, Items[index]!);
     }
 
     /// <summary>
@@ -3402,7 +3393,7 @@ public partial class ComboBox : ListControl
             throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
         }
 
-        PInvoke.SendMessage(this, (WM)PInvoke.CB_SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
+        PInvoke.SendMessage(this, PInvoke.CB_SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
     }
 
     /// <summary>
@@ -3447,7 +3438,7 @@ public partial class ComboBox : ListControl
 
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)DataManager.Position);
+                PInvoke.SendMessage(this, PInvoke.CB_SETCURSEL, (WPARAM)DataManager.Position);
             }
             else
             {
@@ -3549,21 +3540,21 @@ public partial class ComboBox : ListControl
 
         if (DrawMode == DrawMode.OwnerDrawFixed)
         {
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, 0, ItemHeight);
+            PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
+            PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, 0, ItemHeight);
         }
         else if (DrawMode == DrawMode.OwnerDrawVariable)
         {
-            PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
+            PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
             Graphics graphics = CreateGraphicsInternal();
             for (int i = 0; i < Items.Count; i++)
             {
-                int original = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
+                int original = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
                 MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
                 OnMeasureItem(mievent);
                 if (mievent.ItemHeight != original)
                 {
-                    PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)i, (LPARAM)mievent.ItemHeight);
+                    PInvoke.SendMessage(this, PInvoke.CB_SETITEMHEIGHT, (WPARAM)i, (LPARAM)mievent.ItemHeight);
                 }
             }
 
@@ -3589,11 +3580,11 @@ public partial class ComboBox : ListControl
         // v1.1 - ComboBox::set_Text compares FilterItemOnProperty(item) w/ "value" and set the SelectedIndex accordingly
         // v1.1 - null values correspond to String.Empty
         // v1.1 - SelectedIndex == -1 corresponds to Text is null
-        string s = null;
+        string? s = null;
 
         if (SelectedIndex != -1)
         {
-            object item = Items[SelectedIndex];
+            object? item = Items[SelectedIndex];
             if (item is not null)
             {
                 s = GetItemText(item);
@@ -3606,7 +3597,7 @@ public partial class ComboBox : ListControl
         {
             if (_childEdit is not null && !_childEdit.HWND.IsNull)
             {
-                PInvoke.SendMessage(_childEdit, WM.SETTEXT, 0, s);
+                PInvoke.SendMessage(_childEdit, PInvoke.WM_SETTEXT, 0, s);
             }
         }
     }
@@ -3629,7 +3620,7 @@ public partial class ComboBox : ListControl
     private void WmParentNotify(ref Message m)
     {
         base.WndProc(ref m);
-        if ((int)m.WParamInternal == ((int)WM.CREATE | 1000 << 16))
+        if ((int)m.WParamInternal == ((int)PInvoke.WM_CREATE | 1000 << 16))
         {
             _dropDownHandle = (HWND)m.LParamInternal;
 
@@ -3708,14 +3699,14 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void WmReflectCommand(ref Message m)
     {
-        switch ((CBN)m.WParamInternal.SIGNEDHIWORD)
+        switch ((uint)m.WParamInternal.SIGNEDHIWORD)
         {
-            case CBN.DBLCLK:
+            case PInvoke.CBN_DBLCLK:
                 break;
-            case CBN.EDITUPDATE:
+            case PInvoke.CBN_EDITUPDATE:
                 OnTextUpdate(EventArgs.Empty);
                 break;
-            case CBN.CLOSEUP:
+            case PInvoke.CBN_CLOSEUP:
 
                 OnDropDownClosed(EventArgs.Empty);
                 if (FormattingEnabled && Text != _currentText && _dropDown)
@@ -3725,21 +3716,21 @@ public partial class ComboBox : ListControl
 
                 _dropDown = false;
                 break;
-            case CBN.DROPDOWN:
+            case PInvoke.CBN_DROPDOWN:
                 _currentText = Text;
                 _dropDown = true;
                 OnDropDown(EventArgs.Empty);
                 UpdateDropDownHeight();
 
                 break;
-            case CBN.EDITCHANGE:
+            case PInvoke.CBN_EDITCHANGE:
                 OnTextChanged(EventArgs.Empty);
                 break;
-            case CBN.SELCHANGE:
+            case PInvoke.CBN_SELCHANGE:
                 UpdateText();
                 OnSelectedIndexChanged(EventArgs.Empty);
                 break;
-            case CBN.SELENDOK:
+            case PInvoke.CBN_SELENDOK:
                 OnSelectionChangeCommittedInternal(EventArgs.Empty);
                 break;
         }
@@ -3750,11 +3741,11 @@ public partial class ComboBox : ListControl
         DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
         using var e = new DrawItemEventArgs(
-            dis->hDC,
+            dis->hDC.CreateGraphics(),
             Font,
             dis->rcItem,
-            dis->itemID,
-            dis->itemState,
+            (int)dis->itemID,
+            (DrawItemState)(int)dis->itemState,
             ForeColor,
             BackColor);
 
@@ -3772,7 +3763,7 @@ public partial class ComboBox : ListControl
         if (DrawMode == DrawMode.OwnerDrawVariable && itemID >= 0)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            var mie = new MeasureItemEventArgs(graphics, itemID, ItemHeight);
+            MeasureItemEventArgs mie = new(graphics, itemID, ItemHeight);
             OnMeasureItem(mie);
             mis->itemHeight = unchecked((uint)mie.ItemHeight);
         }
@@ -3792,24 +3783,23 @@ public partial class ComboBox : ListControl
     /// </summary>
     protected override unsafe void WndProc(ref Message m)
     {
-        switch ((WM)m.Msg)
+        switch (m.MsgInternal)
         {
             // We don't want to fire the focus events twice -
             // once in the combobox and once in the ChildWndProc.
-            case WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 try
                 {
                     _fireSetFocus = false;
                     base.WndProc(ref m);
                 }
-
                 finally
                 {
                     _fireSetFocus = true;
                 }
 
                 break;
-            case WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 try
                 {
                     _fireLostFocus = false;
@@ -3825,42 +3815,43 @@ public partial class ComboBox : ListControl
                     // WM_MOUSELEAVE to ourselves, since that also sets up the right state. Or... at least the state is the same
                     // as with Theming on.
 
-                    if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
+                    if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false
+                        && DropDownStyle == ComboBoxStyle.DropDownList
+                        && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
-                        PostMessageW(this, WM.MOUSELEAVE);
+                        PInvoke.PostMessage(this, PInvoke.WM_MOUSELEAVE);
                     }
                 }
-
                 finally
                 {
                     _fireLostFocus = true;
                 }
 
                 break;
-            case WM.CTLCOLOREDIT:
-            case WM.CTLCOLORLISTBOX:
+            case PInvoke.WM_CTLCOLOREDIT:
+            case PInvoke.WM_CTLCOLORLISTBOX:
                 m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
                 break;
-            case WM.ERASEBKGND:
+            case PInvoke.WM_ERASEBKGND:
                 WmEraseBkgnd(ref m);
                 break;
-            case WM.PARENTNOTIFY:
+            case PInvoke.WM_PARENTNOTIFY:
                 WmParentNotify(ref m);
                 break;
-            case WM.REFLECT_COMMAND:
+            case MessageId.WM_REFLECT_COMMAND:
                 WmReflectCommand(ref m);
                 break;
-            case WM.REFLECT_DRAWITEM:
+            case MessageId.WM_REFLECT_DRAWITEM:
                 WmReflectDrawItem(ref m);
                 break;
-            case WM.REFLECT_MEASUREITEM:
+            case MessageId.WM_REFLECT_MEASUREITEM:
                 WmReflectMeasureItem(ref m);
                 break;
-            case WM.LBUTTONDOWN:
+            case PInvoke.WM_LBUTTONDOWN:
                 _mouseEvents = true;
                 base.WndProc(ref m);
                 break;
-            case WM.LBUTTONUP:
+            case PInvoke.WM_LBUTTONUP:
                 PInvoke.GetWindowRect(this, out var rect);
                 Rectangle clientRect = rect;
 
@@ -3888,12 +3879,12 @@ public partial class ComboBox : ListControl
 
                 break;
 
-            case WM.MOUSELEAVE:
+            case PInvoke.WM_MOUSELEAVE:
                 DefWndProc(ref m);
                 OnMouseLeaveInternal(EventArgs.Empty);
                 break;
 
-            case WM.PAINT:
+            case PInvoke.WM_PAINT:
                 if (!GetStyle(ControlStyles.UserPaint)
                     && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
                     && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
@@ -3912,7 +3903,7 @@ public partial class ComboBox : ListControl
                     bool useBeginPaint = m.WParamInternal == 0u;
                     using var paintScope = useBeginPaint ? new PInvoke.BeginPaintScope((HWND)Handle) : default;
 
-                    HDC dc = useBeginPaint ? paintScope : (HDC)m.WParamInternal;
+                    HDC dc = useBeginPaint ? paintScope! : (HDC)m.WParamInternal;
 
                     using PInvoke.SaveDcScope savedDcState = new(dc);
 
@@ -3938,13 +3929,13 @@ public partial class ComboBox : ListControl
                 base.WndProc(ref m);
                 break;
 
-            case WM.PRINTCLIENT:
+            case PInvoke.WM_PRINTCLIENT:
                 // All the fancy stuff we do in OnPaint has to happen again in OnPrint.
                 if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                 {
                     DefWndProc(ref m);
 
-                    if (((PRF)(nint)m.LParamInternal & PRF.CLIENT) == PRF.CLIENT)
+                    if (((nint)m.LParamInternal & PInvoke.PRF_CLIENT) == PInvoke.PRF_CLIENT)
                     {
                         if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                         {
@@ -3959,11 +3950,11 @@ public partial class ComboBox : ListControl
                 base.WndProc(ref m);
                 return;
 
-            case WM.SETCURSOR:
+            case PInvoke.WM_SETCURSOR:
                 base.WndProc(ref m);
                 break;
 
-            case WM.SETFONT:
+            case PInvoke.WM_SETFONT:
                 if (Width == 0)
                 {
                     _suppressNextWindowsPos = true;
@@ -3972,7 +3963,7 @@ public partial class ComboBox : ListControl
                 base.WndProc(ref m);
                 break;
 
-            case WM.WINDOWPOSCHANGED:
+            case PInvoke.WM_WINDOWPOSCHANGED:
                 if (!_suppressNextWindowsPos)
                 {
                     base.WndProc(ref m);
@@ -3981,13 +3972,13 @@ public partial class ComboBox : ListControl
                 _suppressNextWindowsPos = false;
                 break;
 
-            case WM.NCDESTROY:
+            case PInvoke.WM_NCDESTROY:
                 base.WndProc(ref m);
                 ReleaseChildWindow();
                 break;
 
             default:
-                if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
+                if (m.MsgInternal == RegisteredMessage.WM_MOUSEENTER)
                 {
                     DefWndProc(ref m);
                     OnMouseEnterInternal(EventArgs.Empty);

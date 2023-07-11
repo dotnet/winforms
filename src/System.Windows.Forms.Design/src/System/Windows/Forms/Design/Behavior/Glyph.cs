@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior;
@@ -18,12 +16,12 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 public abstract class Glyph
 {
-    private Behavior _behavior;
+    private Behavior? _behavior;
 
     /// <summary>
     ///  Glyph's default constructor takes a Behavior.
     /// </summary>
-    protected Glyph(Behavior behavior)
+    protected Glyph(Behavior? behavior)
     {
         _behavior = behavior;
     }
@@ -32,7 +30,7 @@ public abstract class Glyph
     ///  This read-only property will return the Behavior associated with
     ///  this Glyph.  The Behavior can be null.
     /// </summary>
-    public virtual Behavior Behavior => _behavior;
+    public virtual Behavior? Behavior => _behavior;
 
     /// <summary>
     ///  This read-only property will return the Bounds associated with
@@ -47,7 +45,7 @@ public abstract class Glyph
     ///  a valid Cursor.  Otherwise, returning null will cause the
     ///  the BehaviorService to simply ignore it.
     /// </summary>
-    public abstract Cursor GetHitTest(Point p);
+    public abstract Cursor? GetHitTest(Point p);
 
     /// <summary>
     ///  Abstract method that forces Glyph implementations to provide
@@ -61,7 +59,7 @@ public abstract class Glyph
     ///  This method is called by inheriting classes to change the
     ///  Behavior object associated with the Glyph.
     /// </summary>
-    protected void SetBehavior(Behavior behavior)
+    protected void SetBehavior(Behavior? behavior)
     {
         _behavior = behavior;
     }

@@ -6,11 +6,12 @@ using System.Drawing;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop;
 
 // NB: doesn't require thread affinity
-public class COM2PictureConverterTests
+public unsafe class COM2PictureConverterTests
 {
     private static Com2PictureConverter Instance { get; } = new Com2PictureConverter(new Com2PropertyDescriptor(
         default,
@@ -24,7 +25,7 @@ public class COM2PictureConverterTests
     [Fact]
     public void ConvertNativeToManaged_Null()
     {
-        Assert.Null(Instance.ConvertNativeToManaged(null, null));
+        Assert.Null(Instance.ConvertNativeToManaged(default, null));
     }
 
     private unsafe class TestIPicture : IPictureMock
@@ -40,14 +41,15 @@ public class COM2PictureConverterTests
 
         public override OLE_HANDLE Handle => new((uint)(int)_handle);
 
-        public override short Type => (short)_type;
+        public override PICTYPE Type => _type;
     }
 
     [Fact]
     public void ConvertNativeToManaged_NullHandle()
     {
         TestIPicture nullIPicture = new(0);
-        Assert.Null(Instance.ConvertNativeToManaged(nullIPicture, null));
+        using var unknown = ComHelpers.GetComScope<IUnknown>(nullIPicture);
+        Assert.Null(Instance.ConvertNativeToManaged((VARIANT)unknown.Value, null));
     }
 
     [Fact]
@@ -56,15 +58,16 @@ public class COM2PictureConverterTests
         Icon errorIcon = SystemIcons.Error;
         nint handle = errorIcon.Handle;
         TestIPicture iconIPicture = new(handle, PICTYPE.PICTYPE_ICON);
+        using var unknown = ComHelpers.GetComScope<IUnknown>(iconIPicture);
 
-        using Icon icon = (Icon)Instance.ConvertNativeToManaged(iconIPicture, null);
+        using Icon icon = (Icon)Instance.ConvertNativeToManaged((VARIANT)unknown.Value, null);
 
         Assert.Equal(icon.Height, errorIcon.Height);
         Assert.Equal(icon.Width, errorIcon.Width);
         Assert.Equal(typeof(Icon), Instance.ManagedType);
 
         // We should get the cached object if the handle didn't change
-        Assert.Same(icon, (Icon)Instance.ConvertNativeToManaged(iconIPicture, null));
+        Assert.Same(icon, (Icon)Instance.ConvertNativeToManaged((VARIANT)unknown.Value, null));
     }
 
     [Fact]
@@ -76,14 +79,15 @@ public class COM2PictureConverterTests
         TestIPicture bitmapIPicture = new(hBitmap, PICTYPE.PICTYPE_BITMAP);
         try
         {
-            using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged(bitmapIPicture, pd: null);
+            using var unknown = ComHelpers.GetComScope<IUnknown>(bitmapIPicture);
+            using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged((VARIANT)unknown.Value, property: null);
 
             Assert.Equal(bitmap.Height, errorIcon.Height);
             Assert.Equal(bitmap.Width, errorIcon.Width);
             Assert.Equal(typeof(Bitmap), Instance.ManagedType);
 
             // We should get the cached object if the handle didn't change
-            Assert.Same(bitmap, (Bitmap)Instance.ConvertNativeToManaged(bitmapIPicture, pd: null));
+            Assert.Same(bitmap, (Bitmap)Instance.ConvertNativeToManaged((VARIANT)unknown.Value, property: null));
         }
         finally
         {
@@ -94,11 +98,11 @@ public class COM2PictureConverterTests
     [Fact]
     public void ConvertNativeToManaged_UnsupportedPICTYPE()
     {
-        // The converter asserts, but doesn't throw. Suppress asserts so
-        // that we can validate it returns null as expected.
+        // The converter asserts, but doesn't throw. Suppress asserts so that we can validate it returns null as expected.
         using (new NoAssertContext())
         {
-            Assert.Null(Instance.ConvertNativeToManaged(new TestIPicture(1, PICTYPE.PICTYPE_METAFILE), null));
+            using var unknown = ComHelpers.GetComScope<IUnknown>(new TestIPicture(1, PICTYPE.PICTYPE_METAFILE));
+            Assert.Null(Instance.ConvertNativeToManaged((VARIANT)unknown.Value, null));
         }
     }
 
@@ -106,54 +110,48 @@ public class COM2PictureConverterTests
     public void ConvertManagedToNative_NullObject()
     {
         bool cancelSet = true;
-        Assert.Null(Instance.ConvertManagedToNative(null, null, ref cancelSet));
+        Assert.True(Instance.ConvertManagedToNative(null, null, ref cancelSet).IsEmpty);
         Assert.False(cancelSet);
     }
 
-    [Fact]
+    [StaFact]
     public unsafe void ConvertManagedToNative_Icon()
     {
         bool cancelSet = true;
         Icon exclamationIcon = SystemIcons.Exclamation;
 
-        IPicture.Interface picture = (IPicture.Interface)Instance.ConvertManagedToNative(exclamationIcon, null, ref cancelSet);
+        using VARIANT native = Instance.ConvertManagedToNative(exclamationIcon, null, ref cancelSet);
+        using ComScope<IPicture> picture = ComScope<IPicture>.QueryFrom((IUnknown*)native);
 
         Assert.False(cancelSet);
-        short type = picture.Type;
-        int height = picture.Height;
-        int width = picture.Width;
-        Assert.Equal((short)PICTYPE.PICTYPE_ICON, type);
+        int height = picture.Value->Height;
+        int width = picture.Value->Width;
+        Assert.Equal(PICTYPE.PICTYPE_ICON, picture.Value->Type);
         Assert.Equal(exclamationIcon.Height, GdiHelper.HimetricToPixelY(height));
         Assert.Equal(exclamationIcon.Width, GdiHelper.HimetricToPixelX(width));
 
-        // Should get the cached value
-        Assert.Same(picture, (IPicture.Interface)Instance.ConvertManagedToNative(exclamationIcon, null, ref cancelSet));
-
         // And we should also round trip to the same value
-        Assert.Same(exclamationIcon, Instance.ConvertNativeToManaged(picture, null));
+        Assert.Same(exclamationIcon, Instance.ConvertNativeToManaged((VARIANT)picture.AsUnknown, null));
     }
 
-    [Fact]
+    [StaFact]
     public unsafe void ConvertManagedToNative_Bitmap()
     {
         bool cancelSet = true;
         using Bitmap bitmap = new Bitmap(42, 70);
 
-        IPicture.Interface picture = (IPicture.Interface)Instance.ConvertManagedToNative(bitmap, null, ref cancelSet);
+        using VARIANT native = Instance.ConvertManagedToNative(bitmap, null, ref cancelSet);
+        using ComScope<IPicture> picture = ComScope<IPicture>.QueryFrom((IUnknown*)native);
 
         Assert.False(cancelSet);
-        short type = picture.Type;
-        int height = picture.Height;
-        int width = picture.Width;
-        Assert.Equal((short)PICTYPE.PICTYPE_BITMAP, type);
+        int height = picture.Value->Height;
+        int width = picture.Value->Width;
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, picture.Value->Type);
         Assert.Equal(bitmap.Height, GdiHelper.HimetricToPixelY(height));
         Assert.Equal(bitmap.Width, GdiHelper.HimetricToPixelX(width));
 
-        // Should get the cached value
-        Assert.Same(picture, (IPicture.Interface)Instance.ConvertManagedToNative(bitmap, null, ref cancelSet));
-
         // And we should also round trip to the same value
-        Assert.Same(bitmap, Instance.ConvertNativeToManaged(picture, null));
+        Assert.Same(bitmap, Instance.ConvertNativeToManaged((VARIANT)picture.AsUnknown, null));
     }
 
     [Fact]
@@ -164,12 +162,12 @@ public class COM2PictureConverterTests
         using (new NoAssertContext())
         {
             bool cancelSet = true;
-            Assert.Null(Instance.ConvertManagedToNative(new object(), null, ref cancelSet));
+            Assert.True(Instance.ConvertManagedToNative(new object(), null, ref cancelSet).IsEmpty);
             Assert.False(cancelSet);
         }
     }
 
-    private unsafe class IPictureMock : IPicture.Interface
+    private unsafe class IPictureMock : IPicture.Interface, IManagedWrapper<IPicture>
     {
         public virtual HRESULT Render(HDC hDC, int x, int y, int cx, int cy, int xSrc, int ySrc, int cxSrc, int cySrc, RECT* pRcWBounds)
             => HRESULT.S_OK;
@@ -182,7 +180,7 @@ public class COM2PictureConverterTests
 
         public virtual HRESULT get_hPal(OLE_HANDLE* phPal) => HRESULT.S_OK;
 
-        public virtual short Type => default;
+        public virtual PICTYPE Type => default;
 
         public virtual int Width => default;
 

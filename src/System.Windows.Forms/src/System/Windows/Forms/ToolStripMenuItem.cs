@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -31,12 +30,12 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     private ToolStrip? _lastOwner;
 
     /// <summary>
-    /// Support for mapping NATIVE menu commands to ToolStripMenuItems.
-    /// It corresponds to <see cref="User32.MENUITEMINFOW.wID"/>.
+    ///  Support for mapping NATIVE menu commands to ToolStripMenuItems.
+    ///  It corresponds to <see cref="MENUITEMINFOW.wID"/>.
     /// </summary>
     private readonly int _nativeMenuCommandID = -1;
     private HandleRef<HWND> _targetWindowHandle;
-    private IntPtr _nativeMenuHandle = IntPtr.Zero;
+    private HMENU _nativeMenuHandle = HMENU.Null;
 
     // Keep checked images shared between menu items, but per thread so we don't have locking issues in GDI+
     [ThreadStatic]
@@ -116,18 +115,17 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         Properties.SetObject(s_propMdiForm, mdiForm);
     }
 
-    /// <summary> this constructor is only used when we're trying to
-    ///  mimic a native menu like the system menu.  In that case
-    ///  we've got to go ahead and collect the command id and the
-    ///  target window to send WM_COMMAND/WM_SYSCOMMAND messages to.
+    /// <summary>
+    ///  This constructor is only used when we're trying to mimic a native menu like the system menu. In that case
+    ///  we collect the command id and the target window to send WM_COMMAND/WM_SYSCOMMAND messages to.
     /// </summary>
-    internal ToolStripMenuItem(IntPtr hMenu, int nativeMenuCommandId, IWin32Window targetWindow)
+    internal ToolStripMenuItem(HMENU hmenu, int nativeMenuCommandId, IWin32Window targetWindow)
     {
         Initialize();
         Overflow = ToolStripItemOverflow.Never;
         _nativeMenuCommandID = nativeMenuCommandId;
         _targetWindowHandle = Control.GetSafeHandle(targetWindow);
-        _nativeMenuHandle = hMenu;
+        _nativeMenuHandle = hmenu;
 
         // Since fetching the image and the text is an awful lot of work
         // we're going to just cache it and assume the native stuff
@@ -713,14 +711,15 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return false;
         }
 
-        var info = new User32.MENUITEMINFOW
+        MENUITEMINFOW info = new()
         {
-            cbSize = (uint)sizeof(User32.MENUITEMINFOW),
-            fMask = User32.MIIM.STATE,
-            wID = _nativeMenuCommandID
+            cbSize = (uint)sizeof(MENUITEMINFOW),
+            fMask = MENU_ITEM_MASK.MIIM_STATE,
+            wID = (uint)_nativeMenuCommandID
         };
-        User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
-        return (info.fState & User32.MFS.DISABLED) == 0;
+
+        PInvoke.GetMenuItemInfo(_nativeMenuHandle, (uint)_nativeMenuCommandID, fByPosition: false, ref info);
+        return (info.fState & MENU_ITEM_STATE.MFS_DISABLED) == 0;
     }
 
     // returns text and shortcut separated by tab.
@@ -735,35 +734,36 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         string? text = null;
 
         // fetch the string length
-        var info = new User32.MENUITEMINFOW
+        MENUITEMINFOW info = new()
         {
-            cbSize = (uint)sizeof(User32.MENUITEMINFOW),
-            fMask = User32.MIIM.STRING,
-            wID = _nativeMenuCommandID
+            cbSize = (uint)sizeof(MENUITEMINFOW),
+            fMask = MENU_ITEM_MASK.MIIM_STRING,
+            wID = (uint)_nativeMenuCommandID
         };
-        User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
+
+        PInvoke.GetMenuItemInfo(_nativeMenuHandle, (uint)_nativeMenuCommandID, fByPosition: false, ref info);
 
         if (info.cch > 0)
         {
-            // fetch the string
+            // Fetch the string
             info.cch += 1;  // according to MSDN we need to increment the count we receive by 1.
-            info.wID = _nativeMenuCommandID;
-            IntPtr allocatedStringBuffer = Marshal.AllocCoTaskMem(info.cch * sizeof(char));
+            info.wID = (uint)_nativeMenuCommandID;
+            nint allocatedStringBuffer = Marshal.AllocCoTaskMem((int)info.cch * sizeof(char));
             info.dwTypeData = (char*)allocatedStringBuffer;
 
             try
             {
-                User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
+                PInvoke.GetMenuItemInfo(_nativeMenuHandle, (uint)_nativeMenuCommandID, fByPosition: false, ref info);
 
-                // convert the string into managed data.
-                if (info.dwTypeData is not null)
+                // Convert the string into managed data.
+                if (!info.dwTypeData.IsNull)
                 {
-                    text = new string(info.dwTypeData, 0, info.cch);
+                    text = new string(info.dwTypeData, 0, (int)info.cch);
                 }
             }
             finally
             {
-                if (allocatedStringBuffer != IntPtr.Zero)
+                if (allocatedStringBuffer != 0)
                 {
                     // use our local instead of the info structure member *just* in case windows decides to clobber over it.
                     // we want to be sure to deallocate the memory we know we allocated.
@@ -777,71 +777,66 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     private unsafe Image? GetNativeMenuItemImage()
     {
-        if (_nativeMenuCommandID == -1 || _nativeMenuHandle == IntPtr.Zero)
+        if (_nativeMenuCommandID == -1 || _nativeMenuHandle.IsNull)
         {
-            Debug.Fail("why were we called to fetch native menu item info with nothing assigned?");
+            Debug.Fail("Why were we called to fetch native menu item info with nothing assigned?");
             return null;
         }
 
-        var info = new User32.MENUITEMINFOW
+        MENUITEMINFOW info = new()
         {
-            cbSize = (uint)sizeof(User32.MENUITEMINFOW),
-            fMask = User32.MIIM.BITMAP,
-            wID = _nativeMenuCommandID
+            cbSize = (uint)sizeof(MENUITEMINFOW),
+            fMask = MENU_ITEM_MASK.MIIM_BITMAP,
+            wID = (uint)_nativeMenuCommandID
         };
-        User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
-        if (info.hbmpItem != IntPtr.Zero && PARAM.ToInt(info.hbmpItem) > (int)User32.HBMMENU.POPUP_MINIMIZE)
+        PInvoke.GetMenuItemInfo(_nativeMenuHandle, (uint)_nativeMenuCommandID, fByPosition: false, ref info);
+
+        if (!info.hbmpItem.IsNull && (int)info.hbmpItem > (int)HBITMAP.HBMMENU_POPUP_MINIMIZE)
         {
-            return Bitmap.FromHbitmap(info.hbmpItem);
+            return Image.FromHbitmap(info.hbmpItem);
         }
 
-        // its a system defined bitmap
+        // Its a system defined bitmap.
         int buttonToUse = -1;
 
-        switch (PARAM.ToInt(info.hbmpItem))
+        if (info.hbmpItem == HBITMAP.HBMMENU_MBAR_CLOSE
+            || info.hbmpItem == HBITMAP.HBMMENU_MBAR_CLOSE_D
+            || info.hbmpItem == HBITMAP.HBMMENU_POPUP_CLOSE)
         {
-            case (int)User32.HBMMENU.MBAR_CLOSE:
-            case (int)User32.HBMMENU.MBAR_CLOSE_D:
-            case (int)User32.HBMMENU.POPUP_CLOSE:
-                buttonToUse = (int)CaptionButton.Close;
-                break;
-            case (int)User32.HBMMENU.MBAR_MINIMIZE:
-            case (int)User32.HBMMENU.MBAR_MINIMIZE_D:
-            case (int)User32.HBMMENU.POPUP_MINIMIZE:
-                buttonToUse = (int)CaptionButton.Minimize;
-                break;
-            case (int)User32.HBMMENU.MBAR_RESTORE:
-            case (int)User32.HBMMENU.POPUP_RESTORE:
-                buttonToUse = (int)CaptionButton.Restore;
-                break;
-            case (int)User32.HBMMENU.POPUP_MAXIMIZE:
-                buttonToUse = (int)CaptionButton.Maximize;
-                break;
-            case (int)User32.HBMMENU.SYSTEM:
-            //
-            case (int)User32.HBMMENU.CALLBACK:
-            // owner draw not supported
-            default:
-                break;
+            buttonToUse = (int)CaptionButton.Close;
+        }
+        else if (info.hbmpItem == HBITMAP.HBMMENU_MBAR_MINIMIZE
+            || info.hbmpItem == HBITMAP.HBMMENU_MBAR_MINIMIZE_D
+            || info.hbmpItem == HBITMAP.HBMMENU_POPUP_MINIMIZE)
+        {
+            buttonToUse = (int)CaptionButton.Minimize;
+        }
+        else if (info.hbmpItem == HBITMAP.HBMMENU_MBAR_RESTORE
+            || info.hbmpItem == HBITMAP.HBMMENU_POPUP_RESTORE)
+        {
+            buttonToUse = (int)CaptionButton.Restore;
+        }
+        else if (info.hbmpItem == HBITMAP.HBMMENU_POPUP_MAXIMIZE)
+        {
+            buttonToUse = (int)CaptionButton.Maximize;
+        }
+        else
+        {
+            return null;
         }
 
-        if (buttonToUse > -1)
+        // Ee've mapped to a system defined bitmap we know how to draw.
+        Bitmap image = new(16, 16);
+
+        using (Graphics g = Graphics.FromImage(image))
         {
-            // we've mapped to a system defined bitmap we know how to draw
-            Bitmap image = new Bitmap(16, 16);
-
-            using (Graphics g = Graphics.FromImage(image))
-            {
-                ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
-                g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
-            }
-
-            image.MakeTransparent(SystemColors.Control);
-            return image;
+            ControlPaint.DrawCaptionButton(g, new Rectangle(Point.Empty, image.Size), (CaptionButton)buttonToUse, ButtonState.Flat);
+            g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
         }
 
-        return null;
+        image.MakeTransparent(SystemColors.Control);
+        return image;
     }
 
     internal Size GetShortcutTextSize()
@@ -908,14 +903,14 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
             // the system message... if we use SendMessage the dismissal of our window
             // breaks things like the modal sizing loop.
-            PInvoke.PostMessage(_targetWindowHandle, User32.WM.SYSCOMMAND, (WPARAM)(uint)_nativeMenuCommandID);
+            PInvoke.PostMessage(_targetWindowHandle, PInvoke.WM_SYSCOMMAND, (WPARAM)(uint)_nativeMenuCommandID);
         }
         else
         {
             // These are user added items like ".Net Window..."
 
             // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-            PInvoke.PostMessage(_targetWindowHandle, User32.WM.COMMAND, (WPARAM)(uint)_nativeMenuCommandID);
+            PInvoke.PostMessage(_targetWindowHandle, PInvoke.WM_COMMAND, (WPARAM)(uint)_nativeMenuCommandID);
         }
 
         Invalidate();
@@ -1231,10 +1226,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     }
 
     /// <summary> this is to support routing to native menu commands </summary>
-    internal void SetNativeTargetMenu(IntPtr hMenu)
-    {
-        _nativeMenuHandle = hMenu;
-    }
+    internal void SetNativeTargetMenu(HMENU hmenu) => _nativeMenuHandle = hmenu;
 
     internal static string? ShortcutToText(Keys shortcutKeys, string? shortcutKeyDisplayString)
     {

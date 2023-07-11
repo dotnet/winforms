@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.User32;
-
 namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
     public static LRESULT SendMessage<T>(
         T hWnd,
-        WM Msg,
+        MessageId Msg,
         WPARAM wParam = default,
         LPARAM lParam = default) where T : IHandle<HWND>
     {
@@ -21,7 +19,7 @@ internal static partial class PInvoke
 
     public static LRESULT SendMessage<THwnd, TWParam>(
         THwnd hWnd,
-        WM Msg,
+        MessageId Msg,
         TWParam wParam,
         LPARAM lParam = default) where THwnd : IHandle<HWND> where TWParam : IHandle<HWND>
     {
@@ -32,7 +30,7 @@ internal static partial class PInvoke
 
     public static unsafe LRESULT SendMessage<T>(
         T hWnd,
-        WM Msg,
+        MessageId Msg,
         WPARAM wParam,
         string? lParam) where T : IHandle<HWND>
     {
@@ -44,7 +42,7 @@ internal static partial class PInvoke
 
     public static unsafe nint SendMessage<THwnd, TLParam>(
         THwnd hWnd,
-        WM Msg,
+        MessageId Msg,
         WPARAM wParam,
         ref TLParam lParam)
         where THwnd : IHandle<HWND>
@@ -58,7 +56,7 @@ internal static partial class PInvoke
 
     public static unsafe nint SendMessage<THwnd, TWParam, TLParam>(
         THwnd hWnd,
-        WM Msg,
+        MessageId Msg,
         ref TWParam wParam,
         ref TLParam lParam)
         where THwnd : IHandle<HWND>

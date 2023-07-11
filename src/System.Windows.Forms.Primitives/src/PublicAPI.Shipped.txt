@@ -83,6 +83,7 @@ System.Windows.Forms.Padding.Equals(System.Windows.Forms.Padding other) -> bool
 System.Windows.Forms.Padding.Horizontal.get -> int
 System.Windows.Forms.Padding.Left.get -> int
 System.Windows.Forms.Padding.Left.set -> void
+System.Windows.Forms.Padding.Padding() -> void
 System.Windows.Forms.Padding.Padding(int all) -> void
 System.Windows.Forms.Padding.Padding(int left, int top, int right, int bottom) -> void
 System.Windows.Forms.Padding.Right.get -> int

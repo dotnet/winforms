@@ -15,6 +15,7 @@ using System.Windows.Forms.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 
@@ -270,7 +271,7 @@ public partial class Control
                 if (s_logPixels.IsEmpty)
                 {
                     s_logPixels = default;
-                    using var dc = User32.GetDcScope.ScreenDC;
+                    using var dc = GetDcScope.ScreenDC;
                     s_logPixels.X = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
                     s_logPixels.Y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                 }
@@ -373,13 +374,13 @@ public partial class Control
                     }
 #endif
 
-                    if (lpmsg->message == (uint)User32.WM.KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
+                    if (lpmsg->message == PInvoke.WM_KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
                     {
                         target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
                     }
                     else
                     {
-                        PInvoke.SendMessage(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
+                        PInvoke.SendMessage(target, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                     }
 
                     break;
@@ -474,10 +475,10 @@ public partial class Control
             // Now do the actual drawing.  We must ask all of our children to draw as well.
             try
             {
-                nint flags = (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
+                nint flags = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT;
                 if (hdcType != OBJ_TYPE.OBJ_ENHMETADC)
                 {
-                    PInvoke.SendMessage(_control, User32.WM.PRINT, (WPARAM)hdcDraw, (LPARAM)flags);
+                    PInvoke.SendMessage(_control, PInvoke.WM_PRINT, (WPARAM)hdcDraw, (LPARAM)flags);
                 }
                 else
                 {
@@ -611,7 +612,7 @@ public partial class Control
             Debug.Indent();
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-            hr = dispatch.Value->TryGetProperty((uint)dispid, &property, PInvoke.LCID.USER_DEFAULT.RawValue);
+            hr = dispatch.Value->TryGetProperty(dispid, &property, PInvoke.LCID.USER_DEFAULT.RawValue);
 
             if (hr.Succeeded)
             {
@@ -739,7 +740,7 @@ public partial class Control
         ///  the mnemonics for each control to mnemonicList.  Each mnemonic
         ///  is added as a char to the list.
         /// </summary>
-        private void GetMnemonicList(Control control, List<char> mnemonicList)
+        private static void GetMnemonicList(Control control, List<char> mnemonicList)
         {
             // Get the mnemonic for our control
             char mnemonic = WindowsFormsUtils.GetMnemonic(control.Text, true);
@@ -1051,7 +1052,6 @@ public partial class Control
             using ComScope<IStream> stream = new(null);
             HRESULT hr = stg->OpenStream(
                 GetStreamName(),
-                null,
                 STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                 0,
                 stream);
@@ -1062,7 +1062,6 @@ public partial class Control
                 // as the stream name in v1. Lets see if a stream by that name exists.
                 hr = stg->OpenStream(
                     GetType().FullName!,
-                    null,
                     STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                     0,
                     stream);
@@ -1973,12 +1972,12 @@ public partial class Control
 #endif // DEBUG
 
             bool needPreProcess = false;
-            switch ((User32.WM)lpmsg->message)
+            switch (lpmsg->message)
             {
-                case User32.WM.KEYDOWN:
-                case User32.WM.SYSKEYDOWN:
-                case User32.WM.CHAR:
-                case User32.WM.SYSCHAR:
+                case PInvoke.WM_KEYDOWN:
+                case PInvoke.WM_SYSKEYDOWN:
+                case PInvoke.WM_CHAR:
+                case PInvoke.WM_SYSCHAR:
                     needPreProcess = true;
                     break;
             }
@@ -2004,14 +2003,14 @@ public partial class Control
                             // otherwise the host may never send the key to our wndproc.
 
                             // Someone returned true from IsInputKey or IsInputChar
-                            PInvoke.TranslateMessage(*lpmsg);
+                            PInvoke.TranslateMessage(lpmsg);
                             if (PInvoke.IsWindowUnicode(lpmsg->hwnd))
                             {
-                                User32.DispatchMessageW(ref *lpmsg);
+                                PInvoke.DispatchMessage(lpmsg);
                             }
                             else
                             {
-                                User32.DispatchMessageA(ref *lpmsg);
+                                PInvoke.DispatchMessageA(lpmsg);
                             }
 
                             return HRESULT.S_OK;
@@ -2245,7 +2244,7 @@ public partial class Control
                     return;
                 }
 
-                if (m.Msg is >= ((int)User32.WM.NCLBUTTONDOWN) and <= ((int)User32.WM.NCMBUTTONDBLCLK))
+                if (m.Msg is >= ((int)PInvoke.WM_NCLBUTTONDOWN) and <= ((int)PInvoke.WM_NCMBUTTONDBLCLK))
                 {
                     return;
                 }

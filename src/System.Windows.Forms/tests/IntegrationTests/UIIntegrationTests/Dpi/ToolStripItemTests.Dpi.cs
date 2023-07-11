@@ -5,7 +5,6 @@
 using System.Drawing;
 using Windows.Win32.UI.HiDpi;
 using Xunit.Abstractions;
-using static Interop;
 
 namespace System.Windows.Forms.UITests.Dpi;
 
@@ -48,7 +47,7 @@ public class ToolStripItemDpiTests : ControlTestBase
 
             form.Show();
 
-            DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED_BEFOREPARENT, toolStrip, newDpi);
+            DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED_BEFOREPARENT, toolStrip, newDpi);
             var factor = (float)newDpi / form.DeviceDpi;
 
             Assert.Equal((float)initialFont.Size * factor, toolStrip.Font.Size, precision: 1);

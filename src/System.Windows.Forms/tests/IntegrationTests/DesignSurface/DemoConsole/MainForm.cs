@@ -130,6 +130,19 @@ public partial class MainForm : Form
                         rb1.Parent = pnl;
                         rb2.Parent = pnl;
 
+                        Label l1 = surface.CreateControl<Label>(new Size(100, 25), new Point(12, 12));
+                        Label l2 = surface.CreateControl<Label>(new Size(120, 25), new Point(12, 12));
+                        l1.Text = "I'm the first Label";
+                        l2.Text = "I'm the second Label";
+                        l1.BackColor = Color.Coral;
+                        l2.BackColor = Color.LightGreen;
+
+                        SplitContainer sct = surface.CreateControl<SplitContainer>(new Size(400, 100), new Point(0, 0));
+                        sct.Dock = DockStyle.Bottom;
+                        sct.BackColor = Color.White;
+                        l1.Parent = sct.Panel1;
+                        l2.Parent = sct.Panel2;
+
                         PictureBox pb1 = surface.CreateControl<PictureBox>(new Size(64, 64), new Point(24, 166));
                         pb1.Image = new Icon("painter.ico").ToBitmap();
 

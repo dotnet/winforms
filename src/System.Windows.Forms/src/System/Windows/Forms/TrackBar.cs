@@ -288,7 +288,7 @@ public partial class TrackBar : Control, ISupportInitialize
             _largeChange = value;
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, 0, value);
+                PInvoke.SendMessage(this, PInvoke.TBM_SETPAGESIZE, 0, value);
             }
         }
     }
@@ -433,7 +433,7 @@ public partial class TrackBar : Control, ISupportInitialize
             return;
         }
 
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+        PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
         Invalidate();
     }
 
@@ -491,7 +491,7 @@ public partial class TrackBar : Control, ISupportInitialize
             _smallChange = value;
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, 0, value);
+                PInvoke.SendMessage(this, PInvoke.TBM_SETLINESIZE, 0, value);
             }
         }
     }
@@ -572,7 +572,7 @@ public partial class TrackBar : Control, ISupportInitialize
             bool recreateHandle = ShouldRecreateHandle();
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)value);
+                PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)value);
                 // If user opts out of TrackBarModernRendering then recreateHandle
                 // will always be false.
                 if (recreateHandle)
@@ -785,10 +785,10 @@ public partial class TrackBar : Control, ISupportInitialize
             }
         }
 
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
+        PInvoke.SendMessage(this, PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
         for (int i = _minimum + drawnTickFrequency; i < _maximum - drawnTickFrequency; i += drawnTickFrequency)
         {
-            LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
+            LRESULT lresult = PInvoke.SendMessage(this, PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
             Debug.Assert((bool)(BOOL)lresult);
         }
     }
@@ -808,7 +808,7 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         if (IsHandleCreated)
         {
-            _value = (int)PInvoke.SendMessage(this, User32.WM.USER);
+            _value = (int)PInvoke.SendMessage(this, PInvoke.WM_USER);
 
             // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
             if (_orientation == Orientation.Vertical)
@@ -857,12 +857,12 @@ public partial class TrackBar : Control, ISupportInitialize
         }
 
         Debug.Assert(_autoDrawTicks == ShouldAutoDrawTicks());
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
+        PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+        PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
+        PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
         DrawTicks();
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
-        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
+        PInvoke.SendMessage(this, PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
+        PInvoke.SendMessage(this, PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
         SetTrackBarPosition();
         AdjustSize();
     }
@@ -924,12 +924,12 @@ public partial class TrackBar : Control, ISupportInitialize
             return;
         }
 
-        Debug.Assert(_cumulativeWheelData > -NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too small");
-        Debug.Assert(_cumulativeWheelData < NativeMethods.WHEEL_DELTA, "cumulativeWheelData is too big");
+        Debug.Assert(_cumulativeWheelData > -PInvoke.WHEEL_DELTA, "cumulativeWheelData is too small");
+        Debug.Assert(_cumulativeWheelData < PInvoke.WHEEL_DELTA, "cumulativeWheelData is too big");
         _cumulativeWheelData += e.Delta;
 
         float partialNotches;
-        partialNotches = (float)_cumulativeWheelData / (float)NativeMethods.WHEEL_DELTA;
+        partialNotches = (float)_cumulativeWheelData / (float)PInvoke.WHEEL_DELTA;
 
         if (wheelScrollLines == -1)
         {
@@ -946,13 +946,13 @@ public partial class TrackBar : Control, ISupportInitialize
             {
                 absScrollBands = scrollBands;
                 Value = Math.Min(absScrollBands + Value, Maximum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
             else
             {
                 absScrollBands = -scrollBands;
                 Value = Math.Max(Value - absScrollBands, Minimum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
         }
 
@@ -1048,8 +1048,8 @@ public partial class TrackBar : Control, ISupportInitialize
             // will always be false.
             if (IsHandleCreated && !recreateHandle)
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+                PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
                 if (!_autoDrawTicks)
                 {
                     DrawTicks();
@@ -1107,7 +1107,7 @@ public partial class TrackBar : Control, ISupportInitialize
                 reflectedValue = Minimum + Maximum - _value;
             }
 
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPOS, (WPARAM)(BOOL)true, (LPARAM)reflectedValue);
+            PInvoke.SendMessage(this, PInvoke.TBM_SETPOS, (WPARAM)(BOOL)true, (LPARAM)reflectedValue);
         }
     }
 
@@ -1155,18 +1155,18 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.REFLECT_HSCROLL:
-            case User32.WM.REFLECT_VSCROLL:
-                switch (m.WParamInternal.LOWORD)
+            case MessageId.WM_REFLECT_HSCROLL:
+            case MessageId.WM_REFLECT_VSCROLL:
+                switch ((uint)m.WParamInternal.LOWORD)
                 {
-                    case NativeMethods.TB_LINEUP:
-                    case NativeMethods.TB_LINEDOWN:
-                    case NativeMethods.TB_PAGEUP:
-                    case NativeMethods.TB_PAGEDOWN:
-                    case NativeMethods.TB_THUMBTRACK:
-                    case NativeMethods.TB_TOP:
-                    case NativeMethods.TB_BOTTOM:
-                    case NativeMethods.TB_ENDTRACK:
+                    case PInvoke.TB_LINEUP:
+                    case PInvoke.TB_LINEDOWN:
+                    case PInvoke.TB_PAGEUP:
+                    case PInvoke.TB_PAGEDOWN:
+                    case PInvoke.TB_THUMBTRACK:
+                    case PInvoke.TB_TOP:
+                    case PInvoke.TB_BOTTOM:
+                    case PInvoke.TB_ENDTRACK:
                         if (_value != Value)
                         {
                             OnScroll(EventArgs.Empty);

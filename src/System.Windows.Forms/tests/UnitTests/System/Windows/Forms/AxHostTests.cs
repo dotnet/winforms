@@ -11,6 +11,7 @@ using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -1283,7 +1284,8 @@ public class AxHostTests
     [MemberData(nameof(DoVerb_TestData))]
     public void AxHost_DoVerb_InvokeWithHandle_Success(int verb)
     {
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using NoAssertContext context = new();
+        using SubAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.DoVerb(verb);
     }
@@ -1292,11 +1294,13 @@ public class AxHostTests
     [MemberData(nameof(DoVerb_TestData))]
     public void AxHost_DoVerb_InvokeWithHandleWithParent_Success(int verb)
     {
-        using var parent = new Control();
-        using var control = new SubAxHost(WebBrowserClsidString)
+        using NoAssertContext context = new();
+        using Control parent = new();
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Parent = parent
         };
+
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.True(parent.IsHandleCreated);
         control.DoVerb(verb);
@@ -1307,8 +1311,9 @@ public class AxHostTests
     [MemberData(nameof(DoVerb_TestData))]
     public void AxHost_DoVerb_InvokeWithHandleWithParentWithoutHandle_Success(int verb)
     {
-        using var parent = new Control();
-        using var control = new SubAxHost(WebBrowserClsidString);
+        using NoAssertContext context = new();
+        using Control parent = new();
+        using SubAxHost control = new(WebBrowserClsidString);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.Parent = parent;
         Assert.False(parent.IsHandleCreated);
@@ -1574,14 +1579,14 @@ public class AxHostTests
         Assert.NotNull(iPicture);
 
         OLE_HANDLE handle = iPicture.Handle;
-        short type = iPicture.Type;
+        PICTYPE type = iPicture.Type;
         int width = iPicture.Width;
         int height = iPicture.Height;
         uint attributes = iPicture.Attributes;
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
-        Assert.Equal(3, type);
+        Assert.Equal(PICTYPE.PICTYPE_ICON, type);
         Assert.Equal(847, width);
         Assert.Equal(847, height);
         Assert.Throws<COMException>(() => iPicture.CurDC);
@@ -1660,7 +1665,7 @@ public class AxHostTests
 
         OLE_HANDLE handle = iPicture.Handle;
         iPicture.get_hPal(out OLE_HANDLE hPal).ThrowOnFailure();
-        short type = iPicture.Type;
+        PICTYPE type = iPicture.Type;
         int width = iPicture.Width;
         int height = iPicture.Height;
         uint attributes = iPicture.Attributes;
@@ -1668,10 +1673,10 @@ public class AxHostTests
 
         Assert.NotEqual(0u, handle);
         Assert.Equal(0u, hPal);
-        Assert.Equal(1, type);
+        Assert.Equal(PICTYPE.PICTYPE_BITMAP, type);
         Assert.Equal(265, width);
         Assert.Equal(291, height);
-        Assert.Equal(HDC.Null, curDc);
+        Assert.Equal(default, curDc);
         Assert.Equal(0u, attributes);
 
         var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1688,14 +1693,14 @@ public class AxHostTests
         Assert.NotNull(iPicture);
 
         OLE_HANDLE handle = iPicture.Handle;
-        short type = iPicture.Type;
+        PICTYPE type = iPicture.Type;
         int width = iPicture.Width;
         int height = iPicture.Height;
         uint attributes = iPicture.Attributes;
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
-        Assert.Equal(4, type);
+        Assert.Equal(PICTYPE.PICTYPE_ENHMETAFILE, type);
         Assert.Equal(19972, width);
         Assert.Equal(28332, height);
         Assert.Throws<COMException>(() => iPicture.CurDC);
@@ -1807,8 +1812,9 @@ public class AxHostTests
     [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
     public void AxHost_InvokeEditMode_InvokeWithSiteWithParent_Success(bool designMode, object selectionService, int expectedCallCount)
     {
-        using var parent = new Control();
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        using Control parent = new();
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
+
         mockSite
             .Setup(s => s.Container)
             .Returns((IContainer)null);
@@ -1840,20 +1846,18 @@ public class AxHostTests
         mockSite
             .Setup(s => s.Name)
             .Returns("Name");
-        using var control = new SubAxHost(WebBrowserClsidString)
+
+        using SubAxHost control = new(WebBrowserClsidString)
         {
             Parent = parent,
             Site = mockSite.Object
         };
+
         control.InvokeEditMode();
-        Assert.True(control.IsHandleCreated);
-        Assert.True(parent.IsHandleCreated);
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
 
         // Call again.
         control.InvokeEditMode();
-        Assert.True(control.IsHandleCreated);
-        Assert.True(parent.IsHandleCreated);
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
     }
 

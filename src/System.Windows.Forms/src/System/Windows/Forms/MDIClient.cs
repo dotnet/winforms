@@ -76,10 +76,6 @@ public sealed partial class MdiClient : Control
         set => base.BackgroundImageLayout = value;
     }
 
-    /// <summary>
-    ///  Gets the required creation parameters when the control handle is created.
-    /// </summary>
-    /// <value>The required creation parameters when the control handle is created.</value>
     protected override CreateParams CreateParams
     {
         get
@@ -88,19 +84,16 @@ public sealed partial class MdiClient : Control
 
             cp.ClassName = "MDICLIENT";
 
-            // Note: Don't set the MDIS_ALLCHILDSTYLES CreatParams.Style bit, it prevents an MDI child form from getting activated
-            // when made visible (no WM_MDIACTIVATE sent to it), and forcing activation on it changes the activation event sequence
-            // (MdiChildActivate/Enter/Focus/Activate/etc.).
-            // Comment for removed code:
-            // Add the style MDIS_ALLCHILDSTYLES
-            // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
-            // to make them not visible but still present.
+            // Note: Don't set the MDIS_ALLCHILDSTYLES CreatParams.Style bit, it prevents an MDI child form from getting
+            // activated when made visible (no WM_MDIACTIVATE sent to it), and forcing activation on it changes the
+            // activation event sequence (MdiChildActivate/Enter/Focus/Activate/etc.).
             cp.Style |= (int)(WINDOW_STYLE.WS_VSCROLL | WINDOW_STYLE.WS_HSCROLL);
             cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
-            cp.Param = new User32.CLIENTCREATESTRUCT
+            cp.Param = new CLIENTCREATESTRUCT
             {
                 idFirstChild = 1
             };
+
             ISite? site = ParentInternal?.Site;
             if (site is not null && site.DesignMode)
             {
@@ -110,9 +103,9 @@ public sealed partial class MdiClient : Control
 
             if (RightToLeft == RightToLeft.Yes && ParentInternal is not null && ParentInternal.IsMirrored)
             {
-                //We want to turn on mirroring for MdiClient explicitly.
+                // We want to turn on mirroring for MdiClient explicitly.
                 cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
-                //Don't need these styles when mirroring is turned on.
+                // Don't need these styles when mirroring is turned on.
                 cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
             }
 
@@ -121,8 +114,7 @@ public sealed partial class MdiClient : Control
     }
 
     /// <summary>
-    ///  The list of MDI children contained. This list
-    ///  will be sorted by the order in which the children were
+    ///  The list of MDI children contained. This list will be sorted by the order in which the children were
     ///  added to the form, not the current ZOrder.
     /// </summary>
     public Form[] MdiChildren
@@ -152,16 +144,16 @@ public sealed partial class MdiClient : Control
         switch (value)
         {
             case MdiLayout.Cascade:
-                PInvoke.SendMessage(this, User32.WM.MDICASCADE);
+                PInvoke.SendMessage(this, PInvoke.WM_MDICASCADE);
                 break;
             case MdiLayout.TileVertical:
-                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.VERTICAL);
+                PInvoke.SendMessage(this, PInvoke.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_VERTICAL);
                 break;
             case MdiLayout.TileHorizontal:
-                PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.HORIZONTAL);
+                PInvoke.SendMessage(this, PInvoke.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_HORIZONTAL);
                 break;
             case MdiLayout.ArrangeIcons:
-                PInvoke.SendMessage(this, User32.WM.MDIICONARRANGE);
+                PInvoke.SendMessage(this, PInvoke.WM_MDIICONARRANGE);
                 break;
         }
     }
@@ -339,9 +331,9 @@ public sealed partial class MdiClient : Control
     /// <param name="m">The Windows <see cref="Message" /> to process.</param>
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.CREATE:
+            case PInvoke.WM_CREATE:
                 if (ParentInternal is not null && ParentInternal.Site is not null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                 {
                     SetWindowRgn();
@@ -349,7 +341,7 @@ public sealed partial class MdiClient : Control
 
                 break;
 
-            case User32.WM.SETFOCUS:
+            case PInvoke.WM_SETFOCUS:
                 InvokeGotFocus(ParentInternal, EventArgs.Empty);
                 Form? childForm = null;
                 if (ParentInternal is Form parentInternalAsForm)
@@ -373,7 +365,7 @@ public sealed partial class MdiClient : Control
                 DefWndProc(ref m);
                 InvokeGotFocus(this, EventArgs.Empty);
                 return;
-            case User32.WM.KILLFOCUS:
+            case PInvoke.WM_KILLFOCUS:
                 InvokeLostFocus(ParentInternal, EventArgs.Empty);
                 break;
         }

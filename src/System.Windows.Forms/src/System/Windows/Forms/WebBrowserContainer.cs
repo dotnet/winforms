@@ -41,14 +41,14 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         return HRESULT.E_NOTIMPL;
     }
 
-    HRESULT IOleContainer.Interface.EnumObjects(OLECONTF grfFlags, IEnumUnknown** ppenum)
+    HRESULT IOleContainer.Interface.EnumObjects(uint grfFlags, IEnumUnknown** ppenum)
     {
         if (ppenum is null)
         {
             return HRESULT.E_POINTER;
         }
 
-        if (grfFlags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
+        if (((OLECONTF)grfFlags).HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
         {
             Debug.Assert(parent is not null);
             List<object> list = new();
@@ -173,10 +173,10 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             {
                 if (fuseOcx)
                 {
-                    object ax = webBrowserBase._activeXInstance;
-                    if (ax is not null)
+                    object? activeX = webBrowserBase._activeXInstance;
+                    if (activeX is not null)
                     {
-                        list.Add(ax);
+                        list.Add(activeX);
                     }
                 }
                 else
@@ -203,7 +203,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
     private IContainer? GetParentIContainer()
     {
-        ISite site = parent.Site;
+        ISite? site = parent.Site;
         return site is not null && site.DesignMode ? site.Container : null;
     }
 
@@ -345,8 +345,8 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
                 return ctl.container;
             }
 
-            ScrollableControl f = ctl.ContainingControl;
-            if (f is not null)
+            ScrollableControl? containingControl = ctl.ContainingControl;
+            if (containingControl is not null)
             {
                 WebBrowserContainer container = ctl.CreateWebBrowserContainer();
                 if (container.RegisterControl(ctl))
@@ -376,16 +376,16 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         if (siteUIActive is not null && siteUIActive != site)
         {
             WebBrowserBase tempSite = siteUIActive;
-            tempSite.AXInPlaceObject.UIDeactivate();
+            tempSite.AXInPlaceObject!.UIDeactivate();
         }
 
         site.AddSelectionHandler();
         Debug.Assert(siteUIActive is null, "Object did not call OnUIDeactivate");
         siteUIActive = site;
-        ContainerControl f = site.ContainingControl;
-        if (f is not null && f.Contains(site))
+        ContainerControl? containingControl = site.ContainingControl;
+        if (containingControl is not null && containingControl.Contains(site))
         {
-            f.SetActiveControl(site);
+            containingControl.SetActiveControl(site);
         }
     }
 
@@ -409,7 +409,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         if (siteActive == site)
         {
             siteActive = null;
-            ContainerControl parentContainer = parent.FindContainerControlInternal();
+            ContainerControl? parentContainer = parent.FindContainerControlInternal();
             parentContainer?.SetActiveControl(null);
         }
     }

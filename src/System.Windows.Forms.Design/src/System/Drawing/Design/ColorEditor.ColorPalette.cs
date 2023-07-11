@@ -4,9 +4,7 @@
 
 #nullable disable
 
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using static Interop.User32;
 
 namespace System.Drawing.Design;
 
@@ -212,7 +210,7 @@ public partial class ColorEditor
                 {
                     if (SelectedColor.Equals(GetColorFromCell(x, y)))
                     {
-                        Rectangle r = default(Rectangle);
+                        Rectangle r = default;
                         FillRectWithCellBounds(x, y, ref r);
                         Invalidate(Rectangle.Inflate(r, 5, 5));
                         break;
@@ -223,10 +221,14 @@ public partial class ColorEditor
 
         private void InvalidateFocus()
         {
-            Rectangle r = default(Rectangle);
+            Rectangle r = default;
             FillRectWithCellBounds(_focus.X, _focus.Y, ref r);
             Invalidate(Rectangle.Inflate(r, 5, 5));
-            NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(_focus.X, _focus.Y));
+            PInvoke.NotifyWinEvent(
+                (uint)AccessibleEvents.Focus,
+                this,
+                (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                1 + Get1DFrom2D(_focus.X, _focus.Y));
         }
 
         protected override bool IsInputKey(Keys keyData) => keyData switch

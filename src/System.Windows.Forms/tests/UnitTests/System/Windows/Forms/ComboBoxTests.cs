@@ -1485,7 +1485,7 @@ public class ComboBoxTests
 
             var m = new Message
             {
-                Msg = (int)User32.WM.PAINT
+                Msg = (int)PInvoke.WM_PAINT
             };
             control.WndProc(ref m);
             Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
@@ -1512,7 +1512,7 @@ public class ComboBoxTests
 
             var m = new Message
             {
-                Msg = (int)User32.WM.PAINT
+                Msg = (int)PInvoke.WM_PAINT
             };
             control.WndProc(ref m);
             Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
@@ -1567,7 +1567,7 @@ public class ComboBoxTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.PAINT
+            Msg = (int)PInvoke.WM_PAINT
         };
         control.WndProc(ref m);
         Assert.True(control.IsHandleCreated);
@@ -1601,7 +1601,7 @@ public class ComboBoxTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.PAINT
+            Msg = (int)PInvoke.WM_PAINT
         };
         control.WndProc(ref m);
         Assert.True(control.IsHandleCreated);
@@ -1658,7 +1658,7 @@ public class ComboBoxTests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WM.PAINT,
+                    Msg = (int)PInvoke.WM_PAINT,
                     WParam = hdc
                 };
                 control.WndProc(ref m);
@@ -1696,7 +1696,7 @@ public class ComboBoxTests
 
                 var m = new Message
                 {
-                    Msg = (int)User32.WM.PAINT,
+                    Msg = (int)PInvoke.WM_PAINT,
                     WParam = hdc
                 };
                 control.WndProc(ref m);
@@ -1762,7 +1762,7 @@ public class ComboBoxTests
 
             var m = new Message
             {
-                Msg = (int)User32.WM.PAINT,
+                Msg = (int)PInvoke.WM_PAINT,
                 WParam = hdc
             };
             control.WndProc(ref m);
@@ -1807,7 +1807,7 @@ public class ComboBoxTests
 
             var m = new Message
             {
-                Msg = (int)User32.WM.PAINT,
+                Msg = (int)PInvoke.WM_PAINT,
                 WParam = hdc
             };
             control.WndProc(ref m);

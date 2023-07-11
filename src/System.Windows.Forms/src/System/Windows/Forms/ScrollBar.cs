@@ -37,7 +37,7 @@ public abstract partial class ScrollBar : Control
 
         TabStop = false;
 
-        if ((CreateParams.Style & (int)User32.SBS.VERT) != 0)
+        if ((CreateParams.Style & (int)SCROLLBAR_CONSTANTS.SB_VERT) != 0)
         {
             _scrollOrientation = ScrollOrientation.VerticalScroll;
         }
@@ -498,7 +498,7 @@ public abstract partial class ScrollBar : Control
         return base.GetScaledBounds(bounds, factor, specified);
     }
 
-    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg) => default;
+    internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, MessageId msg) => default;
 
     protected override void OnEnabledChanged(EventArgs e)
     {
@@ -540,17 +540,17 @@ public abstract partial class ScrollBar : Control
 
             bool scrolled = false;
 
-            while (Math.Abs(_wheelDelta) >= NativeMethods.WHEEL_DELTA)
+            while (Math.Abs(_wheelDelta) >= PInvoke.WHEEL_DELTA)
             {
                 if (_wheelDelta > 0)
                 {
-                    _wheelDelta -= NativeMethods.WHEEL_DELTA;
+                    _wheelDelta -= (int)PInvoke.WHEEL_DELTA;
                     DoScroll(ScrollEventType.SmallDecrement);
                     scrolled = true;
                 }
                 else
                 {
-                    _wheelDelta += NativeMethods.WHEEL_DELTA;
+                    _wheelDelta += (int)PInvoke.WHEEL_DELTA;
                     DoScroll(ScrollEventType.SmallIncrement);
                     scrolled = true;
                 }
@@ -726,23 +726,23 @@ public abstract partial class ScrollBar : Control
 
     protected override void WndProc(ref Message m)
     {
-        switch ((User32.WM)m.Msg)
+        switch (m.MsgInternal)
         {
-            case User32.WM.REFLECT_HSCROLL:
-            case User32.WM.REFLECT_VSCROLL:
+            case MessageId.WM_REFLECT_HSCROLL:
+            case MessageId.WM_REFLECT_VSCROLL:
                 WmReflectScroll(ref m);
                 break;
 
-            case User32.WM.ERASEBKGND:
+            case PInvoke.WM_ERASEBKGND:
                 break;
 
-            case User32.WM.SIZE:
+            case PInvoke.WM_SIZE:
                 // Fixes the scrollbar focus rect
                 if (PInvoke.GetFocus() == HWND)
                 {
                     DefWndProc(ref m);
-                    PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
-                    PInvoke.SendMessage(this, User32.WM.SETFOCUS);
+                    PInvoke.SendMessage(this, PInvoke.WM_KILLFOCUS);
+                    PInvoke.SendMessage(this, PInvoke.WM_SETFOCUS);
                 }
 
                 break;

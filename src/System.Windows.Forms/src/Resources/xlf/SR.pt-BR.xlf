@@ -4854,13 +4854,11 @@ depuração just-in-time (JIT) em vez desta caixa de diálogo.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
     Versão do Assembly: {1}
-    Versão do Win32: {2}
-    Base de Código: {3}
+    Localização: {2}
 </target>
         <note />
       </trans-unit>
@@ -8634,6 +8632,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ResXResourceWriterSaved">
         <source>Resource writer has been saved.  You may not edit it.</source>
         <target state="translated">O gravador de recurso foi salvo. Talvez você não possa editá-lo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceValueNotFound">
+        <source>The resource value '{0}' was not found.</source>
+        <target state="translated">O valor do recurso '{0}' não foi encontrado.</target>
         <note />
       </trans-unit>
       <trans-unit id="RestartNotSupported">

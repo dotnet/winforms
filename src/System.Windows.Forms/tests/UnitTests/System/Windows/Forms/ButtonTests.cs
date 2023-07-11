@@ -9,7 +9,6 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using static Interop;
 using static Interop.UiaCore;
-using static Interop.User32;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -3385,7 +3384,7 @@ public class ButtonTests
 
             var m = new Message
             {
-                Msg = (int)User32.WM.ERASEBKGND,
+                Msg = (int)PInvoke.WM_ERASEBKGND,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -3429,7 +3428,7 @@ public class ButtonTests
             {
                 var m = new Message
                 {
-                    Msg = (int)User32.WM.ERASEBKGND,
+                    Msg = (int)PInvoke.WM_ERASEBKGND,
                     WParam = hdc,
                     Result = (IntPtr)250
                 };
@@ -3465,7 +3464,7 @@ public class ButtonTests
 
         var m = new Message
         {
-            Msg = (int)User32.WM.ERASEBKGND,
+            Msg = (int)PInvoke.WM_ERASEBKGND,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -3502,7 +3501,7 @@ public class ButtonTests
         {
             var m = new Message
             {
-                Msg = (int)User32.WM.ERASEBKGND,
+                Msg = (int)PInvoke.WM_ERASEBKGND,
                 WParam = hdc,
                 Result = (IntPtr)250
             };
@@ -3545,7 +3544,7 @@ public class ButtonTests
         };
         var m = new Message
         {
-            Msg = (int)WM.MOUSEHOVER,
+            Msg = (int)PInvoke.WM_MOUSEHOVER,
             Result = (IntPtr)250
         };
         control.WndProc(ref m);
@@ -3560,23 +3559,23 @@ public class ButtonTests
     public static IEnumerable<object[]> WndProc_ReflectCommandWithoutHandle_TestData()
     {
         yield return new object[] { FlatStyle.Flat, IntPtr.Zero, (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(0, (int)BN.CLICKED), (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(123, (int)BN.CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.Flat, PARAM.FromLowHigh(123, 456), (IntPtr)250, 0 };
 
         yield return new object[] { FlatStyle.Popup, IntPtr.Zero, (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(0, (int)BN.CLICKED), (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(123, (int)BN.CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.Popup, PARAM.FromLowHigh(123, 456), (IntPtr)250, 0 };
 
         yield return new object[] { FlatStyle.Standard, IntPtr.Zero, (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(0, (int)BN.CLICKED), (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(123, (int)BN.CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.Standard, PARAM.FromLowHigh(123, 456), (IntPtr)250, 0 };
 
         yield return new object[] { FlatStyle.System, IntPtr.Zero, (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(0, (int)BN.CLICKED), (IntPtr)250, 1 };
-        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, (int)BN.CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(0, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
+        yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, (int)PInvoke.BN_CLICKED), (IntPtr)250, 1 };
         yield return new object[] { FlatStyle.System, PARAM.FromLowHigh(123, 456), (IntPtr)250, 0 };
     }
 
@@ -3586,10 +3585,11 @@ public class ButtonTests
     {
         using (new NoAssertContext())
         {
-            using var control = new SubButton
+            using SubButton control = new()
             {
                 FlatStyle = flatStyle
             };
+
             int callCount = 0;
             control.Click += (sender, e) =>
             {
@@ -3598,12 +3598,13 @@ public class ButtonTests
                 callCount++;
             };
 
-            var m = new Message
+            Message m = new()
             {
-                Msg = (int)(WM.REFLECT | WM.COMMAND),
+                Msg = (int)(MessageId.WM_REFLECT_COMMAND),
                 WParam = wParam,
-                Result = (IntPtr)250
+                Result = 250
             };
+
             control.WndProc(ref m);
             Assert.Equal(expectedResult, m.Result);
             Assert.Equal(expectedCallCount, callCount);
@@ -3636,7 +3637,7 @@ public class ButtonTests
 
         var m = new Message
         {
-            Msg = (int)(WM.REFLECT | WM.COMMAND),
+            Msg = (int)(MessageId.WM_REFLECT_COMMAND),
             WParam = wParam,
             Result = (IntPtr)250
         };

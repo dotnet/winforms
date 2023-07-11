@@ -910,9 +910,19 @@
         <target state="translated">Ana Kapsayıcıda Yerleştir</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutHorizontalOrientation">
+        <source>Horizontal Splitter Orientation.</source>
+        <target state="translated">Yatay Bölümlendirici Yönü.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
         <target state="translated">Ana Kapsayıcıda Yerinden Çıkar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutVerticalOrientation">
+        <source>Vertical Splitter Orientation.</source>
+        <target state="translated">Dikey Bölümlendirici Yönü.</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">

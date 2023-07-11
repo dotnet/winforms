@@ -259,7 +259,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         var actual = item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId);
 
-        Assert.Equal(NativeMethods.WinFormFrameworkId, actual);
+        Assert.Equal("WinForm", actual);
         Assert.False(control.IsHandleCreated);
     }
 

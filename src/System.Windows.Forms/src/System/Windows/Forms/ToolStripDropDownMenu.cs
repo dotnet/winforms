@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -234,28 +233,29 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     ///  targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to
     ///  hmenu is a handle to the native menu.
     /// </summary>
-    internal static unsafe ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow)
+    internal static unsafe ToolStripDropDownMenu FromHMenu(HMENU hmenu, IWin32Window targetWindow)
     {
         ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
         managedDropDown.SuspendLayout();
 
-        int count = PInvoke.GetMenuItemCount((HMENU)hmenu);
+        int count = PInvoke.GetMenuItemCount(hmenu);
 
         ToolStripItem itemToAdd;
 
         // surf through the items in the collection, building up TSMenuItems and TSSeparators
         // corresponding to the native menu.
-        for (int i = 0; i < count; i++)
+        for (uint i = 0; i < count; i++)
         {
             // peek at the i'th item.
-            var info = new User32.MENUITEMINFOW
+            MENUITEMINFOW info = new()
             {
-                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
-                fMask = User32.MIIM.FTYPE
+                cbSize = (uint)sizeof(MENUITEMINFOW),
+                fMask = MENU_ITEM_MASK.MIIM_FTYPE
             };
-            User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ true, ref info);
 
-            if (info.fType == User32.MFT.SEPARATOR)
+            PInvoke.GetMenuItemInfo(hmenu, i, fByPosition: true, ref info);
+
+            if (info.fType == MENU_ITEM_TYPE.MFT_SEPARATOR)
             {
                 // its a separator.
                 itemToAdd = new ToolStripSeparator();
@@ -263,27 +263,27 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
             else
             {
                 // its a menu item... lets fish out the command id
-                info = new User32.MENUITEMINFOW
+                info = new()
                 {
-                    cbSize = (uint)sizeof(User32.MENUITEMINFOW),
-                    fMask = User32.MIIM.ID
+                    cbSize = (uint)sizeof(MENUITEMINFOW),
+                    fMask = MENU_ITEM_MASK.MIIM_ID
                 };
 
-                User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ true, ref info);
+                PInvoke.GetMenuItemInfo(hmenu, i, fByPosition: true, ref info);
 
                 // create the managed object - toolstripmenu item knows how to grok hmenu for information.
-                itemToAdd = new ToolStripMenuItem(hmenu, info.wID, targetWindow);
+                itemToAdd = new ToolStripMenuItem(hmenu, (int)info.wID, targetWindow);
 
                 // if there is a submenu fetch it.
-                info = new User32.MENUITEMINFOW
+                info = new()
                 {
-                    cbSize = (uint)sizeof(User32.MENUITEMINFOW),
-                    fMask = User32.MIIM.SUBMENU
+                    cbSize = (uint)sizeof(MENUITEMINFOW),
+                    fMask = MENU_ITEM_MASK.MIIM_SUBMENU
                 };
 
-                User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ true, ref info);
+                PInvoke.GetMenuItemInfo(hmenu, i, fByPosition: true, ref info);
 
-                if (info.hSubMenu != IntPtr.Zero)
+                if (!info.hSubMenu.IsNull)
                 {
                     // set the dropdown to be the items from the submenu
                     ((ToolStripMenuItem)itemToAdd).DropDown = FromHMenu(info.hSubMenu, targetWindow);

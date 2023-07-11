@@ -131,7 +131,7 @@ public partial class Control
                         biHeight = bmp.bmHeight,
                         biPlanes = 1,
                         biBitCount = bmp.bmBitsPixel,
-                        biCompression = BI_COMPRESSION.BI_RGB
+                        biCompression = (uint)BI_COMPRESSION.BI_RGB
                     };
 
                     // Include the palette for 256 color bitmaps
@@ -204,7 +204,7 @@ public partial class Control
                         DIB_USAGE.DIB_RGB_COLORS,
                         ROP_CODE.SRCCOPY);
 
-                    if (iRet == NativeMethods.GDI_ERROR)
+                    if (iRet == PInvoke.GDI_ERROR)
                     {
                         return false;
                     }

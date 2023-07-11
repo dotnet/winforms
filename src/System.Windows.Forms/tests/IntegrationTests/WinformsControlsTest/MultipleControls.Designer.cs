@@ -234,6 +234,8 @@ partial class MultipleControls
         this.checkedListBox1.Name = "checkedListBox1";
         this.checkedListBox1.Size = new System.Drawing.Size(140, 112);
         this.checkedListBox1.TabIndex = 10;
+        this.checkedListBox1.SetItemCheckState(0, CheckState.Checked);
+        this.checkedListBox1.SetItemCheckState(1, CheckState.Indeterminate);
         // 
         // numericUpDown1
         // 
@@ -290,6 +292,8 @@ partial class MultipleControls
         this.checkedListBox2.Name = "checkedListBox2";
         this.checkedListBox2.Size = new System.Drawing.Size(140, 58);
         this.checkedListBox2.TabIndex = 13;
+        this.checkedListBox2.SetItemCheckState(0, CheckState.Checked);
+        this.checkedListBox2.SetItemCheckState(1, CheckState.Indeterminate);
         // 
         // MultipleControls
         // 

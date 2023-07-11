@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -47,7 +46,7 @@ internal static partial class DpiHelper
 
         if (!OsVersion.IsWindows10_1607OrGreater())
         {
-            using var dc = User32.GetDcScope.ScreenDC;
+            using var dc = GetDcScope.ScreenDC;
             return PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
         }
 

@@ -4854,13 +4854,11 @@ just-in-time (JIT) debugging instead of this dialog box.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
-    アセンブリ バージョン:{1}
-    Win32 バージョン:{2}
-    コードベース:{3}
+    アセンブリ バージョン: {1}
+    場所: {2}
 </target>
         <note />
       </trans-unit>
@@ -8634,6 +8632,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ResXResourceWriterSaved">
         <source>Resource writer has been saved.  You may not edit it.</source>
         <target state="translated">リソース ライターは保存されています。  編集できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceValueNotFound">
+        <source>The resource value '{0}' was not found.</source>
+        <target state="translated">リソース値 '{0}' が見つかりませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="RestartNotSupported">

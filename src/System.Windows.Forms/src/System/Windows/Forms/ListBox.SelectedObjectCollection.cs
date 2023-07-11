@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -54,7 +53,7 @@ public partial class ListBox
 
                         case SelectionMode.MultiSimple:
                         case SelectionMode.MultiExtended:
-                            return (int)PInvoke.SendMessage(_owner, (WM)LB.GETSELCOUNT);
+                            return (int)PInvoke.SendMessage(_owner, PInvoke.LB_GETSELCOUNT);
                     }
 
                     return 0;

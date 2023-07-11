@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -331,10 +330,10 @@ public partial class PrintPreviewControl : Control
 
     private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
     {
-        switch ((User32.SBH)m.WParamInternal.LOWORD)
+        switch ((SCROLLBAR_COMMAND)m.WParamInternal.LOWORD)
         {
-            case User32.SBH.THUMBPOSITION:
-            case User32.SBH.THUMBTRACK:
+            case SCROLLBAR_COMMAND.SB_THUMBPOSITION:
+            case SCROLLBAR_COMMAND.SB_THUMBTRACK:
                 SCROLLINFO si = new()
                 {
                     cbSize = (uint)sizeof(SCROLLINFO),
@@ -344,7 +343,7 @@ public partial class PrintPreviewControl : Control
                 SCROLLBAR_CONSTANTS direction = horizontal ? SCROLLBAR_CONSTANTS.SB_HORZ : SCROLLBAR_CONSTANTS.SB_VERT;
                 pos = PInvoke.GetScrollInfo(m.HWND, direction, ref si) ? si.nTrackPos : m.WParamInternal.HIWORD;
                 break;
-            case User32.SBH.LINELEFT:
+            case SCROLLBAR_COMMAND.SB_LINELEFT:
                 if (pos > SCROLL_LINE)
                 {
                     pos -= SCROLL_LINE;
@@ -355,7 +354,7 @@ public partial class PrintPreviewControl : Control
                 }
 
                 break;
-            case User32.SBH.LINERIGHT:
+            case SCROLLBAR_COMMAND.SB_LINERIGHT:
                 if (pos < maxPos - SCROLL_LINE)
                 {
                     pos += SCROLL_LINE;
@@ -366,7 +365,7 @@ public partial class PrintPreviewControl : Control
                 }
 
                 break;
-            case User32.SBH.PAGELEFT:
+            case SCROLLBAR_COMMAND.SB_PAGELEFT:
                 if (pos > SCROLL_PAGE)
                 {
                     pos -= SCROLL_PAGE;
@@ -377,7 +376,7 @@ public partial class PrintPreviewControl : Control
                 }
 
                 break;
-            case User32.SBH.PAGERIGHT:
+            case SCROLLBAR_COMMAND.SB_PAGERIGHT:
                 if (pos < maxPos - SCROLL_PAGE)
                 {
                     pos += SCROLL_PAGE;
@@ -404,9 +403,10 @@ public partial class PrintPreviewControl : Control
             return;
         }
 
-        using User32.GetDcScope hdc = new(Handle);
-        screendpi = new Point(PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
-                              PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
+        using GetDcScope hdc = new(HWND);
+        screendpi = new Point(
+            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
+            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
 
         Size pageSize = pageInfo[StartPage].PhysicalSize;
         Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
@@ -730,7 +730,7 @@ public partial class PrintPreviewControl : Control
         Position = locPos;
     }
 
-    private void SetPositionNoInvalidate(Point value)
+    private unsafe void SetPositionNoInvalidate(Point value)
     {
         Point current = position;
 
@@ -748,12 +748,12 @@ public partial class PrintPreviewControl : Control
         }
 
         RECT scroll = ClientRectangle;
-        User32.ScrollWindow(
+        PInvoke.ScrollWindow(
             this,
             current.X - position.X,
             current.Y - position.Y,
-            ref scroll,
-            ref scroll);
+            &scroll,
+            &scroll);
 
         PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_HORZ, position.X, true);
         PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_VERT, position.Y, true);
@@ -943,13 +943,13 @@ public partial class PrintPreviewControl : Control
     {
         switch (m.MsgInternal)
         {
-            case User32.WM.VSCROLL:
+            case PInvoke.WM_VSCROLL:
                 WmVScroll(ref m);
                 break;
-            case User32.WM.HSCROLL:
+            case PInvoke.WM_HSCROLL:
                 WmHScroll(ref m);
                 break;
-            case User32.WM.KEYDOWN:
+            case PInvoke.WM_KEYDOWN:
                 WmKeyDown(ref m);
                 break;
             default:

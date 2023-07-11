@@ -48,16 +48,16 @@ public class TreeNodeCollection : IList
     {
         get
         {
-            if (index < 0 || index >= owner.childCount)
+            if (index < 0 || index >= owner.childNodes.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            return owner.children[index];
+            return owner.childNodes[index];
         }
         set
         {
-            if (index < 0 || index >= owner.childCount)
+            if (index < 0 || index >= owner.childNodes.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -65,7 +65,7 @@ public class TreeNodeCollection : IList
             ArgumentNullException.ThrowIfNull(value);
 
             TreeView tv = owner.treeView;
-            TreeNode actual = owner.children[index];
+            TreeNode actual = owner.childNodes[index];
 
             if (value.treeView is not null && value.treeView.Handle != tv.Handle)
             {
@@ -140,7 +140,7 @@ public class TreeNodeCollection : IList
     {
         get
         {
-            return owner.childCount;
+            return owner.childNodes.Count;
         }
     }
 
@@ -274,9 +274,9 @@ public class TreeNodeCollection : IList
             tv.BeginUpdate();
         }
 
-        owner.Nodes.FixedIndex = owner.childCount;
-        owner.EnsureCapacity(nodes.Length);
-        for (int i = nodes.Length - 1; i >= 0; i--)
+        owner.Nodes.FixedIndex = owner.childNodes.Count;
+        owner.childNodes.EnsureCapacity(nodes.Length);
+        for (int i = 0; i < nodes.Length; i++)
         {
             AddInternal(nodes[i], i);
         }
@@ -297,7 +297,7 @@ public class TreeNodeCollection : IList
         return foundNodes.ToArray();
     }
 
-    private List<TreeNode> FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, List<TreeNode> foundTreeNodes)
+    private static List<TreeNode> FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, List<TreeNode> foundTreeNodes)
     {
         // Perform breadth first search - as it's likely people will want tree nodes belonging
         // to the same parent close to each other.
@@ -381,12 +381,10 @@ public class TreeNodeCollection : IList
         {
             //if fixedIndex != -1 capacity was ensured by AddRange
             Debug.Assert(delta == 0, "delta should be 0");
-            owner.EnsureCapacity(1);
-            node.index = owner.childCount;
+            node.index = owner.childNodes.Count;
         }
 
-        owner.children[node.index] = node;
-        owner.childCount++;
+        owner.childNodes.Add(node);
         node.Realize(false);
 
         if (tv is not null && node == tv.selectedNode)
@@ -536,9 +534,9 @@ public class TreeNodeCollection : IList
             index = 0;
         }
 
-        if (index > owner.childCount)
+        if (index > owner.childNodes.Count)
         {
-            index = owner.childCount;
+            index = owner.childNodes.Count;
         }
 
         owner.InsertNodeAt(index, node);
@@ -657,9 +655,9 @@ public class TreeNodeCollection : IList
 
     public void CopyTo(Array dest, int index)
     {
-        if (owner.childCount > 0)
+        if (owner.childNodes.Count > 0)
         {
-            System.Array.Copy(owner.children, 0, dest, index, owner.childCount);
+            ((ICollection)owner.childNodes).CopyTo(dest, index);
         }
     }
 
@@ -695,13 +693,6 @@ public class TreeNodeCollection : IList
 
     public IEnumerator GetEnumerator()
     {
-        if (owner.children is not null)
-        {
-            return new ArraySubsetEnumerator(owner.children, owner.childCount);
-        }
-        else
-        {
-            return Array.Empty<TreeNode>().GetEnumerator();
-        }
+        return owner.childNodes.GetEnumerator();
     }
 }

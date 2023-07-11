@@ -2,56 +2,42 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms.Design.Behavior;
 
 public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
 {
-    private readonly IEnumerator baseEnumerator;
-    private readonly IEnumerable temp;
+    private readonly IEnumerator _baseEnumerator;
 
     public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
     {
-        temp = mappings;
-        baseEnumerator = temp.GetEnumerator();
+        _baseEnumerator = ((IEnumerable)mappings).GetEnumerator();
     }
 
-    public Adorner Current
-    {
-        get
-        {
-            return ((Adorner)(baseEnumerator.Current));
-        }
-    }
+#nullable disable // explicitly leaving Current as "oblivious" to avoid spurious warnings in foreach over non-generic enumerables
+    public Adorner Current => (Adorner)_baseEnumerator.Current;
 
-    object IEnumerator.Current
-    {
-        get
-        {
-            return baseEnumerator.Current;
-        }
-    }
+    object IEnumerator.Current => _baseEnumerator.Current;
+#nullable restore
 
     public bool MoveNext()
     {
-        return baseEnumerator.MoveNext();
+        return _baseEnumerator.MoveNext();
     }
 
     bool IEnumerator.MoveNext()
     {
-        return baseEnumerator.MoveNext();
+        return _baseEnumerator.MoveNext();
     }
 
     public void Reset()
     {
-        baseEnumerator.Reset();
+        _baseEnumerator.Reset();
     }
 
     void IEnumerator.Reset()
     {
-        baseEnumerator.Reset();
+        _baseEnumerator.Reset();
     }
 }

@@ -133,14 +133,14 @@ public abstract partial class AxHost
         {
             try
             {
-                IPerPropertyBrowsing.Interface ippb = _owner.GetPerPropertyBrowsing();
-                if (ippb is null)
+                using var propertyBrowsing = _owner.TryGetComScope<IPerPropertyBrowsing>(out HRESULT hr);
+                if (hr.Failed)
                 {
                     return Guid.Empty;
                 }
 
                 Guid rval = Guid.Empty;
-                if (ippb.MapPropertyToPage(dispid, &rval).Succeeded)
+                if (propertyBrowsing.Value->MapPropertyToPage(dispid, &rval).Succeeded)
                 {
                     return rval;
                 }
@@ -265,14 +265,11 @@ public abstract partial class AxHost
         }
 
         /// <summary>
-        ///  Called externally to update the editor or type converter.
-        ///  This simply sets flags so this will happen, it doesn't actually to the update...
-        ///  we wait and do that on-demand for perf.
+        ///  Called externally to flag that we need to update the editor or type converter.
         /// </summary>
         internal void UpdateTypeConverterAndTypeEditor(bool force)
         {
-            // if this is an external request, flip the flag to false so we do the update on demand.
-            //
+            // If this is an external request, flip the flag to false so we do the update on demand.
             if (GetFlag(FlagUpdatedEditorAndConverter) && force)
             {
                 SetFlag(FlagUpdatedEditorAndConverter, false);
@@ -280,9 +277,7 @@ public abstract partial class AxHost
         }
 
         /// <summary>
-        ///  Called externally to update the editor or type converter.
-        ///  This simply sets flags so this will happen, it doesn't actually to the update...
-        ///  we wait and do that on-demand for perf.
+        ///  Called externally to flag that we need to update the editor or type converter for a specific DISPID.
         /// </summary>
         internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, int dispid)
         {
@@ -294,93 +289,91 @@ public abstract partial class AxHost
 
             try
             {
-                IPerPropertyBrowsing.Interface ppb = _owner.GetPerPropertyBrowsing();
-
-                if (ppb is not null)
+                using var propertyBrowsing = _owner.TryGetComScope<IPerPropertyBrowsing>(out HRESULT hr);
+                if (hr.Failed)
                 {
-                    // Check for enums
-                    CALPOLESTR caStrings = default;
-                    CADWORD caCookies = default;
-
-                    HRESULT hr = HRESULT.S_OK;
-                    try
-                    {
-                        hr = ppb.GetPredefinedStrings(dispid, &caStrings, &caCookies);
-                    }
-                    catch (ExternalException ex)
-                    {
-                        hr = (HRESULT)ex.ErrorCode;
-                        Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={dispid}), object type={ComNativeDescriptor.GetClassName(ppb)}");
-                    }
-
-                    if (hr == HRESULT.S_OK)
-                    {
-                        string?[] names = caStrings.ConvertAndFree();
-                        uint[] cookies = caCookies.ConvertAndFree();
-
-                        if (names.Length > 0 && cookies.Length > 0)
-                        {
-                            if (_converter is null)
-                            {
-                                _converter = new AxEnumConverter(
-                                    this,
-                                    new AxPerPropertyBrowsingEnum(
-                                        this,
-                                        _owner,
-                                        names,
-                                        cookies));
-                            }
-                            else if (_converter is AxEnumConverter enumConverter)
-                            {
-                                enumConverter.RefreshValues();
-                                if (enumConverter._com2Enum is AxPerPropertyBrowsingEnum axEnum)
-                                {
-                                    axEnum.RefreshArrays(names, cookies);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Destroy the existing editor if we created the current one so if the items have
-                        // disappeared, we don't hold onto the old items.
-                        if (_converter is Com2EnumConverter)
-                        {
-                            _converter = null;
-                        }
-
-                        // If we didn't get any strings, try the proppage editor
-                        //
-                        // Check to see if this is a property that we have already massaged to be a
-                        // .Net type. If it is, don't bother with custom property pages. We already
-                        // have a .Net Editor for this type.
-
-                        if (_baseDescriptor.GetAttribute<ComAliasNameAttribute>() is null)
-                        {
-                            Guid g = GetPropertyPage(dispid);
-
-                            if (!Guid.Empty.Equals(g))
-                            {
-                                _editor = new AxPropertyTypeEditor(this, g);
-
-                                // Show any non-browsable property that has an editor through a property page.
-                                if (!IsBrowsable)
-                                {
-                                    s_axPropTraceSwitch.TraceVerbose(
-                                        $"Making property: {Name} browsable because we found an editor.");
-
-                                    AddAttribute(new BrowsableAttribute(true));
-                                }
-                            }
-                        }
-                    }
+                    return;
                 }
 
-                SetFlag(FlagUpdatedEditorAndConverter, true);
+                // Check for enums
+                CALPOLESTR caStrings = default;
+                CADWORD caCookies = default;
+
+                hr = propertyBrowsing.Value->GetPredefinedStrings(dispid, &caStrings, &caCookies);
+
+                if (hr.Failed)
+                {
+                    Debug.Fail($"IPerPropertyBrowsing::GetPredefinedStrings(dispid={dispid}) failed: {hr}");
+                }
+
+                if (hr == HRESULT.S_OK)
+                {
+                    string?[] names = caStrings.ConvertAndFree();
+                    uint[] cookies = caCookies.ConvertAndFree();
+
+                    if (names.Length > 0 && cookies.Length > 0)
+                    {
+                        if (_converter is null)
+                        {
+                            _converter = new AxEnumConverter(
+                                this,
+                                new AxPerPropertyBrowsingEnum(
+                                    this,
+                                    _owner,
+                                    names,
+                                    cookies));
+                        }
+                        else if (_converter is AxEnumConverter enumConverter)
+                        {
+                            enumConverter.RefreshValues();
+                            if (enumConverter._com2Enum is AxPerPropertyBrowsingEnum axEnum)
+                            {
+                                axEnum.RefreshArrays(names, cookies);
+                            }
+                        }
+                    }
+
+                    return;
+                }
+
+                // Destroy the existing editor if we created the current one so if the items have
+                // disappeared, we don't hold onto the old items.
+                if (_converter is Com2EnumConverter)
+                {
+                    _converter = null;
+                }
+
+                // If we didn't get any strings, try the property page editor.
+                //
+                // Check to see if this is a property that we have already massaged to be a .NET type. If it is, don't
+                // bother with custom property pages. We already have a .NET Editor for this type.
+
+                if (_baseDescriptor.GetAttribute<ComAliasNameAttribute>() is not null)
+                {
+                    return;
+                }
+
+                Guid pageGuid = GetPropertyPage(dispid);
+
+                if (pageGuid != Guid.Empty)
+                {
+                    _editor = new AxPropertyTypeEditor(this, pageGuid);
+
+                    // Show any non-browsable property that has an editor through a property page.
+                    if (!IsBrowsable)
+                    {
+                        s_axPropTraceSwitch.TraceVerbose($"Making property: {Name} browsable because we found an editor.");
+                        AddAttribute(new BrowsableAttribute(true));
+                    }
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                s_axPropTraceSwitch.TraceVerbose($"could not get the type editor for property: {Name} Exception: {e}");
+                s_axPropTraceSwitch.TraceVerbose($"Could not get the type editor for property: {Name} Exception: {ex}");
+            }
+            finally
+            {
+                SetFlag(FlagUpdatedEditorAndConverter, true);
             }
         }
     }

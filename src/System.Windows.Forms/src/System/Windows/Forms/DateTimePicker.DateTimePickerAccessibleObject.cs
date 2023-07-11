@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms;
 
@@ -33,18 +32,8 @@ public partial class DateTimePicker
                     }
                 }
 
-                string? baseShortcut = base.KeyboardShortcut;
-
-                if (baseShortcut is null || baseShortcut.Length == 0)
-                {
-                    char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(this.GetOwnerText(), convertToUpperCase: false);
-                    if (ownerTextMnemonic != '\0')
-                    {
-                        return $"Alt+{ownerTextMnemonic}";
-                    }
-                }
-
-                return baseShortcut;
+                // Win32 DTP does not interpret ampersand in its Text as an escape character for a mnemonic.
+                return null;
             }
         }
 
@@ -139,7 +128,7 @@ public partial class DateTimePicker
                 && owner.IsHandleCreated
                 && ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
             {
-                PInvoke.SendMessage(owner, WM.SYSKEYDOWN, (WPARAM)(int)Keys.Down);
+                PInvoke.SendMessage(owner, PInvoke.WM_SYSKEYDOWN, (WPARAM)(int)Keys.Down);
             }
         }
 
@@ -149,7 +138,7 @@ public partial class DateTimePicker
                 && owner.IsHandleCreated
                 && ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
             {
-                PInvoke.SendMessage(owner, (WM)PInvoke.DTM_CLOSEMONTHCAL);
+                PInvoke.SendMessage(owner, PInvoke.DTM_CLOSEMONTHCAL);
             }
         }
 

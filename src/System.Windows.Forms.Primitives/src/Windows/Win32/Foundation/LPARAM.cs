@@ -13,7 +13,7 @@ internal readonly partial struct LPARAM
 
     public static explicit operator LPARAM(BOOL value) => new((nint)value);
 
-    public static implicit operator LPARAM(int value) => new((nint)value);
+    public static implicit operator LPARAM(int value) => new(value);
 
     public static explicit operator int(LPARAM value) => (int)value.Value;
     public static explicit operator uint(LPARAM value) => (uint)(int)value.Value;
@@ -21,6 +21,7 @@ internal readonly partial struct LPARAM
     public static explicit operator LPARAM(uint value) => new((nint)(nuint)value);
 
     public static explicit operator HWND(LPARAM value) => (HWND)value.Value;
+    public static explicit operator LPARAM(HWND value) => (LPARAM)value.Value;
 
     public static explicit operator LPARAM(Color value) => (LPARAM)ColorTranslator.ToWin32(value);
     public static explicit operator Point(LPARAM value) => new(value.SIGNEDLOWORD, value.SIGNEDHIWORD);

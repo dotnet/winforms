@@ -131,12 +131,16 @@ public partial class ComponentEditorForm
             rc2.bottom = rc2.top + size.Height;
             rc2.right = rc.right;
             PInvoke.SetTextColor(dc, textColor);
-            User32.DrawTextW(
-                dc,
-                itemText,
-                itemText.Length,
-                ref rc2,
-                User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
+
+            fixed (char* t = itemText)
+            {
+                PInvoke.DrawText(
+                    dc,
+                    t,
+                    itemText.Length,
+                    ref rc2,
+                    DRAW_TEXT_FORMAT.DT_LEFT | DRAW_TEXT_FORMAT.DT_VCENTER | DRAW_TEXT_FORMAT.DT_END_ELLIPSIS | DRAW_TEXT_FORMAT.DT_NOPREFIX);
+            }
 
             PInvoke.ImageList.Draw(
                 imagelist,
@@ -181,9 +185,9 @@ public partial class ComponentEditorForm
         {
             base.OnHandleCreated(e);
 
-            int itemHeight = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMHEIGHT);
+            int itemHeight = (int)PInvoke.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT);
             itemHeight += 2 * PADDING_VERT;
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
+            PInvoke.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
 
             if (_hbrushDither.IsNull)
             {
@@ -269,7 +273,7 @@ public partial class ComponentEditorForm
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.MsgInternal == User32.WM.REFLECT_NOTIFY)
+            if (m.MsgInternal == MessageId.WM_REFLECT_NOTIFY)
             {
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 if ((int)nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)

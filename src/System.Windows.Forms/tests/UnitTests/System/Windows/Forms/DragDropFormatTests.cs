@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Windows.Win32.System.Ole;
 using static Interop;
-using static Interop.User32;
 using IStream = Windows.Win32.System.Com.IStream;
 
 namespace System.Windows.Forms.Tests;
@@ -17,7 +16,7 @@ public class DragDropFormatTests
     {
         FORMATETC formatEtc = new()
         {
-            cfFormat = (short)RegisterClipboardFormatW("InShellDragLoop"),
+            cfFormat = (short)PInvoke.RegisterClipboardFormat("InShellDragLoop"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,
@@ -33,14 +32,14 @@ public class DragDropFormatTests
                 BOOL.Size)
         };
 
-        SaveInDragLoopToHandle(medium.unionmember, inDragLoop: true);
+        SaveInDragLoopToHandle((HGLOBAL)medium.unionmember, inDragLoop: true);
         yield return new object[] { formatEtc, medium };
 
         MemoryStream memoryStream = new();
         IStream.Interface iStream = new Ole32.GPStream(memoryStream);
         formatEtc = new()
         {
-            cfFormat = (short)RegisterClipboardFormatW("DragContext"),
+            cfFormat = (short)PInvoke.RegisterClipboardFormat("DragContext"),
             dwAspect = DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,
@@ -67,7 +66,7 @@ public class DragDropFormatTests
         {
             dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
             dragDropFormat.Dispose();
-            int handleSize = (int)PInvoke.GlobalSize(dragDropFormat.Medium.unionmember);
+            int handleSize = (int)PInvoke.GlobalSize((HGLOBAL)dragDropFormat.Medium.unionmember);
             Assert.Equal(0, handleSize);
             Assert.Null(dragDropFormat.Medium.pUnkForRelease);
             Assert.Equal(TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
@@ -171,7 +170,7 @@ public class DragDropFormatTests
         }
     }
 
-    private static unsafe void SaveInDragLoopToHandle(IntPtr handle, bool inDragLoop)
+    private static unsafe void SaveInDragLoopToHandle(HGLOBAL handle, bool inDragLoop)
     {
         try
         {

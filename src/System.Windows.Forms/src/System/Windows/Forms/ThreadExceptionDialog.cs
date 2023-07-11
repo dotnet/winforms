@@ -181,31 +181,12 @@ public class ThreadExceptionDialog : Form
         detailsTextBuilder.AppendLine();
         detailsTextBuilder.AppendFormat(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgLoadedAssembliesSection);
 
-#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308.
-        foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            AssemblyName name = asm.GetName();
-            string? fileVer = SR.NotAvailable;
-
-            try
-            {
-                if (name.EscapedCodeBase is not null && name.EscapedCodeBase.Length > 0)
-                {
-                    Uri codeBase = new Uri(name.EscapedCodeBase);
-                    if (codeBase.Scheme == "file")
-                    {
-                        fileVer = FileVersionInfo.GetVersionInfo(NativeMethods.GetLocalPath(name.EscapedCodeBase)).FileVersion;
-                    }
-                }
-            }
-            catch (IO.FileNotFoundException)
-            {
-            }
-
-            detailsTextBuilder.AppendFormat(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase);
+            AssemblyName name = assembly.GetName();
+            detailsTextBuilder.AppendFormat(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, assembly.Location);
             detailsTextBuilder.Append(separator);
         }
-#pragma warning restore SYSLIB0044 // Type or member is obsolete
 
         detailsTextBuilder.AppendFormat(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgJITDebuggingSection);
         if (Application.CustomThreadExceptionHandlerAttached)
@@ -351,6 +332,9 @@ public class ThreadExceptionDialog : Form
         _details.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop + _scaledButtonTopPadding, width - _scaledDetailsWidthPadding, _scaledDetailsHeight);
         _details.Visible = _detailsVisible;
         Controls.Add(_details);
+
+        AutoScaleMode = AutoScaleMode.Dpi;
+
         if (DpiHelper.IsScalingRequirementMet)
         {
             DpiChanged += ThreadExceptionDialog_DpiChanged;

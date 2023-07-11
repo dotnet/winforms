@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-using static Interop.User32;
-
 namespace System.Windows.Forms;
 
 public partial class ComboBox
@@ -17,14 +14,14 @@ public partial class ComboBox
         internal static int s_inWndProcCnt;
 
         // This dictionary can contain null for those ACWindows we find, but are sure are not ours.
-        private static readonly Dictionary<IntPtr, ACNativeWindow?> s_ACWindows = new();
+        private static readonly Dictionary<HWND, ACNativeWindow?> s_ACWindows = new();
 
-        internal ACNativeWindow(IntPtr acHandle)
+        internal ACNativeWindow(HWND acHandle)
         {
             Debug.Assert(!s_ACWindows.ContainsKey(acHandle));
             AssignHandle(acHandle);
             s_ACWindows.Add(acHandle, this);
-            EnumChildWindows(new HandleRef(this, acHandle), RegisterACWindowRecursive);
+            PInvoke.EnumChildWindows(new HandleRef<HWND>(this, acHandle), RegisterACWindowRecursive);
         }
 
         private static BOOL RegisterACWindowRecursive(HWND handle)
@@ -72,18 +69,18 @@ public partial class ComboBox
                 s_inWndProcCnt--;
             }
 
-            if (m.Msg == (int)WM.NCDESTROY)
+            if (m.MsgInternal == PInvoke.WM_NCDESTROY)
             {
-                Debug.Assert(s_ACWindows.ContainsKey(Handle));
-                s_ACWindows.Remove(Handle);   //so we do not leak ac windows.
+                Debug.Assert(s_ACWindows.ContainsKey(HWND));
+                s_ACWindows.Remove(HWND);   //so we do not leak ac windows.
             }
         }
 
-        internal static void RegisterACWindow(IntPtr acHandle, bool subclass)
+        internal static void RegisterACWindow(HWND acHandle, bool subclass)
         {
-            if (subclass && s_ACWindows.ContainsKey(acHandle))
+            if (subclass && s_ACWindows.TryGetValue(acHandle, out ACNativeWindow? value))
             {
-                if (s_ACWindows[acHandle] is null)
+                if (value is null)
                 {
                     s_ACWindows.Remove(acHandle); //if an external handle got destroyed, don't let it stop us.
                 }
@@ -108,8 +105,8 @@ public partial class ComboBox
         /// </summary>
         internal static void ClearNullACWindows()
         {
-            List<IntPtr> toRemove = new();
-            foreach (KeyValuePair<IntPtr, ACNativeWindow?> acNativeWindowByHandle in s_ACWindows)
+            List<HWND> toRemove = new();
+            foreach (var acNativeWindowByHandle in s_ACWindows)
             {
                 if (acNativeWindowByHandle.Value is null)
                 {
@@ -117,7 +114,7 @@ public partial class ComboBox
                 }
             }
 
-            foreach (IntPtr handle in toRemove)
+            foreach (HWND handle in toRemove)
             {
                 s_ACWindows.Remove(handle);
             }

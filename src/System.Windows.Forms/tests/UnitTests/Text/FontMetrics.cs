@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.Text;
 
@@ -44,7 +43,7 @@ public class FontMetrics
         }
 
         using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
-        User32.DRAWTEXTPARAMS margins = hfont.GetTextMargins();
+        DRAWTEXTPARAMS margins = hfont.GetTextMargins();
         Assert.Equal(left, margins.iLeftMargin);
         Assert.Equal(right, margins.iRightMargin);
     }
@@ -91,46 +90,46 @@ public class FontMetrics
     public static TheoryData<string, float, Size, uint, Size> MeasureTextData =>
         new TheoryData<string, float, Size, uint, Size>
         {
-            { "Arial", 9.0f, new Size(-1, -1), (uint)User32.DT.BOTTOM, new Size(173, 15) },
-            { "Arial", 12.0f, new Size(-1, -1), (uint)User32.DT.BOTTOM, new Size(215, 18) },
-            { "Microsoft Sans Serif", 16.0f, new Size(-1, -1), (uint)User32.DT.BOTTOM, new Size(299, 26) },
-            { "Times New Roman", 11.0f, new Size(-1, -1), (uint)User32.DT.BOTTOM, new Size(179, 17) },
-            { "MS Gothic", 10.0f, new Size(-1, -1), (uint)User32.DT.BOTTOM, new Size(189, 14) },
-            { "Arial", 9.0f, new Size(0, 0), (uint)User32.DT.BOTTOM, new Size(173, 15) },
-            { "Arial", 12.0f, new Size(0, 0), (uint)User32.DT.BOTTOM, new Size(215, 18) },
-            { "Microsoft Sans Serif", 16.0f, new Size(0, 0), (uint)User32.DT.BOTTOM, new Size(299, 26) },
-            { "Times New Roman", 11.0f, new Size(0, 0), (uint)User32.DT.BOTTOM, new Size(179, 17) },
-            { "MS Gothic", 10.0f, new Size(0, 0), (uint)User32.DT.BOTTOM, new Size(189, 14) },
-            { "Arial", 9.0f, new Size(1, 1), (uint)User32.DT.BOTTOM, new Size(173, 15) },
-            { "Arial", 12.0f, new Size(1, 1), (uint)User32.DT.BOTTOM, new Size(215, 18) },
-            { "Microsoft Sans Serif", 16.0f, new Size(1, 1), (uint)User32.DT.BOTTOM, new Size(299, 26) },
-            { "Times New Roman", 11.0f, new Size(1, 1), (uint)User32.DT.BOTTOM, new Size(179, 17) },
-            { "MS Gothic", 10.0f, new Size(1, 1), (uint)User32.DT.BOTTOM, new Size(189, 14) },
-            { "Arial", 9.0f, new Size(300, 300), (uint)User32.DT.BOTTOM, new Size(173, 15) },
-            { "Arial", 12.0f, new Size(300, 300), (uint)User32.DT.BOTTOM, new Size(215, 18) },
-            { "Microsoft Sans Serif", 16.0f, new Size(300, 300), (uint)User32.DT.BOTTOM, new Size(299, 26) },
-            { "Times New Roman", 11.0f, new Size(300, 300), (uint)User32.DT.BOTTOM, new Size(179, 17) },
-            { "MS Gothic", 10.0f, new Size(300, 300), (uint)User32.DT.BOTTOM, new Size(189, 14) },
-            { "Arial", 9.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.BOTTOM, new Size(173, 15) },
-            { "Arial", 12.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.BOTTOM, new Size(215, 18) },
-            { "Microsoft Sans Serif", 16.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.BOTTOM, new Size(299, 26) },
-            { "Times New Roman", 11.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.BOTTOM, new Size(179, 17) },
-            { "MS Gothic", 10.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.BOTTOM, new Size(189, 14) },
-            { "Arial", 9.0f, new Size(1, 1), (uint)User32.DT.SINGLELINE, new Size(173, 15) },
-            { "Arial", 12.0f, new Size(1, 1), (uint)User32.DT.SINGLELINE, new Size(215, 18) },
-            { "Microsoft Sans Serif", 16.0f, new Size(1, 1), (uint)User32.DT.SINGLELINE, new Size(299, 26) },
-            { "Times New Roman", 11.0f, new Size(1, 1), (uint)User32.DT.SINGLELINE, new Size(179, 17) },
-            { "MS Gothic", 10.0f, new Size(1, 1), (uint)User32.DT.SINGLELINE, new Size(189, 14) },
-            { "Arial", 9.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.SINGLELINE, new Size(173, 15) },
-            { "Arial", 12.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.SINGLELINE, new Size(215, 18) },
-            { "Microsoft Sans Serif", 16.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.SINGLELINE, new Size(299, 26) },
-            { "Times New Roman", 11.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.SINGLELINE, new Size(179, 17) },
-            { "MS Gothic", 10.0f, new Size(int.MaxValue, int.MaxValue), (uint)User32.DT.SINGLELINE, new Size(189, 14) },
+            { "Arial", 9.0f, new Size(-1, -1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(173, 15) },
+            { "Arial", 12.0f, new Size(-1, -1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(215, 18) },
+            { "Microsoft Sans Serif", 16.0f, new Size(-1, -1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(299, 26) },
+            { "Times New Roman", 11.0f, new Size(-1, -1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(179, 17) },
+            { "MS Gothic", 10.0f, new Size(-1, -1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(189, 14) },
+            { "Arial", 9.0f, new Size(0, 0), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(173, 15) },
+            { "Arial", 12.0f, new Size(0, 0), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(215, 18) },
+            { "Microsoft Sans Serif", 16.0f, new Size(0, 0), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(299, 26) },
+            { "Times New Roman", 11.0f, new Size(0, 0), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(179, 17) },
+            { "MS Gothic", 10.0f, new Size(0, 0), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(189, 14) },
+            { "Arial", 9.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(173, 15) },
+            { "Arial", 12.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(215, 18) },
+            { "Microsoft Sans Serif", 16.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(299, 26) },
+            { "Times New Roman", 11.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(179, 17) },
+            { "MS Gothic", 10.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(189, 14) },
+            { "Arial", 9.0f, new Size(300, 300), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(173, 15) },
+            { "Arial", 12.0f, new Size(300, 300), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(215, 18) },
+            { "Microsoft Sans Serif", 16.0f, new Size(300, 300), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(299, 26) },
+            { "Times New Roman", 11.0f, new Size(300, 300), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(179, 17) },
+            { "MS Gothic", 10.0f, new Size(300, 300), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(189, 14) },
+            { "Arial", 9.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(173, 15) },
+            { "Arial", 12.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(215, 18) },
+            { "Microsoft Sans Serif", 16.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(299, 26) },
+            { "Times New Roman", 11.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(179, 17) },
+            { "MS Gothic", 10.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(189, 14) },
+            { "Arial", 9.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(173, 15) },
+            { "Arial", 12.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(215, 18) },
+            { "Microsoft Sans Serif", 16.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(299, 26) },
+            { "Times New Roman", 11.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(179, 17) },
+            { "MS Gothic", 10.0f, new Size(1, 1), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(189, 14) },
+            { "Arial", 9.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(173, 15) },
+            { "Arial", 12.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(215, 18) },
+            { "Microsoft Sans Serif", 16.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(299, 26) },
+            { "Times New Roman", 11.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(179, 17) },
+            { "MS Gothic", 10.0f, new Size(int.MaxValue, int.MaxValue), (uint)DRAW_TEXT_FORMAT.DT_SINGLELINE, new Size(189, 14) },
         };
 
     [Theory]
     [MemberData(nameof(AdjustData))]
-    public void Font_AdjustForVerticalAlignment(string family, float size, Rectangle bounds, uint dt, Rectangle expected)
+    public unsafe void Font_AdjustForVerticalAlignment(string family, float size, Rectangle bounds, uint dt, Rectangle expected)
     {
         using Font font = new Font(family, size);
         if (font.Name != family)
@@ -143,27 +142,27 @@ public class FontMetrics
         using var screen = GdiCache.GetScreenHdc();
         using PInvoke.SelectObjectScope fontSelection = new(screen, hfont.Object);
 
-        User32.DRAWTEXTPARAMS param = default;
+        DRAWTEXTPARAMS param = default;
         Rectangle result = screen.HDC.AdjustForVerticalAlignment(
             "Windows Foundation Classes",
             bounds,
-            (User32.DT)dt,
-            ref param);
+            (DRAW_TEXT_FORMAT)dt,
+            &param);
         Assert.Equal(expected, result);
     }
 
     public static TheoryData<string, float, Rectangle, uint, Rectangle> AdjustData =>
         new TheoryData<string, float, Rectangle, uint, Rectangle>
         {
-            { "Arial", 9.0f, new Rectangle(1, 1, 1, 1), (uint)User32.DT.BOTTOM, new Rectangle(1, 1, 1, 1) },
-            { "Arial", 12.0f, new Rectangle(1, 1, 1, 1), (uint)User32.DT.BOTTOM, new Rectangle(1, 1, 1, 1) },
-            { "Microsoft Sans Serif", 16.0f, new Rectangle(1, 1, 1, 1), (uint)User32.DT.BOTTOM, new Rectangle(1, 1, 1, 1) },
-            { "Times New Roman", 11.0f, new Rectangle(1, 1, 1, 1), (uint)User32.DT.BOTTOM, new Rectangle(1, 1, 1, 1) },
-            { "MS Gothic", 10.0f, new Rectangle(1, 1, 1, 1), (uint)User32.DT.BOTTOM, new Rectangle(1, 1, 1, 1) },
-            { "Arial", 9.0f, new Rectangle(1, 1, 100, 100), (uint)User32.DT.BOTTOM, new Rectangle(1, 86, 100, 100) },
-            { "Arial", 12.0f, new Rectangle(1, 1, 100, 100), (uint)User32.DT.BOTTOM, new Rectangle(1, 83, 100, 100) },
-            { "Microsoft Sans Serif", 16.0f, new Rectangle(1, 1, 100, 100), (uint)User32.DT.BOTTOM, new Rectangle(1, 75, 100, 100) },
-            { "Times New Roman", 11.0f, new Rectangle(1, 1, 100, 100), (uint)User32.DT.BOTTOM, new Rectangle(1, 84, 100, 100) },
-            { "MS Gothic", 10.0f, new Rectangle(1, 1, 100, 100), (uint)User32.DT.BOTTOM, new Rectangle(1, 87, 100, 100) },
+            { "Arial", 9.0f, new Rectangle(1, 1, 1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 1, 1, 1) },
+            { "Arial", 12.0f, new Rectangle(1, 1, 1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 1, 1, 1) },
+            { "Microsoft Sans Serif", 16.0f, new Rectangle(1, 1, 1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 1, 1, 1) },
+            { "Times New Roman", 11.0f, new Rectangle(1, 1, 1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 1, 1, 1) },
+            { "MS Gothic", 10.0f, new Rectangle(1, 1, 1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 1, 1, 1) },
+            { "Arial", 9.0f, new Rectangle(1, 1, 100, 100), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 86, 100, 100) },
+            { "Arial", 12.0f, new Rectangle(1, 1, 100, 100), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 83, 100, 100) },
+            { "Microsoft Sans Serif", 16.0f, new Rectangle(1, 1, 100, 100), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 75, 100, 100) },
+            { "Times New Roman", 11.0f, new Rectangle(1, 1, 100, 100), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 84, 100, 100) },
+            { "MS Gothic", 10.0f, new Rectangle(1, 1, 100, 100), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 87, 100, 100) },
         };
 }

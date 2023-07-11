@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -788,17 +787,17 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     }
 
                     Debug.Assert(s_cachedDropDownWidth >= 1);
-                    PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)s_cachedDropDownWidth);
+                    PInvoke.SendMessage(comboBox, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)s_cachedDropDownWidth);
                 }
             }
             else
             {
                 // The dropdown width may have been previously adjusted to the items because of the owning column autosized.
                 // The dropdown width needs to be realigned to the DropDownWidth property value.
-                int dropDownWidth = (int)PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_GETDROPPEDWIDTH);
+                int dropDownWidth = (int)PInvoke.SendMessage(comboBox, PInvoke.CB_GETDROPPEDWIDTH);
                 if (dropDownWidth != DropDownWidth)
                 {
-                    PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)DropDownWidth);
+                    PInvoke.SendMessage(comboBox, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)DropDownWidth);
                 }
             }
         }

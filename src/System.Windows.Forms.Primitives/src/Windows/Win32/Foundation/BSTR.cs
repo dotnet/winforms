@@ -9,14 +9,19 @@ namespace Windows.Win32.Foundation;
 
 internal readonly unsafe partial struct BSTR : IDisposable
 {
+    // Use Marshal here to allocate/free as that is cross-plat which can come into play with our ComNativeDescriptor.
+
     public BSTR(string value) : this((char*)Marshal.StringToBSTR(value))
     {
     }
 
     public void Dispose()
     {
-        Marshal.FreeBSTR((nint)Value);
-        Unsafe.AsRef(this) = default;
+        if (Value is not null)
+        {
+            Marshal.FreeBSTR((nint)Value);
+            Unsafe.AsRef(this) = default;
+        }
     }
 
     /// <summary>
@@ -24,7 +29,7 @@ internal readonly unsafe partial struct BSTR : IDisposable
     /// </summary>
     public readonly string ToStringAndFree()
     {
-        string result = ToString();
+        string result = ToString() ?? string.Empty;
         Dispose();
         return result;
     }

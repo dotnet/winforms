@@ -145,7 +145,7 @@ internal unsafe class DataStreamFromComStream : Stream
     {
         if (disposing && _comStream is not null)
         {
-            _comStream->Commit(STGC.STGC_DEFAULT);
+            _comStream->Commit((uint)STGC.STGC_DEFAULT);
         }
 
         _comStream = null;

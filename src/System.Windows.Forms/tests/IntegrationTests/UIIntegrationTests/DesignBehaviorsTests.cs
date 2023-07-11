@@ -60,7 +60,7 @@ public class DesignBehaviorsTests : ControlTestBase
             ServiceContainer serviceContainer = new();
             DesignSurface designSurface = new(serviceContainer);
 
-            var designerHost = (IDesignerHost)designSurface.GetService(typeof(IDesignerHost));
+            var designerHost = (IDesignerHost)designSurface.GetService(typeof(IDesignerHost))!;
             serviceContainer.RemoveService(typeof(IToolboxService), false);
             serviceContainer.AddService(typeof(IToolboxService), new SampleToolboxService(designerHost));
 
@@ -182,7 +182,7 @@ public class DesignBehaviorsTests : ControlTestBase
             return DeserializeToolboxItem(serializedObject, _designerHost);
         }
 
-        public ToolboxItem DeserializeToolboxItem(object serializedObject, IDesignerHost host)
+        public ToolboxItem DeserializeToolboxItem(object serializedObject, IDesignerHost? host)
         {
             ToolboxItem? item = ((DataObject)serializedObject)?.GetData(typeof(ToolboxItem)) as ToolboxItem;
             return item!;

@@ -10,10 +10,11 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using UIA = Windows.Win32.UI.Accessibility;
 using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
 using static Interop;
-using Windows.Win32.System.Com;
-using UIA = Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -425,7 +426,7 @@ public unsafe partial class AccessibleObject :
             UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
             UiaCore.UIA.AutomationIdPropertyId => AutomationId,
             UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
-            UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
+            UiaCore.UIA.FrameworkIdPropertyId => "WinForm",
             UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
             UiaCore.UIA.IsGridItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
             UiaCore.UIA.IsGridPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridPatternId),
@@ -1898,19 +1899,19 @@ public unsafe partial class AccessibleObject :
     ///  for a *user-defined* accessible object, that has NO inner object, its important that the id is
     ///  left as OBJID_CLIENT, otherwise the object will be short-circuited into a total NOP!
     /// </summary>
-    internal int AccessibleObjectId { get; set; } = User32.OBJID.CLIENT;
+    internal int AccessibleObjectId { get; set; } = (int)OBJECT_IDENTIFIER.OBJID_CLIENT;
 
     /// <summary>
     ///  Indicates whether this accessible object represents the client area of
     ///  the window.
     /// </summary>
-    internal bool IsClientObject => AccessibleObjectId == User32.OBJID.CLIENT;
+    internal bool IsClientObject => AccessibleObjectId == (int)OBJECT_IDENTIFIER.OBJID_CLIENT;
 
     /// <summary>
     ///  Indicates whether this accessible object represents the non-client
     ///  area of the window.
     /// </summary>
-    internal bool IsNonClientObject => AccessibleObjectId == User32.OBJID.WINDOW;
+    internal bool IsNonClientObject => AccessibleObjectId == (int)OBJECT_IDENTIFIER.OBJID_WINDOW;
 
     protected void UseStdAccessibleObjects(IntPtr handle)
     {

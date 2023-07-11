@@ -254,17 +254,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
     }
 
-    /// <summary>
-    ///  Deriving classes can override this to configure a default size for their control.
-    ///  This is more efficient than setting the size in the control's constructor.
-    /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(75, 23);
-        }
-    }
+    protected override Size DefaultSize => new Size(75, 23);
 
     protected override CreateParams CreateParams
     {
@@ -275,39 +265,39 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
 
-                cp.Style |= (int)User32.BS.MULTILINE;
+                cp.Style |= PInvoke.BS_MULTILINE;
 
                 if (IsDefault)
                 {
-                    cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
+                    cp.Style |= PInvoke.BS_DEFPUSHBUTTON;
                 }
 
                 ContentAlignment align = RtlTranslateContent(TextAlign);
 
-                if ((int)(align & WindowsFormsUtils.AnyLeftAlign) != 0)
+                if ((align & WindowsFormsUtils.AnyLeftAlign) != 0)
                 {
-                    cp.Style |= (int)User32.BS.LEFT;
+                    cp.Style |= PInvoke.BS_LEFT;
                 }
-                else if ((int)(align & WindowsFormsUtils.AnyRightAlign) != 0)
+                else if ((align & WindowsFormsUtils.AnyRightAlign) != 0)
                 {
-                    cp.Style |= (int)User32.BS.RIGHT;
+                    cp.Style |= PInvoke.BS_RIGHT;
                 }
                 else
                 {
-                    cp.Style |= (int)User32.BS.CENTER;
+                    cp.Style |= PInvoke.BS_CENTER;
                 }
 
-                if ((int)(align & WindowsFormsUtils.AnyTopAlign) != 0)
+                if ((align & WindowsFormsUtils.AnyTopAlign) != 0)
                 {
-                    cp.Style |= (int)User32.BS.TOP;
+                    cp.Style |= PInvoke.BS_TOP;
                 }
-                else if ((int)(align & WindowsFormsUtils.AnyBottomAlign) != 0)
+                else if ((align & WindowsFormsUtils.AnyBottomAlign) != 0)
                 {
-                    cp.Style |= (int)User32.BS.BOTTOM;
+                    cp.Style |= PInvoke.BS_BOTTOM;
                 }
                 else
                 {
-                    cp.Style |= (int)User32.BS.VCENTER;
+                    cp.Style |= PInvoke.BS_VCENTER;
                 }
             }
 
@@ -315,13 +305,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    protected override ImeMode DefaultImeMode
-    {
-        get
-        {
-            return ImeMode.Disable;
-        }
-    }
+    protected override ImeMode DefaultImeMode => ImeMode.Disable;
 
     protected internal bool IsDefault
     {
@@ -1237,7 +1221,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 // not paint the button as "un-depressed".
                 if (!OwnerDraw)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)User32.BM.SETSTATE, (WPARAM)(BOOL)true);
+                    PInvoke.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)true);
                 }
 
                 Invalidate(DownChangeRectangle);
@@ -1266,7 +1250,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 SetFlag(FlagMousePressed, false);
                 SetFlag(FlagMouseDown, false);
-                PInvoke.SendMessage(this, (User32.WM)User32.BM.SETSTATE, (WPARAM)(BOOL)false);
+                PInvoke.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)false);
             }
 
             // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
@@ -1434,7 +1418,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         {
             // We don't respect this because the code below eats BM_SETSTATE.
             // So we just invoke the click.
-            case (User32.WM)User32.BM.CLICK:
+            case PInvoke.BM_CLICK:
                 if (this is IButtonControl control)
                 {
                     control.PerformClick();
@@ -1451,14 +1435,14 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         {
             switch (m.MsgInternal)
             {
-                case (User32.WM)User32.BM.SETSTATE:
+                case PInvoke.BM_SETSTATE:
                     // Ignore BM_SETSTATE - Windows gets confused and paints things,
                     // even though we are ownerdraw.
                     break;
 
-                case User32.WM.KILLFOCUS:
-                case User32.WM.CANCELMODE:
-                case User32.WM.CAPTURECHANGED:
+                case PInvoke.WM_KILLFOCUS:
+                case PInvoke.WM_CANCELMODE:
+                case PInvoke.WM_CAPTURECHANGED:
                     if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                     {
                         SetFlag(FlagMousePressed, false);
@@ -1473,9 +1457,9 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                     base.WndProc(ref m);
                     break;
 
-                case User32.WM.LBUTTONUP:
-                case User32.WM.MBUTTONUP:
-                case User32.WM.RBUTTONUP:
+                case PInvoke.WM_LBUTTONUP:
+                case PInvoke.WM_MBUTTONUP:
+                case PInvoke.WM_RBUTTONUP:
                     try
                     {
                         SetFlag(FlagInButtonUp, true);
@@ -1497,8 +1481,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         {
             switch (m.MsgInternal)
             {
-                case User32.WM.REFLECT_COMMAND:
-                    if ((User32.BN)m.WParamInternal.HIWORD == User32.BN.CLICKED && !ValidationCancelled)
+                case MessageId.WM_REFLECT_COMMAND:
+                    if (m.WParamInternal.HIWORD == PInvoke.BN_CLICKED && !ValidationCancelled)
                     {
                         OnClick(EventArgs.Empty);
                     }

@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
-using static Interop.User32;
 
 namespace System.Windows.Forms.IntegrationTests.Common;
 
@@ -402,14 +401,16 @@ public static class TestHelpers
     /// </summary>
     /// <param name="process">The process to send the key(s) to</param>
     /// <param name="keys">The key(s) to send to the process</param>
-    /// <remarks>Throws an ArgumentException if the process is null or has exited.</remarks>
-    /// <remarks>Throws an ArgumentException if the given key(s) is null or the empty string.</remarks>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="process"/> is <see langword="null"/> or has exited or <paramref name="keys"/>
+    ///  is <see langword="null"/> or empty.
+    /// </exception>
     /// <returns>Whether or not the key(s) were pressed on the process</returns>
-    /// <seealso cref="System.Diagnostics.Process.MainWindowHandle"/>
+    /// <seealso cref="Process.MainWindowHandle"/>
     /// <seealso cref="PInvoke.SetForegroundWindow{T}(T)"/>
     /// <seealso cref="PInvoke.GetForegroundWindow()"/>
-    /// <seealso cref="System.Windows.Forms.SendKeys.SendWait(string)"/>
-    /// <seealso cref="System.Threading.Thread.Sleep(int)"/>
+    /// <seealso cref="SendKeys.SendWait(string)"/>
+    /// <seealso cref="Thread.Sleep(int)"/>
     internal static bool SendKeysToProcess(Process process, string keys, bool switchToMainWindow = true)
     {
         if (process is null)
@@ -436,7 +437,7 @@ public static class TestHelpers
 
         HWND foregroundWindow = PInvoke.GetForegroundWindow();
 
-        string windowTitle = GetWindowText(foregroundWindow);
+        string windowTitle = PInvoke.GetWindowText(foregroundWindow);
 
         if (PInvoke.GetWindowThreadProcessId(foregroundWindow, out uint processId) == 0 ||
             processId != process.Id)

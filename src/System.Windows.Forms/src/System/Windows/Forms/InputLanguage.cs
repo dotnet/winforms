@@ -27,7 +27,7 @@ public sealed class InputLanguage
     /// <summary>
     ///  Returns the culture of the current input language.
     /// </summary>
-    public CultureInfo Culture => new CultureInfo(PARAM.LOWORD(_handle));
+    public CultureInfo Culture => new CultureInfo(LanguageTag);
 
     /// <summary>
     ///  Gets or sets the input language for the current thread.
@@ -94,7 +94,7 @@ public sealed class InputLanguage
         }
     }
 
-    private static string s_keyboardLayoutsRegistryPath => @"SYSTEM\CurrentControlSet\Control\Keyboard Layouts";
+    private const string KeyboardLayoutsRegistryPath = @"SYSTEM\CurrentControlSet\Control\Keyboard Layouts";
 
     /// <summary>
     ///  Returns the name of the current keyboard layout as it appears in the Windows
@@ -105,7 +105,7 @@ public sealed class InputLanguage
         get
         {
             // https://learn.microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
-            using RegistryKey? key = Registry.LocalMachine.OpenSubKey($@"{s_keyboardLayoutsRegistryPath}\{LayoutId}");
+            using RegistryKey? key = Registry.LocalMachine.OpenSubKey($@"{KeyboardLayoutsRegistryPath}\{LayoutId}");
             return key.GetMUIString("Layout Display Name", "Layout Text") ?? SR.UnknownInputLanguageLayout;
         }
     }
@@ -139,24 +139,16 @@ public sealed class InputLanguage
                 // Extract special layout id from the device handle
                 int layoutId = device & 0x0FFF;
 
-                using RegistryKey? key = Registry.LocalMachine.OpenSubKey(s_keyboardLayoutsRegistryPath);
+                using RegistryKey? key = Registry.LocalMachine.OpenSubKey(KeyboardLayoutsRegistryPath);
                 if (key is not null)
                 {
                     // Match keyboard layout by layout id
                     foreach (string subKeyName in key.GetSubKeyNames())
                     {
                         using RegistryKey? subKey = key.OpenSubKey(subKeyName);
-                        if (subKey is null)
-                        {
-                            continue;
-                        }
-
-                        if (subKey.GetValue("Layout Id") is not string subKeyLayoutId)
-                        {
-                            continue;
-                        }
-
-                        if (layoutId == Convert.ToInt32(subKeyLayoutId, 16))
+                        if (subKey is not null
+                            && subKey.GetValue("Layout Id") is string subKeyLayoutId
+                            && Convert.ToInt32(subKeyLayoutId, 16) == layoutId)
                         {
                             Debug.Assert(subKeyName.Length == 8, $"unexpected key length in registry: {subKey.Name}");
                             return subKeyName.ToUpperInvariant();
@@ -177,6 +169,57 @@ public sealed class InputLanguage
             }
 
             return device.ToString("X8");
+        }
+    }
+
+    private const string UserProfileRegistryPath = @"Control Panel\International\User Profile";
+
+    /// <summary>
+    ///  Returns the <see href="https://learn.microsoft.com/globalization/locale/standard-locale-names">BCP 47 language
+    ///  tag</see> of the current input language.
+    /// </summary>
+    private string LanguageTag
+    {
+        get
+        {
+            // According to the GetKeyboardLayout API function docs low word of HKL contains input language identifier.
+            int langId = PARAM.LOWORD(_handle);
+
+            // We need to convert the language identifier to a language tag, because they are deprecated and may have a
+            // transient value.
+            // https://learn.microsoft.com/globalization/locale/other-locale-names#lcid
+            // https://learn.microsoft.com/windows/win32/winmsg/wm-inputlangchange#remarks
+            //
+            // It turns out that the LCIDToLocaleName API, which is used inside CultureInfo, may return incorrect
+            // language tags for transient language identifiers. For example, it returns "nqo-GN" and "jv-Java-ID"
+            // instead of the "nqo" and "jv-Java" (as seen in the Get-WinUserLanguageList PowerShell cmdlet).
+            //
+            // Try to extract proper language tag from registry as a workaround approved by a Windows team.
+            // https://github.com/dotnet/winforms/pull/8573#issuecomment-1542600949
+            //
+            // NOTE: this logic may break in future versions of Windows since it is not documented.
+            if (langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD1
+                || langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD2
+                || langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD3
+                || langId == PInvoke.LOCALE_TRANSIENT_KEYBOARD4)
+            {
+                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(UserProfileRegistryPath);
+                if (key is not null && key.GetValue("Languages") is string[] languages)
+                {
+                    foreach (string language in languages)
+                    {
+                        using RegistryKey? subKey = key.OpenSubKey(language);
+                        if (subKey is not null
+                            && subKey.GetValue("TransientLangId") is int transientLangId
+                            && transientLangId == langId)
+                        {
+                            return language;
+                        }
+                    }
+                }
+            }
+
+            return CultureInfo.GetCultureInfo(langId).Name;
         }
     }
 
@@ -213,13 +256,9 @@ public sealed class InputLanguage
     {
         ArgumentNullException.ThrowIfNull(culture);
 
-        // KeyboardLayoutId is the LCID for built-in cultures, but it is the CU-preferred keyboard language for
-        // custom cultures.
-        int lcid = culture.KeyboardLayoutId;
-
         foreach (InputLanguage? lang in InstalledInputLanguages)
         {
-            if ((unchecked((int)(long)lang!._handle) & 0xFFFF) == lcid)
+            if (culture.Equals(lang?.Culture))
             {
                 return lang;
             }

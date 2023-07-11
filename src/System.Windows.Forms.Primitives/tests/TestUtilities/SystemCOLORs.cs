@@ -2,54 +2,52 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System;
 
 internal static class SystemCOLORs
 {
-    private static readonly Dictionary<COLORREF, List<User32.COLOR>> s_systemColors = CreateColorDictionary();
+    private static readonly Dictionary<COLORREF, List<SYS_COLOR_INDEX>> s_systemColors = CreateColorDictionary();
 
-    private static readonly Dictionary<User32.COLOR, string> s_names = new Dictionary<User32.COLOR, string>
+    private static readonly Dictionary<SYS_COLOR_INDEX, string> s_names = new()
     {
-        { User32.COLOR.SCROLLBAR, "COLOR_SCROLLBAR" },
-        { User32.COLOR.BACKGROUND, "COLOR_BACKGROUND" },
-        { User32.COLOR.ACTIVECAPTION, "COLOR_ACTIVECAPTION" },
-        { User32.COLOR.INACTIVECAPTION, "COLOR_INACTIVECAPTION" },
-        { User32.COLOR.MENU, "COLOR_MENU" },
-        { User32.COLOR.WINDOW, "COLOR_WINDOW" },
-        { User32.COLOR.WINDOWFRAME, "COLOR_WINDOWFRAME" },
-        { User32.COLOR.MENUTEXT, "COLOR_MENUTEXT" },
-        { User32.COLOR.WINDOWTEXT, "COLOR_WINDOWTEXT" },
-        { User32.COLOR.CAPTIONTEXT, "COLOR_CAPTIONTEXT" },
-        { User32.COLOR.ACTIVEBORDER, "COLOR_ACTIVEBORDER" },
-        { User32.COLOR.INACTIVEBORDER, "COLOR_INACTIVEBORDER" },
-        { User32.COLOR.APPWORKSPACE, "COLOR_APPWORKSPACE" },
-        { User32.COLOR.HIGHLIGHT, "COLOR_HIGHLIGHT" },
-        { User32.COLOR.HIGHLIGHTTEXT, "COLOR_HIGHLIGHTTEXT" },
-        { User32.COLOR.BTNFACE, "COLOR_BTNFACE" },
-        { User32.COLOR.BTNSHADOW, "COLOR_BTNSHADOW" },
-        { User32.COLOR.GRAYTEXT, "COLOR_GRAYTEXT" },
-        { User32.COLOR.BTNTEXT, "COLOR_BTNTEXT" },
-        { User32.COLOR.INACTIVECAPTIONTEXT, "COLOR_INACTIVECAPTIONTEXT" },
-        { User32.COLOR.BTNHIGHLIGHT, "COLOR_BTNHIGHLIGHT" },
-        { User32.COLOR.DKSHADOW3D, "COLOR_3DDKSHADOW" },
-        { User32.COLOR.LIGHT3D, "COLOR_3DLIGHT" },
-        { User32.COLOR.INFOTEXT, "COLOR_INFOTEXT" },
-        { User32.COLOR.INFOBK, "COLOR_INFOBK" },
-        { User32.COLOR.HOTLIGHT, "COLOR_HOTLIGHT" },
-        { User32.COLOR.GRADIENTACTIVECAPTION, "COLOR_GRADIENTACTIVECAPTION" },
-        { User32.COLOR.GRADIENTINACTIVECAPTION, "COLOR_GRADIENTINACTIVECAPTION" },
-        { User32.COLOR.MENUHILIGHT, "COLOR_MENUHILIGHT" },
-        { User32.COLOR.MENUBAR, "COLOR_MENUBAR" },
+        { SYS_COLOR_INDEX.COLOR_SCROLLBAR, "COLOR_SCROLLBAR" },
+        { SYS_COLOR_INDEX.COLOR_BACKGROUND, "COLOR_BACKGROUND" },
+        { SYS_COLOR_INDEX.COLOR_ACTIVECAPTION, "COLOR_ACTIVECAPTION" },
+        { SYS_COLOR_INDEX.COLOR_INACTIVECAPTION, "COLOR_INACTIVECAPTION" },
+        { SYS_COLOR_INDEX.COLOR_MENU, "COLOR_MENU" },
+        { SYS_COLOR_INDEX.COLOR_WINDOW, "COLOR_WINDOW" },
+        { SYS_COLOR_INDEX.COLOR_WINDOWFRAME, "COLOR_WINDOWFRAME" },
+        { SYS_COLOR_INDEX.COLOR_MENUTEXT, "COLOR_MENUTEXT" },
+        { SYS_COLOR_INDEX.COLOR_WINDOWTEXT, "COLOR_WINDOWTEXT" },
+        { SYS_COLOR_INDEX.COLOR_CAPTIONTEXT, "COLOR_CAPTIONTEXT" },
+        { SYS_COLOR_INDEX.COLOR_ACTIVEBORDER, "COLOR_ACTIVEBORDER" },
+        { SYS_COLOR_INDEX.COLOR_INACTIVEBORDER, "COLOR_INACTIVEBORDER" },
+        { SYS_COLOR_INDEX.COLOR_APPWORKSPACE, "COLOR_APPWORKSPACE" },
+        { SYS_COLOR_INDEX.COLOR_HIGHLIGHT, "COLOR_HIGHLIGHT" },
+        { SYS_COLOR_INDEX.COLOR_HIGHLIGHTTEXT, "COLOR_HIGHLIGHTTEXT" },
+        { SYS_COLOR_INDEX.COLOR_BTNFACE, "COLOR_BTNFACE" },
+        { SYS_COLOR_INDEX.COLOR_BTNSHADOW, "COLOR_BTNSHADOW" },
+        { SYS_COLOR_INDEX.COLOR_GRAYTEXT, "COLOR_GRAYTEXT" },
+        { SYS_COLOR_INDEX.COLOR_BTNTEXT, "COLOR_BTNTEXT" },
+        { SYS_COLOR_INDEX.COLOR_INACTIVECAPTIONTEXT, "COLOR_INACTIVECAPTIONTEXT" },
+        { SYS_COLOR_INDEX.COLOR_BTNHIGHLIGHT, "COLOR_BTNHIGHLIGHT" },
+        { SYS_COLOR_INDEX.COLOR_3DDKSHADOW, "COLOR_3DDKSHADOW" },
+        { SYS_COLOR_INDEX.COLOR_3DLIGHT, "COLOR_3DLIGHT" },
+        { SYS_COLOR_INDEX.COLOR_INFOTEXT, "COLOR_INFOTEXT" },
+        { SYS_COLOR_INDEX.COLOR_INFOBK, "COLOR_INFOBK" },
+        { SYS_COLOR_INDEX.COLOR_HOTLIGHT, "COLOR_HOTLIGHT" },
+        { SYS_COLOR_INDEX.COLOR_GRADIENTACTIVECAPTION, "COLOR_GRADIENTACTIVECAPTION" },
+        { SYS_COLOR_INDEX.COLOR_GRADIENTINACTIVECAPTION, "COLOR_GRADIENTINACTIVECAPTION" },
+        { SYS_COLOR_INDEX.COLOR_MENUHILIGHT, "COLOR_MENUHILIGHT" },
+        { SYS_COLOR_INDEX.COLOR_MENUBAR, "COLOR_MENUBAR" },
     };
 
-    public static bool TryGetSystemColor(COLORREF colorRef, out List<User32.COLOR> colors)
+    public static bool TryGetSystemColor(COLORREF colorRef, out List<SYS_COLOR_INDEX> colors)
         => s_systemColors.TryGetValue(colorRef, out colors);
 
     public static string ToSystemColorString(COLORREF colorRef)
     {
-        if (TryGetSystemColor(colorRef, out List<User32.COLOR> colors))
+        if (TryGetSystemColor(colorRef, out List<SYS_COLOR_INDEX> colors))
         {
             string colorString = string.Join(", ", colors.Select(c => s_names[c]));
             return $"{colorRef} ({colorString})";
@@ -60,11 +58,11 @@ internal static class SystemCOLORs
         }
     }
 
-    private static Dictionary<COLORREF, List<User32.COLOR>> CreateColorDictionary()
+    private static Dictionary<COLORREF, List<SYS_COLOR_INDEX>> CreateColorDictionary()
     {
-        var dictionary = new Dictionary<COLORREF, List<User32.COLOR>>();
+        Dictionary<COLORREF, List<SYS_COLOR_INDEX>> dictionary = new();
 
-        for (int i = 0; i <= (int)User32.COLOR.MENUBAR; i++)
+        for (int i = 0; i <= (int)SYS_COLOR_INDEX.COLOR_MENUBAR; i++)
         {
             if (i == 25)
             {
@@ -74,16 +72,17 @@ internal static class SystemCOLORs
 
             COLORREF colorRef = (COLORREF)PInvoke.GetSysColor((SYS_COLOR_INDEX)i);
 
-            if (dictionary.TryGetValue(colorRef, out List<User32.COLOR> colors))
+            if (dictionary.TryGetValue(colorRef, out List<SYS_COLOR_INDEX> colors))
             {
-                colors.Add((User32.COLOR)i);
+                colors.Add((SYS_COLOR_INDEX)i);
             }
             else
             {
-                var colorList = new List<User32.COLOR>
+                List<SYS_COLOR_INDEX> colorList = new()
                 {
-                    (User32.COLOR)i
+                    (SYS_COLOR_INDEX)i
                 };
+
                 dictionary.Add(colorRef, colorList);
             }
         }
