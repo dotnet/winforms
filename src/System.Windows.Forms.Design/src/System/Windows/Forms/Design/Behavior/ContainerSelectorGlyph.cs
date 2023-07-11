@@ -46,10 +46,7 @@ internal sealed class ContainerSelectorGlyph : Glyph
     public override void Paint(PaintEventArgs pe)
     {
         // Initialize the glyph
-        if (_glyph is null)
-        {
-            _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
-        }
+        _glyph ??= new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
 
         // Draw the transparent Bitmap
         pe.Graphics.DrawImage(_glyph, _glyphBounds);
