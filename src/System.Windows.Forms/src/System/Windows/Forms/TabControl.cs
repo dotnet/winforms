@@ -38,7 +38,7 @@ public partial class TabControl : Control
     private Rectangle _cachedDisplayRect;
     private bool _currentlyScaling;
     private int _selectedIndex = -1;
-    private string _controlTipText = string.Empty;
+    private string? _controlTipText = string.Empty;
     private bool _handleInTable;
 
     // Events
@@ -1924,7 +1924,7 @@ public partial class TabControl : Control
 
         int commandID = (int)ttt->hdr.idFrom;
 
-        string tipText = GetToolTipText(GetTabPage(commandID));
+        string? tipText = GetToolTipText(GetTabPage(commandID));
         if (string.IsNullOrEmpty(tipText))
         {
             tipText = _controlTipText;

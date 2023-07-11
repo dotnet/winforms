@@ -118,7 +118,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            return ((flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0x00);
+            return ((flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0);
         }
         set
         {
@@ -142,7 +142,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
         if (FormattedValueType.IsAssignableFrom(defaultCheckStateType))
         {
-            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
+            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
             {
                 if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                 {
@@ -151,7 +151,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
                 return System.Windows.Forms.CheckState.Checked;
             }
-            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
+            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
             {
                 if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                 {
@@ -172,7 +172,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
         else if (FormattedValueType.IsAssignableFrom(defaultBooleanType))
         {
-            bool ret = (bool)((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00);
+            bool ret = (bool)((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0);
             if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
             {
                 return ret ? SR.DataGridViewCheckBoxCell_ClipboardTrue : SR.DataGridViewCheckBoxCell_ClipboardFalse;
@@ -358,7 +358,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         get
         {
-            return ((flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0x00);
+            return ((flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0);
         }
         set
         {
@@ -395,6 +395,36 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                     flags = (byte)(flags & ~DATAGRIDVIEWCHECKBOXCELL_threeState);
                 }
             }
+        }
+    }
+
+    private CheckState CheckState
+    {
+        get
+        {
+            // When the CheckBoxCell has not been focused, the flags variable is not up to date,
+            // so in this case, we use EditingCellValueChanged && FormattedValue to determine CheckState.
+            // When users change the CheckBoxCell's CheckState but don't commit the value,
+            // FormattedValue is not updated, but flags are, so in this case, we use flags to determine CheckState.
+            if ((!EditingCellValueChanged && FormattedValue is CheckState checkState && checkState == CheckState.Indeterminate) ||
+                (flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
+            {
+                return CheckState.Indeterminate;
+            }
+
+            if ((!EditingCellValueChanged && FormattedValue is CheckState checkState2 && checkState2 == CheckState.Checked) ||
+                (flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+            {
+                return CheckState.Checked;
+            }
+
+            if ((!EditingCellValueChanged && FormattedValue is bool boolValue && boolValue) ||
+                (flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+            {
+                return CheckState.Checked;
+            }
+
+            return CheckState.Unchecked;
         }
     }
 
@@ -1015,29 +1045,19 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void NotifyUiaClient()
     {
-        bool isCheckboxChecked = false;
-        switch (EditingCellFormattedValue)
-        {
-            case string stringValue:
-                isCheckboxChecked = stringValue == SR.DataGridViewCheckBoxCell_ClipboardChecked;
-                break;
-            case CheckState checkStateValue:
-                isCheckboxChecked = checkStateValue == CheckState.Checked;
-                break;
-            case bool boolValue:
-                isCheckboxChecked = boolValue;
-                break;
-        }
-
         if (IsParentAccessibilityObjectCreated)
         {
             var cellName = AccessibilityObject.Name ?? string.Empty;
+            string notificationText = CheckState switch
+            {
+                CheckState.Checked => string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName),
+                CheckState.Unchecked => string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName),
+                _ => string.Format(SR.DataGridViewCheckBoxCellIndeterminateStateDescription, cellName),
+            };
             AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.Other,
                 Automation.AutomationNotificationProcessing.MostRecent,
-                isCheckboxChecked
-                    ? string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName)
-                    : string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName));
+                notificationText);
         }
     }
 
@@ -1734,11 +1754,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         IDataGridViewEditingCell editingCell = (IDataGridViewEditingCell)this;
         if (FormattedValueType.IsAssignableFrom(typeof(CheckState)))
         {
-            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
+            if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
             {
                 editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Indeterminate;
             }
-            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
+            else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
             {
                 editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Unchecked;
             }
