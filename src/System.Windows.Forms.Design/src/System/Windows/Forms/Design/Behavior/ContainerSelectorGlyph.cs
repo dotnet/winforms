@@ -49,7 +49,6 @@ internal sealed class ContainerSelectorGlyph : Glyph
         if (_glyph is null)
         {
             _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
-            _glyph.MakeTransparent();
         }
 
         // Draw the transparent Bitmap
