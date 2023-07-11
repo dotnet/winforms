@@ -42,6 +42,7 @@ partial class DataGridViewTest
         this.column5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
         this.column6 = new System.Windows.Forms.DataGridViewImageColumn();
         this.column7 = new System.Windows.Forms.DataGridViewButtonColumn();
+        this.column8 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
         this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
         this.changeFontButton = new System.Windows.Forms.Button();
         this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -69,7 +70,8 @@ partial class DataGridViewTest
         this.column3,
         this.column4,
         this.column6,
-        this.column7 });
+        this.column7,
+        this.column8, });
         dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
         dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Info;
         dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -82,7 +84,7 @@ partial class DataGridViewTest
         | System.Windows.Forms.AnchorStyles.Right)));
         this.dataGridView1.Location = new System.Drawing.Point(0, 0);
         this.dataGridView1.Name = "dataGridView1";
-        this.dataGridView1.Size = new System.Drawing.Size(692, 150);
+        this.dataGridView1.Size = new System.Drawing.Size(750, 150);
         this.dataGridView1.TabIndex = 0;
         // 
         // column1
@@ -124,6 +126,12 @@ partial class DataGridViewTest
         this.column7.Name = "column7";
         this.column7.Text = "Button";
         this.column7.UseColumnTextForButtonValue = true;
+        // 
+        // column8
+        // 
+        this.column8.HeaderText = "Column8";
+        this.column8.Name = "column8";
+        this.column8.ThreeState = true;
         // 
         // currentDPILabel1
         // 
@@ -199,7 +207,7 @@ partial class DataGridViewTest
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-        this.ClientSize = new System.Drawing.Size(692, 272);
+        this.ClientSize = new System.Drawing.Size(750, 272);
         this.Controls.Add(this.resetFontButton);
         this.Controls.Add(this.label1);
         this.Controls.Add(this.numericUpDown1);
@@ -226,6 +234,7 @@ partial class DataGridViewTest
     private System.Windows.Forms.DataGridViewComboBoxColumn column5;
     private System.Windows.Forms.DataGridViewImageColumn column6;
     private System.Windows.Forms.DataGridViewButtonColumn column7;
+    private System.Windows.Forms.DataGridViewCheckBoxColumn column8;
     private WinformsControlsTest.CurrentDPILabel currentDPILabel1;
     private System.Windows.Forms.Button changeFontButton;
     private System.Windows.Forms.NumericUpDown numericUpDown1;

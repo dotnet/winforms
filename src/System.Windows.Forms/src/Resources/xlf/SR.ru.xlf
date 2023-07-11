@@ -2262,6 +2262,11 @@
         <target state="translated">Не задан объект-владелец для DataGridViewCell.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCellAccessibleObject_OwnerWrongType">
+        <source>DataGridViewCell of type {0} does not provide the Toggle pattern.</source>
+        <target state="new">DataGridViewCell of type {0} does not provide the Toggle pattern.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCellCollection_AtLeastOneCellIsNull">
         <source>At least one of the provided cells is null.</source>
         <target state="translated">Как минимум одна из указанных ячеек имеет пустое значение.</target>
@@ -2330,6 +2335,11 @@
       <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
         <source>{0} check box checked</source>
         <target state="translated">Флажок {0} установлен.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellIndeterminateStateDescription">
+        <source>{0} check box indeterminate</source>
+        <target state="new">{0} check box indeterminate</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
@@ -8623,6 +8633,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ResXResourceWriterSaved">
         <source>Resource writer has been saved.  You may not edit it.</source>
         <target state="translated">Объект, выполняющий запись ресурсов, сохранен.  Редактирование запрещено.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceValueNotFound">
+        <source>The resource value '{0}' was not found.</source>
+        <target state="translated">Значение ресурса "{0}" не найдено.</target>
         <note />
       </trans-unit>
       <trans-unit id="RestartNotSupported">

@@ -353,7 +353,7 @@ public partial class ComboBox
                         }
                         else
                         {
-                            OwnerComboBoxAccessibleObject?.RemoveListItemAccessibleObjectAt(index);
+                            OwnerComboBoxAccessibleObject?.RemoveComboBoxItemAccessibleObjectAt(index);
                             InnerList.RemoveAt(index);
                         }
                     }
@@ -378,7 +378,7 @@ public partial class ComboBox
                 _owner.NativeRemoveAt(index);
             }
 
-            OwnerComboBoxAccessibleObject?.RemoveListItemAccessibleObjectAt(index);
+            OwnerComboBoxAccessibleObject?.RemoveComboBoxItemAccessibleObjectAt(index);
             InnerList.RemoveAt(index);
 
             if (!_owner.IsHandleCreated)

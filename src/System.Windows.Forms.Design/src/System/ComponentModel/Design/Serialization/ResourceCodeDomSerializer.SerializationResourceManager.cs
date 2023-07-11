@@ -301,7 +301,7 @@ internal partial class ResourceCodeDomSerializer
                 _mergedMetadata = metaData;
             }
 
-            return _mergedMetadata.GetEnumerator();
+            return _mergedMetadata?.GetEnumerator();
         }
 
         /// <summary>
@@ -392,8 +392,7 @@ internal partial class ResourceCodeDomSerializer
         {
             Debug.Assert(culture is not null, "null parameter");
             Dictionary<string, object> resourceSet = null;
-            object objRs = ResourceTable[culture];
-            if (objRs is null)
+            if (!ResourceTable.TryGetValue(culture, out Dictionary<string, object> objRs))
             {
                 IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
                 TraceIf(TraceLevel.Error, resSvc is null, "IResourceService is not available.  We will not be able to load resources.");
@@ -423,7 +422,7 @@ internal partial class ResourceCodeDomSerializer
             }
             else
             {
-                resourceSet = objRs as Dictionary<string, object>;
+                resourceSet = objRs;
                 if (resourceSet is null)
                 {
                     // the resourceSets hash table may contain our "this" pointer as a sentinel value

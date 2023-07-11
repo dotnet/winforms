@@ -11,7 +11,6 @@ public partial class ScrollBar
 {
     internal class ScrollBarAccessibleObject : ControlAccessibleObject
     {
-        private readonly ScrollBar _owningScrollBar;
         private ScrollBarFirstLineButtonAccessibleObject? _firstLineButtonAccessibleObject;
         private ScrollBarFirstPageButtonAccessibleObject? _firstPageButtonAccessibleObject;
         private ScrollBarLastLineButtonAccessibleObject? _lastLineButtonAccessibleObject;
@@ -20,40 +19,41 @@ public partial class ScrollBar
 
         internal ScrollBarAccessibleObject(ScrollBar owningScrollBar) : base(owningScrollBar)
         {
-            _owningScrollBar = owningScrollBar;
         }
 
-        internal ScrollBarFirstLineButtonAccessibleObject FirstLineButtonAccessibleObject
-            => _firstLineButtonAccessibleObject ??= new(_owningScrollBar);
+        internal ScrollBarFirstLineButtonAccessibleObject? FirstLineButtonAccessibleObject
+            => _firstLineButtonAccessibleObject ??= this.TryGetOwnerAs(out ScrollBar? owner) ? new(owner) : null;
 
-        internal ScrollBarFirstPageButtonAccessibleObject FirstPageButtonAccessibleObject
-            => _firstPageButtonAccessibleObject ??= new(_owningScrollBar);
+        internal ScrollBarFirstPageButtonAccessibleObject? FirstPageButtonAccessibleObject
+            => _firstPageButtonAccessibleObject ??= this.TryGetOwnerAs(out ScrollBar? owner) ? new(owner) : null;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => this;
 
-        internal ScrollBarLastLineButtonAccessibleObject LastLineButtonAccessibleObject
-            => _lastLineButtonAccessibleObject ??= new(_owningScrollBar);
+        internal ScrollBarLastLineButtonAccessibleObject? LastLineButtonAccessibleObject
+            => _lastLineButtonAccessibleObject ??= this.TryGetOwnerAs(out ScrollBar? owner) ? new(owner) : null;
 
-        internal ScrollBarLastPageButtonAccessibleObject LastPageButtonAccessibleObject
-            => _lastPageButtonAccessibleObject ??= new(_owningScrollBar);
+        internal ScrollBarLastPageButtonAccessibleObject? LastPageButtonAccessibleObject
+            => _lastPageButtonAccessibleObject ??= this.TryGetOwnerAs(out ScrollBar? owner) ? new(owner) : null;
 
-        internal ScrollBarThumbAccessibleObject ThumbAccessibleObject
-            => _thumbAccessibleObject ??= new(_owningScrollBar);
+        internal ScrollBarThumbAccessibleObject? ThumbAccessibleObject
+            => _thumbAccessibleObject ??= this.TryGetOwnerAs(out ScrollBar? owner) ? new(owner) : null;
 
         // The maximum value can only be reached programmatically. The value of a scroll bar cannot reach its maximum
         // value through user interaction at run time. The maximum value that can be reached through user interaction
         // is equal to 1 plus the Maximum property value minus the LargeChange property value.
-        internal int UIMaximum => _owningScrollBar.Maximum - _owningScrollBar.LargeChange + 1;
+        internal int UIMaximum => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Maximum - owner.LargeChange + 1 : 0;
 
         private bool ArePageButtonsDisplayed
-            => FirstPageButtonAccessibleObject.IsDisplayed && LastPageButtonAccessibleObject.IsDisplayed;
+            => (FirstPageButtonAccessibleObject?.IsDisplayed ?? false)
+               && (LastPageButtonAccessibleObject?.IsDisplayed ?? false);
 
         private bool ArePageButtonsHidden
-            => !FirstPageButtonAccessibleObject.IsDisplayed && !LastPageButtonAccessibleObject.IsDisplayed;
+            => !(FirstPageButtonAccessibleObject?.IsDisplayed ?? true)
+               && !(LastPageButtonAccessibleObject?.IsDisplayed ?? true);
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (!_owningScrollBar.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out ScrollBar? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
@@ -61,8 +61,8 @@ public partial class ScrollBar
             return index switch
             {
                 0 => FirstLineButtonAccessibleObject,
-                1 => FirstPageButtonAccessibleObject.IsDisplayed ? FirstPageButtonAccessibleObject : ThumbAccessibleObject,
-                2 => FirstPageButtonAccessibleObject.IsDisplayed
+                1 => (FirstPageButtonAccessibleObject?.IsDisplayed ?? false) ? FirstPageButtonAccessibleObject : ThumbAccessibleObject,
+                2 => (FirstPageButtonAccessibleObject?.IsDisplayed ?? false)
                     ? ThumbAccessibleObject
                     : ArePageButtonsHidden ? LastLineButtonAccessibleObject : LastPageButtonAccessibleObject,
                 3 => ArePageButtonsDisplayed
@@ -74,7 +74,7 @@ public partial class ScrollBar
         }
 
         public override int GetChildCount()
-            => _owningScrollBar.IsHandleCreated
+            => this.TryGetOwnerAs(out ScrollBar? owner) && owner.IsHandleCreated
                 ? ArePageButtonsDisplayed
                     ? 5
                     : ArePageButtonsHidden ? 3 : 4
@@ -82,33 +82,34 @@ public partial class ScrollBar
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!_owningScrollBar.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out ScrollBar? owner) || !owner.IsHandleCreated)
             {
                 return null;
             }
 
             Point point = new(x, y);
-            if (ThumbAccessibleObject.Bounds.Contains(point))
+
+            if (ThumbAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return ThumbAccessibleObject;
             }
 
-            if (FirstLineButtonAccessibleObject.Bounds.Contains(point))
+            if (FirstLineButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return FirstLineButtonAccessibleObject;
             }
 
-            if (FirstPageButtonAccessibleObject.Bounds.Contains(point))
+            if (FirstPageButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return FirstPageButtonAccessibleObject;
             }
 
-            if (LastPageButtonAccessibleObject.Bounds.Contains(point))
+            if (LastPageButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return LastPageButtonAccessibleObject;
             }
 
-            if (LastLineButtonAccessibleObject.Bounds.Contains(point))
+            if (LastLineButtonAccessibleObject?.Bounds.Contains(point) == true)
             {
                 return LastLineButtonAccessibleObject;
             }
@@ -138,9 +139,9 @@ public partial class ScrollBar
                 // it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UiaCore.UIA.ControlTypePropertyId when
-                    _owningScrollBar.AccessibleRole == AccessibleRole.Default
+                    this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     => UiaCore.UIA.ScrollBarControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => _owningScrollBar.Focused,
+                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Focused : false,
                 UiaCore.UIA.RangeValueValuePropertyId => RangeValue,
                 UiaCore.UIA.RangeValueIsReadOnlyPropertyId => IsReadOnly,
                 UiaCore.UIA.RangeValueLargeChangePropertyId => LargeChange,
@@ -153,26 +154,26 @@ public partial class ScrollBar
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override double RangeValue => _owningScrollBar.Value;
+        internal override double RangeValue => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Value : base.RangeValue;
 
-        internal override double LargeChange => _owningScrollBar.LargeChange;
+        internal override double LargeChange => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.LargeChange : base.LargeChange;
 
-        internal override double SmallChange => _owningScrollBar.SmallChange;
+        internal override double SmallChange => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.SmallChange : base.SmallChange;
 
-        internal override double Maximum => _owningScrollBar.Maximum;
+        internal override double Maximum => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Maximum : base.Maximum;
 
-        internal override double Minimum => _owningScrollBar.Minimum;
+        internal override double Minimum => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Minimum : base.Minimum;
 
         internal override bool IsReadOnly => false;
 
         internal override void SetValue(double newValue)
         {
-            if (!_owningScrollBar.IsHandleCreated)
+            if (!this.TryGetOwnerAs(out ScrollBar? owner) || !owner.IsHandleCreated)
             {
                 return;
             }
 
-            _owningScrollBar.Value = (int)newValue;
+            owner.Value = (int)newValue;
         }
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)

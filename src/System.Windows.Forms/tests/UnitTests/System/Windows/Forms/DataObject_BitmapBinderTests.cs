@@ -54,7 +54,8 @@ public class DataObject_BitmapBinderTests
                 Binder = s_serializationBinder
             };
 
-            object deserialized = formatter.Deserialize(stream);
+            // cs/dangerous-binary-deserialization
+            object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Safe use because input stream is controlled contains strings and Bitmap which is instantiated by a binder. 
             Assert.NotNull(deserialized);
 
             if (value is not Bitmap)

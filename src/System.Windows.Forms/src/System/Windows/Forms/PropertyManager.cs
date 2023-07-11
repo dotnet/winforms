@@ -25,7 +25,7 @@ public class PropertyManager : BindingManagerBase
         OnCurrentChanged(EventArgs.Empty);
     }
 
-    private protected override void SetDataSource(object dataSource)
+    private protected override void SetDataSource(object? dataSource)
     {
         if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
         {
@@ -37,13 +37,13 @@ public class PropertyManager : BindingManagerBase
 
         if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
         {
-            _propInfo = TypeDescriptor.GetProperties(dataSource).Find(_propName, true);
+            _propInfo = TypeDescriptor.GetProperties(_dataSource).Find(_propName, true);
             if (_propInfo is null)
             {
                 throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource));
             }
 
-            _propInfo.AddValueChanged(dataSource, new EventHandler(PropertyChanged));
+            _propInfo.AddValueChanged(_dataSource, new EventHandler(PropertyChanged));
         }
     }
 
@@ -55,7 +55,7 @@ public class PropertyManager : BindingManagerBase
     {
     }
 
-    internal PropertyManager(object dataSource, string propName) : base()
+    internal PropertyManager(object? dataSource, string propName) : base()
     {
         _propName = propName;
         SetDataSource(dataSource);

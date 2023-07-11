@@ -190,7 +190,7 @@ public unsafe class WebBrowserSiteBase :
         if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
         {
             HWND hwnd = HWND.Null;
-            if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded)
+            if (Host.AXInPlaceObject!.GetWindow(&hwnd).Succeeded)
             {
                 if (Host.GetHandleNoCreate() != hwnd)
                 {
@@ -306,7 +306,7 @@ public unsafe class WebBrowserSiteBase :
 
     HRESULT IOleInPlaceSite.Interface.DiscardUndoState() => HRESULT.S_OK;
 
-    HRESULT IOleInPlaceSite.Interface.DeactivateAndUndo() => Host.AXInPlaceObject.UIDeactivate();
+    HRESULT IOleInPlaceSite.Interface.DeactivateAndUndo() => Host.AXInPlaceObject!.UIDeactivate();
 
     HRESULT IOleInPlaceSite.Interface.OnPosRectChange(RECT* lprcPosRect) => OnActiveXRectChange(lprcPosRect);
 
@@ -380,7 +380,7 @@ public unsafe class WebBrowserSiteBase :
             return;
         }
 
-        object nativeObject = Host._activeXInstance;
+        object? nativeObject = Host._activeXInstance;
         if (nativeObject is not null)
         {
             try
@@ -411,7 +411,7 @@ public unsafe class WebBrowserSiteBase :
 
         var posRect = new RECT(0, 0, lprcPosRect->right - lprcPosRect->left, lprcPosRect->bottom - lprcPosRect->top);
         var clipRect = WebBrowserHelper.GetClipRect();
-        Host.AXInPlaceObject.SetObjectRects(&posRect, &clipRect);
+        Host.AXInPlaceObject!.SetObjectRects(&posRect, &clipRect);
         Host.MakeDirty();
         return HRESULT.S_OK;
     }
