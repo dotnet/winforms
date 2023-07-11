@@ -382,7 +382,7 @@ public partial class ListView
         {
             if (!this.TryGetOwnerAs(out ListView? owningListView))
             {
-                return base.IsPatternSupported(patternId);
+                return false;
             }
 
             if (patternId == UiaCore.UIA.SelectionPatternId ||
