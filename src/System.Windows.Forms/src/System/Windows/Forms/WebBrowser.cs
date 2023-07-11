@@ -73,10 +73,7 @@ public partial class WebBrowser : WebBrowserBase
     [DefaultValue(true)]
     public bool AllowNavigation
     {
-        get
-        {
-            return _webBrowserState[WEBBROWSERSTATE_allowNavigation];
-        }
+        get => _webBrowserState[WEBBROWSERSTATE_allowNavigation];
         set
         {
             _webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
@@ -99,10 +96,7 @@ public partial class WebBrowser : WebBrowserBase
     [DefaultValue(true)]
     public bool AllowWebBrowserDrop
     {
-        get
-        {
-            return AxIWebBrowser2.RegisterAsDropTarget;
-        }
+        get => AxIWebBrowser2.RegisterAsDropTarget;
         set
         {
             //Note: you lose this value when you load a new document: the value needs to be refreshed in
@@ -124,10 +118,7 @@ public partial class WebBrowser : WebBrowserBase
     [DefaultValue(false)]
     public bool ScriptErrorsSuppressed
     {
-        get
-        {
-            return AxIWebBrowser2.Silent;
-        }
+        get => AxIWebBrowser2.Silent;
         set
         {
             if (value != ScriptErrorsSuppressed)
@@ -148,14 +139,8 @@ public partial class WebBrowser : WebBrowserBase
     [DefaultValue(true)]
     public bool WebBrowserShortcutsEnabled
     {
-        get
-        {
-            return _webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
-        }
-        set
-        {
-            _webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled] = value;
-        }
+        get => _webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
+        set => _webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled] = value;
     }
 
     /// <summary>
@@ -165,13 +150,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool CanGoBack
-    {
-        get
-        {
-            return CanGoBackInternal;
-        }
-    }
+    public bool CanGoBack => CanGoBackInternal;
 
     /// <summary>
     ///  Returns the current WEBBROWSERSTATE_canGoBack value so that this value can be accessed
@@ -179,10 +158,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     internal bool CanGoBackInternal
     {
-        get
-        {
-            return _webBrowserState[WEBBROWSERSTATE_canGoBack];
-        }
+        get => _webBrowserState[WEBBROWSERSTATE_canGoBack];
         set
         {
             if (value != CanGoBackInternal)
@@ -200,13 +176,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool CanGoForward
-    {
-        get
-        {
-            return CanGoForwardInternal;
-        }
-    }
+    public bool CanGoForward => CanGoForwardInternal;
 
     /// <summary>
     ///  Returns the current WEBBROWSERSTATE_canGoForward value so that this value can
@@ -214,10 +184,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     internal bool CanGoForwardInternal
     {
-        get
-        {
-            return _webBrowserState[WEBBROWSERSTATE_canGoForward];
-        }
+        get => _webBrowserState[WEBBROWSERSTATE_canGoForward];
         set
         {
             if (value != CanGoForwardInternal)
@@ -442,20 +409,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsBusy
-    {
-        get
-        {
-            if (Document is null)
-            {
-                return false;
-            }
-            else
-            {
-                return AxIWebBrowser2.Busy;
-            }
-        }
-    }
+    public bool IsBusy => Document is null ? false : AxIWebBrowser2.Busy;
 
     /// <summary>
     ///  Gets the offline state of the browser control. Maps to IWebBrowser2:Offline.
@@ -463,13 +417,7 @@ public partial class WebBrowser : WebBrowserBase
     [SRDescription(nameof(SR.WebBrowserIsOfflineDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsOffline
-    {
-        get
-        {
-            return AxIWebBrowser2.Offline;
-        }
-    }
+    public bool IsOffline => AxIWebBrowser2.Offline;
 
     /// <summary>
     ///  Indicates whether to use the WebBrowser context menu.
@@ -483,14 +431,8 @@ public partial class WebBrowser : WebBrowserBase
     [DefaultValue(true)]
     public bool IsWebBrowserContextMenuEnabled
     {
-        get
-        {
-            return _webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
-        }
-        set
-        {
-            _webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled] = value;
-        }
+        get => _webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
+        set => _webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled] = value;
     }
 
     /// <summary>
@@ -503,10 +445,7 @@ public partial class WebBrowser : WebBrowserBase
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? ObjectForScripting
     {
-        get
-        {
-            return _objectForScripting;
-        }
+        get => _objectForScripting;
         set
         {
             if (value is not null)
@@ -547,20 +486,10 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public WebBrowserReadyState ReadyState
-    {
-        get
-        {
-            if (Document is null)
-            {
-                return WebBrowserReadyState.Uninitialized;
-            }
-            else
-            {
-                return (WebBrowserReadyState)AxIWebBrowser2.ReadyState;
-            }
-        }
-    }
+    public WebBrowserReadyState ReadyState =>
+        Document is null
+        ? WebBrowserReadyState.Uninitialized
+        : (WebBrowserReadyState)AxIWebBrowser2.ReadyState;
 
     /// <summary>
     ///  The text that would be displayed in the IE status bar.
@@ -1138,13 +1067,7 @@ public partial class WebBrowser : WebBrowserBase
     /// <summary>
     ///  Overrides the default size property of Control to specify a bigger default size of 250 x 250.
     /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(250, 250);
-        }
-    }
+    protected override Size DefaultSize => new Size(250, 250);
 
     /// <summary>
     ///  Retrieves IWebBrowser2 from the native object. Overriding classes should first call base.AttachInterfaces.
@@ -1198,28 +1121,19 @@ public partial class WebBrowser : WebBrowserBase
     /// <summary>
     ///  Returns a WebBrowserSite object.
     /// </summary>
-    protected override WebBrowserSiteBase CreateWebBrowserSiteBase()
-    {
-        return new WebBrowserSite(this);
-    }
+    protected override WebBrowserSiteBase CreateWebBrowserSiteBase() => new WebBrowserSite(this);
 
     /// <summary>
     ///  Raises the <see cref="CanGoBackChanged"/> event.
     /// </summary>
     //
-    protected virtual void OnCanGoBackChanged(EventArgs e)
-    {
-        CanGoBackChanged?.Invoke(this, e);
-    }
+    protected virtual void OnCanGoBackChanged(EventArgs e) => CanGoBackChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="CanGoForwardChanged"/> event.
     /// </summary>
     //
-    protected virtual void OnCanGoForwardChanged(EventArgs e)
-    {
-        CanGoForwardChanged?.Invoke(this, e);
-    }
+    protected virtual void OnCanGoForwardChanged(EventArgs e) => CanGoForwardChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="DocumentCompleted"/> event.
@@ -1235,64 +1149,43 @@ public partial class WebBrowser : WebBrowserBase
     ///  Raises the <see cref="DocumentTitleChanged"/> event.
     /// </summary>
     //
-    protected virtual void OnDocumentTitleChanged(EventArgs e)
-    {
-        DocumentTitleChanged?.Invoke(this, e);
-    }
+    protected virtual void OnDocumentTitleChanged(EventArgs e) => DocumentTitleChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="EncryptionLevelChanged"/> event.
     /// </summary>
     //
-    protected virtual void OnEncryptionLevelChanged(EventArgs e)
-    {
-        EncryptionLevelChanged?.Invoke(this, e);
-    }
+    protected virtual void OnEncryptionLevelChanged(EventArgs e) => EncryptionLevelChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="FileDownload"/> event.
     /// </summary>
     //
-    protected virtual void OnFileDownload(EventArgs e)
-    {
-        FileDownload?.Invoke(this, e);
-    }
+    protected virtual void OnFileDownload(EventArgs e) => FileDownload?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="Navigated"/> event.
     /// </summary>
     //
-    protected virtual void OnNavigated(WebBrowserNavigatedEventArgs e)
-    {
-        Navigated?.Invoke(this, e);
-    }
+    protected virtual void OnNavigated(WebBrowserNavigatedEventArgs e) => Navigated?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="Navigating"/> event.
     /// </summary>
     //
-    protected virtual void OnNavigating(WebBrowserNavigatingEventArgs e)
-    {
-        Navigating?.Invoke(this, e);
-    }
+    protected virtual void OnNavigating(WebBrowserNavigatingEventArgs e) => Navigating?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="NewWindow"/> event.
     /// </summary>
     //
-    protected virtual void OnNewWindow(CancelEventArgs e)
-    {
-        NewWindow?.Invoke(this, e);
-    }
+    protected virtual void OnNewWindow(CancelEventArgs e) => NewWindow?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="ProgressChanged"/> event.
     /// </summary>
     //
-    protected virtual void OnProgressChanged(WebBrowserProgressChangedEventArgs e)
-    {
-        ProgressChanged?.Invoke(this, e);
-    }
+    protected virtual void OnProgressChanged(WebBrowserProgressChangedEventArgs e) => ProgressChanged?.Invoke(this, e);
 
     /// <summary>
     ///  Raises the <see cref="StatusTextChanged"/> event.
@@ -1401,23 +1294,11 @@ public partial class WebBrowser : WebBrowserBase
         }
     }
 
-    private bool ShouldSerializeDocumentText()
-    {
-        return IsValidUrl;
-    }
+    private bool ShouldSerializeDocumentText() => IsValidUrl;
 
-    private bool IsValidUrl
-    {
-        get
-        {
-            return Url is null || Url.AbsoluteUri == "about:blank";
-        }
-    }
+    private bool IsValidUrl => Url is null || Url.AbsoluteUri == "about:blank";
 
-    private bool ShouldSerializeUrl()
-    {
-        return !ShouldSerializeDocumentText();
-    }
+    private bool ShouldSerializeUrl() => !ShouldSerializeDocumentText();
 
     /// <summary>
     ///  Returns true if there is a context menu to show.
