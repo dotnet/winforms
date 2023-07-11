@@ -41,7 +41,7 @@ public partial class WebBrowserBase
             WINDOWPOS* wp = (WINDOWPOS*)m.LParamInternal;
             wp->x = 0;
             wp->y = 0;
-            Size s = _webBrowserBase.webBrowserBaseChangingSize;
+            Size s = _webBrowserBase._webBrowserBaseChangingSize;
             if (s.Width == -1)
             {
                 // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.

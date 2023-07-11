@@ -52,7 +52,7 @@ public partial class ListView : Control
     private ColumnHeaderStyle _headerStyle = ColumnHeaderStyle.Clickable;
     private SortOrder _sorting = SortOrder.None;
     private View _viewStyle = View.LargeIcon;
-    private string _toolTipCaption = string.Empty;
+    private string? _toolTipCaption = string.Empty;
 
     private const int LISTVIEWSTATE_ownerDraw = 0x00000001;
     private const int LISTVIEWSTATE_allowColumnReorder = 0x00000002;
@@ -3578,7 +3578,7 @@ public partial class ListView : Control
         }
     }
 
-    internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string caption, ToolTip tooltip)
+    internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
     {
         // The "ShowItemToolTips" flag is required so that when the user hovers over the ListViewItem,
         // their own tooltip is displayed, not the ListViewItem tooltip.

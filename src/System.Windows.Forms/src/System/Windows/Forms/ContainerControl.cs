@@ -407,14 +407,14 @@ public class ContainerControl : ScrollableControl, IContainerControl
         // Recursive function that makes sure that the chain of active controls is coherent.
         bool ret = true;
         bool updateContainerActiveControl = false;
-        ContainerControl? cc = null;
+        ContainerControl? containerControl = null;
         Control? parent = ParentInternal;
         if (parent is not null)
         {
-            cc = parent.GetContainerControl() as ContainerControl;
-            if (cc is not null)
+            containerControl = parent.GetContainerControl() as ContainerControl;
+            if (containerControl is not null)
             {
-                updateContainerActiveControl = (cc.ActiveControl != this);
+                updateContainerActiveControl = (containerControl.ActiveControl != this);
             }
         }
 
@@ -422,7 +422,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             if (updateContainerActiveControl)
             {
-                if (cc is not null && !cc.ActivateControl(this, false))
+                if (containerControl is not null && !containerControl.ActivateControl(this, false))
                 {
                     return false;
                 }
@@ -674,13 +674,13 @@ public class ContainerControl : ScrollableControl, IContainerControl
         else
         {
             // Determine and focus closest visible parent
-            ContainerControl? cc = this;
-            while (cc is not null && !cc.Visible)
+            ContainerControl? containerControl = this;
+            while (containerControl is not null && !containerControl.Visible)
             {
-                Control? parent = cc.ParentInternal;
+                Control? parent = containerControl.ParentInternal;
                 if (parent is not null)
                 {
-                    cc = parent.GetContainerControl() as ContainerControl;
+                    containerControl = parent.GetContainerControl() as ContainerControl;
                 }
                 else
                 {
@@ -688,9 +688,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 }
             }
 
-            if (cc is not null && cc.Visible)
+            if (containerControl is not null && containerControl.Visible)
             {
-                PInvoke.SetFocus(cc);
+                PInvoke.SetFocus(containerControl);
             }
         }
     }
@@ -1676,12 +1676,12 @@ public class ContainerControl : ScrollableControl, IContainerControl
                     // innerMostFCC.ParentInternal can be null when the ActiveControl is deleted.
                     if (innerMostFCC.ParentInternal is not null)
                     {
-                        ContainerControl? cc = innerMostFCC.ParentInternal.GetContainerControl() as ContainerControl;
-                        stopControl = cc;
-                        if (cc is not null && cc != this)
+                        ContainerControl? containerControl = innerMostFCC.ParentInternal.GetContainerControl() as ContainerControl;
+                        stopControl = containerControl;
+                        if (containerControl is not null && containerControl != this)
                         {
-                            cc._focusedControl = null;
-                            cc._activeControl = null;
+                            containerControl._focusedControl = null;
+                            containerControl._activeControl = null;
                         }
                     }
                 }
