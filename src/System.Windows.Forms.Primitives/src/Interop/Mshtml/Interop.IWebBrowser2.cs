@@ -137,9 +137,9 @@ internal partial class Interop
             void Navigate2(
                 ref object URL,
                 ref object flags,
-                ref object targetFrameName,
-                ref object postData,
-                ref object headers);
+                ref object? targetFrameName,
+                ref object? postData,
+                ref object? headers);
 
             [DispId(501)]
             OLECMDF QueryStatusWB(

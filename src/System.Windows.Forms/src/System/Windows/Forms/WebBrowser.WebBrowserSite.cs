@@ -143,7 +143,7 @@ public partial class WebBrowser
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IDocHostUIHandler.GetExternal(out object ppDispatch)
+        HRESULT IDocHostUIHandler.GetExternal(out object? ppDispatch)
         {
             WebBrowser wb = (WebBrowser)Host;
             ppDispatch = wb.ObjectForScripting;

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -28,13 +26,13 @@ public partial class WebBrowser : WebBrowserBase
     // Reference to the native ActiveX control's IWebBrowser2
     // Do not reference this directly. Use the AxIWebBrowser2
     // property instead.
-    private Mshtml.IWebBrowser2 axIWebBrowser2;
+    private Mshtml.IWebBrowser2? axIWebBrowser2;
 
-    private AxHost.ConnectionPointCookie _cookie;   // To hook up events from the native WebBrowser
-    private Stream documentStreamToSetOnLoad;
+    private AxHost.ConnectionPointCookie? _cookie;   // To hook up events from the native WebBrowser
+    private Stream? documentStreamToSetOnLoad;
     private WebBrowserEncryptionLevel encryptionLevel = WebBrowserEncryptionLevel.Insecure;
-    private object objectForScripting;
-    private WebBrowserEvent webBrowserEvent;
+    private object? objectForScripting;
+    private WebBrowserEvent? webBrowserEvent;
     internal string statusText = string.Empty;
 
     private const int WEBBROWSERSTATE_webBrowserShortcutsEnabled = 0x00000001;
@@ -236,7 +234,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public HtmlDocument Document
+    public HtmlDocument? Document
     {
         get
         {
@@ -244,7 +242,7 @@ public partial class WebBrowser : WebBrowserBase
             if (objDoc is not null)
             {
                 // Document is not necessarily an IHTMLDocument, it might be an office document as well.
-                IHTMLDocument2 iHTMLDocument2 = null;
+                IHTMLDocument2? iHTMLDocument2 = null;
                 try
                 {
                     iHTMLDocument2 = objDoc as IHTMLDocument2;
@@ -278,18 +276,18 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public unsafe Stream DocumentStream
+    public unsafe Stream? DocumentStream
     {
         get
         {
-            HtmlDocument htmlDocument = Document;
+            HtmlDocument? htmlDocument = Document;
             if (htmlDocument is null)
             {
                 return null;
             }
             else
             {
-                IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
+                IPersistStreamInit.Interface? psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                 Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
                 if (psi is null)
                 {
@@ -325,11 +323,12 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public string DocumentText
     {
         get
         {
-            using Stream stream = DocumentStream;
+            using Stream? stream = DocumentStream;
             if (stream is null)
             {
                 return string.Empty;
@@ -366,14 +365,14 @@ public partial class WebBrowser : WebBrowserBase
         {
             string documentTitle;
 
-            HtmlDocument htmlDocument = Document;
+            HtmlDocument? htmlDocument = Document;
             if (htmlDocument is null)
             {
                 documentTitle = AxIWebBrowser2.LocationName;
             }
             else
             {
-                IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
+                IHTMLDocument2? htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
                 Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                 try
                 {
@@ -400,10 +399,10 @@ public partial class WebBrowser : WebBrowserBase
         get
         {
             string docType = string.Empty;
-            HtmlDocument htmlDocument = Document;
+            HtmlDocument? htmlDocument = Document;
             if (htmlDocument is not null)
             {
-                IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
+                IHTMLDocument2? htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
                 Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                 try
                 {
@@ -502,7 +501,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public object ObjectForScripting
+    public object? ObjectForScripting
     {
         get
         {
@@ -536,7 +535,7 @@ public partial class WebBrowser : WebBrowserBase
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
-    public new event EventHandler PaddingChanged
+    public new event EventHandler? PaddingChanged
     {
         add => base.PaddingChanged += value;
         remove => base.PaddingChanged -= value;
@@ -595,7 +594,7 @@ public partial class WebBrowser : WebBrowserBase
     [SRCategory(nameof(SR.CatBehavior))]
     [TypeConverter(typeof(WebBrowserUriTypeConverter))]
     [DefaultValue(null)]
-    public Uri Url
+    public Uri? Url
     {
         get
         {
@@ -622,7 +621,12 @@ public partial class WebBrowser : WebBrowserBase
                 value = null;
             }
 
-            PerformNavigateHelper(ReadyNavigateToUrl(value), false, null, null, null);
+            PerformNavigateHelper(
+                ReadyNavigateToUrl(value),
+                false,
+                targetFrameName: null,
+                postData: null,
+                headers: null);
         }
     }
 
@@ -707,7 +711,7 @@ public partial class WebBrowser : WebBrowserBase
     /// <summary>
     ///  Navigates to the specified Uri's AbsolutePath
     /// </summary>
-    public void Navigate(Uri url)
+    public void Navigate(Uri? url)
     {
         Url = url; // Does null check in PerformNavigate2
     }
@@ -721,7 +725,12 @@ public partial class WebBrowser : WebBrowserBase
     ///  break.
     public void Navigate(string urlString)
     {
-        PerformNavigateHelper(ReadyNavigateToUrl(urlString), false, null, null, null);
+        PerformNavigateHelper(
+            ReadyNavigateToUrl(urlString),
+            false,
+            targetFrameName: null,
+            postData: null,
+            headers: null);
     }
 
     /// <summary>
@@ -729,9 +738,14 @@ public partial class WebBrowser : WebBrowserBase
     ///  If the frame name is invalid, it opens a new window (not ideal, but it's the current behavior).
     ///  Maps to IWebBrowser2:Navigate.
     /// </summary>
-    public void Navigate(Uri url, string targetFrameName)
+    public void Navigate(Uri? url, string? targetFrameName)
     {
-        PerformNavigateHelper(ReadyNavigateToUrl(url), false, targetFrameName, null, null);
+        PerformNavigateHelper(
+            ReadyNavigateToUrl(url),
+            false,
+            targetFrameName,
+            postData: null,
+            headers: null);
     }
 
     /// <summary>
@@ -741,17 +755,27 @@ public partial class WebBrowser : WebBrowserBase
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
     ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
     ///  break.
-    public void Navigate(string urlString, string targetFrameName)
+    public void Navigate(string urlString, string? targetFrameName)
     {
-        PerformNavigateHelper(ReadyNavigateToUrl(urlString), false, targetFrameName, null, null);
+        PerformNavigateHelper(
+            ReadyNavigateToUrl(urlString),
+            false,
+            targetFrameName,
+            postData: null,
+            headers: null);
     }
 
     /// <summary>
     ///  Opens a new window if newWindow is true, navigating it to the specified URL. Maps to IWebBrowser2:Navigate.
     /// </summary>
-    public void Navigate(Uri url, bool newWindow)
+    public void Navigate(Uri? url, bool newWindow)
     {
-        PerformNavigateHelper(ReadyNavigateToUrl(url), newWindow, null, null, null);
+        PerformNavigateHelper(
+            ReadyNavigateToUrl(url),
+            newWindow,
+            targetFrameName: null,
+            postData: null,
+            headers: null);
     }
 
     /// <summary>
@@ -763,15 +787,25 @@ public partial class WebBrowser : WebBrowserBase
     ///  break.
     public void Navigate(string urlString, bool newWindow)
     {
-        PerformNavigateHelper(ReadyNavigateToUrl(urlString), newWindow, null, null, null);
+        PerformNavigateHelper(
+            ReadyNavigateToUrl(urlString),
+            newWindow,
+            targetFrameName: null,
+            postData: null,
+            headers: null);
     }
 
     /// <summary>
     ///  Navigates to the specified Uri's AbsolutePath with specified args
     /// </summary>
-    public void Navigate(Uri url, string targetFrameName, byte[] postData, string additionalHeaders)
+    public void Navigate(Uri? url, string? targetFrameName, byte[]? postData, string? additionalHeaders)
     {
-        PerformNavigateHelper(ReadyNavigateToUrl(url), false, targetFrameName, postData, additionalHeaders);
+        PerformNavigateHelper(
+            ReadyNavigateToUrl(url),
+            false,
+            targetFrameName,
+            postData,
+            additionalHeaders);
     }
 
     /// <summary>
@@ -781,9 +815,18 @@ public partial class WebBrowser : WebBrowserBase
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
     ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
     ///  break.
-    public void Navigate(string urlString, string targetFrameName, byte[] postData, string additionalHeaders)
+    public void Navigate(
+        string urlString,
+        string? targetFrameName,
+        byte[]? postData,
+        string? additionalHeaders)
     {
-        PerformNavigateHelper(ReadyNavigateToUrl(urlString), false, targetFrameName, postData, additionalHeaders);
+        PerformNavigateHelper(
+            ReadyNavigateToUrl(urlString),
+            false,
+            targetFrameName,
+            postData,
+            additionalHeaders);
     }
 
     /// <summary>
@@ -967,7 +1010,7 @@ public partial class WebBrowser : WebBrowserBase
     [Browsable(false)]
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.WebBrowserCanGoBackChangedDescr))]
-    public event EventHandler CanGoBackChanged;
+    public event EventHandler? CanGoBackChanged;
 
     /// <summary>
     ///  Occurs when the IE forward button would change from enabled to disabled or vice versa.
@@ -976,7 +1019,7 @@ public partial class WebBrowser : WebBrowserBase
     [Browsable(false)]
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.WebBrowserCanGoForwardChangedDescr))]
-    public event EventHandler CanGoForwardChanged;
+    public event EventHandler? CanGoForwardChanged;
 
     /// <summary>
     ///  Occurs when the document hosted in the web browser control is fully loaded.
@@ -986,7 +1029,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.WebBrowserDocumentCompletedDescr))]
-    public event WebBrowserDocumentCompletedEventHandler DocumentCompleted;
+    public event WebBrowserDocumentCompletedEventHandler? DocumentCompleted;
 
     /// <summary>
     ///  Occurs whenever the title text changes. The Title is the html page title
@@ -997,7 +1040,7 @@ public partial class WebBrowser : WebBrowserBase
     [Browsable(false)]
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.WebBrowserDocumentTitleChangedDescr))]
-    public event EventHandler DocumentTitleChanged;
+    public event EventHandler? DocumentTitleChanged;
 
     /// <summary>
     ///  Occurs whenever encryption level changes.
@@ -1007,7 +1050,7 @@ public partial class WebBrowser : WebBrowserBase
     [Browsable(false)]
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.WebBrowserEncryptionLevelChangedDescr))]
-    public event EventHandler EncryptionLevelChanged;
+    public event EventHandler? EncryptionLevelChanged;
 
     /// <summary>
     ///  Occurs when a file download occurs.
@@ -1015,7 +1058,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.WebBrowserFileDownloadDescr))]
-    public event EventHandler FileDownload;
+    public event EventHandler? FileDownload;
 
     /// <summary>
     ///  Occurs after browser control navigation occurs.
@@ -1023,7 +1066,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.WebBrowserNavigatedDescr))]
-    public event WebBrowserNavigatedEventHandler Navigated;
+    public event WebBrowserNavigatedEventHandler? Navigated;
 
     /// <summary>
     ///  Occurs before browser control navigation occurs.
@@ -1032,7 +1075,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.WebBrowserNavigatingDescr))]
-    public event WebBrowserNavigatingEventHandler Navigating;
+    public event WebBrowserNavigatingEventHandler? Navigating;
 
     /// <summary>
     ///  Occurs when a new browser window is created.
@@ -1040,7 +1083,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.WebBrowserNewWindowDescr))]
-    public event CancelEventHandler NewWindow;
+    public event CancelEventHandler? NewWindow;
 
     /// <summary>
     ///  Occurs when an update to the progress of a download occurs.
@@ -1050,7 +1093,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.WebBrowserProgressChangedDescr))]
-    public event WebBrowserProgressChangedEventHandler ProgressChanged;
+    public event WebBrowserProgressChangedEventHandler? ProgressChanged;
 
     /// <summary>
     ///  Occurs whenever the status text changes.
@@ -1060,7 +1103,7 @@ public partial class WebBrowser : WebBrowserBase
     [Browsable(false)]
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.WebBrowserStatusTextChangedDescr))]
-    public event EventHandler StatusTextChanged;
+    public event EventHandler? StatusTextChanged;
 
     /// <summary>
     ///  Returns true if this control (or any of its child windows) has focus.
@@ -1261,7 +1304,9 @@ public partial class WebBrowser : WebBrowserBase
     }
 
     #region ShimSupport
-    private HtmlShimManager htmlShimManager;
+
+    private HtmlShimManager? htmlShimManager;
+
     internal HtmlShimManager ShimManager
     {
         get
@@ -1290,7 +1335,7 @@ public partial class WebBrowser : WebBrowserBase
         return urlString;
     }
 
-    private string ReadyNavigateToUrl(Uri url)
+    private string ReadyNavigateToUrl(Uri? url)
     {
         string urlString;
         if (url is null)
@@ -1314,17 +1359,32 @@ public partial class WebBrowser : WebBrowserBase
         return ReadyNavigateToUrl(urlString);
     }
 
-    private void PerformNavigateHelper(string urlString, bool newWindow, string targetFrameName, byte[] postData, string headers)
+    private void PerformNavigateHelper(
+        string urlString,
+        bool newWindow,
+        string? targetFrameName,
+        byte[]? postData,
+        string? headers)
     {
         object objUrlString = (object)urlString;
         object objFlags = (object)(newWindow ? 1 : 0);
-        object objTargetFrameName = (object)targetFrameName;
-        object objPostData = (object)postData;
-        object objHeaders = (object)headers;
-        PerformNavigate2(ref objUrlString, ref objFlags, ref objTargetFrameName, ref objPostData, ref objHeaders);
+        object? objTargetFrameName = targetFrameName;
+        object? objPostData = postData;
+        object? objHeaders = headers;
+        PerformNavigate2(
+            ref objUrlString,
+            ref objFlags,
+            ref objTargetFrameName,
+            ref objPostData,
+            ref objHeaders);
     }
 
-    private void PerformNavigate2(ref object URL, ref object flags, ref object targetFrameName, ref object postData, ref object headers)
+    private void PerformNavigate2(
+        ref object URL,
+        ref object flags,
+        ref object? targetFrameName,
+        ref object? postData,
+        ref object? headers)
     {
         try
         {
@@ -1364,7 +1424,7 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     private bool ShowContextMenu(Point location)
     {
-        ContextMenuStrip contextMenuStrip = ContextMenuStrip;
+        ContextMenuStrip? contextMenuStrip = ContextMenuStrip;
         if (contextMenuStrip is not null)
         {
             Point client;

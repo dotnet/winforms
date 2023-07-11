@@ -354,9 +354,9 @@ override System.Windows.Forms.DataGridView.HitTestInfo.ToString() -> string!
 ~override System.Windows.Forms.TreeView.Text.get -> string
 ~override System.Windows.Forms.TreeView.Text.set -> void
 ~override System.Windows.Forms.TreeView.ToString() -> string
-~override System.Windows.Forms.WebBrowser.AttachInterfaces(object nativeActiveXObject) -> void
-~override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.WebBrowser.CreateWebBrowserSiteBase() -> System.Windows.Forms.WebBrowserSiteBase
+override System.Windows.Forms.WebBrowser.AttachInterfaces(object! nativeActiveXObject) -> void
+override System.Windows.Forms.WebBrowser.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.WebBrowser.CreateWebBrowserSiteBase() -> System.Windows.Forms.WebBrowserSiteBase!
 override System.Windows.Forms.WebBrowserBase.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.WebBrowserBase.BackgroundImage.set -> void
 override System.Windows.Forms.WebBrowserBase.Cursor.get -> System.Windows.Forms.Cursor!
@@ -854,26 +854,26 @@ System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control? control) -
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-~System.Windows.Forms.WebBrowser.Document.get -> System.Windows.Forms.HtmlDocument
-~System.Windows.Forms.WebBrowser.DocumentStream.get -> System.IO.Stream
-~System.Windows.Forms.WebBrowser.DocumentStream.set -> void
-~System.Windows.Forms.WebBrowser.DocumentText.get -> string
-~System.Windows.Forms.WebBrowser.DocumentText.set -> void
-~System.Windows.Forms.WebBrowser.DocumentTitle.get -> string
-~System.Windows.Forms.WebBrowser.DocumentType.get -> string
-~System.Windows.Forms.WebBrowser.Navigate(string urlString) -> void
-~System.Windows.Forms.WebBrowser.Navigate(string urlString, bool newWindow) -> void
-~System.Windows.Forms.WebBrowser.Navigate(string urlString, string targetFrameName) -> void
-~System.Windows.Forms.WebBrowser.Navigate(string urlString, string targetFrameName, byte[] postData, string additionalHeaders) -> void
-~System.Windows.Forms.WebBrowser.Navigate(System.Uri url) -> void
-~System.Windows.Forms.WebBrowser.Navigate(System.Uri url, bool newWindow) -> void
-~System.Windows.Forms.WebBrowser.Navigate(System.Uri url, string targetFrameName) -> void
-~System.Windows.Forms.WebBrowser.Navigate(System.Uri url, string targetFrameName, byte[] postData, string additionalHeaders) -> void
-~System.Windows.Forms.WebBrowser.ObjectForScripting.get -> object
-~System.Windows.Forms.WebBrowser.ObjectForScripting.set -> void
-~System.Windows.Forms.WebBrowser.Url.get -> System.Uri
-~System.Windows.Forms.WebBrowser.Url.set -> void
-~System.Windows.Forms.WebBrowser.Version.get -> System.Version
+System.Windows.Forms.WebBrowser.Document.get -> System.Windows.Forms.HtmlDocument?
+System.Windows.Forms.WebBrowser.DocumentStream.get -> System.IO.Stream?
+System.Windows.Forms.WebBrowser.DocumentStream.set -> void
+System.Windows.Forms.WebBrowser.DocumentText.get -> string!
+System.Windows.Forms.WebBrowser.DocumentText.set -> void
+System.Windows.Forms.WebBrowser.DocumentTitle.get -> string!
+System.Windows.Forms.WebBrowser.DocumentType.get -> string!
+System.Windows.Forms.WebBrowser.Navigate(string! urlString) -> void
+System.Windows.Forms.WebBrowser.Navigate(string! urlString, bool newWindow) -> void
+System.Windows.Forms.WebBrowser.Navigate(string! urlString, string? targetFrameName) -> void
+System.Windows.Forms.WebBrowser.Navigate(string! urlString, string? targetFrameName, byte[]? postData, string? additionalHeaders) -> void
+System.Windows.Forms.WebBrowser.Navigate(System.Uri? url) -> void
+System.Windows.Forms.WebBrowser.Navigate(System.Uri? url, bool newWindow) -> void
+System.Windows.Forms.WebBrowser.Navigate(System.Uri? url, string? targetFrameName) -> void
+System.Windows.Forms.WebBrowser.Navigate(System.Uri? url, string? targetFrameName, byte[]? postData, string? additionalHeaders) -> void
+System.Windows.Forms.WebBrowser.ObjectForScripting.get -> object?
+System.Windows.Forms.WebBrowser.ObjectForScripting.set -> void
+System.Windows.Forms.WebBrowser.Url.get -> System.Uri?
+System.Windows.Forms.WebBrowser.Url.set -> void
+System.Windows.Forms.WebBrowser.Version.get -> System.Version!
 System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser! host) -> void
 System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object?
 System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap! bitmap, System.Drawing.Rectangle targetBounds) -> void
@@ -1217,18 +1217,18 @@ virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.TreeView.OnNodeMouseDoubleClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnNodeMouseHover(System.Windows.Forms.TreeNodeMouseHoverEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnCanGoBackChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnCanGoForwardChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnDocumentCompleted(System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnDocumentTitleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnEncryptionLevelChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnFileDownload(System.EventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnNavigated(System.Windows.Forms.WebBrowserNavigatedEventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnNavigating(System.Windows.Forms.WebBrowserNavigatingEventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnNewWindow(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnProgressChanged(System.Windows.Forms.WebBrowserProgressChangedEventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.OnStatusTextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.WebBrowser.StatusText.get -> string
+virtual System.Windows.Forms.WebBrowser.OnCanGoBackChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnCanGoForwardChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnDocumentCompleted(System.Windows.Forms.WebBrowserDocumentCompletedEventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnDocumentTitleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnEncryptionLevelChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnFileDownload(System.EventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnNavigated(System.Windows.Forms.WebBrowserNavigatedEventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnNavigating(System.Windows.Forms.WebBrowserNavigatingEventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnNewWindow(System.ComponentModel.CancelEventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnProgressChanged(System.Windows.Forms.WebBrowserProgressChangedEventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.OnStatusTextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.WebBrowser.StatusText.get -> string!
 abstract System.Windows.Forms.BindingManagerBase.AddNew() -> void
 abstract System.Windows.Forms.BindingManagerBase.CancelCurrentEdit() -> void
 abstract System.Windows.Forms.BindingManagerBase.Count.get -> int
@@ -12368,14 +12368,14 @@ System.Windows.Forms.WebBrowser.AllowNavigation.set -> void
 System.Windows.Forms.WebBrowser.AllowWebBrowserDrop.get -> bool
 System.Windows.Forms.WebBrowser.AllowWebBrowserDrop.set -> void
 System.Windows.Forms.WebBrowser.CanGoBack.get -> bool
-System.Windows.Forms.WebBrowser.CanGoBackChanged -> System.EventHandler
+System.Windows.Forms.WebBrowser.CanGoBackChanged -> System.EventHandler?
 System.Windows.Forms.WebBrowser.CanGoForward.get -> bool
-System.Windows.Forms.WebBrowser.CanGoForwardChanged -> System.EventHandler
-System.Windows.Forms.WebBrowser.DocumentCompleted -> System.Windows.Forms.WebBrowserDocumentCompletedEventHandler
-System.Windows.Forms.WebBrowser.DocumentTitleChanged -> System.EventHandler
+System.Windows.Forms.WebBrowser.CanGoForwardChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowser.DocumentCompleted -> System.Windows.Forms.WebBrowserDocumentCompletedEventHandler?
+System.Windows.Forms.WebBrowser.DocumentTitleChanged -> System.EventHandler?
 System.Windows.Forms.WebBrowser.EncryptionLevel.get -> System.Windows.Forms.WebBrowserEncryptionLevel
-System.Windows.Forms.WebBrowser.EncryptionLevelChanged -> System.EventHandler
-System.Windows.Forms.WebBrowser.FileDownload -> System.EventHandler
+System.Windows.Forms.WebBrowser.EncryptionLevelChanged -> System.EventHandler?
+System.Windows.Forms.WebBrowser.FileDownload -> System.EventHandler?
 System.Windows.Forms.WebBrowser.GoBack() -> bool
 System.Windows.Forms.WebBrowser.GoForward() -> bool
 System.Windows.Forms.WebBrowser.GoHome() -> void
@@ -12384,14 +12384,14 @@ System.Windows.Forms.WebBrowser.IsBusy.get -> bool
 System.Windows.Forms.WebBrowser.IsOffline.get -> bool
 System.Windows.Forms.WebBrowser.IsWebBrowserContextMenuEnabled.get -> bool
 System.Windows.Forms.WebBrowser.IsWebBrowserContextMenuEnabled.set -> void
-System.Windows.Forms.WebBrowser.Navigated -> System.Windows.Forms.WebBrowserNavigatedEventHandler
-System.Windows.Forms.WebBrowser.Navigating -> System.Windows.Forms.WebBrowserNavigatingEventHandler
-System.Windows.Forms.WebBrowser.NewWindow -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.WebBrowser.Navigated -> System.Windows.Forms.WebBrowserNavigatedEventHandler?
+System.Windows.Forms.WebBrowser.Navigating -> System.Windows.Forms.WebBrowserNavigatingEventHandler?
+System.Windows.Forms.WebBrowser.NewWindow -> System.ComponentModel.CancelEventHandler?
 System.Windows.Forms.WebBrowser.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.WebBrowser.Padding.set -> void
-System.Windows.Forms.WebBrowser.PaddingChanged -> System.EventHandler
+System.Windows.Forms.WebBrowser.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.WebBrowser.Print() -> void
-System.Windows.Forms.WebBrowser.ProgressChanged -> System.Windows.Forms.WebBrowserProgressChangedEventHandler
+System.Windows.Forms.WebBrowser.ProgressChanged -> System.Windows.Forms.WebBrowserProgressChangedEventHandler?
 System.Windows.Forms.WebBrowser.ReadyState.get -> System.Windows.Forms.WebBrowserReadyState
 System.Windows.Forms.WebBrowser.Refresh(System.Windows.Forms.WebBrowserRefreshOption opt) -> void
 System.Windows.Forms.WebBrowser.ScriptErrorsSuppressed.get -> bool
@@ -12403,7 +12403,7 @@ System.Windows.Forms.WebBrowser.ShowPrintDialog() -> void
 System.Windows.Forms.WebBrowser.ShowPrintPreviewDialog() -> void
 System.Windows.Forms.WebBrowser.ShowPropertiesDialog() -> void
 System.Windows.Forms.WebBrowser.ShowSaveAsDialog() -> void
-System.Windows.Forms.WebBrowser.StatusTextChanged -> System.EventHandler
+System.Windows.Forms.WebBrowser.StatusTextChanged -> System.EventHandler?
 System.Windows.Forms.WebBrowser.Stop() -> void
 System.Windows.Forms.WebBrowser.WebBrowser() -> void
 System.Windows.Forms.WebBrowser.WebBrowserShortcutsEnabled.get -> bool

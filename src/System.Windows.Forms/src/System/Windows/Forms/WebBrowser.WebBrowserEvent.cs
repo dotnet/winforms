@@ -78,7 +78,7 @@ public partial class WebBrowser
             _haveNavigated = true;
             if (_parent.documentStreamToSetOnLoad is not null && (string?)urlObject == "about:blank")
             {
-                HtmlDocument htmlDocument = _parent.Document;
+                HtmlDocument? htmlDocument = _parent.Document;
                 if (htmlDocument is not null)
                 {
                     IPersistStreamInit.Interface? psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
