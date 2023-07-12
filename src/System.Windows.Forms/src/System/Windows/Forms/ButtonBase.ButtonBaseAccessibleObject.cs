@@ -31,13 +31,13 @@ public partial class ButtonBase
         {
             char mnemonic = '\0';
 
-            if ((!useMnemonic || !WindowsFormsUtils.ContainsMnemonic(control?.Text)) && previousLabel is not null && previousLabel.UseMnemonic)
+            if ((!useMnemonic || !WindowsFormsUtils.ContainsMnemonic(control.Text)) && previousLabel is not null && previousLabel.UseMnemonic)
             {
-                mnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, false);
+                mnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, convertToUpperCase: false);
             }
             else if (useMnemonic)
             {
-                mnemonic = WindowsFormsUtils.GetMnemonic(control?.Text, false);
+                mnemonic = WindowsFormsUtils.GetMnemonic(control.Text, convertToUpperCase: false);
             }
 
             return (mnemonic == '\0') ? null : $"Alt+{mnemonic}";
