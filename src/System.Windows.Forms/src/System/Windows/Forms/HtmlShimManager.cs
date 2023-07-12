@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -15,9 +13,9 @@ namespace System.Windows.Forms;
 /// </summary>
 internal sealed class HtmlShimManager : IDisposable
 {
-    private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim> htmlWindowShims;
-    private Dictionary<HtmlElement, HtmlElement.HtmlElementShim> htmlElementShims;
-    private Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim> _htmlDocumentShims;
+    private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>? htmlWindowShims;
+    private Dictionary<HtmlElement, HtmlElement.HtmlElementShim>? htmlElementShims;
+    private Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>? _htmlDocumentShims;
 
     internal HtmlShimManager()
     {
@@ -29,7 +27,7 @@ internal sealed class HtmlShimManager : IDisposable
     /// </summary>
     public void AddDocumentShim(HtmlDocument doc)
     {
-        HtmlDocument.HtmlDocumentShim shim = null;
+        HtmlDocument.HtmlDocumentShim? shim = null;
 
         if (_htmlDocumentShims is null)
         {
@@ -54,7 +52,7 @@ internal sealed class HtmlShimManager : IDisposable
     /// </summary>
     public void AddWindowShim(HtmlWindow window)
     {
-        HtmlWindow.HtmlWindowShim shim = null;
+        HtmlWindow.HtmlWindowShim? shim = null;
         if (htmlWindowShims is null)
         {
             htmlWindowShims = new Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>();
@@ -79,7 +77,7 @@ internal sealed class HtmlShimManager : IDisposable
     /// </summary>
     public void AddElementShim(HtmlElement element)
     {
-        HtmlElement.HtmlElementShim shim = null;
+        HtmlElement.HtmlElementShim? shim = null;
 
         if (htmlElementShims is null)
         {
@@ -99,14 +97,14 @@ internal sealed class HtmlShimManager : IDisposable
         }
     }
 
-    internal HtmlDocument.HtmlDocumentShim GetDocumentShim(HtmlDocument document)
+    internal HtmlDocument.HtmlDocumentShim? GetDocumentShim(HtmlDocument document)
     {
         if (_htmlDocumentShims is null)
         {
             return null;
         }
 
-        if (_htmlDocumentShims.TryGetValue(document, out HtmlDocument.HtmlDocumentShim value))
+        if (_htmlDocumentShims.TryGetValue(document, out HtmlDocument.HtmlDocumentShim? value))
         {
             return value;
         }
@@ -114,14 +112,14 @@ internal sealed class HtmlShimManager : IDisposable
         return null;
     }
 
-    internal HtmlElement.HtmlElementShim GetElementShim(HtmlElement element)
+    internal HtmlElement.HtmlElementShim? GetElementShim(HtmlElement element)
     {
         if (htmlElementShims is null)
         {
             return null;
         }
 
-        if (htmlElementShims.TryGetValue(element, out HtmlElement.HtmlElementShim elementShim))
+        if (htmlElementShims.TryGetValue(element, out HtmlElement.HtmlElementShim? elementShim))
         {
             return elementShim;
         }
@@ -129,14 +127,14 @@ internal sealed class HtmlShimManager : IDisposable
         return null;
     }
 
-    internal HtmlWindow.HtmlWindowShim GetWindowShim(HtmlWindow window)
+    internal HtmlWindow.HtmlWindowShim? GetWindowShim(HtmlWindow window)
     {
         if (htmlWindowShims is null)
         {
             return null;
         }
 
-        if (htmlWindowShims.TryGetValue(window, out HtmlWindow.HtmlWindowShim windowShim))
+        if (htmlWindowShims.TryGetValue(window, out HtmlWindow.HtmlWindowShim? windowShim))
         {
             return windowShim;
         }
@@ -202,14 +200,11 @@ internal sealed class HtmlShimManager : IDisposable
                 }
             }
 
-            //
-            // prune the particular window from the list.
-            //
+            // Prune the particular window from the list.
             if (htmlWindowShims is not null)
             {
-                if (htmlWindowShims.TryGetValue(unloadedWindow, out HtmlWindow.HtmlWindowShim shim))
+                if (htmlWindowShims.Remove(unloadedWindow, out HtmlWindow.HtmlWindowShim? shim))
                 {
-                    htmlWindowShims.Remove(unloadedWindow);
                     shim.Dispose();
                 }
             }
