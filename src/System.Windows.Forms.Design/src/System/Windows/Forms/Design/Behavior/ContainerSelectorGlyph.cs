@@ -7,12 +7,13 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  This is the glyph used to drag container controls around the designer. This glyph (and associated behavior) is created by the ParentControlDesigner.
+///  This is the glyph used to drag container controls around the designer.
+///  This glyph (and associated behavior) is created by the ParentControlDesigner.
 /// </summary>
 [DebuggerDisplay("{GetType().Name}:: Component: {_component}, Cursor: {_hitTestCursor}")]
 internal sealed class ContainerSelectorGlyph : Glyph
 {
-    private Rectangle _glyphBounds;
+    private readonly Rectangle _glyphBounds;
     private Bitmap? _glyph;
     private readonly ContainerSelectorBehavior? _relatedBehavior;
 
@@ -29,44 +30,25 @@ internal sealed class ContainerSelectorGlyph : Glyph
     /// <summary>
     ///  The bounds of this Glyph.
     /// </summary>
-    public override Rectangle Bounds
-    {
-        get => _glyphBounds;
-    }
+    public override Rectangle Bounds => _glyphBounds;
 
-    public Behavior? RelatedBehavior
-    {
-        get => _relatedBehavior;
-    }
+    public Behavior? RelatedBehavior => _relatedBehavior;
 
     /// <summary>
     ///  Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
     /// </summary>
     public override Cursor? GetHitTest(Point p)
-    {
-        if (_glyphBounds.Contains(p) || _relatedBehavior?.OkToMove == true)
-        {
-            return Cursors.SizeAll;
-        }
-
-        return null;
-    }
-
-    private Bitmap MoveGlyph
-    {
-        get
-        {
-            _glyph ??= new Bitmap(typeof(ContainerSelectorGlyph), "MoverGlyph");
-
-            return _glyph;
-        }
-    }
+        => _glyphBounds.Contains(p) || _relatedBehavior?.OkToMove == true ? Cursors.SizeAll : null;
 
     /// <summary>
     ///  Very simple paint logic.
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        pe.Graphics.DrawImage(MoveGlyph, _glyphBounds);
+        // Initialize the glyph
+        _glyph ??= new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
+
+        // Draw the transparent Bitmap
+        pe.Graphics.DrawImage(_glyph, _glyphBounds);
     }
 }

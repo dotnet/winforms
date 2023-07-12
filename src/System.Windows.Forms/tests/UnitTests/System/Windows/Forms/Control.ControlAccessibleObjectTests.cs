@@ -1219,7 +1219,7 @@ public class Control_ControlAccessibleObjectTests
     {
         var typesToIgnore = new[]
         {
-           typeof(ListView), typeof(TreeView)
+           typeof(MonthCalendar)
         };
 
         return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
