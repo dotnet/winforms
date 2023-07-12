@@ -11,12 +11,28 @@ public class ControlDesignerTests
     [WinFormsFact]
     public void ControlDesigner_Ctor_Default()
     {
-        using var designer = new ControlDesigner();
-        Assert.Null(designer.Control);
-        Assert.Null(designer.Component);
-        Assert.Equal(SelectionRules.Visible, designer.SelectionRules);
-        Assert.True(designer.ParticipatesWithSnapLines);
-        Assert.False(designer.AutoResizeHandles);
+        using TestControlDesigner controlDesigner = new TestControlDesigner();
+        Assert.False(controlDesigner.AutoResizeHandles);
+        Assert.Null(controlDesigner.Control);
+        Assert.True(controlDesigner.ControlSupportsSnaplines);
+        Assert.Null(controlDesigner.Component);
+        Assert.True(controlDesigner.ForceVisible);
+        Assert.Null(controlDesigner.GetParentComponentProperty());
+        Assert.False(controlDesigner.SerializePerformLayout);
+    }
+
+    [WinFormsFact]
+    public void ControlDesigner_PropertiesTest()
+    {
+        using TestControlDesigner controlDesigner = new TestControlDesigner();
+        using Button button = new Button();
+        controlDesigner.Initialize(button);
+        Assert.Empty(controlDesigner.AssociatedComponents);
+        Assert.False(controlDesigner.IsRootDesigner);
+        Assert.NotNull(controlDesigner.SnapLines);
+        Assert.Equal(8, controlDesigner.SnapLines.Count);
+        Assert.NotNull(controlDesigner.StandardBehavior);
+        Assert.Equal(Cursors.Default, controlDesigner.StandardBehavior.Cursor);
     }
 
     [Fact]
