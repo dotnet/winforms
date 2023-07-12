@@ -8,14 +8,5 @@ namespace System.ComponentModel;
 internal static class CoreSwitches
 {
     private static BooleanSwitch? s_perfTrack;
-
-    public static BooleanSwitch PerfTrack
-    {
-        get
-        {
-            s_perfTrack ??= new BooleanSwitch("PERFTRACK", "Debug performance critical sections.");
-
-            return s_perfTrack;
-        }
-    }
+    public static BooleanSwitch PerfTrack => s_perfTrack ??= new BooleanSwitch("PERFTRACK", "Debug performance critical sections.");
 }
