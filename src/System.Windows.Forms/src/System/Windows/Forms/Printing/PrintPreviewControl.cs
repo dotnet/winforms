@@ -472,6 +472,7 @@ public partial class PrintPreviewControl : Control
     public void InvalidatePreview()
     {
         pageInfo = null;
+        exceptionPrinting = false;
         InvalidateLayout();
     }
 
