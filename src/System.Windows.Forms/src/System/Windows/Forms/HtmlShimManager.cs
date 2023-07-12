@@ -200,14 +200,11 @@ internal sealed class HtmlShimManager : IDisposable
                 }
             }
 
-            //
-            // prune the particular window from the list.
-            //
+            // Prune the particular window from the list.
             if (htmlWindowShims is not null)
             {
-                if (htmlWindowShims.TryGetValue(unloadedWindow, out HtmlWindow.HtmlWindowShim? shim))
+                if (htmlWindowShims.Remove(unloadedWindow, out HtmlWindow.HtmlWindowShim? shim))
                 {
-                    htmlWindowShims.Remove(unloadedWindow);
                     shim.Dispose();
                 }
             }
