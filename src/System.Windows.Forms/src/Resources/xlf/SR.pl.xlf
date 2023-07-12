@@ -7844,6 +7844,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Liczba stron w poprzek.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PrintPreviewControlAccHorizontalScrollBarAccName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrintPreviewControlAccVerticalScrollBarAccName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PrintPreviewControlZoomNegative">
         <source>Zoom must be 0 or greater. Negative values are not permitted.</source>
         <target state="translated">Powiększenie musi mieć wartość 0 lub większą. Wartości ujemne są niedozwolone.</target>

@@ -23,7 +23,6 @@ public partial class PrintPreviewControl : Control
     private Point lastOffset;
     private bool antiAlias;
 
-    private const int SCROLL_PAGE = 100;
     private const int SCROLL_LINE = 5;
     private const double DefaultZoom = .3;
 
@@ -35,6 +34,11 @@ public partial class PrintPreviewControl : Control
     private int rows = 1;
     private int columns = 1;
     private bool autoZoom = true;
+    private readonly int _focusHOffset = SystemInformation.HorizontalFocusThickness;
+    private readonly int _focusVOffset = SystemInformation.VerticalFocusThickness;
+    private HScrollBar _hScrollBar = new HScrollBar();
+    private VScrollBar _vScrollBar = new VScrollBar();
+    private bool _scrollLayoutPending;
 
     // The following are all computed by ComputeLayout
     private bool layoutOk;
@@ -53,8 +57,47 @@ public partial class PrintPreviewControl : Control
         ResetForeColor();
         Size = new Size(100, 100);
         SetStyle(ControlStyles.ResizeRedraw, false);
-        SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
+        SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
         TabStop = false;
+
+        _hScrollBar.AccessibleName = SR.PrintPreviewControlAccHorizontalScrollBarAccName;
+        _hScrollBar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+        _hScrollBar.Left = _focusHOffset;
+        _hScrollBar.SmallChange = SCROLL_LINE;
+        _hScrollBar.Visible = false;
+        _hScrollBar.ValueChanged += scrollBar_ValueChanged;
+        _hScrollBar.TabIndex = 0;
+        _hScrollBar.TabStop = true;
+        Controls.Add(_hScrollBar);
+
+        _vScrollBar.AccessibleName = SR.PrintPreviewControlAccVerticalScrollBarAccName;
+        _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+        _vScrollBar.SmallChange = SCROLL_LINE;
+        _vScrollBar.Top = _focusVOffset;
+        _vScrollBar.Visible = false;
+        _vScrollBar.Scroll += scrollBar_ValueChanged;
+        _vScrollBar.TabIndex = 1;
+        _vScrollBar.TabStop = true;
+        Controls.Add(_vScrollBar);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _hScrollBar.ValueChanged -= scrollBar_ValueChanged;
+            _hScrollBar.Dispose();
+
+            _vScrollBar.ValueChanged -= scrollBar_ValueChanged;
+            _vScrollBar.Dispose();
+
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+            _hScrollBar = null;
+            _vScrollBar = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        }
+
+        base.Dispose(disposing);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
@@ -131,21 +174,6 @@ public partial class PrintPreviewControl : Control
     }
 
     /// <summary>
-    ///  Gets the CreateParams used to create the window.
-    ///  If a subclass overrides this function, it must call the base implementation.
-    /// </summary>
-    protected override CreateParams CreateParams
-    {
-        get
-        {
-            CreateParams cp = base.CreateParams;
-            cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
-            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
-            return cp;
-        }
-    }
-
-    /// <summary>
     ///  The virtual coordinate of the upper left visible pixel.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
@@ -158,6 +186,7 @@ public partial class PrintPreviewControl : Control
         set
         {
             SetPositionNoInvalidate(value);
+            Invalidate();
         }
     }
 
@@ -328,70 +357,6 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
-    {
-        switch ((SCROLLBAR_COMMAND)m.WParamInternal.LOWORD)
-        {
-            case SCROLLBAR_COMMAND.SB_THUMBPOSITION:
-            case SCROLLBAR_COMMAND.SB_THUMBTRACK:
-                SCROLLINFO si = new()
-                {
-                    cbSize = (uint)sizeof(SCROLLINFO),
-                    fMask = SCROLLINFO_MASK.SIF_TRACKPOS
-                };
-
-                SCROLLBAR_CONSTANTS direction = horizontal ? SCROLLBAR_CONSTANTS.SB_HORZ : SCROLLBAR_CONSTANTS.SB_VERT;
-                pos = PInvoke.GetScrollInfo(m.HWND, direction, ref si) ? si.nTrackPos : m.WParamInternal.HIWORD;
-                break;
-            case SCROLLBAR_COMMAND.SB_LINELEFT:
-                if (pos > SCROLL_LINE)
-                {
-                    pos -= SCROLL_LINE;
-                }
-                else
-                {
-                    pos = 0;
-                }
-
-                break;
-            case SCROLLBAR_COMMAND.SB_LINERIGHT:
-                if (pos < maxPos - SCROLL_LINE)
-                {
-                    pos += SCROLL_LINE;
-                }
-                else
-                {
-                    pos = maxPos;
-                }
-
-                break;
-            case SCROLLBAR_COMMAND.SB_PAGELEFT:
-                if (pos > SCROLL_PAGE)
-                {
-                    pos -= SCROLL_PAGE;
-                }
-                else
-                {
-                    pos = 0;
-                }
-
-                break;
-            case SCROLLBAR_COMMAND.SB_PAGERIGHT:
-                if (pos < maxPos - SCROLL_PAGE)
-                {
-                    pos += SCROLL_PAGE;
-                }
-                else
-                {
-                    pos = maxPos;
-                }
-
-                break;
-        }
-
-        return pos;
-    }
-
     // This function computes everything in terms of physical size (millimeters), not pixels
     private void ComputeLayout()
     {
@@ -399,7 +364,6 @@ public partial class PrintPreviewControl : Control
         layoutOk = true;
         if (pageInfo.Length == 0)
         {
-            ClientSize = Size;
             return;
         }
 
@@ -462,7 +426,13 @@ public partial class PrintPreviewControl : Control
     // Recomputes the sizes and positions of pages without forcing a new "preview print"
     private void InvalidateLayout()
     {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
         layoutOk = false;
+        LayoutScrollBars();
         Invalidate();
     }
 
@@ -471,9 +441,40 @@ public partial class PrintPreviewControl : Control
     /// </summary>
     public void InvalidatePreview()
     {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
         pageInfo = null;
         exceptionPrinting = false;
+        SetVirtualSizeNoInvalidate(Size.Empty);
         InvalidateLayout();
+    }
+
+    private Rectangle InsideRectangle
+    {
+        get
+        {
+            Rectangle rect = InnerClientRectangle;
+
+            if (_hScrollBar.Visible)
+            {
+                rect.Height -= _hScrollBar.Height;
+            }
+
+            if (_vScrollBar.Visible)
+            {
+                rect.Width -= _vScrollBar.Width;
+
+                if (RightToLeft == RightToLeft.Yes)
+                {
+                    rect.X += _vScrollBar.Width;
+                }
+            }
+
+            return rect;
+        }
     }
 
     /// <summary>
@@ -481,8 +482,37 @@ public partial class PrintPreviewControl : Control
     /// </summary>
     protected override void OnResize(EventArgs eventargs)
     {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
         InvalidateLayout();
         base.OnResize(eventargs);
+    }
+
+    protected override void OnMouseDown(MouseEventArgs e)
+    {
+        if (!Focused)
+        {
+            Focus();
+        }
+
+        base.OnMouseDown(e);
+    }
+
+    protected override void OnGotFocus(EventArgs e)
+    {
+        Invalidate();
+
+        base.OnGotFocus(e);
+    }
+
+    protected override void OnLostFocus(EventArgs e)
+    {
+        Invalidate();
+
+        base.OnLostFocus(e);
     }
 
     private void CalculatePageInfo()
@@ -518,13 +548,22 @@ public partial class PrintPreviewControl : Control
         }
     }
 
+    protected override void OnPaintBackground(PaintEventArgs e)
+    {
+        PaintTransparentBackground(e, ClientRectangle);
+    }
+
     /// <summary>
     ///  Paints the control.
     /// </summary>
     protected override void OnPaint(PaintEventArgs pevent)
     {
-        Color backColor = GetBackColor(SystemInformation.HighContrast);
+        bool isHighContrast = SystemInformation.HighContrast;
+        Color backColor = GetBackColor(isHighContrast);
         using var backBrush = backColor.GetCachedSolidBrushScope();
+
+        PaintResizeBox(pevent, isHighContrast);
+        PaintFocus(pevent, isHighContrast);
 
         if (pageInfo is null || pageInfo.Length == 0)
         {
@@ -560,15 +599,20 @@ public partial class PrintPreviewControl : Control
                 ComputeLayout();
             }
 
-            Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
+            Rectangle rect = InsideRectangle;
 
-            //Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-            Point virtualPixels = new Point(VirtualSize);
+            using GraphicsClipScope clipScope = new(pevent.GraphicsInternal);
+            pevent.GraphicsInternal.SetClip(rect);
+
+            position.X = _hScrollBar.Value;
+            position.Y = _vScrollBar.Value;
+
+            Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
 
             // center pages on screen if small enough
             Point offset = new Point(
-                Math.Max(0, (Size.Width - virtualPixels.X) / 2),
-                Math.Max(0, (Size.Height - virtualPixels.Y) / 2));
+                Math.Max(0, (rect.Width - virtualSize.Width) / 2),
+                Math.Max(0, (rect.Height - virtualSize.Height) / 2));
             offset.X -= Position.X;
             offset.Y -= Position.Y;
             lastOffset = offset;
@@ -576,12 +620,11 @@ public partial class PrintPreviewControl : Control
             int borderPixelsX = PhysicalToPixels(border, screendpi.X);
             int borderPixelsY = PhysicalToPixels(border, screendpi.Y);
 
-            Region originalClip = pevent.Graphics.Clip;
             Rectangle[] pageRenderArea = new Rectangle[rows * columns];
             Point lastImageSize = Point.Empty;
             int maxImageHeight = 0;
 
-            using (var clipScope = new GraphicsClipScope(pevent.GraphicsInternal))
+            using (new GraphicsClipScope(pevent.GraphicsInternal))
             {
                 for (int row = 0; row < rows; row++)
                 {
@@ -650,6 +693,35 @@ public partial class PrintPreviewControl : Control
         base.OnPaint(pevent); // raise paint event
     }
 
+    private void PaintResizeBox(PaintEventArgs e, bool isHighContrast)
+    {
+        if (!_hScrollBar.Visible || !_vScrollBar.Visible)
+        {
+            return;
+        }
+
+        e.Graphics.FillRectangle(SystemBrushes.Control, ResizeBoxRectangle);
+    }
+
+    private void PaintFocus(PaintEventArgs e, bool isHighContrast)
+    {
+        Rectangle focusRect = FocusRectangle;
+
+        if (!e.ClipRectangle.Contains(focusRect) || !Focused || !ShowFocusCues)
+        {
+            return;
+        }
+
+        if (isHighContrast)
+        {
+            ControlPaint.DrawHighContrastFocusRectangle(e.Graphics, focusRect, SystemColors.ControlText);
+        }
+        else
+        {
+            ControlPaint.DrawFocusRectangle(e.Graphics, focusRect);
+        }
+    }
+
     protected virtual void OnStartPageChanged(EventArgs e)
     {
         if (Events[EVENT_STARTPAGECHANGED] is EventHandler eh)
@@ -710,98 +782,168 @@ public partial class PrintPreviewControl : Control
         ForeColor = Color.White;
     }
 
-    /// <summary>
-    ///  WM_HSCROLL handler.
-    /// </summary>
-    private void WmHScroll(ref Message m)
+    private void SetPositionNoInvalidate(Point value)
     {
-        // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
-        // the message is the built-in Window scrollbar.
-        if (m.LParamInternal != 0)
+        _scrollLayoutPending = true;
+
+        _hScrollBar.Value = Clamp(value.X, _hScrollBar.Minimum, _hScrollBar.Maximum);
+        _vScrollBar.Value = Clamp(value.Y, _vScrollBar.Minimum, _vScrollBar.Maximum);
+
+        _scrollLayoutPending = false;
+
+        static int Clamp(int value, int min, int max)
         {
-            base.WndProc(ref m);
+            if (value < min)
+            {
+                return min;
+            }
+
+            if (max < value)
+            {
+                return max;
+            }
+
+            return value;
+        }
+    }
+
+    internal void SetVirtualSizeNoInvalidate(Size value)
+    {
+        if (!IsHandleCreated)
+        {
             return;
         }
 
-        Point locPos = position;
-        int pos = locPos.X;
-        int maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
-
-        locPos.X = AdjustScroll(m, pos, maxPos, true);
-        Position = locPos;
-    }
-
-    private unsafe void SetPositionNoInvalidate(Point value)
-    {
-        Point current = position;
-
-        position = value;
-        position.X = Math.Min(position.X, virtualSize.Width - Width);
-        position.Y = Math.Min(position.Y, virtualSize.Height - Height);
-        if (position.X < 0)
-        {
-            position.X = 0;
-        }
-
-        if (position.Y < 0)
-        {
-            position.Y = 0;
-        }
-
-        RECT scroll = ClientRectangle;
-        PInvoke.ScrollWindow(
-            this,
-            current.X - position.X,
-            current.Y - position.Y,
-            &scroll,
-            &scroll);
-
-        PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_HORZ, position.X, true);
-        PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_VERT, position.Y, true);
-    }
-
-    internal unsafe void SetVirtualSizeNoInvalidate(Size value)
-    {
         virtualSize = value;
-        SetPositionNoInvalidate(position); // Make sure it's within range
 
-        SCROLLINFO info = new()
-        {
-            cbSize = (uint)sizeof(SCROLLINFO),
-            fMask = SCROLLINFO_MASK.SIF_RANGE | SCROLLINFO_MASK.SIF_PAGE,
-            nMin = 0,
-            nMax = Math.Max(Height, virtualSize.Height) - 1,
-            nPage = (uint)Height
-        };
-
-        PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_VERT, ref info, true);
-
-        info.fMask = SCROLLINFO_MASK.SIF_RANGE | SCROLLINFO_MASK.SIF_PAGE;
-        info.nMin = 0;
-        info.nMax = Math.Max(Width, virtualSize.Width) - 1;
-        info.nPage = (uint)Width;
-        PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref info, true);
+        LayoutScrollBars();
     }
 
-    /// <summary>
-    ///  WM_VSCROLL handler.
-    /// </summary>
-    private void WmVScroll(ref Message m)
+    private Rectangle InnerClientRectangle
     {
-        // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
-        // the message is the built-in Window scrollbar.
-        if (m.LParamInternal != 0)
+        get
         {
-            base.WndProc(ref m);
+            Rectangle rect = ClientRectangle;
+            rect.Inflate(-_focusHOffset, -_focusVOffset);
+            rect.Width--;
+            rect.Height--;
+
+            return rect;
+        }
+    }
+
+    private Rectangle FocusRectangle
+        => new(0, 0, Width - 1, Height - 1);
+
+    private Rectangle ResizeBoxRectangle
+        => new(_vScrollBar.Left, _hScrollBar.Top, _vScrollBar.Width, _hScrollBar.Height);
+
+    private void LayoutScrollBars()
+    {
+        if (!IsHandleCreated)
+        {
             return;
         }
 
-        Point locPos = Position;
-        int pos = locPos.Y;
-        int maxPos = Math.Max(Height, virtualSize.Height/* - Height*/);
+        _scrollLayoutPending = true;
+        SuspendLayout();
 
-        locPos.Y = AdjustScroll(m, pos, maxPos, false);
-        Position = locPos;
+        Rectangle availableRect = InnerClientRectangle;
+
+        (bool horizontalScrollNeeded, bool verticalScrollNeeded) = IsScrollNeeded(availableRect.Size);
+
+        _hScrollBar.Visible = horizontalScrollNeeded;
+        if (horizontalScrollNeeded)
+        {
+            _hScrollBar.Top = availableRect.Bottom - _hScrollBar.Height;
+            _hScrollBar.Width = availableRect.Width - (verticalScrollNeeded ? _vScrollBar.Width : 0);
+
+            AdjustScroll(
+                _hScrollBar,
+                virtualDimension: virtualSize.Width,
+                displayDimension: availableRect.Width,
+                offset: (verticalScrollNeeded ? _vScrollBar.Width : 0));
+        }
+        else if (_hScrollBar.Value > 0)
+        {
+            _hScrollBar.Value = 0;
+        }
+
+        _vScrollBar.Visible = verticalScrollNeeded;
+        if (verticalScrollNeeded)
+        {
+            _vScrollBar.Height = availableRect.Height - (horizontalScrollNeeded ? _hScrollBar.Height : 0);
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                _vScrollBar.Left = availableRect.Left;
+                _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom;
+            }
+            else
+            {
+                _vScrollBar.Left = availableRect.Right - _vScrollBar.Width;
+                _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+            }
+
+            AdjustScroll(
+                _vScrollBar,
+                virtualDimension: virtualSize.Height,
+                displayDimension: availableRect.Height,
+                offset: (horizontalScrollNeeded ? _hScrollBar.Height : 0));
+        }
+        else if (_vScrollBar.Value > 0)
+        {
+            _vScrollBar.Value = 0;
+        }
+
+        ResumeLayout(true);
+        _scrollLayoutPending = false;
+
+        (bool horizontal, bool vertical) IsScrollNeeded(Size displaySize)
+        {
+            bool horizontal = virtualSize.Width > displaySize.Width;
+            bool vertical = virtualSize.Height > displaySize.Height;
+
+            if (!horizontal && vertical)
+            {
+                horizontal = virtualSize.Width > (displaySize.Width - _vScrollBar.Width);
+            }
+
+            if (!vertical && horizontal)
+            {
+                vertical = virtualSize.Height > (displaySize.Height - _hScrollBar.Height);
+            }
+
+            return (horizontal, vertical);
+        }
+
+        void AdjustScroll(ScrollBar scrollBar, int virtualDimension, int displayDimension, int offset)
+        {
+            var oldLargeChange = scrollBar.LargeChange;
+
+            scrollBar.Maximum = virtualDimension;
+            scrollBar.LargeChange = displayDimension - offset;
+
+            if (scrollBar.Value > 0)
+            {
+                var diff = scrollBar.LargeChange - oldLargeChange;
+
+                if (scrollBar.Value >= diff)
+                {
+                    scrollBar.Value -= diff;
+                }
+            }
+        }
+    }
+
+    private void scrollBar_ValueChanged(object? sender, EventArgs e)
+    {
+        if (_scrollLayoutPending)
+        {
+            return;
+        }
+
+        Invalidate(InsideRectangle);
     }
 
     /// <summary>
@@ -813,24 +955,38 @@ public partial class PrintPreviewControl : Control
         Point locPos = Position;
         int pos;
         int maxPos;
+        bool scrollVisible = _vScrollBar.Visible || _hScrollBar.Visible;
+        bool vertical = _vScrollBar.Visible;
+        int largeChange = vertical ? _vScrollBar.LargeChange : _hScrollBar.LargeChange;
 
         switch (keyData & Keys.KeyCode)
         {
             case Keys.PageUp:
                 if ((keyData & Keys.Modifiers) == Keys.Control)
                 {
-                    pos = locPos.X;
-                    if (pos > SCROLL_PAGE)
+                    if (scrollVisible)
                     {
-                        pos -= SCROLL_PAGE;
-                    }
-                    else
-                    {
-                        pos = 0;
-                    }
+                        pos = vertical ? locPos.Y : locPos.X;
+                        if (pos > largeChange)
+                        {
+                            pos -= largeChange;
+                        }
+                        else
+                        {
+                            pos = 0;
+                        }
 
-                    locPos.X = pos;
-                    Position = locPos;
+                        if (vertical)
+                        {
+                            locPos.Y = pos;
+                        }
+                        else
+                        {
+                            locPos.X = pos;
+                        }
+
+                        Position = locPos;
+                    }
                 }
                 else if (StartPage > 0)
                 {
@@ -841,19 +997,30 @@ public partial class PrintPreviewControl : Control
             case Keys.PageDown:
                 if ((keyData & Keys.Modifiers) == Keys.Control)
                 {
-                    pos = locPos.X;
-                    maxPos = Math.Max(Width, virtualSize.Width);
-                    if (pos < maxPos - SCROLL_PAGE)
+                    if (scrollVisible)
                     {
-                        pos += SCROLL_PAGE;
-                    }
-                    else
-                    {
-                        pos = maxPos;
-                    }
+                        pos = vertical ? locPos.Y : locPos.X;
+                        maxPos = vertical ? _vScrollBar.Maximum : _hScrollBar.Maximum;
+                        if (pos < maxPos - largeChange)
+                        {
+                            pos += largeChange;
+                        }
+                        else
+                        {
+                            pos = maxPos;
+                        }
 
-                    locPos.X = pos;
-                    Position = locPos;
+                        if (vertical)
+                        {
+                            locPos.Y = pos;
+                        }
+                        else
+                        {
+                            locPos.X = pos;
+                        }
+
+                        Position = locPos;
+                    }
                 }
                 else if (pageInfo is not null && StartPage < pageInfo.Length)
                 {
@@ -877,65 +1044,80 @@ public partial class PrintPreviewControl : Control
                 break;
 
             case Keys.Up:
-                pos = locPos.Y;
-                if (pos > SCROLL_LINE)
+                if (_vScrollBar.Visible)
                 {
-                    pos -= SCROLL_LINE;
-                }
-                else
-                {
-                    pos = 0;
+                    pos = locPos.Y;
+                    if (pos > _vScrollBar.LargeChange)
+                    {
+                        pos -= _vScrollBar.LargeChange;
+                    }
+                    else
+                    {
+                        pos = 0;
+                    }
+
+                    locPos.Y = pos;
+                    Position = locPos;
                 }
 
-                locPos.Y = pos;
-                Position = locPos;
                 break;
             case Keys.Down:
-
-                pos = locPos.Y;
-                maxPos = Math.Max(Height, virtualSize.Height);
-
-                if (pos < maxPos - SCROLL_LINE)
+                if (_vScrollBar.Visible)
                 {
-                    pos += SCROLL_LINE;
-                }
-                else
-                {
-                    pos = maxPos;
+                    pos = locPos.Y;
+                    maxPos = _vScrollBar.Maximum - _vScrollBar.LargeChange;
+
+                    if (pos < maxPos - _vScrollBar.LargeChange)
+                    {
+                        pos += _vScrollBar.LargeChange;
+                    }
+                    else
+                    {
+                        pos = maxPos;
+                    }
+
+                    locPos.Y = pos;
+                    Position = locPos;
                 }
 
-                locPos.Y = pos;
-                Position = locPos;
                 break;
             case Keys.Left:
-
-                pos = locPos.X;
-                if (pos > SCROLL_LINE)
+                if (_hScrollBar.Visible)
                 {
-                    pos -= SCROLL_LINE;
-                }
-                else
-                {
-                    pos = 0;
+                    pos = locPos.X;
+                    if (pos > _hScrollBar.LargeChange)
+                    {
+                        pos -= _hScrollBar.LargeChange;
+                    }
+                    else
+                    {
+                        pos = 0;
+                    }
+
+                    locPos.X = pos;
+                    Position = locPos;
                 }
 
-                locPos.X = pos;
-                Position = locPos;
                 break;
             case Keys.Right:
-                pos = locPos.X;
-                maxPos = Math.Max(Width, virtualSize.Width);
-                if (pos < maxPos - SCROLL_LINE)
+                if (_hScrollBar.Visible)
                 {
-                    pos += SCROLL_LINE;
-                }
-                else
-                {
-                    pos = maxPos;
+                    pos = locPos.X;
+                    maxPos = _hScrollBar.Maximum - _hScrollBar.LargeChange;
+
+                    if (pos < maxPos - _hScrollBar.LargeChange)
+                    {
+                        pos += _hScrollBar.LargeChange;
+                    }
+                    else
+                    {
+                        pos = maxPos;
+                    }
+
+                    locPos.X = pos;
+                    Position = locPos;
                 }
 
-                locPos.X = pos;
-                Position = locPos;
                 break;
         }
     }
@@ -944,12 +1126,6 @@ public partial class PrintPreviewControl : Control
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_VSCROLL:
-                WmVScroll(ref m);
-                break;
-            case PInvoke.WM_HSCROLL:
-                WmHScroll(ref m);
-                break;
             case PInvoke.WM_KEYDOWN:
                 WmKeyDown(ref m);
                 break;

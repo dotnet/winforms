@@ -7844,6 +7844,16 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Počet stránek na šířku.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PrintPreviewControlAccHorizontalScrollBarAccName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrintPreviewControlAccVerticalScrollBarAccName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PrintPreviewControlZoomNegative">
         <source>Zoom must be 0 or greater. Negative values are not permitted.</source>
         <target state="translated">Hodnota přiblížení musí být rovna nule nebo větší. Záporné hodnoty nejsou povoleny.</target>

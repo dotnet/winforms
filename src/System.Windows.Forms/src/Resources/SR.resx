@@ -6972,4 +6972,10 @@ Stack trace where the illegal operation occurred was:
   <data name="ResourceValueNotFound" xml:space="preserve">
     <value>The resource value '{0}' was not found.</value>
   </data>
+  <data name="PrintPreviewControlAccHorizontalScrollBarAccName" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="PrintPreviewControlAccVerticalScrollBarAccName" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
 </root>
