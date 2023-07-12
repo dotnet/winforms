@@ -2264,7 +2264,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCellAccessibleObject_OwnerWrongType">
         <source>DataGridViewCell of type {0} does not provide the Toggle pattern.</source>
-        <target state="new">DataGridViewCell of type {0} does not provide the Toggle pattern.</target>
+        <target state="translated">DataGridViewCell di tipo {0} non fornisce il pattern Toggle.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCellCollection_AtLeastOneCellIsNull">
@@ -2339,7 +2339,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellIndeterminateStateDescription">
         <source>{0} check box indeterminate</source>
-        <target state="new">{0} check box indeterminate</target>
+        <target state="translated">{0} casella di controllo indeterminato</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
