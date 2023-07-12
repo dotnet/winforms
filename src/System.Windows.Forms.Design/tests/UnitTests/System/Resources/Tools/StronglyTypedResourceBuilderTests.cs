@@ -558,6 +558,46 @@ public partial class StronglyTypedResourceBuilderTests
         ValidateResultAudio(CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
     }
 
+    [Fact]
+    public static void StronglyTypedResourceBuilder_VerifyResourceName_ValidName()
+    {
+        var key = "MyResource";
+        string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
+        Assert.Equal(key, result);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_VerifyResourceName_InvalidName()
+    {
+        var key = "Invalid Resource?";
+        string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
+        Assert.Equal("Invalid_Resource_", result);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_VerifyResourceName_NameWithSpaces()
+    {
+        var key = "Resource Name";
+        string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
+        Assert.Equal("Resource_Name", result);
+    }
+
+    [Fact]
+    public static void StronglyTypedResourceBuilder_VerifyResourceName_NameStartWithNumber()
+    {
+        var key = "1.name";
+        string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
+        Assert.Equal("_1_name", result);
+    }
+
+    [Theory]
+    [MemberData(nameof(ResourceName_TestData))]
+    public static void StronglyTypedResourceBuilder_VerifyResourceName_NameWithSpecialCharacters(string resourceName, string expectedResult)
+    {
+        string result = StronglyTypedResourceBuilder.VerifyResourceName(resourceName, s_cSharpProvider);
+        Assert.Equal(expectedResult, result);
+    }
+
     [WinFormsFact]
     public static void StronglyTypedResourceBuilder_Create_AxHost_FromMemory_SerializeWith_StateConverter()
     {
@@ -664,5 +704,13 @@ public partial class StronglyTypedResourceBuilderTests
         }
 
         Assert.Equal("HELLO", Encoding.UTF8.GetString(contents));
+    }
+
+    public static IEnumerable<object[]> ResourceName_TestData()
+    {
+        yield return new object[] { "Image#Jpeg", "Image_Jpeg" };
+        yield return new object[] { "Generate &method", "Generate__method" };
+        yield return new object[] { "'%s' in this scope", "__s__in_this_scope" };
+        yield return new object[] { "{ ... }", "_______" };
     }
 }
