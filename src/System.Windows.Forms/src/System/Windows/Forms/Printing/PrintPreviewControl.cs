@@ -300,21 +300,11 @@ public partial class PrintPreviewControl : Control
     }
 
     [DefaultValue(false)]
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     [DispId(PInvoke.DISPID_TABSTOP)]
     public new bool TabStop
     {
         get => base.TabStop;
         set => base.TabStop = value;
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler? TabStopChanged
-    {
-        add => base.TabStopChanged += value;
-        remove => base.TabStopChanged -= value;
     }
 
     /// <summary>

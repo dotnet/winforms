@@ -8994,7 +8994,6 @@ System.Windows.Forms.PrintPreviewControl.StartPage.set -> void
 System.Windows.Forms.PrintPreviewControl.StartPageChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.TabStop.get -> bool
 System.Windows.Forms.PrintPreviewControl.TabStop.set -> void
-System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.TextChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.get -> bool
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.set -> void
