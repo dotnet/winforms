@@ -55,5 +55,27 @@ public partial class RadioButton
                     p == UiaCore.UIA.SelectionItemPatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
+
+        public override string? KeyboardShortcut => this.TryGetOwnerAs(out RadioButton? owner)
+            ? ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel)
+            : null;
+
+        public override string? Name
+        {
+            get
+            {
+                if (!this.TryGetOwnerAs(out RadioButton? owner))
+                {
+                    return null;
+                }
+
+                if (owner.AccessibleName is { } name)
+                {
+                    return name;
+                }
+
+                return owner.UseMnemonic ? WindowsFormsUtils.TextWithoutMnemonics(TextLabel) : TextLabel;
+            }
+        }
     }
 }

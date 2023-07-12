@@ -4,6 +4,7 @@
 
 using static Interop;
 using static Interop.UiaCore;
+using ButtonAccessibleObject = System.Windows.Forms.Button.ButtonAccessibleObject;
 
 namespace System.Windows.Forms.Tests;
 
@@ -12,7 +13,7 @@ public class Button_ButtonAccessibleObjectTests
     [WinFormsFact]
     public void ButtonAccessibleObject_Ctor_NullControl_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => new Button.ButtonAccessibleObject(null));
+        Assert.Throws<ArgumentException>(() => new ButtonAccessibleObject(null));
     }
 
     [WinFormsFact]
@@ -20,7 +21,7 @@ public class Button_ButtonAccessibleObjectTests
     {
         using var button = new Button();
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
+        var buttonAccessibleObject = new ButtonAccessibleObject(button);
 
         Assert.Same(button, buttonAccessibleObject.Owner);
         Assert.False(button.IsHandleCreated);
@@ -41,7 +42,7 @@ public class Button_ButtonAccessibleObjectTests
             button.CreateControl();
         }
 
-        var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
+        var buttonAccessibleObject = new ButtonAccessibleObject(button);
 
         Assert.Equal(accessibleRole, buttonAccessibleObject.Role);
         Assert.Equal(createControl, button.IsHandleCreated);
@@ -56,7 +57,7 @@ public class Button_ButtonAccessibleObjectTests
         };
 
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
+        var buttonAccessibleObject = new ButtonAccessibleObject(button);
 
         Assert.Equal(AccessibleRole.Link, buttonAccessibleObject.Role);
         Assert.False(button.IsHandleCreated);
@@ -77,7 +78,7 @@ public class Button_ButtonAccessibleObjectTests
         };
 
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
+        var buttonAccessibleObject = new ButtonAccessibleObject(button);
         object value = buttonAccessibleObject.GetPropertyValue((UIA)propertyID);
 
         Assert.Equal(expected, value);
@@ -90,7 +91,7 @@ public class Button_ButtonAccessibleObjectTests
         using var button = new Button();
 
         Assert.False(button.IsHandleCreated);
-        var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
+        var buttonAccessibleObject = new ButtonAccessibleObject(button);
 
         Assert.True(buttonAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
         Assert.False(button.IsHandleCreated);

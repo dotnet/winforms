@@ -1624,6 +1624,85 @@ public class Control_ControlAccessibleObjectTests
         }
     }
 
+    public static IEnumerable<object[]> ControlAccessibleObject_Name_KeyboardShortcut_TestData()
+    {
+        // Controls that have UseMnemonic property.
+        yield return new object[] { typeof(Label) };
+        yield return new object[] { typeof(LinkLabel) };
+        yield return new object[] { typeof(Button) };
+        yield return new object[] { typeof(RadioButton) };
+        yield return new object[] { typeof(CheckBox) };
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsTheory]
+    [MemberData(nameof(ControlAccessibleObject_Name_KeyboardShortcut_TestData))]
+    public void ControlAccessibleObject_Shortcut_Invoke_ReturnsExpected(Type type)
+    {
+        using var control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+        control.Text = "&control";
+        control.TabIndex = 1;
+        var accessibleObject = control.AccessibilityObject;
+
+        Assert.Equal("Alt+c", accessibleObject.KeyboardShortcut);
+
+        control.GetType().GetProperty(nameof(Label.UseMnemonic)).SetValue(control, false);
+
+        Assert.Null(accessibleObject.KeyboardShortcut);
+
+        if (control is not Label)
+        {
+            using var form = new Form();
+            using var label = new Label();
+            label.Text = "&label";
+            label.TabIndex = 0;
+
+            form.Controls.Add(label);
+            form.Controls.Add(control);
+            form.Show();
+
+            Assert.Equal("Alt+l", accessibleObject.KeyboardShortcut);
+
+            label.UseMnemonic = false;
+
+            Assert.Null(accessibleObject.KeyboardShortcut);
+
+            control.GetType().GetProperty(nameof(Label.UseMnemonic)).SetValue(control, true);
+
+            Assert.Equal("Alt+c", accessibleObject.KeyboardShortcut);
+
+            control.Text = "control";
+            label.UseMnemonic = true;
+
+            Assert.Equal("Alt+l", accessibleObject.KeyboardShortcut);
+        }
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/9296
+    [WinFormsTheory]
+    [MemberData(nameof(ControlAccessibleObject_Name_KeyboardShortcut_TestData))]
+    public void ControlAccessibleObject_Name_Invoke_ReturnsExpected(Type type)
+    {
+        using var control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+        control.Text = "&control";
+        var accessibleObject = control.AccessibilityObject;
+
+        Assert.Equal("control", accessibleObject.Name);
+
+        control.GetType().GetProperty(nameof(Label.UseMnemonic)).SetValue(control, false);
+
+        Assert.Equal("&control", accessibleObject.Name);
+
+        accessibleObject.Name = "CustomName";
+
+        Assert.Equal("CustomName", accessibleObject.Name);
+
+        control.GetType().GetProperty(nameof(Label.UseMnemonic)).SetValue(control, true);
+
+        Assert.Equal("CustomName", accessibleObject.Name);
+        Assert.False(control.IsHandleCreated);
+    }
+
     // ContextMenuStrip, From, ToolStripDropDown, ToolStripDropDownMenu
     // are Top level controls that can't be added to a ToolStrip.
     // A TabPage can be added to a TabControl only (see TabPage.AssignParent method).
