@@ -2383,11 +2383,11 @@ public partial class ListBox : ListControl
         }
 
         using var e = new DrawItemEventArgs(
-            dis->hDC.CreateGraphics(),
+            dis->hDC,
             Font,
             bounds,
-            (int)dis->itemID,
-            (DrawItemState)(int)dis->itemState,
+            dis->itemID,
+            dis->itemState,
             ForeColor,
             BackColor);
 
