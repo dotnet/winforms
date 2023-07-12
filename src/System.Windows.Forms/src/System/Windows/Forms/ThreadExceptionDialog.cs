@@ -69,8 +69,7 @@ public class ThreadExceptionDialog : Form
     private Bitmap? _expandImage;
     private Bitmap? _collapseImage;
     private bool _detailsVisible;
-    private SizeF savedAutoScaleDimensions;
-    private int scaledHeightPadding = HEIGHTPADDING;
+    private SizeF _savedAutoScaleDimensions;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="ThreadExceptionDialog"/> class.
@@ -358,7 +357,7 @@ public class ThreadExceptionDialog : Form
 
         _detailsButton.Image = _detailsVisible ? _collapseImage : _expandImage;
 
-        savedAutoScaleDimensions = AutoScaleDimensions;
+        _savedAutoScaleDimensions = AutoScaleDimensions;
     }
 
     /// <summary>
@@ -386,10 +385,11 @@ public class ThreadExceptionDialog : Form
     /// </summary>
     private void DetailsClick(object? sender, EventArgs eventargs)
     {
-        if (savedAutoScaleDimensions.Height > 0)
+        int scaledHeightPadding = _scaledHeightPadding;
+        if (_savedAutoScaleDimensions.Height > 0)
         {
             SizeF currentAutoScaleDimensions = CurrentAutoScaleDimensions;
-            scaledHeightPadding = (int)(_scaledHeightPadding * (currentAutoScaleDimensions.Height / savedAutoScaleDimensions.Height));
+            scaledHeightPadding = (int)Math.Round((_scaledHeightPadding * (currentAutoScaleDimensions.Height / _savedAutoScaleDimensions.Height)));
         }
 
         int delta = _details.Height + scaledHeightPadding;
