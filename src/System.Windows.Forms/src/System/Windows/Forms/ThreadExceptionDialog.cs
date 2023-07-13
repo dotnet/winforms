@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -69,7 +69,7 @@ public class ThreadExceptionDialog : Form
     private Bitmap? _expandImage;
     private Bitmap? _collapseImage;
     private bool _detailsVisible;
-    private SizeF _savedAutoScaleDimensions;
+    private int _scaledHeightPadding = HEIGHTPADDING;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="ThreadExceptionDialog"/> class.
@@ -357,7 +357,10 @@ public class ThreadExceptionDialog : Form
 
         _detailsButton.Image = _detailsVisible ? _collapseImage : _expandImage;
 
-        _savedAutoScaleDimensions = AutoScaleDimensions;
+        if (e.DeviceDpiNew != e.DeviceDpiOld)
+        {
+            _scaledHeightPadding = (int)Math.Round(HEIGHTPADDING * ((float)e.DeviceDpiNew / e.DeviceDpiOld));
+        }
     }
 
     /// <summary>
@@ -385,14 +388,7 @@ public class ThreadExceptionDialog : Form
     /// </summary>
     private void DetailsClick(object? sender, EventArgs eventargs)
     {
-        int scaledHeightPadding = _scaledHeightPadding;
-        if (_savedAutoScaleDimensions.Height > 0)
-        {
-            SizeF currentAutoScaleDimensions = CurrentAutoScaleDimensions;
-            scaledHeightPadding = (int)Math.Round((_scaledHeightPadding * (currentAutoScaleDimensions.Height / _savedAutoScaleDimensions.Height)));
-        }
-
-        int delta = _details.Height + scaledHeightPadding;
+        int delta = _details.Height + _scaledHeightPadding;
         if (_detailsVisible)
         {
             delta = -delta;
