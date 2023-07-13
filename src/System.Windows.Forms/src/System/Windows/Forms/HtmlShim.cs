@@ -25,15 +25,8 @@ internal abstract class HtmlShim : IDisposable
     {
     }
 
-    private EventHandlerList Events
-    {
-        get
-        {
-            _events ??= new EventHandlerList();
-
-            return _events;
-        }
-    }
+    private EventHandlerList Events =>
+        _events ??= new EventHandlerList();
 
     ///  Support IHtml*3.AttachHandler
     public abstract void AttachEventHandler(string eventName, EventHandler eventHandler);
