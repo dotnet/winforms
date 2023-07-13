@@ -11,6 +11,7 @@
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
   </PropertyGroup>
 
   <!--ApplicationConfiguration specific settings.-->
