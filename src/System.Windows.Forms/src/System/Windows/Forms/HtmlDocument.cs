@@ -35,13 +35,7 @@ public sealed partial class HtmlDocument
         _shimManager = shimManager;
     }
 
-    internal IHTMLDocument2 NativeHtmlDocument2
-    {
-        get
-        {
-            return _htmlDocument2;
-        }
-    }
+    internal IHTMLDocument2 NativeHtmlDocument2 => _htmlDocument2;
 
     private HtmlDocumentShim? DocumentShim
     {
@@ -63,13 +57,7 @@ public sealed partial class HtmlDocument
         }
     }
 
-    private HtmlShimManager ShimManager
-    {
-        get
-        {
-            return _shimManager;
-        }
-    }
+    private HtmlShimManager ShimManager => _shimManager;
 
     public HtmlElement? ActiveElement
     {
@@ -91,10 +79,7 @@ public sealed partial class HtmlDocument
 
     public string Domain
     {
-        get
-        {
-            return NativeHtmlDocument2.GetDomain();
-        }
+        get => NativeHtmlDocument2.GetDomain();
         set
         {
             try
@@ -111,14 +96,8 @@ public sealed partial class HtmlDocument
 
     public string Title
     {
-        get
-        {
-            return NativeHtmlDocument2.GetTitle();
-        }
-        set
-        {
-            NativeHtmlDocument2.SetTitle(value);
-        }
+        get => NativeHtmlDocument2.GetTitle();
+        set => NativeHtmlDocument2.SetTitle(value);
     }
 
     public Uri? Url
@@ -240,65 +219,29 @@ public sealed partial class HtmlDocument
         }
     }
 
-    public bool Focused
-    {
-        get
-        {
-            return ((IHTMLDocument4)NativeHtmlDocument2).HasFocus();
-        }
-    }
+    public bool Focused => ((IHTMLDocument4)NativeHtmlDocument2).HasFocus();
 
-    public object DomDocument
-    {
-        get
-        {
-            return NativeHtmlDocument2;
-        }
-    }
+    public object DomDocument => NativeHtmlDocument2;
 
     public string Cookie
     {
-        get
-        {
-            return NativeHtmlDocument2.GetCookie();
-        }
-        set
-        {
-            NativeHtmlDocument2.SetCookie(value);
-        }
+        get => NativeHtmlDocument2.GetCookie();
+        set => NativeHtmlDocument2.SetCookie(value);
     }
 
     public bool RightToLeft
     {
-        get
-        {
-            return ((IHTMLDocument3)NativeHtmlDocument2).GetDir() == "rtl";
-        }
-        set
-        {
-            ((IHTMLDocument3)NativeHtmlDocument2).SetDir(value ? "rtl" : "ltr");
-        }
+        get => ((IHTMLDocument3)NativeHtmlDocument2).GetDir() == "rtl";
+        set => ((IHTMLDocument3)NativeHtmlDocument2).SetDir(value ? "rtl" : "ltr");
     }
 
     public string Encoding
     {
-        get
-        {
-            return NativeHtmlDocument2.GetCharset();
-        }
-        set
-        {
-            NativeHtmlDocument2.SetCharset(value);
-        }
+        get => NativeHtmlDocument2.GetCharset();
+        set => NativeHtmlDocument2.SetCharset(value);
     }
 
-    public string DefaultEncoding
-    {
-        get
-        {
-            return NativeHtmlDocument2.GetDefaultCharset();
-        }
-    }
+    public string DefaultEncoding => NativeHtmlDocument2.GetDefaultCharset();
 
     public HtmlElementCollection All
     {
@@ -454,10 +397,7 @@ public sealed partial class HtmlDocument
         return null;
     }
 
-    public object? InvokeScript(string scriptName)
-    {
-        return InvokeScript(scriptName, null);
-    }
+    public object? InvokeScript(string scriptName) => InvokeScript(scriptName, null);
 
     public void AttachEventHandler(string eventName, EventHandler eventHandler)
     {
