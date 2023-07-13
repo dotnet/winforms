@@ -48,7 +48,6 @@ public class ThreadExceptionDialog : Form
     private readonly int _scaledButtonTopPadding = BUTTONTOPPADDING;
     private readonly int _scaledButtonDetailsLeftPadding = BUTTONDETAILS_LEFTPADDING;
     private readonly int _scaledMessageTopPadding = MESSAGE_TOPPADDING;
-    private readonly int _scaledHeightPadding = HEIGHTPADDING;
     private readonly int _scaledButtonWidth = BUTTONWIDTH;
     private readonly int _scaledButtonHeight = BUTTONHEIGHT;
     private readonly int _scaledButtonAlignmentWidth = BUTTONALIGNMENTWIDTH;
