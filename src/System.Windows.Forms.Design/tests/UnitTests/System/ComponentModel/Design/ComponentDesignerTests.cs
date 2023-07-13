@@ -38,6 +38,60 @@ public class ComponentDesignerTests
         Assert.Empty(treeDesigner.Children);
     }
 
+    [Fact]
+    public void ComponentDesigner_GetService_ReturnsExpected()
+    {
+        using var designer = new ComponentDesigner();
+
+        var service = designer.GetService<IDesignerHost>();
+        Assert.Null(service);
+
+        designer.Initialize(new Component());
+
+        service = designer.GetService<IDesignerHost>();
+        Assert.Null(service);
+
+        using var component = new Component();
+        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(component);
+        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        component.Site = mockSite.Object;
+        designer.Initialize(component);
+
+        service = designer.GetService<IDesignerHost>();
+        Assert.NotNull(service);
+    }
+
+    [Fact]
+    public void ComponentDesigner_PostFilterProperties_Success()
+    {
+        using var designer = new SubComponentDesigner();
+        PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
+        var properties = new Dictionary<string, PropertyDescriptor>
+        {
+            { "SettingsKey", descriptor }
+        };
+        using var component = new IPersistComponentSettingsComponent();
+        designer.Initialize(component);
+        designer.PostFilterProperties(properties);
+        PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
+        Assert.Same(descriptor, result);
+
+        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(component);
+        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        component.Site = mockSite.Object;
+        designer.Initialize(component);
+
+        designer.PostFilterProperties(properties);
+        result = (PropertyDescriptor)properties["SettingsKey"];
+        Assert.NotSame(descriptor, result);
+    }
+
     private static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
     {
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -2890,7 +2944,7 @@ public class ComponentDesignerTests
 
         public new void PostFilterEvents(IDictionary events) => base.PostFilterEvents(events);
 
-        public new void PostFilterProperties(IDictionary events) => base.PostFilterProperties(events);
+        public new void PostFilterProperties(IDictionary properties) => base.PostFilterProperties(properties);
 
         public new void RaiseComponentChanged(MemberDescriptor member, object oldValue, object newValue)
         {

@@ -40,8 +40,6 @@ internal partial class OleDragDropHandler
     private static bool freezePainting;
     private static Dictionary<IDataObject, IComponent> currentDrags;
 
-    private static readonly CodeMarkers codemarkers = CodeMarkers.Instance;
-
     public const string CF_CODE = "CF_XMLCODE";
     public const string CF_COMPONENTTYPES = "CF_COMPONENTTYPES";
     public const string CF_TOOLBOXITEM = "CF_NESTEDTOOLBOXITEM";
@@ -340,7 +338,6 @@ internal partial class OleDragDropHandler
             selSvc.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
         }
 
-        codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXDesignCreateComponentEnd);
         return comps;
     }
 
