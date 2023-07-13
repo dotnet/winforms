@@ -7249,7 +7249,7 @@ public partial class ToolStripTests
     {
         // Regression test for https://github.com/dotnet/winforms/issues/9181,https://github.com/dotnet/winforms/issues/9438
         // and it verifies that setting TabStop=true,
-        // When typing Right arrow keyboard, the next focus position is first item on the left,
+        // When typing Right arrow keyboard, the next focus position is first item on the left.
         // When typing Left arrow keyboard, the next focus position is first item on the Right.
 
         using ToolStrip toolStrip = new() { LayoutStyle = toolStripLayoutStyle, TabStop = tabStop, GripStyle = gripStyle };
