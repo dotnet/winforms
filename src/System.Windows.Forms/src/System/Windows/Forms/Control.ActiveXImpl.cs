@@ -866,8 +866,8 @@ public partial class Control
                     ThrowHr(hr);
                 }
 
-                var posRect = default(RECT);
-                var clipRect = default(RECT);
+                RECT posRect = default;
+                RECT clipRect = default;
 
                 _inPlaceUiWindow?.Dispose();
                 _inPlaceUiWindow = null;
@@ -882,12 +882,12 @@ public partial class Control
                     &pWindow,
                     &posRect,
                     &clipRect,
-                    &inPlaceFrameInfo);
+                    &inPlaceFrameInfo).AssertSuccess();
 
                 SetObjectRects(&posRect, &clipRect);
 
-                _inPlaceFrame = new(pFrame, takeOwnership: true);
-                _inPlaceUiWindow = new(pWindow, takeOwnership: true);
+                _inPlaceFrame = pFrame is null ? null : new(pFrame, takeOwnership: true);
+                _inPlaceUiWindow = pWindow is null ? null : new(pWindow, takeOwnership: true);
 
                 // We are parenting ourselves directly to the host window. The host must implement the ambient property
                 // DISPID_AMBIENT_MESSAGEREFLECT. If it doesn't, that means that the host won't reflect messages back
@@ -944,6 +944,7 @@ public partial class Control
             using var inPlaceUiWindow = _inPlaceUiWindow is null ? default : _inPlaceUiWindow.GetInterface();
             if (_inPlaceUiWindow is not null)
             {
+                activeObject->AddRef();
                 inPlaceUiWindow.Value->SetActiveObject(activeObject, (PCWSTR)null);
             }
 
@@ -954,7 +955,7 @@ public partial class Control
                 && hr != HRESULT.INPLACE_E_NOTOOLSPACE
                 && hr != HRESULT.E_NOTIMPL)
             {
-                Marshal.ThrowExceptionForHR((int)hr);
+                hr.ThrowOnFailure();
             }
 
             if (_inPlaceUiWindow is not null)
@@ -965,7 +966,7 @@ public partial class Control
                     && hr != HRESULT.INPLACE_E_NOTOOLSPACE
                     && hr != HRESULT.E_NOTIMPL)
                 {
-                    Marshal.ThrowExceptionForHR((int)hr);
+                    hr.ThrowOnFailure();
                 }
             }
         }
