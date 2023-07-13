@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -37,21 +35,15 @@ public sealed partial class HtmlDocument
         _shimManager = shimManager;
     }
 
-    internal IHTMLDocument2 NativeHtmlDocument2
-    {
-        get
-        {
-            return _htmlDocument2;
-        }
-    }
+    internal IHTMLDocument2 NativeHtmlDocument2 => _htmlDocument2;
 
-    private HtmlDocumentShim DocumentShim
+    private HtmlDocumentShim? DocumentShim
     {
         get
         {
             if (ShimManager is not null)
             {
-                HtmlDocumentShim shim = ShimManager.GetDocumentShim(this);
+                HtmlDocumentShim? shim = ShimManager.GetDocumentShim(this);
                 if (shim is null)
                 {
                     _shimManager.AddDocumentShim(this);
@@ -65,15 +57,9 @@ public sealed partial class HtmlDocument
         }
     }
 
-    private HtmlShimManager ShimManager
-    {
-        get
-        {
-            return _shimManager;
-        }
-    }
+    private HtmlShimManager ShimManager => _shimManager;
 
-    public HtmlElement ActiveElement
+    public HtmlElement? ActiveElement
     {
         get
         {
@@ -82,7 +68,7 @@ public sealed partial class HtmlDocument
         }
     }
 
-    public HtmlElement Body
+    public HtmlElement? Body
     {
         get
         {
@@ -93,10 +79,7 @@ public sealed partial class HtmlDocument
 
     public string Domain
     {
-        get
-        {
-            return NativeHtmlDocument2.GetDomain();
-        }
+        get => NativeHtmlDocument2.GetDomain();
         set
         {
             try
@@ -113,17 +96,11 @@ public sealed partial class HtmlDocument
 
     public string Title
     {
-        get
-        {
-            return NativeHtmlDocument2.GetTitle();
-        }
-        set
-        {
-            NativeHtmlDocument2.SetTitle(value);
-        }
+        get => NativeHtmlDocument2.GetTitle();
+        set => NativeHtmlDocument2.SetTitle(value);
     }
 
-    public Uri Url
+    public Uri? Url
     {
         get
         {
@@ -133,7 +110,7 @@ public sealed partial class HtmlDocument
         }
     }
 
-    public HtmlWindow Window
+    public HtmlWindow? Window
     {
         get
         {
@@ -242,65 +219,29 @@ public sealed partial class HtmlDocument
         }
     }
 
-    public bool Focused
-    {
-        get
-        {
-            return ((IHTMLDocument4)NativeHtmlDocument2).HasFocus();
-        }
-    }
+    public bool Focused => ((IHTMLDocument4)NativeHtmlDocument2).HasFocus();
 
-    public object DomDocument
-    {
-        get
-        {
-            return NativeHtmlDocument2;
-        }
-    }
+    public object DomDocument => NativeHtmlDocument2;
 
     public string Cookie
     {
-        get
-        {
-            return NativeHtmlDocument2.GetCookie();
-        }
-        set
-        {
-            NativeHtmlDocument2.SetCookie(value);
-        }
+        get => NativeHtmlDocument2.GetCookie();
+        set => NativeHtmlDocument2.SetCookie(value);
     }
 
     public bool RightToLeft
     {
-        get
-        {
-            return ((IHTMLDocument3)NativeHtmlDocument2).GetDir() == "rtl";
-        }
-        set
-        {
-            ((IHTMLDocument3)NativeHtmlDocument2).SetDir(value ? "rtl" : "ltr");
-        }
+        get => ((IHTMLDocument3)NativeHtmlDocument2).GetDir() == "rtl";
+        set => ((IHTMLDocument3)NativeHtmlDocument2).SetDir(value ? "rtl" : "ltr");
     }
 
     public string Encoding
     {
-        get
-        {
-            return NativeHtmlDocument2.GetCharset();
-        }
-        set
-        {
-            NativeHtmlDocument2.SetCharset(value);
-        }
+        get => NativeHtmlDocument2.GetCharset();
+        set => NativeHtmlDocument2.SetCharset(value);
     }
 
-    public string DefaultEncoding
-    {
-        get
-        {
-            return NativeHtmlDocument2.GetDefaultCharset();
-        }
-    }
+    public string DefaultEncoding => NativeHtmlDocument2.GetDefaultCharset();
 
     public HtmlElementCollection All
     {
@@ -360,13 +301,13 @@ public sealed partial class HtmlDocument
         ((IHTMLDocument4)NativeHtmlDocument2).Focus();
     }
 
-    public HtmlElement GetElementById(string id)
+    public HtmlElement? GetElementById(string id)
     {
         IHTMLElement iHTMLElement = ((IHTMLDocument3)NativeHtmlDocument2).GetElementById(id);
         return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
     }
 
-    public HtmlElement GetElementFromPoint(Point point)
+    public HtmlElement? GetElementFromPoint(Point point)
     {
         IHTMLElement iHTMLElement = NativeHtmlDocument2.ElementFromPoint(point.X, point.Y);
         return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
@@ -378,21 +319,21 @@ public sealed partial class HtmlDocument
         return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
     }
 
-    public HtmlDocument OpenNew(bool replaceInHistory)
+    public HtmlDocument? OpenNew(bool replaceInHistory)
     {
         object name = (replaceInHistory ? "replace" : "");
-        object nullObject = null;
+        object? nullObject = null;
         object ohtmlDocument = NativeHtmlDocument2.Open("text/html", name, nullObject, nullObject);
         return ohtmlDocument is IHTMLDocument iHTMLDocument ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
     }
 
-    public HtmlElement CreateElement(string elementTag)
+    public HtmlElement? CreateElement(string elementTag)
     {
         IHTMLElement iHTMLElement = NativeHtmlDocument2.CreateElement(elementTag);
         return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
     }
 
-    public unsafe object InvokeScript(string scriptName, object[] args)
+    public unsafe object? InvokeScript(string scriptName, object[]? args)
     {
         try
         {
@@ -456,98 +397,95 @@ public sealed partial class HtmlDocument
         return null;
     }
 
-    public object InvokeScript(string scriptName)
-    {
-        return InvokeScript(scriptName, null);
-    }
+    public object? InvokeScript(string scriptName) => InvokeScript(scriptName, null);
 
     public void AttachEventHandler(string eventName, EventHandler eventHandler)
     {
-        HtmlDocumentShim shim = DocumentShim;
+        HtmlDocumentShim? shim = DocumentShim;
         shim?.AttachEventHandler(eventName, eventHandler);
     }
 
     public void DetachEventHandler(string eventName, EventHandler eventHandler)
     {
-        HtmlDocumentShim shim = DocumentShim;
+        HtmlDocumentShim? shim = DocumentShim;
         shim?.DetachEventHandler(eventName, eventHandler);
     }
 
-    public event HtmlElementEventHandler Click
+    public event HtmlElementEventHandler? Click
     {
-        add => DocumentShim.AddHandler(s_eventClick, value);
-        remove => DocumentShim.RemoveHandler(s_eventClick, value);
+        add => DocumentShim!.AddHandler(s_eventClick, value);
+        remove => DocumentShim!.RemoveHandler(s_eventClick, value);
     }
 
-    public event HtmlElementEventHandler ContextMenuShowing
+    public event HtmlElementEventHandler? ContextMenuShowing
     {
-        add => DocumentShim.AddHandler(s_eventContextMenuShowing, value);
-        remove => DocumentShim.RemoveHandler(s_eventContextMenuShowing, value);
+        add => DocumentShim!.AddHandler(s_eventContextMenuShowing, value);
+        remove => DocumentShim!.RemoveHandler(s_eventContextMenuShowing, value);
     }
 
-    public event HtmlElementEventHandler Focusing
+    public event HtmlElementEventHandler? Focusing
     {
-        add => DocumentShim.AddHandler(s_eventFocusing, value);
-        remove => DocumentShim.RemoveHandler(s_eventFocusing, value);
+        add => DocumentShim!.AddHandler(s_eventFocusing, value);
+        remove => DocumentShim!.RemoveHandler(s_eventFocusing, value);
     }
 
-    public event HtmlElementEventHandler LosingFocus
+    public event HtmlElementEventHandler? LosingFocus
     {
-        add => DocumentShim.AddHandler(s_eventLosingFocus, value);
-        remove => DocumentShim.RemoveHandler(s_eventLosingFocus, value);
+        add => DocumentShim!.AddHandler(s_eventLosingFocus, value);
+        remove => DocumentShim!.RemoveHandler(s_eventLosingFocus, value);
     }
 
-    public event HtmlElementEventHandler MouseDown
+    public event HtmlElementEventHandler? MouseDown
     {
-        add => DocumentShim.AddHandler(s_eventMouseDown, value);
-        remove => DocumentShim.RemoveHandler(s_eventMouseDown, value);
+        add => DocumentShim!.AddHandler(s_eventMouseDown, value);
+        remove => DocumentShim!.RemoveHandler(s_eventMouseDown, value);
     }
 
     /// <summary>
     ///  Occurs when the mouse leaves the document
     /// </summary>
-    public event HtmlElementEventHandler MouseLeave
+    public event HtmlElementEventHandler? MouseLeave
     {
-        add => DocumentShim.AddHandler(s_eventMouseLeave, value);
-        remove => DocumentShim.RemoveHandler(s_eventMouseLeave, value);
+        add => DocumentShim!.AddHandler(s_eventMouseLeave, value);
+        remove => DocumentShim!.RemoveHandler(s_eventMouseLeave, value);
     }
 
-    public event HtmlElementEventHandler MouseMove
+    public event HtmlElementEventHandler? MouseMove
     {
-        add => DocumentShim.AddHandler(s_eventMouseMove, value);
-        remove => DocumentShim.RemoveHandler(s_eventMouseMove, value);
+        add => DocumentShim!.AddHandler(s_eventMouseMove, value);
+        remove => DocumentShim!.RemoveHandler(s_eventMouseMove, value);
     }
 
-    public event HtmlElementEventHandler MouseOver
+    public event HtmlElementEventHandler? MouseOver
     {
-        add => DocumentShim.AddHandler(s_eventMouseOver, value);
-        remove => DocumentShim.RemoveHandler(s_eventMouseOver, value);
+        add => DocumentShim!.AddHandler(s_eventMouseOver, value);
+        remove => DocumentShim!.RemoveHandler(s_eventMouseOver, value);
     }
 
-    public event HtmlElementEventHandler MouseUp
+    public event HtmlElementEventHandler? MouseUp
     {
-        add => DocumentShim.AddHandler(s_eventMouseUp, value);
-        remove => DocumentShim.RemoveHandler(s_eventMouseUp, value);
+        add => DocumentShim!.AddHandler(s_eventMouseUp, value);
+        remove => DocumentShim!.RemoveHandler(s_eventMouseUp, value);
     }
 
-    public event HtmlElementEventHandler Stop
+    public event HtmlElementEventHandler? Stop
     {
-        add => DocumentShim.AddHandler(s_eventStop, value);
-        remove => DocumentShim.RemoveHandler(s_eventStop, value);
+        add => DocumentShim!.AddHandler(s_eventStop, value);
+        remove => DocumentShim!.RemoveHandler(s_eventStop, value);
     }
 
     private static Color ColorFromObject(object oColor)
     {
         try
         {
-            if (oColor is string)
+            if (oColor is string strColor)
             {
-                string strColor = oColor as string;
                 int index = strColor.IndexOf('#');
                 if (index >= 0)
                 {
                     // The string is of the form: #ff00a0. Skip past the #
                     string hexColor = strColor[(index + 1)..];
+
                     // The actual color is non-transparent. So set alpha = 255.
                     return Color.FromArgb(255, Color.FromArgb(int.Parse(hexColor, NumberStyles.HexNumber, CultureInfo.InvariantCulture)));
                 }
@@ -569,7 +507,7 @@ public sealed partial class HtmlDocument
         return Color.Empty;
     }
 
-    public static unsafe bool operator ==(HtmlDocument left, HtmlDocument right)
+    public static unsafe bool operator ==(HtmlDocument? left, HtmlDocument? right)
     {
         // Not equal if only one's null.
         if (left is null != right is null)
@@ -585,13 +523,13 @@ public sealed partial class HtmlDocument
 
         // Neither are null.  Get the IUnknowns and compare them.
         using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlDocument2);
-        using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlDocument2);
+        using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right!.NativeHtmlDocument2);
         return leftUnknown.Value == rightUnknown.Value;
     }
 
-    public static bool operator !=(HtmlDocument left, HtmlDocument right) => !(left == right);
+    public static bool operator !=(HtmlDocument? left, HtmlDocument? right) => !(left == right);
 
     public override int GetHashCode() => _htmlDocument2?.GetHashCode() ?? 0;
 
-    public override bool Equals(object obj) => this == (HtmlDocument)obj;
+    public override bool Equals(object? obj) => this == (HtmlDocument?)obj;
 }

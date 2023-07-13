@@ -227,7 +227,7 @@ public partial class WebBrowser : WebBrowserBase
                         if (!string.IsNullOrEmpty(href))
                         {
                             Uri url = new Uri(href);
-                            return new HtmlDocument(ShimManager, iHTMLDocument2 as IHTMLDocument);
+                            return new HtmlDocument(ShimManager, (IHTMLDocument)iHTMLDocument2);
                         }
                     }
                 }
