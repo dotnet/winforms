@@ -67,7 +67,7 @@ internal partial class Interop
             string GetNameProp();
             int Write([In, MarshalAs(UnmanagedType.SafeArray)] object[] psarray);
             int WriteLine([In, MarshalAs(UnmanagedType.SafeArray)] object[] psarray);
-            [return: MarshalAs(UnmanagedType.Interface)] object Open(string mimeExtension, object name, object features, object replace);
+            [return: MarshalAs(UnmanagedType.Interface)] object Open(string mimeExtension, object name, object? features, object? replace);
             void Close();
             void Clear();
             bool QueryCommandSupported(string cmdID);

@@ -286,7 +286,7 @@ override System.Windows.Forms.DataGridView.HitTestInfo.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
-~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
+override System.Windows.Forms.HtmlDocument.Equals(object? obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
 ~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -383,8 +383,8 @@ static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.HtmlDocument.operator !=(System.Windows.Forms.HtmlDocument left, System.Windows.Forms.HtmlDocument right) -> bool
-~static System.Windows.Forms.HtmlDocument.operator ==(System.Windows.Forms.HtmlDocument left, System.Windows.Forms.HtmlDocument right) -> bool
+static System.Windows.Forms.HtmlDocument.operator !=(System.Windows.Forms.HtmlDocument? left, System.Windows.Forms.HtmlDocument? right) -> bool
+static System.Windows.Forms.HtmlDocument.operator ==(System.Windows.Forms.HtmlDocument? left, System.Windows.Forms.HtmlDocument? right) -> bool
 ~static System.Windows.Forms.HtmlElement.operator !=(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
 ~static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
@@ -651,35 +651,35 @@ System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitma
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell[] array, int index) -> void
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlDocument.All.get -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlDocument.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
-~System.Windows.Forms.HtmlDocument.Body.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlDocument.Cookie.get -> string
-~System.Windows.Forms.HtmlDocument.Cookie.set -> void
-~System.Windows.Forms.HtmlDocument.CreateElement(string elementTag) -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlDocument.DefaultEncoding.get -> string
-~System.Windows.Forms.HtmlDocument.DetachEventHandler(string eventName, System.EventHandler eventHandler) -> void
-~System.Windows.Forms.HtmlDocument.Domain.get -> string
-~System.Windows.Forms.HtmlDocument.Domain.set -> void
-~System.Windows.Forms.HtmlDocument.DomDocument.get -> object
-~System.Windows.Forms.HtmlDocument.Encoding.get -> string
-~System.Windows.Forms.HtmlDocument.Encoding.set -> void
-~System.Windows.Forms.HtmlDocument.ExecCommand(string command, bool showUI, object value) -> void
-~System.Windows.Forms.HtmlDocument.Forms.get -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlDocument.GetElementById(string id) -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlDocument.GetElementFromPoint(System.Drawing.Point point) -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlDocument.GetElementsByTagName(string tagName) -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlDocument.Images.get -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlDocument.InvokeScript(string scriptName) -> object
-~System.Windows.Forms.HtmlDocument.InvokeScript(string scriptName, object[] args) -> object
-~System.Windows.Forms.HtmlDocument.Links.get -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlDocument.OpenNew(bool replaceInHistory) -> System.Windows.Forms.HtmlDocument
-~System.Windows.Forms.HtmlDocument.Title.get -> string
-~System.Windows.Forms.HtmlDocument.Title.set -> void
-~System.Windows.Forms.HtmlDocument.Url.get -> System.Uri
-~System.Windows.Forms.HtmlDocument.Window.get -> System.Windows.Forms.HtmlWindow
-~System.Windows.Forms.HtmlDocument.Write(string text) -> void
+System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlDocument.All.get -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlDocument.AttachEventHandler(string! eventName, System.EventHandler! eventHandler) -> void
+System.Windows.Forms.HtmlDocument.Body.get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlDocument.Cookie.get -> string!
+System.Windows.Forms.HtmlDocument.Cookie.set -> void
+System.Windows.Forms.HtmlDocument.CreateElement(string! elementTag) -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlDocument.DefaultEncoding.get -> string!
+System.Windows.Forms.HtmlDocument.DetachEventHandler(string! eventName, System.EventHandler! eventHandler) -> void
+System.Windows.Forms.HtmlDocument.Domain.get -> string!
+System.Windows.Forms.HtmlDocument.Domain.set -> void
+System.Windows.Forms.HtmlDocument.DomDocument.get -> object!
+System.Windows.Forms.HtmlDocument.Encoding.get -> string!
+System.Windows.Forms.HtmlDocument.Encoding.set -> void
+System.Windows.Forms.HtmlDocument.ExecCommand(string! command, bool showUI, object! value) -> void
+System.Windows.Forms.HtmlDocument.Forms.get -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlDocument.GetElementById(string! id) -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlDocument.GetElementFromPoint(System.Drawing.Point point) -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlDocument.GetElementsByTagName(string! tagName) -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlDocument.Images.get -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlDocument.InvokeScript(string! scriptName) -> object?
+System.Windows.Forms.HtmlDocument.InvokeScript(string! scriptName, object![]? args) -> object?
+System.Windows.Forms.HtmlDocument.Links.get -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlDocument.OpenNew(bool replaceInHistory) -> System.Windows.Forms.HtmlDocument?
+System.Windows.Forms.HtmlDocument.Title.get -> string!
+System.Windows.Forms.HtmlDocument.Title.set -> void
+System.Windows.Forms.HtmlDocument.Url.get -> System.Uri?
+System.Windows.Forms.HtmlDocument.Window.get -> System.Windows.Forms.HtmlWindow?
+System.Windows.Forms.HtmlDocument.Write(string! text) -> void
 ~System.Windows.Forms.HtmlElement.All.get -> System.Windows.Forms.HtmlElementCollection
 ~System.Windows.Forms.HtmlElement.AppendChild(System.Windows.Forms.HtmlElement newElement) -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElement.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
@@ -7180,24 +7180,24 @@ System.Windows.Forms.HtmlDocument.ActiveLinkColor.get -> System.Drawing.Color
 System.Windows.Forms.HtmlDocument.ActiveLinkColor.set -> void
 System.Windows.Forms.HtmlDocument.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.HtmlDocument.BackColor.set -> void
-System.Windows.Forms.HtmlDocument.Click -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlDocument.ContextMenuShowing -> System.Windows.Forms.HtmlElementEventHandler
+System.Windows.Forms.HtmlDocument.Click -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlDocument.ContextMenuShowing -> System.Windows.Forms.HtmlElementEventHandler?
 System.Windows.Forms.HtmlDocument.Focus() -> void
 System.Windows.Forms.HtmlDocument.Focused.get -> bool
-System.Windows.Forms.HtmlDocument.Focusing -> System.Windows.Forms.HtmlElementEventHandler
+System.Windows.Forms.HtmlDocument.Focusing -> System.Windows.Forms.HtmlElementEventHandler?
 System.Windows.Forms.HtmlDocument.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.HtmlDocument.ForeColor.set -> void
 System.Windows.Forms.HtmlDocument.LinkColor.get -> System.Drawing.Color
 System.Windows.Forms.HtmlDocument.LinkColor.set -> void
-System.Windows.Forms.HtmlDocument.LosingFocus -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlDocument.MouseDown -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlDocument.MouseLeave -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlDocument.MouseMove -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlDocument.MouseOver -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlDocument.MouseUp -> System.Windows.Forms.HtmlElementEventHandler
+System.Windows.Forms.HtmlDocument.LosingFocus -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlDocument.MouseDown -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlDocument.MouseLeave -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlDocument.MouseMove -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlDocument.MouseOver -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlDocument.MouseUp -> System.Windows.Forms.HtmlElementEventHandler?
 System.Windows.Forms.HtmlDocument.RightToLeft.get -> bool
 System.Windows.Forms.HtmlDocument.RightToLeft.set -> void
-System.Windows.Forms.HtmlDocument.Stop -> System.Windows.Forms.HtmlElementEventHandler
+System.Windows.Forms.HtmlDocument.Stop -> System.Windows.Forms.HtmlElementEventHandler?
 System.Windows.Forms.HtmlDocument.VisitedLinkColor.get -> System.Drawing.Color
 System.Windows.Forms.HtmlDocument.VisitedLinkColor.set -> void
 System.Windows.Forms.HtmlElement
