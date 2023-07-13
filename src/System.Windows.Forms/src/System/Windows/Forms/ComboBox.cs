@@ -3741,11 +3741,11 @@ public partial class ComboBox : ListControl
         DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
         using var e = new DrawItemEventArgs(
-            dis->hDC.CreateGraphics(),
+            dis->hDC,
             Font,
             dis->rcItem,
-            (int)dis->itemID,
-            (DrawItemState)(int)dis->itemState,
+            dis->itemID,
+            dis->itemState,
             ForeColor,
             BackColor);
 
