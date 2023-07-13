@@ -77,7 +77,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetExternal(
-                [MarshalAs(UnmanagedType.Interface)] out object ppDispatch);
+                [MarshalAs(UnmanagedType.Interface)] out object? ppDispatch);
 
             [PreserveSig]
             HRESULT TranslateUrl(

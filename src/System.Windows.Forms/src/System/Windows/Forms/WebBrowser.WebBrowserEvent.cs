@@ -76,19 +76,19 @@ public partial class WebBrowser
         {
             Debug.Assert(urlObject is null || urlObject is string, "invalid url");
             _haveNavigated = true;
-            if (_parent.documentStreamToSetOnLoad is not null && (string?)urlObject == "about:blank")
+            if (_parent._documentStreamToSetOnLoad is not null && (string?)urlObject == "about:blank")
             {
-                HtmlDocument htmlDocument = _parent.Document;
+                HtmlDocument? htmlDocument = _parent.Document;
                 if (htmlDocument is not null)
                 {
                     IPersistStreamInit.Interface? psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                    using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_parent.documentStreamToSetOnLoad));
+                    using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_parent._documentStreamToSetOnLoad));
                     psi.Load(pStream);
                     htmlDocument.Encoding = "unicode";
                 }
 
-                _parent.documentStreamToSetOnLoad = null;
+                _parent._documentStreamToSetOnLoad = null;
             }
             else
             {
@@ -106,7 +106,7 @@ public partial class WebBrowser
 
         public void SetSecureLockIcon(int secureLockIcon)
         {
-            _parent.encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
+            _parent._encryptionLevel = (WebBrowserEncryptionLevel)secureLockIcon;
             _parent.OnEncryptionLevelChanged(EventArgs.Empty);
         }
 
@@ -134,7 +134,7 @@ public partial class WebBrowser
 
         public void StatusTextChange(string text)
         {
-            _parent.statusText = text ?? string.Empty;
+            _parent._statusText = text ?? string.Empty;
             _parent.OnStatusTextChanged(EventArgs.Empty);
         }
 
