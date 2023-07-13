@@ -59,7 +59,7 @@ public partial class DataGridView
 
         internal override void SetFocus()
         {
-            if (this.TryGetOwnerAs(out Panel? owner) && owner.IsHandleCreated && owner.CanFocus)
+            if (this.IsHandleCreated(out Panel? owner) && owner.CanFocus)
             {
                 owner.Focus();
             }

@@ -17,7 +17,7 @@ public partial class TabPage
         {
             get
             {
-                if (!this.TryGetOwnerAs(out TabPage? owningTabPage) || !owningTabPage.IsHandleCreated)
+                if (!this.IsHandleCreated(out TabPage? owningTabPage))
                 {
                     return Rectangle.Empty;
                 }
@@ -37,7 +37,7 @@ public partial class TabPage
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (!this.TryGetOwnerAs(out TabPage? owningTabPage) || !owningTabPage.IsHandleCreated)
+            if (!this.IsHandleCreated(out TabPage? owningTabPage))
             {
                 return null;
             }
@@ -51,11 +51,11 @@ public partial class TabPage
         }
 
         public override int GetChildCount()
-            => this.TryGetOwnerAs(out TabPage? owningTabPage) && owningTabPage.IsHandleCreated ? owningTabPage.Controls.Count : -1;
+            => this.IsHandleCreated(out TabPage? owningTabPage) ? owningTabPage.Controls.Count : -1;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!this.TryGetOwnerAs(out TabPage? owningTabPage) || !owningTabPage.IsHandleCreated || OwningTabControl is null)
+            if (!this.IsHandleCreated(out TabPage? owningTabPage) || OwningTabControl is null)
             {
                 return null;
             }

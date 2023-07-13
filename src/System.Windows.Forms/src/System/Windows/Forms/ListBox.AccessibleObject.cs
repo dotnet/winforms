@@ -25,8 +25,8 @@ public partial class ListBox
             _itemAccessibleObjects = new Dictionary<ItemArray.Entry, ListBoxItemAccessibleObject>();
         }
 
-        internal override Rectangle BoundingRectangle => this.TryGetOwnerAs(out ListBox? owner) && owner.IsHandleCreated ?
-                                                         owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
+        internal override Rectangle BoundingRectangle => this.IsHandleCreated(out ListBox? owner) ?
+            owner.GetToolNativeScreenRectangle() : Rectangle.Empty;
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
@@ -74,7 +74,7 @@ public partial class ListBox
         /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
         {
-            if (!this.TryGetOwnerAs(out ListBox? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out ListBox? owner))
             {
                 return base.ElementProviderFromPoint(x, y);
             }
@@ -111,7 +111,7 @@ public partial class ListBox
             };
         }
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus() => this.TryGetOwnerAs(out ListBox? owner) && owner.IsHandleCreated ? GetFocused() : null;
+        internal override UiaCore.IRawElementProviderFragment? GetFocus() => this.IsHandleCreated(out ListBox? owner) ? GetFocused() : null;
 
         /// <summary>
         ///  Gets the accessible property value.
@@ -216,7 +216,7 @@ public partial class ListBox
 
         internal override void SelectItem()
         {
-            if (this.TryGetOwnerAs(out ListBox? owner) && owner.IsHandleCreated)
+            if (this.IsHandleCreated(out ListBox? owner))
             {
                 GetChild(owner.FocusedIndex)?.SelectItem();
             }
@@ -224,7 +224,7 @@ public partial class ListBox
 
         internal override void SetFocus()
         {
-            if (!this.TryGetOwnerAs(out ListBox? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out ListBox? owner))
             {
                 return;
             }
@@ -298,7 +298,7 @@ public partial class ListBox
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.TryGetOwnerAs(out ListBox? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out ListBox? owner))
             {
                 return null;
             }

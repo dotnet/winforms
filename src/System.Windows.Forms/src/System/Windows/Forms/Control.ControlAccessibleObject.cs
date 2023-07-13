@@ -502,11 +502,10 @@ public partial class Control
             };
 
         internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
-            => this.TryGetOwnerAs(out Control? owner) && owner.IsHandleCreated && base.RaiseAutomationEvent(eventId);
+            => this.IsHandleCreated(out Control? owner) && base.RaiseAutomationEvent(eventId);
 
         internal override bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
-            => this.TryGetOwnerAs(out Control? owner)
-                && owner.IsHandleCreated
+            => this.IsHandleCreated(out Control? owner)
                 && base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
 
         internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider

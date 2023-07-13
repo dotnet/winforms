@@ -28,7 +28,7 @@ public abstract partial class UpDownBase
                 {
                     get
                     {
-                        if (!_parent.TryGetOwnerAs(out UpDownButtons? owner) || !owner.IsHandleCreated)
+                        if (!_parent.IsHandleCreated(out UpDownButtons? owner))
                         {
                             return Rectangle.Empty;
                         }
@@ -51,7 +51,7 @@ public abstract partial class UpDownBase
 
                 public override void DoDefaultAction()
                 {
-                    if (!_parent.TryGetOwnerAs(out UpDownButtons? owner) || !owner.IsHandleCreated)
+                    if (!_parent.IsHandleCreated(out UpDownButtons? owner))
                     {
                         return;
                     }

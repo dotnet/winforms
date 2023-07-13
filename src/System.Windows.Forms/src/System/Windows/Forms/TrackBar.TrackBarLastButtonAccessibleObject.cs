@@ -22,7 +22,7 @@ public partial class TrackBar
                 : SR.TrackBarLargeDecreaseButtonName;
 
         public override AccessibleStates State
-            => !this.TryGetOwnerAs(out TrackBar? owner) || !owner.IsHandleCreated || IsDisplayed
+            => !this.IsHandleCreated(out TrackBar? owner) || IsDisplayed
                 ? AccessibleStates.None
                 : AccessibleStates.Invisible;
 
@@ -30,9 +30,8 @@ public partial class TrackBar
         {
             get
             {
-                if (!this.TryGetOwnerAs(out TrackBar? owner)
+                if (!this.IsHandleCreated(out TrackBar? owner)
                     || ParentInternal is not { } parent
-                    || !owner.IsHandleCreated
                     || !base.IsDisplayed)
                 {
                     return false;
@@ -51,7 +50,7 @@ public partial class TrackBar
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!this.TryGetOwnerAs(out TrackBar? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out TrackBar? owner))
             {
                 return null;
             }
@@ -68,7 +67,7 @@ public partial class TrackBar
 
         internal override void Invoke()
         {
-            if (this.TryGetOwnerAs(out TrackBar? owner) && owner.IsHandleCreated)
+            if (this.IsHandleCreated(out TrackBar? owner))
             {
                 // The "GetChildId" method returns to the id of the trackbar element,
                 // which allows to use the native "accDoDefaultAction" method when the "Invoke" method is called

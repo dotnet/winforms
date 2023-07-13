@@ -15,13 +15,13 @@ public partial class ButtonBase
         }
 
         public override AccessibleStates State
-            => this.TryGetOwnerAs(out ButtonBase? owner) && owner.IsHandleCreated && owner.OwnerDraw && owner.MouseIsDown
+            => this.IsHandleCreated(out ButtonBase? owner) && owner.OwnerDraw && owner.MouseIsDown
                 ? base.State | AccessibleStates.Pressed
                 : base.State;
 
         public override void DoDefaultAction()
         {
-            if (this.TryGetOwnerAs(out ButtonBase? owner) && owner.IsHandleCreated)
+            if (this.IsHandleCreated(out ButtonBase? owner))
             {
                 owner.OnClick(EventArgs.Empty);
             }

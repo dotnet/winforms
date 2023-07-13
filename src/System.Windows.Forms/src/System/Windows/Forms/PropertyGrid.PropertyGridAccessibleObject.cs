@@ -34,7 +34,7 @@ public partial class PropertyGrid
         /// </returns>
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
         {
-            if (!this.TryGetOwnerAs(out PropertyGrid? owningPropertyGrid) || !owningPropertyGrid.IsHandleCreated)
+            if (!this.IsHandleCreated(out PropertyGrid? owningPropertyGrid))
             {
                 return null;
             }

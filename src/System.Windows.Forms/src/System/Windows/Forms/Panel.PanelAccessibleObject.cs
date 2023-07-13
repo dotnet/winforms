@@ -18,7 +18,7 @@ public partial class Panel
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (!this.TryGetOwnerAs(out Panel? owner) || !owner.IsHandleCreated || index < 0 || index >= owner.Controls.Count)
+            if (!this.IsHandleCreated(out Panel? owner) || index < 0 || index >= owner.Controls.Count)
             {
                 return null;
             }
@@ -27,9 +27,7 @@ public partial class Panel
         }
 
         public override int GetChildCount()
-            => this.TryGetOwnerAs(out Panel? owner) && owner.IsHandleCreated
-                ? owner.Controls.Count
-                : -1;
+            => this.IsHandleCreated(out Panel? owner) ? owner.Controls.Count : -1;
 
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
            => propertyID switch

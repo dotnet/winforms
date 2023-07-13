@@ -44,7 +44,7 @@ public partial class MonthCalendar
         {
             get
             {
-                if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated)
+                if (!this.IsHandleCreated(out MonthCalendar? owner))
                 {
                     return null;
                 }
@@ -130,7 +130,7 @@ public partial class MonthCalendar
         {
             get
             {
-                if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated || CalendarsAccessibleObjects is null)
+                if (!this.IsHandleCreated(out MonthCalendar? owner) || CalendarsAccessibleObjects is null)
                 {
                     return -1;
                 }
@@ -157,7 +157,7 @@ public partial class MonthCalendar
             int innerX = (int)x;
             int innerY = (int)y;
 
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out MonthCalendar? owner))
             {
                 return base.ElementProviderFromPoint(x, y);
             }
@@ -217,7 +217,7 @@ public partial class MonthCalendar
 
         private CalendarAccessibleObject? GetCalendarFromPoint(int x, int y)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated || CalendarsAccessibleObjects is null)
+            if (!this.IsHandleCreated(out MonthCalendar? owner) || CalendarsAccessibleObjects is null)
             {
                 return null;
             }
@@ -235,7 +235,7 @@ public partial class MonthCalendar
 
         internal unsafe SelectionRange? GetCalendarPartDateRange(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out MonthCalendar? owner))
             {
                 return null;
             }
@@ -257,7 +257,7 @@ public partial class MonthCalendar
 
         internal unsafe RECT GetCalendarPartRectangle(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out MonthCalendar? owner))
             {
                 return default;
             }
@@ -279,7 +279,7 @@ public partial class MonthCalendar
 
         internal unsafe string GetCalendarPartText(MCGRIDINFO_PART dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out MonthCalendar? owner))
             {
                 return string.Empty;
             }
@@ -319,7 +319,7 @@ public partial class MonthCalendar
 
         private CalendarCellAccessibleObject? GetCellByDate(DateTime date)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated || CalendarsAccessibleObjects is null)
+            if (!this.IsHandleCreated(out MonthCalendar? owner) || CalendarsAccessibleObjects is null)
             {
                 return null;
             }
@@ -385,7 +385,7 @@ public partial class MonthCalendar
 
         private unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out MonthCalendar? owner))
             {
                 return default;
             }
@@ -404,7 +404,7 @@ public partial class MonthCalendar
 
         internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated || CalendarsAccessibleObjects is null)
+            if (!this.IsHandleCreated(out MonthCalendar? owner) || CalendarsAccessibleObjects is null)
             {
                 return null;
             }
@@ -453,7 +453,7 @@ public partial class MonthCalendar
 
         internal bool IsEnabled => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.Enabled;
 
-        internal bool IsHandleCreated => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.IsHandleCreated;
+        internal bool IsHandleCreated => this.IsHandleCreated(out MonthCalendar? owner);
 
         internal override bool IsPatternSupported(UiaCore.UIA patternId)
             => patternId switch
@@ -481,7 +481,7 @@ public partial class MonthCalendar
 
         internal void RaiseAutomationEventForChild(UiaCore.UIA automationEventId)
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out MonthCalendar? owner))
             {
                 return;
             }
@@ -502,7 +502,7 @@ public partial class MonthCalendar
 
         private void RebuildAccessibilityTree()
         {
-            if (!this.TryGetOwnerAs(out MonthCalendar? owner) || !owner.IsHandleCreated || _calendarsAccessibleObjects is null)
+            if (!this.IsHandleCreated(out MonthCalendar? owner) || _calendarsAccessibleObjects is null)
             {
                 return;
             }
@@ -543,7 +543,7 @@ public partial class MonthCalendar
 
         internal void SetSelectionRange(DateTime d1, DateTime d2)
         {
-            if (this.TryGetOwnerAs(out MonthCalendar? owner) && owner.IsHandleCreated)
+            if (this.IsHandleCreated(out MonthCalendar? owner))
             {
                 owner.SetSelectionRange(d1, d2);
             }

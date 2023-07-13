@@ -18,4 +18,17 @@ internal static class OwnedObjectExtensions
         ownerAs = ownedObject.Owner as TAs;
         return ownerAs is not null;
     }
+
+    /// <summary>
+    ///  Tries to get IsHandleCreated from the owner.
+    /// </summary>
+    public static bool IsHandleCreated<TOwner, TAs>(
+        this IOwnedObject<TOwner> ownedObject,
+        [NotNullWhen(true)] out TAs? ownerAs)
+        where TOwner : class
+        where TAs : Control
+    {
+        ownerAs = ownedObject.Owner as TAs;
+        return ownerAs is not null && ownerAs.IsHandleCreated;
+    }
 }

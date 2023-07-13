@@ -23,7 +23,7 @@ internal partial class PropertyGridView
         }
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => (this.TryGetOwnerAs(out Control? owner) && owner.IsHandleCreated) ? HitTest((int)x, (int)y) : null;
+            => this.IsHandleCreated(out Control? owner) ? HitTest((int)x, (int)y) : null;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
@@ -417,7 +417,7 @@ internal partial class PropertyGridView
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.TryGetOwnerAs(out PropertyGridView? owner) || !owner.IsHandleCreated)
+            if (!this.IsHandleCreated(out PropertyGridView? owner))
             {
                 return null;
             }

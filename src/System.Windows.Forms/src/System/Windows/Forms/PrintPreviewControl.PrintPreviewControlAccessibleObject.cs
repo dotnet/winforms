@@ -25,7 +25,7 @@ public partial class PrintPreviewControl
             };
 
         internal override Rectangle BoundingRectangle
-            => this.TryGetOwnerAs(out PrintPreviewControl? owner) && owner.IsHandleCreated && owner.Parent is not null
+            => this.IsHandleCreated(out PrintPreviewControl? owner) && owner.Parent is not null
                 ? owner.GetToolNativeScreenRectangle()
                 : Rectangle.Empty;
     }
