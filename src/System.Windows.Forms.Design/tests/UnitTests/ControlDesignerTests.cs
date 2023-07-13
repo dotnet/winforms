@@ -8,6 +8,33 @@ namespace System.Windows.Forms.Design.Tests;
 
 public class ControlDesignerTests
 {
+    [WinFormsFact]
+    public void ControlDesigner_Ctor_Default()
+    {
+        using TestControlDesigner controlDesigner = new TestControlDesigner();
+        Assert.False(controlDesigner.AutoResizeHandles);
+        Assert.Null(controlDesigner.Control);
+        Assert.True(controlDesigner.ControlSupportsSnaplines);
+        Assert.Null(controlDesigner.Component);
+        Assert.True(controlDesigner.ForceVisible);
+        Assert.Null(controlDesigner.GetParentComponentProperty());
+        Assert.False(controlDesigner.SerializePerformLayout);
+    }
+
+    [WinFormsFact]
+    public void ControlDesigner_PropertiesTest()
+    {
+        using TestControlDesigner controlDesigner = new TestControlDesigner();
+        using Button button = new Button();
+        controlDesigner.Initialize(button);
+        Assert.Empty(controlDesigner.AssociatedComponents);
+        Assert.False(controlDesigner.IsRootDesigner);
+        Assert.NotNull(controlDesigner.SnapLines);
+        Assert.Equal(8, controlDesigner.SnapLines.Count);
+        Assert.NotNull(controlDesigner.StandardBehavior);
+        Assert.Equal(Cursors.Default, controlDesigner.StandardBehavior.Cursor);
+    }
+
     [Fact]
     public void AccessibleObjectField()
     {
