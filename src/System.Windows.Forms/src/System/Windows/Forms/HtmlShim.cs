@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using static Interop.Mshtml;
 
@@ -19,9 +17,9 @@ namespace System.Windows.Forms;
 
 internal abstract class HtmlShim : IDisposable
 {
-    private EventHandlerList events;
+    private EventHandlerList? events;
     private int eventCount;
-    private Dictionary<EventHandler, HtmlToClrEventProxy> attachedEventList;
+    private Dictionary<EventHandler, HtmlToClrEventProxy>? attachedEventList;
 
     protected HtmlShim()
     {
@@ -108,7 +106,7 @@ internal abstract class HtmlShim : IDisposable
 
     public void FireEvent(object key, EventArgs e)
     {
-        Delegate delegateToInvoke = (Delegate)Events[key];
+        Delegate? delegateToInvoke = Events[key];
 
         if (delegateToInvoke is not null)
         {
@@ -153,16 +151,15 @@ internal abstract class HtmlShim : IDisposable
         OnEventHandlerRemoved();
     }
 
-    protected HtmlToClrEventProxy RemoveEventProxy(EventHandler eventHandler)
+    protected HtmlToClrEventProxy? RemoveEventProxy(EventHandler eventHandler)
     {
         if (attachedEventList is null)
         {
             return null;
         }
 
-        if (attachedEventList.TryGetValue(eventHandler, out HtmlToClrEventProxy proxy))
+        if (attachedEventList.Remove(eventHandler, out HtmlToClrEventProxy? proxy))
         {
-            attachedEventList.Remove(eventHandler);
             return proxy;
         }
 
