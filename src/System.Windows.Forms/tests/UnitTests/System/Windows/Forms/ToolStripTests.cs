@@ -7234,14 +7234,25 @@ public partial class ToolStripTests
         }
     }
 
-    [WinFormsFact]
-    public void ToolStrip_GetNextItem_ItemsBackwardExpected()
+    [WinFormsTheory]
+    [InlineData(ToolStripLayoutStyle.Flow, true, ToolStripGripStyle.Visible)]
+    [InlineData(ToolStripLayoutStyle.HorizontalStackWithOverflow, true, ToolStripGripStyle.Visible)]
+    [InlineData(ToolStripLayoutStyle.StackWithOverflow, true, ToolStripGripStyle.Visible)]
+    [InlineData(ToolStripLayoutStyle.Table, true, ToolStripGripStyle.Visible)]
+    [InlineData(ToolStripLayoutStyle.VerticalStackWithOverflow, true, ToolStripGripStyle.Visible)]
+    [InlineData(ToolStripLayoutStyle.Flow, true, ToolStripGripStyle.Hidden)]
+    [InlineData(ToolStripLayoutStyle.HorizontalStackWithOverflow, true, ToolStripGripStyle.Hidden)]
+    [InlineData(ToolStripLayoutStyle.StackWithOverflow, true, ToolStripGripStyle.Hidden)]
+    [InlineData(ToolStripLayoutStyle.Table, true, ToolStripGripStyle.Hidden)]
+    [InlineData(ToolStripLayoutStyle.VerticalStackWithOverflow, true, ToolStripGripStyle.Hidden)]
+    public void ToolStrip_GetNextItem_ItemsBackwardExpected(ToolStripLayoutStyle toolStripLayoutStyle, bool tabStop, ToolStripGripStyle gripStyle)
     {
-        // Regression test for https://github.com/dotnet/winforms/issues/9181, and it verifies that setting TabStop=true,
-        // When typing Right arrow keyboard, the next focus position is first item on the left,
+        // Regression test for https://github.com/dotnet/winforms/issues/9181,https://github.com/dotnet/winforms/issues/9438
+        // and it verifies that setting TabStop=true,
+        // When typing Right arrow keyboard, the next focus position is first item on the left.
         // When typing Left arrow keyboard, the next focus position is first item on the Right.
 
-        using ToolStrip toolStrip = new() { TabStop = true, Width = 300 };
+        using ToolStrip toolStrip = new() { LayoutStyle = toolStripLayoutStyle, TabStop = tabStop, GripStyle = gripStyle };
         using ToolStripMenuItem toolStripMenuItem1 = new();
         using ToolStripMenuItem toolStripMenuItem2 = new();
         using ToolStripMenuItem toolStripMenuItem3 = new();
