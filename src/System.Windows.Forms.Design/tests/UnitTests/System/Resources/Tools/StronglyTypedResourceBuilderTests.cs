@@ -561,7 +561,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public static void StronglyTypedResourceBuilder_VerifyResourceName_ValidName()
     {
-        var key = "MyResource";
+        string key = "MyResource";
         string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
         Assert.Equal(key, result);
     }
@@ -569,7 +569,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public static void StronglyTypedResourceBuilder_VerifyResourceName_InvalidName()
     {
-        var key = "Invalid Resource?";
+        string key = "Invalid Resource?";
         string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
         Assert.Equal("Invalid_Resource_", result);
     }
@@ -577,7 +577,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public static void StronglyTypedResourceBuilder_VerifyResourceName_NameWithSpaces()
     {
-        var key = "Resource Name";
+        string key = "Resource Name";
         string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
         Assert.Equal("Resource_Name", result);
     }
@@ -585,7 +585,7 @@ public partial class StronglyTypedResourceBuilderTests
     [Fact]
     public static void StronglyTypedResourceBuilder_VerifyResourceName_NameStartWithNumber()
     {
-        var key = "1.name";
+        string key = "1.name";
         string result = StronglyTypedResourceBuilder.VerifyResourceName(key, s_cSharpProvider);
         Assert.Equal("_1_name", result);
     }
