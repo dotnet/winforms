@@ -10,18 +10,6 @@ namespace System.Windows.Forms.Design.Tests;
 
 internal class TestControlDesigner : ControlDesigner
 {
-    internal new bool ControlSupportsSnaplines => base.ControlSupportsSnaplines;
-
-    internal new bool ForceVisible => base.ForceVisible;
-
-    internal new bool IsRootDesigner => base.IsRootDesigner;
-
-    internal new Behavior.Behavior MoveBehavior => base.MoveBehavior;
-
-    internal new bool SerializePerformLayout => base.SerializePerformLayout;
-
-    internal new Behavior.Behavior StandardBehavior => base.StandardBehavior;
-
     internal AccessibleObject GetAccessibleObjectField()
     {
         return accessibilityObj;
