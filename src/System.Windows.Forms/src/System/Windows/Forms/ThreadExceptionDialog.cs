@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -48,7 +48,6 @@ public class ThreadExceptionDialog : Form
     private readonly int _scaledButtonTopPadding = BUTTONTOPPADDING;
     private readonly int _scaledButtonDetailsLeftPadding = BUTTONDETAILS_LEFTPADDING;
     private readonly int _scaledMessageTopPadding = MESSAGE_TOPPADDING;
-    private readonly int _scaledHeightPadding = HEIGHTPADDING;
     private readonly int _scaledButtonWidth = BUTTONWIDTH;
     private readonly int _scaledButtonHeight = BUTTONHEIGHT;
     private readonly int _scaledButtonAlignmentWidth = BUTTONALIGNMENTWIDTH;
@@ -69,6 +68,7 @@ public class ThreadExceptionDialog : Form
     private Bitmap? _expandImage;
     private Bitmap? _collapseImage;
     private bool _detailsVisible;
+    private int _scaledHeightPadding = HEIGHTPADDING;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="ThreadExceptionDialog"/> class.
@@ -355,6 +355,11 @@ public class ThreadExceptionDialog : Form
         ScaleBitmapLogicalToDevice(ref _collapseImage);
 
         _detailsButton.Image = _detailsVisible ? _collapseImage : _expandImage;
+
+        if (e.DeviceDpiNew != e.DeviceDpiOld)
+        {
+            _scaledHeightPadding = (int)Math.Round(HEIGHTPADDING * ((float)e.DeviceDpiNew / e.DeviceDpiOld));
+        }
     }
 
     /// <summary>
