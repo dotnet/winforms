@@ -131,10 +131,7 @@ public partial class RichTextBox : TextBoxBase
     [Browsable(false)]
     public override bool AllowDrop
     {
-        get
-        {
-            return _richTextBoxFlags[allowOleDropSection] != 0;
-        }
+        get => _richTextBoxFlags[allowOleDropSection] != 0;
         set
         {
             _richTextBoxFlags[allowOleDropSection] = value ? 1 : 0;
@@ -144,10 +141,7 @@ public partial class RichTextBox : TextBoxBase
 
     internal bool AllowOleObjects
     {
-        get
-        {
-            return _richTextBoxFlags[allowOleObjectsSection] != 0;
-        }
+        get => _richTextBoxFlags[allowOleObjectsSection] != 0;
         set
         {
             _richTextBoxFlags[allowOleObjectsSection] = value ? 1 : 0;
@@ -181,7 +175,7 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxAutoWordSelection))]
     public bool AutoWordSelection
     {
-        get { return _richTextBoxFlags[autoWordSelectionSection] != 0; }
+        get => _richTextBoxFlags[autoWordSelectionSection] != 0;
         set
         {
             _richTextBoxFlags[autoWordSelectionSection] = value ? 1 : 0;
@@ -238,10 +232,7 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxBulletIndent))]
     public int BulletIndent
     {
-        get
-        {
-            return _bulletIndent;
-        }
+        get => _bulletIndent;
 
         set
         {
@@ -262,8 +253,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool CallOnContentsResized
     {
-        get { return _richTextBoxFlags[callOnContentsResizedSection] != 0; }
-        set { _richTextBoxFlags[callOnContentsResizedSection] = value ? 1 : 0; }
+        get => _richTextBoxFlags[callOnContentsResizedSection] != 0;
+        set => _richTextBoxFlags[callOnContentsResizedSection] = value ? 1 : 0;
     }
 
     internal override bool CanRaiseTextChangedEvent => !SuppressTextChangedEvent;
@@ -360,10 +351,7 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxDetectURLs))]
     public bool DetectUrls
     {
-        get
-        {
-            return _richTextBoxFlags[autoUrlDetectSection] != 0;
-        }
+        get => _richTextBoxFlags[autoUrlDetectSection] != 0;
         set
         {
             if (value != DetectUrls)
@@ -378,13 +366,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(100, 96);
-        }
-    }
+    protected override Size DefaultSize => new Size(100, 96);
 
     /// <summary>
     ///  We can't just enable drag/drop of text by default: it's a breaking change.
@@ -395,10 +377,7 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxEnableAutoDragDrop))]
     public bool EnableAutoDragDrop
     {
-        get
-        {
-            return _richTextBoxFlags[enableAutoDragDropSection] != 0;
-        }
+        get => _richTextBoxFlags[enableAutoDragDropSection] != 0;
         set
         {
             _richTextBoxFlags[enableAutoDragDropSection] = value ? 1 : 0;
@@ -488,8 +467,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool InConstructor
     {
-        get { return _richTextBoxFlags[fInCtorSection] != 0; }
-        set { _richTextBoxFlags[fInCtorSection] = value ? 1 : 0; }
+        get => _richTextBoxFlags[fInCtorSection] != 0;
+        set => _richTextBoxFlags[fInCtorSection] = value ? 1 : 0;
     }
 
     /// <summary>
@@ -501,15 +480,9 @@ public partial class RichTextBox : TextBoxBase
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public RichTextBoxLanguageOptions LanguageOption
     {
-        get
-        {
-            if (IsHandleCreated)
-            {
-                return (RichTextBoxLanguageOptions)(int)PInvoke.SendMessage(this, PInvoke.EM_GETLANGOPTIONS);
-            }
-
-            return _languageOption;
-        }
+        get => IsHandleCreated
+            ? (RichTextBoxLanguageOptions)(int)PInvoke.SendMessage(this, PInvoke.EM_GETLANGOPTIONS)
+            : _languageOption;
         set
         {
             if (LanguageOption != value)
@@ -525,8 +498,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool LinkCursor
     {
-        get { return _richTextBoxFlags[linkcursorSection] != 0; }
-        set { _richTextBoxFlags[linkcursorSection] = value ? 1 : 0; }
+        get => _richTextBoxFlags[linkcursorSection] != 0;
+        set => _richTextBoxFlags[linkcursorSection] = value ? 1 : 0;
     }
 
     [DefaultValue(int.MaxValue)]
@@ -545,8 +518,8 @@ public partial class RichTextBox : TextBoxBase
 
     private bool ProtectedError
     {
-        get { return _richTextBoxFlags[protectedErrorSection] != 0; }
-        set { _richTextBoxFlags[protectedErrorSection] = value ? 1 : 0; }
+        get => _richTextBoxFlags[protectedErrorSection] != 0;
+        set => _richTextBoxFlags[protectedErrorSection] = value ? 1 : 0;
     }
 
     private protected override void RaiseAccessibilityTextChangedEvent()
@@ -585,7 +558,7 @@ public partial class RichTextBox : TextBoxBase
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool RichTextShortcutsEnabled
     {
-        get { return _richTextBoxFlags[richTextShortcutsEnabledSection] != 0; }
+        get => _richTextBoxFlags[richTextShortcutsEnabledSection] != 0;
         set
         {
             s_shortcutsToDisable ??= new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
@@ -603,10 +576,7 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxRightMargin))]
     public int RightMargin
     {
-        get
-        {
-            return _rightMargin;
-        }
+        get => _rightMargin;
         set
         {
             if (_rightMargin != value)
@@ -687,10 +657,7 @@ public partial class RichTextBox : TextBoxBase
     [SRDescription(nameof(SR.RichTextBoxScrollBars))]
     public RichTextBoxScrollBars ScrollBars
     {
-        get
-        {
-            return (RichTextBoxScrollBars)_richTextBoxFlags[scrollBarsSection];
-        }
+        get => (RichTextBoxScrollBars)_richTextBoxFlags[scrollBarsSection];
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -996,14 +963,8 @@ public partial class RichTextBox : TextBoxBase
     [DisallowNull]
     public Font? SelectionFont
     {
-        get
-        {
-            return GetCharFormatFont(true);
-        }
-        set
-        {
-            SetCharFormatFont(true, value);
-        }
+        get => GetCharFormatFont(true);
+        set => SetCharFormatFont(true, value);
     }
 
     /// <summary>
