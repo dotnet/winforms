@@ -15,7 +15,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_Ctor_Default()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         Assert.Empty(designer.ActionLists);
         Assert.Same(designer.ActionLists, designer.ActionLists);
         Assert.Empty(designer.AssociatedComponents);
@@ -33,7 +33,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_Children_GetDefault_ReturnsExpected()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         ITreeDesigner treeDesigner = designer;
         Assert.Empty(treeDesigner.Children);
     }
@@ -41,17 +41,17 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_GetService_ReturnsExpected()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
 
         var service = designer.GetService<IDesignerHost>();
         Assert.Null(service);
 
-        designer.Initialize(new Component());
+        using Component component = new();
+        designer.Initialize(component);
 
         service = designer.GetService<IDesignerHost>();
         Assert.Null(service);
 
-        using var component = new Component();
         var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
@@ -67,13 +67,13 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_PostFilterProperties_Success()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         var properties = new Dictionary<string, PropertyDescriptor>
         {
             { "SettingsKey", descriptor }
         };
-        using var component = new IPersistComponentSettingsComponent();
+        using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         designer.PostFilterProperties(properties);
         PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
@@ -260,8 +260,8 @@ public class ComponentDesignerTests
     [MemberData(nameof(InheritanceAttribute_GetValidService_TestData))]
     public void ComponentDesigner_InheritanceAttribute_GetWithValidService_ReturnsDefault(InheritanceAttribute attributeResult, int expectedCallCount1, int expectedCallCount2)
     {
-        using var designer = new SubComponentDesigner();
-        using var component = new Component();
+        using SubComponentDesigner designer = new();
+        using Component component = new();
         var mockInheritanceService = new Mock<IInheritanceService>(MockBehavior.Strict);
         mockInheritanceService
             .Setup(s => s.GetInheritanceAttribute(component))
@@ -288,7 +288,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(InheritanceAttribute_GetInvalidService_TestData))]
     public void ComponentDesigner_InheritanceAttribute_GetWithInvalidService_ReturnsDefault(object inheritanceService)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         var mockSite = CreateMockSiteWithInheritanceService(inheritanceService);
 
         using var component = new Component
@@ -332,7 +332,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(ParentComponent_ValidService_TestData))]
     public void ComponentDesigner_ParentComponent_GetWithValidService_ReturnsExpected(Component rootComponent)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
@@ -361,8 +361,8 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_ParentComponent_GetWithValidServiceRootComponentEqual_ReturnsNull()
     {
-        using var designer = new SubComponentDesigner();
-        using var component = new Component();
+        using SubComponentDesigner designer = new();
+        using Component component = new();
         var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
@@ -393,7 +393,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(ParentComponent_InvalidService_TestData))]
     public void ComponentDesigner_ParentComponent_GetWithInvalidService_ReturnsNull(object host)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         var mockSite = CreateMockSiteWithDesignerHost(host);
 
         using var component = new Component
@@ -416,7 +416,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(ParentComponent_ValidService_TestData))]
     public void ComponentDesigner_ITreeDesignerParent_GetWithValidService_ReturnsExpected(Component rootComponent)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         ITreeDesigner treeDesigner = designer;
         var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
         mockDesignerHost
@@ -453,9 +453,9 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_ITreeDesignerParent_GetWithValidServiceRootComponentEqual_ReturnsNull()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         ITreeDesigner treeDesigner = designer;
-        using var component = new Component();
+        using Component component = new();
         var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
@@ -480,7 +480,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(ParentComponent_InvalidService_TestData))]
     public void ComponentDesigner_ITreeDesignerParent_GetWithInvalidServiceFirstCall_ReturnsNull(object host)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         ITreeDesigner treeDesigner = designer;
         var mockSite = CreateMockSiteWithDesignerHost(host);
 
@@ -504,7 +504,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(ParentComponent_InvalidService_TestData))]
     public void ComponentDesigner_ITreeDesignerParent_GetWithInvalidServiceSecondCall_ReturnsNull(object host)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         ITreeDesigner treeDesigner = designer;
         var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
         mockDesignerHost
@@ -565,7 +565,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_Dispose_InvokeWithComponent_Success()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockComponent = new Mock<IComponent>(MockBehavior.Strict);
         mockComponent
             .Setup(c => c.Site)
@@ -625,7 +625,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(Dispose_InvokeWithComponentChangeService_TestData))]
     public void ComponentDesigner_Dispose_InvokeWithComponentChangeService_Success(object componentChangeService)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new Component
         {
             Site = CreateMockSiteWithComponentChangeService(componentChangeService).Object
@@ -644,7 +644,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_Dispose_InvokeWithoutComponent_Success()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         designer.Dispose();
         Assert.Null(designer.Component);
 
@@ -657,7 +657,7 @@ public class ComponentDesignerTests
     [BoolData]
     public void ComponentDesigner_Dispose_InvokeBoolWithComponent_Success(bool disposing)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         var mockComponent = new Mock<IComponent>(MockBehavior.Strict);
         mockComponent
             .Setup(c => c.Site)
@@ -692,7 +692,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(Dispose_InvokeBoolWithComponentChangeService_TestData))]
     public void ComponentDesigner_Dispose_InvokeBoolWithComponentChangeService_Success(object componentChangeService, bool disposing)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         using var component = new Component
         {
             Site = CreateMockSiteWithComponentChangeService(componentChangeService).Object
@@ -712,7 +712,7 @@ public class ComponentDesignerTests
     [BoolData]
     public void ComponentDesigner_Dispose_InvokeBoolWithoutComponent_Success(bool disposing)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         designer.Dispose(disposing);
         Assert.Null(designer.Component);
 
@@ -724,7 +724,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_DoDefaultAction_InvokeDefault_Nop()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         designer.DoDefaultAction();
 
         // Call again.
@@ -758,7 +758,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_ValidProperty_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostValidProperty_Success(string property, ICollection compatibleMethods, int expectedSetCallCount, string uniqueMethodName)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component1 = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -879,7 +879,7 @@ public class ComponentDesignerTests
     [InlineData("name", "name", 1)]
     public void ComponentDesigner_DoDefaultAction_InvokeWithRootComponent_CallsShowCode(string value, string uniqueName, int expectedCallCount)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new DefaultEventComponent
         {
             StringProperty = value
@@ -977,7 +977,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_ValidProperty_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostValidPropertyWithTransaction_Success(string property, ICollection compatibleMethods, int expectedSetCallCount, string uniqueMethodName)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component1 = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -1106,7 +1106,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_DoDefaultAction_InvokeWithCanceledThrowingCreateTransaction_Success()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -1199,7 +1199,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_NotCanceledException_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeWithNotCanceledThrowingCreateTransaction_Rethrows(Exception exception)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -1285,7 +1285,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_DoDefaultAction_InvokeWithInvalidOperationExceptionThrowingCreateTransaction_Catches()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -1375,7 +1375,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_DoDefaultAction_InvokeThrowsInvalidOperationException_CallsCancel()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -1482,7 +1482,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_NonInvalidOperationException_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeThrowsNonInvalidOperationException_CallsCommit(Exception exception)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -1589,7 +1589,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_InvalidProperty_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostInvalidProperty_Success(PropertyDescriptor property)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         using var component = new DefaultEventComponent
         {
             StringProperty = "StringValue"
@@ -1680,7 +1680,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_InvalidSelectedComponents_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeWithComponentWithHostInvalidSelectedComponents_Success(ICollection selectedComponents)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockEventBindingService = new Mock<IEventBindingService>(MockBehavior.Strict);
         var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
         mockSelectionService
@@ -1751,7 +1751,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_InvalidEventBindingService_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeInvalidEventBindingService_Nop(object eventBindingService)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -1806,7 +1806,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(DoDefaultAction_InvalidSelectionService_TestData))]
     public void ComponentDesigner_DoDefaultAction_InvokeInvalidSelectionService_Nop(object selectionService)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockEventBindingService = new Mock<IEventBindingService>(MockBehavior.Strict);
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
         mockSite
@@ -1870,7 +1870,7 @@ public class ComponentDesignerTests
         {
             StringProperty = "StringValue"
         };
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockEventBindingService = new Mock<IEventBindingService>(MockBehavior.Strict);
         var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
         mockSelectionService
@@ -1949,7 +1949,7 @@ public class ComponentDesignerTests
     public void ComponentDesigner_GetService_InvokeWithComponentWithSite_ReturnsNull(Type serviceType)
     {
         var service = new object();
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(serviceType))
@@ -1981,8 +1981,9 @@ public class ComponentDesignerTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void ComponentDesigner_GetService_InvokeWithComponentWithoutSite_ReturnsNull(Type serviceType)
     {
-        using var designer = new SubComponentDesigner();
-        designer.Initialize(new Component());
+        using SubComponentDesigner designer = new();
+        using Component component = new();
+        designer.Initialize(component);
         Assert.Null(designer.GetService(serviceType));
     }
 
@@ -1990,15 +1991,15 @@ public class ComponentDesignerTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void ComponentDesigner_GetService_InvokeWithoutComponent_ReturnsNull(Type serviceType)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         Assert.Null(designer.GetService(serviceType));
     }
 
     [Fact]
     public void ComponentDesigner_Initialize_Invoke_Success()
     {
-        using var designer = new ComponentDesigner();
-        using var component = new Component();
+        using ComponentDesigner designer = new();
+        using Component component = new();
         designer.Initialize(component);
         Assert.Same(component, designer.Component);
         Assert.Empty(designer.AssociatedComponents);
@@ -2012,8 +2013,8 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_Initialize_RootComponent_Success()
     {
-        using var component = new Component();
-        using var designer = new ComponentDesigner();
+        using Component component = new();
+        using ComponentDesigner designer = new();
         var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
@@ -2079,7 +2080,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(Initialize_NonRootComponent_TestData))]
     public void ComponentDesigner_Initialize_NonRootComponent_Success(object host, object componentChangeService)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2121,7 +2122,7 @@ public class ComponentDesignerTests
     public void ComponentDesigner_Initialize_NullInheritanceAttribute_Success()
     {
         using var designer = new CustomInheritanceAttributeComponentDesigner(null);
-        using var component = new Component();
+        using Component component = new();
         designer.Initialize(component);
         Assert.Same(component, designer.Component);
         Assert.Empty(designer.AssociatedComponents);
@@ -2130,7 +2131,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_Initialize_InvokeIServiceContainerSiteWithNullDesignerCommandSet_CallsAddService()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2190,7 +2191,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(Initialize_NonNullDesignerCommandSet_TestData))]
     public void ComponentDesigner_Initialize_InvokeIServiceContainerSiteWithNonNullDesignerCommandSet_DoesNotCallAddService(object designerCommandSet)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2236,8 +2237,8 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_ParentComponent_GetWithHost_ReturnsExpected()
     {
-        using var designer = new SubComponentDesigner();
-        using var component = new Component();
+        using SubComponentDesigner designer = new();
+        using Component component = new();
         designer.Initialize(component);
     }
 
@@ -2251,7 +2252,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(IDictionary_TestData))]
     public void ComponentDesigner_InitializeExistingComponent_Invoke_ThrowsNotImplementedException(IDictionary defaultValues)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         Assert.Throws<NotImplementedException>(() => designer.InitializeExistingComponent(defaultValues));
     }
 
@@ -2259,7 +2260,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(IDictionary_TestData))]
     public void ComponentDesigner_InitializeNewComponent_Invoke_Nop(IDictionary defaultValues)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         designer.InitializeNewComponent(defaultValues);
     }
 
@@ -2267,7 +2268,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_InitializeNonDefault_Invoke_Nop()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         designer.InitializeNonDefault();
     }
 #pragma warning restore 0618
@@ -2275,14 +2276,14 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_InvokeGetInheritanceAttribute_InvokeNonNullToInvoke_ReturnsExpected()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         Assert.Same(designer.InheritanceAttribute, designer.InvokeGetInheritanceAttribute(designer));
     }
 
     [Fact]
     public void ComponentDesigner_InvokeGetInheritanceAttribute_InvokeNullToInvoke_ReturnsNull()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         Assert.Null(designer.InvokeGetInheritanceAttribute(null));
     }
 
@@ -2297,13 +2298,13 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_PreFilterProperties_WithComponentWithKey_Success()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         var properties = new Dictionary<string, PropertyDescriptor>
         {
             { "SettingsKey", descriptor }
         };
-        using var component = new IPersistComponentSettingsComponent();
+        using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         designer.PreFilterProperties(properties);
         PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
@@ -2317,13 +2318,13 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_PreFilterProperties_WithIPersistComponentSettingsComponentWithKey_Success()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         var properties = new Dictionary<string, PropertyDescriptor>
         {
             { "SettingsKey", descriptor }
         };
-        using var component = new IPersistComponentSettingsComponent();
+        using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         designer.PreFilterProperties(properties);
         PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
@@ -2338,10 +2339,10 @@ public class ComponentDesignerTests
     [MemberData(nameof(PreFilterProperties_ComponentWithoutKey_TestData))]
     public void ComponentDesigner_PreFilterProperties_WithIPersistComponentSettingsComponentWithoutKey_Success(IDictionary properties)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         object oldValue = properties?["SettingsKey"];
-        using var component = new IPersistComponentSettingsComponent();
+        using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         designer.PreFilterProperties(properties);
         Assert.Same(oldValue, properties?["SettingsKey"]);
@@ -2350,13 +2351,13 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_PreFilterProperties_WithNonIPersistComponentSettingsComponent_Nop()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         var properties = new Dictionary<string, PropertyDescriptor>
         {
             { "SettingsKey", descriptor }
         };
-        using var component = new Component();
+        using Component component = new();
         designer.Initialize(component);
         designer.PreFilterProperties(properties);
         Assert.Same(descriptor, properties["SettingsKey"]);
@@ -2366,7 +2367,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(IDictionary_TestData))]
     public void ComponentDesigner_PreFilterProperties_WithoutComponent_Nop(IDictionary properties)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         designer.PreFilterProperties(properties);
     }
 
@@ -2399,7 +2400,7 @@ public class ComponentDesignerTests
         yield return new object[] { new Dictionary<Type, object>(), InheritanceAttribute.Default };
         yield return new object[] { new Dictionary<Type, object> { { typeof(InheritanceAttribute), null } }, InheritanceAttribute.Default };
         yield return new object[] { new Dictionary<Type, object> { { typeof(InheritanceAttribute), new object() } }, InheritanceAttribute.Default };
-        var attribute = new InheritanceAttribute();
+        InheritanceAttribute attribute = new();
         yield return new object[] { new Dictionary<Type, object> { { typeof(InheritanceAttribute), attribute } }, attribute };
     }
 
@@ -2407,7 +2408,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(PostFilterAttributes_TestData))]
     public void ComponentDesigner_PostFilterAttributes_HasInheritanceAttributeKey_Sets(IDictionary attributes, object expected)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         designer.PostFilterAttributes(attributes);
         Assert.Same(expected, designer.InheritanceAttribute);
     }
@@ -2483,8 +2484,8 @@ public class ComponentDesignerTests
     [MemberData(nameof(RaiseComponentChanged_TestData))]
     public void ComponentDesigner_RaiseComponentChanged_InvokeWithValidService_CallsOnOnComponentChanged(MemberDescriptor member, object oldValue, object newValue)
     {
-        using var designer = new SubComponentDesigner();
-        using var component = new Component();
+        using SubComponentDesigner designer = new();
+        using Component component = new();
         var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
         mockComponentChangeService
             .Setup(s => s.OnComponentChanged(component, member, oldValue, newValue))
@@ -2512,8 +2513,8 @@ public class ComponentDesignerTests
     [MemberData(nameof(RaiseComponentChanged_InvalidService_TestData))]
     public void ComponentDesigner_RaiseComponentChanged_InvokeWithInvalidService_CallsOnOnComponentChanged(object componentChangeService, MemberDescriptor member, object oldValue, object newValue)
     {
-        using var designer = new SubComponentDesigner();
-        using var component = new Component();
+        using SubComponentDesigner designer = new();
+        using Component component = new();
         var mockSite = CreateMockSiteWithComponentChangeService(componentChangeService);
         component.Site = mockSite.Object;
 
@@ -2527,7 +2528,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(RaiseComponentChanged_TestData))]
     public void ComponentDesigner_RaiseComponentChanged_InvokeWithoutComponent_Nop(MemberDescriptor member, object oldValue, object newValue)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         designer.RaiseComponentChanged(member, oldValue, newValue);
     }
 
@@ -2541,8 +2542,8 @@ public class ComponentDesignerTests
     [MemberData(nameof(RaiseComponentChanging_TestData))]
     public void ComponentDesigner_RaiseComponentChanging_InvokeWithValidService_CallsOnOnComponentChanged(MemberDescriptor member)
     {
-        using var designer = new SubComponentDesigner();
-        using var component = new Component();
+        using SubComponentDesigner designer = new();
+        using Component component = new();
         var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
         mockComponentChangeService
             .Setup(s => s.OnComponentChanging(component, member))
@@ -2570,8 +2571,8 @@ public class ComponentDesignerTests
     [MemberData(nameof(RaiseComponentChanging_InvalidService_TestData))]
     public void ComponentDesigner_RaiseComponentChanging_InvokeWithInvalidService_CallsOnOnComponentChanged(object componentChangeService, MemberDescriptor member)
     {
-        using var designer = new SubComponentDesigner();
-        using var component = new Component();
+        using SubComponentDesigner designer = new();
+        using Component component = new();
         var mockSite = CreateMockSiteWithComponentChangeService(componentChangeService);
         component.Site = mockSite.Object;
 
@@ -2585,7 +2586,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(RaiseComponentChanging_TestData))]
     public void ComponentDesigner_RaiseComponentChanging_InvokeWithoutComponent_Nop(MemberDescriptor member)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         designer.RaiseComponentChanging(member);
     }
 
@@ -2602,7 +2603,7 @@ public class ComponentDesignerTests
     [InlineData("OldValue", "NewValue", "OldValue")]
     public void ComponentDesigner_OnSetComponentDefaults_InvokeWithComponentWithDefaultProperty_Nop(string oldValue, string siteName, string expectedValue)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         var mockSite = new Mock<ISite>(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
@@ -2671,7 +2672,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(OnSetComponentDefaults_InvalidComponent_TestData))]
     public void ComponentDesigner_OnSetComponentDefaults_InvokeWithInvalidComponent_Nop(Component component)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         designer.Initialize(component);
         designer.OnSetComponentDefaults();
     }
@@ -2679,8 +2680,8 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_OnSetComponentDefaults_InvokeWithComponentWithoutSite_Nop()
     {
-        using var designer = new ComponentDesigner();
-        using var component = new Component();
+        using ComponentDesigner designer = new();
+        using Component component = new();
         designer.Initialize(component);
         designer.OnSetComponentDefaults();
     }
@@ -2688,7 +2689,7 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_OnSetComponentDefaults_InvokeWithoutComponent_Nop()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         designer.OnSetComponentDefaults();
     }
 #pragma warning restore 0618
@@ -2726,14 +2727,14 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithComponentWithKey_Success()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         IDesignerFilter filter = designer;
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         var properties = new Dictionary<string, PropertyDescriptor>
         {
             { "SettingsKey", descriptor }
         };
-        using var component = new IPersistComponentSettingsComponent();
+        using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         filter.PreFilterProperties(properties);
         PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
@@ -2747,14 +2748,14 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithIPersistComponentSettingsComponentWithKey_Success()
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         IDesignerFilter filter = designer;
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         var properties = new Dictionary<string, PropertyDescriptor>
         {
             { "SettingsKey", descriptor }
         };
-        using var component = new IPersistComponentSettingsComponent();
+        using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         filter.PreFilterProperties(properties);
         PropertyDescriptor result = (PropertyDescriptor)properties["SettingsKey"];
@@ -2769,11 +2770,11 @@ public class ComponentDesignerTests
     [MemberData(nameof(PreFilterProperties_ComponentWithoutKey_TestData))]
     public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithIPersistComponentSettingsComponentWithoutKey_Success(IDictionary properties)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         IDesignerFilter filter = designer;
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         object oldValue = properties?["SettingsKey"];
-        using var component = new IPersistComponentSettingsComponent();
+        using IPersistComponentSettingsComponent component = new();
         designer.Initialize(component);
         filter.PreFilterProperties(properties);
         Assert.Same(oldValue, properties?["SettingsKey"]);
@@ -2782,14 +2783,14 @@ public class ComponentDesignerTests
     [Fact]
     public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithNonIPersistComponentSettingsComponent_Nop()
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         IDesignerFilter filter = designer;
         PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(CustomComponent))[0];
         var properties = new Dictionary<string, PropertyDescriptor>
         {
             { "SettingsKey", descriptor }
         };
-        using var component = new Component();
+        using Component component = new();
         designer.Initialize(component);
         filter.PreFilterProperties(properties);
         Assert.Same(descriptor, properties["SettingsKey"]);
@@ -2799,7 +2800,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(IDictionary_TestData))]
     public void ComponentDesigner_IDesignerFilterPreFilterProperties_WithoutComponent_Nop(IDictionary properties)
     {
-        using var designer = new ComponentDesigner();
+        using ComponentDesigner designer = new();
         IDesignerFilter filter = designer;
         filter.PreFilterProperties(properties);
     }
@@ -2833,7 +2834,7 @@ public class ComponentDesignerTests
     [MemberData(nameof(PostFilterAttributes_TestData))]
     public void ComponentDesigner_IDesignerFilterPostFilterAttributes_HasInheritanceAttributeKey_Sets(IDictionary attributes, object expected)
     {
-        using var designer = new SubComponentDesigner();
+        using SubComponentDesigner designer = new();
         IDesignerFilter filter = designer;
         filter.PostFilterAttributes(attributes);
         Assert.Same(expected, designer.InheritanceAttribute);
