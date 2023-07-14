@@ -271,4 +271,17 @@ public class ResXResourceWriterTests
         Assert.Equal(_testString1, currentEntry.Key);
         Assert.Equal(_testDateTime, currentEntry.Value);
     }
+
+    [Fact]
+    public void ResXResourceWriter_AddAlias_WithNullAssemblyName_ThrowNullException()
+    {
+        // Arrange
+        using ResXResourceWriter writer = new(_resxFileName);
+
+        // Act and Assert
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            writer.AddAlias(aliasName: "MyAlias", assemblyName: null);
+        });
+    }
 }
