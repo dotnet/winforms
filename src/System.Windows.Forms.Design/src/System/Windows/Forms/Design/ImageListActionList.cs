@@ -20,32 +20,26 @@ internal class ImageListActionList : DesignerActionList
 
     public void ChooseImages() => EditorServiceContext.EditValue(_designer, Component, "Images");
 
-    public ColorDepth? ColorDepth
+    public ColorDepth ColorDepth
     {
-        get
-        {
-            return (Component as ImageList)?.ColorDepth;
-        }
+        get => (Component as ImageList)!.ColorDepth;
         set
         {
             if (Component is not null)
             {
-                TypeDescriptor.GetProperties(Component)["ColorDepth"]?.SetValue(Component, value);
+                TypeDescriptor.GetProperties(Component)[nameof(ImageSize)]?.SetValue(Component, value);
             }
         }
     }
 
-    public Size? ImageSize
+    public Size ImageSize
     {
-        get
-        {
-            return (Component as ImageList)?.ImageSize;
-        }
+        get => (Component as ImageList)!.ImageSize;
         set
         {
             if (Component is not null)
             {
-                TypeDescriptor.GetProperties(Component)["ImageSize"]?.SetValue(Component, value);
+                TypeDescriptor.GetProperties(Component)[nameof(ImageSize)]?.SetValue(Component, value);
             }
         }
     }
@@ -54,9 +48,9 @@ internal class ImageListActionList : DesignerActionList
     {
         DesignerActionItemCollection items = new DesignerActionItemCollection
         {
-            new DesignerActionPropertyItem("ImageSize", SR.ImageListActionList_ImageSizeDisplayName, SR.PropertiesCategoryName, SR.ImageListActionList_ImageSizeDescription),
-            new DesignerActionPropertyItem("ColorDepth", SR.ImageListActionList_ColorDepthDisplayName, SR.PropertiesCategoryName, SR.ImageListActionList_ColorDepthDescription),
-            new DesignerActionMethodItem(this, "ChooseImages", SR.ImageListActionList_ChooseImagesDisplayName, SR.LinksCategoryName, SR.ImageListActionList_ChooseImagesDescription, true)
+            new DesignerActionPropertyItem(nameof(ImageSize), SR.ImageListActionList_ImageSizeDisplayName, SR.PropertiesCategoryName, SR.ImageListActionList_ImageSizeDescription),
+            new DesignerActionPropertyItem(nameof(ColorDepth), SR.ImageListActionList_ColorDepthDisplayName, SR.PropertiesCategoryName, SR.ImageListActionList_ColorDepthDescription),
+            new DesignerActionMethodItem(this, nameof(ChooseImages), SR.ImageListActionList_ChooseImagesDisplayName, SR.LinksCategoryName, SR.ImageListActionList_ChooseImagesDescription, true)
         };
         return items;
     }
