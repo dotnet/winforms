@@ -1317,10 +1317,28 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="ExceptionCollectionInvalidArgument" xml:space="preserve">
     <value>Argument must only contain objects of type '{0}'.</value>
   </data>
-    <data name="DesignerShortcutVerticalOrientation" xml:space="preserve">
+  <data name="DesignerShortcutVerticalOrientation" xml:space="preserve">
     <value>Vertical Splitter Orientation.</value>
   </data>
-    <data name="DesignerShortcutHorizontalOrientation" xml:space="preserve">
+  <data name="DesignerShortcutHorizontalOrientation" xml:space="preserve">
     <value>Horizontal Splitter Orientation.</value>
+  </data>
+  <data name="ImageListActionList_ChooseImagesDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ImageListActionList_ChooseImagesDisplayName" xml:space="preserve">
+    <value>Choose images</value>
+  </data>
+  <data name="ImageListActionList_ColorDepthDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ImageListActionList_ColorDepthDisplayName" xml:space="preserve">
+    <value>Image Bit Depth</value>
+  </data>
+  <data name="ImageListActionList_ImageSizeDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ImageListActionList_ImageSizeDisplayName" xml:space="preserve">
+    <value>Image Size</value>
   </data>
 </root>

@@ -1080,6 +1080,21 @@
         <target state="translated">Bildsammlungs-Editor</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListActionList_ChooseImagesDisplayName">
+        <source>Choose images</source>
+        <target state="new">Choose images</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ColorDepthDisplayName">
+        <source>Image Bit Depth</source>
+        <target state="new">Image Bit Depth</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ImageSizeDisplayName">
+        <source>Image Size</source>
+        <target state="new">Image Size</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListDescription">
         <source>Chooses an ImageList to use with this TreeView</source>
         <target state="translated">Wählt eine ImageList aus, die mit dieser TreeView verwendet wird</target>
