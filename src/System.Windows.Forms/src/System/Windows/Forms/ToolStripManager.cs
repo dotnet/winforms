@@ -63,24 +63,22 @@ public static partial class ToolStripManager
                 {
                     // Default to menu font
                     sysFont = SystemInformation.GetMenuFontForDpi(dpi);
-                    if (sysFont is not null)
-                    {
-                        // Ensure font is in pixels so it displays properly in the property grid at design time.
-                        if (sysFont.Unit != GraphicsUnit.Point)
-                        {
-                            retFont = ControlPaint.FontInPoints(sysFont);
-                            sysFont.Dispose();
-                        }
-                        else
-                        {
-                            retFont = sysFont;
-                        }
 
-                        s_defaultFontCache[dpi] = retFont;
+                    // Ensure font is in pixels so it displays properly in the property grid at design time.
+                    if (sysFont.Unit != GraphicsUnit.Point)
+                    {
+                        retFont = ControlPaint.FontInPoints(sysFont);
+                        sysFont.Dispose();
                     }
+                    else
+                    {
+                        retFont = sysFont;
+                    }
+
+                    s_defaultFontCache[dpi] = retFont;
                 }
 
-                return retFont!;
+                return retFont;
             }
             else
             {
@@ -98,26 +96,24 @@ public static partial class ToolStripManager
                         {
                             // Default to menu font
                             sysFont = SystemFonts.MenuFont;
+
                             // ...or to control font if menu font unavailable
                             sysFont ??= Control.DefaultFont;
 
-                            if (sysFont is not null)
+                            // Ensure font is in pixels so it displays properly in the property grid at design time.
+                            if (sysFont.Unit != GraphicsUnit.Point)
                             {
-                                // Ensure font is in pixels so it displays properly in the property grid at design time.
-                                if (sysFont.Unit != GraphicsUnit.Point)
-                                {
-                                    s_defaultFont = ControlPaint.FontInPoints(sysFont);
-                                    retFont = s_defaultFont;
-                                    sysFont.Dispose();
-                                }
-                                else
-                                {
-                                    s_defaultFont = sysFont;
-                                    retFont = s_defaultFont;
-                                }
+                                s_defaultFont = ControlPaint.FontInPoints(sysFont);
+                                retFont = s_defaultFont;
+                                sysFont.Dispose();
+                            }
+                            else
+                            {
+                                s_defaultFont = sysFont;
+                                retFont = s_defaultFont;
                             }
 
-                            return retFont!;
+                            return retFont;
                         }
                     }
                 }
