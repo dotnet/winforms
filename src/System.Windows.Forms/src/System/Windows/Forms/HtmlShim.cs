@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using static Interop.Mshtml;
 
@@ -19,40 +17,33 @@ namespace System.Windows.Forms;
 
 internal abstract class HtmlShim : IDisposable
 {
-    private EventHandlerList events;
-    private int eventCount;
-    private Dictionary<EventHandler, HtmlToClrEventProxy> attachedEventList;
+    private EventHandlerList? _events;
+    private int _eventCount;
+    private Dictionary<EventHandler, HtmlToClrEventProxy>? _attachedEventList;
 
     protected HtmlShim()
     {
     }
 
-    private EventHandlerList Events
-    {
-        get
-        {
-            events ??= new EventHandlerList();
-
-            return events;
-        }
-    }
+    private EventHandlerList Events =>
+        _events ??= new EventHandlerList();
 
     ///  Support IHtml*3.AttachHandler
     public abstract void AttachEventHandler(string eventName, EventHandler eventHandler);
 
-    public void AddHandler(object key, Delegate value)
+    public void AddHandler(object key, Delegate? value)
     {
-        eventCount++;
+        _eventCount++;
         Events.AddHandler(key, value);
         OnEventHandlerAdded();
     }
 
     protected HtmlToClrEventProxy AddEventProxy(string eventName, EventHandler eventHandler)
     {
-        attachedEventList ??= new Dictionary<EventHandler, HtmlToClrEventProxy>();
+        _attachedEventList ??= new Dictionary<EventHandler, HtmlToClrEventProxy>();
 
         HtmlToClrEventProxy proxy = new HtmlToClrEventProxy(this, eventName, eventHandler);
-        attachedEventList[eventHandler] = proxy;
+        _attachedEventList[eventHandler] = proxy;
         return proxy;
     }
 
@@ -71,14 +62,14 @@ internal abstract class HtmlShim : IDisposable
     ///  inheriting classes should override to disconnect from ConnectionPoint and call base.
     public virtual void DisconnectFromEvents()
     {
-        if (attachedEventList is not null)
+        if (_attachedEventList is not null)
         {
-            EventHandler[] events = new EventHandler[attachedEventList.Count];
-            attachedEventList.Keys.CopyTo(events, 0);
+            EventHandler[] events = new EventHandler[_attachedEventList.Count];
+            _attachedEventList.Keys.CopyTo(events, 0);
 
             foreach (EventHandler eh in events)
             {
-                HtmlToClrEventProxy proxy = attachedEventList[eh];
+                HtmlToClrEventProxy proxy = _attachedEventList[eh];
                 DetachEventHandler(proxy.EventName, eh);
             }
         }
@@ -98,17 +89,14 @@ internal abstract class HtmlShim : IDisposable
         if (disposing)
         {
             DisconnectFromEvents();
-            if (events is not null)
-            {
-                events.Dispose();
-                events = null;
-            }
+            _events?.Dispose();
+            _events = null;
         }
     }
 
     public void FireEvent(object key, EventArgs e)
     {
-        Delegate delegateToInvoke = (Delegate)Events[key];
+        Delegate? delegateToInvoke = Events[key];
 
         if (delegateToInvoke is not null)
         {
@@ -139,30 +127,29 @@ internal abstract class HtmlShim : IDisposable
 
     protected virtual void OnEventHandlerRemoved()
     {
-        if (eventCount <= 0)
+        if (_eventCount <= 0)
         {
             DisconnectFromEvents();
-            eventCount = 0;
+            _eventCount = 0;
         }
     }
 
-    public void RemoveHandler(object key, Delegate value)
+    public void RemoveHandler(object key, Delegate? value)
     {
-        eventCount--;
+        _eventCount--;
         Events.RemoveHandler(key, value);
         OnEventHandlerRemoved();
     }
 
-    protected HtmlToClrEventProxy RemoveEventProxy(EventHandler eventHandler)
+    protected HtmlToClrEventProxy? RemoveEventProxy(EventHandler eventHandler)
     {
-        if (attachedEventList is null)
+        if (_attachedEventList is null)
         {
             return null;
         }
 
-        if (attachedEventList.TryGetValue(eventHandler, out HtmlToClrEventProxy proxy))
+        if (_attachedEventList.Remove(eventHandler, out HtmlToClrEventProxy? proxy))
         {
-            attachedEventList.Remove(eventHandler);
             return proxy;
         }
 
