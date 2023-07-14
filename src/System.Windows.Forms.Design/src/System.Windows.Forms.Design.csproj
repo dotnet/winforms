@@ -70,6 +70,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\Common\src\AssemblyRef.cs" Link="AssemblyRef.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
   </ItemGroup>
   
