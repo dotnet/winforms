@@ -55,7 +55,7 @@ public class LayoutEventArgsTests
         static LayoutEventArgs CreateAndDisposeControl()
         {
             // Setup TableLayoutPanel and Panel
-            TableLayoutPanel tableLayoutPanel = new()
+            using TableLayoutPanel tableLayoutPanel = new()
             {
                 ColumnCount = 2,
                 RowCount = 2,
