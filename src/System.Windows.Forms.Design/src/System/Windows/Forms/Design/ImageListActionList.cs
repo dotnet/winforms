@@ -10,9 +10,10 @@ namespace System.Windows.Forms.Design;
 
 internal class ImageListActionList : DesignerActionList
 {
-    private ImageListDesigner _designer;
+    private readonly ImageListDesigner _designer;
 
-    public ImageListActionList(ImageListDesigner designer) : base(designer.Component)
+    public ImageListActionList(ImageListDesigner designer)
+        : base(designer.Component)
     {
         _designer = designer;
     }
