@@ -27,7 +27,7 @@ internal class ImageListActionList : DesignerActionList
         {
             if (Component is not null)
             {
-                TypeDescriptor.GetProperties(Component)[nameof(ImageSize)]?.SetValue(Component, value);
+                TypeDescriptor.GetProperties(Component)[nameof(ColorDepth)]?.SetValue(Component, value);
             }
         }
     }

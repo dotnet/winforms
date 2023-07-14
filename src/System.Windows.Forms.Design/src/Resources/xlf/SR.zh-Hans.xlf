@@ -1080,14 +1080,29 @@
         <target state="translated">图像集合编辑器</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListActionList_ChooseImagesDescription">
+        <source>Opens the Images collection editor</source>
+        <target state="new">Opens the Images collection editor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDisplayName">
         <source>Choose images</source>
         <target state="new">Choose images</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListActionList_ColorDepthDescription">
+        <source>Changes the bit depth images imported into this ImageList are stored at</source>
+        <target state="new">Changes the bit depth images imported into this ImageList are stored at</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDisplayName">
         <source>Image Bit Depth</source>
         <target state="new">Image Bit Depth</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ImageSizeDescription">
+        <source>Changes the size images imported into this ImageList are stored at</source>
+        <target state="new">Changes the size images imported into this ImageList are stored at</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDisplayName">
