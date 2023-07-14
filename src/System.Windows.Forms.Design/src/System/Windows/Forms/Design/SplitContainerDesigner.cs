@@ -187,7 +187,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
             if (panelDesigner is not null)
             {
                 // Create our glyph, and set its cursor appropriately.
-                ControlBodyGlyph bodyGlyph = new ControlBodyGlyph(translatedBounds, Cursor.Current, _splitterPanel1, panelDesigner);
+                ControlBodyGlyph bodyGlyph = new(translatedBounds, Cursor.Current, _splitterPanel1, panelDesigner);
                 selMgr.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
             }
 
@@ -197,7 +197,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
             if (panelDesigner is not null)
             {
                 // Create our glyph, and set its cursor appropriately.
-                ControlBodyGlyph bodyGlyph = new ControlBodyGlyph(translatedBounds, Cursor.Current, _splitterPanel2, panelDesigner);
+                ControlBodyGlyph bodyGlyph = new(translatedBounds, Cursor.Current, _splitterPanel2, panelDesigner);
                 selMgr.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
             }
         }

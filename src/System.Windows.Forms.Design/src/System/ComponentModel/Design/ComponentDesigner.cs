@@ -509,7 +509,6 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                     }
 
                     persistableComponent.SettingsKey = settingsKeyName;
-                    return persistableComponent.SettingsKey;
                 }
             }
 
