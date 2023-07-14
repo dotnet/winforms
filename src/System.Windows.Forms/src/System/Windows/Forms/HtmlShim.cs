@@ -89,11 +89,8 @@ internal abstract class HtmlShim : IDisposable
         if (disposing)
         {
             DisconnectFromEvents();
-            if (_events is not null)
-            {
-                _events.Dispose();
-                _events = null;
-            }
+            _events?.Dispose();
+            _events = null;
         }
     }
 
