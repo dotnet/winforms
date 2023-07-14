@@ -84,7 +84,7 @@ public abstract partial class TextBoxBase
 
         internal override void SetFocus()
         {
-            if (!this.IsHandleCreated(out Control? owner))
+            if (!this.IsOwnerHandleCreated(out Control? _))
             {
                 return;
             }

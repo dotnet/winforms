@@ -29,7 +29,7 @@ public partial class ComboBox
 
         private void ComboBoxDefaultAction(bool expand)
         {
-            if (this.IsHandleCreated(out ComboBox? owner) && owner.DroppedDown != expand)
+            if (this.IsOwnerHandleCreated(out ComboBox? owner) && owner.DroppedDown != expand)
             {
                 owner.DroppedDown = expand;
             }
@@ -65,7 +65,7 @@ public partial class ComboBox
         internal override void Collapse() => ComboBoxDefaultAction(false);
 
         internal override UiaCore.ExpandCollapseState ExpandCollapseState
-            => this.IsHandleCreated(out ComboBox? owner) && owner.DroppedDown
+            => this.IsOwnerHandleCreated(out ComboBox? owner) && owner.DroppedDown
                 ? UiaCore.ExpandCollapseState.Expanded
                 : UiaCore.ExpandCollapseState.Collapsed;
 
@@ -105,7 +105,7 @@ public partial class ComboBox
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!this.IsHandleCreated(out ComboBox? owner))
+            if (!this.IsOwnerHandleCreated(out ComboBox? _))
             {
                 return null;
             }
@@ -210,7 +210,7 @@ public partial class ComboBox
 
         internal void SetComboBoxItemFocus()
         {
-            if (!this.IsHandleCreated(out ComboBox? owner))
+            if (!this.IsOwnerHandleCreated(out ComboBox? _))
             {
                 return;
             }
@@ -220,7 +220,7 @@ public partial class ComboBox
 
         internal void SetComboBoxItemSelection()
         {
-            if (!this.IsHandleCreated(out ComboBox? owner))
+            if (!this.IsOwnerHandleCreated(out ComboBox? _))
             {
                 return;
             }
@@ -230,7 +230,7 @@ public partial class ComboBox
 
         internal override void SetFocus()
         {
-            if (!this.IsHandleCreated(out ComboBox? owner))
+            if (!this.IsOwnerHandleCreated(out ComboBox? _))
             {
                 return;
             }
@@ -283,7 +283,7 @@ public partial class ComboBox
 
         public override void DoDefaultAction()
         {
-            if (!this.IsHandleCreated(out ComboBox? owner) || owner.DropDownStyle == ComboBoxStyle.Simple)
+            if (!this.IsOwnerHandleCreated(out ComboBox? owner) || owner.DropDownStyle == ComboBoxStyle.Simple)
             {
                 return;
             }

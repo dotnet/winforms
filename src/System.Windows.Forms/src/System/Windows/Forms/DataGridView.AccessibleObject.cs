@@ -177,7 +177,7 @@ public partial class DataGridView
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.IsHandleCreated(out DataGridView? owner))
+            if (!this.IsOwnerHandleCreated(out DataGridView? owner))
             {
                 return null;
             }
@@ -424,7 +424,7 @@ public partial class DataGridView
 
         internal override void SetFocus()
         {
-            if (this.IsHandleCreated(out DataGridView? owner) && owner.CanFocus)
+            if (this.IsOwnerHandleCreated(out DataGridView? owner) && owner.CanFocus)
             {
                 owner.Focus();
             }
@@ -435,7 +435,7 @@ public partial class DataGridView
         #region IRawElementProviderFragmentRoot Implementation
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => this.IsHandleCreated(out DataGridView? owner) ? HitTest((int)x, (int)y) : null;
+            => this.IsOwnerHandleCreated(out DataGridView? _) ? HitTest((int)x, (int)y) : null;
 
         internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
 

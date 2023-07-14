@@ -23,7 +23,7 @@ internal partial class PropertyGridView
         }
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => this.IsHandleCreated(out Control? owner) ? HitTest((int)x, (int)y) : null;
+            => this.IsOwnerHandleCreated(out Control? _) ? HitTest((int)x, (int)y) : null;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
@@ -248,7 +248,7 @@ internal partial class PropertyGridView
         /// <returns>The first child property.</returns>
         internal AccessibleObject? GetFirstChildProperty(CategoryGridEntry current)
         {
-            if (current.ChildCount <= 0 || !this.TryGetOwnerAs(out PropertyGridView? owner))
+            if (current.ChildCount <= 0 || !this.TryGetOwnerAs(out PropertyGridView? _))
             {
                 return null;
             }
@@ -279,7 +279,7 @@ internal partial class PropertyGridView
         /// <returns>The last child property.</returns>
         internal AccessibleObject? GetLastChildProperty(CategoryGridEntry current)
         {
-            if (current.ChildCount <= 0 || !this.TryGetOwnerAs(out PropertyGridView? owner))
+            if (current.ChildCount <= 0 || !this.TryGetOwnerAs(out PropertyGridView? _))
             {
                 return null;
             }
@@ -417,7 +417,7 @@ internal partial class PropertyGridView
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.IsHandleCreated(out PropertyGridView? owner))
+            if (!this.IsOwnerHandleCreated(out PropertyGridView? owner))
             {
                 return null;
             }

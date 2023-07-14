@@ -20,15 +20,26 @@ internal static class OwnedObjectExtensions
     }
 
     /// <summary>
-    ///  Tries to get IsHandleCreated from the owner.
+    ///  If the owner object exists, then verify if the handle is created, if owner does not exist, return false.
     /// </summary>
-    public static bool IsHandleCreated<TOwner, TAs>(
+    public static bool IsOwnerHandleCreated<TOwner, TAs>(
         this IOwnedObject<TOwner> ownedObject,
         [NotNullWhen(true)] out TAs? ownerAs)
         where TOwner : class
         where TAs : Control
     {
         ownerAs = ownedObject.Owner as TAs;
-        return ownerAs is not null && ownerAs.IsHandleCreated;
+        if (ownerAs is null)
+        {
+            return false;
+        }
+
+        if (!ownerAs.IsHandleCreated)
+        {
+            ownerAs = null;
+            return false;
+        }
+
+        return true;
     }
 }

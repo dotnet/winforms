@@ -21,7 +21,7 @@ public partial class TrackBar
         {
             get
             {
-                if (!this.IsHandleCreated(out TrackBar? owner) || !IsDisplayed)
+                if (!this.IsOwnerHandleCreated(out TrackBar? _) || !IsDisplayed)
                 {
                     return Rectangle.Empty;
                 }

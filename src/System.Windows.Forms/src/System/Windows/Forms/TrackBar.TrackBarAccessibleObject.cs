@@ -23,7 +23,7 @@ public partial class TrackBar
         {
             get
             {
-                if (!this.IsHandleCreated(out TrackBar? owner))
+                if (!this.IsOwnerHandleCreated(out TrackBar? _))
                 {
                     return Rectangle.Empty;
                 }
@@ -63,7 +63,7 @@ public partial class TrackBar
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (!this.IsHandleCreated(out TrackBar? owner))
+            if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
                 return null;
             }
@@ -81,7 +81,7 @@ public partial class TrackBar
 
         public override int GetChildCount()
         {
-            if (!this.IsHandleCreated(out TrackBar? owner))
+            if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
                 return -1;
             }
@@ -95,7 +95,7 @@ public partial class TrackBar
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.IsHandleCreated(out TrackBar? owner))
+            if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
                 return null;
             }
@@ -128,7 +128,7 @@ public partial class TrackBar
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!this.IsHandleCreated(out TrackBar? owner))
+            if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
                 return null;
             }

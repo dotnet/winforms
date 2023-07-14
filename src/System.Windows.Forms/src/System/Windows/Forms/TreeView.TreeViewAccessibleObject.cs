@@ -52,7 +52,7 @@ public partial class TreeView
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.IsHandleCreated(out TreeView? owningTreeView))
+            if (!this.IsOwnerHandleCreated(out TreeView? owningTreeView))
             {
                 return null;
             }
@@ -126,7 +126,7 @@ public partial class TreeView
 
         internal override IRawElementProviderSimple[]? GetSelection()
         {
-            if (this.IsHandleCreated(out TreeView? owningTreeView) && GetSelected() is IRawElementProviderSimple selected)
+            if (this.IsOwnerHandleCreated(out TreeView? _) && GetSelected() is IRawElementProviderSimple selected)
             {
                 return new[] { selected };
             }

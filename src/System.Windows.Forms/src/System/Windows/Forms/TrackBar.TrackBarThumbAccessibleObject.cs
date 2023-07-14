@@ -17,7 +17,7 @@ public partial class TrackBar
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!this.IsHandleCreated(out TrackBar? owner))
+            if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
                 return null;
             }

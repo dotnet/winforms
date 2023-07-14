@@ -19,7 +19,7 @@ public partial class TabControl
         {
             get
             {
-                if (!this.IsHandleCreated(out TabControl? owner))
+                if (!this.IsOwnerHandleCreated(out TabControl? _))
                 {
                     return Rectangle.Empty;
                 }
@@ -43,7 +43,7 @@ public partial class TabControl
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (!this.IsHandleCreated(out TabControl? owner)
+            if (!this.IsOwnerHandleCreated(out TabControl? owner)
                 || owner.TabPages.Count == 0
                 || index < 0
                 || index > owner.TabPages.Count)
@@ -58,7 +58,7 @@ public partial class TabControl
 
         public override int GetChildCount()
         {
-            if (!this.IsHandleCreated(out TabControl? owner))
+            if (!this.IsOwnerHandleCreated(out TabControl? owner))
             {
                 // We return -1 instead of 0 when the Handle has not been created,
                 // so that the user can distinguish between the situation
@@ -80,7 +80,7 @@ public partial class TabControl
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.IsHandleCreated(out TabControl? owner))
+            if (!this.IsOwnerHandleCreated(out TabControl? owner))
             {
                 return null;
             }
@@ -108,7 +108,7 @@ public partial class TabControl
 
         internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
-            if (!this.IsHandleCreated(out TabControl? owner))
+            if (!this.IsOwnerHandleCreated(out TabControl? owner))
             {
                 return null;
             }
@@ -135,7 +135,7 @@ public partial class TabControl
             };
 
         internal override IRawElementProviderSimple[]? GetSelection()
-            => !this.IsHandleCreated(out TabControl? owner) || owner.SelectedTab is null
+            => !this.IsOwnerHandleCreated(out TabControl? owner) || owner.SelectedTab is null
                 ? Array.Empty<IRawElementProviderSimple>()
                 : new IRawElementProviderSimple[] { owner.SelectedTab.TabAccessibilityObject };
 

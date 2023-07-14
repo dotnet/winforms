@@ -18,7 +18,7 @@ public partial class LinkLabel
         }
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => !this.IsHandleCreated(out LinkLabel? owner)
+            => !this.IsOwnerHandleCreated(out LinkLabel? owner)
                 ? base.ElementProviderFromPoint(x, y)
                 : HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 
@@ -60,7 +60,7 @@ public partial class LinkLabel
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.IsHandleCreated(out LinkLabel? owner))
+            if (!this.IsOwnerHandleCreated(out LinkLabel? owner))
             {
                 return null;
             }
