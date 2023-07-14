@@ -116,7 +116,7 @@ public partial class DateTimePicker
 
         internal override void Toggle()
         {
-            if (this.TryGetOwnerAs(out DateTimePicker? owner) && owner.IsHandleCreated)
+            if (this.IsOwnerHandleCreated(out DateTimePicker? owner))
             {
                 owner.Checked = !owner.Checked;
             }
@@ -124,8 +124,7 @@ public partial class DateTimePicker
 
         internal override void Expand()
         {
-            if (this.TryGetOwnerAs(out DateTimePicker? owner)
-                && owner.IsHandleCreated
+            if (this.IsOwnerHandleCreated(out DateTimePicker? owner)
                 && ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
             {
                 PInvoke.SendMessage(owner, PInvoke.WM_SYSKEYDOWN, (WPARAM)(int)Keys.Down);
@@ -134,8 +133,7 @@ public partial class DateTimePicker
 
         internal override void Collapse()
         {
-            if (this.TryGetOwnerAs(out DateTimePicker? owner)
-                && owner.IsHandleCreated
+            if (this.IsOwnerHandleCreated(out DateTimePicker? owner)
                 && ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
             {
                 PInvoke.SendMessage(owner, PInvoke.DTM_CLOSEMONTHCAL);

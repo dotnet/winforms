@@ -18,12 +18,12 @@ public partial class Form
         {
         }
 
-        public override Rectangle Bounds => this.TryGetOwnerAs(out Control? owner) && owner.IsHandleCreated
+        public override Rectangle Bounds => this.IsOwnerHandleCreated(out Control? owner)
             ? owner.RectangleToScreen(owner.ClientRectangle)
             : Rectangle.Empty;
 
         internal override Rectangle BoundingRectangle
-            => !this.TryGetOwnerAs(out Control? owner) || !owner.IsHandleCreated
+            => !this.IsOwnerHandleCreated(out Control? owner)
                 ? Rectangle.Empty
                 : owner.Parent?.RectangleToScreen(owner.Bounds) ?? owner.Bounds;
 

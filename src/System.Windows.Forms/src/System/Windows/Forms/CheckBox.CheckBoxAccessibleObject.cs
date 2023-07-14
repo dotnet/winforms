@@ -64,7 +64,7 @@ public partial class CheckBox
 
         public override void DoDefaultAction()
         {
-            if (!this.TryGetOwnerAs(out CheckBox? owner) || !owner.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out CheckBox? owner))
             {
                 return;
             }

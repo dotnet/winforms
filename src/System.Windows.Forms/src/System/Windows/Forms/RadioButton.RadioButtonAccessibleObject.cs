@@ -31,7 +31,7 @@ public partial class RadioButton
 
         public override void DoDefaultAction()
         {
-            if (this.TryGetOwnerAs(out RadioButton? owner) && owner.IsHandleCreated)
+            if (this.IsOwnerHandleCreated(out RadioButton? owner))
             {
                 owner.PerformClick();
             }

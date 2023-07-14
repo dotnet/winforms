@@ -21,7 +21,7 @@ public partial class ListView
         {
             get
             {
-                if (this.TryGetOwnerAs(out ListView? owningListView) && owningListView.IsHandleCreated)
+                if (this.IsOwnerHandleCreated(out ListView? owningListView))
                 {
                     PInvoke.GetWindowRect(owningListView, out var rect);
                     return rect;
@@ -31,8 +31,7 @@ public partial class ListView
             }
         }
 
-        internal override bool CanSelectMultiple
-            => this.TryGetOwnerAs(out ListView? owningListView) && owningListView.IsHandleCreated;
+        internal override bool CanSelectMultiple => this.IsOwnerHandleCreated(out ListView? _);
 
         internal override int ColumnCount
             => this.TryGetOwnerAs(out ListView? owningListView) ? owningListView.Columns.Count : base.ColumnCount;
@@ -77,7 +76,7 @@ public partial class ListView
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!this.TryGetOwnerAs(out ListView? owningListView) || !owningListView.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ListView? _))
             {
                 return null;
             }
@@ -92,7 +91,7 @@ public partial class ListView
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (!this.TryGetOwnerAs(out ListView? owningListView) || !owningListView.IsHandleCreated || index < 0)
+            if (!this.IsOwnerHandleCreated(out ListView? owningListView) || index < 0)
             {
                 return null;
             }
@@ -113,7 +112,7 @@ public partial class ListView
 
         public override int GetChildCount()
         {
-            if (!this.TryGetOwnerAs(out ListView? owningListView) || !owningListView.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ListView? owningListView))
             {
                 return InvalidIndex;
             }
@@ -207,7 +206,7 @@ public partial class ListView
 
         internal override UiaCore.IRawElementProviderFragment? GetFocus()
         {
-            if (!this.TryGetOwnerAs(out ListView? owningListView) || !owningListView.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ListView? owningListView))
             {
                 return null;
             }
@@ -275,7 +274,7 @@ public partial class ListView
 
         internal override UiaCore.IRawElementProviderSimple[] GetSelection()
         {
-            if (!this.TryGetOwnerAs(out ListView? owningListView) || !owningListView.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ListView? owningListView))
             {
                 return Array.Empty<UiaCore.IRawElementProviderSimple>();
             }
@@ -317,7 +316,7 @@ public partial class ListView
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.TryGetOwnerAs(out ListView? owningListView) || !owningListView.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ListView? owningListView))
             {
                 return null;
             }

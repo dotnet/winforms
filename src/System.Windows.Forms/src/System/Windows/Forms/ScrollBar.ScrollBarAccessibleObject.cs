@@ -53,7 +53,7 @@ public partial class ScrollBar
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (!this.TryGetOwnerAs(out ScrollBar? owner) || !owner.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ScrollBar? _))
             {
                 return null;
             }
@@ -74,7 +74,7 @@ public partial class ScrollBar
         }
 
         public override int GetChildCount()
-            => this.TryGetOwnerAs(out ScrollBar? owner) && owner.IsHandleCreated
+            => this.IsOwnerHandleCreated(out ScrollBar? _)
                 ? ArePageButtonsDisplayed
                     ? 5
                     : ArePageButtonsHidden ? 3 : 4
@@ -82,7 +82,7 @@ public partial class ScrollBar
 
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.TryGetOwnerAs(out ScrollBar? owner) || !owner.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ScrollBar? _))
             {
                 return null;
             }
@@ -168,7 +168,7 @@ public partial class ScrollBar
 
         internal override void SetValue(double newValue)
         {
-            if (!this.TryGetOwnerAs(out ScrollBar? owner) || !owner.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ScrollBar? owner))
             {
                 return;
             }

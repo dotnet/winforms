@@ -16,14 +16,14 @@ public partial class ToolStrip
         }
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
-            => this.TryGetOwnerAs(out ToolStrip? owner) && owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
+            => this.IsOwnerHandleCreated(out ToolStrip? _) ? HitTest((int)x, (int)y) : null;
 
         /// <summary>
         ///  Return the child object at the given screen coordinates.
         /// </summary>
         public override AccessibleObject? HitTest(int x, int y)
         {
-            if (!this.TryGetOwnerAs(out ToolStrip? owner) || !owner.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ToolStrip? owner))
             {
                 return null;
             }
@@ -380,7 +380,7 @@ public partial class ToolStrip
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (!this.TryGetOwnerAs(out ToolStrip? owner) || !owner.IsHandleCreated)
+            if (!this.IsOwnerHandleCreated(out ToolStrip? _))
             {
                 return null;
             }
